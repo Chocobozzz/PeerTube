@@ -1,0 +1,19 @@
+listen:
+  port: 9001
+
+webserver:
+  host: 'localhost'
+  port: 9001
+
+database:
+  suffix: '-test1'
+
+# From the project root directory
+storage:
+  certs: 'test1/certs/'
+  uploads: 'test1/uploads/'
+  logs: 'test1/logs/'
+
+network:
+  friends:
+    - 'http://localhost:9002'

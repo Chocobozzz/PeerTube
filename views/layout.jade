@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    link(rel='icon' type='image/png' href='/images/favicon.png')
+    
+    title= title
+    
+    // build:css /stylesheets/global.min.css 
+    each file in [ 'index' ]
+      link(rel='stylesheet', href='/stylesheets/' + file + '.css')
+    // endbuild
+    
+    // build:css /stylesheets/vendor/global.min.css 
+    each file in [ 'bootstrap.min' ]
+      link(rel='stylesheet', href='/stylesheets/vendor/css/' + file + '.css')
+    // endbuild
+    
+  body
+    block content

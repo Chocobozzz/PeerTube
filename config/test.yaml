@@ -1,0 +1,9 @@
+listen:
+  port: 9000
+
+webserver:
+  https: false
+
+database:
+  host: 'localhost'
+  port: 27017

@@ -1,0 +1,21 @@
+listen:
+  port: 9000
+
+webserver:
+  https: false
+  host: 'localhost'
+  port: 9000
+
+database:
+  host: 'localhost'
+  port: 27017
+  suffix: '-suffix'
+
+# From the project root directory
+storage:
+  certs: 'certs/'
+  uploads: 'uploads/'
+  logs: 'logs/'
+
+network:
+  friends: []

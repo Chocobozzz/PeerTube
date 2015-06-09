@@ -1,0 +1,19 @@
+listen:
+  port: 9003
+
+webserver:
+  host: 'localhost'
+  port: 9003
+
+database:
+  suffix: '-test3'
+
+# From the project root directory
+storage:
+  certs: 'test3/certs/'
+  uploads: 'test3/uploads/'
+  logs: 'test3/logs/'
+
+network:
+  friends:
+    - 'http://localhost:9001'

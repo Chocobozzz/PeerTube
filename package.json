@@ -1,0 +1,80 @@
+{
+  "name": "petube",
+  "description": "none",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": "0.12.x",
+    "npm": "1.3.x"
+  },
+  "scripts": {
+    "start": "grunt dev",
+    "test": "grunt build && standard && mocha test/api"
+  },
+  "dependencies": {
+    "async": "^1.2.1",
+    "bittorrent-tracker": "^4.4.5",
+    "blueimp-file-upload": "^9.10.1",
+    "body-parser": "^1.12.4",
+    "bootstrap": "^3.3.5",
+    "browserify": "^10.2.4",
+    "compression": "^1.5.0",
+    "config": "^1.14.0",
+    "connect-livereload": "^0.5.3",
+    "cookie-parser": "^1.3.5",
+    "debug": "^2.2.0",
+    "dezalgo": "^1.0.3",
+    "electron-spawn": "https://github.com/Chocobozzz/electron-spawn",
+    "express": "^4.12.4",
+    "express-validator": "^2.11.0",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^3.8.0",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-copy": "0.8.0",
+    "grunt-contrib-csslint": "^0.4.0",
+    "grunt-contrib-cssmin": "^0.12.3",
+    "grunt-contrib-htmlmin": "^0.4.0",
+    "grunt-contrib-imagemin": "^0.9.4",
+    "grunt-contrib-jade": "^0.14.1",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-uglify": "^0.9.1",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-server": "^0.5.1",
+    "grunt-filerev": "^2.3.1",
+    "grunt-newer": "^1.1.1",
+    "grunt-usemin": "^3.0.0",
+    "jade": "^1.10.0",
+    "jquery": "^2.1.4",
+    "js-yaml": "^3.3.1",
+    "mkdirp": "^0.5.1",
+    "mongoose": "^4.0.5",
+    "morgan": "^1.5.3",
+    "multer": "^0.1.8",
+    "node-ipc": "^3.0.0",
+    "openssl-wrapper": "https://github.com/Chocobozzz/node-openssl-wrapper",
+    "request": "^2.57.0",
+    "request-replay": "^0.3.0",
+    "segfault-handler": "^0.2.4",
+    "time-grunt": "^1.2.1",
+    "ursa": "^0.8.5",
+    "webtorrent": "*",
+    "winston": "^1.0.1",
+    "ws": "^0.7.2"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
+    "supertest": "^1.1.0"
+  },
+  "standard": {
+    "globals": [
+      "alert",
+      "confirm",
+      "it",
+      "after",
+      "before",
+      "describe"
+    ]
+  }
+}
