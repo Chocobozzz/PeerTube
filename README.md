@@ -67,6 +67,8 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 ## Architecture
 
+See [ARCHITECTURE.md](https://github.com/Chocobozzz/PeerTube/blob/master/ARCHITECTURE.md) for a more detailed explication.
+
 ### Backend
 
   * The backend whould be a REST API
