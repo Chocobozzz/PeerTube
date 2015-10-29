@@ -24,7 +24,7 @@
 
   checker.createDirectories()
 
-  // ----------- PeTube modules -----------
+  // ----------- PeerTube modules -----------
   var config = require('config')
   var logger = require('./src/logger')
   var routes = require('./routes')

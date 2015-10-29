@@ -1,6 +1,6 @@
 {
-  "name": "petube",
-  "description": "none",
+  "name": "peertube",
+  "description": "Prototype of a decentralized video streaming platform using P2P (bittorent) directly in the web browser with webtorrent.",
   "version": "0.0.1",
   "private": true,
   "engines": {

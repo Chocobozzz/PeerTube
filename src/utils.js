@@ -63,7 +63,7 @@
 
     // Signature ?
     if (all.method === 'POST' && all.data && all.sign === true) {
-      var myKey = ursa.createPrivateKey(fs.readFileSync(utils.certDir + 'petube.key.pem'))
+      var myKey = ursa.createPrivateKey(fs.readFileSync(utils.certDir + 'peertube.key.pem'))
       signature = myKey.hashAndSign('sha256', url, 'utf8', 'hex')
     }
 
@@ -111,7 +111,7 @@
   }
 
   utils.certsExist = function (callback) {
-    fs.exists(utils.certDir + 'petube.key.pem', function (exists) {
+    fs.exists(utils.certDir + 'peertube.key.pem', function (exists) {
       return callback(exists)
     })
   }
@@ -125,14 +125,14 @@
       }
 
       logger.debug('Gen RSA keys...')
-      openssl.exec('genrsa', { 'out': utils.certDir + 'petube.key.pem' }, function (err) {
+      openssl.exec('genrsa', { 'out': utils.certDir + 'peertube.key.pem' }, function (err) {
         if (err) {
           logger.error('Cannot create private key on this pod.', { error: err })
           return callback(err)
         }
 
         logger.debug('Manage public key...')
-        openssl.exec('rsa', { 'in': utils.certDir + 'petube.key.pem', 'pubout': true, 'out': utils.certDir + 'petube.pub' }, function (err) {
+        openssl.exec('rsa', { 'in': utils.certDir + 'peertube.key.pem', 'pubout': true, 'out': utils.certDir + 'peertube.pub' }, function (err) {
           if (err) {
             logger.error('Cannot create public key on this pod .', { error: err })
             return callback(err)

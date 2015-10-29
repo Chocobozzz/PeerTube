@@ -6,7 +6,7 @@
 
   var logger = require('./logger')
 
-  var dbname = 'petube' + config.get('database.suffix')
+  var dbname = 'peertube' + config.get('database.suffix')
   var host = config.get('database.host')
   var port = config.get('database.port')
 

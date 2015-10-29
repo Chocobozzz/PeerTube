@@ -39,7 +39,7 @@
       var signature_ok = crt.hashAndVerify('sha256', new Buffer(req.body.signature.url).toString('hex'), req.body.signature.signature, 'hex')
 
       if (signature_ok === true) {
-        var myKey = ursa.createPrivateKey(fs.readFileSync(utils.certDir + 'petube.key.pem'))
+        var myKey = ursa.createPrivateKey(fs.readFileSync(utils.certDir + 'peertube.key.pem'))
         var decryptedKey = myKey.decrypt(req.body.key, 'hex', 'utf8')
         logger.debug(decryptedKey)
         req.body.data = JSON.parse(utils.symetricDecrypt(req.body.data, decryptedKey))

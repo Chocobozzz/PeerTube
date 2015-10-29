@@ -1,4 +1,4 @@
-# PeTube
+# PeerTube
 
 Prototype of a decentralized video streaming platform using P2P (bittorent) directly in the web browser with [webtorrent](https://github.com/feross/webtorrent).
 
@@ -45,7 +45,7 @@ Prototype of a decentralized video streaming platform using P2P (bittorent) dire
 ### Test It!
 
     $ git clone https://github.com/Chocobozzz/PeerTube
-    $ cd PeopleTube
+    $ cd PeerTube
     # npm install -g electron-prebuilt
     $ npm install
     $ npm start

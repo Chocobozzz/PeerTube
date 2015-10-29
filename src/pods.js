@@ -53,7 +53,7 @@
         return callback(err)
       }
 
-      fs.readFile(utils.certDir + 'petube.pub', 'utf8', function (err, cert) {
+      fs.readFile(utils.certDir + 'peertube.pub', 'utf8', function (err, cert) {
         if (err) {
           logger.error('Cannot read cert file.', { error: err })
           return callback(err)
@@ -99,7 +99,7 @@
 
   pods.makeFriends = function (callback) {
     logger.debug('Read public key...')
-    fs.readFile(utils.certDir + 'petube.pub', 'utf8', function (err, cert) {
+    fs.readFile(utils.certDir + 'peertube.pub', 'utf8', function (err, cert) {
       if (err) {
         logger.error('Cannot read public cert.', { error: err })
         return callback(err)
