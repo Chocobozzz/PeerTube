@@ -50,7 +50,7 @@ Prototype of a decentralized video streaming platform using P2P (bittorent) dire
     $ npm install
     $ npm start
 
-### Test with many 3 fresh nodes
+### Test with 3 fresh nodes
     $ scripts/clean_test.sh
     $ scripts/run_servers.sh
 
