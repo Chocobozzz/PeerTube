@@ -125,7 +125,7 @@
       }
 
       logger.debug('Gen RSA keys...')
-      openssl.exec('genrsa', { 'out': utils.certDir + 'peertube.key.pem' }, function (err) {
+      openssl.exec('genrsa', { 'out': utils.certDir + 'peertube.key.pem', '2048': false }, function (err) {
         if (err) {
           logger.error('Cannot create private key on this pod.', { error: err })
           return callback(err)

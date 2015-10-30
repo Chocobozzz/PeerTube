@@ -1,0 +1,24 @@
+language: node_js
+
+node_js:
+    - "0.12"
+
+sudo: false
+
+services:
+    - mongodb
+
+cache:
+    directories:
+        - node_modules
+        - $(npm config get prefix)/bin/grunt-cli
+        - $(npm config get prefix)/bin/electron-prebuilt
+
+before_script:
+    - npm install electron-prebuilt -g
+    - npm install grunt-cli -g
+
+after_failure:
+    - cat test1/logs/all-logs.log
+    - cat test2/logs/all-logs.log
+    - cat test3/logs/all-logs.log
