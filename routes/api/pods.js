@@ -8,7 +8,7 @@
 
   function listPods (req, res, next) {
     pods.list(function (err, pods_list) {
-      if (err) next(err)
+      if (err) return next(err)
 
       res.json(pods_list)
     })
@@ -16,7 +16,7 @@
 
   function addPods (req, res, next) {
     pods.add(req.body.data, function (err, json) {
-      if (err) next(err)
+      if (err) return next(err)
 
       res.json(json)
     })
@@ -24,7 +24,7 @@
 
   function makeFriends (req, res, next) {
     pods.makeFriends(function (err) {
-      if (err) next(err)
+      if (err) return next(err)
 
       res.sendStatus(204)
     })

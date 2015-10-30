@@ -8,7 +8,7 @@
 
   function addRemoteVideos (req, res, next) {
     videos.addRemote(req.body.data, function (err, video) {
-      if (err) next(err)
+      if (err) return next(err)
 
       res.json(video)
     })
@@ -16,7 +16,7 @@
 
   function removeRemoteVideo (req, res, next) {
     videos.removeRemote(req.body.signature.url, req.body.data.magnetUri, function (err) {
-      if (err) next(err)
+      if (err) return next(err)
 
       res.status(204)
     })
