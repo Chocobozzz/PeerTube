@@ -37,7 +37,7 @@
     }
 
     before(function (done) {
-      this.timeout(20000)
+      this.timeout(30000)
       var path_friends = '/api/pods/makefriends'
 
       utils.runMultipleServers(3, function (apps_run, urls_run) {
@@ -65,7 +65,7 @@
                     done()
                   })
                 })
-            }, 5000)
+            }, 10000)
           })
       })
     })
