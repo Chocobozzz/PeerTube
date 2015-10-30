@@ -103,6 +103,7 @@
 
     VideosDB.findById(id, function (err, video) {
       if (err || !video) {
+        if (!err) err = new Error('Cannot find this video.')
         logger.error('Cannot find this video.', { error: err })
         return callback(err)
       }

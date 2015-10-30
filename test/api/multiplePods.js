@@ -61,7 +61,7 @@
                 .end(function (err, res) {
                   if (err) throw err
 
-                  webtorrent.create(function () {
+                  webtorrent.create({ host: 'client', port: '1' }, function () {
                     done()
                   })
                 })
@@ -214,7 +214,7 @@
     describe('Should seed the uploaded video', function () {
       it('Should add the file 1 by asking pod 3', function (done) {
         // Yes, this could be long
-        this.timeout(60000)
+        this.timeout(200000)
 
         getVideosList(urls[2], function (err, res) {
           if (err) throw err
@@ -232,14 +232,12 @@
 
       it('Should add the file 2 by asking pod 1', function (done) {
         // Yes, this could be long
-        this.timeout(60000)
+        this.timeout(200000)
 
         getVideosList(urls[0], function (err, res) {
           if (err) throw err
 
           var video = res.body[1]
-
-          video_id = video._id
 
           webtorrent.add(video.magnetUri, function (torrent) {
             expect(torrent.files).to.exist
@@ -253,12 +251,13 @@
 
       it('Should add the file 3 by asking pod 2', function (done) {
         // Yes, this could be long
-        this.timeout(60000)
+        this.timeout(200000)
 
         getVideosList(urls[1], function (err, res) {
           if (err) throw err
 
           var video = res.body[2]
+          video_id = res.body[1]._id
 
           webtorrent.add(video.magnetUri, function (torrent) {
             expect(torrent.files).to.exist

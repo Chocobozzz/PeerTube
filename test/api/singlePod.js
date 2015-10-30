@@ -23,7 +23,7 @@
           app = app1
           url = url1
 
-          webtorrent.create(function () {
+          webtorrent.create({ host: 'client', port: '1' }, function () {
             done()
           })
         })

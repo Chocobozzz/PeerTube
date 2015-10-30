@@ -8,16 +8,8 @@
 
   var logger = require('./logger')
 
-  var host
-  var port
-
-  try {
-    host = config.get('webserver.host')
-    port = config.get('webserver.port')
-  } catch (e) {
-    host = 'client'
-    port = 1
-  }
+  var host = config.get('webserver.host')
+  var port = config.get('webserver.port')
 
   var nodeKey = 'webtorrentnode' + port
   var processKey = 'webtorrent' + port
@@ -33,7 +25,21 @@
   // Useful to kill it
   webtorrentnode.app = null
 
-  webtorrentnode.create = function (callback) {
+  webtorrentnode.create = function (options, callback) {
+    if (typeof options === 'function') {
+      callback = options
+      options = {}
+    }
+
+    // Override options
+    if (options.host) host = options.host
+    if (options.port) {
+      port = options.port
+      nodeKey = 'webtorrentnode' + port
+      processKey = 'webtorrent' + port
+      ipc.config.id = nodeKey
+    }
+
     ipc.serve(function () {
       if (!webtorrentnode.silent) logger.info('IPC server ready.')
 
