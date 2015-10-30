@@ -36,7 +36,7 @@ Prototype of a decentralized video streaming platform using P2P (bittorent) dire
 
 ### Dependencies
 
-  * NodeJS >= 0.12
+  * NodeJS == 0.12
   * Grunt-cli (npm install -g grunt-cli)
   * OpenSSL (cli)
   * MongoDB
