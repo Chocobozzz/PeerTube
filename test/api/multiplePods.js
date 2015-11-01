@@ -284,7 +284,7 @@
           })
       })
 
-      it('Should have videos 1 and 2 on each pod', function (done) {
+      it('Should have videos 1 and 3 on each pod', function (done) {
         async.each(urls, function (url, callback) {
           getVideosList(url, function (err, res) {
             if (err) throw err
