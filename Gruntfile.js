@@ -3,7 +3,6 @@
 module.exports = function (grunt) {
   var paths = {
     dist: 'dist',
-    tmp: '.tmp',
     jade: 'views/**/**/*.jade',
     css: 'public/stylesheets/*.css',
     vendor: 'public/stylesheets/vendor',
@@ -31,10 +30,6 @@ module.exports = function (grunt) {
           browserifyOptions: { 'debug': true },
           watch: true
         }
-      },
-      dist: {
-        src: [ paths.js ],
-        dest: paths.browserified
       }
     },
     copy: {
@@ -53,24 +48,7 @@ module.exports = function (grunt) {
             paths.browserified
           ]
         }]
-      },
-      dist: {
-        files: [{
-          dot: true,
-          src: [
-            paths.tmp,
-            paths.browserified,
-            '<%= paths.dist %>/*',
-            '!<%= paths.dist %>/.git*'
-          ]
-        }]
       }
-    },
-    csslint: {
-      options: {
-        csslintrc: '.csslintrc'
-      },
-      src: paths.css
     },
     express: {
       dev: {
@@ -82,95 +60,6 @@ module.exports = function (grunt) {
           debug: true,
           background: true
         }
-      },
-      test: {
-        options: {
-          script: paths.server,
-          harmony: true,
-          port: 9000,
-          node_env: 'test',
-          background: true,
-          debug: false
-        }
-      },
-      prod: {
-        options: {
-          script: paths.server,
-          harmony: true,
-          port: 9000,
-          node_env: 'production',
-          background: false,
-          debug: false
-        }
-      }
-    },
-    filerev: {
-      options: {
-        copy: false
-      },
-      dist: {
-        cwd: 'dist',
-        src: [ paths.js, paths.css, paths.img ],
-        dest: 'dist',
-        expand: true
-      }
-    },
-    htmlmin: {
-      dist: {
-        options: {
-          removeComments: true,
-          collapseWhitespace: true
-        },
-        files: [ {
-          expand: true,
-          src: [ '<%= paths.dist %>/views/**/**/*.html' ]
-        } ]
-      }
-    },
-    imagemin: {
-      dist: {
-        files: [{
-          expand: true,
-          cwd: './public/images',
-          src: '*.{png,jpg,jpeg}',
-          dest: '<%= paths.dist %>/public/images'
-        }]
-      }
-    },
-    jade: {
-      dist: {
-        options: {
-          pretty: true
-        },
-        files: [ {
-          src: '**/*.jade',
-          dest: '<%= paths.dist %>/views',
-          ext: '.html',
-          cwd: './views',
-          expand: true
-        } ]
-      }
-    },
-    jshint: {
-      all: {
-        src: paths.js,
-        options: {
-          jshintrc: true
-        }
-      }
-    },
-    usemin: {
-      html: [ '<%= paths.dist %>/views/**/**/*.html' ],
-      css: [ '<%= paths.dist %>/public/stylesheets/*.css' ],
-      options: {
-        assetsDirs: [ '<%= paths.dist %>/public' ]
-      }
-    },
-    useminPrepare: {
-      html: '<%= paths.dist %>/views/index.html',
-      options: {
-        root: 'public',
-        dest: '<%= paths.dist %>/public'
       }
     },
     watch: {
@@ -220,15 +109,12 @@ module.exports = function (grunt) {
     )
   })
 
-  // TODO
-  // Build dist directory for production
-
   // Clean build
   grunt.registerTask('clean', [], function () {
     grunt.loadNpmTasks('grunt-contrib-clean')
 
     grunt.task.run(
-      'clean:dist'
+      'clean:dev'
     )
   })
 }
