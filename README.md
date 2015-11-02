@@ -54,7 +54,7 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
   * Grunt-cli (npm install -g grunt-cli)
   * OpenSSL (cli)
   * MongoDB
-  * xvfb-run (for electron)
+  * xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 (for electron)
 
 ### Test It!
 
