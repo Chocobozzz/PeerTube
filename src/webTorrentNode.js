@@ -43,9 +43,21 @@
     ipc.serve(function () {
       if (!webtorrentnode.silent) logger.info('IPC server ready.')
 
+      // Run a timeout of 30s after which we exit the process
+      var timeout_webtorrent_process = setTimeout(function () {
+        logger.error('Timeout : cannot run the webtorrent process. Please ensure you have electron-prebuilt npm package installed with xvfb-run.')
+        process.exit()
+      }, 30000)
+
       ipc.server.on(processKey + '.ready', function () {
         if (!webtorrentnode.silent) logger.info('Webtorrent process ready.')
+        clearTimeout(timeout_webtorrent_process)
         callback()
+      })
+
+      ipc.server.on(processKey + '.exception', function (data) {
+        logger.error('Received exception error from webtorrent process.', { exception: data.exception })
+        process.exit()
       })
 
       var webtorrent_process = spawn(__dirname + '/webtorrent.js', host, port, { detached: true })
@@ -56,15 +68,6 @@
       webtorrent_process.stdout.on('data', function (data) {
         // logger.debug('Webtorrent process:', data.toString())
       })
-
-      function exitChildProcess () {
-        if (!webtorrentnode.silent) logger.info('Gracefully exit child')
-        process.kill(-webtorrent_process.pid)
-        process.exit(0)
-      }
-
-      process.on('SIGINT', exitChildProcess)
-      process.on('SIGTERM', exitChildProcess)
 
       webtorrentnode.app = webtorrent_process
     })

@@ -150,6 +150,18 @@
     if (err) throw err
     // Create/activate the webtorrent module
     webtorrent.create(function () {
+      function cleanForExit () {
+        utils.cleanForExit(webtorrent.app)
+      }
+
+      function exitGracefullyOnSignal () {
+        process.exit()
+      }
+
+      process.on('exit', cleanForExit)
+      process.on('SIGINT', exitGracefullyOnSignal)
+      process.on('SIGTERM', exitGracefullyOnSignal)
+
       // ----------- Make the server listening -----------
       server.listen(port, function () {
         videos.seedAll(function () {

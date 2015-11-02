@@ -186,5 +186,10 @@
     return dec
   }
 
+  utils.cleanForExit = function (webtorrent_process) {
+    logger.info('Gracefully exiting')
+    process.kill(-webtorrent_process.pid)
+  }
+
   module.exports = utils
 })()

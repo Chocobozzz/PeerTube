@@ -83,5 +83,9 @@
       ipc.of[nodeKey].emit(processKey + '.ready')
       console.log('Ready.')
     })
+
+    process.on('uncaughtException', function (e) {
+      ipc.of[nodeKey].emit(processKey + '.exception', { exception: e })
+    })
   }
 })()
