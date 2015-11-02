@@ -88,7 +88,8 @@
     if (!webtorrentnode.silent) logger.debug('Node wants to seed ' + data._id)
 
     // Finish signal
-    ipc.server.on(nodeKey + '.seedDone.' + data._id, function (received) {
+    var event_key = nodeKey + '.seedDone.' + data._id
+    ipc.server.on(event_key, function listener (received) {
       if (!webtorrentnode.silent) logger.debug('Process seeded torrent ' + received.magnetUri)
 
       // This is a fake object, we just use the magnetUri in this project
@@ -96,6 +97,7 @@
         magnetURI: received.magnetUri
       }
 
+      ipc.server.off(event_key)
       callback(torrent)
     })
 
@@ -113,7 +115,8 @@
     if (!webtorrentnode.silent) logger.debug('Node wants to add ' + data._id)
 
     // Finish signal
-    ipc.server.on(nodeKey + '.addDone.' + data._id, function (received) {
+    var event_key = nodeKey + '.addDone.' + data._id
+    ipc.server.on(event_key, function (received) {
       if (!webtorrentnode.silent) logger.debug('Process added torrent')
 
       // This is a fake object, we just use the magnetUri in this project
@@ -121,6 +124,7 @@
         files: received.files
       }
 
+      ipc.server.off(event_key)
       callback(torrent)
     })
 
@@ -138,12 +142,14 @@
     if (!webtorrentnode.silent) logger.debug('Node wants to stop seeding ' + data._id)
 
     // Finish signal
-    ipc.server.on(nodeKey + '.removeDone.' + data._id, function (received) {
+    var event_key = nodeKey + '.removeDone.' + data._id
+    ipc.server.on(event_key, function (received) {
       if (!webtorrentnode.silent) logger.debug('Process removed torrent ' + data._id)
 
       var err = null
       if (received.err) err = received.err
 
+      ipc.server.off(event_key)
       callback(err)
     })
 
