@@ -3,8 +3,8 @@
 
   var express = require('express')
   var router = express.Router()
-  var middleware = require('../../middlewares')
-  var videos = require('../../src/videos')
+  var middleware = require('../../../middlewares')
+  var videos = require('../../../src/videos')
 
   function addRemoteVideos (req, res, next) {
     videos.addRemote(req.body.data, function (err, video) {

@@ -9,7 +9,7 @@
   var utils = require('../utils')
 
   function getFriendsList (url, end) {
-    var path = '/api/pods/'
+    var path = '/api/v1/pods/'
 
     request(url)
       .get(path)
@@ -75,7 +75,7 @@
         })
       }
 
-      var path = '/api/pods/makefriends'
+      var path = '/api/v1/pods/makefriends'
 
       // The second pod make friend with the third
       request(urls[1])

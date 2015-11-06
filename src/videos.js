@@ -73,7 +73,7 @@
         logger.debug('Sending this video Uri to friends...')
 
         var data = {
-          path: '/api/remotevideos/add',
+          path: '/api/' + global.API_VERSION + '/remotevideos/add',
           method: 'POST',
           data: params
         }
@@ -130,7 +130,7 @@
             }
 
             var data = {
-              path: '/api/remotevideos/remove',
+              path: '/api/' + global.API_VERSION + '/remotevideos/remove',
               method: 'POST',
               data: {
                 magnetUri: video.magnetUri

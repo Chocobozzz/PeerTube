@@ -3,6 +3,7 @@
 
   var request = require('supertest')
   var chai = require('chai')
+  var fs = require('fs')
   var expect = chai.expect
   var webtorrent = require(__dirname + '/../../src/webTorrentNode')
   webtorrent.silent = true
@@ -10,7 +11,7 @@
   var utils = require('../utils')
 
   describe('Test a single pod', function () {
-    var path = '/api/videos'
+    var path = '/api/v1/videos'
     var app = null
     var url = ''
     var video_id = -1
@@ -98,7 +99,13 @@
         .expect(204)
         .end(function (err, res) {
           if (err) throw err
-          done()
+
+          fs.readdir(__dirname + '/../../test1/uploads/', function (err, files) {
+            if (err) throw err
+
+            expect(files.length).to.equal(0)
+            done()
+          })
         })
     })
 

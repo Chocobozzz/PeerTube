@@ -38,7 +38,7 @@
 
     if (e.keyCode === 13) {
       $.ajax({
-        url: '/api/videos/search/' + search,
+        url: '/api/v1/videos/search/' + search,
         type: 'GET',
         dataType: 'json',
         success: function (videos) {
@@ -51,7 +51,7 @@
   // Join a new network
   function makeFriends () {
     $.ajax({
-      url: '/api/pods/makefriends',
+      url: '/api/v1/pods/makefriends',
       type: 'GET',
       dataType: 'json',
       success: function () {
@@ -140,7 +140,7 @@
     $form_video.fileupload({
       singleFileUploads: true,
       multipart: true,
-      url: '/api/videos',
+      url: '/api/v1/videos',
       autoupload: false,
       add: function (e, data) {
         var $text = $('<span></span>').addClass('name_file').text(data['files'][0]['name'])
@@ -170,7 +170,7 @@
   // Print the list of all the videos
   function getVideos () {
     $.ajax({
-      url: '/api/videos/',
+      url: '/api/v1/videos/',
       dataType: 'json',
       type: 'GET',
       success: function (videos) {
@@ -181,7 +181,7 @@
 
   function removeVideo (video) {
     $.ajax({
-      url: '/api/videos/' + video._id,
+      url: '/api/v1/videos/' + video._id,
       type: 'DELETE',
       success: function (response, status) {
         getVideos()

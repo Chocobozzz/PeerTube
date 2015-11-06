@@ -1,6 +1,9 @@
 ;(function () {
   'use strict'
 
+  // ----------- Constantes -----------
+  global.API_VERSION = 'v1'
+
   // ----------- Node modules -----------
   var express = require('express')
   var path = require('path')
@@ -28,7 +31,7 @@
   var config = require('config')
   var logger = require('./src/logger')
   var routes = require('./routes')
-  var api = require('./routes/api')
+  var api = require('./routes/api/' + global.API_VERSION)
   var utils = require('./src/utils')
   var videos = require('./src/videos')
   var webtorrent = require('./src/webTorrentNode')
@@ -88,9 +91,10 @@
   }
 
   // ----------- Routes -----------
-  app.use('/api/videos', api.videos)
-  app.use('/api/remotevideos', api.remoteVideos)
-  app.use('/api/pods', api.pods)
+  var api_route = '/api/' + global.API_VERSION
+  app.use(api_route + '/videos', api.videos)
+  app.use(api_route + '/remotevideos', api.remoteVideos)
+  app.use(api_route + '/pods', api.pods)
 
   // ----------- Tracker -----------
 

@@ -18,7 +18,7 @@
   // ----------- Private functions -----------
 
   function getForeignPodsList (url, callback) {
-    var path = '/api/pods'
+    var path = '/api/' + global.API_VERSION + '/pods'
 
     request.get(url + path, function (err, response, body) {
       if (err) throw err
@@ -143,7 +143,7 @@
         logger.debug('Make requests...')
 
         utils.makeMultipleRetryRequest(
-          { method: 'POST', path: '/api/pods/', data: data },
+          { method: 'POST', path: '/api/' + global.API_VERSION + '/pods/', data: data },
 
           pods_list,
 

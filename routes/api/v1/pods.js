@@ -3,8 +3,8 @@
 
   var express = require('express')
   var router = express.Router()
-  var middleware = require('../../middlewares')
-  var pods = require('../../src/pods')
+  var middleware = require('../../../middlewares')
+  var pods = require('../../../src/pods')
 
   function listPods (req, res, next) {
     pods.list(function (err, pods_list) {

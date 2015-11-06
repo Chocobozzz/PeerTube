@@ -3,8 +3,8 @@
 
   var express = require('express')
   var router = express.Router()
-  var middleware = require('../../middlewares')
-  var videos = require('../../src/videos')
+  var middleware = require('../../../middlewares')
+  var videos = require('../../../src/videos')
 
   function listVideos (req, res, next) {
     videos.list(function (err, videos_list) {

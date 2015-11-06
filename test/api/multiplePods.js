@@ -11,7 +11,7 @@
   webtorrent.silent = true
 
   describe('Test multiple pods', function () {
-    var path = '/api/videos'
+    var path = '/api/v1/videos'
     var apps = []
     var urls = []
     var video_id = -1
@@ -38,7 +38,7 @@
 
     before(function (done) {
       this.timeout(30000)
-      var path_friends = '/api/pods/makefriends'
+      var path_friends = '/api/v1/pods/makefriends'
 
       utils.runMultipleServers(3, function (apps_run, urls_run) {
         apps = apps_run
