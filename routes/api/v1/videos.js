@@ -4,7 +4,8 @@
   var express = require('express')
   var router = express.Router()
   var middleware = require('../../../middlewares')
-  var reqValidator = require('../../../middlewares/reqValidators').videos
+  var miscMiddleware = middleware.misc
+  var reqValidator = middleware.reqValidators.videos
   var videos = require('../../../src/videos')
 
   function listVideos (req, res, next) {
@@ -52,11 +53,11 @@
     })
   }
 
-  router.get('/', middleware.cache(false), listVideos)
-  router.post('/', reqValidator.videosAdd, middleware.cache(false), addVideos)
-  router.get('/search/:name', reqValidator.videosSearch, middleware.cache(false), searchVideos)
-  router.get('/:id', reqValidator.videosGet, middleware.cache(false), getVideos)
-  router.delete('/:id', reqValidator.videosRemove, middleware.cache(false), removeVideo)
+  router.get('/', miscMiddleware.cache(false), listVideos)
+  router.post('/', reqValidator.videosAdd, miscMiddleware.cache(false), addVideos)
+  router.get('/search/:name', reqValidator.videosSearch, miscMiddleware.cache(false), searchVideos)
+  router.get('/:id', reqValidator.videosGet, miscMiddleware.cache(false), getVideos)
+  router.delete('/:id', reqValidator.videosRemove, miscMiddleware.cache(false), removeVideo)
 
   module.exports = router
 })()

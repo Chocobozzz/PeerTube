@@ -13,7 +13,7 @@
   }
 
   var express = require('express')
-  var middleware = require('../middlewares')
+  var middleware = require('../middlewares').misc
 
   var router = express.Router()
 

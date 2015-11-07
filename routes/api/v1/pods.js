@@ -4,7 +4,8 @@
   var express = require('express')
   var router = express.Router()
   var middleware = require('../../../middlewares')
-  var reqValidator = require('../../../middlewares/reqValidators').pods
+  var miscMiddleware = middleware.misc
+  var reqValidator = middleware.reqValidators.pods
   var pods = require('../../../src/pods')
 
   function listPods (req, res, next) {
@@ -31,9 +32,9 @@
     })
   }
 
-  router.get('/', middleware.cache(false), listPods)
-  router.get('/makefriends', middleware.cache(false), makeFriends)
-  router.post('/', reqValidator.podsAdd, middleware.cache(false), addPods)
+  router.get('/', miscMiddleware.cache(false), listPods)
+  router.get('/makefriends', miscMiddleware.cache(false), makeFriends)
+  router.post('/', reqValidator.podsAdd, miscMiddleware.cache(false), addPods)
 
   module.exports = router
 })()

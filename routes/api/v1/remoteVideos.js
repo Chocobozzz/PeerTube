@@ -4,7 +4,8 @@
   var express = require('express')
   var router = express.Router()
   var middleware = require('../../../middlewares')
-  var requestValidator = require('../../../middlewares/reqValidators').remote
+  var miscMiddleware = middleware.misc
+  var reqValidator = middleware.reqValidators.remote
   var videos = require('../../../src/videos')
 
   function addRemoteVideos (req, res, next) {
@@ -23,8 +24,8 @@
     })
   }
 
-  router.post('/add', requestValidator.secureRequest, middleware.decryptBody, requestValidator.remoteVideosAdd, middleware.cache(false), addRemoteVideos)
-  router.post('/remove', requestValidator.secureRequest, middleware.decryptBody, requestValidator.remoteVideosRemove, middleware.cache(false), removeRemoteVideo)
+  router.post('/add', reqValidator.secureRequest, miscMiddleware.decryptBody, reqValidator.remoteVideosAdd, miscMiddleware.cache(false), addRemoteVideos)
+  router.post('/remove', reqValidator.secureRequest, miscMiddleware.decryptBody, reqValidator.remoteVideosRemove, miscMiddleware.cache(false), removeRemoteVideo)
 
   module.exports = router
 })()
