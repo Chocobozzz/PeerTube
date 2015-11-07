@@ -6,6 +6,7 @@
 
   // ----------- Node modules -----------
   var express = require('express')
+  var expressValidator = require('express-validator')
   var path = require('path')
   var morgan = require('morgan')
   var bodyParser = require('body-parser')
@@ -47,6 +48,7 @@
   app.use(bodyParser.json())
   app.use(multer({ dest: uploads }))
   app.use(bodyParser.urlencoded({ extended: false }))
+  app.use(expressValidator())
 
   // ----------- Views, routes and static files -----------
 
