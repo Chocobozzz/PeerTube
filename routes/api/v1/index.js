@@ -1,10 +1,12 @@
 ;(function () {
   'use strict'
 
-  var api = {}
-  api.videos = require('./videos')
-  api.remoteVideos = require('./remoteVideos')
-  api.pods = require('./pods')
+  var express = require('express')
+  var router = express.Router()
 
-  module.exports = api
+  router.use('/videos', require('./videos'))
+  router.use('/remotevideos', require('./remoteVideos'))
+  router.use('/pods', require('./pods'))
+
+  module.exports = router
 })()

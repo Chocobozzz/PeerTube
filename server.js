@@ -32,12 +32,10 @@
   var config = require('config')
   var logger = require('./src/logger')
   var routes = require('./routes')
-  var api = require('./routes/api/' + global.API_VERSION)
   var utils = require('./src/utils')
   var videos = require('./src/videos')
   var webtorrent = require('./src/webTorrentNode')
 
-  var compression
   var port = config.get('listen.port')
   var uploads = config.get('storage.uploads')
 
@@ -52,51 +50,25 @@
 
   // ----------- Views, routes and static files -----------
 
-  if (process.env.NODE_ENV === 'production') {
-    // logger.log('Production : static files in dist/\n')
+  // Livereload
+  app.use(require('connect-livereload')({
+    port: 35729
+  }))
 
-    // GZip compression
-    compression = require('compression')
-    app.use(compression())
+  require('segfault-handler').registerHandler()
 
-    // A month
-    var maxAge = 86400000 * 30
+  app.use(express.static(path.join(__dirname, '/public'), { maxAge: 0 }))
 
-    // TODO
-    app.get(/^\/(index|(partials\/[a-z\/]+))?$/, function (req, res, next) {
-      if (req.url === '/') {
-        req.url = '/index'
-      }
+  // Jade template from ./views directory
+  app.set('views', path.join(__dirname, '/views'))
+  app.set('view engine', 'jade')
 
-      req.url += '.html'
-      next()
-    })
-
-    app.use(express.static(path.join(__dirname, '/dist/public'), { maxAge: maxAge }))
-    app.use(express.static(path.join(__dirname, '/dist/views'), { maxAge: maxAge }))
-  } else {
-    // Livereload
-    app.use(require('connect-livereload')({
-      port: 35729
-    }))
-
-    require('segfault-handler').registerHandler()
-
-    app.use(express.static(path.join(__dirname, '/public'), { maxAge: 0 }))
-
-    // Jade template from ./views directory
-    app.set('views', path.join(__dirname, '/views'))
-    app.set('view engine', 'jade')
-
-    // Views routes
-    app.use('/', routes)
-  }
-
-  // ----------- Routes -----------
+  // API
   var api_route = '/api/' + global.API_VERSION
-  app.use(api_route + '/videos', api.videos)
-  app.use(api_route + '/remotevideos', api.remoteVideos)
-  app.use(api_route + '/pods', api.pods)
+  app.use(api_route, routes.api)
+
+  // Views routes
+  app.use('/', routes.views)
 
   // ----------- Tracker -----------
 
