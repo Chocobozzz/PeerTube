@@ -1,25 +1,32 @@
 language: node_js
 
 node_js:
-    - "0.12"
-    - "4.2"
+  - "0.12"
+  - "4.2"
+
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
 
 sudo: false
 
 services:
-    - mongodb
+  - mongodb
 
 cache:
-    directories:
-        - node_modules
-        - $(npm config get prefix)/bin/grunt-cli
-        - $(npm config get prefix)/bin/electron-prebuilt
+  directories:
+    - node_modules
+    - $(npm config get prefix)/bin/grunt-cli
+    - $(npm config get prefix)/bin/electron-prebuilt
 
 before_script:
-    - npm install electron-prebuilt -g
-    - npm install grunt-cli -g
+  - npm install electron-prebuilt -g
+  - npm install grunt-cli -g
 
 after_failure:
-    - cat test1/logs/all-logs.log
-    - cat test2/logs/all-logs.log
-    - cat test3/logs/all-logs.log
+  - cat test1/logs/all-logs.log
+  - cat test2/logs/all-logs.log
+  - cat test3/logs/all-logs.log
