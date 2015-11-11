@@ -44,7 +44,7 @@
     "request-replay": "^0.3.0",
     "segfault-handler": "^0.2.4",
     "time-grunt": "^1.2.1",
-    "ursa": "^0.8.5",
+    "ursa": "^0.9.1",
     "webtorrent": "*",
     "winston": "^1.0.1",
     "ws": "^0.7.2"
