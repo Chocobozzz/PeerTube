@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "async": "^1.2.1",
-    "bittorrent-tracker": "^4.4.5",
+    "bittorrent-tracker": "^6.0.6",
     "blueimp-file-upload": "^9.10.1",
     "body-parser": "^1.12.4",
     "bootstrap": "^3.3.5",
@@ -47,7 +47,7 @@
     "ursa": "^0.9.1",
     "webtorrent": "*",
     "winston": "^1.0.1",
-    "ws": "^0.7.2"
+    "ws": "^0.8.0"
   },
   "devDependencies": {
     "chai": "^3.3.0",
