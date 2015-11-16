@@ -1,10 +1,9 @@
 ;(function () {
   // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-
   'use strict'
 
-  var winston = require('winston')
   var config = require('config')
+  var winston = require('winston')
 
   var logDir = __dirname + '/../' + config.get('storage.logs')
 

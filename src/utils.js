@@ -1,22 +1,22 @@
 ;(function () {
   'use strict'
 
+  var config = require('config')
+  var crypto = require('crypto')
+  var fs = require('fs')
+  var openssl = require('openssl-wrapper')
   var request = require('request')
   var replay = require('request-replay')
   var ursa = require('ursa')
-  var config = require('config')
-  var fs = require('fs')
-  var openssl = require('openssl-wrapper')
-  var crypto = require('crypto')
 
   var logger = require('./logger')
+
+  var utils = {}
 
   var http = config.get('webserver.https') ? 'https' : 'http'
   var host = config.get('webserver.host')
   var port = config.get('webserver.port')
   var algorithm = 'aes-256-ctr'
-
-  var utils = {}
 
   // ----------- Private functions ----------
 
@@ -29,7 +29,7 @@
       }
     }
 
-    logger.debug('Sending informations to %s', to_pod.url, { params: params })
+    logger.debug('Sending informations to %s.', to_pod.url, { params: params })
 
     // Replay 15 times, with factor 3
     replay(
@@ -52,7 +52,7 @@
   utils.certDir = __dirname + '/../' + config.get('storage.certs')
 
   // { path, data }
-  utils.makeMultipleRetryRequest = function (all, pods, callbackEach, callback) {
+  utils.makeMultipleRetryRequest = function (all_data, pods, callbackEach, callback) {
     if (!callback) {
       callback = callbackEach
       callbackEach = function () {}
@@ -61,8 +61,8 @@
     var url = http + '://' + host + ':' + port
     var signature
 
-    // Signature ?
-    if (all.method === 'POST' && all.data && all.sign === true) {
+    // Add signature if it is specified in the params
+    if (all_data.method === 'POST' && all_data.data && all_data.sign === true) {
       var myKey = ursa.createPrivateKey(fs.readFileSync(utils.certDir + 'peertube.key.pem'))
       signature = myKey.hashAndSign('sha256', url, 'utf8', 'hex')
     }
@@ -70,22 +70,21 @@
     // Make a request for each pod
     for (var pod of pods) {
       var params = {
-        url: pod.url + all.path,
-        method: all.method
+        url: pod.url + all_data.path,
+        method: all_data.method
       }
 
       // Add data with POST requst ?
-      if (all.method === 'POST' && all.data) {
+      if (all_data.method === 'POST' && all_data.data) {
         logger.debug('Make a POST request.')
 
         // Encrypt data ?
-        if (all.encrypt === true) {
-          logger.debug(pod.publicKey)
+        if (all_data.encrypt === true) {
           var crt = ursa.createPublicKey(pod.publicKey)
 
           // TODO: ES6 with let
           ;(function (crt_copy, copy_params, copy_url, copy_pod, copy_signature) {
-            utils.symetricEncrypt(JSON.stringify(all.data), function (err, dataEncrypted) {
+            utils.symetricEncrypt(JSON.stringify(all_data.data), function (err, dataEncrypted) {
               if (err) throw err
 
               var passwordEncrypted = crt_copy.encrypt(dataEncrypted.password, 'utf8', 'hex')
@@ -98,7 +97,7 @@
             })
           })(crt, params, url, pod, signature)
         } else {
-          params.json = { data: all.data }
+          params.json = { data: all_data.data }
           makeRetryRequest(params, url, pod, signature, callbackEach)
         }
       } else {
@@ -124,20 +123,22 @@
         return callback(new Error(string))
       }
 
-      logger.debug('Gen RSA keys...')
+      logger.info('Generating a RSA key...')
       openssl.exec('genrsa', { 'out': utils.certDir + 'peertube.key.pem', '2048': false }, function (err) {
         if (err) {
           logger.error('Cannot create private key on this pod.', { error: err })
           return callback(err)
         }
+        logger.info('RSA key generated.')
 
-        logger.debug('Manage public key...')
+        logger.info('Manage public key...')
         openssl.exec('rsa', { 'in': utils.certDir + 'peertube.key.pem', 'pubout': true, 'out': utils.certDir + 'peertube.pub' }, function (err) {
           if (err) {
             logger.error('Cannot create public key on this pod .', { error: err })
             return callback(err)
           }
 
+          logger.info('Public key managed.')
           return callback(null)
         })
       })

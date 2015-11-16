@@ -1,20 +1,22 @@
 ;(function () {
   'use strict'
 
-  // ----------- Constantes -----------
+  // ----------- Constants -----------
   global.API_VERSION = 'v1'
 
   // ----------- Node modules -----------
+  var bodyParser = require('body-parser')
   var express = require('express')
   var expressValidator = require('express-validator')
-  var path = require('path')
+  var http = require('http')
   var morgan = require('morgan')
-  var bodyParser = require('body-parser')
   var multer = require('multer')
+  var path = require('path')
   var TrackerServer = require('bittorrent-tracker').Server
   var WebSocketServer = require('ws').Server
+
+  // Create our main app
   var app = express()
-  var http = require('http')
 
   // ----------- Checker -----------
   var checker = require('./src/checker')
@@ -26,7 +28,7 @@
     process.exit(0)
   }
 
-  checker.createDirectories()
+  checker.createDirectoriesIfNotExist()
 
   // ----------- PeerTube modules -----------
   var config = require('config')
@@ -36,16 +38,22 @@
   var videos = require('./src/videos')
   var webtorrent = require('./src/webTorrentNode')
 
+  // Get configurations
   var port = config.get('listen.port')
   var uploads = config.get('storage.uploads')
 
   // ----------- Command line -----------
 
   // ----------- App -----------
+
+  // For the logger
   app.use(morgan('combined', { stream: logger.stream }))
+  // For body requests
   app.use(bodyParser.json())
+  // For POST file requests
   app.use(multer({ dest: uploads }))
   app.use(bodyParser.urlencoded({ extended: false }))
+  // Validate some params for the API
   app.use(expressValidator())
 
   // ----------- Views, routes and static files -----------
@@ -55,15 +63,17 @@
     port: 35729
   }))
 
+  // Catch sefaults
   require('segfault-handler').registerHandler()
 
+  // Static files
   app.use(express.static(path.join(__dirname, '/public'), { maxAge: 0 }))
 
   // Jade template from ./views directory
   app.set('views', path.join(__dirname, '/views'))
   app.set('view engine', 'jade')
 
-  // API
+  // API routes
   var api_route = '/api/' + global.API_VERSION
   app.use(api_route, routes.api)
 

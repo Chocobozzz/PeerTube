@@ -1,16 +1,17 @@
 ;(function () {
   'use strict'
 
-  var fs = require('fs')
-  var config = require('config')
   var async = require('async')
+  var config = require('config')
+  var fs = require('fs')
   var request = require('request')
 
   var logger = require('./logger')
-  var utils = require('./utils')
   var PodsDB = require('./database').PodsDB
+  var utils = require('./utils')
 
   var pods = {}
+
   var http = config.get('webserver.https') ? 'https' : 'http'
   var host = config.get('webserver.host')
   var port = config.get('webserver.port')
@@ -27,6 +28,7 @@
   }
 
   // ----------- Public functions -----------
+
   pods.list = function (callback) {
     PodsDB.find(function (err, pods_list) {
       if (err) {
@@ -73,18 +75,27 @@
       }
 
       logger.debug('Make multiple requests.')
+
+      var params = {
+        encrypt: true,
+        sign: true,
+        method: data.method,
+        path: data.path,
+        data: data.data
+      }
+
       utils.makeMultipleRetryRequest(
-        { encrypt: true, sign: true, method: data.method, path: data.path, data: data.data },
+        params,
 
         urls,
 
-        function (err, response, body, url) {
+        function callbackEachPodFinished (err, response, body, url) {
           if (err || response.statusCode !== 200) {
             logger.error('Error sending secure request to %s/%s pod.', url, data.path, { error: err })
           }
         },
 
-        function (err) {
+        function callbackAllPodsFinished (err) {
           if (err) {
             logger.error('There was some errors when sending the video meta data.', { error: err })
             return callback(err)
@@ -98,7 +109,9 @@
   }
 
   pods.makeFriends = function (callback) {
-    logger.debug('Read public key...')
+    var pods_score = {}
+
+    logger.info('Make friends!')
     fs.readFile(utils.certDir + 'peertube.pub', 'utf8', function (err, cert) {
       if (err) {
         logger.error('Cannot read public cert.', { error: err })
@@ -106,71 +119,86 @@
       }
 
       var urls = config.get('network.friends')
-      var pods_score = {}
 
-      async.each(urls, function (url, callback) {
-        // Always add a trust pod
-        pods_score[url] = Infinity
-
-        getForeignPodsList(url, function (foreign_pods_list) {
-          if (foreign_pods_list.length === 0) return callback()
-
-          async.each(foreign_pods_list, function (foreign_pod, callback) {
-            var foreign_url = foreign_pod.url
-            if (pods_score[foreign_url]) pods_score[foreign_url]++
-            else pods_score[foreign_url] = 1
-            callback()
-          }, callback)
-        })
-      }, function () {
-        logger.debug('Pods score', { pods_score: pods_score })
-
-        // Build the list of pods to add
-        // Only add a pod if it exists in more than a half base pods
-        var pods_list = []
-        var base_score = urls.length / 2
-        Object.keys(pods_score).forEach(function (pod) {
-          if (pods_score[pod] > base_score) pods_list.push({ url: pod })
-        })
-
-        logger.debug('Pods that we keep', { pods: pods_list })
-
-        var data = {
-          url: http + '://' + host + ':' + port,
-          publicKey: cert
-        }
+      async.each(urls, computeForeignPodsList, function () {
+        logger.debug('Pods scores computed.', { pods_score: pods_score })
+        var pods_list = computeWinningPods(urls, pods_score)
+        logger.debug('Pods that we keep computed.', { pods_to_keep: pods_list })
 
         logger.debug('Make requests...')
-
-        utils.makeMultipleRetryRequest(
-          { method: 'POST', path: '/api/' + global.API_VERSION + '/pods/', data: data },
-
-          pods_list,
-
-          function eachRequest (err, response, body, url) {
-            if (!err && response.statusCode === 200) {
-              pods.add({ url: url, publicKey: body.cert }, function (err) {
-                if (err) {
-                  logger.error('Error with adding %s pod.', url, { error: err })
-                }
-              })
-            } else {
-              logger.error('Error with adding %s pod.', url)
-            }
-          },
-
-          function endRequests (err) {
-            if (err) {
-              logger.error('There was some errors when we wanted to make friends.', { error: err })
-              return callback(err)
-            }
-
-            logger.debug('Finished')
-            callback(null)
-          }
-        )
+        makeRequestsToWinningPods(cert, pods_list)
       })
     })
+
+    // -----------------------------------------------------------------------
+
+    function computeForeignPodsList (url, callback) {
+      // Always add a trust pod
+      pods_score[url] = Infinity
+
+      getForeignPodsList(url, function (foreign_pods_list) {
+        if (foreign_pods_list.length === 0) return callback()
+
+        async.each(foreign_pods_list, function (foreign_pod, callback_each) {
+          var foreign_url = foreign_pod.url
+
+          if (pods_score[foreign_url]) pods_score[foreign_url]++
+          else pods_score[foreign_url] = 1
+
+          callback_each()
+        }, function () {
+          callback()
+        })
+      })
+    }
+
+    function computeWinningPods (urls, pods_score) {
+      // Build the list of pods to add
+      // Only add a pod if it exists in more than a half base pods
+      var pods_list = []
+      var base_score = urls.length / 2
+      Object.keys(pods_score).forEach(function (pod) {
+        if (pods_score[pod] > base_score) pods_list.push({ url: pod })
+      })
+
+      return pods_list
+    }
+
+    function makeRequestsToWinningPods (cert, pods_list) {
+      var data = {
+        url: http + '://' + host + ':' + port,
+        publicKey: cert
+      }
+
+      utils.makeMultipleRetryRequest(
+        { method: 'POST', path: '/api/' + global.API_VERSION + '/pods/', data: data },
+
+        pods_list,
+
+        function eachRequest (err, response, body, url) {
+          // We add the pod if it responded correctly with its public certificate
+          if (!err && response.statusCode === 200) {
+            pods.add({ url: url, publicKey: body.cert }, function (err) {
+              if (err) {
+                logger.error('Error with adding %s pod.', url, { error: err })
+              }
+            })
+          } else {
+            logger.error('Error with adding %s pod.', url, { error: err || new Error('Status not 200') })
+          }
+        },
+
+        function endRequests (err) {
+          if (err) {
+            logger.error('There was some errors when we wanted to make friends.', { error: err })
+            return callback(err)
+          }
+
+          logger.debug('makeRequestsToWinningPods finished.')
+          return callback(null)
+        }
+      )
+    }
   }
 
   module.exports = pods

@@ -25,7 +25,7 @@
   }
 
   // Create directories for the storage if it doesn't exist
-  checker.createDirectories = function () {
+  checker.createDirectoriesIfNotExist = function () {
     var storages = config.get('storage')
 
     for (var key of Object.keys(storages)) {

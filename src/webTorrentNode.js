@@ -1,10 +1,10 @@
 ;(function () {
   'use strict'
 
-  var spawn = require('electron-spawn')
   var config = require('config')
   var ipc = require('node-ipc')
   var pathUtils = require('path')
+  var spawn = require('electron-spawn')
 
   var logger = require('./logger')
 
@@ -85,12 +85,12 @@
       }
     }
 
-    if (!webtorrentnode.silent) logger.debug('Node wants to seed ' + data._id)
+    if (!webtorrentnode.silent) logger.debug('Node wants to seed %s.', data._id)
 
     // Finish signal
     var event_key = nodeKey + '.seedDone.' + data._id
     ipc.server.on(event_key, function listener (received) {
-      if (!webtorrentnode.silent) logger.debug('Process seeded torrent ' + received.magnetUri)
+      if (!webtorrentnode.silent) logger.debug('Process seeded torrent %s.', received.magnetUri)
 
       // This is a fake object, we just use the magnetUri in this project
       var torrent = {
@@ -117,7 +117,7 @@
     // Finish signal
     var event_key = nodeKey + '.addDone.' + data._id
     ipc.server.on(event_key, function (received) {
-      if (!webtorrentnode.silent) logger.debug('Process added torrent')
+      if (!webtorrentnode.silent) logger.debug('Process added torrent.')
 
       // This is a fake object, we just use the magnetUri in this project
       var torrent = {
@@ -139,12 +139,12 @@
       }
     }
 
-    if (!webtorrentnode.silent) logger.debug('Node wants to stop seeding ' + data._id)
+    if (!webtorrentnode.silent) logger.debug('Node wants to stop seeding %s.', data._id)
 
     // Finish signal
     var event_key = nodeKey + '.removeDone.' + data._id
     ipc.server.on(event_key, function (received) {
-      if (!webtorrentnode.silent) logger.debug('Process removed torrent ' + data._id)
+      if (!webtorrentnode.silent) logger.debug('Process removed torrent %s.', data._id)
 
       var err = null
       if (received.err) err = received.err
