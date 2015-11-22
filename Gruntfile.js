@@ -5,6 +5,7 @@ module.exports = function (grunt) {
     dist: 'dist',
     jade: 'views/**/**/*.jade',
     css: 'public/stylesheets/*.css',
+    scss: 'public/stylesheets/*.scss',
     vendor: 'public/stylesheets/vendor',
     js: 'public/javascripts/*.js',
     src: 'src/*.js',
@@ -34,8 +35,8 @@ module.exports = function (grunt) {
     },
     copy: {
       dev: {
-        cwd: 'node_modules/bootstrap/dist/',
-        src: [ 'css/*', 'fonts/*' ],
+        cwd: 'node_modules/bootstrap-sass/assets/',
+        src: [ 'fonts/bootstrap/*' ],
         expand: true,
         dest: paths.vendor
       }
@@ -45,7 +46,7 @@ module.exports = function (grunt) {
         files: [{
           dot: true,
           src: [
-            paths.browserified
+            paths.browserified, 'public/stylesheets/global.css', paths.vendor
           ]
         }]
       }
@@ -59,6 +60,13 @@ module.exports = function (grunt) {
           node_env: 'development',
           debug: true,
           background: true
+        }
+      }
+    },
+    sass: {
+      dev: {
+        files: {
+          'public/stylesheets/global.css': paths.scss
         }
       }
     },
@@ -83,11 +91,14 @@ module.exports = function (grunt) {
 
   // Build client javascript and copy bootstrap dependencies
   grunt.registerTask('build', [], function () {
+    grunt.loadNpmTasks('grunt-sass')
     grunt.loadNpmTasks('grunt-browserify')
     grunt.loadNpmTasks('grunt-contrib-copy')
     grunt.loadNpmTasks('grunt-newer')
 
+    // TODO: SASS --> newer
     grunt.task.run(
+      'sass:dev',
       'newer:browserify:dev',
       'newer:copy:dev'
     )
@@ -95,13 +106,16 @@ module.exports = function (grunt) {
 
   // Start in dev mode (reload front end files without refresh)
   grunt.registerTask('dev', [], function () {
+    grunt.loadNpmTasks('grunt-sass')
     grunt.loadNpmTasks('grunt-browserify')
     grunt.loadNpmTasks('grunt-contrib-watch')
     grunt.loadNpmTasks('grunt-express-server')
     grunt.loadNpmTasks('grunt-contrib-copy')
     grunt.loadNpmTasks('grunt-newer')
 
+    // TODO: SASS --> newer
     grunt.task.run(
+      'sass:dev',
       'newer:browserify:dev',
       'newer:copy:dev',
       'express:dev',
