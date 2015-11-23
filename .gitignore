@@ -8,3 +8,5 @@ logs/
 test1/
 test2/
 test3/
+public/stylesheets/global.css
+public/stylesheets/vendor
