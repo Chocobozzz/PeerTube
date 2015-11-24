@@ -24,7 +24,8 @@
   // ----------- Pods -----------
   var podsSchema = mongoose.Schema({
     url: String,
-    publicKey: String
+    publicKey: String,
+    score: { type: Number, max: global.FRIEND_BASE_SCORE }
   })
 
   var PodsDB = mongoose.model('pods', podsSchema)

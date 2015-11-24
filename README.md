@@ -36,7 +36,7 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
   - [ ] Inscription
   - [ ] Connection
   - [ ] Account rights (upload...)
-- [ ] Make the network auto sufficient (eject bad pods etc)
+- [X] Make the network auto sufficient (eject bad pods etc)
 - [ ] Manage API breaks
 - [ ] Add "DDOS" security (check if a pod don't send too many requests for example)
 

@@ -74,8 +74,8 @@
   }
 
   module.exports = {
+    flushTests: flushTests,
     runMultipleServers: runMultipleServers,
-    runServer: runServer,
-    flushTests: flushTests
+    runServer: runServer
   }
 })()

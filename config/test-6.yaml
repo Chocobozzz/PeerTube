@@ -1,0 +1,21 @@
+listen:
+  port: 9006
+
+webserver:
+  host: 'localhost'
+  port: 9006
+
+database:
+  suffix: '-test6'
+
+# From the project root directory
+storage:
+  certs: 'test6/certs/'
+  uploads: 'test6/uploads/'
+  logs: 'test6/logs/'
+
+network:
+  friends:
+    - 'http://localhost:9001'
+    - 'http://localhost:9002'
+    - 'http://localhost:9003'

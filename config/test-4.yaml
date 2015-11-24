@@ -1,0 +1,19 @@
+listen:
+  port: 9004
+
+webserver:
+  host: 'localhost'
+  port: 9004
+
+database:
+  suffix: '-test4'
+
+# From the project root directory
+storage:
+  certs: 'test4/certs/'
+  uploads: 'test4/uploads/'
+  logs: 'test4/logs/'
+
+network:
+  friends:
+    - 'http://localhost:9002'

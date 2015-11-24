@@ -16,6 +16,13 @@
   var host = config.get('webserver.host')
   var port = config.get('webserver.port')
 
+  // ----------- Constants -----------
+
+  var PODS_SCORE = {
+    MALUS: -10,
+    BONUS: 10
+  }
+
   // ----------- Private functions -----------
 
   function getForeignPodsList (url, callback) {
@@ -24,6 +31,25 @@
     request.get(url + path, function (err, response, body) {
       if (err) throw err
       callback(JSON.parse(body))
+    })
+  }
+
+  function updatePodsScore (good_pods, bad_pods) {
+    logger.info('Updating %d good pods and %d bad pods scores.', good_pods.length, bad_pods.length)
+
+    PodsDB.update({ _id: { $in: good_pods } }, { $inc: { score: PODS_SCORE.BONUS } }, { multi: true }).exec()
+    PodsDB.update({ _id: { $in: bad_pods } }, { $inc: { score: PODS_SCORE.MALUS } }, { multi: true }, function (err) {
+      if (err) throw err
+      removeBadPods()
+    })
+  }
+
+  function removeBadPods () {
+    PodsDB.remove({ score: 0 }, function (err, result) {
+      if (err) throw err
+
+      var number_removed = result.result.n
+      if (number_removed !== 0) logger.info('Removed %d pod.', number_removed)
     })
   }
 
@@ -46,7 +72,8 @@
 
     var params = {
       url: data.url,
-      publicKey: data.publicKey
+      publicKey: data.publicKey,
+      score: global.FRIEND_BASE_SCORE
     }
 
     PodsDB.create(params, function (err, pod) {
@@ -68,7 +95,9 @@
 
   // { path, data }
   pods.makeSecureRequest = function (data, callback) {
-    PodsDB.find({}, { url: 1, publicKey: 1 }).exec(function (err, urls) {
+    if (callback === undefined) callback = function () {}
+
+    PodsDB.find({}, { _id: 1, url: 1, publicKey: 1 }).exec(function (err, pods) {
       if (err) {
         logger.error('Cannot get the list of the pods.', { error: err })
         return callback(err)
@@ -84,15 +113,23 @@
         data: data.data
       }
 
+      var bad_pods = []
+      var good_pods = []
+
       utils.makeMultipleRetryRequest(
         params,
 
-        urls,
+        pods,
 
-        function callbackEachPodFinished (err, response, body, url) {
+        function callbackEachPodFinished (err, response, body, pod, callback_each_pod_finished) {
           if (err || response.statusCode !== 200) {
-            logger.error('Error sending secure request to %s/%s pod.', url, data.path, { error: err })
+            bad_pods.push(pod._id)
+            logger.error('Error sending secure request to %s/%s pod.', pod.url, data.path, { error: err })
+          } else {
+            good_pods.push(pod._id)
           }
+
+          return callback_each_pod_finished()
         },
 
         function callbackAllPodsFinished (err) {
@@ -102,6 +139,8 @@
           }
 
           logger.debug('Finished')
+
+          updatePodsScore(good_pods, bad_pods)
           callback(null)
         }
       )
@@ -133,8 +172,8 @@
     // -----------------------------------------------------------------------
 
     function computeForeignPodsList (url, callback) {
-      // Always add a trust pod
-      pods_score[url] = Infinity
+      // Let's give 1 point to the pod we ask the friends list
+      pods_score[url] = 1
 
       getForeignPodsList(url, function (foreign_pods_list) {
         if (foreign_pods_list.length === 0) return callback()
@@ -175,16 +214,19 @@
 
         pods_list,
 
-        function eachRequest (err, response, body, url) {
+        function eachRequest (err, response, body, pod, callback_each_request) {
           // We add the pod if it responded correctly with its public certificate
           if (!err && response.statusCode === 200) {
-            pods.add({ url: url, publicKey: body.cert }, function (err) {
+            pods.add({ url: pod.url, publicKey: body.cert, score: global.FRIEND_BASE_SCORE }, function (err) {
               if (err) {
-                logger.error('Error with adding %s pod.', url, { error: err })
+                logger.error('Error with adding %s pod.', pod.url, { error: err })
               }
+
+              return callback_each_request()
             })
           } else {
-            logger.error('Error with adding %s pod.', url, { error: err || new Error('Status not 200') })
+            logger.error('Error with adding %s pod.', pod.url, { error: err || new Error('Status not 200') })
+            return callback_each_request()
           }
         },
 

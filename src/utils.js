@@ -1,6 +1,7 @@
 ;(function () {
   'use strict'
 
+  var async = require('async')
   var config = require('config')
   var crypto = require('crypto')
   var fs = require('fs')
@@ -30,14 +31,15 @@
     }
 
     logger.debug('Sending informations to %s.', to_pod.url, { params: params })
+    // Default 10 but in tests we want to be faster
+    var retries = utils.isTestInstance() ? 2 : 10
 
-    // Replay 15 times, with factor 3
     replay(
       request.post(params, function (err, response, body) {
-        callbackEach(err, response, body, to_pod.url)
+        callbackEach(err, response, body, to_pod)
       }),
       {
-        retries: 10,
+        retries: retries,
         factor: 3,
         maxTimeout: Infinity,
         errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
@@ -68,7 +70,13 @@
     }
 
     // Make a request for each pod
-    for (var pod of pods) {
+    async.each(pods, function (pod, callback_each_async) {
+      function callbackEachRetryRequest (err, response, body, pod) {
+        callbackEach(err, response, body, pod, function () {
+          callback_each_async()
+        })
+      }
+
       var params = {
         url: pod.url + all_data.path,
         method: all_data.method
@@ -93,20 +101,18 @@
                 key: passwordEncrypted
               }
 
-              makeRetryRequest(copy_params, copy_url, copy_pod, copy_signature, callbackEach)
+              makeRetryRequest(copy_params, copy_url, copy_pod, copy_signature, callbackEachRetryRequest)
             })
           })(crt, params, url, pod, signature)
         } else {
           params.json = { data: all_data.data }
-          makeRetryRequest(params, url, pod, signature, callbackEach)
+          makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
         }
       } else {
         logger.debug('Make a GET/DELETE request')
-        makeRetryRequest(params, url, pod, signature, callbackEach)
+        makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
       }
-    }
-
-    return callback()
+    }, callback)
   }
 
   utils.certsExist = function (callback) {
@@ -190,6 +196,10 @@
   utils.cleanForExit = function (webtorrent_process) {
     logger.info('Gracefully exiting')
     process.kill(-webtorrent_process.pid)
+  }
+
+  utils.isTestInstance = function () {
+    return (process.env.NODE_ENV === 'test')
   }
 
   module.exports = utils

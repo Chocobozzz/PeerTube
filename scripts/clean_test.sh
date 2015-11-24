@@ -1,5 +1,6 @@
 #!/bin/bash
 
-printf "use peertube-test1;\ndb.dropDatabase();\nuse peertube-test2;\ndb.dropDatabase();\nuse peertube-test3;\ndb.dropDatabase();" | mongo
-
-rm -rf ./test1 ./test2 ./test3
+for i in $(seq 1 6); do
+  printf "use peertube-test%s;\ndb.dropDatabase();" "$i" | mongo
+  rm -rf "./test$i"
+done

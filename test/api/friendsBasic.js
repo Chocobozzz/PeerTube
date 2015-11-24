@@ -19,7 +19,7 @@
       .end(end)
   }
 
-  describe('Test friends', function () {
+  describe('Test basic friends', function () {
     var apps = []
     var urls = []
 

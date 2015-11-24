@@ -78,14 +78,9 @@
           data: params
         }
 
-        pods.makeSecureRequest(data, function (err) {
-          if (err) {
-            logger.error('Somes issues when sending this video to friends.', { error: err })
-            return callback(err)
-          }
-
-          return callback(null)
-        })
+        // Do not wait the secure requests
+        pods.makeSecureRequest(data)
+        callback(null)
       })
     })
   }
@@ -138,14 +133,8 @@
             }
 
             // Yes this is a POST request because we add some informations in the body (signature, encrypt etc)
-            pods.makeSecureRequest(data, function (err) {
-              if (err) {
-                logger.error('Somes issues when sending we want to remove the video to friends.', { error: err })
-                return callback(err)
-              }
-
-              callback(null)
-            })
+            pods.makeSecureRequest(data)
+            callback(null)
           })
         })
       })

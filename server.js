@@ -1,9 +1,6 @@
 ;(function () {
   'use strict'
 
-  // ----------- Constants -----------
-  global.API_VERSION = 'v1'
-
   // ----------- Node modules -----------
   var bodyParser = require('body-parser')
   var express = require('express')
@@ -30,11 +27,16 @@
 
   checker.createDirectoriesIfNotExist()
 
+  // ----------- Constants -----------
+  var utils = require('./src/utils')
+
+  global.API_VERSION = 'v1'
+  global.FRIEND_BASE_SCORE = utils.isTestInstance() ? 20 : 100
+
   // ----------- PeerTube modules -----------
   var config = require('config')
   var logger = require('./src/logger')
   var routes = require('./routes')
-  var utils = require('./src/utils')
   var videos = require('./src/videos')
   var webtorrent = require('./src/webTorrentNode')
 
