@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "grunt dev",
-    "test": "grunt build && standard && mocha test/api"
+    "test": "grunt build && standard && mocha test"
   },
   "dependencies": {
     "async": "^1.2.1",
@@ -74,7 +74,8 @@
       "afterEach",
       "before",
       "beforeEach",
-      "describe"
+      "describe",
+      "include"
     ]
   }
 }
