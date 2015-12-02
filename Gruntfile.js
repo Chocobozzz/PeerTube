@@ -33,6 +33,12 @@ module.exports = function (grunt) {
         }
       }
     },
+    concurrent: {
+      options: {
+        logConcurrentOutput: true
+      },
+      dev: [ 'watch:livereload', 'watch:sass', 'express:dev' ]
+    },
     copy: {
       dev: {
         cwd: 'node_modules/bootstrap-sass/assets/',
@@ -59,7 +65,7 @@ module.exports = function (grunt) {
           port: 9000,
           node_env: 'development',
           debug: true,
-          background: true
+          background: false
         }
       }
     },
@@ -71,57 +77,28 @@ module.exports = function (grunt) {
       }
     },
     watch: {
-      express: {
-        files: [ paths.main, paths.routes, paths.src ],
-        tasks: [ 'express:dev' ],
+      livereload: {
+        files: [ paths.jade, paths.css, paths.browserified ],
+        tasks: [ ],
         options: {
-          livereload: true,
-          spawn: false
+          livereload: true
         }
       },
-      dev: {
-        files: [ paths.jade, paths.css, paths.browserified ],
-        options: {
-          livereload: true,
-          nospawn: false
-        }
+      sass: {
+        files: [ paths.scss ],
+        tasks: [ 'sass:dev' ]
       }
     }
   })
 
-  // Build client javascript and copy bootstrap dependencies
-  grunt.registerTask('build', [], function () {
-    grunt.loadNpmTasks('grunt-sass')
-    grunt.loadNpmTasks('grunt-browserify')
-    grunt.loadNpmTasks('grunt-contrib-copy')
-    grunt.loadNpmTasks('grunt-newer')
+  // Load automatically all the tasks
+  require('load-grunt-tasks')(grunt)
 
-    // TODO: SASS --> newer
-    grunt.task.run(
-      'sass:dev',
-      'newer:browserify:dev',
-      'newer:copy:dev'
-    )
-  })
+  // Build client javascript and copy bootstrap dependencies
+  grunt.registerTask('build', [ 'sass:dev', 'newer:browserify:dev', 'newer:copy:dev' ])
 
   // Start in dev mode (reload front end files without refresh)
-  grunt.registerTask('dev', [], function () {
-    grunt.loadNpmTasks('grunt-sass')
-    grunt.loadNpmTasks('grunt-browserify')
-    grunt.loadNpmTasks('grunt-contrib-watch')
-    grunt.loadNpmTasks('grunt-express-server')
-    grunt.loadNpmTasks('grunt-contrib-copy')
-    grunt.loadNpmTasks('grunt-newer')
-
-    // TODO: SASS --> newer
-    grunt.task.run(
-      'sass:dev',
-      'newer:browserify:dev',
-      'newer:copy:dev',
-      'express:dev',
-      'watch'
-    )
-  })
+  grunt.registerTask('dev', [ 'sass:dev', 'newer:browserify:dev', 'newer:copy:dev', 'concurrent:dev' ])
 
   // Clean build
   grunt.registerTask('clean', [], function () {
