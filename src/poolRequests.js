@@ -29,6 +29,8 @@
     PoolRequestsDB.find({}, { type: 1, request: 1 }, function (err, pool_requests) {
       if (err) throw err
 
+      if (pool_requests.length === 0) return
+
       var requests = {
         add: [],
         remove: []
