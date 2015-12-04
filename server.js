@@ -35,7 +35,9 @@
 
   // ----------- PeerTube modules -----------
   var config = require('config')
+  var customValidators = require('./src/customValidators')
   var logger = require('./src/logger')
+  var poolRequests = require('./src/poolRequests')
   var routes = require('./routes')
   var videos = require('./src/videos')
   var webtorrent = require('./src/webTorrentNode')
@@ -56,7 +58,9 @@
   app.use(multer({ dest: uploads }))
   app.use(bodyParser.urlencoded({ extended: false }))
   // Validate some params for the API
-  app.use(expressValidator())
+  app.use(expressValidator({
+    customValidators: customValidators
+  }))
 
   // ----------- Views, routes and static files -----------
 
@@ -154,6 +158,9 @@
 
       // ----------- Make the server listening -----------
       server.listen(port, function () {
+        // Activate the pool requests
+        poolRequests.activate()
+
         videos.seedAll(function () {
           logger.info('Seeded all the videos')
           logger.info('Server listening on port %d', port)

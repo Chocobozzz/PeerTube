@@ -36,7 +36,7 @@
 
     replay(
       request.post(params, function (err, response, body) {
-        callbackEach(err, response, body, to_pod)
+        callbackEach(err, response, body, params.url, to_pod)
       }),
       {
         retries: retries,
@@ -71,8 +71,8 @@
 
     // Make a request for each pod
     async.each(pods, function (pod, callback_each_async) {
-      function callbackEachRetryRequest (err, response, body, pod) {
-        callbackEach(err, response, body, pod, function () {
+      function callbackEachRetryRequest (err, response, body, url, pod) {
+        callbackEach(err, response, body, url, pod, function () {
           callback_each_async()
         })
       }

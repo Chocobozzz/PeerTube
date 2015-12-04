@@ -8,6 +8,7 @@
 
   var logger = require('./logger')
   var PodsDB = require('./database').PodsDB
+  var poolRequests = require('./poolRequests')
   var utils = require('./utils')
 
   var pods = {}
@@ -15,13 +16,6 @@
   var http = config.get('webserver.https') ? 'https' : 'http'
   var host = config.get('webserver.host')
   var port = config.get('webserver.port')
-
-  // ----------- Constants -----------
-
-  var PODS_SCORE = {
-    MALUS: -10,
-    BONUS: 10
-  }
 
   // ----------- Private functions -----------
 
@@ -31,25 +25,6 @@
     request.get(url + path, function (err, response, body) {
       if (err) throw err
       callback(JSON.parse(body))
-    })
-  }
-
-  function updatePodsScore (good_pods, bad_pods) {
-    logger.info('Updating %d good pods and %d bad pods scores.', good_pods.length, bad_pods.length)
-
-    PodsDB.update({ _id: { $in: good_pods } }, { $inc: { score: PODS_SCORE.BONUS } }, { multi: true }).exec()
-    PodsDB.update({ _id: { $in: bad_pods } }, { $inc: { score: PODS_SCORE.MALUS } }, { multi: true }, function (err) {
-      if (err) throw err
-      removeBadPods()
-    })
-  }
-
-  function removeBadPods () {
-    PodsDB.remove({ score: 0 }, function (err, result) {
-      if (err) throw err
-
-      var number_removed = result.result.n
-      if (number_removed !== 0) logger.info('Removed %d pod.', number_removed)
     })
   }
 
@@ -93,58 +68,16 @@
     })
   }
 
-  // { path, data }
-  pods.makeSecureRequest = function (data, callback) {
-    if (callback === undefined) callback = function () {}
+  pods.addVideoToFriends = function (video) {
+    // To avoid duplicates
+    var id = video.name + video.magnetUri
+    poolRequests.addToPoolRequests(id, 'add', video)
+  }
 
-    PodsDB.find({}, { _id: 1, url: 1, publicKey: 1 }).exec(function (err, pods) {
-      if (err) {
-        logger.error('Cannot get the list of the pods.', { error: err })
-        return callback(err)
-      }
-
-      logger.debug('Make multiple requests.')
-
-      var params = {
-        encrypt: true,
-        sign: true,
-        method: data.method,
-        path: data.path,
-        data: data.data
-      }
-
-      var bad_pods = []
-      var good_pods = []
-
-      utils.makeMultipleRetryRequest(
-        params,
-
-        pods,
-
-        function callbackEachPodFinished (err, response, body, pod, callback_each_pod_finished) {
-          if (err || response.statusCode !== 200) {
-            bad_pods.push(pod._id)
-            logger.error('Error sending secure request to %s/%s pod.', pod.url, data.path, { error: err })
-          } else {
-            good_pods.push(pod._id)
-          }
-
-          return callback_each_pod_finished()
-        },
-
-        function callbackAllPodsFinished (err) {
-          if (err) {
-            logger.error('There was some errors when sending the video meta data.', { error: err })
-            return callback(err)
-          }
-
-          logger.debug('Finished')
-
-          updatePodsScore(good_pods, bad_pods)
-          callback(null)
-        }
-      )
-    })
+  pods.removeVideoToFriends = function (video) {
+    // To avoid duplicates
+    var id = video.name + video.magnetUri
+    poolRequests.addToPoolRequests(id, 'remove', video)
   }
 
   pods.makeFriends = function (callback) {
@@ -214,7 +147,7 @@
 
         pods_list,
 
-        function eachRequest (err, response, body, pod, callback_each_request) {
+        function eachRequest (err, response, body, url, pod, callback_each_request) {
           // We add the pod if it responded correctly with its public certificate
           if (!err && response.statusCode === 200) {
             pods.add({ url: pod.url, publicKey: body.cert, score: global.FRIEND_BASE_SCORE }, function (err) {

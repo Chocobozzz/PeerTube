@@ -30,6 +30,15 @@
 
   var PodsDB = mongoose.model('pods', podsSchema)
 
+  // ----------- PoolRequests -----------
+  var poolRequestsSchema = mongoose.Schema({
+    type: String,
+    id: String, // Special id to find duplicates (video created we want to remove...)
+    request: mongoose.Schema.Types.Mixed
+  })
+
+  var PoolRequestsDB = mongoose.model('poolRequests', poolRequestsSchema)
+
   // ----------- Connection -----------
 
   mongoose.connect('mongodb://' + host + ':' + port + '/' + dbname)
@@ -45,6 +54,7 @@
   // ----------- Export -----------
   module.exports = {
     VideosDB: VideosDB,
-    PodsDB: PodsDB
+    PodsDB: PodsDB,
+    PoolRequestsDB: PoolRequestsDB
   }
 })()

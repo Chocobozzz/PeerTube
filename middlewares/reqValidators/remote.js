@@ -18,10 +18,8 @@
   }
 
   remote.remoteVideosAdd = function (req, res, next) {
-    req.checkBody('data.name', 'Should have a name').isLength(1, 50)
-    req.checkBody('data.description', 'Should have a description').isLength(1, 250)
-    req.checkBody('data.magnetUri', 'Should have a magnetUri').notEmpty()
-    req.checkBody('data.podUrl', 'Should have a podUrl').isURL()
+    req.checkBody('data').isArray()
+    req.checkBody('data').eachIsRemoteVideosAddValid()
 
     logger.debug('Checking remoteVideosAdd parameters', { parameters: req.body })
 
@@ -29,7 +27,8 @@
   }
 
   remote.remoteVideosRemove = function (req, res, next) {
-    req.checkBody('data.magnetUri', 'Should have a magnetUri').notEmpty()
+    req.checkBody('data').isArray()
+    req.checkBody('data').eachIsRemoteVideosRemoveValid()
 
     logger.debug('Checking remoteVideosRemove parameters', { parameters: req.body })
 

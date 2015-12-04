@@ -3,6 +3,7 @@
 
   var async = require('async')
   var config = require('config')
+  var dz = require('dezalgo')
   var fs = require('fs')
   var webtorrent = require('./webTorrentNode')
 
@@ -67,19 +68,10 @@
           return callback(err)
         }
 
-        // Now we'll send the video's meta data
+        // Now we'll add the video's meta data to our friends
         params.namePath = null
 
-        logger.info('Sending %s video to friends.', video_file.path)
-
-        var data = {
-          path: '/api/' + global.API_VERSION + '/remotevideos/add',
-          method: 'POST',
-          data: params
-        }
-
-        // Do not wait the secure requests
-        pods.makeSecureRequest(data)
+        pods.addVideoToFriends(params)
         callback(null)
       })
     })
@@ -124,16 +116,12 @@
               return callback(err)
             }
 
-            var data = {
-              path: '/api/' + global.API_VERSION + '/remotevideos/remove',
-              method: 'POST',
-              data: {
-                magnetUri: video.magnetUri
-              }
+            var params = {
+              name: video.name,
+              magnetUri: video.magnetUri
             }
 
-            // Yes this is a POST request because we add some informations in the body (signature, encrypt etc)
-            pods.makeSecureRequest(data)
+            pods.removeVideoToFriends(params)
             callback(null)
           })
         })
@@ -142,49 +130,65 @@
   }
 
   // Use the magnet Uri because the _id field is not the same on different servers
-  videos.removeRemote = function (fromUrl, magnetUri, callback) {
-    VideosDB.findOne({ magnetUri: magnetUri }, function (err, video) {
-      if (err || !video) {
-        logger.error('Cannot find the torrent URI of this remote video.')
+  videos.removeRemotes = function (fromUrl, magnetUris, callback) {
+    VideosDB.find({ magnetUri: { $in: magnetUris } }, function (err, videos) {
+      if (err || !videos) {
+        logger.error('Cannot find the torrent URI of these remote videos.')
         return callback(err)
       }
 
-      // TODO: move to reqValidators middleware ?
-      if (video.podUrl !== fromUrl) {
-        logger.error('The pod has not the rights on this video.')
-        return callback(err)
-      }
+      var to_remove = []
+      async.each(videos, function (video, callback_async) {
+        callback_async = dz(callback_async)
 
-      VideosDB.findByIdAndRemove(video._id, function (err) {
-        if (err) {
-          logger.error('Cannot remove the remote video.')
-          return callback(err)
+        if (video.podUrl !== fromUrl) {
+          logger.error('The pod %s has not the rights on the video of %s.', fromUrl, video.podUrl)
+        } else {
+          to_remove.push(video._id)
         }
 
-        callback(null)
+        callback_async()
+      }, function () {
+        VideosDB.remove({ _id: { $in: to_remove } }, function (err) {
+          if (err) {
+            logger.error('Cannot remove the remote videos.')
+            return callback(err)
+          }
+
+          callback(null)
+        })
       })
     })
   }
 
   // { name, magnetUri, podUrl }
-  videos.addRemote = function (data, callback) {
-    logger.debug('Add remote video from pod: %s', data.podUrl)
+  videos.addRemotes = function (videos, callback) {
+    var to_add = []
 
-    var params = {
-      name: data.name,
-      namePath: null,
-      description: data.description,
-      magnetUri: data.magnetUri,
-      podUrl: data.podUrl
-    }
+    async.each(videos, function (video, callback_each) {
+      callback_each = dz(callback_each)
+      logger.debug('Add remote video from pod: %s', video.podUrl)
 
-    VideosDB.create(params, function (err, video) {
-      if (err) {
-        logger.error('Cannot insert this remote video.', { error: err })
-        return callback(err)
+      var params = {
+        name: video.name,
+        namePath: null,
+        description: video.description,
+        magnetUri: video.magnetUri,
+        podUrl: video.podUrl
       }
 
-      return callback(null, video)
+      to_add.push(params)
+
+      callback_each()
+    }, function () {
+      VideosDB.create(to_add, function (err, videos) {
+        if (err) {
+          logger.error('Cannot insert this remote video.', { error: err })
+          return callback(err)
+        }
+
+        return callback(null, videos)
+      })
     })
   }
 

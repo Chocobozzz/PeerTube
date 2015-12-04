@@ -103,9 +103,9 @@
     })
 
     it('Should make friends with the pods 1, 2, 3', function (done) {
-      this.timeout(100000)
+      this.timeout(150000)
 
-      // Pods 1, 2, 3 and 4 become friends
+      // Pods 1, 2, 3 and 4 become friends (yes this is beautiful)
       makeFriend(2, function () {
         makeFriend(1, function () {
           makeFriend(4, function () {
@@ -114,37 +114,45 @@
 
             // Expulse pod 4 from pod 1 and 2
             uploadVideo(1, function () {
-              uploadVideo(1, function () {
-                uploadVideo(2, function () {
-                  uploadVideo(2, function () {
-                    // Rerun server 4
-                    utils.runServer(4, function (app, url) {
-                      apps[3] = app
-                      getFriendsList(4, function (err, res) {
-                        if (err) throw err
-                        // Pod 4 didn't know pod 1 and 2 removed it
-                        expect(res.body.length).to.equal(3)
+              setTimeout(function () {
+                uploadVideo(1, function () {
+                  setTimeout(function () {
+                    uploadVideo(2, function () {
+                      setTimeout(function () {
+                        uploadVideo(2, function () {
+                          setTimeout(function () {
+                            // Rerun server 4
+                            utils.runServer(4, function (app, url) {
+                              apps[3] = app
+                              getFriendsList(4, function (err, res) {
+                                if (err) throw err
+                                // Pod 4 didn't know pod 1 and 2 removed it
+                                expect(res.body.length).to.equal(3)
 
-                        // Pod 6 ask pod 1, 2 and 3
-                        makeFriend(6, function () {
-                          getFriendsList(6, function (err, res) {
-                            if (err) throw err
+                                // Pod 6 ask pod 1, 2 and 3
+                                makeFriend(6, function () {
+                                  getFriendsList(6, function (err, res) {
+                                    if (err) throw err
 
-                            // Pod 4 should not be our friend
-                            var result = res.body
-                            expect(result.length).to.equal(3)
-                            for (var pod of result) {
-                              expect(pod.url).not.equal(urls[3])
-                            }
+                                    // Pod 4 should not be our friend
+                                    var result = res.body
+                                    expect(result.length).to.equal(3)
+                                    for (var pod of result) {
+                                      expect(pod.url).not.equal(urls[3])
+                                    }
 
-                            done()
-                          })
+                                    done()
+                                  })
+                                })
+                              })
+                            })
+                          }, 11000)
                         })
-                      })
+                      }, 11000)
                     })
-                  })
+                  }, 11000)
                 })
-              })
+              }, 11000)
             })
           })
         })

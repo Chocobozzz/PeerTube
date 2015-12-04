@@ -14,7 +14,7 @@
     var path = '/api/v1/videos'
     var apps = []
     var urls = []
-    var video_id = -1
+    var to_remove = []
 
     function getVideosList (url, end) {
       request(url)
@@ -33,6 +33,14 @@
         .field('description', description)
         .attach('input_video', __dirname + '/../fixtures/' + fixture)
         .expect(201)
+        .end(end)
+    }
+
+    function removeVideo (url, id, end) {
+      request(url)
+        .delete(path + '/' + id)
+        .set('Accept', 'application/json')
+        .expect(204)
         .end(end)
     }
 
@@ -89,7 +97,7 @@
 
     describe('Should upload the video and propagate on each pod', function () {
       it('Should upload the video on pod 1 and propagate on each pod', function (done) {
-        this.timeout(5000)
+        this.timeout(15000)
 
         uploadVideo(urls[0], 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', function (err) {
           if (err) throw err
@@ -125,12 +133,12 @@
 
               done()
             })
-          }, 1000)
+          }, 11000)
         })
       })
 
       it('Should upload the video on pod 2 and propagate on each pod', function (done) {
-        this.timeout(5000)
+        this.timeout(15000)
 
         uploadVideo(urls[1], 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', function (err) {
           if (err) throw err
@@ -166,47 +174,56 @@
 
               done()
             })
-          }, 1000)
+          }, 11000)
         })
       })
 
-      it('Should upload the video on pod 3 and propagate on each pod', function (done) {
-        this.timeout(5000)
+      it('Should upload two videos on pod 3 and propagate on each pod', function (done) {
+        this.timeout(15000)
 
         uploadVideo(urls[2], 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', function (err) {
           if (err) throw err
+          uploadVideo(urls[2], 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', function (err) {
+            if (err) throw err
 
-          setTimeout(function () {
-            var base_magnet = null
-            // All pods should have this video
-            async.each(urls, function (url, callback) {
-              getVideosList(url, function (err, res) {
+            setTimeout(function () {
+              var base_magnet = null
+              // All pods should have this video
+              async.each(urls, function (url, callback) {
+                getVideosList(url, function (err, res) {
+                  if (err) throw err
+
+                  var videos = res.body
+                  expect(videos).to.be.an('array')
+                  expect(videos.length).to.equal(4)
+                  var video = videos[2]
+                  expect(video.name).to.equal('my super name for pod 3')
+                  expect(video.description).to.equal('my super description for pod 3')
+                  expect(video.podUrl).to.equal('http://localhost:9003')
+                  expect(video.magnetUri).to.exist
+
+                  video = videos[3]
+                  expect(video.name).to.equal('my super name for pod 3-2')
+                  expect(video.description).to.equal('my super description for pod 3-2')
+                  expect(video.podUrl).to.equal('http://localhost:9003')
+                  expect(video.magnetUri).to.exist
+
+                  // All pods should have the same magnet Uri
+                  if (base_magnet === null) {
+                    base_magnet = video.magnetUri
+                  } else {
+                    expect(video.magnetUri).to.equal.magnetUri
+                  }
+
+                  callback()
+                })
+              }, function (err) {
                 if (err) throw err
 
-                var videos = res.body
-                expect(videos).to.be.an('array')
-                expect(videos.length).to.equal(3)
-                var video = videos[2]
-                expect(video.name).to.equal('my super name for pod 3')
-                expect(video.description).to.equal('my super description for pod 3')
-                expect(video.podUrl).to.equal('http://localhost:9003')
-                expect(video.magnetUri).to.exist
-
-                // All pods should have the same magnet Uri
-                if (base_magnet === null) {
-                  base_magnet = video.magnetUri
-                } else {
-                  expect(video.magnetUri).to.equal.magnetUri
-                }
-
-                callback()
+                done()
               })
-            }, function (err) {
-              if (err) throw err
-
-              done()
-            })
-          }, 1000)
+            }, 11000)
+          })
         })
       })
     })
@@ -220,6 +237,9 @@
           if (err) throw err
 
           var video = res.body[0]
+          to_remove.push(res.body[2]._id)
+          to_remove.push(res.body[3]._id)
+
           webtorrent.add(video.magnetUri, function (torrent) {
             expect(torrent.files).to.exist
             expect(torrent.files.length).to.equal(1)
@@ -257,7 +277,6 @@
           if (err) throw err
 
           var video = res.body[2]
-          video_id = res.body[1]._id
 
           webtorrent.add(video.magnetUri, function (torrent) {
             expect(torrent.files).to.exist
@@ -269,19 +288,39 @@
         })
       })
 
-      it('Should remove the file 2 by asking pod 2', function (done) {
-        request(urls[1])
-          .delete(path + '/' + video_id)
-          .set('Accept', 'application/json')
-          .expect(204)
-          .end(function (err, res) {
+      it('Should add the file 3-2 by asking pod 1', function (done) {
+        // Yes, this could be long
+        this.timeout(200000)
+
+        getVideosList(urls[0], function (err, res) {
+          if (err) throw err
+
+          var video = res.body[3]
+
+          webtorrent.add(video.magnetUri, function (torrent) {
+            expect(torrent.files).to.exist
+            expect(torrent.files.length).to.equal(1)
+            expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+            done()
+          })
+        })
+      })
+
+      it('Should remove the file 3 and 3-2 by asking pod 3', function (done) {
+        this.timeout(15000)
+
+        removeVideo(urls[2], to_remove[0], function (err) {
+          if (err) throw err
+          removeVideo(urls[2], to_remove[1], function (err) {
             if (err) throw err
 
             // Wait the propagation to the other pods
             setTimeout(function () {
               done()
-            }, 1000)
+            }, 11000)
           })
+        })
       })
 
       it('Should have videos 1 and 3 on each pod', function (done) {
@@ -293,8 +332,10 @@
             expect(videos).to.be.an('array')
             expect(videos.length).to.equal(2)
             expect(videos[0]._id).not.to.equal(videos[1]._id)
-            expect(videos[0]._id).not.to.equal(video_id)
-            expect(videos[1]._id).not.to.equal(video_id)
+            expect(videos[0]._id).not.to.equal(to_remove[0])
+            expect(videos[1]._id).not.to.equal(to_remove[0])
+            expect(videos[0]._id).not.to.equal(to_remove[1])
+            expect(videos[1]._id).not.to.equal(to_remove[1])
 
             callback()
           })

@@ -3,21 +3,23 @@
 
   var express = require('express')
   var router = express.Router()
+  var pluck = require('lodash-node/compat/collection/pluck')
+
   var middleware = require('../../../middlewares')
   var miscMiddleware = middleware.misc
   var reqValidator = middleware.reqValidators.remote
   var videos = require('../../../src/videos')
 
   function addRemoteVideos (req, res, next) {
-    videos.addRemote(req.body.data, function (err, video) {
+    videos.addRemotes(req.body.data, function (err, videos) {
       if (err) return next(err)
 
-      res.json(video)
+      res.json(videos)
     })
   }
 
   function removeRemoteVideo (req, res, next) {
-    videos.removeRemote(req.body.signature.url, req.body.data.magnetUri, function (err) {
+    videos.removeRemotes(req.body.signature.url, pluck(req.body.data, 'magnetUri'), function (err) {
       if (err) return next(err)
 
       res.status(204)
