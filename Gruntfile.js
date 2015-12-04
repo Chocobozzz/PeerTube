@@ -70,6 +70,9 @@ module.exports = function (grunt) {
       }
     },
     sass: {
+      options: {
+        includePaths: [ 'node_modules/bootstrap-sass/assets/stylesheets/' ]
+      },
       dev: {
         files: {
           'public/stylesheets/global.css': paths.scss
