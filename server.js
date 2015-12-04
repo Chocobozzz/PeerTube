@@ -7,7 +7,6 @@
   var expressValidator = require('express-validator')
   var http = require('http')
   var morgan = require('morgan')
-  var multer = require('multer')
   var path = require('path')
   var TrackerServer = require('bittorrent-tracker').Server
   var WebSocketServer = require('ws').Server
@@ -44,7 +43,6 @@
 
   // Get configurations
   var port = config.get('listen.port')
-  var uploads = config.get('storage.uploads')
 
   // ----------- Command line -----------
 
@@ -54,8 +52,6 @@
   app.use(morgan('combined', { stream: logger.stream }))
   // For body requests
   app.use(bodyParser.json())
-  // For POST file requests
-  app.use(multer({ dest: uploads }))
   app.use(bodyParser.urlencoded({ extended: false }))
   // Validate some params for the API
   app.use(expressValidator({

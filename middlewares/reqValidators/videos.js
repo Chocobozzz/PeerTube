@@ -24,8 +24,8 @@
   }
 
   videos.videosAdd = function (req, res, next) {
-    req.checkFiles('input_video.originalname', 'Should have an input video').notEmpty()
-    req.checkFiles('input_video.mimetype', 'Should have a correct mime type').matches(/video\/(webm)|(mp4)|(ogg)/i)
+    req.checkFiles('input_video[0].originalname', 'Should have an input video').notEmpty()
+    req.checkFiles('input_video[0].mimetype', 'Should have a correct mime type').matches(/video\/(webm)|(mp4)|(ogg)/i)
     req.checkBody('name', 'Should have a name').isLength(1, 50)
     req.checkBody('description', 'Should have a description').isLength(1, 250)
 

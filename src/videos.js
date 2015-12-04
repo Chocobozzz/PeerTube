@@ -56,7 +56,7 @@
 
       var params = {
         name: video_data.name,
-        namePath: video_file.name,
+        namePath: video_file.filename,
         description: video_data.description,
         magnetUri: torrent.magnetURI,
         podUrl: http + '://' + host + ':' + port
