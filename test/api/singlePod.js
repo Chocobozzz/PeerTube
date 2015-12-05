@@ -92,6 +92,44 @@
         })
     })
 
+    it('Should search the video', function (done) {
+      request(url)
+        .get(path + '/search/my')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function (err, res) {
+          if (err) throw err
+
+          expect(res.body).to.be.an('array')
+          expect(res.body.length).to.equal(1)
+
+          var video = res.body[0]
+          expect(video.name).to.equal('my super name')
+          expect(video.description).to.equal('my super description')
+          expect(video.podUrl).to.equal('http://localhost:9001')
+          expect(video.magnetUri).to.exist
+
+          done()
+        })
+    })
+
+    it('Should not find a search', function (done) {
+      request(url)
+        .get(path + '/search/hello')
+        .set('Accept', 'application/json')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end(function (err, res) {
+          if (err) throw err
+
+          expect(res.body).to.be.an('array')
+          expect(res.body.length).to.equal(0)
+
+          done()
+        })
+    })
+
     it('Should remove the video', function (done) {
       request(url)
         .delete(path + '/' + video_id)
