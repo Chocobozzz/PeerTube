@@ -1,7 +1,7 @@
 # PeerTube
 
 [![Build Status](https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=master)](https://travis-ci.org/Chocobozzz/PeerTube)
-![Dependencies Status](https://david-dm.org/Chocobozzz/PeerTube.svg)
+[![Dependencies Status](https://david-dm.org/Chocobozzz/PeerTube.svg)](https://david-dm.org/Chocobozzz/PeerTube)
 
 Prototype of a decentralized video streaming platform using P2P (bittorrent) directly in the web browser with [webtorrent](https://github.com/feross/webtorrent).
 
