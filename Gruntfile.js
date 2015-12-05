@@ -5,7 +5,7 @@ module.exports = function (grunt) {
     dist: 'dist',
     jade: 'views/**/**/*.jade',
     css: 'public/stylesheets/*.css',
-    scss: 'public/stylesheets/*.scss',
+    scss: 'public/stylesheets/application.scss',
     vendor: 'public/stylesheets/vendor',
     js: 'public/javascripts/*.js',
     src: 'src/*.js',

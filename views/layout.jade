@@ -2,7 +2,7 @@ doctype html
 html
   head
     link(rel='icon' type='image/png' href='/images/favicon.png')
-
+    meta(name='viewport' content='width=device-width, initial-scale=1')
     title= title
 
     // build:css /stylesheets/global.min.css
@@ -11,4 +11,5 @@ html
     // endbuild
 
   body
+    include header
     block content
