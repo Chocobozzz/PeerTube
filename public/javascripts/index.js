@@ -31,7 +31,7 @@
     makeFriends()
   })
 
-  $('#search_video').on('keyup', function (e) {
+  $('#search-video').on('keyup', function (e) {
     var search = $(this).val()
 
     if (search === '') return
