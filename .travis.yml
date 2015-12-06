@@ -34,3 +34,6 @@ after_failure:
   - cat test1/logs/all-logs.log
   - cat test2/logs/all-logs.log
   - cat test3/logs/all-logs.log
+  - cat test4/logs/all-logs.log
+  - cat test5/logs/all-logs.log
+  - cat test6/logs/all-logs.log
