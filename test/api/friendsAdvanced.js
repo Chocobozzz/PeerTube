@@ -1,60 +1,29 @@
 ;(function () {
   'use strict'
 
-  var request = require('supertest')
   var chai = require('chai')
   var expect = chai.expect
 
-  var utils = require('../utils')
+  var utils = require('./utils')
 
   describe('Test advanced friends', function () {
-    var path = '/api/v1/pods/makefriends'
     var apps = []
     var urls = []
 
     function makeFriend (pod_number, callback) {
-      // The first pod make friend with the third
-      request(urls[pod_number - 1])
-        .get(path)
-        .set('Accept', 'application/json')
-        .expect(204)
-        .end(function (err, res) {
-          if (err) throw err
-
-          // Wait for the request between pods
-          setTimeout(function () {
-            callback()
-          }, 1000)
-        })
+      return utils.makeFriend(urls[pod_number - 1], callback)
     }
 
     function getFriendsList (pod_number, end) {
-      var path = '/api/v1/pods/'
-
-      request(urls[pod_number - 1])
-        .get(path)
-        .set('Accept', 'application/json')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(end)
+      return utils.getFriendsList(urls[pod_number - 1], end)
     }
 
     function uploadVideo (pod_number, callback) {
-      var path = '/api/v1/videos'
+      var name = 'my super video'
+      var description = 'my super description'
+      var fixture = 'video_short.webm'
 
-      request(urls[pod_number - 1])
-        .post(path)
-        .set('Accept', 'application/json')
-        .field('name', 'my super video')
-        .field('description', 'my super description')
-        .attach('input_video', __dirname + '/../fixtures/video_short.webm')
-        .expect(201)
-        .end(function (err) {
-          if (err) throw err
-
-          // Wait for the retry requests
-          setTimeout(callback, 10000)
-        })
+      return utils.uploadVideo(urls[pod_number - 1], name, description, fixture, callback)
     }
 
     beforeEach(function (done) {

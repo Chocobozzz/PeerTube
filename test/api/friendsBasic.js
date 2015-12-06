@@ -1,23 +1,12 @@
 ;(function () {
   'use strict'
 
-  var request = require('supertest')
+  var async = require('async')
   var chai = require('chai')
   var expect = chai.expect
-  var async = require('async')
+  var request = require('supertest')
 
-  var utils = require('../utils')
-
-  function getFriendsList (url, end) {
-    var path = '/api/v1/pods/'
-
-    request(url)
-      .get(path)
-      .set('Accept', 'application/json')
-      .expect(200)
-      .expect('Content-Type', /json/)
-      .end(end)
-  }
+  var utils = require('./utils')
 
   describe('Test basic friends', function () {
     var apps = []
@@ -34,7 +23,7 @@
 
     it('Should not have friends', function (done) {
       async.each(urls, function (url, callback) {
-        getFriendsList(url, function (err, res) {
+        utils.getFriendsList(url, function (err, res) {
           if (err) throw err
 
           var result = res.body
@@ -59,7 +48,7 @@
           friends.push(urls[i])
         }
 
-        getFriendsList(url_to_test, function (err, res) {
+        utils.getFriendsList(url_to_test, function (err, res) {
           if (err) throw err
 
           var result = res.body
@@ -88,7 +77,7 @@
           // Wait for the request between pods
           setTimeout(function () {
             // The second pod should have the third as a friend
-            getFriendsList(urls[1], function (err, res) {
+            utils.getFriendsList(urls[1], function (err, res) {
               if (err) throw err
 
               var result = res.body
@@ -97,7 +86,7 @@
               expect(result[0].url).to.be.equal(urls[2])
 
               // Same here, the third pod should have the second pod as a friend
-              getFriendsList(urls[2], function (err, res) {
+              utils.getFriendsList(urls[2], function (err, res) {
                 if (err) throw err
 
                 var result = res.body
