@@ -25,15 +25,13 @@
   }
 
   misc.decryptBody = function (req, res, next) {
-    logger.debug('Decrypting body.')
-
     PodsDB.findOne({ url: req.body.signature.url }, function (err, pod) {
       if (err) {
         logger.error('Cannot get signed url in decryptBody.', { error: err })
         res.sendStatus(500)
       }
 
-      logger.debug('Found one pod which could send the message.', { pod: pod.publicKey, url: req.body.signature.url })
+      logger.debug('Decrypting body from %s.', req.body.signature.url)
 
       var crt = ursa.createPublicKey(pod.publicKey)
       var signature_ok = crt.hashAndVerify('sha256', new Buffer(req.body.signature.url).toString('hex'), req.body.signature.signature, 'hex')
@@ -41,9 +39,8 @@
       if (signature_ok === true) {
         var myKey = ursa.createPrivateKey(fs.readFileSync(utils.certDir + 'peertube.key.pem'))
         var decryptedKey = myKey.decrypt(req.body.key, 'hex', 'utf8')
-        logger.debug(decryptedKey)
         req.body.data = JSON.parse(utils.symetricDecrypt(req.body.data, decryptedKey))
-        logger.debug('Decrypted.', { body: req.body })
+        delete req.body.key
       } else {
         logger.error('Signature is not okay in decryptBody for %s.', req.body.signature.url)
         res.sendStatus(500)

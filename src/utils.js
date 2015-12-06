@@ -30,7 +30,7 @@
       }
     }
 
-    logger.debug('Sending informations to %s.', to_pod.url, { params: params })
+    logger.debug('Make retry requests to %s.', to_pod.url)
     // Default 10 but in tests we want to be faster
     var retries = utils.isTestInstance() ? 2 : 10
 
@@ -84,8 +84,6 @@
 
       // Add data with POST requst ?
       if (all_data.method === 'POST' && all_data.data) {
-        logger.debug('Make a POST request.')
-
         // Encrypt data ?
         if (all_data.encrypt === true) {
           var crt = ursa.createPublicKey(pod.publicKey)
@@ -109,7 +107,6 @@
           makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
         }
       } else {
-        logger.debug('Make a GET/DELETE request')
         makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
       }
     }, callback)

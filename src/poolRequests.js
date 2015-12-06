@@ -74,7 +74,6 @@
   }
 
   function makePoolRequest (type, requests) {
-    logger.debug('Make pool requests scheduled.')
     PodsDB.find({}, { _id: 1, url: 1, publicKey: 1 }).exec(function (err, pods) {
       if (err) throw err
 

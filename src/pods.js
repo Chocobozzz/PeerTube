@@ -97,7 +97,6 @@
         var pods_list = computeWinningPods(urls, pods_score)
         logger.debug('Pods that we keep computed.', { pods_to_keep: pods_list })
 
-        logger.debug('Make requests...')
         makeRequestsToWinningPods(cert, pods_list)
       })
     })

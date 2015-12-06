@@ -12,7 +12,7 @@
     req.checkBody('key', 'Should have a key').notEmpty()
     req.checkBody('data', 'Should have data').notEmpty()
 
-    logger.debug('Checking secureRequest parameters', { parameters: req.body })
+    logger.debug('Checking secureRequest parameters', { parameters: { data: req.body.data, keyLength: req.body.key.length } })
 
     checkErrors(req, res, next)
   }
