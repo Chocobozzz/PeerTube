@@ -23,33 +23,66 @@
   // ----------- Private -----------
   var timer = null
 
+  function removePoolRequestsFromDB (ids) {
+    PoolRequestsDB.remove({ _id: { $in: ids } }, function (err) {
+      if (err) {
+        logger.error('Cannot remove requests from the pool requests database.', { error: err })
+        return
+      }
+
+      logger.info('Pool requests flushed.')
+    })
+  }
+
   function makePoolRequests () {
     logger.info('Making pool requests to friends.')
 
-    PoolRequestsDB.find({}, { type: 1, request: 1 }, function (err, pool_requests) {
+    PoolRequestsDB.find({}, { _id: 1, type: 1, request: 1 }, function (err, pool_requests) {
       if (err) throw err
 
       if (pool_requests.length === 0) return
 
       var requests = {
-        add: [],
-        remove: []
+        add: {
+          ids: [],
+          requests: []
+        },
+        remove: {
+          ids: [],
+          requests: []
+        }
       }
 
       async.each(pool_requests, function (pool_request, callback_each) {
         if (pool_request.type === 'add') {
-          requests.add.push(pool_request.request)
+          requests.add.requests.push(pool_request.request)
+          requests.add.ids.push(pool_request._id)
         } else if (pool_request.type === 'remove') {
-          requests.remove.push(pool_request.request)
+          requests.remove.requests.push(pool_request.request)
+          requests.remove.ids.push(pool_request._id)
         } else {
           throw new Error('Unkown pool request type.')
         }
 
         callback_each()
       }, function () {
-        makePoolRequest('add', requests.add)
-        makePoolRequest('remove', requests.remove)
-        logger.info('Pool requests to friends sent.')
+        // Send the add requests
+        if (requests.add.requests.length !== 0) {
+          makePoolRequest('add', requests.add.requests, function (err) {
+            if (err) logger.error('Errors when sent add pool requests.', { error: err })
+
+            removePoolRequestsFromDB(requests.add.ids)
+          })
+        }
+
+        // Send the remove requests
+        if (requests.remove.requests.length !== 0) {
+          makePoolRequest('remove', requests.remove.requests, function (err) {
+            if (err) logger.error('Errors when sent remove pool requests.', { error: err })
+
+            removePoolRequestsFromDB(requests.remove.ids)
+          })
+        }
       })
     })
   }
@@ -73,7 +106,9 @@
     })
   }
 
-  function makePoolRequest (type, requests) {
+  function makePoolRequest (type, requests, callback) {
+    if (!callback) callback = function () {}
+
     PodsDB.find({}, { _id: 1, url: 1, publicKey: 1 }).exec(function (err, pods) {
       if (err) throw err
 
@@ -110,12 +145,10 @@
       }
 
       function callbackAllPodsFinished (err) {
-        if (err) {
-          logger.error('There was some errors when sending the video meta data.', { error: err })
-        }
+        if (err) return callback(err)
 
         updatePodsScore(good_pods, bad_pods)
-        PoolRequestsDB.remove().exec()
+        callback(null)
       }
     })
   }
