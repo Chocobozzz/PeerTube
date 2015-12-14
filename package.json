@@ -51,7 +51,7 @@
     "mongoose": "^4.0.5",
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
-    "node-ipc": "^4.1.0",
+    "node-ipc": "^5.0.0",
     "openssl-wrapper": "https://github.com/Chocobozzz/node-openssl-wrapper",
     "request": "^2.57.0",
     "request-replay": "^0.3.0",
