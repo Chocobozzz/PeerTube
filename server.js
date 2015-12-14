@@ -26,18 +26,14 @@
 
   checker.createDirectoriesIfNotExist()
 
-  // ----------- Constants -----------
-  var utils = require('./src/utils')
-
-  global.API_VERSION = 'v1'
-  global.FRIEND_BASE_SCORE = utils.isTestInstance() ? 20 : 100
-
   // ----------- PeerTube modules -----------
   var config = require('config')
+  var constants = require('./src/constants')
   var customValidators = require('./src/customValidators')
   var logger = require('./src/logger')
   var poolRequests = require('./src/poolRequests')
   var routes = require('./routes')
+  var utils = require('./src/utils')
   var videos = require('./src/videos')
   var webtorrent = require('./src/webTorrentNode')
 
@@ -76,7 +72,7 @@
   app.set('view engine', 'jade')
 
   // API routes
-  var api_route = '/api/' + global.API_VERSION
+  var api_route = '/api/' + constants.API_VERSION
   app.use(api_route, routes.api)
 
   // Views routes

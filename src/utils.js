@@ -10,6 +10,7 @@
   var replay = require('request-replay')
   var ursa = require('ursa')
 
+  var constants = require('./constants')
   var logger = require('./logger')
 
   var utils = {}
@@ -31,15 +32,13 @@
     }
 
     logger.debug('Make retry requests to %s.', to_pod.url)
-    // Default 10 but in tests we want to be faster
-    var retries = utils.isTestInstance() ? 2 : 10
 
     replay(
       request.post(params, function (err, response, body) {
         callbackEach(err, response, body, params.url, to_pod)
       }),
       {
-        retries: retries,
+        retries: constants.REQUEST_RETRIES,
         factor: 3,
         maxTimeout: Infinity,
         errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
@@ -193,10 +192,6 @@
   utils.cleanForExit = function (webtorrent_process) {
     logger.info('Gracefully exiting')
     process.kill(-webtorrent_process.pid)
-  }
-
-  utils.isTestInstance = function () {
-    return (process.env.NODE_ENV === 'test')
   }
 
   module.exports = utils

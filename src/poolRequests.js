@@ -3,6 +3,7 @@
 
   var async = require('async')
 
+  var constants = require('./constants')
   var logger = require('./logger')
   var database = require('./database')
   var PoolRequestsDB = database.PoolRequestsDB
@@ -10,15 +11,6 @@
   var utils = require('./utils')
 
   var poolRequests = {}
-
-  // ----------- Constants -----------
-
-  // Time to wait between requests to the friends
-  var INTERVAL = utils.isTestInstance() ? 10000 : 60000
-  var PODS_SCORE = {
-    MALUS: -10,
-    BONUS: 10
-  }
 
   // ----------- Private -----------
   var timer = null
@@ -90,8 +82,8 @@
   function updatePodsScore (good_pods, bad_pods) {
     logger.info('Updating %d good pods and %d bad pods scores.', good_pods.length, bad_pods.length)
 
-    PodsDB.update({ _id: { $in: good_pods } }, { $inc: { score: PODS_SCORE.BONUS } }, { multi: true }).exec()
-    PodsDB.update({ _id: { $in: bad_pods } }, { $inc: { score: PODS_SCORE.MALUS } }, { multi: true }, function (err) {
+    PodsDB.update({ _id: { $in: good_pods } }, { $inc: { score: constants.PODS_SCORE.BONUS } }, { multi: true }).exec()
+    PodsDB.update({ _id: { $in: bad_pods } }, { $inc: { score: constants.PODS_SCORE.MALUS } }, { multi: true }, function (err) {
       if (err) throw err
       removeBadPods()
     })
@@ -121,9 +113,9 @@
       }
 
       if (type === 'add') {
-        params.path = '/api/' + global.API_VERSION + '/remotevideos/add'
+        params.path = '/api/' + constants.API_VERSION + '/remotevideos/add'
       } else if (type === 'remove') {
-        params.path = '/api/' + global.API_VERSION + '/remotevideos/remove'
+        params.path = '/api/' + constants.API_VERSION + '/remotevideos/remove'
       } else {
         throw new Error('Unkown pool request type.')
       }
@@ -156,7 +148,7 @@
   // ----------- Public -----------
   poolRequests.activate = function () {
     logger.info('Pool requests activated.')
-    timer = setInterval(makePoolRequests, INTERVAL)
+    timer = setInterval(makePoolRequests, constants.INTERVAL)
   }
 
   poolRequests.addToPoolRequests = function (id, type, request) {

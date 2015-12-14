@@ -4,6 +4,7 @@
   var config = require('config')
   var mongoose = require('mongoose')
 
+  var constants = require('./constants')
   var logger = require('./logger')
 
   var dbname = 'peertube' + config.get('database.suffix')
@@ -25,7 +26,7 @@
   var podsSchema = mongoose.Schema({
     url: String,
     publicKey: String,
-    score: { type: Number, max: global.FRIEND_BASE_SCORE }
+    score: { type: Number, max: constants.FRIEND_BASE_SCORE }
   })
 
   var PodsDB = mongoose.model('pods', podsSchema)

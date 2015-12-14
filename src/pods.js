@@ -6,6 +6,7 @@
   var fs = require('fs')
   var request = require('request')
 
+  var constants = require('./constants')
   var logger = require('./logger')
   var PodsDB = require('./database').PodsDB
   var poolRequests = require('./poolRequests')
@@ -20,7 +21,7 @@
   // ----------- Private functions -----------
 
   function getForeignPodsList (url, callback) {
-    var path = '/api/' + global.API_VERSION + '/pods'
+    var path = '/api/' + constants.API_VERSION + '/pods'
 
     request.get(url + path, function (err, response, body) {
       if (err) throw err
@@ -48,7 +49,7 @@
     var params = {
       url: data.url,
       publicKey: data.publicKey,
-      score: global.FRIEND_BASE_SCORE
+      score: constants.FRIEND_BASE_SCORE
     }
 
     PodsDB.create(params, function (err, pod) {
@@ -142,14 +143,14 @@
       }
 
       utils.makeMultipleRetryRequest(
-        { method: 'POST', path: '/api/' + global.API_VERSION + '/pods/', data: data },
+        { method: 'POST', path: '/api/' + constants.API_VERSION + '/pods/', data: data },
 
         pods_list,
 
         function eachRequest (err, response, body, url, pod, callback_each_request) {
           // We add the pod if it responded correctly with its public certificate
           if (!err && response.statusCode === 200) {
-            pods.add({ url: pod.url, publicKey: body.cert, score: global.FRIEND_BASE_SCORE }, function (err) {
+            pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err) {
               if (err) {
                 logger.error('Error with adding %s pod.', pod.url, { error: err })
               }
