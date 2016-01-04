@@ -27,7 +27,7 @@ cache:
     - $(npm config get prefix)/bin/electron-prebuilt
 
 before_script:
-  - npm install electron-prebuilt@0.35.4 -g
+  - npm install electron-prebuilt -g
   - npm install grunt-cli -g
 
 after_failure:
