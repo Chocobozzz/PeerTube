@@ -211,7 +211,7 @@
       file.appendTo($embed.get(0), function (err) {
         if (err) {
           alert('Cannot append the file.')
-          console.err(err)
+          console.error(err)
         }
       })
     })
