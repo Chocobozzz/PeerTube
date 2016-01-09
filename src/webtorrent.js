@@ -27,7 +27,7 @@
       var path = args.path
       var _id = data._id
 
-      wt.seed(path, function (torrent) {
+      wt.seed(path, { announceList: '' }, function (torrent) {
         var to_send = {
           magnetUri: torrent.magnetURI
         }
