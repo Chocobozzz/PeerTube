@@ -3,6 +3,7 @@
 
   var express = require('express')
   var config = require('config')
+  var crypto = require('crypto')
   var multer = require('multer')
   var router = express.Router()
 
@@ -58,7 +59,24 @@
     })
   }
 
-  var reqFiles = multer({ dest: uploads }).fields([{ name: 'input_video', maxCount: 1 }])
+  // multer configuration
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, uploads)
+    },
+
+    filename: function (req, file, cb) {
+      var extension = ''
+      if (file.mimetype === 'video/webm') extension = 'webm'
+      else if (file.mimetype === 'video/mp4') extension = 'mp4'
+      else if (file.mimetype === 'video/ogg') extension = 'ogv'
+      crypto.pseudoRandomBytes(16, function (err, raw) {
+        var fieldname = err ? undefined : raw.toString('hex')
+        cb(null, fieldname + '.' + extension)
+      })
+    }
+  })
+  var reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
 
   router.get('/', miscMiddleware.cache(false), listVideos)
   router.post('/', reqFiles, reqValidator.videosAdd, miscMiddleware.cache(false), addVideos)
