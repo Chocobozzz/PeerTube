@@ -50,7 +50,7 @@
     })
 
     it('Should make friends with two pod each in a different group', function (done) {
-      this.timeout(10000)
+      this.timeout(20000)
 
       // Pod 3 makes friend with the first one
       makeFriend(3, function () {
@@ -58,14 +58,16 @@
         makeFriend(4, function () {
           // Now if the fifth wants to make friends with the third et the first
           makeFriend(5, function () {
-            // It should have 0 friends
-            getFriendsList(5, function (err, res) {
-              if (err) throw err
+            setTimeout(function () {
+              // It should have 0 friends
+              getFriendsList(5, function (err, res) {
+                if (err) throw err
 
-              expect(res.body.length).to.equal(0)
+                expect(res.body.length).to.equal(0)
 
-              done()
-            })
+                done()
+              })
+            }, 11000)
           })
         })
       })

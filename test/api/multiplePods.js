@@ -140,7 +140,7 @@
       })
 
       it('Should upload two videos on pod 3 and propagate on each pod', function (done) {
-        this.timeout(15000)
+        this.timeout(30000)
 
         utils.uploadVideo(urls[2], 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', function (err) {
           if (err) throw err
@@ -183,7 +183,7 @@
 
                 done()
               })
-            }, 11000)
+            }, 22000)
           })
         })
       })
