@@ -34,8 +34,31 @@
       .end(end)
   }
 
-  function makeFriend (url, callback) {
+  function makeFriends (url, expected_status, callback) {
+    if (!callback) {
+      callback = expected_status
+      expected_status = 204
+    }
+
     var path = '/api/v1/pods/makefriends'
+
+    // The first pod make friend with the third
+    request(url)
+      .get(path)
+      .set('Accept', 'application/json')
+      .expect(expected_status)
+      .end(function (err, res) {
+        if (err) throw err
+
+        // Wait for the request between pods
+        setTimeout(function () {
+          callback()
+        }, 1000)
+      })
+  }
+
+  function quitFriends (url, callback) {
+    var path = '/api/v1/pods/quitfriends'
 
     // The first pod make friend with the third
     request(url)
@@ -152,7 +175,8 @@
     flushTests: flushTests,
     getFriendsList: getFriendsList,
     getVideosList: getVideosList,
-    makeFriend: makeFriend,
+    makeFriends: makeFriends,
+    quitFriends: quitFriends,
     removeVideo: removeVideo,
     runMultipleServers: runMultipleServers,
     runServer: runServer,

@@ -22,12 +22,12 @@
         urls = urls_run
 
         // The second pod make friend with the third
-        utils.makeFriend(urls[1], function (err, res) {
+        utils.makeFriends(urls[1], function (err, res) {
           if (err) throw err
 
           // Wait for the request between pods
           setTimeout(function () {
-            utils.makeFriend(urls[0], function (err, res) {
+            utils.makeFriends(urls[0], function (err, res) {
               if (err) throw err
 
               webtorrent.create({ host: 'client', port: '1' }, function () {

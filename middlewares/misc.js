@@ -28,7 +28,12 @@
     PodsDB.findOne({ url: req.body.signature.url }, function (err, pod) {
       if (err) {
         logger.error('Cannot get signed url in decryptBody.', { error: err })
-        res.sendStatus(500)
+        return res.sendStatus(500)
+      }
+
+      if (pod === null) {
+        logger.error('Unknown pod %s.', req.body.signature.url)
+        return res.sendStatus(403)
       }
 
       logger.debug('Decrypting body from %s.', req.body.signature.url)
@@ -43,7 +48,7 @@
         delete req.body.key
       } else {
         logger.error('Signature is not okay in decryptBody for %s.', req.body.signature.url)
-        res.sendStatus(500)
+        return res.sendStatus(403)
       }
 
       next()

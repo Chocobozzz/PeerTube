@@ -43,6 +43,18 @@
     })
   }
 
+  videos.listOwned = function (callback) {
+    // If namePath is not null this is *our* video
+    VideosDB.find({ namePath: { $ne: null } }, function (err, videos_list) {
+      if (err) {
+        logger.error('Cannot get list of the videos.', { error: err })
+        return callback(err)
+      }
+
+      return callback(null, videos_list)
+    })
+  }
+
   videos.add = function (data, callback) {
     var video_file = data.video
     var video_data = data.data
@@ -131,6 +143,8 @@
 
   // Use the magnet Uri because the _id field is not the same on different servers
   videos.removeRemotes = function (fromUrl, magnetUris, callback) {
+    if (callback === undefined) callback = function () {}
+
     VideosDB.find({ magnetUri: { $in: magnetUris } }, function (err, videos) {
       if (err || !videos) {
         logger.error('Cannot find the torrent URI of these remote videos.')
@@ -155,14 +169,34 @@
             return callback(err)
           }
 
+          logger.info('Removed remote videos from %s.', fromUrl)
           callback(null)
         })
       })
     })
   }
 
+  videos.removeAllRemotes = function (callback) {
+    VideosDB.remove({ namePath: null }, function (err) {
+      if (err) return callback(err)
+
+      callback(null)
+    })
+  }
+
+  videos.removeAllRemotesOf = function (fromUrl, callback) {
+    VideosDB.remove({ podUrl: fromUrl }, function (err) {
+      if (err) return callback(err)
+
+      callback(null)
+    })
+  }
+
   // { name, magnetUri, podUrl }
+  // TODO: avoid doublons
   videos.addRemotes = function (videos, callback) {
+    if (callback === undefined) callback = function () {}
+
     var to_add = []
 
     async.each(videos, function (video, callback_each) {

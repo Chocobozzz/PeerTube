@@ -43,7 +43,9 @@
   }
 
   // { url }
+  // TODO: check if the pod is not already a friend
   pods.add = function (data, callback) {
+    var videos = require('./videos')
     logger.info('Adding pod: %s', data.url)
 
     var params = {
@@ -58,13 +60,38 @@
         return callback(err)
       }
 
+      videos.addRemotes(data.videos)
+
       fs.readFile(utils.certDir + 'peertube.pub', 'utf8', function (err, cert) {
         if (err) {
           logger.error('Cannot read cert file.', { error: err })
           return callback(err)
         }
 
-        return callback(null, { cert: cert })
+        videos.listOwned(function (err, videos_list) {
+          if (err) {
+            logger.error('Cannot get the list of owned videos.', { error: err })
+            return callback(err)
+          }
+
+          return callback(null, { cert: cert, videos: videos_list })
+        })
+      })
+    })
+  }
+
+  pods.remove = function (url, callback) {
+    var videos = require('./videos')
+    logger.info('Removing %s pod.', url)
+
+    videos.removeAllRemotesOf(url, function (err) {
+      if (err) logger.error('Cannot remove all remote videos of %s.', url)
+
+      PodsDB.remove({ url: url }, function (err) {
+        if (err) return callback(err)
+
+        logger.info('%s pod removed.', url)
+        callback(null)
       })
     })
   }
@@ -82,6 +109,7 @@
   }
 
   pods.makeFriends = function (callback) {
+    var videos = require('./videos')
     var pods_score = {}
 
     logger.info('Make friends!')
@@ -137,43 +165,109 @@
     }
 
     function makeRequestsToWinningPods (cert, pods_list) {
-      var data = {
-        url: http + '://' + host + ':' + port,
-        publicKey: cert
+      // Stop pool requests
+      poolRequests.deactivate()
+      // Flush pool requests
+      poolRequests.forceSend()
+
+      // Get the list of our videos to send to our new friends
+      videos.listOwned(function (err, videos_list) {
+        if (err) throw err
+
+        var data = {
+          url: http + '://' + host + ':' + port,
+          publicKey: cert,
+          videos: videos_list
+        }
+
+        utils.makeMultipleRetryRequest(
+          { method: 'POST', path: '/api/' + constants.API_VERSION + '/pods/', data: data },
+
+          pods_list,
+
+          function eachRequest (err, response, body, url, pod, callback_each_request) {
+            // We add the pod if it responded correctly with its public certificate
+            if (!err && response.statusCode === 200) {
+              pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err) {
+                if (err) logger.error('Error with adding %s pod.', pod.url, { error: err })
+
+                videos.addRemotes(body.videos, function (err) {
+                  if (err) logger.error('Error with adding videos of pod.', pod.url, { error: err })
+
+                  logger.debug('Adding remote videos from %s.', pod.url, { videos: body.videos })
+                  return callback_each_request()
+                })
+              })
+            } else {
+              logger.error('Error with adding %s pod.', pod.url, { error: err || new Error('Status not 200') })
+              return callback_each_request()
+            }
+          },
+
+          function endRequests (err) {
+            // Now we made new friends, we can re activate the pool of requests
+            poolRequests.activate()
+
+            if (err) {
+              logger.error('There was some errors when we wanted to make friends.', { error: err })
+              return callback(err)
+            }
+
+            logger.debug('makeRequestsToWinningPods finished.')
+            return callback(null)
+          }
+        )
+      })
+    }
+  }
+
+  pods.quitFriends = function (callback) {
+    // Stop pool requests
+    poolRequests.deactivate()
+    // Flush pool requests
+    poolRequests.forceSend()
+
+    PodsDB.find(function (err, pods) {
+      if (err) return callback(err)
+
+      var request = {
+        method: 'POST',
+        path: '/api/' + constants.API_VERSION + '/pods/remove',
+        sign: true,
+        encrypt: true,
+        data: {
+          url: 'me' // Fake data
+        }
       }
 
-      utils.makeMultipleRetryRequest(
-        { method: 'POST', path: '/api/' + constants.API_VERSION + '/pods/', data: data },
+      // Announce we quit them
+      utils.makeMultipleRetryRequest(request, pods, function () {
+        PodsDB.remove(function (err) {
+          poolRequests.activate()
 
-        pods_list,
+          if (err) return callback(err)
 
-        function eachRequest (err, response, body, url, pod, callback_each_request) {
-          // We add the pod if it responded correctly with its public certificate
-          if (!err && response.statusCode === 200) {
-            pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err) {
-              if (err) {
-                logger.error('Error with adding %s pod.', pod.url, { error: err })
-              }
+          logger.info('Broke friends, so sad :(')
 
-              return callback_each_request()
-            })
-          } else {
-            logger.error('Error with adding %s pod.', pod.url, { error: err || new Error('Status not 200') })
-            return callback_each_request()
-          }
-        },
+          var videos = require('./videos')
+          videos.removeAllRemotes(function (err) {
+            if (err) return callback(err)
 
-        function endRequests (err) {
-          if (err) {
-            logger.error('There was some errors when we wanted to make friends.', { error: err })
-            return callback(err)
-          }
+            logger.info('Removed all remote videos.')
+            callback(null)
+          })
+        })
+      })
+    })
+  }
 
-          logger.debug('makeRequestsToWinningPods finished.')
-          return callback(null)
-        }
-      )
-    }
+  pods.hasFriends = function (callback) {
+    PodsDB.count(function (err, count) {
+      if (err) return callback(err)
+
+      var has_friends = (count !== 0)
+      callback(null, has_friends)
+    })
   }
 
   module.exports = pods

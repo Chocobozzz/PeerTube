@@ -1,6 +1,7 @@
 ;(function () {
   'use strict'
 
+  var async = require('async')
   var chai = require('chai')
   var expect = chai.expect
 
@@ -10,8 +11,12 @@
     var apps = []
     var urls = []
 
-    function makeFriend (pod_number, callback) {
-      return utils.makeFriend(urls[pod_number - 1], callback)
+    function makeFriends (pod_number, callback) {
+      return utils.makeFriends(urls[pod_number - 1], callback)
+    }
+
+    function quitFriends (pod_number, callback) {
+      return utils.quitFriends(urls[pod_number - 1], callback)
     }
 
     function getFriendsList (pod_number, end) {
@@ -26,7 +31,11 @@
       return utils.uploadVideo(urls[pod_number - 1], name, description, fixture, callback)
     }
 
-    beforeEach(function (done) {
+    function getVideos (pod_number, callback) {
+      return utils.getVideosList(urls[pod_number - 1], callback)
+    }
+
+    before(function (done) {
       this.timeout(30000)
       utils.runMultipleServers(6, function (apps_run, urls_run) {
         apps = apps_run
@@ -35,7 +44,7 @@
       })
     })
 
-    afterEach(function (done) {
+    after(function (done) {
       apps.forEach(function (app) {
         process.kill(-app.pid)
       })
@@ -53,11 +62,11 @@
       this.timeout(20000)
 
       // Pod 3 makes friend with the first one
-      makeFriend(3, function () {
+      makeFriends(3, function () {
         // Pod 4 makes friend with the second one
-        makeFriend(4, function () {
+        makeFriends(4, function () {
           // Now if the fifth wants to make friends with the third et the first
-          makeFriend(5, function () {
+          makeFriends(5, function () {
             setTimeout(function () {
               // It should have 0 friends
               getFriendsList(5, function (err, res) {
@@ -73,13 +82,30 @@
       })
     })
 
+    it('Should quit all friends', function (done) {
+      this.timeout(10000)
+      quitFriends(1, function () {
+        quitFriends(2, function () {
+          async.each([ 1, 2, 3, 4, 5, 6 ], function (i, callback) {
+            getFriendsList(i, function (err, res) {
+              if (err) throw err
+              expect(res.body.length).to.equal(0)
+              callback()
+            })
+          }, function () {
+            done()
+          })
+        })
+      })
+    })
+
     it('Should make friends with the pods 1, 2, 3', function (done) {
       this.timeout(150000)
 
       // Pods 1, 2, 3 and 4 become friends (yes this is beautiful)
-      makeFriend(2, function () {
-        makeFriend(1, function () {
-          makeFriend(4, function () {
+      makeFriends(2, function () {
+        makeFriends(1, function () {
+          makeFriends(4, function () {
             // Kill the server 4
             apps[3].kill()
 
@@ -99,7 +125,7 @@
                             expect(res.body.length).to.equal(3)
 
                             // Pod 6 ask pod 1, 2 and 3
-                            makeFriend(6, function () {
+                            makeFriends(6, function () {
                               getFriendsList(6, function (err, res) {
                                 if (err) throw err
 
@@ -123,6 +149,46 @@
             })
           })
         })
+      })
+    })
+
+    it('Should pod 1 quit friends', function (done) {
+      this.timeout(25000)
+      // Upload a video on server 3 for aditionnal tests
+      uploadVideo(3, function () {
+        setTimeout(function () {
+          quitFriends(1, function () {
+            // Remove pod 1 from pod 2
+            getVideos(1, function (err, res) {
+              if (err) throw err
+              expect(res.body).to.be.an('array')
+              expect(res.body.length).to.equal(2)
+
+              getVideos(2, function (err, res) {
+                if (err) throw err
+                expect(res.body).to.be.an('array')
+                expect(res.body.length).to.equal(3)
+                done()
+              })
+            })
+          })
+        }, 15000)
+      })
+    })
+
+    it('Should make friends between pod 1 and 2 and exchange their videos', function (done) {
+      this.timeout(20000)
+      makeFriends(1, function () {
+        setTimeout(function () {
+          getVideos(1, function (err, res) {
+            if (err) throw err
+
+            expect(res.body).to.be.an('array')
+            expect(res.body.length).to.equal(5)
+
+            done()
+          })
+        }, 5000)
       })
     })
   })

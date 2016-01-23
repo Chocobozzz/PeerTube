@@ -56,7 +56,7 @@
   utils.makeMultipleRetryRequest = function (all_data, pods, callbackEach, callback) {
     if (!callback) {
       callback = callbackEach
-      callbackEach = function () {}
+      callbackEach = null
     }
 
     var url = http + '://' + host + ':' + port
@@ -71,9 +71,13 @@
     // Make a request for each pod
     async.each(pods, function (pod, callback_each_async) {
       function callbackEachRetryRequest (err, response, body, url, pod) {
-        callbackEach(err, response, body, url, pod, function () {
+        if (callbackEach !== null) {
+          callbackEach(err, response, body, url, pod, function () {
+            callback_each_async()
+          })
+        } else {
           callback_each_async()
-        })
+        }
       }
 
       var params = {

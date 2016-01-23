@@ -31,6 +31,10 @@
     makeFriends()
   })
 
+  $('#panel_quit_friends').on('click', function () {
+    quitFriends()
+  })
+
   $('#search-video').on('keyup', function (e) {
     var search = $(this).val()
 
@@ -60,6 +64,17 @@
     })
   }
 
+  function quitFriends () {
+    $.ajax({
+      url: '/api/v1/pods/quitfriends',
+      type: 'GET',
+      dataType: 'json',
+      success: function () {
+        alert('Quit friends!')
+      }
+    })
+  }
+
   function printVideos (videos) {
     $content.empty()
 
@@ -72,22 +87,27 @@
 
       var $video_name = $('<span></span>').addClass('video_name').text(video.name)
       var $video_pod = $('<span></span>').addClass('video_pod_url').text(video.podUrl)
-      var $remove = $('<span></span>').addClass('span_action glyphicon glyphicon-remove')
-      var $header = $('<div></div>').append([ $video_name, $video_pod, $remove ])
+      var $header = $('<div></div>').append([ $video_name, $video_pod ])
+
+      if (video.namePath !== null) {
+        var $remove = $('<span></span>').addClass('span_action glyphicon glyphicon-remove')
+
+        // Remove the video
+        $remove.on('click', function () {
+          // TODO
+          if (!confirm('Are you sure ?')) return
+
+          removeVideo(video)
+        })
+
+        $header.append($remove)
+      }
 
       var $video_description = $('<div></div>').addClass('video_description').text(video.description)
 
       // Get the video
       $video_name.on('click', function () {
         getVideo(video)
-      })
-
-      // Remove the video
-      $remove.on('click', function () {
-        // TODO
-        if (!confirm('Are you sure ?')) return
-
-        removeVideo(video)
       })
 
       if (!video.magnetUri) {

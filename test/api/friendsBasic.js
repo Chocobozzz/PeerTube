@@ -9,6 +9,29 @@
   var utils = require('./utils')
 
   describe('Test basic friends', function () {
+    function testMadeFriends (urls, url_to_test, callback) {
+      var friends = []
+      for (var i = 0; i < urls.length; i++) {
+        if (urls[i] === url_to_test) continue
+        friends.push(urls[i])
+      }
+
+      utils.getFriendsList(url_to_test, function (err, res) {
+        if (err) throw err
+
+        var result = res.body
+        var result_urls = [ result[0].url, result[1].url ]
+        expect(result).to.be.an('array')
+        expect(result.length).to.equal(2)
+        expect(result_urls[0]).to.not.equal(result_urls[1])
+
+        var error_string = 'Friends url do not correspond for ' + url_to_test
+        expect(friends).to.contain(result_urls[0], error_string)
+        expect(friends).to.contain(result_urls[1], error_string)
+        callback()
+      })
+    }
+
     var apps = []
     var urls = []
 
@@ -40,29 +63,6 @@
 
     it('Should make friends', function (done) {
       this.timeout(10000)
-
-      function testMadeFriends (urls, url_to_test, callback) {
-        var friends = []
-        for (var i = 0; i < urls.length; i++) {
-          if (urls[i] === url_to_test) continue
-          friends.push(urls[i])
-        }
-
-        utils.getFriendsList(url_to_test, function (err, res) {
-          if (err) throw err
-
-          var result = res.body
-          var result_urls = [ result[0].url, result[1].url ]
-          expect(result).to.be.an('array')
-          expect(result.length).to.equal(2)
-          expect(result_urls[0]).to.not.equal(result_urls[1])
-
-          var error_string = 'Friends url do not correspond for ' + url_to_test
-          expect(friends).to.contain(result_urls[0], error_string)
-          expect(friends).to.contain(result_urls[1], error_string)
-          callback()
-        })
-      }
 
       var path = '/api/v1/pods/makefriends'
 
@@ -118,8 +118,48 @@
         })
     })
 
-    // TODO
-    it('Should not be able to make friends again')
+    it('Should not be allowed to make friend again', function (done) {
+      utils.makeFriends(urls[1], 409, done)
+    })
+
+    it('Should quit friends of pod 2', function (done) {
+      utils.quitFriends(urls[1], function () {
+        utils.getFriendsList(urls[1], function (err, res) {
+          if (err) throw err
+
+          var result = res.body
+          expect(result).to.be.an('array')
+          expect(result.length).to.equal(0)
+
+          // Other pods shouldn't have pod 2 too
+          async.each([ urls[0], urls[2] ], function (url, callback) {
+            utils.getFriendsList(url, function (err, res) {
+              if (err) throw err
+
+              var result = res.body
+              expect(result).to.be.an('array')
+              expect(result.length).to.equal(1)
+              expect(result[0].url).not.to.be.equal(urls[1])
+              callback()
+            })
+          }, function (err) {
+            if (err) throw err
+            done()
+          })
+        })
+      })
+    })
+
+    it('Should allow pod 2 to make friend again', function (done) {
+      utils.makeFriends(urls[1], function () {
+        async.each(urls, function (url, callback) {
+          testMadeFriends(urls, url, callback)
+        }, function (err) {
+          if (err) throw err
+          done()
+        })
+      })
+    })
 
     after(function (done) {
       apps.forEach(function (app) {

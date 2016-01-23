@@ -6,9 +6,11 @@
   var constants = require('./constants')
   var logger = require('./logger')
   var database = require('./database')
+  var pluck = require('lodash-node/compat/collection/pluck')
   var PoolRequestsDB = database.PoolRequestsDB
   var PodsDB = database.PodsDB
   var utils = require('./utils')
+  var VideosDB = database.VideosDB
 
   var poolRequests = {}
 
@@ -90,11 +92,26 @@
   }
 
   function removeBadPods () {
-    PodsDB.remove({ score: 0 }, function (err, result) {
+    PodsDB.find({ score: 0 }, { _id: 1, url: 1 }, function (err, pods) {
       if (err) throw err
 
-      var number_removed = result.result.n
-      if (number_removed !== 0) logger.info('Removed %d pod.', number_removed)
+      if (pods.length === 0) return
+
+      var urls = pluck(pods, 'url')
+      var ids = pluck(pods, '_id')
+
+      VideosDB.remove({ podUrl: { $in: urls } }, function (err, r) {
+        if (err) logger.error('Cannot remove videos from a pod that we removing.', { error: err })
+        var videos_removed = r.result.n
+        logger.info('Removed %d videos.', videos_removed)
+
+        PodsDB.remove({ _id: { $in: ids } }, function (err, r) {
+          if (err) logger.error('Cannot remove bad pods.', { error: err })
+
+          var pods_removed = r.result.n
+          logger.info('Removed %d pods.', pods_removed)
+        })
+      })
     })
   }
 
@@ -126,9 +143,9 @@
       utils.makeMultipleRetryRequest(params, pods, callbackEachPodFinished, callbackAllPodsFinished)
 
       function callbackEachPodFinished (err, response, body, url, pod, callback_each_pod_finished) {
-        if (err || response.statusCode !== 200) {
+        if (err || (response.statusCode !== 200 && response.statusCode !== 204)) {
           bad_pods.push(pod._id)
-          logger.error('Error sending secure request to %s pod.', url, { error: err })
+          logger.error('Error sending secure request to %s pod.', url, { error: err || new Error('Status code not 20x') })
         } else {
           good_pods.push(pod._id)
         }
@@ -178,6 +195,11 @@
   poolRequests.deactivate = function () {
     logger.info('Pool requests deactivated.')
     clearInterval(timer)
+  }
+
+  poolRequests.forceSend = function () {
+    logger.info('Force pool requests sending.')
+    makePoolRequests()
   }
 
   module.exports = poolRequests
