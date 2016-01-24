@@ -52,7 +52,7 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 ### Dependencies
 
-  * NodeJS == 0.12
+  * **NodeJS >= 4.2**
   * Grunt-cli (npm install -g grunt-cli)
   * OpenSSL (cli)
   * MongoDB

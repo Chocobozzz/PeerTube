@@ -1,7 +1,6 @@
 language: node_js
 
 node_js:
-  - "0.12"
   - "4.2"
   - "5.1"
 
@@ -27,6 +26,7 @@ cache:
     - $(npm config get prefix)/bin/electron-prebuilt
 
 before_script:
+  - npm update
   - npm install electron-prebuilt -g
   - npm install grunt-cli -g
 
