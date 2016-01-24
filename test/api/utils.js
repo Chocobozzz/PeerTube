@@ -6,10 +6,23 @@
   var fork = child_process.fork
   var request = require('supertest')
 
+  module.exports = {
+    flushTests: flushTests,
+    getFriendsList: getFriendsList,
+    getVideosList: getVideosList,
+    makeFriends: makeFriends,
+    quitFriends: quitFriends,
+    removeVideo: removeVideo,
+    flushAndRunMultipleServers: flushAndRunMultipleServers,
+    runServer: runServer,
+    searchVideo: searchVideo,
+    uploadVideo: uploadVideo
+  }
+
+  // ---------------------- Export functions --------------------
+
   function flushTests (callback) {
-    exec(__dirname + '/../../scripts/clean_test.sh', function () {
-      callback()
-    })
+    exec(__dirname + '/../../scripts/clean_test.sh', callback)
   }
 
   function getFriendsList (url, end) {
@@ -51,9 +64,7 @@
         if (err) throw err
 
         // Wait for the request between pods
-        setTimeout(function () {
-          callback()
-        }, 1000)
+        setTimeout(callback, 1000)
       })
   }
 
@@ -69,23 +80,8 @@
         if (err) throw err
 
         // Wait for the request between pods
-        setTimeout(function () {
-          callback()
-        }, 1000)
+        setTimeout(callback, 1000)
       })
-  }
-
-  function uploadVideo (url, name, description, fixture, end) {
-    var path = '/api/v1/videos'
-
-    request(url)
-      .post(path)
-      .set('Accept', 'application/json')
-      .field('name', name)
-      .field('description', description)
-      .attach('input_video', __dirname + '/fixtures/' + fixture)
-      .expect(201)
-      .end(end)
   }
 
   function removeVideo (url, id, end) {
@@ -98,7 +94,7 @@
       .end(end)
   }
 
-  function runMultipleServers (total_servers, serversRun) {
+  function flushAndRunMultipleServers (total_servers, serversRun) {
     var apps = []
     var urls = []
     var i = 0
@@ -171,16 +167,16 @@
       .end(end)
   }
 
-  module.exports = {
-    flushTests: flushTests,
-    getFriendsList: getFriendsList,
-    getVideosList: getVideosList,
-    makeFriends: makeFriends,
-    quitFriends: quitFriends,
-    removeVideo: removeVideo,
-    runMultipleServers: runMultipleServers,
-    runServer: runServer,
-    searchVideo: searchVideo,
-    uploadVideo: uploadVideo
+  function uploadVideo (url, name, description, fixture, end) {
+    var path = '/api/v1/videos'
+
+    request(url)
+      .post(path)
+      .set('Accept', 'application/json')
+      .field('name', name)
+      .field('description', description)
+      .attach('input_video', __dirname + '/fixtures/' + fixture)
+      .expect(201)
+      .end(end)
   }
 })()

@@ -1,6 +1,7 @@
 ;(function () {
   'use strict'
 
+  var async = require('async')
   var chai = require('chai')
   var expect = chai.expect
   var request = require('supertest')
@@ -10,18 +11,6 @@
   describe('Test parameters validator', function () {
     var app = null
     var url = ''
-
-    before(function (done) {
-      this.timeout(20000)
-
-      utils.flushTests(function () {
-        utils.runServer(1, function (app1, url1) {
-          app = app1
-          url = url1
-          done()
-        })
-      })
-    })
 
     function makePostRequest (path, fields, attach, done, fail) {
       var status_code = 400
@@ -49,6 +38,25 @@
         .send(fields)
         .expect(status_code, done)
     }
+
+    // ---------------------------------------------------------------
+
+    before(function (done) {
+      this.timeout(20000)
+
+      async.series([
+        function (next) {
+          utils.flushTests(next)
+        },
+        function (next) {
+          utils.runServer(1, function (app1, url1) {
+            app = app1
+            url = url1
+            next()
+          })
+        }
+      ], done)
+    })
 
     describe('Of the pods API', function () {
       var path = '/api/v1/pods/'
@@ -284,9 +292,7 @@
 
       // Keep the logs if the test failed
       if (this.ok) {
-        utils.flushTests(function () {
-          done()
-        })
+        utils.flushTests(done)
       } else {
         done()
       }

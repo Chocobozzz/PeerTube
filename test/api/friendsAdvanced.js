@@ -35,145 +35,190 @@
       return utils.getVideosList(urls[pod_number - 1], callback)
     }
 
+    // ---------------------------------------------------------------
+
     before(function (done) {
       this.timeout(30000)
-      utils.runMultipleServers(6, function (apps_run, urls_run) {
+      utils.flushAndRunMultipleServers(6, function (apps_run, urls_run) {
         apps = apps_run
         urls = urls_run
         done()
       })
     })
 
-    after(function (done) {
-      apps.forEach(function (app) {
-        process.kill(-app.pid)
-      })
-
-      if (this.ok) {
-        utils.flushTests(function () {
-          done()
-        })
-      } else {
-        done()
-      }
-    })
-
     it('Should make friends with two pod each in a different group', function (done) {
       this.timeout(20000)
 
-      // Pod 3 makes friend with the first one
-      makeFriends(3, function () {
+      async.series([
+        // Pod 3 makes friend with the first one
+        function (next) {
+          makeFriends(3, next)
+        },
         // Pod 4 makes friend with the second one
-        makeFriends(4, function () {
-          // Now if the fifth wants to make friends with the third et the first
-          makeFriends(5, function () {
-            setTimeout(function () {
-              // It should have 0 friends
-              getFriendsList(5, function (err, res) {
-                if (err) throw err
+        function (next) {
+          makeFriends(4, next)
+        },
+        // Now if the fifth wants to make friends with the third et the first
+        function (next) {
+          makeFriends(5, next)
+        },
+        function (next) {
+          setTimeout(next, 11000)
+        }],
+        function (err) {
+          if (err) throw err
 
-                expect(res.body.length).to.equal(0)
+          // It should have 0 friends
+          getFriendsList(5, function (err, res) {
+            if (err) throw err
 
-                done()
-              })
-            }, 11000)
+            expect(res.body.length).to.equal(0)
+
+            done()
           })
-        })
-      })
+        }
+      )
     })
 
     it('Should quit all friends', function (done) {
       this.timeout(10000)
-      quitFriends(1, function () {
-        quitFriends(2, function () {
+
+      async.series([
+        function (next) {
+          quitFriends(1, next)
+        },
+        function (next) {
+          quitFriends(2, next)
+        }],
+        function (err) {
+          if (err) throw err
+
           async.each([ 1, 2, 3, 4, 5, 6 ], function (i, callback) {
             getFriendsList(i, function (err, res) {
               if (err) throw err
+
               expect(res.body.length).to.equal(0)
+
               callback()
             })
-          }, function () {
-            done()
-          })
-        })
-      })
+          }, done)
+        }
+      )
     })
 
     it('Should make friends with the pods 1, 2, 3', function (done) {
       this.timeout(150000)
 
-      // Pods 1, 2, 3 and 4 become friends (yes this is beautiful)
-      makeFriends(2, function () {
-        makeFriends(1, function () {
-          makeFriends(4, function () {
-            // Kill the server 4
-            apps[3].kill()
-
-            // Expulse pod 4 from pod 1 and 2
-            uploadVideo(1, function () {
-              uploadVideo(2, function () {
-                setTimeout(function () {
-                  uploadVideo(1, function () {
-                    uploadVideo(2, function () {
-                      setTimeout(function () {
-                        // Rerun server 4
-                        utils.runServer(4, function (app, url) {
-                          apps[3] = app
-                          getFriendsList(4, function (err, res) {
-                            if (err) throw err
-                            // Pod 4 didn't know pod 1 and 2 removed it
-                            expect(res.body.length).to.equal(3)
-
-                            // Pod 6 ask pod 1, 2 and 3
-                            makeFriends(6, function () {
-                              getFriendsList(6, function (err, res) {
-                                if (err) throw err
-
-                                // Pod 4 should not be our friend
-                                var result = res.body
-                                expect(result.length).to.equal(3)
-                                for (var pod of result) {
-                                  expect(pod.url).not.equal(urls[3])
-                                }
-
-                                done()
-                              })
-                            })
-                          })
-                        })
-                      }, 15000)
-                    })
-                  })
-                }, 11000)
-              })
-            })
+      async.series([
+        // Pods 1, 2, 3 and 4 become friends
+        function (next) {
+          makeFriends(2, next)
+        },
+        function (next) {
+          makeFriends(1, next)
+        },
+        function (next) {
+          makeFriends(4, next)
+        },
+        // Kill pod 4
+        function (next) {
+          apps[3].kill()
+          next()
+        },
+        // Expulse pod 4 from pod 1 and 2
+        function (next) {
+          uploadVideo(1, next)
+        },
+        function (next) {
+          uploadVideo(2, next)
+        },
+        function (next) {
+          setTimeout(next, 11000)
+        },
+        function (next) {
+          uploadVideo(1, next)
+        },
+        function (next) {
+          uploadVideo(2, next)
+        },
+        function (next) {
+          setTimeout(next, 20000)
+        },
+        // Rerun server 4
+        function (next) {
+          utils.runServer(4, function (app, url) {
+            apps[3] = app
+            next()
           })
-        })
-      })
+        },
+        function (next) {
+          getFriendsList(4, function (err, res) {
+            if (err) throw err
+
+            // Pod 4 didn't know pod 1 and 2 removed it
+            expect(res.body.length).to.equal(3)
+
+            next()
+          })
+        },
+        // Pod 6 ask pod 1, 2 and 3
+        function (next) {
+          makeFriends(6, next)
+        }],
+        function (err) {
+          if (err) throw err
+
+          getFriendsList(6, function (err, res) {
+            if (err) throw err
+
+            // Pod 4 should not be our friend
+            var result = res.body
+            expect(result.length).to.equal(3)
+            for (var pod of result) {
+              expect(pod.url).not.equal(urls[3])
+            }
+
+            done()
+          })
+        }
+      )
     })
 
     it('Should pod 1 quit friends', function (done) {
       this.timeout(25000)
-      // Upload a video on server 3 for aditionnal tests
-      uploadVideo(3, function () {
-        setTimeout(function () {
-          quitFriends(1, function () {
-            // Remove pod 1 from pod 2
-            getVideos(1, function (err, res) {
-              if (err) throw err
-              expect(res.body).to.be.an('array')
-              expect(res.body.length).to.equal(2)
 
-              getVideos(2, function (err, res) {
-                if (err) throw err
-                expect(res.body).to.be.an('array')
-                expect(res.body.length).to.equal(3)
-                done()
-              })
-            })
+      async.series([
+        // Upload a video on server 3 for aditionnal tests
+        function (next) {
+          uploadVideo(3, next)
+        },
+        function (next) {
+          setTimeout(next, 15000)
+        },
+        function (next) {
+          quitFriends(1, next)
+        },
+        // Remove pod 1 from pod 2
+        function (next) {
+          getVideos(1, function (err, res) {
+            if (err) throw err
+            expect(res.body).to.be.an('array')
+            expect(res.body.length).to.equal(2)
+
+            next()
           })
-        }, 15000)
-      })
+        }],
+        function (err) {
+          if (err) throw err
+
+          getVideos(2, function (err, res) {
+            if (err) throw err
+            expect(res.body).to.be.an('array')
+            expect(res.body.length).to.equal(3)
+            done()
+          })
+        }
+      )
     })
 
     it('Should make friends between pod 1 and 2 and exchange their videos', function (done) {
@@ -190,6 +235,18 @@
           })
         }, 5000)
       })
+    })
+
+    after(function (done) {
+      apps.forEach(function (app) {
+        process.kill(-app.pid)
+      })
+
+      if (this.ok) {
+        utils.flushTests(done)
+      } else {
+        done()
+      }
     })
   })
 })()

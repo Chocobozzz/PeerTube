@@ -1,6 +1,7 @@
 ;(function () {
   'use strict'
 
+  var async = require('async')
   var chai = require('chai')
   var fs = require('fs')
   var expect = chai.expect
@@ -18,16 +19,21 @@
     before(function (done) {
       this.timeout(20000)
 
-      utils.flushTests(function () {
-        utils.runServer(1, function (app1, url1) {
-          app = app1
-          url = url1
-
-          webtorrent.create({ host: 'client', port: '1' }, function () {
-            done()
+      async.series([
+        function (next) {
+          utils.flushTests(next)
+        },
+        function (next) {
+          utils.runServer(1, function (app1, url1) {
+            app = app1
+            url = url1
+            next()
           })
-        })
-      })
+        },
+        function (next) {
+          webtorrent.create({ host: 'client', port: '1' }, next)
+        }
+      ], done)
     })
 
     it('Should not have videos', function (done) {
@@ -132,9 +138,7 @@
 
       // Keep the logs if the test failed
       if (this.ok) {
-        utils.flushTests(function () {
-          done()
-        })
+        utils.flushTests(done)
       } else {
         done()
       }

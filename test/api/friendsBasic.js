@@ -9,6 +9,9 @@
   var utils = require('./utils')
 
   describe('Test basic friends', function () {
+    var apps = []
+    var urls = []
+
     function testMadeFriends (urls, url_to_test, callback) {
       var friends = []
       for (var i = 0; i < urls.length; i++) {
@@ -32,12 +35,11 @@
       })
     }
 
-    var apps = []
-    var urls = []
+    // ---------------------------------------------------------------
 
     before(function (done) {
       this.timeout(20000)
-      utils.runMultipleServers(3, function (apps_run, urls_run) {
+      utils.flushAndRunMultipleServers(3, function (apps_run, urls_run) {
         apps = apps_run
         urls = urls_run
         done()
@@ -54,11 +56,7 @@
           expect(result.length).to.equal(0)
           callback()
         })
-      }, function (err) {
-        if (err) throw err
-
-        done()
-      })
+      }, done)
     })
 
     it('Should make friends', function (done) {
@@ -66,56 +64,65 @@
 
       var path = '/api/v1/pods/makefriends'
 
-      // The second pod make friend with the third
-      request(urls[1])
-        .get(path)
-        .set('Accept', 'application/json')
-        .expect(204)
-        .end(function (err, res) {
-          if (err) throw err
+      async.series([
+        // The second pod make friend with the third
+        function (next) {
+          request(urls[1])
+            .get(path)
+            .set('Accept', 'application/json')
+            .expect(204)
+            .end(next)
+        },
+        // Wait for the request between pods
+        function (next) {
+          setTimeout(next, 1000)
+        },
+        // The second pod should have the third as a friend
+        function (next) {
+          utils.getFriendsList(urls[1], function (err, res) {
+            if (err) throw err
 
-          // Wait for the request between pods
-          setTimeout(function () {
-            // The second pod should have the third as a friend
-            utils.getFriendsList(urls[1], function (err, res) {
-              if (err) throw err
+            var result = res.body
+            expect(result).to.be.an('array')
+            expect(result.length).to.equal(1)
+            expect(result[0].url).to.be.equal(urls[2])
 
-              var result = res.body
-              expect(result).to.be.an('array')
-              expect(result.length).to.equal(1)
-              expect(result[0].url).to.be.equal(urls[2])
+            next()
+          })
+        },
+        // Same here, the third pod should have the second pod as a friend
+        function (next) {
+          utils.getFriendsList(urls[2], function (err, res) {
+            if (err) throw err
 
-              // Same here, the third pod should have the second pod as a friend
-              utils.getFriendsList(urls[2], function (err, res) {
-                if (err) throw err
+            var result = res.body
+            expect(result).to.be.an('array')
+            expect(result.length).to.equal(1)
+            expect(result[0].url).to.be.equal(urls[1])
 
-                var result = res.body
-                expect(result).to.be.an('array')
-                expect(result.length).to.equal(1)
-                expect(result[0].url).to.be.equal(urls[1])
-
-                // Finally the first pod make friend with the second pod
-                request(urls[0])
-                  .get(path)
-                  .set('Accept', 'application/json')
-                  .expect(204)
-                  .end(function (err, res) {
-                    if (err) throw err
-
-                    setTimeout(function () {
-                      // Now each pod should be friend with the other ones
-                      async.each(urls, function (url, callback) {
-                        testMadeFriends(urls, url, callback)
-                      }, function (err) {
-                        if (err) throw err
-                        done()
-                      })
-                    }, 1000)
-                  })
-              })
-            })
-          }, 1000)
-        })
+            next()
+          })
+        },
+        // Finally the first pod make friend with the second pod
+        function (next) {
+          request(urls[0])
+            .get(path)
+            .set('Accept', 'application/json')
+            .expect(204)
+            .end(next)
+        },
+        // Wait for the request between pods
+        function (next) {
+          setTimeout(next, 1000)
+        }
+      ],
+      // Now each pod should be friend with the other ones
+      function (err) {
+        if (err) throw err
+        async.each(urls, function (url, callback) {
+          testMadeFriends(urls, url, callback)
+        }, done)
+      })
     })
 
     it('Should not be allowed to make friend again', function (done) {
@@ -123,15 +130,25 @@
     })
 
     it('Should quit friends of pod 2', function (done) {
-      utils.quitFriends(urls[1], function () {
-        utils.getFriendsList(urls[1], function (err, res) {
-          if (err) throw err
+      async.series([
+        // Pod 1 quit friends
+        function (next) {
+          utils.quitFriends(urls[1], next)
+        },
+        // Pod 1 should not have friends anymore
+        function (next) {
+          utils.getFriendsList(urls[1], function (err, res) {
+            if (err) throw err
 
-          var result = res.body
-          expect(result).to.be.an('array')
-          expect(result.length).to.equal(0)
+            var result = res.body
+            expect(result).to.be.an('array')
+            expect(result.length).to.equal(0)
 
-          // Other pods shouldn't have pod 2 too
+            next()
+          })
+        },
+        // Other pods shouldn't have pod 1 too
+        function (next) {
           async.each([ urls[0], urls[2] ], function (url, callback) {
             utils.getFriendsList(url, function (err, res) {
               if (err) throw err
@@ -142,22 +159,16 @@
               expect(result[0].url).not.to.be.equal(urls[1])
               callback()
             })
-          }, function (err) {
-            if (err) throw err
-            done()
-          })
-        })
-      })
+          }, next)
+        }
+      ], done)
     })
 
     it('Should allow pod 2 to make friend again', function (done) {
       utils.makeFriends(urls[1], function () {
         async.each(urls, function (url, callback) {
           testMadeFriends(urls, url, callback)
-        }, function (err) {
-          if (err) throw err
-          done()
-        })
+        }, done)
       })
     })
 
@@ -167,9 +178,7 @@
       })
 
       if (this.ok) {
-        utils.flushTests(function () {
-          done()
-        })
+        utils.flushTests(done)
       } else {
         done()
       }

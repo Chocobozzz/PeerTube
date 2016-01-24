@@ -17,26 +17,31 @@
     before(function (done) {
       this.timeout(30000)
 
-      utils.runMultipleServers(3, function (apps_run, urls_run) {
-        apps = apps_run
-        urls = urls_run
-
+      async.series([
+        // Run servers
+        function (next) {
+          utils.flushAndRunMultipleServers(3, function (apps_run, urls_run) {
+            apps = apps_run
+            urls = urls_run
+            next()
+          })
+        },
         // The second pod make friend with the third
-        utils.makeFriends(urls[1], function (err, res) {
-          if (err) throw err
-
-          // Wait for the request between pods
-          setTimeout(function () {
-            utils.makeFriends(urls[0], function (err, res) {
-              if (err) throw err
-
-              webtorrent.create({ host: 'client', port: '1' }, function () {
-                done()
-              })
-            })
-          }, 10000)
-        })
-      })
+        function (next) {
+          utils.makeFriends(urls[1], next)
+        },
+        // Wait for the request between pods
+        function (next) {
+          setTimeout(next, 10000)
+        },
+        // Pod 1 make friends too
+        function (next) {
+          utils.makeFriends(urls[0], next)
+        },
+        function (next) {
+          webtorrent.create({ host: 'client', port: '1' }, next)
+        }
+      ], done)
     })
 
     it('Should not have videos for all pods', function (done) {
@@ -49,22 +54,24 @@
 
           callback()
         })
-      }, function (err) {
-        if (err) throw err
-
-        done()
-      })
+      }, done)
     })
 
     describe('Should upload the video and propagate on each pod', function () {
       it('Should upload the video on pod 1 and propagate on each pod', function (done) {
         this.timeout(15000)
 
-        utils.uploadVideo(urls[0], 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', function (err) {
-          if (err) throw err
+        async.series([
+          function (next) {
+            utils.uploadVideo(urls[0], 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', next)
+          },
+          function (next) {
+            setTimeout(next, 11000)
+          }],
+          // All pods should have this video
+          function (err) {
+            if (err) throw err
 
-          setTimeout(function () {
-            // All pods should have this video
             async.each(urls, function (url, callback) {
               var base_magnet = null
 
@@ -89,23 +96,25 @@
 
                 callback()
               })
-            }, function (err) {
-              if (err) throw err
-
-              done()
-            })
-          }, 11000)
-        })
+            }, done)
+          }
+        )
       })
 
       it('Should upload the video on pod 2 and propagate on each pod', function (done) {
         this.timeout(15000)
 
-        utils.uploadVideo(urls[1], 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', function (err) {
-          if (err) throw err
+        async.series([
+          function (next) {
+            utils.uploadVideo(urls[1], 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', next)
+          },
+          function (next) {
+            setTimeout(next, 11000)
+          }],
+          // All pods should have this video
+          function (err) {
+            if (err) throw err
 
-          setTimeout(function () {
-            // All pods should have this video
             async.each(urls, function (url, callback) {
               var base_magnet = null
 
@@ -130,62 +139,60 @@
 
                 callback()
               })
-            }, function (err) {
-              if (err) throw err
-
-              done()
-            })
-          }, 11000)
-        })
+            }, done)
+          }
+        )
       })
 
       it('Should upload two videos on pod 3 and propagate on each pod', function (done) {
         this.timeout(30000)
 
-        utils.uploadVideo(urls[2], 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', function (err) {
-          if (err) throw err
-          utils.uploadVideo(urls[2], 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', function (err) {
+        async.series([
+          function (next) {
+            utils.uploadVideo(urls[2], 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', next)
+          },
+          function (next) {
+            utils.uploadVideo(urls[2], 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', next)
+          },
+          function (next) {
+            setTimeout(next, 22000)
+          }],
+          function (err) {
             if (err) throw err
 
-            setTimeout(function () {
-              var base_magnet = null
-              // All pods should have this video
-              async.each(urls, function (url, callback) {
-                utils.getVideosList(url, function (err, res) {
-                  if (err) throw err
-
-                  var videos = res.body
-                  expect(videos).to.be.an('array')
-                  expect(videos.length).to.equal(4)
-                  var video = videos[2]
-                  expect(video.name).to.equal('my super name for pod 3')
-                  expect(video.description).to.equal('my super description for pod 3')
-                  expect(video.podUrl).to.equal('http://localhost:9003')
-                  expect(video.magnetUri).to.exist
-
-                  video = videos[3]
-                  expect(video.name).to.equal('my super name for pod 3-2')
-                  expect(video.description).to.equal('my super description for pod 3-2')
-                  expect(video.podUrl).to.equal('http://localhost:9003')
-                  expect(video.magnetUri).to.exist
-
-                  // All pods should have the same magnet Uri
-                  if (base_magnet === null) {
-                    base_magnet = video.magnetUri
-                  } else {
-                    expect(video.magnetUri).to.equal.magnetUri
-                  }
-
-                  callback()
-                })
-              }, function (err) {
+            var base_magnet = null
+            // All pods should have this video
+            async.each(urls, function (url, callback) {
+              utils.getVideosList(url, function (err, res) {
                 if (err) throw err
 
-                done()
+                var videos = res.body
+                expect(videos).to.be.an('array')
+                expect(videos.length).to.equal(4)
+                var video = videos[2]
+                expect(video.name).to.equal('my super name for pod 3')
+                expect(video.description).to.equal('my super description for pod 3')
+                expect(video.podUrl).to.equal('http://localhost:9003')
+                expect(video.magnetUri).to.exist
+
+                video = videos[3]
+                expect(video.name).to.equal('my super name for pod 3-2')
+                expect(video.description).to.equal('my super description for pod 3-2')
+                expect(video.podUrl).to.equal('http://localhost:9003')
+                expect(video.magnetUri).to.exist
+
+                // All pods should have the same magnet Uri
+                if (base_magnet === null) {
+                  base_magnet = video.magnetUri
+                } else {
+                  expect(video.magnetUri).to.equal.magnetUri
+                }
+
+                callback()
               })
-            }, 22000)
-          })
-        })
+            }, done)
+          }
+        )
       })
     })
 
@@ -271,17 +278,18 @@
       it('Should remove the file 3 and 3-2 by asking pod 3', function (done) {
         this.timeout(15000)
 
-        utils.removeVideo(urls[2], to_remove[0], function (err) {
-          if (err) throw err
-          utils.removeVideo(urls[2], to_remove[1], function (err) {
+        async.series([
+          function (next) {
+            utils.removeVideo(urls[2], to_remove[0], next)
+          },
+          function (next) {
+            utils.removeVideo(urls[2], to_remove[1], next)
+          }],
+          function (err) {
             if (err) throw err
-
-            // Wait the propagation to the other pods
-            setTimeout(function () {
-              done()
-            }, 11000)
-          })
-        })
+            setTimeout(done, 11000)
+          }
+        )
       })
 
       it('Should have videos 1 and 3 on each pod', function (done) {
@@ -300,11 +308,7 @@
 
             callback()
           })
-        }, function (err) {
-          if (err) throw err
-
-          done()
-        })
+        }, done)
       })
     })
 
@@ -316,9 +320,7 @@
 
       // Keep the logs if the test failed
       if (this.ok) {
-        utils.flushTests(function () {
-          done()
-        })
+        utils.flushTests(done)
       } else {
         done()
       }
