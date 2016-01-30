@@ -2,8 +2,8 @@
   'use strict'
 
   var checkErrors = require('./utils').checkErrors
-  var VideosDB = require('../../src/database').VideosDB
-  var logger = require('../../src/logger')
+  var VideosDB = require('../../initializers/database').VideosDB
+  var logger = require('../../helpers/logger')
 
   var videos = {}
 

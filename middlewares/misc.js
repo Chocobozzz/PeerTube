@@ -4,9 +4,9 @@
   var ursa = require('ursa')
   var fs = require('fs')
 
-  var logger = require('../src/logger')
-  var utils = require('../src/utils')
-  var PodsDB = require('../src/database').PodsDB
+  var logger = require('../helpers/logger')
+  var utils = require('../helpers/utils')
+  var PodsDB = require('../initializers/database').PodsDB
 
   var misc = {}
 

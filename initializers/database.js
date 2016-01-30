@@ -5,7 +5,7 @@
   var mongoose = require('mongoose')
 
   var constants = require('./constants')
-  var logger = require('./logger')
+  var logger = require('../helpers/logger')
 
   var dbname = 'peertube' + config.get('database.suffix')
   var host = config.get('database.host')

@@ -2,7 +2,7 @@
   'use strict'
 
   var util = require('util')
-  var logger = require('../../src/logger')
+  var logger = require('../../helpers/logger')
 
   var utils = {}
 

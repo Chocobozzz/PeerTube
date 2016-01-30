@@ -10,7 +10,7 @@
   var replay = require('request-replay')
   var ursa = require('ursa')
 
-  var constants = require('./constants')
+  var constants = require('../initializers/constants')
   var logger = require('./logger')
 
   var utils = {}

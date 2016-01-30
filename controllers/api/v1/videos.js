@@ -10,7 +10,7 @@
   var middleware = require('../../../middlewares')
   var miscMiddleware = middleware.misc
   var reqValidator = middleware.reqValidators.videos
-  var videos = require('../../../src/videos')
+  var videos = require('../../../models/videos')
 
   var uploads = config.get('storage.uploads')
 

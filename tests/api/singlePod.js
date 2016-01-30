@@ -6,7 +6,7 @@
   var fs = require('fs')
   var expect = chai.expect
 
-  var webtorrent = require(__dirname + '/../../src/webTorrentNode')
+  var webtorrent = require(__dirname + '/../../lib/webTorrentNode')
   webtorrent.silent = true
 
   var utils = require('./utils')

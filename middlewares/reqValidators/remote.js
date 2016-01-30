@@ -2,7 +2,7 @@
   'use strict'
 
   var checkErrors = require('./utils').checkErrors
-  var logger = require('../../src/logger')
+  var logger = require('../../helpers/logger')
 
   var remote = {}
 

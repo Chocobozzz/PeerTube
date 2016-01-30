@@ -8,7 +8,7 @@
   var middleware = require('../../../middlewares')
   var miscMiddleware = middleware.misc
   var reqValidator = middleware.reqValidators.remote
-  var videos = require('../../../src/videos')
+  var videos = require('../../../models/videos')
 
   function addRemoteVideos (req, res, next) {
     videos.addRemotes(req.body.data, function (err, videos) {

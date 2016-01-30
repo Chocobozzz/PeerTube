@@ -7,7 +7,7 @@
   var miscMiddleware = middleware.misc
   var reqValidator = middleware.reqValidators.pods
   var secureRequest = middleware.reqValidators.remote.secureRequest
-  var pods = require('../../../src/pods')
+  var pods = require('../../../models/pods')
 
   function listPods (req, res, next) {
     pods.list(function (err, pods_list) {

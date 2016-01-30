@@ -6,7 +6,7 @@
   var expect = chai.expect
 
   var utils = require('./utils')
-  var webtorrent = require(__dirname + '/../../src/webTorrentNode')
+  var webtorrent = require(__dirname + '/../../lib/webTorrentNode')
   webtorrent.silent = true
 
   describe('Test multiple pods', function () {

@@ -6,11 +6,11 @@
   var fs = require('fs')
   var request = require('request')
 
-  var constants = require('./constants')
-  var logger = require('./logger')
-  var PodsDB = require('./database').PodsDB
-  var poolRequests = require('./poolRequests')
-  var utils = require('./utils')
+  var constants = require('../initializers/constants')
+  var logger = require('../helpers/logger')
+  var PodsDB = require('../initializers/database').PodsDB
+  var poolRequests = require('../lib/poolRequests')
+  var utils = require('../helpers/utils')
 
   var pods = {}
 

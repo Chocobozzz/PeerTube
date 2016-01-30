@@ -15,7 +15,7 @@
   var app = express()
 
   // ----------- Checker -----------
-  var checker = require('./src/checker')
+  var checker = require('./initializers/checker')
 
   var miss = checker.checkConfig()
   if (miss.length !== 0) {
@@ -28,14 +28,14 @@
 
   // ----------- PeerTube modules -----------
   var config = require('config')
-  var constants = require('./src/constants')
-  var customValidators = require('./src/customValidators')
-  var logger = require('./src/logger')
-  var poolRequests = require('./src/poolRequests')
-  var routes = require('./routes')
-  var utils = require('./src/utils')
-  var videos = require('./src/videos')
-  var webtorrent = require('./src/webTorrentNode')
+  var constants = require('./initializers/constants')
+  var customValidators = require('./helpers/customValidators')
+  var logger = require('./helpers/logger')
+  var poolRequests = require('./lib/poolRequests')
+  var routes = require('./controllers')
+  var utils = require('./helpers/utils')
+  var videos = require('./models/videos')
+  var webtorrent = require('./lib/webTorrentNode')
 
   // Get configurations
   var port = config.get('listen.port')

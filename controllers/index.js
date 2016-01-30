@@ -1,7 +1,7 @@
 ;(function () {
   'use strict'
 
-  var constants = require('../src/constants')
+  var constants = require('../initializers/constants')
 
   var routes = {
     api: require('./api/' + constants.API_VERSION),

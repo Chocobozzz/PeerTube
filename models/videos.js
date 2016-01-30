@@ -5,11 +5,11 @@
   var config = require('config')
   var dz = require('dezalgo')
   var fs = require('fs')
-  var webtorrent = require('./webTorrentNode')
+  var webtorrent = require('../lib/webTorrentNode')
 
-  var logger = require('./logger')
+  var logger = require('../helpers/logger')
   var pods = require('./pods')
-  var VideosDB = require('./database').VideosDB
+  var VideosDB = require('../initializers/database').VideosDB
 
   var videos = {}
 
