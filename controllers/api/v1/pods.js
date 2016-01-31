@@ -2,20 +2,27 @@
   'use strict'
 
   var express = require('express')
-  var router = express.Router()
+
   var middleware = require('../../../middlewares')
   var miscMiddleware = middleware.misc
+  var pods = require('../../../models/pods')
   var reqValidator = middleware.reqValidators.pods
   var secureRequest = middleware.reqValidators.remote.secureRequest
-  var pods = require('../../../models/pods')
 
-  function listPods (req, res, next) {
-    pods.list(function (err, pods_list) {
-      if (err) return next(err)
+  var router = express.Router()
 
-      res.json(pods_list)
-    })
-  }
+  router.get('/', miscMiddleware.cache(false), listPods)
+  router.post('/', reqValidator.podsAdd, miscMiddleware.cache(false), addPods)
+  router.get('/makefriends', miscMiddleware.cache(false), makeFriends)
+  router.get('/quitfriends', miscMiddleware.cache(false), quitFriends)
+  // Post because this is a secured request
+  router.post('/remove', secureRequest, miscMiddleware.decryptBody, removePods)
+
+  // ---------------------------------------------------------------------------
+
+  module.exports = router
+
+  // ---------------------------------------------------------------------------
 
   function addPods (req, res, next) {
     pods.add(req.body.data, function (err, json) {
@@ -25,11 +32,11 @@
     })
   }
 
-  function removePods (req, res, next) {
-    pods.remove(req.body.signature.url, function (err) {
+  function listPods (req, res, next) {
+    pods.list(function (err, pods_list) {
       if (err) return next(err)
 
-      res.sendStatus(204)
+      res.json(pods_list)
     })
   }
 
@@ -50,6 +57,14 @@
     })
   }
 
+  function removePods (req, res, next) {
+    pods.remove(req.body.signature.url, function (err) {
+      if (err) return next(err)
+
+      res.sendStatus(204)
+    })
+  }
+
   function quitFriends (req, res, next) {
     pods.quitFriends(function (err) {
       if (err) return next(err)
@@ -57,13 +72,4 @@
       res.sendStatus(204)
     })
   }
-
-  router.get('/', miscMiddleware.cache(false), listPods)
-  router.get('/makefriends', miscMiddleware.cache(false), makeFriends)
-  router.get('/quitfriends', miscMiddleware.cache(false), quitFriends)
-  router.post('/', reqValidator.podsAdd, miscMiddleware.cache(false), addPods)
-  // Post because this is a secured request
-  router.post('/remove', secureRequest, miscMiddleware.decryptBody, removePods)
-
-  module.exports = router
 })()

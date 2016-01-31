@@ -1,11 +1,13 @@
 ;(function () {
   'use strict'
 
-  var reqValidator = {
+  var reqValidators = {
     videos: require('./videos'),
     pods: require('./pods'),
     remote: require('./remote')
   }
 
-  module.exports = reqValidator
+  // ---------------------------------------------------------------------------
+
+  module.exports = reqValidators
 })()

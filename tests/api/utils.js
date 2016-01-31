@@ -6,7 +6,7 @@
   var fork = child_process.fork
   var request = require('supertest')
 
-  module.exports = {
+  var testUtils = {
     flushTests: flushTests,
     getFriendsList: getFriendsList,
     getVideosList: getVideosList,
@@ -179,4 +179,8 @@
       .expect(201)
       .end(end)
   }
+
+  // ---------------------------------------------------------------------------
+
+  module.exports = testUtils
 })()

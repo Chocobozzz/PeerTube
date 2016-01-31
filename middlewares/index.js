@@ -1,10 +1,12 @@
 ;(function () {
   'use strict'
 
-  var middleware = {
-    reqValidators: require('./reqValidators'),
-    misc: require('./misc')
+  var middlewares = {
+    misc: require('./misc'),
+    reqValidators: require('./reqValidators')
   }
 
-  module.exports = middleware
+  // ---------------------------------------------------------------------------
+
+  module.exports = middlewares
 })()

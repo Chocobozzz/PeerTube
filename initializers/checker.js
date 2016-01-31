@@ -4,10 +4,13 @@
   var config = require('config')
   var mkdirp = require('mkdirp')
 
-  var checker = {}
+  var checker = {
+    checkConfig: checkConfig,
+    createDirectoriesIfNotExist: createDirectoriesIfNotExist
+  }
 
   // Check the config files
-  checker.checkConfig = function () {
+  function checkConfig () {
     var required = [ 'listen.port',
       'webserver.https', 'webserver.host', 'webserver.port',
       'database.host', 'database.port', 'database.suffix',
@@ -25,7 +28,7 @@
   }
 
   // Create directories for the storage if it doesn't exist
-  checker.createDirectoriesIfNotExist = function () {
+  function createDirectoriesIfNotExist () {
     var storages = config.get('storage')
 
     for (var key of Object.keys(storages)) {
@@ -40,6 +43,7 @@
     }
   }
 
-  // ----------- Export -----------
+  // ---------------------------------------------------------------------------
+
   module.exports = checker
 })()

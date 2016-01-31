@@ -12,39 +12,23 @@
   var poolRequests = require('../lib/poolRequests')
   var utils = require('../helpers/utils')
 
-  var pods = {}
-
   var http = config.get('webserver.https') ? 'https' : 'http'
   var host = config.get('webserver.host')
   var port = config.get('webserver.port')
 
-  // ----------- Private functions -----------
-
-  function getForeignPodsList (url, callback) {
-    var path = '/api/' + constants.API_VERSION + '/pods'
-
-    request.get(url + path, function (err, response, body) {
-      if (err) throw err
-      callback(JSON.parse(body))
-    })
+  var pods = {
+    add: add,
+    addVideoToFriends: addVideoToFriends,
+    list: list,
+    hasFriends: hasFriends,
+    makeFriends: makeFriends,
+    quitFriends: quitFriends,
+    remove: remove,
+    removeVideoToFriends
   }
 
-  // ----------- Public functions -----------
-
-  pods.list = function (callback) {
-    PodsDB.find(function (err, pods_list) {
-      if (err) {
-        logger.error('Cannot get the list of the pods.', { error: err })
-        return callback(err)
-      }
-
-      return callback(null, pods_list)
-    })
-  }
-
-  // { url }
   // TODO: check if the pod is not already a friend
-  pods.add = function (data, callback) {
+  function add (data, callback) {
     var videos = require('./videos')
     logger.info('Adding pod: %s', data.url)
 
@@ -62,7 +46,7 @@
 
       videos.addRemotes(data.videos)
 
-      fs.readFile(utils.certDir + 'peertube.pub', 'utf8', function (err, cert) {
+      fs.readFile(utils.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
         if (err) {
           logger.error('Cannot read cert file.', { error: err })
           return callback(err)
@@ -80,40 +64,38 @@
     })
   }
 
-  pods.remove = function (url, callback) {
-    var videos = require('./videos')
-    logger.info('Removing %s pod.', url)
-
-    videos.removeAllRemotesOf(url, function (err) {
-      if (err) logger.error('Cannot remove all remote videos of %s.', url)
-
-      PodsDB.remove({ url: url }, function (err) {
-        if (err) return callback(err)
-
-        logger.info('%s pod removed.', url)
-        callback(null)
-      })
-    })
-  }
-
-  pods.addVideoToFriends = function (video) {
+  function addVideoToFriends (video) {
     // To avoid duplicates
     var id = video.name + video.magnetUri
     poolRequests.addToPoolRequests(id, 'add', video)
   }
 
-  pods.removeVideoToFriends = function (video) {
-    // To avoid duplicates
-    var id = video.name + video.magnetUri
-    poolRequests.addToPoolRequests(id, 'remove', video)
+  function list (callback) {
+    PodsDB.find(function (err, pods_list) {
+      if (err) {
+        logger.error('Cannot get the list of the pods.', { error: err })
+        return callback(err)
+      }
+
+      return callback(null, pods_list)
+    })
   }
 
-  pods.makeFriends = function (callback) {
+  function hasFriends (callback) {
+    PodsDB.count(function (err, count) {
+      if (err) return callback(err)
+
+      var has_friends = (count !== 0)
+      callback(null, has_friends)
+    })
+  }
+
+  function makeFriends (callback) {
     var videos = require('./videos')
     var pods_score = {}
 
     logger.info('Make friends!')
-    fs.readFile(utils.certDir + 'peertube.pub', 'utf8', function (err, cert) {
+    fs.readFile(utils.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
       if (err) {
         logger.error('Cannot read public cert.', { error: err })
         return callback(err)
@@ -188,7 +170,7 @@
           function eachRequest (err, response, body, url, pod, callback_each_request) {
             // We add the pod if it responded correctly with its public certificate
             if (!err && response.statusCode === 200) {
-              pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err) {
+              add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err) {
                 if (err) logger.error('Error with adding %s pod.', pod.url, { error: err })
 
                 videos.addRemotes(body.videos, function (err) {
@@ -221,7 +203,7 @@
     }
   }
 
-  pods.quitFriends = function (callback) {
+  function quitFriends (callback) {
     // Stop pool requests
     poolRequests.deactivate()
     // Flush pool requests
@@ -261,14 +243,40 @@
     })
   }
 
-  pods.hasFriends = function (callback) {
-    PodsDB.count(function (err, count) {
-      if (err) return callback(err)
+  function remove (url, callback) {
+    var videos = require('./videos')
+    logger.info('Removing %s pod.', url)
 
-      var has_friends = (count !== 0)
-      callback(null, has_friends)
+    videos.removeAllRemotesOf(url, function (err) {
+      if (err) logger.error('Cannot remove all remote videos of %s.', url)
+
+      PodsDB.remove({ url: url }, function (err) {
+        if (err) return callback(err)
+
+        logger.info('%s pod removed.', url)
+        callback(null)
+      })
     })
   }
 
+  function removeVideoToFriends (video) {
+    // To avoid duplicates
+    var id = video.name + video.magnetUri
+    poolRequests.addToPoolRequests(id, 'remove', video)
+  }
+
+  // ---------------------------------------------------------------------------
+
   module.exports = pods
+
+  // ---------------------------------------------------------------------------
+
+  function getForeignPodsList (url, callback) {
+    var path = '/api/' + constants.API_VERSION + '/pods'
+
+    request.get(url + path, function (err, response, body) {
+      if (err) throw err
+      callback(JSON.parse(body))
+    })
+  }
 })()

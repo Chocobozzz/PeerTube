@@ -3,9 +3,13 @@
 
   var validator = require('validator')
 
-  var customValidators = {}
+  var customValidators = {
+    eachIsRemoteVideosAddValid: eachIsRemoteVideosAddValid,
+    eachIsRemoteVideosRemoveValid: eachIsRemoteVideosRemoveValid,
+    isArray: isArray
+  }
 
-  customValidators.eachIsRemoteVideosAddValid = function (values) {
+  function eachIsRemoteVideosAddValid (values) {
     return values.every(function (val) {
       return validator.isLength(val.name, 1, 50) &&
         validator.isLength(val.description, 1, 50) &&
@@ -14,16 +18,17 @@
     })
   }
 
-  customValidators.eachIsRemoteVideosRemoveValid = function (values) {
+  function eachIsRemoteVideosRemoveValid (values) {
     return values.every(function (val) {
       return validator.isLength(val.magnetUri, 10)
     })
   }
 
-  customValidators.isArray = function (value) {
+  function isArray (value) {
     return Array.isArray(value)
   }
 
-  // ----------- Export -----------
+  // ---------------------------------------------------------------------------
+
   module.exports = customValidators
 })()

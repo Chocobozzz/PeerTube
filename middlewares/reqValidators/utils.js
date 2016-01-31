@@ -2,11 +2,14 @@
   'use strict'
 
   var util = require('util')
+
   var logger = require('../../helpers/logger')
 
-  var utils = {}
+  var reqValidatorsUtils = {
+    checkErrors: checkErrors
+  }
 
-  utils.checkErrors = function (req, res, next, status_code) {
+  function checkErrors (req, res, next, status_code) {
     if (status_code === undefined) status_code = 400
     var errors = req.validationErrors()
 
@@ -18,5 +21,7 @@
     return next()
   }
 
-  module.exports = utils
+  // ---------------------------------------------------------------------------
+
+  module.exports = reqValidatorsUtils
 })()

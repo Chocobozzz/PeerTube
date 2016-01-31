@@ -13,47 +13,29 @@
   var constants = require('../initializers/constants')
   var logger = require('./logger')
 
-  var utils = {}
-
+  var certDir = __dirname + '/../' + config.get('storage.certs')
   var http = config.get('webserver.https') ? 'https' : 'http'
   var host = config.get('webserver.host')
   var port = config.get('webserver.port')
   var algorithm = 'aes-256-ctr'
 
-  // ----------- Private functions ----------
-
-  function makeRetryRequest (params, from_url, to_pod, signature, callbackEach) {
-    // Append the signature
-    if (signature) {
-      params.json.signature = {
-        url: from_url,
-        signature: signature
-      }
-    }
-
-    logger.debug('Make retry requests to %s.', to_pod.url)
-
-    replay(
-      request.post(params, function (err, response, body) {
-        callbackEach(err, response, body, params.url, to_pod)
-      }),
-      {
-        retries: constants.REQUEST_RETRIES,
-        factor: 3,
-        maxTimeout: Infinity,
-        errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
-      }
-    ).on('replay', function (replay) {
-      logger.info('Replaying request to %s. Request failed: %d %s. Replay number: #%d. Will retry in: %d ms.',
-        params.url, replay.error.code, replay.error.message, replay.number, replay.delay)
-    })
+  var utils = {
+    getCertDir: getCertDir,
+    certsExist: certsExist,
+    cleanForExit: cleanForExit,
+    createCerts: createCerts,
+    createCertsIfNotExist: createCertsIfNotExist,
+    generatePassword: generatePassword,
+    makeMultipleRetryRequest: makeMultipleRetryRequest,
+    symetricEncrypt: symetricEncrypt,
+    symetricDecrypt: symetricDecrypt
   }
 
-  // ----------- Public attributes ----------
-  utils.certDir = __dirname + '/../' + config.get('storage.certs')
+  function getCertDir () {
+    return certDir
+  }
 
-  // { path, data }
-  utils.makeMultipleRetryRequest = function (all_data, pods, callbackEach, callback) {
+  function makeMultipleRetryRequest (all_data, pods, callbackEach, callback) {
     if (!callback) {
       callback = callbackEach
       callbackEach = null
@@ -64,7 +46,7 @@
 
     // Add signature if it is specified in the params
     if (all_data.method === 'POST' && all_data.data && all_data.sign === true) {
-      var myKey = ursa.createPrivateKey(fs.readFileSync(utils.certDir + 'peertube.key.pem'))
+      var myKey = ursa.createPrivateKey(fs.readFileSync(certDir + 'peertube.key.pem'))
       signature = myKey.hashAndSign('sha256', url, 'utf8', 'hex')
     }
 
@@ -93,7 +75,7 @@
 
           // TODO: ES6 with let
           ;(function (crt_copy, copy_params, copy_url, copy_pod, copy_signature) {
-            utils.symetricEncrypt(JSON.stringify(all_data.data), function (err, dataEncrypted) {
+            symetricEncrypt(JSON.stringify(all_data.data), function (err, dataEncrypted) {
               if (err) throw err
 
               var passwordEncrypted = crt_copy.encrypt(dataEncrypted.password, 'utf8', 'hex')
@@ -115,14 +97,14 @@
     }, callback)
   }
 
-  utils.certsExist = function (callback) {
-    fs.exists(utils.certDir + 'peertube.key.pem', function (exists) {
+  function certsExist (callback) {
+    fs.exists(certDir + 'peertube.key.pem', function (exists) {
       return callback(exists)
     })
   }
 
-  utils.createCerts = function (callback) {
-    utils.certsExist(function (exist) {
+  function createCerts (callback) {
+    certsExist(function (exist) {
       if (exist === true) {
         var string = 'Certs already exist.'
         logger.warning(string)
@@ -130,7 +112,7 @@
       }
 
       logger.info('Generating a RSA key...')
-      openssl.exec('genrsa', { 'out': utils.certDir + 'peertube.key.pem', '2048': false }, function (err) {
+      openssl.exec('genrsa', { 'out': certDir + 'peertube.key.pem', '2048': false }, function (err) {
         if (err) {
           logger.error('Cannot create private key on this pod.', { error: err })
           return callback(err)
@@ -138,7 +120,7 @@
         logger.info('RSA key generated.')
 
         logger.info('Manage public key...')
-        openssl.exec('rsa', { 'in': utils.certDir + 'peertube.key.pem', 'pubout': true, 'out': utils.certDir + 'peertube.pub' }, function (err) {
+        openssl.exec('rsa', { 'in': certDir + 'peertube.key.pem', 'pubout': true, 'out': certDir + 'peertube.pub' }, function (err) {
           if (err) {
             logger.error('Cannot create public key on this pod .', { error: err })
             return callback(err)
@@ -151,19 +133,19 @@
     })
   }
 
-  utils.createCertsIfNotExist = function (callback) {
-    utils.certsExist(function (exist) {
+  function createCertsIfNotExist (callback) {
+    certsExist(function (exist) {
       if (exist === true) {
         return callback(null)
       }
 
-      utils.createCerts(function (err) {
+      createCerts(function (err) {
         return callback(err)
       })
     })
   }
 
-  utils.generatePassword = function (callback) {
+  function generatePassword (callback) {
     crypto.randomBytes(32, function (err, buf) {
       if (err) {
         return callback(err)
@@ -173,8 +155,8 @@
     })
   }
 
-  utils.symetricEncrypt = function (text, callback) {
-    utils.generatePassword(function (err, password) {
+  function symetricEncrypt (text, callback) {
+    generatePassword(function (err, password) {
       if (err) {
         return callback(err)
       }
@@ -186,17 +168,48 @@
     })
   }
 
-  utils.symetricDecrypt = function (text, password) {
+  function symetricDecrypt (text, password) {
     var decipher = crypto.createDecipher(algorithm, password)
     var dec = decipher.update(text, 'hex', 'utf8')
     dec += decipher.final('utf8')
     return dec
   }
 
-  utils.cleanForExit = function (webtorrent_process) {
+  function cleanForExit (webtorrent_process) {
     logger.info('Gracefully exiting')
     process.kill(-webtorrent_process.pid)
   }
 
+  // ---------------------------------------------------------------------------
+
   module.exports = utils
+
+  // ---------------------------------------------------------------------------
+
+  function makeRetryRequest (params, from_url, to_pod, signature, callbackEach) {
+    // Append the signature
+    if (signature) {
+      params.json.signature = {
+        url: from_url,
+        signature: signature
+      }
+    }
+
+    logger.debug('Make retry requests to %s.', to_pod.url)
+
+    replay(
+      request.post(params, function (err, response, body) {
+        callbackEach(err, response, body, params.url, to_pod)
+      }),
+      {
+        retries: constants.REQUEST_RETRIES,
+        factor: 3,
+        maxTimeout: Infinity,
+        errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
+      }
+    ).on('replay', function (replay) {
+      logger.info('Replaying request to %s. Request failed: %d %s. Replay number: #%d. Will retry in: %d ms.',
+        params.url, replay.error.code, replay.error.message, replay.number, replay.delay)
+    })
+  }
 })()

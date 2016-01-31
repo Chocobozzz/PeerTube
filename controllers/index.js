@@ -3,10 +3,8 @@
 
   var constants = require('../initializers/constants')
 
-  var routes = {
+  module.exports = {
     api: require('./api/' + constants.API_VERSION),
     views: require('./views')
   }
-
-  module.exports = routes
 })()

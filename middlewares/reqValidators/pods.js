@@ -4,9 +4,11 @@
   var checkErrors = require('./utils').checkErrors
   var logger = require('../../helpers/logger')
 
-  var pods = {}
+  var reqValidatorsPod = {
+    podsAdd: podsAdd
+  }
 
-  pods.podsAdd = function (req, res, next) {
+  function podsAdd (req, res, next) {
     req.checkBody('data.url', 'Should have an url').notEmpty().isURL({ require_protocol: true })
     req.checkBody('data.publicKey', 'Should have a public key').notEmpty()
 
@@ -15,5 +17,7 @@
     checkErrors(req, res, next)
   }
 
-  module.exports = pods
+  // ---------------------------------------------------------------------------
+
+  module.exports = reqValidatorsPod
 })()

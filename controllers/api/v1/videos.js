@@ -1,34 +1,50 @@
 ;(function () {
   'use strict'
 
-  var express = require('express')
   var config = require('config')
   var crypto = require('crypto')
+  var express = require('express')
   var multer = require('multer')
-  var router = express.Router()
 
   var middleware = require('../../../middlewares')
   var miscMiddleware = middleware.misc
   var reqValidator = middleware.reqValidators.videos
   var videos = require('../../../models/videos')
 
+  var router = express.Router()
   var uploads = config.get('storage.uploads')
 
-  function listVideos (req, res, next) {
-    videos.list(function (err, videos_list) {
-      if (err) return next(err)
+  // multer configuration
+  var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, uploads)
+    },
 
-      res.json(videos_list)
-    })
-  }
+    filename: function (req, file, cb) {
+      var extension = ''
+      if (file.mimetype === 'video/webm') extension = 'webm'
+      else if (file.mimetype === 'video/mp4') extension = 'mp4'
+      else if (file.mimetype === 'video/ogg') extension = 'ogv'
+      crypto.pseudoRandomBytes(16, function (err, raw) {
+        var fieldname = err ? undefined : raw.toString('hex')
+        cb(null, fieldname + '.' + extension)
+      })
+    }
+  })
 
-  function searchVideos (req, res, next) {
-    videos.search(req.params.name, function (err, videos_list) {
-      if (err) return next(err)
+  var reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
 
-      res.json(videos_list)
-    })
-  }
+  router.get('/', miscMiddleware.cache(false), listVideos)
+  router.post('/', reqFiles, reqValidator.videosAdd, miscMiddleware.cache(false), addVideos)
+  router.get('/:id', reqValidator.videosGet, miscMiddleware.cache(false), getVideos)
+  router.delete('/:id', reqValidator.videosRemove, miscMiddleware.cache(false), removeVideo)
+  router.get('/search/:name', reqValidator.videosSearch, miscMiddleware.cache(false), searchVideos)
+
+  // ---------------------------------------------------------------------------
+
+  module.exports = router
+
+  // ---------------------------------------------------------------------------
 
   function addVideos (req, res, next) {
     videos.add({ video: req.files.input_video[0], data: req.body }, function (err) {
@@ -51,6 +67,14 @@
     })
   }
 
+  function listVideos (req, res, next) {
+    videos.list(function (err, videos_list) {
+      if (err) return next(err)
+
+      res.json(videos_list)
+    })
+  }
+
   function removeVideo (req, res, next) {
     videos.remove(req.params.id, function (err) {
       if (err) return next(err)
@@ -59,30 +83,11 @@
     })
   }
 
-  // multer configuration
-  var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, uploads)
-    },
+  function searchVideos (req, res, next) {
+    videos.search(req.params.name, function (err, videos_list) {
+      if (err) return next(err)
 
-    filename: function (req, file, cb) {
-      var extension = ''
-      if (file.mimetype === 'video/webm') extension = 'webm'
-      else if (file.mimetype === 'video/mp4') extension = 'mp4'
-      else if (file.mimetype === 'video/ogg') extension = 'ogv'
-      crypto.pseudoRandomBytes(16, function (err, raw) {
-        var fieldname = err ? undefined : raw.toString('hex')
-        cb(null, fieldname + '.' + extension)
-      })
-    }
-  })
-  var reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
-
-  router.get('/', miscMiddleware.cache(false), listVideos)
-  router.post('/', reqFiles, reqValidator.videosAdd, miscMiddleware.cache(false), addVideos)
-  router.get('/search/:name', reqValidator.videosSearch, miscMiddleware.cache(false), searchVideos)
-  router.get('/:id', reqValidator.videosGet, miscMiddleware.cache(false), getVideos)
-  router.delete('/:id', reqValidator.videosRemove, miscMiddleware.cache(false), removeVideo)
-
-  module.exports = router
+      res.json(videos_list)
+    })
+  }
 })()

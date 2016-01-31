@@ -4,11 +4,9 @@
 
   var config = require('config')
   var winston = require('winston')
-
-  var logDir = __dirname + '/../' + config.get('storage.logs')
-
   winston.emitErrs = true
 
+  var logDir = __dirname + '/../' + config.get('storage.logs')
   var logger = new winston.Logger({
     transports: [
       new winston.transports.File({
@@ -31,10 +29,13 @@
     exitOnError: true
   })
 
-  module.exports = logger
-  module.exports.stream = {
+  logger.stream = {
     write: function (message, encoding) {
       logger.info(message)
     }
   }
+
+  // ---------------------------------------------------------------------------
+
+  module.exports = logger
 })()

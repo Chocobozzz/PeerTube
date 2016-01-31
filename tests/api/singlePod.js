@@ -3,8 +3,8 @@
 
   var async = require('async')
   var chai = require('chai')
-  var fs = require('fs')
   var expect = chai.expect
+  var fs = require('fs')
 
   var webtorrent = require(__dirname + '/../../lib/webTorrentNode')
   webtorrent.silent = true
