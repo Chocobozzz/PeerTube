@@ -9,7 +9,7 @@
   var logger = require('../../../helpers/logger')
   var friends = require('../../../lib/friends')
   var middleware = require('../../../middlewares')
-  var miscMiddleware = middleware.misc
+  var cacheMiddleware = middleware.cache
   var reqValidator = middleware.reqValidators.videos
   var Videos = require('../../../models/videos') // model
   var videos = require('../../../lib/videos')
@@ -38,11 +38,11 @@
 
   var reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
 
-  router.get('/', miscMiddleware.cache(false), listVideos)
-  router.post('/', reqFiles, reqValidator.videosAdd, miscMiddleware.cache(false), addVideo)
-  router.get('/:id', reqValidator.videosGet, miscMiddleware.cache(false), getVideos)
-  router.delete('/:id', reqValidator.videosRemove, miscMiddleware.cache(false), removeVideo)
-  router.get('/search/:name', reqValidator.videosSearch, miscMiddleware.cache(false), searchVideos)
+  router.get('/', cacheMiddleware.cache(false), listVideos)
+  router.post('/', reqFiles, reqValidator.videosAdd, cacheMiddleware.cache(false), addVideo)
+  router.get('/:id', reqValidator.videosGet, cacheMiddleware.cache(false), getVideos)
+  router.delete('/:id', reqValidator.videosRemove, cacheMiddleware.cache(false), removeVideo)
+  router.get('/search/:name', reqValidator.videosSearch, cacheMiddleware.cache(false), searchVideos)
 
   // ---------------------------------------------------------------------------
 

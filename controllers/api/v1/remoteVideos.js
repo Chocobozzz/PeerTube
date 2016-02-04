@@ -5,7 +5,8 @@
   var pluck = require('lodash-node/compat/collection/pluck')
 
   var middleware = require('../../../middlewares')
-  var miscMiddleware = middleware.misc
+  var secureMiddleware = middleware.secure
+  var cacheMiddleware = middleware.cache
   var reqValidator = middleware.reqValidators.remote
   var videos = require('../../../models/videos')
 
@@ -13,17 +14,17 @@
 
   router.post('/add',
     reqValidator.secureRequest,
-    miscMiddleware.decryptBody,
+    secureMiddleware.decryptBody,
     reqValidator.remoteVideosAdd,
-    miscMiddleware.cache(false),
+    cacheMiddleware.cache(false),
     addRemoteVideos
   )
 
   router.post('/remove',
     reqValidator.secureRequest,
-    miscMiddleware.decryptBody,
+    secureMiddleware.decryptBody,
     reqValidator.remoteVideosRemove,
-    miscMiddleware.cache(false),
+    cacheMiddleware.cache(false),
     removeRemoteVideo
   )
 

@@ -2,8 +2,9 @@
   'use strict'
 
   var middlewares = {
-    misc: require('./misc'),
-    reqValidators: require('./reqValidators')
+    cache: require('./cache'),
+    reqValidators: require('./reqValidators'),
+    secure: require('./secure')
   }
 
   // ---------------------------------------------------------------------------

@@ -3,12 +3,12 @@
 
   var express = require('express')
 
-  var middleware = require('../middlewares').misc
+  var cacheMiddleware = require('../middlewares').cache
 
   var router = express.Router()
 
-  router.get(/^\/(index)?$/, middleware.cache(), getIndex)
-  router.get('/partials/:directory/:name', middleware.cache(), getPartial)
+  router.get(/^\/(index)?$/, cacheMiddleware.cache(), getIndex)
+  router.get('/partials/:directory/:name', cacheMiddleware.cache(), getPartial)
 
   // ---------------------------------------------------------------------------
 
