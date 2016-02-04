@@ -6,10 +6,14 @@
   var express = require('express')
   var multer = require('multer')
 
+  var logger = require('../../../helpers/logger')
+  var friends = require('../../../lib/friends')
   var middleware = require('../../../middlewares')
   var miscMiddleware = middleware.misc
   var reqValidator = middleware.reqValidators.videos
-  var videos = require('../../../models/videos')
+  var Videos = require('../../../models/videos') // model
+  var videos = require('../../../lib/videos')
+  var webtorrent = require('../../../lib/webTorrentNode')
 
   var router = express.Router()
   var uploads = config.get('storage.uploads')
@@ -35,7 +39,7 @@
   var reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
 
   router.get('/', miscMiddleware.cache(false), listVideos)
-  router.post('/', reqFiles, reqValidator.videosAdd, miscMiddleware.cache(false), addVideos)
+  router.post('/', reqFiles, reqValidator.videosAdd, miscMiddleware.cache(false), addVideo)
   router.get('/:id', reqValidator.videosGet, miscMiddleware.cache(false), getVideos)
   router.delete('/:id', reqValidator.videosRemove, miscMiddleware.cache(false), removeVideo)
   router.get('/search/:name', reqValidator.videosSearch, miscMiddleware.cache(false), searchVideos)
@@ -46,17 +50,41 @@
 
   // ---------------------------------------------------------------------------
 
-  function addVideos (req, res, next) {
-    videos.add({ video: req.files.input_video[0], data: req.body }, function (err) {
-      if (err) return next(err)
+  function addVideo (req, res, next) {
+    var video_file = req.files.input_video[0]
+    var video_infos = req.body
 
-      // TODO : include Location of the new video
-      res.sendStatus(201)
+    videos.seed(video_file.path, function (err, torrent) {
+      if (err) {
+        logger.error('Cannot seed this video.', { error: err })
+        return next(err)
+      }
+
+      var video_data = {
+        name: video_infos.name,
+        namePath: video_file.filename,
+        description: video_infos.description,
+        magnetUri: torrent.magnetURI
+      }
+
+      Videos.add(video_data, function (err) {
+        if (err) {
+          // TODO unseed the video
+          logger.error('Cannot insert this video in the database.', { error: err })
+          return next(err)
+        }
+
+        // Now we'll add the video's meta data to our friends
+        friends.addVideoToFriends(video_data)
+
+        // TODO : include Location of the new video
+        res.sendStatus(201)
+      })
     })
   }
 
   function getVideos (req, res, next) {
-    videos.get(req.params.id, function (err, video) {
+    Videos.get(req.params.id, function (err, video) {
       if (err) return next(err)
 
       if (video === null) {
@@ -68,7 +96,7 @@
   }
 
   function listVideos (req, res, next) {
-    videos.list(function (err, videos_list) {
+    Videos.list(function (err, videos_list) {
       if (err) return next(err)
 
       res.json(videos_list)
@@ -76,18 +104,43 @@
   }
 
   function removeVideo (req, res, next) {
-    videos.remove(req.params.id, function (err) {
+    var video_id = req.params.id
+    Videos.get(video_id, function (err, video) {
       if (err) return next(err)
 
-      res.sendStatus(204)
+      removeTorrent(video.magnetUri, function () {
+        Videos.removeOwned(req.params.id, function (err) {
+          if (err) return next(err)
+
+          var params = {
+            name: video.name,
+            magnetUri: video.magnetUri
+          }
+
+          friends.removeVideoToFriends(params)
+          res.sendStatus(204)
+        })
+      })
     })
   }
 
   function searchVideos (req, res, next) {
-    videos.search(req.params.name, function (err, videos_list) {
+    Videos.search(req.params.name, function (err, videos_list) {
       if (err) return next(err)
 
       res.json(videos_list)
     })
+  }
+
+  // ---------------------------------------------------------------------------
+
+  // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
+  function removeTorrent (magnetUri, callback) {
+    try {
+      webtorrent.remove(magnetUri, callback)
+    } catch (err) {
+      logger.warn('Cannot remove the torrent from WebTorrent', { err: err })
+      return callback(null)
+    }
   }
 })()

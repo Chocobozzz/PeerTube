@@ -5,7 +5,7 @@
   var ursa = require('ursa')
 
   var logger = require('../helpers/logger')
-  var PodsDB = require('../initializers/database').PodsDB
+  var Pods = require('../models/pods')
   var utils = require('../helpers/utils')
 
   var miscMiddleware = {
@@ -28,18 +28,19 @@
   }
 
   function decryptBody (req, res, next) {
-    PodsDB.findOne({ url: req.body.signature.url }, function (err, pod) {
+    var url = req.body.signature.url
+    Pods.findByUrl(url, function (err, pod) {
       if (err) {
         logger.error('Cannot get signed url in decryptBody.', { error: err })
         return res.sendStatus(500)
       }
 
       if (pod === null) {
-        logger.error('Unknown pod %s.', req.body.signature.url)
+        logger.error('Unknown pod %s.', url)
         return res.sendStatus(403)
       }
 
-      logger.debug('Decrypting body from %s.', req.body.signature.url)
+      logger.debug('Decrypting body from %s.', url)
 
       var crt = ursa.createPublicKey(pod.publicKey)
       var signature_ok = crt.hashAndVerify('sha256', new Buffer(req.body.signature.url).toString('hex'), req.body.signature.signature, 'hex')

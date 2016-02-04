@@ -30,15 +30,19 @@
   var config = require('config')
   var constants = require('./initializers/constants')
   var customValidators = require('./helpers/customValidators')
+  var database = require('./initializers/database')
   var logger = require('./helpers/logger')
   var poolRequests = require('./lib/poolRequests')
   var routes = require('./controllers')
   var utils = require('./helpers/utils')
-  var videos = require('./models/videos')
+  var videos = require('./lib/videos')
   var webtorrent = require('./lib/webTorrentNode')
 
   // Get configurations
   var port = config.get('listen.port')
+
+  // ----------- Database -----------
+  database.connect()
 
   // ----------- Command line -----------
 
@@ -153,7 +157,7 @@
         // Activate the pool requests
         poolRequests.activate()
 
-        videos.seedAll(function () {
+        videos.seedAllExisting(function () {
           logger.info('Seeded all the videos')
           logger.info('Server listening on port %d', port)
           app.emit('ready')

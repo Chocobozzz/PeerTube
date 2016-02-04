@@ -5,71 +5,62 @@
   var config = require('config')
   var dz = require('dezalgo')
   var fs = require('fs')
-  var webtorrent = require('../lib/webTorrentNode')
+  var mongoose = require('mongoose')
 
   var logger = require('../helpers/logger')
-  var pods = require('./pods')
-  var VideosDB = require('../initializers/database').VideosDB
 
   var http = config.get('webserver.https') === true ? 'https' : 'http'
   var host = config.get('webserver.host')
   var port = config.get('webserver.port')
+  var uploadDir = __dirname + '/../' + config.get('storage.uploads')
 
-  var videos = {
+  // ---------------------------------------------------------------------------
+
+  var videosSchema = mongoose.Schema({
+    name: String,
+    namePath: String,
+    description: String,
+    magnetUri: String,
+    podUrl: String
+  })
+  var VideosDB = mongoose.model('videos', videosSchema)
+
+  // ---------------------------------------------------------------------------
+
+  var Videos = {
     add: add,
     addRemotes: addRemotes,
     get: get,
+    getVideoState: getVideoState,
+    isOwned: isOwned,
     list: list,
     listOwned: listOwned,
-    remove: remove,
+    removeOwned: removeOwned,
     removeAllRemotes: removeAllRemotes,
     removeAllRemotesOf: removeAllRemotesOf,
-    removeRemotes: removeRemotes,
-    search: search,
-    seedAll: seedAll,
-    uploadDir: uploadDir
+    removeRemotesOfByMagnetUris: removeRemotesOfByMagnetUris,
+    search: search
   }
 
-  // ----------- Public attributes ----------
-  var uploadDir = __dirname + '/../' + config.get('storage.uploads')
+  function add (video, callback) {
+    logger.info('Adding %s video to database.', video.name)
 
-  function add (data, callback) {
-    var video_file = data.video
-    var video_data = data.data
+    var params = video
+    params.podUrl = http + '://' + host + ':' + port
 
-    logger.info('Adding %s video.', video_file.path)
-    seedVideo(video_file.path, function (err, torrent) {
+    VideosDB.create(params, function (err, video) {
       if (err) {
-        logger.error('Cannot seed this video.', { error: err })
+        logger.error('Cannot insert this video into database.', { error: err })
         return callback(err)
       }
 
-      var params = {
-        name: video_data.name,
-        namePath: video_file.filename,
-        description: video_data.description,
-        magnetUri: torrent.magnetURI,
-        podUrl: http + '://' + host + ':' + port
-      }
-
-      VideosDB.create(params, function (err, video) {
-        if (err) {
-          logger.error('Cannot insert this video.', { error: err })
-          return callback(err)
-        }
-
-        // Now we'll add the video's meta data to our friends
-        params.namePath = null
-
-        pods.addVideoToFriends(params)
-        callback(null)
-      })
+      callback(null)
     })
   }
 
   // TODO: avoid doublons
   function addRemotes (videos, callback) {
-    if (callback === undefined) callback = function () {}
+    if (!callback) callback = function () {}
 
     var to_add = []
 
@@ -111,6 +102,38 @@
     })
   }
 
+  function getVideoState (id, callback) {
+    get(id, function (err, video) {
+      if (err) return callback(err)
+
+      var exist = (video !== null)
+      var owned = false
+      if (exist === true) {
+        owned = (video.namePath !== null)
+      }
+
+      return callback(null, { exist: exist, owned: owned })
+    })
+  }
+
+  function isOwned (id, callback) {
+    VideosDB.findById(id, function (err, video) {
+      if (err || !video) {
+        if (!err) err = new Error('Cannot find this video.')
+        logger.error('Cannot find this video.', { error: err })
+        return callback(err)
+      }
+
+      if (video.namePath === null) {
+        var error_string = 'Cannot remove the video of another pod.'
+        logger.error(error_string)
+        return callback(null, false, video)
+      }
+
+      callback(null, true, video)
+    })
+  }
+
   function list (callback) {
     VideosDB.find(function (err, videos_list) {
       if (err) {
@@ -134,76 +157,35 @@
     })
   }
 
-  function remove (id, callback) {
-    // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
-    function removeTorrent (magnetUri, callback) {
-      try {
-        webtorrent.remove(magnetUri, callback)
-      } catch (err) {
-        logger.warn('Cannot remove the torrent from WebTorrent', { err: err })
-        return callback(null)
-      }
-    }
-
-    VideosDB.findById(id, function (err, video) {
-      if (err || !video) {
-        if (!err) err = new Error('Cannot find this video.')
-        logger.error('Cannot find this video.', { error: err })
+  function removeOwned (id, callback) {
+    VideosDB.findByIdAndRemove(id, function (err, video) {
+      if (err) {
+        logger.error('Cannot remove the torrent.', { error: err })
         return callback(err)
       }
 
-      if (video.namePath === null) {
-        var error_string = 'Cannot remove the video of another pod.'
-        logger.error(error_string)
-        return callback(new Error(error_string))
-      }
+      fs.unlink(uploadDir + video.namePath, function (err) {
+        if (err) {
+          logger.error('Cannot remove this video file.', { error: err })
+          return callback(err)
+        }
 
-      logger.info('Removing %s video', video.name)
-
-      removeTorrent(video.magnetUri, function () {
-        VideosDB.findByIdAndRemove(id, function (err) {
-          if (err) {
-            logger.error('Cannot remove the torrent.', { error: err })
-            return callback(err)
-          }
-
-          fs.unlink(uploadDir + video.namePath, function (err) {
-            if (err) {
-              logger.error('Cannot remove this video file.', { error: err })
-              return callback(err)
-            }
-
-            var params = {
-              name: video.name,
-              magnetUri: video.magnetUri
-            }
-
-            pods.removeVideoToFriends(params)
-            callback(null)
-          })
-        })
+        callback(null)
       })
     })
   }
 
   function removeAllRemotes (callback) {
-    VideosDB.remove({ namePath: null }, function (err) {
-      if (err) return callback(err)
-
-      callback(null)
-    })
+    VideosDB.remove({ namePath: null }, callback)
   }
 
   function removeAllRemotesOf (fromUrl, callback) {
-    VideosDB.remove({ podUrl: fromUrl }, function (err) {
-      if (err) return callback(err)
-
-      callback(null)
-    })
+    // TODO { podUrl: { $in: urls } }
+    VideosDB.remove({ podUrl: fromUrl }, callback)
   }
 
   // Use the magnet Uri because the _id field is not the same on different servers
-  function removeRemotes (fromUrl, magnetUris, callback) {
+  function removeRemotesOfByMagnetUris (fromUrl, magnetUris, callback) {
     if (callback === undefined) callback = function () {}
 
     VideosDB.find({ magnetUri: { $in: magnetUris } }, function (err, videos) {
@@ -248,39 +230,7 @@
     })
   }
 
-  function seedAll (callback) {
-    VideosDB.find({ namePath: { $ne: null } }, function (err, videos_list) {
-      if (err) {
-        logger.error('Cannot get list of the videos to seed.', { error: err })
-        return callback(err)
-      }
-
-      async.each(videos_list, function (video, each_callback) {
-        seedVideo(uploadDir + video.namePath, function (err) {
-          if (err) {
-            logger.error('Cannot seed this video.', { error: err })
-            return callback(err)
-          }
-
-          each_callback(null)
-        })
-      }, callback)
-    })
-  }
-
   // ---------------------------------------------------------------------------
 
-  module.exports = videos
-
-  // ---------------------------------------------------------------------------
-
-  function seedVideo (path, callback) {
-    logger.info('Seeding %s...', path)
-
-    webtorrent.seed(path, function (torrent) {
-      logger.info('%s seeded (%s).', path, torrent.magnetURI)
-
-      return callback(null, torrent)
-    })
-  }
+  module.exports = Videos
 })()

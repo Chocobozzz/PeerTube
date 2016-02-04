@@ -42,7 +42,10 @@
   }
 
   function removeRemoteVideo (req, res, next) {
-    videos.removeRemotes(req.body.signature.url, pluck(req.body.data, 'magnetUri'), function (err) {
+    var url = req.body.signature.url
+    var magnetUris = pluck(req.body.data, 'magnetUri')
+
+    videos.removeRemotesOfByMagnetUris(url, magnetUris, function (err) {
       if (err) return next(err)
 
       res.sendStatus(204)

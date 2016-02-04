@@ -3,7 +3,7 @@
 
   var checkErrors = require('./utils').checkErrors
   var logger = require('../../helpers/logger')
-  var VideosDB = require('../../initializers/database').VideosDB
+  var Videos = require('../../models/videos')
 
   var reqValidatorsVideos = {
     videosAdd: videosAdd,
@@ -29,8 +29,13 @@
     logger.debug('Checking videosGet parameters', { parameters: req.params })
 
     checkErrors(req, res, function () {
-      findVideoById(req.params.id, function (video) {
-        if (!video) return res.status(404).send('Video not found')
+      Videos.getVideoState(req.params.id, function (err, state) {
+        if (err) {
+          logger.error('Error in videosGet request validator.', { error: err })
+          res.sendStatus(500)
+        }
+
+        if (state.exist === false) return res.status(404).send('Video not found')
 
         next()
       })
@@ -43,9 +48,14 @@
     logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
     checkErrors(req, res, function () {
-      findVideoById(req.params.id, function (video) {
-        if (!video) return res.status(404).send('Video not found')
-        else if (video.namePath === null) return res.status(403).send('Cannot remove video of another pod')
+      Videos.getVideoState(req.params.id, function (err, state) {
+        if (err) {
+          logger.error('Error in videosRemove request validator.', { error: err })
+          res.sendStatus(500)
+        }
+
+        if (state.exist === false) return res.status(404).send('Video not found')
+        else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
 
         next()
       })
@@ -63,14 +73,4 @@
   // ---------------------------------------------------------------------------
 
   module.exports = reqValidatorsVideos
-
-  // ---------------------------------------------------------------------------
-
-  function findVideoById (id, callback) {
-    VideosDB.findById(id, { _id: 1, namePath: 1 }).limit(1).exec(function (err, video) {
-      if (err) throw err
-
-      callback(video)
-    })
-  }
 })()
