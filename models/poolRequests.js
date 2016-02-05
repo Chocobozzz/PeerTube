@@ -26,21 +26,28 @@
     logger.debug('Add request to the pool requests.', { id: id, type: type, request: request })
 
     PoolRequestsDB.findOne({ id: id }, function (err, entity) {
-      if (err) logger.error(err)
+      if (err) {
+        logger.error('Cannot find one pool request.', { error: err })
+        return // Abort
+      }
 
       if (entity) {
         if (entity.type === type) {
-          logger.error(new Error('Cannot insert two same requests.'))
-          return
+          logger.error('Cannot insert two same requests.')
+          return // Abort
         }
 
         // Remove the request of the other type
         PoolRequestsDB.remove({ id: id }, function (err) {
-          if (err) logger.error(err)
+          if (err) {
+            logger.error('Cannot remove a pool request.', { error: err })
+            return // Abort
+          }
         })
       } else {
         PoolRequestsDB.create({ id: id, type: type, request: request }, function (err) {
-          if (err) logger.error(err)
+          logger.error('Cannot create a pool request.', { error: err })
+          return // Abort
         })
       }
     })
@@ -54,7 +61,7 @@
     PoolRequestsDB.remove({ _id: { $in: ids } }, function (err) {
       if (err) {
         logger.error('Cannot remove requests from the pool requests database.', { error: err })
-        return
+        return // Abort
       }
 
       logger.info('Pool requests flushed.')

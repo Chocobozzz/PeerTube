@@ -101,7 +101,7 @@
       logger.info('Generating a RSA key...')
       openssl.exec('genrsa', { 'out': certDir + 'peertube.key.pem', '2048': false }, function (err) {
         if (err) {
-          logger.error('Cannot create private key on this pod.', { error: err })
+          logger.error('Cannot create private key on this pod.')
           return callback(err)
         }
         logger.info('RSA key generated.')
@@ -109,7 +109,7 @@
         logger.info('Manage public key...')
         openssl.exec('rsa', { 'in': certDir + 'peertube.key.pem', 'pubout': true, 'out': certDir + 'peertube.pub' }, function (err) {
           if (err) {
-            logger.error('Cannot create public key on this pod .', { error: err })
+            logger.error('Cannot create public key on this pod.')
             return callback(err)
           }
 
@@ -122,9 +122,7 @@
 
   function generatePassword (callback) {
     crypto.randomBytes(32, function (err, buf) {
-      if (err) {
-        return callback(err)
-      }
+      if (err) return callback(err)
 
       callback(null, buf.toString('utf8'))
     })
@@ -139,9 +137,7 @@
 
   function symetricEncrypt (text, callback) {
     generatePassword(function (err, password) {
-      if (err) {
-        return callback(err)
-      }
+      if (err) return callback(err)
 
       var cipher = crypto.createCipher(algorithm, password)
       var crypted = cipher.update(text, 'utf8', 'hex')

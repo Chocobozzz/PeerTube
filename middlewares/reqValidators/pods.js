@@ -12,7 +12,10 @@
 
   function makeFriends (req, res, next) {
     friends.hasFriends(function (err, has_friends) {
-      if (err) return next(err)
+      if (err) {
+        logger.error('Cannot know if we have friends.', { error: err })
+        res.sendStatus(500)
+      }
 
       if (has_friends === true) {
         // We need to quit our friends before make new ones

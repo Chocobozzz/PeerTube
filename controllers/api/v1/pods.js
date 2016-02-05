@@ -39,13 +39,13 @@
 
       fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
         if (err) {
-          logger.error('Cannot read cert file.', { error: err })
+          logger.error('Cannot read cert file.')
           return next(err)
         }
 
         Videos.listOwned(function (err, videos_list) {
           if (err) {
-            logger.error('Cannot get the list of owned videos.', { error: err })
+            logger.error('Cannot get the list of owned videos.')
             return next(err)
           }
 
@@ -78,7 +78,8 @@
 
       Videos.removeAllRemotesOf(url, function (err) {
         if (err) logger.error('Cannot remove all remote videos of %s.', url)
-        logger.info('%s pod removed.', url)
+        else logger.info('%s pod removed.', url)
+
         res.sendStatus(204)
       })
     })

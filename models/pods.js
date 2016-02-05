@@ -61,7 +61,7 @@
   function list (callback) {
     PodsDB.find(function (err, pods_list) {
       if (err) {
-        logger.error('Cannot get the list of the pods.', { error: err })
+        logger.error('Cannot get the list of the pods.')
         return callback(err)
       }
 

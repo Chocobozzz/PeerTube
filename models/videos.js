@@ -50,7 +50,7 @@
 
     VideosDB.create(params, function (err, video) {
       if (err) {
-        logger.error('Cannot insert this video into database.', { error: err })
+        logger.error('Cannot insert this video into database.')
         return callback(err)
       }
 
@@ -82,7 +82,7 @@
     }, function () {
       VideosDB.create(to_add, function (err, videos) {
         if (err) {
-          logger.error('Cannot insert this remote video.', { error: err })
+          logger.error('Cannot insert this remote video.')
           return callback(err)
         }
 
@@ -94,7 +94,7 @@
   function get (id, callback) {
     VideosDB.findById(id, function (err, video) {
       if (err) {
-        logger.error('Cannot get this video.', { error: err })
+        logger.error('Cannot get this video.')
         return callback(err)
       }
 
@@ -120,14 +120,14 @@
     VideosDB.findById(id, function (err, video) {
       if (err || !video) {
         if (!err) err = new Error('Cannot find this video.')
-        logger.error('Cannot find this video.', { error: err })
+        logger.error('Cannot find this video.')
         return callback(err)
       }
 
       if (video.namePath === null) {
         var error_string = 'Cannot remove the video of another pod.'
         logger.error(error_string)
-        return callback(null, false, video)
+        return callback(new Error(error_string), false, video)
       }
 
       callback(null, true, video)
@@ -137,7 +137,7 @@
   function list (callback) {
     VideosDB.find(function (err, videos_list) {
       if (err) {
-        logger.error('Cannot get list of the videos.', { error: err })
+        logger.error('Cannot get the list of the videos.')
         return callback(err)
       }
 
@@ -149,7 +149,7 @@
     // If namePath is not null this is *our* video
     VideosDB.find({ namePath: { $ne: null } }, function (err, videos_list) {
       if (err) {
-        logger.error('Cannot get list of the videos.', { error: err })
+        logger.error('Cannot get the list of owned videos.')
         return callback(err)
       }
 
@@ -160,13 +160,13 @@
   function removeOwned (id, callback) {
     VideosDB.findByIdAndRemove(id, function (err, video) {
       if (err) {
-        logger.error('Cannot remove the torrent.', { error: err })
+        logger.error('Cannot remove the torrent.')
         return callback(err)
       }
 
       fs.unlink(uploadDir + video.namePath, function (err) {
         if (err) {
-          logger.error('Cannot remove this video file.', { error: err })
+          logger.error('Cannot remove this video file.')
           return callback(err)
         }
 
@@ -222,7 +222,7 @@
   function search (name, callback) {
     VideosDB.find({ name: new RegExp(name) }, function (err, videos) {
       if (err) {
-        logger.error('Cannot search the videos.', { error: err })
+        logger.error('Cannot search the videos.')
         return callback(err)
       }
 

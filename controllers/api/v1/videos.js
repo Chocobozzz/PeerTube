@@ -56,7 +56,7 @@
 
     videos.seed(video_file.path, function (err, torrent) {
       if (err) {
-        logger.error('Cannot seed this video.', { error: err })
+        logger.error('Cannot seed this video.')
         return next(err)
       }
 
@@ -70,7 +70,7 @@
       Videos.add(video_data, function (err) {
         if (err) {
           // TODO unseed the video
-          logger.error('Cannot insert this video in the database.', { error: err })
+          logger.error('Cannot insert this video in the database.')
           return next(err)
         }
 

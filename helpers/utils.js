@@ -8,7 +8,7 @@
   }
 
   function cleanForExit (webtorrent_process) {
-    logger.info('Gracefully exiting')
+    logger.info('Gracefully exiting.')
     process.kill(-webtorrent_process.pid)
   }
 
