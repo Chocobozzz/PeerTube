@@ -17,44 +17,27 @@
   // ---------------------------------------------------------------------------
 
   var PoolRequests = {
-    addRequest: addRequest,
+    create: create,
+    findById: findById,
     list: list,
+    removeRequestById: removeRequestById,
     removeRequests: removeRequests
   }
 
-  function addRequest (id, type, request) {
-    logger.debug('Add request to the pool requests.', { id: id, type: type, request: request })
+  function create (id, type, request, callback) {
+    PoolRequestsDB.create({ id: id, type: type, request: request }, callback)
+  }
 
-    PoolRequestsDB.findOne({ id: id }, function (err, entity) {
-      if (err) {
-        logger.error('Cannot find one pool request.', { error: err })
-        return // Abort
-      }
-
-      if (entity) {
-        if (entity.type === type) {
-          logger.error('Cannot insert two same requests.')
-          return // Abort
-        }
-
-        // Remove the request of the other type
-        PoolRequestsDB.remove({ id: id }, function (err) {
-          if (err) {
-            logger.error('Cannot remove a pool request.', { error: err })
-            return // Abort
-          }
-        })
-      } else {
-        PoolRequestsDB.create({ id: id, type: type, request: request }, function (err) {
-          logger.error('Cannot create a pool request.', { error: err })
-          return // Abort
-        })
-      }
-    })
+  function findById (id, callback) {
+    PoolRequestsDB.findOne({ id: id }, callback)
   }
 
   function list (callback) {
     PoolRequestsDB.find({}, { _id: 1, type: 1, request: 1 }, callback)
+  }
+
+  function removeRequestById (id, callback) {
+    PoolRequestsDB.remove({ id: id }, callback)
   }
 
   function removeRequests (ids) {
