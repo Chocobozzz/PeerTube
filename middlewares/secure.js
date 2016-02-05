@@ -1,12 +1,9 @@
 ;(function () {
   'use strict'
 
-  var fs = require('fs')
-  var ursa = require('ursa')
-
   var logger = require('../helpers/logger')
+  var peertubeCrypto = require('../helpers/peertubeCrypto')
   var Pods = require('../models/pods')
-  var utils = require('../helpers/utils')
 
   var secureMiddleware = {
     decryptBody: decryptBody
@@ -27,20 +24,24 @@
 
       logger.debug('Decrypting body from %s.', url)
 
-      var crt = ursa.createPublicKey(pod.publicKey)
-      var signature_ok = crt.hashAndVerify('sha256', new Buffer(req.body.signature.url).toString('hex'), req.body.signature.signature, 'hex')
+      var signature_ok = peertubeCrypto.checkSignature(pod.publicKey, url, req.body.signature.signature)
 
       if (signature_ok === true) {
-        var myKey = ursa.createPrivateKey(fs.readFileSync(utils.getCertDir() + 'peertube.key.pem'))
-        var decryptedKey = myKey.decrypt(req.body.key, 'hex', 'utf8')
-        req.body.data = JSON.parse(utils.symetricDecrypt(req.body.data, decryptedKey))
-        delete req.body.key
+        peertubeCrypto.decrypt(req.body.key, req.body.data, function (err, decrypted) {
+          if (err) {
+            logger.error('Cannot decrypt data.', { error: err })
+            return res.sendStatus(500)
+          }
+
+          req.body.data = JSON.parse(decrypted)
+          delete req.body.key
+
+          next()
+        })
       } else {
         logger.error('Signature is not okay in decryptBody for %s.', req.body.signature.url)
         return res.sendStatus(403)
       }
-
-      next()
     })
   }
 

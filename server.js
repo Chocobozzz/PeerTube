@@ -32,6 +32,7 @@
   var customValidators = require('./helpers/customValidators')
   var database = require('./initializers/database')
   var logger = require('./helpers/logger')
+  var peertubeCrypto = require('./helpers/peertubeCrypto')
   var poolRequests = require('./lib/poolRequests')
   var routes = require('./controllers')
   var utils = require('./helpers/utils')
@@ -117,7 +118,7 @@
   // Prod : no stacktraces leaked to user
   if (process.env.NODE_ENV === 'production') {
     app.use(function (err, req, res, next) {
-      logger.error('Error : ' + err.message, { error: err })
+      logger.error(err)
       res.status(err.status || 500)
       res.render('error', {
         message: err.message,
@@ -126,7 +127,7 @@
     })
   } else {
     app.use(function (err, req, res, next) {
-      logger.error('Error : ' + err.message, { error: err })
+      logger.error(err)
       res.status(err.status || 500)
       res.render('error', {
         message: err.message,
@@ -136,7 +137,7 @@
   }
 
   // ----------- Create the certificates if they don't already exist -----------
-  utils.createCertsIfNotExist(function (err) {
+  peertubeCrypto.createCertsIfNotExist(function (err) {
     if (err) throw err
     // Create/activate the webtorrent module
     webtorrent.create(function () {

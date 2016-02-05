@@ -8,11 +8,11 @@
   var friends = require('../../../lib/friends')
   var middleware = require('../../../middlewares')
   var cacheMiddleware = middleware.cache
+  var peertubeCrypto = require('../../../helpers/peertubeCrypto')
   var Pods = require('../../../models/pods')
   var reqValidator = middleware.reqValidators.pods
   var secureMiddleware = middleware.secure
   var secureRequest = middleware.reqValidators.remote.secureRequest
-  var utils = require('../../../helpers/utils')
   var Videos = require('../../../models/videos')
 
   var router = express.Router()
@@ -37,7 +37,7 @@
 
       Videos.addRemotes(informations.videos)
 
-      fs.readFile(utils.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
+      fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
         if (err) {
           logger.error('Cannot read cert file.', { error: err })
           return next(err)
