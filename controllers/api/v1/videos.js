@@ -13,7 +13,7 @@
   var reqValidator = middleware.reqValidators.videos
   var Videos = require('../../../models/videos') // model
   var videos = require('../../../lib/videos')
-  var webtorrent = require('../../../lib/webTorrentNode')
+  var webtorrent = require('../../../lib/webtorrent')
 
   var router = express.Router()
   var uploads = config.get('storage.uploads')

@@ -37,7 +37,7 @@
   var routes = require('./controllers')
   var utils = require('./helpers/utils')
   var videos = require('./lib/videos')
-  var webtorrent = require('./lib/webTorrentNode')
+  var webtorrent = require('./lib/webtorrent')
 
   // Get configurations
   var port = config.get('listen.port')
