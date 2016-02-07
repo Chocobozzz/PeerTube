@@ -20,7 +20,7 @@ function makeFriends (req, res, next) {
       // We need to quit our friends before make new ones
       res.sendStatus(409)
     } else {
-      next()
+      return next()
     }
   })
 }
