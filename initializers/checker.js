@@ -36,9 +36,7 @@ function createDirectoriesIfNotExist () {
     try {
       mkdirp.sync(path.join(__dirname, '..', dir))
     } catch (error) {
-      // Do not use logger
-      console.error('Cannot create ' + path + ':' + error)
-      process.exit(0)
+      throw new Error('Cannot create ' + path + ':' + error)
     }
   }
 }

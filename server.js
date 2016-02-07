@@ -18,9 +18,7 @@ var checker = require('./initializers/checker')
 
 var miss = checker.checkConfig()
 if (miss.length !== 0) {
-  // Do not use logger module
-  console.error('Miss some configurations keys.', { miss: miss })
-  process.exit(0)
+  throw new Error('Miss some configurations keys : ' + miss)
 }
 
 checker.createDirectoriesIfNotExist()
@@ -145,7 +143,7 @@ peertubeCrypto.createCertsIfNotExist(function (err) {
     }
 
     function exitGracefullyOnSignal () {
-      process.exit()
+      process.exit(-1)
     }
 
     process.on('exit', cleanForExit)

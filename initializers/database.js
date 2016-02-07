@@ -16,8 +16,7 @@ var database = {
 function connect () {
   mongoose.connect('mongodb://' + host + ':' + port + '/' + dbname)
   mongoose.connection.on('error', function () {
-    logger.error('Mongodb connection error.')
-    process.exit(0)
+    throw new Error('Mongodb connection error.')
   })
 
   mongoose.connection.on('open', function () {
