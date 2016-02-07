@@ -5,8 +5,9 @@
   var chai = require('chai')
   var expect = chai.expect
   var fs = require('fs')
+  var pathUtils = require('path')
 
-  var webtorrent = require(__dirname + '/../../lib/webtorrent')
+  var webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
   webtorrent.silent = true
 
   var utils = require('./utils')
@@ -112,7 +113,7 @@
       utils.removeVideo(url, video_id, function (err) {
         if (err) throw err
 
-        fs.readdir(__dirname + '/../../test1/uploads/', function (err, files) {
+        fs.readdir(pathUtils.join(__dirname, '../../test1/uploads/'), function (err, files) {
           if (err) throw err
 
           expect(files.length).to.equal(0)

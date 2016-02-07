@@ -3,6 +3,7 @@
 
   var config = require('config')
   var mkdirp = require('mkdirp')
+  var path = require('path')
 
   var checker = {
     checkConfig: checkConfig,
@@ -32,9 +33,9 @@
     var storages = config.get('storage')
 
     for (var key of Object.keys(storages)) {
-      var path = storages[key]
+      var dir = storages[key]
       try {
-        mkdirp.sync(__dirname + '/../' + path)
+        mkdirp.sync(path.join(__dirname, '..', dir))
       } catch (error) {
         // Do not use logger
         console.error('Cannot create ' + path + ':' + error)

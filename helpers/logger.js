@@ -3,15 +3,16 @@
   'use strict'
 
   var config = require('config')
+  var path = require('path')
   var winston = require('winston')
   winston.emitErrs = true
 
-  var logDir = __dirname + '/../' + config.get('storage.logs')
+  var logDir = path.join(__dirname, '..', config.get('storage.logs'))
   var logger = new winston.Logger({
     transports: [
       new winston.transports.File({
         level: 'debug',
-        filename: logDir + '/all-logs.log',
+        filename: path.join(logDir, 'all-logs.log'),
         handleExceptions: true,
         json: true,
         maxsize: 5242880,

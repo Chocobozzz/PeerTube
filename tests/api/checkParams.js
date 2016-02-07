@@ -4,6 +4,7 @@
   var async = require('async')
   var chai = require('chai')
   var expect = chai.expect
+  var pathUtils = require('path')
   var request = require('supertest')
 
   var utils = require('./utils')
@@ -119,7 +120,7 @@
       describe('When searching a video', function () {
         it('Should fail with nothing', function (done) {
           request(url)
-            .get(path + '/search/')
+            .get(pathUtils.join(path, 'search'))
             .set('Accept', 'application/json')
             .expect(400, done)
         })
@@ -137,7 +138,7 @@
             description: 'my super description'
           }
           var attach = {
-            'input_video': __dirname + '/fixtures/video_short.webm'
+            'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
           }
           makePostRequest(path, data, attach, done)
         })
@@ -148,7 +149,7 @@
             description: 'my super description'
           }
           var attach = {
-            'input_video': __dirname + '/fixtures/video_short.webm'
+            'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
           }
           makePostRequest(path, data, attach, done)
         })
@@ -158,7 +159,7 @@
             name: 'my super name'
           }
           var attach = {
-            'input_video': __dirname + '/fixtures/video_short.webm'
+            'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
           }
           makePostRequest(path, data, attach, done)
         })
@@ -171,7 +172,7 @@
                          'very very very very very very very very very very very very very very very long'
           }
           var attach = {
-            'input_video': __dirname + '/fixtures/video_short.webm'
+            'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
           }
           makePostRequest(path, data, attach, done)
         })
@@ -191,7 +192,7 @@
             description: 'my super description'
           }
           var attach = {
-            'input_video': __dirname + '/../fixtures/video_short_fake.webm'
+            'input_video': pathUtils.join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
           }
           makePostRequest(path, data, attach, done)
         })
@@ -202,12 +203,12 @@
             description: 'my super description'
           }
           var attach = {
-            'input_video': __dirname + '/fixtures/video_short.webm'
+            'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
           }
           makePostRequest(path, data, attach, function () {
-            attach.input_video = __dirname + '/fixtures/video_short.mp4'
+            attach.input_video = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
             makePostRequest(path, data, attach, function () {
-              attach.input_video = __dirname + '/fixtures/video_short.ogv'
+              attach.input_video = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
               makePostRequest(path, data, attach, done, true)
             }, true)
           }, true)

@@ -4,6 +4,7 @@
   var child_process = require('child_process')
   var exec = child_process.exec
   var fork = child_process.fork
+  var pathUtils = require('path')
   var request = require('supertest')
 
   var testUtils = {
@@ -22,7 +23,7 @@
   // ---------------------- Export functions --------------------
 
   function flushTests (callback) {
-    exec(__dirname + '/../../scripts/clean_test.sh', callback)
+    exec(pathUtils.join(__dirname, '../../scripts/clean_test.sh'), callback)
   }
 
   function getFriendsList (url, end) {
@@ -139,7 +140,7 @@
       detached: true
     }
 
-    var app = fork(__dirname + '/../../server.js', [], options)
+    var app = fork(pathUtils.join(__dirname, '../../server.js'), [], options)
     app.stdout.on('data', function onStdout (data) {
       var dont_continue = false
       // Check if all required sentences are here
@@ -175,7 +176,7 @@
       .set('Accept', 'application/json')
       .field('name', name)
       .field('description', description)
-      .attach('input_video', __dirname + '/fixtures/' + fixture)
+      .attach('input_video', pathUtils.join(__dirname, 'fixtures', fixture))
       .expect(201)
       .end(end)
   }

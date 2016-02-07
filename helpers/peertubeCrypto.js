@@ -5,11 +5,12 @@
   var crypto = require('crypto')
   var fs = require('fs')
   var openssl = require('openssl-wrapper')
+  var path = require('path')
   var ursa = require('ursa')
 
   var logger = require('./logger')
 
-  var certDir = __dirname + '/../' + config.get('storage.certs')
+  var certDir = path.join(__dirname, '..', config.get('storage.certs'))
   var algorithm = 'aes-256-ctr'
 
   var peertubeCrypto = {

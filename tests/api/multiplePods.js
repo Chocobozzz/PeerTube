@@ -4,9 +4,10 @@
   var async = require('async')
   var chai = require('chai')
   var expect = chai.expect
+  var pathUtils = require('path')
 
   var utils = require('./utils')
-  var webtorrent = require(__dirname + '/../../lib/webtorrent')
+  var webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
   webtorrent.silent = true
 
   describe('Test multiple pods', function () {
