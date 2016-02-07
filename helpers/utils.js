@@ -1,18 +1,16 @@
-;(function () {
-  'use strict'
+'use strict'
 
-  var logger = require('./logger')
+var logger = require('./logger')
 
-  var utils = {
-    cleanForExit: cleanForExit
-  }
+var utils = {
+  cleanForExit: cleanForExit
+}
 
-  function cleanForExit (webtorrent_process) {
-    logger.info('Gracefully exiting.')
-    process.kill(-webtorrent_process.pid)
-  }
+function cleanForExit (webtorrent_process) {
+  logger.info('Gracefully exiting.')
+  process.kill(-webtorrent_process.pid)
+}
 
-  // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-  module.exports = utils
-})()
+module.exports = utils

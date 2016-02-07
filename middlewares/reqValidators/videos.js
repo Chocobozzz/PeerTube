@@ -1,76 +1,74 @@
-;(function () {
-  'use strict'
+'use strict'
 
-  var checkErrors = require('./utils').checkErrors
-  var logger = require('../../helpers/logger')
-  var Videos = require('../../models/videos')
+var checkErrors = require('./utils').checkErrors
+var logger = require('../../helpers/logger')
+var Videos = require('../../models/videos')
 
-  var reqValidatorsVideos = {
-    videosAdd: videosAdd,
-    videosGet: videosGet,
-    videosRemove: videosRemove,
-    videosSearch: videosSearch
-  }
+var reqValidatorsVideos = {
+  videosAdd: videosAdd,
+  videosGet: videosGet,
+  videosRemove: videosRemove,
+  videosSearch: videosSearch
+}
 
-  function videosAdd (req, res, next) {
-    req.checkFiles('input_video[0].originalname', 'Should have an input video').notEmpty()
-    req.checkFiles('input_video[0].mimetype', 'Should have a correct mime type').matches(/video\/(webm)|(mp4)|(ogg)/i)
-    req.checkBody('name', 'Should have a name').isLength(1, 50)
-    req.checkBody('description', 'Should have a description').isLength(1, 250)
+function videosAdd (req, res, next) {
+  req.checkFiles('input_video[0].originalname', 'Should have an input video').notEmpty()
+  req.checkFiles('input_video[0].mimetype', 'Should have a correct mime type').matches(/video\/(webm)|(mp4)|(ogg)/i)
+  req.checkBody('name', 'Should have a name').isLength(1, 50)
+  req.checkBody('description', 'Should have a description').isLength(1, 250)
 
-    logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
+  logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
-    checkErrors(req, res, next)
-  }
+  checkErrors(req, res, next)
+}
 
-  function videosGet (req, res, next) {
-    req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+function videosGet (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
 
-    logger.debug('Checking videosGet parameters', { parameters: req.params })
+  logger.debug('Checking videosGet parameters', { parameters: req.params })
 
-    checkErrors(req, res, function () {
-      Videos.getVideoState(req.params.id, function (err, state) {
-        if (err) {
-          logger.error('Error in videosGet request validator.', { error: err })
-          res.sendStatus(500)
-        }
+  checkErrors(req, res, function () {
+    Videos.getVideoState(req.params.id, function (err, state) {
+      if (err) {
+        logger.error('Error in videosGet request validator.', { error: err })
+        res.sendStatus(500)
+      }
 
-        if (state.exist === false) return res.status(404).send('Video not found')
+      if (state.exist === false) return res.status(404).send('Video not found')
 
-        next()
-      })
+      next()
     })
-  }
+  })
+}
 
-  function videosRemove (req, res, next) {
-    req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+function videosRemove (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
 
-    logger.debug('Checking videosRemove parameters', { parameters: req.params })
+  logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
-    checkErrors(req, res, function () {
-      Videos.getVideoState(req.params.id, function (err, state) {
-        if (err) {
-          logger.error('Error in videosRemove request validator.', { error: err })
-          res.sendStatus(500)
-        }
+  checkErrors(req, res, function () {
+    Videos.getVideoState(req.params.id, function (err, state) {
+      if (err) {
+        logger.error('Error in videosRemove request validator.', { error: err })
+        res.sendStatus(500)
+      }
 
-        if (state.exist === false) return res.status(404).send('Video not found')
-        else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
+      if (state.exist === false) return res.status(404).send('Video not found')
+      else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
 
-        next()
-      })
+      next()
     })
-  }
+  })
+}
 
-  function videosSearch (req, res, next) {
-    req.checkParams('name', 'Should have a name').notEmpty()
+function videosSearch (req, res, next) {
+  req.checkParams('name', 'Should have a name').notEmpty()
 
-    logger.debug('Checking videosSearch parameters', { parameters: req.params })
+  logger.debug('Checking videosSearch parameters', { parameters: req.params })
 
-    checkErrors(req, res, next)
-  }
+  checkErrors(req, res, next)
+}
 
-  // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-  module.exports = reqValidatorsVideos
-})()
+module.exports = reqValidatorsVideos

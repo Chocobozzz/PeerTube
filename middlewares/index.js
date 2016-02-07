@@ -1,13 +1,11 @@
-;(function () {
-  'use strict'
+'use strict'
 
-  var middlewares = {
-    cache: require('./cache'),
-    reqValidators: require('./reqValidators'),
-    secure: require('./secure')
-  }
+var middlewares = {
+  cache: require('./cache'),
+  reqValidators: require('./reqValidators'),
+  secure: require('./secure')
+}
 
-  // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-  module.exports = middlewares
-})()
+module.exports = middlewares

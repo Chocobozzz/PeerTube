@@ -1,32 +1,30 @@
-;(function () {
-  'use strict'
+'use strict'
 
-  var config = require('config')
-  var mongoose = require('mongoose')
+var config = require('config')
+var mongoose = require('mongoose')
 
-  var logger = require('../helpers/logger')
+var logger = require('../helpers/logger')
 
-  var dbname = 'peertube' + config.get('database.suffix')
-  var host = config.get('database.host')
-  var port = config.get('database.port')
+var dbname = 'peertube' + config.get('database.suffix')
+var host = config.get('database.host')
+var port = config.get('database.port')
 
-  var database = {
-    connect: connect
-  }
+var database = {
+  connect: connect
+}
 
-  function connect () {
-    mongoose.connect('mongodb://' + host + ':' + port + '/' + dbname)
-    mongoose.connection.on('error', function () {
-      logger.error('Mongodb connection error.')
-      process.exit(0)
-    })
+function connect () {
+  mongoose.connect('mongodb://' + host + ':' + port + '/' + dbname)
+  mongoose.connection.on('error', function () {
+    logger.error('Mongodb connection error.')
+    process.exit(0)
+  })
 
-    mongoose.connection.on('open', function () {
-      logger.info('Connected to mongodb.')
-    })
-  }
+  mongoose.connection.on('open', function () {
+    logger.info('Connected to mongodb.')
+  })
+}
 
-  // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 
-  module.exports = database
-})()
+module.exports = database

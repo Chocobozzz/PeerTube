@@ -1,10 +1,8 @@
-;(function () {
-  'use strict'
+'use strict'
 
-  var constants = require('../initializers/constants')
+var constants = require('../initializers/constants')
 
-  module.exports = {
-    api: require('./api/' + constants.API_VERSION),
-    views: require('./views')
-  }
-})()
+module.exports = {
+  api: require('./api/' + constants.API_VERSION),
+  views: require('./views')
+}
