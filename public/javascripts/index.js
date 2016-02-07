@@ -58,6 +58,11 @@
       url: '/api/v1/pods/makefriends',
       type: 'GET',
       dataType: 'json',
+      statusCode: {
+        409: function () {
+          alert('Already made friends.')
+        }
+      },
       success: function () {
         alert('Made friends!')
       }
