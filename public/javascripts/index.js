@@ -99,7 +99,6 @@
 
         // Remove the video
         $remove.on('click', function () {
-          // TODO
           if (!confirm('Are you sure ?')) return
 
           removeVideo(video)

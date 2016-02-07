@@ -180,7 +180,6 @@ function removeAllRemotes (callback) {
 }
 
 function removeAllRemotesOf (fromUrl, callback) {
-  // TODO { podUrl: { $in: urls } }
   VideosDB.remove({ podUrl: fromUrl }, callback)
 }
 
