@@ -4,9 +4,13 @@ var express = require('express')
 
 var router = express.Router()
 
-router.use('/pods', require('./pods'))
-router.use('/remotevideos', require('./remoteVideos'))
-router.use('/videos', require('./videos'))
+var podsController = require('./pods')
+var remoteVideosController = require('./remoteVideos')
+var videosController = require('./videos')
+
+router.use('/pods', podsController)
+router.use('/remotevideos', remoteVideosController)
+router.use('/videos', videosController)
 
 // ---------------------------------------------------------------------------
 

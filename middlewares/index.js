@@ -1,9 +1,13 @@
 'use strict'
 
+var cacheMiddleware = require('./cache')
+var reqValidatorsMiddleware = require('./reqValidators')
+var secureMiddleware = require('./secure')
+
 var middlewares = {
-  cache: require('./cache'),
-  reqValidators: require('./reqValidators'),
-  secure: require('./secure')
+  cache: cacheMiddleware,
+  reqValidators: reqValidatorsMiddleware,
+  secure: secureMiddleware
 }
 
 // ---------------------------------------------------------------------------

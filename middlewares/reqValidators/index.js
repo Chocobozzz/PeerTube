@@ -1,9 +1,13 @@
 'use strict'
 
+var podsReqValidators = require('./pods')
+var remoteReqValidators = require('./remote')
+var videosReqValidators = require('./videos')
+
 var reqValidators = {
-  videos: require('./videos'),
-  pods: require('./pods'),
-  remote: require('./remote')
+  pods: podsReqValidators,
+  remote: remoteReqValidators,
+  videos: videosReqValidators
 }
 
 // ---------------------------------------------------------------------------
