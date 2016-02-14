@@ -59,6 +59,15 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
   * MongoDB
   * xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 (for electron)
 
+#### Debian
+
+Install NodeJS 4.2: [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+
+    # apt-get install mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1
+    # npm install -g grunt-cli
+    # npm install -g electron-prebuilt
+
+
 ### Test It!
 
     $ git clone https://github.com/Chocobozzz/PeerTube
@@ -72,7 +81,7 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
     $ scripts/clean_test.sh
     $ scripts/run_servers.sh
 
-Then you will can access to the three nodes at http://localhost:900{1,2,3}. If you call "make friends" on http://localhost:9002, the pod 2 and 3 will become friends. Then if you call "make friends" on http://localhost:9001 it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
+Then you will can access to the three nodes at `http://localhost:900{1,2,3}`. If you call "make friends" on `http://localhost:9002`, the pod 2 and 3 will become friends. Then if you call "make friends" on `http://localhost:9001` it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
 
 ### Dockerfile
 
