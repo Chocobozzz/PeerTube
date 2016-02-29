@@ -19,14 +19,7 @@ sudo: false
 services:
   - mongodb
 
-cache:
-  directories:
-    - node_modules
-    - $(npm config get prefix)/bin/grunt-cli
-    - $(npm config get prefix)/bin/electron-prebuilt
-
 before_script:
-  - npm update
   - npm install electron-prebuilt -g
   - npm install grunt-cli -g
 
