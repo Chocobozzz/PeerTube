@@ -2,13 +2,11 @@
 
 module.exports = function (grunt) {
   var paths = {
-    dist: 'dist',
-    jade: 'views/**/**/*.jade',
     css: 'public/stylesheets/*.css',
     scss: 'public/stylesheets/application.scss',
     vendor: 'public/stylesheets/vendor',
     js: 'public/javascripts/*.js',
-    routes: 'controllers/**/*.js',
+    routes: './server/controllers/**/*.js',
     main: './server.js',
     browserified: 'public/javascripts/bundle.js',
     img: 'public/images/*.{png,jpg,jpeg,gif,webp,svg}',

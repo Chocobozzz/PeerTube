@@ -14,7 +14,7 @@ var WebSocketServer = require('ws').Server
 var app = express()
 
 // ----------- Checker -----------
-var checker = require('./initializers/checker')
+var checker = require('./server/initializers/checker')
 
 var miss = checker.checkConfig()
 if (miss.length !== 0) {
@@ -25,16 +25,16 @@ checker.createDirectoriesIfNotExist()
 
 // ----------- PeerTube modules -----------
 var config = require('config')
-var constants = require('./initializers/constants')
-var customValidators = require('./helpers/customValidators')
-var database = require('./initializers/database')
-var logger = require('./helpers/logger')
-var peertubeCrypto = require('./helpers/peertubeCrypto')
-var poolRequests = require('./lib/poolRequests')
-var routes = require('./controllers')
-var utils = require('./helpers/utils')
-var videos = require('./lib/videos')
-var webtorrent = require('./lib/webtorrent')
+var constants = require('./server/initializers/constants')
+var customValidators = require('./server/helpers/customValidators')
+var database = require('./server/initializers/database')
+var logger = require('./server/helpers/logger')
+var peertubeCrypto = require('./server/helpers/peertubeCrypto')
+var poolRequests = require('./server/lib/poolRequests')
+var routes = require('./server/controllers')
+var utils = require('./server/helpers/utils')
+var videos = require('./server/lib/videos')
+var webtorrent = require('./server/lib/webtorrent')
 
 // Get configurations
 var port = config.get('listen.port')
@@ -67,11 +67,7 @@ app.use(require('connect-livereload')({
 require('segfault-handler').registerHandler()
 
 // Static files
-app.use(express.static(path.join(__dirname, '/public'), { maxAge: 0 }))
-
-// Jade template from ./views directory
-app.set('views', path.join(__dirname, '/views'))
-app.set('view engine', 'jade')
+app.use(express.static(path.join(__dirname, '/app'), { maxAge: 0 }))
 
 // API routes
 var api_route = '/api/' + constants.API_VERSION
