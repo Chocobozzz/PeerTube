@@ -5,4 +5,6 @@ import {Component} from 'angular2/core';
     templateUrl: 'app/app.component.html',
     styleUrls: [ 'app/app.component.css' ]
 })
-export class AppComponent { }
+export class AppComponent {
+  title = "coucou";
+}

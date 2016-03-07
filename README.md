@@ -54,7 +54,6 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
 ### Dependencies
 
   * **NodeJS >= 4.2**
-  * Grunt-cli (npm install -g grunt-cli)
   * OpenSSL (cli)
   * MongoDB
   * xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 (for electron)
@@ -64,7 +63,6 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
 Install NodeJS 4.2: [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 
     # apt-get install mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1
-    # npm install -g grunt-cli
     # npm install -g electron-prebuilt
 
 

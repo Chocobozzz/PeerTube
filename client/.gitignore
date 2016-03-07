@@ -1,3 +1,5 @@
 typings
 app/**/*.js
 app/**/*.map
+stylesheets/index.css
+app/*.css
