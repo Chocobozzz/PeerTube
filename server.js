@@ -67,14 +67,16 @@ app.use(require('connect-livereload')({
 require('segfault-handler').registerHandler()
 
 // Static files
-app.use(express.static(path.join(__dirname, '/app'), { maxAge: 0 }))
+app.use(express.static(path.join(__dirname, '/client'), { maxAge: 0 }))
 
 // API routes
 var api_route = '/api/' + constants.API_VERSION
 app.use(api_route, routes.api)
 
-// Views routes
-app.use('/', routes.views)
+// Client application
+app.use('/*', function (req, res, next) {
+  res.sendFile(path.join(__dirname, 'client/index.html'))
+})
 
 // ----------- Tracker -----------
 
@@ -108,26 +110,10 @@ app.use(function (req, res, next) {
   next(err)
 })
 
-// Prod : no stacktraces leaked to user
-if (process.env.NODE_ENV === 'production') {
-  app.use(function (err, req, res, next) {
-    logger.error(err)
-    res.status(err.status || 500)
-    res.render('error', {
-      message: err.message,
-      error: {}
-    })
-  })
-} else {
-  app.use(function (err, req, res, next) {
-    logger.error(err)
-    res.status(err.status || 500)
-    res.render('error', {
-      message: err.message,
-      error: err
-    })
-  })
-}
+app.use(function (err, req, res, next) {
+  logger.error(err)
+  res.sendStatus(err.status || 500)
+})
 
 // ----------- Create the certificates if they don't already exist -----------
 peertubeCrypto.createCertsIfNotExist(function (err) {

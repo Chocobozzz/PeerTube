@@ -1,7 +1,4 @@
-*.komodoproject
 node_modules
-.tmp
-public/javascripts/bundle.js
 schemes/
 certs/
 logs/

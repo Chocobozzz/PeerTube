@@ -2,13 +2,11 @@
 
 module.exports = function (grunt) {
   var paths = {
-    css: 'public/stylesheets/*.css',
-    scss: 'public/stylesheets/application.scss',
-    vendor: 'public/stylesheets/vendor',
-    js: 'public/javascripts/*.js',
+    css: 'client/stylesheets/*.css',
+    scss: 'client/stylesheets/application.scss',
+    vendor: 'client/stylesheets/vendor',
     routes: './server/controllers/**/*.js',
     main: './server.js',
-    browserified: 'public/javascripts/bundle.js',
     img: 'public/images/*.{png,jpg,jpeg,gif,webp,svg}',
     test: 'tests',
     server: 'server.js'
@@ -20,16 +18,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     paths: paths,
     pkg: grunt.file.readJSON('package.json'),
-    browserify: {
-      dev: {
-        src: [ paths.js, '!public/javascripts/bundle.js' ],
-        dest: paths.browserified,
-        options: {
-          browserifyOptions: { 'debug': true },
-          watch: true
-        }
-      }
-    },
     concurrent: {
       options: {
         logConcurrentOutput: true
@@ -72,21 +60,8 @@ module.exports = function (grunt) {
       },
       dev: {
         files: {
-          'public/stylesheets/global.css': paths.scss
+          'client/stylesheets/global.css': paths.scss
         }
-      }
-    },
-    watch: {
-      livereload: {
-        files: [ paths.jade, paths.css, paths.browserified ],
-        tasks: [ ],
-        options: {
-          livereload: true
-        }
-      },
-      sass: {
-        files: [ paths.scss ],
-        tasks: [ 'sass:dev' ]
       }
     }
   })
@@ -95,10 +70,7 @@ module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt)
 
   // Build client javascript and copy bootstrap dependencies
-  grunt.registerTask('build', [ 'sass:dev', 'newer:browserify:dev', 'newer:copy:dev' ])
-
-  // Start in dev mode (reload front end files without refresh)
-  grunt.registerTask('dev', [ 'sass:dev', 'newer:browserify:dev', 'newer:copy:dev', 'concurrent:dev' ])
+  grunt.registerTask('build', [ 'sass:dev', 'newer:copy:dev' ])
 
   // Clean build
   grunt.registerTask('clean', [], function () {

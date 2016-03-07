@@ -2,6 +2,7 @@
 
 var async = require('async')
 var config = require('config')
+// TODO
 var path = require('path')
 var webtorrent = require('../lib/webtorrent')
 

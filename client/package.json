@@ -1,0 +1,37 @@
+{
+  "name": "peertube-client",
+  "version": "0.0.1",
+  "private": true,
+  "licence": "GPLv3",
+  "author": {
+    "name": "Florian Bigard",
+    "email": "florian.bigard@gmail.com",
+    "url": "http://github.com/Chocobozzz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Chocobozzz/PeerTube.git"
+  },
+  "scripts": {
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "typings": "typings",
+    "postinstall": "typings install"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "angular2": "2.0.0-beta.8",
+    "systemjs": "0.19.22",
+    "es6-promise": "^3.0.2",
+    "es6-shim": "^0.33.3",
+    "reflect-metadata": "0.1.2",
+    "rxjs": "5.0.0-beta.2",
+    "zone.js": "0.5.15"
+  },
+  "devDependencies": {
+    "concurrently": "^2.0.0",
+    "lite-server": "^2.1.0",
+    "typescript": "^1.8.2",
+    "typings":"^0.6.8"
+  }
+}
