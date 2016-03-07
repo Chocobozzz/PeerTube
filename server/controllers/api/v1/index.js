@@ -11,7 +11,14 @@ var videosController = require('./videos')
 router.use('/pods', podsController)
 router.use('/remotevideos', remoteVideosController)
 router.use('/videos', videosController)
+router.use('/*', badRequest)
 
 // ---------------------------------------------------------------------------
 
 module.exports = router
+
+// ---------------------------------------------------------------------------
+
+function badRequest (req, res, next) {
+  res.sendStatus(400)
+}

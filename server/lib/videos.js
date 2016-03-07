@@ -9,7 +9,7 @@ var webtorrent = require('../lib/webtorrent')
 var logger = require('../helpers/logger')
 var Videos = require('../models/videos')
 
-var uploadDir = path.join(__dirname, '..', config.get('storage.uploads'))
+var uploadDir = path.join(__dirname, '..', '..', config.get('storage.uploads'))
 
 var videos = {
   seed: seed,

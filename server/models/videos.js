@@ -12,7 +12,7 @@ var logger = require('../helpers/logger')
 var http = config.get('webserver.https') === true ? 'https' : 'http'
 var host = config.get('webserver.host')
 var port = config.get('webserver.port')
-var uploadDir = path.join(__dirname, '..', config.get('storage.uploads'))
+var uploadDir = path.join(__dirname, '..', '..', config.get('storage.uploads'))
 
 // ---------------------------------------------------------------------------
 

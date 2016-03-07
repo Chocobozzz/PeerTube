@@ -6,7 +6,7 @@ var path = require('path')
 var winston = require('winston')
 winston.emitErrs = true
 
-var logDir = path.join(__dirname, '..', config.get('storage.logs'))
+var logDir = path.join(__dirname, '..', '..', config.get('storage.logs'))
 var logger = new winston.Logger({
   transports: [
     new winston.transports.File({

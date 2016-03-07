@@ -34,7 +34,7 @@ function createDirectoriesIfNotExist () {
   for (var key of Object.keys(storages)) {
     var dir = storages[key]
     try {
-      mkdirp.sync(path.join(__dirname, '..', dir))
+      mkdirp.sync(path.join(__dirname, '..', '..', dir))
     } catch (error) {
       throw new Error('Cannot create ' + path + ':' + error)
     }

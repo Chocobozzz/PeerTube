@@ -112,7 +112,7 @@ describe('Test a single pod', function () {
     utils.removeVideo(url, video_id, function (err) {
       if (err) throw err
 
-      fs.readdir(pathUtils.join(__dirname, '../../test1/uploads/'), function (err, files) {
+      fs.readdir(pathUtils.join(__dirname, '../../../test1/uploads/'), function (err, files) {
         if (err) throw err
 
         expect(files.length).to.equal(0)

@@ -34,7 +34,7 @@
     "dev": "concurrently \"npm run livereload\" \"npm run client:tsc:watch\" \"npm run client:sass:watch\" \"npm start\"",
     "livereload": "livereload ./client",
     "start": "node server",
-    "test": "standard && mocha tests"
+    "test": "standard && mocha server/tests"
   },
   "dependencies": {
     "async": "^1.2.1",
@@ -73,6 +73,9 @@
     "supertest": "^1.1.0"
   },
   "standard": {
+    "ignore": [
+      "client/"
+    ],
     "globals": [
       "alert",
       "confirm",

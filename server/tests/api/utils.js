@@ -22,7 +22,7 @@ var testUtils = {
 // ---------------------- Export functions --------------------
 
 function flushTests (callback) {
-  exec(pathUtils.join(__dirname, '../../scripts/clean_test.sh'), callback)
+  exec(pathUtils.join(__dirname, '../../../bin/clean_test.sh'), callback)
 }
 
 function getFriendsList (url, end) {
@@ -139,7 +139,7 @@ function runServer (number, callback) {
     detached: true
   }
 
-  var app = fork(pathUtils.join(__dirname, '../../server.js'), [], options)
+  var app = fork(pathUtils.join(__dirname, '../../../server.js'), [], options)
   app.stdout.on('data', function onStdout (data) {
     var dont_continue = false
     // Check if all required sentences are here

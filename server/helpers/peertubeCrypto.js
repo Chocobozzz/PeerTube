@@ -9,7 +9,7 @@ var ursa = require('ursa')
 
 var logger = require('./logger')
 
-var certDir = path.join(__dirname, '..', config.get('storage.certs'))
+var certDir = path.join(__dirname, '..', '..', config.get('storage.certs'))
 var algorithm = 'aes-256-ctr'
 
 var peertubeCrypto = {

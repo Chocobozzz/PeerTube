@@ -252,7 +252,7 @@ describe('Test parameters validator', function () {
       it('Should have 404 with nothing', function (done) {
         request(url)
         .delete(path)
-        .expect(404, done)
+        .expect(400, done)
       })
 
       it('Should fail without a mongodb id', function (done) {
