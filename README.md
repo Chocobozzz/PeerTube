@@ -76,8 +76,8 @@ Install NodeJS 4.2: [https://nodejs.org/en/download/package-manager/#debian-and-
 
 ### Test with 3 fresh nodes
 
-    $ scripts/clean_test.sh
-    $ scripts/run_servers.sh
+    $ bin/clean_test.sh
+    $ bin/run_servers.sh
 
 Then you will can access to the three nodes at `http://localhost:900{1,2,3}`. If you call "make friends" on `http://localhost:9002`, the pod 2 and 3 will become friends. Then if you call "make friends" on `http://localhost:9001` it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
 
