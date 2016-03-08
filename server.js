@@ -66,12 +66,16 @@ app.use(require('connect-livereload')({
 // Catch sefaults
 require('segfault-handler').registerHandler()
 
-// Static files
-app.use(express.static(path.join(__dirname, '/client'), { maxAge: 0 }))
-
 // API routes
 var api_route = '/api/' + constants.API_VERSION
 app.use(api_route, routes.api)
+
+// Static files
+app.use('/app', express.static(path.join(__dirname, '/client'), { maxAge: 0 }))
+// 404 for static files not found
+app.use('/app/*', function (req, res, next) {
+  res.sendStatus(404)
+})
 
 // Client application
 app.use('/*', function (req, res, next) {
