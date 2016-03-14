@@ -48,6 +48,6 @@ function removeRemoteVideo (req, res, next) {
   videos.removeRemotesOfByMagnetUris(url, magnetUris, function (err) {
     if (err) return next(err)
 
-    res.sendStatus(204)
+    res.type('json').status(204).end()
   })
 }

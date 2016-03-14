@@ -77,7 +77,7 @@ function addVideo (req, res, next) {
       friends.addVideoToFriends(video_data)
 
       // TODO : include Location of the new video
-      res.sendStatus(201)
+      res.type('json').status(201).end()
     })
   })
 }
@@ -87,7 +87,7 @@ function getVideos (req, res, next) {
     if (err) return next(err)
 
     if (video === null) {
-      return res.sendStatus(404)
+      res.type('json').status(204).end()
     }
 
     res.json(video)
@@ -117,7 +117,7 @@ function removeVideo (req, res, next) {
         }
 
         friends.removeVideoToFriends(params)
-        res.sendStatus(204)
+        res.type('json').status(204).end()
       })
     })
   })

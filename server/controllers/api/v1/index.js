@@ -20,5 +20,5 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function badRequest (req, res, next) {
-  res.sendStatus(400)
+  res.type('json').status(400).end()
 }

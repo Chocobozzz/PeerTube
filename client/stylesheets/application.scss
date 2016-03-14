@@ -1,6 +1,6 @@
-$icon-font-path: "/stylesheets/vendor/fonts/bootstrap/";
+$icon-font-path: "/app/node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 
 @import "bootstrap-variables";
 @import "_bootstrap";
-@import "base";
-@import "index";
+@import "base.scss";
+@import "index.scss";

@@ -1,0 +1,28 @@
+menu {
+  min-height: 300px;
+  height: 100%;
+  margin-right: 20px;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+
+  .panel_button {
+    margin: 8px;
+    cursor: pointer;
+    transition: margin 0.2s;
+
+    &:hover {
+      margin-left: 15px;
+    }
+
+    a {
+      color: #333333;
+    }
+  }
+
+  .glyphicon {
+    margin: 5px;
+  }
+}
+
+footer {
+  margin-top: 30px;
+}

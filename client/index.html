@@ -1,34 +1,40 @@
 <html>
   <head>
-    <title>Angular 2 QuickStart</title>
+    <title>PeerTube</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/stylesheets/index.css">
+    <link rel="stylesheet" href="/app/stylesheets/index.css">
 
     <!-- 1. Load libraries -->
     <!-- IE required polyfills, in this exact order -->
-    <script src="app/node_modules/es6-shim/es6-shim.min.js"></script>
-    <script src="app/node_modules/systemjs/dist/system-polyfills.js"></script>
-    <script src="app/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+    <script src="/app/node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="/app/node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="/app/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
 
-    <script src="app/node_modules/angular2/bundles/angular2-polyfills.js"></script>
-    <script src="app/node_modules/systemjs/dist/system.src.js"></script>
-    <script src="app/node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="app/node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="app/node_modules/angular2/bundles/router.dev.js"></script>
+    <script src="/app/node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="/app/node_modules/systemjs/dist/system.src.js"></script>
+    <script src="/app/node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="/app/node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="/app/node_modules/angular2/bundles/router.dev.js"></script>
+    <script src="/app/node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="/app/node_modules/jquery/dist/jquery.js"></script>
+    <script src="/app/node_modules/jquery.ui.widget/jquery.ui.widget.js"></script>
+    <script src="/app/node_modules/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script src="/app/node_modules/webtorrent/webtorrent.min.js"></script>
+
 
     <!-- 2. Configure SystemJS -->
     <script>
       System.config({
         packages: {
-          app: {
+          '/app': {
             components: {
               format: 'register',
               defaultExtension: 'js'
             }
-          }
+          },
         }
       });
-      System.import('app/components/bootstrap')
+      System.import('/app/angular/bootstrap')
             .then(null, console.error.bind(console));
     </script>
 

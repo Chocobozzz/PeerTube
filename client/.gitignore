@@ -1,5 +1,5 @@
 typings
-components/**/*.js
-components/**/*.map
+angular/**/*.js
+angular/**/*.map
+angular/**/*.css
 stylesheets/index.css
-components/**/*.css

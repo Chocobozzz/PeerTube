@@ -1,0 +1,39 @@
+<h3>Upload a video</h3>
+
+<form (ngSubmit)="uploadFile()" #videoForm="ngForm">
+  <div class="form-group">
+    <label for="name">Video name</label>
+    <input
+      type="text" class="form-control" name="name" id="name" required
+      ngControl="name"  #name="ngForm"
+    >
+    <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+      Name is required
+    </div>
+  </div>
+
+  <div class="btn btn-default btn-file">
+    <span>Select the video...</span>
+    <input type="file" name="input_video" id="input_video">
+  </div>
+
+  <span *ngIf="fileToUpload">{{ fileToUpload.name }}</span>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea
+      name="description" id="description" class="form-control" placeholder="Description..." required
+      ngControl="description"  #description="ngForm"
+    >
+    </textarea>
+    <div [hidden]="description.valid || description.pristine" class="alert alert-danger">
+        A description is required
+    </div>
+  </div>
+
+  <div id="progress" *ngIf="progressBar.max !== 0">
+    <progress [value]="progressBar.value" [max]="progressBar.max"></progress>
+  </div>
+
+  <input type="submit" value="Upload" class="btn btn-default" [disabled]="!videoForm.form.valid || !fileToUpload">
+</form>

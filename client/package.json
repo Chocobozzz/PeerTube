@@ -20,13 +20,17 @@
   },
   "license": "ISC",
   "dependencies": {
-    "angular2": "2.0.0-beta.8",
+    "angular2": "2.0.0-beta.9",
+    "blueimp-file-upload": "^9.12.1",
     "bootstrap-sass": "^3.3.6",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.33.3",
+    "jquery": "^2.2.1",
+    "jquery.ui.widget": "^1.10.3",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
     "systemjs": "0.19.22",
+    "webtorrent": "^0.85.1",
     "zone.js": "0.5.15"
   },
   "devDependencies": {

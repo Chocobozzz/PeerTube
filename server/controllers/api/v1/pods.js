@@ -66,7 +66,7 @@ function makeFriends (req, res, next) {
   friends.makeFriends(function (err) {
     if (err) return next(err)
 
-    res.sendStatus(204)
+    res.type('json').status(204).end()
   })
 }
 
@@ -79,7 +79,7 @@ function removePods (req, res, next) {
       if (err) logger.error('Cannot remove all remote videos of %s.', url)
       else logger.info('%s pod removed.', url)
 
-      res.sendStatus(204)
+      res.type('json').status(204).end()
     })
   })
 }
@@ -88,6 +88,6 @@ function quitFriends (req, res, next) {
   friends.quitFriends(function (err) {
     if (err) return next(err)
 
-    res.sendStatus(204)
+    res.type('json').status(204).end()
   })
 }
