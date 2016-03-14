@@ -1,8 +1,9 @@
 /// <reference path='../../../../typings/browser/ambient/webtorrent/webtorrent.d.ts' />
 
 import { Component, OnInit, ElementRef } from 'angular2/core';
-import { RouteParams } from 'angular2/router';
+import { RouteParams, CanDeactivate, ComponentInstruction } from 'angular2/router';
 
+// TODO import it with systemjs
 declare var WebTorrent: any;
 
 import { Video } from '../../models/video';
@@ -14,7 +15,7 @@ import { VideosService } from '../../services/videos.service';
   styleUrls: [ 'app/angular/videos/components/watch/videos-watch.component.css' ]
 })
 
-export class VideosWatchComponent {
+export class VideosWatchComponent implements OnInit, CanDeactivate {
   video: Video;
 
   private client: any;
@@ -24,6 +25,7 @@ export class VideosWatchComponent {
     private _routeParams: RouteParams,
     private _elementRef: ElementRef
   ) {
+    // TODO: use a service
     this.client = new WebTorrent({ dht: false });
   }
 
@@ -46,5 +48,11 @@ export class VideosWatchComponent {
         }
       })
     })
+  }
+
+  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) : any {
+    console.log('Removing video from webtorrent.');
+    this.client.remove(this.video.magnetUri);
+    return true;
   }
 }

@@ -76,8 +76,8 @@ function addVideo (req, res, next) {
       // Now we'll add the video's meta data to our friends
       friends.addVideoToFriends(video_data)
 
-      // TODO : include Location of the new video
-      res.type('json').status(201).end()
+      // TODO : include Location of the new video -> 201
+      res.type('json').status(204).end()
     })
   })
 }

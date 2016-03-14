@@ -1,5 +1,19 @@
 <div class="container">
 
+  <header class="row">
+    <div class="col-md-2">
+      <h4>PeerTube</h4>
+    </div>
+
+    <div class="col-md-8">
+      <input
+        type="text" id="search_video" name="search_video" class="form-control" placeholder="Search a video..."
+        #search (keyup.enter)="doSearch(search.value)"
+      >
+    </div>
+  </header>
+
+
   <div class="row">
 
     <menu class="col-md-2">

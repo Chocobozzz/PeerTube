@@ -1,6 +1,6 @@
 import { Component, ElementRef } from 'angular2/core';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
-import {HTTP_PROVIDERS} from 'angular2/http';
+import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Router } from 'angular2/router';
+import { HTTP_PROVIDERS } from 'angular2/http';
 
 import { VideosAddComponent } from '../videos/components/add/videos-add.component';
 import { VideosListComponent } from '../videos/components/list/videos-list.component';
@@ -36,15 +36,22 @@ import { FriendsService } from '../friends/services/friends.service';
 })
 
 export class AppComponent {
-  constructor(private _friendsService: FriendsService) {}
+  constructor(private _friendsService: FriendsService, private _router: Router) {}
+
+  doSearch(search: string) {
+    if (search !== '') {
+      this._router.navigate(['VideosList', { search: search }]);
+    } else {
+      this._router.navigate(['VideosList']);
+    }
+  }
 
   makeFriends() {
     this._friendsService.makeFriends().subscribe(
       status => {
         if (status === 409) {
           alert('Already made friends!');
-        }
-        else {
+        } else {
           alert('Made friends!');
         }
       },

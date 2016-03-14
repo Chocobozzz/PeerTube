@@ -30,6 +30,12 @@ export class VideosService {
     }
   }
 
+  searchVideos(search: string) {
+    return this.http.get(this._baseVideoUrl + 'search/' + search)
+                    .map(res => <Video> res.json())
+                    .catch(this.handleError);
+  }
+
   private handleError (error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');

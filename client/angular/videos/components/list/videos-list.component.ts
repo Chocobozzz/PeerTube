@@ -1,8 +1,8 @@
-import {Component, OnInit} from 'angular2/core';
-import {ROUTER_DIRECTIVES} from 'angular2/router';
+import { Component, OnInit } from 'angular2/core';
+import { ROUTER_DIRECTIVES, RouteParams } from 'angular2/router';
 
-import {VideosService} from '../../services/videos.service';
-import {Video} from '../../models/video';
+import { VideosService } from '../../services/videos.service';
+import { Video } from '../../models/video';
 
 @Component({
   selector: 'my-videos-list',
@@ -14,16 +14,29 @@ import {Video} from '../../models/video';
 export class VideosListComponent implements OnInit {
   videos: Video[];
 
+  private search: string;
+
   constructor(
-    private _videosService: VideosService
-  ) { }
+    private _videosService: VideosService,
+    routeParams: RouteParams
+  ) {
+    this.search = routeParams.get('search');
+  }
 
   ngOnInit() {
     this.getVideos();
   }
 
   getVideos() {
-    this._videosService.getVideos().subscribe(
+    let observable = null;
+
+    if (this.search !== null) {
+      observable = this._videosService.searchVideos(this.search);
+    } else {
+      observable = this._videosService.getVideos()
+    }
+
+    observable.subscribe(
       videos => this.videos = videos,
       error => alert(error)
     );

@@ -1,9 +1,10 @@
-import {Component, ElementRef, Inject, OnInit} from 'angular2/core';
-import {Router} from 'angular2/router';
-import {NgForm} from 'angular2/common';
+import { Component, ElementRef, Inject, OnInit } from 'angular2/core';
+import { Router } from 'angular2/router';
+import { NgForm } from 'angular2/common';
 
-import {Video} from '../../models/video';
+import { Video } from '../../models/video';
 
+// TODO: import it with systemjs
 declare var jQuery:any;
 
 @Component({
@@ -22,9 +23,10 @@ export class VideosAddComponent implements OnInit {
 
   ngOnInit() {
     jQuery(this._elementRef.nativeElement).find('#input_video').fileupload({
+      url: '/api/v1/videos',
+      dataType: 'json',
       singleFileUploads: true,
       multipart: true,
-      url: '/api/v1/videos',
       autoupload: false,
 
       add: (e, data) => {
@@ -38,7 +40,8 @@ export class VideosAddComponent implements OnInit {
       },
 
       done: (e, data) => {
-        console.log('finished');
+        console.log('Video uploaded.');
+
         // Print all the videos once it's finished
         this._router.navigate(['VideosList']);
       }
