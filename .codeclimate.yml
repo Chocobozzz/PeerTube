@@ -18,6 +18,6 @@ ratings:
 exclude_paths:
 - config/
 - node_modules/
-- public
-- tests/
+- client
+- server/tests/
 - .tmp/
