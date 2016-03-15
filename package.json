@@ -41,6 +41,7 @@
     "async": "^1.2.1",
     "bittorrent-tracker": "^7.0.0",
     "body-parser": "^1.12.4",
+    "concurrently": "^2.0.0",
     "config": "^1.14.0",
     "connect-livereload": "^0.5.3",
     "debug": "^2.2.0",

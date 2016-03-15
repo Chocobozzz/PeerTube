@@ -176,7 +176,7 @@ function uploadVideo (url, name, description, fixture, end) {
     .field('name', name)
     .field('description', description)
     .attach('input_video', pathUtils.join(__dirname, 'fixtures', fixture))
-    .expect(201)
+    .expect(204)
     .end(end)
 }
 
