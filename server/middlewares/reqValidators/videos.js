@@ -2,6 +2,7 @@
 
 var checkErrors = require('./utils').checkErrors
 var logger = require('../../helpers/logger')
+var videos = require('../../lib/videos')
 var Videos = require('../../models/videos')
 
 var reqValidatorsVideos = {
@@ -28,15 +29,17 @@ function videosGet (req, res, next) {
   logger.debug('Checking videosGet parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    Videos.getVideoState(req.params.id, function (err, state) {
+    Videos.get(req.params.id, function (err, video) {
       if (err) {
         logger.error('Error in videosGet request validator.', { error: err })
         res.sendStatus(500)
       }
 
-      if (state.exist === false) return res.status(404).send('Video not found')
+      videos.getVideoState(video, function (state) {
+        if (state.exist === false) return res.status(404).send('Video not found')
 
-      next()
+        next()
+      })
     })
   })
 }
@@ -47,16 +50,18 @@ function videosRemove (req, res, next) {
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    Videos.getVideoState(req.params.id, function (err, state) {
+    Videos.get(req.params.id, function (err, video) {
       if (err) {
         logger.error('Error in videosRemove request validator.', { error: err })
         res.sendStatus(500)
       }
 
-      if (state.exist === false) return res.status(404).send('Video not found')
-      else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
+      videos.getVideoState(video, function (state) {
+        if (state.exist === false) return res.status(404).send('Video not found')
+        else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
 
-      next()
+        next()
+      })
     })
   })
 }

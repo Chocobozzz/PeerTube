@@ -31,8 +31,6 @@ var Videos = {
   add: add,
   addRemotes: addRemotes,
   get: get,
-  getVideoState: getVideoState,
-  isOwned: isOwned,
   list: list,
   listOwned: listOwned,
   removeOwned: removeOwned,
@@ -99,38 +97,6 @@ function get (id, callback) {
     }
 
     return callback(null, video)
-  })
-}
-
-function getVideoState (id, callback) {
-  get(id, function (err, video) {
-    if (err) return callback(err)
-
-    var exist = (video !== null)
-    var owned = false
-    if (exist === true) {
-      owned = (video.namePath !== null)
-    }
-
-    return callback(null, { exist: exist, owned: owned })
-  })
-}
-
-function isOwned (id, callback) {
-  VideosDB.findById(id, function (err, video) {
-    if (err || !video) {
-      if (!err) err = new Error('Cannot find this video.')
-      logger.error('Cannot find this video.')
-      return callback(err)
-    }
-
-    if (video.namePath === null) {
-      var error_string = 'Cannot remove the video of another pod.'
-      logger.error(error_string)
-      return callback(new Error(error_string), false, video)
-    }
-
-    callback(null, true, video)
   })
 }
 

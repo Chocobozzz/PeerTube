@@ -12,8 +12,19 @@ var Videos = require('../models/videos')
 var uploadDir = path.join(__dirname, '..', '..', config.get('storage.uploads'))
 
 var videos = {
+  getVideoState: getVideoState,
   seed: seed,
   seedAllExisting: seedAllExisting
+}
+
+function getVideoState (video, callback) {
+  var exist = (video !== null)
+  var owned = false
+  if (exist === true) {
+    owned = (video.namePath !== null)
+  }
+
+  return callback({ exist: exist, owned: owned })
 }
 
 function seed (path, callback) {
