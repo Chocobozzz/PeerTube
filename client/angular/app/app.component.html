@@ -17,24 +17,28 @@
   <div class="row">
 
     <menu class="col-md-2">
-      <div id="panel_get_videos" class="panel_button">
-        <span class="glyphicon glyphicon-list"></span>
-        <a [routerLink]="['VideosList']">Get videos</a>
+      <div class="panel_block">
+        <div id="panel_get_videos" class="panel_button">
+          <span class="glyphicon glyphicon-list"></span>
+          <a [routerLink]="['VideosList']">Get videos</a>
+        </div>
+
+        <div id="panel_upload_video" class="panel_button">
+          <span class="glyphicon glyphicon-cloud-upload"></span>
+          <a [routerLink]="['VideosAdd']">Upload a video</a>
+        </div>
       </div>
 
-      <div id="panel_upload_video" class="panel_button">
-        <span class="glyphicon glyphicon-cloud-upload"></span>
-        <a [routerLink]="['VideosAdd']">Upload a video</a>
-      </div>
+      <div class="panel_block">
+        <div id="panel_make_friends" class="panel_button">
+          <span class="glyphicon glyphicon-user"></span>
+          <a (click)='makeFriends()'>Make friends</a>
+        </div>
 
-      <div id="panel_make_friends" class="panel_button">
-        <span class="glyphicon glyphicon-user"></span>
-        <a (click)='makeFriends()'>Make friends</a>
-      </div>
-
-      <div id="panel_quit_friends" class="panel_button">
-        <span class="glyphicon glyphicon-plane"></span>
-        <a (click)='quitFriends()'>Quit friends</a>
+        <div id="panel_quit_friends" class="panel_button">
+          <span class="glyphicon glyphicon-plane"></span>
+          <a (click)='quitFriends()'>Quit friends</a>
+        </div>
       </div>
     </menu>
 
