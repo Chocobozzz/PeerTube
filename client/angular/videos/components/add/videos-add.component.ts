@@ -36,10 +36,13 @@ export class VideosAddComponent implements OnInit {
 
       progressall: (e, data) => {
         this.progressBar.value = data.loaded;
-        this.progressBar.max = data.total;
+        // The server is a little bit slow to answer (has to seed the video)
+        // So we add more time to the progress bar (+10%)
+        this.progressBar.max = data.total + (0.1 * data.total);
       },
 
       done: (e, data) => {
+        this.progressBar.value = this.progressBar.max;
         console.log('Video uploaded.');
 
         // Print all the videos once it's finished
