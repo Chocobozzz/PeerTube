@@ -56,7 +56,7 @@
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "node-ipc": "^6.0.0",
-    "openssl-wrapper": "https://github.com/Chocobozzz/node-openssl-wrapper",
+    "openssl-wrapper": "^0.2.3",
     "request": "^2.57.0",
     "request-replay": "^1.0.2",
     "segfault-handler": "^1.0.0",
