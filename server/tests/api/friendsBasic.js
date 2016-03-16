@@ -1,19 +1,19 @@
 'use strict'
 
-var async = require('async')
-var chai = require('chai')
-var expect = chai.expect
-var request = require('supertest')
+const async = require('async')
+const chai = require('chai')
+const expect = chai.expect
+const request = require('supertest')
 
-var utils = require('./utils')
+const utils = require('./utils')
 
 describe('Test basic friends', function () {
-  var apps = []
-  var urls = []
+  let apps = []
+  let urls = []
 
   function testMadeFriends (urls, url_to_test, callback) {
-    var friends = []
-    for (var i = 0; i < urls.length; i++) {
+    const friends = []
+    for (let i = 0; i < urls.length; i++) {
       if (urls[i] === url_to_test) continue
       friends.push(urls[i])
     }
@@ -21,13 +21,13 @@ describe('Test basic friends', function () {
     utils.getFriendsList(url_to_test, function (err, res) {
       if (err) throw err
 
-      var result = res.body
-      var result_urls = [ result[0].url, result[1].url ]
+      const result = res.body
+      const result_urls = [ result[0].url, result[1].url ]
       expect(result).to.be.an('array')
       expect(result.length).to.equal(2)
       expect(result_urls[0]).to.not.equal(result_urls[1])
 
-      var error_string = 'Friends url do not correspond for ' + url_to_test
+      const error_string = 'Friends url do not correspond for ' + url_to_test
       expect(friends).to.contain(result_urls[0], error_string)
       expect(friends).to.contain(result_urls[1], error_string)
       callback()
@@ -50,7 +50,7 @@ describe('Test basic friends', function () {
       utils.getFriendsList(url, function (err, res) {
         if (err) throw err
 
-        var result = res.body
+        const result = res.body
         expect(result).to.be.an('array')
         expect(result.length).to.equal(0)
         callback()
@@ -61,7 +61,7 @@ describe('Test basic friends', function () {
   it('Should make friends', function (done) {
     this.timeout(10000)
 
-    var path = '/api/v1/pods/makefriends'
+    const path = '/api/v1/pods/makefriends'
 
     async.series([
       // The second pod make friend with the third
@@ -81,7 +81,7 @@ describe('Test basic friends', function () {
         utils.getFriendsList(urls[1], function (err, res) {
           if (err) throw err
 
-          var result = res.body
+          const result = res.body
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
           expect(result[0].url).to.be.equal(urls[2])
@@ -94,7 +94,7 @@ describe('Test basic friends', function () {
         utils.getFriendsList(urls[2], function (err, res) {
           if (err) throw err
 
-          var result = res.body
+          const result = res.body
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
           expect(result[0].url).to.be.equal(urls[1])
@@ -139,7 +139,7 @@ describe('Test basic friends', function () {
         utils.getFriendsList(urls[1], function (err, res) {
           if (err) throw err
 
-          var result = res.body
+          const result = res.body
           expect(result).to.be.an('array')
           expect(result.length).to.equal(0)
 
@@ -152,7 +152,7 @@ describe('Test basic friends', function () {
           utils.getFriendsList(url, function (err, res) {
             if (err) throw err
 
-            var result = res.body
+            const result = res.body
             expect(result).to.be.an('array')
             expect(result.length).to.equal(1)
             expect(result[0].url).not.to.be.equal(urls[1])

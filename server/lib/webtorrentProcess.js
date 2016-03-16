@@ -1,32 +1,32 @@
 'use strict'
 
-var WebTorrent = require('webtorrent')
-var ipc = require('node-ipc')
+const WebTorrent = require('webtorrent')
+const ipc = require('node-ipc')
 
 function webtorrent (args) {
   if (args.length !== 3) {
     throw new Error('Wrong arguments number: ' + args.length + '/3')
   }
 
-  var host = args[1]
-  var port = args[2]
-  var nodeKey = 'webtorrentnode' + port
-  var processKey = 'webtorrentprocess' + port
+  const host = args[1]
+  const port = args[2]
+  const nodeKey = 'webtorrentnode' + port
+  const processKey = 'webtorrentprocess' + port
 
   ipc.config.silent = true
   ipc.config.id = processKey
 
   if (host === 'client' && port === '1') global.WEBTORRENT_ANNOUNCE = []
   else global.WEBTORRENT_ANNOUNCE = 'ws://' + host + ':' + port + '/tracker/socket'
-  var wt = new WebTorrent({ dht: false })
+  const wt = new WebTorrent({ dht: false })
 
   function seed (data) {
-    var args = data.args
-    var path = args.path
-    var _id = data._id
+    const args = data.args
+    const path = args.path
+    const _id = data._id
 
     wt.seed(path, { announceList: '' }, function (torrent) {
-      var to_send = {
+      const to_send = {
         magnetUri: torrent.magnetURI
       }
 
@@ -35,12 +35,12 @@ function webtorrent (args) {
   }
 
   function add (data) {
-    var args = data.args
-    var magnetUri = args.magnetUri
-    var _id = data._id
+    const args = data.args
+    const magnetUri = args.magnetUri
+    const _id = data._id
 
     wt.add(magnetUri, function (torrent) {
-      var to_send = {
+      const to_send = {
         files: []
       }
 
@@ -53,9 +53,9 @@ function webtorrent (args) {
   }
 
   function remove (data) {
-    var args = data.args
-    var magnetUri = args.magnetUri
-    var _id = data._id
+    const args = data.args
+    const magnetUri = args.magnetUri
+    const _id = data._id
 
     try {
       wt.remove(magnetUri, callback)
@@ -65,7 +65,7 @@ function webtorrent (args) {
     }
 
     function callback () {
-      var to_send = {}
+      const to_send = {}
       ipc.of[nodeKey].emit(nodeKey + '.removeDone.' + _id, to_send)
     }
   }

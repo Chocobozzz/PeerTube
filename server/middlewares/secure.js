@@ -1,15 +1,15 @@
 'use strict'
 
-var logger = require('../helpers/logger')
-var peertubeCrypto = require('../helpers/peertubeCrypto')
-var Pods = require('../models/pods')
+const logger = require('../helpers/logger')
+const peertubeCrypto = require('../helpers/peertubeCrypto')
+const Pods = require('../models/pods')
 
-var secureMiddleware = {
+const secureMiddleware = {
   decryptBody: decryptBody
 }
 
 function decryptBody (req, res, next) {
-  var url = req.body.signature.url
+  const url = req.body.signature.url
   Pods.findByUrl(url, function (err, pod) {
     if (err) {
       logger.error('Cannot get signed url in decryptBody.', { error: err })
@@ -23,7 +23,7 @@ function decryptBody (req, res, next) {
 
     logger.debug('Decrypting body from %s.', url)
 
-    var signature_ok = peertubeCrypto.checkSignature(pod.publicKey, url, req.body.signature.signature)
+    const signature_ok = peertubeCrypto.checkSignature(pod.publicKey, url, req.body.signature.signature)
 
     if (signature_ok === true) {
       peertubeCrypto.decrypt(req.body.key, req.body.data, function (err, decrypted) {

@@ -1,22 +1,22 @@
 'use strict'
 
 // API version of our pod
-var API_VERSION = 'v1'
+const API_VERSION = 'v1'
 
 // Score a pod has when we create it as a friend
-var FRIEND_BASE_SCORE = 100
+let FRIEND_BASE_SCORE = 100
 
 // Time to wait between requests to the friends
-var INTERVAL = 60000
+let INTERVAL = 60000
 
 // Number of points we add/remove from a friend after a successful/bad request
-var PODS_SCORE = {
+const PODS_SCORE = {
   MALUS: -10,
   BONUS: 10
 }
 
 // Number of retries we make for the make retry requests (to friends...)
-var REQUEST_RETRIES = 10
+let REQUEST_RETRIES = 10
 
 // Special constants for a test instance
 if (isTestInstance() === true) {

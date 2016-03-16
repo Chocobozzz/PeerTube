@@ -1,6 +1,4 @@
-;(function () {
-  'use strict'
+'use strict'
 
-  // Order of the tests we want to execute
-  require('./api/')
-})()
+// Order of the tests we want to execute
+require('./api/')

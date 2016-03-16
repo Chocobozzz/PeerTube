@@ -1,25 +1,24 @@
 'use strict'
 
-var async = require('async')
-var config = require('config')
-// TODO
-var path = require('path')
-var webtorrent = require('../lib/webtorrent')
+const async = require('async')
+const config = require('config')
+const pathUtils = require('path')
+const webtorrent = require('../lib/webtorrent')
 
-var logger = require('../helpers/logger')
-var Videos = require('../models/videos')
+const logger = require('../helpers/logger')
+const Videos = require('../models/videos')
 
-var uploadDir = path.join(__dirname, '..', '..', config.get('storage.uploads'))
+const uploadDir = pathUtils.join(__dirname, '..', '..', config.get('storage.uploads'))
 
-var videos = {
+const videos = {
   getVideoState: getVideoState,
   seed: seed,
   seedAllExisting: seedAllExisting
 }
 
 function getVideoState (video, callback) {
-  var exist = (video !== null)
-  var owned = false
+  const exist = (video !== null)
+  let owned = false
   if (exist === true) {
     owned = (video.namePath !== null)
   }

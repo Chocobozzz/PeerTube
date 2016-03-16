@@ -1,11 +1,11 @@
 'use strict'
 
-var checkErrors = require('./utils').checkErrors
-var logger = require('../../helpers/logger')
-var videos = require('../../lib/videos')
-var Videos = require('../../models/videos')
+const checkErrors = require('./utils').checkErrors
+const logger = require('../../helpers/logger')
+const videos = require('../../lib/videos')
+const Videos = require('../../models/videos')
 
-var reqValidatorsVideos = {
+const reqValidatorsVideos = {
   videosAdd: videosAdd,
   videosGet: videosGet,
   videosRemove: videosRemove,

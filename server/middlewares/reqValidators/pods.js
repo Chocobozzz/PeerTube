@@ -1,10 +1,10 @@
 'use strict'
 
-var checkErrors = require('./utils').checkErrors
-var friends = require('../../lib/friends')
-var logger = require('../../helpers/logger')
+const checkErrors = require('./utils').checkErrors
+const friends = require('../../lib/friends')
+const logger = require('../../helpers/logger')
 
-var reqValidatorsPod = {
+const reqValidatorsPod = {
   makeFriends: makeFriends,
   podsAdd: podsAdd
 }

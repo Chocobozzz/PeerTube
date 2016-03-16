@@ -1,19 +1,19 @@
 'use strict'
 
-var async = require('async')
-var config = require('config')
-var request = require('request')
-var replay = require('request-replay')
+const async = require('async')
+const config = require('config')
+const request = require('request')
+const replay = require('request-replay')
 
-var constants = require('../initializers/constants')
-var logger = require('./logger')
-var peertubeCrypto = require('./peertubeCrypto')
+const constants = require('../initializers/constants')
+const logger = require('./logger')
+const peertubeCrypto = require('./peertubeCrypto')
 
-var http = config.get('webserver.https') ? 'https' : 'http'
-var host = config.get('webserver.host')
-var port = config.get('webserver.port')
+const http = config.get('webserver.https') ? 'https' : 'http'
+const host = config.get('webserver.host')
+const port = config.get('webserver.port')
 
-var requests = {
+const requests = {
   makeMultipleRetryRequest: makeMultipleRetryRequest
 }
 
@@ -23,8 +23,8 @@ function makeMultipleRetryRequest (all_data, pods, callbackEach, callback) {
     callbackEach = null
   }
 
-  var url = http + '://' + host + ':' + port
-  var signature
+  const url = http + '://' + host + ':' + port
+  let signature
 
   // Add signature if it is specified in the params
   if (all_data.method === 'POST' && all_data.data && all_data.sign === true) {
@@ -43,7 +43,7 @@ function makeMultipleRetryRequest (all_data, pods, callbackEach, callback) {
       }
     }
 
-    var params = {
+    const params = {
       url: pod.url + all_data.path,
       method: all_data.method
     }
@@ -52,19 +52,16 @@ function makeMultipleRetryRequest (all_data, pods, callbackEach, callback) {
     if (all_data.method === 'POST' && all_data.data) {
       // Encrypt data ?
       if (all_data.encrypt === true) {
-        // TODO: ES6 with let
-        ;(function (copy_params, copy_url, copy_pod, copy_signature) {
-          peertubeCrypto.encrypt(pod.publicKey, JSON.stringify(all_data.data), function (err, encrypted) {
-            if (err) return callback(err)
+        peertubeCrypto.encrypt(pod.publicKey, JSON.stringify(all_data.data), function (err, encrypted) {
+          if (err) return callback(err)
 
-            copy_params.json = {
-              data: encrypted.data,
-              key: encrypted.key
-            }
+          params.json = {
+            data: encrypted.data,
+            key: encrypted.key
+          }
 
-            makeRetryRequest(copy_params, copy_url, copy_pod, copy_signature, callbackEachRetryRequest)
-          })
-        })(params, url, pod, signature)
+          makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
+        })
       } else {
         params.json = { data: all_data.data }
         makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)

@@ -1,6 +1,6 @@
 'use strict'
 
-var cacheMiddleware = {
+const cacheMiddleware = {
   cache: cache
 }
 

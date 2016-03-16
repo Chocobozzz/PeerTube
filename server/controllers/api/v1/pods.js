@@ -1,20 +1,20 @@
 'use strict'
 
-var express = require('express')
-var fs = require('fs')
+const express = require('express')
+const fs = require('fs')
 
-var logger = require('../../../helpers/logger')
-var friends = require('../../../lib/friends')
-var middleware = require('../../../middlewares')
-var cacheMiddleware = middleware.cache
-var peertubeCrypto = require('../../../helpers/peertubeCrypto')
-var Pods = require('../../../models/pods')
-var reqValidator = middleware.reqValidators.pods
-var secureMiddleware = middleware.secure
-var secureRequest = middleware.reqValidators.remote.secureRequest
-var Videos = require('../../../models/videos')
+const logger = require('../../../helpers/logger')
+const friends = require('../../../lib/friends')
+const middleware = require('../../../middlewares')
+const cacheMiddleware = middleware.cache
+const peertubeCrypto = require('../../../helpers/peertubeCrypto')
+const Pods = require('../../../models/pods')
+const reqValidator = middleware.reqValidators.pods
+const secureMiddleware = middleware.secure
+const secureRequest = middleware.reqValidators.remote.secureRequest
+const Videos = require('../../../models/videos')
 
-var router = express.Router()
+const router = express.Router()
 
 router.get('/', cacheMiddleware.cache(false), listPods)
 router.post('/', reqValidator.podsAdd, cacheMiddleware.cache(false), addPods)
@@ -30,7 +30,7 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addPods (req, res, next) {
-  var informations = req.body.data
+  const informations = req.body.data
   Pods.add(informations, function (err) {
     if (err) return next(err)
 
@@ -71,7 +71,7 @@ function makeFriends (req, res, next) {
 }
 
 function removePods (req, res, next) {
-  var url = req.body.signature.url
+  const url = req.body.signature.url
   Pods.remove(url, function (err) {
     if (err) return next(err)
 

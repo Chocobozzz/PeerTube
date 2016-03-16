@@ -1,16 +1,16 @@
 'use strict'
 
-var util = require('util')
+const util = require('util')
 
-var logger = require('../../helpers/logger')
+const logger = require('../../helpers/logger')
 
-var reqValidatorsUtils = {
+const reqValidatorsUtils = {
   checkErrors: checkErrors
 }
 
 function checkErrors (req, res, next, status_code) {
   if (status_code === undefined) status_code = 400
-  var errors = req.validationErrors()
+  const errors = req.validationErrors()
 
   if (errors) {
     logger.warn('Incorrect request parameters', { path: req.originalUrl, err: errors })

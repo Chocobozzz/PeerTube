@@ -1,24 +1,24 @@
 'use strict'
 
-var config = require('config')
-var mkdirp = require('mkdirp')
-var path = require('path')
+const config = require('config')
+const mkdirp = require('mkdirp')
+const path = require('path')
 
-var checker = {
+const checker = {
   checkConfig: checkConfig,
   createDirectoriesIfNotExist: createDirectoriesIfNotExist
 }
 
 // Check the config files
 function checkConfig () {
-  var required = [ 'listen.port',
+  const required = [ 'listen.port',
     'webserver.https', 'webserver.host', 'webserver.port',
     'database.host', 'database.port', 'database.suffix',
     'storage.certs', 'storage.uploads', 'storage.logs',
     'network.friends' ]
-  var miss = []
+  const miss = []
 
-  for (var key of required) {
+  for (const key of required) {
     if (!config.has(key)) {
       miss.push(key)
     }
@@ -29,10 +29,10 @@ function checkConfig () {
 
 // Create directories for the storage if it doesn't exist
 function createDirectoriesIfNotExist () {
-  var storages = config.get('storage')
+  const storages = config.get('storage')
 
-  for (var key of Object.keys(storages)) {
-    var dir = storages[key]
+  for (const key of Object.keys(storages)) {
+    const dir = storages[key]
     try {
       mkdirp.sync(path.join(__dirname, '..', '..', dir))
     } catch (error) {

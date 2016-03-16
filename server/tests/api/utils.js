@@ -1,12 +1,12 @@
 'use strict'
 
-var child_process = require('child_process')
-var exec = child_process.exec
-var fork = child_process.fork
-var pathUtils = require('path')
-var request = require('supertest')
+const child_process = require('child_process')
+const exec = child_process.exec
+const fork = child_process.fork
+const pathUtils = require('path')
+const request = require('supertest')
 
-var testUtils = {
+const testUtils = {
   flushTests: flushTests,
   getFriendsList: getFriendsList,
   getVideosList: getVideosList,
@@ -26,7 +26,7 @@ function flushTests (callback) {
 }
 
 function getFriendsList (url, end) {
-  var path = '/api/v1/pods/'
+  const path = '/api/v1/pods/'
 
   request(url)
     .get(path)
@@ -37,7 +37,7 @@ function getFriendsList (url, end) {
 }
 
 function getVideosList (url, end) {
-  var path = '/api/v1/videos'
+  const path = '/api/v1/videos'
 
   request(url)
     .get(path)
@@ -53,7 +53,7 @@ function makeFriends (url, expected_status, callback) {
     expected_status = 204
   }
 
-  var path = '/api/v1/pods/makefriends'
+  const path = '/api/v1/pods/makefriends'
 
   // The first pod make friend with the third
   request(url)
@@ -69,7 +69,7 @@ function makeFriends (url, expected_status, callback) {
 }
 
 function quitFriends (url, callback) {
-  var path = '/api/v1/pods/quitfriends'
+  const path = '/api/v1/pods/quitfriends'
 
   // The first pod make friend with the third
   request(url)
@@ -85,7 +85,7 @@ function quitFriends (url, callback) {
 }
 
 function removeVideo (url, id, end) {
-  var path = '/api/v1/videos'
+  const path = '/api/v1/videos'
 
   request(url)
     .delete(path + '/' + id)
@@ -95,9 +95,9 @@ function removeVideo (url, id, end) {
 }
 
 function flushAndRunMultipleServers (total_servers, serversRun) {
-  var apps = []
-  var urls = []
-  var i = 0
+  let apps = []
+  let urls = []
+  let i = 0
 
   function anotherServerDone (number, app, url) {
     apps[number - 1] = app
@@ -109,41 +109,39 @@ function flushAndRunMultipleServers (total_servers, serversRun) {
   }
 
   flushTests(function () {
-    for (var j = 1; j <= total_servers; j++) {
-      (function (k) { // TODO: ES6 with let
-        // For the virtual buffer
-        setTimeout(function () {
-          runServer(k, function (app, url) {
-            anotherServerDone(k, app, url)
-          })
-        }, 1000 * k)
-      })(j)
+    for (let j = 1; j <= total_servers; j++) {
+      // For the virtual buffer
+      setTimeout(function () {
+        runServer(j, function (app, url) {
+          anotherServerDone(j, app, url)
+        })
+      }, 1000 * j)
     }
   })
 }
 
 function runServer (number, callback) {
-  var port = 9000 + number
-  var server_run_string = {
+  const port = 9000 + number
+  const server_run_string = {
     'Connected to mongodb': false,
     'Server listening on port': false
   }
 
   // Share the environment
-  var env = Object.create(process.env)
+  const env = Object.create(process.env)
   env.NODE_ENV = 'test'
   env.NODE_APP_INSTANCE = number
-  var options = {
+  const options = {
     silent: true,
     env: env,
     detached: true
   }
 
-  var app = fork(pathUtils.join(__dirname, '../../../server.js'), [], options)
+  const app = fork(pathUtils.join(__dirname, '../../../server.js'), [], options)
   app.stdout.on('data', function onStdout (data) {
-    var dont_continue = false
+    let dont_continue = false
     // Check if all required sentences are here
-    for (var key of Object.keys(server_run_string)) {
+    for (const key of Object.keys(server_run_string)) {
       if (data.toString().indexOf(key) !== -1) server_run_string[key] = true
       if (server_run_string[key] === false) dont_continue = true
     }
@@ -157,7 +155,7 @@ function runServer (number, callback) {
 }
 
 function searchVideo (url, search, end) {
-  var path = '/api/v1/videos'
+  const path = '/api/v1/videos'
 
   request(url)
     .get(path + '/search/' + search)
@@ -168,7 +166,7 @@ function searchVideo (url, search, end) {
 }
 
 function uploadVideo (url, name, description, fixture, end) {
-  var path = '/api/v1/videos'
+  const path = '/api/v1/videos'
 
   request(url)
     .post(path)

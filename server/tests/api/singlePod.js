@@ -1,20 +1,20 @@
 'use strict'
 
-var async = require('async')
-var chai = require('chai')
-var expect = chai.expect
-var fs = require('fs')
-var pathUtils = require('path')
+const async = require('async')
+const chai = require('chai')
+const expect = chai.expect
+const fs = require('fs')
+const pathUtils = require('path')
 
-var webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
+const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
 webtorrent.silent = true
 
-var utils = require('./utils')
+const utils = require('./utils')
 
 describe('Test a single pod', function () {
-  var app = null
-  var url = ''
-  var video_id = -1
+  let app = null
+  let url = ''
+  let video_id = -1
 
   before(function (done) {
     this.timeout(20000)
@@ -62,7 +62,7 @@ describe('Test a single pod', function () {
       expect(res.body).to.be.an('array')
       expect(res.body.length).to.equal(1)
 
-      var video = res.body[0]
+      const video = res.body[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
       expect(video.podUrl).to.equal('http://localhost:9001')
@@ -87,7 +87,7 @@ describe('Test a single pod', function () {
       expect(res.body).to.be.an('array')
       expect(res.body.length).to.equal(1)
 
-      var video = res.body[0]
+      const video = res.body[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
       expect(video.podUrl).to.equal('http://localhost:9001')

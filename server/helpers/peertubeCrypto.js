@@ -1,18 +1,18 @@
 'use strict'
 
-var config = require('config')
-var crypto = require('crypto')
-var fs = require('fs')
-var openssl = require('openssl-wrapper')
-var path = require('path')
-var ursa = require('ursa')
+const config = require('config')
+const crypto = require('crypto')
+const fs = require('fs')
+const openssl = require('openssl-wrapper')
+const path = require('path')
+const ursa = require('ursa')
 
-var logger = require('./logger')
+const logger = require('./logger')
 
-var certDir = path.join(__dirname, '..', '..', config.get('storage.certs'))
-var algorithm = 'aes-256-ctr'
+const certDir = path.join(__dirname, '..', '..', config.get('storage.certs'))
+const algorithm = 'aes-256-ctr'
 
-var peertubeCrypto = {
+const peertubeCrypto = {
   checkSignature: checkSignature,
   createCertsIfNotExist: createCertsIfNotExist,
   decrypt: decrypt,
@@ -22,8 +22,8 @@ var peertubeCrypto = {
 }
 
 function checkSignature (public_key, raw_data, hex_signature) {
-  var crt = ursa.createPublicKey(public_key)
-  var is_valid = crt.hashAndVerify('sha256', new Buffer(raw_data).toString('hex'), hex_signature, 'hex')
+  const crt = ursa.createPublicKey(public_key)
+  const is_valid = crt.hashAndVerify('sha256', new Buffer(raw_data).toString('hex'), hex_signature, 'hex')
   return is_valid
 }
 
@@ -43,22 +43,22 @@ function decrypt (key, data, callback) {
   fs.readFile(getCertDir() + 'peertube.key.pem', function (err, file) {
     if (err) return callback(err)
 
-    var my_private_key = ursa.createPrivateKey(file)
-    var decrypted_key = my_private_key.decrypt(key, 'hex', 'utf8')
-    var decrypted_data = symetricDecrypt(data, decrypted_key)
+    const my_private_key = ursa.createPrivateKey(file)
+    const decrypted_key = my_private_key.decrypt(key, 'hex', 'utf8')
+    const decrypted_data = symetricDecrypt(data, decrypted_key)
 
     return callback(null, decrypted_data)
   })
 }
 
 function encrypt (public_key, data, callback) {
-  var crt = ursa.createPublicKey(public_key)
+  const crt = ursa.createPublicKey(public_key)
 
   symetricEncrypt(data, function (err, dataEncrypted) {
     if (err) return callback(err)
 
-    var key = crt.encrypt(dataEncrypted.password, 'utf8', 'hex')
-    var encrypted = {
+    const key = crt.encrypt(dataEncrypted.password, 'utf8', 'hex')
+    const encrypted = {
       data: dataEncrypted.crypted,
       key: key
     }
@@ -72,8 +72,8 @@ function getCertDir () {
 }
 
 function sign (data) {
-  var myKey = ursa.createPrivateKey(fs.readFileSync(certDir + 'peertube.key.pem'))
-  var signature = myKey.hashAndSign('sha256', data, 'utf8', 'hex')
+  const myKey = ursa.createPrivateKey(fs.readFileSync(certDir + 'peertube.key.pem'))
+  const signature = myKey.hashAndSign('sha256', data, 'utf8', 'hex')
 
   return signature
 }
@@ -93,7 +93,7 @@ function certsExist (callback) {
 function createCerts (callback) {
   certsExist(function (exist) {
     if (exist === true) {
-      var string = 'Certs already exist.'
+      const string = 'Certs already exist.'
       logger.warning(string)
       return callback(new Error(string))
     }
@@ -129,8 +129,8 @@ function generatePassword (callback) {
 }
 
 function symetricDecrypt (text, password) {
-  var decipher = crypto.createDecipher(algorithm, password)
-  var dec = decipher.update(text, 'hex', 'utf8')
+  const decipher = crypto.createDecipher(algorithm, password)
+  let dec = decipher.update(text, 'hex', 'utf8')
   dec += decipher.final('utf8')
   return dec
 }
@@ -139,8 +139,8 @@ function symetricEncrypt (text, callback) {
   generatePassword(function (err, password) {
     if (err) return callback(err)
 
-    var cipher = crypto.createCipher(algorithm, password)
-    var crypted = cipher.update(text, 'utf8', 'hex')
+    const cipher = crypto.createCipher(algorithm, password)
+    let crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex')
     callback(null, { crypted: crypted, password: password })
   })

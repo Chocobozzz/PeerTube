@@ -1,41 +1,41 @@
 'use strict'
 
-var config = require('config')
-var crypto = require('crypto')
-var express = require('express')
-var multer = require('multer')
+const config = require('config')
+const crypto = require('crypto')
+const express = require('express')
+const multer = require('multer')
 
-var logger = require('../../../helpers/logger')
-var friends = require('../../../lib/friends')
-var middleware = require('../../../middlewares')
-var cacheMiddleware = middleware.cache
-var reqValidator = middleware.reqValidators.videos
-var Videos = require('../../../models/videos') // model
-var videos = require('../../../lib/videos')
-var webtorrent = require('../../../lib/webtorrent')
+const logger = require('../../../helpers/logger')
+const friends = require('../../../lib/friends')
+const middleware = require('../../../middlewares')
+const cacheMiddleware = middleware.cache
+const reqValidator = middleware.reqValidators.videos
+const Videos = require('../../../models/videos') // model
+const videos = require('../../../lib/videos')
+const webtorrent = require('../../../lib/webtorrent')
 
-var router = express.Router()
-var uploads = config.get('storage.uploads')
+const router = express.Router()
+const uploads = config.get('storage.uploads')
 
 // multer configuration
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploads)
   },
 
   filename: function (req, file, cb) {
-    var extension = ''
+    let extension = ''
     if (file.mimetype === 'video/webm') extension = 'webm'
     else if (file.mimetype === 'video/mp4') extension = 'mp4'
     else if (file.mimetype === 'video/ogg') extension = 'ogv'
     crypto.pseudoRandomBytes(16, function (err, raw) {
-      var fieldname = err ? undefined : raw.toString('hex')
+      const fieldname = err ? undefined : raw.toString('hex')
       cb(null, fieldname + '.' + extension)
     })
   }
 })
 
-var reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
+const reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
 
 router.get('/', cacheMiddleware.cache(false), listVideos)
 router.post('/', reqFiles, reqValidator.videosAdd, cacheMiddleware.cache(false), addVideo)
@@ -50,8 +50,8 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addVideo (req, res, next) {
-  var video_file = req.files.input_video[0]
-  var video_infos = req.body
+  const video_file = req.files.input_video[0]
+  const video_infos = req.body
 
   videos.seed(video_file.path, function (err, torrent) {
     if (err) {
@@ -59,7 +59,7 @@ function addVideo (req, res, next) {
       return next(err)
     }
 
-    var video_data = {
+    const video_data = {
       name: video_infos.name,
       namePath: video_file.filename,
       description: video_infos.description,
@@ -103,7 +103,7 @@ function listVideos (req, res, next) {
 }
 
 function removeVideo (req, res, next) {
-  var video_id = req.params.id
+  const video_id = req.params.id
   Videos.get(video_id, function (err, video) {
     if (err) return next(err)
 
@@ -111,7 +111,7 @@ function removeVideo (req, res, next) {
       Videos.removeOwned(req.params.id, function (err) {
         if (err) return next(err)
 
-        var params = {
+        const params = {
           name: video.name,
           magnetUri: video.magnetUri
         }

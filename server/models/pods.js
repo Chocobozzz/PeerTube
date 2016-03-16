@@ -1,22 +1,22 @@
 'use strict'
 
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-var constants = require('../initializers/constants')
-var logger = require('../helpers/logger')
+const constants = require('../initializers/constants')
+const logger = require('../helpers/logger')
 
 // ---------------------------------------------------------------------------
 
-var podsSchema = mongoose.Schema({
+const podsSchema = mongoose.Schema({
   url: String,
   publicKey: String,
   score: { type: Number, max: constants.FRIEND_BASE_SCORE }
 })
-var PodsDB = mongoose.model('pods', podsSchema)
+const PodsDB = mongoose.model('pods', podsSchema)
 
 // ---------------------------------------------------------------------------
 
-var Pods = {
+const Pods = {
   add: add,
   count: count,
   findByUrl: findByUrl,
@@ -31,7 +31,7 @@ var Pods = {
 // TODO: check if the pod is not already a friend
 function add (data, callback) {
   if (!callback) callback = function () {}
-  var params = {
+  const params = {
     url: data.url,
     publicKey: data.publicKey,
     score: constants.FRIEND_BASE_SCORE

@@ -1,13 +1,13 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
 'use strict'
 
-var config = require('config')
-var path = require('path')
-var winston = require('winston')
+const config = require('config')
+const path = require('path')
+const winston = require('winston')
 winston.emitErrs = true
 
-var logDir = path.join(__dirname, '..', '..', config.get('storage.logs'))
-var logger = new winston.Logger({
+const logDir = path.join(__dirname, '..', '..', config.get('storage.logs'))
+const logger = new winston.Logger({
   transports: [
     new winston.transports.File({
       level: 'debug',

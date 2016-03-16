@@ -1,33 +1,33 @@
 'use strict'
 
-var async = require('async')
-var config = require('config')
-var dz = require('dezalgo')
-var fs = require('fs')
-var mongoose = require('mongoose')
-var path = require('path')
+const async = require('async')
+const config = require('config')
+const dz = require('dezalgo')
+const fs = require('fs')
+const mongoose = require('mongoose')
+const path = require('path')
 
-var logger = require('../helpers/logger')
+const logger = require('../helpers/logger')
 
-var http = config.get('webserver.https') === true ? 'https' : 'http'
-var host = config.get('webserver.host')
-var port = config.get('webserver.port')
-var uploadDir = path.join(__dirname, '..', '..', config.get('storage.uploads'))
+const http = config.get('webserver.https') === true ? 'https' : 'http'
+const host = config.get('webserver.host')
+const port = config.get('webserver.port')
+const uploadDir = path.join(__dirname, '..', '..', config.get('storage.uploads'))
 
 // ---------------------------------------------------------------------------
 
-var videosSchema = mongoose.Schema({
+const videosSchema = mongoose.Schema({
   name: String,
   namePath: String,
   description: String,
   magnetUri: String,
   podUrl: String
 })
-var VideosDB = mongoose.model('videos', videosSchema)
+const VideosDB = mongoose.model('videos', videosSchema)
 
 // ---------------------------------------------------------------------------
 
-var Videos = {
+const Videos = {
   add: add,
   addRemotes: addRemotes,
   get: get,
@@ -43,7 +43,7 @@ var Videos = {
 function add (video, callback) {
   logger.info('Adding %s video to database.', video.name)
 
-  var params = video
+  const params = video
   params.podUrl = http + '://' + host + ':' + port
 
   VideosDB.create(params, function (err, video) {
@@ -60,13 +60,13 @@ function add (video, callback) {
 function addRemotes (videos, callback) {
   if (!callback) callback = function () {}
 
-  var to_add = []
+  const to_add = []
 
   async.each(videos, function (video, callback_each) {
     callback_each = dz(callback_each)
     logger.debug('Add remote video from pod: %s', video.podUrl)
 
-    var params = {
+    const params = {
       name: video.name,
       namePath: null,
       description: video.description,
@@ -159,7 +159,7 @@ function removeRemotesOfByMagnetUris (fromUrl, magnetUris, callback) {
       return callback(err)
     }
 
-    var to_remove = []
+    const to_remove = []
     async.each(videos, function (video, callback_async) {
       callback_async = dz(callback_async)
 

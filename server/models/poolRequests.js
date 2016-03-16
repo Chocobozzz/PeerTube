@@ -1,21 +1,21 @@
 'use strict'
 
-var mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
-var logger = require('../helpers/logger')
+const logger = require('../helpers/logger')
 
 // ---------------------------------------------------------------------------
 
-var poolRequestsSchema = mongoose.Schema({
+const poolRequestsSchema = mongoose.Schema({
   type: String,
   id: String, // Special id to find duplicates (video created we want to remove...)
   request: mongoose.Schema.Types.Mixed
 })
-var PoolRequestsDB = mongoose.model('poolRequests', poolRequestsSchema)
+const PoolRequestsDB = mongoose.model('poolRequests', poolRequestsSchema)
 
 // ---------------------------------------------------------------------------
 
-var PoolRequests = {
+const PoolRequests = {
   create: create,
   findById: findById,
   list: list,

@@ -1,8 +1,8 @@
 'use strict'
 
-var logger = require('./logger')
+const logger = require('./logger')
 
-var utils = {
+const utils = {
   cleanForExit: cleanForExit
 }
 

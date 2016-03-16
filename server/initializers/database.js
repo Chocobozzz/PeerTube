@@ -1,15 +1,15 @@
 'use strict'
 
-var config = require('config')
-var mongoose = require('mongoose')
+const config = require('config')
+const mongoose = require('mongoose')
 
-var logger = require('../helpers/logger')
+const logger = require('../helpers/logger')
 
-var dbname = 'peertube' + config.get('database.suffix')
-var host = config.get('database.host')
-var port = config.get('database.port')
+const dbname = 'peertube' + config.get('database.suffix')
+const host = config.get('database.host')
+const port = config.get('database.port')
 
-var database = {
+const database = {
   connect: connect
 }
 

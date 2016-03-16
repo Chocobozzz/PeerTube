@@ -1,12 +1,12 @@
 'use strict'
 
-var express = require('express')
+const express = require('express')
 
-var router = express.Router()
+const router = express.Router()
 
-var podsController = require('./pods')
-var remoteVideosController = require('./remoteVideos')
-var videosController = require('./videos')
+const podsController = require('./pods')
+const remoteVideosController = require('./remoteVideos')
+const videosController = require('./videos')
 
 router.use('/pods', podsController)
 router.use('/remotevideos', remoteVideosController)

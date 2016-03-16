@@ -1,20 +1,20 @@
 'use strict'
 
-var config = require('config')
-var ipc = require('node-ipc')
-var pathUtils = require('path')
-var spawn = require('electron-spawn')
+const config = require('config')
+const ipc = require('node-ipc')
+const pathUtils = require('path')
+const spawn = require('electron-spawn')
 
-var logger = require('../helpers/logger')
+const logger = require('../helpers/logger')
 
-var host = config.get('webserver.host')
-var port = config.get('webserver.port')
-var nodeKey = 'webtorrentnode' + port
-var processKey = 'webtorrentprocess' + port
+let host = config.get('webserver.host')
+let port = config.get('webserver.port')
+let nodeKey = 'webtorrentnode' + port
+let processKey = 'webtorrentprocess' + port
 ipc.config.silent = true
 ipc.config.id = nodeKey
 
-var webtorrent = {
+const webtorrent = {
   add: add,
   app: null, // Pid of the app
   create: create,
@@ -42,7 +42,7 @@ function create (options, callback) {
     if (!webtorrent.silent) logger.info('IPC server ready.')
 
     // Run a timeout of 30s after which we exit the process
-    var timeout_webtorrent_process = setTimeout(function () {
+    const timeout_webtorrent_process = setTimeout(function () {
       throw new Error('Timeout : cannot run the webtorrent process. Please ensure you have electron-prebuilt npm package installed with xvfb-run.')
     }, 30000)
 
@@ -56,7 +56,7 @@ function create (options, callback) {
       throw new Error('Received exception error from webtorrent process.' + data.exception)
     })
 
-    var webtorrent_process = spawn(pathUtils.join(__dirname, 'webtorrentProcess.js'), host, port, { detached: true })
+    const webtorrent_process = spawn(pathUtils.join(__dirname, 'webtorrentProcess.js'), host, port, { detached: true })
     webtorrent_process.stderr.on('data', function (data) {
       // logger.debug('Webtorrent process stderr: ', data.toString())
     })
@@ -72,9 +72,9 @@ function create (options, callback) {
 }
 
 function seed (path, callback) {
-  var extension = pathUtils.extname(path)
-  var basename = pathUtils.basename(path, extension)
-  var data = {
+  const extension = pathUtils.extname(path)
+  const basename = pathUtils.basename(path, extension)
+  const data = {
     _id: basename,
     args: {
       path: path
@@ -84,12 +84,12 @@ function seed (path, callback) {
   if (!webtorrent.silent) logger.debug('Node wants to seed %s.', data._id)
 
   // Finish signal
-  var event_key = nodeKey + '.seedDone.' + data._id
+  const event_key = nodeKey + '.seedDone.' + data._id
   ipc.server.on(event_key, function listener (received) {
     if (!webtorrent.silent) logger.debug('Process seeded torrent %s.', received.magnetUri)
 
     // This is a fake object, we just use the magnetUri in this project
-    var torrent = {
+    const torrent = {
       magnetURI: received.magnetUri
     }
 
@@ -101,7 +101,7 @@ function seed (path, callback) {
 }
 
 function add (magnetUri, callback) {
-  var data = {
+  const data = {
     _id: magnetUri,
     args: {
       magnetUri: magnetUri
@@ -111,12 +111,12 @@ function add (magnetUri, callback) {
   if (!webtorrent.silent) logger.debug('Node wants to add ' + data._id)
 
   // Finish signal
-  var event_key = nodeKey + '.addDone.' + data._id
+  const event_key = nodeKey + '.addDone.' + data._id
   ipc.server.on(event_key, function (received) {
     if (!webtorrent.silent) logger.debug('Process added torrent.')
 
     // This is a fake object, we just use the magnetUri in this project
-    var torrent = {
+    const torrent = {
       files: received.files
     }
 
@@ -128,7 +128,7 @@ function add (magnetUri, callback) {
 }
 
 function remove (magnetUri, callback) {
-  var data = {
+  const data = {
     _id: magnetUri,
     args: {
       magnetUri: magnetUri
@@ -138,11 +138,11 @@ function remove (magnetUri, callback) {
   if (!webtorrent.silent) logger.debug('Node wants to stop seeding %s.', data._id)
 
   // Finish signal
-  var event_key = nodeKey + '.removeDone.' + data._id
+  const event_key = nodeKey + '.removeDone.' + data._id
   ipc.server.on(event_key, function (received) {
     if (!webtorrent.silent) logger.debug('Process removed torrent %s.', data._id)
 
-    var err = null
+    let err = null
     if (received.err) err = received.err
 
     ipc.server.off(event_key)

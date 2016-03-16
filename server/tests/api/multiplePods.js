@@ -1,18 +1,18 @@
 'use strict'
 
-var async = require('async')
-var chai = require('chai')
-var expect = chai.expect
-var pathUtils = require('path')
+const async = require('async')
+const chai = require('chai')
+const expect = chai.expect
+const pathUtils = require('path')
 
-var utils = require('./utils')
-var webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
+const utils = require('./utils')
+const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
 webtorrent.silent = true
 
 describe('Test multiple pods', function () {
-  var apps = []
-  var urls = []
-  var to_remove = []
+  let apps = []
+  let urls = []
+  const to_remove = []
 
   before(function (done) {
     this.timeout(30000)
@@ -73,15 +73,15 @@ describe('Test multiple pods', function () {
           if (err) throw err
 
           async.each(urls, function (url, callback) {
-            var base_magnet = null
+            let base_magnet = null
 
             utils.getVideosList(url, function (err, res) {
               if (err) throw err
 
-              var videos = res.body
+              const videos = res.body
               expect(videos).to.be.an('array')
               expect(videos.length).to.equal(1)
-              var video = videos[0]
+              const video = videos[0]
               expect(video.name).to.equal('my super name for pod 1')
               expect(video.description).to.equal('my super description for pod 1')
               expect(video.podUrl).to.equal('http://localhost:9001')
@@ -116,15 +116,15 @@ describe('Test multiple pods', function () {
           if (err) throw err
 
           async.each(urls, function (url, callback) {
-            var base_magnet = null
+            let base_magnet = null
 
             utils.getVideosList(url, function (err, res) {
               if (err) throw err
 
-              var videos = res.body
+              const videos = res.body
               expect(videos).to.be.an('array')
               expect(videos.length).to.equal(2)
-              var video = videos[1]
+              const video = videos[1]
               expect(video.name).to.equal('my super name for pod 2')
               expect(video.description).to.equal('my super description for pod 2')
               expect(video.podUrl).to.equal('http://localhost:9002')
@@ -160,16 +160,16 @@ describe('Test multiple pods', function () {
         function (err) {
           if (err) throw err
 
-          var base_magnet = null
+          let base_magnet = null
           // All pods should have this video
           async.each(urls, function (url, callback) {
             utils.getVideosList(url, function (err, res) {
               if (err) throw err
 
-              var videos = res.body
+              const videos = res.body
               expect(videos).to.be.an('array')
               expect(videos.length).to.equal(4)
-              var video = videos[2]
+              let video = videos[2]
               expect(video.name).to.equal('my super name for pod 3')
               expect(video.description).to.equal('my super description for pod 3')
               expect(video.podUrl).to.equal('http://localhost:9003')
@@ -204,7 +204,7 @@ describe('Test multiple pods', function () {
       utils.getVideosList(urls[2], function (err, res) {
         if (err) throw err
 
-        var video = res.body[0]
+        const video = res.body[0]
         to_remove.push(res.body[2]._id)
         to_remove.push(res.body[3]._id)
 
@@ -225,7 +225,7 @@ describe('Test multiple pods', function () {
       utils.getVideosList(urls[0], function (err, res) {
         if (err) throw err
 
-        var video = res.body[1]
+        const video = res.body[1]
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -244,7 +244,7 @@ describe('Test multiple pods', function () {
       utils.getVideosList(urls[1], function (err, res) {
         if (err) throw err
 
-        var video = res.body[2]
+        const video = res.body[2]
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -263,7 +263,7 @@ describe('Test multiple pods', function () {
       utils.getVideosList(urls[0], function (err, res) {
         if (err) throw err
 
-        var video = res.body[3]
+        const video = res.body[3]
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -297,7 +297,7 @@ describe('Test multiple pods', function () {
         utils.getVideosList(url, function (err, res) {
           if (err) throw err
 
-          var videos = res.body
+          const videos = res.body
           expect(videos).to.be.an('array')
           expect(videos.length).to.equal(2)
           expect(videos[0]._id).not.to.equal(videos[1]._id)

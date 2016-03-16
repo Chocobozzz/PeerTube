@@ -1,8 +1,8 @@
 'use strict'
 
-var validator = require('validator')
+const validator = require('validator')
 
-var customValidators = {
+const customValidators = {
   eachIsRemoteVideosAddValid: eachIsRemoteVideosAddValid,
   eachIsRemoteVideosRemoveValid: eachIsRemoteVideosRemoveValid,
   isArray: isArray

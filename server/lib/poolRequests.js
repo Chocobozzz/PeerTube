@@ -1,18 +1,18 @@
 'use strict'
 
-var async = require('async')
-var pluck = require('lodash-node/compat/collection/pluck')
+const async = require('async')
+const pluck = require('lodash-node/compat/collection/pluck')
 
-var constants = require('../initializers/constants')
-var logger = require('../helpers/logger')
-var Pods = require('../models/pods')
-var PoolRequests = require('../models/poolRequests')
-var requests = require('../helpers/requests')
-var Videos = require('../models/videos')
+const constants = require('../initializers/constants')
+const logger = require('../helpers/logger')
+const Pods = require('../models/pods')
+const PoolRequests = require('../models/poolRequests')
+const requests = require('../helpers/requests')
+const Videos = require('../models/videos')
 
-var timer = null
+let timer = null
 
-var poolRequests = {
+const poolRequests = {
   activate: activate,
   addRequest: addRequest,
   deactivate: deactivate,
@@ -77,7 +77,7 @@ function makePoolRequest (type, requests_to_make, callback) {
   Pods.list(function (err, pods) {
     if (err) return callback(err)
 
-    var params = {
+    const params = {
       encrypt: true,
       sign: true,
       method: 'POST',
@@ -93,8 +93,8 @@ function makePoolRequest (type, requests_to_make, callback) {
       return callback(new Error('Unkown pool request type.'))
     }
 
-    var bad_pods = []
-    var good_pods = []
+    const bad_pods = []
+    const good_pods = []
 
     requests.makeMultipleRetryRequest(params, pods, callbackEachPodFinished, callbackAllPodsFinished)
 
@@ -129,7 +129,7 @@ function makePoolRequests () {
 
     if (pool_requests.length === 0) return
 
-    var requests_to_make = {
+    const requests_to_make = {
       add: {
         ids: [],
         requests: []
@@ -184,14 +184,14 @@ function removeBadPods () {
 
     if (pods.length === 0) return
 
-    var urls = pluck(pods, 'url')
-    var ids = pluck(pods, '_id')
+    const urls = pluck(pods, 'url')
+    const ids = pluck(pods, '_id')
 
     Videos.removeAllRemotesOf(urls, function (err, r) {
       if (err) {
         logger.error('Cannot remove videos from a pod that we removing.', { error: err })
       } else {
-        var videos_removed = r.result.n
+        const videos_removed = r.result.n
         logger.info('Removed %d videos.', videos_removed)
       }
 
@@ -199,7 +199,7 @@ function removeBadPods () {
         if (err) {
           logger.error('Cannot remove bad pods.', { error: err })
         } else {
-          var pods_removed = r.result.n
+          const pods_removed = r.result.n
           logger.info('Removed %d pods.', pods_removed)
         }
       })

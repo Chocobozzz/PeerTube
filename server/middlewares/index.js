@@ -1,10 +1,10 @@
 'use strict'
 
-var cacheMiddleware = require('./cache')
-var reqValidatorsMiddleware = require('./reqValidators')
-var secureMiddleware = require('./secure')
+const cacheMiddleware = require('./cache')
+const reqValidatorsMiddleware = require('./reqValidators')
+const secureMiddleware = require('./secure')
 
-var middlewares = {
+const middlewares = {
   cache: cacheMiddleware,
   reqValidators: reqValidatorsMiddleware,
   secure: secureMiddleware

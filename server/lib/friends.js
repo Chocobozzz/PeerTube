@@ -1,23 +1,23 @@
 'use strict'
 
-var async = require('async')
-var config = require('config')
-var fs = require('fs')
-var request = require('request')
+const async = require('async')
+const config = require('config')
+const fs = require('fs')
+const request = require('request')
 
-var constants = require('../initializers/constants')
-var logger = require('../helpers/logger')
-var peertubeCrypto = require('../helpers/peertubeCrypto')
-var Pods = require('../models/pods')
-var poolRequests = require('../lib/poolRequests')
-var requests = require('../helpers/requests')
-var Videos = require('../models/videos')
+const constants = require('../initializers/constants')
+const logger = require('../helpers/logger')
+const peertubeCrypto = require('../helpers/peertubeCrypto')
+const Pods = require('../models/pods')
+const poolRequests = require('../lib/poolRequests')
+const requests = require('../helpers/requests')
+const Videos = require('../models/videos')
 
-var http = config.get('webserver.https') ? 'https' : 'http'
-var host = config.get('webserver.host')
-var port = config.get('webserver.port')
+const http = config.get('webserver.https') ? 'https' : 'http'
+const host = config.get('webserver.host')
+const port = config.get('webserver.port')
 
-var pods = {
+const pods = {
   addVideoToFriends: addVideoToFriends,
   hasFriends: hasFriends,
   makeFriends: makeFriends,
@@ -27,7 +27,7 @@ var pods = {
 
 function addVideoToFriends (video) {
   // To avoid duplicates
-  var id = video.name + video.magnetUri
+  const id = video.name + video.magnetUri
   // ensure namePath is null
   video.namePath = null
   poolRequests.addRequest(id, 'add', video)
@@ -37,13 +37,13 @@ function hasFriends (callback) {
   Pods.count(function (err, count) {
     if (err) return callback(err)
 
-    var has_friends = (count !== 0)
+    const has_friends = (count !== 0)
     callback(null, has_friends)
   })
 }
 
 function makeFriends (callback) {
-  var pods_score = {}
+  const pods_score = {}
 
   logger.info('Make friends!')
   fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
@@ -52,7 +52,7 @@ function makeFriends (callback) {
       return callback(err)
     }
 
-    var urls = config.get('network.friends')
+    const urls = config.get('network.friends')
 
     async.each(urls, function (url, callback) {
       computeForeignPodsList(url, pods_score, callback)
@@ -60,8 +60,8 @@ function makeFriends (callback) {
       if (err) return callback(err)
 
       logger.debug('Pods scores computed.', { pods_score: pods_score })
-      var pods_list = computeWinningPods(urls, pods_score)
-      logger.debug('Pods that we keep computed.', { pods_to_keep: pods_list })
+      const pods_list = computeWinningPods(urls, pods_score)
+      logger.debug('Pods that we keep.', { pods_to_keep: pods_list })
 
       makeRequestsToWinningPods(cert, pods_list, callback)
     })
@@ -77,7 +77,7 @@ function quitFriends (callback) {
   Pods.list(function (err, pods) {
     if (err) return callback(err)
 
-    var request = {
+    const request = {
       method: 'POST',
       path: '/api/' + constants.API_VERSION + '/pods/remove',
       sign: true,
@@ -109,7 +109,7 @@ function quitFriends (callback) {
 
 function removeVideoToFriends (video) {
   // To avoid duplicates
-  var id = video.name + video.magnetUri
+  const id = video.name + video.magnetUri
   poolRequests.addRequest(id, 'remove', video)
 }
 
@@ -128,7 +128,7 @@ function computeForeignPodsList (url, pods_score, callback) {
     if (foreign_pods_list.length === 0) return callback()
 
     async.each(foreign_pods_list, function (foreign_pod, callback_each) {
-      var foreign_url = foreign_pod.url
+      const foreign_url = foreign_pod.url
 
       if (pods_score[foreign_url]) pods_score[foreign_url]++
       else pods_score[foreign_url] = 1
@@ -143,8 +143,8 @@ function computeForeignPodsList (url, pods_score, callback) {
 function computeWinningPods (urls, pods_score) {
   // Build the list of pods to add
   // Only add a pod if it exists in more than a half base pods
-  var pods_list = []
-  var base_score = urls.length / 2
+  const pods_list = []
+  const base_score = urls.length / 2
   Object.keys(pods_score).forEach(function (pod) {
     if (pods_score[pod] > base_score) pods_list.push({ url: pod })
   })
@@ -153,7 +153,7 @@ function computeWinningPods (urls, pods_score) {
 }
 
 function getForeignPodsList (url, callback) {
-  var path = '/api/' + constants.API_VERSION + '/pods'
+  const path = '/api/' + constants.API_VERSION + '/pods'
 
   request.get(url + path, function (err, response, body) {
     if (err) return callback(err)
@@ -175,7 +175,7 @@ function makeRequestsToWinningPods (cert, pods_list, callback) {
       return callback(err)
     }
 
-    var data = {
+    const data = {
       url: http + '://' + host + ':' + port,
       publicKey: cert,
       videos: videos_list

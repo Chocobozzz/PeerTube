@@ -1,9 +1,9 @@
 'use strict'
 
-var checkErrors = require('./utils').checkErrors
-var logger = require('../../helpers/logger')
+const checkErrors = require('./utils').checkErrors
+const logger = require('../../helpers/logger')
 
-var reqValidatorsRemote = {
+const reqValidatorsRemote = {
   remoteVideosAdd: remoteVideosAdd,
   remoteVideosRemove: remoteVideosRemove,
   secureRequest: secureRequest

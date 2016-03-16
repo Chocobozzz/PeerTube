@@ -1,10 +1,10 @@
 'use strict'
 
-var podsReqValidators = require('./pods')
-var remoteReqValidators = require('./remote')
-var videosReqValidators = require('./videos')
+const podsReqValidators = require('./pods')
+const remoteReqValidators = require('./remote')
+const videosReqValidators = require('./videos')
 
-var reqValidators = {
+const reqValidators = {
   pods: podsReqValidators,
   remote: remoteReqValidators,
   videos: videosReqValidators

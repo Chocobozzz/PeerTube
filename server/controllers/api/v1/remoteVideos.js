@@ -1,15 +1,15 @@
 'use strict'
 
-var express = require('express')
-var pluck = require('lodash-node/compat/collection/pluck')
+const express = require('express')
+const pluck = require('lodash-node/compat/collection/pluck')
 
-var middleware = require('../../../middlewares')
-var secureMiddleware = middleware.secure
-var cacheMiddleware = middleware.cache
-var reqValidator = middleware.reqValidators.remote
-var videos = require('../../../models/videos')
+const middleware = require('../../../middlewares')
+const secureMiddleware = middleware.secure
+const cacheMiddleware = middleware.cache
+const reqValidator = middleware.reqValidators.remote
+const videos = require('../../../models/videos')
 
-var router = express.Router()
+const router = express.Router()
 
 router.post('/add',
   reqValidator.secureRequest,
@@ -42,8 +42,8 @@ function addRemoteVideos (req, res, next) {
 }
 
 function removeRemoteVideo (req, res, next) {
-  var url = req.body.signature.url
-  var magnetUris = pluck(req.body.data, 'magnetUri')
+  const url = req.body.signature.url
+  const magnetUris = pluck(req.body.data, 'magnetUri')
 
   videos.removeRemotesOfByMagnetUris(url, magnetUris, function (err) {
     if (err) return next(err)

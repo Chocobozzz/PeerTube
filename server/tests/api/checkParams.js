@@ -1,27 +1,27 @@
 'use strict'
 
-var async = require('async')
-var chai = require('chai')
-var expect = chai.expect
-var pathUtils = require('path')
-var request = require('supertest')
+const async = require('async')
+const chai = require('chai')
+const expect = chai.expect
+const pathUtils = require('path')
+const request = require('supertest')
 
-var utils = require('./utils')
+const utils = require('./utils')
 
 describe('Test parameters validator', function () {
-  var app = null
-  var url = ''
+  let app = null
+  let url = ''
 
   function makePostRequest (path, fields, attach, done, fail) {
-    var status_code = 400
+    let status_code = 400
     if (fail !== undefined && fail === false) status_code = 200
 
-    var req = request(url)
+    const req = request(url)
       .post(path)
       .set('Accept', 'application/json')
 
     Object.keys(fields).forEach(function (field) {
-      var value = fields[field]
+      const value = fields[field]
       req.field(field, value)
     })
 
@@ -29,7 +29,7 @@ describe('Test parameters validator', function () {
   }
 
   function makePostBodyRequest (path, fields, done, fail) {
-    var status_code = 400
+    let status_code = 400
     if (fail !== undefined && fail === false) status_code = 200
 
     request(url)
@@ -59,16 +59,16 @@ describe('Test parameters validator', function () {
   })
 
   describe('Of the pods API', function () {
-    var path = '/api/v1/pods/'
+    const path = '/api/v1/pods/'
 
     describe('When adding a pod', function () {
       it('Should fail with nothing', function (done) {
-        var data = {}
+        const data = {}
         makePostBodyRequest(path, data, done)
       })
 
       it('Should fail without public key', function (done) {
-        var data = {
+        const data = {
           data: {
             url: 'http://coucou.com'
           }
@@ -77,7 +77,7 @@ describe('Test parameters validator', function () {
       })
 
       it('Should fail without an url', function (done) {
-        var data = {
+        const data = {
           data: {
             publicKey: 'mysuperpublickey'
           }
@@ -86,7 +86,7 @@ describe('Test parameters validator', function () {
       })
 
       it('Should fail with an incorrect url', function (done) {
-        var data = {
+        const data = {
           data: {
             url: 'coucou.com',
             publicKey: 'mysuperpublickey'
@@ -102,7 +102,7 @@ describe('Test parameters validator', function () {
       })
 
       it('Should succeed with the correct parameters', function (done) {
-        var data = {
+        const data = {
           data: {
             url: 'http://coucou.com',
             publicKey: 'mysuperpublickey'
@@ -114,7 +114,7 @@ describe('Test parameters validator', function () {
   })
 
   describe('Of the videos API', function () {
-    var path = '/api/v1/videos/'
+    const path = '/api/v1/videos/'
 
     describe('When searching a video', function () {
       it('Should fail with nothing', function (done) {
@@ -127,81 +127,81 @@ describe('Test parameters validator', function () {
 
     describe('When adding a video', function () {
       it('Should fail with nothing', function (done) {
-        var data = {}
-        var attach = {}
+        const data = {}
+        const attach = {}
         makePostRequest(path, data, attach, done)
       })
 
       it('Should fail without name', function (done) {
-        var data = {
+        const data = {
           description: 'my super description'
         }
-        var attach = {
+        const attach = {
           'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
 
       it('Should fail with a long name', function (done) {
-        var data = {
+        const data = {
           name: 'My very very very very very very very very very very very very very very very very long name',
           description: 'my super description'
         }
-        var attach = {
+        const attach = {
           'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
 
       it('Should fail without description', function (done) {
-        var data = {
+        const data = {
           name: 'my super name'
         }
-        var attach = {
+        const attach = {
           'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
 
       it('Should fail with a long description', function (done) {
-        var data = {
+        const data = {
           name: 'my super name',
           description: 'my super description which is very very very very very very very very very very very very very very' +
                        'very very very very very very very very very very very very very very very very very very very very very' +
                        'very very very very very very very very very very very very very very very long'
         }
-        var attach = {
+        const attach = {
           'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
 
       it('Should fail without an input file', function (done) {
-        var data = {
+        const data = {
           name: 'my super name',
           description: 'my super description'
         }
-        var attach = {}
+        const attach = {}
         makePostRequest(path, data, attach, done)
       })
 
       it('Should fail without an incorrect input file', function (done) {
-        var data = {
+        const data = {
           name: 'my super name',
           description: 'my super description'
         }
-        var attach = {
+        const attach = {
           'input_video': pathUtils.join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
         }
         makePostRequest(path, data, attach, done)
       })
 
       it('Should succeed with the correct parameters', function (done) {
-        var data = {
+        const data = {
           name: 'my super name',
           description: 'my super description'
         }
-        var attach = {
+        const attach = {
           'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, function () {

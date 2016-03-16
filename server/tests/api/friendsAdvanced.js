@@ -1,14 +1,14 @@
 'use strict'
 
-var async = require('async')
-var chai = require('chai')
-var expect = chai.expect
+const async = require('async')
+const chai = require('chai')
+const expect = chai.expect
 
-var utils = require('./utils')
+const utils = require('./utils')
 
 describe('Test advanced friends', function () {
-  var apps = []
-  var urls = []
+  let apps = []
+  let urls = []
 
   function makeFriends (pod_number, callback) {
     return utils.makeFriends(urls[pod_number - 1], callback)
@@ -23,9 +23,9 @@ describe('Test advanced friends', function () {
   }
 
   function uploadVideo (pod_number, callback) {
-    var name = 'my super video'
-    var description = 'my super description'
-    var fixture = 'video_short.webm'
+    const name = 'my super video'
+    const description = 'my super description'
+    const fixture = 'video_short.webm'
 
     return utils.uploadVideo(urls[pod_number - 1], name, description, fixture, callback)
   }
@@ -171,9 +171,9 @@ describe('Test advanced friends', function () {
           if (err) throw err
 
           // Pod 4 should not be our friend
-          var result = res.body
+          const result = res.body
           expect(result.length).to.equal(3)
-          for (var pod of result) {
+          for (const pod of result) {
             expect(pod.url).not.equal(urls[3])
           }
 
