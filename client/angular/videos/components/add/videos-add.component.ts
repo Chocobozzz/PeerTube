@@ -36,7 +36,7 @@ export class VideosAddComponent implements OnInit {
 
       progressall: (e, data) => {
         this.progressBar.value = data.loaded;
-        this.progressBar.max= data.total;
+        this.progressBar.max = data.total;
       },
 
       done: (e, data) => {

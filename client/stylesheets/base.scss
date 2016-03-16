@@ -7,18 +7,5 @@ footer {
   padding-top: 10px;
   text-align: center;
   font-size: small;
-}
-
-.search-group {
-  .search-btn {
-    position: relative;
-    left: -40px;
-    top: 0;
-
-    &:hover { text-decoration: none; }
-  }
-}
-
-.panel_block:not(:last-child) {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
 }

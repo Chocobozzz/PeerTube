@@ -12,12 +12,14 @@
     </div>
   </div>
 
-  <div class="btn btn-default btn-file">
-    <span>Select the video...</span>
-    <input type="file" name="input_video" id="input_video">
-  </div>
+  <div class="form-group">
+    <div class="btn btn-default btn-file">
+      <span>Select the video...</span>
+      <input type="file" name="input_video" id="input_video">
+    </div>
 
-  <span *ngIf="fileToUpload">{{ fileToUpload.name }}</span>
+    <span *ngIf="fileToUpload">{{ fileToUpload.name }}</span>
+  </div>
 
   <div class="form-group">
     <label for="description">Description</label>
