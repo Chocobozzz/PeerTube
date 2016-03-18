@@ -35,7 +35,7 @@ const storage = multer.diskStorage({
   }
 })
 
-const reqFiles = multer({ storage: storage }).fields([{ name: 'input_video', maxCount: 1 }])
+const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
 
 router.get('/', cacheMiddleware.cache(false), listVideos)
 router.post('/', reqFiles, reqValidator.videosAdd, cacheMiddleware.cache(false), addVideo)
@@ -50,7 +50,7 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addVideo (req, res, next) {
-  const video_file = req.files.input_video[0]
+  const video_file = req.files.videofile[0]
   const video_infos = req.body
 
   videos.seed(video_file.path, function (err, torrent) {

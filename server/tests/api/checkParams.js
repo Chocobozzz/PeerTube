@@ -137,7 +137,7 @@ describe('Test parameters validator', function () {
           description: 'my super description'
         }
         const attach = {
-          'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
@@ -148,7 +148,7 @@ describe('Test parameters validator', function () {
           description: 'my super description'
         }
         const attach = {
-          'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
@@ -158,7 +158,7 @@ describe('Test parameters validator', function () {
           name: 'my super name'
         }
         const attach = {
-          'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
@@ -171,7 +171,7 @@ describe('Test parameters validator', function () {
                        'very very very very very very very very very very very very very very very long'
         }
         const attach = {
-          'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, done)
       })
@@ -191,7 +191,7 @@ describe('Test parameters validator', function () {
           description: 'my super description'
         }
         const attach = {
-          'input_video': pathUtils.join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+          'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
         }
         makePostRequest(path, data, attach, done)
       })
@@ -202,12 +202,12 @@ describe('Test parameters validator', function () {
           description: 'my super description'
         }
         const attach = {
-          'input_video': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
         makePostRequest(path, data, attach, function () {
-          attach.input_video = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
+          attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
           makePostRequest(path, data, attach, function () {
-            attach.input_video = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
+            attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
             makePostRequest(path, data, attach, done, true)
           }, true)
         }, true)

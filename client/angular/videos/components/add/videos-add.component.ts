@@ -22,7 +22,7 @@ export class VideosAddComponent implements OnInit {
   constructor(private _router: Router, private _elementRef: ElementRef) {}
 
   ngOnInit() {
-    jQuery(this._elementRef.nativeElement).find('#input_video').fileupload({
+    jQuery(this._elementRef.nativeElement).find('#videofile').fileupload({
       url: '/api/v1/videos',
       dataType: 'json',
       singleFileUploads: true,
