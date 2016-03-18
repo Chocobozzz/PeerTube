@@ -1,6 +1,8 @@
 export interface Video {
-  _id: string;
+  id: string;
   name: string;
   description: string;
   magnetUri: string;
+  podUrl: string;
+  isLocal: boolean;
 }

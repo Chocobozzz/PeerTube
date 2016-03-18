@@ -35,11 +35,10 @@ function videosGet (req, res, next) {
         res.sendStatus(500)
       }
 
-      videos.getVideoState(video, function (state) {
-        if (state.exist === false) return res.status(404).send('Video not found')
+      const state = videos.getVideoState(video)
+      if (state.exist === false) return res.status(404).send('Video not found')
 
-        next()
-      })
+      next()
     })
   })
 }
@@ -56,12 +55,11 @@ function videosRemove (req, res, next) {
         res.sendStatus(500)
       }
 
-      videos.getVideoState(video, function (state) {
-        if (state.exist === false) return res.status(404).send('Video not found')
-        else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
+      const state = videos.getVideoState(video)
+      if (state.exist === false) return res.status(404).send('Video not found')
+      else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
 
-        next()
-      })
+      next()
     })
   })
 }

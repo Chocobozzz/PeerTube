@@ -1,8 +1,8 @@
 <div *ngFor="#video of videos" class="video">
   <div>
-    <a [routerLink]="['VideosWatch', { id: video._id }]" class="video_name">{{ video.name }}</a>
+    <a [routerLink]="['VideosWatch', { id: video.id }]" class="video_name">{{ video.name }}</a>
     <span class="video_pod_url">{{ video.podUrl }}</span>
-    <span *ngIf="video.namePath !== null" (click)="removeVideo(video._id)" class="video_remove glyphicon glyphicon-remove"></span>
+    <span *ngIf="video.isLocal === true" (click)="removeVideo(video.id)" class="video_remove glyphicon glyphicon-remove"></span>
   </div>
 
   <div class="video_description">

@@ -16,14 +16,14 @@ const videos = {
   seedAllExisting: seedAllExisting
 }
 
-function getVideoState (video, callback) {
+function getVideoState (video) {
   const exist = (video !== null)
   let owned = false
   if (exist === true) {
     owned = (video.namePath !== null)
   }
 
-  return callback({ exist: exist, owned: owned })
+  return { exist: exist, owned: owned }
 }
 
 function seed (path, callback) {

@@ -205,8 +205,8 @@ describe('Test multiple pods', function () {
         if (err) throw err
 
         const video = res.body[0]
-        to_remove.push(res.body[2]._id)
-        to_remove.push(res.body[3]._id)
+        to_remove.push(res.body[2].id)
+        to_remove.push(res.body[3].id)
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -300,11 +300,11 @@ describe('Test multiple pods', function () {
           const videos = res.body
           expect(videos).to.be.an('array')
           expect(videos.length).to.equal(2)
-          expect(videos[0]._id).not.to.equal(videos[1]._id)
-          expect(videos[0]._id).not.to.equal(to_remove[0])
-          expect(videos[1]._id).not.to.equal(to_remove[0])
-          expect(videos[0]._id).not.to.equal(to_remove[1])
-          expect(videos[1]._id).not.to.equal(to_remove[1])
+          expect(videos[0].id).not.to.equal(videos[1].id)
+          expect(videos[0].id).not.to.equal(to_remove[0])
+          expect(videos[1].id).not.to.equal(to_remove[0])
+          expect(videos[0].id).not.to.equal(to_remove[1])
+          expect(videos[1].id).not.to.equal(to_remove[1])
 
           callback()
         })

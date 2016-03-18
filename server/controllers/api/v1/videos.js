@@ -83,14 +83,15 @@ function addVideo (req, res, next) {
 }
 
 function getVideos (req, res, next) {
-  Videos.get(req.params.id, function (err, video) {
+  Videos.get(req.params.id, function (err, video_obj) {
     if (err) return next(err)
 
-    if (video === null) {
-      res.type('json').status(204).end()
+    const state = videos.getVideoState(video_obj)
+    if (state.exist === false) {
+      return res.type('json').status(204).end()
     }
 
-    res.json(video)
+    res.json(getFormatedVideo(video_obj))
   })
 }
 
@@ -98,7 +99,7 @@ function listVideos (req, res, next) {
   Videos.list(function (err, videos_list) {
     if (err) return next(err)
 
-    res.json(videos_list)
+    res.json(getFormatedVideos(videos_list))
   })
 }
 
@@ -127,11 +128,34 @@ function searchVideos (req, res, next) {
   Videos.search(req.params.name, function (err, videos_list) {
     if (err) return next(err)
 
-    res.json(videos_list)
+    res.json(getFormatedVideos(videos_list))
   })
 }
 
 // ---------------------------------------------------------------------------
+
+function getFormatedVideo (video_obj) {
+  const formated_video = {
+    id: video_obj._id,
+    name: video_obj.name,
+    description: video_obj.description,
+    podUrl: video_obj.podUrl,
+    isLocal: videos.getVideoState(video_obj).owned,
+    magnetUri: video_obj.magnetUri
+  }
+
+  return formated_video
+}
+
+function getFormatedVideos (videos_obj) {
+  const formated_videos = []
+
+  videos_obj.forEach(function (video_obj) {
+    formated_videos.push(getFormatedVideo(video_obj))
+  })
+
+  return formated_videos
+}
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
 function removeTorrent (magnetUri, callback) {

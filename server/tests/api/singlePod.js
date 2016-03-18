@@ -68,7 +68,30 @@ describe('Test a single pod', function () {
       expect(video.podUrl).to.equal('http://localhost:9001')
       expect(video.magnetUri).to.exist
 
-      video_id = video._id
+      video_id = video.id
+
+      webtorrent.add(video.magnetUri, function (torrent) {
+        expect(torrent.files).to.exist
+        expect(torrent.files.length).to.equal(1)
+        expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+        done()
+      })
+    })
+  })
+
+  it('Should get the video', function (done) {
+    // Yes, this could be long
+    this.timeout(60000)
+
+    utils.getVideo(url, video_id, function (err, res) {
+      if (err) throw err
+
+      const video = res.body
+      expect(video.name).to.equal('my super name')
+      expect(video.description).to.equal('my super description')
+      expect(video.podUrl).to.equal('http://localhost:9001')
+      expect(video.magnetUri).to.exist
 
       webtorrent.add(video.magnetUri, function (torrent) {
         expect(torrent.files).to.exist
@@ -91,7 +114,6 @@ describe('Test a single pod', function () {
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
       expect(video.podUrl).to.equal('http://localhost:9001')
-      expect(video.magnetUri).to.exist
 
       done()
     })

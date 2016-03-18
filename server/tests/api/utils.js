@@ -9,6 +9,7 @@ const request = require('supertest')
 const testUtils = {
   flushTests: flushTests,
   getFriendsList: getFriendsList,
+  getVideo: getVideo,
   getVideosList: getVideosList,
   makeFriends: makeFriends,
   quitFriends: quitFriends,
@@ -27,6 +28,17 @@ function flushTests (callback) {
 
 function getFriendsList (url, end) {
   const path = '/api/v1/pods/'
+
+  request(url)
+    .get(path)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getVideo (url, id, end) {
+  const path = '/api/v1/videos/' + id
 
   request(url)
     .get(path)
