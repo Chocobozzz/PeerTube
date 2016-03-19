@@ -83,7 +83,7 @@ function webtorrent (args) {
   })
 
   process.on('uncaughtException', function (e) {
-    ipc.of[nodeKey].emit(processKey + '.exception', { exception: e })
+    ipc.of[nodeKey].emit(processKey + '.exception', { exception: e.toString() })
   })
 }
 

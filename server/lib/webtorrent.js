@@ -53,7 +53,7 @@ function create (options, callback) {
     })
 
     ipc.server.on(processKey + '.exception', function (data) {
-      throw new Error('Received exception error from webtorrent process.' + data.exception)
+      throw new Error('Received exception error from webtorrent process : ' + data.exception)
     })
 
     const webtorrent_process = spawn(pathUtils.join(__dirname, 'webtorrentProcess.js'), host, port, { detached: true })
