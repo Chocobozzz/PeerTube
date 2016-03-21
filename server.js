@@ -119,6 +119,14 @@ app.use(function (err, req, res, next) {
   res.sendStatus(err.status || 500)
 })
 
+// TODO: move into initializer
+require('./server/models/users').createClient('coucou', [ 'password' ], function (err, id) {
+  if (err) throw err
+  logger.info('Client id: ' + id)
+
+  require('./server/models/users').createUser('floflo', 'coucou', function () {})
+})
+
 // ----------- Create the certificates if they don't already exist -----------
 peertubeCrypto.createCertsIfNotExist(function (err) {
   if (err) throw err

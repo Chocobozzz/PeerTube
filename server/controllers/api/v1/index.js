@@ -6,10 +6,12 @@ const router = express.Router()
 
 const podsController = require('./pods')
 const remoteVideosController = require('./remoteVideos')
+const usersController = require('./users')
 const videosController = require('./videos')
 
 router.use('/pods', podsController)
 router.use('/remotevideos', remoteVideosController)
+router.use('/users', usersController)
 router.use('/videos', videosController)
 router.use('/*', badRequest)
 
