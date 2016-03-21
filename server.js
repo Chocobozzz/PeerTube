@@ -1,41 +1,41 @@
 'use strict'
 
 // ----------- Node modules -----------
-var bodyParser = require('body-parser')
-var express = require('express')
-var expressValidator = require('express-validator')
-var http = require('http')
-var morgan = require('morgan')
-var path = require('path')
-var TrackerServer = require('bittorrent-tracker').Server
-var WebSocketServer = require('ws').Server
+const bodyParser = require('body-parser')
+const express = require('express')
+const expressValidator = require('express-validator')
+const http = require('http')
+const morgan = require('morgan')
+const path = require('path')
+const TrackerServer = require('bittorrent-tracker').Server
+const WebSocketServer = require('ws').Server
 
 // Create our main app
-var app = express()
+const app = express()
 
 // ----------- Checker -----------
-var checker = require('./server/initializers/checker')
+const checker = require('./server/initializers/checker')
 
-var miss = checker.checkConfig()
+const miss = checker.checkConfig()
 if (miss.length !== 0) {
   throw new Error('Miss some configurations keys : ' + miss)
 }
 
 // ----------- PeerTube modules -----------
-var config = require('config')
-var constants = require('./server/initializers/constants')
-var customValidators = require('./server/helpers/customValidators')
-var database = require('./server/initializers/database')
-var installer = require('./server/initializers/installer')
-var logger = require('./server/helpers/logger')
-var poolRequests = require('./server/lib/poolRequests')
-var routes = require('./server/controllers')
-var utils = require('./server/helpers/utils')
-var videos = require('./server/lib/videos')
-var webtorrent = require('./server/lib/webtorrent')
+const config = require('config')
+const constants = require('./server/initializers/constants')
+const customValidators = require('./server/helpers/customValidators')
+const database = require('./server/initializers/database')
+const installer = require('./server/initializers/installer')
+const logger = require('./server/helpers/logger')
+const poolRequests = require('./server/lib/poolRequests')
+const routes = require('./server/controllers')
+const utils = require('./server/helpers/utils')
+const videos = require('./server/lib/videos')
+const webtorrent = require('./server/lib/webtorrent')
 
 // Get configurations
-var port = config.get('listen.port')
+const port = config.get('listen.port')
 
 // ----------- Database -----------
 database.connect()
@@ -65,7 +65,7 @@ app.use(require('connect-livereload')({
 require('segfault-handler').registerHandler()
 
 // API routes
-var api_route = '/api/' + constants.API_VERSION
+const api_route = '/api/' + constants.API_VERSION
 app.use(api_route, routes.api)
 
 // Static files
@@ -82,7 +82,7 @@ app.use('/*', function (req, res, next) {
 
 // ----------- Tracker -----------
 
-var trackerServer = new TrackerServer({
+const trackerServer = new TrackerServer({
   http: false,
   udp: false,
   ws: false,
@@ -97,8 +97,8 @@ trackerServer.on('warning', function (err) {
   logger.error(err)
 })
 
-var server = http.createServer(app)
-var wss = new WebSocketServer({server: server, path: '/tracker/socket'})
+const server = http.createServer(app)
+const wss = new WebSocketServer({server: server, path: '/tracker/socket'})
 wss.on('connection', function (ws) {
   trackerServer.onWebSocketConnection(ws)
 })
@@ -107,7 +107,7 @@ wss.on('connection', function (ws) {
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  var err = new Error('Not Found')
+  const err = new Error('Not Found')
   err.status = 404
   next(err)
 })
