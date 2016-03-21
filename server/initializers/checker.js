@@ -1,12 +1,13 @@
 'use strict'
 
 const config = require('config')
-const mkdirp = require('mkdirp')
-const path = require('path')
+
+const Users = require('../models/users')
 
 const checker = {
   checkConfig: checkConfig,
-  createDirectoriesIfNotExist: createDirectoriesIfNotExist
+  clientsExist: clientsExist,
+  usersExist: usersExist
 }
 
 // Check the config files
@@ -27,18 +28,20 @@ function checkConfig () {
   return miss
 }
 
-// Create directories for the storage if it doesn't exist
-function createDirectoriesIfNotExist () {
-  const storages = config.get('storage')
+function clientsExist (callback) {
+  Users.getClients(function (err, clients) {
+    if (err) return callback(err)
 
-  for (const key of Object.keys(storages)) {
-    const dir = storages[key]
-    try {
-      mkdirp.sync(path.join(__dirname, '..', '..', dir))
-    } catch (error) {
-      throw new Error('Cannot create ' + path + ':' + error)
-    }
-  }
+    return callback(null, clients.length !== 0)
+  })
+}
+
+function usersExist (callback) {
+  Users.getUsers(function (err, users) {
+    if (err) return callback(err)
+
+    return callback(null, users.length !== 0)
+  })
 }
 
 // ---------------------------------------------------------------------------

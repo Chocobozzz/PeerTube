@@ -21,15 +21,13 @@ if (miss.length !== 0) {
   throw new Error('Miss some configurations keys : ' + miss)
 }
 
-checker.createDirectoriesIfNotExist()
-
 // ----------- PeerTube modules -----------
 var config = require('config')
 var constants = require('./server/initializers/constants')
 var customValidators = require('./server/helpers/customValidators')
 var database = require('./server/initializers/database')
+var installer = require('./server/initializers/installer')
 var logger = require('./server/helpers/logger')
-var peertubeCrypto = require('./server/helpers/peertubeCrypto')
 var poolRequests = require('./server/lib/poolRequests')
 var routes = require('./server/controllers')
 var utils = require('./server/helpers/utils')
@@ -119,17 +117,9 @@ app.use(function (err, req, res, next) {
   res.sendStatus(err.status || 500)
 })
 
-// TODO: move into initializer
-require('./server/models/users').createClient('coucou', [ 'password' ], function (err, id) {
+installer.installApplication(function (err) {
   if (err) throw err
-  logger.info('Client id: ' + id)
 
-  require('./server/models/users').createUser('floflo', 'coucou', function () {})
-})
-
-// ----------- Create the certificates if they don't already exist -----------
-peertubeCrypto.createCertsIfNotExist(function (err) {
-  if (err) throw err
   // Create/activate the webtorrent module
   webtorrent.create(function () {
     function cleanForExit () {

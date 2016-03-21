@@ -34,8 +34,10 @@ const Users = {
   createUser: createUser,
   getAccessToken: getAccessToken,
   getClient: getClient,
+  getClients: getClients,
   getRefreshToken: getRefreshToken,
   getUser: getUser,
+  getUsers: getUsers,
   saveToken: saveToken
 }
 
@@ -70,6 +72,10 @@ function getClient (clientId, clientSecret) {
   return OAuthClientsDB.findOne({ _id: mongo_id, clientSecret: clientSecret })
 }
 
+function getClients (callback) {
+  return OAuthClientsDB.find(callback)
+}
+
 function getRefreshToken (refreshToken) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
@@ -79,6 +85,10 @@ function getRefreshToken (refreshToken) {
 function getUser (username, password) {
   logger.debug('Getting User (username: ' + username + ', password: ' + password + ').')
   return UsersDB.findOne({ username: username, password: password })
+}
+
+function getUsers (callback) {
+  return UsersDB.find(callback)
 }
 
 function saveToken (token, client, user) {
