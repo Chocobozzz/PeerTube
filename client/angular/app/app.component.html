@@ -18,6 +18,14 @@
 
     <menu class="col-md-2">
       <div class="panel_block">
+        <div id="panel_user_login" class="panel_button">
+          <span class="glyphicon glyphicon-user"></span>
+          <a *ngIf="!isLoggedIn" [routerLink]="['UserLogin']">Login</a>
+          <a *ngIf="isLoggedIn" (click)="logout()">Logout</a>
+        </div>
+      </div>
+
+      <div class="panel_block">
         <div id="panel_get_videos" class="panel_button">
           <span class="glyphicon glyphicon-list"></span>
           <a [routerLink]="['VideosList']">Get videos</a>
@@ -31,7 +39,7 @@
 
       <div class="panel_block">
         <div id="panel_make_friends" class="panel_button">
-          <span class="glyphicon glyphicon-user"></span>
+          <span class="glyphicon glyphicon-cloud"></span>
           <a (click)='makeFriends()'>Make friends</a>
         </div>
 

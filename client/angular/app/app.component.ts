@@ -7,8 +7,16 @@ import { VideosListComponent } from '../videos/components/list/videos-list.compo
 import { VideosWatchComponent } from '../videos/components/watch/videos-watch.component';
 import { VideosService } from '../videos/services/videos.service';
 import { FriendsService } from '../friends/services/friends.service';
+import { UserLoginComponent } from '../users/components/login/login.component';
+import { AuthService } from '../users/services/auth.service';
+import { AuthStatus } from '../users/models/authStatus';
 
 @RouteConfig([
+  {
+    path: '/users/login',
+    name: 'UserLogin',
+    component: UserLoginComponent
+  },
   {
     path: '/videos/list',
     name: 'VideosList',
@@ -32,11 +40,30 @@ import { FriendsService } from '../friends/services/friends.service';
     templateUrl: 'app/angular/app/app.component.html',
     styleUrls: [ 'app/angular/app/app.component.css' ],
     directives: [ ROUTER_DIRECTIVES ],
-    providers: [ ROUTER_PROVIDERS, HTTP_PROVIDERS, ElementRef, VideosService, FriendsService ]
+    providers: [ ROUTER_PROVIDERS, HTTP_PROVIDERS,
+                 ElementRef, VideosService, FriendsService,
+                 AuthService
+               ]
 })
 
 export class AppComponent {
-  constructor(private _friendsService: FriendsService, private _router: Router) {}
+  isLoggedIn: boolean;
+
+  constructor(private _friendsService: FriendsService,
+              private _authService: AuthService,
+              private _router: Router
+  ) {
+    if (localStorage.getItem('access_token')) this.isLoggedIn = true;
+    else this.isLoggedIn = false;
+
+    this._authService.loginChanged$.subscribe(
+      status => {
+        if (status === AuthStatus.LoggedIn) {
+          this.isLoggedIn = true;
+        }
+      }
+    );
+  }
 
   doSearch(search: string) {
     if (search !== '') {
@@ -44,6 +71,10 @@ export class AppComponent {
     } else {
       this._router.navigate(['VideosList']);
     }
+  }
+
+  logout() {
+    // this._authService.logout();
   }
 
   makeFriends() {
