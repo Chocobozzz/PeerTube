@@ -31,7 +31,7 @@
           <a [routerLink]="['VideosList']">Get videos</a>
         </div>
 
-        <div id="panel_upload_video" class="panel_button">
+        <div id="panel_upload_video" class="panel_button" *ngIf="isLoggedIn">
           <span class="glyphicon glyphicon-cloud-upload"></span>
           <a [routerLink]="['VideosAdd']">Upload a video</a>
         </div>
