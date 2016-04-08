@@ -1,0 +1,46 @@
+{
+  "rulesDirectory": ["./node_modules/codelyzer/dist/src"],
+  "rules": {
+    "class-name": true,
+    "curly": false,
+    "eofline": true,
+    "indent": ["spaces"],
+    "max-line-length": [true, 140],
+    "member-ordering": [true,
+      "public-before-private",
+      "static-before-instance",
+      "variables-before-functions"
+    ],
+    "no-arg": true,
+    "no-construct": true,
+    "no-duplicate-key": true,
+    "no-duplicate-variable": true,
+    "no-empty": true,
+    "no-eval": true,
+    "no-trailing-whitespace": true,
+    "no-unused-expression": true,
+    "no-unused-variable": true,
+    "no-unreachable": true,
+    "no-use-before-declare": true,
+    "one-line": [true,
+      "check-open-brace",
+      "check-catch",
+      "check-else",
+      "check-whitespace"
+    ],
+    "quotemark": [true, "single"],
+    "semicolon": true,
+    "trailing-comma": true,
+    "triple-equals": true,
+    "variable-name": false,
+
+    "component-selector-name": [true, "kebab-case"],
+    "component-selector-type": [true, "element"],
+    "host-parameter-decorator": true,
+    "input-parameter-decorator": true,
+    "output-parameter-decorator": true,
+    "attribute-parameter-decorator": true,
+    "input-property-directive": true,
+    "output-property-directive": true
+  }
+}

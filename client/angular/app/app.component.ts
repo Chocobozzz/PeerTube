@@ -53,8 +53,11 @@ export class AppComponent {
               private _authService: AuthService,
               private _router: Router
   ) {
-    if (localStorage.getItem('access_token')) this.isLoggedIn = true;
-    else this.isLoggedIn = false;
+    if (localStorage.getItem('access_token')) {
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
+    }
 
     this._authService.loginChanged$.subscribe(
       status => {
@@ -87,7 +90,7 @@ export class AppComponent {
         }
       },
       error => alert(error)
-    )
+    );
   }
 
   quitFriends() {
@@ -96,6 +99,6 @@ export class AppComponent {
           alert('Quit friends!');
       },
       error => alert(error)
-    )
+    );
   }
 }

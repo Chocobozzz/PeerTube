@@ -16,7 +16,8 @@
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "typings": "typings",
-    "postinstall": "typings install"
+    "postinstall": "typings install",
+    "test": "tslint -c ./tslint.json angular/**/*.ts angular/**/**/*.ts"
   },
   "license": "ISC",
   "dependencies": {
@@ -34,6 +35,8 @@
     "zone.js": "0.5.15"
   },
   "devDependencies": {
+    "codelyzer": "0.0.12",
+    "tslint": "^3.7.1",
     "typescript": "^1.8.2",
     "typings": "^0.6.8"
   }

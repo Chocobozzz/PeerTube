@@ -2,18 +2,17 @@ import { Injectable } from 'angular2/core';
 import { Http, Response, Headers, URLSearchParams } from 'angular2/http';
 import { Observable, Subject } from 'rxjs/Rx';
 
-import { Token } from '../models/token';
 import { AuthStatus } from '../models/authStatus';
 
 @Injectable()
 export class AuthService {
+  loginChanged$ = this._loginChanged.asObservable();
+
   private _loginChanged = new Subject<AuthStatus>();
 
   private _baseLoginUrl = '/api/v1/users/token';
   private _clientId = '56f055587305d40b21904240';
   private _clientSecret = 'megustalabanana';
-
-  loginChanged$ = this._loginChanged.asObservable();
 
   constructor (private http: Http) {}
 
@@ -32,7 +31,7 @@ export class AuthService {
 
     let options = {
       headers: headers
-    }
+    };
 
     return this.http.post(this._baseLoginUrl, body.toString(), options)
                     .map(res => res.json())

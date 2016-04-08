@@ -1,8 +1,5 @@
-import { Component, ElementRef, Inject, OnInit } from 'angular2/core';
+import { Component, ElementRef, OnInit } from 'angular2/core';
 import { Router } from 'angular2/router';
-import { NgForm } from 'angular2/common';
-
-import { Video } from '../../models/video';
 
 // TODO: import it with systemjs
 declare var jQuery:any;

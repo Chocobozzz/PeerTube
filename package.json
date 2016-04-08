@@ -34,7 +34,7 @@
     "dev": "npm run build && NODE_ENV=test concurrently \"npm run livereload\" \"npm run client:tsc:watch\" \"npm run client:sass:watch\" \"npm start\"",
     "livereload": "livereload ./client",
     "start": "node server",
-    "test": "standard && mocha server/tests",
+    "test": "cd client && npm test && cd .. && standard && mocha server/tests",
     "postinstall": "cd client && npm install"
   },
   "dependencies": {

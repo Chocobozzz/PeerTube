@@ -33,7 +33,7 @@ export class VideosListComponent implements OnInit {
     if (this.search !== null) {
       observable = this._videosService.searchVideos(this.search);
     } else {
-      observable = this._videosService.getVideos()
+      observable = this._videosService.getVideos();
     }
 
     observable.subscribe(
@@ -46,7 +46,7 @@ export class VideosListComponent implements OnInit {
     this._videosService.removeVideo(id).subscribe(
       status => this.getVideos(),
       error => alert(error)
-    )
+    );
   }
 
 }

@@ -47,8 +47,8 @@ export class VideosWatchComponent implements OnInit, CanDeactivate {
           alert('Cannot append the file.');
           console.error(err);
         }
-      })
-    })
+      });
+    });
   }
 
   routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) : any {
