@@ -1,9 +1,6 @@
 {
   "ambientDependencies": {
-    "es6-shim": "github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#4de74cb527395c13ba20b438c3a7a419ad931f1c",
-    "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#bc92442c075929849ec41d28ab618892ba493504",
-    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#abc2bcfb8524b1e027e6298d3348012b5b06eda5",
-    "parse-torrent": "github:DefinitelyTyped/DefinitelyTyped/parse-torrent/parse-torrent.d.ts#abc2bcfb8524b1e027e6298d3348012b5b06eda5",
-    "webtorrent": "github:DefinitelyTyped/DefinitelyTyped/webtorrent/webtorrent.d.ts#abc2bcfb8524b1e027e6298d3348012b5b06eda5"
+    "es6-shim": "github:DefinitelyTyped/DefinitelyTyped/es6-shim/es6-shim.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd",
+    "jasmine": "github:DefinitelyTyped/DefinitelyTyped/jasmine/jasmine.d.ts#7de6c3dd94feaeb21f20054b9f30d5dabc5efabd"
   }
 }
