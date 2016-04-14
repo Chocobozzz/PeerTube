@@ -38,7 +38,7 @@ export class VideosListComponent implements OnInit {
   getVideos() {
     let observable = null;
 
-    if (this.search !== null) {""
+    if (this.search !== null) {
       observable = this._videosService.searchVideos(this.search);
     } else {
       observable = this._videosService.getVideos();

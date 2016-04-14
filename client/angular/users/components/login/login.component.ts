@@ -27,9 +27,8 @@ export class UserLoginComponent {
       error => {
         if (error.error === 'invalid_grant') {
           alert('Credentials are invalid.');
-        }
-        else {
-          alert(`${error.error}: ${error.error_description}`)
+        } else {
+          alert(`${error.error}: ${error.error_description}`);
         }
       }
     );
