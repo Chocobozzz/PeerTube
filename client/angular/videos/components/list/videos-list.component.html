@@ -2,7 +2,7 @@
   <div>
     <a [routerLink]="['VideosWatch', { id: video.id }]" class="video_name">{{ video.name }}</a>
     <span class="video_pod_url">{{ video.podUrl }}</span>
-    <span *ngIf="video.isLocal === true" (click)="removeVideo(video.id)" class="video_remove glyphicon glyphicon-remove"></span>
+    <span *ngIf="video.isLocal === true && user && video.author === user.username" (click)="removeVideo(video.id)" class="video_remove glyphicon glyphicon-remove"></span>
   </div>
 
   <div class="video_description">

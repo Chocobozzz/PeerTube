@@ -1,14 +1,15 @@
-import {Injectable} from 'angular2/core';
-import {Http, Response} from 'angular2/http';
-import {Observable} from 'rxjs/Rx';
+import { Injectable } from 'angular2/core';
+import { Http, Response } from 'angular2/http';
+import { Observable } from 'rxjs/Rx';
 
-import {Video} from '../models/video';
+import { Video } from '../models/video';
+import { AuthService } from '../../users/services/auth.service';
 
 @Injectable()
 export class VideosService {
   private _baseVideoUrl = '/api/v1/videos/';
 
-  constructor (private http: Http) {}
+  constructor (private http: Http, private _authService: AuthService) {}
 
   getVideos() {
     return this.http.get(this._baseVideoUrl)
@@ -24,7 +25,8 @@ export class VideosService {
 
   removeVideo(id: string) {
     if (confirm('Are you sure?')) {
-      return this.http.delete(this._baseVideoUrl + id)
+      const options = this._authService.getAuthRequestOptions();
+      return this.http.delete(this._baseVideoUrl + id, options)
                       .map(res => <number> res.status)
                       .catch(this.handleError);
     }

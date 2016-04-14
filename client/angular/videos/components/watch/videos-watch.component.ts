@@ -1,5 +1,3 @@
-/// <reference path='../../../../typings/browser/ambient/webtorrent/webtorrent.d.ts' />
-
 import { Component, OnInit, ElementRef } from 'angular2/core';
 import { RouteParams, CanDeactivate, ComponentInstruction } from 'angular2/router';
 

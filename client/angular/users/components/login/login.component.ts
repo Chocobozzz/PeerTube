@@ -3,7 +3,7 @@ import { Router } from 'angular2/router';
 
 import { AuthService } from '../../services/auth.service';
 import { AuthStatus } from '../../models/authStatus';
-import { Token } from '../../models/token';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'my-user-login',
@@ -17,16 +17,21 @@ export class UserLoginComponent {
   login(username: string, password: string) {
     this._authService.login(username, password).subscribe(
       result => {
-        if (result.error) return alert(result.error_description);
-
-        let token = new Token(result);
-        token.save();
+        const user = new User(username, result);
+        user.save();
 
         this._authService.setStatus(AuthStatus.LoggedIn);
 
         this._router.navigate(['VideosList']);
       },
-      error => alert(error)
+      error => {
+        if (error.error === 'invalid_grant') {
+          alert('Credentials are invalid.');
+        }
+        else {
+          alert(`${error.error}: ${error.error_description}`)
+        }
+      }
     );
   }
 }

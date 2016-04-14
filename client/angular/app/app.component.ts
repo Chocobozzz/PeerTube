@@ -53,11 +53,7 @@ export class AppComponent {
               private _authService: AuthService,
               private _router: Router
   ) {
-    if (localStorage.getItem('access_token')) {
-      this.isLoggedIn = true;
-    } else {
-      this.isLoggedIn = false;
-    }
+    this.isLoggedIn = this._authService.isLoggedIn();
 
     this._authService.loginChanged$.subscribe(
       status => {

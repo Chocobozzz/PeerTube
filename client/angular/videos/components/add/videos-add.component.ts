@@ -1,6 +1,9 @@
 import { Component, ElementRef, OnInit } from 'angular2/core';
 import { Router } from 'angular2/router';
 
+import { AuthService } from '../../../users/services/auth.service';
+import { User } from '../../../users/models/user';
+
 // TODO: import it with systemjs
 declare var jQuery:any;
 
@@ -11,14 +14,19 @@ declare var jQuery:any;
 })
 
 export class VideosAddComponent implements OnInit {
+  user: User;
   fileToUpload: any;
   progressBar: { value: number; max: number; } = { value: 0, max: 0 };
 
   private _form: any;
 
-  constructor(private _router: Router, private _elementRef: ElementRef) {}
+  constructor(
+    private _router: Router, private _elementRef: ElementRef,
+    private _authService: AuthService
+  ) {}
 
   ngOnInit() {
+    this.user = User.load();
     jQuery(this._elementRef.nativeElement).find('#videofile').fileupload({
       url: '/api/v1/videos',
       dataType: 'json',
@@ -49,6 +57,7 @@ export class VideosAddComponent implements OnInit {
   }
 
   uploadFile() {
+    this._form.headers = this._authService.getRequestHeader().toJSON();
     this._form.formData = jQuery(this._elementRef.nativeElement).find('form').serializeArray();
     this._form.submit();
   }
