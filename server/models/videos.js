@@ -21,7 +21,8 @@ const videosSchema = mongoose.Schema({
   namePath: String,
   description: String,
   magnetUri: String,
-  podUrl: String
+  podUrl: String,
+  author: String
 })
 const VideosDB = mongoose.model('videos', videosSchema)
 

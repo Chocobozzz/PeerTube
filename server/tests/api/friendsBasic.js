@@ -8,17 +8,16 @@ const request = require('supertest')
 const utils = require('./utils')
 
 describe('Test basic friends', function () {
-  let apps = []
-  let urls = []
+  let servers = []
 
-  function testMadeFriends (urls, url_to_test, callback) {
+  function testMadeFriends (servers, server_to_test, callback) {
     const friends = []
-    for (let i = 0; i < urls.length; i++) {
-      if (urls[i] === url_to_test) continue
-      friends.push(urls[i])
+    for (let i = 0; i < servers.length; i++) {
+      if (servers[i].url === server_to_test.url) continue
+      friends.push(servers[i].url)
     }
 
-    utils.getFriendsList(url_to_test, function (err, res) {
+    utils.getFriendsList(server_to_test.url, function (err, res) {
       if (err) throw err
 
       const result = res.body
@@ -27,7 +26,7 @@ describe('Test basic friends', function () {
       expect(result.length).to.equal(2)
       expect(result_urls[0]).to.not.equal(result_urls[1])
 
-      const error_string = 'Friends url do not correspond for ' + url_to_test
+      const error_string = 'Friends url do not correspond for ' + server_to_test.url
       expect(friends).to.contain(result_urls[0], error_string)
       expect(friends).to.contain(result_urls[1], error_string)
       callback()
@@ -38,16 +37,15 @@ describe('Test basic friends', function () {
 
   before(function (done) {
     this.timeout(20000)
-    utils.flushAndRunMultipleServers(3, function (apps_run, urls_run) {
-      apps = apps_run
-      urls = urls_run
+    utils.flushAndRunMultipleServers(3, function (servers_run, urls_run) {
+      servers = servers_run
       done()
     })
   })
 
   it('Should not have friends', function (done) {
-    async.each(urls, function (url, callback) {
-      utils.getFriendsList(url, function (err, res) {
+    async.each(servers, function (server, callback) {
+      utils.getFriendsList(server.url, function (err, res) {
         if (err) throw err
 
         const result = res.body
@@ -66,7 +64,7 @@ describe('Test basic friends', function () {
     async.series([
       // The second pod make friend with the third
       function (next) {
-        request(urls[1])
+        request(servers[1].url)
           .get(path)
           .set('Accept', 'application/json')
           .expect(204)
@@ -78,33 +76,33 @@ describe('Test basic friends', function () {
       },
       // The second pod should have the third as a friend
       function (next) {
-        utils.getFriendsList(urls[1], function (err, res) {
+        utils.getFriendsList(servers[1].url, function (err, res) {
           if (err) throw err
 
           const result = res.body
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
-          expect(result[0].url).to.be.equal(urls[2])
+          expect(result[0].url).to.be.equal(servers[2].url)
 
           next()
         })
       },
       // Same here, the third pod should have the second pod as a friend
       function (next) {
-        utils.getFriendsList(urls[2], function (err, res) {
+        utils.getFriendsList(servers[2].url, function (err, res) {
           if (err) throw err
 
           const result = res.body
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
-          expect(result[0].url).to.be.equal(urls[1])
+          expect(result[0].url).to.be.equal(servers[1].url)
 
           next()
         })
       },
       // Finally the first pod make friend with the second pod
       function (next) {
-        request(urls[0])
+        request(servers[0].url)
           .get(path)
           .set('Accept', 'application/json')
           .expect(204)
@@ -118,25 +116,25 @@ describe('Test basic friends', function () {
     // Now each pod should be friend with the other ones
     function (err) {
       if (err) throw err
-      async.each(urls, function (url, callback) {
-        testMadeFriends(urls, url, callback)
+      async.each(servers, function (server, callback) {
+        testMadeFriends(servers, server, callback)
       }, done)
     })
   })
 
   it('Should not be allowed to make friend again', function (done) {
-    utils.makeFriends(urls[1], 409, done)
+    utils.makeFriends(servers[1].url, 409, done)
   })
 
   it('Should quit friends of pod 2', function (done) {
     async.series([
       // Pod 1 quit friends
       function (next) {
-        utils.quitFriends(urls[1], next)
+        utils.quitFriends(servers[1].url, next)
       },
       // Pod 1 should not have friends anymore
       function (next) {
-        utils.getFriendsList(urls[1], function (err, res) {
+        utils.getFriendsList(servers[1].url, function (err, res) {
           if (err) throw err
 
           const result = res.body
@@ -148,14 +146,14 @@ describe('Test basic friends', function () {
       },
       // Other pods shouldn't have pod 1 too
       function (next) {
-        async.each([ urls[0], urls[2] ], function (url, callback) {
+        async.each([ servers[0].url, servers[2].url ], function (url, callback) {
           utils.getFriendsList(url, function (err, res) {
             if (err) throw err
 
             const result = res.body
             expect(result).to.be.an('array')
             expect(result.length).to.equal(1)
-            expect(result[0].url).not.to.be.equal(urls[1])
+            expect(result[0].url).not.to.be.equal(servers[1].url)
             callback()
           })
         }, next)
@@ -164,16 +162,16 @@ describe('Test basic friends', function () {
   })
 
   it('Should allow pod 2 to make friend again', function (done) {
-    utils.makeFriends(urls[1], function () {
-      async.each(urls, function (url, callback) {
-        testMadeFriends(urls, url, callback)
+    utils.makeFriends(servers[1].url, function () {
+      async.each(servers, function (server, callback) {
+        testMadeFriends(servers, server, callback)
       }, done)
     })
   })
 
   after(function (done) {
-    apps.forEach(function (app) {
-      process.kill(-app.pid)
+    servers.forEach(function (server) {
+      process.kill(-server.app.pid)
     })
 
     if (this.ok) {

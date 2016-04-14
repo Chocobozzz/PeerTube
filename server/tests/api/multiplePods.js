@@ -10,8 +10,7 @@ const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
 webtorrent.silent = true
 
 describe('Test multiple pods', function () {
-  let apps = []
-  let urls = []
+  let servers = []
   const to_remove = []
 
   before(function (done) {
@@ -20,15 +19,25 @@ describe('Test multiple pods', function () {
     async.series([
       // Run servers
       function (next) {
-        utils.flushAndRunMultipleServers(3, function (apps_run, urls_run) {
-          apps = apps_run
-          urls = urls_run
+        utils.flushAndRunMultipleServers(3, function (servers_run) {
+          servers = servers_run
           next()
         })
       },
+      // Get the access tokens
+      function (next) {
+        async.each(servers, function (server, callback_each) {
+          utils.loginAndGetAccessToken(server, function (err, access_token) {
+            if (err) return callback_each(err)
+
+            server.access_token = access_token
+            callback_each()
+          })
+        }, next)
+      },
       // The second pod make friend with the third
       function (next) {
-        utils.makeFriends(urls[1], next)
+        utils.makeFriends(servers[1].url, next)
       },
       // Wait for the request between pods
       function (next) {
@@ -36,7 +45,7 @@ describe('Test multiple pods', function () {
       },
       // Pod 1 make friends too
       function (next) {
-        utils.makeFriends(urls[0], next)
+        utils.makeFriends(servers[0].url, next)
       },
       function (next) {
         webtorrent.create({ host: 'client', port: '1' }, next)
@@ -45,8 +54,8 @@ describe('Test multiple pods', function () {
   })
 
   it('Should not have videos for all pods', function (done) {
-    async.each(urls, function (url, callback) {
-      utils.getVideosList(url, function (err, res) {
+    async.each(servers, function (server, callback) {
+      utils.getVideosList(server.url, function (err, res) {
         if (err) throw err
 
         expect(res.body).to.be.an('array')
@@ -63,7 +72,7 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(urls[0], 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', next)
+          utils.uploadVideo(servers[0].url, servers[0].access_token, 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -72,10 +81,10 @@ describe('Test multiple pods', function () {
         function (err) {
           if (err) throw err
 
-          async.each(urls, function (url, callback) {
+          async.each(servers, function (server, callback) {
             let base_magnet = null
 
-            utils.getVideosList(url, function (err, res) {
+            utils.getVideosList(server.url, function (err, res) {
               if (err) throw err
 
               const videos = res.body
@@ -106,7 +115,7 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(urls[1], 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', next)
+          utils.uploadVideo(servers[1].url, servers[1].access_token, 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -115,10 +124,10 @@ describe('Test multiple pods', function () {
         function (err) {
           if (err) throw err
 
-          async.each(urls, function (url, callback) {
+          async.each(servers, function (server, callback) {
             let base_magnet = null
 
-            utils.getVideosList(url, function (err, res) {
+            utils.getVideosList(server.url, function (err, res) {
               if (err) throw err
 
               const videos = res.body
@@ -149,10 +158,10 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(urls[2], 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', next)
+          utils.uploadVideo(servers[2].url, servers[2].access_token, 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', next)
         },
         function (next) {
-          utils.uploadVideo(urls[2], 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', next)
+          utils.uploadVideo(servers[2].url, servers[2].access_token, 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', next)
         },
         function (next) {
           setTimeout(next, 22000)
@@ -162,8 +171,8 @@ describe('Test multiple pods', function () {
 
           let base_magnet = null
           // All pods should have this video
-          async.each(urls, function (url, callback) {
-            utils.getVideosList(url, function (err, res) {
+          async.each(servers, function (server, callback) {
+            utils.getVideosList(server.url, function (err, res) {
               if (err) throw err
 
               const videos = res.body
@@ -201,7 +210,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(urls[2], function (err, res) {
+      utils.getVideosList(servers[2].url, function (err, res) {
         if (err) throw err
 
         const video = res.body[0]
@@ -222,7 +231,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(urls[0], function (err, res) {
+      utils.getVideosList(servers[0].url, function (err, res) {
         if (err) throw err
 
         const video = res.body[1]
@@ -241,7 +250,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(urls[1], function (err, res) {
+      utils.getVideosList(servers[1].url, function (err, res) {
         if (err) throw err
 
         const video = res.body[2]
@@ -260,7 +269,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(urls[0], function (err, res) {
+      utils.getVideosList(servers[0].url, function (err, res) {
         if (err) throw err
 
         const video = res.body[3]
@@ -280,10 +289,10 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.removeVideo(urls[2], to_remove[0], next)
+          utils.removeVideo(servers[2].url, servers[2].access_token, to_remove[0], next)
         },
         function (next) {
-          utils.removeVideo(urls[2], to_remove[1], next)
+          utils.removeVideo(servers[2].url, servers[2].access_token, to_remove[1], next)
         }],
         function (err) {
           if (err) throw err
@@ -293,8 +302,8 @@ describe('Test multiple pods', function () {
     })
 
     it('Should have videos 1 and 3 on each pod', function (done) {
-      async.each(urls, function (url, callback) {
-        utils.getVideosList(url, function (err, res) {
+      async.each(servers, function (server, callback) {
+        utils.getVideosList(server.url, function (err, res) {
           if (err) throw err
 
           const videos = res.body
@@ -313,8 +322,8 @@ describe('Test multiple pods', function () {
   })
 
   after(function (done) {
-    apps.forEach(function (app) {
-      process.kill(-app.pid)
+    servers.forEach(function (server) {
+      process.kill(-server.app.pid)
     })
     process.kill(-webtorrent.app.pid)
 

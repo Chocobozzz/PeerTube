@@ -7,41 +7,48 @@ const expect = chai.expect
 const utils = require('./utils')
 
 describe('Test advanced friends', function () {
-  let apps = []
-  let urls = []
+  let servers = []
 
   function makeFriends (pod_number, callback) {
-    return utils.makeFriends(urls[pod_number - 1], callback)
+    return utils.makeFriends(servers[pod_number - 1].url, callback)
   }
 
   function quitFriends (pod_number, callback) {
-    return utils.quitFriends(urls[pod_number - 1], callback)
+    return utils.quitFriends(servers[pod_number - 1].url, callback)
   }
 
   function getFriendsList (pod_number, end) {
-    return utils.getFriendsList(urls[pod_number - 1], end)
+    return utils.getFriendsList(servers[pod_number - 1].url, end)
   }
 
   function uploadVideo (pod_number, callback) {
     const name = 'my super video'
     const description = 'my super description'
     const fixture = 'video_short.webm'
+    const server = servers[pod_number - 1]
 
-    return utils.uploadVideo(urls[pod_number - 1], name, description, fixture, callback)
+    return utils.uploadVideo(server.url, server.access_token, name, description, fixture, callback)
   }
 
   function getVideos (pod_number, callback) {
-    return utils.getVideosList(urls[pod_number - 1], callback)
+    return utils.getVideosList(servers[pod_number - 1].url, callback)
   }
 
   // ---------------------------------------------------------------
 
   before(function (done) {
     this.timeout(30000)
-    utils.flushAndRunMultipleServers(6, function (apps_run, urls_run) {
-      apps = apps_run
-      urls = urls_run
-      done()
+    utils.flushAndRunMultipleServers(6, function (servers_run, urls_run) {
+      servers = servers_run
+
+      async.each(servers, function (server, callback_each) {
+        utils.loginAndGetAccessToken(server, function (err, access_token) {
+          if (err) return callback_each(err)
+
+          server.access_token = access_token
+          callback_each()
+        })
+      }, done)
     })
   })
 
@@ -121,7 +128,7 @@ describe('Test advanced friends', function () {
       },
       // Kill pod 4
       function (next) {
-        apps[3].kill()
+        servers[3].app.kill()
         next()
       },
       // Expulse pod 4 from pod 1 and 2
@@ -145,8 +152,8 @@ describe('Test advanced friends', function () {
       },
       // Rerun server 4
       function (next) {
-        utils.runServer(4, function (app, url) {
-          apps[3] = app
+        utils.runServer(4, function (server) {
+          servers[3].app = server.app
           next()
         })
       },
@@ -156,7 +163,6 @@ describe('Test advanced friends', function () {
 
           // Pod 4 didn't know pod 1 and 2 removed it
           expect(res.body.length).to.equal(3)
-
           next()
         })
       },
@@ -174,7 +180,7 @@ describe('Test advanced friends', function () {
           const result = res.body
           expect(result.length).to.equal(3)
           for (const pod of result) {
-            expect(pod.url).not.equal(urls[3])
+            expect(pod.url).not.equal(servers[3].url)
           }
 
           done()
@@ -237,8 +243,8 @@ describe('Test advanced friends', function () {
   })
 
   after(function (done) {
-    apps.forEach(function (app) {
-      process.kill(-app.pid)
+    servers.forEach(function (server) {
+      process.kill(-server.app.pid)
     })
 
     if (this.ok) {

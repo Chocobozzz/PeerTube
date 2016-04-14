@@ -57,12 +57,12 @@ function createOAuthClientIfNotExist (callback) {
     logger.info('Creating a default OAuth Client.')
 
     // TODO: generate password
-    const password = 'megustalabanana'
-    Users.createClient(password, [ 'password' ], function (err, id) {
+    const secret = 'megustalabanana'
+    Users.createClient(secret, [ 'password' ], function (err, id) {
       if (err) return callback(err)
 
       logger.info('Client id: ' + id)
-      logger.info('Client password: ' + password)
+      logger.info('Client secret: ' + secret)
 
       return callback(null)
     })

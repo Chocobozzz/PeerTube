@@ -12,8 +12,7 @@ webtorrent.silent = true
 const utils = require('./utils')
 
 describe('Test a single pod', function () {
-  let app = null
-  let url = ''
+  let server = null
   let video_id = -1
 
   before(function (done) {
@@ -24,9 +23,15 @@ describe('Test a single pod', function () {
         utils.flushTests(next)
       },
       function (next) {
-        utils.runServer(1, function (app1, url1) {
-          app = app1
-          url = url1
+        utils.runServer(1, function (server1) {
+          server = server1
+          next()
+        })
+      },
+      function (next) {
+        utils.loginAndGetAccessToken(server, function (err, token) {
+          if (err) throw err
+          server.access_token = token
           next()
         })
       },
@@ -37,7 +42,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should not have videos', function (done) {
-    utils.getVideosList(url, function (err, res) {
+    utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
       expect(res.body).to.be.an('array')
@@ -49,14 +54,14 @@ describe('Test a single pod', function () {
 
   it('Should upload the video', function (done) {
     this.timeout(5000)
-    utils.uploadVideo(url, 'my super name', 'my super description', 'video_short.webm', done)
+    utils.uploadVideo(server.url, server.access_token, 'my super name', 'my super description', 'video_short.webm', done)
   })
 
   it('Should seed the uploaded video', function (done) {
     // Yes, this could be long
     this.timeout(60000)
 
-    utils.getVideosList(url, function (err, res) {
+    utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
       expect(res.body).to.be.an('array')
@@ -84,7 +89,7 @@ describe('Test a single pod', function () {
     // Yes, this could be long
     this.timeout(60000)
 
-    utils.getVideo(url, video_id, function (err, res) {
+    utils.getVideo(server.url, video_id, function (err, res) {
       if (err) throw err
 
       const video = res.body
@@ -104,7 +109,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search the video', function (done) {
-    utils.searchVideo(url, 'my', function (err, res) {
+    utils.searchVideo(server.url, 'my', function (err, res) {
       if (err) throw err
 
       expect(res.body).to.be.an('array')
@@ -120,7 +125,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should not find a search', function (done) {
-    utils.searchVideo(url, 'hello', function (err, res) {
+    utils.searchVideo(server.url, 'hello', function (err, res) {
       if (err) throw err
 
       expect(res.body).to.be.an('array')
@@ -131,7 +136,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should remove the video', function (done) {
-    utils.removeVideo(url, video_id, function (err) {
+    utils.removeVideo(server.url, server.access_token, video_id, function (err) {
       if (err) throw err
 
       fs.readdir(pathUtils.join(__dirname, '../../../test1/uploads/'), function (err, files) {
@@ -144,7 +149,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should not have videos', function (done) {
-    utils.getVideosList(url, function (err, res) {
+    utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
       expect(res.body).to.be.an('array')
@@ -155,7 +160,7 @@ describe('Test a single pod', function () {
   })
 
   after(function (done) {
-    process.kill(-app.pid)
+    process.kill(-server.app.pid)
     process.kill(-webtorrent.app.pid)
 
     // Keep the logs if the test failed

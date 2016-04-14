@@ -8,6 +8,7 @@ const multer = require('multer')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middleware = require('../../../middlewares')
+const oAuth2 = require('../../../middlewares/oauth2')
 const cacheMiddleware = middleware.cache
 const reqValidator = middleware.reqValidators.videos
 const Videos = require('../../../models/videos') // model
@@ -38,9 +39,9 @@ const storage = multer.diskStorage({
 const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
 
 router.get('/', cacheMiddleware.cache(false), listVideos)
-router.post('/', reqFiles, reqValidator.videosAdd, cacheMiddleware.cache(false), addVideo)
+router.post('/', oAuth2.authenticate, reqFiles, reqValidator.videosAdd, cacheMiddleware.cache(false), addVideo)
 router.get('/:id', reqValidator.videosGet, cacheMiddleware.cache(false), getVideos)
-router.delete('/:id', reqValidator.videosRemove, cacheMiddleware.cache(false), removeVideo)
+router.delete('/:id', oAuth2.authenticate, reqValidator.videosRemove, cacheMiddleware.cache(false), removeVideo)
 router.get('/search/:name', reqValidator.videosSearch, cacheMiddleware.cache(false), searchVideos)
 
 // ---------------------------------------------------------------------------
@@ -63,7 +64,8 @@ function addVideo (req, res, next) {
       name: video_infos.name,
       namePath: video_file.filename,
       description: video_infos.description,
-      magnetUri: torrent.magnetURI
+      magnetUri: torrent.magnetURI,
+      author: res.locals.oauth.token.user.username
     }
 
     Videos.add(video_data, function (err) {
@@ -141,7 +143,8 @@ function getFormatedVideo (video_obj) {
     description: video_obj.description,
     podUrl: video_obj.podUrl,
     isLocal: videos.getVideoState(video_obj).owned,
-    magnetUri: video_obj.magnetUri
+    magnetUri: video_obj.magnetUri,
+    author: video_obj.author
   }
 
   return formated_video

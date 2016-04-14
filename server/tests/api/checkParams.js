@@ -9,16 +9,17 @@ const request = require('supertest')
 const utils = require('./utils')
 
 describe('Test parameters validator', function () {
-  let app = null
-  let url = ''
+  let server = null
 
-  function makePostRequest (path, fields, attach, done, fail) {
+  function makePostRequest (path, token, fields, attach, done, fail) {
     let status_code = 400
     if (fail !== undefined && fail === false) status_code = 200
 
-    const req = request(url)
+    const req = request(server.url)
       .post(path)
       .set('Accept', 'application/json')
+
+    if (token) req.set('Authorization', 'Bearer ' + token)
 
     Object.keys(fields).forEach(function (field) {
       const value = fields[field]
@@ -32,7 +33,7 @@ describe('Test parameters validator', function () {
     let status_code = 400
     if (fail !== undefined && fail === false) status_code = 200
 
-    request(url)
+    request(server.url)
       .post(path)
       .set('Accept', 'application/json')
       .send(fields)
@@ -49,9 +50,17 @@ describe('Test parameters validator', function () {
         utils.flushTests(next)
       },
       function (next) {
-        utils.runServer(1, function (app1, url1) {
-          app = app1
-          url = url1
+        utils.runServer(1, function (server1) {
+          server = server1
+
+          next()
+        })
+      },
+      function (next) {
+        utils.loginAndGetAccessToken(server, function (err, token) {
+          if (err) throw err
+          server.access_token = token
+
           next()
         })
       }
@@ -118,7 +127,7 @@ describe('Test parameters validator', function () {
 
     describe('When searching a video', function () {
       it('Should fail with nothing', function (done) {
-        request(url)
+        request(server.url)
           .get(pathUtils.join(path, 'search'))
           .set('Accept', 'application/json')
           .expect(400, done)
@@ -129,7 +138,7 @@ describe('Test parameters validator', function () {
       it('Should fail with nothing', function (done) {
         const data = {}
         const attach = {}
-        makePostRequest(path, data, attach, done)
+        makePostRequest(path, server.access_token, data, attach, done)
       })
 
       it('Should fail without name', function (done) {
@@ -139,7 +148,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, data, attach, done)
+        makePostRequest(path, server.access_token, data, attach, done)
       })
 
       it('Should fail with a long name', function (done) {
@@ -150,7 +159,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, data, attach, done)
+        makePostRequest(path, server.access_token, data, attach, done)
       })
 
       it('Should fail without description', function (done) {
@@ -160,7 +169,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, data, attach, done)
+        makePostRequest(path, server.access_token, data, attach, done)
       })
 
       it('Should fail with a long description', function (done) {
@@ -173,7 +182,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, data, attach, done)
+        makePostRequest(path, server.access_token, data, attach, done)
       })
 
       it('Should fail without an input file', function (done) {
@@ -182,7 +191,7 @@ describe('Test parameters validator', function () {
           description: 'my super description'
         }
         const attach = {}
-        makePostRequest(path, data, attach, done)
+        makePostRequest(path, server.access_token, data, attach, done)
       })
 
       it('Should fail without an incorrect input file', function (done) {
@@ -193,7 +202,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
         }
-        makePostRequest(path, data, attach, done)
+        makePostRequest(path, server.access_token, data, attach, done)
       })
 
       it('Should succeed with the correct parameters', function (done) {
@@ -204,11 +213,11 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, data, attach, function () {
+        makePostRequest(path, server.access_token, data, attach, function () {
           attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
-          makePostRequest(path, data, attach, function () {
+          makePostRequest(path, server.access_token, data, attach, function () {
             attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
-            makePostRequest(path, data, attach, done, true)
+            makePostRequest(path, server.access_token, data, attach, done, true)
           }, true)
         }, true)
       })
@@ -216,7 +225,7 @@ describe('Test parameters validator', function () {
 
     describe('When getting a video', function () {
       it('Should return the list of the videos with nothing', function (done) {
-        request(url)
+        request(server.url)
           .get(path)
           .set('Accept', 'application/json')
           .expect(200)
@@ -232,14 +241,14 @@ describe('Test parameters validator', function () {
       })
 
       it('Should fail without a mongodb id', function (done) {
-        request(url)
+        request(server.url)
           .get(path + 'coucou')
           .set('Accept', 'application/json')
           .expect(400, done)
       })
 
       it('Should return 404 with an incorrect video', function (done) {
-        request(url)
+        request(server.url)
           .get(path + '123456789012345678901234')
           .set('Accept', 'application/json')
           .expect(404, done)
@@ -250,20 +259,23 @@ describe('Test parameters validator', function () {
 
     describe('When removing a video', function () {
       it('Should have 404 with nothing', function (done) {
-        request(url)
-        .delete(path)
-        .expect(400, done)
+        request(server.url)
+          .delete(path)
+          .set('Authorization', 'Bearer ' + server.access_token)
+          .expect(400, done)
       })
 
       it('Should fail without a mongodb id', function (done) {
-        request(url)
+        request(server.url)
           .delete(path + 'hello')
+          .set('Authorization', 'Bearer ' + server.access_token)
           .expect(400, done)
       })
 
       it('Should fail with a video which does not exist', function (done) {
-        request(url)
+        request(server.url)
           .delete(path + '123456789012345678901234')
+          .set('Authorization', 'Bearer ' + server.access_token)
           .expect(404, done)
       })
 
@@ -288,7 +300,7 @@ describe('Test parameters validator', function () {
   })
 
   after(function (done) {
-    process.kill(-app.pid)
+    process.kill(-server.app.pid)
 
     // Keep the logs if the test failed
     if (this.ok) {

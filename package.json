@@ -48,7 +48,7 @@
     "dezalgo": "^1.0.3",
     "electron-spawn": "https://github.com/Chocobozzz/electron-spawn",
     "express": "^4.12.4",
-    "express-oauth-server": "https://github.com/oauthjs/express-oauth-server",
+    "express-oauth-server": "https://github.com/Chocobozzz/express-oauth-server",
     "express-validator": "^2.11.0",
     "js-yaml": "^3.5.4",
     "lodash-node": "^3.10.2",

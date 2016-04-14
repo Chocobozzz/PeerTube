@@ -104,7 +104,7 @@ function saveToken (token, client, user) {
   }
 
   return OAuthTokensDB.create(token_to_create, function (err, token_created) {
-    if (err) throw err // node-oauth2-server library use Promise.try
+    if (err) throw err // node-oauth2-server library uses Promise.try
 
     token_created.client = client
     token_created.user = user

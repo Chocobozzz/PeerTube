@@ -11,6 +11,8 @@ const testUtils = {
   getFriendsList: getFriendsList,
   getVideo: getVideo,
   getVideosList: getVideosList,
+  login: login,
+  loginAndGetAccessToken: loginAndGetAccessToken,
   makeFriends: makeFriends,
   quitFriends: quitFriends,
   removeVideo: removeVideo,
@@ -59,6 +61,40 @@ function getVideosList (url, end) {
     .end(end)
 }
 
+function login (url, client, user, expected_status, end) {
+  if (!end) {
+    end = expected_status
+    expected_status = 200
+  }
+
+  const path = '/api/v1/users/token'
+
+  const body = {
+    client_id: client.id,
+    client_secret: client.secret,
+    username: user.username,
+    password: user.password,
+    response_type: 'code',
+    grant_type: 'password',
+    scope: 'upload'
+  }
+
+  request(url)
+    .post(path)
+    .type('form')
+    .send(body)
+    .expect(expected_status)
+    .end(end)
+}
+
+function loginAndGetAccessToken (server, callback) {
+  login(server.url, server.client, server.user, 200, function (err, res) {
+    if (err) return callback(err)
+
+    return callback(null, res.body.access_token)
+  })
+}
+
 function makeFriends (url, expected_status, callback) {
   if (!callback) {
     callback = expected_status
@@ -96,13 +132,19 @@ function quitFriends (url, callback) {
     })
 }
 
-function removeVideo (url, id, end) {
+function removeVideo (url, token, id, expected_status, end) {
+  if (!end) {
+    end = expected_status
+    expected_status = 204
+  }
+
   const path = '/api/v1/videos'
 
   request(url)
     .delete(path + '/' + id)
     .set('Accept', 'application/json')
-    .expect(204)
+    .set('Authorization', 'Bearer ' + token)
+    .expect(expected_status)
     .end(end)
 }
 
@@ -133,10 +175,30 @@ function flushAndRunMultipleServers (total_servers, serversRun) {
 }
 
 function runServer (number, callback) {
-  const port = 9000 + number
+  const server = {
+    app: null,
+    url: `http://localhost:${9000 + number}`,
+    client: {
+      id: null,
+      secret: null
+    },
+    user: {
+      username: null,
+      password: null
+    }
+  }
+
+  // These actions are async so we need to be sure that they have both been done
   const server_run_string = {
     'Connected to mongodb': false,
     'Server listening on port': false
+  }
+
+  const regexps = {
+    client_id: 'Client id: ([a-f0-9]+)',
+    client_secret: 'Client secret: (.+)',
+    user_username: 'Username: (.+)',
+    user_password: 'User password: (.+)'
   }
 
   // Share the environment
@@ -149,9 +211,22 @@ function runServer (number, callback) {
     detached: true
   }
 
-  const app = fork(pathUtils.join(__dirname, '../../../server.js'), [], options)
-  app.stdout.on('data', function onStdout (data) {
+  server.app = fork(pathUtils.join(__dirname, '../../../server.js'), [], options)
+  server.app.stdout.on('data', function onStdout (data) {
     let dont_continue = false
+
+    // Capture things if we want to
+    for (const key of Object.keys(regexps)) {
+      const regexp = regexps[key]
+      const matches = data.toString().match(regexp)
+      if (matches !== null) {
+        if (key === 'client_id') server.client.id = matches[1]
+        else if (key === 'client_secret') server.client.secret = matches[1]
+        else if (key === 'user_username') server.user.username = matches[1]
+        else if (key === 'user_password') server.user.password = matches[1]
+      }
+    }
+
     // Check if all required sentences are here
     for (const key of Object.keys(server_run_string)) {
       if (data.toString().indexOf(key) !== -1) server_run_string[key] = true
@@ -161,8 +236,8 @@ function runServer (number, callback) {
     // If no, there is maybe one thing not already initialized (mongodb...)
     if (dont_continue === true) return
 
-    app.stdout.removeListener('data', onStdout)
-    callback(app, 'http://localhost:' + port)
+    server.app.stdout.removeListener('data', onStdout)
+    callback(server)
   })
 }
 
@@ -177,16 +252,22 @@ function searchVideo (url, search, end) {
     .end(end)
 }
 
-function uploadVideo (url, name, description, fixture, end) {
+function uploadVideo (url, access_token, name, description, fixture, special_status, end) {
+  if (!end) {
+    end = special_status
+    special_status = 204
+  }
+
   const path = '/api/v1/videos'
 
   request(url)
     .post(path)
     .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + access_token)
     .field('name', name)
     .field('description', description)
     .attach('videofile', pathUtils.join(__dirname, 'fixtures', fixture))
-    .expect(204)
+    .expect(special_status)
     .end(end)
 }
 
