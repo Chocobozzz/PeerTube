@@ -1,7 +1,7 @@
 'use strict'
 
 const async = require('async')
-const pluck = require('lodash-node/compat/collection/pluck')
+const map = require('lodash-node/compat/collection/map')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
@@ -184,8 +184,8 @@ function removeBadPods () {
 
     if (pods.length === 0) return
 
-    const urls = pluck(pods, 'url')
-    const ids = pluck(pods, '_id')
+    const urls = map(pods, 'url')
+    const ids = map(pods, '_id')
 
     Videos.removeAllRemotesOf(urls, function (err, r) {
       if (err) {
