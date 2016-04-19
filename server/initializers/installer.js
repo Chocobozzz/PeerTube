@@ -3,6 +3,7 @@
 const async = require('async')
 const config = require('config')
 const mkdirp = require('mkdirp')
+const passwordGenerator = require('password-generator')
 const path = require('path')
 
 const checker = require('./checker')
@@ -56,8 +57,7 @@ function createOAuthClientIfNotExist (callback) {
 
     logger.info('Creating a default OAuth Client.')
 
-    // TODO: generate password
-    const secret = 'megustalabanana'
+    const secret = passwordGenerator(32, false)
     Users.createClient(secret, [ 'password' ], function (err, id) {
       if (err) return callback(err)
 
@@ -78,9 +78,8 @@ function createOAuthUserIfNotExist (callback) {
 
     logger.info('Creating the administrator.')
 
-    // TODO: generate password
-    const username = 'admin'
-    const password = 'nomegustalabanana'
+    const username = 'root'
+    const password = passwordGenerator(8, true)
 
     Users.createUser(username, password, function (err) {
       if (err) return callback(err)
