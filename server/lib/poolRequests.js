@@ -1,7 +1,7 @@
 'use strict'
 
 const async = require('async')
-const map = require('lodash-node/compat/collection/map')
+const map = require('lodash/map')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')

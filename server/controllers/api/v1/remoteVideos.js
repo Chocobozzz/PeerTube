@@ -1,7 +1,7 @@
 'use strict'
 
 const express = require('express')
-const map = require('lodash-node/modern/collection/map')
+const map = require('lodash/map')
 
 const middleware = require('../../../middlewares')
 const secureMiddleware = middleware.secure
