@@ -33,7 +33,7 @@ export class AuthService {
         error => {
           alert(error);
         }
-      )
+      );
   }
 
   login(username: string, password: string) {
