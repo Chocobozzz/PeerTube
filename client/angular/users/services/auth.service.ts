@@ -11,12 +11,29 @@ export class AuthService {
 
   private _loginChanged;
   private _baseLoginUrl = '/api/v1/users/token';
+  private _baseClientUrl = '/api/v1/users/client';
   private _clientId = '56f055587305d40b21904240';
   private _clientSecret = 'megustalabanana';
 
   constructor (private http: Http) {
     this._loginChanged = new Subject<AuthStatus>();
     this.loginChanged$ = this._loginChanged.asObservable();
+
+    // Fetch the client_id/client_secret
+    // FIXME: save in local storage?
+    this.http.get(this._baseClientUrl)
+      .map(res => res.json())
+      .catch(this.handleError)
+      .subscribe(
+        result => {
+          this._clientId = result.client_id;
+          this._clientSecret = result.client_secret;
+          console.log('Client credentials loaded.');
+        },
+        error => {
+          alert(error);
+        }
+      )
   }
 
   login(username: string, password: string) {

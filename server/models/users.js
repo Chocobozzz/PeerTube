@@ -35,6 +35,7 @@ const Users = {
   getAccessToken: getAccessToken,
   getClient: getClient,
   getClients: getClients,
+  getFirstClient: getFirstClient,
   getRefreshToken: getRefreshToken,
   getUser: getUser,
   getUsers: getUsers,
@@ -62,6 +63,10 @@ function getAccessToken (bearerToken, callback) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
   return OAuthTokensDB.findOne({ accessToken: bearerToken }).populate('user')
+}
+
+function getFirstClient (callback) {
+  return OAuthClientsDB.findOne({}, callback)
 }
 
 function getClient (clientId, clientSecret) {
