@@ -31,6 +31,12 @@ describe('Test users', function () {
     ], done)
   })
 
+  it('Should create a new client')
+
+  it('Should return the first client')
+
+  it('Should remove the last client')
+
   it('Should not login with an invalid client id', function (done) {
     const client = { id: 'client', password: server.client.secret }
     utils.login(server.url, client, server.user, 400, function (err, res) {
