@@ -12,8 +12,8 @@ export class AuthService {
   private _loginChanged;
   private _baseLoginUrl = '/api/v1/users/token';
   private _baseClientUrl = '/api/v1/users/client';
-  private _clientId = '56f055587305d40b21904240';
-  private _clientSecret = 'megustalabanana';
+  private _clientId = '';
+  private _clientSecret = '';
 
   constructor (private http: Http) {
     this._loginChanged = new Subject<AuthStatus>();
