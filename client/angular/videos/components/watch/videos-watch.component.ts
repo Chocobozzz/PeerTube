@@ -40,7 +40,7 @@ export class VideosWatchComponent implements OnInit, CanDeactivate {
     console.log('Adding ' + this.video.magnetUri + '.');
     this.client.add(this.video.magnetUri, (torrent) => {
       console.log('Added ' + this.video.magnetUri + '.');
-      torrent.files[0].appendTo(this._elementRef.nativeElement, (err) => {
+      torrent.files[0].appendTo(this._elementRef.nativeElement.querySelector('.embed-responsive'), (err) => {
         if (err) {
           alert('Cannot append the file.');
           console.error(err);
