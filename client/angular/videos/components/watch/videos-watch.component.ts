@@ -64,7 +64,7 @@ export class VideosWatchComponent implements OnInit, CanDeactivate {
 
   routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) : any {
     console.log('Removing video from webtorrent.');
-    clearInterval(this._interval)
+    clearInterval(this._interval);
     this.client.remove(this.video.magnetUri);
     return true;
   }
