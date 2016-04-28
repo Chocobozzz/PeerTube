@@ -1,3 +1,4 @@
+<div *ngIf="videos.length === 0">There is no video.</div>
 <div *ngFor="#video of videos" class="video">
   <div>
     <a [routerLink]="['VideosWatch', { id: video.id }]" class="video_name">{{ video.name }}</a>

@@ -15,7 +15,7 @@ import { Video } from '../../models/video';
 
 export class VideosListComponent implements OnInit {
   user: User = null;
-  videos: Video[];
+  videos: Video[] = [];
 
   private search: string;
 
