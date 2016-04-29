@@ -1,5 +1,5 @@
 .embed-responsive {
-  height: 100%;
+  height: 500px;
 }
 
 #video-loading {
@@ -27,4 +27,14 @@
 @-moz-keyframes spinm {
     from { -moz-transform: rotate(0deg);}
     to { -moz-transform: rotate(360deg);}
+}
+
+#torrent-info {
+  font-size: 10px;
+
+  div {
+    display: inline-block;
+    width: 33%;
+    text-align: center;
+  }
 }
