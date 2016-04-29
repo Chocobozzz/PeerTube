@@ -20,7 +20,7 @@
     "build": "concurrently \"npm run client:sass\" \"npm run client:tsc\"",
     "client:clean": "concurrently \"npm run client:tsc:clean\" \"npm run client:sass:clean\"",
     "client:sass:index": "npm run client:sass:index:clean && cd client && node-sass --include-path node_modules/bootstrap-sass/assets/stylesheets/ stylesheets/application.scss stylesheets/index.css",
-    "client:sass:index:watch": "cd client && node-sass -w --include-path node_modules/bootstrap-sass/assets/stylesheets/ stylesheets/application.scss stylesheets/index.css",
+    "client:sass:index:watch": "cd client && node-sass -w --include-path node_modules/bootstrap-sass/assets/stylesheets/ stylesheets/application.scss stylesheets/index.css client/angular/**/ client/angular/**/**",
     "client:sass:index:clean": "cd client && rm -f stylesheets/index.css",
     "client:sass:angular": "cd client && node-sass angular/ --output angular/",
     "client:sass:angular:watch": "cd client && node-sass -w angular/ --output angular/",

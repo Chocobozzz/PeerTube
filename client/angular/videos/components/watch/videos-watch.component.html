@@ -1,5 +1,11 @@
+<!-- Loader -->
+<div id="video-loading" class="col-md-12 text-center" *ngIf="loading">
+  <div class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></div>
+</div>
+
 <div class="embed-responsive embed-responsive-19by9">
 </div>
+
 <div id="torrent-info">
   <div>Download: {{ downloadSpeed | bytes }}/s</div>
   <div>Upload: {{ uploadSpeed | bytes }}/s</div>

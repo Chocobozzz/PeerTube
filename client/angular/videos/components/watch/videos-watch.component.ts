@@ -20,6 +20,7 @@ export class VideosWatchComponent implements OnInit, CanDeactivate {
   downloadSpeed: number;
   uploadSpeed: number;
   numPeers: number;
+  loading: boolean = false;
 
   private _interval: number;
   private client: any;
@@ -42,9 +43,11 @@ export class VideosWatchComponent implements OnInit, CanDeactivate {
   }
 
   loadVideo(video: Video) {
+    this.loading = true;
     this.video = video;
     console.log('Adding ' + this.video.magnetUri + '.');
     this.client.add(this.video.magnetUri, (torrent) => {
+      this.loading = false;
       console.log('Added ' + this.video.magnetUri + '.');
       torrent.files[0].appendTo(this._elementRef.nativeElement.querySelector('.embed-responsive'), (err) => {
         if (err) {
