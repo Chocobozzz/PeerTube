@@ -21,6 +21,7 @@ services:
 
 before_script:
   - npm install electron-prebuilt -g
+  - npm run build
 
 after_failure:
   - cat test1/logs/all-logs.log
