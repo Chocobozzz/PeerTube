@@ -40,10 +40,7 @@ import { AuthStatus } from '../users/models/authStatus';
     templateUrl: 'app/angular/app/app.component.html',
     styleUrls: [ 'app/angular/app/app.component.css' ],
     directives: [ ROUTER_DIRECTIVES ],
-    providers: [ ROUTER_PROVIDERS, HTTP_PROVIDERS,
-                 ElementRef, VideosService, FriendsService,
-                 AuthService
-               ]
+    providers: [ ROUTER_PROVIDERS, HTTP_PROVIDERS, VideosService, FriendsService, AuthService ]
 })
 
 export class AppComponent {
