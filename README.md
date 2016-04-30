@@ -12,7 +12,7 @@
 [![Dependency Status](https://david-dm.org/Chocobozzz/PeerTube.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client)
 [![devDependency Status](https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client#info=devDependencies)
 
-Prototype of a decentralized video streaming platform using P2P (bittorrent) directly in the web browser with [webtorrent](https://github.com/feross/webtorrent).
+Prototype of a decentralized video streaming platform using P2P (bittorrent) directly in the web browser with [WebTorrent](https://github.com/feross/webtorrent).
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
@@ -23,7 +23,7 @@ We can't build a FOSS video streaming alternatives to YouTube, Dailymotion, Vime
 So we need to have a decentralized network (as [Diaspora](https://github.com/diaspora/diaspora) for example).
 But it's not enought because one video could become famous and overload the server.
 It's the reason why we need to use a P2P protocol to limit the server load.
-Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (thus bittorrent) inside the web browser right now.
+Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus bittorrent) inside the web browser right now.
 
 ## Features
 
@@ -42,7 +42,7 @@ Thanks to [webtorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [X] Remove the video
 - [X] List the videos
 - [X] Search a video name (local index)
-- [X] View the video in an HTML5 page with webtorrent
+- [X] View the video in an HTML5 page with WebTorrent
 - [ ]  Manage user accounts
   - [ ] Inscription
   - [X] Connection
