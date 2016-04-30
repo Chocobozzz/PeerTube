@@ -114,15 +114,15 @@ See the ARCHITECTURE.md for more informations. Do not hesitate to give your opin
 
 Here are some simple schemes:
 
-![Decentralized](http://lutim.cpy.re/aV2pawRz)
+![Decentralized](http://lutim.cpy.re/Q7mnNdJP)
 
-![Watch a video](http://lutim.cpy.re/AlOeoVPi)
+![Watch a video](http://lutim.cpy.re/0riSzAp1)
 
-![Watch a video P2P](http://lutim.cpy.re/fb0JH6C3)
+![Watch a video P2P](http://lutim.cpy.re/OzMSOtxG)
 
-![Join a network](http://lutim.cpy.re/ijuCgmpI)
+![Join a network](http://lutim.cpy.re/uVjNNRa9)
 
-![Many networks](http://lutim.cpy.re/iz8mXHug)
+![Many networks](http://lutim.cpy.re/udTMqcb0)
 
 ### Frontend
 
