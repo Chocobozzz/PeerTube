@@ -1,12 +1,14 @@
 # PeerTube
 
 *Server*
+
 [![Build Status](https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=master)](https://travis-ci.org/Chocobozzz/PeerTube)
 [![Dependencies Status](https://david-dm.org/Chocobozzz/PeerTube.svg)](https://david-dm.org/Chocobozzz/PeerTube)
 [![devDependency Status](https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg)](https://david-dm.org/Chocobozzz/PeerTube#info=devDependencies)
 [![Code climate](https://codeclimate.com/github/Chocobozzz/PeerTube/badges/gpa.svg)](https://codeclimate.com/github/Chocobozzz/PeerTube)
 
 *Client*
+
 [![Dependency Status](https://david-dm.org/Chocobozzz/PeerTube.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client)
 [![devDependency Status](https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client#info=devDependencies)
 
