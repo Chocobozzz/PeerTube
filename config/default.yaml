@@ -9,7 +9,7 @@ webserver:
 database:
   host: 'localhost'
   port: 27017
-  suffix: '-suffix'
+  suffix: '-dev'
 
 # From the project root directory
 storage:

@@ -25,7 +25,7 @@ const testUtils = {
 // ---------------------- Export functions --------------------
 
 function flushTests (callback) {
-  exec(pathUtils.join(__dirname, '../../../bin/clean_test.sh'), callback)
+  exec('npm run clean:server:test', callback)
 }
 
 function getFriendsList (url, end) {
