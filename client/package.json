@@ -36,7 +36,7 @@
     "zone.js": "0.6.12"
   },
   "devDependencies": {
-    "codelyzer": "0.0.12",
+    "codelyzer": "0.0.18",
     "tslint": "^3.7.4",
     "typescript": "^1.8.10",
     "typings": "^0.8.1"
