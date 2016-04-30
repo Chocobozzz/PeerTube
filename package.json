@@ -21,7 +21,7 @@
     "build:client": "SCRIPTY_PARALLEL=true scripty",
     "build:client:sass": "scripty",
     "build:client:tsc": "scripty",
-    "clean": "SCRIPTY_PARALLEL=true scripty",
+    "clean": "npm run clean:client",
     "clean:client": "SCRIPTY_PARALLEL=true scripty",
     "clean:client:sass": "scripty",
     "clean:client:tsc": "scripty",
