@@ -2,11 +2,16 @@
 'use strict'
 
 const config = require('config')
+const mkdirp = require('mkdirp')
 const path = require('path')
 const winston = require('winston')
 winston.emitErrs = true
 
 const logDir = path.join(__dirname, '..', '..', config.get('storage.logs'))
+
+// Create the directory if it does not exist
+mkdirp.sync(logDir)
+
 const logger = new winston.Logger({
   transports: [
     new winston.transports.File({
