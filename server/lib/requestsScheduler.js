@@ -6,13 +6,13 @@ const map = require('lodash/map')
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 const Pods = require('../models/pods')
-const PoolRequests = require('../models/poolRequests')
+const Requests = require('../models/requests')
 const requests = require('../helpers/requests')
 const Videos = require('../models/videos')
 
 let timer = null
 
-const poolRequests = {
+const requestsScheduler = {
   activate: activate,
   addRequest: addRequest,
   deactivate: deactivate,
@@ -20,16 +20,16 @@ const poolRequests = {
 }
 
 function activate () {
-  logger.info('Pool requests activated.')
-  timer = setInterval(makePoolRequests, constants.INTERVAL)
+  logger.info('Requests scheduler activated.')
+  timer = setInterval(makeRequests, constants.INTERVAL)
 }
 
 function addRequest (id, type, request) {
-  logger.debug('Add request to the pool requests.', { id: id, type: type, request: request })
+  logger.debug('Add request to the requests scheduler.', { id: id, type: type, request: request })
 
-  PoolRequests.findById(id, function (err, entity) {
+  Requests.findById(id, function (err, entity) {
     if (err) {
-      logger.error('Cannot find one pool request.', { error: err })
+      logger.error('Cannot find one request.', { error: err })
       return // Abort
     }
 
@@ -40,15 +40,15 @@ function addRequest (id, type, request) {
       }
 
       // Remove the request of the other type
-      PoolRequests.removeRequestById(id, function (err) {
+      Requests.removeRequestById(id, function (err) {
         if (err) {
-          logger.error('Cannot remove a pool request.', { error: err })
+          logger.error('Cannot remove a request.', { error: err })
           return // Abort
         }
       })
     } else {
-      PoolRequests.create(id, type, request, function (err) {
-        if (err) logger.error('Cannot create a pool request.', { error: err })
+      Requests.create(id, type, request, function (err) {
+        if (err) logger.error('Cannot create a request.', { error: err })
         return // Abort
       })
     }
@@ -56,22 +56,22 @@ function addRequest (id, type, request) {
 }
 
 function deactivate () {
-  logger.info('Pool requests deactivated.')
+  logger.info('Requests scheduler deactivated.')
   clearInterval(timer)
 }
 
 function forceSend () {
-  logger.info('Force pool requests sending.')
-  makePoolRequests()
+  logger.info('Force requests scheduler sending.')
+  makeRequests()
 }
 
 // ---------------------------------------------------------------------------
 
-module.exports = poolRequests
+module.exports = requestsScheduler
 
 // ---------------------------------------------------------------------------
 
-function makePoolRequest (type, requests_to_make, callback) {
+function makeRequest (type, requests_to_make, callback) {
   if (!callback) callback = function () {}
 
   Pods.list(function (err, pods) {
@@ -118,16 +118,16 @@ function makePoolRequest (type, requests_to_make, callback) {
   })
 }
 
-function makePoolRequests () {
-  logger.info('Making pool requests to friends.')
+function makeRequests () {
+  logger.info('Making requests to friends.')
 
-  PoolRequests.list(function (err, pool_requests) {
+  Requests.list(function (err, requests) {
     if (err) {
-      logger.error('Cannot get the list of pool requests.', { err: err })
+      logger.error('Cannot get the list of requests.', { err: err })
       return // Abort
     }
 
-    if (pool_requests.length === 0) return
+    if (requests.length === 0) return
 
     const requests_to_make = {
       add: {
@@ -140,7 +140,7 @@ function makePoolRequests () {
       }
     }
 
-    async.each(pool_requests, function (pool_request, callback_each) {
+    async.each(requests, function (pool_request, callback_each) {
       if (pool_request.type === 'add') {
         requests_to_make.add.requests.push(pool_request.request)
         requests_to_make.add.ids.push(pool_request._id)
@@ -148,7 +148,7 @@ function makePoolRequests () {
         requests_to_make.remove.requests.push(pool_request.request)
         requests_to_make.remove.ids.push(pool_request._id)
       } else {
-        logger.error('Unkown pool request type.', { request_type: pool_request.type })
+        logger.error('Unkown request type.', { request_type: pool_request.type })
         return // abort
       }
 
@@ -156,19 +156,19 @@ function makePoolRequests () {
     }, function () {
       // Send the add requests
       if (requests_to_make.add.requests.length !== 0) {
-        makePoolRequest('add', requests_to_make.add.requests, function (err) {
-          if (err) logger.error('Errors when sent add pool requests.', { error: err })
+        makeRequest('add', requests_to_make.add.requests, function (err) {
+          if (err) logger.error('Errors when sent add requests.', { error: err })
 
-          PoolRequests.removeRequests(requests_to_make.add.ids)
+          Requests.removeRequests(requests_to_make.add.ids)
         })
       }
 
       // Send the remove requests
       if (requests_to_make.remove.requests.length !== 0) {
-        makePoolRequest('remove', requests_to_make.remove.requests, function (err) {
+        makeRequest('remove', requests_to_make.remove.requests, function (err) {
           if (err) logger.error('Errors when sent remove pool requests.', { error: err })
 
-          PoolRequests.removeRequests(requests_to_make.remove.ids)
+          Requests.removeRequests(requests_to_make.remove.ids)
         })
       }
     })

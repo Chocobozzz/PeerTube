@@ -9,7 +9,7 @@ const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertubeCrypto')
 const Pods = require('../models/pods')
-const poolRequests = require('../lib/poolRequests')
+const requestsScheduler = require('../lib/requestsScheduler')
 const requests = require('../helpers/requests')
 const Videos = require('../models/videos')
 
@@ -30,7 +30,7 @@ function addVideoToFriends (video) {
   const id = video.name + video.magnetUri
   // ensure namePath is null
   video.namePath = null
-  poolRequests.addRequest(id, 'add', video)
+  requestsScheduler.addRequest(id, 'add', video)
 }
 
 function hasFriends (callback) {
@@ -70,9 +70,9 @@ function makeFriends (callback) {
 
 function quitFriends (callback) {
   // Stop pool requests
-  poolRequests.deactivate()
+  requestsScheduler.deactivate()
   // Flush pool requests
-  poolRequests.forceSend()
+  requestsScheduler.forceSend()
 
   Pods.list(function (err, pods) {
     if (err) return callback(err)
@@ -90,7 +90,7 @@ function quitFriends (callback) {
     // Announce we quit them
     requests.makeMultipleRetryRequest(request, pods, function () {
       Pods.removeAll(function (err) {
-        poolRequests.activate()
+        requestsScheduler.activate()
 
         if (err) return callback(err)
 
@@ -110,7 +110,7 @@ function quitFriends (callback) {
 function removeVideoToFriends (video) {
   // To avoid duplicates
   const id = video.name + video.magnetUri
-  poolRequests.addRequest(id, 'remove', video)
+  requestsScheduler.addRequest(id, 'remove', video)
 }
 
 // ---------------------------------------------------------------------------
@@ -164,9 +164,9 @@ function getForeignPodsList (url, callback) {
 
 function makeRequestsToWinningPods (cert, pods_list, callback) {
   // Stop pool requests
-  poolRequests.deactivate()
+  requestsScheduler.deactivate()
   // Flush pool requests
-  poolRequests.forceSend()
+  requestsScheduler.forceSend()
 
   // Get the list of our videos to send to our new friends
   Videos.listOwned(function (err, videos_list) {
@@ -213,7 +213,7 @@ function makeRequestsToWinningPods (cert, pods_list, callback) {
 
       function endRequests (err) {
         // Now we made new friends, we can re activate the pool of requests
-        poolRequests.activate()
+        requestsScheduler.activate()
 
         if (err) {
           logger.error('There was some errors when we wanted to make friends.')
