@@ -64,13 +64,15 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   * **NodeJS >= 4.2**
   * OpenSSL (cli)
   * MongoDB
-  * xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin (for electron)
+  * ffmpeg xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin (for electron)
 
 #### Debian
 
-Install NodeJS 4.2: [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  * Install NodeJS 4.2: [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  * Add jessie backports to your *source.list*: http://backports.debian.org/Instructions/
 
-    # apt-get install mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin
+    # apt-get update
+    # apt-get install ffmpeg mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin
     # npm install -g electron-prebuilt
 
 #### Other distribution... (PR welcome)

@@ -22,7 +22,8 @@ const videosSchema = mongoose.Schema({
   description: String,
   magnetUri: String,
   podUrl: String,
-  author: String
+  author: String,
+  duration: Number
 })
 const VideosDB = mongoose.model('videos', videosSchema)
 
@@ -72,7 +73,8 @@ function addRemotes (videos, callback) {
       namePath: null,
       description: video.description,
       magnetUri: video.magnetUri,
-      podUrl: video.podUrl
+      podUrl: video.podUrl,
+      duration: video.duration
     }
 
     to_add.push(params)

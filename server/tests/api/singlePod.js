@@ -4,6 +4,7 @@ const async = require('async')
 const chai = require('chai')
 const expect = chai.expect
 const fs = require('fs')
+const keyBy = require('lodash/keyBy')
 const pathUtils = require('path')
 
 const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
@@ -160,6 +161,37 @@ describe('Test a single pod', function () {
 
       expect(res.body).to.be.an('array')
       expect(res.body.length).to.equal(0)
+
+      done()
+    })
+  })
+
+  it('Should upload 6 videos', function (done) {
+    this.timeout(25000)
+    const videos = [
+      'video_short.mp4', 'video_short.ogv', 'video_short.webm',
+      'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
+    ]
+    async.each(videos, function (video, callback_each) {
+      utils.uploadVideo(server.url, server.access_token, video + ' name', video + ' description', video, callback_each)
+    }, done)
+  })
+
+  it('Should have the correct durations', function (done) {
+    utils.getVideosList(server.url, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos).to.be.an('array')
+      expect(videos.length).to.equal(6)
+
+      const videos_by_name = keyBy(videos, 'name')
+      expect(videos_by_name['video_short.mp4 name'].duration).to.equal(5)
+      expect(videos_by_name['video_short.ogv name'].duration).to.equal(5)
+      expect(videos_by_name['video_short.webm name'].duration).to.equal(5)
+      expect(videos_by_name['video_short1.webm name'].duration).to.equal(10)
+      expect(videos_by_name['video_short2.webm name'].duration).to.equal(5)
+      expect(videos_by_name['video_short3.webm name'].duration).to.equal(5)
 
       done()
     })

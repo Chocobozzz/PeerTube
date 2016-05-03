@@ -3,6 +3,7 @@
 const config = require('config')
 const crypto = require('crypto')
 const express = require('express')
+const ffmpeg = require('fluent-ffmpeg')
 const multer = require('multer')
 
 const logger = require('../../../helpers/logger')
@@ -60,26 +61,37 @@ function addVideo (req, res, next) {
       return next(err)
     }
 
-    const video_data = {
-      name: video_infos.name,
-      namePath: video_file.filename,
-      description: video_infos.description,
-      magnetUri: torrent.magnetURI,
-      author: res.locals.oauth.token.user.username
-    }
-
-    Videos.add(video_data, function (err) {
+    ffmpeg.ffprobe(video_file.path, function (err, metadata) {
       if (err) {
-        // TODO unseed the video
-        logger.error('Cannot insert this video in the database.')
+        // TODO: unseed the video
+        logger.error('Cannot retrieve metadata of the file')
         return next(err)
       }
 
-      // Now we'll add the video's meta data to our friends
-      friends.addVideoToFriends(video_data)
+      const duration = Math.floor(metadata.format.duration)
 
-      // TODO : include Location of the new video -> 201
-      res.type('json').status(204).end()
+      const video_data = {
+        name: video_infos.name,
+        namePath: video_file.filename,
+        description: video_infos.description,
+        magnetUri: torrent.magnetURI,
+        author: res.locals.oauth.token.user.username,
+        duration: duration
+      }
+
+      Videos.add(video_data, function (err) {
+        if (err) {
+          // TODO unseed the video
+          logger.error('Cannot insert this video in the database.')
+          return next(err)
+        }
+
+        // Now we'll add the video's meta data to our friends
+        friends.addVideoToFriends(video_data)
+
+        // TODO : include Location of the new video -> 201
+        res.type('json').status(204).end()
+      })
     })
   })
 }
@@ -144,7 +156,8 @@ function getFormatedVideo (video_obj) {
     podUrl: video_obj.podUrl,
     isLocal: videos.getVideoState(video_obj).owned,
     magnetUri: video_obj.magnetUri,
-    author: video_obj.author
+    author: video_obj.author,
+    duration: video_obj.duration
   }
 
   return formated_video
