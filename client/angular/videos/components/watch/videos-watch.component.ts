@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from 'angular2/core';
 import { RouteParams, CanDeactivate, ComponentInstruction } from 'angular2/router';
-import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
+import { BytesPipe } from 'angular-pipes/math';
 
 // TODO import it with systemjs
 declare var WebTorrent: any;
