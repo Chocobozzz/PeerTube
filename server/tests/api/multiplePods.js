@@ -96,6 +96,12 @@ describe('Test multiple pods', function () {
               expect(video.podUrl).to.equal('http://localhost:9001')
               expect(video.magnetUri).to.exist
 
+              if (server.url !== 'http://localhost:9001') {
+                expect(video.isLocal).to.be.false
+              } else {
+                expect(video.isLocal).to.be.true
+              }
+
               // All pods should have the same magnet Uri
               if (base_magnet === null) {
                 base_magnet = video.magnetUri
@@ -139,6 +145,12 @@ describe('Test multiple pods', function () {
               expect(video.podUrl).to.equal('http://localhost:9002')
               expect(video.magnetUri).to.exist
 
+              if (server.url !== 'http://localhost:9002') {
+                expect(video.isLocal).to.be.false
+              } else {
+                expect(video.isLocal).to.be.true
+              }
+
               // All pods should have the same magnet Uri
               if (base_magnet === null) {
                 base_magnet = video.magnetUri
@@ -178,23 +190,31 @@ describe('Test multiple pods', function () {
               const videos = res.body
               expect(videos).to.be.an('array')
               expect(videos.length).to.equal(4)
-              let video = videos[2]
-              expect(video.name).to.equal('my super name for pod 3')
-              expect(video.description).to.equal('my super description for pod 3')
-              expect(video.podUrl).to.equal('http://localhost:9003')
-              expect(video.magnetUri).to.exist
+              const video1 = videos[2]
+              expect(video1.name).to.equal('my super name for pod 3')
+              expect(video1.description).to.equal('my super description for pod 3')
+              expect(video1.podUrl).to.equal('http://localhost:9003')
+              expect(video1.magnetUri).to.exist
 
-              video = videos[3]
-              expect(video.name).to.equal('my super name for pod 3-2')
-              expect(video.description).to.equal('my super description for pod 3-2')
-              expect(video.podUrl).to.equal('http://localhost:9003')
-              expect(video.magnetUri).to.exist
+              const video2 = videos[3]
+              expect(video2.name).to.equal('my super name for pod 3-2')
+              expect(video2.description).to.equal('my super description for pod 3-2')
+              expect(video2.podUrl).to.equal('http://localhost:9003')
+              expect(video2.magnetUri).to.exist
+
+              if (server.url !== 'http://localhost:9003') {
+                expect(video1.isLocal).to.be.false
+                expect(video2.isLocal).to.be.false
+              } else {
+                expect(video1.isLocal).to.be.true
+                expect(video2.isLocal).to.be.true
+              }
 
               // All pods should have the same magnet Uri
               if (base_magnet === null) {
-                base_magnet = video.magnetUri
+                base_magnet = video2.magnetUri
               } else {
-                expect(video.magnetUri).to.equal.magnetUri
+                expect(video2.magnetUri).to.equal.magnetUri
               }
 
               callback()

@@ -72,6 +72,8 @@ describe('Test a single pod', function () {
       expect(video.description).to.equal('my super description')
       expect(video.podUrl).to.equal('http://localhost:9001')
       expect(video.magnetUri).to.exist
+      expect(video.author).to.equal('root')
+      expect(video.isLocal).to.be.true
 
       video_id = video.id
 
@@ -97,6 +99,8 @@ describe('Test a single pod', function () {
       expect(video.description).to.equal('my super description')
       expect(video.podUrl).to.equal('http://localhost:9001')
       expect(video.magnetUri).to.exist
+      expect(video.author).to.equal('root')
+      expect(video.isLocal).to.be.true
 
       webtorrent.add(video.magnetUri, function (torrent) {
         expect(torrent.files).to.exist
@@ -119,6 +123,8 @@ describe('Test a single pod', function () {
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
       expect(video.podUrl).to.equal('http://localhost:9001')
+      expect(video.author).to.equal('root')
+      expect(video.isLocal).to.be.true
 
       done()
     })

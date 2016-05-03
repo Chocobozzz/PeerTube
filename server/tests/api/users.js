@@ -98,7 +98,10 @@ describe('Test users', function () {
       utils.getVideosList(server.url, function (err, res) {
         if (err) throw err
 
-        video_id = res.body[0].id
+        const video = res.body[0]
+        expect(video.author).to.equal('root')
+
+        video_id = video.id
         done()
       })
     })
