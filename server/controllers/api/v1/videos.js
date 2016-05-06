@@ -3,7 +3,6 @@
 const config = require('config')
 const crypto = require('crypto')
 const express = require('express')
-const ffmpeg = require('fluent-ffmpeg')
 const multer = require('multer')
 
 const logger = require('../../../helpers/logger')
@@ -61,14 +60,12 @@ function addVideo (req, res, next) {
       return next(err)
     }
 
-    ffmpeg.ffprobe(video_file.path, function (err, metadata) {
+    videos.getVideoDuration(video_file.path, function (err, duration) {
       if (err) {
         // TODO: unseed the video
         logger.error('Cannot retrieve metadata of the file')
         return next(err)
       }
-
-      const duration = Math.floor(metadata.format.duration)
 
       const video_data = {
         name: video_infos.name,

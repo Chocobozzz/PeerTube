@@ -2,6 +2,7 @@
 
 const async = require('async')
 const config = require('config')
+const ffmpeg = require('fluent-ffmpeg')
 const pathUtils = require('path')
 const webtorrent = require('../lib/webtorrent')
 
@@ -11,9 +12,18 @@ const Videos = require('../models/videos')
 const uploadDir = pathUtils.join(__dirname, '..', '..', config.get('storage.uploads'))
 
 const videos = {
+  getVideoDuration: getVideoDuration,
   getVideoState: getVideoState,
   seed: seed,
   seedAllExisting: seedAllExisting
+}
+
+function getVideoDuration (video_path, callback) {
+  ffmpeg.ffprobe(video_path, function (err, metadata) {
+    if (err) return callback(err)
+
+    return callback(null, Math.floor(metadata.format.duration))
+  })
 }
 
 function getVideoState (video) {
