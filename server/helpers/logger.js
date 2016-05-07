@@ -8,6 +8,7 @@ const winston = require('winston')
 winston.emitErrs = true
 
 const logDir = path.join(__dirname, '..', '..', config.get('storage.logs'))
+const label = config.get('webserver.host') + ':' + config.get('webserver.port')
 
 // Create the directory if it does not exist
 mkdirp.sync(logDir)
@@ -25,6 +26,7 @@ const logger = new winston.Logger({
     }),
     new winston.transports.Console({
       level: 'debug',
+      label: label,
       handleExceptions: true,
       humanReadableUnhandledException: true,
       json: false,
