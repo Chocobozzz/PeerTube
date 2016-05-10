@@ -76,7 +76,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
 
-      utils.testImage(server.url, 'video_short.webm', video.thumbnail_path, function (err, test) {
+      utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
         expect(test).to.equal(true)
 
@@ -108,7 +108,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
 
-      utils.testImage(server.url, 'video_short.webm', video.thumbnail_path, function (err, test) {
+      utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
         expect(test).to.equal(true)
 
@@ -137,7 +137,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
 
-      utils.testImage(server.url, 'video_short.webm', video.thumbnail_path, function (err, test) {
+      utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
         expect(test).to.equal(true)
 
@@ -220,7 +220,7 @@ describe('Test a single pod', function () {
         if (err) throw err
         const video_name = video.name.replace(' name', '')
 
-        utils.testImage(server.url, video_name, video.thumbnail_path, function (err, test) {
+        utils.testImage(server.url, video_name, video.thumbnailPath, function (err, test) {
           if (err) throw err
 
           expect(test).to.equal(true)

@@ -182,7 +182,7 @@ function getFormatedVideo (video_obj) {
     magnetUri: video_obj.magnetUri,
     author: video_obj.author,
     duration: video_obj.duration,
-    thumbnail_path: constants.THUMBNAILS_STATIC_PATH + '/' + video_obj.thumbnail
+    thumbnailPath: constants.THUMBNAILS_STATIC_PATH + '/' + video_obj.thumbnail
   }
 
   return formated_video

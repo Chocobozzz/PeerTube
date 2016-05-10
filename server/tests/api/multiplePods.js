@@ -110,7 +110,7 @@ describe('Test multiple pods', function () {
                 expect(video.magnetUri).to.equal.magnetUri
               }
 
-              utils.testImage(server.url, 'video_short1.webm', video.thumbnail_path, function (err, test) {
+              utils.testImage(server.url, 'video_short1.webm', video.thumbnailPath, function (err, test) {
                 if (err) throw err
                 expect(test).to.equal(true)
 
@@ -165,7 +165,7 @@ describe('Test multiple pods', function () {
                 expect(video.magnetUri).to.equal.magnetUri
               }
 
-              utils.testImage(server.url, 'video_short2.webm', video.thumbnail_path, function (err, test) {
+              utils.testImage(server.url, 'video_short2.webm', video.thumbnailPath, function (err, test) {
                 if (err) throw err
                 expect(test).to.equal(true)
 
@@ -241,11 +241,11 @@ describe('Test multiple pods', function () {
                 expect(video2.magnetUri).to.equal.magnetUri
               }
 
-              utils.testImage(server.url, 'video_short3.webm', video1.thumbnail_path, function (err, test) {
+              utils.testImage(server.url, 'video_short3.webm', video1.thumbnailPath, function (err, test) {
                 if (err) throw err
                 expect(test).to.equal(true)
 
-                utils.testImage(server.url, 'video_short.webm', video2.thumbnail_path, function (err, test) {
+                utils.testImage(server.url, 'video_short.webm', video2.thumbnailPath, function (err, test) {
                   if (err) throw err
                   expect(test).to.equal(true)
 
