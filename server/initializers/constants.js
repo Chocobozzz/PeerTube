@@ -18,6 +18,12 @@ const PODS_SCORE = {
 // Number of retries we make for the make retry requests (to friends...)
 let REQUEST_RETRIES = 10
 
+// Videos thumbnail size
+const THUMBNAILS_SIZE = '200x110'
+
+// Path for access to thumbnails with express router
+const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   FRIEND_BASE_SCORE = 20
@@ -32,7 +38,9 @@ module.exports = {
   FRIEND_BASE_SCORE: FRIEND_BASE_SCORE,
   INTERVAL: INTERVAL,
   PODS_SCORE: PODS_SCORE,
-  REQUEST_RETRIES: REQUEST_RETRIES
+  REQUEST_RETRIES: REQUEST_RETRIES,
+  THUMBNAILS_SIZE: THUMBNAILS_SIZE,
+  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH
 }
 
 // ---------------------------------------------------------------------------

@@ -16,6 +16,7 @@ storage:
   certs: 'certs/'
   uploads: 'uploads/'
   logs: 'logs/'
+  thumbnails: 'thumbnails/'
 
 network:
   friends: []

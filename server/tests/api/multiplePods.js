@@ -193,14 +193,23 @@ describe('Test multiple pods', function () {
               expect(videos).to.be.an('array')
               expect(videos.length).to.equal(4)
 
-              const video1 = videos[2]
+              // We not sure about the order of the two last uploads
+              let video1 = null
+              let video2 = null
+              if (videos[2].name === 'my super name for pod 3') {
+                video1 = videos[2]
+                video2 = videos[3]
+              } else {
+                video1 = videos[3]
+                video2 = videos[2]
+              }
+
               expect(video1.name).to.equal('my super name for pod 3')
               expect(video1.description).to.equal('my super description for pod 3')
               expect(video1.podUrl).to.equal('http://localhost:9003')
               expect(video1.magnetUri).to.exist
               expect(video1.duration).to.equal(5)
 
-              const video2 = videos[3]
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.description).to.equal('my super description for pod 3-2')
               expect(video2.podUrl).to.equal('http://localhost:9003')

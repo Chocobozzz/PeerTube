@@ -7,7 +7,9 @@ const middleware = require('../../../middlewares')
 const secureMiddleware = middleware.secure
 const cacheMiddleware = middleware.cache
 const reqValidator = middleware.reqValidators.remote
-const videos = require('../../../models/videos')
+const logger = require('../../../helpers/logger')
+const Videos = require('../../../models/videos')
+const videos = require('../../../lib/videos')
 
 const router = express.Router()
 
@@ -34,20 +36,34 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addRemoteVideos (req, res, next) {
-  videos.addRemotes(req.body.data, function (err, videos) {
-    if (err) return next(err)
+  const videos_to_create = req.body.data
+  videos.createRemoteVideos(videos_to_create, function (err, remote_videos) {
+    if (err) {
+      logger.error('Cannot create remote videos.', { error: err })
+      return next(err)
+    }
 
-    res.json(videos)
+    res.type('json').status(201).end()
   })
 }
 
 function removeRemoteVideo (req, res, next) {
-  const url = req.body.signature.url
+  const fromUrl = req.body.signature.url
   const magnetUris = map(req.body.data, 'magnetUri')
 
-  videos.removeRemotesOfByMagnetUris(url, magnetUris, function (err) {
-    if (err) return next(err)
+  Videos.listFromUrlAndMagnets(fromUrl, magnetUris, function (err, videos_list) {
+    if (err) {
+      logger.error('Cannot list videos from url and magnets.', { error: err })
+      return next(err)
+    }
 
-    res.type('json').status(204).end()
+    videos.removeRemoteVideos(videos_list, function (err) {
+      if (err) {
+        logger.error('Cannot remove remote videos.', { error: err })
+        return next(err)
+      }
+
+      res.type('json').status(204).end()
+    })
   })
 }

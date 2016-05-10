@@ -8,6 +8,7 @@ const logger = require('../helpers/logger')
 const Pods = require('../models/pods')
 const Requests = require('../models/requests')
 const requests = require('../helpers/requests')
+const videos = require('../lib/videos')
 const Videos = require('../models/videos')
 
 let timer = null
@@ -99,7 +100,7 @@ function makeRequest (type, requests_to_make, callback) {
     requests.makeMultipleRetryRequest(params, pods, callbackEachPodFinished, callbackAllPodsFinished)
 
     function callbackEachPodFinished (err, response, body, url, pod, callback_each_pod_finished) {
-      if (err || (response.statusCode !== 200 && response.statusCode !== 204)) {
+      if (err || (response.statusCode !== 200 && response.statusCode !== 201 && response.statusCode !== 204)) {
         bad_pods.push(pod._id)
         logger.error('Error sending secure request to %s pod.', url, { error: err || new Error('Status code not 20x') })
       } else {
@@ -187,12 +188,13 @@ function removeBadPods () {
     const urls = map(pods, 'url')
     const ids = map(pods, '_id')
 
-    Videos.removeAllRemotesOf(urls, function (err, r) {
+    Videos.listFromUrls(urls, function (err, videos_list) {
       if (err) {
-        logger.error('Cannot remove videos from a pod that we removing.', { error: err })
+        logger.error('Cannot list videos urls.', { error: err, urls: urls })
       } else {
-        const videos_removed = r.result.n
-        logger.info('Removed %d videos.', videos_removed)
+        videos.removeRemoteVideos(videos_list, function (err) {
+          if (err) logger.error('Cannot remove remote videos.', { error: err })
+        })
       }
 
       Pods.removeAllByIds(ids, function (err, r) {

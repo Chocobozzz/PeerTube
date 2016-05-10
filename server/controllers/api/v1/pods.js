@@ -1,17 +1,16 @@
 'use strict'
 
 const express = require('express')
-const fs = require('fs')
 
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middleware = require('../../../middlewares')
 const cacheMiddleware = middleware.cache
-const peertubeCrypto = require('../../../helpers/peertubeCrypto')
 const Pods = require('../../../models/pods')
 const reqValidator = middleware.reqValidators.pods
 const secureMiddleware = middleware.secure
 const secureRequest = middleware.reqValidators.remote.secureRequest
+const videos = require('../../../lib/videos')
 const Videos = require('../../../models/videos')
 
 const router = express.Router()
@@ -34,9 +33,12 @@ function addPods (req, res, next) {
   Pods.add(informations, function (err) {
     if (err) return next(err)
 
-    Videos.addRemotes(informations.videos)
+    // Create the remote videos from the new pod
+    videos.createRemoteVideos(informations.videos, function (err) {
+      if (err) logger.error('Cannot create remote videos.', { error: err })
+    })
 
-    fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
+    friends.getMyCertificate(function (err, cert) {
       if (err) {
         logger.error('Cannot read cert file.')
         return next(err)
@@ -75,11 +77,20 @@ function removePods (req, res, next) {
   Pods.remove(url, function (err) {
     if (err) return next(err)
 
-    Videos.removeAllRemotesOf(url, function (err) {
-      if (err) logger.error('Cannot remove all remote videos of %s.', url)
-      else logger.info('%s pod removed.', url)
+    Videos.listFromUrl(url, function (err, videos_list) {
+      if (err) {
+        logger.error('Cannot list videos from url.', { error: err })
+        next(err)
+      }
 
-      res.type('json').status(204).end()
+      videos.removeRemoteVideos(videos_list, function (err) {
+        if (err) {
+          logger.error('Cannot remove remote videos.', { error: err })
+          next(err)
+        }
+
+        res.type('json').status(204).end()
+      })
     })
   })
 }

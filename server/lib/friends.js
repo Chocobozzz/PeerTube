@@ -11,6 +11,7 @@ const peertubeCrypto = require('../helpers/peertubeCrypto')
 const Pods = require('../models/pods')
 const requestsScheduler = require('../lib/requestsScheduler')
 const requests = require('../helpers/requests')
+const videos = require('../lib/videos')
 const Videos = require('../models/videos')
 
 const http = config.get('webserver.https') ? 'https' : 'http'
@@ -20,6 +21,7 @@ const port = config.get('webserver.port')
 const pods = {
   addVideoToFriends: addVideoToFriends,
   hasFriends: hasFriends,
+  getMyCertificate: getMyCertificate,
   makeFriends: makeFriends,
   quitFriends: quitFriends,
   removeVideoToFriends: removeVideoToFriends
@@ -42,11 +44,15 @@ function hasFriends (callback) {
   })
 }
 
+function getMyCertificate (callback) {
+  fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', callback)
+}
+
 function makeFriends (callback) {
   const pods_score = {}
 
   logger.info('Make friends!')
-  fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', function (err, cert) {
+  getMyCertificate(function (err, cert) {
     if (err) {
       logger.error('Cannot read public cert.')
       return callback(err)
@@ -54,8 +60,8 @@ function makeFriends (callback) {
 
     const urls = config.get('network.friends')
 
-    async.each(urls, function (url, callback) {
-      computeForeignPodsList(url, pods_score, callback)
+    async.each(urls, function (url, callback_each) {
+      computeForeignPodsList(url, pods_score, callback_each)
     }, function (err) {
       if (err) return callback(err)
 
@@ -96,11 +102,18 @@ function quitFriends (callback) {
 
         logger.info('Broke friends, so sad :(')
 
-        Videos.removeAllRemotes(function (err) {
+        Videos.listFromRemotes(function (err, videos_list) {
           if (err) return callback(err)
 
-          logger.info('Removed all remote videos.')
-          callback(null)
+          videos.removeRemoteVideos(videos_list, function (err) {
+            if (err) {
+              logger.error('Cannot remove remote videos.', { error: err })
+              return callback(err)
+            }
+
+            logger.info('Removed all remote videos.')
+            callback(null)
+          })
         })
       })
     })
@@ -127,16 +140,14 @@ function computeForeignPodsList (url, pods_score, callback) {
     if (err) return callback(err)
     if (foreign_pods_list.length === 0) return callback()
 
-    async.each(foreign_pods_list, function (foreign_pod, callback_each) {
+    foreign_pods_list.forEach(function (foreign_pod) {
       const foreign_url = foreign_pod.url
 
       if (pods_score[foreign_url]) pods_score[foreign_url]++
       else pods_score[foreign_url] = 1
-
-      callback_each()
-    }, function () {
-      callback()
     })
+
+    callback()
   })
 }
 
@@ -194,12 +205,14 @@ function makeRequestsToWinningPods (cert, pods_list, callback) {
               logger.error('Error with adding %s pod.', pod.url, { error: err })
               return callback_each_request()
             }
-
-            Videos.addRemotes(body.videos, function (err) {
+            console.log('hihi')
+            videos.createRemoteVideos(body.videos, function (err) {
               if (err) {
                 logger.error('Error with adding videos of pod.', pod.url, { error: err })
                 return callback_each_request()
               }
+
+              console.log('kik')
 
               logger.debug('Adding remote videos from %s.', pod.url, { videos: body.videos })
               return callback_each_request()

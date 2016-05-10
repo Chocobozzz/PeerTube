@@ -13,6 +13,7 @@ storage:
   certs: 'test5/certs/'
   uploads: 'test5/uploads/'
   logs: 'test5/logs/'
+  thumbnails: 'test5/thumbnails/'
 
 network:
   friends:

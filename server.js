@@ -75,6 +75,10 @@ app.use('/app/*', function (req, res, next) {
   res.sendStatus(404)
 })
 
+// Thumbnails path for express
+const thumbnails_physical_path = path.join(__dirname, config.get('storage.thumbnails'))
+app.use(constants.THUMBNAILS_STATIC_PATH, express.static(thumbnails_physical_path, { maxAge: 0 }))
+
 // Client application
 app.use('/*', function (req, res, next) {
   res.sendFile(path.join(__dirname, 'client/index.html'))
