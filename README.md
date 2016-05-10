@@ -16,6 +16,12 @@ Prototype of a decentralized video streaming platform using P2P (bittorrent) dir
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
+![screenshot](https://lutim.cpy.re/vC2loRww)
+
+## Demonstration
+
+PeerTube is not ready for production yet, but you can find [a video](https://vimeo.com/164881662 "Yes Vimeo, please don't judge me") to see how it looks like.
+
 ## Why
 
 We can't build a FOSS video streaming alternatives to YouTube, Dailymotion, Vimeo... with a centralized software. One organization alone cannot have enought money to pay bandwith and video storage of its server.
@@ -131,15 +137,15 @@ See the ARCHITECTURE.md for more informations. Do not hesitate to give your opin
 
 Here are some simple schemes:
 
-![Decentralized](http://lutim.cpy.re/Q7mnNdJP)
+![Decentralized](https://lutim.cpy.re/Q7mnNdJP)
 
-![Watch a video](http://lutim.cpy.re/0riSzAp1)
+![Watch a video](https://lutim.cpy.re/0riSzAp1)
 
-![Watch a video P2P](http://lutim.cpy.re/OzMSOtxG)
+![Watch a video P2P](https://lutim.cpy.re/OzMSOtxG)
 
-![Join a network](http://lutim.cpy.re/uVjNNRa9)
+![Join a network](https://lutim.cpy.re/uVjNNRa9)
 
-![Many networks](http://lutim.cpy.re/udTMqcb0)
+![Many networks](https://lutim.cpy.re/udTMqcb0)
 
 ### Frontend
 
