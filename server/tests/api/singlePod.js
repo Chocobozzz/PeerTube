@@ -76,14 +76,19 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
 
-      video_id = video.id
+      utils.testImage(server.url, 'video_short.webm', video.thumbnail_path, function (err, test) {
+        if (err) throw err
+        expect(test).to.equal(true)
 
-      webtorrent.add(video.magnetUri, function (torrent) {
-        expect(torrent.files).to.exist
-        expect(torrent.files.length).to.equal(1)
-        expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+        video_id = video.id
 
-        done()
+        webtorrent.add(video.magnetUri, function (torrent) {
+          expect(torrent.files).to.exist
+          expect(torrent.files.length).to.equal(1)
+          expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+          done()
+        })
       })
     })
   })
@@ -103,12 +108,17 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
 
-      webtorrent.add(video.magnetUri, function (torrent) {
-        expect(torrent.files).to.exist
-        expect(torrent.files.length).to.equal(1)
-        expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+      utils.testImage(server.url, 'video_short.webm', video.thumbnail_path, function (err, test) {
+        if (err) throw err
+        expect(test).to.equal(true)
 
-        done()
+        webtorrent.add(video.magnetUri, function (torrent) {
+          expect(torrent.files).to.exist
+          expect(torrent.files.length).to.equal(1)
+          expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+          done()
+        })
       })
     })
   })
@@ -127,7 +137,12 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
 
-      done()
+      utils.testImage(server.url, 'video_short.webm', video.thumbnail_path, function (err, test) {
+        if (err) throw err
+        expect(test).to.equal(true)
+
+        done()
+      })
     })
   })
 
@@ -194,6 +209,24 @@ describe('Test a single pod', function () {
       expect(videos_by_name['video_short3.webm name'].duration).to.equal(5)
 
       done()
+    })
+  })
+
+  it('Should have the correct thumbnails', function (done) {
+    utils.getVideosList(server.url, function (err, res) {
+      const videos = res.body
+
+      async.each(videos, function (video, callback_each) {
+        if (err) throw err
+        const video_name = video.name.replace(' name', '')
+
+        utils.testImage(server.url, video_name, video.thumbnail_path, function (err, test) {
+          if (err) throw err
+
+          expect(test).to.equal(true)
+          callback_each()
+        })
+      }, done)
     })
   })
 

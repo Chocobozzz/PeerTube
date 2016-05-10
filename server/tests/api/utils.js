@@ -3,6 +3,7 @@
 const child_process = require('child_process')
 const exec = child_process.exec
 const fork = child_process.fork
+const fs = require('fs')
 const pathUtils = require('path')
 const request = require('supertest')
 
@@ -19,6 +20,7 @@ const testUtils = {
   flushAndRunMultipleServers: flushAndRunMultipleServers,
   runServer: runServer,
   searchVideo: searchVideo,
+  testImage: testImage,
   uploadVideo: uploadVideo
 }
 
@@ -250,6 +252,21 @@ function searchVideo (url, search, end) {
     .expect(200)
     .expect('Content-Type', /json/)
     .end(end)
+}
+
+function testImage (url, video_name, image_path, callback) {
+  request(url)
+    .get(image_path)
+    .expect(200)
+    .end(function (err, res) {
+      if (err) return callback(err)
+
+      fs.readFile(pathUtils.join(__dirname, 'fixtures', video_name + '.jpg'), function (err, data) {
+        if (err) return callback(err)
+
+        callback(null, data.equals(res.body))
+      })
+    })
 }
 
 function uploadVideo (url, access_token, name, description, fixture, special_status, end) {
