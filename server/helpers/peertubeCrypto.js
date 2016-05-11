@@ -21,10 +21,10 @@ const peertubeCrypto = {
   sign: sign
 }
 
-function checkSignature (public_key, raw_data, hex_signature) {
-  const crt = ursa.createPublicKey(public_key)
-  const is_valid = crt.hashAndVerify('sha256', new Buffer(raw_data).toString('hex'), hex_signature, 'hex')
-  return is_valid
+function checkSignature (publicKey, rawData, hexSignature) {
+  const crt = ursa.createPublicKey(publicKey)
+  const isValid = crt.hashAndVerify('sha256', new Buffer(rawData).toString('hex'), hexSignature, 'hex')
+  return isValid
 }
 
 function createCertsIfNotExist (callback) {
@@ -43,16 +43,16 @@ function decrypt (key, data, callback) {
   fs.readFile(getCertDir() + 'peertube.key.pem', function (err, file) {
     if (err) return callback(err)
 
-    const my_private_key = ursa.createPrivateKey(file)
-    const decrypted_key = my_private_key.decrypt(key, 'hex', 'utf8')
-    const decrypted_data = symetricDecrypt(data, decrypted_key)
+    const myPrivateKey = ursa.createPrivateKey(file)
+    const decryptedKey = myPrivateKey.decrypt(key, 'hex', 'utf8')
+    const decryptedData = symetricDecrypt(data, decryptedKey)
 
-    return callback(null, decrypted_data)
+    return callback(null, decryptedData)
   })
 }
 
-function encrypt (public_key, data, callback) {
-  const crt = ursa.createPublicKey(public_key)
+function encrypt (publicKey, data, callback) {
+  const crt = ursa.createPublicKey(publicKey)
 
   symetricEncrypt(data, function (err, dataEncrypted) {
     if (err) return callback(err)

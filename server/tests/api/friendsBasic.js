@@ -10,25 +10,25 @@ const utils = require('./utils')
 describe('Test basic friends', function () {
   let servers = []
 
-  function testMadeFriends (servers, server_to_test, callback) {
+  function testMadeFriends (servers, serverToTest, callback) {
     const friends = []
     for (let i = 0; i < servers.length; i++) {
-      if (servers[i].url === server_to_test.url) continue
+      if (servers[i].url === serverToTest.url) continue
       friends.push(servers[i].url)
     }
 
-    utils.getFriendsList(server_to_test.url, function (err, res) {
+    utils.getFriendsList(serverToTest.url, function (err, res) {
       if (err) throw err
 
       const result = res.body
-      const result_urls = [ result[0].url, result[1].url ]
+      const resultUrls = [ result[0].url, result[1].url ]
       expect(result).to.be.an('array')
       expect(result.length).to.equal(2)
-      expect(result_urls[0]).to.not.equal(result_urls[1])
+      expect(resultUrls[0]).to.not.equal(resultUrls[1])
 
-      const error_string = 'Friends url do not correspond for ' + server_to_test.url
-      expect(friends).to.contain(result_urls[0], error_string)
-      expect(friends).to.contain(result_urls[1], error_string)
+      const errorString = 'Friends url do not correspond for ' + serverToTest.url
+      expect(friends).to.contain(resultUrls[0], errorString)
+      expect(friends).to.contain(resultUrls[1], errorString)
       callback()
     })
   }
@@ -37,8 +37,8 @@ describe('Test basic friends', function () {
 
   before(function (done) {
     this.timeout(20000)
-    utils.flushAndRunMultipleServers(3, function (servers_run, urls_run) {
-      servers = servers_run
+    utils.flushAndRunMultipleServers(3, function (serversRun, urlsRun) {
+      servers = serversRun
       done()
     })
   })

@@ -36,8 +36,8 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addRemoteVideos (req, res, next) {
-  const videos_to_create = req.body.data
-  videos.createRemoteVideos(videos_to_create, function (err, remote_videos) {
+  const videosToCreate = req.body.data
+  videos.createRemoteVideos(videosToCreate, function (err, remoteVideos) {
     if (err) {
       logger.error('Cannot create remote videos.', { error: err })
       return next(err)
@@ -51,13 +51,13 @@ function removeRemoteVideo (req, res, next) {
   const fromUrl = req.body.signature.url
   const magnetUris = map(req.body.data, 'magnetUri')
 
-  Videos.listFromUrlAndMagnets(fromUrl, magnetUris, function (err, videos_list) {
+  Videos.listFromUrlAndMagnets(fromUrl, magnetUris, function (err, videosList) {
     if (err) {
       logger.error('Cannot list videos from url and magnets.', { error: err })
       return next(err)
     }
 
-    videos.removeRemoteVideos(videos_list, function (err) {
+    videos.removeRemoteVideos(videosList, function (err) {
       if (err) {
         logger.error('Cannot remove remote videos.', { error: err })
         return next(err)

@@ -10,13 +10,13 @@ const reqValidatorsPod = {
 }
 
 function makeFriends (req, res, next) {
-  friends.hasFriends(function (err, has_friends) {
+  friends.hasFriends(function (err, hasFriends) {
     if (err) {
       logger.error('Cannot know if we have friends.', { error: err })
       res.sendStatus(500)
     }
 
-    if (has_friends === true) {
+    if (hasFriends === true) {
       // We need to quit our friends before make new ones
       res.sendStatus(409)
     } else {

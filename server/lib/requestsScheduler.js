@@ -72,7 +72,7 @@ module.exports = requestsScheduler
 
 // ---------------------------------------------------------------------------
 
-function makeRequest (type, requests_to_make, callback) {
+function makeRequest (type, requestsToMake, callback) {
   if (!callback) callback = function () {}
 
   Pods.list(function (err, pods) {
@@ -83,7 +83,7 @@ function makeRequest (type, requests_to_make, callback) {
       sign: true,
       method: 'POST',
       path: null,
-      data: requests_to_make
+      data: requestsToMake
     }
 
     if (type === 'add') {
@@ -94,26 +94,26 @@ function makeRequest (type, requests_to_make, callback) {
       return callback(new Error('Unkown pool request type.'))
     }
 
-    const bad_pods = []
-    const good_pods = []
+    const badPods = []
+    const goodPods = []
 
     requests.makeMultipleRetryRequest(params, pods, callbackEachPodFinished, callbackAllPodsFinished)
 
-    function callbackEachPodFinished (err, response, body, url, pod, callback_each_pod_finished) {
+    function callbackEachPodFinished (err, response, body, url, pod, callbackEachPodFinished) {
       if (err || (response.statusCode !== 200 && response.statusCode !== 201 && response.statusCode !== 204)) {
-        bad_pods.push(pod._id)
+        badPods.push(pod._id)
         logger.error('Error sending secure request to %s pod.', url, { error: err || new Error('Status code not 20x') })
       } else {
-        good_pods.push(pod._id)
+        goodPods.push(pod._id)
       }
 
-      return callback_each_pod_finished()
+      return callbackEachPodFinished()
     }
 
     function callbackAllPodsFinished (err) {
       if (err) return callback(err)
 
-      updatePodsScore(good_pods, bad_pods)
+      updatePodsScore(goodPods, badPods)
       callback(null)
     }
   })
@@ -130,7 +130,7 @@ function makeRequests () {
 
     if (requests.length === 0) return
 
-    const requests_to_make = {
+    const requestsToMake = {
       add: {
         ids: [],
         requests: []
@@ -141,35 +141,35 @@ function makeRequests () {
       }
     }
 
-    async.each(requests, function (pool_request, callback_each) {
-      if (pool_request.type === 'add') {
-        requests_to_make.add.requests.push(pool_request.request)
-        requests_to_make.add.ids.push(pool_request._id)
-      } else if (pool_request.type === 'remove') {
-        requests_to_make.remove.requests.push(pool_request.request)
-        requests_to_make.remove.ids.push(pool_request._id)
+    async.each(requests, function (poolRequest, callbackEach) {
+      if (poolRequest.type === 'add') {
+        requestsToMake.add.requests.push(poolRequest.request)
+        requestsToMake.add.ids.push(poolRequest._id)
+      } else if (poolRequest.type === 'remove') {
+        requestsToMake.remove.requests.push(poolRequest.request)
+        requestsToMake.remove.ids.push(poolRequest._id)
       } else {
-        logger.error('Unkown request type.', { request_type: pool_request.type })
+        logger.error('Unkown request type.', { request_type: poolRequest.type })
         return // abort
       }
 
-      callback_each()
+      callbackEach()
     }, function () {
       // Send the add requests
-      if (requests_to_make.add.requests.length !== 0) {
-        makeRequest('add', requests_to_make.add.requests, function (err) {
+      if (requestsToMake.add.requests.length !== 0) {
+        makeRequest('add', requestsToMake.add.requests, function (err) {
           if (err) logger.error('Errors when sent add requests.', { error: err })
 
-          Requests.removeRequests(requests_to_make.add.ids)
+          Requests.removeRequests(requestsToMake.add.ids)
         })
       }
 
       // Send the remove requests
-      if (requests_to_make.remove.requests.length !== 0) {
-        makeRequest('remove', requests_to_make.remove.requests, function (err) {
+      if (requestsToMake.remove.requests.length !== 0) {
+        makeRequest('remove', requestsToMake.remove.requests, function (err) {
           if (err) logger.error('Errors when sent remove pool requests.', { error: err })
 
-          Requests.removeRequests(requests_to_make.remove.ids)
+          Requests.removeRequests(requestsToMake.remove.ids)
         })
       }
     })
@@ -188,11 +188,11 @@ function removeBadPods () {
     const urls = map(pods, 'url')
     const ids = map(pods, '_id')
 
-    Videos.listFromUrls(urls, function (err, videos_list) {
+    Videos.listFromUrls(urls, function (err, videosList) {
       if (err) {
         logger.error('Cannot list videos urls.', { error: err, urls: urls })
       } else {
-        videos.removeRemoteVideos(videos_list, function (err) {
+        videos.removeRemoteVideos(videosList, function (err) {
           if (err) logger.error('Cannot remove remote videos.', { error: err })
         })
       }
@@ -201,22 +201,22 @@ function removeBadPods () {
         if (err) {
           logger.error('Cannot remove bad pods.', { error: err })
         } else {
-          const pods_removed = r.result.n
-          logger.info('Removed %d pods.', pods_removed)
+          const podsRemoved = r.result.n
+          logger.info('Removed %d pods.', podsRemoved)
         }
       })
     })
   })
 }
 
-function updatePodsScore (good_pods, bad_pods) {
-  logger.info('Updating %d good pods and %d bad pods scores.', good_pods.length, bad_pods.length)
+function updatePodsScore (goodPods, badPods) {
+  logger.info('Updating %d good pods and %d bad pods scores.', goodPods.length, badPods.length)
 
-  Pods.incrementScores(good_pods, constants.PODS_SCORE.BONUS, function (err) {
+  Pods.incrementScores(goodPods, constants.PODS_SCORE.BONUS, function (err) {
     if (err) logger.error('Cannot increment scores of good pods.')
   })
 
-  Pods.incrementScores(bad_pods, constants.PODS_SCORE.MALUS, function (err) {
+  Pods.incrementScores(badPods, constants.PODS_SCORE.MALUS, function (err) {
     if (err) logger.error('Cannot increment scores of bad pods.')
     removeBadPods()
   })

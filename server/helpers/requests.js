@@ -17,7 +17,7 @@ const requests = {
   makeMultipleRetryRequest: makeMultipleRetryRequest
 }
 
-function makeMultipleRetryRequest (all_data, pods, callbackEach, callback) {
+function makeMultipleRetryRequest (allData, pods, callbackEach, callback) {
   if (!callback) {
     callback = callbackEach
     callbackEach = null
@@ -27,32 +27,32 @@ function makeMultipleRetryRequest (all_data, pods, callbackEach, callback) {
   let signature
 
   // Add signature if it is specified in the params
-  if (all_data.method === 'POST' && all_data.data && all_data.sign === true) {
+  if (allData.method === 'POST' && allData.data && allData.sign === true) {
     signature = peertubeCrypto.sign(url)
   }
 
   // Make a request for each pod
-  async.each(pods, function (pod, callback_each_async) {
+  async.each(pods, function (pod, callbackEachAsync) {
     function callbackEachRetryRequest (err, response, body, url, pod) {
       if (callbackEach !== null) {
         callbackEach(err, response, body, url, pod, function () {
-          callback_each_async()
+          callbackEachAsync()
         })
       } else {
-        callback_each_async()
+        callbackEachAsync()
       }
     }
 
     const params = {
-      url: pod.url + all_data.path,
-      method: all_data.method
+      url: pod.url + allData.path,
+      method: allData.method
     }
 
     // Add data with POST requst ?
-    if (all_data.method === 'POST' && all_data.data) {
+    if (allData.method === 'POST' && allData.data) {
       // Encrypt data ?
-      if (all_data.encrypt === true) {
-        peertubeCrypto.encrypt(pod.publicKey, JSON.stringify(all_data.data), function (err, encrypted) {
+      if (allData.encrypt === true) {
+        peertubeCrypto.encrypt(pod.publicKey, JSON.stringify(allData.data), function (err, encrypted) {
           if (err) return callback(err)
 
           params.json = {
@@ -63,7 +63,7 @@ function makeMultipleRetryRequest (all_data, pods, callbackEach, callback) {
           makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
         })
       } else {
-        params.json = { data: all_data.data }
+        params.json = { data: allData.data }
         makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
       }
     } else {
@@ -78,20 +78,20 @@ module.exports = requests
 
 // ---------------------------------------------------------------------------
 
-function makeRetryRequest (params, from_url, to_pod, signature, callbackEach) {
+function makeRetryRequest (params, fromUrl, toPod, signature, callbackEach) {
   // Append the signature
   if (signature) {
     params.json.signature = {
-      url: from_url,
+      url: fromUrl,
       signature: signature
     }
   }
 
-  logger.debug('Make retry requests to %s.', to_pod.url)
+  logger.debug('Make retry requests to %s.', toPod.url)
 
   replay(
     request.post(params, function (err, response, body) {
-      callbackEach(err, response, body, params.url, to_pod)
+      callbackEach(err, response, body, params.url, toPod)
     }),
     {
       retries: constants.REQUEST_RETRIES,

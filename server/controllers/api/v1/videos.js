@@ -32,8 +32,8 @@ const storage = multer.diskStorage({
     if (file.mimetype === 'video/webm') extension = 'webm'
     else if (file.mimetype === 'video/mp4') extension = 'mp4'
     else if (file.mimetype === 'video/ogg') extension = 'ogv'
-    utils.generateRandomString(16, function (err, random_string) {
-      const fieldname = err ? undefined : random_string
+    utils.generateRandomString(16, function (err, randomString) {
+      const fieldname = err ? undefined : randomString
       cb(null, fieldname + '.' + extension)
     })
   }
@@ -55,47 +55,47 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addVideo (req, res, next) {
-  const video_file = req.files.videofile[0]
-  const video_infos = req.body
+  const videoFile = req.files.videofile[0]
+  const videoInfos = req.body
 
-  videos.seed(video_file.path, function (err, torrent) {
+  videos.seed(videoFile.path, function (err, torrent) {
     if (err) {
       logger.error('Cannot seed this video.')
       return next(err)
     }
 
-    videos.getVideoDuration(video_file.path, function (err, duration) {
+    videos.getVideoDuration(videoFile.path, function (err, duration) {
       if (err) {
         // TODO: unseed the video
         logger.error('Cannot retrieve metadata of the file.')
         return next(err)
       }
 
-      videos.getVideoThumbnail(video_file.path, function (err, thumbnail_name) {
+      videos.getVideoThumbnail(videoFile.path, function (err, thumbnailName) {
         if (err) {
           // TODO: unseed the video
           logger.error('Cannot make a thumbnail of the video file.')
           return next(err)
         }
 
-        const video_data = {
-          name: video_infos.name,
-          namePath: video_file.filename,
-          description: video_infos.description,
+        const videoData = {
+          name: videoInfos.name,
+          namePath: videoFile.filename,
+          description: videoInfos.description,
           magnetUri: torrent.magnetURI,
           author: res.locals.oauth.token.user.username,
           duration: duration,
-          thumbnail: thumbnail_name
+          thumbnail: thumbnailName
         }
 
-        Videos.add(video_data, function (err) {
+        Videos.add(videoData, function (err) {
           if (err) {
             // TODO unseed the video
             logger.error('Cannot insert this video in the database.')
             return next(err)
           }
 
-          fs.readFile(thumbnailsDir + thumbnail_name, function (err, data) {
+          fs.readFile(thumbnailsDir + thumbnailName, function (err, data) {
             if (err) {
               // TODO: remove video?
               logger.error('Cannot read the thumbnail of the video')
@@ -103,9 +103,9 @@ function addVideo (req, res, next) {
             }
 
             // Set the image in base64
-            video_data.thumbnail_base64 = new Buffer(data).toString('base64')
+            videoData.thumbnailBase64 = new Buffer(data).toString('base64')
             // Now we'll add the video's meta data to our friends
-            friends.addVideoToFriends(video_data)
+            friends.addVideoToFriends(videoData)
 
             // TODO : include Location of the new video -> 201
             res.type('json').status(204).end()
@@ -117,29 +117,29 @@ function addVideo (req, res, next) {
 }
 
 function getVideos (req, res, next) {
-  Videos.get(req.params.id, function (err, video_obj) {
+  Videos.get(req.params.id, function (err, videoObj) {
     if (err) return next(err)
 
-    const state = videos.getVideoState(video_obj)
+    const state = videos.getVideoState(videoObj)
     if (state.exist === false) {
       return res.type('json').status(204).end()
     }
 
-    res.json(getFormatedVideo(video_obj))
+    res.json(getFormatedVideo(videoObj))
   })
 }
 
 function listVideos (req, res, next) {
-  Videos.list(function (err, videos_list) {
+  Videos.list(function (err, videosList) {
     if (err) return next(err)
 
-    res.json(getFormatedVideos(videos_list))
+    res.json(getFormatedVideos(videosList))
   })
 }
 
 function removeVideo (req, res, next) {
-  const video_id = req.params.id
-  Videos.get(video_id, function (err, video) {
+  const videoId = req.params.id
+  Videos.get(videoId, function (err, video) {
     if (err) return next(err)
 
     removeTorrent(video.magnetUri, function () {
@@ -163,39 +163,39 @@ function removeVideo (req, res, next) {
 }
 
 function searchVideos (req, res, next) {
-  Videos.search(req.params.name, function (err, videos_list) {
+  Videos.search(req.params.name, function (err, videosList) {
     if (err) return next(err)
 
-    res.json(getFormatedVideos(videos_list))
+    res.json(getFormatedVideos(videosList))
   })
 }
 
 // ---------------------------------------------------------------------------
 
-function getFormatedVideo (video_obj) {
-  const formated_video = {
-    id: video_obj._id,
-    name: video_obj.name,
-    description: video_obj.description,
-    podUrl: video_obj.podUrl,
-    isLocal: videos.getVideoState(video_obj).owned,
-    magnetUri: video_obj.magnetUri,
-    author: video_obj.author,
-    duration: video_obj.duration,
-    thumbnailPath: constants.THUMBNAILS_STATIC_PATH + '/' + video_obj.thumbnail
+function getFormatedVideo (videoObj) {
+  const formatedVideo = {
+    id: videoObj._id,
+    name: videoObj.name,
+    description: videoObj.description,
+    podUrl: videoObj.podUrl,
+    isLocal: videos.getVideoState(videoObj).owned,
+    magnetUri: videoObj.magnetUri,
+    author: videoObj.author,
+    duration: videoObj.duration,
+    thumbnailPath: constants.THUMBNAILS_STATIC_PATH + '/' + videoObj.thumbnail
   }
 
-  return formated_video
+  return formatedVideo
 }
 
-function getFormatedVideos (videos_obj) {
-  const formated_videos = []
+function getFormatedVideos (videosObj) {
+  const formatedVideos = []
 
-  videos_obj.forEach(function (video_obj) {
-    formated_videos.push(getFormatedVideo(video_obj))
+  videosObj.forEach(function (videoObj) {
+    formatedVideos.push(getFormatedVideo(videoObj))
   })
 
-  return formated_videos
+  return formatedVideos
 }
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process

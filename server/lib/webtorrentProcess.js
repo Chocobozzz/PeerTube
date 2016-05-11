@@ -26,11 +26,11 @@ function webtorrent (args) {
     const _id = data._id
 
     wt.seed(path, { announceList: '' }, function (torrent) {
-      const to_send = {
+      const toSend = {
         magnetUri: torrent.magnetURI
       }
 
-      ipc.of[nodeKey].emit(nodeKey + '.seedDone.' + _id, to_send)
+      ipc.of[nodeKey].emit(nodeKey + '.seedDone.' + _id, toSend)
     })
   }
 
@@ -40,15 +40,15 @@ function webtorrent (args) {
     const _id = data._id
 
     wt.add(magnetUri, function (torrent) {
-      const to_send = {
+      const toSend = {
         files: []
       }
 
       torrent.files.forEach(function (file) {
-        to_send.files.push({ path: file.path })
+        toSend.files.push({ path: file.path })
       })
 
-      ipc.of[nodeKey].emit(nodeKey + '.addDone.' + _id, to_send)
+      ipc.of[nodeKey].emit(nodeKey + '.addDone.' + _id, toSend)
     })
   }
 
@@ -65,8 +65,8 @@ function webtorrent (args) {
     }
 
     function callback () {
-      const to_send = {}
-      ipc.of[nodeKey].emit(nodeKey + '.removeDone.' + _id, to_send)
+      const toSend = {}
+      ipc.of[nodeKey].emit(nodeKey + '.removeDone.' + _id, toSend)
     }
   }
 

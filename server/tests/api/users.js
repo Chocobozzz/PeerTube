@@ -12,8 +12,8 @@ const utils = require('./utils')
 
 describe('Test users', function () {
   let server = null
-  let access_token = null
-  let video_id
+  let accessToken = null
+  let videoId
 
   before(function (done) {
     this.timeout(20000)
@@ -78,21 +78,21 @@ describe('Test users', function () {
   })
 
   it('Should not be able to upload a video', function (done) {
-    access_token = 'mysupertoken'
-    utils.uploadVideo(server.url, access_token, 'my super name', 'my super description', 'video_short.webm', 401, done)
+    accessToken = 'mysupertoken'
+    utils.uploadVideo(server.url, accessToken, 'my super name', 'my super description', 'video_short.webm', 401, done)
   })
 
   it('Should be able to login', function (done) {
     utils.login(server.url, server.client, server.user, 200, function (err, res) {
       if (err) throw err
 
-      access_token = res.body.access_token
+      accessToken = res.body.access_token
       done()
     })
   })
 
   it('Should upload the video with the correct token', function (done) {
-    utils.uploadVideo(server.url, access_token, 'my super name', 'my super description', 'video_short.webm', 204, function (err, res) {
+    utils.uploadVideo(server.url, accessToken, 'my super name', 'my super description', 'video_short.webm', 204, function (err, res) {
       if (err) throw err
 
       utils.getVideosList(server.url, function (err, res) {
@@ -101,24 +101,24 @@ describe('Test users', function () {
         const video = res.body[0]
         expect(video.author).to.equal('root')
 
-        video_id = video.id
+        videoId = video.id
         done()
       })
     })
   })
 
   it('Should upload the video again with the correct token', function (done) {
-    utils.uploadVideo(server.url, access_token, 'my super name 2', 'my super description 2', 'video_short.webm', 204, done)
+    utils.uploadVideo(server.url, accessToken, 'my super name 2', 'my super description 2', 'video_short.webm', 204, done)
   })
 
   it('Should not be able to remove the video with an incorrect token', function (done) {
-    utils.removeVideo(server.url, 'bad_token', video_id, 401, done)
+    utils.removeVideo(server.url, 'bad_token', videoId, 401, done)
   })
 
   it('Should not be able to remove the video with the token of another account')
 
   it('Should be able to remove the video with the correct token', function (done) {
-    utils.removeVideo(server.url, access_token, video_id, done)
+    utils.removeVideo(server.url, accessToken, videoId, done)
   })
 
   it('Should logout')

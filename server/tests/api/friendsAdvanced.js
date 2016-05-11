@@ -9,44 +9,44 @@ const utils = require('./utils')
 describe('Test advanced friends', function () {
   let servers = []
 
-  function makeFriends (pod_number, callback) {
-    return utils.makeFriends(servers[pod_number - 1].url, callback)
+  function makeFriends (podNumber, callback) {
+    return utils.makeFriends(servers[podNumber - 1].url, callback)
   }
 
-  function quitFriends (pod_number, callback) {
-    return utils.quitFriends(servers[pod_number - 1].url, callback)
+  function quitFriends (podNumber, callback) {
+    return utils.quitFriends(servers[podNumber - 1].url, callback)
   }
 
-  function getFriendsList (pod_number, end) {
-    return utils.getFriendsList(servers[pod_number - 1].url, end)
+  function getFriendsList (podNumber, end) {
+    return utils.getFriendsList(servers[podNumber - 1].url, end)
   }
 
-  function uploadVideo (pod_number, callback) {
+  function uploadVideo (podNumber, callback) {
     const name = 'my super video'
     const description = 'my super description'
     const fixture = 'video_short.webm'
-    const server = servers[pod_number - 1]
+    const server = servers[podNumber - 1]
 
     return utils.uploadVideo(server.url, server.access_token, name, description, fixture, callback)
   }
 
-  function getVideos (pod_number, callback) {
-    return utils.getVideosList(servers[pod_number - 1].url, callback)
+  function getVideos (podNumber, callback) {
+    return utils.getVideosList(servers[podNumber - 1].url, callback)
   }
 
   // ---------------------------------------------------------------
 
   before(function (done) {
     this.timeout(30000)
-    utils.flushAndRunMultipleServers(6, function (servers_run, urls_run) {
-      servers = servers_run
+    utils.flushAndRunMultipleServers(6, function (serversRun, urlsRun) {
+      servers = serversRun
 
-      async.each(servers, function (server, callback_each) {
-        utils.loginAndGetAccessToken(server, function (err, access_token) {
-          if (err) return callback_each(err)
+      async.each(servers, function (server, callbackEach) {
+        utils.loginAndGetAccessToken(server, function (err, accessToken) {
+          if (err) return callbackEach(err)
 
-          server.access_token = access_token
-          callback_each()
+          server.accessToken = accessToken
+          callbackEach()
         })
       }, done)
     })

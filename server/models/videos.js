@@ -77,13 +77,13 @@ function get (id, callback) {
 }
 
 function list (callback) {
-  VideosDB.find(function (err, videos_list) {
+  VideosDB.find(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of the videos.')
       return callback(err)
     }
 
-    return callback(null, videos_list)
+    return callback(null, videosList)
   })
 }
 
@@ -105,13 +105,13 @@ function listFromRemotes (callback) {
 
 function listOwned (callback) {
   // If namePath is not null this is *our* video
-  VideosDB.find({ namePath: { $ne: null } }, function (err, videos_list) {
+  VideosDB.find({ namePath: { $ne: null } }, function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of owned videos.')
       return callback(err)
     }
 
-    return callback(null, videos_list)
+    return callback(null, videosList)
   })
 }
 

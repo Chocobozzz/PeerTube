@@ -12,8 +12,8 @@ describe('Test parameters validator', function () {
   let server = null
 
   function makePostRequest (path, token, fields, attach, done, fail) {
-    let status_code = 400
-    if (fail !== undefined && fail === false) status_code = 200
+    let statusCode = 400
+    if (fail !== undefined && fail === false) statusCode = 200
 
     const req = request(server.url)
       .post(path)
@@ -26,18 +26,18 @@ describe('Test parameters validator', function () {
       req.field(field, value)
     })
 
-    req.expect(status_code, done)
+    req.expect(statusCode, done)
   }
 
   function makePostBodyRequest (path, fields, done, fail) {
-    let status_code = 400
-    if (fail !== undefined && fail === false) status_code = 200
+    let statusCode = 400
+    if (fail !== undefined && fail === false) statusCode = 200
 
     request(server.url)
       .post(path)
       .set('Accept', 'application/json')
       .send(fields)
-      .expect(status_code, done)
+      .expect(statusCode, done)
   }
 
   // ---------------------------------------------------------------

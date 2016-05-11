@@ -45,11 +45,11 @@ const Users = {
 function createClient (secret, grants, callback) {
   logger.debug('Creating client.')
 
-  const mongo_id = new mongoose.mongo.ObjectID()
-  return OAuthClientsDB.create({ _id: mongo_id, clientSecret: secret, grants: grants }, function (err) {
+  const mongoId = new mongoose.mongo.ObjectID()
+  return OAuthClientsDB.create({ _id: mongoId, clientSecret: secret, grants: grants }, function (err) {
     if (err) return callback(err)
 
-    return callback(null, mongo_id)
+    return callback(null, mongoId)
   })
 }
 
@@ -73,8 +73,8 @@ function getClient (clientId, clientSecret) {
   logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ').')
 
   // TODO req validator
-  const mongo_id = new mongoose.mongo.ObjectID(clientId)
-  return OAuthClientsDB.findOne({ _id: mongo_id, clientSecret: clientSecret })
+  const mongoId = new mongoose.mongo.ObjectID(clientId)
+  return OAuthClientsDB.findOne({ _id: mongoId, clientSecret: clientSecret })
 }
 
 function getClients (callback) {
@@ -99,7 +99,7 @@ function getUsers (callback) {
 function saveToken (token, client, user) {
   logger.debug('Saving token for client ' + client.id + ' and user ' + user.id + '.')
 
-  const token_to_create = {
+  const tokenToCreate = {
     accessToken: token.accessToken,
     accessTokenExpiresOn: token.accessTokenExpiresOn,
     client: client.id,
@@ -108,13 +108,13 @@ function saveToken (token, client, user) {
     user: user.id
   }
 
-  return OAuthTokensDB.create(token_to_create, function (err, token_created) {
+  return OAuthTokensDB.create(tokenToCreate, function (err, tokenCreated) {
     if (err) throw err // node-oauth2-server library uses Promise.try
 
-    token_created.client = client
-    token_created.user = user
+    tokenCreated.client = client
+    tokenCreated.user = user
 
-    return token_created
+    return tokenCreated
   })
 }
 

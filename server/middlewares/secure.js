@@ -23,9 +23,9 @@ function decryptBody (req, res, next) {
 
     logger.debug('Decrypting body from %s.', url)
 
-    const signature_ok = peertubeCrypto.checkSignature(pod.publicKey, url, req.body.signature.signature)
+    const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, url, req.body.signature.signature)
 
-    if (signature_ok === true) {
+    if (signatureOk === true) {
       peertubeCrypto.decrypt(req.body.key, req.body.data, function (err, decrypted) {
         if (err) {
           logger.error('Cannot decrypt data.', { error: err })

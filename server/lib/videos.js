@@ -29,15 +29,15 @@ const videos = {
 
 function createRemoteVideos (videos, callback) {
   // Create the remote videos from the new pod
-  createRemoteVideoObjects(videos, function (err, remote_videos) {
+  createRemoteVideoObjects(videos, function (err, remoteVideos) {
     if (err) return callback(err)
 
-    Videos.addRemotes(remote_videos, callback)
+    Videos.addRemotes(remoteVideos, callback)
   })
 }
 
-function getVideoDuration (video_path, callback) {
-  ffmpeg.ffprobe(video_path, function (err, metadata) {
+function getVideoDuration (videoPath, callback) {
+  ffmpeg.ffprobe(videoPath, function (err, metadata) {
     if (err) return callback(err)
 
     return callback(null, Math.floor(metadata.format.duration))
@@ -54,9 +54,9 @@ function getVideoState (video) {
   return { exist: exist, owned: owned }
 }
 
-function getVideoThumbnail (video_path, callback) {
-  const filename = pathUtils.basename(video_path) + '.jpg'
-  ffmpeg(video_path)
+function getVideoThumbnail (videoPath, callback) {
+  const filename = pathUtils.basename(videoPath) + '.jpg'
+  ffmpeg(videoPath)
     .on('error', callback)
     .on('end', function () {
       callback(null, filename)
@@ -71,7 +71,7 @@ function getVideoThumbnail (video_path, callback) {
 
 // Remove video datas from disk (video file, thumbnail...)
 function removeVideosDataFromDisk (videos, callback) {
-  async.each(videos, function (video, callback_each) {
+  async.each(videos, function (video, callbackEach) {
     fs.unlink(thumbnailsDir + video.thumbnail, function (err) {
       if (err) logger.error('Cannot remove the video thumbnail')
 
@@ -79,13 +79,13 @@ function removeVideosDataFromDisk (videos, callback) {
         fs.unlink(uploadDir + video.namePath, function (err) {
           if (err) {
             logger.error('Cannot remove this video file.')
-            return callback_each(err)
+            return callbackEach(err)
           }
 
-          callback_each(null)
+          callbackEach(null)
         })
       } else {
-        callback_each(null)
+        callbackEach(null)
       }
     })
   }, callback)
@@ -110,20 +110,20 @@ function seed (path, callback) {
 }
 
 function seedAllExisting (callback) {
-  Videos.listOwned(function (err, videos_list) {
+  Videos.listOwned(function (err, videosList) {
     if (err) {
       logger.error('Cannot get list of the videos to seed.')
       return callback(err)
     }
 
-    async.each(videos_list, function (video, each_callback) {
+    async.each(videosList, function (video, callbackEach) {
       seed(uploadDir + video.namePath, function (err) {
         if (err) {
           logger.error('Cannot seed this video.')
           return callback(err)
         }
 
-        each_callback(null)
+        callbackEach(null)
       })
     }, callback)
   })
@@ -136,16 +136,16 @@ module.exports = videos
 // ---------------------------------------------------------------------------
 
 function createRemoteVideoObjects (videos, callback) {
-  const remote_videos = []
+  const remoteVideos = []
 
-  async.each(videos, function (video, callback_each) {
+  async.each(videos, function (video, callbackEach) {
     // Creating the thumbnail for this remote video
-    utils.generateRandomString(16, function (err, random_string) {
-      if (err) return callback_each(err)
+    utils.generateRandomString(16, function (err, randomString) {
+      if (err) return callbackEach(err)
 
-      const thumbnail_name = random_string + '.jpg'
-      createThumbnailFromBase64(thumbnail_name, video.thumbnail_base64, function (err) {
-        if (err) return callback_each(err)
+      const thumbnailName = randomString + '.jpg'
+      createThumbnailFromBase64(thumbnailName, video.thumbnailBase64, function (err) {
+        if (err) return callbackEach(err)
 
         const params = {
           name: video.name,
@@ -153,21 +153,21 @@ function createRemoteVideoObjects (videos, callback) {
           magnetUri: video.magnetUri,
           podUrl: video.podUrl,
           duration: video.duration,
-          thumbnail: thumbnail_name
+          thumbnail: thumbnailName
         }
-        remote_videos.push(params)
+        remoteVideos.push(params)
 
-        callback_each(null)
+        callbackEach(null)
       })
     })
   },
   function (err) {
     if (err) return callback(err)
 
-    callback(null, remote_videos)
+    callback(null, remoteVideos)
   })
 }
 
-function createThumbnailFromBase64 (thumbnail_name, data, callback) {
-  fs.writeFile(thumbnailsDir + thumbnail_name, data, { encoding: 'base64' }, callback)
+function createThumbnailFromBase64 (thumbnailName, data, callback) {
+  fs.writeFile(thumbnailsDir + thumbnailName, data, { encoding: 'base64' }, callback)
 }

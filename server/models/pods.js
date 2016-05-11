@@ -58,13 +58,13 @@ function incrementScores (ids, value, callback) {
 }
 
 function list (callback) {
-  PodsDB.find(function (err, pods_list) {
+  PodsDB.find(function (err, podsList) {
     if (err) {
       logger.error('Cannot get the list of the pods.')
       return callback(err)
     }
 
-    return callback(null, pods_list)
+    return callback(null, podsList)
   })
 }
 

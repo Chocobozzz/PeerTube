@@ -14,7 +14,7 @@ const utils = require('./utils')
 
 describe('Test a single pod', function () {
   let server = null
-  let video_id = -1
+  let videoId = -1
 
   before(function (done) {
     this.timeout(20000)
@@ -80,7 +80,7 @@ describe('Test a single pod', function () {
         if (err) throw err
         expect(test).to.equal(true)
 
-        video_id = video.id
+        videoId = video.id
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -97,7 +97,7 @@ describe('Test a single pod', function () {
     // Yes, this could be long
     this.timeout(60000)
 
-    utils.getVideo(server.url, video_id, function (err, res) {
+    utils.getVideo(server.url, videoId, function (err, res) {
       if (err) throw err
 
       const video = res.body
@@ -158,7 +158,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should remove the video', function (done) {
-    utils.removeVideo(server.url, server.access_token, video_id, function (err) {
+    utils.removeVideo(server.url, server.accessToken, videoId, function (err) {
       if (err) throw err
 
       fs.readdir(pathUtils.join(__dirname, '../../../test1/uploads/'), function (err, files) {
@@ -187,8 +187,8 @@ describe('Test a single pod', function () {
       'video_short.mp4', 'video_short.ogv', 'video_short.webm',
       'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
     ]
-    async.each(videos, function (video, callback_each) {
-      utils.uploadVideo(server.url, server.access_token, video + ' name', video + ' description', video, callback_each)
+    async.each(videos, function (video, callbackEach) {
+      utils.uploadVideo(server.url, server.accessToken, video + ' name', video + ' description', video, callbackEach)
     }, done)
   })
 
@@ -200,13 +200,13 @@ describe('Test a single pod', function () {
       expect(videos).to.be.an('array')
       expect(videos.length).to.equal(6)
 
-      const videos_by_name = keyBy(videos, 'name')
-      expect(videos_by_name['video_short.mp4 name'].duration).to.equal(5)
-      expect(videos_by_name['video_short.ogv name'].duration).to.equal(5)
-      expect(videos_by_name['video_short.webm name'].duration).to.equal(5)
-      expect(videos_by_name['video_short1.webm name'].duration).to.equal(10)
-      expect(videos_by_name['video_short2.webm name'].duration).to.equal(5)
-      expect(videos_by_name['video_short3.webm name'].duration).to.equal(5)
+      const videosByName = keyBy(videos, 'name')
+      expect(videosByName['video_short.mp4 name'].duration).to.equal(5)
+      expect(videosByName['video_short.ogv name'].duration).to.equal(5)
+      expect(videosByName['video_short.webm name'].duration).to.equal(5)
+      expect(videosByName['video_short1.webm name'].duration).to.equal(10)
+      expect(videosByName['video_short2.webm name'].duration).to.equal(5)
+      expect(videosByName['video_short3.webm name'].duration).to.equal(5)
 
       done()
     })
@@ -216,15 +216,15 @@ describe('Test a single pod', function () {
     utils.getVideosList(server.url, function (err, res) {
       const videos = res.body
 
-      async.each(videos, function (video, callback_each) {
+      async.each(videos, function (video, callbackEach) {
         if (err) throw err
-        const video_name = video.name.replace(' name', '')
+        const videoName = video.name.replace(' name', '')
 
-        utils.testImage(server.url, video_name, video.thumbnailPath, function (err, test) {
+        utils.testImage(server.url, videoName, video.thumbnailPath, function (err, test) {
           if (err) throw err
 
           expect(test).to.equal(true)
-          callback_each()
+          callbackEach()
         })
       }, done)
     })

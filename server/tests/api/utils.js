@@ -1,8 +1,8 @@
 'use strict'
 
-const child_process = require('child_process')
-const exec = child_process.exec
-const fork = child_process.fork
+const childProcess = require('child_process')
+const exec = childProcess.exec
+const fork = childProcess.fork
 const fs = require('fs')
 const pathUtils = require('path')
 const request = require('supertest')
@@ -63,10 +63,10 @@ function getVideosList (url, end) {
     .end(end)
 }
 
-function login (url, client, user, expected_status, end) {
+function login (url, client, user, expectedStatus, end) {
   if (!end) {
-    end = expected_status
-    expected_status = 200
+    end = expectedStatus
+    expectedStatus = 200
   }
 
   const path = '/api/v1/users/token'
@@ -85,7 +85,7 @@ function login (url, client, user, expected_status, end) {
     .post(path)
     .type('form')
     .send(body)
-    .expect(expected_status)
+    .expect(expectedStatus)
     .end(end)
 }
 
@@ -97,10 +97,10 @@ function loginAndGetAccessToken (server, callback) {
   })
 }
 
-function makeFriends (url, expected_status, callback) {
+function makeFriends (url, expectedStatus, callback) {
   if (!callback) {
-    callback = expected_status
-    expected_status = 204
+    callback = expectedStatus
+    expectedStatus = 204
   }
 
   const path = '/api/v1/pods/makefriends'
@@ -109,7 +109,7 @@ function makeFriends (url, expected_status, callback) {
   request(url)
     .get(path)
     .set('Accept', 'application/json')
-    .expect(expected_status)
+    .expect(expectedStatus)
     .end(function (err, res) {
       if (err) throw err
 
@@ -134,10 +134,10 @@ function quitFriends (url, callback) {
     })
 }
 
-function removeVideo (url, token, id, expected_status, end) {
+function removeVideo (url, token, id, expectedStatus, end) {
   if (!end) {
-    end = expected_status
-    expected_status = 204
+    end = expectedStatus
+    expectedStatus = 204
   }
 
   const path = '/api/v1/videos'
@@ -146,11 +146,11 @@ function removeVideo (url, token, id, expected_status, end) {
     .delete(path + '/' + id)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + token)
-    .expect(expected_status)
+    .expect(expectedStatus)
     .end(end)
 }
 
-function flushAndRunMultipleServers (total_servers, serversRun) {
+function flushAndRunMultipleServers (totalServers, serversRun) {
   let apps = []
   let urls = []
   let i = 0
@@ -159,13 +159,13 @@ function flushAndRunMultipleServers (total_servers, serversRun) {
     apps[number - 1] = app
     urls[number - 1] = url
     i++
-    if (i === total_servers) {
+    if (i === totalServers) {
       serversRun(apps, urls)
     }
   }
 
   flushTests(function () {
-    for (let j = 1; j <= total_servers; j++) {
+    for (let j = 1; j <= totalServers; j++) {
       // For the virtual buffer
       setTimeout(function () {
         runServer(j, function (app, url) {
@@ -191,7 +191,7 @@ function runServer (number, callback) {
   }
 
   // These actions are async so we need to be sure that they have both been done
-  const server_run_string = {
+  const serverRunString = {
     'Connected to mongodb': false,
     'Server listening on port': false
   }
@@ -215,7 +215,7 @@ function runServer (number, callback) {
 
   server.app = fork(pathUtils.join(__dirname, '../../../server.js'), [], options)
   server.app.stdout.on('data', function onStdout (data) {
-    let dont_continue = false
+    let dontContinue = false
 
     // Capture things if we want to
     for (const key of Object.keys(regexps)) {
@@ -230,13 +230,13 @@ function runServer (number, callback) {
     }
 
     // Check if all required sentences are here
-    for (const key of Object.keys(server_run_string)) {
-      if (data.toString().indexOf(key) !== -1) server_run_string[key] = true
-      if (server_run_string[key] === false) dont_continue = true
+    for (const key of Object.keys(serverRunString)) {
+      if (data.toString().indexOf(key) !== -1) serverRunString[key] = true
+      if (serverRunString[key] === false) dontContinue = true
     }
 
     // If no, there is maybe one thing not already initialized (mongodb...)
-    if (dont_continue === true) return
+    if (dontContinue === true) return
 
     server.app.stdout.removeListener('data', onStdout)
     callback(server)
@@ -254,14 +254,14 @@ function searchVideo (url, search, end) {
     .end(end)
 }
 
-function testImage (url, video_name, image_path, callback) {
+function testImage (url, videoName, imagePath, callback) {
   request(url)
-    .get(image_path)
+    .get(imagePath)
     .expect(200)
     .end(function (err, res) {
       if (err) return callback(err)
 
-      fs.readFile(pathUtils.join(__dirname, 'fixtures', video_name + '.jpg'), function (err, data) {
+      fs.readFile(pathUtils.join(__dirname, 'fixtures', videoName + '.jpg'), function (err, data) {
         if (err) return callback(err)
 
         callback(null, data.equals(res.body))
@@ -269,10 +269,10 @@ function testImage (url, video_name, image_path, callback) {
     })
 }
 
-function uploadVideo (url, access_token, name, description, fixture, special_status, end) {
+function uploadVideo (url, accessToken, name, description, fixture, specialStatus, end) {
   if (!end) {
-    end = special_status
-    special_status = 204
+    end = specialStatus
+    specialStatus = 204
   }
 
   const path = '/api/v1/videos'
@@ -280,11 +280,11 @@ function uploadVideo (url, access_token, name, description, fixture, special_sta
   request(url)
     .post(path)
     .set('Accept', 'application/json')
-    .set('Authorization', 'Bearer ' + access_token)
+    .set('Authorization', 'Bearer ' + accessToken)
     .field('name', name)
     .field('description', description)
     .attach('videofile', pathUtils.join(__dirname, 'fixtures', fixture))
-    .expect(special_status)
+    .expect(specialStatus)
     .end(end)
 }
 

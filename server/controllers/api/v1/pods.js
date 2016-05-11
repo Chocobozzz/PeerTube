@@ -44,23 +44,23 @@ function addPods (req, res, next) {
         return next(err)
       }
 
-      Videos.listOwned(function (err, videos_list) {
+      Videos.listOwned(function (err, videosList) {
         if (err) {
           logger.error('Cannot get the list of owned videos.')
           return next(err)
         }
 
-        res.json({ cert: cert, videos: videos_list })
+        res.json({ cert: cert, videos: videosList })
       })
     })
   })
 }
 
 function listPods (req, res, next) {
-  Pods.list(function (err, pods_list) {
+  Pods.list(function (err, podsList) {
     if (err) return next(err)
 
-    res.json(pods_list)
+    res.json(podsList)
   })
 }
 
@@ -77,13 +77,13 @@ function removePods (req, res, next) {
   Pods.remove(url, function (err) {
     if (err) return next(err)
 
-    Videos.listFromUrl(url, function (err, videos_list) {
+    Videos.listFromUrl(url, function (err, videosList) {
       if (err) {
         logger.error('Cannot list videos from url.', { error: err })
         next(err)
       }
 
-      videos.removeRemoteVideos(videos_list, function (err) {
+      videos.removeRemoteVideos(videosList, function (err) {
         if (err) {
           logger.error('Cannot remove remote videos.', { error: err })
           next(err)

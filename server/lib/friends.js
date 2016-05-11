@@ -39,8 +39,8 @@ function hasFriends (callback) {
   Pods.count(function (err, count) {
     if (err) return callback(err)
 
-    const has_friends = (count !== 0)
-    callback(null, has_friends)
+    const hasFriends = (count !== 0)
+    callback(null, hasFriends)
   })
 }
 
@@ -49,7 +49,7 @@ function getMyCertificate (callback) {
 }
 
 function makeFriends (callback) {
-  const pods_score = {}
+  const podsScore = {}
 
   logger.info('Make friends!')
   getMyCertificate(function (err, cert) {
@@ -60,16 +60,16 @@ function makeFriends (callback) {
 
     const urls = config.get('network.friends')
 
-    async.each(urls, function (url, callback_each) {
-      computeForeignPodsList(url, pods_score, callback_each)
+    async.each(urls, function (url, callbackEach) {
+      computeForeignPodsList(url, podsScore, callbackEach)
     }, function (err) {
       if (err) return callback(err)
 
-      logger.debug('Pods scores computed.', { pods_score: pods_score })
-      const pods_list = computeWinningPods(urls, pods_score)
-      logger.debug('Pods that we keep.', { pods_to_keep: pods_list })
+      logger.debug('Pods scores computed.', { podsScore: podsScore })
+      const podsList = computeWinningPods(urls, podsScore)
+      logger.debug('Pods that we keep.', { podsToKeep: podsList })
 
-      makeRequestsToWinningPods(cert, pods_list, callback)
+      makeRequestsToWinningPods(cert, podsList, callback)
     })
   })
 }
@@ -102,10 +102,10 @@ function quitFriends (callback) {
 
         logger.info('Broke friends, so sad :(')
 
-        Videos.listFromRemotes(function (err, videos_list) {
+        Videos.listFromRemotes(function (err, videosList) {
           if (err) return callback(err)
 
-          videos.removeRemoteVideos(videos_list, function (err) {
+          videos.removeRemoteVideos(videosList, function (err) {
             if (err) {
               logger.error('Cannot remove remote videos.', { error: err })
               return callback(err)
@@ -132,35 +132,35 @@ module.exports = pods
 
 // ---------------------------------------------------------------------------
 
-function computeForeignPodsList (url, pods_score, callback) {
+function computeForeignPodsList (url, podsScore, callback) {
   // Let's give 1 point to the pod we ask the friends list
-  pods_score[url] = 1
+  podsScore[url] = 1
 
-  getForeignPodsList(url, function (err, foreign_pods_list) {
+  getForeignPodsList(url, function (err, foreignPodsList) {
     if (err) return callback(err)
-    if (foreign_pods_list.length === 0) return callback()
+    if (foreignPodsList.length === 0) return callback()
 
-    foreign_pods_list.forEach(function (foreign_pod) {
-      const foreign_url = foreign_pod.url
+    foreignPodsList.forEach(function (foreignPod) {
+      const foreignUrl = foreignPod.url
 
-      if (pods_score[foreign_url]) pods_score[foreign_url]++
-      else pods_score[foreign_url] = 1
+      if (podsScore[foreignUrl]) podsScore[foreignUrl]++
+      else podsScore[foreignUrl] = 1
     })
 
     callback()
   })
 }
 
-function computeWinningPods (urls, pods_score) {
+function computeWinningPods (urls, podsScore) {
   // Build the list of pods to add
   // Only add a pod if it exists in more than a half base pods
-  const pods_list = []
-  const base_score = urls.length / 2
-  Object.keys(pods_score).forEach(function (pod) {
-    if (pods_score[pod] > base_score) pods_list.push({ url: pod })
+  const podsList = []
+  const baseScore = urls.length / 2
+  Object.keys(baseScore).forEach(function (pod) {
+    if (podsScore[pod] > baseScore) podsList.push({ url: pod })
   })
 
-  return pods_list
+  return podsList
 }
 
 function getForeignPodsList (url, callback) {
@@ -173,14 +173,14 @@ function getForeignPodsList (url, callback) {
   })
 }
 
-function makeRequestsToWinningPods (cert, pods_list, callback) {
+function makeRequestsToWinningPods (cert, podsList, callback) {
   // Stop pool requests
   requestsScheduler.deactivate()
   // Flush pool requests
   requestsScheduler.forceSend()
 
   // Get the list of our videos to send to our new friends
-  Videos.listOwned(function (err, videos_list) {
+  Videos.listOwned(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of videos we own.')
       return callback(err)
@@ -189,38 +189,36 @@ function makeRequestsToWinningPods (cert, pods_list, callback) {
     const data = {
       url: http + '://' + host + ':' + port,
       publicKey: cert,
-      videos: videos_list
+      videos: videosList
     }
 
     requests.makeMultipleRetryRequest(
       { method: 'POST', path: '/api/' + constants.API_VERSION + '/pods/', data: data },
 
-      pods_list,
+      podsList,
 
-      function eachRequest (err, response, body, url, pod, callback_each_request) {
+      function eachRequest (err, response, body, url, pod, callbackEachRequest) {
         // We add the pod if it responded correctly with its public certificate
         if (!err && response.statusCode === 200) {
           Pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err) {
             if (err) {
               logger.error('Error with adding %s pod.', pod.url, { error: err })
-              return callback_each_request()
+              return callbackEachRequest()
             }
-            console.log('hihi')
+
             videos.createRemoteVideos(body.videos, function (err) {
               if (err) {
                 logger.error('Error with adding videos of pod.', pod.url, { error: err })
-                return callback_each_request()
+                return callbackEachRequest()
               }
 
-              console.log('kik')
-
               logger.debug('Adding remote videos from %s.', pod.url, { videos: body.videos })
-              return callback_each_request()
+              return callbackEachRequest()
             })
           })
         } else {
           logger.error('Error with adding %s pod.', pod.url, { error: err || new Error('Status not 200') })
-          return callback_each_request()
+          return callbackEachRequest()
         }
       },
 

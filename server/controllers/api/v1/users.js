@@ -20,14 +20,14 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function getAngularClient (req, res, next) {
-  const server_host = config.get('webserver.host')
-  const server_port = config.get('webserver.port')
-  let header_host_should_be = server_host
-  if (server_port !== 80 && server_port !== 443) {
-    header_host_should_be += ':' + server_port
+  const serverHost = config.get('webserver.host')
+  const serverPort = config.get('webserver.port')
+  let headerHostShouldBe = serverHost
+  if (serverPort !== 80 && serverPort !== 443) {
+    headerHostShouldBe += ':' + serverPort
   }
 
-  if (req.get('host') !== header_host_should_be) return res.type('json').status(403).end()
+  if (req.get('host') !== headerHostShouldBe) return res.type('json').status(403).end()
 
   Users.getFirstClient(function (err, client) {
     if (err) return next(err)

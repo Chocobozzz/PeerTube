@@ -11,7 +11,7 @@ webtorrent.silent = true
 
 describe('Test multiple pods', function () {
   let servers = []
-  const to_remove = []
+  const toRemove = []
 
   before(function (done) {
     this.timeout(30000)
@@ -19,19 +19,19 @@ describe('Test multiple pods', function () {
     async.series([
       // Run servers
       function (next) {
-        utils.flushAndRunMultipleServers(3, function (servers_run) {
-          servers = servers_run
+        utils.flushAndRunMultipleServers(3, function (serversRun) {
+          servers = serversRun
           next()
         })
       },
       // Get the access tokens
       function (next) {
-        async.each(servers, function (server, callback_each) {
-          utils.loginAndGetAccessToken(server, function (err, access_token) {
-            if (err) return callback_each(err)
+        async.each(servers, function (server, callbackEach) {
+          utils.loginAndGetAccessToken(server, function (err, accessToken) {
+            if (err) return callbackEach(err)
 
-            server.access_token = access_token
-            callback_each()
+            server.accessToken = accessToken
+            callbackEach()
           })
         }, next)
       },
@@ -82,7 +82,7 @@ describe('Test multiple pods', function () {
           if (err) throw err
 
           async.each(servers, function (server, callback) {
-            let base_magnet = null
+            let baseMagnet = null
 
             utils.getVideosList(server.url, function (err, res) {
               if (err) throw err
@@ -104,8 +104,8 @@ describe('Test multiple pods', function () {
               }
 
               // All pods should have the same magnet Uri
-              if (base_magnet === null) {
-                base_magnet = video.magnetUri
+              if (baseMagnet === null) {
+                baseMagnet = video.magnetUri
               } else {
                 expect(video.magnetUri).to.equal.magnetUri
               }
@@ -137,7 +137,7 @@ describe('Test multiple pods', function () {
           if (err) throw err
 
           async.each(servers, function (server, callback) {
-            let base_magnet = null
+            let baseMagnet = null
 
             utils.getVideosList(server.url, function (err, res) {
               if (err) throw err
@@ -159,8 +159,8 @@ describe('Test multiple pods', function () {
               }
 
               // All pods should have the same magnet Uri
-              if (base_magnet === null) {
-                base_magnet = video.magnetUri
+              if (baseMagnet === null) {
+                baseMagnet = video.magnetUri
               } else {
                 expect(video.magnetUri).to.equal.magnetUri
               }
@@ -193,7 +193,7 @@ describe('Test multiple pods', function () {
         function (err) {
           if (err) throw err
 
-          let base_magnet = null
+          let baseMagnet = null
           // All pods should have this video
           async.each(servers, function (server, callback) {
             utils.getVideosList(server.url, function (err, res) {
@@ -235,8 +235,8 @@ describe('Test multiple pods', function () {
               }
 
               // All pods should have the same magnet Uri
-              if (base_magnet === null) {
-                base_magnet = video2.magnetUri
+              if (baseMagnet === null) {
+                baseMagnet = video2.magnetUri
               } else {
                 expect(video2.magnetUri).to.equal.magnetUri
               }
@@ -268,8 +268,8 @@ describe('Test multiple pods', function () {
         if (err) throw err
 
         const video = res.body[0]
-        to_remove.push(res.body[2].id)
-        to_remove.push(res.body[3].id)
+        toRemove.push(res.body[2].id)
+        toRemove.push(res.body[3].id)
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -343,10 +343,10 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.removeVideo(servers[2].url, servers[2].access_token, to_remove[0], next)
+          utils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0], next)
         },
         function (next) {
-          utils.removeVideo(servers[2].url, servers[2].access_token, to_remove[1], next)
+          utils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[1], next)
         }],
         function (err) {
           if (err) throw err
@@ -364,10 +364,10 @@ describe('Test multiple pods', function () {
           expect(videos).to.be.an('array')
           expect(videos.length).to.equal(2)
           expect(videos[0].id).not.to.equal(videos[1].id)
-          expect(videos[0].id).not.to.equal(to_remove[0])
-          expect(videos[1].id).not.to.equal(to_remove[0])
-          expect(videos[0].id).not.to.equal(to_remove[1])
-          expect(videos[1].id).not.to.equal(to_remove[1])
+          expect(videos[0].id).not.to.equal(toRemove[0])
+          expect(videos[1].id).not.to.equal(toRemove[0])
+          expect(videos[0].id).not.to.equal(toRemove[1])
+          expect(videos[1].id).not.to.equal(toRemove[1])
 
           callback()
         })

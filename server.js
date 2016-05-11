@@ -65,8 +65,8 @@ app.use(require('connect-livereload')({
 require('segfault-handler').registerHandler()
 
 // API routes
-const api_route = '/api/' + constants.API_VERSION
-app.use(api_route, routes.api)
+const apiRoute = '/api/' + constants.API_VERSION
+app.use(apiRoute, routes.api)
 
 // Static files
 app.use('/app', express.static(path.join(__dirname, '/client'), { maxAge: 0 }))
@@ -76,8 +76,8 @@ app.use('/app/*', function (req, res, next) {
 })
 
 // Thumbnails path for express
-const thumbnails_physical_path = path.join(__dirname, config.get('storage.thumbnails'))
-app.use(constants.THUMBNAILS_STATIC_PATH, express.static(thumbnails_physical_path, { maxAge: 0 }))
+const thumbnailsPhysicalPath = path.join(__dirname, config.get('storage.thumbnails'))
+app.use(constants.THUMBNAILS_STATIC_PATH, express.static(thumbnailsPhysicalPath, { maxAge: 0 }))
 
 // Client application
 app.use('/*', function (req, res, next) {

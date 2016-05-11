@@ -17,9 +17,9 @@ function generateRandomString (size, callback) {
   })
 }
 
-function cleanForExit (webtorrent_process) {
+function cleanForExit (webtorrentProcess) {
   logger.info('Gracefully exiting.')
-  process.kill(-webtorrent_process.pid)
+  process.kill(-webtorrentProcess.pid)
 }
 
 // ---------------------------------------------------------------------------
