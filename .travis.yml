@@ -22,7 +22,7 @@ services:
 before_script:
   - npm install electron-prebuilt -g
   - npm run build
-  - sudo add-apt-repository ppa:mc3man/trusty-media -y
+  - sudo add-apt-repository ppa:pavlyshko/precise -y
   - sudo apt-get update -q
   - sudo apt-get install ffmpeg -y
 
