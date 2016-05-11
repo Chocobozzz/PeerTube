@@ -3,6 +3,14 @@ export class Token {
   refresh_token: string;
   token_type: string;
 
+  static load(): Token {
+    return new Token({
+      access_token: localStorage.getItem('access_token'),
+      refresh_token: localStorage.getItem('refresh_token'),
+      token_type: localStorage.getItem('token_type')
+    });
+  }
+
   constructor (hash?: any) {
     if (hash) {
       this.access_token = hash.access_token;
@@ -13,14 +21,6 @@ export class Token {
         this.token_type = hash.token_type;
       }
     }
-  }
-
-  static load(): Token {
-    return new Token({
-      access_token: localStorage.getItem('access_token'),
-      refresh_token: localStorage.getItem('refresh_token'),
-      token_type: localStorage.getItem('token_type')
-    });
   }
 
   save():void {
