@@ -20,3 +20,6 @@ storage:
 
 network:
   friends: []
+
+electron:
+  debug: false

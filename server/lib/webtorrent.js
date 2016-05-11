@@ -7,6 +7,7 @@ const spawn = require('electron-spawn')
 
 const logger = require('../helpers/logger')
 
+const electron_debug = config.get('electron.debug')
 let host = config.get('webserver.host')
 let port = config.get('webserver.port')
 let nodeKey = 'webtorrentnode' + port
@@ -57,13 +58,16 @@ function create (options, callback) {
     })
 
     const webtorrent_process = spawn(pathUtils.join(__dirname, 'webtorrentProcess.js'), host, port, { detached: true })
-    webtorrent_process.stderr.on('data', function (data) {
-      // logger.debug('Webtorrent process stderr: ', data.toString())
-    })
 
-    webtorrent_process.stdout.on('data', function (data) {
-      // logger.debug('Webtorrent process:', data.toString())
-    })
+    if (electron_debug === true) {
+      webtorrent_process.stderr.on('data', function (data) {
+        logger.debug('Webtorrent process stderr: ', data.toString())
+      })
+
+      webtorrent_process.stdout.on('data', function (data) {
+        logger.debug('Webtorrent process:', data.toString())
+      })
+    }
 
     webtorrent.app = webtorrent_process
   })
