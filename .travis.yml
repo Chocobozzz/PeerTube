@@ -23,7 +23,7 @@ before_script:
   - npm install electron-prebuilt -g
   - npm run build
   - mkdir ffmpeg
-  - wget "http://ffmpeg.gusari.org/static/64bit/ffmpeg.static.64bit.latest.tar.gz"
+  - wget "http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz"
   - tar xzf ffmpeg.static.64bit.latest.tar.gz -C ffmpeg
   - export PATH=`pwd`/ffmpeg:$PATH
 
