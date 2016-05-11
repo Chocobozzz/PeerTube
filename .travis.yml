@@ -13,9 +13,8 @@ addons:
       - ubuntu-toolchain-r-test
     packages:
       - g++-4.8
-      - ffmpeg
 
-sudo: false
+sudo: true
 
 services:
   - mongodb
@@ -23,6 +22,9 @@ services:
 before_script:
   - npm install electron-prebuilt -g
   - npm run build
+  - sudo add-apt-repository ppa:mc3man/trusty-media -y
+  - sudo apt-get update -q
+  - sudo apt-get install ffmpeg -y
 
 after_failure:
   - cat test1/logs/all-logs.log
