@@ -14,7 +14,7 @@ addons:
     packages:
       - g++-4.8
 
-sudo: true
+sudo: false
 
 services:
   - mongodb
@@ -22,9 +22,10 @@ services:
 before_script:
   - npm install electron-prebuilt -g
   - npm run build
-  - sudo add-apt-repository ppa:pavlyshko/precise -y
-  - sudo apt-get update -q
-  - sudo apt-get install ffmpeg -y
+  - mkdir ffmpeg
+  - wget "http://ffmpeg.gusari.org/static/64bit/ffmpeg.static.64bit.latest.tar.gz"
+  - tar xzf ffmpeg.static.64bit.latest.tar.gz -C ffmpeg
+  - export PATH=`pwd`/ffmpeg:$PATH
 
 after_failure:
   - cat test1/logs/all-logs.log
