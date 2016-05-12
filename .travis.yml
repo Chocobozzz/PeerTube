@@ -22,8 +22,8 @@ services:
 before_script:
   - npm install electron-prebuilt -g
   - npm run build
-  - wget "http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz"
-  - tar xf ffmpeg-release-64bit-static.tar.xz
+  - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"
+  - tar xf ffmpeg-release-3.0.2-64bit-static.tar.xz
   - mkdir -p $HOME/bin
   - cp ffmpeg-*-64bit-static/{ffmpeg,ffprobe,ffserver} $HOME/bin
   - export PATH=$HOME/bin:$PATH
