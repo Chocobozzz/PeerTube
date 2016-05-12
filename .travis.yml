@@ -22,10 +22,11 @@ services:
 before_script:
   - npm install electron-prebuilt -g
   - npm run build
-  - mkdir ffmpeg
   - wget "http://johnvansickle.com/ffmpeg/releases/ffmpeg-release-64bit-static.tar.xz"
-  - tar xzf ffmpeg.static.64bit.latest.tar.gz -C ffmpeg
-  - export PATH=`pwd`/ffmpeg:$PATH
+  - tar xf ffmpeg-release-64bit-static.tar.xz
+  - mkdir -p $HOME/bin
+  - cp ffmpeg-*-64bit-static/{ffmpeg,ffprobe,ffserver} $HOME/bin
+  - export PATH=$HOME/bin:$PATH
 
 after_failure:
   - cat test1/logs/all-logs.log
