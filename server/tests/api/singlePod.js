@@ -32,7 +32,7 @@ describe('Test a single pod', function () {
       function (next) {
         utils.loginAndGetAccessToken(server, function (err, token) {
           if (err) throw err
-          server.access_token = token
+          server.accessToken = token
           next()
         })
       },
@@ -55,7 +55,7 @@ describe('Test a single pod', function () {
 
   it('Should upload the video', function (done) {
     this.timeout(5000)
-    utils.uploadVideo(server.url, server.access_token, 'my super name', 'my super description', 'video_short.webm', done)
+    utils.uploadVideo(server.url, server.accessToken, 'my super name', 'my super description', 'video_short.webm', done)
   })
 
   it('Should seed the uploaded video', function (done) {
@@ -87,7 +87,8 @@ describe('Test a single pod', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          done()
+          // We remove it because we'll add it again
+          webtorrent.remove(video.magnetUri, done)
         })
       })
     })

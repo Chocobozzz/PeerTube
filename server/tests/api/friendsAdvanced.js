@@ -27,7 +27,7 @@ describe('Test advanced friends', function () {
     const fixture = 'video_short.webm'
     const server = servers[podNumber - 1]
 
-    return utils.uploadVideo(server.url, server.access_token, name, description, fixture, callback)
+    return utils.uploadVideo(server.url, server.accessToken, name, description, fixture, callback)
   }
 
   function getVideos (podNumber, callback) {

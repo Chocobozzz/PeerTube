@@ -59,7 +59,7 @@ describe('Test parameters validator', function () {
       function (next) {
         utils.loginAndGetAccessToken(server, function (err, token) {
           if (err) throw err
-          server.access_token = token
+          server.accessToken = token
 
           next()
         })
@@ -138,7 +138,7 @@ describe('Test parameters validator', function () {
       it('Should fail with nothing', function (done) {
         const data = {}
         const attach = {}
-        makePostRequest(path, server.access_token, data, attach, done)
+        makePostRequest(path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without name', function (done) {
@@ -148,7 +148,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.access_token, data, attach, done)
+        makePostRequest(path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with a long name', function (done) {
@@ -159,7 +159,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.access_token, data, attach, done)
+        makePostRequest(path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without description', function (done) {
@@ -169,7 +169,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.access_token, data, attach, done)
+        makePostRequest(path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with a long description', function (done) {
@@ -182,7 +182,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.access_token, data, attach, done)
+        makePostRequest(path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without an input file', function (done) {
@@ -191,7 +191,7 @@ describe('Test parameters validator', function () {
           description: 'my super description'
         }
         const attach = {}
-        makePostRequest(path, server.access_token, data, attach, done)
+        makePostRequest(path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without an incorrect input file', function (done) {
@@ -202,7 +202,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
         }
-        makePostRequest(path, server.access_token, data, attach, done)
+        makePostRequest(path, server.accessToken, data, attach, done)
       })
 
       it('Should succeed with the correct parameters', function (done) {
@@ -213,11 +213,11 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.access_token, data, attach, function () {
+        makePostRequest(path, server.accessToken, data, attach, function () {
           attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
-          makePostRequest(path, server.access_token, data, attach, function () {
+          makePostRequest(path, server.accessToken, data, attach, function () {
             attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
-            makePostRequest(path, server.access_token, data, attach, done, true)
+            makePostRequest(path, server.accessToken, data, attach, done, true)
           }, true)
         }, true)
       })
@@ -261,21 +261,21 @@ describe('Test parameters validator', function () {
       it('Should have 404 with nothing', function (done) {
         request(server.url)
           .delete(path)
-          .set('Authorization', 'Bearer ' + server.access_token)
+          .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(400, done)
       })
 
       it('Should fail without a mongodb id', function (done) {
         request(server.url)
           .delete(path + 'hello')
-          .set('Authorization', 'Bearer ' + server.access_token)
+          .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(400, done)
       })
 
       it('Should fail with a video which does not exist', function (done) {
         request(server.url)
           .delete(path + '123456789012345678901234')
-          .set('Authorization', 'Bearer ' + server.access_token)
+          .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(404, done)
       })
 

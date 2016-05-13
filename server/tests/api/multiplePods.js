@@ -72,7 +72,7 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(servers[0].url, servers[0].access_token, 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', next)
+          utils.uploadVideo(servers[0].url, servers[0].accessToken, 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -127,7 +127,7 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(servers[1].url, servers[1].access_token, 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', next)
+          utils.uploadVideo(servers[1].url, servers[1].accessToken, 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -182,10 +182,10 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(servers[2].url, servers[2].access_token, 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', next)
+          utils.uploadVideo(servers[2].url, servers[2].accessToken, 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', next)
         },
         function (next) {
-          utils.uploadVideo(servers[2].url, servers[2].access_token, 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', next)
+          utils.uploadVideo(servers[2].url, servers[2].accessToken, 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', next)
         },
         function (next) {
           setTimeout(next, 22000)
