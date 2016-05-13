@@ -37,7 +37,7 @@
         </div>
       </div>
 
-      <div class="panel_block">
+      <div class="panel_block" *ngIf="isLoggedIn">
         <div id="panel_make_friends" class="panel_button">
           <span class="glyphicon glyphicon-cloud"></span>
           <a (click)='makeFriends()'>Make friends</a>
