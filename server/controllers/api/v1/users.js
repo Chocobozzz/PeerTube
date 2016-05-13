@@ -4,14 +4,12 @@ const config = require('config')
 const express = require('express')
 const oAuth2 = require('../../../middlewares/oauth2')
 
-const middleware = require('../../../middlewares')
-const cacheMiddleware = middleware.cache
 const Users = require('../../../models/users')
 
 const router = express.Router()
 
-router.get('/client', cacheMiddleware.cache(false), getAngularClient)
-router.post('/token', cacheMiddleware.cache(false), oAuth2.token, success)
+router.get('/client', getAngularClient)
+router.post('/token', oAuth2.token, success)
 
 // ---------------------------------------------------------------------------
 

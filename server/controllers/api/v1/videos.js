@@ -11,7 +11,6 @@ const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middleware = require('../../../middlewares')
 const oAuth2 = require('../../../middlewares/oauth2')
-const cacheMiddleware = middleware.cache
 const reqValidator = middleware.reqValidators.videos
 const utils = require('../../../helpers/utils')
 const Videos = require('../../../models/videos') // model
@@ -42,11 +41,11 @@ const storage = multer.diskStorage({
 const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
 const thumbnailsDir = path.join(__dirname, '..', '..', '..', '..', config.get('storage.thumbnails'))
 
-router.get('/', cacheMiddleware.cache(false), listVideos)
-router.post('/', oAuth2.authenticate, reqFiles, reqValidator.videosAdd, cacheMiddleware.cache(false), addVideo)
-router.get('/:id', reqValidator.videosGet, cacheMiddleware.cache(false), getVideos)
-router.delete('/:id', oAuth2.authenticate, reqValidator.videosRemove, cacheMiddleware.cache(false), removeVideo)
-router.get('/search/:name', reqValidator.videosSearch, cacheMiddleware.cache(false), searchVideos)
+router.get('/', listVideos)
+router.post('/', oAuth2.authenticate, reqFiles, reqValidator.videosAdd, addVideo)
+router.get('/:id', reqValidator.videosGet, getVideos)
+router.delete('/:id', oAuth2.authenticate, reqValidator.videosRemove, removeVideo)
+router.get('/search/:name', reqValidator.videosSearch, searchVideos)
 
 // ---------------------------------------------------------------------------
 

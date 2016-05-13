@@ -5,7 +5,6 @@ const map = require('lodash/map')
 
 const middleware = require('../../../middlewares')
 const secureMiddleware = middleware.secure
-const cacheMiddleware = middleware.cache
 const reqValidator = middleware.reqValidators.remote
 const logger = require('../../../helpers/logger')
 const Videos = require('../../../models/videos')
@@ -17,7 +16,6 @@ router.post('/add',
   reqValidator.secureRequest,
   secureMiddleware.decryptBody,
   reqValidator.remoteVideosAdd,
-  cacheMiddleware.cache(false),
   addRemoteVideos
 )
 
@@ -25,7 +23,6 @@ router.post('/remove',
   reqValidator.secureRequest,
   secureMiddleware.decryptBody,
   reqValidator.remoteVideosRemove,
-  cacheMiddleware.cache(false),
   removeRemoteVideo
 )
 

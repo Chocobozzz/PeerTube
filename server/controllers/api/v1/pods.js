@@ -5,7 +5,6 @@ const express = require('express')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middleware = require('../../../middlewares')
-const cacheMiddleware = middleware.cache
 const Pods = require('../../../models/pods')
 const reqValidator = middleware.reqValidators.pods
 const secureMiddleware = middleware.secure
@@ -15,10 +14,10 @@ const Videos = require('../../../models/videos')
 
 const router = express.Router()
 
-router.get('/', cacheMiddleware.cache(false), listPods)
-router.post('/', reqValidator.podsAdd, cacheMiddleware.cache(false), addPods)
-router.get('/makefriends', reqValidator.makeFriends, cacheMiddleware.cache(false), makeFriends)
-router.get('/quitfriends', cacheMiddleware.cache(false), quitFriends)
+router.get('/', listPods)
+router.post('/', reqValidator.podsAdd, addPods)
+router.get('/makefriends', reqValidator.makeFriends, makeFriends)
+router.get('/quitfriends', quitFriends)
 // Post because this is a secured request
 router.post('/remove', secureRequest, secureMiddleware.decryptBody, removePods)
 
