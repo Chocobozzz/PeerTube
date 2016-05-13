@@ -156,10 +156,12 @@ function computeWinningPods (urls, podsScore) {
   // Only add a pod if it exists in more than a half base pods
   const podsList = []
   const baseScore = urls.length / 2
-  Object.keys(baseScore).forEach(function (pod) {
+  Object.keys(podsScore).forEach(function (pod) {
     if (podsScore[pod] > baseScore) podsList.push({ url: pod })
   })
-
+  console.log(urls)
+  console.log(podsScore)
+  console.log(podsList)
   return podsList
 }
 
