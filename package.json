@@ -67,7 +67,7 @@
     "segfault-handler": "^1.0.0",
     "ursa": "^0.9.1",
     "validator": "^5.0.0",
-    "webtorrent": "^0.89.0",
+    "webtorrent": "^0.93.2",
     "winston": "^2.1.1",
     "ws": "^1.0.1"
   },
