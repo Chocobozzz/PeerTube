@@ -1,5 +1,6 @@
 'use strict'
 
+const async = require('async')
 const config = require('config')
 const express = require('express')
 const fs = require('fs')
@@ -81,63 +82,92 @@ function addVideo (req, res, next) {
   const videoFile = req.files.videofile[0]
   const videoInfos = req.body
 
-  videos.seed(videoFile.path, function (err, torrent) {
-    if (err) {
-      logger.error('Cannot seed this video.')
-      return next(err)
-    }
+  async.waterfall([
+    function (callback) {
+      videos.seed(videoFile.path, callback)
+    },
 
-    videos.getVideoDuration(videoFile.path, function (err, duration) {
-      if (err) {
-        // TODO: unseed the video
-        logger.error('Cannot retrieve metadata of the file.')
-        return next(err)
-      }
+    function seed (torrent, callback) {
+      videos.getVideoDuration(videoFile.path, function (err, duration) {
+        if (err) {
+          // TODO: unseed the video
+          logger.error('Cannot retrieve metadata of the file.')
+          return next(err)
+        }
 
+        callback(null, torrent, duration)
+      })
+    },
+
+    function createThumbnail (torrent, duration, callback) {
       videos.createVideoThumbnail(videoFile.path, function (err, thumbnailName) {
         if (err) {
           // TODO: unseed the video
           logger.error('Cannot make a thumbnail of the video file.')
-          return next(err)
+          return callback(err)
         }
 
-        const videoData = {
-          name: videoInfos.name,
-          namePath: videoFile.filename,
-          description: videoInfos.description,
-          magnetUri: torrent.magnetURI,
-          author: res.locals.oauth.token.user.username,
-          duration: duration,
-          thumbnail: thumbnailName
-        }
-
-        Videos.add(videoData, function (err, insertedVideo) {
-          if (err) {
-            // TODO unseed the video
-            logger.error('Cannot insert this video in the database.')
-            return next(err)
-          }
-
-          videoData.createdDate = insertedVideo.createdDate
-
-          fs.readFile(thumbnailsDir + thumbnailName, function (err, data) {
-            if (err) {
-              // TODO: remove video?
-              logger.error('Cannot read the thumbnail of the video')
-              return next(err)
-            }
-
-            // Set the image in base64
-            videoData.thumbnailBase64 = new Buffer(data).toString('base64')
-            // Now we'll add the video's meta data to our friends
-            friends.addVideoToFriends(videoData)
-
-            // TODO : include Location of the new video -> 201
-            res.type('json').status(204).end()
-          })
-        })
+        callback(null, torrent, duration, thumbnailName)
       })
-    })
+    },
+
+    function insertIntoDB (torrent, duration, thumbnailName, callback) {
+      const videoData = {
+        name: videoInfos.name,
+        namePath: videoFile.filename,
+        description: videoInfos.description,
+        magnetUri: torrent.magnetURI,
+        author: res.locals.oauth.token.user.username,
+        duration: duration,
+        thumbnail: thumbnailName
+      }
+
+      Videos.add(videoData, function (err, insertedVideo) {
+        if (err) {
+          // TODO unseed the video
+          // TODO remove thumbnail
+          logger.error('Cannot insert this video in the database.')
+          return callback(err)
+        }
+
+        return callback(null, torrent, duration, thumbnailName, videoData, insertedVideo)
+      })
+    },
+
+    function getThumbnailBase64 (torrent, duration, thumbnailName, videoData, insertedVideo, callback) {
+      videoData.createdDate = insertedVideo.createdDate
+
+      fs.readFile(thumbnailsDir + thumbnailName, function (err, thumbnailData) {
+        if (err) {
+          // TODO unseed the video
+          // TODO remove thumbnail
+          // TODO: remove video
+          logger.error('Cannot read the thumbnail of the video')
+          return callback(err)
+        }
+
+        return callback(null, videoData, thumbnailData)
+      })
+    },
+
+    function sendToFriends (videoData, thumbnailData, callback) {
+      // Set the image in base64
+      videoData.thumbnailBase64 = new Buffer(thumbnailData).toString('base64')
+
+      // Now we'll add the video's meta data to our friends
+      friends.addVideoToFriends(videoData)
+
+      return callback(null)
+    }
+
+  ], function (err) {
+    if (err) {
+      logger.error('Cannot insert the video.')
+      return next(err)
+    }
+
+    // TODO : include Location of the new video -> 201
+    return res.type('json').status(204).end()
   })
 }
 
@@ -164,26 +194,51 @@ function listVideos (req, res, next) {
 
 function removeVideo (req, res, next) {
   const videoId = req.params.id
-  Videos.get(videoId, function (err, video) {
-    if (err) return next(err)
 
-    removeTorrent(video.magnetUri, function () {
-      Videos.removeOwned(req.params.id, function (err) {
-        if (err) return next(err)
+  async.waterfall([
+    function getVideo (callback) {
+      Videos.get(videoId, callback)
+    },
 
-        videos.removeVideosDataFromDisk([ video ], function (err) {
-          if (err) logger.error('Cannot remove video data from disk.', { video: video })
-
-          const params = {
-            name: video.name,
-            magnetUri: video.magnetUri
-          }
-
-          friends.removeVideoToFriends(params)
-          res.type('json').status(204).end()
-        })
+    function removeVideoTorrent (video, callback) {
+      removeTorrent(video.magnetUri, function () {
+        return callback(null, video)
       })
-    })
+    },
+
+    function removeFromDB (video, callback) {
+      Videos.removeOwned(req.params.id, function (err) {
+        if (err) return callback(err)
+
+        return callback(null, video)
+      })
+    },
+
+    function removeVideoData (video, callback) {
+      videos.removeVideosDataFromDisk([ video ], function (err) {
+        if (err) logger.error('Cannot remove video data from disk.', { video: video })
+
+        return callback(null, video)
+      })
+    },
+
+    function sendInformationToFriends (video, callback) {
+      const params = {
+        name: video.name,
+        magnetUri: video.magnetUri
+      }
+
+      friends.removeVideoToFriends(params)
+
+      return callback(null)
+    }
+  ], function (err) {
+    if (err) {
+      logger.error('Errors when removed the video.', { error: err })
+      return next(err)
+    }
+
+    return res.type('json').status(204).end()
   })
 }
 
