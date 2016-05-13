@@ -1,5 +1,6 @@
 'use strict'
 
+const async = require('async')
 const express = require('express')
 
 const logger = require('../../../helpers/logger')
@@ -30,29 +31,48 @@ module.exports = router
 
 function addPods (req, res, next) {
   const informations = req.body.data
-  Pods.add(informations, function (err) {
-    if (err) return next(err)
 
-    // Create the remote videos from the new pod
-    videos.createRemoteVideos(informations.videos, function (err) {
-      if (err) logger.error('Cannot create remote videos.', { error: err })
-    })
+  async.waterfall([
+    function addPod (callback) {
+      Pods.add(informations, function (err) {
+        return callback(err)
+      })
+    },
 
-    friends.getMyCertificate(function (err, cert) {
-      if (err) {
-        logger.error('Cannot read cert file.')
-        return next(err)
-      }
+    function createVideosOfThisPod (callback) {
+      // Create the remote videos from the new pod
+      videos.createRemoteVideos(informations.videos, function (err) {
+        if (err) logger.error('Cannot create remote videos.', { error: err })
 
+        return callback(err)
+      })
+    },
+
+    function fetchMyCertificate (callback) {
+      friends.getMyCertificate(function (err, cert) {
+        if (err) {
+          logger.error('Cannot read cert file.')
+          return callback(err)
+        }
+
+        return callback(null, cert)
+      })
+    },
+
+    function getListOfMyVideos (cert, callback) {
       Videos.listOwned(function (err, videosList) {
         if (err) {
           logger.error('Cannot get the list of owned videos.')
-          return next(err)
+          return callback(err)
         }
 
-        res.json({ cert: cert, videos: videosList })
+        return callback(null, cert, videosList)
       })
-    })
+    }
+  ], function (err, cert, videosList) {
+    if (err) return next(err)
+
+    return res.json({ cert: cert, videos: videosList })
   })
 }
 
@@ -74,24 +94,39 @@ function makeFriends (req, res, next) {
 
 function removePods (req, res, next) {
   const url = req.body.signature.url
-  Pods.remove(url, function (err) {
-    if (err) return next(err)
 
-    Videos.listFromUrl(url, function (err, videosList) {
-      if (err) {
-        logger.error('Cannot list videos from url.', { error: err })
-        next(err)
-      }
+  async.waterfall([
+    function (callback) {
+      Pods.remove(url, function (err) {
+        return callback(err)
+      })
+    },
 
+    function (callback) {
+      Videos.listFromUrl(url, function (err, videosList) {
+        if (err) {
+          logger.error('Cannot list videos from url.', { error: err })
+          return callback(err)
+        }
+
+        return callback(null, videosList)
+      })
+    },
+
+    function removeTheRemoteVideos (videosList, callback) {
       videos.removeRemoteVideos(videosList, function (err) {
         if (err) {
           logger.error('Cannot remove remote videos.', { error: err })
-          next(err)
+          callback(err)
         }
 
-        res.type('json').status(204).end()
+        return callback(null)
       })
-    })
+    }
+  ], function (err) {
+    if (err) return next(err)
+
+    return res.type('json').status(204).end()
   })
 }
 
