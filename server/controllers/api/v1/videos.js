@@ -111,12 +111,14 @@ function addVideo (req, res, next) {
           thumbnail: thumbnailName
         }
 
-        Videos.add(videoData, function (err) {
+        Videos.add(videoData, function (err, insertedVideo) {
           if (err) {
             // TODO unseed the video
             logger.error('Cannot insert this video in the database.')
             return next(err)
           }
+
+          videoData.createdDate = insertedVideo.createdDate
 
           fs.readFile(thumbnailsDir + thumbnailName, function (err, data) {
             if (err) {
@@ -205,7 +207,8 @@ function getFormatedVideo (videoObj) {
     magnetUri: videoObj.magnetUri,
     author: videoObj.author,
     duration: videoObj.duration,
-    thumbnailPath: constants.THUMBNAILS_STATIC_PATH + '/' + videoObj.thumbnail
+    thumbnailPath: constants.THUMBNAILS_STATIC_PATH + '/' + videoObj.thumbnail,
+    createdDate: videoObj.createdDate
   }
 
   return formatedVideo

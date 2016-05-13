@@ -14,7 +14,8 @@ function eachIsRemoteVideosAddValid (values) {
       validator.isLength(val.description, 1, 50) &&
       validator.isLength(val.magnetUri, 10) &&
       validator.isURL(val.podUrl) &&
-      !isNaN(val.duration)
+      !isNaN(val.duration) &&
+      validator.isDate(val.createdDate)
   })
 }
 

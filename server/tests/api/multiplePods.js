@@ -98,6 +98,7 @@ describe('Test multiple pods', function () {
               expect(video.podUrl).to.equal('http://localhost:9001')
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(10)
+              expect(utils.dateIsValid(video.createdDate)).to.be.true
 
               if (server.url !== 'http://localhost:9001') {
                 expect(video.isLocal).to.be.false
@@ -153,6 +154,7 @@ describe('Test multiple pods', function () {
               expect(video.podUrl).to.equal('http://localhost:9002')
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(5)
+              expect(utils.dateIsValid(video.createdDate)).to.be.true
 
               if (server.url !== 'http://localhost:9002') {
                 expect(video.isLocal).to.be.false
@@ -221,12 +223,14 @@ describe('Test multiple pods', function () {
               expect(video1.podUrl).to.equal('http://localhost:9003')
               expect(video1.magnetUri).to.exist
               expect(video1.duration).to.equal(5)
+              expect(utils.dateIsValid(video1.createdDate)).to.be.true
 
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.description).to.equal('my super description for pod 3-2')
               expect(video2.podUrl).to.equal('http://localhost:9003')
               expect(video2.magnetUri).to.exist
               expect(video2.duration).to.equal(5)
+              expect(utils.dateIsValid(video2.createdDate)).to.be.true
 
               if (server.url !== 'http://localhost:9003') {
                 expect(video1.isLocal).to.be.false

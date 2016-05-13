@@ -76,6 +76,7 @@ describe('Test a single pod', function () {
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
+      expect(utils.dateIsValid(video.createdDate)).to.be.true
 
       utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -109,6 +110,7 @@ describe('Test a single pod', function () {
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
+      expect(utils.dateIsValid(video.createdDate)).to.be.true
 
       utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -138,6 +140,7 @@ describe('Test a single pod', function () {
       expect(video.podUrl).to.equal('http://localhost:9001')
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
+      expect(utils.dateIsValid(video.createdDate)).to.be.true
 
       utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err

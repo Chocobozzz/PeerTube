@@ -8,6 +8,7 @@ const pathUtils = require('path')
 const request = require('supertest')
 
 const testUtils = {
+  dateIsValid: dateIsValid,
   flushTests: flushTests,
   getFriendsList: getFriendsList,
   getVideo: getVideo,
@@ -27,6 +28,16 @@ const testUtils = {
 }
 
 // ---------------------- Export functions --------------------
+
+function dateIsValid (dateString) {
+  const dateToCheck = new Date(dateString)
+  const now = new Date()
+
+  // Check if the interval is more than 2 minutes
+  if (now - dateToCheck > 120000) return false
+
+  return true
+}
 
 function flushTests (callback) {
   exec('npm run clean:server:test', callback)

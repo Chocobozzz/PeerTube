@@ -19,7 +19,11 @@ const videosSchema = mongoose.Schema({
   podUrl: String,
   author: String,
   duration: Number,
-  thumbnail: String
+  thumbnail: String,
+  createdDate: {
+    type: Date,
+    default: Date.now
+  }
 })
 const VideosDB = mongoose.model('videos', videosSchema)
 
@@ -46,13 +50,13 @@ function add (video, callback) {
   const params = video
   params.podUrl = http + '://' + host + ':' + port
 
-  VideosDB.create(params, function (err, video) {
+  VideosDB.create(params, function (err, insertedVideo) {
     if (err) {
       logger.error('Cannot insert this video into database.')
       return callback(err)
     }
 
-    callback(null)
+    callback(null, insertedVideo)
   })
 }
 
