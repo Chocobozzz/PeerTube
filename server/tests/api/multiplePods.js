@@ -316,7 +316,7 @@ describe('Test multiple pods', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          done()
+          webtorrent.remove(video.magnetUri, done)
         })
       })
     })
