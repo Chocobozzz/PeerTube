@@ -12,6 +12,7 @@ const testUtils = {
   getFriendsList: getFriendsList,
   getVideo: getVideo,
   getVideosList: getVideosList,
+  getVideosListPagination: getVideosListPagination,
   login: login,
   loginAndGetAccessToken: loginAndGetAccessToken,
   makeFriends: makeFriends,
@@ -20,6 +21,7 @@ const testUtils = {
   flushAndRunMultipleServers: flushAndRunMultipleServers,
   runServer: runServer,
   searchVideo: searchVideo,
+  searchVideoWithPagination: searchVideoWithPagination,
   testImage: testImage,
   uploadVideo: uploadVideo
 }
@@ -57,6 +59,19 @@ function getVideosList (url, end) {
 
   request(url)
     .get(path)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getVideosListPagination (url, start, count, end) {
+  const path = '/api/v1/videos'
+
+  request(url)
+    .get(path)
+    .query({ start: start })
+    .query({ count: count })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
@@ -255,6 +270,19 @@ function searchVideo (url, search, end) {
 
   request(url)
     .get(path + '/search/' + search)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function searchVideoWithPagination (url, search, start, count, end) {
+  const path = '/api/v1/videos'
+
+  request(url)
+    .get(path + '/search/' + search)
+    .query({ start: start })
+    .query({ count: count })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)

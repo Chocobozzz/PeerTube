@@ -76,8 +76,8 @@ function get (id, callback) {
   })
 }
 
-function list (callback) {
-  VideosDB.find(function (err, videosList) {
+function list (start, count, callback) {
+  VideosDB.find({}).skip(start).limit(start + count).exec(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of the videos.')
       return callback(err)
@@ -125,8 +125,9 @@ function removeByIds (ids, callback) {
   VideosDB.remove({ _id: { $in: ids } }, callback)
 }
 
-function search (name, callback) {
-  VideosDB.find({ name: new RegExp(name) }, function (err, videos) {
+function search (name, start, count, callback) {
+  VideosDB.find({ name: new RegExp(name) }).skip(start).limit(start + count)
+  .exec(function (err, videos) {
     if (err) {
       logger.error('Cannot search the videos.')
       return callback(err)

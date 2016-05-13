@@ -11,7 +11,10 @@ const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
 const oAuth2 = middlewares.oauth2
-const reqValidator = middlewares.reqValidators.videos
+const pagination = middlewares.pagination
+const reqValidator = middlewares.reqValidators
+const reqValidatorPagination = reqValidator.pagination
+const reqValidatorVideos = reqValidator.videos
 const utils = require('../../../helpers/utils')
 const Videos = require('../../../models/videos') // model
 const videos = require('../../../lib/videos')
@@ -41,11 +44,32 @@ const storage = multer.diskStorage({
 const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
 const thumbnailsDir = path.join(__dirname, '..', '..', '..', '..', config.get('storage.thumbnails'))
 
-router.get('/', listVideos)
-router.post('/', oAuth2.authenticate, reqFiles, reqValidator.videosAdd, addVideo)
-router.get('/:id', reqValidator.videosGet, getVideos)
-router.delete('/:id', oAuth2.authenticate, reqValidator.videosRemove, removeVideo)
-router.get('/search/:name', reqValidator.videosSearch, searchVideos)
+router.get('/',
+  reqValidatorPagination.pagination,
+  pagination.setPagination,
+  listVideos
+)
+router.post('/',
+  oAuth2.authenticate,
+  reqFiles,
+  reqValidatorVideos.videosAdd,
+  addVideo
+)
+router.get('/:id',
+  reqValidatorVideos.videosGet,
+  getVideos
+)
+router.delete('/:id',
+  oAuth2.authenticate,
+  reqValidatorVideos.videosRemove,
+  removeVideo
+)
+router.get('/search/:name',
+  reqValidatorVideos.videosSearch,
+  reqValidatorPagination.pagination,
+  pagination.setPagination,
+  searchVideos
+)
 
 // ---------------------------------------------------------------------------
 
@@ -129,7 +153,7 @@ function getVideos (req, res, next) {
 }
 
 function listVideos (req, res, next) {
-  Videos.list(function (err, videosList) {
+  Videos.list(req.query.start, req.query.count, function (err, videosList) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList))
@@ -162,7 +186,7 @@ function removeVideo (req, res, next) {
 }
 
 function searchVideos (req, res, next) {
-  Videos.search(req.params.name, function (err, videosList) {
+  Videos.search(req.params.name, req.query.start, req.query.count, function (err, videosList) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList))

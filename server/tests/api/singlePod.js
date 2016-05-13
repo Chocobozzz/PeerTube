@@ -15,6 +15,7 @@ const utils = require('./utils')
 describe('Test a single pod', function () {
   let server = null
   let videoId = -1
+  let videosListBase = null
 
   before(function (done) {
     this.timeout(20000)
@@ -215,7 +216,11 @@ describe('Test a single pod', function () {
 
   it('Should have the correct thumbnails', function (done) {
     utils.getVideosList(server.url, function (err, res) {
+      if (err) throw err
+
       const videos = res.body
+      // For the next test
+      videosListBase = videos
 
       async.each(videos, function (video, callbackEach) {
         if (err) throw err
@@ -228,6 +233,81 @@ describe('Test a single pod', function () {
           callbackEach()
         })
       }, done)
+    })
+  })
+
+  it('Should list only the two first videos', function (done) {
+    utils.getVideosListPagination(server.url, 0, 2, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(2)
+      expect(videos[0].name === videosListBase[0].name)
+      expect(videos[1].name === videosListBase[1].name)
+
+      done()
+    })
+  })
+
+  it('Should list only the next three videos', function (done) {
+    utils.getVideosListPagination(server.url, 2, 3, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(4)
+      expect(videos[0].name === videosListBase[2].name)
+      expect(videos[1].name === videosListBase[3].name)
+      expect(videos[2].name === videosListBase[4].name)
+
+      done()
+    })
+  })
+
+  it('Should list the last video', function (done) {
+    utils.getVideosListPagination(server.url, 5, 6, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(1)
+      expect(videos[0].name === videosListBase[5].name)
+
+      done()
+    })
+  })
+
+  it('Should search the first video', function (done) {
+    utils.searchVideoWithPagination(server.url, 'webm', 0, 1, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(1)
+      expect(videos[0].name === 'video_short.webm name')
+
+      done()
+    })
+  })
+
+  it('Should search the last two videos', function (done) {
+    utils.searchVideoWithPagination(server.url, 'webm', 2, 2, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(2)
+      expect(videos[0].name === 'video_short2.webm name')
+      expect(videos[1].name === 'video_short3.webm name')
+
+      done()
+    })
+  })
+
+  it('Should search all the videos', function (done) {
+    utils.searchVideoWithPagination(server.url, 'webm', 0, 15, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(4)
+
+      done()
     })
   })
 
