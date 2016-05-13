@@ -9,6 +9,9 @@ let FRIEND_BASE_SCORE = 100
 // Time to wait between requests to the friends
 let INTERVAL = 60000
 
+// Number of results by default for the pagination
+const PAGINATION_COUNT_DEFAULT = 15
+
 // Number of points we add/remove from a friend after a successful/bad request
 const PODS_SCORE = {
   MALUS: -10,
@@ -37,6 +40,7 @@ module.exports = {
   API_VERSION: API_VERSION,
   FRIEND_BASE_SCORE: FRIEND_BASE_SCORE,
   INTERVAL: INTERVAL,
+  PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUEST_RETRIES: REQUEST_RETRIES,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
