@@ -1,5 +1,5 @@
-import { Injectable } from 'angular2/core';
-import { Http, Response, Headers, URLSearchParams, RequestOptions } from 'angular2/http';
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers, URLSearchParams, RequestOptions } from '@angular/http';
 import { Observable, Subject } from 'rxjs/Rx';
 
 import { AuthStatus } from '../models/authStatus';

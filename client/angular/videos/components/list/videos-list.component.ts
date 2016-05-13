@@ -1,5 +1,5 @@
-import { Component, OnInit } from 'angular2/core';
-import { ROUTER_DIRECTIVES, RouteParams } from 'angular2/router';
+import { Component, OnInit } from '@angular/core';
+import { ROUTER_DIRECTIVES, RouteParams } from '@angular/router-deprecated';
 
 import { AuthService } from '../../../users/services/auth.service';
 import { User } from '../../../users/models/user';

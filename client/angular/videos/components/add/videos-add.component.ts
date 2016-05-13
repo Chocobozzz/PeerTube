@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit } from 'angular2/core';
-import { Router } from 'angular2/router';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { Router } from '@angular/router-deprecated';
 
 import { AuthService } from '../../../users/services/auth.service';
 import { User } from '../../../users/models/user';
