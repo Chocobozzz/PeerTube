@@ -20,7 +20,7 @@ const videos = {
   createRemoteVideos: createRemoteVideos,
   getVideoDuration: getVideoDuration,
   getVideoState: getVideoState,
-  getVideoThumbnail: getVideoThumbnail,
+  createVideoThumbnail: createVideoThumbnail,
   removeVideosDataFromDisk: removeVideosDataFromDisk,
   removeRemoteVideos: removeRemoteVideos,
   seed: seed,
@@ -54,7 +54,7 @@ function getVideoState (video) {
   return { exist: exist, owned: owned }
 }
 
-function getVideoThumbnail (videoPath, callback) {
+function createVideoThumbnail (videoPath, callback) {
   const filename = pathUtils.basename(videoPath) + '.jpg'
   ffmpeg(videoPath)
     .on('error', callback)

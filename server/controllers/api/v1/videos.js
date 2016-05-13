@@ -94,7 +94,7 @@ function addVideo (req, res, next) {
         return next(err)
       }
 
-      videos.getVideoThumbnail(videoFile.path, function (err, thumbnailName) {
+      videos.createVideoThumbnail(videoFile.path, function (err, thumbnailName) {
         if (err) {
           // TODO: unseed the video
           logger.error('Cannot make a thumbnail of the video file.')
