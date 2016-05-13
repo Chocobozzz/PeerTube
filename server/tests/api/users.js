@@ -82,6 +82,16 @@ describe('Test users', function () {
     utils.uploadVideo(server.url, accessToken, 'my super name', 'my super description', 'video_short.webm', 401, done)
   })
 
+  it('Should not be able to make friends', function (done) {
+    accessToken = 'mysupertoken'
+    utils.makeFriends(server.url, accessToken, 401, done)
+  })
+
+  it('Should not be able to quit friends', function (done) {
+    accessToken = 'mysupertoken'
+    utils.quitFriends(server.url, accessToken, 401, done)
+  })
+
   it('Should be able to login', function (done) {
     utils.login(server.url, server.client, server.user, 200, function (err, res) {
       if (err) throw err

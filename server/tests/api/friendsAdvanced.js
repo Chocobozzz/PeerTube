@@ -10,15 +10,18 @@ describe('Test advanced friends', function () {
   let servers = []
 
   function makeFriends (podNumber, callback) {
-    return utils.makeFriends(servers[podNumber - 1].url, callback)
+    const server = servers[podNumber - 1]
+    return utils.makeFriends(server.url, server.accessToken, callback)
   }
 
   function quitFriends (podNumber, callback) {
-    return utils.quitFriends(servers[podNumber - 1].url, callback)
+    const server = servers[podNumber - 1]
+    return utils.quitFriends(server.url, server.accessToken, callback)
   }
 
   function getFriendsList (podNumber, end) {
-    return utils.getFriendsList(servers[podNumber - 1].url, end)
+    const server = servers[podNumber - 1]
+    return utils.getFriendsList(server.url, end)
   }
 
   function uploadVideo (podNumber, callback) {

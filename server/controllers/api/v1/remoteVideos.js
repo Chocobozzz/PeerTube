@@ -3,9 +3,9 @@
 const express = require('express')
 const map = require('lodash/map')
 
-const middleware = require('../../../middlewares')
-const secureMiddleware = middleware.secure
-const reqValidator = middleware.reqValidators.remote
+const middlewares = require('../../../middlewares')
+const secureMiddleware = middlewares.secure
+const reqValidator = middlewares.reqValidators.remote
 const logger = require('../../../helpers/logger')
 const Videos = require('../../../models/videos')
 const videos = require('../../../lib/videos')

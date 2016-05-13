@@ -37,7 +37,8 @@ describe('Test multiple pods', function () {
       },
       // The second pod make friend with the third
       function (next) {
-        utils.makeFriends(servers[1].url, next)
+        const server = servers[1]
+        utils.makeFriends(server.url, server.accessToken, next)
       },
       // Wait for the request between pods
       function (next) {
@@ -45,7 +46,8 @@ describe('Test multiple pods', function () {
       },
       // Pod 1 make friends too
       function (next) {
-        utils.makeFriends(servers[0].url, next)
+        const server = servers[0]
+        utils.makeFriends(server.url, server.accessToken, next)
       },
       function (next) {
         webtorrent.create({ host: 'client', port: '1' }, next)

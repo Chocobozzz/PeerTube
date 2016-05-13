@@ -97,7 +97,7 @@ function loginAndGetAccessToken (server, callback) {
   })
 }
 
-function makeFriends (url, expectedStatus, callback) {
+function makeFriends (url, accessToken, expectedStatus, callback) {
   if (!callback) {
     callback = expectedStatus
     expectedStatus = 204
@@ -109,6 +109,7 @@ function makeFriends (url, expectedStatus, callback) {
   request(url)
     .get(path)
     .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
     .expect(expectedStatus)
     .end(function (err, res) {
       if (err) throw err
@@ -118,14 +119,20 @@ function makeFriends (url, expectedStatus, callback) {
     })
 }
 
-function quitFriends (url, callback) {
+function quitFriends (url, accessToken, expectedStatus, callback) {
+  if (!callback) {
+    callback = expectedStatus
+    expectedStatus = 204
+  }
+
   const path = '/api/v1/pods/quitfriends'
 
   // The first pod make friend with the third
   request(url)
     .get(path)
     .set('Accept', 'application/json')
-    .expect(204)
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
     .end(function (err, res) {
       if (err) throw err
 

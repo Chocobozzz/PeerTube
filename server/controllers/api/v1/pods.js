@@ -4,11 +4,12 @@ const express = require('express')
 
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
-const middleware = require('../../../middlewares')
+const middlewares = require('../../../middlewares')
 const Pods = require('../../../models/pods')
-const reqValidator = middleware.reqValidators.pods
-const secureMiddleware = middleware.secure
-const secureRequest = middleware.reqValidators.remote.secureRequest
+const oAuth2 = middlewares.oauth2
+const reqValidator = middlewares.reqValidators.pods
+const secureMiddleware = middlewares.secure
+const secureRequest = middlewares.reqValidators.remote.secureRequest
 const videos = require('../../../lib/videos')
 const Videos = require('../../../models/videos')
 
@@ -16,8 +17,8 @@ const router = express.Router()
 
 router.get('/', listPods)
 router.post('/', reqValidator.podsAdd, addPods)
-router.get('/makefriends', reqValidator.makeFriends, makeFriends)
-router.get('/quitfriends', quitFriends)
+router.get('/makefriends', oAuth2.authenticate, reqValidator.makeFriends, makeFriends)
+router.get('/quitfriends', oAuth2.authenticate, quitFriends)
 // Post because this is a secured request
 router.post('/remove', secureRequest, secureMiddleware.decryptBody, removePods)
 

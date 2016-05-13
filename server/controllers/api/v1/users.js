@@ -2,7 +2,7 @@
 
 const config = require('config')
 const express = require('express')
-const oAuth2 = require('../../../middlewares/oauth2')
+const oAuth2 = require('../../../middlewares').oauth2
 
 const Users = require('../../../models/users')
 
