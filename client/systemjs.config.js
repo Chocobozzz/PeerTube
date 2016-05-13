@@ -29,7 +29,7 @@
     packages: packages,
     bundles: {
       'angular-rxjs.bundle': [
-        'rxjs',
+        'rxjs/Rx.js',
         '@angular/common/index.js',
         '@angular/compiler/index.js',
         '@angular/core/index.js',
