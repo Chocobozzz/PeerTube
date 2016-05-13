@@ -22,7 +22,7 @@ export class VideosWatchComponent implements OnInit, CanDeactivate {
   numPeers: number;
   loading: boolean = false;
 
-  private _interval: number;
+  private _interval: NodeJS.Timer;
   private client: any;
 
   constructor(

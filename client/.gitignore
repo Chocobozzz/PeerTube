@@ -1,5 +1,4 @@
 typings
-!typings/typings.d.ts
 angular/**/*.js
 angular/**/*.map
 angular/**/*.css
