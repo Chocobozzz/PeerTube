@@ -16,21 +16,23 @@ const installer = {
 }
 
 function installApplication (callback) {
-  // Creates directories
-  createDirectoriesIfNotExist(function (err) {
-    if (err) return callback(err)
+  async.series([
+    function createDirectories (callbackAsync) {
+      createDirectoriesIfNotExist(callbackAsync)
+    },
 
-    // ----------- Create the certificates if they don't already exist -----------
-    peertubeCrypto.createCertsIfNotExist(function (err) {
-      if (err) return callback(err)
+    function createCertificates (callbackAsync) {
+      peertubeCrypto.createCertsIfNotExist(callbackAsync)
+    },
 
-      createOAuthClientIfNotExist(function (err) {
-        if (err) return callback(err)
+    function createOAuthClient (callbackAsync) {
+      createOAuthClientIfNotExist(callbackAsync)
+    },
 
-        createOAuthUserIfNotExist(callback)
-      })
-    })
-  })
+    function createOAuthUser (callbackAsync) {
+      createOAuthUserIfNotExist(callbackAsync)
+    }
+  ], callback)
 }
 
 // ---------------------------------------------------------------------------
