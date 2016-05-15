@@ -80,43 +80,58 @@ function quitFriends (callback) {
   // Flush pool requests
   requestsScheduler.forceSend()
 
-  Pods.list(function (err, pods) {
+  async.waterfall([
+    function getPodsList (callbackAsync) {
+      return Pods.list(callbackAsync)
+    },
+
+    function announceIQuitMyFriends (pods, callbackAsync) {
+      const request = {
+        method: 'POST',
+        path: '/api/' + constants.API_VERSION + '/pods/remove',
+        sign: true,
+        encrypt: true,
+        data: {
+          url: 'me' // Fake data
+        }
+      }
+
+      // Announce we quit them
+      requests.makeMultipleRetryRequest(request, pods, function (err) {
+        return callbackAsync(err)
+      })
+    },
+
+    function removePodsFromDB (callbackAsync) {
+      Pods.removeAll(function (err) {
+        return callbackAsync(err)
+      })
+    },
+
+    function listRemoteVideos (callbackAsync) {
+      logger.info('Broke friends, so sad :(')
+
+      Videos.listFromRemotes(callbackAsync)
+    },
+
+    function removeTheRemoteVideos (videosList, callbackAsync) {
+      videos.removeRemoteVideos(videosList, function (err) {
+        if (err) {
+          logger.error('Cannot remove remote videos.', { error: err })
+          return callbackAsync(err)
+        }
+
+        return callbackAsync(null)
+      })
+    }
+  ], function (err) {
+    // Don't forget to re activate the scheduler, even if there was an error
+    requestsScheduler.activate()
+
     if (err) return callback(err)
 
-    const request = {
-      method: 'POST',
-      path: '/api/' + constants.API_VERSION + '/pods/remove',
-      sign: true,
-      encrypt: true,
-      data: {
-        url: 'me' // Fake data
-      }
-    }
-
-    // Announce we quit them
-    requests.makeMultipleRetryRequest(request, pods, function () {
-      Pods.removeAll(function (err) {
-        requestsScheduler.activate()
-
-        if (err) return callback(err)
-
-        logger.info('Broke friends, so sad :(')
-
-        Videos.listFromRemotes(function (err, videosList) {
-          if (err) return callback(err)
-
-          videos.removeRemoteVideos(videosList, function (err) {
-            if (err) {
-              logger.error('Cannot remove remote videos.', { error: err })
-              return callback(err)
-            }
-
-            logger.info('Removed all remote videos.')
-            callback(null)
-          })
-        })
-      })
-    })
+    logger.info('Removed all remote videos.')
+    return callback(null)
   })
 }
 
@@ -159,9 +174,7 @@ function computeWinningPods (urls, podsScore) {
   Object.keys(podsScore).forEach(function (pod) {
     if (podsScore[pod] > baseScore) podsList.push({ url: pod })
   })
-  console.log(urls)
-  console.log(podsScore)
-  console.log(podsList)
+
   return podsList
 }
 
@@ -199,6 +212,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
 
       podsList,
 
+      // Callback called after each request
       function eachRequest (err, response, body, url, pod, callbackEachRequest) {
         // We add the pod if it responded correctly with its public certificate
         if (!err && response.statusCode === 200) {
@@ -224,6 +238,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
         }
       },
 
+      // Final callback, we've ended all the requests
       function endRequests (err) {
         // Now we made new friends, we can re activate the pool of requests
         requestsScheduler.activate()
