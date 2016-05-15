@@ -177,35 +177,61 @@ function makeRequests () {
 }
 
 function removeBadPods () {
-  Pods.findBadPods(function (err, pods) {
-    if (err) {
-      logger.error('Cannot find bad pods.', { error: err })
-      return // abort
-    }
-
-    if (pods.length === 0) return
-
-    const urls = map(pods, 'url')
-    const ids = map(pods, '_id')
-
-    Videos.listFromUrls(urls, function (err, videosList) {
-      if (err) {
-        logger.error('Cannot list videos urls.', { error: err, urls: urls })
-      } else {
-        videos.removeRemoteVideos(videosList, function (err) {
-          if (err) logger.error('Cannot remove remote videos.', { error: err })
-        })
-      }
-
-      Pods.removeAllByIds(ids, function (err, r) {
+  async.waterfall([
+    function findBadPods (callback) {
+      Pods.findBadPods(function (err, pods) {
         if (err) {
-          logger.error('Cannot remove bad pods.', { error: err })
-        } else {
-          const podsRemoved = r.result.n
-          logger.info('Removed %d pods.', podsRemoved)
+          logger.error('Cannot find bad pods.', { error: err })
+          return callback(err)
         }
+
+        return callback(null, pods)
       })
-    })
+    },
+
+    function listVideosOfTheseBadPods (pods, callback) {
+      if (pods.length === 0) return callback(null)
+
+      const urls = map(pods, 'url')
+      const ids = map(pods, '_id')
+
+      Videos.listFromUrls(urls, function (err, videosList) {
+        if (err) {
+          logger.error('Cannot list videos urls.', { error: err, urls: urls })
+          return callback(null, ids, [])
+        }
+
+        return callback(null, ids, videosList)
+      })
+    },
+
+    function removeVideosOfTheseBadPods (podIds, videosList, callback) {
+      // We don't have to remove pods, skip
+      if (typeof podIds === 'function') return podIds(null)
+
+      // Remove the remote videos
+      videos.removeRemoteVideos(videosList, function (err) {
+        if (err) logger.error('Cannot remove remote videos.', { error: err })
+
+        return callback(null, podIds)
+      })
+    },
+
+    function removeBadPodsFromDB (podIds, callback) {
+      // We don't have to remove pods, skip
+      if (typeof podIds === 'function') return podIds(null)
+
+      Pods.removeAllByIds(podIds, callback)
+    }
+  ], function (err, removeResult) {
+    if (err) {
+      logger.error('Cannot remove bad pods.', { error: err })
+    } else if (removeResult) {
+      const podsRemoved = removeResult.result.n
+      logger.info('Removed %d pods.', podsRemoved)
+    } else {
+      logger.info('No need to remove bad pods.')
+    }
   })
 }
 
