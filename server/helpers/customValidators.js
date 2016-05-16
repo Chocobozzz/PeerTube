@@ -2,6 +2,8 @@
 
 const validator = require('validator')
 
+const constants = require('../initializers/constants')
+
 const customValidators = {
   eachIsRemoteVideosAddValid: eachIsRemoteVideosAddValid,
   eachIsRemoteVideosRemoveValid: eachIsRemoteVideosRemoveValid,
@@ -15,6 +17,8 @@ function eachIsRemoteVideosAddValid (values) {
       validator.isLength(val.magnetUri, 10) &&
       validator.isURL(val.podUrl) &&
       !isNaN(val.duration) &&
+      val.duration >= 0 &&
+      val.duration < constants.MAXIMUM_VIDEO_DURATION &&
       validator.isDate(val.createdDate)
   })
 }

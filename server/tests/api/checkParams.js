@@ -11,9 +11,9 @@ const utils = require('./utils')
 describe('Test parameters validator', function () {
   let server = null
 
-  function makePostRequest (path, token, fields, attach, done, fail) {
+  function makePostRequest (path, token, fields, attaches, done, fail) {
     let statusCode = 400
-    if (fail !== undefined && fail === false) statusCode = 200
+    if (fail !== undefined && fail === false) statusCode = 204
 
     const req = request(server.url)
       .post(path)
@@ -24,6 +24,11 @@ describe('Test parameters validator', function () {
     Object.keys(fields).forEach(function (field) {
       const value = fields[field]
       req.field(field, value)
+    })
+
+    Object.keys(attaches).forEach(function (attach) {
+      const value = attaches[attach]
+      req.attach(attach, value)
     })
 
     req.expect(statusCode, done)
@@ -200,7 +205,18 @@ describe('Test parameters validator', function () {
           description: 'my super description'
         }
         const attach = {
-          'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short_fake.webm')
+        }
+        makePostRequest(path, server.accessToken, data, attach, done)
+      })
+
+      it('Should fail with a too big duration', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description'
+        }
+        const attach = {
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_too_long.webm')
         }
         makePostRequest(path, server.accessToken, data, attach, done)
       })
@@ -217,9 +233,9 @@ describe('Test parameters validator', function () {
           attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
           makePostRequest(path, server.accessToken, data, attach, function () {
             attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
-            makePostRequest(path, server.accessToken, data, attach, done, true)
-          }, true)
-        }, true)
+            makePostRequest(path, server.accessToken, data, attach, done, false)
+          }, false)
+        }, false)
       })
     })
 
@@ -234,7 +250,7 @@ describe('Test parameters validator', function () {
             if (err) throw err
 
             expect(res.body).to.be.an('array')
-            expect(res.body.length).to.equal(0)
+            expect(res.body.length).to.equal(3)
 
             done()
           })

@@ -9,6 +9,9 @@ let FRIEND_BASE_SCORE = 100
 // Time to wait between requests to the friends
 let INTERVAL = 60000
 
+// 2 hours maximum for the duration of a video (in seconds)
+let MAXIMUM_VIDEO_DURATION = 7200
+
 // Number of results by default for the pagination
 const PAGINATION_COUNT_DEFAULT = 15
 
@@ -31,6 +34,7 @@ const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
 if (isTestInstance() === true) {
   FRIEND_BASE_SCORE = 20
   INTERVAL = 10000
+  MAXIMUM_VIDEO_DURATION = 14
   REQUEST_RETRIES = 2
 }
 
@@ -40,6 +44,7 @@ module.exports = {
   API_VERSION: API_VERSION,
   FRIEND_BASE_SCORE: FRIEND_BASE_SCORE,
   INTERVAL: INTERVAL,
+  MAXIMUM_VIDEO_DURATION: MAXIMUM_VIDEO_DURATION,
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUEST_RETRIES: REQUEST_RETRIES,

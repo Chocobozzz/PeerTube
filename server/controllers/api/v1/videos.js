@@ -83,23 +83,11 @@ function addVideo (req, res, next) {
   const videoInfos = req.body
 
   async.waterfall([
-    function (callback) {
+    function seedTheVideo (callback) {
       videos.seed(videoFile.path, callback)
     },
 
-    function seed (torrent, callback) {
-      videos.getVideoDuration(videoFile.path, function (err, duration) {
-        if (err) {
-          // TODO: unseed the video
-          logger.error('Cannot retrieve metadata of the file.')
-          return next(err)
-        }
-
-        callback(null, torrent, duration)
-      })
-    },
-
-    function createThumbnail (torrent, duration, callback) {
+    function createThumbnail (torrent, callback) {
       videos.createVideoThumbnail(videoFile.path, function (err, thumbnailName) {
         if (err) {
           // TODO: unseed the video
@@ -107,18 +95,18 @@ function addVideo (req, res, next) {
           return callback(err)
         }
 
-        callback(null, torrent, duration, thumbnailName)
+        callback(null, torrent, thumbnailName)
       })
     },
 
-    function insertIntoDB (torrent, duration, thumbnailName, callback) {
+    function insertIntoDB (torrent, thumbnailName, callback) {
       const videoData = {
         name: videoInfos.name,
         namePath: videoFile.filename,
         description: videoInfos.description,
         magnetUri: torrent.magnetURI,
         author: res.locals.oauth.token.user.username,
-        duration: duration,
+        duration: videoFile.duration,
         thumbnail: thumbnailName
       }
 
@@ -130,11 +118,11 @@ function addVideo (req, res, next) {
           return callback(err)
         }
 
-        return callback(null, torrent, duration, thumbnailName, videoData, insertedVideo)
+        return callback(null, torrent, thumbnailName, videoData, insertedVideo)
       })
     },
 
-    function getThumbnailBase64 (torrent, duration, thumbnailName, videoData, insertedVideo, callback) {
+    function getThumbnailBase64 (torrent, thumbnailName, videoData, insertedVideo, callback) {
       videoData.createdDate = insertedVideo.createdDate
 
       fs.readFile(thumbnailsDir + thumbnailName, function (err, thumbnailData) {

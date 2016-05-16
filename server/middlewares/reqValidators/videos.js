@@ -1,6 +1,7 @@
 'use strict'
 
 const checkErrors = require('./utils').checkErrors
+const constants = require('../../initializers/constants')
 const logger = require('../../helpers/logger')
 const videos = require('../../lib/videos')
 const Videos = require('../../models/videos')
@@ -20,7 +21,22 @@ function videosAdd (req, res, next) {
 
   logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
-  checkErrors(req, res, next)
+  checkErrors(req, res, function () {
+    const videoFile = req.files.videofile[0]
+
+    videos.getVideoDuration(videoFile.path, function (err, duration) {
+      if (err) {
+        return res.status(400).send('Cannot retrieve metadata of the file.')
+      }
+
+      if (duration > constants.MAXIMUM_VIDEO_DURATION) {
+        return res.status(400).send('Duration of the video file is too big.')
+      }
+
+      videoFile.duration = duration
+      next()
+    })
+  })
 }
 
 function videosGet (req, res, next) {
