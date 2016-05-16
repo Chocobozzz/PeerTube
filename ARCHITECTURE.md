@@ -48,7 +48,7 @@
 ### Actions on a pod
   * A pod is a tracker (websocket) which is responsible for all the video uploaded in it
   * A pod has different user accounts that can upload videos
-  * All pods have an index of all videos of the network (name, origin pod url, small description, uploader username, magnetUri). For example, a test with 1000000 of videos with only alphanum characters and the following lengths: name = 50, username = 50, url = 25, description = 250 has a mongodb size of ~ 1GB.
+  * All pods have an index of all videos of the network (name, origin pod url, small description, uploader username, magnet Uri, thumbnail name, created date and the thumbnail file). For example, a test with 1000000 of videos with only alphanum characters and the following lengths: name = 50, author = 50, url = 25, description = 250, magnerUri = 200, thumbnail name = 50 has a mongodb size of ~ 4GB. To this, we add 1 000 000 thumbnails of 5-15 KB so 15GB maximum
   * After having uploaded a video, the server seeds it, adds the meta data in its database and makes a secure request to all of its friends
   * If an user wants to watch a video, he asks its pod the magnetUri and the frontend adds the torrent (with webtorrent), creates the video tag and streams the file into it
   * An user watching a video seeds it too (bittorent) so another user who is watching the same video can get the data from the origin server and the user 1 (etc)
