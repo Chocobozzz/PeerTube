@@ -19,6 +19,7 @@ function eachIsRemoteVideosAddValid (values) {
       !isNaN(val.duration) &&
       val.duration >= 0 &&
       val.duration < constants.MAXIMUM_VIDEO_DURATION &&
+      validator.isLength(val.author, 1, constants.MAXIMUM_AUTHOR_LENGTH) &&
       validator.isDate(val.createdDate)
   })
 }

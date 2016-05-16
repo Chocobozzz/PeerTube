@@ -9,6 +9,8 @@ let FRIEND_BASE_SCORE = 100
 // Time to wait between requests to the friends
 let INTERVAL = 60000
 
+// Max length of the author username
+const MAXIMUM_AUTHOR_LENGTH = 20
 // 2 hours maximum for the duration of a video (in seconds)
 let MAXIMUM_VIDEO_DURATION = 7200
 
@@ -44,6 +46,7 @@ module.exports = {
   API_VERSION: API_VERSION,
   FRIEND_BASE_SCORE: FRIEND_BASE_SCORE,
   INTERVAL: INTERVAL,
+  MAXIMUM_AUTHOR_LENGTH: MAXIMUM_AUTHOR_LENGTH,
   MAXIMUM_VIDEO_DURATION: MAXIMUM_VIDEO_DURATION,
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
