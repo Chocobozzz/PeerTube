@@ -20,6 +20,8 @@ function eachIsRemoteVideosAddValid (values) {
       val.duration >= 0 &&
       val.duration < constants.MAXIMUM_VIDEO_DURATION &&
       validator.isLength(val.author, 1, constants.MAXIMUM_AUTHOR_LENGTH) &&
+      validator.isBase64(val.thumbnailBase64) &&
+      validator.isByteLength(val.thumbnailBase64, { min: 0, max: 20000 }) &&
       validator.isDate(val.createdDate)
   })
 }
