@@ -72,6 +72,7 @@ function getVideosList (url, end) {
 
   request(url)
     .get(path)
+    .query({ sort: 'name' })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
