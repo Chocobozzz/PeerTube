@@ -8,10 +8,10 @@ const reqValidatorsPagination = {
 }
 
 function pagination (req, res, next) {
-  req.checkParams('start', 'Should have a number start').optional().isInt()
-  req.checkParams('count', 'Should have a number count').optional().isInt()
+  req.checkQuery('start', 'Should have a number start').optional().isInt()
+  req.checkQuery('count', 'Should have a number count').optional().isInt()
 
-  logger.debug('Checking pagination parameters', { parameters: req.params })
+  logger.debug('Checking pagination parameters', { parameters: req.query })
 
   checkErrors(req, res, next)
 }

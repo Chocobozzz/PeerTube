@@ -130,10 +130,60 @@ describe('Test parameters validator', function () {
   describe('Of the videos API', function () {
     const path = '/api/v1/videos/'
 
+    describe('When listing a video', function () {
+      it('Should fail with a bad start pagination', function (done) {
+        request(server.url)
+          .get(path)
+          .query({ start: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with a bad count pagination', function (done) {
+        request(server.url)
+          .get(path)
+          .query({ count: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with an incorrect sort', function (done) {
+        request(server.url)
+          .get(path)
+          .query({ sort: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+    })
+
     describe('When searching a video', function () {
       it('Should fail with nothing', function (done) {
         request(server.url)
           .get(pathUtils.join(path, 'search'))
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with a bad start pagination', function (done) {
+        request(server.url)
+          .get(pathUtils.join(path, 'search', 'test'))
+          .query({ start: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with a bad count pagination', function (done) {
+        request(server.url)
+          .get(pathUtils.join(path, 'search', 'test'))
+          .query({ count: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with an incorrect sort', function (done) {
+        request(server.url)
+          .get(pathUtils.join(path, 'search', 'test'))
+          .query({ sort: 'hello' })
           .set('Accept', 'application/json')
           .expect(400, done)
       })

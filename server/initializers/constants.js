@@ -26,6 +26,11 @@ const PODS_SCORE = {
 // Number of retries we make for the make retry requests (to friends...)
 let REQUEST_RETRIES = 10
 
+// Sortable columns per schema
+const SORTABLE_COLUMNS = {
+  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
+}
+
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
 
@@ -51,6 +56,7 @@ module.exports = {
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUEST_RETRIES: REQUEST_RETRIES,
+  SORTABLE_COLUMNS: SORTABLE_COLUMNS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
   THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH
 }

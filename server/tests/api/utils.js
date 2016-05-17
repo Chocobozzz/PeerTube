@@ -14,6 +14,7 @@ const testUtils = {
   getVideo: getVideo,
   getVideosList: getVideosList,
   getVideosListPagination: getVideosListPagination,
+  getVideosListSort: getVideosListSort,
   login: login,
   loginAndGetAccessToken: loginAndGetAccessToken,
   makeFriends: makeFriends,
@@ -23,6 +24,7 @@ const testUtils = {
   runServer: runServer,
   searchVideo: searchVideo,
   searchVideoWithPagination: searchVideoWithPagination,
+  searchVideoWithSort: searchVideoWithSort,
   testImage: testImage,
   uploadVideo: uploadVideo
 }
@@ -83,6 +85,18 @@ function getVideosListPagination (url, start, count, end) {
     .get(path)
     .query({ start: start })
     .query({ count: count })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getVideosListSort (url, sort, end) {
+  const path = '/api/v1/videos'
+
+  request(url)
+    .get(path)
+    .query({ sort: sort })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
@@ -294,6 +308,18 @@ function searchVideoWithPagination (url, search, start, count, end) {
     .get(path + '/search/' + search)
     .query({ start: start })
     .query({ count: count })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function searchVideoWithSort (url, search, sort, end) {
+  const path = '/api/v1/videos'
+
+  request(url)
+    .get(path + '/search/' + search)
+    .query({ sort: sort })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)

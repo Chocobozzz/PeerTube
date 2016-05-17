@@ -15,7 +15,9 @@ const oAuth2 = middlewares.oauth2
 const pagination = middlewares.pagination
 const reqValidator = middlewares.reqValidators
 const reqValidatorPagination = reqValidator.pagination
+const reqValidatorSort = reqValidator.sort
 const reqValidatorVideos = reqValidator.videos
+const sort = middlewares.sort
 const utils = require('../../../helpers/utils')
 const Videos = require('../../../models/videos') // model
 const videos = require('../../../lib/videos')
@@ -47,6 +49,8 @@ const thumbnailsDir = path.join(__dirname, '..', '..', '..', '..', config.get('s
 
 router.get('/',
   reqValidatorPagination.pagination,
+  reqValidatorSort.videosSort,
+  sort.setVideosSort,
   pagination.setPagination,
   listVideos
 )
@@ -68,6 +72,8 @@ router.delete('/:id',
 router.get('/search/:name',
   reqValidatorVideos.videosSearch,
   reqValidatorPagination.pagination,
+  reqValidatorSort.videosSort,
+  sort.setVideosSort,
   pagination.setPagination,
   searchVideos
 )
@@ -173,7 +179,7 @@ function getVideos (req, res, next) {
 }
 
 function listVideos (req, res, next) {
-  Videos.list(req.query.start, req.query.count, function (err, videosList) {
+  Videos.list(req.query.start, req.query.count, req.query.sort, function (err, videosList) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList))
@@ -231,7 +237,7 @@ function removeVideo (req, res, next) {
 }
 
 function searchVideos (req, res, next) {
-  Videos.search(req.params.name, req.query.start, req.query.count, function (err, videosList) {
+  Videos.search(req.params.name, req.query.start, req.query.count, req.query.sort, function (err, videosList) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList))

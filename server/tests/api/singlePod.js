@@ -314,6 +314,39 @@ describe('Test a single pod', function () {
     })
   })
 
+  it('Should list and sort by name in descending order', function (done) {
+    utils.getVideosListSort(server.url, '-name', function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(6)
+      expect(videos[5].name === 'video_short.mp4 name')
+      expect(videos[4].name === 'video_short.ogv name')
+      expect(videos[3].name === 'video_short.webm name')
+      expect(videos[2].name === 'video_short1.webm name')
+      expect(videos[1].name === 'video_short2.webm name')
+      expect(videos[0].name === 'video_short3.webm name')
+
+      done()
+    })
+  })
+
+  it('Should search and sort by name in ascending order', function (done) {
+    utils.searchVideoWithSort(server.url, 'webm', 'name', function (err, res) {
+      if (err) throw err
+
+      const videos = res.body
+      expect(videos.length).to.equal(4)
+
+      expect(videos[0].name === 'video_short.webm name')
+      expect(videos[1].name === 'video_short1.webm name')
+      expect(videos[2].name === 'video_short2.webm name')
+      expect(videos[3].name === 'video_short3.webm name')
+
+      done()
+    })
+  })
+
   after(function (done) {
     process.kill(-server.app.pid)
     process.kill(-webtorrent.app.pid)
