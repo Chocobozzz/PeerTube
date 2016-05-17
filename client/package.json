@@ -42,12 +42,12 @@
     "zone.js": "0.6.12"
   },
   "devDependencies": {
-    "codelyzer": "0.0.18",
+    "codelyzer": "0.0.19",
     "standard": "^7.0.1",
     "systemjs-builder": "^0.15.16",
     "tslint": "^3.7.4",
     "typescript": "^1.8.10",
-    "typings": "^0.8.1"
+    "typings": "^1.0.4"
   },
   "standard": {
     "ignore": [
