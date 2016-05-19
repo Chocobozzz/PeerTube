@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 read -p "This will remove all node and typescript modules. Are you sure? " -n 1 -r
 

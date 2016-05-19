@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 read -p "This will remove certs, uploads, database (dev) and logs. Are you sure? " -n 1 -r
 
