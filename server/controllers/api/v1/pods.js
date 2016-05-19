@@ -117,7 +117,7 @@ function removePods (req, res, next) {
       videos.removeRemoteVideos(videosList, function (err) {
         if (err) {
           logger.error('Cannot remove remote videos.', { error: err })
-          callback(err)
+          return callback(err)
         }
 
         return callback(null)
