@@ -92,7 +92,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 ## Usage
 
-### Run the server
+### Development
 
     $ npm start
 
@@ -102,6 +102,18 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
     $ npm run play
 
 Then you will can access to the three nodes at `http://localhost:900{1,2,3}`. If you call "make friends" on `http://localhost:9002`, the pod 2 and 3 will become friends. Then if you call "make friends" on `http://localhost:9001` it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
+
+### Production
+
+If you want to run PeerTube for production (bad idea for now :) ):
+
+    $ cp config/production.yaml.example config/production.yaml
+
+Then edit the `config/production.yaml` file according to your webserver configuration.
+
+Finally, run the server with the `production` `NODE_ENV` variable set.
+
+    $ NODE_ENV=production npm start
 
 ### Other commands
 

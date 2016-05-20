@@ -1,0 +1,4 @@
+webserver:
+  https: false
+  host: 'example.com'
+  port: 80
