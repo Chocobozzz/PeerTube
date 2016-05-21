@@ -1,0 +1,57 @@
+.video-miniature {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  margin-right: 40px;
+  position: relative;
+
+  .video-miniature-thumbnail {
+    display: block;
+    position: relative;
+
+    .video-miniature-duration {
+      position: absolute;
+      right: 2px;
+      bottom: 2px;
+      display: inline-block;
+      background-color: rgba(0, 0, 0, 0.8);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 2px;
+      font-size: 11px;
+    }
+  }
+
+  .video-miniature-remove {
+    display: inline-block;
+    position: absolute;
+    left: 2px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 2px;
+    cursor: pointer;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
+  .video-miniature-informations {
+    margin-left: 3px;
+
+    .video-miniature-name {
+      display: block;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+
+    .video-miniature-author, .video-miniature-created-date {
+      display: block;
+      margin-left: 1px;
+      font-size: 11px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+}

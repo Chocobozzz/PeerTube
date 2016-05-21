@@ -1,34 +1,8 @@
-.video {
-  margin-bottom: 10px;
-  transition: margin 0.5s ease;
-
-  &:hover {
-    margin-left: 5px;
-  }
-
-  a.video_name {
-    color: #333333;
-    margin-right: 5px;
-  }
-
-  .video_pod_url {
-    font-size: small;
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .video_description {
-    font-size: small;
-    font-style: italic;
-    margin-left: 7px;
-  }
-
-  .video_remove {
-    margin: 5px;
-    cursor: pointer;
-  }
-}
-
 .loading {
   display: inline-block;
   margin-top: 100px;
+}
+
+my-videos-miniature {
+  display: inline-block;
 }

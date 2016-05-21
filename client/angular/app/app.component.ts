@@ -5,7 +5,7 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import { VideosAddComponent } from '../videos/components/add/videos-add.component';
 import { VideosListComponent } from '../videos/components/list/videos-list.component';
 import { VideosWatchComponent } from '../videos/components/watch/videos-watch.component';
-import { VideosService } from '../videos/services/videos.service';
+import { VideosService } from '../videos/videos.service';
 import { FriendsService } from '../friends/services/friends.service';
 import { UserLoginComponent } from '../users/components/login/login.component';
 import { AuthService } from '../users/services/auth.service';

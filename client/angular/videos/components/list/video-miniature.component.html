@@ -1,0 +1,22 @@
+<div class="video-miniature" (mouseenter)="onHover()" (mouseleave)="onBlur()">
+  <a
+    [routerLink]="['VideosWatch', { id: video.id }]" [attr.title]="video.description"
+    class="video-miniature-thumbnail"
+  >
+    <img [attr.src]="video.thumbnailPath" alt="video thumbnail" />
+    <span class="video-miniature-duration">{{ video.duration }}</span>
+  </a>
+  <span
+    *ngIf="displayRemoveIcon()" (click)="removeVideo(video.id)"
+    class="video-miniature-remove glyphicon glyphicon-remove"
+  ></span>
+
+  <div class="video-miniature-informations">
+    <a [routerLink]="['VideosWatch', { id: video.id }]" class="video-miniature-name">
+      <span>{{ video.name }}</span>
+    </a>
+
+    <span class="video-miniature-author">by {{ video.by }}</span>
+    <span class="video-miniature-created-date">on {{ video.createdDate | date:'short' }}</span>
+  </div>
+</div>

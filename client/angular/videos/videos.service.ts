@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
-import { Video } from '../models/video';
-import { AuthService } from '../../users/services/auth.service';
+import { Video } from './video';
+import { AuthService } from '../users/services/auth.service';
 
 @Injectable()
 export class VideosService {
@@ -13,7 +13,8 @@ export class VideosService {
 
   getVideos() {
     return this.http.get(this._baseVideoUrl)
-                    .map(res => <Video[]> res.json())
+                    .map(res => res.json())
+                    .map(this.extractVideos)
                     .catch(this.handleError);
   }
 
@@ -24,18 +25,26 @@ export class VideosService {
   }
 
   removeVideo(id: string) {
-    if (confirm('Are you sure?')) {
-      const options = this._authService.getAuthRequestOptions();
-      return this.http.delete(this._baseVideoUrl + id, options)
-                      .map(res => <number> res.status)
-                      .catch(this.handleError);
-    }
+    const options = this._authService.getAuthRequestOptions();
+    return this.http.delete(this._baseVideoUrl + id, options)
+                    .map(res => <number> res.status)
+                    .catch(this.handleError);
   }
 
   searchVideos(search: string) {
     return this.http.get(this._baseVideoUrl + 'search/' + search)
-                    .map(res => <Video> res.json())
+                    .map(res => res.json())
+                    .map(this.extractVideos)
                     .catch(this.handleError);
+  }
+
+  private extractVideos (body: any[]) {
+    const videos = [];
+    for (const video_json of body) {
+      videos.push(new Video(video_json));
+    }
+
+    return videos;
   }
 
   private handleError (error: Response) {

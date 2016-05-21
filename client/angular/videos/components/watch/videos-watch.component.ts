@@ -5,8 +5,8 @@ import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 // TODO import it with systemjs
 declare var WebTorrent: any;
 
-import { Video } from '../../models/video';
-import { VideosService } from '../../services/videos.service';
+import { Video } from '../../video';
+import { VideosService } from '../../videos.service';
 
 @Component({
   selector: 'my-video-watch',

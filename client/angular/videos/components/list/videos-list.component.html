@@ -1,12 +1,3 @@
 <div *ngIf="videos.length === 0">There is no video.</div>
-<div *ngFor="let video of videos" class="video">
-  <div>
-    <a [routerLink]="['VideosWatch', { id: video.id }]" class="video_name">{{ video.name }}</a>
-    <span class="video_pod_url">{{ video.podUrl }}</span>
-    <span *ngIf="video.isLocal === true && user && video.author === user.username" (click)="removeVideo(video.id)" class="video_remove glyphicon glyphicon-remove"></span>
-  </div>
-
-  <div class="video_description">
-    {{ video.description }}
-  </div>
-</div>
+<my-video-miniature *ngFor="let video of videos" [video]="video" [user]="user" (removed)="onRemoved(video)">
+</my-video-miniature>

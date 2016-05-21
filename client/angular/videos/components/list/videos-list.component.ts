@@ -3,14 +3,15 @@ import { ROUTER_DIRECTIVES, RouteParams } from '@angular/router-deprecated';
 
 import { AuthService } from '../../../users/services/auth.service';
 import { User } from '../../../users/models/user';
-import { VideosService } from '../../services/videos.service';
-import { Video } from '../../models/video';
+import { VideosService } from '../../videos.service';
+import { Video } from '../../video';
+import { VideoMiniatureComponent } from './video-miniature.component';
 
 @Component({
   selector: 'my-videos-list',
   styleUrls: [ 'app/angular/videos/components/list/videos-list.component.css' ],
   templateUrl: 'app/angular/videos/components/list/videos-list.component.html',
-  directives: [ ROUTER_DIRECTIVES ]
+  directives: [ ROUTER_DIRECTIVES, VideoMiniatureComponent ]
 })
 
 export class VideosListComponent implements OnInit {
@@ -50,11 +51,8 @@ export class VideosListComponent implements OnInit {
     );
   }
 
-  removeVideo(id: string) {
-    this._videosService.removeVideo(id).subscribe(
-      status => this.getVideos(),
-      error => alert(error)
-    );
+  onRemoved(video: Video): void {
+    this.videos.splice(this.videos.indexOf(video), 1);
   }
 
 }
