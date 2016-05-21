@@ -56,11 +56,6 @@ app.use(expressValidator({
 
 // ----------- Views, routes and static files -----------
 
-// Livereload
-app.use(require('connect-livereload')({
-  port: 35729
-}))
-
 // Catch sefaults
 require('segfault-handler').registerHandler()
 
