@@ -1,5 +1,6 @@
 'use strict'
 
+const async = require('async')
 const config = require('config')
 const mongoose = require('mongoose')
 
@@ -81,15 +82,8 @@ function get (id, callback) {
 }
 
 function list (start, count, sort, callback) {
-  VideosDB.find({}).skip(start).limit(start + count).sort(sort)
-  .exec(function (err, videosList) {
-    if (err) {
-      logger.error('Cannot get the list of the videos.')
-      return callback(err)
-    }
-
-    return callback(null, videosList)
-  })
+  const query = {}
+  return findWithCount(query, start, count, sort, callback)
 }
 
 function listFromUrl (fromUrl, callback) {
@@ -131,17 +125,29 @@ function removeByIds (ids, callback) {
 }
 
 function search (name, start, count, sort, callback) {
-  VideosDB.find({ name: new RegExp(name) }).skip(start).limit(start + count).sort(sort)
-  .exec(function (err, videos) {
-    if (err) {
-      logger.error('Cannot search the videos.')
-      return callback(err)
-    }
-
-    return callback(null, videos)
-  })
+  const query = { name: new RegExp(name) }
+  findWithCount(query, start, count, sort, callback)
 }
 
 // ---------------------------------------------------------------------------
 
 module.exports = Videos
+
+// ---------------------------------------------------------------------------
+
+function findWithCount (query, start, count, sort, callback) {
+  async.parallel([
+    function (asyncCallback) {
+      VideosDB.find(query).skip(start).limit(start + count).sort(sort).exec(asyncCallback)
+    },
+    function (asyncCallback) {
+      VideosDB.count(query, asyncCallback)
+    }
+  ], function (err, results) {
+    if (err) return callback(err)
+
+    const videos = results[0]
+    const totalVideos = results[1]
+    return callback(null, videos, totalVideos)
+  })
+}

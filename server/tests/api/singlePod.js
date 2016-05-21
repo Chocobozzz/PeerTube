@@ -47,8 +47,9 @@ describe('Test a single pod', function () {
     utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
-      expect(res.body).to.be.an('array')
-      expect(res.body.length).to.equal(0)
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(0)
 
       done()
     })
@@ -66,13 +67,14 @@ describe('Test a single pod', function () {
     utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
-      expect(res.body).to.be.an('array')
-      expect(res.body.length).to.equal(1)
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(1)
 
-      const video = res.body[0]
+      const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('http://localhost:9001')
+      expect(video.podUrl).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
@@ -106,7 +108,7 @@ describe('Test a single pod', function () {
       const video = res.body
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('http://localhost:9001')
+      expect(video.podUrl).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
@@ -131,13 +133,14 @@ describe('Test a single pod', function () {
     utils.searchVideo(server.url, 'my', function (err, res) {
       if (err) throw err
 
-      expect(res.body).to.be.an('array')
-      expect(res.body.length).to.equal(1)
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(1)
 
-      const video = res.body[0]
+      const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('http://localhost:9001')
+      expect(video.podUrl).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(utils.dateIsValid(video.createdDate)).to.be.true
@@ -155,8 +158,9 @@ describe('Test a single pod', function () {
     utils.searchVideo(server.url, 'hello', function (err, res) {
       if (err) throw err
 
-      expect(res.body).to.be.an('array')
-      expect(res.body.length).to.equal(0)
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(0)
 
       done()
     })
@@ -179,8 +183,9 @@ describe('Test a single pod', function () {
     utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
-      expect(res.body).to.be.an('array')
-      expect(res.body.length).to.equal(0)
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(0)
 
       done()
     })
@@ -201,7 +206,8 @@ describe('Test a single pod', function () {
     utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      expect(res.body.total).to.equal(6)
+      const videos = res.body.data
       expect(videos).to.be.an('array')
       expect(videos.length).to.equal(6)
 
@@ -221,7 +227,7 @@ describe('Test a single pod', function () {
     utils.getVideosList(server.url, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
       // For the next test
       videosListBase = videos
 
@@ -243,7 +249,8 @@ describe('Test a single pod', function () {
     utils.getVideosListPagination(server.url, 0, 2, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(2)
       expect(videos[0].name === videosListBase[0].name)
       expect(videos[1].name === videosListBase[1].name)
@@ -256,7 +263,8 @@ describe('Test a single pod', function () {
     utils.getVideosListPagination(server.url, 2, 3, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(4)
       expect(videos[0].name === videosListBase[2].name)
       expect(videos[1].name === videosListBase[3].name)
@@ -270,7 +278,8 @@ describe('Test a single pod', function () {
     utils.getVideosListPagination(server.url, 5, 6, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(1)
       expect(videos[0].name === videosListBase[5].name)
 
@@ -282,7 +291,8 @@ describe('Test a single pod', function () {
     utils.searchVideoWithPagination(server.url, 'webm', 0, 1, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(1)
       expect(videos[0].name === 'video_short.webm name')
 
@@ -294,7 +304,8 @@ describe('Test a single pod', function () {
     utils.searchVideoWithPagination(server.url, 'webm', 2, 2, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(2)
       expect(videos[0].name === 'video_short2.webm name')
       expect(videos[1].name === 'video_short3.webm name')
@@ -307,7 +318,8 @@ describe('Test a single pod', function () {
     utils.searchVideoWithPagination(server.url, 'webm', 0, 15, function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(4)
 
       done()
@@ -318,7 +330,8 @@ describe('Test a single pod', function () {
     utils.getVideosListSort(server.url, '-name', function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(6)
       expect(videos[5].name === 'video_short.mp4 name')
       expect(videos[4].name === 'video_short.ogv name')
@@ -335,7 +348,8 @@ describe('Test a single pod', function () {
     utils.searchVideoWithSort(server.url, 'webm', 'name', function (err, res) {
       if (err) throw err
 
-      const videos = res.body
+      const videos = res.body.data
+      expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(4)
 
       expect(videos[0].name === 'video_short.webm name')

@@ -210,8 +210,10 @@ describe('Test advanced friends', function () {
       function (next) {
         getVideos(1, function (err, res) {
           if (err) throw err
-          expect(res.body).to.be.an('array')
-          expect(res.body.length).to.equal(2)
+
+          const videos = res.body.data
+          expect(videos).to.be.an('array')
+          expect(videos.length).to.equal(2)
 
           next()
         })
@@ -221,8 +223,10 @@ describe('Test advanced friends', function () {
 
         getVideos(2, function (err, res) {
           if (err) throw err
-          expect(res.body).to.be.an('array')
-          expect(res.body.length).to.equal(3)
+
+          const videos = res.body.data
+          expect(videos).to.be.an('array')
+          expect(videos.length).to.equal(3)
           done()
         })
       }
@@ -236,8 +240,9 @@ describe('Test advanced friends', function () {
         getVideos(1, function (err, res) {
           if (err) throw err
 
-          expect(res.body).to.be.an('array')
-          expect(res.body.length).to.equal(5)
+          const videos = res.body.data
+          expect(videos).to.be.an('array')
+          expect(videos.length).to.equal(5)
 
           done()
         })

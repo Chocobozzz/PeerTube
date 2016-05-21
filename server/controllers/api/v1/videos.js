@@ -62,7 +62,7 @@ router.post('/',
 )
 router.get('/:id',
   reqValidatorVideos.videosGet,
-  getVideos
+  getVideo
 )
 router.delete('/:id',
   oAuth2.authenticate,
@@ -165,7 +165,7 @@ function addVideo (req, res, next) {
   })
 }
 
-function getVideos (req, res, next) {
+function getVideo (req, res, next) {
   Videos.get(req.params.id, function (err, videoObj) {
     if (err) return next(err)
 
@@ -179,10 +179,10 @@ function getVideos (req, res, next) {
 }
 
 function listVideos (req, res, next) {
-  Videos.list(req.query.start, req.query.count, req.query.sort, function (err, videosList) {
+  Videos.list(req.query.start, req.query.count, req.query.sort, function (err, videosList, totalVideos) {
     if (err) return next(err)
 
-    res.json(getFormatedVideos(videosList))
+    res.json(getFormatedVideos(videosList, totalVideos))
   })
 }
 
@@ -237,10 +237,10 @@ function removeVideo (req, res, next) {
 }
 
 function searchVideos (req, res, next) {
-  Videos.search(req.params.name, req.query.start, req.query.count, req.query.sort, function (err, videosList) {
+  Videos.search(req.params.name, req.query.start, req.query.count, req.query.sort, function (err, videosList, totalVideos) {
     if (err) return next(err)
 
-    res.json(getFormatedVideos(videosList))
+    res.json(getFormatedVideos(videosList, totalVideos))
   })
 }
 
@@ -263,14 +263,17 @@ function getFormatedVideo (videoObj) {
   return formatedVideo
 }
 
-function getFormatedVideos (videosObj) {
+function getFormatedVideos (videosObj, totalVideos) {
   const formatedVideos = []
 
   videosObj.forEach(function (videoObj) {
     formatedVideos.push(getFormatedVideo(videoObj))
   })
 
-  return formatedVideos
+  return {
+    total: totalVideos,
+    data: formatedVideos
+  }
 }
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process

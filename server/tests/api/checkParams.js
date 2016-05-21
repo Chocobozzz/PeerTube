@@ -299,8 +299,8 @@ describe('Test parameters validator', function () {
           .end(function (err, res) {
             if (err) throw err
 
-            expect(res.body).to.be.an('array')
-            expect(res.body.length).to.equal(3)
+            expect(res.body.data).to.be.an('array')
+            expect(res.body.data.length).to.equal(3)
 
             done()
           })
