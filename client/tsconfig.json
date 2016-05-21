@@ -9,10 +9,37 @@
     "removeComments": false,
     "noImplicitAny": false
   },
+  "filesGlob": [
+    "**/*.ts",
+    "!node_modules/**"
+  ],
   "exclude": [
     "node_modules",
     "typings/main",
     "typings/main.d.ts"
   ],
-  "compileOnSave": false
+  "compileOnSave": false,
+  "files": [
+    "angular/app/app.component.ts",
+    "angular/friends/services/friends.service.ts",
+    "angular/main.ts",
+    "angular/users/components/login/login.component.ts",
+    "angular/users/models/authStatus.ts",
+    "angular/users/models/token.ts",
+    "angular/users/models/user.ts",
+    "angular/users/services/auth.service.ts",
+    "angular/videos/components/add/videos-add.component.ts",
+    "angular/videos/components/list/video-miniature.component.ts",
+    "angular/videos/components/list/videos-list.component.ts",
+    "angular/videos/components/watch/videos-watch.component.ts",
+    "angular/videos/video.ts",
+    "angular/videos/videos.service.ts",
+    "typings/globals/es6-shim/index.d.ts",
+    "typings/globals/jasmine/index.d.ts",
+    "typings/globals/node/index.d.ts",
+    "typings/index.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
 }
