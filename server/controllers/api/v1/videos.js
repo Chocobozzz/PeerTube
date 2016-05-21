@@ -251,7 +251,7 @@ function getFormatedVideo (videoObj) {
     id: videoObj._id,
     name: videoObj.name,
     description: videoObj.description,
-    podUrl: videoObj.podUrl,
+    podUrl: videoObj.podUrl.replace(/^https?:\/\//, ''),
     isLocal: videos.getVideoState(videoObj).owned,
     magnetUri: videoObj.magnetUri,
     author: videoObj.author,
