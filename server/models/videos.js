@@ -124,8 +124,15 @@ function removeByIds (ids, callback) {
   VideosDB.remove({ _id: { $in: ids } }, callback)
 }
 
-function search (name, start, count, sort, callback) {
-  const query = { name: new RegExp(name) }
+function search (value, field, start, count, sort, callback) {
+  const query = {}
+  // Make an exact search with the magnet
+  if (field === 'magnetUri') {
+    query[field] = value
+  } else {
+    query[field] = new RegExp(value)
+  }
+
   findWithCount(query, start, count, sort, callback)
 }
 

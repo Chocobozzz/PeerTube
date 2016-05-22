@@ -129,7 +129,7 @@ describe('Test a single pod', function () {
     })
   })
 
-  it('Should search the video', function (done) {
+  it('Should search the video by name by default', function (done) {
     utils.searchVideo(server.url, 'my', function (err, res) {
       if (err) throw err
 
@@ -154,8 +154,45 @@ describe('Test a single pod', function () {
     })
   })
 
-  it('Should not find a search', function (done) {
+  it('Should search the video by podUrl', function (done) {
+    utils.searchVideo(server.url, '9001', 'podUrl', function (err, res) {
+      if (err) throw err
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(1)
+
+      const video = res.body.data[0]
+      expect(video.name).to.equal('my super name')
+      expect(video.description).to.equal('my super description')
+      expect(video.podUrl).to.equal('localhost:9001')
+      expect(video.author).to.equal('root')
+      expect(video.isLocal).to.be.true
+      expect(utils.dateIsValid(video.createdDate)).to.be.true
+
+      utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
+        if (err) throw err
+        expect(test).to.equal(true)
+
+        done()
+      })
+    })
+  })
+
+  it('Should not find a search by name by default', function (done) {
     utils.searchVideo(server.url, 'hello', function (err, res) {
+      if (err) throw err
+
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(0)
+
+      done()
+    })
+  })
+
+  it('Should not find a search by author', function (done) {
+    utils.searchVideo(server.url, 'hello', 'author', function (err, res) {
       if (err) throw err
 
       expect(res.body.total).to.equal(0)
@@ -288,7 +325,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search the first video', function (done) {
-    utils.searchVideoWithPagination(server.url, 'webm', 0, 1, function (err, res) {
+    utils.searchVideoWithPagination(server.url, 'webm', 'name', 0, 1, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
@@ -301,7 +338,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search the last two videos', function (done) {
-    utils.searchVideoWithPagination(server.url, 'webm', 2, 2, function (err, res) {
+    utils.searchVideoWithPagination(server.url, 'webm', 'name', 2, 2, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
@@ -314,13 +351,63 @@ describe('Test a single pod', function () {
     })
   })
 
-  it('Should search all the videos', function (done) {
-    utils.searchVideoWithPagination(server.url, 'webm', 0, 15, function (err, res) {
+  it('Should search all the webm videos', function (done) {
+    utils.searchVideoWithPagination(server.url, 'webm', 'name', 0, 15, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
       expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(4)
+
+      done()
+    })
+  })
+
+  it('Should search all the root author videos', function (done) {
+    utils.searchVideoWithPagination(server.url, 'root', 'author', 0, 15, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body.data
+      expect(res.body.total).to.equal(6)
+      expect(videos.length).to.equal(6)
+
+      done()
+    })
+  })
+
+  it('Should search all the 9001 port videos', function (done) {
+    utils.searchVideoWithPagination(server.url, '9001', 'podUrl', 0, 15, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body.data
+      expect(res.body.total).to.equal(6)
+      expect(videos.length).to.equal(6)
+
+      done()
+    })
+  })
+
+  it('Should search all the localhost videos', function (done) {
+    utils.searchVideoWithPagination(server.url, 'localhost', 'podUrl', 0, 15, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body.data
+      expect(res.body.total).to.equal(6)
+      expect(videos.length).to.equal(6)
+
+      done()
+    })
+  })
+
+  it('Should search the good magnetUri video', function (done) {
+    const video = videosListBase[0]
+    utils.searchVideoWithPagination(server.url, encodeURIComponent(video.magnetUri), 'magnetUri', 0, 15, function (err, res) {
+      if (err) throw err
+
+      const videos = res.body.data
+      expect(res.body.total).to.equal(1)
+      expect(videos.length).to.equal(1)
+      expect(videos[0].name).to.equal(video.name)
 
       done()
     })

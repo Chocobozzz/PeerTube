@@ -27,6 +27,11 @@ const PODS_SCORE = {
 let REQUEST_RETRIES = 10
 
 // Sortable columns per schema
+const SEARCHABLE_COLUMNS = {
+  VIDEOS: [ 'name', 'magnetUri', 'podUrl', 'author' ]
+}
+
+// Sortable columns per schema
 const SORTABLE_COLUMNS = {
   VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
 }
@@ -56,6 +61,7 @@ module.exports = {
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUEST_RETRIES: REQUEST_RETRIES,
+  SEARCHABLE_COLUMNS: SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
   THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH

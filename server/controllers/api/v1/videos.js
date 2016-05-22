@@ -17,6 +17,7 @@ const reqValidator = middlewares.reqValidators
 const reqValidatorPagination = reqValidator.pagination
 const reqValidatorSort = reqValidator.sort
 const reqValidatorVideos = reqValidator.videos
+const search = middlewares.search
 const sort = middlewares.sort
 const utils = require('../../../helpers/utils')
 const Videos = require('../../../models/videos') // model
@@ -69,12 +70,13 @@ router.delete('/:id',
   reqValidatorVideos.videosRemove,
   removeVideo
 )
-router.get('/search/:name',
+router.get('/search/:value',
   reqValidatorVideos.videosSearch,
   reqValidatorPagination.pagination,
   reqValidatorSort.videosSort,
   sort.setVideosSort,
   pagination.setPagination,
+  search.setVideosSearch,
   searchVideos
 )
 
@@ -237,7 +239,8 @@ function removeVideo (req, res, next) {
 }
 
 function searchVideos (req, res, next) {
-  Videos.search(req.params.name, req.query.start, req.query.count, req.query.sort, function (err, videosList, totalVideos) {
+  Videos.search(req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort,
+  function (err, videosList, totalVideos) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList, totalVideos))

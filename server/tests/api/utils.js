@@ -291,24 +291,31 @@ function runServer (number, callback) {
   })
 }
 
-function searchVideo (url, search, end) {
-  const path = '/api/v1/videos'
+function searchVideo (url, search, field, end) {
+  if (!end) {
+    end = field
+    field = null
+  }
 
-  request(url)
-    .get(path + '/search/' + search)
-    .set('Accept', 'application/json')
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .end(end)
+  const path = '/api/v1/videos'
+  const req = request(url)
+              .get(path + '/search/' + search)
+              .set('Accept', 'application/json')
+
+  if (field) req.query({ field: field })
+  req.expect(200)
+     .expect('Content-Type', /json/)
+     .end(end)
 }
 
-function searchVideoWithPagination (url, search, start, count, end) {
+function searchVideoWithPagination (url, search, field, start, count, end) {
   const path = '/api/v1/videos'
 
   request(url)
     .get(path + '/search/' + search)
     .query({ start: start })
     .query({ count: count })
+    .query({ field: field })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)

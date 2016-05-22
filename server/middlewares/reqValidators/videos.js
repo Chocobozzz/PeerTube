@@ -81,7 +81,9 @@ function videosRemove (req, res, next) {
 }
 
 function videosSearch (req, res, next) {
-  req.checkParams('name', 'Should have a name').notEmpty()
+  const searchableColumns = constants.SEARCHABLE_COLUMNS.VIDEOS
+  req.checkParams('value', 'Should have a name').notEmpty()
+  req.checkQuery('field', 'Should have correct searchable column').optional().isIn(searchableColumns)
 
   logger.debug('Checking videosSearch parameters', { parameters: req.params })
 
