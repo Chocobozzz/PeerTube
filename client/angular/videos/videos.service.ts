@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, RequestOptions, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
+import { Pagination } from './pagination';
 import { Video } from './video';
 import { AuthService } from '../users/services/auth.service';
 
@@ -11,8 +12,9 @@ export class VideosService {
 
   constructor (private http: Http, private _authService: AuthService) {}
 
-  getVideos() {
-    return this.http.get(this._baseVideoUrl)
+  getVideos(pagination: Pagination) {
+    const params = { search: this.createPaginationParams(pagination) };
+    return this.http.get(this._baseVideoUrl, params)
                     .map(res => res.json())
                     .map(this.extractVideos)
                     .catch(this.handleError);
@@ -31,24 +33,38 @@ export class VideosService {
                     .catch(this.handleError);
   }
 
-  searchVideos(search: string) {
-    return this.http.get(this._baseVideoUrl + 'search/' + search)
+  searchVideos(search: string, pagination: Pagination) {
+    const params = { search: this.createPaginationParams(pagination) };
+    return this.http.get(this._baseVideoUrl + 'search/' + encodeURIComponent(search), params)
                     .map(res => res.json())
                     .map(this.extractVideos)
                     .catch(this.handleError);
   }
 
-  private extractVideos (body: any[]) {
+  private extractVideos (body: any) {
+    const videos_json = body.data;
+    const totalVideos = body.total;
     const videos = [];
-    for (const video_json of body) {
+    for (const video_json of videos_json) {
       videos.push(new Video(video_json));
     }
 
-    return videos;
+    return { videos, totalVideos };
   }
 
   private handleError (error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');
+  }
+
+  private createPaginationParams(pagination: Pagination) {
+    const params = new URLSearchParams();
+    const start: number = (pagination.currentPage - 1) * pagination.itemsPerPage;
+    const count: number = pagination.itemsPerPage;
+
+    params.set('start', start.toString());
+    params.set('count', count.toString());
+
+    return params;
   }
 }

@@ -1,4 +1,4 @@
-<div class="video-miniature" (mouseenter)="onHover()" (mouseleave)="onBlur()">
+<div class="video-miniature col-md-4" (mouseenter)="onHover()" (mouseleave)="onBlur()">
   <a
     [routerLink]="['VideosWatch', { id: video.id }]" [attr.title]="video.description"
     class="video-miniature-thumbnail"

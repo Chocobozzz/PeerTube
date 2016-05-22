@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ROUTER_DIRECTIVES, RouteParams } from '@angular/router-deprecated';
 
+import { PAGINATION_DIRECTIVES } from 'ng2-bootstrap/components/pagination';
+
 import { AuthService } from '../../../users/services/auth.service';
+import { Pagination } from '../../pagination';
 import { User } from '../../../users/models/user';
 import { VideosService } from '../../videos.service';
 import { Video } from '../../video';
@@ -11,21 +14,26 @@ import { VideoMiniatureComponent } from './video-miniature.component';
   selector: 'my-videos-list',
   styleUrls: [ 'app/angular/videos/components/list/videos-list.component.css' ],
   templateUrl: 'app/angular/videos/components/list/videos-list.component.html',
-  directives: [ ROUTER_DIRECTIVES, VideoMiniatureComponent ]
+  directives: [ ROUTER_DIRECTIVES, PAGINATION_DIRECTIVES, VideoMiniatureComponent ]
 })
 
 export class VideosListComponent implements OnInit {
   user: User = null;
   videos: Video[] = [];
+  pagination: Pagination = {
+    currentPage: 1,
+    itemsPerPage: 9,
+    total: 0
+  }
 
   private search: string;
 
   constructor(
     private _authService: AuthService,
     private _videosService: VideosService,
-    routeParams: RouteParams
+    private _routeParams: RouteParams
   ) {
-    this.search = routeParams.get('search');
+    this.search = this._routeParams.get('search');
   }
 
   ngOnInit() {
@@ -40,13 +48,16 @@ export class VideosListComponent implements OnInit {
     let observable = null;
 
     if (this.search !== null) {
-      observable = this._videosService.searchVideos(this.search);
+      observable = this._videosService.searchVideos(this.search, this.pagination);
     } else {
-      observable = this._videosService.getVideos();
+      observable = this._videosService.getVideos(this.pagination);
     }
 
     observable.subscribe(
-      videos => this.videos = videos,
+      ({ videos, totalVideos }) => {
+        this.videos = videos;
+        this.pagination.total = totalVideos;
+      },
       error => alert(error)
     );
   }

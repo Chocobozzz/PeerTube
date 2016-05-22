@@ -2,11 +2,13 @@
   var map = {
     'app': 'app/angular',
     'angular-pipes': 'app/node_modules/angular-pipes',
+    'ng2-bootstrap': 'app/node_modules/ng2-bootstrap',
     'angular-rxjs.bundle': 'app/bundles/angular-rxjs.bundle.js'
   }
 
   var packages = {
     'app': { main: 'main.js', defaultExtension: 'js' },
+    'ng2-bootstrap': { defaultExtension: 'js' },
     'rxjs': { defaultExtension: 'js' }
   }
   var packageNames = [

@@ -1,8 +1,12 @@
-.loading {
-  display: inline-block;
-  margin-top: 100px;
+.videos-miniatures {
+  min-height: 600px;
 }
 
 my-videos-miniature {
   display: inline-block;
+}
+
+pagination {
+  display: block;
+  text-align: center;
 }

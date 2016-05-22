@@ -1,8 +1,6 @@
 .video-miniature {
-  width: 200px;
   height: 200px;
   display: inline-block;
-  margin-right: 40px;
   position: relative;
 
   .video-miniature-thumbnail {
@@ -11,7 +9,7 @@
 
     .video-miniature-duration {
       position: absolute;
-      right: 2px;
+      right: 60px;
       bottom: 2px;
       display: inline-block;
       background-color: rgba(0, 0, 0, 0.8);
@@ -24,7 +22,7 @@
   .video-miniature-remove {
     display: inline-block;
     position: absolute;
-    left: 2px;
+    left: 16px;
     background-color: rgba(0, 0, 0, 0.8);
     color: rgba(255, 255, 255, 0.8);
     padding: 2px;

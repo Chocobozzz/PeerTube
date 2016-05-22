@@ -1,3 +1,11 @@
-<div *ngIf="videos.length === 0">There is no video.</div>
-<my-video-miniature *ngFor="let video of videos" [video]="video" [user]="user" (removed)="onRemoved(video)">
-</my-video-miniature>
+<div class="videos-miniatures">
+  <div *ngIf="videos.length === 0">There is no video.</div>
+
+  <my-video-miniature *ngFor="let video of videos" [video]="video" [user]="user" (removed)="onRemoved(video)">
+  </my-video-miniature>
+</div>
+
+<pagination
+  [totalItems]="pagination.total" [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
+  (ngModelChange)="getVideos()"
+></pagination>
