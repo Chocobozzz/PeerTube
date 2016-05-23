@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { Pagination } from './pagination';
 import { Video } from './video';
 import { AuthService } from '../users/services/auth.service';
+import { Search } from '../app/search';
 
 @Injectable()
 export class VideosService {
@@ -13,8 +14,8 @@ export class VideosService {
   constructor (private http: Http, private _authService: AuthService) {}
 
   getVideos(pagination: Pagination) {
-    const params = { search: this.createPaginationParams(pagination) };
-    return this.http.get(this._baseVideoUrl, params)
+    const params = this.createPaginationParams(pagination);
+    return this.http.get(this._baseVideoUrl, { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
                     .catch(this.handleError);
@@ -33,9 +34,10 @@ export class VideosService {
                     .catch(this.handleError);
   }
 
-  searchVideos(search: string, pagination: Pagination) {
-    const params = { search: this.createPaginationParams(pagination) };
-    return this.http.get(this._baseVideoUrl + 'search/' + encodeURIComponent(search), params)
+  searchVideos(search: Search, pagination: Pagination) {
+    const params = this.createPaginationParams(pagination);
+    if (search.field) params.set('field', search.field);
+    return this.http.get(this._baseVideoUrl + 'search/' + encodeURIComponent(search.value), { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
                     .catch(this.handleError);

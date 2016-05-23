@@ -9,6 +9,7 @@ import { User } from '../../../users/models/user';
 import { VideosService } from '../../videos.service';
 import { Video } from '../../video';
 import { VideoMiniatureComponent } from './video-miniature.component';
+import { Search, SearchField } from '../../../app/search';
 
 @Component({
   selector: 'my-videos-list',
@@ -26,14 +27,17 @@ export class VideosListComponent implements OnInit {
     total: 0
   }
 
-  private search: string;
+  private search: Search;
 
   constructor(
     private _authService: AuthService,
     private _videosService: VideosService,
     private _routeParams: RouteParams
   ) {
-    this.search = this._routeParams.get('search');
+    this.search = {
+      value: this._routeParams.get('search'),
+      field: <SearchField>this._routeParams.get('field')
+    }
   }
 
   ngOnInit() {
@@ -47,7 +51,7 @@ export class VideosListComponent implements OnInit {
   getVideos() {
     let observable = null;
 
-    if (this.search !== null) {
+    if (this.search.value !== null) {
       observable = this._videosService.searchVideos(this.search, this.pagination);
     } else {
       observable = this._videosService.getVideos(this.pagination);

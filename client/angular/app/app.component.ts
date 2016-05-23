@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Router } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS } from '@angular/http';
 
+import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
+
 import { VideosAddComponent } from '../videos/components/add/videos-add.component';
 import { VideosListComponent } from '../videos/components/list/videos-list.component';
 import { VideosWatchComponent } from '../videos/components/watch/videos-watch.component';
@@ -10,6 +12,8 @@ import { FriendsService } from '../friends/services/friends.service';
 import { UserLoginComponent } from '../users/components/login/login.component';
 import { AuthService } from '../users/services/auth.service';
 import { AuthStatus } from '../users/models/authStatus';
+import { SearchComponent } from './search.component';
+import { Search } from './search';
 
 @RouteConfig([
   {
@@ -39,12 +43,14 @@ import { AuthStatus } from '../users/models/authStatus';
     selector: 'my-app',
     templateUrl: 'app/angular/app/app.component.html',
     styleUrls: [ 'app/angular/app/app.component.css' ],
-    directives: [ ROUTER_DIRECTIVES ],
+    directives: [ ROUTER_DIRECTIVES, SearchComponent ],
     providers: [ ROUTER_PROVIDERS, HTTP_PROVIDERS, VideosService, FriendsService, AuthService ]
 })
 
 export class AppComponent {
   isLoggedIn: boolean;
+  search_field: string = name;
+  choices = [  ];
 
   constructor(private _friendsService: FriendsService,
               private _authService: AuthService,
@@ -61,9 +67,10 @@ export class AppComponent {
     );
   }
 
-  doSearch(search: string) {
-    if (search !== '') {
-      this._router.navigate(['VideosList', { search: search }]);
+  onSearch(search: Search) {
+    console.log(search);
+    if (search.value !== '') {
+      this._router.navigate(['VideosList', { search: search.value, field: search.field }]);
     } else {
       this._router.navigate(['VideosList']);
     }

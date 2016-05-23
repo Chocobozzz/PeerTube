@@ -21,6 +21,8 @@
   "compileOnSave": false,
   "files": [
     "angular/app/app.component.ts",
+    "angular/app/search.component.ts",
+    "angular/app/search.ts",
     "angular/friends/services/friends.service.ts",
     "angular/main.ts",
     "angular/users/components/login/login.component.ts",

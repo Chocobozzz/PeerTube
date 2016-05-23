@@ -6,10 +6,7 @@
     </div>
 
     <div class="col-md-9">
-      <input
-        type="text" id="search_video" name="search_video" class="form-control" placeholder="Search a video..."
-        #search (keyup.enter)="doSearch(search.value)"
-      >
+      <my-search (search)="onSearch($event)"></my-search>
     </div>
   </header>
 
