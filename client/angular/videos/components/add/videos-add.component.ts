@@ -1,6 +1,9 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
 
+import { PROGRESSBAR_DIRECTIVES } from 'ng2-bootstrap/components/progressbar';
+import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
+
 import { AuthService } from '../../../users/services/auth.service';
 import { User } from '../../../users/models/user';
 
@@ -10,7 +13,9 @@ declare var jQuery:any;
 @Component({
   selector: 'my-videos-add',
   styleUrls: [ 'app/angular/videos/components/add/videos-add.component.css' ],
-  templateUrl: 'app/angular/videos/components/add/videos-add.component.html'
+  templateUrl: 'app/angular/videos/components/add/videos-add.component.html',
+  directives: [ PROGRESSBAR_DIRECTIVES ],
+  pipes: [ BytesPipe ]
 })
 
 export class VideosAddComponent implements OnInit {

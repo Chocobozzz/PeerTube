@@ -34,7 +34,7 @@
   </div>
 
   <div id="progress" *ngIf="progressBar.max !== 0">
-    <progress [value]="progressBar.value" [max]="progressBar.max"></progress>
+    <progressbar [value]="progressBar.value" [max]="progressBar.max">{{ progressBar.value | bytes }} / {{ progressBar.max | bytes }}</progressbar>
   </div>
 
   <input type="submit" value="Upload" class="btn btn-default" [disabled]="!videoForm.form.valid || !fileToUpload">

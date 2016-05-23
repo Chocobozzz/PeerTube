@@ -1,5 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { RouteParams, CanDeactivate, ComponentInstruction } from '@angular/router-deprecated';
+
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 
 // TODO import it with systemjs
