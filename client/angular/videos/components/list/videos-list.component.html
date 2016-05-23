@@ -1,3 +1,8 @@
+<div class="videos-info">
+  <span class="videos-total-results"> {{ pagination.total }}</span>
+  <my-video-sort [currentSort]="sort" (sort)="onSort($event)"></my-video-sort>
+</div>
+
 <div class="videos-miniatures">
   <div *ngIf="videos.length === 0">There is no video.</div>
 

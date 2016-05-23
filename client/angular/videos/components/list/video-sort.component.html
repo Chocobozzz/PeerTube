@@ -1,0 +1,5 @@
+<select [(ngModel)]="currentSort" (ngModelChange)="onSortChange()">
+  <option *ngFor="let choice of choiceKeys" [value]="choice">
+    {{ getStringChoice(choice) }}
+  </option>
+</select>

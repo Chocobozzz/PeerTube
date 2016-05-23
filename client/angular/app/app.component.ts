@@ -68,7 +68,6 @@ export class AppComponent {
   }
 
   onSearch(search: Search) {
-    console.log(search);
     if (search.value !== '') {
       this._router.navigate(['VideosList', { search: search.value, field: search.field }]);
     } else {

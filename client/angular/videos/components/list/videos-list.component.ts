@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ROUTER_DIRECTIVES, RouteParams } from '@angular/router-deprecated';
+import { ROUTER_DIRECTIVES, RouteParams, Router } from '@angular/router-deprecated';
 
 import { PAGINATION_DIRECTIVES } from 'ng2-bootstrap/components/pagination';
 
@@ -10,12 +10,14 @@ import { VideosService } from '../../videos.service';
 import { Video } from '../../video';
 import { VideoMiniatureComponent } from './video-miniature.component';
 import { Search, SearchField } from '../../../app/search';
+import { VideoSortComponent } from './video-sort.component';
+import { SortField } from './sort';
 
 @Component({
   selector: 'my-videos-list',
   styleUrls: [ 'app/angular/videos/components/list/videos-list.component.css' ],
   templateUrl: 'app/angular/videos/components/list/videos-list.component.html',
-  directives: [ ROUTER_DIRECTIVES, PAGINATION_DIRECTIVES, VideoMiniatureComponent ]
+  directives: [ ROUTER_DIRECTIVES, PAGINATION_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent ]
 })
 
 export class VideosListComponent implements OnInit {
@@ -26,18 +28,22 @@ export class VideosListComponent implements OnInit {
     itemsPerPage: 9,
     total: 0
   }
+  sort: SortField;
 
   private search: Search;
 
   constructor(
     private _authService: AuthService,
     private _videosService: VideosService,
-    private _routeParams: RouteParams
+    private _routeParams: RouteParams,
+    private _router: Router
   ) {
     this.search = {
       value: this._routeParams.get('search'),
       field: <SearchField>this._routeParams.get('field')
     }
+
+    this.sort = <SortField>this._routeParams.get('sort') || '-createdDate';
   }
 
   ngOnInit() {
@@ -52,9 +58,9 @@ export class VideosListComponent implements OnInit {
     let observable = null;
 
     if (this.search.value !== null) {
-      observable = this._videosService.searchVideos(this.search, this.pagination);
+      observable = this._videosService.searchVideos(this.search, this.pagination, this.sort);
     } else {
-      observable = this._videosService.getVideos(this.pagination);
+      observable = this._videosService.getVideos(this.pagination, this.sort);
     }
 
     observable.subscribe(
@@ -70,4 +76,9 @@ export class VideosListComponent implements OnInit {
     this.videos.splice(this.videos.indexOf(video), 1);
   }
 
+  onSort(sort: SortField) {
+    this.sort = sort;
+    this._router.navigate(['VideosList', { sort: this.sort }]);
+    this.getVideos();
+  }
 }

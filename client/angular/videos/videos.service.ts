@@ -6,6 +6,7 @@ import { Pagination } from './pagination';
 import { Video } from './video';
 import { AuthService } from '../users/services/auth.service';
 import { Search } from '../app/search';
+import { SortField } from './components/list/sort';
 
 @Injectable()
 export class VideosService {
@@ -13,8 +14,11 @@ export class VideosService {
 
   constructor (private http: Http, private _authService: AuthService) {}
 
-  getVideos(pagination: Pagination) {
+  getVideos(pagination: Pagination, sort: SortField) {
     const params = this.createPaginationParams(pagination);
+
+    if (sort) params.set('sort', sort)
+
     return this.http.get(this._baseVideoUrl, { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
@@ -34,9 +38,12 @@ export class VideosService {
                     .catch(this.handleError);
   }
 
-  searchVideos(search: Search, pagination: Pagination) {
+  searchVideos(search: Search, pagination: Pagination, sort: SortField) {
     const params = this.createPaginationParams(pagination);
+
     if (search.field) params.set('field', search.field);
+    if (sort) params.set('sort', sort)
+
     return this.http.get(this._baseVideoUrl + 'search/' + encodeURIComponent(search.value), { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
