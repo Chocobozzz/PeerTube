@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { Pagination } from './pagination';
@@ -17,7 +17,7 @@ export class VideosService {
   getVideos(pagination: Pagination, sort: SortField) {
     const params = this.createPaginationParams(pagination);
 
-    if (sort) params.set('sort', sort)
+    if (sort) params.set('sort', sort);
 
     return this.http.get(this._baseVideoUrl, { search: params })
                     .map(res => res.json())
@@ -42,7 +42,7 @@ export class VideosService {
     const params = this.createPaginationParams(pagination);
 
     if (search.field) params.set('field', search.field);
-    if (sort) params.set('sort', sort)
+    if (sort) params.set('sort', sort);
 
     return this.http.get(this._baseVideoUrl + 'search/' + encodeURIComponent(search.value), { search: params })
                     .map(res => res.json())

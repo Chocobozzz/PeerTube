@@ -1,6 +1,4 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Router } from '@angular/router-deprecated';
-import { HTTP_PROVIDERS } from '@angular/http';
 
 import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
 
@@ -16,15 +14,15 @@ export class SearchComponent {
   @Output() search: EventEmitter<Search> = new EventEmitter<Search>();
 
   searchCriterias: Search = {
-    field: "name",
-    value: ""
-  }
+    field: 'name',
+    value: ''
+  };
   fieldChoices = {
-    name: "Name",
-    author: "Author",
-    podUrl: "Pod Url",
-    magnetUri: "Magnet Uri"
-  }
+    name: 'Name',
+    author: 'Author',
+    podUrl: 'Pod Url',
+    magnetUri: 'Magnet Uri'
+  };
 
   get choiceKeys() {
     return Object.keys(this.fieldChoices);
@@ -34,7 +32,7 @@ export class SearchComponent {
     return this.fieldChoices[choiceKey];
   }
 
-  choose($event:MouseEvent, choice: SearchField){
+  choose($event:MouseEvent, choice: SearchField) {
     $event.preventDefault();
     $event.stopPropagation();
 

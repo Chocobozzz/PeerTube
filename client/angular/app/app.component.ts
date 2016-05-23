@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Router } from '@angular/router-deprecated';
 import { HTTP_PROVIDERS } from '@angular/http';
 
-import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
-
 import { VideosAddComponent } from '../videos/components/add/videos-add.component';
 import { VideosListComponent } from '../videos/components/list/videos-list.component';
 import { VideosWatchComponent } from '../videos/components/watch/videos-watch.component';

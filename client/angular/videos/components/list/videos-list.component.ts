@@ -27,7 +27,7 @@ export class VideosListComponent implements OnInit {
     currentPage: 1,
     itemsPerPage: 9,
     total: 0
-  }
+  };
   sort: SortField;
 
   private search: Search;
@@ -41,7 +41,7 @@ export class VideosListComponent implements OnInit {
     this.search = {
       value: this._routeParams.get('search'),
       field: <SearchField>this._routeParams.get('field')
-    }
+    };
 
     this.sort = <SortField>this._routeParams.get('sort') || '-createdDate';
   }

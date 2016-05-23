@@ -15,12 +15,12 @@ export class VideoSortComponent {
 
   sortChoices = {
     'name': 'Name - Asc',
-    '-name': "Name - Desc",
-    'duration': "Duration - Asc",
-    '-duration': "Duration - Desc",
-    'createdDate': "Created Date - Asc",
-    '-createdDate': "Created Date - Desc"
-  }
+    '-name': 'Name - Desc',
+    'duration': 'Duration - Asc',
+    '-duration': 'Duration - Desc',
+    'createdDate': 'Created Date - Asc',
+    '-createdDate': 'Created Date - Desc'
+  };
 
   get choiceKeys() {
     return Object.keys(this.sortChoices);
