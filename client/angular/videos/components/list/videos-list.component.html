@@ -1,6 +1,6 @@
-<div class="videos-info">
-  <span class="videos-total-results"> {{ pagination.total }}</span>
-  <my-video-sort [currentSort]="sort" (sort)="onSort($event)"></my-video-sort>
+<div class="row videos-info">
+  <div class="col-md-9 videos-total-results"> {{ pagination.total }} videos</div>
+  <my-video-sort class="col-md-3" [currentSort]="sort" (sort)="onSort($event)"></my-video-sort>
 </div>
 
 <div class="videos-miniatures">

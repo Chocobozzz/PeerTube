@@ -53,6 +53,7 @@ export class AppComponent {
   constructor(private _friendsService: FriendsService,
               private _authService: AuthService,
               private _router: Router
+
   ) {
     this.isLoggedIn = this._authService.isLoggedIn();
 
@@ -67,7 +68,11 @@ export class AppComponent {
 
   onSearch(search: Search) {
     if (search.value !== '') {
-      this._router.navigate(['VideosList', { search: search.value, field: search.field }]);
+      const params = {
+        search: search.value,
+        field: search.field
+      };
+      this._router.navigate(['VideosList', params]);
     } else {
       this._router.navigate(['VideosList']);
     }

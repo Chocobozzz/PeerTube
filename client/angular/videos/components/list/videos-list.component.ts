@@ -78,7 +78,17 @@ export class VideosListComponent implements OnInit {
 
   onSort(sort: SortField) {
     this.sort = sort;
-    this._router.navigate(['VideosList', { sort: this.sort }]);
+
+    const params: any = {
+      sort: this.sort
+    };
+
+    if (this.search.value) {
+      params.search = this.search.value;
+      params.field = this.search.field;
+    }
+
+    this._router.navigate(['VideosList', params]);
     this.getVideos();
   }
 }

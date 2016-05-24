@@ -10,3 +10,23 @@ pagination {
   display: block;
   text-align: center;
 }
+
+.videos-info {
+
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #f1f1f1;
+  height: 40px;
+  line-height: 40px;
+  width: 765px;
+  margin-left: 15px;
+
+  my-video-sort {
+    padding-right: 0;
+  }
+
+  .videos-total-results {
+    font-size: 13px;
+    padding-left: 0;
+  }
+}
