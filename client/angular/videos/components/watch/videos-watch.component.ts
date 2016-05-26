@@ -3,6 +3,8 @@ import { RouteParams, CanDeactivate, ComponentInstruction } from '@angular/route
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 
+import { LoaderComponent } from '../../loader.component';
+
 // TODO import it with systemjs
 declare var WebTorrent: any;
 
@@ -13,6 +15,7 @@ import { VideosService } from '../../videos.service';
   selector: 'my-video-watch',
   templateUrl: 'app/angular/videos/components/watch/videos-watch.component.html',
   styleUrls: [ 'app/angular/videos/components/watch/videos-watch.component.css' ],
+  directives: [ LoaderComponent ],
   pipes: [ BytesPipe ]
 })
 

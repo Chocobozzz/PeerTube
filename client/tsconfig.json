@@ -36,6 +36,7 @@
     "angular/videos/components/list/video-sort.component.ts",
     "angular/videos/components/list/videos-list.component.ts",
     "angular/videos/components/watch/videos-watch.component.ts",
+    "angular/videos/loader.component.ts",
     "angular/videos/pagination.ts",
     "angular/videos/video.ts",
     "angular/videos/videos.service.ts",

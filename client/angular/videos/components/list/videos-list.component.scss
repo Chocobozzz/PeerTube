@@ -1,16 +1,3 @@
-.videos-miniatures {
-  min-height: 600px;
-}
-
-my-videos-miniature {
-  display: inline-block;
-}
-
-pagination {
-  display: block;
-  text-align: center;
-}
-
 .videos-info {
 
   padding-bottom: 20px;
@@ -29,4 +16,22 @@ pagination {
     font-size: 13px;
     padding-left: 0;
   }
+}
+
+.videos-miniatures {
+  min-height: 600px;
+
+  my-videos-miniature {
+    display: inline-block;
+  }
+
+  .no-video {
+    margin-top: 50px;
+    text-align: center;
+  }
+}
+
+pagination {
+  display: block;
+  text-align: center;
 }

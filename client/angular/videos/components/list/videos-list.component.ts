@@ -12,12 +12,13 @@ import { VideoMiniatureComponent } from './video-miniature.component';
 import { Search, SearchField } from '../../../app/search';
 import { VideoSortComponent } from './video-sort.component';
 import { SortField } from './sort';
+import { LoaderComponent } from '../../loader.component';
 
 @Component({
   selector: 'my-videos-list',
   styleUrls: [ 'app/angular/videos/components/list/videos-list.component.css' ],
   templateUrl: 'app/angular/videos/components/list/videos-list.component.html',
-  directives: [ ROUTER_DIRECTIVES, PAGINATION_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent ]
+  directives: [ ROUTER_DIRECTIVES, PAGINATION_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent, LoaderComponent ]
 })
 
 export class VideosListComponent implements OnInit {
@@ -29,6 +30,7 @@ export class VideosListComponent implements OnInit {
     total: 0
   };
   sort: SortField;
+  loading: boolean = false;
 
   private search: Search;
 
@@ -55,6 +57,9 @@ export class VideosListComponent implements OnInit {
   }
 
   getVideos() {
+    this.loading = true;
+    this.videos = [];
+
     let observable = null;
 
     if (this.search.value !== null) {
@@ -67,6 +72,7 @@ export class VideosListComponent implements OnInit {
       ({ videos, totalVideos }) => {
         this.videos = videos;
         this.pagination.total = totalVideos;
+        this.loading = false;
       },
       error => alert(error)
     );
