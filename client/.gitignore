@@ -1,6 +1,8 @@
 typings
-angular/**/*.js
-angular/**/*.map
-angular/**/*.css
+app/**/*.js
+app/**/*.map
+app/**/*.css
 stylesheets/index.css
 bundles
+main.js
+main.js.map

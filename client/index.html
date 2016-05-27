@@ -7,27 +7,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="/app/stylesheets/index.css">
+    <link rel="stylesheet" href="client/stylesheets/index.css">
 
     <!-- 1. Load libraries -->
     <!-- IE required polyfills, in this exact order -->
-    <script src="/app/node_modules/es6-shim/es6-shim.min.js"></script>
-    <script src="/app/node_modules/zone.js/dist/zone.js"></script>
-    <script src="/app/node_modules/reflect-metadata/Reflect.js"></script>
-    <script src="/app/node_modules/systemjs/dist/system.src.js"></script>
+    <script src="client/node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="client/node_modules/zone.js/dist/zone.js"></script>
+    <script src="client/node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="client/node_modules/systemjs/dist/system.src.js"></script>
 
-    <script src="/app/node_modules/jquery/dist/jquery.js"></script>
-    <script src="/app/node_modules/jquery.ui.widget/jquery.ui.widget.js"></script>
-    <script src="/app/node_modules/blueimp-file-upload/js/jquery.fileupload.js"></script>
+    <script src="client/node_modules/jquery/dist/jquery.js"></script>
+    <script src="client/node_modules/jquery.ui.widget/jquery.ui.widget.js"></script>
+    <script src="client/node_modules/blueimp-file-upload/js/jquery.fileupload.js"></script>
 
-    <script src="/app/node_modules/webtorrent/webtorrent.min.js"></script>
+    <script src="client/node_modules/webtorrent/webtorrent.min.js"></script>
 
-    <script src="/app/node_modules/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
+    <script src="client/node_modules/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
 
     <!-- 2. Configure SystemJS -->
-    <script src="/app/systemjs.config.js"></script>
+    <script src="client/systemjs.config.js"></script>
     <script>
-      System.import('app').catch(function(err){ console.error(err); });
+      System.import('client').catch(function(err){ console.error(err); });
     </script>
   </head>
 

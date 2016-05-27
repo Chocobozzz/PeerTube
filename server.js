@@ -64,9 +64,9 @@ const apiRoute = '/api/' + constants.API_VERSION
 app.use(apiRoute, routes.api)
 
 // Static files
-app.use('/app', express.static(path.join(__dirname, '/client'), { maxAge: 0 }))
+app.use('/client', express.static(path.join(__dirname, '/client'), { maxAge: 0 }))
 // 404 for static files not found
-app.use('/app/*', function (req, res, next) {
+app.use('/client/*', function (req, res, next) {
   res.sendStatus(404)
 })
 
