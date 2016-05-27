@@ -6,7 +6,7 @@
 <div class="videos-miniatures">
   <my-loader [loading]="loading"></my-loader>
 
-  <div class="col-md-12 no-video" *ngIf="!loading && videos.length === 0">There is no video.</div>
+  <div class="col-md-12 no-video" *ngIf="noVideo()">There is no video.</div>
 
   <my-video-miniature *ngFor="let video of videos" [video]="video" [user]="user" (removed)="onRemoved(video)">
   </my-video-miniature>

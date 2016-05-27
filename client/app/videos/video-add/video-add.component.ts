@@ -25,9 +25,9 @@ export class VideoAddComponent implements OnInit {
   private form: any;
 
   constructor(
-    private router: Router,
+    private authService: AuthService,
     private elementRef: ElementRef,
-    private authService: AuthService
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -62,8 +62,8 @@ export class VideoAddComponent implements OnInit {
   }
 
   uploadFile() {
-    this.form.headers = this.authService.getRequestHeader().toJSON();
     this.form.formData = jQuery(this.elementRef.nativeElement).find('form').serializeArray();
+    this.form.headers = this.authService.getRequestHeader().toJSON();
     this.form.submit();
   }
 }

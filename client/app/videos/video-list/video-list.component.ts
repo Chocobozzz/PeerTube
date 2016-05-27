@@ -80,6 +80,10 @@ export class VideoListComponent implements OnInit {
     );
   }
 
+  noVideo() {
+    return !this.loading && this.videos.length === 0;
+  }
+
   onRemoved(video: Video) {
     this.videos.splice(this.videos.indexOf(video), 1);
   }
