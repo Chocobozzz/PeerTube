@@ -2,6 +2,7 @@
   "rulesDirectory": ["./node_modules/codelyzer"],
   "rules": {
     "class-name": true,
+    "no-inferrable-types": true,
     "curly": false,
     "eofline": true,
     "indent": ["spaces"],
