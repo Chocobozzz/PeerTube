@@ -7,27 +7,28 @@ import { User } from './user.model';
 
 @Injectable()
 export class AuthService {
-  loginChanged$;
+  private static BASE_LOGIN_URL = '/api/v1/users/token';
+  private static BASE_CLIENT_URL = '/api/v1/users/client';
 
-  private _loginChanged;
-  private _baseLoginUrl = '/api/v1/users/token';
-  private _baseClientUrl = '/api/v1/users/client';
-  private _clientId = '';
-  private _clientSecret = '';
+  loginChangedSource: Observable<AuthStatus>;
 
-  constructor (private http: Http) {
-    this._loginChanged = new Subject<AuthStatus>();
-    this.loginChanged$ = this._loginChanged.asObservable();
+  private loginChanged: Subject<AuthStatus>;
+  private clientId: string;
+  private clientSecret: string;
+
+  constructor(private http: Http) {
+    this.loginChanged = new Subject<AuthStatus>();
+    this.loginChangedSource = this.loginChanged.asObservable();
 
     // Fetch the client_id/client_secret
     // FIXME: save in local storage?
-    this.http.get(this._baseClientUrl)
+    this.http.get(AuthService.BASE_CLIENT_URL)
       .map(res => res.json())
       .catch(this.handleError)
       .subscribe(
         result => {
-          this._clientId = result.client_id;
-          this._clientSecret = result.client_secret;
+          this.clientId = result.client_id;
+          this.clientSecret = result.client_secret;
           console.log('Client credentials loaded.');
         },
         error => {
@@ -38,8 +39,8 @@ export class AuthService {
 
   login(username: string, password: string) {
     let body = new URLSearchParams();
-    body.set('client_id', this._clientId);
-    body.set('client_secret', this._clientSecret);
+    body.set('client_id', this.clientId);
+    body.set('client_secret', this.clientSecret);
     body.set('response_type', 'code');
     body.set('grant_type', 'password');
     body.set('scope', 'upload');
@@ -53,7 +54,7 @@ export class AuthService {
       headers: headers
     };
 
-    return this.http.post(this._baseLoginUrl, body.toString(), options)
+    return this.http.post(AuthService.BASE_LOGIN_URL, body.toString(), options)
                     .map(res => res.json())
                     .catch(this.handleError);
   }
@@ -62,7 +63,7 @@ export class AuthService {
     // TODO make HTTP request
   }
 
-  getRequestHeader(): Headers {
+  getRequestHeader() {
     return new Headers({ 'Authorization': `${this.getTokenType()} ${this.getToken()}` });
   }
 
@@ -70,11 +71,11 @@ export class AuthService {
     return new RequestOptions({ headers: this.getRequestHeader() });
   }
 
-  getToken(): string {
+  getToken() {
     return localStorage.getItem('access_token');
   }
 
-  getTokenType(): string {
+  getTokenType() {
     return localStorage.getItem('token_type');
   }
 
@@ -88,7 +89,7 @@ export class AuthService {
     return user;
   }
 
-  isLoggedIn(): boolean {
+  isLoggedIn() {
     if (this.getToken()) {
       return true;
     } else {
@@ -97,7 +98,7 @@ export class AuthService {
   }
 
   setStatus(status: AuthStatus) {
-    this._loginChanged.next(status);
+    this.loginChanged.next(status);
   }
 
   private handleError (error: Response) {

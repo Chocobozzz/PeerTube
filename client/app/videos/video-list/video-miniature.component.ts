@@ -19,9 +19,9 @@ export class VideoMiniatureComponent {
   @Input() video: Video;
   @Input() user: User;
 
-  hovering: boolean = false;
+  hovering = false;
 
-  constructor(private _videoService: VideoService) {}
+  constructor(private videoService: VideoService) {}
 
   onHover() {
     this.hovering = true;
@@ -31,13 +31,13 @@ export class VideoMiniatureComponent {
     this.hovering = false;
   }
 
-  displayRemoveIcon(): boolean {
+  displayRemoveIcon() {
     return this.hovering && this.video.isRemovableBy(this.user);
   }
 
   removeVideo(id: string) {
     if (confirm('Do you really want to remove this video?')) {
-      this._videoService.removeVideo(id).subscribe(
+      this.videoService.removeVideo(id).subscribe(
         status => this.removed.emit(true),
         error => alert(error)
       );

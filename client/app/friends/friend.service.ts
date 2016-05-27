@@ -4,23 +4,23 @@ import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class FriendService {
-  private _baseFriendsUrl = '/api/v1/pods/';
+  private static BASE_FRIEND_URL: string = '/api/v1/pods/';
 
   constructor (private http: Http) {}
 
   makeFriends() {
-    return this.http.get(this._baseFriendsUrl + 'makefriends')
-                    .map(res => <number> res.status)
+    return this.http.get(FriendService.BASE_FRIEND_URL + 'makefriends')
+                    .map(res => res.status)
                     .catch(this.handleError);
   }
 
   quitFriends() {
-    return this.http.get(this._baseFriendsUrl + 'quitfriends')
-                    .map(res => <number> res.status)
+    return this.http.get(FriendService.BASE_FRIEND_URL + 'quitfriends')
+                    .map(res => res.status)
                     .catch(this.handleError);
   }
 
-  private handleError (error: Response) {
+  private handleError (error: Response): Observable<number> {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');
   }

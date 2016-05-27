@@ -11,7 +11,7 @@ export class Video {
   by: string;
   duration: string;
 
-  private static createDurationString(duration: number): string {
+  private static createDurationString(duration: number) {
     const minutes = Math.floor(duration / 60);
     const seconds = duration % 60;
     const minutes_padding = minutes >= 10 ? '' : '0';
@@ -20,7 +20,7 @@ export class Video {
     return minutes_padding + minutes.toString() + ':' + seconds_padding + seconds.toString();
   }
 
-  private static createByString(author: string, podUrl: string): string {
+  private static createByString(author: string, podUrl: string) {
     let [ host, port ] = podUrl.replace(/^https?:\/\//, '').split(':');
 
     if (port === '80' || port === '443') {
@@ -57,7 +57,7 @@ export class Video {
     this.by = Video.createByString(hash.author, hash.podUrl);
   }
 
-  isRemovableBy(user): boolean {
+  isRemovableBy(user) {
     return this.isLocal === true && user && this.author === user.username;
   }
 }

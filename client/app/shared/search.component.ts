@@ -12,12 +12,13 @@ import { SearchField } from './search-field.type';
 })
 
 export class SearchComponent {
-  @Output() search: EventEmitter<Search> = new EventEmitter<Search>();
+  @Output() search = new EventEmitter<Search>();
 
   searchCriterias: Search = {
     field: 'name',
     value: ''
   };
+
   fieldChoices = {
     name: 'Name',
     author: 'Author',
@@ -29,18 +30,18 @@ export class SearchComponent {
     return Object.keys(this.fieldChoices);
   }
 
-  getStringChoice(choiceKey: SearchField): string {
+  getStringChoice(choiceKey: SearchField) {
     return this.fieldChoices[choiceKey];
   }
 
-  choose($event:MouseEvent, choice: SearchField) {
+  choose($event: MouseEvent, choice: SearchField) {
     $event.preventDefault();
     $event.stopPropagation();
 
     this.searchCriterias.field = choice;
   }
 
-  doSearch(): void {
+  doSearch() {
     this.search.emit(this.searchCriterias);
   }
 

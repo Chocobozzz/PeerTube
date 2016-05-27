@@ -10,17 +10,17 @@ import { AuthService, AuthStatus, User } from '../shared/index';
 })
 
 export class UserLoginComponent {
-  constructor(private _authService: AuthService, private _router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login(username: string, password: string) {
-    this._authService.login(username, password).subscribe(
+    this.authService.login(username, password).subscribe(
       result => {
         const user = new User(username, result);
         user.save();
 
-        this._authService.setStatus(AuthStatus.LoggedIn);
+        this.authService.setStatus(AuthStatus.LoggedIn);
 
-        this._router.navigate(['VideosList']);
+        this.router.navigate(['VideosList']);
       },
       error => {
         if (error.error === 'invalid_grant') {

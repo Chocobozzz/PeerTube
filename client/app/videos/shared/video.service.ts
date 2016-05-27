@@ -10,30 +10,30 @@ import { Video } from './video.model';
 
 @Injectable()
 export class VideoService {
-  private _baseVideoUrl = '/api/v1/videos/';
+  private static BASE_VIDEO_URL = '/api/v1/videos/';
 
-  constructor (private http: Http, private _authService: AuthService) {}
+  constructor(private http: Http, private authService: AuthService) {}
 
   getVideos(pagination: Pagination, sort: SortField) {
     const params = this.createPaginationParams(pagination);
 
     if (sort) params.set('sort', sort);
 
-    return this.http.get(this._baseVideoUrl, { search: params })
+    return this.http.get(VideoService.BASE_VIDEO_URL, { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
                     .catch(this.handleError);
   }
 
   getVideo(id: string) {
-    return this.http.get(this._baseVideoUrl + id)
+    return this.http.get(VideoService.BASE_VIDEO_URL + id)
                     .map(res => <Video> res.json())
                     .catch(this.handleError);
   }
 
   removeVideo(id: string) {
-    const options = this._authService.getAuthRequestOptions();
-    return this.http.delete(this._baseVideoUrl + id, options)
+    const options = this.authService.getAuthRequestOptions();
+    return this.http.delete(VideoService.BASE_VIDEO_URL + id, options)
                     .map(res => <number> res.status)
                     .catch(this.handleError);
   }
@@ -44,13 +44,13 @@ export class VideoService {
     if (search.field) params.set('field', search.field);
     if (sort) params.set('sort', sort);
 
-    return this.http.get(this._baseVideoUrl + 'search/' + encodeURIComponent(search.value), { search: params })
+    return this.http.get(VideoService.BASE_VIDEO_URL + 'search/' + encodeURIComponent(search.value), { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
                     .catch(this.handleError);
   }
 
-  private extractVideos (body: any) {
+  private extractVideos(body: any) {
     const videos_json = body.data;
     const totalVideos = body.total;
     const videos = [];
@@ -61,7 +61,7 @@ export class VideoService {
     return { videos, totalVideos };
   }
 
-  private handleError (error: Response) {
+  private handleError(error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');
   }

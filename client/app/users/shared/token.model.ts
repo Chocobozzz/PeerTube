@@ -3,7 +3,7 @@ export class Token {
   refresh_token: string;
   token_type: string;
 
-  static load(): Token {
+  static load() {
     return new Token({
       access_token: localStorage.getItem('access_token'),
       refresh_token: localStorage.getItem('refresh_token'),
@@ -11,10 +11,11 @@ export class Token {
     });
   }
 
-  constructor (hash?: any) {
+  constructor(hash?: any) {
     if (hash) {
       this.access_token = hash.access_token;
       this.refresh_token = hash.refresh_token;
+
       if (hash.token_type === 'bearer') {
         this.token_type = 'Bearer';
       } else {
@@ -23,7 +24,7 @@ export class Token {
     }
   }
 
-  save():void {
+  save() {
     localStorage.setItem('access_token', this.access_token);
     localStorage.setItem('refresh_token', this.refresh_token);
     localStorage.setItem('token_type', this.token_type);

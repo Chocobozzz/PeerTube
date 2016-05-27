@@ -4,16 +4,16 @@ export class User {
   username: string;
   token: Token;
 
-  static load(): User {
+  static load() {
     return new User(localStorage.getItem('username'), Token.load());
   }
 
-  constructor (username: string, hash_token: any) {
+  constructor(username: string, hash_token: any) {
     this.username = username;
     this.token = new Token(hash_token);
   }
 
-  save(): void {
+  save() {
     localStorage.setItem('username', this.username);
     this.token.save();
   }

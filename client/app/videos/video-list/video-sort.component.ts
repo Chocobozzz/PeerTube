@@ -26,7 +26,7 @@ export class VideoSortComponent {
     return Object.keys(this.sortChoices);
   }
 
-  getStringChoice(choiceKey: SortField): string {
+  getStringChoice(choiceKey: SortField) {
     return this.sortChoices[choiceKey];
   }
 

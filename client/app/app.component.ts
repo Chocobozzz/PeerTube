@@ -51,16 +51,15 @@ import {
 export class AppComponent {
   isLoggedIn: boolean;
   search_field: string = name;
-  choices = [ ];
+  choices = [];
 
-  constructor(private _friendService: FriendService,
-              private _authService: AuthService,
-              private _router: Router
-
+  constructor(private friendService: FriendService,
+              private authService: AuthService,
+              private router: Router
   ) {
-    this.isLoggedIn = this._authService.isLoggedIn();
+    this.isLoggedIn = this.authService.isLoggedIn();
 
-    this._authService.loginChanged$.subscribe(
+    this.authService.loginChangedSource.subscribe(
       status => {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true;
@@ -75,9 +74,9 @@ export class AppComponent {
         search: search.value,
         field: search.field
       };
-      this._router.navigate(['VideosList', params]);
+      this.router.navigate(['VideosList', params]);
     } else {
-      this._router.navigate(['VideosList']);
+      this.router.navigate(['VideosList']);
     }
   }
 
@@ -86,7 +85,7 @@ export class AppComponent {
   }
 
   makeFriends() {
-    this._friendService.makeFriends().subscribe(
+    this.friendService.makeFriends().subscribe(
       status => {
         if (status === 409) {
           alert('Already made friends!');
@@ -99,7 +98,7 @@ export class AppComponent {
   }
 
   quitFriends() {
-    this._friendService.quitFriends().subscribe(
+    this.friendService.quitFriends().subscribe(
       status => {
           alert('Quit friends!');
       },

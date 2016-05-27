@@ -31,26 +31,26 @@ export class VideoListComponent implements OnInit {
     total: 0
   };
   sort: SortField;
-  loading: boolean = false;
+  loading = false;
 
   private search: Search;
 
   constructor(
-    private _authService: AuthService,
-    private _videoService: VideoService,
-    private _routeParams: RouteParams,
-    private _router: Router
+    private authService: AuthService,
+    private videoService: VideoService,
+    private routeParams: RouteParams,
+    private router: Router
   ) {
     this.search = {
-      value: this._routeParams.get('search'),
-      field: <SearchField>this._routeParams.get('field')
+      value: this.routeParams.get('search'),
+      field: <SearchField>this.routeParams.get('field')
     };
 
-    this.sort = <SortField>this._routeParams.get('sort') || '-createdDate';
+    this.sort = <SortField>this.routeParams.get('sort') || '-createdDate';
   }
 
   ngOnInit() {
-    if (this._authService.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       this.user = User.load();
     }
 
@@ -64,9 +64,9 @@ export class VideoListComponent implements OnInit {
     let observable = null;
 
     if (this.search.value !== null) {
-      observable = this._videoService.searchVideos(this.search, this.pagination, this.sort);
+      observable = this.videoService.searchVideos(this.search, this.pagination, this.sort);
     } else {
-      observable = this._videoService.getVideos(this.pagination, this.sort);
+      observable = this.videoService.getVideos(this.pagination, this.sort);
     }
 
     observable.subscribe(
@@ -79,7 +79,7 @@ export class VideoListComponent implements OnInit {
     );
   }
 
-  onRemoved(video: Video): void {
+  onRemoved(video: Video) {
     this.videos.splice(this.videos.indexOf(video), 1);
   }
 
@@ -95,7 +95,7 @@ export class VideoListComponent implements OnInit {
       params.field = this.search.field;
     }
 
-    this._router.navigate(['VideosList', params]);
+    this.router.navigate(['VideosList', params]);
     this.getVideos();
   }
 }

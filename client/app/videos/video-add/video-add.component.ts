@@ -7,7 +7,7 @@ import { PROGRESSBAR_DIRECTIVES } from 'ng2-bootstrap/components/progressbar';
 import { AuthService, User } from '../../users/index';
 
 // TODO: import it with systemjs
-declare var jQuery:any;
+declare var jQuery: any;
 
 @Component({
   selector: 'my-videos-add',

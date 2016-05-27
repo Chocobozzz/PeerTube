@@ -23,21 +23,21 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
   numPeers: number;
   loading: boolean = false;
 
-  private _interval: NodeJS.Timer;
+  private interval: NodeJS.Timer;
   private client: any;
 
   constructor(
-    private _videoService: VideoService,
-    private _routeParams: RouteParams,
-    private _elementRef: ElementRef
+    private videoService: VideoService,
+    private routeParams: RouteParams,
+    private elementRef: ElementRef
   ) {
     // TODO: use a service
     this.client = new WebTorrent({ dht: false });
   }
 
   ngOnInit() {
-    let id = this._routeParams.get('id');
-    this._videoService.getVideo(id).subscribe(
+    let id = this.routeParams.get('id');
+    this.videoService.getVideo(id).subscribe(
       video => this.loadVideo(video),
       error => alert(error)
     );
@@ -50,7 +50,7 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
     this.client.add(this.video.magnetUri, (torrent) => {
       this.loading = false;
       console.log('Added ' + this.video.magnetUri + '.');
-      torrent.files[0].appendTo(this._elementRef.nativeElement.querySelector('.embed-responsive'), (err) => {
+      torrent.files[0].appendTo(this.elementRef.nativeElement.querySelector('.embed-responsive'), (err) => {
         if (err) {
           alert('Cannot append the file.');
           console.error(err);
@@ -58,7 +58,7 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
       });
 
       // Refresh each second
-      this._interval = setInterval(() => {
+      this.interval = setInterval(() => {
         this.downloadSpeed = torrent.downloadSpeed;
         this.uploadSpeed = torrent.uploadSpeed;
         this.numPeers = torrent.numPeers;
@@ -66,9 +66,9 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
     });
   }
 
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) : any {
+  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     console.log('Removing video from webtorrent.');
-    clearInterval(this._interval);
+    clearInterval(this.interval);
     this.client.remove(this.video.magnetUri);
     return true;
   }
