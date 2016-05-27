@@ -4,7 +4,6 @@ import { SortField } from '../shared/index';
 
 @Component({
   selector: 'my-video-sort',
-  // styleUrls: [ 'app/angular/videos/components/list/video-sort.component.css' ],
   templateUrl: 'client/app/videos/video-list/video-sort.component.html'
 })
 

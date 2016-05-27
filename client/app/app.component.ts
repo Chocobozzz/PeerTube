@@ -45,7 +45,7 @@ import {
     templateUrl: 'client/app/app.component.html',
     styleUrls: [ 'client/app/app.component.css' ],
     directives: [ ROUTER_DIRECTIVES, SearchComponent ],
-    providers: [ ROUTER_PROVIDERS, HTTP_PROVIDERS, VideoService, FriendService, AuthService ]
+    providers: [ AuthService, FriendService, HTTP_PROVIDERS, ROUTER_PROVIDERS, VideoService ]
 })
 
 export class AppComponent {

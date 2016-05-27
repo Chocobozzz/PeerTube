@@ -19,7 +19,7 @@ import { VideoSortComponent } from './video-sort.component';
   selector: 'my-videos-list',
   styleUrls: [ 'client/app/videos/video-list/video-list.component.css' ],
   templateUrl: 'client/app/videos/video-list/video-list.component.html',
-  directives: [ ROUTER_DIRECTIVES, PAGINATION_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent, LoaderComponent ]
+  directives: [ LoaderComponent, PAGINATION_DIRECTIVES, ROUTER_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent ]
 })
 
 export class VideoListComponent implements OnInit {
