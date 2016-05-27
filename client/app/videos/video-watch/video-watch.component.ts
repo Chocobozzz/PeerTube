@@ -17,30 +17,22 @@ declare var WebTorrent: any;
 })
 
 export class VideoWatchComponent implements OnInit, CanDeactivate {
-  video: Video;
   downloadSpeed: number;
-  uploadSpeed: number;
-  numPeers: number;
   loading: boolean = false;
+  numPeers: number;
+  uploadSpeed: number;
+  video: Video;
 
-  private interval: NodeJS.Timer;
   private client: any;
+  private interval: NodeJS.Timer;
 
   constructor(
-    private videoService: VideoService,
+    private elementRef: ElementRef,
     private routeParams: RouteParams,
-    private elementRef: ElementRef
+    private videoService: VideoService
   ) {
     // TODO: use a service
     this.client = new WebTorrent({ dht: false });
-  }
-
-  ngOnInit() {
-    let id = this.routeParams.get('id');
-    this.videoService.getVideo(id).subscribe(
-      video => this.loadVideo(video),
-      error => alert(error)
-    );
   }
 
   loadVideo(video: Video) {
@@ -60,10 +52,18 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
       // Refresh each second
       this.interval = setInterval(() => {
         this.downloadSpeed = torrent.downloadSpeed;
-        this.uploadSpeed = torrent.uploadSpeed;
         this.numPeers = torrent.numPeers;
+        this.uploadSpeed = torrent.uploadSpeed;
       }, 1000);
     });
+  }
+
+  ngOnInit() {
+    let id = this.routeParams.get('id');
+    this.videoService.getVideo(id).subscribe(
+      video => this.loadVideo(video),
+      error => alert(error)
+    );
   }
 
   routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {

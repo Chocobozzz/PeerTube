@@ -12,7 +12,16 @@ import { Video } from './video.model';
 export class VideoService {
   private static BASE_VIDEO_URL = '/api/v1/videos/';
 
-  constructor(private http: Http, private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private http: Http
+  ) {}
+
+  getVideo(id: string) {
+    return this.http.get(VideoService.BASE_VIDEO_URL + id)
+                    .map(res => <Video> res.json())
+                    .catch(this.handleError);
+  }
 
   getVideos(pagination: Pagination, sort: SortField) {
     const params = this.createPaginationParams(pagination);
@@ -22,12 +31,6 @@ export class VideoService {
     return this.http.get(VideoService.BASE_VIDEO_URL, { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
-                    .catch(this.handleError);
-  }
-
-  getVideo(id: string) {
-    return this.http.get(VideoService.BASE_VIDEO_URL + id)
-                    .map(res => <Video> res.json())
                     .catch(this.handleError);
   }
 
@@ -50,6 +53,17 @@ export class VideoService {
                     .catch(this.handleError);
   }
 
+  private createPaginationParams(pagination: Pagination) {
+    const params = new URLSearchParams();
+    const start: number = (pagination.currentPage - 1) * pagination.itemsPerPage;
+    const count: number = pagination.itemsPerPage;
+
+    params.set('start', start.toString());
+    params.set('count', count.toString());
+
+    return params;
+  }
+
   private extractVideos(body: any) {
     const videos_json = body.data;
     const totalVideos = body.total;
@@ -64,16 +78,5 @@ export class VideoService {
   private handleError(error: Response) {
     console.error(error);
     return Observable.throw(error.json().error || 'Server error');
-  }
-
-  private createPaginationParams(pagination: Pagination) {
-    const params = new URLSearchParams();
-    const start: number = (pagination.currentPage - 1) * pagination.itemsPerPage;
-    const count: number = pagination.itemsPerPage;
-
-    params.set('start', start.toString());
-    params.set('count', count.toString());
-
-    return params;
   }
 }

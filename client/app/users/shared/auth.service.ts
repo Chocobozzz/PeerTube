@@ -7,14 +7,14 @@ import { User } from './user.model';
 
 @Injectable()
 export class AuthService {
-  private static BASE_LOGIN_URL = '/api/v1/users/token';
   private static BASE_CLIENT_URL = '/api/v1/users/client';
+  private static BASE_LOGIN_URL = '/api/v1/users/token';
 
   loginChangedSource: Observable<AuthStatus>;
 
-  private loginChanged: Subject<AuthStatus>;
   private clientId: string;
   private clientSecret: string;
+  private loginChanged: Subject<AuthStatus>;
 
   constructor(private http: Http) {
     this.loginChanged = new Subject<AuthStatus>();
@@ -37,38 +37,12 @@ export class AuthService {
       );
   }
 
-  login(username: string, password: string) {
-    let body = new URLSearchParams();
-    body.set('client_id', this.clientId);
-    body.set('client_secret', this.clientSecret);
-    body.set('response_type', 'code');
-    body.set('grant_type', 'password');
-    body.set('scope', 'upload');
-    body.set('username', username);
-    body.set('password', password);
-
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-
-    let options = {
-      headers: headers
-    };
-
-    return this.http.post(AuthService.BASE_LOGIN_URL, body.toString(), options)
-                    .map(res => res.json())
-                    .catch(this.handleError);
-  }
-
-  logout() {
-    // TODO make HTTP request
+  getAuthRequestOptions(): RequestOptions {
+    return new RequestOptions({ headers: this.getRequestHeader() });
   }
 
   getRequestHeader() {
     return new Headers({ 'Authorization': `${this.getTokenType()} ${this.getToken()}` });
-  }
-
-  getAuthRequestOptions(): RequestOptions {
-    return new RequestOptions({ headers: this.getRequestHeader() });
   }
 
   getToken() {
@@ -95,6 +69,32 @@ export class AuthService {
     } else {
       return false;
     }
+  }
+
+  login(username: string, password: string) {
+    let body = new URLSearchParams();
+    body.set('client_id', this.clientId);
+    body.set('client_secret', this.clientSecret);
+    body.set('response_type', 'code');
+    body.set('grant_type', 'password');
+    body.set('scope', 'upload');
+    body.set('username', username);
+    body.set('password', password);
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    let options = {
+      headers: headers
+    };
+
+    return this.http.post(AuthService.BASE_LOGIN_URL, body.toString(), options)
+                    .map(res => res.json())
+                    .catch(this.handleError);
+  }
+
+  logout() {
+    // TODO make HTTP request
   }
 
   setStatus(status: AuthStatus) {

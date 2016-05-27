@@ -10,7 +10,10 @@ import { AuthService, AuthStatus, User } from '../shared/index';
 })
 
 export class UserLoginComponent {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   login(username: string, password: string) {
     this.authService.login(username, password).subscribe(

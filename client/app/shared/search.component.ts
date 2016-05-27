@@ -14,24 +14,19 @@ import { SearchField } from './search-field.type';
 export class SearchComponent {
   @Output() search = new EventEmitter<Search>();
 
-  searchCriterias: Search = {
-    field: 'name',
-    value: ''
-  };
-
   fieldChoices = {
     name: 'Name',
     author: 'Author',
     podUrl: 'Pod Url',
     magnetUri: 'Magnet Uri'
   };
+  searchCriterias: Search = {
+    field: 'name',
+    value: ''
+  };
 
   get choiceKeys() {
     return Object.keys(this.fieldChoices);
-  }
-
-  getStringChoice(choiceKey: SearchField) {
-    return this.fieldChoices[choiceKey];
   }
 
   choose($event: MouseEvent, choice: SearchField) {
@@ -45,4 +40,7 @@ export class SearchComponent {
     this.search.emit(this.searchCriterias);
   }
 
+  getStringChoice(choiceKey: SearchField) {
+    return this.fieldChoices[choiceKey];
+  }
 }

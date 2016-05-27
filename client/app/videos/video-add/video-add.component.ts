@@ -18,20 +18,21 @@ declare var jQuery: any;
 })
 
 export class VideoAddComponent implements OnInit {
-  user: User;
   fileToUpload: any;
   progressBar: { value: number; max: number; } = { value: 0, max: 0 };
+  user: User;
 
-  private _form: any;
+  private form: any;
 
   constructor(
-    private _router: Router, private _elementRef: ElementRef,
-    private _authService: AuthService
+    private router: Router,
+    private elementRef: ElementRef,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.user = User.load();
-    jQuery(this._elementRef.nativeElement).find('#videofile').fileupload({
+    jQuery(this.elementRef.nativeElement).find('#videofile').fileupload({
       url: '/api/v1/videos',
       dataType: 'json',
       singleFileUploads: true,
@@ -39,7 +40,7 @@ export class VideoAddComponent implements OnInit {
       autoupload: false,
 
       add: (e, data) => {
-        this._form = data;
+        this.form = data;
         this.fileToUpload = data['files'][0];
       },
 
@@ -55,14 +56,14 @@ export class VideoAddComponent implements OnInit {
         console.log('Video uploaded.');
 
         // Print all the videos once it's finished
-        this._router.navigate(['VideosList']);
+        this.router.navigate(['VideosList']);
       }
     });
   }
 
   uploadFile() {
-    this._form.headers = this._authService.getRequestHeader().toJSON();
-    this._form.formData = jQuery(this._elementRef.nativeElement).find('form').serializeArray();
-    this._form.submit();
+    this.form.headers = this.authService.getRequestHeader().toJSON();
+    this.form.formData = jQuery(this.elementRef.nativeElement).find('form').serializeArray();
+    this.form.submit();
   }
 }

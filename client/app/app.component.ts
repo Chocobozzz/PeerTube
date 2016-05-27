@@ -49,13 +49,13 @@ import {
 })
 
 export class AppComponent {
-  isLoggedIn: boolean;
-  search_field: string = name;
   choices = [];
+  isLoggedIn: boolean;
 
-  constructor(private friendService: FriendService,
-              private authService: AuthService,
-              private router: Router
+  constructor(
+    private authService: AuthService,
+    private friendService: FriendService,
+    private router: Router
   ) {
     this.isLoggedIn = this.authService.isLoggedIn();
 
@@ -71,8 +71,8 @@ export class AppComponent {
   onSearch(search: Search) {
     if (search.value !== '') {
       const params = {
-        search: search.value,
-        field: search.field
+        field: search.field,
+        search: search.value
       };
       this.router.navigate(['VideosList', params]);
     } else {
@@ -100,7 +100,7 @@ export class AppComponent {
   quitFriends() {
     this.friendService.quitFriends().subscribe(
       status => {
-          alert('Quit friends!');
+        alert('Quit friends!');
       },
       error => alert(error)
     );

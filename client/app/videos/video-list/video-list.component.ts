@@ -23,23 +23,23 @@ import { VideoSortComponent } from './video-sort.component';
 })
 
 export class VideoListComponent implements OnInit {
-  user: User = null;
-  videos: Video[] = [];
+  loading = false;
   pagination: Pagination = {
     currentPage: 1,
     itemsPerPage: 9,
     total: 0
   };
   sort: SortField;
-  loading = false;
+  user: User = null;
+  videos: Video[] = [];
 
   private search: Search;
 
   constructor(
     private authService: AuthService,
-    private videoService: VideoService,
+    private router: Router,
     private routeParams: RouteParams,
-    private router: Router
+    private videoService: VideoService
   ) {
     this.search = {
       value: this.routeParams.get('search'),
@@ -73,6 +73,7 @@ export class VideoListComponent implements OnInit {
       ({ videos, totalVideos }) => {
         this.videos = videos;
         this.pagination.total = totalVideos;
+
         this.loading = false;
       },
       error => alert(error)
@@ -91,8 +92,8 @@ export class VideoListComponent implements OnInit {
     };
 
     if (this.search.value) {
-      params.search = this.search.value;
       params.field = this.search.field;
+      params.search = this.search.value;
     }
 
     this.router.navigate(['VideosList', params]);

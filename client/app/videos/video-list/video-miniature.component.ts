@@ -16,23 +16,23 @@ import { User } from '../../users/index';
 export class VideoMiniatureComponent {
   @Output() removed = new EventEmitter<any>();
 
-  @Input() video: Video;
   @Input() user: User;
+  @Input() video: Video;
 
   hovering = false;
 
   constructor(private videoService: VideoService) {}
 
-  onHover() {
-    this.hovering = true;
+  displayRemoveIcon() {
+    return this.hovering && this.video.isRemovableBy(this.user);
   }
 
   onBlur() {
     this.hovering = false;
   }
 
-  displayRemoveIcon() {
-    return this.hovering && this.video.isRemovableBy(this.user);
+  onHover() {
+    this.hovering = true;
   }
 
   removeVideo(id: string) {
