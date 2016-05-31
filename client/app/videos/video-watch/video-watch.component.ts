@@ -4,14 +4,13 @@ import { CanDeactivate, ComponentInstruction, RouteParams } from '@angular/route
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 
 import { LoaderComponent, Video, VideoService } from '../shared/index';
-
-// TODO import it with systemjs
-declare var WebTorrent: any;
+import { WebTorrentService } from './webtorrent.service';
 
 @Component({
   selector: 'my-video-watch',
   templateUrl: 'client/app/videos/video-watch/video-watch.component.html',
   styleUrls: [ 'client/app/videos/video-watch/video-watch.component.css' ],
+  providers: [ WebTorrentService ],
   directives: [ LoaderComponent ],
   pipes: [ BytesPipe ]
 })
@@ -23,23 +22,21 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
   uploadSpeed: number;
   video: Video;
 
-  private client: any;
   private interval: NodeJS.Timer;
 
   constructor(
     private elementRef: ElementRef,
     private routeParams: RouteParams,
-    private videoService: VideoService
-  ) {
-    // TODO: use a service
-    this.client = new WebTorrent({ dht: false });
-  }
+    private videoService: VideoService,
+    private webTorrentService: WebTorrentService
+  ) {}
 
   loadVideo(video: Video) {
     this.loading = true;
     this.video = video;
     console.log('Adding ' + this.video.magnetUri + '.');
-    this.client.add(this.video.magnetUri, (torrent) => {
+
+    this.webTorrentService.add(this.video.magnetUri, (torrent) => {
       this.loading = false;
       console.log('Added ' + this.video.magnetUri + '.');
       torrent.files[0].appendTo(this.elementRef.nativeElement.querySelector('.embed-responsive'), (err) => {
@@ -69,7 +66,7 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
   routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     console.log('Removing video from webtorrent.');
     clearInterval(this.interval);
-    this.client.remove(this.video.magnetUri);
+    this.webTorrentService.remove(this.video.magnetUri);
     return true;
   }
 }

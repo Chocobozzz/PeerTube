@@ -1,3 +1,6 @@
+/// <reference path="../../../typings/globals/jquery/index.d.ts" />
+/// <reference path="../../../typings/globals/jquery.fileupload/index.d.ts" />
+
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
 
@@ -5,9 +8,6 @@ import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 import { PROGRESSBAR_DIRECTIVES } from 'ng2-bootstrap/components/progressbar';
 
 import { AuthService, User } from '../../users/index';
-
-// TODO: import it with systemjs
-declare var jQuery: any;
 
 @Component({
   selector: 'my-videos-add',
@@ -37,7 +37,7 @@ export class VideoAddComponent implements OnInit {
       dataType: 'json',
       singleFileUploads: true,
       multipart: true,
-      autoupload: false,
+      autoUpload: false,
 
       add: (e, data) => {
         this.form = data;

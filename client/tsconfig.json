@@ -51,9 +51,12 @@
     "app/videos/video-list/video-sort.component.ts",
     "app/videos/video-watch/index.ts",
     "app/videos/video-watch/video-watch.component.ts",
+    "app/videos/video-watch/webtorrent.service.ts",
     "main.ts",
     "typings/globals/es6-shim/index.d.ts",
     "typings/globals/jasmine/index.d.ts",
+    "typings/globals/jquery.fileupload/index.d.ts",
+    "typings/globals/jquery/index.d.ts",
     "typings/globals/node/index.d.ts",
     "typings/index.d.ts"
   ],
