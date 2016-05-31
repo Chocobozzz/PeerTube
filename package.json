@@ -60,7 +60,7 @@
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "node-ipc": "^7.0.0",
-    "openssl-wrapper": "^0.2.3",
+    "openssl-wrapper": "^0.3.3",
     "password-generator": "^2.0.2",
     "request": "^2.57.0",
     "request-replay": "^1.0.2",
