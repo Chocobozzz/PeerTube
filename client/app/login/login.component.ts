@@ -4,12 +4,11 @@ import { Router } from '@angular/router-deprecated';
 import { AuthService, AuthStatus, User } from '../shared/index';
 
 @Component({
-  selector: 'my-user-login',
-  styleUrls: [ 'client/app/users/login/login.component.css' ],
-  templateUrl: 'client/app/users/login/login.component.html'
+  selector: 'my-login',
+  templateUrl: 'client/app/login/login.component.html'
 })
 
-export class UserLoginComponent {
+export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router

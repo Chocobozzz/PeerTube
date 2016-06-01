@@ -10,8 +10,7 @@ import {
   Video,
   VideoService
 } from '../shared/index';
-import { Search, SearchField } from '../../shared/index';
-import { AuthService, User } from '../../users/index';
+import { AuthService, Search, SearchField, User } from '../../shared/index';
 import { VideoMiniatureComponent } from './video-miniature.component';
 import { VideoSortComponent } from './video-sort.component';
 

@@ -7,7 +7,7 @@ import { SearchField } from './search-field.type';
 
 @Component({
     selector: 'my-search',
-    templateUrl: 'client/app/shared/search.component.html',
+    templateUrl: 'client/app/shared/search/search.component.html',
     directives: [ DROPDOWN_DIRECTIVES ]
 })
 

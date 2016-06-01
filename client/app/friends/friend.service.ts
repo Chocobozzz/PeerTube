@@ -2,20 +2,24 @@ import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
+import { AuthService } from '../shared/index';
+
 @Injectable()
 export class FriendService {
   private static BASE_FRIEND_URL: string = '/api/v1/pods/';
 
-  constructor (private http: Http) {}
+  constructor (private http: Http, private authService: AuthService) {}
 
   makeFriends() {
-    return this.http.get(FriendService.BASE_FRIEND_URL + 'makefriends')
+    const headers = this.authService.getRequestHeader();
+    return this.http.get(FriendService.BASE_FRIEND_URL + 'makefriends', { headers })
                     .map(res => res.status)
                     .catch(this.handleError);
   }
 
   quitFriends() {
-    return this.http.get(FriendService.BASE_FRIEND_URL + 'quitfriends')
+    const headers = this.authService.getRequestHeader();
+    return this.http.get(FriendService.BASE_FRIEND_URL + 'quitfriends', { headers })
                     .map(res => res.status)
                     .catch(this.handleError);
   }

@@ -3,12 +3,13 @@ import { HTTP_PROVIDERS } from '@angular/http';
 import { RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 
 import { FriendService } from './friends/index';
-import { Search, SearchComponent } from './shared/index';
+import { LoginComponent } from './login/index';
 import {
-  UserLoginComponent,
   AuthService,
-  AuthStatus
-} from './users/index';
+  AuthStatus,
+  Search,
+  SearchComponent
+} from './shared/index';
 import {
   VideoAddComponent,
   VideoListComponent,
@@ -20,7 +21,7 @@ import {
   {
     path: '/users/login',
     name: 'UserLogin',
-    component: UserLoginComponent
+    component: LoginComponent
   },
   {
     path: '/videos/list',

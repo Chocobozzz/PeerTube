@@ -7,7 +7,7 @@ import { Router } from '@angular/router-deprecated';
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 import { PROGRESSBAR_DIRECTIVES } from 'ng2-bootstrap/components/progressbar';
 
-import { AuthService, User } from '../../users/index';
+import { AuthService, User } from '../../shared/index';
 
 @Component({
   selector: 'my-videos-add',

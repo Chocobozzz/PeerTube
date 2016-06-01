@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { Pagination } from './pagination.model';
 import { Search } from '../../shared/index';
 import { SortField } from './sort-field.type';
-import { AuthService } from '../../users/index';
+import { AuthService } from '../../shared/index';
 import { Video } from './video.model';
 
 @Injectable()

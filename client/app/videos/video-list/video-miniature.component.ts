@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 
 import { Video, VideoService } from '../shared/index';
-import { User } from '../../users/index';
+import { User } from '../../shared/index';
 
 @Component({
   selector: 'my-video-miniature',
