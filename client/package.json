@@ -17,7 +17,7 @@
     "tsc:w": "tsc -w",
     "typings": "typings",
     "postinstall": "typings install",
-    "test": "standard && tslint -c ./tslint.json angular/**/*.ts angular/**/**/*.ts angular/**/**/**/*.ts"
+    "test": "standard && tslint -c ./tslint.json angular/**/*.ts"
   },
   "license": "GPLv3",
   "dependencies": {
