@@ -61,7 +61,7 @@
     "multer": "^1.1.0",
     "node-ipc": "^7.0.0",
     "node-sass": "^3.4.2",
-    "openssl-wrapper": "^0.3.3",
+    "openssl-wrapper": "^0.2.3",
     "password-generator": "^2.0.2",
     "request": "^2.57.0",
     "request-replay": "^1.0.2",
