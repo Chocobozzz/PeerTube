@@ -13,11 +13,9 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "typings": "typings",
     "postinstall": "typings install",
-    "test": "standard && tslint -c ./tslint.json angular/**/*.ts",
-    "build": "webpack --config config/webpack.dev.js --progress --profile --colors --display-error-details --display-cached",
-    "watch": "npm run build -- --watch"
+    "test": "standard && tslint -c ./tslint.json src/**/*.ts",
+    "webpack": "webpack"
   },
   "license": "GPLv3",
   "dependencies": {
