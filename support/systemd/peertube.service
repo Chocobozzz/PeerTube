@@ -1,0 +1,17 @@
+[Unit]
+Description=PeerTube daemon
+
+[Service]
+Type=simple
+Environment=NODE_ENV=production
+User=myuser
+Group=myuser
+ExecStart=/usr/bin/node server
+WorkingDirectory=/path/to/peertube
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=peertube
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
