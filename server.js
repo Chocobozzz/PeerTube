@@ -64,7 +64,7 @@ const apiRoute = '/api/' + constants.API_VERSION
 app.use(apiRoute, routes.api)
 
 // Static files
-app.use('/client', express.static(path.join(__dirname, '/client'), { maxAge: 0 }))
+app.use('/client', express.static(path.join(__dirname, '/client/dist'), { maxAge: 0 }))
 // 404 for static files not found
 app.use('/client/*', function (req, res, next) {
   res.sendStatus(404)
@@ -76,7 +76,7 @@ app.use(constants.THUMBNAILS_STATIC_PATH, express.static(thumbnailsPhysicalPath,
 
 // Client application
 app.use('/*', function (req, res, next) {
-  res.sendFile(path.join(__dirname, 'client/index.html'))
+  res.sendFile(path.join(__dirname, 'client/dist/index.html'))
 })
 
 // ----------- Tracker -----------
