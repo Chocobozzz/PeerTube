@@ -1,0 +1,27 @@
+server {
+  listen 80;
+  server_name domain.tld;
+
+  location / {
+    proxy_pass http://localhost:9000;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    # For the video upload
+    client_max_body_size 100m;
+  }
+
+  # Websocket tracker
+  location /tracker/socket {
+    # Peers send a message to the tracker every 15 minutes
+    # Don't close the websocket before this time
+    proxy_read_timeout 1200s;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_http_version 1.1;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+    proxy_pass http://localhost:9000;
+  }
+}
