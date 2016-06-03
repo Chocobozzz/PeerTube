@@ -72,6 +72,10 @@ module.exports = {
 
   },
 
+  output: {
+    publicPath: '/client/'
+  },
+
   /*
    * Options affecting the normal modules.
    *

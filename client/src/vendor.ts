@@ -17,12 +17,3 @@ import 'rxjs/add/operator/mergeMap';
 
 import 'jquery';
 import 'bootstrap-loader';
-
-if ('production' === ENV) {
-  // Production
-
-
-} else {
-  // Development
-
-}
