@@ -90,13 +90,13 @@ styles:
   badges: false
   jumbotron: false
   thumbnails: true
-  alerts: false
+  alerts: true
   progress-bars: true
   media: true
   list-group: false
   panels: false
   wells: false
-  responsive-embed: false
+  responsive-embed: true
   close: false
 
   # Components w/ JavaScript
@@ -112,7 +112,7 @@ styles:
 ### Bootstrap scripts
 scripts:
   transition: false
-  alert: false
+  alert: true
   button: false
   carousel: false
   collapse: false

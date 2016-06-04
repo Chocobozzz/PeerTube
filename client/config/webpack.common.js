@@ -68,7 +68,9 @@ module.exports = {
     root: helpers.root('src'),
 
     // remove other default values
-    modulesDirectories: [ 'node_modules' ]
+    modulesDirectories: [ 'node_modules', 'node_modules/blueimp-file-upload/js/vendor' ],
+
+    packageAlias: 'browser'
 
   },
 
@@ -243,7 +245,8 @@ module.exports = {
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
-      jquery: 'jquery'
+      jquery: 'jquery',
+      WebTorrent: 'webtorrent/webtorrent.min'
     })
 
   ],
@@ -257,6 +260,8 @@ module.exports = {
   node: {
     global: 'window',
     crypto: 'empty',
+    fs: 'empty',
+    events: true,
     module: false,
     clearImmediate: false,
     setImmediate: false

@@ -9,7 +9,6 @@ const commonConfig = require('./webpack.common.js') // the settings that are com
 /**
  * Webpack Plugins
  */
-const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const DefinePlugin = require('webpack/lib/DefinePlugin')
 const DedupePlugin = require('webpack/lib/optimize/DedupePlugin')
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
