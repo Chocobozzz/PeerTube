@@ -173,6 +173,10 @@ module.exports = {
 
   },
 
+  sassLoader: {
+    precision: 10
+  },
+
   /*
    * Add additional plugins to the compiler.
    *
