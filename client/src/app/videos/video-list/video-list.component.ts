@@ -84,7 +84,7 @@ export class VideoListComponent implements OnInit {
   }
 
   onRemoved(video: Video) {
-    this.videos.splice(this.videos.indexOf(video), 1);
+    this.getVideos();
   }
 
   onSort(sort: SortField) {
