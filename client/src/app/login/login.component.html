@@ -1,14 +1,30 @@
 <h3>Login</h3>
-<form role="form" (submit)="login(username.value, password.value)">
+
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<form role="form" (ngSubmit)="login(username.value, password.value)" #loginForm="ngForm">
   <div class="form-group">
     <label for="username">Username</label>
-    <input type="text" #username class="form-control" id="username" placeholder="Username">
+    <input
+      type="text" class="form-control" name="username" id="username" placeholder="Username" required
+      ngControl="username" #username="ngForm"
+    >
+    <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+      Username is required
+    </div>
   </div>
 
   <div class="form-group">
     <label for="password">Password</label>
-    <input type="password" #password class="form-control" id="password" placeholder="Password">
+    <input
+      type="password" class="form-control" name="password" id="password" placeholder="Password" required
+      ngControl="password" #password="ngForm"
+    >
+    <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+      Password is required
+    </div>
   </div>
 
-  <input type="submit" value="Login" class="btn btn-default">
+  <input type="submit" value="Login" class="btn btn-default" [disabled]="!loginForm.form.valid">
 </form>

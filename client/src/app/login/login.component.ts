@@ -9,6 +9,8 @@ import { AuthService, AuthStatus, User } from '../shared';
 })
 
 export class LoginComponent {
+  error: string = null;
+
   constructor(
     private authService: AuthService,
     private router: Router
@@ -17,6 +19,8 @@ export class LoginComponent {
   login(username: string, password: string) {
     this.authService.login(username, password).subscribe(
       result => {
+        this.error = null;
+
         const user = new User(username, result);
         user.save();
 
@@ -26,9 +30,9 @@ export class LoginComponent {
       },
       error => {
         if (error.error === 'invalid_grant') {
-          alert('Credentials are invalid.');
+          this.error = 'Credentials are invalid.';
         } else {
-          alert(`${error.error}: ${error.error_description}`);
+          this.error = `${error.error}: ${error.error_description}`;
         }
       }
     );
