@@ -147,12 +147,6 @@ module.exports = {
         loader: 'json-loader'
       },
 
-      /*
-       * Raw loader support for *.css files
-       * Returns file content as string
-       *
-       * See: https://github.com/webpack/raw-loader
-       */
       {
         test: /\.scss$/,
         exclude: /node_modules/,

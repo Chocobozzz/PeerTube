@@ -6,8 +6,16 @@
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "noEmitHelpers": true
+  },
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true
+  },
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "atom": {
+    "rewriteTsconfig": true
   },
   "filesGlob": [
     "**/*.ts",
@@ -18,7 +26,6 @@
     "typings/main",
     "typings/main.d.ts"
   ],
-  "compileOnSave": false,
   "files": [
     "src/app/app.component.ts",
     "src/app/friends/friend.service.ts",
@@ -62,8 +69,5 @@
     "typings/globals/jquery/index.d.ts",
     "typings/globals/node/index.d.ts",
     "typings/index.d.ts"
-  ],
-  "atom": {
-    "rewriteTsconfig": true
-  }
+  ]
 }
