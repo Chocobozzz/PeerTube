@@ -222,10 +222,16 @@ module.exports = {
      *
      * See: https://www.npmjs.com/package/copy-webpack-plugin
      */
-    new CopyWebpackPlugin([{
-      from: 'src/assets',
-      to: 'assets'
-    }]),
+    new CopyWebpackPlugin([
+      {
+        from: 'src/assets',
+        to: 'assets'
+      },
+      {
+        from: 'node_modules/webtorrent/webtorrent.min.js',
+        to: 'assets/webtorrent'
+      }
+    ]),
 
     /*
      * Plugin: HtmlWebpackPlugin
@@ -243,8 +249,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
-      jquery: 'jquery',
-      WebTorrent: 'webtorrent/webtorrent.min'
+      jquery: 'jquery'
     })
 
   ],

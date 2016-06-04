@@ -19,5 +19,3 @@ import 'jquery';
 import 'bootstrap-loader';
 import 'jquery.ui.widget/jquery.ui.widget';
 import 'blueimp-file-upload';
-// TODO: build webtorrent with webpack when https://github.com/webpack/webpack/pull/1931 will be merged
-import 'webtorrent/webtorrent.min';

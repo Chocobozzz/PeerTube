@@ -85,6 +85,10 @@ module.exports = webpackMerge(commonConfig, {
 
   },
 
+  externals: {
+    webtorrent: 'WebTorrent'
+  },
+
   plugins: [
 
     /**
