@@ -1,5 +1,7 @@
 <h3>Upload a video</h3>
 
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
 <form (ngSubmit)="uploadFile()" #videoForm="ngForm">
   <div class="form-group">
     <label for="name">Video name</label>

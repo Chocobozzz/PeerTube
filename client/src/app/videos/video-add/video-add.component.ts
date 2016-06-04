@@ -18,6 +18,7 @@ import { AuthService, User } from '../../shared';
 })
 
 export class VideoAddComponent implements OnInit {
+  error: string = null;
   fileToUpload: any;
   progressBar: { value: number; max: number; } = { value: 0, max: 0 };
   user: User;
@@ -57,11 +58,23 @@ export class VideoAddComponent implements OnInit {
 
         // Print all the videos once it's finished
         this.router.navigate(['VideosList']);
+      },
+
+      fail: (e, data) => {
+        const xhr = data.jqXHR;
+        if (xhr.status === 400) {
+          this.error = xhr.responseText;
+        } else {
+          this.error = 'Unknow error';
+        }
+
+        console.error(data);
       }
     });
   }
 
   uploadFile() {
+    this.error = null;
     this.form.formData = jQuery(this.elementRef.nativeElement).find('form').serializeArray();
     this.form.headers = this.authService.getRequestHeader().toJSON();
     this.form.submit();

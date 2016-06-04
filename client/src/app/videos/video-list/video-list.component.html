@@ -1,5 +1,9 @@
 <div class="row videos-info">
-  <div class="col-md-9 videos-total-results"> {{ pagination.total }} videos</div>
+  <div class="col-md-9 videos-total-results">
+    {{ pagination.total }} videos
+
+    <my-loader [loading]="loading"></my-loader>
+  </div>
   <my-video-sort class="col-md-3" [currentSort]="sort" (sort)="onSort($event)"></my-video-sort>
 </div>
 
