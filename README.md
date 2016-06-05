@@ -18,7 +18,10 @@ Prototype of a decentralized video streaming platform using P2P (bittorrent) dir
 
 ## Demonstration
 
-PeerTube is not ready for production yet, but you can find [a video](https://vimeo.com/164881662 "Yes Vimeo, please don't judge me") to see how it looks like.
+Want to see in action?
+
+   * You can directly test in your browser with this [demo server](http://peertube.cpy.re). Don't forget to use the latest version of Firefox/Chromium/(Opera?) and check your firewall configuration (for WebRTC)
+   * You can find [a video](https://vimeo.com/164881662 "Yes Vimeo, please don't judge me") to see how the "decentralization feature" looks like
 
 ## Why
 
