@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 import { Pagination } from './pagination.model';
 import { Search } from '../../shared';

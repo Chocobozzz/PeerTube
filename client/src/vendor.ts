@@ -12,6 +12,9 @@ import '@angular/http';
 import '@angular/router-deprecated';
 
 // RxJS
+import 'rxjs/Observable';
+import 'rxjs/Subject';
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
