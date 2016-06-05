@@ -16,13 +16,17 @@ import { WebTorrentService } from './webtorrent.service';
 })
 
 export class VideoWatchComponent implements OnInit, CanDeactivate {
+  private static LOADTIME_TOO_LONG: number = 30000;
+
   downloadSpeed: number;
+  error: boolean = false;
   loading: boolean = false;
   numPeers: number;
   uploadSpeed: number;
   video: Video;
 
-  private interval: NodeJS.Timer;
+  private errorTimer: NodeJS.Timer;
+  private torrentInfosInterval: NodeJS.Timer;
 
   constructor(
     private elementRef: ElementRef,
@@ -31,13 +35,27 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
     private webTorrentService: WebTorrentService
   ) {}
 
-  loadVideo(video: Video) {
+  loadVideo() {
+    // Reset the error
+    this.error = false;
+    // We are loading the video
     this.loading = true;
-    this.video = video;
+
     console.log('Adding ' + this.video.magnetUri + '.');
 
+    // The callback might never return if there are network issues
+    // So we create a timer to inform the user the load is abnormally long
+    this.errorTimer = setTimeout(() => this.loadTooLong(), VideoWatchComponent.LOADTIME_TOO_LONG);
+
     this.webTorrentService.add(this.video.magnetUri, (torrent) => {
+      // Clear the error timer
+      clearTimeout(this.errorTimer);
+      // Maybe the error was fired by the timer, so reset it
+      this.error = false;
+
+      // We are not loading the video anymore
       this.loading = false;
+
       console.log('Added ' + this.video.magnetUri + '.');
       torrent.files[0].appendTo(this.elementRef.nativeElement.querySelector('.embed-responsive'), (err) => {
         if (err) {
@@ -47,7 +65,7 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
       });
 
       // Refresh each second
-      this.interval = setInterval(() => {
+      this.torrentInfosInterval = setInterval(() => {
         this.downloadSpeed = torrent.downloadSpeed;
         this.numPeers = torrent.numPeers;
         this.uploadSpeed = torrent.uploadSpeed;
@@ -58,15 +76,23 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
   ngOnInit() {
     let id = this.routeParams.get('id');
     this.videoService.getVideo(id).subscribe(
-      video => this.loadVideo(video),
+      video => {
+        this.video = video;
+        this.loadVideo();
+      },
       error => alert(error)
     );
   }
 
   routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
     console.log('Removing video from webtorrent.');
-    clearInterval(this.interval);
+    clearInterval(this.torrentInfosInterval);
     this.webTorrentService.remove(this.video.magnetUri);
     return true;
+  }
+
+  private loadTooLong() {
+    this.error = true;
+    console.error('The video load seems to be abnormally long.');
   }
 }

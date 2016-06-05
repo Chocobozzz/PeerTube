@@ -1,3 +1,17 @@
+<div *ngIf="error" class="alert alert-danger">
+  The video load seems to be abnormally long. You could:
+  <ul>
+    <li>Check your browser console to see potentials errors</li>
+    <li>Your firewall or NAT could be too restrictive for WebRTC (there is no TURN server)</li>
+    <li>
+      Report an issue on
+      <a href="https://github.com/Chocobozzz/PeerTube/issues" title="Report an issue">
+        https://github.com/Chocobozzz/PeerTube/issues
+      </a>
+    </li>
+  </ul>
+</div>
+
 <div class="embed-responsive embed-responsive-19by9">
   <my-loader [loading]="loading"></my-loader>
 </div>
