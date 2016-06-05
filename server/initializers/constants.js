@@ -6,8 +6,8 @@ const API_VERSION = 'v1'
 // Score a pod has when we create it as a friend
 let FRIEND_BASE_SCORE = 100
 
-// Time to wait between requests to the friends
-let INTERVAL = 60000
+// Time to wait between requests to the friends (10 min)
+let INTERVAL = 600000
 
 // Max length of the author username
 const MAXIMUM_AUTHOR_LENGTH = 20
