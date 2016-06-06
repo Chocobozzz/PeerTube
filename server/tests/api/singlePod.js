@@ -57,7 +57,11 @@ describe('Test a single pod', function () {
 
   it('Should upload the video', function (done) {
     this.timeout(5000)
-    utils.uploadVideo(server.url, server.accessToken, 'my super name', 'my super description', 'video_short.webm', done)
+    const name = 'my super name'
+    const description = 'my super description'
+    const tags = [ 'tag1', 'tag2', 'tag3' ]
+    const file = 'video_short.webm'
+    utils.uploadVideo(server.url, server.accessToken, name, description, tags, file, done)
   })
 
   it('Should seed the uploaded video', function (done) {
@@ -78,6 +82,7 @@ describe('Test a single pod', function () {
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
+      expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(utils.dateIsValid(video.createdDate)).to.be.true
 
       utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
@@ -112,6 +117,7 @@ describe('Test a single pod', function () {
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
+      expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(utils.dateIsValid(video.createdDate)).to.be.true
 
       utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
@@ -143,6 +149,7 @@ describe('Test a single pod', function () {
       expect(video.podUrl).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
+      expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(utils.dateIsValid(video.createdDate)).to.be.true
 
       utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
@@ -168,6 +175,7 @@ describe('Test a single pod', function () {
       expect(video.podUrl).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
+      expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(utils.dateIsValid(video.createdDate)).to.be.true
 
       utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
@@ -235,7 +243,11 @@ describe('Test a single pod', function () {
       'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
     ]
     async.each(videos, function (video, callbackEach) {
-      utils.uploadVideo(server.url, server.accessToken, video + ' name', video + ' description', video, callbackEach)
+      const name = video + ' name'
+      const description = video + ' description'
+      const tags = [ 'tag1', 'tag2', 'tag3' ]
+
+      utils.uploadVideo(server.url, server.accessToken, name, description, tags, video, callbackEach)
     }, done)
   })
 

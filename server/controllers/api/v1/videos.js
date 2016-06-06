@@ -115,7 +115,8 @@ function addVideo (req, res, next) {
         magnetUri: torrent.magnetURI,
         author: res.locals.oauth.token.user.username,
         duration: videoFile.duration,
-        thumbnail: thumbnailName
+        thumbnail: thumbnailName,
+        tags: videoInfos.tags
       }
 
       Videos.add(videoData, function (err, insertedVideo) {
@@ -156,7 +157,7 @@ function addVideo (req, res, next) {
       return callback(null)
     }
 
-  ], function (err) {
+  ], function andFinally (err) {
     if (err) {
       logger.error('Cannot insert the video.')
       return next(err)
@@ -228,7 +229,7 @@ function removeVideo (req, res, next) {
 
       return callback(null)
     }
-  ], function (err) {
+  ], function andFinally (err) {
     if (err) {
       logger.error('Errors when removed the video.', { error: err })
       return next(err)
@@ -259,6 +260,7 @@ function getFormatedVideo (videoObj) {
     magnetUri: videoObj.magnetUri,
     author: videoObj.author,
     duration: videoObj.duration,
+    tags: videoObj.tags,
     thumbnailPath: constants.THUMBNAILS_STATIC_PATH + '/' + videoObj.thumbnail,
     createdDate: videoObj.createdDate
   }

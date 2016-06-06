@@ -75,7 +75,11 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(servers[0].url, servers[0].accessToken, 'my super name for pod 1', 'my super description for pod 1', 'video_short1.webm', next)
+          const name = 'my super name for pod 1'
+          const description = 'my super description for pod 1'
+          const tags = [ 'tag1p1', 'tag2p1' ]
+          const file = 'video_short1.webm'
+          utils.uploadVideo(servers[0].url, servers[0].accessToken, name, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -99,6 +103,7 @@ describe('Test multiple pods', function () {
               expect(video.podUrl).to.equal('localhost:9001')
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(10)
+              expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
               expect(utils.dateIsValid(video.createdDate)).to.be.true
 
               if (server.url !== 'http://localhost:9001') {
@@ -131,7 +136,11 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(servers[1].url, servers[1].accessToken, 'my super name for pod 2', 'my super description for pod 2', 'video_short2.webm', next)
+          const name = 'my super name for pod 2'
+          const description = 'my super description for pod 2'
+          const tags = [ 'tag1p2', 'tag2p2', 'tag3p2' ]
+          const file = 'video_short2.webm'
+          utils.uploadVideo(servers[1].url, servers[1].accessToken, name, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -155,6 +164,7 @@ describe('Test multiple pods', function () {
               expect(video.podUrl).to.equal('localhost:9002')
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(5)
+              expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
               expect(utils.dateIsValid(video.createdDate)).to.be.true
 
               if (server.url !== 'http://localhost:9002') {
@@ -187,10 +197,18 @@ describe('Test multiple pods', function () {
 
       async.series([
         function (next) {
-          utils.uploadVideo(servers[2].url, servers[2].accessToken, 'my super name for pod 3', 'my super description for pod 3', 'video_short3.webm', next)
+          const name = 'my super name for pod 3'
+          const description = 'my super description for pod 3'
+          const tags = [ 'tag1p3' ]
+          const file = 'video_short3.webm'
+          utils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
         },
         function (next) {
-          utils.uploadVideo(servers[2].url, servers[2].accessToken, 'my super name for pod 3-2', 'my super description for pod 3-2', 'video_short.webm', next)
+          const name = 'my super name for pod 3-2'
+          const description = 'my super description for pod 3-2'
+          const tags = [ 'tag2p3', 'tag3p3', 'tag4p3' ]
+          const file = 'video_short.webm'
+          utils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 22000)
@@ -224,6 +242,7 @@ describe('Test multiple pods', function () {
               expect(video1.podUrl).to.equal('localhost:9003')
               expect(video1.magnetUri).to.exist
               expect(video1.duration).to.equal(5)
+              expect(video1.tags).to.deep.equal([ 'tag1p3' ])
               expect(utils.dateIsValid(video1.createdDate)).to.be.true
 
               expect(video2.name).to.equal('my super name for pod 3-2')
@@ -231,6 +250,7 @@ describe('Test multiple pods', function () {
               expect(video2.podUrl).to.equal('localhost:9003')
               expect(video2.magnetUri).to.exist
               expect(video2.duration).to.equal(5)
+              expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
               expect(utils.dateIsValid(video2.createdDate)).to.be.true
 
               if (server.url !== 'http://localhost:9003') {

@@ -79,7 +79,12 @@ describe('Test users', function () {
 
   it('Should not be able to upload a video', function (done) {
     accessToken = 'mysupertoken'
-    utils.uploadVideo(server.url, accessToken, 'my super name', 'my super description', 'video_short.webm', 401, done)
+
+    const name = 'my super name'
+    const description = 'my super description'
+    const tags = [ 'tag1', 'tag2' ]
+    const video = 'video_short.webm'
+    utils.uploadVideo(server.url, accessToken, name, description, tags, video, 401, done)
   })
 
   it('Should not be able to make friends', function (done) {
@@ -102,7 +107,11 @@ describe('Test users', function () {
   })
 
   it('Should upload the video with the correct token', function (done) {
-    utils.uploadVideo(server.url, accessToken, 'my super name', 'my super description', 'video_short.webm', 204, function (err, res) {
+    const name = 'my super name'
+    const description = 'my super description'
+    const tags = [ 'tag1', 'tag2' ]
+    const video = 'video_short.webm'
+    utils.uploadVideo(server.url, accessToken, name, description, tags, video, 204, function (err, res) {
       if (err) throw err
 
       utils.getVideosList(server.url, function (err, res) {
@@ -118,7 +127,11 @@ describe('Test users', function () {
   })
 
   it('Should upload the video again with the correct token', function (done) {
-    utils.uploadVideo(server.url, accessToken, 'my super name 2', 'my super description 2', 'video_short.webm', 204, done)
+    const name = 'my super name 2'
+    const description = 'my super description 2'
+    const tags = [ 'tag1' ]
+    const video = 'video_short.webm'
+    utils.uploadVideo(server.url, accessToken, name, description, tags, video, 204, done)
   })
 
   it('Should not be able to remove the video with an incorrect token', function (done) {

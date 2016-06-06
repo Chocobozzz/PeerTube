@@ -9,11 +9,6 @@ let FRIEND_BASE_SCORE = 100
 // Time to wait between requests to the friends (10 min)
 let INTERVAL = 600000
 
-// Max length of the author username
-const MAXIMUM_AUTHOR_LENGTH = 20
-// 2 hours maximum for the duration of a video (in seconds)
-let MAXIMUM_VIDEO_DURATION = 7200
-
 // Number of results by default for the pagination
 const PAGINATION_COUNT_DEFAULT = 15
 
@@ -42,11 +37,22 @@ const THUMBNAILS_SIZE = '200x110'
 // Path for access to thumbnails with express router
 const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
 
+const VIDEOS_CONSTRAINTS_FIELDS = {
+  NAME: { min: 1, max: 50 }, // Length
+  DESCRIPTION: { min: 1, max: 250 }, // Length
+  MAGNET_URI: { min: 10 }, // Length
+  DURATION: { min: 1, max: 7200 }, // Number
+  AUTHOR: { min: 3, max: 20 }, // Length
+  TAGS: { min: 1, max: 3 }, // Number of total tags
+  TAG: { min: 2, max: 10 }, // Length
+  THUMBNAIL: { min: 0, max: 20000 } // Bytes
+}
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   FRIEND_BASE_SCORE = 20
   INTERVAL = 10000
-  MAXIMUM_VIDEO_DURATION = 14
+  VIDEOS_CONSTRAINTS_FIELDS.DURATION.max = 14
   REQUEST_RETRIES = 2
 }
 
@@ -56,15 +62,14 @@ module.exports = {
   API_VERSION: API_VERSION,
   FRIEND_BASE_SCORE: FRIEND_BASE_SCORE,
   INTERVAL: INTERVAL,
-  MAXIMUM_AUTHOR_LENGTH: MAXIMUM_AUTHOR_LENGTH,
-  MAXIMUM_VIDEO_DURATION: MAXIMUM_VIDEO_DURATION,
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUEST_RETRIES: REQUEST_RETRIES,
   SEARCHABLE_COLUMNS: SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
-  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH
+  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH,
+  VIDEOS_CONSTRAINTS_FIELDS: VIDEOS_CONSTRAINTS_FIELDS
 }
 
 // ---------------------------------------------------------------------------

@@ -21,6 +21,7 @@ const videosSchema = mongoose.Schema({
   author: String,
   duration: Number,
   thumbnail: String,
+  tags: [ String ],
   createdDate: {
     type: Date,
     default: Date.now

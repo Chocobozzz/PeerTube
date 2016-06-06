@@ -349,7 +349,7 @@ function testImage (url, videoName, imagePath, callback) {
     })
 }
 
-function uploadVideo (url, accessToken, name, description, fixture, specialStatus, end) {
+function uploadVideo (url, accessToken, name, description, tags, fixture, specialStatus, end) {
   if (!end) {
     end = specialStatus
     specialStatus = 204
@@ -357,15 +357,20 @@ function uploadVideo (url, accessToken, name, description, fixture, specialStatu
 
   const path = '/api/v1/videos'
 
-  request(url)
-    .post(path)
-    .set('Accept', 'application/json')
-    .set('Authorization', 'Bearer ' + accessToken)
-    .field('name', name)
-    .field('description', description)
-    .attach('videofile', pathUtils.join(__dirname, 'fixtures', fixture))
-    .expect(specialStatus)
-    .end(end)
+  const req = request(url)
+              .post(path)
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + accessToken)
+              .field('name', name)
+              .field('description', description)
+
+  for (let i = 0; i < tags.length; i++) {
+    req.field('tags[' + i + ']', tags[i])
+  }
+
+  req.attach('videofile', pathUtils.join(__dirname, 'fixtures', fixture))
+     .expect(specialStatus)
+     .end(end)
 }
 
 // ---------------------------------------------------------------------------

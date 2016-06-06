@@ -11,7 +11,7 @@ const reqValidatorsRemote = {
 
 function remoteVideosAdd (req, res, next) {
   req.checkBody('data').isArray()
-  req.checkBody('data').eachIsRemoteVideosAddValid()
+  req.checkBody('data').isEachAddRemoteVideosValid()
 
   logger.debug('Checking remoteVideosAdd parameters', { parameters: req.body })
 
@@ -20,7 +20,7 @@ function remoteVideosAdd (req, res, next) {
 
 function remoteVideosRemove (req, res, next) {
   req.checkBody('data').isArray()
-  req.checkBody('data').eachIsRemoteVideosRemoveValid()
+  req.checkBody('data').isEachRemoveRemoteVideosValid()
 
   logger.debug('Checking remoteVideosRemove parameters', { parameters: req.body })
 

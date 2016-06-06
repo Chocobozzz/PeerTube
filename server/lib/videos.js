@@ -153,7 +153,8 @@ function createRemoteVideoObjects (videos, callback) {
           magnetUri: video.magnetUri,
           podUrl: video.podUrl,
           duration: video.duration,
-          thumbnail: thumbnailName
+          thumbnail: thumbnailName,
+          tags: video.tags
         }
         remoteVideos.push(params)
 

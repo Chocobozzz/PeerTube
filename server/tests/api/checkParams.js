@@ -23,7 +23,14 @@ describe('Test parameters validator', function () {
 
     Object.keys(fields).forEach(function (field) {
       const value = fields[field]
-      req.field(field, value)
+
+      if (Array.isArray(value)) {
+        for (let i = 0; i < value.length; i++) {
+          req.field(field + '[' + i + ']', value[i])
+        }
+      } else {
+        req.field(field, value)
+      }
     })
 
     Object.keys(attaches).forEach(function (attach) {
@@ -198,7 +205,8 @@ describe('Test parameters validator', function () {
 
       it('Should fail without name', function (done) {
         const data = {
-          description: 'my super description'
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
         }
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
@@ -209,7 +217,8 @@ describe('Test parameters validator', function () {
       it('Should fail with a long name', function (done) {
         const data = {
           name: 'My very very very very very very very very very very very very very very very very long name',
-          description: 'my super description'
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
         }
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
@@ -219,7 +228,8 @@ describe('Test parameters validator', function () {
 
       it('Should fail without description', function (done) {
         const data = {
-          name: 'my super name'
+          name: 'my super name',
+          tags: [ 'tag1', 'tag2' ]
         }
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
@@ -232,7 +242,79 @@ describe('Test parameters validator', function () {
           name: 'my super name',
           description: 'my super description which is very very very very very very very very very very very very very very' +
                        'very very very very very very very very very very very very very very very very very very very very very' +
-                       'very very very very very very very very very very very very very very very long'
+                       'very very very very very very very very very very very very very very very long',
+          tags: [ 'tag1', 'tag2' ]
+        }
+        const attach = {
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+        }
+        makePostRequest(path, server.accessToken, data, attach, done)
+      })
+
+      it('Should fail without tags', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description'
+        }
+        const attach = {
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+        }
+        makePostRequest(path, server.accessToken, data, attach, done)
+      })
+
+      it('Should fail with too many tags', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
+        }
+        const attach = {
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+        }
+        makePostRequest(path, server.accessToken, data, attach, done)
+      })
+
+      it('Should fail with not enough tags', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ ]
+        }
+        const attach = {
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+        }
+        makePostRequest(path, server.accessToken, data, attach, done)
+      })
+
+      it('Should fail with a tag length too low', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'tag1', 't' ]
+        }
+        const attach = {
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+        }
+        makePostRequest(path, server.accessToken, data, attach, done)
+      })
+
+      it('Should fail with a tag length too big', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'mysupertagtoolong', 'tag1' ]
+        }
+        const attach = {
+          'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
+        }
+        makePostRequest(path, server.accessToken, data, attach, done)
+      })
+
+      it('Should fail with malformed tags', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'my tag' ]
         }
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
@@ -243,7 +325,8 @@ describe('Test parameters validator', function () {
       it('Should fail without an input file', function (done) {
         const data = {
           name: 'my super name',
-          description: 'my super description'
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
         }
         const attach = {}
         makePostRequest(path, server.accessToken, data, attach, done)
@@ -252,7 +335,8 @@ describe('Test parameters validator', function () {
       it('Should fail without an incorrect input file', function (done) {
         const data = {
           name: 'my super name',
-          description: 'my super description'
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
         }
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short_fake.webm')
@@ -263,7 +347,8 @@ describe('Test parameters validator', function () {
       it('Should fail with a too big duration', function (done) {
         const data = {
           name: 'my super name',
-          description: 'my super description'
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
         }
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_too_long.webm')
@@ -274,7 +359,8 @@ describe('Test parameters validator', function () {
       it('Should succeed with the correct parameters', function (done) {
         const data = {
           name: 'my super name',
-          description: 'my super description'
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
         }
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
