@@ -187,6 +187,32 @@ describe('Test a single pod', function () {
     })
   })
 
+  it('Should search the video by tag', function (done) {
+    utils.searchVideo(server.url, 'tag1', 'tags', function (err, res) {
+      if (err) throw err
+
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(1)
+
+      const video = res.body.data[0]
+      expect(video.name).to.equal('my super name')
+      expect(video.description).to.equal('my super description')
+      expect(video.podUrl).to.equal('localhost:9001')
+      expect(video.author).to.equal('root')
+      expect(video.isLocal).to.be.true
+      expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
+      expect(utils.dateIsValid(video.createdDate)).to.be.true
+
+      utils.testImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
+        if (err) throw err
+        expect(test).to.equal(true)
+
+        done()
+      })
+    })
+  })
+
   it('Should not find a search by name by default', function (done) {
     utils.searchVideo(server.url, 'hello', function (err, res) {
       if (err) throw err
@@ -201,6 +227,18 @@ describe('Test a single pod', function () {
 
   it('Should not find a search by author', function (done) {
     utils.searchVideo(server.url, 'hello', 'author', function (err, res) {
+      if (err) throw err
+
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data.length).to.equal(0)
+
+      done()
+    })
+  })
+
+  it('Should not find a search by tag', function (done) {
+    utils.searchVideo(server.url, 'tag', 'tags', function (err, res) {
       if (err) throw err
 
       expect(res.body.total).to.equal(0)

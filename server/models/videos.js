@@ -128,7 +128,7 @@ function removeByIds (ids, callback) {
 function search (value, field, start, count, sort, callback) {
   const query = {}
   // Make an exact search with the magnet
-  if (field === 'magnetUri') {
+  if (field === 'magnetUri' || field === 'tags') {
     query[field] = value
   } else {
     query[field] = new RegExp(value)

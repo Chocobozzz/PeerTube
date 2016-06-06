@@ -23,7 +23,7 @@ let REQUEST_RETRIES = 10
 
 // Sortable columns per schema
 const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'podUrl', 'author' ]
+  VIDEOS: [ 'name', 'magnetUri', 'podUrl', 'author', 'tags' ]
 }
 
 // Sortable columns per schema
