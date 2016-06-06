@@ -21,6 +21,9 @@ const PODS_SCORE = {
 // Number of retries we make for the make retry requests (to friends...)
 let REQUEST_RETRIES = 10
 
+// Different types or requests for the request scheduler module
+const REQUEST_SCHEDULER_TYPE = [ 'add', 'remove' ]
+
 // Sortable columns per schema
 const SEARCHABLE_COLUMNS = {
   VIDEOS: [ 'name', 'magnetUri', 'podUrl', 'author', 'tags' ]
@@ -65,6 +68,7 @@ module.exports = {
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUEST_RETRIES: REQUEST_RETRIES,
+  REQUEST_SCHEDULER_TYPE: REQUEST_SCHEDULER_TYPE,
   SEARCHABLE_COLUMNS: SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
