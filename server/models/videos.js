@@ -12,6 +12,7 @@ const port = config.get('webserver.port')
 
 // ---------------------------------------------------------------------------
 
+// TODO: add indexes on searchable columns
 const videosSchema = mongoose.Schema({
   name: String,
   namePath: String,

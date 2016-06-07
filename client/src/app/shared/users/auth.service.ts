@@ -43,7 +43,11 @@ export class AuthService {
   }
 
   getRequestHeader() {
-    return new Headers({ 'Authorization': `${this.getTokenType()} ${this.getToken()}` });
+    return new Headers({ 'Authorization': this.getRequestHeaderValue() });
+  }
+
+  getRequestHeaderValue() {
+    return `${this.getTokenType()} ${this.getToken()}`;
   }
 
   getToken() {

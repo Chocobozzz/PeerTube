@@ -18,7 +18,8 @@ export class SearchComponent {
     name: 'Name',
     author: 'Author',
     podUrl: 'Pod Url',
-    magnetUri: 'Magnet Uri'
+    magnetUri: 'Magnet Uri',
+    tags: 'Tags'
   };
   searchCriterias: Search = {
     field: 'name',

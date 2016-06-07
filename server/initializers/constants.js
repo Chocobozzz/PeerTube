@@ -41,8 +41,8 @@ const THUMBNAILS_SIZE = '200x110'
 const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
 
 const VIDEOS_CONSTRAINTS_FIELDS = {
-  NAME: { min: 1, max: 50 }, // Length
-  DESCRIPTION: { min: 1, max: 250 }, // Length
+  NAME: { min: 3, max: 50 }, // Length
+  DESCRIPTION: { min: 3, max: 250 }, // Length
   MAGNET_URI: { min: 10 }, // Length
   DURATION: { min: 1, max: 7200 }, // Number
   AUTHOR: { min: 3, max: 20 }, // Length

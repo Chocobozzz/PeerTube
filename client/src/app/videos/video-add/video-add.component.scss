@@ -1,6 +1,7 @@
 .btn-file {
   position: relative;
   overflow: hidden;
+  display: block;
 }
 
 .btn-file input[type=file] {
@@ -28,6 +29,28 @@
   margin-bottom: 10px;
 }
 
-#progress {
-  margin-bottom: 10px;
+div.tags {
+  height: 40px;
+  font-size: 20px;
+  margin-top: 20px;
+
+  .tag {
+    margin-right: 10px;
+
+    .remove {
+      cursor: pointer;
+    }
+  }
+}
+
+div.file-to-upload {
+  height: 40px;
+
+  .glyphicon-remove {
+    cursor: pointer;
+  }
+}
+
+div.progress {
+  // height: 40px;
 }

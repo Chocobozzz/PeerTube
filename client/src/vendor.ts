@@ -18,7 +18,5 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 
-import 'jquery';
 import 'bootstrap-loader';
-import 'jquery.ui.widget/jquery.ui.widget';
-import 'blueimp-file-upload';
+import 'ng2-file-upload';

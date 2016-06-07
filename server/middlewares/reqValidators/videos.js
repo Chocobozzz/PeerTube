@@ -32,7 +32,7 @@ function videosAdd (req, res, next) {
       }
 
       if (!customValidators.isVideoDurationValid(duration)) {
-        return res.status(400).send('Duration of the video file is too big (max: ' + constants.MAXIMUM_VIDEO_DURATION + 's).')
+        return res.status(400).send('Duration of the video file is too big (max: ' + constants.VIDEOS_CONSTRAINTS_FIELDS.DURATION.max + 's).')
       }
 
       videoFile.duration = duration

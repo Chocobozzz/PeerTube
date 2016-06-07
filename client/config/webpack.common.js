@@ -68,7 +68,7 @@ module.exports = {
     root: helpers.root('src'),
 
     // remove other default values
-    modulesDirectories: [ 'node_modules', 'node_modules/blueimp-file-upload/js/vendor' ],
+    modulesDirectories: [ 'node_modules' ],
 
     packageAlias: 'browser'
 
@@ -245,12 +245,6 @@ module.exports = {
       template: 'src/index.html',
       chunksSortMode: 'dependency'
     }),
-
-    new webpack.ProvidePlugin({
-      jQuery: 'jquery',
-      $: 'jquery',
-      jquery: 'jquery'
-    })
 
   ],
 

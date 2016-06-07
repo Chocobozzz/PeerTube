@@ -86,7 +86,7 @@ styles:
   breadcrumbs: false
   pagination: true
   pager: false
-  labels: false
+  labels: true
   badges: false
   jumbotron: false
   thumbnails: true
@@ -112,7 +112,7 @@ styles:
 ### Bootstrap scripts
 scripts:
   transition: false
-  alert: true
+  alert: false
   button: false
   carousel: false
   collapse: false

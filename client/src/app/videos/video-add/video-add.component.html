@@ -2,42 +2,74 @@
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form (ngSubmit)="uploadFile()" #videoForm="ngForm">
+<form novalidate (ngSubmit)="upload()" [ngFormModel]="videoForm">
   <div class="form-group">
-    <label for="name">Video name</label>
+    <label for="name">Name</label>
     <input
-      type="text" class="form-control" name="name" id="name" required
-      ngControl="name"  #name="ngForm"
+      type="text" class="form-control" name="name" id="name"
+      ngControl="name" #name="ngForm" [(ngModel)]="video.name"
     >
-    <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-      Name is required
+    <div [hidden]="name.valid || name.pristine" class="alert alert-warning">
+      A name is required and should be between 3 and 50 characters long
     </div>
   </div>
 
   <div class="form-group">
-    <div class="btn btn-default btn-file">
-      <span>Select the video...</span>
-      <input type="file" name="videofile" id="videofile">
+    <label for="tags">Tags</label>
+    <input
+      type="text" class="form-control" name="tags" id="tags"
+      ngControl="tags" #tags="ngForm" [disabled]="isTagsInputDisabled" (keyup)="onTagKeyPress($event)" [(ngModel)]="currentTag"
+    >
+    <div [hidden]="tags.valid || tags.pristine" class="alert alert-warning">
+      A tag should be between 2 and 10 characters long
     </div>
+  </div>
 
-    <span *ngIf="fileToUpload">{{ fileToUpload.name }}</span>
+  <div class="tags">
+    <div class="label label-info tag" *ngFor="let tag of video.tags">
+      {{ tag }}
+      <span class="remove" (click)="removeTag(tag)">x</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="videofile">File</label>
+    <div class="btn btn-default btn-file" [ngClass]="{ 'disabled': filename !== null }" >
+      <span>Select the video...</span>
+      <input
+        type="file" name="videofile" id="videofile"
+        ng2FileSelect [uploader]="uploader" [disabled]="filename !== null"
+      >
+    </div>
+  </div>
+
+  <div class="file-to-upload">
+    <div class="file" *ngIf="uploader.queue.length > 0">
+      <span class="filename">{{ filename }}</span>
+      <span class="glyphicon glyphicon-remove" (click)="removeFile()"></span>
+    </div>
   </div>
 
   <div class="form-group">
     <label for="description">Description</label>
     <textarea
-      name="description" id="description" class="form-control" placeholder="Description..." required
-      ngControl="description"  #description="ngForm"
+      name="description" id="description" class="form-control" placeholder="Description..."
+      ngControl="description"  #description="ngForm" [(ngModel)]="video.description"
     >
     </textarea>
-    <div [hidden]="description.valid || description.pristine" class="alert alert-danger">
-        A description is required
+    <div [hidden]="description.valid || description.pristine" class="alert alert-warning">
+        A description is required and should be between 3 and 250 characters long
     </div>
   </div>
 
-  <div id="progress" *ngIf="progressBar.max !== 0">
-    <progressbar [value]="progressBar.value" [max]="progressBar.max">{{ progressBar.value | bytes }} / {{ progressBar.max | bytes }}</progressbar>
+  <div class="progress">
+    <progressbar [value]="uploader.progress" max="100"></progressbar>
   </div>
 
-  <input type="submit" value="Upload" class="btn btn-default" [disabled]="!videoForm.form.valid || !fileToUpload">
+  <div class="form-group">
+    <input
+      type="submit" value="Upload" class="btn btn-default form-control" [title]="getInvalidFieldsTitle()"
+      [disabled]="!videoForm.valid || video.tags.length === 0 || filename === null"
+    >
+  </div>
 </form>
