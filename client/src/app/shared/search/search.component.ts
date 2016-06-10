@@ -51,7 +51,10 @@ export class SearchComponent implements OnInit {
     $event.stopPropagation();
 
     this.searchCriterias.field = choice;
-    this.doSearch();
+
+    if (this.searchCriterias.value !== '') {
+      this.doSearch();
+    }
   }
 
   doSearch() {
