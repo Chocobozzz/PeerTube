@@ -52,7 +52,7 @@ export class SearchComponent implements OnInit {
 
     this.searchCriterias.field = choice;
 
-    if (this.searchCriterias.value !== '') {
+    if (this.searchCriterias.value) {
       this.doSearch();
     }
   }

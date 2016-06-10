@@ -34,6 +34,10 @@ import { SearchService } from './shared'; // Temporary
   {
     path: '/videos/add',
     component: VideoAddComponent
+  },
+  {
+    path: '/',
+    component: VideoListComponent
   }
 ])
 
