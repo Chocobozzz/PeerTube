@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router } from '@angular/router';
 
 import { AuthService, AuthStatus, User } from '../shared';
 
@@ -26,7 +26,7 @@ export class LoginComponent {
 
         this.authService.setStatus(AuthStatus.LoggedIn);
 
-        this.router.navigate(['VideosList']);
+        this.router.navigate(['/videos/list']);
       },
       error => {
         if (error.error === 'invalid_grant') {

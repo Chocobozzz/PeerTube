@@ -8,7 +8,7 @@ menu {
   margin-right: 20px;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
 
-  .panel_button {
+  .panel-button {
     margin: 8px;
     cursor: pointer;
     transition: margin 0.2s;
@@ -27,6 +27,6 @@ menu {
   }
 }
 
-.panel_block:not(:last-child) {
+.panel-block:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { CanDeactivate, ComponentInstruction, RouteParams } from '@angular/router-deprecated';
+import { CanDeactivate, RouteSegment } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 
@@ -30,7 +30,7 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
 
   constructor(
     private elementRef: ElementRef,
-    private routeParams: RouteParams,
+    private routeSegment: RouteSegment,
     private videoService: VideoService,
     private webTorrentService: WebTorrentService
   ) {}
@@ -74,7 +74,7 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
   }
 
   ngOnInit() {
-    let id = this.routeParams.get('id');
+    let id = this.routeSegment.getParam('id');
     this.videoService.getVideo(id).subscribe(
       video => {
         this.video = video;
@@ -84,11 +84,11 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
     );
   }
 
-  routerCanDeactivate(next: ComponentInstruction, prev: ComponentInstruction) {
+  routerCanDeactivate() {
     console.log('Removing video from webtorrent.');
     clearInterval(this.torrentInfosInterval);
     this.webTorrentService.remove(this.video.magnetUri);
-    return true;
+    return Promise.resolve(true);
   }
 
   private loadTooLong() {

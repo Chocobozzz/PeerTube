@@ -37,6 +37,7 @@
     "src/app/shared/search/search-field.type.ts",
     "src/app/shared/search/search.component.ts",
     "src/app/shared/search/search.model.ts",
+    "src/app/shared/search/search.service.ts",
     "src/app/shared/users/auth-status.model.ts",
     "src/app/shared/users/auth.service.ts",
     "src/app/shared/users/index.ts",

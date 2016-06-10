@@ -1,6 +1,6 @@
 import { Control, ControlGroup, Validators } from '@angular/common';
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { Router } from '@angular/router-deprecated';
+import { Router } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 import { PROGRESSBAR_DIRECTIVES } from 'ng2-bootstrap/components/progressbar';

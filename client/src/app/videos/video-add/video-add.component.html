@@ -21,12 +21,12 @@
       ngControl="tags" #tags="ngForm" [disabled]="isTagsInputDisabled" (keyup)="onTagKeyPress($event)" [(ngModel)]="currentTag"
     >
     <div [hidden]="tags.valid || tags.pristine" class="alert alert-warning">
-      A tag should be between 2 and 10 characters long
+      A tag should be between 2 and 10 characters (alphanumeric) long
     </div>
   </div>
 
   <div class="tags">
-    <div class="label label-info tag" *ngFor="let tag of video.tags">
+    <div class="label label-primary tag" *ngFor="let tag of video.tags">
       {{ tag }}
       <span class="remove" (click)="removeTag(tag)">x</span>
     </div>

@@ -1,6 +1,6 @@
 <div class="video-miniature col-md-4" (mouseenter)="onHover()" (mouseleave)="onBlur()">
   <a
-    [routerLink]="['VideosWatch', { id: video.id }]" [attr.title]="video.description"
+    [routerLink]="['/videos/watch', video.id]" [attr.title]="video.description"
     class="video-miniature-thumbnail"
   >
     <img [attr.src]="video.thumbnailPath" alt="video thumbnail" />
@@ -12,11 +12,15 @@
   ></span>
 
   <div class="video-miniature-informations">
-    <a [routerLink]="['VideosWatch', { id: video.id }]" class="video-miniature-name">
-      <span>{{ video.name }}</span>
-    </a>
+    <span class="video-miniature-name-tags">
+      <a [routerLink]="['/videos/watch', video.id]" class="video-miniature-name">{{ video.name }}</a>
 
-    <span class="video-miniature-author">by {{ video.by }}</span>
+      <span *ngFor="let tag of video.tags" class="video-miniature-tag">
+        <a [routerLink]="['/videos/list', { field: 'tags', search: tag }]" class="label label-primary">{{ tag }}</a>
+      </span>
+    </span>
+
+    <a [routerLink]="['/videos/list', { field: 'author', search: video.author }]" class="video-miniature-author">by {{ video.by }}</a>
     <span class="video-miniature-created-date">on {{ video.createdDate | date:'short' }}</span>
   </div>
 </div>

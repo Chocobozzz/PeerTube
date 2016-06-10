@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES, RouteParams } from '@angular/router-deprecated';
+import { Router, ROUTER_DIRECTIVES, RouteSegment } from '@angular/router';
 
 import { PAGINATION_DIRECTIVES } from 'ng2-bootstrap/components/pagination';
 
@@ -13,6 +13,7 @@ import {
 import { AuthService, Search, SearchField, User } from '../../shared';
 import { VideoMiniatureComponent } from './video-miniature.component';
 import { VideoSortComponent } from './video-sort.component';
+import { SearchService } from '../../shared';
 
 @Component({
   selector: 'my-videos-list',
@@ -37,21 +38,25 @@ export class VideoListComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private routeParams: RouteParams,
-    private videoService: VideoService
-  ) {
-    this.search = {
-      value: this.routeParams.get('search'),
-      field: <SearchField>this.routeParams.get('field')
-    };
-
-    this.sort = <SortField>this.routeParams.get('sort') || '-createdDate';
-  }
+    private routeSegment: RouteSegment,
+    private videoService: VideoService,
+    private searchService: SearchService // Temporary
+  ) {}
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
       this.user = User.load();
     }
+
+    this.search = {
+      value: this.routeSegment.getParam('search'),
+      field: <SearchField>this.routeSegment.getParam('field')
+    };
+
+    // Temporary
+    this.searchChanged(this.search);
+
+    this.sort = <SortField>this.routeSegment.getParam('sort') || '-createdDate';
 
     this.getVideos();
   }
@@ -62,7 +67,7 @@ export class VideoListComponent implements OnInit {
 
     let observable = null;
 
-    if (this.search.value !== null) {
+    if (this.search.value) {
       observable = this.videoService.searchVideos(this.search, this.pagination, this.sort);
     } else {
       observable = this.videoService.getVideos(this.pagination, this.sort);
@@ -99,7 +104,10 @@ export class VideoListComponent implements OnInit {
       params.search = this.search.value;
     }
 
-    this.router.navigate(['VideosList', params]);
-    this.getVideos();
+    this.router.navigate(['/videos/list', params]);
+  }
+
+  searchChanged(search: Search) {
+    this.searchService.searchChanged.next(search);
   }
 }

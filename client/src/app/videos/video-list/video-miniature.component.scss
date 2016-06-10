@@ -1,5 +1,5 @@
 .video-miniature {
-  height: 200px;
+  margin-top: 30px;
   display: inline-block;
   position: relative;
 
@@ -35,13 +35,34 @@
 
   .video-miniature-informations {
     margin-left: 3px;
+    width: 200px;
 
-    .video-miniature-name {
+    .video-miniature-name-tags {
       display: block;
-      font-weight: bold;
 
-      &:hover {
-        text-decoration: none;
+      .video-miniature-name {
+        font-weight: bold;
+
+        &:hover {
+          text-decoration: none;
+        }
+
+        &::after {
+          content: '\002022';
+          margin-left: 3px;
+        }
+      }
+
+      .video-miniature-tag {
+        font-size: 12px;
+        cursor: pointer;
+        transition: opacity 0.5s;
+        position: relative;
+        top: -2px;
+
+        &:hover {
+          opacity: 0.9;
+        }
       }
     }
 
@@ -49,7 +70,16 @@
       display: block;
       margin-left: 1px;
       font-size: 11px;
-      color: rgba(0, 0, 0, 0.5);
+      color: rgb(54, 118, 173);
+    }
+
+    .video-miniature-author {
+      transition: opacity 0.5s;
+
+      &:hover {
+        text-decoration: none;
+        opacity: 0.9;
+      }
     }
   }
 }

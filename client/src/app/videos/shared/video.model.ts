@@ -9,6 +9,7 @@ export class Video {
   magnetUri: string;
   name: string;
   podUrl: string;
+  tags: string[];
   thumbnailPath: string;
 
   private static createByString(author: string, podUrl: string) {
@@ -42,6 +43,7 @@ export class Video {
     magnetUri: string,
     name: string,
     podUrl: string,
+    tags: string[],
     thumbnailPath: string
   }) {
     this.author  = hash.author;
@@ -53,6 +55,7 @@ export class Video {
     this.magnetUri = hash.magnetUri;
     this.name = hash.name;
     this.podUrl = hash.podUrl;
+    this.tags = hash.tags;
     this.thumbnailPath = hash.thumbnailPath;
 
     this.by = Video.createByString(hash.author, hash.podUrl);

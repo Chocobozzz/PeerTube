@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HTTP_PROVIDERS } from '@angular/http';
-import { RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
+import { Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Routes } from '@angular/router';
 
 import { FriendService } from './friends';
 import { LoginComponent } from './login';
@@ -16,27 +16,23 @@ import {
   VideoWatchComponent,
   VideoService
 } from './videos';
+import { SearchService } from './shared'; // Temporary
 
-@RouteConfig([
+@Routes([
   {
     path: '/users/login',
-    name: 'UserLogin',
     component: LoginComponent
   },
   {
     path: '/videos/list',
-    name: 'VideosList',
-    component: VideoListComponent,
-    useAsDefault: true
+    component: VideoListComponent
   },
   {
     path: '/videos/watch/:id',
-    name: 'VideosWatch',
     component: VideoWatchComponent
   },
   {
     path: '/videos/add',
-    name: 'VideosAdd',
     component: VideoAddComponent
   }
 ])
@@ -46,7 +42,7 @@ import {
     template: require('./app.component.html'),
     styles: [ require('./app.component.scss') ],
     directives: [ ROUTER_DIRECTIVES, SearchComponent ],
-    providers: [ AuthService, FriendService, HTTP_PROVIDERS, ROUTER_PROVIDERS, VideoService ]
+    providers: [ AuthService, FriendService, HTTP_PROVIDERS, ROUTER_PROVIDERS, VideoService, SearchService ]
 })
 
 export class AppComponent {
@@ -75,12 +71,13 @@ export class AppComponent {
         field: search.field,
         search: search.value
       };
-      this.router.navigate(['VideosList', params]);
+      this.router.navigate(['/videos/list', params]);
     } else {
-      this.router.navigate(['VideosList']);
+      this.router.navigate(['/videos/list']);
     }
   }
 
+  // FIXME
   logout() {
     // this._authService.logout();
   }
