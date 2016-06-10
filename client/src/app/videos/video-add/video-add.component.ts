@@ -126,7 +126,7 @@ export class VideoAddComponent implements OnInit {
       console.log('Video uploaded.');
 
       // Print all the videos once it's finished
-      this.router.navigate(['VideosList']);
+      this.router.navigate(['/videos/list']);
     };
 
     item.onError = (response: string, status: number) => {
