@@ -152,7 +152,7 @@ function makeRequests () {
     }
 
     // For each requests to make, we add it to the correct request type
-    async.each(requests, function (poolRequest, callbackEach) {
+    requests.forEach(function (poolRequest) {
       if (REQUEST_SCHEDULER_TYPE.indexOf(poolRequest.type) > -1) {
         const requestTypeToMake = requestsToMake[poolRequest.type]
         requestTypeToMake.requests.push(poolRequest.request)
@@ -161,22 +161,20 @@ function makeRequests () {
         logger.error('Unkown request type.', { request_type: poolRequest.type })
         return // abort
       }
-
-      callbackEach()
-    }, function () {
-      for (let type of Object.keys(requestsToMake)) {
-        const requestTypeToMake = requestsToMake[type]
-        // If there are requests for this type
-        if (requestTypeToMake.requests.length !== 0) {
-          makeRequest(type, requestTypeToMake.requests, function (err) {
-            if (err) logger.error('Errors when sent ' + type + ' requests.', { error: err })
-
-            // We made the requests, so we can remove them from the scheduler
-            Requests.removeRequests(requestTypeToMake.ids)
-          })
-        }
-      }
     })
+
+    for (let type of Object.keys(requestsToMake)) {
+      const requestTypeToMake = requestsToMake[type]
+      // If there are requests for this type
+      if (requestTypeToMake.requests.length !== 0) {
+        makeRequest(type, requestTypeToMake.requests, function (err) {
+          if (err) logger.error('Errors when sent ' + type + ' requests.', { error: err })
+
+          // We made the requests, so we can remove them from the scheduler
+          Requests.removeRequests(requestTypeToMake.ids)
+        })
+      }
+    }
   })
 }
 
