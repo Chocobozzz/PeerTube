@@ -50,13 +50,17 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [X] List the videos
 - [X] Search a video name (local index)
 - [X] View the video in an HTML5 page with WebTorrent
-- [ ]  Manage user accounts
-  - [ ] Inscription
+- [ ] Manage admin account
   - [X] Connection
   - [X] Account rights (upload...)
 - [X] Make the network auto sufficient (eject bad pods etc)
+- [ ] Validate the prototype (test PeerTube in a real world with many pods and videos)
 - [ ] Manage API breaks
 - [ ] Add "DDOS" security (check if a pod don't send too many requests for example)
+- [ ] Admin panel
+  - [ ] Stats about the network (how many friends, how many requests per hour...)
+  - [ ] Stats about videos
+  - [ ] Manage users (create/remove)
 
 
 ## Installation
