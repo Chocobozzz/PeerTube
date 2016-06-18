@@ -19,10 +19,13 @@ const PodsDB = mongoose.model('pods', podsSchema)
 const Pods = {
   add: add,
   count: count,
+  findById: findById,
   findByUrl: findByUrl,
   findBadPods: findBadPods,
   incrementScores: incrementScores,
   list: list,
+  listAllIds: listAllIds,
+  listAllUrls: listAllUrls,
   remove: remove,
   removeAll: removeAll,
   removeAllByIds: removeAllByIds
@@ -48,6 +51,10 @@ function findBadPods (callback) {
   PodsDB.find({ score: 0 }, callback)
 }
 
+function findById (id, callback) {
+  PodsDB.findById(id, callback)
+}
+
 function findByUrl (url, callback) {
   PodsDB.findOne({ url: url }, callback)
 }
@@ -66,6 +73,14 @@ function list (callback) {
 
     return callback(null, podsList)
   })
+}
+
+function listAllIds (callback) {
+  return PodsDB.find({}, { _id: 1 }, callback)
+}
+
+function listAllUrls (callback) {
+  return PodsDB.find({}, { _id: 0, url: 1 }, callback)
 }
 
 function remove (url, callback) {

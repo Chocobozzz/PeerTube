@@ -90,33 +90,27 @@ describe('Test parameters validator', function () {
 
       it('Should fail without public key', function (done) {
         const data = {
-          data: {
-            url: 'http://coucou.com'
-          }
+          url: 'http://coucou.com'
         }
         makePostBodyRequest(path, data, done)
       })
 
       it('Should fail without an url', function (done) {
         const data = {
-          data: {
-            publicKey: 'mysuperpublickey'
-          }
+          publicKey: 'mysuperpublickey'
         }
         makePostBodyRequest(path, data, done)
       })
 
       it('Should fail with an incorrect url', function (done) {
         const data = {
-          data: {
-            url: 'coucou.com',
-            publicKey: 'mysuperpublickey'
-          }
+          url: 'coucou.com',
+          publicKey: 'mysuperpublickey'
         }
         makePostBodyRequest(path, data, function () {
-          data.data.url = 'http://coucou'
+          data.url = 'http://coucou'
           makePostBodyRequest(path, data, function () {
-            data.data.url = 'coucou'
+            data.url = 'coucou'
             makePostBodyRequest(path, data, done)
           })
         })
@@ -124,10 +118,8 @@ describe('Test parameters validator', function () {
 
       it('Should succeed with the correct parameters', function (done) {
         const data = {
-          data: {
-            url: 'http://coucou.com',
-            publicKey: 'mysuperpublickey'
-          }
+          url: 'http://coucou.com',
+          publicKey: 'mysuperpublickey'
         }
         makePostBodyRequest(path, data, done, false)
       })

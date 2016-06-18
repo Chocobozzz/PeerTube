@@ -3,8 +3,6 @@
 const async = require('async')
 const config = require('config')
 const express = require('express')
-const fs = require('fs')
-const path = require('path')
 const multer = require('multer')
 
 const constants = require('../../../initializers/constants')
@@ -46,7 +44,6 @@ const storage = multer.diskStorage({
 })
 
 const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
-const thumbnailsDir = path.join(__dirname, '..', '..', '..', '..', config.get('storage.thumbnails'))
 
 router.get('/',
   reqValidatorPagination.pagination,
@@ -127,34 +124,25 @@ function addVideo (req, res, next) {
           return callback(err)
         }
 
-        return callback(null, torrent, thumbnailName, videoData, insertedVideo)
+        return callback(null, insertedVideo)
       })
     },
 
-    function getThumbnailBase64 (torrent, thumbnailName, videoData, insertedVideo, callback) {
-      videoData.createdDate = insertedVideo.createdDate
-
-      fs.readFile(thumbnailsDir + thumbnailName, function (err, thumbnailData) {
+    function sendToFriends (insertedVideo, callback) {
+      videos.convertVideoToRemote(insertedVideo, function (err, remoteVideo) {
         if (err) {
           // TODO unseed the video
           // TODO remove thumbnail
-          // TODO: remove video
-          logger.error('Cannot read the thumbnail of the video')
+          // TODO delete from DB
+          logger.error('Cannot convert video to remote.')
           return callback(err)
         }
 
-        return callback(null, videoData, thumbnailData)
+        // Now we'll add the video's meta data to our friends
+        friends.addVideoToFriends(remoteVideo)
+
+        return callback(null)
       })
-    },
-
-    function sendToFriends (videoData, thumbnailData, callback) {
-      // Set the image in base64
-      videoData.thumbnailBase64 = new Buffer(thumbnailData).toString('base64')
-
-      // Now we'll add the video's meta data to our friends
-      friends.addVideoToFriends(videoData)
-
-      return callback(null)
     }
 
   ], function andFinally (err) {

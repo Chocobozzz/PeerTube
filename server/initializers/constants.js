@@ -18,11 +18,11 @@ const PODS_SCORE = {
   BONUS: 10
 }
 
-// Number of retries we make for the make retry requests (to friends...)
-let REQUEST_RETRIES = 10
+// Number of requests in parallel we can make
+const REQUESTS_IN_PARALLEL = 10
 
-// Different types or requests for the request scheduler module
-const REQUEST_SCHEDULER_TYPE = [ 'add', 'remove' ]
+// Number of requests to retry for replay requests module
+const RETRY_REQUESTS = 5
 
 // Sortable columns per schema
 const SEARCHABLE_COLUMNS = {
@@ -56,7 +56,6 @@ if (isTestInstance() === true) {
   FRIEND_BASE_SCORE = 20
   INTERVAL = 10000
   VIDEOS_CONSTRAINTS_FIELDS.DURATION.max = 14
-  REQUEST_RETRIES = 2
 }
 
 // ---------------------------------------------------------------------------
@@ -67,8 +66,8 @@ module.exports = {
   INTERVAL: INTERVAL,
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
-  REQUEST_RETRIES: REQUEST_RETRIES,
-  REQUEST_SCHEDULER_TYPE: REQUEST_SCHEDULER_TYPE,
+  REQUESTS_IN_PARALLEL: REQUESTS_IN_PARALLEL,
+  RETRY_REQUESTS: RETRY_REQUESTS,
   SEARCHABLE_COLUMNS: SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,

@@ -25,9 +25,10 @@ describe('Test basic friends', function () {
       if (err) throw err
 
       const result = res.body
-      const resultUrls = [ result[0].url, result[1].url ]
       expect(result).to.be.an('array')
       expect(result.length).to.equal(2)
+
+      const resultUrls = [ result[0].url, result[1].url ]
       expect(resultUrls[0]).to.not.equal(resultUrls[1])
 
       const errorString = 'Friends url do not correspond for ' + serverToTest.url

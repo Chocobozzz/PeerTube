@@ -17,6 +17,7 @@ const uploadDir = pathUtils.join(__dirname, '..', '..', config.get('storage.uplo
 const thumbnailsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.thumbnails'))
 
 const videos = {
+  convertVideoToRemote: convertVideoToRemote,
   createRemoteVideos: createRemoteVideos,
   getVideoDuration: getVideoDuration,
   getVideoState: getVideoState,
@@ -25,6 +26,29 @@ const videos = {
   removeRemoteVideos: removeRemoteVideos,
   seed: seed,
   seedAllExisting: seedAllExisting
+}
+
+function convertVideoToRemote (video, callback) {
+  fs.readFile(thumbnailsDir + video.thumbnail, function (err, thumbnailData) {
+    if (err) {
+      logger.error('Cannot read the thumbnail of the video')
+      return callback(err)
+    }
+
+    const remoteVideo = {
+      name: video.name,
+      description: video.description,
+      magnetUri: video.magnetUri,
+      author: video.author,
+      duration: video.duration,
+      thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
+      tags: video.tags,
+      createdDate: video.createdDate,
+      podUrl: video.podUrl
+    }
+
+    return callback(null, remoteVideo)
+  })
 }
 
 function createRemoteVideos (videos, callback) {
@@ -154,7 +178,8 @@ function createRemoteVideoObjects (videos, callback) {
           podUrl: video.podUrl,
           duration: video.duration,
           thumbnail: thumbnailName,
-          tags: video.tags
+          tags: video.tags,
+          author: video.author
         }
         remoteVideos.push(params)
 

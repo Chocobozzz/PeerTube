@@ -24,15 +24,15 @@ const pods = {
   getMyCertificate: getMyCertificate,
   makeFriends: makeFriends,
   quitFriends: quitFriends,
-  removeVideoToFriends: removeVideoToFriends
+  removeVideoToFriends: removeVideoToFriends,
+  sendOwnedVideosToPod: sendOwnedVideosToPod
 }
 
 function addVideoToFriends (video) {
-  // To avoid duplicates
-  const id = video.name + video.magnetUri
   // ensure namePath is null
   video.namePath = null
-  requestsScheduler.addRequest(id, 'add', video)
+
+  requestsScheduler.addRequest('add', video)
 }
 
 function hasFriends (callback) {
@@ -60,7 +60,7 @@ function makeFriends (callback) {
 
     const urls = config.get('network.friends')
 
-    async.each(urls, function (url, callbackEach) {
+    async.eachSeries(urls, function (url, callbackEach) {
       computeForeignPodsList(url, podsScore, callbackEach)
     }, function (err) {
       if (err) return callback(err)
@@ -78,7 +78,7 @@ function quitFriends (callback) {
   // Stop pool requests
   requestsScheduler.deactivate()
   // Flush pool requests
-  requestsScheduler.forceSend()
+  requestsScheduler.flush()
 
   async.waterfall([
     function getPodsList (callbackAsync) {
@@ -86,19 +86,25 @@ function quitFriends (callback) {
     },
 
     function announceIQuitMyFriends (pods, callbackAsync) {
-      const request = {
+      const requestParams = {
         method: 'POST',
         path: '/api/' + constants.API_VERSION + '/pods/remove',
-        sign: true,
-        encrypt: true,
-        data: {
-          url: 'me' // Fake data
-        }
+        sign: true
       }
 
       // Announce we quit them
-      requests.makeMultipleRetryRequest(request, pods, function (err) {
-        return callbackAsync(err)
+      // We don't care if the request fails
+      // The other pod will exclude us automatically after a while
+      async.eachLimit(pods, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
+        requestParams.toPod = pod
+        requests.makeSecureRequest(requestParams, callbackEach)
+      }, function (err) {
+        if (err) {
+          logger.error('Some errors while quitting friends.', { err: err })
+          // Don't stop the process
+        }
+
+        return callbackAsync()
       })
     },
 
@@ -136,9 +142,28 @@ function quitFriends (callback) {
 }
 
 function removeVideoToFriends (video) {
-  // To avoid duplicates
-  const id = video.name + video.magnetUri
-  requestsScheduler.addRequest(id, 'remove', video)
+  requestsScheduler.addRequest('remove', video)
+}
+
+function sendOwnedVideosToPod (podId) {
+  Videos.listOwned(function (err, videosList) {
+    if (err) {
+      logger.error('Cannot get the list of videos we own.')
+      return
+    }
+
+    videosList.forEach(function (video) {
+      videos.convertVideoToRemote(video, function (err, remoteVideo) {
+        if (err) {
+          logger.error('Cannot convert video to remote.', { error: err })
+          // Don't break the process
+          return
+        }
+
+        requestsScheduler.addRequestTo([ podId ], 'add', remoteVideo)
+      })
+    })
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -148,18 +173,19 @@ module.exports = pods
 // ---------------------------------------------------------------------------
 
 function computeForeignPodsList (url, podsScore, callback) {
-  // Let's give 1 point to the pod we ask the friends list
-  podsScore[url] = 1
-
   getForeignPodsList(url, function (err, foreignPodsList) {
     if (err) return callback(err)
-    if (foreignPodsList.length === 0) return callback()
+
+    if (!foreignPodsList) foreignPodsList = []
+
+    // Let's give 1 point to the pod we ask the friends list
+    foreignPodsList.push({ url: url })
 
     foreignPodsList.forEach(function (foreignPod) {
-      const foreignUrl = foreignPod.url
+      const foreignPodUrl = foreignPod.url
 
-      if (podsScore[foreignUrl]) podsScore[foreignUrl]++
-      else podsScore[foreignUrl] = 1
+      if (podsScore[foreignPodUrl]) podsScore[foreignPodUrl]++
+      else podsScore[foreignPodUrl] = 1
     })
 
     callback()
@@ -194,63 +220,43 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   // Flush pool requests
   requestsScheduler.forceSend()
 
-  // Get the list of our videos to send to our new friends
-  Videos.listOwned(function (err, videosList) {
-    if (err) {
-      logger.error('Cannot get the list of videos we own.')
-      return callback(err)
-    }
-
-    const data = {
-      url: http + '://' + host + ':' + port,
-      publicKey: cert,
-      videos: videosList
-    }
-
-    requests.makeMultipleRetryRequest(
-      { method: 'POST', path: '/api/' + constants.API_VERSION + '/pods/', data: data },
-
-      podsList,
-
-      // Callback called after each request
-      function eachRequest (err, response, body, url, pod, callbackEachRequest) {
-        // We add the pod if it responded correctly with its public certificate
-        if (!err && response.statusCode === 200) {
-          Pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err) {
-            if (err) {
-              logger.error('Error with adding %s pod.', pod.url, { error: err })
-              return callbackEachRequest()
-            }
-
-            videos.createRemoteVideos(body.videos, function (err) {
-              if (err) {
-                logger.error('Error with adding videos of pod.', pod.url, { error: err })
-                return callbackEachRequest()
-              }
-
-              logger.debug('Adding remote videos from %s.', pod.url, { videos: body.videos })
-              return callbackEachRequest()
-            })
-          })
-        } else {
-          logger.error('Error with adding %s pod.', pod.url, { error: err || new Error('Status not 200') })
-          return callbackEachRequest()
-        }
-      },
-
-      // Final callback, we've ended all the requests
-      function endRequests (err) {
-        // Now we made new friends, we can re activate the pool of requests
-        requestsScheduler.activate()
-
-        if (err) {
-          logger.error('There was some errors when we wanted to make friends.')
-          return callback(err)
-        }
-
-        logger.debug('makeRequestsToWinningPods finished.')
-        return callback(null)
+  async.eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
+    const params = {
+      url: pod.url + '/api/' + constants.API_VERSION + '/pods/',
+      method: 'POST',
+      json: {
+        url: http + '://' + host + ':' + port,
+        publicKey: cert
       }
-    )
+    }
+
+    requests.makeRetryRequest(params, function (err, res, body) {
+      if (err) {
+        logger.error('Error with adding %s pod.', pod.url, { error: err })
+        // Don't break the process
+        return callbackEach()
+      }
+
+      if (res.statusCode === 200) {
+        Pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err, podCreated) {
+          if (err) logger.error('Cannot add friend %s pod.', pod.url)
+
+          // Add our videos to the request scheduler
+          sendOwnedVideosToPod(podCreated._id)
+
+          return callbackEach()
+        })
+      } else {
+        logger.error('Status not 200 for %s pod.', pod.url)
+        return callbackEach()
+      }
+    })
+  }, function endRequests () {
+    // Final callback, we've ended all the requests
+    // Now we made new friends, we can re activate the pool of requests
+    requestsScheduler.activate()
+
+    logger.debug('makeRequestsToWinningPods finished.')
+    return callback()
   })
 }

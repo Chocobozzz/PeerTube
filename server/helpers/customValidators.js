@@ -7,8 +7,7 @@ const VIDEOS_CONSTRAINTS_FIELDS = constants.VIDEOS_CONSTRAINTS_FIELDS
 
 const customValidators = {
   exists: exists,
-  isEachAddRemoteVideosValid: isEachAddRemoteVideosValid,
-  isEachRemoveRemoteVideosValid: isEachRemoveRemoteVideosValid,
+  isEachRemoteVideosValid: isEachRemoteVideosValid,
   isArray: isArray,
   isVideoAuthorValid: isVideoAuthorValid,
   isVideoDateValid: isVideoDateValid,
@@ -25,28 +24,39 @@ function exists (value) {
   return value !== undefined && value !== null
 }
 
-function isEachAddRemoteVideosValid (videos) {
-  return videos.every(function (video) {
-    return isVideoAuthorValid(video.author) &&
-           isVideoDateValid(video.createdDate) &&
-           isVideoDescriptionValid(video.description) &&
-           isVideoDurationValid(video.duration) &&
-           isVideoMagnetUriValid(video.magnetUri) &&
-           isVideoNameValid(video.name) &&
-           isVideoPodUrlValid(video.podUrl) &&
-           isVideoTagsValid(video.tags) &&
-           isVideoThumbnailValid(video.thumbnailBase64)
-  })
-}
-
-function isEachRemoveRemoteVideosValid (videos) {
-  return videos.every(function (video) {
-    return isVideoMagnetUriValid(video.magnetUri)
+function isEachRemoteVideosValid (requests) {
+  return requests.every(function (request) {
+    const video = request.data
+    return (
+      isRequestTypeAddValid(request.type) &&
+      isVideoAuthorValid(video.author) &&
+      isVideoDateValid(video.createdDate) &&
+      isVideoDescriptionValid(video.description) &&
+      isVideoDurationValid(video.duration) &&
+      isVideoMagnetUriValid(video.magnetUri) &&
+      isVideoNameValid(video.name) &&
+      isVideoPodUrlValid(video.podUrl) &&
+      isVideoTagsValid(video.tags) &&
+      isVideoThumbnailValid(video.thumbnailBase64)
+    ) ||
+    (
+      isRequestTypeRemoveValid(request.type) &&
+      isVideoNameValid(video.name) &&
+      isVideoMagnetUriValid(video.magnetUri)
+    )
   })
 }
 
 function isArray (value) {
   return Array.isArray(value)
+}
+
+function isRequestTypeAddValid (value) {
+  return value === 'add'
+}
+
+function isRequestTypeRemoveValid (value) {
+  return value === 'remove'
 }
 
 function isVideoAuthorValid (value) {

@@ -9,19 +9,18 @@ const middlewares = require('../../../middlewares')
 const Pods = require('../../../models/pods')
 const oAuth2 = middlewares.oauth2
 const reqValidator = middlewares.reqValidators.pods
-const secureMiddleware = middlewares.secure
-const secureRequest = middlewares.reqValidators.remote.secureRequest
+const signatureValidator = middlewares.reqValidators.remote.signature
 const videos = require('../../../lib/videos')
 const Videos = require('../../../models/videos')
 
 const router = express.Router()
 
-router.get('/', listPods)
+router.get('/', listPodsUrl)
 router.post('/', reqValidator.podsAdd, addPods)
 router.get('/makefriends', oAuth2.authenticate, reqValidator.makeFriends, makeFriends)
 router.get('/quitfriends', oAuth2.authenticate, quitFriends)
 // Post because this is a secured request
-router.post('/remove', secureRequest, secureMiddleware.decryptBody, removePods)
+router.post('/remove', signatureValidator, removePods)
 
 // ---------------------------------------------------------------------------
 
@@ -30,22 +29,17 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addPods (req, res, next) {
-  const informations = req.body.data
+  const informations = req.body
 
   async.waterfall([
     function addPod (callback) {
-      Pods.add(informations, function (err) {
-        return callback(err)
-      })
+      Pods.add(informations, callback)
     },
 
-    function createVideosOfThisPod (callback) {
-      // Create the remote videos from the new pod
-      videos.createRemoteVideos(informations.videos, function (err) {
-        if (err) logger.error('Cannot create remote videos.', { error: err })
+    function sendMyVideos (podCreated, callback) {
+      friends.sendOwnedVideosToPod(podCreated._id)
 
-        return callback(err)
-      })
+      callback(null)
     },
 
     function fetchMyCertificate (callback) {
@@ -57,30 +51,19 @@ function addPods (req, res, next) {
 
         return callback(null, cert)
       })
-    },
-
-    function getListOfMyVideos (cert, callback) {
-      Videos.listOwned(function (err, videosList) {
-        if (err) {
-          logger.error('Cannot get the list of owned videos.')
-          return callback(err)
-        }
-
-        return callback(null, cert, videosList)
-      })
     }
-  ], function (err, cert, videosList) {
+  ], function (err, cert) {
     if (err) return next(err)
 
-    return res.json({ cert: cert, videos: videosList })
+    return res.json({ cert: cert })
   })
 }
 
-function listPods (req, res, next) {
-  Pods.list(function (err, podsList) {
+function listPodsUrl (req, res, next) {
+  Pods.listAllUrls(function (err, podsUrlList) {
     if (err) return next(err)
 
-    res.json(podsList)
+    res.json(podsUrlList)
   })
 }
 

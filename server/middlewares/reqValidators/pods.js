@@ -26,8 +26,10 @@ function makeFriends (req, res, next) {
 }
 
 function podsAdd (req, res, next) {
-  req.checkBody('data.url', 'Should have an url').notEmpty().isURL({ require_protocol: true })
-  req.checkBody('data.publicKey', 'Should have a public key').notEmpty()
+  req.checkBody('url', 'Should have an url').notEmpty().isURL({ require_protocol: true })
+  req.checkBody('publicKey', 'Should have a public key').notEmpty()
+
+  // TODO: check we don't have it already
 
   logger.debug('Checking podsAdd parameters', { parameters: req.body })
 

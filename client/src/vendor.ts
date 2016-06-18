@@ -16,7 +16,7 @@ import 'rxjs/Observable';
 import 'rxjs/Subject';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/throw';
 
 import 'bootstrap-loader';
 import 'ng2-file-upload';

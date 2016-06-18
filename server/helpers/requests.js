@@ -1,12 +1,10 @@
 'use strict'
 
-const async = require('async')
 const config = require('config')
-const request = require('request')
 const replay = require('request-replay')
+const request = require('request')
 
 const constants = require('../initializers/constants')
-const logger = require('./logger')
 const peertubeCrypto = require('./peertubeCrypto')
 
 const http = config.get('webserver.https') ? 'https' : 'http'
@@ -14,93 +12,67 @@ const host = config.get('webserver.host')
 const port = config.get('webserver.port')
 
 const requests = {
-  makeMultipleRetryRequest: makeMultipleRetryRequest
+  makeRetryRequest: makeRetryRequest,
+  makeSecureRequest: makeSecureRequest
 }
 
-function makeMultipleRetryRequest (allData, pods, callbackEach, callback) {
-  if (!callback) {
-    callback = callbackEach
-    callbackEach = null
+function makeRetryRequest (params, callback) {
+  replay(
+    request(params, callback),
+    {
+      retries: constants.RETRY_REQUESTS,
+      factor: 3,
+      maxTimeout: Infinity,
+      errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
+    }
+  )
+}
+
+function makeSecureRequest (params, callback) {
+  const myUrl = http + '://' + host + ':' + port
+
+  const requestParams = {
+    url: params.toPod.url + params.path
   }
 
-  const url = http + '://' + host + ':' + port
-  let signature
+  // Add data with POST requst ?
+  if (params.method === 'POST') {
+    requestParams.json = {}
 
-  // Add signature if it is specified in the params
-  if (allData.method === 'POST' && allData.data && allData.sign === true) {
-    signature = peertubeCrypto.sign(url)
-  }
-
-  // Make a request for each pod
-  async.each(pods, function (pod, callbackEachAsync) {
-    function callbackEachRetryRequest (err, response, body, url, pod) {
-      if (callbackEach !== null) {
-        callbackEach(err, response, body, url, pod, function () {
-          callbackEachAsync()
-        })
-      } else {
-        callbackEachAsync()
+    // Add signature if it is specified in the params
+    if (params.sign === true) {
+      requestParams.json.signature = {
+        url: myUrl,
+        signature: peertubeCrypto.sign(myUrl)
       }
     }
 
-    const params = {
-      url: pod.url + allData.path,
-      method: allData.method
-    }
-
-    // Add data with POST requst ?
-    if (allData.method === 'POST' && allData.data) {
-      // Encrypt data ?
-      if (allData.encrypt === true) {
-        peertubeCrypto.encrypt(pod.publicKey, JSON.stringify(allData.data), function (err, encrypted) {
+    // If there are data informations
+    if (params.data) {
+      // Encrypt data
+      if (params.encrypt === true) {
+        peertubeCrypto.encrypt(params.toPod.publicKey, JSON.stringify(params.data), function (err, encrypted) {
           if (err) return callback(err)
 
-          params.json = {
-            data: encrypted.data,
-            key: encrypted.key
-          }
+          requestParams.json.data = encrypted.data
+          requestParams.json.key = encrypted.key
 
-          makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
+          request.post(requestParams, callback)
         })
       } else {
-        params.json = { data: allData.data }
-        makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
+        // No encryption
+        requestParams.json.data = params.data
+        request.post(requestParams, callback)
       }
     } else {
-      makeRetryRequest(params, url, pod, signature, callbackEachRetryRequest)
+      // No data
+      request.post(requestParams, callback)
     }
-  }, callback)
+  } else {
+    request.get(requestParams, callback)
+  }
 }
 
 // ---------------------------------------------------------------------------
 
 module.exports = requests
-
-// ---------------------------------------------------------------------------
-
-function makeRetryRequest (params, fromUrl, toPod, signature, callbackEach) {
-  // Append the signature
-  if (signature) {
-    params.json.signature = {
-      url: fromUrl,
-      signature: signature
-    }
-  }
-
-  logger.debug('Make retry requests to %s.', toPod.url)
-
-  replay(
-    request.post(params, function (err, response, body) {
-      callbackEach(err, response, body, params.url, toPod)
-    }),
-    {
-      retries: constants.REQUEST_RETRIES,
-      factor: 3,
-      maxTimeout: Infinity,
-      errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
-    }
-  ).on('replay', function (replay) {
-    logger.info('Replaying request to %s. Request failed: %d %s. Replay number: #%d. Will retry in: %d ms.',
-      params.url, replay.error.code, replay.error.message, replay.number, replay.delay)
-  })
-}

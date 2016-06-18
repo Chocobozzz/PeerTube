@@ -130,6 +130,18 @@ describe('Test advanced friends', function () {
       function (next) {
         makeFriends(4, next)
       },
+      // Check the pods 1, 2, 3 and 4 are friends
+      function (next) {
+        async.each([ 1, 2, 3, 4 ], function (i, callback) {
+          getFriendsList(i, function (err, res) {
+            if (err) throw err
+
+            expect(res.body.length).to.equal(3)
+
+            callback()
+          })
+        }, next)
+      },
       // Kill pod 4
       function (next) {
         servers[3].app.kill()
@@ -152,7 +164,7 @@ describe('Test advanced friends', function () {
         uploadVideo(2, next)
       },
       function (next) {
-        setTimeout(next, 20000)
+        setTimeout(next, 11000)
       },
       // Rerun server 4
       function (next) {
@@ -173,6 +185,9 @@ describe('Test advanced friends', function () {
       // Pod 6 ask pod 1, 2 and 3
       function (next) {
         makeFriends(6, next)
+      },
+      function (next) {
+        setTimeout(next, 11000)
       }],
       function (err) {
         if (err) throw err
@@ -247,7 +262,7 @@ describe('Test advanced friends', function () {
 
           done()
         })
-      }, 5000)
+      }, 11000)
     })
   })
 
