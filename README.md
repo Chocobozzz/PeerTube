@@ -50,7 +50,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [X] List the videos
 - [X] Search a video name (local index)
 - [X] View the video in an HTML5 page with WebTorrent
-- [ ] Manage admin account
+- [X] Manage admin account
   - [X] Connection
   - [X] Account rights (upload...)
 - [X] Make the network auto sufficient (eject bad pods etc)
