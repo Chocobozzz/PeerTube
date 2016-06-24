@@ -17,7 +17,8 @@ const customValidators = {
   isVideoNameValid: isVideoNameValid,
   isVideoPodUrlValid: isVideoPodUrlValid,
   isVideoTagsValid: isVideoTagsValid,
-  isVideoThumbnailValid: isVideoThumbnailValid
+  isVideoThumbnailValid: isVideoThumbnailValid,
+  isVideoThumbnail64Valid: isVideoThumbnail64Valid
 }
 
 function exists (value) {
@@ -37,7 +38,7 @@ function isEachRemoteVideosValid (requests) {
       isVideoNameValid(video.name) &&
       isVideoPodUrlValid(video.podUrl) &&
       isVideoTagsValid(video.tags) &&
-      isVideoThumbnailValid(video.thumbnailBase64)
+      isVideoThumbnail64Valid(video.thumbnailBase64)
     ) ||
     (
       isRequestTypeRemoveValid(request.type) &&
@@ -97,8 +98,12 @@ function isVideoTagsValid (tags) {
 }
 
 function isVideoThumbnailValid (value) {
+  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL)
+}
+
+function isVideoThumbnail64Valid (value) {
   return validator.isBase64(value) &&
-         validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL)
+         validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL64)
 }
 
 // ---------------------------------------------------------------------------

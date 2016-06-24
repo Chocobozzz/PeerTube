@@ -2,6 +2,7 @@
 
 const async = require('async')
 const express = require('express')
+const mongoose = require('mongoose')
 
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
@@ -10,10 +11,9 @@ const Pods = require('../../../models/pods')
 const oAuth2 = middlewares.oauth2
 const reqValidator = middlewares.reqValidators.pods
 const signatureValidator = middlewares.reqValidators.remote.signature
-const videos = require('../../../lib/videos')
-const Videos = require('../../../models/videos')
 
 const router = express.Router()
+const Video = mongoose.model('Video')
 
 router.get('/', listPodsUrl)
 router.post('/', reqValidator.podsAdd, addPods)
@@ -86,7 +86,7 @@ function removePods (req, res, next) {
     },
 
     function (callback) {
-      Videos.listFromUrl(url, function (err, videosList) {
+      Video.listByUrls([ url ], function (err, videosList) {
         if (err) {
           logger.error('Cannot list videos from url.', { error: err })
           return callback(err)
@@ -97,14 +97,9 @@ function removePods (req, res, next) {
     },
 
     function removeTheRemoteVideos (videosList, callback) {
-      videos.removeRemoteVideos(videosList, function (err) {
-        if (err) {
-          logger.error('Cannot remove remote videos.', { error: err })
-          return callback(err)
-        }
-
-        return callback(null)
-      })
+      async.each(videosList, function (video, callbackEach) {
+        video.remove(callbackEach)
+      }, callback)
     }
   ], function (err) {
     if (err) return next(err)

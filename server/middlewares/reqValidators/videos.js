@@ -1,11 +1,13 @@
 'use strict'
 
+const mongoose = require('mongoose')
+
 const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
 const customValidators = require('../../helpers/customValidators')
 const logger = require('../../helpers/logger')
-const videos = require('../../lib/videos')
-const Videos = require('../../models/videos')
+
+const Video = mongoose.model('Video')
 
 const reqValidatorsVideos = {
   videosAdd: videosAdd,
@@ -26,7 +28,7 @@ function videosAdd (req, res, next) {
   checkErrors(req, res, function () {
     const videoFile = req.files.videofile[0]
 
-    videos.getVideoDuration(videoFile.path, function (err, duration) {
+    Video.getDurationFromFile(videoFile.path, function (err, duration) {
       if (err) {
         return res.status(400).send('Cannot retrieve metadata of the file.')
       }
@@ -47,14 +49,13 @@ function videosGet (req, res, next) {
   logger.debug('Checking videosGet parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    Videos.get(req.params.id, function (err, video) {
+    Video.load(req.params.id, function (err, video) {
       if (err) {
         logger.error('Error in videosGet request validator.', { error: err })
         return res.sendStatus(500)
       }
 
-      const state = videos.getVideoState(video)
-      if (state.exist === false) return res.status(404).send('Video not found')
+      if (!video) return res.status(404).send('Video not found')
 
       next()
     })
@@ -67,15 +68,14 @@ function videosRemove (req, res, next) {
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    Videos.get(req.params.id, function (err, video) {
+    Video.load(req.params.id, function (err, video) {
       if (err) {
         logger.error('Error in videosRemove request validator.', { error: err })
         return res.sendStatus(500)
       }
 
-      const state = videos.getVideoState(video)
-      if (state.exist === false) return res.status(404).send('Video not found')
-      else if (state.owned === false) return res.status(403).send('Cannot remove video of another pod')
+      if (!video) return res.status(404).send('Video not found')
+      else if (video.isOwned() === false) return res.status(403).send('Cannot remove video of another pod')
 
       next()
     })

@@ -22,7 +22,7 @@ function remoteVideos (req, res, next) {
   req.checkBody('data').isArray()
   req.checkBody('data').isEachRemoteVideosValid()
 
-  logger.debug('Checking remoteVideosAdd parameters', { parameters: req.body })
+  logger.debug('Checking remoteVideos parameters', { parameters: req.body })
 
   checkErrors(req, res, next)
 }

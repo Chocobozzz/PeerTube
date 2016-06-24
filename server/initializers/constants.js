@@ -48,7 +48,8 @@ const VIDEOS_CONSTRAINTS_FIELDS = {
   AUTHOR: { min: 3, max: 20 }, // Length
   TAGS: { min: 1, max: 3 }, // Number of total tags
   TAG: { min: 2, max: 10 }, // Length
-  THUMBNAIL: { min: 0, max: 20000 } // Bytes
+  THUMBNAIL: { min: 2, max: 30 },
+  THUMBNAIL64: { min: 0, max: 20000 } // Bytes
 }
 
 // Special constants for a test instance

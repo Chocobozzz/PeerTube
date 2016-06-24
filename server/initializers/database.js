@@ -5,6 +5,9 @@ const mongoose = require('mongoose')
 
 const logger = require('../helpers/logger')
 
+// Bootstrap models
+require('../models/video')
+
 const dbname = 'peertube' + config.get('database.suffix')
 const host = config.get('database.host')
 const port = config.get('database.port')

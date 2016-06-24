@@ -31,7 +31,6 @@ const logger = require('./server/helpers/logger')
 const poolRequests = require('./server/lib/requestsScheduler')
 const routes = require('./server/controllers')
 const utils = require('./server/helpers/utils')
-const videos = require('./server/lib/videos')
 const webtorrent = require('./server/lib/webtorrent')
 
 // Get configurations
@@ -138,11 +137,11 @@ installer.installApplication(function (err) {
       // Activate the pool requests
       poolRequests.activate()
 
-      videos.seedAllExisting(function () {
+      // videos.seedAllExisting(function () {
         logger.info('Seeded all the videos')
         logger.info('Server listening on port %d', port)
         app.emit('ready')
-      })
+      // })
     })
   })
 })

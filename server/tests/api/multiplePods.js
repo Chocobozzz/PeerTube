@@ -414,7 +414,7 @@ describe('Test multiple pods', function () {
 
     // Keep the logs if the test failed
     if (this.ok) {
-      utils.flushTests(done)
+      // utils.flushTests(done)
     } else {
       done()
     }

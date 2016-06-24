@@ -3,6 +3,7 @@
 const async = require('async')
 const config = require('config')
 const fs = require('fs')
+const mongoose = require('mongoose')
 const request = require('request')
 
 const constants = require('../initializers/constants')
@@ -11,12 +12,11 @@ const peertubeCrypto = require('../helpers/peertubeCrypto')
 const Pods = require('../models/pods')
 const requestsScheduler = require('../lib/requestsScheduler')
 const requests = require('../helpers/requests')
-const videos = require('../lib/videos')
-const Videos = require('../models/videos')
 
 const http = config.get('webserver.https') ? 'https' : 'http'
 const host = config.get('webserver.host')
 const port = config.get('webserver.port')
+const Video = mongoose.model('Video')
 
 const pods = {
   addVideoToFriends: addVideoToFriends,
@@ -117,18 +117,13 @@ function quitFriends (callback) {
     function listRemoteVideos (callbackAsync) {
       logger.info('Broke friends, so sad :(')
 
-      Videos.listFromRemotes(callbackAsync)
+      Video.listRemotes(callbackAsync)
     },
 
     function removeTheRemoteVideos (videosList, callbackAsync) {
-      videos.removeRemoteVideos(videosList, function (err) {
-        if (err) {
-          logger.error('Cannot remove remote videos.', { error: err })
-          return callbackAsync(err)
-        }
-
-        return callbackAsync(null)
-      })
+      async.each(videosList, function (video, callbackEach) {
+        video.remove(callbackEach)
+      }, callbackAsync)
     }
   ], function (err) {
     // Don't forget to re activate the scheduler, even if there was an error
@@ -146,14 +141,14 @@ function removeVideoToFriends (video) {
 }
 
 function sendOwnedVideosToPod (podId) {
-  Videos.listOwned(function (err, videosList) {
+  Video.listOwned(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of videos we own.')
       return
     }
 
     videosList.forEach(function (video) {
-      videos.convertVideoToRemote(video, function (err, remoteVideo) {
+      video.toRemoteJSON(function (err, remoteVideo) {
         if (err) {
           logger.error('Cannot convert video to remote.', { error: err })
           // Don't break the process

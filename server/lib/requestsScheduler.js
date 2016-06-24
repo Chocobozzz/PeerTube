@@ -2,14 +2,15 @@
 
 const async = require('async')
 const map = require('lodash/map')
+const mongoose = require('mongoose')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 const Pods = require('../models/pods')
 const Requests = require('../models/requests')
 const requests = require('../helpers/requests')
-const videos = require('../lib/videos')
-const Videos = require('../models/videos')
+
+const Video = mongoose.model('Video')
 
 let timer = null
 
@@ -210,7 +211,7 @@ function removeBadPods () {
       const urls = map(pods, 'url')
       const ids = map(pods, '_id')
 
-      Videos.listFromUrls(urls, function (err, videosList) {
+      Video.listByUrls(urls, function (err, videosList) {
         if (err) {
           logger.error('Cannot list videos urls.', { error: err, urls: urls })
           return callback(null, ids, [])
@@ -224,9 +225,14 @@ function removeBadPods () {
       // We don't have to remove pods, skip
       if (typeof podIds === 'function') return podIds(null)
 
-      // Remove the remote videos
-      videos.removeRemoteVideos(videosList, function (err) {
-        if (err) logger.error('Cannot remove remote videos.', { error: err })
+      async.each(videosList, function (video, callbackEach) {
+        video.remove(callbackEach)
+      }, function (err) {
+        if (err) {
+          // Don't stop the process
+          logger.error('Error while removing videos of bad pods.', { error: err })
+          return
+        }
 
         return callback(null, podIds)
       })
