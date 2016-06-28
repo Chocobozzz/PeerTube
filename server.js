@@ -21,23 +21,25 @@ if (miss.length !== 0) {
   throw new Error('Miss some configurations keys : ' + miss)
 }
 
-// ----------- PeerTube modules -----------
+// ----------- Database -----------
 const config = require('config')
 const constants = require('./server/initializers/constants')
-const customValidators = require('./server/helpers/customValidators')
 const database = require('./server/initializers/database')
-const installer = require('./server/initializers/installer')
 const logger = require('./server/helpers/logger')
-const poolRequests = require('./server/lib/requestsScheduler')
+
+database.connect()
+
+// ----------- PeerTube modules -----------
+const customValidators = require('./server/helpers/customValidators')
+const installer = require('./server/initializers/installer')
+const mongoose = require('mongoose')
 const routes = require('./server/controllers')
 const utils = require('./server/helpers/utils')
 const webtorrent = require('./server/lib/webtorrent')
+const Request = mongoose.model('Request')
 
 // Get configurations
 const port = config.get('listen.port')
-
-// ----------- Database -----------
-database.connect()
 
 // ----------- Command line -----------
 
@@ -135,7 +137,7 @@ installer.installApplication(function (err) {
     // ----------- Make the server listening -----------
     server.listen(port, function () {
       // Activate the pool requests
-      poolRequests.activate()
+      Request.activate()
 
       // videos.seedAllExisting(function () {
         logger.info('Seeded all the videos')

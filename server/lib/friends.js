@@ -10,12 +10,12 @@ const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertubeCrypto')
 const Pods = require('../models/pods')
-const requestsScheduler = require('../lib/requestsScheduler')
 const requests = require('../helpers/requests')
 
 const http = config.get('webserver.https') ? 'https' : 'http'
 const host = config.get('webserver.host')
 const port = config.get('webserver.port')
+const Request = mongoose.model('Request')
 const Video = mongoose.model('Video')
 
 const pods = {
@@ -29,10 +29,7 @@ const pods = {
 }
 
 function addVideoToFriends (video) {
-  // ensure namePath is null
-  video.namePath = null
-
-  requestsScheduler.addRequest('add', video)
+  createRequest('add', video)
 }
 
 function hasFriends (callback) {
@@ -76,9 +73,9 @@ function makeFriends (callback) {
 
 function quitFriends (callback) {
   // Stop pool requests
-  requestsScheduler.deactivate()
+  Request.deactivate()
   // Flush pool requests
-  requestsScheduler.flush()
+  Request.flush()
 
   async.waterfall([
     function getPodsList (callbackAsync) {
@@ -127,7 +124,7 @@ function quitFriends (callback) {
     }
   ], function (err) {
     // Don't forget to re activate the scheduler, even if there was an error
-    requestsScheduler.activate()
+    Request.activate()
 
     if (err) return callback(err)
 
@@ -136,8 +133,8 @@ function quitFriends (callback) {
   })
 }
 
-function removeVideoToFriends (video) {
-  requestsScheduler.addRequest('remove', video)
+function removeVideoToFriends (videoParams) {
+  createRequest('remove', videoParams)
 }
 
 function sendOwnedVideosToPod (podId) {
@@ -155,7 +152,7 @@ function sendOwnedVideosToPod (podId) {
           return
         }
 
-        requestsScheduler.addRequestTo([ podId ], 'add', remoteVideo)
+        createRequest('add', remoteVideo, [ podId ])
       })
     })
   })
@@ -211,9 +208,9 @@ function getForeignPodsList (url, callback) {
 
 function makeRequestsToWinningPods (cert, podsList, callback) {
   // Stop pool requests
-  requestsScheduler.deactivate()
+  Request.deactivate()
   // Flush pool requests
-  requestsScheduler.forceSend()
+  Request.forceSend()
 
   async.eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
     const params = {
@@ -249,9 +246,26 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   }, function endRequests () {
     // Final callback, we've ended all the requests
     // Now we made new friends, we can re activate the pool of requests
-    requestsScheduler.activate()
+    Request.activate()
 
     logger.debug('makeRequestsToWinningPods finished.')
     return callback()
+  })
+}
+
+function createRequest (type, data, to) {
+  const req = new Request({
+    request: {
+      type: type,
+      data: data
+    }
+  })
+
+  if (to) {
+    req.to = to
+  }
+
+  req.save(function (err) {
+    if (err) logger.error('Cannot save the request.', { error: err })
   })
 }

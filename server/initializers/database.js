@@ -7,6 +7,8 @@ const logger = require('../helpers/logger')
 
 // Bootstrap models
 require('../models/video')
+// Request model needs Video model
+require('../models/request')
 
 const dbname = 'peertube' + config.get('database.suffix')
 const host = config.get('database.host')

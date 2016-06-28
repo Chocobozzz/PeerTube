@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const map = require('lodash/map')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
@@ -76,7 +77,11 @@ function list (callback) {
 }
 
 function listAllIds (callback) {
-  return PodsDB.find({}, { _id: 1 }, callback)
+  return PodsDB.find({}, { _id: 1 }, function (err, pods) {
+    if (err) return callback(err)
+
+    return callback(null, map(pods, '_id'))
+  })
 }
 
 function listAllUrls (callback) {

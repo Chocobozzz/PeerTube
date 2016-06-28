@@ -7,60 +7,51 @@ const mongoose = require('mongoose')
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 const Pods = require('../models/pods')
-const Requests = require('../models/requests')
 const requests = require('../helpers/requests')
 
 const Video = mongoose.model('Video')
 
 let timer = null
 
-const requestsScheduler = {
-  activate: activate,
-  addRequest: addRequest,
-  addRequestTo: addRequestTo,
-  deactivate: deactivate,
-  flush: flush,
-  forceSend: forceSend
+// ---------------------------------------------------------------------------
+
+const RequestSchema = mongoose.Schema({
+  request: mongoose.Schema.Types.Mixed,
+  to: [ { type: mongoose.Schema.Types.ObjectId, ref: 'users' } ]
+})
+
+RequestSchema.statics = {
+  activate,
+  deactivate,
+  flush,
+  forceSend
 }
+
+RequestSchema.pre('save', function (next) {
+  const self = this
+
+  if (self.to.length === 0) {
+    Pods.listAllIds(function (err, podIds) {
+      if (err) return next(err)
+
+      // No friends
+      if (podIds.length === 0) return
+
+      self.to = podIds
+      return next()
+    })
+  } else {
+    return next()
+  }
+})
+
+mongoose.model('Request', RequestSchema)
+
+// ------------------------------ STATICS ------------------------------
 
 function activate () {
   logger.info('Requests scheduler activated.')
-  timer = setInterval(makeRequests, constants.INTERVAL)
-}
-
-// Add request to the scheduler
-function addRequest (type, data) {
-  logger.debug('Add request of type %s to the requests scheduler.', type, { data: data })
-
-  const request = {
-    type: type,
-    data: data
-  }
-
-  Pods.listAllIds(function (err, podIds) {
-    if (err) {
-      logger.debug('Cannot list pod ids.')
-      return
-    }
-
-    // No friends
-    if (!podIds) return
-
-    Requests.create(request, podIds, function (err) {
-      if (err) logger.error('Cannot create a request.', { error: err })
-    })
-  })
-}
-
-function addRequestTo (podIds, type, data) {
-  const request = {
-    type: type,
-    data: data
-  }
-
-  Requests.create(request, podIds, function (err) {
-    if (err) logger.error('Cannot create a request.', { error: err })
-  })
+  timer = setInterval(makeRequests.bind(this), constants.INTERVAL)
 }
 
 function deactivate () {
@@ -69,21 +60,15 @@ function deactivate () {
 }
 
 function flush () {
-  Requests.removeAll(function (err) {
-    if (err) {
-      logger.error('Cannot flush the requests.', { error: err })
-    }
+  removeAll.call(this, function (err) {
+    if (err) logger.error('Cannot flush the requests.', { error: err })
   })
 }
 
 function forceSend () {
   logger.info('Force requests scheduler sending.')
-  makeRequests()
+  makeRequests.call(this)
 }
-
-// ---------------------------------------------------------------------------
-
-module.exports = requestsScheduler
 
 // ---------------------------------------------------------------------------
 
@@ -115,7 +100,9 @@ function makeRequest (toPod, requestsToMake, callback) {
 
 // Make all the requests of the scheduler
 function makeRequests () {
-  Requests.list(function (err, requests) {
+  const self = this
+
+  list.call(self, function (err, requests) {
     if (err) {
       logger.error('Cannot get the list of requests.', { err: err })
       return // Abort
@@ -154,11 +141,14 @@ function makeRequests () {
 
       // FIXME: mongodb request inside a loop :/
       Pods.findById(toPodId, function (err, toPod) {
-        if (err) return logger.error('Error finding pod by id.', { err: err })
+        if (err) {
+          logger.error('Error finding pod by id.', { err: err })
+          return callbackEach()
+        }
 
         // Maybe the pod is not our friend anymore so simply remove them
         if (!toPod) {
-          Requests.removePodOf(requestToMake.ids, toPodId)
+          removePodOf.call(self, requestToMake.ids, toPodId)
           return callbackEach()
         }
 
@@ -173,7 +163,7 @@ function makeRequests () {
             logger.debug('Removing requests for %s pod.', toPodId, { requestsIds: requestToMake.ids })
 
             // Remove the pod id of these request ids
-            Requests.removePodOf(requestToMake.ids, toPodId)
+            removePodOf.call(self, requestToMake.ids, toPodId)
             goodPods.push(toPodId)
           } else {
             badPods.push(toPodId)
@@ -186,7 +176,7 @@ function makeRequests () {
       // All the requests were made, we update the pods score
       updatePodsScore(goodPods, badPods)
       // Flush requests with no pod
-      Requests.removeWithEmptyTo()
+      removeWithEmptyTo.call(self)
     })
   })
 }
@@ -267,4 +257,24 @@ function updatePodsScore (goodPods, badPods) {
     if (err) logger.error('Cannot decrement scores of bad pods.')
     removeBadPods()
   })
+}
+
+function list (callback) {
+  this.find({ }, { _id: 1, request: 1, to: 1 }, callback)
+}
+
+function removeAll (callback) {
+  this.remove({ }, callback)
+}
+
+function removePodOf (requestsIds, podId, callback) {
+  if (!callback) callback = function () {}
+
+  this.update({ _id: { $in: requestsIds } }, { $pull: { to: podId } }, { multi: true }, callback)
+}
+
+function removeWithEmptyTo (callback) {
+  if (!callback) callback = function () {}
+
+  this.remove({ to: { $size: 0 } }, callback)
 }
