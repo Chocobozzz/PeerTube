@@ -24,7 +24,7 @@ const thumbnailsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.
 // TODO: add indexes on searchable columns
 const VideoSchema = mongoose.Schema({
   name: String,
-  namePath: String,
+  filename: String,
   description: String,
   magnetUri: String,
   podUrl: String,
@@ -98,7 +98,7 @@ VideoSchema.pre('save', function (next) {
   const tasks = []
 
   if (video.isOwned()) {
-    const videoPath = pathUtils.join(uploadsDir, video.namePath)
+    const videoPath = pathUtils.join(uploadsDir, video.filename)
     this.podUrl = http + '://' + host + ':' + port
 
     tasks.push(
@@ -134,7 +134,7 @@ mongoose.model('Video', VideoSchema)
 // ------------------------------ METHODS ------------------------------
 
 function isOwned () {
-  return this.namePath !== null
+  return this.filename !== null
 }
 
 function toFormatedJSON () {
@@ -169,7 +169,7 @@ function toRemoteJSON (callback) {
       name: self.name,
       description: self.description,
       magnetUri: self.magnetUri,
-      namePath: null,
+      filename: null,
       author: self.author,
       duration: self.duration,
       thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
@@ -206,12 +206,12 @@ function listByUrls (fromUrls, callback) {
 }
 
 function listOwned (callback) {
-  // If namePath is not null this is *our* video
-  this.find({ namePath: { $ne: null } }, callback)
+  // If filename is not null this is *our* video
+  this.find({ filename: { $ne: null } }, callback)
 }
 
 function listRemotes (callback) {
-  this.find({ namePath: null }, callback)
+  this.find({ filename: null }, callback)
 }
 
 function load (id, callback) {
@@ -235,7 +235,7 @@ function seedAllExisting (callback) {
     if (err) return callback(err)
 
     async.each(videos, function (video, callbackEach) {
-      const videoPath = pathUtils.join(uploadsDir, video.namePath)
+      const videoPath = pathUtils.join(uploadsDir, video.filename)
       seed(videoPath, callbackEach)
     }, callback)
   })
@@ -267,7 +267,7 @@ function removeThumbnail (video, callback) {
 }
 
 function removeFile (video, callback) {
-  fs.unlink(uploadsDir + video.namePath, callback)
+  fs.unlink(uploadsDir + video.filename, callback)
 }
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process

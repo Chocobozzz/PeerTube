@@ -90,7 +90,7 @@ function addVideo (req, res, next) {
     function insertIntoDB (callback) {
       const videoData = {
         name: videoInfos.name,
-        namePath: videoFile.filename,
+        filename: videoFile.filename,
         description: videoInfos.description,
         author: res.locals.oauth.token.user.username,
         duration: videoFile.duration,
