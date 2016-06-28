@@ -37,6 +37,7 @@ const routes = require('./server/controllers')
 const utils = require('./server/helpers/utils')
 const webtorrent = require('./server/lib/webtorrent')
 const Request = mongoose.model('Request')
+const Video = mongoose.model('Video')
 
 // Get configurations
 const port = config.get('listen.port')
@@ -139,11 +140,13 @@ installer.installApplication(function (err) {
       // Activate the pool requests
       Request.activate()
 
-      // videos.seedAllExisting(function () {
+      Video.seedAllExisting(function (err) {
+        if (err) throw err
+
         logger.info('Seeded all the videos')
         logger.info('Server listening on port %d', port)
         app.emit('ready')
-      // })
+      })
     })
   })
 })

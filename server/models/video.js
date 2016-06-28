@@ -230,9 +230,15 @@ function search (value, field, start, count, sort, callback) {
   findWithCount.call(this, query, start, count, sort, callback)
 }
 
-// TODO
-function seedAllExisting () {
+function seedAllExisting (callback) {
+  listOwned.call(this, function (err, videos) {
+    if (err) return callback(err)
 
+    async.each(videos, function (video, callbackEach) {
+      const videoPath = pathUtils.join(uploadsDir, video.namePath)
+      seed(videoPath, callbackEach)
+    }, callback)
+  })
 }
 
 // ---------------------------------------------------------------------------
