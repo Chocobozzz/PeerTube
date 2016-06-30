@@ -81,7 +81,18 @@ function createOAuthUserIfNotExist (callback) {
     logger.info('Creating the administrator.')
 
     const username = 'root'
-    const password = passwordGenerator(8, true)
+    let password = ''
+
+    // Do not generate a random password for tests
+    if (process.env.NODE_ENV === 'test') {
+      password = 'test'
+
+      if (process.env.NODE_APP_INSTANCE) {
+        password += process.env.NODE_APP_INSTANCE
+      }
+    } else {
+      password = passwordGenerator(8, true)
+    }
 
     Users.createUser(username, password, function (err) {
       if (err) return callback(err)
