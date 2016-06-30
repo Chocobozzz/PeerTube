@@ -7,12 +7,12 @@ const mongoose = require('mongoose')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
-const Pods = require('../../../models/pods')
 const oAuth2 = middlewares.oauth2
 const reqValidator = middlewares.reqValidators.pods
 const signatureValidator = middlewares.reqValidators.remote.signature
 
 const router = express.Router()
+const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
 router.get('/', listPodsUrl)
@@ -33,7 +33,11 @@ function addPods (req, res, next) {
 
   async.waterfall([
     function addPod (callback) {
-      Pods.add(informations, callback)
+      const pod = new Pod(informations)
+      pod.save(function (err, podCreated) {
+        // Be sure about the number of parameters for the callback
+        return callback(err, podCreated)
+      })
     },
 
     function sendMyVideos (podCreated, callback) {
@@ -60,7 +64,7 @@ function addPods (req, res, next) {
 }
 
 function listPodsUrl (req, res, next) {
-  Pods.listAllUrls(function (err, podsUrlList) {
+  Pod.listOnlyUrls(function (err, podsUrlList) {
     if (err) return next(err)
 
     res.json(podsUrlList)
@@ -79,8 +83,13 @@ function removePods (req, res, next) {
   const url = req.body.signature.url
 
   async.waterfall([
-    function (callback) {
-      Pods.remove(url, function (err) {
+    function loadPod (callback) {
+      Pod.loadByUrl(url, callback)
+    },
+
+    function removePod (pod, callback) {
+      pod.remove(function (err) {
+        // Be sure we only return one argument in the callback
         return callback(err)
       })
     },

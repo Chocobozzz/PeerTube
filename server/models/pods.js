@@ -2,107 +2,89 @@
 
 const mongoose = require('mongoose')
 const map = require('lodash/map')
+const validator = require('express-validator').validator
 
 const constants = require('../initializers/constants')
-const logger = require('../helpers/logger')
 
 // ---------------------------------------------------------------------------
 
-const podsSchema = mongoose.Schema({
+const PodSchema = mongoose.Schema({
   url: String,
   publicKey: String,
-  score: { type: Number, max: constants.FRIEND_BASE_SCORE }
+  score: { type: Number, max: constants.FRIEND_SCORE.MAX }
 })
-const PodsDB = mongoose.model('pods', podsSchema)
 
-// ---------------------------------------------------------------------------
+// TODO: set options (TLD...)
+PodSchema.path('url').validate(validator.isURL)
+PodSchema.path('publicKey').required(true)
+PodSchema.path('score').validate(function (value) { return !isNaN(value) })
 
-const Pods = {
-  add: add,
-  count: count,
-  findById: findById,
-  findByUrl: findByUrl,
-  findBadPods: findBadPods,
+PodSchema.statics = {
+  countAll: countAll,
   incrementScores: incrementScores,
   list: list,
   listAllIds: listAllIds,
-  listAllUrls: listAllUrls,
-  remove: remove,
-  removeAll: removeAll,
-  removeAllByIds: removeAllByIds
+  listOnlyUrls: listOnlyUrls,
+  listBadPods: listBadPods,
+  load: load,
+  loadByUrl: loadByUrl,
+  removeAll: removeAll
 }
 
-// TODO: check if the pod is not already a friend
-function add (data, callback) {
-  if (!callback) callback = function () {}
-  const params = {
-    url: data.url,
-    publicKey: data.publicKey,
-    score: constants.FRIEND_BASE_SCORE
-  }
+PodSchema.pre('save', function (next) {
+  const self = this
 
-  PodsDB.create(params, callback)
-}
+  Pod.loadByUrl(this.url, function (err, pod) {
+    if (err) return next(err)
 
-function count (callback) {
-  return PodsDB.count(callback)
-}
+    if (pod) return next(new Error('Pod already exists.'))
 
-function findBadPods (callback) {
-  PodsDB.find({ score: 0 }, callback)
-}
+    self.score = constants.FRIEND_SCORE.BASE
+    return next()
+  })
+})
 
-function findById (id, callback) {
-  PodsDB.findById(id, callback)
-}
+const Pod = mongoose.model('Pod', PodSchema)
 
-function findByUrl (url, callback) {
-  PodsDB.findOne({ url: url }, callback)
+// ------------------------------ Statics ------------------------------
+
+function countAll (callback) {
+  return this.count(callback)
 }
 
 function incrementScores (ids, value, callback) {
   if (!callback) callback = function () {}
-  PodsDB.update({ _id: { $in: ids } }, { $inc: { score: value } }, { multi: true }, callback)
+  return this.update({ _id: { $in: ids } }, { $inc: { score: value } }, { multi: true }, callback)
 }
 
 function list (callback) {
-  PodsDB.find(function (err, podsList) {
-    if (err) {
-      logger.error('Cannot get the list of the pods.')
-      return callback(err)
-    }
-
-    return callback(null, podsList)
-  })
+  return this.find(callback)
 }
 
 function listAllIds (callback) {
-  return PodsDB.find({}, { _id: 1 }, function (err, pods) {
+  return this.find({}, { _id: 1 }, function (err, pods) {
     if (err) return callback(err)
 
     return callback(null, map(pods, '_id'))
   })
 }
 
-function listAllUrls (callback) {
-  return PodsDB.find({}, { _id: 0, url: 1 }, callback)
+function listOnlyUrls (callback) {
+  return this.find({}, { _id: 0, url: 1 }, callback)
 }
 
-function remove (url, callback) {
-  if (!callback) callback = function () {}
-  PodsDB.remove({ url: url }, callback)
+function listBadPods (callback) {
+  return this.find({ score: 0 }, callback)
+}
+
+function load (id, callback) {
+  return this.findById(id, callback)
+}
+
+function loadByUrl (url, callback) {
+  return this.findOne({ url: url }, callback)
 }
 
 function removeAll (callback) {
-  if (!callback) callback = function () {}
-  PodsDB.remove(callback)
+  return this.remove({}, callback)
 }
-
-function removeAllByIds (ids, callback) {
-  if (!callback) callback = function () {}
-  PodsDB.remove({ _id: { $in: ids } }, callback)
-}
-
-// ---------------------------------------------------------------------------
-
-module.exports = Pods

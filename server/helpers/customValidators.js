@@ -85,6 +85,7 @@ function isVideoNameValid (value) {
 }
 
 function isVideoPodUrlValid (value) {
+  // TODO: set options (TLD...)
   return validator.isURL(value)
 }
 

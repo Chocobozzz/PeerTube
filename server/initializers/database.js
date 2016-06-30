@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const logger = require('../helpers/logger')
 
 // Bootstrap models
+require('../models/pods')
 require('../models/video')
 // Request model needs Video model
 require('../models/request')

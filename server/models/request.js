@@ -6,9 +6,9 @@ const mongoose = require('mongoose')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
-const Pods = require('../models/pods')
 const requests = require('../helpers/requests')
 
+const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
 let timer = null
@@ -31,7 +31,7 @@ RequestSchema.pre('save', function (next) {
   const self = this
 
   if (self.to.length === 0) {
-    Pods.listAllIds(function (err, podIds) {
+    Pod.listAllIds(function (err, podIds) {
       if (err) return next(err)
 
       // No friends
@@ -140,7 +140,7 @@ function makeRequests () {
       const requestToMake = requestsToMake[toPodId]
 
       // FIXME: mongodb request inside a loop :/
-      Pods.findById(toPodId, function (err, toPod) {
+      Pod.load(toPodId, function (err, toPod) {
         if (err) {
           logger.error('Error finding pod by id.', { err: err })
           return callbackEach()
@@ -185,7 +185,7 @@ function makeRequests () {
 function removeBadPods () {
   async.waterfall([
     function findBadPods (callback) {
-      Pods.findBadPods(function (err, pods) {
+      Pod.listBadPods(function (err, pods) {
         if (err) {
           logger.error('Cannot find bad pods.', { error: err })
           return callback(err)
@@ -199,21 +199,23 @@ function removeBadPods () {
       if (pods.length === 0) return callback(null)
 
       const urls = map(pods, 'url')
-      const ids = map(pods, '_id')
 
       Video.listByUrls(urls, function (err, videosList) {
         if (err) {
           logger.error('Cannot list videos urls.', { error: err, urls: urls })
-          return callback(null, ids, [])
+          return callback(null, pods, [])
         }
 
-        return callback(null, ids, videosList)
+        return callback(null, pods, videosList)
       })
     },
 
-    function removeVideosOfTheseBadPods (podIds, videosList, callback) {
+    function removeVideosOfTheseBadPods (pods, videosList, callback) {
       // We don't have to remove pods, skip
-      if (typeof podIds === 'function') return podIds(null)
+      if (typeof pods === 'function') {
+        callback = pods
+        return callback(null)
+      }
 
       async.each(videosList, function (video, callbackEach) {
         video.remove(callbackEach)
@@ -224,22 +226,30 @@ function removeBadPods () {
           return
         }
 
-        return callback(null, podIds)
+        return callback(null, pods)
       })
     },
 
-    function removeBadPodsFromDB (podIds, callback) {
+    function removeBadPodsFromDB (pods, callback) {
       // We don't have to remove pods, skip
-      if (typeof podIds === 'function') return podIds(null)
+      if (typeof pods === 'function') {
+        callback = pods
+        return callback(null)
+      }
 
-      Pods.removeAllByIds(podIds, callback)
+      async.each(pods, function (pod, callbackEach) {
+        pod.remove(callbackEach)
+      }, function (err) {
+        if (err) return callback(err)
+
+        return callback(null, pods.length)
+      })
     }
-  ], function (err, removeResult) {
+  ], function (err, numberOfPodsRemoved) {
     if (err) {
       logger.error('Cannot remove bad pods.', { error: err })
-    } else if (removeResult) {
-      const podsRemoved = removeResult.result.n
-      logger.info('Removed %d pods.', podsRemoved)
+    } else if (numberOfPodsRemoved) {
+      logger.info('Removed %d pods.', numberOfPodsRemoved)
     } else {
       logger.info('No need to remove bad pods.')
     }
@@ -249,11 +259,11 @@ function removeBadPods () {
 function updatePodsScore (goodPods, badPods) {
   logger.info('Updating %d good pods and %d bad pods scores.', goodPods.length, badPods.length)
 
-  Pods.incrementScores(goodPods, constants.PODS_SCORE.BONUS, function (err) {
+  Pod.incrementScores(goodPods, constants.PODS_SCORE.BONUS, function (err) {
     if (err) logger.error('Cannot increment scores of good pods.')
   })
 
-  Pods.incrementScores(badPods, constants.PODS_SCORE.MALUS, function (err) {
+  Pod.incrementScores(badPods, constants.PODS_SCORE.MALUS, function (err) {
     if (err) logger.error('Cannot decrement scores of bad pods.')
     removeBadPods()
   })

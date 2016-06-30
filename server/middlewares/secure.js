@@ -1,8 +1,10 @@
 'use strict'
 
 const logger = require('../helpers/logger')
+const mongoose = require('mongoose')
 const peertubeCrypto = require('../helpers/peertubeCrypto')
-const Pods = require('../models/pods')
+
+const Pod = mongoose.model('Pod')
 
 const secureMiddleware = {
   decryptBody: decryptBody
@@ -10,7 +12,7 @@ const secureMiddleware = {
 
 function decryptBody (req, res, next) {
   const url = req.body.signature.url
-  Pods.findByUrl(url, function (err, pod) {
+  Pod.loadByUrl(url, function (err, pod) {
     if (err) {
       logger.error('Cannot get signed url in decryptBody.', { error: err })
       return res.sendStatus(500)

@@ -9,16 +9,16 @@ const request = require('request')
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertubeCrypto')
-const Pods = require('../models/pods')
 const requests = require('../helpers/requests')
 
 const http = config.get('webserver.https') ? 'https' : 'http'
 const host = config.get('webserver.host')
 const port = config.get('webserver.port')
+const Pod = mongoose.model('Pod')
 const Request = mongoose.model('Request')
 const Video = mongoose.model('Video')
 
-const pods = {
+const friends = {
   addVideoToFriends: addVideoToFriends,
   hasFriends: hasFriends,
   getMyCertificate: getMyCertificate,
@@ -33,7 +33,7 @@ function addVideoToFriends (video) {
 }
 
 function hasFriends (callback) {
-  Pods.count(function (err, count) {
+  Pod.countAll(function (err, count) {
     if (err) return callback(err)
 
     const hasFriends = (count !== 0)
@@ -79,7 +79,7 @@ function quitFriends (callback) {
 
   async.waterfall([
     function getPodsList (callbackAsync) {
-      return Pods.list(callbackAsync)
+      return Pod.list(callbackAsync)
     },
 
     function announceIQuitMyFriends (pods, callbackAsync) {
@@ -106,7 +106,7 @@ function quitFriends (callback) {
     },
 
     function removePodsFromDB (callbackAsync) {
-      Pods.removeAll(function (err) {
+      Pod.removeAll(function (err) {
         return callbackAsync(err)
       })
     },
@@ -160,7 +160,7 @@ function sendOwnedVideosToPod (podId) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = pods
+module.exports = friends
 
 // ---------------------------------------------------------------------------
 
@@ -230,8 +230,12 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       }
 
       if (res.statusCode === 200) {
-        Pods.add({ url: pod.url, publicKey: body.cert, score: constants.FRIEND_BASE_SCORE }, function (err, podCreated) {
-          if (err) logger.error('Cannot add friend %s pod.', pod.url)
+        const podObj = new Pod({ url: pod.url, publicKey: body.cert })
+        podObj.save(function (err, podCreated) {
+          if (err) {
+            logger.error('Cannot add friend %s pod.', pod.url, { error: err })
+            return callbackEach()
+          }
 
           // Add our videos to the request scheduler
           sendOwnedVideosToPod(podCreated._id)

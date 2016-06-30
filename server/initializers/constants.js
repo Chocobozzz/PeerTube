@@ -4,7 +4,10 @@
 const API_VERSION = 'v1'
 
 // Score a pod has when we create it as a friend
-let FRIEND_BASE_SCORE = 100
+const FRIEND_SCORE = {
+  BASE: 100,
+  MAX: 1000
+}
 
 // Time to wait between requests to the friends (10 min)
 let INTERVAL = 600000
@@ -54,7 +57,7 @@ const VIDEOS_CONSTRAINTS_FIELDS = {
 
 // Special constants for a test instance
 if (isTestInstance() === true) {
-  FRIEND_BASE_SCORE = 20
+  FRIEND_SCORE.BASE = 20
   INTERVAL = 10000
   VIDEOS_CONSTRAINTS_FIELDS.DURATION.max = 14
 }
@@ -63,7 +66,7 @@ if (isTestInstance() === true) {
 
 module.exports = {
   API_VERSION: API_VERSION,
-  FRIEND_BASE_SCORE: FRIEND_BASE_SCORE,
+  FRIEND_SCORE: FRIEND_SCORE,
   INTERVAL: INTERVAL,
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
