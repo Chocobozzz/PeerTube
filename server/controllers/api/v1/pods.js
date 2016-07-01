@@ -7,7 +7,7 @@ const mongoose = require('mongoose')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
-const oAuth2 = middlewares.oauth2
+const oAuth = middlewares.oauth
 const reqValidator = middlewares.reqValidators.pods
 const signatureValidator = middlewares.reqValidators.remote.signature
 
@@ -17,8 +17,8 @@ const Video = mongoose.model('Video')
 
 router.get('/', listPodsUrl)
 router.post('/', reqValidator.podsAdd, addPods)
-router.get('/makefriends', oAuth2.authenticate, reqValidator.makeFriends, makeFriends)
-router.get('/quitfriends', oAuth2.authenticate, quitFriends)
+router.get('/makefriends', oAuth.authenticate, reqValidator.makeFriends, makeFriends)
+router.get('/quitfriends', oAuth.authenticate, quitFriends)
 // Post because this is a secured request
 router.post('/remove', signatureValidator, removePods)
 

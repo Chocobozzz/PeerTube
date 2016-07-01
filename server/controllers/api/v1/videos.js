@@ -9,7 +9,7 @@ const multer = require('multer')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
-const oAuth2 = middlewares.oauth2
+const oAuth = middlewares.oauth
 const pagination = middlewares.pagination
 const reqValidator = middlewares.reqValidators
 const reqValidatorPagination = reqValidator.pagination
@@ -51,7 +51,7 @@ router.get('/',
   listVideos
 )
 router.post('/',
-  oAuth2.authenticate,
+  oAuth.authenticate,
   reqFiles,
   reqValidatorVideos.videosAdd,
   addVideo
@@ -61,7 +61,7 @@ router.get('/:id',
   getVideo
 )
 router.delete('/:id',
-  oAuth2.authenticate,
+  oAuth.authenticate,
   reqValidatorVideos.videosRemove,
   removeVideo
 )

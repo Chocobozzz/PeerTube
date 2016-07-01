@@ -3,13 +3,16 @@
 const async = require('async')
 const config = require('config')
 const mkdirp = require('mkdirp')
+const mongoose = require('mongoose')
 const passwordGenerator = require('password-generator')
 const path = require('path')
 
 const checker = require('./checker')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertubeCrypto')
-const Users = require('../models/users')
+
+const Client = mongoose.model('OAuthClient')
+const User = mongoose.model('User')
 
 const installer = {
   installApplication: installApplication
@@ -60,11 +63,16 @@ function createOAuthClientIfNotExist (callback) {
     logger.info('Creating a default OAuth Client.')
 
     const secret = passwordGenerator(32, false)
-    Users.createClient(secret, [ 'password' ], function (err, id) {
+    const client = new Client({
+      clientSecret: secret,
+      grants: [ 'password' ]
+    })
+
+    client.save(function (err, createdClient) {
       if (err) return callback(err)
 
-      logger.info('Client id: ' + id)
-      logger.info('Client secret: ' + secret)
+      logger.info('Client id: ' + createdClient._id)
+      logger.info('Client secret: ' + createdClient.clientSecret)
 
       return callback(null)
     })
@@ -94,11 +102,16 @@ function createOAuthUserIfNotExist (callback) {
       password = passwordGenerator(8, true)
     }
 
-    Users.createUser(username, password, function (err) {
+    const user = new User({
+      username: username,
+      password: password
+    })
+
+    user.save(function (err, createdUser) {
       if (err) return callback(err)
 
-      logger.info('Username: ' + username)
-      logger.info('User password: ' + password)
+      logger.info('Username: ' + createdUser.username)
+      logger.info('User password: ' + createdUser.password)
 
       return callback(null)
     })

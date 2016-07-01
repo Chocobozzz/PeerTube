@@ -5,10 +5,10 @@ const OAuthServer = require('express-oauth-server')
 const logger = require('../helpers/logger')
 
 const oAuthServer = new OAuthServer({
-  model: require('../models/users')
+  model: require('../lib/oauth-model')
 })
 
-const oAuth2 = {
+const oAuth = {
   authenticate: authenticate,
   token: token
 }
@@ -32,4 +32,4 @@ function token (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = oAuth2
+module.exports = oAuth

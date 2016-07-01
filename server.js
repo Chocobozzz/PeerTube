@@ -13,14 +13,6 @@ const WebSocketServer = require('ws').Server
 // Create our main app
 const app = express()
 
-// ----------- Checker -----------
-const checker = require('./server/initializers/checker')
-
-const miss = checker.checkConfig()
-if (miss.length !== 0) {
-  throw new Error('Miss some configurations keys : ' + miss)
-}
-
 // ----------- Database -----------
 const config = require('config')
 const constants = require('./server/initializers/constants')
@@ -28,6 +20,14 @@ const database = require('./server/initializers/database')
 const logger = require('./server/helpers/logger')
 
 database.connect()
+
+// ----------- Checker -----------
+const checker = require('./server/initializers/checker')
+
+const miss = checker.checkConfig()
+if (miss.length !== 0) {
+  throw new Error('Miss some configurations keys : ' + miss)
+}
 
 // ----------- PeerTube modules -----------
 const customValidators = require('./server/helpers/customValidators')

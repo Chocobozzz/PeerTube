@@ -1,15 +1,16 @@
 'use strict'
 
 const config = require('config')
+const mongoose = require('mongoose')
 const express = require('express')
-const oAuth2 = require('../../../middlewares').oauth2
+const oAuth = require('../../../middlewares').oauth
 
-const Users = require('../../../models/users')
+const Client = mongoose.model('OAuthClient')
 
 const router = express.Router()
 
 router.get('/client', getAngularClient)
-router.post('/token', oAuth2.token, success)
+router.post('/token', oAuth.token, success)
 
 // ---------------------------------------------------------------------------
 
@@ -27,7 +28,7 @@ function getAngularClient (req, res, next) {
 
   if (req.get('host') !== headerHostShouldBe) return res.type('json').status(403).end()
 
-  Users.getFirstClient(function (err, client) {
+  Client.loadFirstClient(function (err, client) {
     if (err) return next(err)
     if (!client) return next(new Error('No client available.'))
 
