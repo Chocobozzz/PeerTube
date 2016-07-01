@@ -5,7 +5,7 @@ const replay = require('request-replay')
 const request = require('request')
 
 const constants = require('../initializers/constants')
-const peertubeCrypto = require('./peertubeCrypto')
+const peertubeCrypto = require('./peertube-crypto')
 
 const http = config.get('webserver.https') ? 'https' : 'http'
 const host = config.get('webserver.host')

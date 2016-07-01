@@ -8,7 +8,7 @@ const request = require('request')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
-const peertubeCrypto = require('../helpers/peertubeCrypto')
+const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
 
 const http = config.get('webserver.https') ? 'https' : 'http'

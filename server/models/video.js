@@ -8,7 +8,7 @@ const pathUtils = require('path')
 const mongoose = require('mongoose')
 
 const constants = require('../initializers/constants')
-const customValidators = require('../helpers/customValidators')
+const customValidators = require('../helpers/custom-validators')
 const logger = require('../helpers/logger')
 const utils = require('../helpers/utils')
 const webtorrent = require('../lib/webtorrent')

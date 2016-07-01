@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
-const customValidators = require('../../helpers/customValidators')
+const customValidators = require('../../helpers/custom-validators')
 const logger = require('../../helpers/logger')
 
 const Video = mongoose.model('Video')

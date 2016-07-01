@@ -30,7 +30,7 @@ if (miss.length !== 0) {
 }
 
 // ----------- PeerTube modules -----------
-const customValidators = require('./server/helpers/customValidators')
+const customValidators = require('./server/helpers/custom-validators')
 const installer = require('./server/initializers/installer')
 const mongoose = require('mongoose')
 const routes = require('./server/controllers')

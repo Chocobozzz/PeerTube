@@ -9,7 +9,7 @@ const path = require('path')
 
 const checker = require('./checker')
 const logger = require('../helpers/logger')
-const peertubeCrypto = require('../helpers/peertubeCrypto')
+const peertubeCrypto = require('../helpers/peertube-crypto')
 
 const Client = mongoose.model('OAuthClient')
 const User = mongoose.model('User')

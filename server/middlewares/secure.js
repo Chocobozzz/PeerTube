@@ -2,7 +2,7 @@
 
 const logger = require('../helpers/logger')
 const mongoose = require('mongoose')
-const peertubeCrypto = require('../helpers/peertubeCrypto')
+const peertubeCrypto = require('../helpers/peertube-crypto')
 
 const Pod = mongoose.model('Pod')
 

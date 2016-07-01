@@ -57,7 +57,7 @@ function create (options, callback) {
       throw new Error('Received exception error from webtorrent process : ' + data.exception)
     })
 
-    const webtorrentProcess = spawn(pathUtils.join(__dirname, 'webtorrentProcess.js'), host, port, { detached: true })
+    const webtorrentProcess = spawn(pathUtils.join(__dirname, 'webtorrent-process.js'), host, port, { detached: true })
 
     if (electronDebug === true) {
       webtorrentProcess.stderr.on('data', function (data) {
