@@ -4,7 +4,7 @@ const util = require('util')
 
 const logger = require('../../helpers/logger')
 
-const reqValidatorsUtils = {
+const validatorsUtils = {
   checkErrors: checkErrors
 }
 
@@ -22,4 +22,4 @@ function checkErrors (req, res, next, statusCode) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = reqValidatorsUtils
+module.exports = validatorsUtils

@@ -6,17 +6,17 @@ const mongoose = require('mongoose')
 
 const middlewares = require('../../../middlewares')
 const secureMiddleware = middlewares.secure
-const reqValidator = middlewares.reqValidators.remote
+const validators = middlewares.validators.remote
 const logger = require('../../../helpers/logger')
 
 const router = express.Router()
 const Video = mongoose.model('Video')
 
 router.post('/videos',
-  reqValidator.signature,
-  reqValidator.dataToDecrypt,
+  validators.signature,
+  validators.dataToDecrypt,
   secureMiddleware.decryptBody,
-  reqValidator.remoteVideos,
+  validators.remoteVideos,
   remoteVideos
 )
 

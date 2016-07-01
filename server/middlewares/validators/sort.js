@@ -4,7 +4,7 @@ const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
 const logger = require('../../helpers/logger')
 
-const reqValidatorsSort = {
+const validatorsSort = {
   videosSort: videosSort
 }
 
@@ -20,4 +20,4 @@ function videosSort (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = reqValidatorsSort
+module.exports = validatorsSort

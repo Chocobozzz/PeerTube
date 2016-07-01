@@ -3,6 +3,7 @@
 const config = require('config')
 const mongoose = require('mongoose')
 const express = require('express')
+
 const oAuth = require('../../../middlewares').oauth
 
 const Client = mongoose.model('OAuthClient')

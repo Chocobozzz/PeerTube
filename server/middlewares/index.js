@@ -2,7 +2,7 @@
 
 const oauth = require('./oauth')
 const pagination = require('./pagination')
-const reqValidatorsMiddleware = require('./reqValidators')
+const validatorsMiddleware = require('./validators')
 const search = require('./search')
 const sort = require('./sort')
 const secureMiddleware = require('./secure')
@@ -10,7 +10,7 @@ const secureMiddleware = require('./secure')
 const middlewares = {
   oauth: oauth,
   pagination: pagination,
-  reqValidators: reqValidatorsMiddleware,
+  validators: validatorsMiddleware,
   search: search,
   sort: sort,
   secure: secureMiddleware

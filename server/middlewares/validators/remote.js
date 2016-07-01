@@ -3,7 +3,7 @@
 const checkErrors = require('./utils').checkErrors
 const logger = require('../../helpers/logger')
 
-const reqValidatorsRemote = {
+const validatorsRemote = {
   dataToDecrypt: dataToDecrypt,
   remoteVideos: remoteVideos,
   signature: signature
@@ -38,4 +38,4 @@ function signature (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = reqValidatorsRemote
+module.exports = validatorsRemote

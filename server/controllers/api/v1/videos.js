@@ -11,10 +11,10 @@ const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
 const oAuth = middlewares.oauth
 const pagination = middlewares.pagination
-const reqValidator = middlewares.reqValidators
-const reqValidatorPagination = reqValidator.pagination
-const reqValidatorSort = reqValidator.sort
-const reqValidatorVideos = reqValidator.videos
+const validators = middlewares.validators
+const validatorsPagination = validators.pagination
+const validatorsSort = validators.sort
+const validatorsVideos = validators.videos
 const search = middlewares.search
 const sort = middlewares.sort
 const utils = require('../../../helpers/utils')
@@ -44,8 +44,8 @@ const storage = multer.diskStorage({
 const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
 
 router.get('/',
-  reqValidatorPagination.pagination,
-  reqValidatorSort.videosSort,
+  validatorsPagination.pagination,
+  validatorsSort.videosSort,
   sort.setVideosSort,
   pagination.setPagination,
   listVideos
@@ -53,22 +53,22 @@ router.get('/',
 router.post('/',
   oAuth.authenticate,
   reqFiles,
-  reqValidatorVideos.videosAdd,
+  validatorsVideos.videosAdd,
   addVideo
 )
 router.get('/:id',
-  reqValidatorVideos.videosGet,
+  validatorsVideos.videosGet,
   getVideo
 )
 router.delete('/:id',
   oAuth.authenticate,
-  reqValidatorVideos.videosRemove,
+  validatorsVideos.videosRemove,
   removeVideo
 )
 router.get('/search/:value',
-  reqValidatorVideos.videosSearch,
-  reqValidatorPagination.pagination,
-  reqValidatorSort.videosSort,
+  validatorsVideos.videosSearch,
+  validatorsPagination.pagination,
+  validatorsSort.videosSort,
   sort.setVideosSort,
   pagination.setPagination,
   search.setVideosSearch,

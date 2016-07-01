@@ -8,16 +8,16 @@ const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
 const oAuth = middlewares.oauth
-const reqValidator = middlewares.reqValidators.pods
-const signatureValidator = middlewares.reqValidators.remote.signature
+const validators = middlewares.validators.pods
+const signatureValidator = middlewares.validators.remote.signature
 
 const router = express.Router()
 const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
 router.get('/', listPodsUrl)
-router.post('/', reqValidator.podsAdd, addPods)
-router.get('/makefriends', oAuth.authenticate, reqValidator.makeFriends, makeFriends)
+router.post('/', validators.podsAdd, addPods)
+router.get('/makefriends', oAuth.authenticate, validators.makeFriends, makeFriends)
 router.get('/quitfriends', oAuth.authenticate, quitFriends)
 // Post because this is a secured request
 router.post('/remove', signatureValidator, removePods)

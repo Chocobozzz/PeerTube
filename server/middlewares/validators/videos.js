@@ -9,7 +9,7 @@ const logger = require('../../helpers/logger')
 
 const Video = mongoose.model('Video')
 
-const reqValidatorsVideos = {
+const validatorsVideos = {
   videosAdd: videosAdd,
   videosGet: videosGet,
   videosRemove: videosRemove,
@@ -94,4 +94,4 @@ function videosSearch (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = reqValidatorsVideos
+module.exports = validatorsVideos

@@ -3,7 +3,7 @@
 const checkErrors = require('./utils').checkErrors
 const logger = require('../../helpers/logger')
 
-const reqValidatorsPagination = {
+const validatorsPagination = {
   pagination: pagination
 }
 
@@ -18,4 +18,4 @@ function pagination (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = reqValidatorsPagination
+module.exports = validatorsPagination

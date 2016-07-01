@@ -4,7 +4,7 @@ const checkErrors = require('./utils').checkErrors
 const friends = require('../../lib/friends')
 const logger = require('../../helpers/logger')
 
-const reqValidatorsPod = {
+const validatorsPod = {
   makeFriends: makeFriends,
   podsAdd: podsAdd
 }
@@ -38,4 +38,4 @@ function podsAdd (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = reqValidatorsPod
+module.exports = validatorsPod
