@@ -270,7 +270,7 @@ function updatePodsScore (goodPods, badPods) {
 }
 
 function list (callback) {
-  this.find({ }, { _id: 1, request: 1, to: 1 }, callback)
+  this.find({ }, { _id: 1, request: 1, to: 1 }).sort({ _id: 1 }).exec(callback)
 }
 
 function removeAll (callback) {

@@ -10,6 +10,7 @@ const request = require('supertest')
 const testUtils = {
   dateIsValid: dateIsValid,
   flushTests: flushTests,
+  getAllVideosListBy: getAllVideosListBy,
   getFriendsList: getFriendsList,
   getVideo: getVideo,
   getVideosList: getVideosList,
@@ -43,6 +44,20 @@ function dateIsValid (dateString) {
 
 function flushTests (callback) {
   exec('npm run clean:server:test', callback)
+}
+
+function getAllVideosListBy (url, end) {
+  const path = '/api/v1/videos'
+
+  request(url)
+    .get(path)
+    .query({ sort: 'createdDate' })
+    .query({ start: 0 })
+    .query({ count: 10000 })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
 }
 
 function getFriendsList (url, end) {

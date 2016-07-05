@@ -39,6 +39,8 @@ function remoteVideos (req, res, next) {
       addRemoteVideo(videoData, callbackEach)
     } else if (request.type === 'remove') {
       removeRemoteVideo(videoData, fromUrl, callbackEach)
+    } else {
+      logger.error('Unkown remote request type %s.', request.type)
     }
   }, function (err) {
     if (err) logger.error('Error managing remote videos.', { error: err })
@@ -49,6 +51,8 @@ function remoteVideos (req, res, next) {
 }
 
 function addRemoteVideo (videoToCreateData, callback) {
+  logger.debug('Adding remote video %s.', videoToCreateData.magnetUri)
+
   // Mongoose pre hook will automatically create the thumbnail on disk
   videoToCreateData.thumbnail = videoToCreateData.thumbnailBase64
 
@@ -64,7 +68,13 @@ function removeRemoteVideo (videoToRemoveData, fromUrl, callback) {
       return callback(err)
     }
 
+    if (videosList.length === 0) {
+      logger.error('No remote video was found for this pod.', { magnetUri: videoToRemoveData.magnetUri, podUrl: fromUrl })
+    }
+
     async.each(videosList, function (video, callbackEach) {
+      logger.debug('Removing remote video %s.', video.magnetUri)
+
       video.remove(callbackEach)
     }, callback)
   })
