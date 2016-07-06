@@ -248,7 +248,7 @@ function findWithCount (query, start, count, sort, callback) {
 
   async.parallel([
     function (asyncCallback) {
-      self.find(query).skip(start).limit(start + count).sort(sort).exec(asyncCallback)
+      self.find(query).skip(start).limit(count).sort(sort).exec(asyncCallback)
     },
     function (asyncCallback) {
       self.count(query, asyncCallback)
