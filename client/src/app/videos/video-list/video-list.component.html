@@ -15,6 +15,6 @@
 </div>
 
 <pagination
-  [totalItems]="pagination.total" [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
-  (ngModelChange)="getVideos()"
+  [totalItems]="pagination.total" [itemsPerPage]="pagination.itemsPerPage" [maxSize]="6" [boundaryLinks]="true" [rotate]="false"
+  (ngModelChange)="getVideos()" [(ngModel)]="pagination.currentPage"
 ></pagination>
