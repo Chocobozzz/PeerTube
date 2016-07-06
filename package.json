@@ -67,6 +67,7 @@
   },
   "devDependencies": {
     "chai": "^3.3.0",
+    "commander": "^2.9.0",
     "livereload": "^0.4.1",
     "mocha": "^2.3.3",
     "standard": "^7.0.1",
