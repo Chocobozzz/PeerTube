@@ -24,6 +24,9 @@ const PODS_SCORE = {
 // Number of requests in parallel we can make
 const REQUESTS_IN_PARALLEL = 10
 
+// How many requests we put in request (request scheduler)
+const REQUESTS_LIMIT = 10
+
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
 
@@ -71,6 +74,7 @@ module.exports = {
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUESTS_IN_PARALLEL: REQUESTS_IN_PARALLEL,
+  REQUESTS_LIMIT: REQUESTS_LIMIT,
   RETRY_REQUESTS: RETRY_REQUESTS,
   SEARCHABLE_COLUMNS: SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,

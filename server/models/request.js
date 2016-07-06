@@ -102,7 +102,7 @@ function makeRequest (toPod, requestsToMake, callback) {
 function makeRequests () {
   const self = this
 
-  list.call(self, function (err, requests) {
+  listWithLimit.call(self, constants.REQUESTS_LIMIT, function (err, requests) {
     if (err) {
       logger.error('Cannot get the list of requests.', { err: err })
       return // Abort
@@ -269,8 +269,8 @@ function updatePodsScore (goodPods, badPods) {
   })
 }
 
-function list (callback) {
-  this.find({ }, { _id: 1, request: 1, to: 1 }).sort({ _id: 1 }).exec(callback)
+function listWithLimit (limit, callback) {
+  this.find({ }, { _id: 1, request: 1, to: 1 }).sort({ _id: 1 }).limit(limit).exec(callback)
 }
 
 function removeAll (callback) {
