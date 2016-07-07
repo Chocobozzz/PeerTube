@@ -352,7 +352,7 @@ describe('Test a single pod', function () {
 
       const videos = res.body.data
       expect(res.body.total).to.equal(6)
-      expect(videos.length).to.equal(4)
+      expect(videos.length).to.equal(3)
       expect(videos[0].name === videosListBase[2].name)
       expect(videos[1].name === videosListBase[3].name)
       expect(videos[2].name === videosListBase[4].name)
