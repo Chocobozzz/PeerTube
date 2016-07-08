@@ -3,7 +3,7 @@ import { Subject } from 'rxjs/Subject';
 
 import { Search } from './search.model';
 
-// This class is needed to communicate between videos/list and search component
+// This class is needed to communicate between videos/ and search component
 // Remove it when we'll be able to subscribe to router changes
 @Injectable()
 export class SearchService {

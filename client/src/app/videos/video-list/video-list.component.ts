@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES, RouteSegment } from '@angular/router';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ActivatedRoute, Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { PAGINATION_DIRECTIVES } from 'ng2-bootstrap/components/pagination';
 
@@ -18,52 +20,64 @@ import { SearchService } from '../../shared';
 @Component({
   selector: 'my-videos-list',
   styles: [ require('./video-list.component.scss') ],
+  pipes: [ AsyncPipe ],
   template: require('./video-list.component.html'),
   directives: [ LoaderComponent, PAGINATION_DIRECTIVES, ROUTER_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent ]
 })
 
-export class VideoListComponent implements OnInit {
-  loading = false;
+export class VideoListComponent implements OnInit, OnDestroy {
+  loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
   pagination: Pagination = {
     currentPage: 1,
     itemsPerPage: 9,
-    total: 0
+    totalItems: null
   };
   sort: SortField;
   user: User = null;
   videos: Video[] = [];
 
   private search: Search;
+  private sub: any;
 
   constructor(
     private authService: AuthService,
+    private changeDetector: ChangeDetectorRef,
     private router: Router,
-    private routeSegment: RouteSegment,
+    private route: ActivatedRoute,
     private videoService: VideoService,
-    private searchService: SearchService // Temporary
+    private searchService: SearchService
   ) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) {
-      this.user = User.load();
-    }
+    this.sub = this.route.params.subscribe(routeParams => {
+      if (this.authService.isLoggedIn()) {
+        this.user = User.load();
+      }
 
-    this.search = {
-      value: this.routeSegment.getParam('search'),
-      field: <SearchField>this.routeSegment.getParam('field')
-    };
+      this.search = {
+        value: routeParams['search'],
+        field: <SearchField>routeParams['field']
+      };
 
-    // Temporary
-    this.searchChanged(this.search);
+      // Update the search service component
+      this.searchService.searchChanged.next(this.search);
 
-    this.sort = <SortField>this.routeSegment.getParam('sort') || '-createdDate';
+      this.sort = <SortField>routeParams['sort'] || '-createdDate';
 
-    this.getVideos();
+      this.getVideos();
+    });
   }
 
-  getVideos() {
-    this.loading = true;
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  getVideos(detectChanges = true) {
+    this.loading.next(true);
     this.videos = [];
+    this.pagination.currentPage = 1;
+
+    this.changeDetector.detectChanges();
 
     let observable = null;
 
@@ -76,9 +90,9 @@ export class VideoListComponent implements OnInit {
     observable.subscribe(
       ({ videos, totalVideos }) => {
         this.videos = videos;
-        this.pagination.total = totalVideos;
+        this.pagination.totalItems = totalVideos;
 
-        this.loading = false;
+        this.loading.next(false);
       },
       error => alert(error)
     );
@@ -89,7 +103,7 @@ export class VideoListComponent implements OnInit {
   }
 
   onRemoved(video: Video) {
-    this.getVideos();
+    this.getVideos(false);
   }
 
   onSort(sort: SortField) {
@@ -105,9 +119,5 @@ export class VideoListComponent implements OnInit {
     }
 
     this.router.navigate(['/videos/list', params]);
-  }
-
-  searchChanged(search: Search) {
-    this.searchService.searchChanged.next(search);
   }
 }

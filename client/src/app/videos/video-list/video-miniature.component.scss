@@ -1,3 +1,5 @@
+@import "../../../sass/pre-customizations.scss";
+
 .video-miniature {
   margin-top: 30px;
   display: inline-block;
@@ -34,34 +36,40 @@
   }
 
   .video-miniature-informations {
-    margin-left: 3px;
     width: 200px;
 
     .video-miniature-name-tags {
       display: block;
 
       .video-miniature-name {
+        height: 23px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-weight: bold;
+        transition: color 0.2s;
+        font-size: 15px;
 
         &:hover {
           text-decoration: none;
         }
-
-        &::after {
-          content: '\002022';
-          margin-left: 3px;
-        }
       }
 
-      .video-miniature-tag {
-        font-size: 12px;
-        cursor: pointer;
-        transition: opacity 0.5s;
-        position: relative;
-        top: -2px;
+      .video-miniature-tags {
+        // Fix for chrome when tags a long
+        width: 201px;
 
-        &:hover {
-          opacity: 0.9;
+        .video-miniature-tag {
+          font-size: 13px;
+          cursor: pointer;
+          position: relative;
+          top: -2px;
+
+          .label {
+            line-height: $line-height-base;
+            transition: background-color 0.2s;
+          }
         }
       }
     }
@@ -69,16 +77,17 @@
     .video-miniature-author, .video-miniature-created-date {
       display: block;
       margin-left: 1px;
-      font-size: 11px;
-      color: rgb(54, 118, 173);
+      font-size: 12px;
+      color: #337ab7;
+      opacity: 0.9;
     }
 
     .video-miniature-author {
-      transition: opacity 0.5s;
+      transition: color 0.2s;
 
       &:hover {
+        color: #23527c;
         text-decoration: none;
-        opacity: 0.9;
       }
     }
   }

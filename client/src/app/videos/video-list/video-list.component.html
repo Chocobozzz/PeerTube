@@ -1,8 +1,8 @@
 <div class="row videos-info">
   <div class="col-md-9 videos-total-results">
-    {{ pagination.total }} videos
+    <span *ngIf="pagination.totalItems !== null">{{ pagination.totalItems }} videos</span>
 
-    <my-loader [loading]="loading"></my-loader>
+    <my-loader [loading]="loading | async"></my-loader>
   </div>
   <my-video-sort class="col-md-3" [currentSort]="sort" (sort)="onSort($event)"></my-video-sort>
 </div>
@@ -14,7 +14,7 @@
   </my-video-miniature>
 </div>
 
-<pagination
-  [totalItems]="pagination.total" [itemsPerPage]="pagination.itemsPerPage" [maxSize]="6" [boundaryLinks]="true" [rotate]="false"
-  (ngModelChange)="getVideos()" [(ngModel)]="pagination.currentPage"
+<pagination *ngIf="pagination.totalItems !== null"
+  [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage" [maxSize]="6" [boundaryLinks]="true" [rotate]="false"
+  [(ngModel)]="pagination.currentPage" (pageChanged)="getVideos()"
 ></pagination>

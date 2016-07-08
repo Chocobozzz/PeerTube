@@ -4,7 +4,7 @@ import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
 
 import { Search } from './search.model';
 import { SearchField } from './search-field.type';
-import { SearchService } from './search.service'; // Temporary
+import { SearchService } from './search.service';
 
 @Component({
     selector: 'my-search',

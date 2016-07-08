@@ -1,52 +1,23 @@
 import { Component } from '@angular/core';
 import { HTTP_PROVIDERS } from '@angular/http';
-import { Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, Routes } from '@angular/router';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { FriendService } from './friends';
-import { LoginComponent } from './login';
 import {
   AuthService,
   AuthStatus,
   Search,
-  SearchComponent
+  SearchComponent,
+  SearchService
 } from './shared';
-import {
-  VideoAddComponent,
-  VideoListComponent,
-  VideoWatchComponent,
-  VideoService
-} from './videos';
-import { SearchService } from './shared'; // Temporary
-
-@Routes([
-  {
-    path: '/users/login',
-    component: LoginComponent
-  },
-  {
-    path: '/videos/list',
-    component: VideoListComponent
-  },
-  {
-    path: '/videos/watch/:id',
-    component: VideoWatchComponent
-  },
-  {
-    path: '/videos/add',
-    component: VideoAddComponent
-  },
-  {
-    path: '/',
-    component: VideoListComponent
-  }
-])
+import { VideoService } from './videos';
 
 @Component({
     selector: 'my-app',
     template: require('./app.component.html'),
     styles: [ require('./app.component.scss') ],
     directives: [ ROUTER_DIRECTIVES, SearchComponent ],
-    providers: [ AuthService, FriendService, HTTP_PROVIDERS, ROUTER_PROVIDERS, VideoService, SearchService ]
+    providers: [ AuthService, FriendService, HTTP_PROVIDERS, VideoService, SearchService ]
 })
 
 export class AppComponent {
@@ -75,6 +46,7 @@ export class AppComponent {
         field: search.field,
         search: search.value
       };
+
       this.router.navigate(['/videos/list', params]);
     } else {
       this.router.navigate(['/videos/list']);

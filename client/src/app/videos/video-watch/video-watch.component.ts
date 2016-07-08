@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { CanDeactivate, RouteSegment } from '@angular/router';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 
@@ -15,7 +15,7 @@ import { WebTorrentService } from './webtorrent.service';
   pipes: [ BytesPipe ]
 })
 
-export class VideoWatchComponent implements OnInit, CanDeactivate {
+export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOADTIME_TOO_LONG: number = 30000;
 
   downloadSpeed: number;
@@ -26,11 +26,12 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
   video: Video;
 
   private errorTimer: NodeJS.Timer;
+  private sub: any;
   private torrentInfosInterval: NodeJS.Timer;
 
   constructor(
     private elementRef: ElementRef,
-    private routeSegment: RouteSegment,
+    private route: ActivatedRoute,
     private videoService: VideoService,
     private webTorrentService: WebTorrentService
   ) {}
@@ -73,22 +74,25 @@ export class VideoWatchComponent implements OnInit, CanDeactivate {
     });
   }
 
-  ngOnInit() {
-    let id = this.routeSegment.getParam('id');
-    this.videoService.getVideo(id).subscribe(
-      video => {
-        this.video = video;
-        this.loadVideo();
-      },
-      error => alert(error)
-    );
-  }
-
-  routerCanDeactivate() {
+  ngOnDestroy() {
     console.log('Removing video from webtorrent.');
     clearInterval(this.torrentInfosInterval);
     this.webTorrentService.remove(this.video.magnetUri);
-    return Promise.resolve(true);
+
+    this.sub.unsubscribe();
+  }
+
+  ngOnInit() {
+    this.sub = this.route.params.subscribe(routeParams => {
+      let id = routeParams['id'];
+      this.videoService.getVideo(id).subscribe(
+        video => {
+          this.video = video;
+          this.loadVideo();
+        },
+        error => alert(error)
+      );
+    });
   }
 
   private loadTooLong() {

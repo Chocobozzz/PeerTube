@@ -17,7 +17,7 @@
       <div class="panel-block">
         <div id="panel-user-login" class="panel-button">
           <span class="glyphicon glyphicon-user"></span>
-          <a *ngIf="!isLoggedIn" [routerLink]="['/users/login']">Login</a>
+          <a *ngIf="!isLoggedIn" [routerLink]="['/login']">Login</a>
           <a *ngIf="isLoggedIn" (click)="logout()">Logout</a>
         </div>
       </div>
