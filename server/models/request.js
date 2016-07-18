@@ -1,8 +1,10 @@
 'use strict'
 
-const async = require('async')
+const each = require('async/each')
+const eachLimit = require('async/eachLimit')
 const map = require('lodash/map')
 const mongoose = require('mongoose')
+const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
@@ -136,7 +138,7 @@ function makeRequests () {
     const goodPods = []
     const badPods = []
 
-    async.eachLimit(Object.keys(requestsToMake), constants.REQUESTS_IN_PARALLEL, function (toPodId, callbackEach) {
+    eachLimit(Object.keys(requestsToMake), constants.REQUESTS_IN_PARALLEL, function (toPodId, callbackEach) {
       const requestToMake = requestsToMake[toPodId]
 
       // FIXME: mongodb request inside a loop :/
@@ -183,7 +185,7 @@ function makeRequests () {
 
 // Remove pods with a score of 0 (too many requests where they were unreachable)
 function removeBadPods () {
-  async.waterfall([
+  waterfall([
     function findBadPods (callback) {
       Pod.listBadPods(function (err, pods) {
         if (err) {
@@ -217,7 +219,7 @@ function removeBadPods () {
         return callback(null)
       }
 
-      async.each(videosList, function (video, callbackEach) {
+      each(videosList, function (video, callbackEach) {
         video.remove(callbackEach)
       }, function (err) {
         if (err) {
@@ -237,7 +239,7 @@ function removeBadPods () {
         return callback(null)
       }
 
-      async.each(pods, function (pod, callbackEach) {
+      each(pods, function (pod, callbackEach) {
         pod.remove(callbackEach)
       }, function (err) {
         if (err) return callback(err)

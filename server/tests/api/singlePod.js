@@ -1,11 +1,12 @@
 'use strict'
 
-const async = require('async')
 const chai = require('chai')
+const each = require('async/each')
 const expect = chai.expect
 const fs = require('fs')
 const keyBy = require('lodash/keyBy')
 const pathUtils = require('path')
+const series = require('async/series')
 
 const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
 webtorrent.silent = true
@@ -20,7 +21,7 @@ describe('Test a single pod', function () {
   before(function (done) {
     this.timeout(20000)
 
-    async.series([
+    series([
       function (next) {
         utils.flushTests(next)
       },
@@ -280,7 +281,7 @@ describe('Test a single pod', function () {
       'video_short.mp4', 'video_short.ogv', 'video_short.webm',
       'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
     ]
-    async.each(videos, function (video, callbackEach) {
+    each(videos, function (video, callbackEach) {
       const name = video + ' name'
       const description = video + ' description'
       const tags = [ 'tag1', 'tag2', 'tag3' ]
@@ -318,7 +319,7 @@ describe('Test a single pod', function () {
       // For the next test
       videosListBase = videos
 
-      async.each(videos, function (video, callbackEach) {
+      each(videos, function (video, callbackEach) {
         if (err) throw err
         const videoName = video.name.replace(' name', '')
 

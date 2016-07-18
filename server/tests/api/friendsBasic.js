@@ -1,8 +1,9 @@
 'use strict'
 
-const async = require('async')
 const chai = require('chai')
+const each = require('async/each')
 const expect = chai.expect
+const series = require('async/series')
 
 const utils = require('./utils')
 
@@ -45,7 +46,7 @@ describe('Test basic friends', function () {
     utils.flushAndRunMultipleServers(3, function (serversRun, urlsRun) {
       servers = serversRun
 
-      async.each(servers, function (server, callbackEach) {
+      each(servers, function (server, callbackEach) {
         utils.loginAndGetAccessToken(server, function (err, accessToken) {
           if (err) return callbackEach(err)
 
@@ -57,7 +58,7 @@ describe('Test basic friends', function () {
   })
 
   it('Should not have friends', function (done) {
-    async.each(servers, function (server, callback) {
+    each(servers, function (server, callback) {
       utils.getFriendsList(server.url, function (err, res) {
         if (err) throw err
 
@@ -72,7 +73,7 @@ describe('Test basic friends', function () {
   it('Should make friends', function (done) {
     this.timeout(10000)
 
-    async.series([
+    series([
       // The second pod make friend with the third
       function (next) {
         makeFriends(2, next)
@@ -119,7 +120,7 @@ describe('Test basic friends', function () {
     // Now each pod should be friend with the other ones
     function (err) {
       if (err) throw err
-      async.each(servers, function (server, callback) {
+      each(servers, function (server, callback) {
         testMadeFriends(servers, server, callback)
       }, done)
     })
@@ -131,7 +132,7 @@ describe('Test basic friends', function () {
   })
 
   it('Should quit friends of pod 2', function (done) {
-    async.series([
+    series([
       // Pod 1 quit friends
       function (next) {
         const server = servers[1]
@@ -151,7 +152,7 @@ describe('Test basic friends', function () {
       },
       // Other pods shouldn't have pod 1 too
       function (next) {
-        async.each([ servers[0].url, servers[2].url ], function (url, callback) {
+        each([ servers[0].url, servers[2].url ], function (url, callback) {
           utils.getFriendsList(url, function (err, res) {
             if (err) throw err
 
@@ -169,7 +170,7 @@ describe('Test basic friends', function () {
   it('Should allow pod 2 to make friend again', function (done) {
     const server = servers[1]
     utils.makeFriends(server.url, server.accessToken, function () {
-      async.each(servers, function (server, callback) {
+      each(servers, function (server, callback) {
         testMadeFriends(servers, server, callback)
       }, done)
     })

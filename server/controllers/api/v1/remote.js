@@ -1,6 +1,7 @@
 'use strict'
 
-const async = require('async')
+const each = require('async/each')
+const eachSeries = require('async/eachSeries')
 const express = require('express')
 const mongoose = require('mongoose')
 
@@ -32,7 +33,7 @@ function remoteVideos (req, res, next) {
 
   // We need to process in the same order to keep consistency
   // TODO: optimization
-  async.eachSeries(requests, function (request, callbackEach) {
+  eachSeries(requests, function (request, callbackEach) {
     const videoData = request.data
 
     if (request.type === 'add') {
@@ -72,7 +73,7 @@ function removeRemoteVideo (videoToRemoveData, fromUrl, callback) {
       logger.error('No remote video was found for this pod.', { magnetUri: videoToRemoveData.magnetUri, podUrl: fromUrl })
     }
 
-    async.each(videosList, function (video, callbackEach) {
+    each(videosList, function (video, callbackEach) {
       logger.debug('Removing remote video %s.', video.magnetUri)
 
       video.remove(callbackEach)

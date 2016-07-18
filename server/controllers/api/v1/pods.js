@@ -1,8 +1,9 @@
 'use strict'
 
-const async = require('async')
+const each = require('async/each')
 const express = require('express')
 const mongoose = require('mongoose')
+const waterfall = require('async/waterfall')
 
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
@@ -31,7 +32,7 @@ module.exports = router
 function addPods (req, res, next) {
   const informations = req.body
 
-  async.waterfall([
+  waterfall([
     function addPod (callback) {
       const pod = new Pod(informations)
       pod.save(function (err, podCreated) {
@@ -82,7 +83,7 @@ function makeFriends (req, res, next) {
 function removePods (req, res, next) {
   const url = req.body.signature.url
 
-  async.waterfall([
+  waterfall([
     function loadPod (callback) {
       Pod.loadByUrl(url, callback)
     },
@@ -106,7 +107,7 @@ function removePods (req, res, next) {
     },
 
     function removeTheRemoteVideos (videosList, callback) {
-      async.each(videosList, function (video, callbackEach) {
+      each(videosList, function (video, callbackEach) {
         video.remove(callbackEach)
       }, callback)
     }

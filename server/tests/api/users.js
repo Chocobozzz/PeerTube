@@ -1,9 +1,9 @@
 'use strict'
 
-const async = require('async')
 const chai = require('chai')
 const expect = chai.expect
 const pathUtils = require('path')
+const series = require('async/series')
 
 const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
 webtorrent.silent = true
@@ -18,7 +18,7 @@ describe('Test users', function () {
   before(function (done) {
     this.timeout(20000)
 
-    async.series([
+    series([
       function (next) {
         utils.flushTests(next)
       },

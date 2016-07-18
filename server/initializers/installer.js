@@ -1,11 +1,12 @@
 'use strict'
 
-const async = require('async')
 const config = require('config')
+const each = require('async/each')
 const mkdirp = require('mkdirp')
 const mongoose = require('mongoose')
 const passwordGenerator = require('password-generator')
 const path = require('path')
+const series = require('async/series')
 
 const checker = require('./checker')
 const logger = require('../helpers/logger')
@@ -19,7 +20,7 @@ const installer = {
 }
 
 function installApplication (callback) {
-  async.series([
+  series([
     function createDirectories (callbackAsync) {
       createDirectoriesIfNotExist(callbackAsync)
     },
@@ -47,7 +48,7 @@ module.exports = installer
 function createDirectoriesIfNotExist (callback) {
   const storages = config.get('storage')
 
-  async.each(Object.keys(storages), function (key, callbackEach) {
+  each(Object.keys(storages), function (key, callbackEach) {
     const dir = storages[key]
     mkdirp(path.join(__dirname, '..', '..', dir), callbackEach)
   }, callback)

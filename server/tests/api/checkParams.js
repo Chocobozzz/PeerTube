@@ -1,10 +1,10 @@
 'use strict'
 
-const async = require('async')
 const chai = require('chai')
 const expect = chai.expect
 const pathUtils = require('path')
 const request = require('supertest')
+const series = require('async/series')
 
 const utils = require('./utils')
 
@@ -57,7 +57,7 @@ describe('Test parameters validator', function () {
   before(function (done) {
     this.timeout(20000)
 
-    async.series([
+    series([
       function (next) {
         utils.flushTests(next)
       },

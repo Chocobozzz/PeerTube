@@ -1,10 +1,13 @@
 'use strict'
 
-const async = require('async')
 const config = require('config')
+const each = require('async/each')
+const eachLimit = require('async/eachLimit')
+const eachSeries = require('async/eachSeries')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const request = require('request')
+const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
@@ -57,7 +60,7 @@ function makeFriends (callback) {
 
     const urls = config.get('network.friends')
 
-    async.eachSeries(urls, function (url, callbackEach) {
+    eachSeries(urls, function (url, callbackEach) {
       computeForeignPodsList(url, podsScore, callbackEach)
     }, function (err) {
       if (err) return callback(err)
@@ -77,7 +80,7 @@ function quitFriends (callback) {
   // Flush pool requests
   Request.flush()
 
-  async.waterfall([
+  waterfall([
     function getPodsList (callbackAsync) {
       return Pod.list(callbackAsync)
     },
@@ -92,7 +95,7 @@ function quitFriends (callback) {
       // Announce we quit them
       // We don't care if the request fails
       // The other pod will exclude us automatically after a while
-      async.eachLimit(pods, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
+      eachLimit(pods, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
         requestParams.toPod = pod
         requests.makeSecureRequest(requestParams, callbackEach)
       }, function (err) {
@@ -118,7 +121,7 @@ function quitFriends (callback) {
     },
 
     function removeTheRemoteVideos (videosList, callbackAsync) {
-      async.each(videosList, function (video, callbackEach) {
+      each(videosList, function (video, callbackEach) {
         video.remove(callbackEach)
       }, callbackAsync)
     }
@@ -212,7 +215,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   // Flush pool requests
   Request.forceSend()
 
-  async.eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
+  eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
     const params = {
       url: pod.url + '/api/' + constants.API_VERSION + '/pods/',
       method: 'POST',

@@ -1,10 +1,10 @@
 'use strict'
 
-const async = require('async')
 const config = require('config')
 const express = require('express')
 const mongoose = require('mongoose')
 const multer = require('multer')
+const waterfall = require('async/waterfall')
 
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
@@ -85,7 +85,7 @@ function addVideo (req, res, next) {
   const videoFile = req.files.videofile[0]
   const videoInfos = req.body
 
-  async.waterfall([
+  waterfall([
 
     function insertIntoDB (callback) {
       const videoData = {
@@ -152,7 +152,7 @@ function listVideos (req, res, next) {
 function removeVideo (req, res, next) {
   const videoId = req.params.id
 
-  async.waterfall([
+  waterfall([
     function getVideo (callback) {
       Video.load(videoId, callback)
     },

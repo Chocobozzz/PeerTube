@@ -1,9 +1,10 @@
 'use strict'
 
-const async = require('async')
 const config = require('config')
+const each = require('async/each')
 const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
+const parallel = require('async/parallel')
 const pathUtils = require('path')
 const mongoose = require('mongoose')
 
@@ -90,7 +91,7 @@ VideoSchema.pre('remove', function (next) {
     )
   }
 
-  async.parallel(tasks, next)
+  parallel(tasks, next)
 })
 
 VideoSchema.pre('save', function (next) {
@@ -110,7 +111,7 @@ VideoSchema.pre('save', function (next) {
       }
     )
 
-    async.parallel(tasks, function (err, results) {
+    parallel(tasks, function (err, results) {
       if (err) return next(err)
 
       video.magnetUri = results[0].magnetURI
@@ -234,7 +235,7 @@ function seedAllExisting (callback) {
   listOwned.call(this, function (err, videos) {
     if (err) return callback(err)
 
-    async.each(videos, function (video, callbackEach) {
+    each(videos, function (video, callbackEach) {
       const videoPath = pathUtils.join(uploadsDir, video.filename)
       seed(videoPath, callbackEach)
     }, callback)
@@ -246,7 +247,7 @@ function seedAllExisting (callback) {
 function findWithCount (query, start, count, sort, callback) {
   const self = this
 
-  async.parallel([
+  parallel([
     function (asyncCallback) {
       self.find(query).skip(start).limit(count).sort(sort).exec(asyncCallback)
     },

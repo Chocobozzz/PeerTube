@@ -1,9 +1,10 @@
 'use strict'
 
-const async = require('async')
 const chai = require('chai')
+const each = require('async/each')
 const expect = chai.expect
 const pathUtils = require('path')
+const series = require('async/series')
 
 const utils = require('./utils')
 const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
@@ -16,7 +17,7 @@ describe('Test multiple pods', function () {
   before(function (done) {
     this.timeout(30000)
 
-    async.series([
+    series([
       // Run servers
       function (next) {
         utils.flushAndRunMultipleServers(3, function (serversRun) {
@@ -26,7 +27,7 @@ describe('Test multiple pods', function () {
       },
       // Get the access tokens
       function (next) {
-        async.each(servers, function (server, callbackEach) {
+        each(servers, function (server, callbackEach) {
           utils.loginAndGetAccessToken(server, function (err, accessToken) {
             if (err) return callbackEach(err)
 
@@ -56,7 +57,7 @@ describe('Test multiple pods', function () {
   })
 
   it('Should not have videos for all pods', function (done) {
-    async.each(servers, function (server, callback) {
+    each(servers, function (server, callback) {
       utils.getVideosList(server.url, function (err, res) {
         if (err) throw err
 
@@ -73,7 +74,7 @@ describe('Test multiple pods', function () {
     it('Should upload the video on pod 1 and propagate on each pod', function (done) {
       this.timeout(15000)
 
-      async.series([
+      series([
         function (next) {
           const name = 'my super name for pod 1'
           const description = 'my super description for pod 1'
@@ -88,7 +89,7 @@ describe('Test multiple pods', function () {
         function (err) {
           if (err) throw err
 
-          async.each(servers, function (server, callback) {
+          each(servers, function (server, callback) {
             let baseMagnet = null
 
             utils.getVideosList(server.url, function (err, res) {
@@ -135,7 +136,7 @@ describe('Test multiple pods', function () {
     it('Should upload the video on pod 2 and propagate on each pod', function (done) {
       this.timeout(15000)
 
-      async.series([
+      series([
         function (next) {
           const name = 'my super name for pod 2'
           const description = 'my super description for pod 2'
@@ -150,7 +151,7 @@ describe('Test multiple pods', function () {
         function (err) {
           if (err) throw err
 
-          async.each(servers, function (server, callback) {
+          each(servers, function (server, callback) {
             let baseMagnet = null
 
             utils.getVideosList(server.url, function (err, res) {
@@ -197,7 +198,7 @@ describe('Test multiple pods', function () {
     it('Should upload two videos on pod 3 and propagate on each pod', function (done) {
       this.timeout(30000)
 
-      async.series([
+      series([
         function (next) {
           const name = 'my super name for pod 3'
           const description = 'my super description for pod 3'
@@ -220,7 +221,7 @@ describe('Test multiple pods', function () {
 
           let baseMagnet = null
           // All pods should have this video
-          async.each(servers, function (server, callback) {
+          each(servers, function (server, callback) {
             utils.getVideosList(server.url, function (err, res) {
               if (err) throw err
 
@@ -372,7 +373,7 @@ describe('Test multiple pods', function () {
     it('Should remove the file 3 and 3-2 by asking pod 3', function (done) {
       this.timeout(15000)
 
-      async.series([
+      series([
         function (next) {
           utils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0], next)
         },
@@ -387,7 +388,7 @@ describe('Test multiple pods', function () {
     })
 
     it('Should have videos 1 and 3 on each pod', function (done) {
-      async.each(servers, function (server, callback) {
+      each(servers, function (server, callback) {
         utils.getVideosList(server.url, function (err, res) {
           if (err) throw err
 

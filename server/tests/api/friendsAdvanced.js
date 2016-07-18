@@ -1,8 +1,9 @@
 'use strict'
 
-const async = require('async')
 const chai = require('chai')
+const each = require('async/each')
 const expect = chai.expect
+const series = require('async/series')
 
 const utils = require('./utils')
 
@@ -45,7 +46,7 @@ describe('Test advanced friends', function () {
     utils.flushAndRunMultipleServers(6, function (serversRun, urlsRun) {
       servers = serversRun
 
-      async.each(servers, function (server, callbackEach) {
+      each(servers, function (server, callbackEach) {
         utils.loginAndGetAccessToken(server, function (err, accessToken) {
           if (err) return callbackEach(err)
 
@@ -59,7 +60,7 @@ describe('Test advanced friends', function () {
   it('Should make friends with two pod each in a different group', function (done) {
     this.timeout(20000)
 
-    async.series([
+    series([
       // Pod 3 makes friend with the first one
       function (next) {
         makeFriends(3, next)
@@ -93,7 +94,7 @@ describe('Test advanced friends', function () {
   it('Should quit all friends', function (done) {
     this.timeout(10000)
 
-    async.series([
+    series([
       function (next) {
         quitFriends(1, next)
       },
@@ -103,7 +104,7 @@ describe('Test advanced friends', function () {
       function (err) {
         if (err) throw err
 
-        async.each([ 1, 2, 3, 4, 5, 6 ], function (i, callback) {
+        each([ 1, 2, 3, 4, 5, 6 ], function (i, callback) {
           getFriendsList(i, function (err, res) {
             if (err) throw err
 
@@ -119,7 +120,7 @@ describe('Test advanced friends', function () {
   it('Should make friends with the pods 1, 2, 3', function (done) {
     this.timeout(150000)
 
-    async.series([
+    series([
       // Pods 1, 2, 3 and 4 become friends
       function (next) {
         makeFriends(2, next)
@@ -132,7 +133,7 @@ describe('Test advanced friends', function () {
       },
       // Check the pods 1, 2, 3 and 4 are friends
       function (next) {
-        async.each([ 1, 2, 3, 4 ], function (i, callback) {
+        each([ 1, 2, 3, 4 ], function (i, callback) {
           getFriendsList(i, function (err, res) {
             if (err) throw err
 
@@ -211,7 +212,7 @@ describe('Test advanced friends', function () {
   it('Should pod 1 quit friends', function (done) {
     this.timeout(25000)
 
-    async.series([
+    series([
       // Upload a video on server 3 for aditionnal tests
       function (next) {
         uploadVideo(3, next)

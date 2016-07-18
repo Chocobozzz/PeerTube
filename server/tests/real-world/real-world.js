@@ -1,8 +1,9 @@
 'use strict'
 
-const async = require('async')
-const program = require('commander')
+const each = require('each')
 const isEqual = require('lodash/isEqual')
+const program = require('commander')
+const series = require('async/series')
 
 process.env.NODE_ENV = 'test'
 const constants = require('../../initializers/constants')
@@ -93,7 +94,7 @@ function getRandomNumServer (servers) {
 function runServers (numberOfPods, callback) {
   let servers = null
 
-  async.series([
+  series([
     // Run servers
     function (next) {
       utils.flushAndRunMultipleServers(numberOfPods, function (serversRun) {
@@ -103,7 +104,7 @@ function runServers (numberOfPods, callback) {
     },
     // Get the access tokens
     function (next) {
-      async.each(servers, function (server, callbackEach) {
+      each(servers, function (server, callbackEach) {
         utils.loginAndGetAccessToken(server, function (err, accessToken) {
           if (err) return callbackEach(err)
 
@@ -184,7 +185,7 @@ function remove (servers, numServer, callback) {
 
 function checkIntegrity (servers, callback) {
   const videos = []
-  async.each(servers, function (server, callback) {
+  each(servers, function (server, callback) {
     utils.getAllVideosListBy(server.url, function (err, res) {
       if (err) throw err
       const serverVideos = res.body.data
