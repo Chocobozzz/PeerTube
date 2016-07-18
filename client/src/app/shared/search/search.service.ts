@@ -7,9 +7,11 @@ import { Search } from './search.model';
 // Remove it when we'll be able to subscribe to router changes
 @Injectable()
 export class SearchService {
-  searchChanged: Subject<Search>;
+  searchUpdated: Subject<Search>;
+  updateSearch: Subject<Search>;
 
   constructor() {
-    this.searchChanged = new Subject<Search>();
+    this.updateSearch = new Subject<Search>();
+    this.searchUpdated = new Subject<Search>();
   }
 }

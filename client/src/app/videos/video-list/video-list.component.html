@@ -8,13 +8,16 @@
 </div>
 
 <div class="videos-miniatures">
-  <div class="col-md-12 no-video" *ngIf="noVideo()">There is no video.</div>
+  <div class="col-md-12 no-video" *ngIf="isThereNoVideo()">There is no video.</div>
 
-  <my-video-miniature class="ng-animate "*ngFor="let video of videos" [video]="video" [user]="user" (removed)="onRemoved(video)">
+  <my-video-miniature
+    class="ng-animate"
+    *ngFor="let video of videos" [video]="video" [user]="user" [currentSort]="sort" (removed)="onRemoved(video)"
+  >
   </my-video-miniature>
 </div>
 
 <pagination *ngIf="pagination.totalItems !== null"
   [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage" [maxSize]="6" [boundaryLinks]="true" [rotate]="false"
-  [(ngModel)]="pagination.currentPage" (pageChanged)="getVideos()"
+  [(ngModel)]="pagination.currentPage" (pageChanged)="onPageChanged($event)"
 ></pagination>

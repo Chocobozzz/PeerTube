@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { HTTP_PROVIDERS } from '@angular/http';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { ActivatedRoute, Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { FriendService } from './friends';
 import {
   AuthService,
   AuthStatus,
-  Search,
   SearchComponent,
   SearchService
 } from './shared';
@@ -27,6 +26,7 @@ export class AppComponent {
   constructor(
     private authService: AuthService,
     private friendService: FriendService,
+    private route: ActivatedRoute,
     private router: Router
   ) {
     this.isLoggedIn = this.authService.isLoggedIn();
@@ -38,19 +38,6 @@ export class AppComponent {
         }
       }
     );
-  }
-
-  onSearch(search: Search) {
-    if (search.value !== '') {
-      const params = {
-        field: search.field,
-        search: search.value
-      };
-
-      this.router.navigate(['/videos/list', params]);
-    } else {
-      this.router.navigate(['/videos/list']);
-    }
   }
 
   // FIXME

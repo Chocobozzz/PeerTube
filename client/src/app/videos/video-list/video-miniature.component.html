@@ -17,12 +17,12 @@
 
       <div class="video-miniature-tags">
         <span *ngFor="let tag of video.tags" class="video-miniature-tag">
-          <a [routerLink]="['/videos/list', { field: 'tags', search: tag }]" class="label label-primary">{{ tag }}</a>
+          <a [routerLink]="['/videos/list', { field: 'tags', search: tag, sort: currentSort }]" class="label label-primary">{{ tag }}</a>
         </span>
       </div>
     </span>
 
-    <a [routerLink]="['/videos/list', { field: 'author', search: video.author }]" class="video-miniature-author">{{ video.by }}</a>
+    <a [routerLink]="['/videos/list', { field: 'author', search: video.author, sort: currentSort }]" class="video-miniature-author">{{ video.by }}</a>
     <span class="video-miniature-created-date">{{ video.createdDate | date:'short' }}</span>
   </div>
 </div>

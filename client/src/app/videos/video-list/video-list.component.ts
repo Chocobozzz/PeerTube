@@ -37,7 +37,8 @@ export class VideoListComponent implements OnInit, OnDestroy {
   videos: Video[] = [];
 
   private search: Search;
-  private sub: any;
+  private subActivatedRoute: any;
+  private subSearch: any;
 
   constructor(
     private authService: AuthService,
@@ -49,33 +50,35 @@ export class VideoListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(routeParams => {
-      if (this.authService.isLoggedIn()) {
-        this.user = User.load();
-      }
+    if (this.authService.isLoggedIn()) {
+      this.user = User.load();
+    }
 
-      this.search = {
-        value: routeParams['search'],
-        field: <SearchField>routeParams['field']
-      };
+    // Subscribe to route changes
+    this.subActivatedRoute = this.route.params.subscribe(routeParams => {
+      this.loadRouteParams(routeParams);
 
       // Update the search service component
-      this.searchService.searchChanged.next(this.search);
-
-      this.sort = <SortField>routeParams['sort'] || '-createdDate';
-
+      this.searchService.updateSearch.next(this.search);
       this.getVideos();
+    });
+
+    // Subscribe to search changes
+    this.subSearch = this.searchService.searchUpdated.subscribe(search => {
+      this.search = search;
+
+      this.navigateToNewParams();
     });
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.subActivatedRoute.unsubscribe();
+    this.subSearch.unsubscribe();
   }
 
   getVideos(detectChanges = true) {
     this.loading.next(true);
     this.videos = [];
-    this.pagination.currentPage = 1;
 
     this.changeDetector.detectChanges();
 
@@ -98,26 +101,65 @@ export class VideoListComponent implements OnInit, OnDestroy {
     );
   }
 
-  noVideo() {
-    return !this.loading && this.videos.length === 0;
+  isThereNoVideo() {
+    return !this.loading.getValue() && this.videos.length === 0;
+  }
+
+  onPageChanged(event: any) {
+    // Be sure the current page is set
+    this.pagination.currentPage = event.page;
+
+    this.navigateToNewParams();
   }
 
   onRemoved(video: Video) {
-    this.getVideos(false);
+    this.getVideos();
   }
 
   onSort(sort: SortField) {
     this.sort = sort;
 
+    this.navigateToNewParams();
+  }
+
+  private buildRouteParams() {
+    // There is always a sort and a current page
     const params: any = {
-      sort: this.sort
+      sort: this.sort,
+      page: this.pagination.currentPage
     };
 
+    // Maybe there is a search
     if (this.search.value) {
       params.field = this.search.field;
       params.search = this.search.value;
     }
 
-    this.router.navigate(['/videos/list', params]);
+    return params;
+  }
+
+  private loadRouteParams(routeParams) {
+    if (routeParams['search'] !== undefined) {
+      this.search = {
+        value: routeParams['search'],
+        field: <SearchField>routeParams['field']
+      };
+    } else {
+      this.search = {
+        value: '',
+        field: 'name'
+      };
+    }
+
+    this.sort = <SortField>routeParams['sort'] || '-createdDate';
+
+    this.pagination.currentPage = parseInt(routeParams['page']) || 1;
+
+    this.changeDetector.detectChanges();
+  }
+
+  private navigateToNewParams() {
+    const routeParams = this.buildRouteParams();
+    this.router.navigate(['/videos/list', routeParams]);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
 
@@ -13,8 +13,6 @@ import { SearchService } from './search.service';
 })
 
 export class SearchComponent implements OnInit {
-  @Output() search = new EventEmitter<Search>();
-
   fieldChoices = {
     name: 'Name',
     author: 'Author',
@@ -30,7 +28,9 @@ export class SearchComponent implements OnInit {
   constructor(private searchService: SearchService) {}
 
   ngOnInit() {
-    this.searchService.searchChanged.subscribe(
+    // Subscribe is the search changed
+    // Usually changed by videos list component
+    this.searchService.updateSearch.subscribe(
       newSearchCriterias => {
         // Put a field by default
         if (!newSearchCriterias.field) {
@@ -58,7 +58,7 @@ export class SearchComponent implements OnInit {
   }
 
   doSearch() {
-    this.search.emit(this.searchCriterias);
+    this.searchService.searchUpdated.next(this.searchCriterias);
   }
 
   getStringChoice(choiceKey: SearchField) {
