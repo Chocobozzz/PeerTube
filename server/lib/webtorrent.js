@@ -97,7 +97,7 @@ function seed (path, callback) {
       magnetURI: received.magnetUri
     }
 
-    ipc.server.off(eventKey)
+    ipc.server.off(eventKey, '*')
     callback(torrent)
   })
 
@@ -124,7 +124,7 @@ function add (magnetUri, callback) {
       files: received.files
     }
 
-    ipc.server.off(eventKey)
+    ipc.server.off(eventKey, '*')
     callback(torrent)
   })
 
@@ -149,7 +149,7 @@ function remove (magnetUri, callback) {
     let err = null
     if (received.err) err = received.err
 
-    ipc.server.off(eventKey)
+    ipc.server.off(eventKey, '*')
     callback(err)
   })
 

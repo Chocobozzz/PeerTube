@@ -52,7 +52,7 @@
     "mongoose": "^4.0.5",
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
-    "node-ipc": "^7.0.0",
+    "node-ipc": "^8.0.0",
     "node-sass": "^3.4.2",
     "openssl-wrapper": "^0.3.4",
     "password-generator": "^2.0.2",
