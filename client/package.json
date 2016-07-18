@@ -40,7 +40,7 @@
     "file-loader": "^0.8.5",
     "html-webpack-plugin": "^2.19.0",
     "json-loader": "^0.5.4",
-    "ng2-bootstrap": "^1.0.16",
+    "ng2-bootstrap": "1.0.16",
     "ng2-file-upload": "^1.0.3",
     "node-sass": "^3.7.0",
     "normalize.css": "^4.1.1",
