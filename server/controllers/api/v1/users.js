@@ -27,7 +27,10 @@ function getAngularClient (req, res, next) {
     headerHostShouldBe += ':' + serverPort
   }
 
-  if (req.get('host') !== headerHostShouldBe) return res.type('json').status(403).end()
+  // Don't make this check if this is a test instance
+  if (process.env.NODE_ENV !== 'test' && req.get('host') !== headerHostShouldBe) {
+    return res.type('json').status(403).end()
+  }
 
   Client.loadFirstClient(function (err, client) {
     if (err) return next(err)
