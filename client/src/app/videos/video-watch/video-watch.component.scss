@@ -11,10 +11,16 @@ my-loader {
 
 #torrent-info {
   font-size: 10px;
+  margin-top: 10px;
+  text-align: center;
 
   div {
-    display: inline-block;
-    width: 33%;
-    text-align: center;
+    min-width: 60px;
+  }
+}
+
+.embed-responsive {
+  @media screen and (max-width: 600px) {
+    height: 300px;
   }
 }

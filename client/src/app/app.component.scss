@@ -4,6 +4,12 @@ header div {
 }
 
 menu {
+  @media screen and (max-width: 600px) {
+    margin-right: 3px !important;
+    padding: 3px !important;
+    min-height: 400px !important;
+  }
+
   min-height: 600px;
   margin-right: 20px;
   border-right: 1px solid rgba(0, 0, 0, 0.2);
@@ -29,4 +35,10 @@ menu {
 
 .panel-block:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.router-outlet-container {
+  @media screen and (max-width: 400px) {
+    padding: 0 3px 0 3px;
+  }
 }

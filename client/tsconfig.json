@@ -45,7 +45,6 @@
     "src/app/shared/users/index.ts",
     "src/app/shared/users/token.model.ts",
     "src/app/shared/users/user.model.ts",
-    "src/app/shared/videos-params.ts",
     "src/app/videos/index.ts",
     "src/app/videos/shared/index.ts",
     "src/app/videos/shared/loader/index.ts",

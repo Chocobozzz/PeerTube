@@ -1,5 +1,9 @@
 body {
   padding: 20px;
+
+  @media screen and (max-width: 400px) {
+    padding: 3px;
+  }
 }
 
 footer {

@@ -1,12 +1,12 @@
 .videos-info {
+  @media screen and (max-width: 400px) {
+    margin-left: 0;
+  }
 
-  padding-bottom: 20px;
   margin-bottom: 20px;
   border-bottom: 1px solid #f1f1f1;
   height: 40px;
   line-height: 40px;
-  width: 765px;
-  margin-left: 15px;
 
   my-video-sort {
     padding-right: 0;
