@@ -11,6 +11,7 @@ const testUtils = {
   dateIsValid: dateIsValid,
   flushTests: flushTests,
   getAllVideosListBy: getAllVideosListBy,
+  getClient: getClient,
   getFriendsList: getFriendsList,
   getVideo: getVideo,
   getVideosList: getVideosList,
@@ -54,6 +55,17 @@ function getAllVideosListBy (url, end) {
     .query({ sort: 'createdDate' })
     .query({ start: 0 })
     .query({ count: 10000 })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getClient (url, end) {
+  const path = '/api/v1/users/client'
+
+  request(url)
+    .get(path)
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
@@ -390,7 +402,14 @@ function uploadVideo (url, accessToken, name, description, tags, fixture, specia
     req.field('tags[' + i + ']', tags[i])
   }
 
-  req.attach('videofile', pathUtils.join(__dirname, 'fixtures', fixture))
+  let filepath = ''
+  if (pathUtils.isAbsolute(fixture)) {
+    filepath = fixture
+  } else {
+    filepath = pathUtils.join(__dirname, 'fixtures', fixture)
+  }
+
+  req.attach('videofile', filepath)
      .expect(specialStatus)
      .end(end)
 }
