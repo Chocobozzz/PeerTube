@@ -27,6 +27,7 @@ before_script:
   - mkdir -p $HOME/bin
   - cp ffmpeg-*-64bit-static/{ffmpeg,ffprobe,ffserver} $HOME/bin
   - export PATH=$HOME/bin:$PATH
+  - export NODE_TEST_IMAGE=true
 
 after_failure:
   - cat test1/logs/all-logs.log

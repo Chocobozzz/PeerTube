@@ -13,3 +13,4 @@ public/stylesheets/vendor
 uploads
 thumbnails
 config/production.yaml
+ffmpeg
