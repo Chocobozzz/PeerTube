@@ -11,8 +11,8 @@ UserSchema.path('password').required(true)
 UserSchema.path('username').required(true)
 
 UserSchema.statics = {
-  list: list,
-  loadByUsernameAndPassword: loadByUsernameAndPassword
+  getByUsernameAndPassword: getByUsernameAndPassword,
+  list: list
 }
 
 mongoose.model('User', UserSchema)
@@ -23,6 +23,6 @@ function list (callback) {
   return this.find(callback)
 }
 
-function loadByUsernameAndPassword (username, password, callback) {
-  return this.findOne({ username: username, password: password }, callback)
+function getByUsernameAndPassword (username, password) {
+  return this.findOne({ username: username, password: password })
 }

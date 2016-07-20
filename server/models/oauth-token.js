@@ -1,13 +1,15 @@
 const mongoose = require('mongoose')
 
+const logger = require('../helpers/logger')
+
 // ---------------------------------------------------------------------------
 
 const OAuthTokenSchema = mongoose.Schema({
   accessToken: String,
-  accessTokenExpiresOn: Date,
+  accessTokenExpiresAt: Date,
   client: { type: mongoose.Schema.Types.ObjectId, ref: 'OAuthClient' },
   refreshToken: String,
-  refreshTokenExpiresOn: Date,
+  refreshTokenExpiresAt: Date,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 })
 
@@ -16,19 +18,38 @@ OAuthTokenSchema.path('client').required(true)
 OAuthTokenSchema.path('user').required(true)
 
 OAuthTokenSchema.statics = {
-  loadByRefreshToken: loadByRefreshToken,
-  loadByTokenAndPopulateUser: loadByTokenAndPopulateUser
+  getByRefreshTokenAndPopulateClient: getByRefreshTokenAndPopulateClient,
+  getByTokenAndPopulateUser: getByTokenAndPopulateUser,
+  getByRefreshToken: getByRefreshToken
 }
 
 mongoose.model('OAuthToken', OAuthTokenSchema)
 
 // ---------------------------------------------------------------------------
 
-function loadByRefreshToken (refreshToken, callback) {
-  return this.findOne({ refreshToken: refreshToken }, callback)
+function getByRefreshTokenAndPopulateClient (refreshToken) {
+  return this.findOne({ refreshToken: refreshToken }).populate('client').then(function (token) {
+    if (!token) return token
+
+    const tokenInfos = {
+      refreshToken: token.refreshToken,
+      refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+      client: {
+        id: token.client._id.toString()
+      },
+      user: token.user
+    }
+
+    return tokenInfos
+  }).catch(function (err) {
+    logger.info('getRefreshToken error.', { error: err })
+  })
 }
 
-function loadByTokenAndPopulateUser (bearerToken, callback) {
-  // FIXME: allow to use callback
+function getByTokenAndPopulateUser (bearerToken) {
   return this.findOne({ accessToken: bearerToken }).populate('user')
+}
+
+function getByRefreshToken (refreshToken) {
+  return this.findOne({ refreshToken: refreshToken })
 }

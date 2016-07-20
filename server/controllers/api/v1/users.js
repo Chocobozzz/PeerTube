@@ -12,6 +12,7 @@ const router = express.Router()
 
 router.get('/client', getAngularClient)
 router.post('/token', oAuth.token, success)
+// TODO: Once https://github.com/oauthjs/node-oauth2-server/pull/289 is merged,, implement revoke token route
 
 // ---------------------------------------------------------------------------
 

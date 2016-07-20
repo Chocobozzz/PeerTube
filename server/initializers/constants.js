@@ -12,6 +12,11 @@ const FRIEND_SCORE = {
 // Time to wait between requests to the friends (10 min)
 let INTERVAL = 600000
 
+const OAUTH_LIFETIME = {
+  ACCESS_TOKEN: 3600 * 4, // 4 hours
+  REFRESH_TOKEN: 1209600 // 2 weeks
+}
+
 // Number of results by default for the pagination
 const PAGINATION_COUNT_DEFAULT = 15
 
@@ -71,6 +76,7 @@ module.exports = {
   API_VERSION: API_VERSION,
   FRIEND_SCORE: FRIEND_SCORE,
   INTERVAL: INTERVAL,
+  OAUTH_LIFETIME: OAUTH_LIFETIME,
   PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
   PODS_SCORE: PODS_SCORE,
   REQUESTS_IN_PARALLEL: REQUESTS_IN_PARALLEL,

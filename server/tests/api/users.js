@@ -144,13 +144,19 @@ describe('Test users', function () {
     utils.removeVideo(server.url, accessToken, videoId, done)
   })
 
-  it('Should logout')
+  it('Should logout (revoke token)')
 
   it('Should not be able to upload a video')
 
   it('Should not be able to remove a video')
 
   it('Should be able to login again')
+
+  it('Should have an expired access token')
+
+  it('Should refresh the token')
+
+  it('Should be able to upload a video again')
 
   after(function (done) {
     process.kill(-server.app.pid)

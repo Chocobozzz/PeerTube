@@ -66,7 +66,7 @@ function createOAuthClientIfNotExist (callback) {
     const secret = passwordGenerator(32, false)
     const client = new Client({
       clientSecret: secret,
-      grants: [ 'password' ]
+      grants: [ 'password', 'refresh_token' ]
     })
 
     client.save(function (err, createdClient) {

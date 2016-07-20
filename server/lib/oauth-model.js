@@ -12,6 +12,7 @@ const OAuthModel = {
   getClient: getClient,
   getRefreshToken: getRefreshToken,
   getUser: getUser,
+  revokeToken: revokeToken,
   saveToken: saveToken
 }
 
@@ -20,7 +21,7 @@ const OAuthModel = {
 function getAccessToken (bearerToken) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
-  return OAuthToken.loadByTokenAndPopulateUser(bearerToken)
+  return OAuthToken.getByTokenAndPopulateUser(bearerToken)
 }
 
 function getClient (clientId, clientSecret) {
@@ -28,19 +29,36 @@ function getClient (clientId, clientSecret) {
 
   // TODO req validator
   const mongoId = new mongoose.mongo.ObjectID(clientId)
-  return OAuthClient.loadByIdAndSecret(mongoId, clientSecret)
+  return OAuthClient.getByIdAndSecret(mongoId, clientSecret)
 }
 
-function getRefreshToken (refreshToken) {
+function getRefreshToken (refreshToken, callback) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
-  return OAuthToken.loadByRefreshToken(refreshToken)
+  return OAuthToken.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 
 function getUser (username, password) {
   logger.debug('Getting User (username: ' + username + ', password: ' + password + ').')
 
-  return User.loadByUsernameAndPassword(username, password)
+  return User.getByUsernameAndPassword(username, password)
+}
+
+function revokeToken (token) {
+  return OAuthToken.getByRefreshToken(token.refreshToken).then(function (tokenDB) {
+    if (tokenDB) tokenDB.remove()
+
+    /*
+      * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js
+      * "As per the discussion we need set older date
+      * revokeToken will expected return a boolean in future version
+      * https://github.com/oauthjs/node-oauth2-server/pull/274
+      * https://github.com/oauthjs/node-oauth2-server/issues/290"
+    */
+    const expiredToken = tokenDB
+    expiredToken.refreshTokenExpiresAt = new Date('2015-05-28T06:59:53.000Z')
+    return expiredToken
+  })
 }
 
 function saveToken (token, client, user) {
@@ -48,10 +66,10 @@ function saveToken (token, client, user) {
 
   const tokenObj = new OAuthToken({
     accessToken: token.accessToken,
-    accessTokenExpiresOn: token.accessTokenExpiresOn,
+    accessTokenExpiresAt: token.accessTokenExpiresAt,
     client: client.id,
     refreshToken: token.refreshToken,
-    refreshTokenExpiresOn: token.refreshTokenExpiresOn,
+    refreshTokenExpiresAt: token.refreshTokenExpiresAt,
     user: user.id
   })
 

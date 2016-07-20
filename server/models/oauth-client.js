@@ -11,8 +11,8 @@ const OAuthClientSchema = mongoose.Schema({
 OAuthClientSchema.path('clientSecret').required(true)
 
 OAuthClientSchema.statics = {
+  getByIdAndSecret: getByIdAndSecret,
   list: list,
-  loadByIdAndSecret: loadByIdAndSecret,
   loadFirstClient: loadFirstClient
 }
 
@@ -28,6 +28,6 @@ function loadFirstClient (callback) {
   return this.findOne({}, callback)
 }
 
-function loadByIdAndSecret (id, clientSecret) {
+function getByIdAndSecret (id, clientSecret) {
   return this.findOne({ _id: id, clientSecret: clientSecret })
 }
