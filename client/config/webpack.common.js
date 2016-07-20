@@ -8,6 +8,7 @@ const helpers = require('./helpers')
 var CopyWebpackPlugin = (CopyWebpackPlugin = require('copy-webpack-plugin'), CopyWebpackPlugin.default || CopyWebpackPlugin)
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin
+const WebpackNotifierPlugin = require('webpack-notifier')
 
 /*
  * Webpack Constants
@@ -244,8 +245,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       chunksSortMode: 'dependency'
-    })
+    }),
 
+    new WebpackNotifierPlugin({ alwaysNotify: true })
   ],
 
   /*
