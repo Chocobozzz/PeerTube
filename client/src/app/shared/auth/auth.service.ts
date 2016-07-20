@@ -9,13 +9,14 @@ import { User } from './user.model';
 @Injectable()
 export class AuthService {
   private static BASE_CLIENT_URL = '/api/v1/users/client';
-  private static BASE_LOGIN_URL = '/api/v1/users/token';
+  private static BASE_TOKEN_URL = '/api/v1/users/token';
 
   loginChangedSource: Observable<AuthStatus>;
 
   private clientId: string;
   private clientSecret: string;
   private loginChanged: Subject<AuthStatus>;
+  private user: User = null;
 
   constructor(private http: Http) {
     this.loginChanged = new Subject<AuthStatus>();
@@ -36,10 +37,19 @@ export class AuthService {
           alert(error);
         }
       );
+
+    // Return null if there is nothing to load
+    this.user = User.load();
   }
 
   getAuthRequestOptions(): RequestOptions {
     return new RequestOptions({ headers: this.getRequestHeader() });
+  }
+
+  getRefreshToken() {
+    if (this.user === null) return null;
+
+    return this.user.getRefreshToken();
   }
 
   getRequestHeader() {
@@ -51,21 +61,19 @@ export class AuthService {
   }
 
   getToken() {
-    return localStorage.getItem('access_token');
+    if (this.user === null) return null;
+
+    return this.user.getAccessToken();
   }
 
   getTokenType() {
-    return localStorage.getItem('token_type');
+    if (this.user === null) return null;
+
+    return this.user.getTokenType();
   }
 
   getUser(): User {
-    if (this.isLoggedIn() === false) {
-      return null;
-    }
-
-    const user = User.load();
-
-    return user;
+    return this.user;
   }
 
   isLoggedIn() {
@@ -93,21 +101,72 @@ export class AuthService {
       headers: headers
     };
 
-    return this.http.post(AuthService.BASE_LOGIN_URL, body.toString(), options)
+    return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
                     .map(res => res.json())
+                    .map(res => {
+                      res.username = username;
+                      return res;
+                    })
+                    .map(res => this.handleLogin(res))
                     .catch(this.handleError);
   }
 
   logout() {
-    // TODO make HTTP request
+    // TODO: make an HTTP request to revoke the tokens
+    this.user = null;
+    User.flush();
+  }
+
+  refreshAccessToken() {
+    console.log('Refreshing token...');
+
+    const refreshToken = this.getRefreshToken();
+
+    let body = new URLSearchParams();
+    body.set('refresh_token', refreshToken);
+    body.set('client_id', this.clientId);
+    body.set('client_secret', this.clientSecret);
+    body.set('response_type', 'code');
+    body.set('grant_type', 'refresh_token');
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+
+    let options = {
+      headers: headers
+    };
+
+    return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
+                    .map(res => res.json())
+                    .map(res => this.handleRefreshToken(res))
+                    .catch(this.handleError);
   }
 
   setStatus(status: AuthStatus) {
     this.loginChanged.next(status);
   }
 
+  private handleLogin (obj: any) {
+    const username = obj.username;
+    const hash_tokens = {
+      access_token: obj.access_token,
+      token_type: obj.token_type,
+      refresh_token: obj.refresh_token
+    };
+
+    this.user = new User(username, hash_tokens);
+    this.user.save();
+
+    this.setStatus(AuthStatus.LoggedIn);
+  }
+
   private handleError (error: Response) {
     console.error(error);
     return Observable.throw(error.json() || { error: 'Server error' });
+  }
+
+  private handleRefreshToken (obj: any) {
+    this.user.refreshTokens(obj.access_token, obj.refresh_token);
+    this.user.save();
   }
 }

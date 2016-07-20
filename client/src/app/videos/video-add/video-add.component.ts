@@ -130,8 +130,22 @@ export class VideoAddComponent implements OnInit {
     };
 
     item.onError = (response: string, status: number) => {
-      this.error = (status === 400) ? response : 'Unknow error';
-      console.error(this.error);
+      // We need to handle manually these cases beceause we use the FileUpload component
+      if (status === 400) {
+        this.error = response;
+      } else if (status === 401) {
+        this.error = 'Access token was expired, refreshing token...';
+        this.authService.refreshAccessToken().subscribe(
+          () => {
+            // Update the uploader request header
+            this.uploader.authToken = this.authService.getRequestHeaderValue();
+            this.error += ' access token refreshed. Please retry your request.';
+          }
+        );
+      } else {
+        this.error = 'Unknow error';
+        console.error(this.error);
+      }
     };
 
 

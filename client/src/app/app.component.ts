@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { HTTP_PROVIDERS } from '@angular/http';
 import { ActivatedRoute, Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { FriendService } from './friends';
@@ -16,7 +15,7 @@ import { VideoService } from './videos';
     template: require('./app.component.html'),
     styles: [ require('./app.component.scss') ],
     directives: [ ROUTER_DIRECTIVES, SearchComponent ],
-    providers: [ AuthService, FriendService, HTTP_PROVIDERS, VideoService, SearchService ]
+    providers: [ FriendService, VideoService, SearchService ]
 })
 
 export class AppComponent {
@@ -35,14 +34,20 @@ export class AppComponent {
       status => {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true;
+          console.log('Logged in.');
+        } else if (status === AuthStatus.LoggedOut) {
+          this.isLoggedIn = false;
+          console.log('Logged out.');
+        } else {
+          console.error('Unknown auth status: ' + status);
         }
       }
     );
   }
 
-  // FIXME
   logout() {
-    // this._authService.logout();
+    this.authService.logout();
+    this.authService.setStatus(AuthStatus.LoggedOut);
   }
 
   makeFriends() {

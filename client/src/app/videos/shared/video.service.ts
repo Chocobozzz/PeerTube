@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Pagination } from './pagination.model';
 import { Search } from '../../shared';
 import { SortField } from './sort-field.type';
-import { AuthService } from '../../shared';
+import { AuthHttp, AuthService } from '../../shared';
 import { Video } from './video.model';
 
 @Injectable()
@@ -14,6 +14,7 @@ export class VideoService {
 
   constructor(
     private authService: AuthService,
+    private authHttp: AuthHttp,
     private http: Http
   ) {}
 
@@ -35,10 +36,9 @@ export class VideoService {
   }
 
   removeVideo(id: string) {
-    const options = this.authService.getAuthRequestOptions();
-    return this.http.delete(VideoService.BASE_VIDEO_URL + id, options)
-                    .map(res => <number> res.status)
-                    .catch(this.handleError);
+    return this.authHttp.delete(VideoService.BASE_VIDEO_URL + id)
+                        .map(res => <number> res.status)
+                        .catch(this.handleError);
   }
 
   searchVideos(search: Search, pagination: Pagination, sort: SortField) {
