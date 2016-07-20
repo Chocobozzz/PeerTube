@@ -72,6 +72,6 @@ export class AuthHttp extends Http {
   }
 
   private setAuthorizationHeader(headers: Headers) {
-    headers.set('Authorization', `${this.authService.getTokenType()} ${this.authService.getToken()}`);
+    headers.set('Authorization', this.authService.getRequestHeaderValue());
   }
 }

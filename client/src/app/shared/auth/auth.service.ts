@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, RequestOptions, Response, URLSearchParams } from '@angular/http';
+import { Headers, Http, Response, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -42,25 +42,17 @@ export class AuthService {
     this.user = User.load();
   }
 
-  getAuthRequestOptions(): RequestOptions {
-    return new RequestOptions({ headers: this.getRequestHeader() });
-  }
-
   getRefreshToken() {
     if (this.user === null) return null;
 
     return this.user.getRefreshToken();
   }
 
-  getRequestHeader() {
-    return new Headers({ 'Authorization': this.getRequestHeaderValue() });
-  }
-
   getRequestHeaderValue() {
-    return `${this.getTokenType()} ${this.getToken()}`;
+    return `${this.getTokenType()} ${this.getAccessToken()}`;
   }
 
-  getToken() {
+  getAccessToken() {
     if (this.user === null) return null;
 
     return this.user.getAccessToken();
@@ -77,7 +69,7 @@ export class AuthService {
   }
 
   isLoggedIn() {
-    if (this.getToken()) {
+    if (this.getAccessToken()) {
       return true;
     } else {
       return false;
@@ -142,7 +134,7 @@ export class AuthService {
                     .catch(this.handleError);
   }
 
-  setStatus(status: AuthStatus) {
+  private setStatus(status: AuthStatus) {
     this.loginChanged.next(status);
   }
 

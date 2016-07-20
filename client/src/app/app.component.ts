@@ -47,7 +47,6 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
-    this.authService.setStatus(AuthStatus.LoggedOut);
   }
 
   makeFriends() {
