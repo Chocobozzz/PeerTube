@@ -1,3 +1,12 @@
+#peertube-title a {
+  color: inherit !important;
+
+  &:hover {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}
+
 header div {
   line-height: 25px;
   margin-bottom: 30px;
