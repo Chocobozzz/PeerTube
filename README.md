@@ -41,14 +41,18 @@ Prototype of a decentralized video streaming platform using P2P (bittorrent) dir
     <img src="https://codeclimate.com/github/Chocobozzz/PeerTube/badges/gpa.svg" alt="Code climate" />
   </a>
 
-  <br />
-
-  <a href="https://github.com/feross/standard">
-    <img src="https://cdn.rawgit.com/feross/standard/master/badge.svg" alt="js-standard-style" />
+  <a href="http://standardjs.com/">
+    <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
   </a>
 </p>
 
-![screenshot](https://lutim.cpy.re/vC2loRww)
+<br />
+
+<p align="center">
+  <a href="http://peertube.cpy.re">
+    <img src="https://lutim.cpy.re/vC2loRww" alt="screenshot" />
+  </a>
+</p>
 
 ## Demonstration
 
@@ -205,5 +209,5 @@ Here are some simple schemes:
 
 ### Frontend
 
-There is already a frontend (Angular 2) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
+There already is a frontend (Angular 2) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
 The backend uses bittorrent protocol, so users could use their favorite bittorrent client to download/play the video with its torrent URI.
