@@ -1,18 +1,52 @@
-# PeerTube
+<h1 align="center">
+  PeerTube
+</h1>
 
-**Server**
-[![Build Status](https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=master)](https://travis-ci.org/Chocobozzz/PeerTube)
-[![Dependencies Status](https://david-dm.org/Chocobozzz/PeerTube.svg)](https://david-dm.org/Chocobozzz/PeerTube)
-[![devDependency Status](https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg)](https://david-dm.org/Chocobozzz/PeerTube#info=devDependencies)
-[![Code climate](https://codeclimate.com/github/Chocobozzz/PeerTube/badges/gpa.svg)](https://codeclimate.com/github/Chocobozzz/PeerTube)
+<h4 align="center">
+Prototype of a decentralized video streaming platform using P2P (bittorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+</h4>
 
-**Client**
-[![Dependency Status](https://david-dm.org/Chocobozzz/PeerTube.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client)
-[![devDependency Status](https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client#info=devDependencies)
+<p align="center">
+  <strong>Client</strong>
 
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+  <br />
 
-Prototype of a decentralized video streaming platform using P2P (bittorrent) directly in the web browser with [WebTorrent](https://github.com/feross/webtorrent).
+  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client">
+    <img src="https://david-dm.org/Chocobozzz/PeerTube.svg?path=client" alt="Dependency Status" />
+  </a>
+
+  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client#info=devDependencies">
+    <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
+  </a>
+</p>
+
+<p align="center">
+  <strong>Server</strong>
+
+  <br />
+
+  <a href="https://travis-ci.org/Chocobozzz/PeerTube">
+    <img src="https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=master" alt="Build Status" />
+  </a>
+
+  <a href="https://david-dm.org/Chocobozzz/PeerTube">
+    <img src="https://david-dm.org/Chocobozzz/PeerTube.svg" alt="Dependencies Status" />
+  </a>
+
+  <a href="https://david-dm.org/Chocobozzz/PeerTube#info=devDependencies">
+    <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg" alt="devDependency Status" />
+  </a>
+
+  <a href="https://codeclimate.com/github/Chocobozzz/PeerTube">
+    <img src="https://codeclimate.com/github/Chocobozzz/PeerTube/badges/gpa.svg" alt="Code climate" />
+  </a>
+
+  <br />
+
+  <a href="https://github.com/feross/standard">
+    <img src="https://cdn.rawgit.com/feross/standard/master/badge.svg" alt="js-standard-style" />
+  </a>
+</p>
 
 ![screenshot](https://lutim.cpy.re/vC2loRww)
 
@@ -154,15 +188,19 @@ See the ARCHITECTURE.md for more informations. Do not hesitate to give your opin
 
 Here are some simple schemes:
 
-![Decentralized](https://lutim.cpy.re/Q7mnNdJP)
+<p align="center">
 
-![Watch a video](https://lutim.cpy.re/0riSzAp1)
+<img src="https://lutim.cpy.re/Q7mnNdJP" alt="Decentralized" />
 
-![Watch a video P2P](https://lutim.cpy.re/OzMSOtxG)
+<img src="https://lutim.cpy.re/0riSzAp1" alt="Watch a video" />
 
-![Join a network](https://lutim.cpy.re/uVjNNRa9)
+<img src="https://lutim.cpy.re/OzMSOtxG" alt="Watch a P2P video" />
 
-![Many networks](https://lutim.cpy.re/udTMqcb0)
+<img src="https://lutim.cpy.re/uVjNNRa9" alt="Join a network" />
+
+<img src="https://lutim.cpy.re/udTMqcb0" alt="Many networks"
+
+</p>
 
 ### Frontend
 
