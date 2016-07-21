@@ -13,7 +13,7 @@
 
   <div class="video-miniature-informations">
     <span class="video-miniature-name-tags">
-      <a [routerLink]="['/videos/watch', video.id]" [attr.title] class="video-miniature-name">{{ video.name }}</a>
+      <a [routerLink]="['/videos/watch', video.id]" [attr.title]="video.name" class="video-miniature-name">{{ video.name }}</a>
 
       <div class="video-miniature-tags">
         <span *ngFor="let tag of video.tags" class="video-miniature-tag">
