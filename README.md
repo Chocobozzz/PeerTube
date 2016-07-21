@@ -205,5 +205,5 @@ Here are some simple schemes:
 
 ### Frontend
 
-There already is a frontend (Angular 2) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
+There is already a frontend (Angular 2) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
 The backend uses bittorrent protocol, so users could use their favorite bittorrent client to download/play the video with its torrent URI.
