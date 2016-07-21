@@ -172,17 +172,18 @@ See [ARCHITECTURE.md](https://github.com/Chocobozzz/PeerTube/blob/master/ARCHITE
 
 ### Backend
 
-  * The backend whould be a REST API
-  * Servers would communicate with each others with it
-    * Each server of a network has a list of all other servers of the network
-    * When a new installed server wants to join a network, it just has to get the list of the servers via one server and tell them "Hi I'm new in the network, communicate with me too please"
+  * The backend is a REST API
+  * Servers communicate with each others through it
+    * A network is composed by servers that communicate between them
+    * Each server of a network has a list of all other servers of this network
+    * When a new installed server wants to join a network, it just has to get the servers list through a server that is already in the network and tell "Hi I'm new in the network, communicate with me and share me your servers list please". Then the server will "make friend" with each server of this list
     * Each server has its own users who query it (search videos, where the torrent URI of this specific video is...)
-    * Server begins to seed and sends to the other servers of the network the video information (name, short description, torrent URI) of a new uploaded video
+    * If an user upload a video, the server seeds it and sends the video informations (name, short description, torrent URI...) to each server of the network
     * Each server has a RSA key to encrypt and sign communications with other servers
   * A server is a tracker responsible for all the videos uploaded in it
   * Even if nobody watches a video, it is seeded by the server where the video was uploaded
-  * A server would run webtorrent-hybrid to be a bridge with webrtc/standard bittorrent protocol
   * A network can live and evolve by expelling bad pod (with too many downtimes for example)
+  * A server **would** run webtorrent-hybrid to be a bridge with webrtc/standard bittorrent protocol
 
 See the ARCHITECTURE.md for more informations. Do not hesitate to give your opinion :)
 
@@ -204,5 +205,5 @@ Here are some simple schemes:
 
 ### Frontend
 
-There would be a simple frontend (Bootstrap, AngularJS) but since the backend is a REST API anybody could build a frontend (Web application, desktop application...).
-The backend uses bittorrent protocol, so users could use their favorite bittorrent client to download/play the video after having its torrent URI.
+There already is a frontend (Angular 2) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
+The backend uses bittorrent protocol, so users could use their favorite bittorrent client to download/play the video with its torrent URI.
