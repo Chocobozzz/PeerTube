@@ -1,7 +1,7 @@
 'use strict'
 
 const config = require('config')
-const each = require('async/each')
+const eachLimit = require('async/eachLimit')
 const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
 const parallel = require('async/parallel')
@@ -235,7 +235,7 @@ function seedAllExisting (callback) {
   listOwned.call(this, function (err, videos) {
     if (err) return callback(err)
 
-    each(videos, function (video, callbackEach) {
+    eachLimit(videos, constants.SEEDS_IN_PARALLEL, function (video, callbackEach) {
       const videoPath = pathUtils.join(uploadsDir, video.filename)
       seed(videoPath, callbackEach)
     }, callback)
