@@ -42,9 +42,9 @@
   * All the requests are retried if they failed
   * The requests are made at regular intervals to all pods of the network with a limit of parallel requests: if there are 1000 pods in the networks, the server won't make more than 10 requests in parallel
   * If there are no informations to send (no video addition/removal), no requests are made
-  * The requests are grouped: for example if the interval is 1 hour and an user upload 2 videos there will be only 1 request that contains the 2 videos informations
-  * The requests in the group are ordered: if an user add a video and remove it, we need to transmit these informations to the other pods in the same order
-  * The requests are grouped with a limit: if an user uploads 100 videos at a time, the information could be propagated in a few hours to do not make too big requests
+  * The requests are grouped: for example if the interval is 1 hour and a user$ upload 2 videos there will be only 1 request that contains the 2 videos informations
+  * The requests in the group are ordered: if a user add a video and remove it, we need to transmit these informations to the other pods in the same order
+  * The requests are grouped with a limit: if a user uploads 100 videos at a time, the information could be propagated in a few hours to do not make too big requests
   * If a grouped request fails the score is decreased by x points
   * If a grouped request is a success the score is increased by x points
   * The maximum of points would be defined
@@ -56,8 +56,8 @@
   * A pod has different user accounts that can upload videos
   * All pods have an index of all videos of the network (name, origin pod url, small description, uploader username, magnet Uri, thumbnail name, created date and the thumbnail file). For example, a test with 1000000 videos with alphanum characters and the following lengths: name = 50, author = 50, url = 25, description = 250, magnerUri = 200, thumbnail name = 50 has a mongodb size of ~ 4GB. To this, we add 1 000 000 thumbnails of 5-15 KB so 15GB maximum
   * After having uploaded a video, the server seeds it, adds the meta data in its database and makes a secure request to all of its friends
-  * If an user wants to watch a video, he asks its pod the magnetUri and the frontend adds the torrent (with WebTorrent), creates the HTML5 video tag and streams the file into it
-  * An user watching a video seeds it too (bittorent) so another user who is watching the same video can get the data from the origin server and the user 1 (etc)
+  * If a user wants to watch a video, he asks its pod the magnetUri and the frontend adds the torrent (with WebTorrent), creates the HTML5 video tag and streams the file into it
+  * A user watching a video seeds it too (bittorent) so another user who is watching the same video can get the data from the origin server and the user 1 (etc)
 
 ## Ideas
 

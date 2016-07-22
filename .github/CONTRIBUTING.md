@@ -5,7 +5,7 @@ Interesting in contributing? Awesome :)
 **Quick Links:**
 
   * [Give your feedback](#give-your-feedback)
-  * [Develop on the Server side}(#develop-on-the-server-side)
+  * [Develop on the Server side](#develop-on-the-server-side)
   * [Develop on the Client side](#develop-on-the-client-side)
   * [Write documentation](#write-documentation)
 
