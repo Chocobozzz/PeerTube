@@ -17,6 +17,7 @@ storage:
   uploads: 'uploads/'
   logs: 'logs/'
   thumbnails: 'thumbnails/'
+  torrents: 'torrents/'
 
 network:
   friends: []

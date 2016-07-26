@@ -14,6 +14,7 @@ storage:
   uploads: 'test3/uploads/'
   logs: 'test3/logs/'
   thumbnails: 'test3/thumbnails/'
+  torrents: 'test3/torrents/'
 
 network:
   friends:

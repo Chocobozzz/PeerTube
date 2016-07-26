@@ -49,11 +49,15 @@ const SORTABLE_COLUMNS = {
   VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
 }
 
+// Express static paths (router)
+const STATIC_PATHS = {
+  THUMBNAILS: '/static/thumbnails',
+  TORRENTS: '/static/torrents/',
+  WEBSEED: '/static/webseed/'
+}
+
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
-
-// Path for access to thumbnails with express router
-const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
 
 const VIDEOS_CONSTRAINTS_FIELDS = {
   NAME: { min: 3, max: 50 }, // Length
@@ -89,8 +93,8 @@ module.exports = {
   SEARCHABLE_COLUMNS: SEARCHABLE_COLUMNS,
   SEEDS_IN_PARALLEL: SEEDS_IN_PARALLEL,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,
+  STATIC_PATHS: STATIC_PATHS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
-  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH,
   VIDEOS_CONSTRAINTS_FIELDS: VIDEOS_CONSTRAINTS_FIELDS
 }
 
