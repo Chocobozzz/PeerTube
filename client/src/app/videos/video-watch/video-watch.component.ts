@@ -77,6 +77,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     console.log('Removing video from webtorrent.');
     clearInterval(this.torrentInfosInterval);
+    clearTimeout(this.errorTimer);
     this.webTorrentService.remove(this.video.magnetUri);
 
     this.sub.unsubscribe();
