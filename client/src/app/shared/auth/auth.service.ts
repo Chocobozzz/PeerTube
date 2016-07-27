@@ -107,6 +107,8 @@ export class AuthService {
     // TODO: make an HTTP request to revoke the tokens
     this.user = null;
     User.flush();
+
+    this.setStatus(AuthStatus.LoggedIn);
   }
 
   refreshAccessToken() {
