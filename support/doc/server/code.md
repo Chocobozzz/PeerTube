@@ -47,7 +47,7 @@ Uses [JavaScript Standard Style](http://standardjs.com/).
 
 The `NODE_ENV=test` is set to speed up communications between pods (see [constants.js](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.js#L71)).
 
-`npm run help` give you all available commands.
+`npm run help` gives you all available commands.
 
 If you want to test the decentralization feature, you can easily run 3 pods by running `npm run play`. The pods password are `test1`, `test2` and `test3`.
 
@@ -64,7 +64,7 @@ The seperate Electron process has the goal to seed videos through WebRTC because
 
 ![Architecture scheme](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/upload-video.png)
 
-When a user upload a video, the rest API asks the Electron process to seed it (communicate with IPC) and then adds it to its Mongo database.
+When a user uploads a video, the rest API asks the Electron process to seed it (communicate with IPC) and then adds it to its Mongo database.
 
 If a user wants to watch the video, the tracker will indicate all other users that are watching the video + the Electron process.
 
