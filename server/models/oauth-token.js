@@ -28,7 +28,7 @@ mongoose.model('OAuthToken', OAuthTokenSchema)
 // ---------------------------------------------------------------------------
 
 function getByRefreshTokenAndPopulateClient (refreshToken) {
-  return this.findOne({ refreshToken: refreshToken }).populate('client').then(function (token) {
+  return this.findOne({ refreshToken: refreshToken }).populate('client').exec().then(function (token) {
     if (!token) return token
 
     const tokenInfos = {
@@ -47,9 +47,9 @@ function getByRefreshTokenAndPopulateClient (refreshToken) {
 }
 
 function getByTokenAndPopulateUser (bearerToken) {
-  return this.findOne({ accessToken: bearerToken }).populate('user')
+  return this.findOne({ accessToken: bearerToken }).populate('user').exec()
 }
 
 function getByRefreshToken (refreshToken) {
-  return this.findOne({ refreshToken: refreshToken })
+  return this.findOne({ refreshToken: refreshToken }).exec()
 }

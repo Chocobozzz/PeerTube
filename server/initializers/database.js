@@ -23,6 +23,7 @@ const database = {
 }
 
 function connect () {
+  mongoose.Promise = global.Promise
   mongoose.connect('mongodb://' + host + ':' + port + '/' + dbname)
   mongoose.connection.on('error', function () {
     throw new Error('Mongodb connection error.')

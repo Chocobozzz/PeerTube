@@ -62,7 +62,7 @@ function revokeToken (token) {
 }
 
 function saveToken (token, client, user) {
-  logger.debug('Saving token for client ' + client.id + ' and user ' + user.id + '.')
+  logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
 
   const tokenObj = new OAuthToken({
     accessToken: token.accessToken,
@@ -73,13 +73,12 @@ function saveToken (token, client, user) {
     user: user.id
   })
 
-  return tokenObj.save(function (err, tokenCreated) {
-    if (err) throw err // node-oauth2-server library uses Promise.try
-
+  return tokenObj.save().then(function (tokenCreated) {
     tokenCreated.client = client
     tokenCreated.user = user
-
     return tokenCreated
+  }).catch(function (err) {
+    throw err
   })
 }
 

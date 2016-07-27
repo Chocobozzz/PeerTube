@@ -29,5 +29,5 @@ function loadFirstClient (callback) {
 }
 
 function getByIdAndSecret (id, clientSecret) {
-  return this.findOne({ _id: id, clientSecret: clientSecret })
+  return this.findOne({ _id: id, clientSecret: clientSecret }).exec()
 }
