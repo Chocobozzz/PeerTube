@@ -9,7 +9,7 @@ const pathUtils = require('path')
 const mongoose = require('mongoose')
 
 const constants = require('../initializers/constants')
-const customValidators = require('../helpers/custom-validators')
+const customVideosValidators = require('../helpers/custom-validators').videos
 const logger = require('../helpers/logger')
 const utils = require('../helpers/utils')
 const webtorrent = require('../lib/webtorrent')
@@ -39,18 +39,18 @@ const VideoSchema = mongoose.Schema({
   }
 })
 
-VideoSchema.path('name').validate(customValidators.isVideoNameValid)
-VideoSchema.path('description').validate(customValidators.isVideoDescriptionValid)
-VideoSchema.path('magnetUri').validate(customValidators.isVideoMagnetUriValid)
-VideoSchema.path('podUrl').validate(customValidators.isVideoPodUrlValid)
-VideoSchema.path('author').validate(customValidators.isVideoAuthorValid)
-VideoSchema.path('duration').validate(customValidators.isVideoDurationValid)
+VideoSchema.path('name').validate(customVideosValidators.isVideoNameValid)
+VideoSchema.path('description').validate(customVideosValidators.isVideoDescriptionValid)
+VideoSchema.path('magnetUri').validate(customVideosValidators.isVideoMagnetUriValid)
+VideoSchema.path('podUrl').validate(customVideosValidators.isVideoPodUrlValid)
+VideoSchema.path('author').validate(customVideosValidators.isVideoAuthorValid)
+VideoSchema.path('duration').validate(customVideosValidators.isVideoDurationValid)
 // The tumbnail can be the path or the data in base 64
 // The pre save hook will convert the base 64 data in a file on disk and replace the thumbnail key by the filename
 VideoSchema.path('thumbnail').validate(function (value) {
-  return customValidators.isVideoThumbnailValid(value) || customValidators.isVideoThumbnail64Valid(value)
+  return customVideosValidators.isVideoThumbnailValid(value) || customVideosValidators.isVideoThumbnail64Valid(value)
 })
-VideoSchema.path('tags').validate(customValidators.isVideoTagsValid)
+VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
 
 VideoSchema.methods = {
   isOwned: isOwned,

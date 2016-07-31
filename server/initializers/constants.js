@@ -3,6 +3,23 @@
 // API version of our pod
 const API_VERSION = 'v1'
 
+const CONSTRAINTS_FIELDS = {
+  USERS: {
+    USERNAME: { min: 3, max: 20 }, // Length
+    PASSWORD: { min: 6, max: 255 } // Length
+  },
+  VIDEOS: {
+    NAME: { min: 3, max: 50 }, // Length
+    DESCRIPTION: { min: 3, max: 250 }, // Length
+    MAGNET_URI: { min: 10 }, // Length
+    DURATION: { min: 1, max: 7200 }, // Number
+    TAGS: { min: 1, max: 3 }, // Number of total tags
+    TAG: { min: 2, max: 10 }, // Length
+    THUMBNAIL: { min: 2, max: 30 },
+    THUMBNAIL64: { min: 0, max: 20000 } // Bytes
+  }
+}
+
 // Score a pod has when we create it as a friend
 const FRIEND_SCORE = {
   BASE: 100,
@@ -55,29 +72,18 @@ const THUMBNAILS_SIZE = '200x110'
 // Path for access to thumbnails with express router
 const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
 
-const VIDEOS_CONSTRAINTS_FIELDS = {
-  NAME: { min: 3, max: 50 }, // Length
-  DESCRIPTION: { min: 3, max: 250 }, // Length
-  MAGNET_URI: { min: 10 }, // Length
-  DURATION: { min: 1, max: 7200 }, // Number
-  AUTHOR: { min: 3, max: 20 }, // Length
-  TAGS: { min: 1, max: 3 }, // Number of total tags
-  TAG: { min: 2, max: 10 }, // Length
-  THUMBNAIL: { min: 2, max: 30 },
-  THUMBNAIL64: { min: 0, max: 20000 } // Bytes
-}
-
 // Special constants for a test instance
 if (isTestInstance() === true) {
   FRIEND_SCORE.BASE = 20
   INTERVAL = 10000
-  VIDEOS_CONSTRAINTS_FIELDS.DURATION.max = 14
+  CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
 }
 
 // ---------------------------------------------------------------------------
 
 module.exports = {
   API_VERSION: API_VERSION,
+  CONSTRAINTS_FIELDS: CONSTRAINTS_FIELDS,
   FRIEND_SCORE: FRIEND_SCORE,
   INTERVAL: INTERVAL,
   OAUTH_LIFETIME: OAUTH_LIFETIME,
@@ -90,8 +96,7 @@ module.exports = {
   SEEDS_IN_PARALLEL: SEEDS_IN_PARALLEL,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
-  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH,
-  VIDEOS_CONSTRAINTS_FIELDS: VIDEOS_CONSTRAINTS_FIELDS
+  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH
 }
 
 // ---------------------------------------------------------------------------

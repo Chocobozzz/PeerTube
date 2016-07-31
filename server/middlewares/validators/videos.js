@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
-const customValidators = require('../../helpers/custom-validators')
+const customVideosValidators = require('../../helpers/custom-validators').videos
 const logger = require('../../helpers/logger')
 
 const Video = mongoose.model('Video')
@@ -33,8 +33,8 @@ function videosAdd (req, res, next) {
         return res.status(400).send('Cannot retrieve metadata of the file.')
       }
 
-      if (!customValidators.isVideoDurationValid(duration)) {
-        return res.status(400).send('Duration of the video file is too big (max: ' + constants.VIDEOS_CONSTRAINTS_FIELDS.DURATION.max + 's).')
+      if (!customVideosValidators.isVideoDurationValid(duration)) {
+        return res.status(400).send('Duration of the video file is too big (max: ' + constants.CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')
       }
 
       videoFile.duration = duration

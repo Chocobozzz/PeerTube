@@ -2,13 +2,13 @@
 
 const validator = require('express-validator').validator
 
-const constants = require('../initializers/constants')
-const VIDEOS_CONSTRAINTS_FIELDS = constants.VIDEOS_CONSTRAINTS_FIELDS
+const constants = require('../../initializers/constants')
+const usersValidators = require('./users')
+const miscValidators = require('./misc')
+const VIDEOS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEOS
 
-const customValidators = {
-  exists: exists,
+const videosValidators = {
   isEachRemoteVideosValid: isEachRemoteVideosValid,
-  isArray: isArray,
   isVideoAuthorValid: isVideoAuthorValid,
   isVideoDateValid: isVideoDateValid,
   isVideoDescriptionValid: isVideoDescriptionValid,
@@ -19,10 +19,6 @@ const customValidators = {
   isVideoTagsValid: isVideoTagsValid,
   isVideoThumbnailValid: isVideoThumbnailValid,
   isVideoThumbnail64Valid: isVideoThumbnail64Valid
-}
-
-function exists (value) {
-  return value !== undefined && value !== null
 }
 
 function isEachRemoteVideosValid (requests) {
@@ -48,20 +44,8 @@ function isEachRemoteVideosValid (requests) {
   })
 }
 
-function isArray (value) {
-  return Array.isArray(value)
-}
-
-function isRequestTypeAddValid (value) {
-  return value === 'add'
-}
-
-function isRequestTypeRemoveValid (value) {
-  return value === 'remove'
-}
-
 function isVideoAuthorValid (value) {
-  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.AUTHOR)
+  return usersValidators.isUserUsernameValid(usersValidators)
 }
 
 function isVideoDateValid (value) {
@@ -90,7 +74,7 @@ function isVideoPodUrlValid (value) {
 }
 
 function isVideoTagsValid (tags) {
-  return isArray(tags) &&
+  return miscValidators.isArray(tags) &&
          validator.isInt(tags.length, VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
          tags.every(function (tag) {
            return validator.isAlphanumeric(tag) &&
@@ -109,6 +93,14 @@ function isVideoThumbnail64Valid (value) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = customValidators
+module.exports = videosValidators
 
 // ---------------------------------------------------------------------------
+
+function isRequestTypeAddValid (value) {
+  return value === 'add'
+}
+
+function isRequestTypeRemoveValid (value) {
+  return value === 'remove'
+}
