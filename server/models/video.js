@@ -64,6 +64,7 @@ VideoSchema.statics = {
   listByUrlAndMagnet: listByUrlAndMagnet,
   listByUrls: listByUrls,
   listOwned: listOwned,
+  listOwnedByAuthor: listOwnedByAuthor,
   listRemotes: listRemotes,
   load: load,
   search: search,
@@ -209,6 +210,10 @@ function listByUrls (fromUrls, callback) {
 function listOwned (callback) {
   // If filename is not null this is *our* video
   this.find({ filename: { $ne: null } }, callback)
+}
+
+function listOwnedByAuthor (author, callback) {
+  this.find({ filename: { $ne: null }, author: author }, callback)
 }
 
 function listRemotes (callback) {

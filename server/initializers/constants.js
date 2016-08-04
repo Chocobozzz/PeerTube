@@ -72,6 +72,11 @@ const THUMBNAILS_SIZE = '200x110'
 // Path for access to thumbnails with express router
 const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
 
+const USER_ROLES = {
+  ADMIN: 'admin',
+  USER: 'user'
+}
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   FRIEND_SCORE.BASE = 20
@@ -96,7 +101,8 @@ module.exports = {
   SEEDS_IN_PARALLEL: SEEDS_IN_PARALLEL,
   SORTABLE_COLUMNS: SORTABLE_COLUMNS,
   THUMBNAILS_SIZE: THUMBNAILS_SIZE,
-  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH
+  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH,
+  USER_ROLES: USER_ROLES
 }
 
 // ---------------------------------------------------------------------------

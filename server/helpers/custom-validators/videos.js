@@ -45,7 +45,7 @@ function isEachRemoteVideosValid (requests) {
 }
 
 function isVideoAuthorValid (value) {
-  return usersValidators.isUserUsernameValid(usersValidators)
+  return usersValidators.isUserUsernameValid(value)
 }
 
 function isVideoDateValid (value) {

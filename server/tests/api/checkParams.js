@@ -11,9 +11,8 @@ const utils = require('./utils')
 describe('Test parameters validator', function () {
   let server = null
 
-  function makePostRequest (path, token, fields, attaches, done, fail) {
-    let statusCode = 400
-    if (fail !== undefined && fail === false) statusCode = 204
+  function makePostRequest (path, token, fields, attaches, done, statusCodeExpected) {
+    if (!statusCodeExpected) statusCodeExpected = 400
 
     const req = request(server.url)
       .post(path)
@@ -38,18 +37,31 @@ describe('Test parameters validator', function () {
       req.attach(attach, value)
     })
 
-    req.expect(statusCode, done)
+    req.expect(statusCodeExpected, done)
   }
 
-  function makePostBodyRequest (path, fields, done, fail) {
-    let statusCode = 400
-    if (fail !== undefined && fail === false) statusCode = 200
+  function makePostBodyRequest (path, token, fields, done, statusCodeExpected) {
+    if (!statusCodeExpected) statusCodeExpected = 400
 
-    request(server.url)
+    const req = request(server.url)
       .post(path)
       .set('Accept', 'application/json')
-      .send(fields)
-      .expect(statusCode, done)
+
+    if (token) req.set('Authorization', 'Bearer ' + token)
+
+    req.send(fields).expect(statusCodeExpected, done)
+  }
+
+  function makePutBodyRequest (path, token, fields, done, statusCodeExpected) {
+    if (!statusCodeExpected) statusCodeExpected = 400
+
+    const req = request(server.url)
+      .put(path)
+      .set('Accept', 'application/json')
+
+    if (token) req.set('Authorization', 'Bearer ' + token)
+
+    req.send(fields).expect(statusCodeExpected, done)
   }
 
   // ---------------------------------------------------------------
@@ -85,21 +97,21 @@ describe('Test parameters validator', function () {
     describe('When adding a pod', function () {
       it('Should fail with nothing', function (done) {
         const data = {}
-        makePostBodyRequest(path, data, done)
+        makePostBodyRequest(path, null, data, done)
       })
 
       it('Should fail without public key', function (done) {
         const data = {
           url: 'http://coucou.com'
         }
-        makePostBodyRequest(path, data, done)
+        makePostBodyRequest(path, null, data, done)
       })
 
       it('Should fail without an url', function (done) {
         const data = {
           publicKey: 'mysuperpublickey'
         }
-        makePostBodyRequest(path, data, done)
+        makePostBodyRequest(path, null, data, done)
       })
 
       it('Should fail with an incorrect url', function (done) {
@@ -107,11 +119,11 @@ describe('Test parameters validator', function () {
           url: 'coucou.com',
           publicKey: 'mysuperpublickey'
         }
-        makePostBodyRequest(path, data, function () {
+        makePostBodyRequest(path, null, data, function () {
           data.url = 'http://coucou'
-          makePostBodyRequest(path, data, function () {
+          makePostBodyRequest(path, null, data, function () {
             data.url = 'coucou'
-            makePostBodyRequest(path, data, done)
+            makePostBodyRequest(path, null, data, done)
           })
         })
       })
@@ -121,7 +133,68 @@ describe('Test parameters validator', function () {
           url: 'http://coucou.com',
           publicKey: 'mysuperpublickey'
         }
-        makePostBodyRequest(path, data, done, false)
+        makePostBodyRequest(path, null, data, done, 200)
+      })
+    })
+
+    describe('For the friends API', function () {
+      let userAccessToken = null
+
+      before(function (done) {
+        utils.createUser(server.url, server.accessToken, 'user1', 'password', function () {
+          server.user = {
+            username: 'user1',
+            password: 'password'
+          }
+
+          utils.loginAndGetAccessToken(server, function (err, accessToken) {
+            if (err) throw err
+
+            userAccessToken = accessToken
+
+            done()
+          })
+        })
+      })
+
+      describe('When making friends', function () {
+        it('Should fail with a invalid token', function (done) {
+          request(server.url)
+            .get(path + '/makefriends')
+            .query({ start: 'hello' })
+            .set('Authorization', 'Bearer faketoken')
+            .set('Accept', 'application/json')
+            .expect(401, done)
+        })
+
+        it('Should fail if the user is not an administrator', function (done) {
+          request(server.url)
+            .get(path + '/makefriends')
+            .query({ start: 'hello' })
+            .set('Authorization', 'Bearer ' + userAccessToken)
+            .set('Accept', 'application/json')
+            .expect(403, done)
+        })
+      })
+
+      describe('When quitting friends', function () {
+        it('Should fail with a invalid token', function (done) {
+          request(server.url)
+            .get(path + '/quitfriends')
+            .query({ start: 'hello' })
+            .set('Authorization', 'Bearer faketoken')
+            .set('Accept', 'application/json')
+            .expect(401, done)
+        })
+
+        it('Should fail if the user is not an administrator', function (done) {
+          request(server.url)
+            .get(path + '/quitfriends')
+            .query({ start: 'hello' })
+            .set('Authorization', 'Bearer ' + userAccessToken)
+            .set('Accept', 'application/json')
+            .expect(403, done)
+        })
       })
     })
   })
@@ -361,7 +434,7 @@ describe('Test parameters validator', function () {
           attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
           makePostRequest(path, server.accessToken, data, attach, function () {
             attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
-            makePostRequest(path, server.accessToken, data, attach, done, false)
+            makePostRequest(path, server.accessToken, data, attach, done, 204)
           }, false)
         }, false)
       })
@@ -426,6 +499,165 @@ describe('Test parameters validator', function () {
       it('Should fail with a video of another pod')
 
       it('Should succeed with the correct parameters')
+    })
+  })
+
+  describe('Of the users API', function () {
+    const path = '/api/v1/users/'
+
+    describe('When adding a new user', function () {
+      it('Should fail with a too small username', function (done) {
+        const data = {
+          username: 'ji',
+          password: 'mysuperpassword'
+        }
+
+        makePostBodyRequest(path, server.accessToken, data, done)
+      })
+
+      it('Should fail with a too long username', function (done) {
+        const data = {
+          username: 'mysuperusernamewhichisverylong',
+          password: 'mysuperpassword'
+        }
+
+        makePostBodyRequest(path, server.accessToken, data, done)
+      })
+
+      it('Should fail with an incorrect username', function (done) {
+        const data = {
+          username: 'my username',
+          password: 'mysuperpassword'
+        }
+
+        makePostBodyRequest(path, server.accessToken, data, done)
+      })
+
+      it('Should fail with a too small password', function (done) {
+        const data = {
+          username: 'myusername',
+          password: 'bla'
+        }
+
+        makePostBodyRequest(path, server.accessToken, data, done)
+      })
+
+      it('Should fail with a too long password', function (done) {
+        const data = {
+          username: 'myusername',
+          password: 'my super long password which is very very very very very very very very very very very very very very' +
+                    'very very very very very very very very very very very very very very very veryv very very very very' +
+                    'very very very very very very very very very very very very very very very very very very very very long'
+        }
+
+        makePostBodyRequest(path, server.accessToken, data, done)
+      })
+
+      it('Should fail with an non authenticated user', function (done) {
+        const data = {
+          username: 'myusername',
+          password: 'my super password'
+        }
+
+        makePostBodyRequest(path, 'super token', data, done, 401)
+      })
+
+      it('Should succeed with the correct params', function (done) {
+        const data = {
+          username: 'user1',
+          password: 'my super password'
+        }
+
+        makePostBodyRequest(path, server.accessToken, data, done, 204)
+      })
+
+      it('Should fail with a non admin user', function (done) {
+        server.user = {
+          username: 'user1',
+          password: 'my super password'
+        }
+
+        utils.loginAndGetAccessToken(server, function (err, accessToken) {
+          if (err) throw err
+
+          const data = {
+            username: 'user2',
+            password: 'my super password'
+          }
+
+          makePostBodyRequest(path, accessToken, data, done, 403)
+        })
+      })
+    })
+
+    describe('When updating a user', function () {
+      let userId = null
+
+      before(function (done) {
+        utils.getUsersList(server.url, function (err, res) {
+          if (err) throw err
+
+          userId = res.body.data[1].id
+          done()
+        })
+      })
+
+      it('Should fail with a too small password', function (done) {
+        const data = {
+          password: 'bla'
+        }
+
+        makePutBodyRequest(path + '/' + userId, server.accessToken, data, done)
+      })
+
+      it('Should fail with a too long password', function (done) {
+        const data = {
+          password: 'my super long password which is very very very very very very very very very very very very very very' +
+                    'very very very very very very very very very very very very very very very veryv very very very very' +
+                    'very very very very very very very very very very very very very very very very very very very very long'
+        }
+
+        makePutBodyRequest(path + '/' + userId, server.accessToken, data, done)
+      })
+
+      it('Should fail with an non authenticated user', function (done) {
+        const data = {
+          password: 'my super password'
+        }
+
+        makePutBodyRequest(path + '/' + userId, 'super token', data, done, 401)
+      })
+
+      it('Should succeed with the correct params', function (done) {
+        const data = {
+          password: 'my super password'
+        }
+
+        makePutBodyRequest(path + '/' + userId, server.accessToken, data, done, 204)
+      })
+    })
+
+    describe('When removing an user', function () {
+      it('Should fail with an incorrect username', function (done) {
+        request(server.url)
+          .delete(path + 'bla-bla')
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .expect(400, done)
+      })
+
+      it('Should return 404 with a non existing username', function (done) {
+        request(server.url)
+          .delete(path + 'qzzerg')
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .expect(404, done)
+      })
+
+      it('Should success with the correct parameters', function (done) {
+        request(server.url)
+          .delete(path + 'user1')
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .expect(204, done)
+      })
     })
   })
 

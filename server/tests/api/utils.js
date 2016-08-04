@@ -8,11 +8,13 @@ const pathUtils = require('path')
 const request = require('supertest')
 
 const testUtils = {
+  createUser: createUser,
   dateIsValid: dateIsValid,
   flushTests: flushTests,
   getAllVideosListBy: getAllVideosListBy,
   getClient: getClient,
   getFriendsList: getFriendsList,
+  getUsersList: getUsersList,
   getVideo: getVideo,
   getVideosList: getVideosList,
   getVideosListPagination: getVideosListPagination,
@@ -21,6 +23,7 @@ const testUtils = {
   loginAndGetAccessToken: loginAndGetAccessToken,
   makeFriends: makeFriends,
   quitFriends: quitFriends,
+  removeUser: removeUser,
   removeVideo: removeVideo,
   flushAndRunMultipleServers: flushAndRunMultipleServers,
   runServer: runServer,
@@ -28,10 +31,28 @@ const testUtils = {
   searchVideoWithPagination: searchVideoWithPagination,
   searchVideoWithSort: searchVideoWithSort,
   testImage: testImage,
-  uploadVideo: uploadVideo
+  uploadVideo: uploadVideo,
+  updateUser: updateUser
 }
 
 // ---------------------- Export functions --------------------
+
+function createUser (url, accessToken, username, password, specialStatus, end) {
+  if (!end) {
+    end = specialStatus
+    specialStatus = 204
+  }
+
+  const path = '/api/v1/users'
+
+  request(url)
+    .post(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .send({ username: username, password: password })
+    .expect(specialStatus)
+    .end(end)
+}
 
 function dateIsValid (dateString) {
   const dateToCheck = new Date(dateString)
@@ -63,6 +84,17 @@ function getAllVideosListBy (url, end) {
 
 function getClient (url, end) {
   const path = '/api/v1/users/client'
+
+  request(url)
+    .get(path)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getUsersList (url, end) {
+  const path = '/api/v1/users'
 
   request(url)
     .get(path)
@@ -207,6 +239,22 @@ function quitFriends (url, accessToken, expectedStatus, callback) {
       // Wait for the request between pods
       setTimeout(callback, 1000)
     })
+}
+
+function removeUser (url, token, username, expectedStatus, end) {
+  if (!end) {
+    end = expectedStatus
+    expectedStatus = 204
+  }
+
+  const path = '/api/v1/users'
+
+  request(url)
+    .delete(path + '/' + username)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + token)
+    .expect(expectedStatus)
+    .end(end)
 }
 
 function removeVideo (url, token, id, expectedStatus, end) {
@@ -412,6 +460,18 @@ function uploadVideo (url, accessToken, name, description, tags, fixture, specia
   req.attach('videofile', filepath)
      .expect(specialStatus)
      .end(end)
+}
+
+function updateUser (url, userId, accessToken, newPassword, end) {
+  const path = '/api/v1/users/' + userId
+
+  request(url)
+    .put(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .send({ password: newPassword })
+    .expect(200)
+    .end(end)
 }
 
 // ---------------------------------------------------------------------------

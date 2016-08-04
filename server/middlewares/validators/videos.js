@@ -18,6 +18,7 @@ const validatorsVideos = {
 
 function videosAdd (req, res, next) {
   req.checkFiles('videofile[0].originalname', 'Should have an input video').notEmpty()
+  // TODO: move to constants and function
   req.checkFiles('videofile[0].mimetype', 'Should have a correct mime type').matches(/video\/(webm)|(mp4)|(ogg)/i)
   req.checkBody('name', 'Should have a valid name').isVideoNameValid()
   req.checkBody('description', 'Should have a valid description').isVideoDescriptionValid()

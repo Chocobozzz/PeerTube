@@ -13,7 +13,9 @@ const utils = require('./utils')
 describe('Test users', function () {
   let server = null
   let accessToken = null
-  let videoId
+  let accessTokenUser = null
+  let videoId = null
+  let userId = null
 
   before(function (done) {
     this.timeout(20000)
@@ -157,6 +159,85 @@ describe('Test users', function () {
   it('Should refresh the token')
 
   it('Should be able to upload a video again')
+
+  it('Should be able to create a new user', function (done) {
+    utils.createUser(server.url, accessToken, 'user_1', 'super password', done)
+  })
+
+  it('Should be able to login with this user', function (done) {
+    server.user = {
+      username: 'user_1',
+      password: 'super password'
+    }
+
+    utils.loginAndGetAccessToken(server, function (err, token) {
+      if (err) throw err
+
+      accessTokenUser = token
+
+      done()
+    })
+  })
+
+  it('Should be able to upload a video with this user', function (done) {
+    this.timeout(5000)
+
+    const name = 'my super name'
+    const description = 'my super description'
+    const tags = [ 'tag1', 'tag2', 'tag3' ]
+    const file = 'video_short.webm'
+    utils.uploadVideo(server.url, accessTokenUser, name, description, tags, file, done)
+  })
+
+  it('Should list all the users', function (done) {
+    utils.getUsersList(server.url, function (err, res) {
+      if (err) throw err
+
+      const users = res.body.data
+
+      expect(users).to.be.an('array')
+      expect(users.length).to.equal(2)
+
+      const rootUser = users[0]
+      expect(rootUser.username).to.equal('root')
+
+      const user = users[1]
+      expect(user.username).to.equal('user_1')
+      userId = user.id
+
+      done()
+    })
+  })
+
+  it('Should update the user password', function (done) {
+    utils.updateUser(server.url, userId, accessTokenUser, 'new password', function (err, res) {
+      if (err) throw err
+
+      server.user.password = 'new password'
+      utils.login(server.url, server.client, server.user, 200, done)
+    })
+  })
+
+  it('Should be able to remove this user', function (done) {
+    utils.removeUser(server.url, accessToken, 'user_1', done)
+  })
+
+  it('Should not be able to login with this user', function (done) {
+    // server.user is already set to user 1
+    utils.login(server.url, server.client, server.user, 400, done)
+  })
+
+  it('Should not have videos of this user', function (done) {
+    utils.getVideosList(server.url, function (err, res) {
+      if (err) throw err
+
+      expect(res.body.total).to.equal(1)
+      const video = res.body.data[0]
+      expect(video.author).to.equal('root')
+
+      done()
+    })
+  })
 
   after(function (done) {
     process.kill(-server.app.pid)

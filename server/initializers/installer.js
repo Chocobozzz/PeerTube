@@ -9,6 +9,7 @@ const path = require('path')
 const series = require('async/series')
 
 const checker = require('./checker')
+const constants = require('./constants')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 
@@ -34,7 +35,7 @@ function installApplication (callback) {
     },
 
     function createOAuthUser (callbackAsync) {
-      createOAuthUserIfNotExist(callbackAsync)
+      createOAuthAdminIfNotExist(callbackAsync)
     }
   ], callback)
 }
@@ -80,7 +81,7 @@ function createOAuthClientIfNotExist (callback) {
   })
 }
 
-function createOAuthUserIfNotExist (callback) {
+function createOAuthAdminIfNotExist (callback) {
   checker.usersExist(function (err, exist) {
     if (err) return callback(err)
 
@@ -90,6 +91,7 @@ function createOAuthUserIfNotExist (callback) {
     logger.info('Creating the administrator.')
 
     const username = 'root'
+    const role = constants.USER_ROLES.ADMIN
     let password = ''
 
     // Do not generate a random password for tests
@@ -105,7 +107,8 @@ function createOAuthUserIfNotExist (callback) {
 
     const user = new User({
       username: username,
-      password: password
+      password: password,
+      role: role
     })
 
     user.save(function (err, createdUser) {

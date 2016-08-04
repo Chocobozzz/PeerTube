@@ -8,6 +8,7 @@ const waterfall = require('async/waterfall')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
+const admin = middlewares.admin
 const oAuth = middlewares.oauth
 const validators = middlewares.validators.pods
 const signatureValidator = middlewares.validators.remote.signature
@@ -18,8 +19,17 @@ const Video = mongoose.model('Video')
 
 router.get('/', listPodsUrl)
 router.post('/', validators.podsAdd, addPods)
-router.get('/makefriends', oAuth.authenticate, validators.makeFriends, makeFriends)
-router.get('/quitfriends', oAuth.authenticate, quitFriends)
+router.get('/makefriends',
+  oAuth.authenticate,
+  admin.ensureIsAdmin,
+  validators.makeFriends,
+  makeFriends
+)
+router.get('/quitfriends',
+  oAuth.authenticate,
+  admin.ensureIsAdmin,
+  quitFriends
+)
 // Post because this is a secured request
 router.post('/remove', signatureValidator, removePods)
 
