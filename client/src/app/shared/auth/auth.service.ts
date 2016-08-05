@@ -8,7 +8,7 @@ import { User } from './user.model';
 
 @Injectable()
 export class AuthService {
-  private static BASE_CLIENT_URL = '/api/v1/users/client';
+  private static BASE_CLIENT_URL = '/api/v1/clients/local';
   private static BASE_TOKEN_URL = '/api/v1/users/token';
 
   loginChangedSource: Observable<AuthStatus>;
