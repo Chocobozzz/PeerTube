@@ -1,15 +1,24 @@
 export class User {
   private static KEYS = {
+    ID: 'id',
+    ROLE: 'role',
     USERNAME: 'username'
   };
 
+  id: string;
+  role: string;
   username: string;
   tokens: Tokens;
 
   static load() {
     const usernameLocalStorage = localStorage.getItem(this.KEYS.USERNAME);
     if (usernameLocalStorage) {
-      return new User(localStorage.getItem(this.KEYS.USERNAME), Tokens.load());
+      return new User(
+        localStorage.getItem(this.KEYS.ID),
+        localStorage.getItem(this.KEYS.USERNAME),
+        localStorage.getItem(this.KEYS.ROLE),
+        Tokens.load()
+      );
     }
 
     return null;
@@ -17,11 +26,15 @@ export class User {
 
   static flush() {
     localStorage.removeItem(this.KEYS.USERNAME);
+    localStorage.removeItem(this.KEYS.ID);
+    localStorage.removeItem(this.KEYS.ROLE);
     Tokens.flush();
   }
 
-  constructor(username: string, hash_tokens: any) {
+  constructor(id: string, username: string, role: string, hash_tokens: any) {
+    this.id = id;
     this.username = username;
+    this.role = role;
     this.tokens = new Tokens(hash_tokens);
   }
 
@@ -43,12 +56,14 @@ export class User {
   }
 
   save() {
-    localStorage.setItem('username', this.username);
+    localStorage.setItem(User.KEYS.ID, this.id);
+    localStorage.setItem(User.KEYS.USERNAME, this.username);
+    localStorage.setItem(User.KEYS.ROLE, this.role);
     this.tokens.save();
   }
 }
 
-// Private class used only by User
+// Private class only used by User
 class Tokens {
   private static KEYS = {
     ACCESS_TOKEN: 'access_token',

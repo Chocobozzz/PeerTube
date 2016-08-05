@@ -10,6 +10,7 @@ import { User } from './user.model';
 export class AuthService {
   private static BASE_CLIENT_URL = '/api/v1/clients/local';
   private static BASE_TOKEN_URL = '/api/v1/users/token';
+  private static BASE_USER_INFORMATIONS_URL = '/api/v1/users/me';
 
   loginChangedSource: Observable<AuthStatus>;
 
@@ -99,6 +100,7 @@ export class AuthService {
                       res.username = username;
                       return res;
                     })
+                    .flatMap(res => this.fetchUserInformations(res))
                     .map(res => this.handleLogin(res))
                     .catch(this.handleError);
   }
@@ -136,22 +138,20 @@ export class AuthService {
                     .catch(this.handleError);
   }
 
-  private setStatus(status: AuthStatus) {
-    this.loginChanged.next(status);
-  }
+  private fetchUserInformations (obj: any) {
+    // Do not call authHttp here to avoid circular dependencies headaches
 
-  private handleLogin (obj: any) {
-    const username = obj.username;
-    const hash_tokens = {
-      access_token: obj.access_token,
-      token_type: obj.token_type,
-      refresh_token: obj.refresh_token
-    };
+    const headers = new Headers();
+    headers.set('Authorization', `Bearer ${obj.access_token}`);
 
-    this.user = new User(username, hash_tokens);
-    this.user.save();
-
-    this.setStatus(AuthStatus.LoggedIn);
+    return this.http.get(AuthService.BASE_USER_INFORMATIONS_URL, { headers })
+             .map(res => res.json())
+             .map(res => {
+               obj.id = res.id;
+               obj.role = res.role;
+               return obj;
+             }
+    );
   }
 
   private handleError (error: Response) {
@@ -159,8 +159,29 @@ export class AuthService {
     return Observable.throw(error.json() || { error: 'Server error' });
   }
 
+  private handleLogin (obj: any) {
+    const id = obj.id;
+    const username = obj.username;
+    const role = obj.role;
+    const hash_tokens = {
+      access_token: obj.access_token,
+      token_type: obj.token_type,
+      refresh_token: obj.refresh_token
+    };
+
+    this.user = new User(id, username, role, hash_tokens);
+    this.user.save();
+
+    this.setStatus(AuthStatus.LoggedIn);
+  }
+
   private handleRefreshToken (obj: any) {
     this.user.refreshTokens(obj.access_token, obj.refresh_token);
     this.user.save();
   }
+
+  private setStatus(status: AuthStatus) {
+    this.loginChanged.next(status);
+  }
+
 }

@@ -18,9 +18,20 @@
     <menu class="col-md-2 col-sm-3 col-xs-3">
       <div class="panel-block">
         <div id="panel-user-login" class="panel-button">
+          <span *ngIf="!isLoggedIn" >
+            <span class="hidden-xs glyphicon glyphicon-log-in"></span>
+            <a [routerLink]="['/login']">Login</a>
+          </span>
+
+          <span *ngIf="isLoggedIn">
+            <span class="hidden-xs glyphicon glyphicon-log-out"></span>
+            <a *ngIf="isLoggedIn" (click)="logout()">Logout</a>
+          </span>
+        </div>
+
+        <div *ngIf="isLoggedIn" id="panel-user-account" class="panel-button">
           <span class="hidden-xs glyphicon glyphicon-user"></span>
-          <a *ngIf="!isLoggedIn" [routerLink]="['/login']">Login</a>
-          <a *ngIf="isLoggedIn" (click)="logout()">Logout</a>
+          <a [routerLink]="['/account']">My account</a>
         </div>
       </div>
 

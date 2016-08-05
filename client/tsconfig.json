@@ -27,6 +27,10 @@
     "typings/main.d.ts"
   ],
   "files": [
+    "src/app/account/account.component.ts",
+    "src/app/account/account.routes.ts",
+    "src/app/account/account.service.ts",
+    "src/app/account/index.ts",
     "src/app/app.component.ts",
     "src/app/app.routes.ts",
     "src/app/friends/friend.service.ts",
@@ -45,6 +49,8 @@
     "src/app/shared/search/search.component.ts",
     "src/app/shared/search/search.model.ts",
     "src/app/shared/search/search.service.ts",
+    "src/app/shared/user/index.ts",
+    "src/app/shared/user/user.service.ts",
     "src/app/videos/index.ts",
     "src/app/videos/shared/index.ts",
     "src/app/videos/shared/loader/index.ts",
