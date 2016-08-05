@@ -47,6 +47,8 @@ export class AppComponent {
 
   logout() {
     this.authService.logout();
+    // Redirect to home page
+    this.router.navigate(['/videos/list']);
   }
 
   makeFriends() {
