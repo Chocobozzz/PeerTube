@@ -483,7 +483,7 @@ function updateUser (url, userId, accessToken, newPassword, end) {
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
     .send({ password: newPassword })
-    .expect(200)
+    .expect(204)
     .end(end)
 }
 
