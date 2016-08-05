@@ -122,7 +122,7 @@ function removeUser (req, res, next) {
       return next(err)
     }
 
-    return res.type('json').status(204).end()
+    return res.sendStatus(204)
   })
 }
 
@@ -134,7 +134,7 @@ function updateUser (req, res, next) {
     user.save(function (err) {
       if (err) return next(err)
 
-      return res.json('json').status(204).end()
+      return res.sendStatus(204)
     })
   })
 }
