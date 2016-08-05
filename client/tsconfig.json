@@ -49,8 +49,6 @@
     "src/app/shared/search/search.component.ts",
     "src/app/shared/search/search.model.ts",
     "src/app/shared/search/search.service.ts",
-    "src/app/shared/user/index.ts",
-    "src/app/shared/user/user.service.ts",
     "src/app/videos/index.ts",
     "src/app/videos/shared/index.ts",
     "src/app/videos/shared/loader/index.ts",

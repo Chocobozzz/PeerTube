@@ -496,6 +496,8 @@ describe('Test parameters validator', function () {
           .expect(404, done)
       })
 
+      it('Should fail with a video of another user')
+
       it('Should fail with a video of another pod')
 
       it('Should succeed with the correct parameters')

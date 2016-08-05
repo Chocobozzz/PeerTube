@@ -77,6 +77,7 @@ function videosRemove (req, res, next) {
 
       if (!video) return res.status(404).send('Video not found')
       else if (video.isOwned() === false) return res.status(403).send('Cannot remove video of another pod')
+      else if (video.author !== res.locals.oauth.token.user.username) return res.status(403).send('Cannot remove video of another user')
 
       next()
     })
