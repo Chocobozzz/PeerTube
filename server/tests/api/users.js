@@ -179,6 +179,19 @@ describe('Test users', function () {
     })
   })
 
+  it('Should be able to get the user informations', function (done) {
+    utils.getUserInformation(server.url, accessTokenUser, function (err, res) {
+      if (err) throw err
+
+      const user = res.body
+
+      expect(user.username).to.equal('user_1')
+      expect(user.id).to.exist
+
+      done()
+    })
+  })
+
   it('Should be able to upload a video with this user', function (done) {
     this.timeout(5000)
 

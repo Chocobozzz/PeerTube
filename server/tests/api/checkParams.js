@@ -504,6 +504,8 @@ describe('Test parameters validator', function () {
 
   describe('Of the users API', function () {
     const path = '/api/v1/users/'
+    let userId = null
+    let userAccessToken = null
 
     describe('When adding a new user', function () {
       it('Should fail with a too small username', function (done) {
@@ -580,19 +582,19 @@ describe('Test parameters validator', function () {
         utils.loginAndGetAccessToken(server, function (err, accessToken) {
           if (err) throw err
 
+          userAccessToken = accessToken
+
           const data = {
             username: 'user2',
             password: 'my super password'
           }
 
-          makePostBodyRequest(path, accessToken, data, done, 403)
+          makePostBodyRequest(path, userAccessToken, data, done, 403)
         })
       })
     })
 
     describe('When updating a user', function () {
-      let userId = null
-
       before(function (done) {
         utils.getUsersList(server.url, function (err, res) {
           if (err) throw err
@@ -607,7 +609,7 @@ describe('Test parameters validator', function () {
           password: 'bla'
         }
 
-        makePutBodyRequest(path + '/' + userId, server.accessToken, data, done)
+        makePutBodyRequest(path + userId, userAccessToken, data, done)
       })
 
       it('Should fail with a too long password', function (done) {
@@ -617,7 +619,7 @@ describe('Test parameters validator', function () {
                     'very very very very very very very very very very very very very very very very very very very very long'
         }
 
-        makePutBodyRequest(path + '/' + userId, server.accessToken, data, done)
+        makePutBodyRequest(path + userId, userAccessToken, data, done)
       })
 
       it('Should fail with an non authenticated user', function (done) {
@@ -625,7 +627,7 @@ describe('Test parameters validator', function () {
           password: 'my super password'
         }
 
-        makePutBodyRequest(path + '/' + userId, 'super token', data, done, 401)
+        makePutBodyRequest(path + userId, 'super token', data, done, 401)
       })
 
       it('Should succeed with the correct params', function (done) {
@@ -633,7 +635,25 @@ describe('Test parameters validator', function () {
           password: 'my super password'
         }
 
-        makePutBodyRequest(path + '/' + userId, server.accessToken, data, done, 204)
+        makePutBodyRequest(path + userId, userAccessToken, data, done, 204)
+      })
+    })
+
+    describe('When getting my information', function () {
+      it('Should fail with a non authenticated user', function (done) {
+        request(server.url)
+          .get(path + 'me')
+          .set('Authorization', 'Bearer faketoken')
+          .set('Accept', 'application/json')
+          .expect(401, done)
+      })
+
+      it('Should success with the correct parameters', function (done) {
+        request(server.url)
+          .get(path + 'me')
+          .set('Authorization', 'Bearer ' + userAccessToken)
+          .set('Accept', 'application/json')
+          .expect(200, done)
       })
     })
 

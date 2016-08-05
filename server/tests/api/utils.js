@@ -14,6 +14,7 @@ const testUtils = {
   getAllVideosListBy: getAllVideosListBy,
   getClient: getClient,
   getFriendsList: getFriendsList,
+  getUserInformation: getUserInformation,
   getUsersList: getUsersList,
   getVideo: getVideo,
   getVideosList: getVideosList,
@@ -88,6 +89,18 @@ function getClient (url, end) {
   request(url)
     .get(path)
     .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getUserInformation (url, accessToken, end) {
+  const path = '/api/v1/users/me'
+
+  request(url)
+    .get(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
     .expect(200)
     .expect('Content-Type', /json/)
     .end(end)

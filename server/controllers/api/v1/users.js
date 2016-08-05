@@ -19,6 +19,7 @@ const Video = mongoose.model('Video')
 const router = express.Router()
 
 router.get('/', listUsers)
+router.get('/me', oAuth.authenticate, getUserInformation)
 
 router.post('/',
   oAuth.authenticate,
@@ -60,6 +61,14 @@ function createUser (req, res, next) {
     if (err) return next(err)
 
     return res.type('json').status(204).end()
+  })
+}
+
+function getUserInformation (req, res, next) {
+  User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
+    if (err) return next(err)
+
+    return res.json(user.toFormatedJSON())
   })
 }
 
