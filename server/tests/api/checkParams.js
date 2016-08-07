@@ -7,64 +7,12 @@ const request = require('supertest')
 const series = require('async/series')
 
 const loginUtils = require('../utils/login')
+const requestsUtils = require('../utils/requests')
 const serversUtils = require('../utils/servers')
 const usersUtils = require('../utils/users')
 
 describe('Test parameters validator', function () {
   let server = null
-
-  function makePostRequest (path, token, fields, attaches, done, statusCodeExpected) {
-    if (!statusCodeExpected) statusCodeExpected = 400
-
-    const req = request(server.url)
-      .post(path)
-      .set('Accept', 'application/json')
-
-    if (token) req.set('Authorization', 'Bearer ' + token)
-
-    Object.keys(fields).forEach(function (field) {
-      const value = fields[field]
-
-      if (Array.isArray(value)) {
-        for (let i = 0; i < value.length; i++) {
-          req.field(field + '[' + i + ']', value[i])
-        }
-      } else {
-        req.field(field, value)
-      }
-    })
-
-    Object.keys(attaches).forEach(function (attach) {
-      const value = attaches[attach]
-      req.attach(attach, value)
-    })
-
-    req.expect(statusCodeExpected, done)
-  }
-
-  function makePostBodyRequest (path, token, fields, done, statusCodeExpected) {
-    if (!statusCodeExpected) statusCodeExpected = 400
-
-    const req = request(server.url)
-      .post(path)
-      .set('Accept', 'application/json')
-
-    if (token) req.set('Authorization', 'Bearer ' + token)
-
-    req.send(fields).expect(statusCodeExpected, done)
-  }
-
-  function makePutBodyRequest (path, token, fields, done, statusCodeExpected) {
-    if (!statusCodeExpected) statusCodeExpected = 400
-
-    const req = request(server.url)
-      .put(path)
-      .set('Accept', 'application/json')
-
-    if (token) req.set('Authorization', 'Bearer ' + token)
-
-    req.send(fields).expect(statusCodeExpected, done)
-  }
 
   // ---------------------------------------------------------------
 
@@ -99,21 +47,21 @@ describe('Test parameters validator', function () {
     describe('When adding a pod', function () {
       it('Should fail with nothing', function (done) {
         const data = {}
-        makePostBodyRequest(path, null, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
       })
 
       it('Should fail without public key', function (done) {
         const data = {
           url: 'http://coucou.com'
         }
-        makePostBodyRequest(path, null, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
       })
 
       it('Should fail without an url', function (done) {
         const data = {
           publicKey: 'mysuperpublickey'
         }
-        makePostBodyRequest(path, null, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
       })
 
       it('Should fail with an incorrect url', function (done) {
@@ -121,11 +69,11 @@ describe('Test parameters validator', function () {
           url: 'coucou.com',
           publicKey: 'mysuperpublickey'
         }
-        makePostBodyRequest(path, null, data, function () {
+        requestsUtils.makePostBodyRequest(server.url, path, null, data, function () {
           data.url = 'http://coucou'
-          makePostBodyRequest(path, null, data, function () {
+          requestsUtils.makePostBodyRequest(server.url, path, null, data, function () {
             data.url = 'coucou'
-            makePostBodyRequest(path, null, data, done)
+            requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
           })
         })
       })
@@ -135,7 +83,7 @@ describe('Test parameters validator', function () {
           url: 'http://coucou.com',
           publicKey: 'mysuperpublickey'
         }
-        makePostBodyRequest(path, null, data, done, 200)
+        requestsUtils.makePostBodyRequest(server.url, path, null, data, done, 200)
       })
     })
 
@@ -267,7 +215,7 @@ describe('Test parameters validator', function () {
       it('Should fail with nothing', function (done) {
         const data = {}
         const attach = {}
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without name', function (done) {
@@ -278,7 +226,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with a long name', function (done) {
@@ -290,7 +238,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without description', function (done) {
@@ -301,7 +249,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with a long description', function (done) {
@@ -315,7 +263,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without tags', function (done) {
@@ -326,7 +274,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with too many tags', function (done) {
@@ -338,7 +286,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with not enough tags', function (done) {
@@ -350,7 +298,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with a tag length too low', function (done) {
@@ -362,7 +310,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with a tag length too big', function (done) {
@@ -374,7 +322,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with malformed tags', function (done) {
@@ -386,7 +334,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without an input file', function (done) {
@@ -396,7 +344,7 @@ describe('Test parameters validator', function () {
           tags: [ 'tag1', 'tag2' ]
         }
         const attach = {}
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail without an incorrect input file', function (done) {
@@ -408,7 +356,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short_fake.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should fail with a too big duration', function (done) {
@@ -420,7 +368,7 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_too_long.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, done)
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
       })
 
       it('Should succeed with the correct parameters', function (done) {
@@ -432,11 +380,11 @@ describe('Test parameters validator', function () {
         const attach = {
           'videofile': pathUtils.join(__dirname, 'fixtures', 'video_short.webm')
         }
-        makePostRequest(path, server.accessToken, data, attach, function () {
+        requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, function () {
           attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.mp4')
-          makePostRequest(path, server.accessToken, data, attach, function () {
+          requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, function () {
             attach.videofile = pathUtils.join(__dirname, 'fixtures', 'video_short.ogv')
-            makePostRequest(path, server.accessToken, data, attach, done, 204)
+            requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done, 204)
           }, false)
         }, false)
       })
@@ -518,7 +466,7 @@ describe('Test parameters validator', function () {
           password: 'mysuperpassword'
         }
 
-        makePostBodyRequest(path, server.accessToken, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
       })
 
       it('Should fail with a too long username', function (done) {
@@ -527,7 +475,7 @@ describe('Test parameters validator', function () {
           password: 'mysuperpassword'
         }
 
-        makePostBodyRequest(path, server.accessToken, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
       })
 
       it('Should fail with an incorrect username', function (done) {
@@ -536,7 +484,7 @@ describe('Test parameters validator', function () {
           password: 'mysuperpassword'
         }
 
-        makePostBodyRequest(path, server.accessToken, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
       })
 
       it('Should fail with a too small password', function (done) {
@@ -545,7 +493,7 @@ describe('Test parameters validator', function () {
           password: 'bla'
         }
 
-        makePostBodyRequest(path, server.accessToken, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
       })
 
       it('Should fail with a too long password', function (done) {
@@ -556,7 +504,7 @@ describe('Test parameters validator', function () {
                     'very very very very very very very very very very very very very very very very very very very very long'
         }
 
-        makePostBodyRequest(path, server.accessToken, data, done)
+        requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
       })
 
       it('Should fail with an non authenticated user', function (done) {
@@ -565,7 +513,7 @@ describe('Test parameters validator', function () {
           password: 'my super password'
         }
 
-        makePostBodyRequest(path, 'super token', data, done, 401)
+        requestsUtils.makePostBodyRequest(server.url, path, 'super token', data, done, 401)
       })
 
       it('Should succeed with the correct params', function (done) {
@@ -574,7 +522,7 @@ describe('Test parameters validator', function () {
           password: 'my super password'
         }
 
-        makePostBodyRequest(path, server.accessToken, data, done, 204)
+        requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done, 204)
       })
 
       it('Should fail with a non admin user', function (done) {
@@ -593,7 +541,7 @@ describe('Test parameters validator', function () {
             password: 'my super password'
           }
 
-          makePostBodyRequest(path, userAccessToken, data, done, 403)
+          requestsUtils.makePostBodyRequest(server.url, path, userAccessToken, data, done, 403)
         })
       })
     })
@@ -613,7 +561,7 @@ describe('Test parameters validator', function () {
           password: 'bla'
         }
 
-        makePutBodyRequest(path + userId, userAccessToken, data, done)
+        requestsUtils.makePutBodyRequest(server.url, path + userId, userAccessToken, data, done)
       })
 
       it('Should fail with a too long password', function (done) {
@@ -623,7 +571,7 @@ describe('Test parameters validator', function () {
                     'very very very very very very very very very very very very very very very very very very very very long'
         }
 
-        makePutBodyRequest(path + userId, userAccessToken, data, done)
+        requestsUtils.makePutBodyRequest(server.url, path + userId, userAccessToken, data, done)
       })
 
       it('Should fail with an non authenticated user', function (done) {
@@ -631,7 +579,7 @@ describe('Test parameters validator', function () {
           password: 'my super password'
         }
 
-        makePutBodyRequest(path + userId, 'super token', data, done, 401)
+        requestsUtils.makePutBodyRequest(server.url, path + userId, 'super token', data, done, 401)
       })
 
       it('Should succeed with the correct params', function (done) {
@@ -639,7 +587,7 @@ describe('Test parameters validator', function () {
           password: 'my super password'
         }
 
-        makePutBodyRequest(path + userId, userAccessToken, data, done, 204)
+        requestsUtils.makePutBodyRequest(server.url, path + userId, userAccessToken, data, done, 204)
       })
     })
 
