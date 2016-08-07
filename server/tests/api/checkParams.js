@@ -6,7 +6,9 @@ const pathUtils = require('path')
 const request = require('supertest')
 const series = require('async/series')
 
-const utils = require('./utils')
+const loginUtils = require('../utils/login')
+const serversUtils = require('../utils/servers')
+const usersUtils = require('../utils/users')
 
 describe('Test parameters validator', function () {
   let server = null
@@ -71,17 +73,17 @@ describe('Test parameters validator', function () {
 
     series([
       function (next) {
-        utils.flushTests(next)
+        serversUtils.flushTests(next)
       },
       function (next) {
-        utils.runServer(1, function (server1) {
+        serversUtils.runServer(1, function (server1) {
           server = server1
 
           next()
         })
       },
       function (next) {
-        utils.loginAndGetAccessToken(server, function (err, token) {
+        loginUtils.loginAndGetAccessToken(server, function (err, token) {
           if (err) throw err
           server.accessToken = token
 
@@ -141,13 +143,13 @@ describe('Test parameters validator', function () {
       let userAccessToken = null
 
       before(function (done) {
-        utils.createUser(server.url, server.accessToken, 'user1', 'password', function () {
+        usersUtils.createUser(server.url, server.accessToken, 'user1', 'password', function () {
           server.user = {
             username: 'user1',
             password: 'password'
           }
 
-          utils.loginAndGetAccessToken(server, function (err, accessToken) {
+          loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
             if (err) throw err
 
             userAccessToken = accessToken
@@ -581,7 +583,7 @@ describe('Test parameters validator', function () {
           password: 'my super password'
         }
 
-        utils.loginAndGetAccessToken(server, function (err, accessToken) {
+        loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
           if (err) throw err
 
           userAccessToken = accessToken
@@ -598,7 +600,7 @@ describe('Test parameters validator', function () {
 
     describe('When updating a user', function () {
       before(function (done) {
-        utils.getUsersList(server.url, function (err, res) {
+        usersUtils.getUsersList(server.url, function (err, res) {
           if (err) throw err
 
           userId = res.body.data[1].id
@@ -702,7 +704,7 @@ describe('Test parameters validator', function () {
 
     // Keep the logs if the test failed
     if (this.ok) {
-      utils.flushTests(done)
+      serversUtils.flushTests(done)
     } else {
       done()
     }

@@ -6,7 +6,11 @@ const expect = chai.expect
 const pathUtils = require('path')
 const series = require('async/series')
 
-const utils = require('./utils')
+const loginUtils = require('../utils/login')
+const miscsUtils = require('../utils/miscs')
+const podsUtils = require('../utils/pods')
+const serversUtils = require('../utils/servers')
+const videosUtils = require('../utils/videos')
 const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
 webtorrent.silent = true
 
@@ -20,7 +24,7 @@ describe('Test multiple pods', function () {
     series([
       // Run servers
       function (next) {
-        utils.flushAndRunMultipleServers(3, function (serversRun) {
+        serversUtils.flushAndRunMultipleServers(3, function (serversRun) {
           servers = serversRun
           next()
         })
@@ -28,7 +32,7 @@ describe('Test multiple pods', function () {
       // Get the access tokens
       function (next) {
         each(servers, function (server, callbackEach) {
-          utils.loginAndGetAccessToken(server, function (err, accessToken) {
+          loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
             if (err) return callbackEach(err)
 
             server.accessToken = accessToken
@@ -39,7 +43,7 @@ describe('Test multiple pods', function () {
       // The second pod make friend with the third
       function (next) {
         const server = servers[1]
-        utils.makeFriends(server.url, server.accessToken, next)
+        podsUtils.makeFriends(server.url, server.accessToken, next)
       },
       // Wait for the request between pods
       function (next) {
@@ -48,7 +52,7 @@ describe('Test multiple pods', function () {
       // Pod 1 make friends too
       function (next) {
         const server = servers[0]
-        utils.makeFriends(server.url, server.accessToken, next)
+        podsUtils.makeFriends(server.url, server.accessToken, next)
       },
       function (next) {
         webtorrent.create({ host: 'client', port: '1' }, next)
@@ -58,7 +62,7 @@ describe('Test multiple pods', function () {
 
   it('Should not have videos for all pods', function (done) {
     each(servers, function (server, callback) {
-      utils.getVideosList(server.url, function (err, res) {
+      videosUtils.getVideosList(server.url, function (err, res) {
         if (err) throw err
 
         const videos = res.body.data
@@ -80,7 +84,7 @@ describe('Test multiple pods', function () {
           const description = 'my super description for pod 1'
           const tags = [ 'tag1p1', 'tag2p1' ]
           const file = 'video_short1.webm'
-          utils.uploadVideo(servers[0].url, servers[0].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[0].url, servers[0].accessToken, name, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -92,7 +96,7 @@ describe('Test multiple pods', function () {
           each(servers, function (server, callback) {
             let baseMagnet = null
 
-            utils.getVideosList(server.url, function (err, res) {
+            videosUtils.getVideosList(server.url, function (err, res) {
               if (err) throw err
 
               const videos = res.body.data
@@ -105,7 +109,7 @@ describe('Test multiple pods', function () {
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(10)
               expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
-              expect(utils.dateIsValid(video.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
               expect(video.author).to.equal('root')
 
               if (server.url !== 'http://localhost:9001') {
@@ -121,7 +125,7 @@ describe('Test multiple pods', function () {
                 expect(video.magnetUri).to.equal.magnetUri
               }
 
-              utils.testImage(server.url, 'video_short1.webm', video.thumbnailPath, function (err, test) {
+              videosUtils.testVideoImage(server.url, 'video_short1.webm', video.thumbnailPath, function (err, test) {
                 if (err) throw err
                 expect(test).to.equal(true)
 
@@ -142,7 +146,7 @@ describe('Test multiple pods', function () {
           const description = 'my super description for pod 2'
           const tags = [ 'tag1p2', 'tag2p2', 'tag3p2' ]
           const file = 'video_short2.webm'
-          utils.uploadVideo(servers[1].url, servers[1].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, name, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -154,7 +158,7 @@ describe('Test multiple pods', function () {
           each(servers, function (server, callback) {
             let baseMagnet = null
 
-            utils.getVideosList(server.url, function (err, res) {
+            videosUtils.getVideosList(server.url, function (err, res) {
               if (err) throw err
 
               const videos = res.body.data
@@ -167,7 +171,7 @@ describe('Test multiple pods', function () {
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(5)
               expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
-              expect(utils.dateIsValid(video.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
               expect(video.author).to.equal('root')
 
               if (server.url !== 'http://localhost:9002') {
@@ -183,7 +187,7 @@ describe('Test multiple pods', function () {
                 expect(video.magnetUri).to.equal.magnetUri
               }
 
-              utils.testImage(server.url, 'video_short2.webm', video.thumbnailPath, function (err, test) {
+              videosUtils.testVideoImage(server.url, 'video_short2.webm', video.thumbnailPath, function (err, test) {
                 if (err) throw err
                 expect(test).to.equal(true)
 
@@ -204,14 +208,14 @@ describe('Test multiple pods', function () {
           const description = 'my super description for pod 3'
           const tags = [ 'tag1p3' ]
           const file = 'video_short3.webm'
-          utils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
         },
         function (next) {
           const name = 'my super name for pod 3-2'
           const description = 'my super description for pod 3-2'
           const tags = [ 'tag2p3', 'tag3p3', 'tag4p3' ]
           const file = 'video_short.webm'
-          utils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 22000)
@@ -222,7 +226,7 @@ describe('Test multiple pods', function () {
           let baseMagnet = null
           // All pods should have this video
           each(servers, function (server, callback) {
-            utils.getVideosList(server.url, function (err, res) {
+            videosUtils.getVideosList(server.url, function (err, res) {
               if (err) throw err
 
               const videos = res.body.data
@@ -247,7 +251,7 @@ describe('Test multiple pods', function () {
               expect(video1.duration).to.equal(5)
               expect(video1.tags).to.deep.equal([ 'tag1p3' ])
               expect(video1.author).to.equal('root')
-              expect(utils.dateIsValid(video1.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video1.createdDate)).to.be.true
 
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.description).to.equal('my super description for pod 3-2')
@@ -256,7 +260,7 @@ describe('Test multiple pods', function () {
               expect(video2.duration).to.equal(5)
               expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
               expect(video2.author).to.equal('root')
-              expect(utils.dateIsValid(video2.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video2.createdDate)).to.be.true
 
               if (server.url !== 'http://localhost:9003') {
                 expect(video1.isLocal).to.be.false
@@ -273,11 +277,11 @@ describe('Test multiple pods', function () {
                 expect(video2.magnetUri).to.equal.magnetUri
               }
 
-              utils.testImage(server.url, 'video_short3.webm', video1.thumbnailPath, function (err, test) {
+              videosUtils.testVideoImage(server.url, 'video_short3.webm', video1.thumbnailPath, function (err, test) {
                 if (err) throw err
                 expect(test).to.equal(true)
 
-                utils.testImage(server.url, 'video_short.webm', video2.thumbnailPath, function (err, test) {
+                videosUtils.testVideoImage(server.url, 'video_short.webm', video2.thumbnailPath, function (err, test) {
                   if (err) throw err
                   expect(test).to.equal(true)
 
@@ -296,7 +300,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(servers[2].url, function (err, res) {
+      videosUtils.getVideosList(servers[2].url, function (err, res) {
         if (err) throw err
 
         const video = res.body.data[0]
@@ -317,7 +321,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(servers[0].url, function (err, res) {
+      videosUtils.getVideosList(servers[0].url, function (err, res) {
         if (err) throw err
 
         const video = res.body.data[1]
@@ -336,7 +340,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(servers[1].url, function (err, res) {
+      videosUtils.getVideosList(servers[1].url, function (err, res) {
         if (err) throw err
 
         const video = res.body.data[2]
@@ -355,7 +359,7 @@ describe('Test multiple pods', function () {
       // Yes, this could be long
       this.timeout(200000)
 
-      utils.getVideosList(servers[0].url, function (err, res) {
+      videosUtils.getVideosList(servers[0].url, function (err, res) {
         if (err) throw err
 
         const video = res.body.data[3]
@@ -375,10 +379,10 @@ describe('Test multiple pods', function () {
 
       series([
         function (next) {
-          utils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0], next)
+          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0], next)
         },
         function (next) {
-          utils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[1], next)
+          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[1], next)
         }],
         function (err) {
           if (err) throw err
@@ -389,7 +393,7 @@ describe('Test multiple pods', function () {
 
     it('Should have videos 1 and 3 on each pod', function (done) {
       each(servers, function (server, callback) {
-        utils.getVideosList(server.url, function (err, res) {
+        videosUtils.getVideosList(server.url, function (err, res) {
           if (err) throw err
 
           const videos = res.body.data
@@ -415,7 +419,7 @@ describe('Test multiple pods', function () {
 
     // Keep the logs if the test failed
     if (this.ok) {
-      utils.flushTests(done)
+      serversUtils.flushTests(done)
     } else {
       done()
     }

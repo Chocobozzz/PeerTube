@@ -5,24 +5,27 @@ const each = require('async/each')
 const expect = chai.expect
 const series = require('async/series')
 
-const utils = require('./utils')
+const loginUtils = require('../utils/login')
+const podsUtils = require('../utils/pods')
+const serversUtils = require('../utils/servers')
+const videosUtils = require('../utils/videos')
 
 describe('Test advanced friends', function () {
   let servers = []
 
   function makeFriends (podNumber, callback) {
     const server = servers[podNumber - 1]
-    return utils.makeFriends(server.url, server.accessToken, callback)
+    return podsUtils.makeFriends(server.url, server.accessToken, callback)
   }
 
   function quitFriends (podNumber, callback) {
     const server = servers[podNumber - 1]
-    return utils.quitFriends(server.url, server.accessToken, callback)
+    return podsUtils.quitFriends(server.url, server.accessToken, callback)
   }
 
   function getFriendsList (podNumber, end) {
     const server = servers[podNumber - 1]
-    return utils.getFriendsList(server.url, end)
+    return podsUtils.getFriendsList(server.url, end)
   }
 
   function uploadVideo (podNumber, callback) {
@@ -32,22 +35,22 @@ describe('Test advanced friends', function () {
     const fixture = 'video_short.webm'
     const server = servers[podNumber - 1]
 
-    return utils.uploadVideo(server.url, server.accessToken, name, description, tags, fixture, callback)
+    return videosUtils.uploadVideo(server.url, server.accessToken, name, description, tags, fixture, callback)
   }
 
   function getVideos (podNumber, callback) {
-    return utils.getVideosList(servers[podNumber - 1].url, callback)
+    return videosUtils.getVideosList(servers[podNumber - 1].url, callback)
   }
 
   // ---------------------------------------------------------------
 
   before(function (done) {
     this.timeout(30000)
-    utils.flushAndRunMultipleServers(6, function (serversRun, urlsRun) {
+    serversUtils.flushAndRunMultipleServers(6, function (serversRun, urlsRun) {
       servers = serversRun
 
       each(servers, function (server, callbackEach) {
-        utils.loginAndGetAccessToken(server, function (err, accessToken) {
+        loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
           if (err) return callbackEach(err)
 
           server.accessToken = accessToken
@@ -169,7 +172,7 @@ describe('Test advanced friends', function () {
       },
       // Rerun server 4
       function (next) {
-        utils.runServer(4, function (server) {
+        serversUtils.runServer(4, function (server) {
           servers[3].app = server.app
           next()
         })
@@ -273,7 +276,7 @@ describe('Test advanced friends', function () {
     })
 
     if (this.ok) {
-      utils.flushTests(done)
+      serversUtils.flushTests(done)
     } else {
       done()
     }
