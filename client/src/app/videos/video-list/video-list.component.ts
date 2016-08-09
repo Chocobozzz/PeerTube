@@ -12,7 +12,7 @@ import {
   Video,
   VideoService
 } from '../shared';
-import { AuthService, Search, SearchField, User } from '../../shared';
+import { AuthService, AuthUser, Search, SearchField } from '../../shared';
 import { VideoMiniatureComponent } from './video-miniature.component';
 import { VideoSortComponent } from './video-sort.component';
 import { SearchService } from '../../shared';
@@ -33,7 +33,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
     totalItems: null
   };
   sort: SortField;
-  user: User = null;
+  user: AuthUser = null;
   videos: Video[] = [];
 
   private search: Search;
@@ -51,7 +51,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.user = User.load();
+      this.user = AuthUser.load();
     }
 
     // Subscribe to route changes

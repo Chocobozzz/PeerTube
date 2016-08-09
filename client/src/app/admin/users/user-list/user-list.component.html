@@ -1,0 +1,24 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Username</th>
+      <th class="text-right">Remove</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.username }}</td>
+      <td class="text-right">
+        <span class="glyphicon glyphicon-remove" *ngIf="!user.isAdmin()" (click)="removeUser(user)"></span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<a class="add-user btn btn-success pull-right" [routerLink]="['/admin/users/add']">
+  <span class="glyphicon glyphicon-plus"></span>
+  Add user
+</a>

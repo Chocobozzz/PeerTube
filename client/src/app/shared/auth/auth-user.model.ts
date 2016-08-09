@@ -1,4 +1,6 @@
-export class User {
+import { User } from '../users';
+
+export class AuthUser extends User {
   private static KEYS = {
     ID: 'id',
     ROLE: 'role',
@@ -13,10 +15,12 @@ export class User {
   static load() {
     const usernameLocalStorage = localStorage.getItem(this.KEYS.USERNAME);
     if (usernameLocalStorage) {
-      return new User(
-        localStorage.getItem(this.KEYS.ID),
-        localStorage.getItem(this.KEYS.USERNAME),
-        localStorage.getItem(this.KEYS.ROLE),
+      return new AuthUser(
+        {
+          id: localStorage.getItem(this.KEYS.ID),
+          username: localStorage.getItem(this.KEYS.USERNAME),
+          role: localStorage.getItem(this.KEYS.ROLE)
+        },
         Tokens.load()
       );
     }
@@ -31,11 +35,9 @@ export class User {
     Tokens.flush();
   }
 
-  constructor(id: string, username: string, role: string, hash_tokens: any) {
-    this.id = id;
-    this.username = username;
-    this.role = role;
-    this.tokens = new Tokens(hash_tokens);
+  constructor(userHash: { id: string, username: string, role: string }, hashTokens: any) {
+    super(userHash);
+    this.tokens = new Tokens(hashTokens);
   }
 
   getAccessToken() {
@@ -56,9 +58,9 @@ export class User {
   }
 
   save() {
-    localStorage.setItem(User.KEYS.ID, this.id);
-    localStorage.setItem(User.KEYS.USERNAME, this.username);
-    localStorage.setItem(User.KEYS.ROLE, this.role);
+    localStorage.setItem(AuthUser.KEYS.ID, this.id);
+    localStorage.setItem(AuthUser.KEYS.USERNAME, this.username);
+    localStorage.setItem(AuthUser.KEYS.ROLE, this.role);
     this.tokens.save();
   }
 }

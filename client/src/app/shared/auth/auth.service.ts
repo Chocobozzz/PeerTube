@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 import { AuthStatus } from './auth-status.model';
-import { User } from './user.model';
+import { AuthUser } from './auth-user.model';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +17,7 @@ export class AuthService {
   private clientId: string;
   private clientSecret: string;
   private loginChanged: Subject<AuthStatus>;
-  private user: User = null;
+  private user: AuthUser = null;
 
   constructor(private http: Http) {
     this.loginChanged = new Subject<AuthStatus>();
@@ -40,7 +40,7 @@ export class AuthService {
       );
 
     // Return null if there is nothing to load
-    this.user = User.load();
+    this.user = AuthUser.load();
   }
 
   getRefreshToken() {
@@ -65,8 +65,14 @@ export class AuthService {
     return this.user.getTokenType();
   }
 
-  getUser(): User {
+  getUser(): AuthUser {
     return this.user;
+  }
+
+  isAdmin() {
+    if (this.user === null) return false;
+
+    return this.user.isAdmin();
   }
 
   isLoggedIn() {
@@ -108,7 +114,7 @@ export class AuthService {
   logout() {
     // TODO: make an HTTP request to revoke the tokens
     this.user = null;
-    User.flush();
+    AuthUser.flush();
 
     this.setStatus(AuthStatus.LoggedOut);
   }
@@ -163,13 +169,13 @@ export class AuthService {
     const id = obj.id;
     const username = obj.username;
     const role = obj.role;
-    const hash_tokens = {
+    const hashTokens = {
       access_token: obj.access_token,
       token_type: obj.token_type,
       refresh_token: obj.refresh_token
     };
 
-    this.user = new User(id, username, role, hash_tokens);
+    this.user = new AuthUser({ id, username, role }, hashTokens);
     this.user.save();
 
     this.setStatus(AuthStatus.LoggedIn);

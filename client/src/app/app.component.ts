@@ -45,6 +45,10 @@ export class AppComponent {
     );
   }
 
+  isUserAdmin() {
+    return this.authService.isAdmin();
+  }
+
   logout() {
     this.authService.logout();
     // Redirect to home page

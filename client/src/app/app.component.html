@@ -47,7 +47,12 @@
         </div>
       </div>
 
-      <div class="panel-block" *ngIf="isLoggedIn">
+      <div class="panel-block" *ngIf="isUserAdmin()">
+        <div id="panel-users" class="panel-button">
+          <span class="hidden-xs glyphicon glyphicon-user"></span>
+          <a [routerLink]="['/admin/users/list']">List users</a>
+        </div>
+
         <div id="panel-make-friends" class="panel-button">
           <span class="hidden-xs glyphicon glyphicon-cloud"></span>
           <a (click)='makeFriends()'>Make friends</a>
