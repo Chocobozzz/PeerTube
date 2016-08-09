@@ -52,7 +52,7 @@ function getUsersList (url, end) {
     .end(end)
 }
 
-function removeUser (url, token, username, expectedStatus, end) {
+function removeUser (url, userId, accessToken, expectedStatus, end) {
   if (!end) {
     end = expectedStatus
     expectedStatus = 204
@@ -61,9 +61,9 @@ function removeUser (url, token, username, expectedStatus, end) {
   const path = '/api/v1/users'
 
   request(url)
-    .delete(path + '/' + username)
+    .delete(path + '/' + userId)
     .set('Accept', 'application/json')
-    .set('Authorization', 'Bearer ' + token)
+    .set('Authorization', 'Bearer ' + accessToken)
     .expect(expectedStatus)
     .end(end)
 }

@@ -21,6 +21,7 @@ UserSchema.methods = {
 UserSchema.statics = {
   getByUsernameAndPassword: getByUsernameAndPassword,
   list: list,
+  loadById: loadById,
   loadByUsername: loadByUsername
 }
 
@@ -34,6 +35,10 @@ function getByUsernameAndPassword (username, password) {
 
 function list (callback) {
   return this.find(callback)
+}
+
+function loadById (id, callback) {
+  return this.findById(id, callback)
 }
 
 function loadByUsername (username, callback) {

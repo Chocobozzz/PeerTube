@@ -235,7 +235,7 @@ describe('Test users', function () {
   })
 
   it('Should be able to remove this user', function (done) {
-    usersUtils.removeUser(server.url, accessToken, 'user_1', done)
+    usersUtils.removeUser(server.url, userId, accessToken, done)
   })
 
   it('Should not be able to login with this user', function (done) {

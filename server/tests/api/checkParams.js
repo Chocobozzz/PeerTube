@@ -610,23 +610,23 @@ describe('Test parameters validator', function () {
     })
 
     describe('When removing an user', function () {
-      it('Should fail with an incorrect username', function (done) {
+      it('Should fail with an incorrect id', function (done) {
         request(server.url)
           .delete(path + 'bla-bla')
           .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(400, done)
       })
 
-      it('Should return 404 with a non existing username', function (done) {
+      it('Should return 404 with a non existing id', function (done) {
         request(server.url)
-          .delete(path + 'qzzerg')
+          .delete(path + '579f982228c99c221d8092b8')
           .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(404, done)
       })
 
       it('Should success with the correct parameters', function (done) {
         request(server.url)
-          .delete(path + 'user1')
+          .delete(path + userId)
           .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(204, done)
       })

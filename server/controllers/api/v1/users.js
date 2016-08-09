@@ -34,7 +34,7 @@ router.put('/:id',
   updateUser
 )
 
-router.delete('/:username',
+router.delete('/:id',
   oAuth.authenticate,
   admin.ensureIsAdmin,
   validatorsUsers.usersRemove,
@@ -83,7 +83,7 @@ function listUsers (req, res, next) {
 function removeUser (req, res, next) {
   waterfall([
     function getUser (callback) {
-      User.loadByUsername(req.params.username, callback)
+      User.loadById(req.params.id, callback)
     },
 
     function getVideos (user, callback) {

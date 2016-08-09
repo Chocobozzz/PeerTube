@@ -25,12 +25,12 @@ function usersAdd (req, res, next) {
 }
 
 function usersRemove (req, res, next) {
-  req.checkParams('username', 'Should have a valid username').isUserUsernameValid()
+  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
 
   logger.debug('Checking usersRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    User.loadByUsername(req.params.username, function (err, user) {
+    User.loadById(req.params.id, function (err, user) {
       if (err) {
         logger.error('Error in usersRemove request validator.', { error: err })
         return res.sendStatus(500)
@@ -44,6 +44,7 @@ function usersRemove (req, res, next) {
 }
 
 function usersUpdate (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
   // Add old password verification
   req.checkBody('password', 'Should have a valid password').isUserPasswordValid()
 
