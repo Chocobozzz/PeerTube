@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
@@ -31,6 +31,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   constructor(
     private elementRef: ElementRef,
+    private ngZone: NgZone,
     private route: ActivatedRoute,
     private videoService: VideoService,
     private webTorrentService: WebTorrentService
@@ -65,12 +66,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         }
       });
 
-      // Refresh each second
-      this.torrentInfosInterval = setInterval(() => {
-        this.downloadSpeed = torrent.downloadSpeed;
-        this.numPeers = torrent.numPeers;
-        this.uploadSpeed = torrent.uploadSpeed;
-      }, 1000);
+      this.runInProgress(torrent);
     });
   }
 
@@ -98,5 +94,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadTooLong() {
     this.error = true;
     console.error('The video load seems to be abnormally long.');
+  }
+
+  private runInProgress(torrent: any) {
+    // Refresh each second
+    this.torrentInfosInterval = setInterval(() => {
+      this.ngZone.run(() => {
+        this.downloadSpeed = torrent.downloadSpeed;
+        this.numPeers = torrent.numPeers;
+        this.uploadSpeed = torrent.uploadSpeed;
+      });
+    }, 1000);
   }
 }

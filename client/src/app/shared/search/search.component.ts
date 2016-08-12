@@ -28,7 +28,7 @@ export class SearchComponent implements OnInit {
   constructor(private searchService: SearchService) {}
 
   ngOnInit() {
-    // Subscribe is the search changed
+    // Subscribe if the search changed
     // Usually changed by videos list component
     this.searchService.updateSearch.subscribe(
       newSearchCriterias => {
