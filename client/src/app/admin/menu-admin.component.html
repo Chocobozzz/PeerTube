@@ -6,14 +6,9 @@
       <a [routerLink]="['/admin/users/list']">List users</a>
     </div>
 
-    <div id="panel-make-friends" class="panel-button">
+    <div id="panel-friends" class="panel-button">
       <span class="hidden-xs glyphicon glyphicon-cloud"></span>
-      <a (click)='makeFriends()'>Make friends</a>
-    </div>
-
-    <div id="panel-quit-friends" class="panel-button">
-      <span class="hidden-xs glyphicon glyphicon-plane"></span>
-      <a (click)='quitFriends()'>Quit friends</a>
+      <a [routerLink]="['/admin/friends/list']">Friends</a>
     </div>
   </div>
 

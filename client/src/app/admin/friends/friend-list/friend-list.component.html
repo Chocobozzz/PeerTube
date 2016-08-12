@@ -1,0 +1,21 @@
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Url</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let friend of friends">
+      <td>{{ friend.url }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<a class="add-user btn btn-danger pull-left" (click)="quitFriends()">
+  Quit friends
+</a>
+
+<a class="add-user btn btn-success pull-right" (click)="makeFriends()">
+  Make friends
+</a>
