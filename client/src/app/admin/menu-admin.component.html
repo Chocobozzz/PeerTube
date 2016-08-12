@@ -1,0 +1,26 @@
+<menu class="col-md-2 col-sm-3 col-xs-3">
+
+  <div class="panel-block">
+    <div id="panel-users" class="panel-button">
+      <span class="hidden-xs glyphicon glyphicon-user"></span>
+      <a [routerLink]="['/admin/users/list']">List users</a>
+    </div>
+
+    <div id="panel-make-friends" class="panel-button">
+      <span class="hidden-xs glyphicon glyphicon-cloud"></span>
+      <a (click)='makeFriends()'>Make friends</a>
+    </div>
+
+    <div id="panel-quit-friends" class="panel-button">
+      <span class="hidden-xs glyphicon glyphicon-plane"></span>
+      <a (click)='quitFriends()'>Quit friends</a>
+    </div>
+  </div>
+
+  <div class="panel-block">
+    <div id="panel-quit-administration" class="panel-button">
+      <span class="hidden-xs glyphicon glyphicon-cog"></span>
+      <a (click)="quitAdmin()">Quit admin.</a>
+    </div>
+  </div>
+</menu>

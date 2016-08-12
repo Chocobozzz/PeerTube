@@ -14,61 +14,12 @@
 
 
   <div class="row">
-
-    <menu class="col-md-2 col-sm-3 col-xs-3">
-      <div class="panel-block">
-        <div id="panel-user-login" class="panel-button">
-          <span *ngIf="!isLoggedIn" >
-            <span class="hidden-xs glyphicon glyphicon-log-in"></span>
-            <a [routerLink]="['/login']">Login</a>
-          </span>
-
-          <span *ngIf="isLoggedIn">
-            <span class="hidden-xs glyphicon glyphicon-log-out"></span>
-            <a *ngIf="isLoggedIn" (click)="logout()">Logout</a>
-          </span>
-        </div>
-
-        <div *ngIf="isLoggedIn" id="panel-user-account" class="panel-button">
-          <span class="hidden-xs glyphicon glyphicon-user"></span>
-          <a [routerLink]="['/account']">My account</a>
-        </div>
-      </div>
-
-      <div class="panel-block">
-        <div id="panel-get-videos" class="panel-button">
-          <span class="hidden-xs glyphicon glyphicon-list"></span>
-          <a [routerLink]="['/videos/list']">Get videos</a>
-        </div>
-
-        <div id="panel-upload-video" class="panel-button" *ngIf="isLoggedIn">
-          <span class="hidden-xs glyphicon glyphicon-cloud-upload"></span>
-          <a [routerLink]="['/videos/add']">Upload a video</a>
-        </div>
-      </div>
-
-      <div class="panel-block" *ngIf="isUserAdmin()">
-        <div id="panel-users" class="panel-button">
-          <span class="hidden-xs glyphicon glyphicon-user"></span>
-          <a [routerLink]="['/admin/users/list']">List users</a>
-        </div>
-
-        <div id="panel-make-friends" class="panel-button">
-          <span class="hidden-xs glyphicon glyphicon-cloud"></span>
-          <a (click)='makeFriends()'>Make friends</a>
-        </div>
-
-        <div id="panel-quit-friends" class="panel-button">
-          <span class="hidden-xs glyphicon glyphicon-plane"></span>
-          <a (click)='quitFriends()'>Quit friends</a>
-        </div>
-      </div>
-    </menu>
+    <my-menu *ngIf="isInAdmin === false" (enteredInAdmin)="onEnteredInAdmin()"></my-menu>
+    <my-menu-admin *ngIf="isInAdmin === true" (quittedAdmin)="onQuittedAdmin()"></my-menu-admin>
 
     <div class="col-md-9 col-sm-8 col-xs-8 router-outlet-container">
       <router-outlet></router-outlet>
     </div>
-
   </div>
 
 

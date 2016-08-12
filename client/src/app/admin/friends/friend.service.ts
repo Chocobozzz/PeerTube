@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { AuthHttp, AuthService } from '../shared';
+import { AuthHttp, AuthService } from '../../shared';
 
 @Injectable()
 export class FriendService {
