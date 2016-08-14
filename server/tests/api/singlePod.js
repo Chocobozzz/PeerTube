@@ -99,8 +99,7 @@ describe('Test a single pod', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          // We remove it because we'll add it again
-          webtorrent.remove(video.magnetUri, done)
+          done()
         })
       })
     })
@@ -127,13 +126,7 @@ describe('Test a single pod', function () {
         if (err) throw err
         expect(test).to.equal(true)
 
-        webtorrent.add(video.magnetUri, function (torrent) {
-          expect(torrent.files).to.exist
-          expect(torrent.files.length).to.equal(1)
-          expect(torrent.files[0].path).to.exist.and.to.not.equal('')
-
-          done()
-        })
+        done()
       })
     })
   })
