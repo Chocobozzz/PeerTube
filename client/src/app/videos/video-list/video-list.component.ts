@@ -66,6 +66,8 @@ export class VideoListComponent implements OnInit, OnDestroy {
     // Subscribe to search changes
     this.subSearch = this.searchService.searchUpdated.subscribe(search => {
       this.search = search;
+      // Reset pagination
+      this.pagination.currentPage = 1;
 
       this.navigateToNewParams();
     });
@@ -76,7 +78,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
     this.subSearch.unsubscribe();
   }
 
-  getVideos(detectChanges = true) {
+  getVideos() {
     this.loading.next(true);
     this.videos = [];
 
@@ -153,7 +155,11 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
     this.sort = <SortField>routeParams['sort'] || '-createdDate';
 
-    this.pagination.currentPage = parseInt(routeParams['page']) || 1;
+    if (routeParams['page'] !== undefined) {
+      this.pagination.currentPage = parseInt(routeParams['page']);
+    } else {
+      this.pagination.currentPage = 1;
+    }
 
     this.changeDetector.detectChanges();
   }
