@@ -19,6 +19,7 @@ UserSchema.methods = {
 }
 
 UserSchema.statics = {
+  count: count,
   getByUsernameAndPassword: getByUsernameAndPassword,
   list: list,
   loadById: loadById,
@@ -28,6 +29,10 @@ UserSchema.statics = {
 mongoose.model('User', UserSchema)
 
 // ---------------------------------------------------------------------------
+
+function count (callback) {
+  return this.count(callback)
+}
 
 function getByUsernameAndPassword (username, password) {
   return this.findOne({ username: username, password: password })
