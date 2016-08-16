@@ -142,7 +142,7 @@ function getVideo (req, res, next) {
 }
 
 function listVideos (req, res, next) {
-  Video.list(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
+  Video.listForApi(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList, videosTotal))

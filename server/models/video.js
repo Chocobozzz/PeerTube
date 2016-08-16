@@ -11,6 +11,7 @@ const mongoose = require('mongoose')
 const constants = require('../initializers/constants')
 const customVideosValidators = require('../helpers/custom-validators').videos
 const logger = require('../helpers/logger')
+const modelUtils = require('./utils')
 const utils = require('../helpers/utils')
 const webtorrent = require('../lib/webtorrent')
 
@@ -60,7 +61,7 @@ VideoSchema.methods = {
 
 VideoSchema.statics = {
   getDurationFromFile: getDurationFromFile,
-  list: list,
+  listForApi: listForApi,
   listByUrlAndMagnet: listByUrlAndMagnet,
   listByUrls: listByUrls,
   listOwned: listOwned,
@@ -194,9 +195,9 @@ function getDurationFromFile (videoPath, callback) {
   })
 }
 
-function list (start, count, sort, callback) {
+function listForApi (start, count, sort, callback) {
   const query = {}
-  return findWithCount.call(this, query, start, count, sort, callback)
+  return modelUtils.findWithCount.call(this, query, start, count, sort, callback)
 }
 
 function listByUrlAndMagnet (fromUrl, magnetUri, callback) {
@@ -233,7 +234,7 @@ function search (value, field, start, count, sort, callback) {
     query[field] = new RegExp(value)
   }
 
-  findWithCount.call(this, query, start, count, sort, callback)
+  modelUtils.findWithCount.call(this, query, start, count, sort, callback)
 }
 
 function seedAllExisting (callback) {
@@ -248,25 +249,6 @@ function seedAllExisting (callback) {
 }
 
 // ---------------------------------------------------------------------------
-
-function findWithCount (query, start, count, sort, callback) {
-  const self = this
-
-  parallel([
-    function (asyncCallback) {
-      self.find(query).skip(start).limit(count).sort(sort).exec(asyncCallback)
-    },
-    function (asyncCallback) {
-      self.count(query, asyncCallback)
-    }
-  ], function (err, results) {
-    if (err) return callback(err)
-
-    const videos = results[0]
-    const totalVideos = results[1]
-    return callback(null, videos, totalVideos)
-  })
-}
 
 function removeThumbnail (video, callback) {
   fs.unlink(thumbnailsDir + video.thumbnail, callback)
