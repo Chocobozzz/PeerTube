@@ -197,7 +197,7 @@ function getDurationFromFile (videoPath, callback) {
 
 function listForApi (start, count, sort, callback) {
   const query = {}
-  return modelUtils.findWithCount.call(this, query, start, count, sort, callback)
+  return modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
 function listByUrlAndMagnet (fromUrl, magnetUri, callback) {
@@ -234,7 +234,7 @@ function search (value, field, start, count, sort, callback) {
     query[field] = new RegExp(value)
   }
 
-  modelUtils.findWithCount.call(this, query, start, count, sort, callback)
+  modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
 function seedAllExisting (callback) {

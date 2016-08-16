@@ -39,7 +39,7 @@ function clientsExist (callback) {
 }
 
 function usersExist (callback) {
-  User.count(function (err, totalUsers) {
+  User.countTotal(function (err, totalUsers) {
     if (err) return callback(err)
 
     return callback(null, totalUsers !== 0)

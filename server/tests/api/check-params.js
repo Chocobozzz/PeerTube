@@ -459,6 +459,32 @@ describe('Test parameters validator', function () {
     let userId = null
     let userAccessToken = null
 
+    describe('When listing users', function () {
+      it('Should fail with a bad start pagination', function (done) {
+        request(server.url)
+          .get(path)
+          .query({ start: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with a bad count pagination', function (done) {
+        request(server.url)
+          .get(path)
+          .query({ count: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with an incorrect sort', function (done) {
+        request(server.url)
+          .get(path)
+          .query({ sort: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+    })
+
     describe('When adding a new user', function () {
       it('Should fail with a too small username', function (done) {
         const data = {

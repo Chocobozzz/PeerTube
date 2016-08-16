@@ -11,6 +11,10 @@ const logger = require('../../../helpers/logger')
 const middlewares = require('../../../middlewares')
 const admin = middlewares.admin
 const oAuth = middlewares.oauth
+const pagination = middlewares.pagination
+const sort = middlewares.sort
+const validatorsPagination = middlewares.validators.pagination
+const validatorsSort = middlewares.validators.sort
 const validatorsUsers = middlewares.validators.users
 
 const User = mongoose.model('User')
@@ -18,8 +22,15 @@ const Video = mongoose.model('Video')
 
 const router = express.Router()
 
-router.get('/', listUsers)
 router.get('/me', oAuth.authenticate, getUserInformation)
+
+router.get('/',
+  validatorsPagination.pagination,
+  validatorsSort.usersSort,
+  sort.setUsersSort,
+  pagination.setPagination,
+  listUsers
+)
 
 router.post('/',
   oAuth.authenticate,
@@ -73,10 +84,10 @@ function getUserInformation (req, res, next) {
 }
 
 function listUsers (req, res, next) {
-  User.list(function (err, usersList) {
+  User.listForApi(req.query.start, req.query.count, req.query.sort, function (err, usersList, usersTotal) {
     if (err) return next(err)
 
-    res.json(getFormatedUsers(usersList))
+    res.json(getFormatedUsers(usersList, usersTotal))
   })
 }
 
@@ -145,7 +156,7 @@ function success (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-function getFormatedUsers (users) {
+function getFormatedUsers (users, usersTotal) {
   const formatedUsers = []
 
   users.forEach(function (user) {
@@ -153,6 +164,7 @@ function getFormatedUsers (users) {
   })
 
   return {
+    total: usersTotal,
     data: formatedUsers
   }
 }

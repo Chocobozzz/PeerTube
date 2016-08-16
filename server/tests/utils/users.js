@@ -6,6 +6,7 @@ const usersUtils = {
   createUser: createUser,
   getUserInformation: getUserInformation,
   getUsersList: getUsersList,
+  getUsersListPaginationAndSort: getUsersListPaginationAndSort,
   removeUser: removeUser,
   updateUser: updateUser
 }
@@ -46,6 +47,20 @@ function getUsersList (url, end) {
 
   request(url)
     .get(path)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getUsersListPaginationAndSort (url, start, count, sort, end) {
+  const path = '/api/v1/users'
+
+  request(url)
+    .get(path)
+    .query({ start: start })
+    .query({ count: count })
+    .query({ sort: sort })
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)

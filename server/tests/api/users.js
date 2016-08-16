@@ -209,17 +209,92 @@ describe('Test users', function () {
     usersUtils.getUsersList(server.url, function (err, res) {
       if (err) throw err
 
-      const users = res.body.data
+      const result = res.body
+      const total = result.total
+      const users = result.data
 
+      expect(total).to.equal(2)
       expect(users).to.be.an('array')
       expect(users.length).to.equal(2)
 
-      const rootUser = users[0]
-      expect(rootUser.username).to.equal('root')
-
-      const user = users[1]
+      const user = users[0]
       expect(user.username).to.equal('user_1')
+
+      const rootUser = users[1]
+      expect(rootUser.username).to.equal('root')
       userId = user.id
+
+      done()
+    })
+  })
+
+  it('Should list only the first user by username asc', function (done) {
+    usersUtils.getUsersListPaginationAndSort(server.url, 0, 1, 'username', function (err, res) {
+      if (err) throw err
+
+      const result = res.body
+      const total = result.total
+      const users = result.data
+
+      expect(total).to.equal(2)
+      expect(users.length).to.equal(1)
+
+      const user = users[0]
+      expect(user.username).to.equal('root')
+
+      done()
+    })
+  })
+
+  it('Should list only the first user by username desc', function (done) {
+    usersUtils.getUsersListPaginationAndSort(server.url, 0, 1, '-username', function (err, res) {
+      if (err) throw err
+
+      const result = res.body
+      const total = result.total
+      const users = result.data
+
+      expect(total).to.equal(2)
+      expect(users.length).to.equal(1)
+
+      const user = users[0]
+      expect(user.username).to.equal('user_1')
+
+      done()
+    })
+  })
+
+  it('Should list only the second user by createdDate desc', function (done) {
+    usersUtils.getUsersListPaginationAndSort(server.url, 0, 1, '-createdDate', function (err, res) {
+      if (err) throw err
+
+      const result = res.body
+      const total = result.total
+      const users = result.data
+
+      expect(total).to.equal(2)
+      expect(users.length).to.equal(1)
+
+      const user = users[0]
+      expect(user.username).to.equal('user_1')
+
+      done()
+    })
+  })
+
+  it('Should list all the users by createdDate asc', function (done) {
+    usersUtils.getUsersListPaginationAndSort(server.url, 0, 2, 'createdDate', function (err, res) {
+      if (err) throw err
+
+      const result = res.body
+      const total = result.total
+      const users = result.data
+
+      expect(total).to.equal(2)
+      expect(users.length).to.equal(2)
+
+      expect(users[0].username).to.equal('root')
+      expect(users[1].username).to.equal('user_1')
 
       done()
     })

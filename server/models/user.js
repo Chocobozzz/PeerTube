@@ -1,10 +1,15 @@
 const mongoose = require('mongoose')
 
 const customUsersValidators = require('../helpers/custom-validators').users
+const modelUtils = require('./utils')
 
 // ---------------------------------------------------------------------------
 
 const UserSchema = mongoose.Schema({
+  createdDate: {
+    type: Date,
+    default: Date.now
+  },
   password: String,
   username: String,
   role: String
@@ -19,9 +24,9 @@ UserSchema.methods = {
 }
 
 UserSchema.statics = {
-  count: count,
+  countTotal: countTotal,
   getByUsernameAndPassword: getByUsernameAndPassword,
-  list: list,
+  listForApi: listForApi,
   loadById: loadById,
   loadByUsername: loadByUsername
 }
@@ -30,7 +35,7 @@ mongoose.model('User', UserSchema)
 
 // ---------------------------------------------------------------------------
 
-function count (callback) {
+function countTotal (callback) {
   return this.count(callback)
 }
 
@@ -38,8 +43,9 @@ function getByUsernameAndPassword (username, password) {
   return this.findOne({ username: username, password: password })
 }
 
-function list (callback) {
-  return this.find(callback)
+function listForApi (start, count, sort, callback) {
+  const query = {}
+  return modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
 function loadById (id, callback) {

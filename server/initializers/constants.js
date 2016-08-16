@@ -63,6 +63,7 @@ const SEEDS_IN_PARALLEL = 3
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
+  USERS: [ 'username', '-username', 'createdDate', '-createdDate' ],
   VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
 }
 
