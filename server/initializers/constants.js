@@ -1,7 +1,33 @@
 'use strict'
 
+const config = require('config')
+const path = require('path')
+
 // API version of our pod
 const API_VERSION = 'v1'
+
+const CONFIG = {
+  DATABASE: {
+    DBNAME: 'peertube' + config.get('database.suffix'),
+    HOST: config.get('database.host'),
+    PORT: config.get('database.port')
+  },
+  ELECTRON: {
+    DEBUG: config.get('electron.debug')
+  },
+  STORAGE: {
+    CERT_DIR: path.join(__dirname, '..', '..', config.get('storage.certs')),
+    LOG_DIR: path.join(__dirname, '..', '..', config.get('storage.logs')),
+    UPLOAD_DIR: path.join(__dirname, '..', '..', config.get('storage.uploads')),
+    THUMBNAILS_DIR: path.join(__dirname, '..', '..', config.get('storage.thumbnails'))
+  },
+  WEBSERVER: {
+    SCHEME: config.get('webserver.https') === true ? 'https' : 'http',
+    HOST: config.get('webserver.host'),
+    PORT: config.get('webserver.port')
+  }
+}
+CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOST + ':' + CONFIG.WEBSERVER.PORT
 
 const CONSTRAINTS_FIELDS = {
   USERS: {
@@ -89,6 +115,7 @@ if (isTestInstance() === true) {
 
 module.exports = {
   API_VERSION: API_VERSION,
+  CONFIG: CONFIG,
   CONSTRAINTS_FIELDS: CONSTRAINTS_FIELDS,
   FRIEND_SCORE: FRIEND_SCORE,
   INTERVAL: INTERVAL,

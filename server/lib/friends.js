@@ -11,12 +11,8 @@ const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
-const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
 
-const http = config.get('webserver.https') ? 'https' : 'http'
-const host = config.get('webserver.host')
-const port = config.get('webserver.port')
 const Pod = mongoose.model('Pod')
 const Request = mongoose.model('Request')
 const Video = mongoose.model('Video')
@@ -45,7 +41,7 @@ function hasFriends (callback) {
 }
 
 function getMyCertificate (callback) {
-  fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', callback)
+  fs.readFile(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.pub', 'utf8', callback)
 }
 
 function makeFriends (callback) {
@@ -220,7 +216,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       url: pod.url + '/api/' + constants.API_VERSION + '/pods/',
       method: 'POST',
       json: {
-        url: http + '://' + host + ':' + port,
+        url: constants.CONFIG.WEBSERVER.URL,
         publicKey: cert
       }
     }

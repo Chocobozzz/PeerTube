@@ -1,6 +1,5 @@
 'use strict'
 
-const config = require('config')
 const eachLimit = require('async/eachLimit')
 const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
@@ -14,12 +13,6 @@ const logger = require('../helpers/logger')
 const modelUtils = require('./utils')
 const utils = require('../helpers/utils')
 const webtorrent = require('../lib/webtorrent')
-
-const http = config.get('webserver.https') === true ? 'https' : 'http'
-const host = config.get('webserver.host')
-const port = config.get('webserver.port')
-const uploadsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.uploads'))
-const thumbnailsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.thumbnails'))
 
 // ---------------------------------------------------------------------------
 
@@ -101,8 +94,8 @@ VideoSchema.pre('save', function (next) {
   const tasks = []
 
   if (video.isOwned()) {
-    const videoPath = pathUtils.join(uploadsDir, video.filename)
-    this.podUrl = http + '://' + host + ':' + port
+    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.UPLOAD_DIR, video.filename)
+    this.podUrl = constants.CONFIG.WEBSERVER.URL
 
     tasks.push(
       function (callback) {
@@ -162,7 +155,7 @@ function toRemoteJSON (callback) {
   const self = this
 
   // Convert thumbnail to base64
-  fs.readFile(pathUtils.join(thumbnailsDir, this.thumbnail), function (err, thumbnailData) {
+  fs.readFile(pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, this.thumbnail), function (err, thumbnailData) {
     if (err) {
       logger.error('Cannot read the thumbnail of the video')
       return callback(err)
@@ -242,7 +235,7 @@ function seedAllExisting (callback) {
     if (err) return callback(err)
 
     eachLimit(videos, constants.SEEDS_IN_PARALLEL, function (video, callbackEach) {
-      const videoPath = pathUtils.join(uploadsDir, video.filename)
+      const videoPath = pathUtils.join(constants.CONFIG.STORAGE.UPLOAD_DIR, video.filename)
       seed(videoPath, callbackEach)
     }, callback)
   })
@@ -251,11 +244,11 @@ function seedAllExisting (callback) {
 // ---------------------------------------------------------------------------
 
 function removeThumbnail (video, callback) {
-  fs.unlink(thumbnailsDir + video.thumbnail, callback)
+  fs.unlink(constants.CONFIG.STORAGE.THUMBNAILS_DIR + video.thumbnail, callback)
 }
 
 function removeFile (video, callback) {
-  fs.unlink(uploadsDir + video.filename, callback)
+  fs.unlink(constants.CONFIG.STORAGE.UPLOAD_DIR + video.filename, callback)
 }
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
@@ -277,7 +270,7 @@ function createThumbnail (videoPath, callback) {
     })
     .thumbnail({
       count: 1,
-      folder: thumbnailsDir,
+      folder: constants.CONFIG.STORAGE.THUMBNAILS_DIR,
       size: constants.THUMBNAILS_SIZE,
       filename: filename
     })
@@ -299,7 +292,7 @@ function generateThumbnailFromBase64 (data, callback) {
     if (err) return callback(err)
 
     const thumbnailName = randomString + '.jpg'
-    fs.writeFile(thumbnailsDir + thumbnailName, data, { encoding: 'base64' }, function (err) {
+    fs.writeFile(constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName, data, { encoding: 'base64' }, function (err) {
       if (err) return callback(err)
 
       return callback(null, thumbnailName)

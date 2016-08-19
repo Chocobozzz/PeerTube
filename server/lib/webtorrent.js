@@ -1,15 +1,14 @@
 'use strict'
 
-const config = require('config')
 const ipc = require('node-ipc')
 const pathUtils = require('path')
 const spawn = require('electron-spawn')
 
+const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 
-const electronDebug = config.get('electron.debug')
-let host = config.get('webserver.host')
-let port = config.get('webserver.port')
+let host = constants.CONFIG.WEBSERVER.HOST
+let port = constants.CONFIG.WEBSERVER.PORT
 let nodeKey = 'webtorrentnode' + port
 let processKey = 'webtorrentprocess' + port
 ipc.config.silent = true
@@ -59,7 +58,7 @@ function create (options, callback) {
 
     const webtorrentProcess = spawn(pathUtils.join(__dirname, 'webtorrent-process.js'), host, port, { detached: true })
 
-    if (electronDebug === true) {
+    if (constants.CONFIG.ELECTRON.DEBUG === true) {
       webtorrentProcess.stderr.on('data', function (data) {
         logger.debug('Webtorrent process stderr: ', data.toString())
       })

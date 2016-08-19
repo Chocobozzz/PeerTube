@@ -1,8 +1,9 @@
 'use strict'
 
-const config = require('config')
 const express = require('express')
 const mongoose = require('mongoose')
+
+const constants = require('../../../initializers/constants')
 
 const Client = mongoose.model('OAuthClient')
 
@@ -12,8 +13,8 @@ router.get('/local', getLocalClient)
 
 // Get the client credentials for the PeerTube front end
 function getLocalClient (req, res, next) {
-  const serverHost = config.get('webserver.host')
-  const serverPort = config.get('webserver.port')
+  const serverHost = constants.CONFIG.WEBSERVER.HOST
+  const serverPort = constants.CONFIG.WEBSERVER.PORT
   let headerHostShouldBe = serverHost
   if (serverPort !== 80 && serverPort !== 443) {
     headerHostShouldBe += ':' + serverPort

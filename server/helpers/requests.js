@@ -1,15 +1,10 @@
 'use strict'
 
-const config = require('config')
 const replay = require('request-replay')
 const request = require('request')
 
 const constants = require('../initializers/constants')
 const peertubeCrypto = require('./peertube-crypto')
-
-const http = config.get('webserver.https') ? 'https' : 'http'
-const host = config.get('webserver.host')
-const port = config.get('webserver.port')
 
 const requests = {
   makeRetryRequest: makeRetryRequest,
@@ -29,8 +24,6 @@ function makeRetryRequest (params, callback) {
 }
 
 function makeSecureRequest (params, callback) {
-  const myUrl = http + '://' + host + ':' + port
-
   const requestParams = {
     url: params.toPod.url + params.path
   }
@@ -42,8 +35,8 @@ function makeSecureRequest (params, callback) {
     // Add signature if it is specified in the params
     if (params.sign === true) {
       requestParams.json.signature = {
-        url: myUrl,
-        signature: peertubeCrypto.sign(myUrl)
+        url: constants.CONFIG.WEBSERVER.URL,
+        signature: peertubeCrypto.sign(constants.CONFIG.WEBSERVER.URL)
       }
     }
 

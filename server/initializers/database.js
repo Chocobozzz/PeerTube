@@ -1,8 +1,8 @@
 'use strict'
 
-const config = require('config')
 const mongoose = require('mongoose')
 
+const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 
 // Bootstrap models
@@ -14,17 +14,13 @@ require('../models/video')
 // Request model needs Video model
 require('../models/request')
 
-const dbname = 'peertube' + config.get('database.suffix')
-const host = config.get('database.host')
-const port = config.get('database.port')
-
 const database = {
   connect: connect
 }
 
 function connect () {
   mongoose.Promise = global.Promise
-  mongoose.connect('mongodb://' + host + ':' + port + '/' + dbname)
+  mongoose.connect('mongodb://' + constants.CONFIG.DATABASE.HOST + ':' + constants.CONFIG.DATABASE.PORT + '/' + constants.CONFIG.DATABASE.DBNAME)
   mongoose.connection.on('error', function () {
     throw new Error('Mongodb connection error.')
   })
