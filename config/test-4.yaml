@@ -14,7 +14,3 @@ storage:
   uploads: 'test4/uploads/'
   logs: 'test4/logs/'
   thumbnails: 'test4/thumbnails/'
-
-network:
-  friends:
-    - 'http://localhost:9002'

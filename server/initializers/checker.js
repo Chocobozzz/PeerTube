@@ -17,8 +17,8 @@ function checkConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.host', 'webserver.port',
     'database.host', 'database.port', 'database.suffix',
-    'storage.certs', 'storage.uploads', 'storage.logs',
-    'network.friends', 'electron.debug' ]
+    'storage.certs', 'storage.uploads', 'storage.logs', 'storage.thumbnails',
+    'electron.debug' ]
   const miss = []
 
   for (const key of required) {

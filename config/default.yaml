@@ -18,8 +18,5 @@ storage:
   logs: 'logs/'
   thumbnails: 'thumbnails/'
 
-network:
-  friends: []
-
 electron:
   debug: false

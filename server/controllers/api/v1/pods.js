@@ -19,7 +19,7 @@ const Video = mongoose.model('Video')
 
 router.get('/', listPodsUrl)
 router.post('/', validators.podsAdd, addPods)
-router.get('/makefriends',
+router.post('/makefriends',
   oAuth.authenticate,
   admin.ensureIsAdmin,
   validators.makeFriends,
@@ -83,7 +83,9 @@ function listPodsUrl (req, res, next) {
 }
 
 function makeFriends (req, res, next) {
-  friends.makeFriends(function (err) {
+  const urls = req.body.urls
+
+  friends.makeFriends(urls, function (err) {
     if (err) return next(err)
 
     res.type('json').status(204).end()

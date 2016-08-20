@@ -108,10 +108,40 @@ describe('Test parameters validator', function () {
       })
 
       describe('When making friends', function () {
+        const body = {
+          urls: [ 'http://localhost:9002' ]
+        }
+
+        it('Should fail without urls', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .set('Authorization', 'Bearer faketoken')
+            .set('Accept', 'application/json')
+            .expect(401, done)
+        })
+
+        it('Should fail with urls is not an array', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send({ urls: 'http://localhost:9002' })
+            .set('Authorization', 'Bearer faketoken')
+            .set('Accept', 'application/json')
+            .expect(401, done)
+        })
+
+        it('Should fail if the array is not composed by urls', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send({ urls: [ 'http://localhost:9002', 'localhost:coucou' ] })
+            .set('Authorization', 'Bearer faketoken')
+            .set('Accept', 'application/json')
+            .expect(401, done)
+        })
+
         it('Should fail with a invalid token', function (done) {
           request(server.url)
-            .get(path + '/makefriends')
-            .query({ start: 'hello' })
+            .post(path + '/makefriends')
+            .send(body)
             .set('Authorization', 'Bearer faketoken')
             .set('Accept', 'application/json')
             .expect(401, done)
@@ -119,8 +149,8 @@ describe('Test parameters validator', function () {
 
         it('Should fail if the user is not an administrator', function (done) {
           request(server.url)
-            .get(path + '/makefriends')
-            .query({ start: 'hello' })
+            .post(path + '/makefriends')
+            .send(body)
             .set('Authorization', 'Bearer ' + userAccessToken)
             .set('Accept', 'application/json')
             .expect(403, done)

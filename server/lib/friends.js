@@ -1,6 +1,5 @@
 'use strict'
 
-const config = require('config')
 const each = require('async/each')
 const eachLimit = require('async/eachLimit')
 const eachSeries = require('async/eachSeries')
@@ -44,7 +43,7 @@ function getMyCertificate (callback) {
   fs.readFile(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.pub', 'utf8', callback)
 }
 
-function makeFriends (callback) {
+function makeFriends (urls, callback) {
   const podsScore = {}
 
   logger.info('Make friends!')
@@ -53,8 +52,6 @@ function makeFriends (callback) {
       logger.error('Cannot read public cert.')
       return callback(err)
     }
-
-    const urls = config.get('network.friends')
 
     eachSeries(urls, function (url, callbackEach) {
       computeForeignPodsList(url, podsScore, callbackEach)

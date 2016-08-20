@@ -10,6 +10,11 @@ const validatorsPod = {
 }
 
 function makeFriends (req, res, next) {
+  req.checkBody('urls', 'Should have an array of urls').isArray()
+  req.checkBody('urls', 'Should be an url').isEachUrl()
+
+  logger.debug('Checking makeFriends parameters', { parameters: req.body })
+
   friends.hasFriends(function (err, hasFriends) {
     if (err) {
       logger.error('Cannot know if we have friends.', { error: err })
