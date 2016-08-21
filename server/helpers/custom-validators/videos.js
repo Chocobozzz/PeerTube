@@ -22,26 +22,27 @@ const videosValidators = {
 }
 
 function isEachRemoteVideosValid (requests) {
-  return requests.every(function (request) {
-    const video = request.data
-    return (
-      isRequestTypeAddValid(request.type) &&
-      isVideoAuthorValid(video.author) &&
-      isVideoDateValid(video.createdDate) &&
-      isVideoDescriptionValid(video.description) &&
-      isVideoDurationValid(video.duration) &&
-      isVideoMagnetUriValid(video.magnetUri) &&
-      isVideoNameValid(video.name) &&
-      isVideoPodUrlValid(video.podUrl) &&
-      isVideoTagsValid(video.tags) &&
-      isVideoThumbnail64Valid(video.thumbnailBase64)
-    ) ||
-    (
-      isRequestTypeRemoveValid(request.type) &&
-      isVideoNameValid(video.name) &&
-      isVideoMagnetUriValid(video.magnetUri)
-    )
-  })
+  return miscValidators.isArray(requests) &&
+    requests.every(function (request) {
+      const video = request.data
+      return (
+        isRequestTypeAddValid(request.type) &&
+        isVideoAuthorValid(video.author) &&
+        isVideoDateValid(video.createdDate) &&
+        isVideoDescriptionValid(video.description) &&
+        isVideoDurationValid(video.duration) &&
+        isVideoMagnetUriValid(video.magnetUri) &&
+        isVideoNameValid(video.name) &&
+        isVideoPodUrlValid(video.podUrl) &&
+        isVideoTagsValid(video.tags) &&
+        isVideoThumbnail64Valid(video.thumbnailBase64)
+      ) ||
+      (
+        isRequestTypeRemoveValid(request.type) &&
+        isVideoNameValid(video.name) &&
+        isVideoMagnetUriValid(video.magnetUri)
+      )
+    })
 }
 
 function isVideoAuthorValid (value) {

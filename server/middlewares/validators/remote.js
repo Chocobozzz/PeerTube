@@ -19,7 +19,6 @@ function dataToDecrypt (req, res, next) {
 }
 
 function remoteVideos (req, res, next) {
-  req.checkBody('data').isArray()
   req.checkBody('data').isEachRemoteVideosValid()
 
   logger.debug('Checking remoteVideos parameters', { parameters: req.body })
