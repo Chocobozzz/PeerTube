@@ -98,7 +98,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [ ] Admin panel
   - [ ] Stats about the network (how many friends, how many requests per hour...)
   - [ ] Stats about videos
-  - [ ] Manage users (create/remove)
+  - [X] Manage users (create/remove)
 
 
 ## Installation
