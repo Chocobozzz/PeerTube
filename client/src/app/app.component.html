@@ -14,14 +14,11 @@
 
 
   <div class="row">
-    <my-menu *ngIf="isInAdmin === false" (enteredInAdmin)="onEnteredInAdmin()"></my-menu>
-    <my-menu-admin *ngIf="isInAdmin === true" (quittedAdmin)="onQuittedAdmin()"></my-menu-admin>
+    <my-menu *ngIf="isInAdmin() === false"></my-menu>
+    <my-menu-admin *ngIf="isInAdmin() === true"></my-menu-admin>
 
     <div class="col-md-9 col-sm-8 col-xs-8 router-outlet-container">
       <router-outlet></router-outlet>
-    </div>
-  </div>
-
 
   <footer>
     PeerTube, CopyLeft 2015-2016

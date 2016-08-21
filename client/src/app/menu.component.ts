@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { AuthService, AuthStatus } from './shared';
@@ -9,7 +9,6 @@ import { AuthService, AuthStatus } from './shared';
   directives: [ ROUTER_DIRECTIVES ]
 })
 export class MenuComponent implements OnInit {
-  @Output() enteredInAdmin = new EventEmitter<boolean>();
   isLoggedIn: boolean;
 
   constructor (
@@ -33,10 +32,6 @@ export class MenuComponent implements OnInit {
         }
       }
     );
-  }
-
-  enterInAdmin() {
-    this.enteredInAdmin.emit(true);
   }
 
   isUserAdmin() {

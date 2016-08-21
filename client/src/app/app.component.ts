@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { MenuAdminComponent } from './admin';
 import { MenuComponent } from './menu.component';
@@ -15,13 +15,9 @@ import { VideoService } from './videos';
 })
 
 export class AppComponent {
-  isInAdmin = false;
+  constructor(private router: Router) {}
 
-  onEnteredInAdmin() {
-    this.isInAdmin = true;
-  }
-
-  onQuittedAdmin() {
-    this.isInAdmin = false;
+  isInAdmin() {
+    return this.router.url.indexOf('/admin/') !== -1;
   }
 }

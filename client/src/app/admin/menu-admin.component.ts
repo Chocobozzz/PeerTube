@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 
 @Component({
@@ -6,10 +6,4 @@ import { ROUTER_DIRECTIVES } from '@angular/router';
   template: require('./menu-admin.component.html'),
   directives: [ ROUTER_DIRECTIVES ]
 })
-export class MenuAdminComponent {
-  @Output() quittedAdmin = new EventEmitter<boolean>();
-
-  quitAdmin() {
-    this.quittedAdmin.emit(true);
-  }
-}
+export class MenuAdminComponent { }
