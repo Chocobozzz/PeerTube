@@ -44,6 +44,106 @@ describe('Test parameters validator', function () {
   describe('Of the pods API', function () {
     const path = '/api/v1/pods/'
 
+    describe('When making friends', function () {
+      let userAccessToken = null
+
+      before(function (done) {
+        usersUtils.createUser(server.url, server.accessToken, 'user1', 'password', function () {
+          server.user = {
+            username: 'user1',
+            password: 'password'
+          }
+
+          loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
+            if (err) throw err
+
+            userAccessToken = accessToken
+
+            done()
+          })
+        })
+      })
+
+      describe('When making friends', function () {
+        const body = {
+          urls: [ 'http://localhost:9002' ]
+        }
+
+        it('Should fail without urls', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .set('Authorization', 'Bearer ' + server.accessToken)
+            .set('Accept', 'application/json')
+            .expect(400, done)
+        })
+
+        it('Should fail with urls is not an array', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send({ urls: 'http://localhost:9002' })
+            .set('Authorization', 'Bearer ' + server.accessToken)
+            .set('Accept', 'application/json')
+            .expect(400, done)
+        })
+
+        it('Should fail if the array is not composed by urls', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send({ urls: [ 'http://localhost:9002', 'localhost:coucou' ] })
+            .set('Authorization', 'Bearer ' + server.accessToken)
+            .set('Accept', 'application/json')
+            .expect(400, done)
+        })
+
+        it('Should fail if urls are not unique', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send({ urls: [ 'http://localhost:9002', 'http://localhost:9002' ] })
+            .set('Authorization', 'Bearer ' + server.accessToken)
+            .set('Accept', 'application/json')
+            .expect(400, done)
+        })
+
+        it('Should fail with a invalid token', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send(body)
+            .set('Authorization', 'Bearer faketoken')
+            .set('Accept', 'application/json')
+            .expect(401, done)
+        })
+
+        it('Should fail if the user is not an administrator', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send(body)
+            .set('Authorization', 'Bearer ' + userAccessToken)
+            .set('Accept', 'application/json')
+            .expect(403, done)
+        })
+      })
+
+      describe('When quitting friends', function () {
+        it('Should fail with a invalid token', function (done) {
+          request(server.url)
+            .get(path + '/quitfriends')
+            .query({ start: 'hello' })
+            .set('Authorization', 'Bearer faketoken')
+            .set('Accept', 'application/json')
+            .expect(401, done)
+        })
+
+        it('Should fail if the user is not an administrator', function (done) {
+          request(server.url)
+            .get(path + '/quitfriends')
+            .query({ start: 'hello' })
+            .set('Authorization', 'Bearer ' + userAccessToken)
+            .set('Accept', 'application/json')
+            .expect(403, done)
+        })
+      })
+    })
+
     describe('When adding a pod', function () {
       it('Should fail with nothing', function (done) {
         const data = {}
@@ -84,97 +184,6 @@ describe('Test parameters validator', function () {
           publicKey: 'mysuperpublickey'
         }
         requestsUtils.makePostBodyRequest(server.url, path, null, data, done, 200)
-      })
-    })
-
-    describe('For the friends API', function () {
-      let userAccessToken = null
-
-      before(function (done) {
-        usersUtils.createUser(server.url, server.accessToken, 'user1', 'password', function () {
-          server.user = {
-            username: 'user1',
-            password: 'password'
-          }
-
-          loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
-            if (err) throw err
-
-            userAccessToken = accessToken
-
-            done()
-          })
-        })
-      })
-
-      describe('When making friends', function () {
-        const body = {
-          urls: [ 'http://localhost:9002' ]
-        }
-
-        it('Should fail without urls', function (done) {
-          request(server.url)
-            .post(path + '/makefriends')
-            .set('Authorization', 'Bearer faketoken')
-            .set('Accept', 'application/json')
-            .expect(401, done)
-        })
-
-        it('Should fail with urls is not an array', function (done) {
-          request(server.url)
-            .post(path + '/makefriends')
-            .send({ urls: 'http://localhost:9002' })
-            .set('Authorization', 'Bearer faketoken')
-            .set('Accept', 'application/json')
-            .expect(401, done)
-        })
-
-        it('Should fail if the array is not composed by urls', function (done) {
-          request(server.url)
-            .post(path + '/makefriends')
-            .send({ urls: [ 'http://localhost:9002', 'localhost:coucou' ] })
-            .set('Authorization', 'Bearer faketoken')
-            .set('Accept', 'application/json')
-            .expect(401, done)
-        })
-
-        it('Should fail with a invalid token', function (done) {
-          request(server.url)
-            .post(path + '/makefriends')
-            .send(body)
-            .set('Authorization', 'Bearer faketoken')
-            .set('Accept', 'application/json')
-            .expect(401, done)
-        })
-
-        it('Should fail if the user is not an administrator', function (done) {
-          request(server.url)
-            .post(path + '/makefriends')
-            .send(body)
-            .set('Authorization', 'Bearer ' + userAccessToken)
-            .set('Accept', 'application/json')
-            .expect(403, done)
-        })
-      })
-
-      describe('When quitting friends', function () {
-        it('Should fail with a invalid token', function (done) {
-          request(server.url)
-            .get(path + '/quitfriends')
-            .query({ start: 'hello' })
-            .set('Authorization', 'Bearer faketoken')
-            .set('Accept', 'application/json')
-            .expect(401, done)
-        })
-
-        it('Should fail if the user is not an administrator', function (done) {
-          request(server.url)
-            .get(path + '/quitfriends')
-            .query({ start: 'hello' })
-            .set('Authorization', 'Bearer ' + userAccessToken)
-            .set('Accept', 'application/json')
-            .expect(403, done)
-        })
       })
     })
   })

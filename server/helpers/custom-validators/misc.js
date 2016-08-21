@@ -1,11 +1,8 @@
 'use strict'
 
-const validator = require('express-validator').validator
-
 const miscValidators = {
   exists: exists,
-  isArray: isArray,
-  isEachUrl: isEachUrl
+  isArray: isArray
 }
 
 function exists (value) {
@@ -14,12 +11,6 @@ function exists (value) {
 
 function isArray (value) {
   return Array.isArray(value)
-}
-
-function isEachUrl (urls) {
-  return urls.every(function (url) {
-    return validator.isURL(url)
-  })
 }
 
 // ---------------------------------------------------------------------------

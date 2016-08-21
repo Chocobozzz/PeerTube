@@ -53,7 +53,13 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 // Validate some params for the API
 app.use(expressValidator({
-  customValidators: Object.assign({}, customValidators.misc, customValidators.users, customValidators.videos)
+  customValidators: Object.assign(
+    {},
+    customValidators.misc,
+    customValidators.pods,
+    customValidators.users,
+    customValidators.videos
+  )
 }))
 
 // ----------- Views, routes and static files -----------
