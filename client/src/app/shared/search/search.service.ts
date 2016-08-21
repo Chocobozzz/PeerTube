@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 import { Search } from './search.model';
 
@@ -12,6 +13,6 @@ export class SearchService {
 
   constructor() {
     this.updateSearch = new Subject<Search>();
-    this.searchUpdated = new Subject<Search>();
+    this.searchUpdated = new ReplaySubject<Search>(1);
   }
 }

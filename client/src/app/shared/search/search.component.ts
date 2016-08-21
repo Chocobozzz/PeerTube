@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
 
@@ -25,7 +26,7 @@ export class SearchComponent implements OnInit {
     value: ''
   };
 
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit() {
     // Subscribe if the search changed
@@ -58,6 +59,10 @@ export class SearchComponent implements OnInit {
   }
 
   doSearch() {
+    if (this.router.url.indexOf('/videos/list') === -1) {
+      this.router.navigate([ '/videos/list' ]);
+    }
+
     this.searchService.searchUpdated.next(this.searchCriterias);
   }
 
