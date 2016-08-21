@@ -22,19 +22,6 @@ export class FriendListComponent implements OnInit {
     );
   }
 
-  makeFriends() {
-    this.friendService.makeFriends().subscribe(
-      status => {
-        if (status === 409) {
-          alert('Already made friends!');
-        } else {
-          alert('Made friends!');
-        }
-      },
-      error => alert(error)
-    );
-  }
-
   quitFriends() {
     if (!confirm('Are you sure?')) return;
 
