@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { Friend, FriendService } from '../shared';
 
 @Component({
   selector: 'my-friend-list',
   template: require('./friend-list.component.html'),
-  styles: [ require('./friend-list.component.scss') ]
+  styles: [ require('./friend-list.component.scss') ],
+  directives: [ ROUTER_DIRECTIVES ]
 })
 export class FriendListComponent implements OnInit {
   friends: Friend[];

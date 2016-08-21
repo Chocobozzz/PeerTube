@@ -1,6 +1,7 @@
 import { RouterConfig } from '@angular/router';
 
 import { FriendsComponent } from './friends.component';
+import { FriendAddComponent } from './friend-add';
 import { FriendListComponent } from './friend-list';
 
 export const FriendsRoutes: RouterConfig = [
@@ -16,6 +17,10 @@ export const FriendsRoutes: RouterConfig = [
         {
           path: 'list',
           component: FriendListComponent
+        },
+        {
+          path: 'add',
+          component: FriendAddComponent
         }
       ]
     }

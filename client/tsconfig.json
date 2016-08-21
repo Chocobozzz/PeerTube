@@ -33,6 +33,8 @@
     "src/app/account/index.ts",
     "src/app/admin/admin.component.ts",
     "src/app/admin/admin.routes.ts",
+    "src/app/admin/friends/friend-add/friend-add.component.ts",
+    "src/app/admin/friends/friend-add/index.ts",
     "src/app/admin/friends/friend-list/friend-list.component.ts",
     "src/app/admin/friends/friend-list/index.ts",
     "src/app/admin/friends/friends.component.ts",

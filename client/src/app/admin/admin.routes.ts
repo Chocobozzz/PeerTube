@@ -9,6 +9,11 @@ export const AdminRoutes: RouterConfig = [
     path: 'admin',
     component: AdminComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'users',
+        pathMatch: 'full'
+      },
       ...FriendsRoutes,
       ...UsersRoutes
     ]

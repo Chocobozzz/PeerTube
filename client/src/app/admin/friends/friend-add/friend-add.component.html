@@ -1,0 +1,18 @@
+<h3>Make friends</h3>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<form role="form" (ngSubmit)="makeFriends()">
+  <div class="form-group"  *ngFor="let url of urls; let id = index; trackBy:customTrackBy">
+    <label for="username">Url</label>
+    <div class="input-group">
+      <input type="text" class="form-control" name="url" id="url" placeholder="http://domain.com" [(ngModel)]="urls[id]" />
+      <span class="input-group-btn">
+        <button *ngIf="displayAddField(id)" (click)="addField()" class="btn btn-default" type="button">+</button>
+        <button *ngIf="displayRemoveField(id)" (click)="removeField(index)" class="btn btn-default" type="button">-</button>
+      </span>
+    </div>
+  </div>
+
+  <input type="submit" value="Make friends" class="btn btn-default">
+</form>

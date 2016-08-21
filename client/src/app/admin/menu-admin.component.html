@@ -8,14 +8,14 @@
 
     <div id="panel-friends" class="panel-button">
       <span class="hidden-xs glyphicon glyphicon-cloud"></span>
-      <a [routerLink]="['/admin/friends/list']">Friends</a>
+      <a [routerLink]="['/admin/friends/list']">List friends</a>
     </div>
   </div>
 
   <div class="panel-block">
     <div id="panel-quit-administration" class="panel-button">
       <span class="hidden-xs glyphicon glyphicon-cog"></span>
-      <a (click)="quitAdmin()">Quit admin.</a>
+      <a [routerLink]="['/videos/list']" (click)="quitAdmin()">Quit admin.</a>
     </div>
   </div>
 </menu>

@@ -20,8 +20,12 @@ export class FriendService {
                         .catch(this.handleError);
   }
 
-  makeFriends() {
-    return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'makefriends')
+  makeFriends(notEmptyUrls) {
+    const body = {
+      urls: notEmptyUrls
+    };
+
+    return this.authHttp.post(FriendService.BASE_FRIEND_URL + 'makefriends', body)
                         .map(res => res.status)
                         .catch(this.handleError);
   }
