@@ -61,7 +61,8 @@ export class FriendAddComponent {
         if (status === 409) {
           alert('Already made friends!');
         } else {
-          alert('Made friends!');
+          alert('Make friends request sent!');
+          this.router.navigate([ '/admin/friends/list' ]);
         }
       },
       error => alert(error)

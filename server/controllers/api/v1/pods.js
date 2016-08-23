@@ -86,10 +86,15 @@ function makeFriends (req, res, next) {
   const urls = req.body.urls
 
   friends.makeFriends(urls, function (err) {
-    if (err) return next(err)
+    if (err) {
+      logger.error('Could not make friends.', { error: err })
+      return
+    }
 
-    res.type('json').status(204).end()
+    logger.info('Made friends!')
   })
+
+  res.type('json').status(204).end()
 }
 
 function removePods (req, res, next) {
