@@ -9,7 +9,7 @@ import { bootstrap }    from '@angular/platform-browser-dynamic';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app/app.routes';
-import { AuthHttp, AuthService } from './app/shared';
+import { AuthHttp, AuthService, RestExtractor } from './app/shared';
 import { AppComponent } from './app/app.component';
 
 if (process.env.ENV === 'production') {
@@ -26,6 +26,7 @@ bootstrap(AppComponent, [
   }),
 
   AuthService,
+  RestExtractor,
 
   provideRouter(routes),
 

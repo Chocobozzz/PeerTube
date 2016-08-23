@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { Friend } from './friend.model';
-import { AuthHttp, AuthService } from '../../../shared';
+import { AuthHttp, RestExtractor } from '../../../shared';
 
 @Injectable()
 export class FriendService {
@@ -11,13 +10,15 @@ export class FriendService {
 
   constructor (
     private authHttp: AuthHttp,
-    private authService: AuthService
+    private restExtractor: RestExtractor
   ) {}
 
   getFriends(): Observable<Friend[]> {
     return this.authHttp.get(FriendService.BASE_FRIEND_URL)
-                        .map(res => <Friend[]>res.json())
-                        .catch(this.handleError);
+                        // Not implemented as a data list by the server yet
+                        // .map(this.restExtractor.extractDataList)
+                        .map((res) => res.json())
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 
   makeFriends(notEmptyUrls) {
@@ -26,18 +27,13 @@ export class FriendService {
     };
 
     return this.authHttp.post(FriendService.BASE_FRIEND_URL + 'makefriends', body)
-                        .map(res => res.status)
-                        .catch(this.handleError);
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 
   quitFriends() {
     return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'quitfriends')
                         .map(res => res.status)
-                        .catch(this.handleError);
-  }
-
-  private handleError (error: Response) {
-    console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 }

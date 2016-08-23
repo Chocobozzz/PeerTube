@@ -37,12 +37,12 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/videos/list']);
       },
       error => {
-        console.error(error);
+        console.error(error.json);
 
-        if (error.error === 'invalid_grant') {
+        if (error.json.error === 'invalid_grant') {
           this.error = 'Credentials are invalid.';
         } else {
-          this.error = `${error.error}: ${error.error_description}`;
+          this.error = `${error.json.error}: ${error.json.error_description}`;
         }
       }
     );

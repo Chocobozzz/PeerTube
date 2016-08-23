@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, Response, URLSearchParams } from '@angular/http';
+import { Headers, Http, URLSearchParams } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 import { AuthStatus } from './auth-status.model';
 import { AuthUser } from './auth-user.model';
+import { RestExtractor } from '../rest';
 
 @Injectable()
 export class AuthService {
@@ -19,15 +20,15 @@ export class AuthService {
   private loginChanged: Subject<AuthStatus>;
   private user: AuthUser = null;
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private restExtractor: RestExtractor) {
     this.loginChanged = new Subject<AuthStatus>();
     this.loginChangedSource = this.loginChanged.asObservable();
 
     // Fetch the client_id/client_secret
     // FIXME: save in local storage?
     this.http.get(AuthService.BASE_CLIENT_URL)
-      .map(res => res.json())
-      .catch(this.handleError)
+      .map(this.restExtractor.extractDataGet)
+      .catch((res) => this.restExtractor.handleError(res))
       .subscribe(
         result => {
           this.clientId = result.client_id;
@@ -101,14 +102,14 @@ export class AuthService {
     };
 
     return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
-                    .map(res => res.json())
+                    .map(this.restExtractor.extractDataGet)
                     .map(res => {
                       res.username = username;
                       return res;
                     })
                     .flatMap(res => this.fetchUserInformations(res))
                     .map(res => this.handleLogin(res))
-                    .catch(this.handleError);
+                    .catch((res) => this.restExtractor.handleError(res));
   }
 
   logout() {
@@ -139,9 +140,9 @@ export class AuthService {
     };
 
     return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
-                    .map(res => res.json())
+                    .map(this.restExtractor.extractDataGet)
                     .map(res => this.handleRefreshToken(res))
-                    .catch(this.handleError);
+                    .catch((res) => this.restExtractor.handleError(res));
   }
 
   private fetchUserInformations (obj: any) {
@@ -158,11 +159,6 @@ export class AuthService {
                return obj;
              }
     );
-  }
-
-  private handleError (error: Response) {
-    console.error(error);
-    return Observable.throw(error.json() || { error: 'Server error' });
   }
 
   private handleLogin (obj: any) {

@@ -3,7 +3,7 @@ import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
 import { MenuAdminComponent } from './admin';
 import { MenuComponent } from './menu.component';
-import { SearchComponent, SearchService } from './shared';
+import { RestExtractor, RestService, SearchComponent, SearchService } from './shared';
 import { VideoService } from './videos';
 
 @Component({
@@ -11,7 +11,7 @@ import { VideoService } from './videos';
     template: require('./app.component.html'),
     styles: [ require('./app.component.scss') ],
     directives: [ MenuAdminComponent, MenuComponent, ROUTER_DIRECTIVES, SearchComponent ],
-    providers: [ VideoService, SearchService ]
+    providers: [ RestExtractor, RestService, VideoService, SearchService ]
 })
 
 export class AppComponent {

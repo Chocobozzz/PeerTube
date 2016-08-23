@@ -7,12 +7,11 @@ import { PAGINATION_DIRECTIVES } from 'ng2-bootstrap/components/pagination';
 
 import {
   LoaderComponent,
-  Pagination,
   SortField,
   Video,
   VideoService
 } from '../shared';
-import { AuthService, AuthUser, Search, SearchField } from '../../shared';
+import { AuthService, AuthUser, RestPagination, Search, SearchField } from '../../shared';
 import { VideoMiniatureComponent } from './video-miniature.component';
 import { VideoSortComponent } from './video-sort.component';
 import { SearchService } from '../../shared';
@@ -27,7 +26,7 @@ import { SearchService } from '../../shared';
 
 export class VideoListComponent implements OnInit, OnDestroy {
   loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  pagination: Pagination = {
+  pagination: RestPagination = {
     currentPage: 1,
     itemsPerPage: 9,
     totalItems: null

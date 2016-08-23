@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
 
-import { AuthHttp, AuthService } from '../shared';
+import { AuthHttp, AuthService, RestExtractor } from '../shared';
 
 @Injectable()
 export class AccountService {
   private static BASE_USERS_URL = '/api/v1/users/';
 
-  constructor(private authHttp: AuthHttp, private authService: AuthService) {  }
+  constructor(
+    private authHttp: AuthHttp,
+    private authService: AuthService,
+    private restExtractor: RestExtractor
+  ) {}
 
   changePassword(newPassword: string) {
     const url = AccountService.BASE_USERS_URL + this.authService.getUser().id;
@@ -14,6 +18,8 @@ export class AccountService {
       password: newPassword
     };
 
-    return this.authHttp.put(url, body);
+    return this.authHttp.put(url, body)
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 }

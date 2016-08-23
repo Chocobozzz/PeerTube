@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 
-import { AuthHttp, User } from '../../../shared';
+import { AuthHttp, RestExtractor, ResultList, User } from '../../../shared';
 
 @Injectable()
 export class UserService {
   // TODO: merge this constant with account
   private static BASE_USERS_URL = '/api/v1/users/';
 
-  constructor(private authHttp: AuthHttp) {}
+  constructor(
+    private authHttp: AuthHttp,
+    private restExtractor: RestExtractor
+  ) {}
 
   addUser(username: string, password: string) {
     const body = {
@@ -17,33 +18,30 @@ export class UserService {
       password
     };
 
-    return this.authHttp.post(UserService.BASE_USERS_URL, body);
+    return this.authHttp.post(UserService.BASE_USERS_URL, body)
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 
   getUsers() {
     return this.authHttp.get(UserService.BASE_USERS_URL)
-                 .map(res => res.json())
+                 .map(this.restExtractor.extractDataList)
                  .map(this.extractUsers)
-                 .catch(this.handleError);
+                 .catch((res) => this.restExtractor.handleError(res));
   }
 
   removeUser(user: User) {
     return this.authHttp.delete(UserService.BASE_USERS_URL + user.id);
   }
 
-  private extractUsers(body: any) {
-    const usersJson = body.data;
-    const totalUsers = body.total;
+  private extractUsers(result: ResultList) {
+    const usersJson = result.data;
+    const totalUsers = result.total;
     const users = [];
     for (const userJson of usersJson) {
       users.push(new User(userJson));
     }
 
     return { users, totalUsers };
-  }
-
-  private handleError(error: Response) {
-    console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
   }
 }
