@@ -96,8 +96,8 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [ ] Manage API breaks
 - [ ] Add "DDOS" security (check if a pod don't send too many requests for example)
 - [ ] Admin panel
-  - [ ] Stats about the network (how many friends, how many requests per hour...)
   - [ ] Stats about videos
+  - [X] Friends list
   - [X] Manage users (create/remove)
 
 
