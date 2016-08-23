@@ -581,30 +581,28 @@ describe('Test parameters validator', function () {
         requestsUtils.makePostBodyRequest(server.url, path, 'super token', data, done, 401)
       })
 
-      it('Should succeed with the correct params', function (done) {
+      it('Should fail if we add a user with the same username', function (done) {
         const data = {
           username: 'user1',
+          password: 'my super password'
+        }
+
+        requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done, 409)
+      })
+
+      it('Should succeed with the correct params', function (done) {
+        const data = {
+          username: 'user2',
           password: 'my super password'
         }
 
         requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done, 204)
       })
 
-      it('Should fail if we add a user with the same username', function (done) {
-        it('Should succeed with the correct params', function (done) {
-          const data = {
-            username: 'user1',
-            password: 'my super password'
-          }
-
-          requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done, 409)
-        })
-      })
-
       it('Should fail with a non admin user', function (done) {
         server.user = {
           username: 'user1',
-          password: 'my super password'
+          password: 'password'
         }
 
         loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
@@ -613,7 +611,7 @@ describe('Test parameters validator', function () {
           userAccessToken = accessToken
 
           const data = {
-            username: 'user2',
+            username: 'user3',
             password: 'my super password'
           }
 
