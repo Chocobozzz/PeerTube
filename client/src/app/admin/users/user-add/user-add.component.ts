@@ -31,7 +31,7 @@ export class UserAddComponent implements OnInit {
     this.userService.addUser(this.username, this.password).subscribe(
       ok => this.router.navigate([ '/admin/users/list' ]),
 
-      err => this.error = err
+      err => this.error = err.text
     );
   }
 }

@@ -34,12 +34,18 @@ export class RestExtractor {
   handleError(res: Response) {
     let text = 'Server error: ';
     text += res.text();
-    let json = res.json();
+    let json = '';
+
+    try {
+      json = res.json();
+    } catch (err) { ; }
 
     const error = {
       json,
       text
     };
+
+    console.error(error);
 
     return Observable.throw(error);
   }

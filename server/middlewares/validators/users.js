@@ -17,11 +17,20 @@ function usersAdd (req, res, next) {
   req.checkBody('username', 'Should have a valid username').isUserUsernameValid()
   req.checkBody('password', 'Should have a valid password').isUserPasswordValid()
 
-  // TODO: check we don't have already the same username
-
   logger.debug('Checking usersAdd parameters', { parameters: req.body })
 
-  checkErrors(req, res, next)
+  checkErrors(req, res, function () {
+    User.loadByUsername(req.body.username, function (err, user) {
+      if (err) {
+        logger.error('Error in usersAdd request validator.', { error: err })
+        return res.sendStatus(500)
+      }
+
+      if (user) return res.status(409).send('User already exists.')
+
+      next()
+    })
+  })
 }
 
 function usersRemove (req, res, next) {

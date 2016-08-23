@@ -20,7 +20,7 @@ export class UserService {
 
     return this.authHttp.post(UserService.BASE_USERS_URL, body)
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res));
+                        .catch(this.restExtractor.handleError);
   }
 
   getUsers() {

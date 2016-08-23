@@ -98,7 +98,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
         this.loading.next(false);
       },
-      error => alert(error)
+      error => alert(error.text)
     );
   }
 

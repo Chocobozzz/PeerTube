@@ -590,6 +590,17 @@ describe('Test parameters validator', function () {
         requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done, 204)
       })
 
+      it('Should fail if we add a user with the same username', function (done) {
+        it('Should succeed with the correct params', function (done) {
+          const data = {
+            username: 'user1',
+            password: 'my super password'
+          }
+
+          requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done, 409)
+        })
+      })
+
       it('Should fail with a non admin user', function (done) {
         server.user = {
           username: 'user1',

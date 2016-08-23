@@ -86,7 +86,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           this.video = video;
           this.loadVideo();
         },
-        error => alert(error)
+        error => alert(error.text)
       );
     });
   }

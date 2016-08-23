@@ -27,7 +27,7 @@ export class UserListComponent implements OnInit {
         this.totalUsers = totalUsers;
       },
 
-      err => alert(err)
+      err => alert(err.text)
     );
   }
 
@@ -37,7 +37,7 @@ export class UserListComponent implements OnInit {
       this.userService.removeUser(user).subscribe(
         () => this.getUsers(),
 
-        err => alert(err)
+        err => alert(err.text)
       );
     }
   }
