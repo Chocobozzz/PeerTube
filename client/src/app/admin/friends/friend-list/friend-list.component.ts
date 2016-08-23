@@ -15,11 +15,7 @@ export class FriendListComponent implements OnInit {
   constructor(private friendService: FriendService) {  }
 
   ngOnInit() {
-    this.friendService.getFriends().subscribe(
-      friends => this.friends = friends,
-
-      err => alert(err)
-    );
+    this.getFriends();
   }
 
   quitFriends() {
@@ -28,8 +24,17 @@ export class FriendListComponent implements OnInit {
     this.friendService.quitFriends().subscribe(
       status => {
         alert('Quit friends!');
+        this.getFriends();
       },
       error => alert(error)
+    );
+  }
+
+  private getFriends() {
+    this.friendService.getFriends().subscribe(
+      friends => this.friends = friends,
+
+      err => alert(err)
     );
   }
 }
