@@ -65,6 +65,8 @@
     "src/app/shared/auth/auth-user.model.ts",
     "src/app/shared/auth/auth.service.ts",
     "src/app/shared/auth/index.ts",
+    "src/app/shared/form-validators/index.ts",
+    "src/app/shared/form-validators/url.validator.ts",
     "src/app/shared/index.ts",
     "src/app/shared/search/index.ts",
     "src/app/shared/search/search-field.type.ts",

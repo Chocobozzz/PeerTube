@@ -2,17 +2,25 @@
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form (ngSubmit)="makeFriends()">
+<form (ngSubmit)="makeFriends()" [formGroup]="friendAddForm">
   <div class="form-group"  *ngFor="let url of urls; let id = index; trackBy:customTrackBy">
     <label for="username">Url</label>
+
     <div class="input-group">
-      <input type="text" class="form-control" [name]="'url-' + id"  [id]="'url-' + id" placeholder="http://domain.com" [(ngModel)]="urls[id]" />
+      <input
+        type="text" class="form-control" placeholder="http://domain.com"
+        [name]="'url-' + id"  [id]="'url-' + id" [formControlName]="'url-' + id" [(ngModel)]="urls[id]"
+      />
       <span class="input-group-btn">
         <button *ngIf="displayAddField(id)" (click)="addField()" class="btn btn-default" type="button">+</button>
-        <button *ngIf="displayRemoveField(id)" (click)="removeField(index)" class="btn btn-default" type="button">-</button>
+        <button *ngIf="displayRemoveField(id)" (click)="removeField(id)" class="btn btn-default" type="button">-</button>
       </span>
+    </div>
+
+    <div [hidden]="friendAddForm.controls['url-' + id].valid || friendAddForm.controls['url-' + id].pristine" class="alert alert-warning">
+      It should be a valid url.
     </div>
   </div>
 
-  <input type="submit" value="Make friends" class="btn btn-default">
+  <input type="submit" value="Make friends" class="btn btn-default" [disabled]="!isFormValid()">
 </form>
