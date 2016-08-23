@@ -56,6 +56,8 @@ export class FriendAddComponent implements OnInit {
   }
 
   removeField(index: number) {
+    // Remove the last control
+    this.friendAddForm.removeControl(`url-${this.urls.length - 1}`);
     this.urls.splice(index, 1);
   }
 
