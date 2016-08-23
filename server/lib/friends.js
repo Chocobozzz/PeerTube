@@ -198,7 +198,12 @@ function getForeignPodsList (url, callback) {
   request.get(url + path, function (err, response, body) {
     if (err) return callback(err)
 
-    callback(null, JSON.parse(body))
+    try {
+      const json = JSON.parse(body)
+      return callback(null, json)
+    } catch (err) {
+      return callback(err)
+    }
   })
 }
 

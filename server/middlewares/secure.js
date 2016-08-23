@@ -34,8 +34,13 @@ function decryptBody (req, res, next) {
           return res.sendStatus(500)
         }
 
-        req.body.data = JSON.parse(decrypted)
-        delete req.body.key
+        try {
+          req.body.data = JSON.parse(decrypted)
+          delete req.body.key
+        } catch (err) {
+          logger.error('Error in JSON.parse', { error: err })
+          return res.sendStatus(500)
+        }
 
         next()
       })
