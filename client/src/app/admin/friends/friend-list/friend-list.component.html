@@ -14,10 +14,10 @@
   </tbody>
 </table>
 
-<a class="add-user btn btn-danger pull-left" (click)="quitFriends()">
+<a *ngIf="friends?.length !== 0" class="add-user btn btn-danger pull-left" (click)="quitFriends()">
   Quit friends
 </a>
 
-<a class="add-user btn btn-success pull-right" [routerLink]="['/admin/friends/add']">
+<a *ngIf="friends?.length === 0" class="add-user btn btn-success pull-right" [routerLink]="['/admin/friends/add']">
   Make friends
 </a>
