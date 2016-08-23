@@ -53,7 +53,7 @@ export class FriendAddComponent {
       return;
     }
 
-    const confirmMessage = 'Are you sure to make friends with:\n - ' + this.urls.join('\n - ');
+    const confirmMessage = 'Are you sure to make friends with:\n - ' + notEmptyUrls.join('\n - ');
     if (!confirm(confirmMessage)) return;
 
     this.friendService.makeFriends(notEmptyUrls).subscribe(

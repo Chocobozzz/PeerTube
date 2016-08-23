@@ -1,5 +1,6 @@
-import { Control, ControlGroup, Validators } from '@angular/common';
+import { Validators } from '@angular/common';
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
@@ -12,14 +13,14 @@ import { AuthService } from '../../shared';
   selector: 'my-videos-add',
   styles: [ require('./video-add.component.scss') ],
   template: require('./video-add.component.html'),
-  directives: [ FileSelectDirective, PROGRESSBAR_DIRECTIVES ],
+  directives: [ FileSelectDirective, PROGRESSBAR_DIRECTIVES, REACTIVE_FORM_DIRECTIVES ],
   pipes: [ BytesPipe ]
 })
 
 export class VideoAddComponent implements OnInit {
   currentTag: string; // Tag the user is writing in the input
   error: string = null;
-  videoForm: ControlGroup;
+  videoForm: FormGroup;
   uploader: FileUploader;
   video = {
     name: '',
@@ -70,10 +71,10 @@ export class VideoAddComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.videoForm = new ControlGroup({
-      name: new Control('', Validators.compose([ Validators.required, Validators.minLength(3), Validators.maxLength(50) ])),
-      description: new Control('', Validators.compose([ Validators.required, Validators.minLength(3), Validators.maxLength(250) ])),
-      tags: new Control('', Validators.pattern('^[a-zA-Z0-9]{2,10}$'))
+    this.videoForm = new FormGroup({
+      name: new FormControl('', [ <any>Validators.required, <any>Validators.minLength(3), <any>Validators.maxLength(50) ]),
+      description: new FormControl('', [ <any>Validators.required, <any>Validators.minLength(3), <any>Validators.maxLength(250) ]),
+      tags: new FormControl('', <any>Validators.pattern('^[a-zA-Z0-9]{2,10}$'))
     });
 
 

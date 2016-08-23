@@ -2,14 +2,14 @@
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form novalidate (ngSubmit)="upload()" [ngFormModel]="videoForm">
+<form novalidate (ngSubmit)="upload()" [formGroup]="videoForm">
   <div class="form-group">
     <label for="name">Name</label>
     <input
       type="text" class="form-control" name="name" id="name"
-      ngControl="name" #name="ngForm" [(ngModel)]="video.name"
+      [(ngModel)]="video.name"
     >
-    <div [hidden]="name.valid || name.pristine" class="alert alert-warning">
+    <div [hidden]="videoForm.controls.name.valid || videoForm.controls.name.pristine" class="alert alert-warning">
       A name is required and should be between 3 and 50 characters long
     </div>
   </div>
@@ -18,9 +18,9 @@
     <label for="tags">Tags</label>
     <input
       type="text" class="form-control" name="tags" id="tags"
-      ngControl="tags" #tags="ngForm" [disabled]="isTagsInputDisabled" (keyup)="onTagKeyPress($event)" [(ngModel)]="currentTag"
+      [disabled]="isTagsInputDisabled" (keyup)="onTagKeyPress($event)" [(ngModel)]="currentTag"
     >
-    <div [hidden]="tags.valid || tags.pristine" class="alert alert-warning">
+    <div [hidden]="videoForm.controls.tags.valid || videoForm.controls.tags.pristine" class="alert alert-warning">
       A tag should be between 2 and 10 characters (alphanumeric) long
     </div>
   </div>
@@ -54,10 +54,10 @@
     <label for="description">Description</label>
     <textarea
       name="description" id="description" class="form-control" placeholder="Description..."
-      ngControl="description"  #description="ngForm" [(ngModel)]="video.description"
+      [(ngModel)]="video.description"
     >
     </textarea>
-    <div [hidden]="description.valid || description.pristine" class="alert alert-warning">
+    <div [hidden]="videoForm.controls.description.valid || videoForm.controls.description.pristine" class="alert alert-warning">
         A description is required and should be between 3 and 250 characters long
     </div>
   </div>

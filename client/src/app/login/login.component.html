@@ -1,16 +1,15 @@
 <h3>Login</h3>
 
-
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form role="form" (ngSubmit)="login(username.value, password.value)" #loginForm="ngForm">
+<form role="form" (ngSubmit)="login()" [formGroup]="loginForm">
   <div class="form-group">
     <label for="username">Username</label>
     <input
-      type="text" class="form-control" name="username" id="username" placeholder="Username" required
-      ngControl="username" #username="ngForm"
+      type="text" class="form-control" name="username" id="username" placeholder="Username"
+      [(ngModel)]="username"
     >
-    <div [hidden]="username.valid || username.pristine" class="alert alert-danger">
+    <div [hidden]="loginForm.controls.username.valid || loginForm.controls.username.pristine" class="alert alert-danger">
       Username is required
     </div>
   </div>
@@ -18,13 +17,13 @@
   <div class="form-group">
     <label for="password">Password</label>
     <input
-      type="password" class="form-control" name="password" id="password" placeholder="Password" required
-      ngControl="password" #password="ngForm"
+      type="password" class="form-control" name="password" id="password" placeholder="Password"
+      [(ngModel)]="password"
     >
-    <div [hidden]="password.valid || password.pristine" class="alert alert-danger">
+    <div [hidden]="loginForm.controls.password.valid || loginForm.controls.password.pristine" class="alert alert-danger">
       Password is required
     </div>
   </div>
 
-  <input type="submit" value="Login" class="btn btn-default" [disabled]="!loginForm.form.valid">
+  <input type="submit" value="Login" class="btn btn-default" [disabled]="!loginForm.valid">
 </form>

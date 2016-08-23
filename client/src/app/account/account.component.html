@@ -3,14 +3,14 @@
 <div *ngIf="information" class="alert alert-success">{{ information }}</div>
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form role="form" (ngSubmit)="changePassword(newPassword.value, newConfirmedPassword.value)" [ngFormModel]="changePasswordForm">
+<form role="form" (ngSubmit)="changePassword()" [formGroup]="changePasswordForm">
   <div class="form-group">
     <label for="new-password">New password</label>
     <input
       type="password" class="form-control" name="new-password" id="new-password"
-      ngControl="newPassword" #newPassword="ngForm"
+      [(ngModel)]="newPassword" #newPasswordInput="ngModel"
     >
-    <div [hidden]="newPassword.valid || newPassword.pristine" class="alert alert-warning">
+    <div [hidden]="changePasswordForm.controls['new-password'].valid || changePasswordForm.controls['new-password'].pristine" class="alert alert-warning">
       The password should have more than 5 characters
     </div>
   </div>
@@ -19,7 +19,7 @@
     <label for="name">Confirm new password</label>
     <input
       type="password" class="form-control" name="new-confirmed-password" id="new-confirmed-password"
-      ngControl="newConfirmedPassword" #newConfirmedPassword="ngForm"
+      [(ngModel)]="newConfirmedPassword" #newConfirmedPasswordInput="ngModel"
     >
   </div>
 

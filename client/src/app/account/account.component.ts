@@ -1,5 +1,6 @@
-import { Control, ControlGroup, Validators } from '@angular/common';
+import { Validators } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AccountService } from './account.service';
@@ -7,11 +8,14 @@ import { AccountService } from './account.service';
 @Component({
   selector: 'my-account',
   template: require('./account.component.html'),
-  providers: [ AccountService ]
+  providers: [ AccountService ],
+  directives: [ REACTIVE_FORM_DIRECTIVES ]
 })
 
 export class AccountComponent implements OnInit {
-  changePasswordForm: ControlGroup;
+  newPassword = '';
+  newConfirmedPassword = '';
+  changePasswordForm: FormGroup;
   information: string = null;
   error: string = null;
 
@@ -21,22 +25,22 @@ export class AccountComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.changePasswordForm = new ControlGroup({
-      newPassword: new Control('', Validators.compose([ Validators.required, Validators.minLength(6) ])),
-      newConfirmedPassword: new Control('', Validators.compose([ Validators.required, Validators.minLength(6) ])),
+    this.changePasswordForm = new FormGroup({
+      'new-password': new FormControl('', [ <any>Validators.required, <any>Validators.minLength(6) ]),
+      'new-confirmed-password': new FormControl('', [ <any>Validators.required, <any>Validators.minLength(6) ]),
     });
   }
 
-  changePassword(newPassword: string, newConfirmedPassword: string) {
+  changePassword() {
     this.information = null;
     this.error = null;
 
-    if (newPassword !== newConfirmedPassword) {
+    if (this.newPassword !== this.newConfirmedPassword) {
       this.error = 'The new password and the confirmed password do not correspond.';
       return;
     }
 
-    this.accountService.changePassword(newPassword).subscribe(
+    this.accountService.changePassword(this.newPassword).subscribe(
       ok => this.information = 'Password updated.',
 
       err => this.error = err

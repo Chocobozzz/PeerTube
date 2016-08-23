@@ -1,4 +1,5 @@
 import { enableProdMode, provide } from '@angular/core';
+import { disableDeprecatedForms, provideForms } from '@angular/forms';
 import {
   HTTP_PROVIDERS,
   RequestOptions,
@@ -23,6 +24,11 @@ bootstrap(AppComponent, [
     },
     deps: [ XHRBackend, RequestOptions, AuthService ]
   }),
+
   AuthService,
-  provideRouter(routes)
+
+  provideRouter(routes),
+
+  disableDeprecatedForms(),
+  provideForms()
 ]);
