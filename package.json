@@ -69,7 +69,7 @@
     "chai": "^3.3.0",
     "commander": "^2.9.0",
     "mocha": "^3.0.1",
-    "standard": "^7.0.1",
+    "standard": "^8.0.0",
     "supertest": "^2.0.0"
   },
   "standard": {
