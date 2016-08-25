@@ -1,5 +1,6 @@
 'use strict'
 
+const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const fs = require('fs')
 const openssl = require('openssl-wrapper')
@@ -12,7 +13,9 @@ const algorithm = 'aes-256-ctr'
 
 const peertubeCrypto = {
   checkSignature: checkSignature,
+  comparePassword: comparePassword,
   createCertsIfNotExist: createCertsIfNotExist,
+  cryptPassword: cryptPassword,
   decrypt: decrypt,
   encrypt: encrypt,
   sign: sign
@@ -24,6 +27,14 @@ function checkSignature (publicKey, rawData, hexSignature) {
   return isValid
 }
 
+function comparePassword (plainPassword, hashPassword, callback) {
+  bcrypt.compare(plainPassword, hashPassword, function (err, isPasswordMatch) {
+    if (err) return callback(err)
+
+    return callback(null, isPasswordMatch)
+  })
+}
+
 function createCertsIfNotExist (callback) {
   certsExist(function (exist) {
     if (exist === true) {
@@ -32,6 +43,16 @@ function createCertsIfNotExist (callback) {
 
     createCerts(function (err) {
       return callback(err)
+    })
+  })
+}
+
+function cryptPassword (password, callback) {
+  bcrypt.genSalt(constants.BCRYPT_SALT_SIZE, function (err, salt) {
+    if (err) return callback(err)
+
+    bcrypt.hash(password, salt, function (err, hash) {
+      return callback(err, hash)
     })
   })
 }

@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "async": "^2.0.0",
+    "bcrypt": "^0.8.7",
     "bittorrent-tracker": "^8.0.0",
     "body-parser": "^1.12.4",
     "concurrently": "^2.0.0",

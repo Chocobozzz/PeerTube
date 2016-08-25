@@ -114,8 +114,8 @@ function createOAuthAdminIfNotExist (callback) {
     user.save(function (err, createdUser) {
       if (err) return callback(err)
 
-      logger.info('Username: ' + createdUser.username)
-      logger.info('User password: ' + createdUser.password)
+      logger.info('Username: ' + username)
+      logger.info('User password: ' + password)
 
       return callback(null)
     })

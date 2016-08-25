@@ -6,6 +6,8 @@ const path = require('path')
 // API version of our pod
 const API_VERSION = 'v1'
 
+const BCRYPT_SALT_SIZE = 10
+
 const CONFIG = {
   DATABASE: {
     DBNAME: 'peertube' + config.get('database.suffix'),
@@ -115,6 +117,7 @@ if (isTestInstance() === true) {
 
 module.exports = {
   API_VERSION: API_VERSION,
+  BCRYPT_SALT_SIZE: BCRYPT_SALT_SIZE,
   CONFIG: CONFIG,
   CONSTRAINTS_FIELDS: CONSTRAINTS_FIELDS,
   FRIEND_SCORE: FRIEND_SCORE,

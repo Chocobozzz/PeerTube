@@ -41,7 +41,22 @@ function getRefreshToken (refreshToken, callback) {
 function getUser (username, password) {
   logger.debug('Getting User (username: ' + username + ', password: ' + password + ').')
 
-  return User.getByUsernameAndPassword(username, password)
+  return User.getByUsername(username).then(function (user) {
+    if (!user) return null
+
+    // We need to return a promise
+    return new Promise(function (resolve, reject) {
+      return user.isPasswordMatch(password, function (err, isPasswordMatch) {
+        if (err) return reject(err)
+
+        if (isPasswordMatch === true) {
+          return resolve(user)
+        }
+
+        return resolve(null)
+      })
+    })
+  })
 }
 
 function revokeToken (token) {
