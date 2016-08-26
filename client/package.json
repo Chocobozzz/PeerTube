@@ -68,7 +68,7 @@
     "zone.js": "0.6.12"
   },
   "devDependencies": {
-    "codelyzer": "0.0.19",
+    "codelyzer": "0.0.28",
     "standard": "^8.0.0"
   }
 }
