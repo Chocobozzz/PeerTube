@@ -3,13 +3,19 @@
 <table class="table table-hover">
   <thead>
     <tr>
+      <th>ID</th>
       <th>Url</th>
+      <th>Score</th>
+      <th>Created Date</th>
     </tr>
   </thead>
 
   <tbody>
     <tr *ngFor="let friend of friends">
+      <td>{{ friend.id }}</td>
       <td>{{ friend.url }}</td>
+      <td>{{ friend.score }}</td>
+      <td>{{ friend.createdDate }}</td>
     </tr>
   </tbody>
 </table>
