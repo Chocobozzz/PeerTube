@@ -17,7 +17,7 @@ const router = express.Router()
 const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
-router.get('/', listPodsUrl)
+router.get('/', listPods)
 router.post('/', validators.podsAdd, addPods)
 router.post('/makefriends',
   oAuth.authenticate,
@@ -74,11 +74,11 @@ function addPods (req, res, next) {
   })
 }
 
-function listPodsUrl (req, res, next) {
-  Pod.listOnlyUrls(function (err, podsUrlList) {
+function listPods (req, res, next) {
+  Pod.list(function (err, podsUrlList) {
     if (err) return next(err)
 
-    res.json(podsUrlList)
+    res.json(getFormatedPods(podsUrlList))
   })
 }
 
@@ -141,4 +141,16 @@ function quitFriends (req, res, next) {
 
     res.type('json').status(204).end()
   })
+}
+
+// ---------------------------------------------------------------------------
+
+function getFormatedPods (pods) {
+  const formatedPods = []
+
+  pods.forEach(function (pod) {
+    formatedPods.push(pod.toFormatedJSON())
+  })
+
+  return formatedPods
 }

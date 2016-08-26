@@ -6,6 +6,7 @@ const expect = chai.expect
 const series = require('async/series')
 
 const loginUtils = require('../utils/login')
+const miscsUtils = require('../utils/miscs')
 const podsUtils = require('../utils/pods')
 const serversUtils = require('../utils/servers')
 
@@ -92,7 +93,11 @@ describe('Test basic friends', function () {
           const result = res.body
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
-          expect(result[0].url).to.be.equal(servers[2].url)
+
+          const pod = result[0]
+          expect(pod.url).to.equal(servers[2].url)
+          expect(pod.score).to.equal(20)
+          expect(miscsUtils.dateIsValid(pod.createdDate)).to.be.true
 
           next()
         })
@@ -105,7 +110,11 @@ describe('Test basic friends', function () {
           const result = res.body
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
-          expect(result[0].url).to.be.equal(servers[1].url)
+
+          const pod = result[0]
+          expect(pod.url).to.equal(servers[1].url)
+          expect(pod.score).to.equal(20)
+          expect(miscsUtils.dateIsValid(pod.createdDate)).to.be.true
 
           next()
         })
