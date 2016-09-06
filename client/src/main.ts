@@ -1,35 +1,20 @@
-import { enableProdMode, provide } from '@angular/core';
-import { disableDeprecatedForms, provideForms } from '@angular/forms';
-import {
-  HTTP_PROVIDERS,
-  RequestOptions,
-  XHRBackend
-} from '@angular/http';
-import { bootstrap }    from '@angular/platform-browser-dynamic';
-import { provideRouter } from '@angular/router';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { decorateModuleRef } from './app/environment';
+import { bootloader } from '@angularclass/hmr';
+/*
+ * App Module
+ * our top level module that holds all of our components
+ */
+import { AppModule } from './app';
 
-import { routes } from './app/app.routes';
-import { AuthHttp, AuthService, RestExtractor } from './app/shared';
-import { AppComponent } from './app/app.component';
-
-if (process.env.ENV === 'production') {
-  enableProdMode();
+/*
+ * Bootstrap our Angular app with a top level NgModule
+ */
+export function main(): Promise<any> {
+  return platformBrowserDynamic()
+    .bootstrapModule(AppModule)
+    .then(decorateModuleRef)
+    .catch(err => console.error(err));
 }
 
-bootstrap(AppComponent, [
-  HTTP_PROVIDERS,
-  provide(AuthHttp, {
-    useFactory: (backend: XHRBackend, defaultOptions: RequestOptions, authService: AuthService) => {
-      return new AuthHttp(backend, defaultOptions, authService);
-    },
-    deps: [ XHRBackend, RequestOptions, AuthService ]
-  }),
-
-  AuthService,
-  RestExtractor,
-
-  provideRouter(routes),
-
-  disableDeprecatedForms(),
-  provideForms()
-]);
+bootloader(main);

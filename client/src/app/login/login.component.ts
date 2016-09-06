@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/common';
-import { FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AuthService } from '../shared';
 
 @Component({
   selector: 'my-login',
-  template: require('./login.component.html'),
-  directives: [ REACTIVE_FORM_DIRECTIVES ]
+  template: require('./login.component.html')
 })
 
 export class LoginComponent implements OnInit {

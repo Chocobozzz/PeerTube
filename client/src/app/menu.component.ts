@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AuthService, AuthStatus } from './shared';
 
 @Component({
   selector: 'my-menu',
-  template: require('./menu.component.html'),
-  directives: [ ROUTER_DIRECTIVES ]
+  template: require('./menu.component.html')
 })
 export class MenuComponent implements OnInit {
   isLoggedIn: boolean;

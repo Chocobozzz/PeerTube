@@ -5,7 +5,7 @@ const helpers = require('./helpers')
  * Webpack Plugins
  */
 
-var CopyWebpackPlugin = (CopyWebpackPlugin = require('copy-webpack-plugin'), CopyWebpackPlugin.default || CopyWebpackPlugin)
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin
 const WebpackNotifierPlugin = require('webpack-notifier')
@@ -15,7 +15,8 @@ const WebpackNotifierPlugin = require('webpack-notifier')
  */
 const METADATA = {
   title: 'PeerTube',
-  baseUrl: '/'
+  baseUrl: '/',
+  isDevServer: helpers.isWebpackDevServer()
 }
 
 /*
@@ -69,10 +70,7 @@ module.exports = {
     root: helpers.root('src'),
 
     // remove other default values
-    modulesDirectories: [ 'node_modules' ],
-
-    packageAlias: 'browser'
-
+    modulesDirectories: [ 'node_modules' ]
   },
 
   output: {
@@ -92,27 +90,15 @@ module.exports = {
      */
     preLoaders: [
 
-      /*
-       * Tslint loader support for *.ts files
-       *
-       * See: https://github.com/wbuchwalter/tslint-loader
-       */
-      // { test: /\.ts$/, loader: 'tslint-loader', exclude: [ helpers.root('node_modules') ] },
-
-      /*
-       * Source map loader support for *.js files
-       * Extracts SourceMaps for source files that as added as sourceMappingURL comment.
-       *
-       * See: https://github.com/webpack/source-map-loader
-       */
       {
-        test: /\.js$/,
-        loader: 'source-map-loader',
-        exclude: [
-          // these packages have problems with their sourcemaps
-          helpers.root('node_modules/rxjs'),
-          helpers.root('node_modules/@angular')
-        ]
+        test: /\.ts$/,
+        loader: 'string-replace-loader',
+        query: {
+          search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
+          replace: '$1.import($3).then(mod => mod.__esModule ? mod.default : mod)',
+          flags: 'g'
+        },
+        include: [helpers.root('src')]
       }
 
     ],
@@ -134,7 +120,11 @@ module.exports = {
        */
       {
         test: /\.ts$/,
-        loader: 'awesome-typescript-loader',
+        loaders: [
+          'awesome-typescript-loader',
+          'angular2-template-loader',
+          '@angularclass/hmr-loader'
+        ],
         exclude: [/\.(spec|e2e)\.ts$/]
       },
 
@@ -192,16 +182,6 @@ module.exports = {
      * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
      */
     new ForkCheckerPlugin(),
-
-    /*
-     * Plugin: OccurenceOrderPlugin
-     * Description: Varies the distribution of the ids to get the smallest id length
-     * for often used ids.
-     *
-     * See: https://webpack.github.io/docs/list-of-plugins.html#occurrenceorderplugin
-     * See: https://github.com/webpack/docs/wiki/optimization#minimize
-     */
-    new webpack.optimize.OccurenceOrderPlugin(true),
 
     /*
      * Plugin: CommonsChunkPlugin

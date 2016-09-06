@@ -1,10 +1,10 @@
-import { RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { FriendsComponent } from './friends.component';
 import { FriendAddComponent } from './friend-add';
 import { FriendListComponent } from './friend-list';
 
-export const FriendsRoutes: RouterConfig = [
+export const FriendsRoutes: Routes = [
   {
       path: 'friends',
       component: FriendsComponent,

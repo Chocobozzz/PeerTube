@@ -1,18 +1,13 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
-
-import { LoaderComponent, Video, VideoService } from '../shared';
+import { Video, VideoService } from '../shared';
 import { WebTorrentService } from './webtorrent.service';
 
 @Component({
   selector: 'my-video-watch',
   template: require('./video-watch.component.html'),
-  styles: [ require('./video-watch.component.scss') ],
-  providers: [ WebTorrentService ],
-  directives: [ LoaderComponent ],
-  pipes: [ BytesPipe ]
+  styles: [ require('./video-watch.component.scss') ]
 })
 
 export class VideoWatchComponent implements OnInit, OnDestroy {

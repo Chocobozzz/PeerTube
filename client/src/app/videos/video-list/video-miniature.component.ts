@@ -1,6 +1,4 @@
-import { DatePipe } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { SortField, Video, VideoService } from '../shared';
 import { User } from '../../shared';
@@ -8,9 +6,7 @@ import { User } from '../../shared';
 @Component({
   selector: 'my-video-miniature',
   styles: [ require('./video-miniature.component.scss') ],
-  template: require('./video-miniature.component.html'),
-  directives: [ ROUTER_DIRECTIVES ],
-  pipes: [ DatePipe ]
+  template: require('./video-miniature.component.html')
 })
 
 export class VideoMiniatureComponent {

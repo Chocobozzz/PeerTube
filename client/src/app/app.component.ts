@@ -1,17 +1,10 @@
 import { Component } from '@angular/core';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
-
-import { MenuAdminComponent } from './admin';
-import { MenuComponent } from './menu.component';
-import { RestExtractor, RestService, SearchComponent, SearchService } from './shared';
-import { VideoService } from './videos';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'my-app',
     template: require('./app.component.html'),
-    styles: [ require('./app.component.scss') ],
-    directives: [ MenuAdminComponent, MenuComponent, ROUTER_DIRECTIVES, SearchComponent ],
-    providers: [ RestExtractor, RestService, VideoService, SearchService ]
+    styles: [ require('./app.component.scss') ]
 })
 
 export class AppComponent {

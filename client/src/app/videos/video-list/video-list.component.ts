@@ -1,27 +1,19 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
-import { ActivatedRoute, Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { PAGINATION_DIRECTIVES } from 'ng2-bootstrap/components/pagination';
-
 import {
-  LoaderComponent,
   SortField,
   Video,
   VideoService
 } from '../shared';
 import { AuthService, AuthUser, RestPagination, Search, SearchField } from '../../shared';
-import { VideoMiniatureComponent } from './video-miniature.component';
-import { VideoSortComponent } from './video-sort.component';
 import { SearchService } from '../../shared';
 
 @Component({
   selector: 'my-videos-list',
   styles: [ require('./video-list.component.scss') ],
-  pipes: [ AsyncPipe ],
-  template: require('./video-list.component.html'),
-  directives: [ LoaderComponent, PAGINATION_DIRECTIVES, ROUTER_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent ]
+  template: require('./video-list.component.html')
 })
 
 export class VideoListComponent implements OnInit, OnDestroy {

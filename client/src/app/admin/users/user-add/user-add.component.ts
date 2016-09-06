@@ -1,14 +1,12 @@
-import { Validators } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserService } from '../shared';
 
 @Component({
   selector: 'my-user-add',
-  template: require('./user-add.component.html'),
-  directives: [ REACTIVE_FORM_DIRECTIVES ]
+  template: require('./user-add.component.html')
 })
 export class UserAddComponent implements OnInit {
   userAddForm: FormGroup;

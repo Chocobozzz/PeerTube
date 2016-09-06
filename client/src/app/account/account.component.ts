@@ -1,15 +1,13 @@
-import { Validators } from '@angular/common';
+import {  } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AccountService } from './account.service';
 
 @Component({
   selector: 'my-account',
-  template: require('./account.component.html'),
-  providers: [ AccountService ],
-  directives: [ REACTIVE_FORM_DIRECTIVES ]
+  template: require('./account.component.html')
 })
 
 export class AccountComponent implements OnInit {

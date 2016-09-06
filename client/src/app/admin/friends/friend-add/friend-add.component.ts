@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { validateUrl } from '../../../shared';
@@ -8,8 +8,7 @@ import { FriendService } from '../shared';
 @Component({
   selector: 'my-friend-add',
   template: require('./friend-add.component.html'),
-  styles: [ require('./friend-add.component.scss') ],
-  directives: [ REACTIVE_FORM_DIRECTIVES ]
+  styles: [ require('./friend-add.component.scss') ]
 })
 export class FriendAddComponent implements OnInit {
   friendAddForm: FormGroup;
@@ -80,12 +79,13 @@ export class FriendAddComponent implements OnInit {
 
     this.friendService.makeFriends(notEmptyUrls).subscribe(
       status => {
-        if (status === 409) {
-          alert('Already made friends!');
-        } else {
+        // TODO: extractdatastatus
+        // if (status === 409) {
+        //   alert('Already made friends!');
+        // } else {
           alert('Make friends request sent!');
           this.router.navigate([ '/admin/friends/list' ]);
-        }
+        // }
       },
       error => alert(error)
     );

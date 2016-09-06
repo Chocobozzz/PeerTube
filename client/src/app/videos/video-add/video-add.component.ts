@@ -1,20 +1,15 @@
-import { Validators } from '@angular/common';
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormControl, FormGroup, REACTIVE_FORM_DIRECTIVES } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
-import { PROGRESSBAR_DIRECTIVES } from 'ng2-bootstrap/components/progressbar';
-import { FileSelectDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
+import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
 import { AuthService } from '../../shared';
 
 @Component({
   selector: 'my-videos-add',
   styles: [ require('./video-add.component.scss') ],
-  template: require('./video-add.component.html'),
-  directives: [ FileSelectDirective, PROGRESSBAR_DIRECTIVES, REACTIVE_FORM_DIRECTIVES ],
-  pipes: [ BytesPipe ]
+  template: require('./video-add.component.html')
 })
 
 export class VideoAddComponent implements OnInit {

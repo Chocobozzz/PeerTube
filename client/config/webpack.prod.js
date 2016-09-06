@@ -9,10 +9,12 @@ const commonConfig = require('./webpack.common.js') // the settings that are com
 /**
  * Webpack Plugins
  */
+// const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const DefinePlugin = require('webpack/lib/DefinePlugin')
-const DedupePlugin = require('webpack/lib/optimize/DedupePlugin')
+const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
+// const IgnorePlugin = require('webpack/lib/IgnorePlugin')
+// const DedupePlugin = require('webpack/lib/optimize/DedupePlugin')
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
-const CompressionPlugin = require('compression-webpack-plugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
 
 /**
@@ -110,7 +112,7 @@ module.exports = webpackMerge(commonConfig, {
      * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
      * See: https://github.com/webpack/docs/wiki/optimization#deduplication
      */
-    new DedupePlugin(),
+    // new DedupePlugin(),
 
     /**
      * Plugin: DefinePlugin
@@ -156,18 +158,15 @@ module.exports = webpackMerge(commonConfig, {
       // comments: true, //debug
 
       beautify: false, // prod
-
-      mangle: {
-        screw_ie8: true,
-        keep_fnames: true
-      }, // prod
-
-      compress: {
-        screw_ie8: true
-      }, // prod
-
+      mangle: { screw_ie8: true, keep_fnames: true }, // prod
+      compress: { screw_ie8: true }, // prod
       comments: false // prod
     }),
+
+    new NormalModuleReplacementPlugin(
+      /angular2-hmr/,
+      helpers.root('config/modules/angular2-hmr-prod.js')
+    ),
 
     /**
      * Plugin: CompressionPlugin

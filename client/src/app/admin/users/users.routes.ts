@@ -1,10 +1,10 @@
-import { RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { UsersComponent } from './users.component';
 import { UserAddComponent } from './user-add';
 import { UserListComponent } from './user-list';
 
-export const UsersRoutes: RouterConfig = [
+export const UsersRoutes: Routes = [
   {
       path: 'users',
       component: UsersComponent,

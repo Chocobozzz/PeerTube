@@ -6,15 +6,18 @@ const commonConfig = require('./webpack.common.js') // the settings that are com
  * Webpack Plugins
  */
 const DefinePlugin = require('webpack/lib/DefinePlugin')
+const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin')
 
 /**
  * Webpack Constants
  */
 const ENV = process.env.ENV = process.env.NODE_ENV = 'development'
+const HOST = process.env.HOST || 'localhost'
+const PORT = process.env.PORT || 3000
 const HMR = helpers.hasProcessFlag('hot')
 const METADATA = webpackMerge(commonConfig.metadata, {
-  host: 'localhost',
-  port: 3000,
+  host: HOST,
+  port: PORT,
   ENV: ENV,
   HMR: HMR
 })
@@ -81,7 +84,10 @@ module.exports = webpackMerge(commonConfig, {
      *
      * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
      */
-    chunkFilename: '[id].chunk.js'
+    chunkFilename: '[id].chunk.js',
+
+    library: 'ac_[name]',
+    libraryTarget: 'var'
 
   },
 
@@ -109,7 +115,9 @@ module.exports = webpackMerge(commonConfig, {
         'NODE_ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR
       }
-    })
+    }),
+
+    new NamedModulesPlugin()
   ],
 
   /**
@@ -122,6 +130,17 @@ module.exports = webpackMerge(commonConfig, {
     emitErrors: false,
     failOnHint: false,
     resourcePath: 'src'
+  },
+
+  devServer: {
+    port: METADATA.port,
+    host: METADATA.host,
+    historyApiFallback: true,
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000
+    },
+    outputPath: helpers.root('dist')
   },
 
   /*

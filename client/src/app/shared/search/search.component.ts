@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
-
 import { Search } from './search.model';
 import { SearchField } from './search-field.type';
 import { SearchService } from './search.service';
 
 @Component({
-    selector: 'my-search',
-    template: require('./search.component.html'),
-    directives: [ DROPDOWN_DIRECTIVES ]
+  selector: 'my-search',
+  template: require('./search.component.html')
 })
 
 export class SearchComponent implements OnInit {
