@@ -11,19 +11,19 @@ import { FriendService } from '../shared';
   styles: [ require('./friend-add.component.scss') ]
 })
 export class FriendAddComponent implements OnInit {
-  friendAddForm: FormGroup;
+  form: FormGroup;
   urls = [ ];
   error: string = null;
 
   constructor(private router: Router, private friendService: FriendService) {}
 
   ngOnInit() {
-    this.friendAddForm = new FormGroup({});
+    this.form = new FormGroup({});
     this.addField();
   }
 
   addField() {
-    this.friendAddForm.addControl(`url-${this.urls.length}`, new FormControl('', [ validateUrl ]));
+    this.form.addControl(`url-${this.urls.length}`, new FormControl('', [ validateUrl ]));
     this.urls.push('');
   }
 
@@ -42,7 +42,7 @@ export class FriendAddComponent implements OnInit {
   isFormValid() {
     // Do not check the last input
     for (let i = 0; i < this.urls.length - 1; i++) {
-      if (!this.friendAddForm.controls[`url-${i}`].valid) return false;
+      if (!this.form.controls[`url-${i}`].valid) return false;
     }
 
     const lastIndex = this.urls.length - 1;
@@ -50,13 +50,13 @@ export class FriendAddComponent implements OnInit {
     if (this.urls[lastIndex] === '' && lastIndex !== 0) {
       return true;
     } else {
-      return this.friendAddForm.controls[`url-${lastIndex}`].valid;
+      return this.form.controls[`url-${lastIndex}`].valid;
     }
   }
 
   removeField(index: number) {
     // Remove the last control
-    this.friendAddForm.removeControl(`url-${this.urls.length - 1}`);
+    this.form.removeControl(`url-${this.urls.length - 1}`);
     this.urls.splice(index, 1);
   }
 
@@ -94,7 +94,8 @@ export class FriendAddComponent implements OnInit {
   private getNotEmptyUrls() {
     const notEmptyUrls = [];
 
-    this.urls.forEach((url) => {
+    Object.keys(this.form.value).forEach((urlKey) => {
+      const url = this.form.value[urlKey];
       if (url !== '') notEmptyUrls.push(url);
     });
 

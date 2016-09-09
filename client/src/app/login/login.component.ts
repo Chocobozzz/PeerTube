@@ -1,39 +1,60 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../shared';
+import { AuthService, FormReactive } from '../shared';
 
 @Component({
   selector: 'my-login',
   template: require('./login.component.html')
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent extends FormReactive implements OnInit {
   error: string = null;
-  username = '';
-  password: '';
-  loginForm: FormGroup;
+
+  form: FormGroup;
+  formErrors = {
+    'username': '',
+    'password': ''
+  };
+  validationMessages = {
+    'username': {
+      'required': 'Username is required.',
+    },
+    'password': {
+      'required': 'Password is required.'
+    }
+  };
 
   constructor(
     private authService: AuthService,
+    private formBuilder: FormBuilder,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
+
+  buildForm() {
+    this.form = this.formBuilder.group({
+      username: [ '', Validators.required ],
+      password: [ '', Validators.required ],
+    });
+
+    this.form.valueChanges.subscribe(data => this.onValueChanged(data));
+  }
 
   ngOnInit() {
-    this.loginForm = new FormGroup({
-      username: new FormControl('', [ <any>Validators.required ]),
-      password: new FormControl('', [ <any>Validators.required ]),
-    });
+    this.buildForm();
   }
 
   login() {
-    this.authService.login(this.username, this.password).subscribe(
-      result => {
-        this.error = null;
+    this.error = null;
 
-        this.router.navigate(['/videos/list']);
-      },
+    const { username, password } = this.form.value;
+
+    this.authService.login(username, password).subscribe(
+      result => this.router.navigate(['/videos/list']),
+
       error => {
         console.error(error.json);
 

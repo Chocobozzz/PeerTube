@@ -2,28 +2,28 @@
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form role="form" (ngSubmit)="addUser()" [formGroup]="userAddForm">
+<form role="form" (ngSubmit)="addUser()" [formGroup]="form">
   <div class="form-group">
     <label for="username">Username</label>
     <input
-      type="text" class="form-control" name="username" id="username" placeholder="Username"
-      [(ngModel)]="username"
+      type="text" class="form-control" id="username" placeholder="Username"
+      formControlName="username"
     >
-    <div [hidden]="userAddForm.controls.username.valid || userAddForm.controls.username.pristine" class="alert alert-danger">
-      Username is required with a length >= 3 and <= 20
+    <div *ngIf="formErrors.username" class="alert alert-danger">
+      {{ formErrors.username }}
     </div>
   </div>
 
   <div class="form-group">
     <label for="password">Password</label>
     <input
-      type="password" class="form-control" name="password" id="password" placeholder="Password"
-      [(ngModel)]="password"
+      type="password" class="form-control" id="password" placeholder="Password"
+      formControlName="password"
     >
-    <div [hidden]="userAddForm.controls.password.valid || userAddForm.controls.password.pristine" class="alert alert-danger">
-      Password is required with a length >= 6
+    <div *ngIf="formErrors.password" class="alert alert-danger">
+      {{ formErrors.password }}
     </div>
   </div>
 
-  <input type="submit" value="Add user" class="btn btn-default" [disabled]="!userAddForm.valid">
+  <input type="submit" value="Add user" class="btn btn-default" [disabled]="!form.valid">
 </form>

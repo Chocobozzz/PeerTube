@@ -28,7 +28,8 @@ import {
   VideoMiniatureComponent,
   VideoSortComponent,
   VideoWatchComponent,
-  VideoService
+  VideoService,
+  WebTorrentService
 } from './videos';
 import {
   FriendsComponent,
@@ -59,7 +60,7 @@ const APP_PROVIDERS = [
 
   AuthService,
   RestExtractor,
-  RestExtractor, RestService, VideoService, SearchService, FriendService, UserService, AccountService
+  RestExtractor, RestService, VideoService, SearchService, FriendService, UserService, AccountService, WebTorrentService
 ];
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process

@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
-import { AuthService } from '../../shared';
+import { AuthService, FormReactive, VIDEO_NAME, VIDEO_DESCRIPTION, VIDEO_TAGS } from '../../shared';
 
 @Component({
   selector: 'my-videos-add',
@@ -12,22 +12,31 @@ import { AuthService } from '../../shared';
   template: require('./video-add.component.html')
 })
 
-export class VideoAddComponent implements OnInit {
-  currentTag: string; // Tag the user is writing in the input
-  error: string = null;
-  videoForm: FormGroup;
+export class VideoAddComponent extends FormReactive implements OnInit {
+  tags: string[] = [];
   uploader: FileUploader;
-  video = {
+
+  error: string = null;
+  form: FormGroup;
+  formErrors = {
     name: '',
-    tags: [],
-    description: ''
+    description: '',
+    currentTag: ''
+  };
+  validationMessages = {
+    name: VIDEO_NAME.MESSAGES,
+    description: VIDEO_DESCRIPTION.MESSAGES,
+    currentTag: VIDEO_TAGS.MESSAGES
   };
 
   constructor(
     private authService: AuthService,
     private elementRef: ElementRef,
+    private formBuilder: FormBuilder,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   get filename() {
     if (this.uploader.queue.length === 0) {
@@ -37,20 +46,26 @@ export class VideoAddComponent implements OnInit {
     return this.uploader.queue[0].file.name;
   }
 
-  get isTagsInputDisabled () {
-    return this.video.tags.length >= 3;
+  buildForm() {
+    this.form = this.formBuilder.group({
+      name: [ '', VIDEO_NAME.VALIDATORS ],
+      description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
+      currentTag: [ '', VIDEO_TAGS.VALIDATORS ]
+    });
+
+    this.form.valueChanges.subscribe(data => this.onValueChanged(data));
   }
 
   getInvalidFieldsTitle() {
     let title = '';
-    const nameControl = this.videoForm.controls['name'];
-    const descriptionControl = this.videoForm.controls['description'];
+    const nameControl = this.form.controls['name'];
+    const descriptionControl = this.form.controls['description'];
 
     if (!nameControl.valid) {
       title += 'A name is required\n';
     }
 
-    if (this.video.tags.length === 0) {
+    if (this.tags.length === 0) {
       title += 'At least one tag is required\n';
     }
 
@@ -66,13 +81,6 @@ export class VideoAddComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.videoForm = new FormGroup({
-      name: new FormControl('', [ <any>Validators.required, <any>Validators.minLength(3), <any>Validators.maxLength(50) ]),
-      description: new FormControl('', [ <any>Validators.required, <any>Validators.minLength(3), <any>Validators.maxLength(250) ]),
-      tags: new FormControl('', <any>Validators.pattern('^[a-zA-Z0-9]{2,10}$'))
-    });
-
-
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
       queueLimit: 1,
@@ -81,26 +89,37 @@ export class VideoAddComponent implements OnInit {
     });
 
     this.uploader.onBuildItemForm = (item, form) => {
-      form.append('name', this.video.name);
-      form.append('description', this.video.description);
+      const name = this.form.value['name'];
+      const description = this.form.value['description'];
 
-      for (let i = 0; i < this.video.tags.length; i++) {
-        form.append(`tags[${i}]`, this.video.tags[i]);
+      form.append('name', name);
+      form.append('description', description);
+
+      for (let i = 0; i < this.tags.length; i++) {
+        form.append(`tags[${i}]`, this.tags[i]);
       }
     };
+
+    this.buildForm();
   }
 
   onTagKeyPress(event: KeyboardEvent) {
+    const currentTag = this.form.value['currentTag'];
+
     // Enter press
     if (event.keyCode === 13) {
       // Check if the tag is valid and does not already exist
       if (
-        this.currentTag !== '' &&
-        this.videoForm.controls['tags'].valid &&
-        this.video.tags.indexOf(this.currentTag) === -1
+        currentTag !== '' &&
+        this.form.controls['currentTag'].valid &&
+        this.tags.indexOf(currentTag) === -1
       ) {
-        this.video.tags.push(this.currentTag);
-        this.currentTag = '';
+        this.tags.push(currentTag);
+        this.form.patchValue({ currentTag: '' });
+
+        if (this.tags.length >= 3) {
+          this.form.get('currentTag').disable();
+        }
       }
     }
   }
@@ -110,7 +129,7 @@ export class VideoAddComponent implements OnInit {
   }
 
   removeTag(tag: string) {
-    this.video.tags.splice(this.video.tags.indexOf(tag), 1);
+    this.tags.splice(this.tags.indexOf(tag), 1);
   }
 
   upload() {
