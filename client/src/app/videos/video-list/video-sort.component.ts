@@ -4,7 +4,7 @@ import { SortField } from '../shared';
 
 @Component({
   selector: 'my-video-sort',
-  template: require('./video-sort.component.html')
+  templateUrl: './video-sort.component.html'
 })
 
 export class VideoSortComponent {

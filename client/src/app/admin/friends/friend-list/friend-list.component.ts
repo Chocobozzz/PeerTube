@@ -4,8 +4,8 @@ import { Friend, FriendService } from '../shared';
 
 @Component({
   selector: 'my-friend-list',
-  template: require('./friend-list.component.html'),
-  styles: [ require('./friend-list.component.scss') ]
+  templateUrl: './friend-list.component.html',
+  styleUrls: [ './friend-list.component.scss' ]
 })
 export class FriendListComponent implements OnInit {
   friends: Friend[];

@@ -5,7 +5,7 @@ import { AuthService, AuthStatus } from './shared';
 
 @Component({
   selector: 'my-menu',
-  template: require('./menu.component.html')
+  templateUrl: './menu.component.html'
 })
 export class MenuComponent implements OnInit {
   isLoggedIn: boolean;

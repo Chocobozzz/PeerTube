@@ -5,8 +5,8 @@ import { User } from '../../shared';
 
 @Component({
   selector: 'my-video-miniature',
-  styles: [ require('./video-miniature.component.scss') ],
-  template: require('./video-miniature.component.html')
+  styleUrls: [ './video-miniature.component.scss' ],
+  templateUrl: './video-miniature.component.html'
 })
 
 export class VideoMiniatureComponent {

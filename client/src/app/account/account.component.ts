@@ -8,7 +8,7 @@ import { FormReactive, USER_PASSWORD } from '../shared';
 
 @Component({
   selector: 'my-account',
-  template: require('./account.component.html')
+  templateUrl: './account.component.html'
 })
 
 export class AccountComponent extends FormReactive implements OnInit {

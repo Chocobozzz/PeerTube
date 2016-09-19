@@ -7,7 +7,7 @@ import { SearchService } from './search.service';
 
 @Component({
   selector: 'my-search',
-  template: require('./search.component.html')
+  templateUrl: './search.component.html'
 })
 
 export class SearchComponent implements OnInit {

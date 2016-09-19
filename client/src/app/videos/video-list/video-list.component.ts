@@ -12,8 +12,8 @@ import { SearchService } from '../../shared';
 
 @Component({
   selector: 'my-videos-list',
-  styles: [ require('./video-list.component.scss') ],
-  template: require('./video-list.component.html')
+  styleUrls: [ './video-list.component.scss' ],
+  templateUrl: './video-list.component.html'
 })
 
 export class VideoListComponent implements OnInit, OnDestroy {

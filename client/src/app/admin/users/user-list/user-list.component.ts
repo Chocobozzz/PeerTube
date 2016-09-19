@@ -5,8 +5,8 @@ import { UserService } from '../shared';
 
 @Component({
   selector: 'my-user-list',
-  template: require('./user-list.component.html'),
-  styles: [ require('./user-list.component.scss') ]
+  templateUrl: './user-list.component.html',
+  styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent implements OnInit {
   totalUsers: number;

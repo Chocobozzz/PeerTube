@@ -6,8 +6,8 @@ import { WebTorrentService } from './webtorrent.service';
 
 @Component({
   selector: 'my-video-watch',
-  template: require('./video-watch.component.html'),
-  styles: [ require('./video-watch.component.scss') ]
+  templateUrl: './video-watch.component.html',
+  styleUrls: [ './video-watch.component.scss' ]
 })
 
 export class VideoWatchComponent implements OnInit, OnDestroy {

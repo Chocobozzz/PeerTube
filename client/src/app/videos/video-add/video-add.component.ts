@@ -8,8 +8,8 @@ import { AuthService, FormReactive, VIDEO_NAME, VIDEO_DESCRIPTION, VIDEO_TAGS } 
 
 @Component({
   selector: 'my-videos-add',
-  styles: [ require('./video-add.component.scss') ],
-  template: require('./video-add.component.html')
+  styleUrls: [ './video-add.component.scss' ],
+  templateUrl: './video-add.component.html'
 })
 
 export class VideoAddComponent extends FormReactive implements OnInit {

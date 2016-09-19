@@ -7,8 +7,8 @@ import { FriendService } from '../shared';
 
 @Component({
   selector: 'my-friend-add',
-  template: require('./friend-add.component.html'),
-  styles: [ require('./friend-add.component.scss') ]
+  templateUrl: './friend-add.component.html',
+  styleUrls: [ './friend-add.component.scss' ]
 })
 export class FriendAddComponent implements OnInit {
   form: FormGroup;

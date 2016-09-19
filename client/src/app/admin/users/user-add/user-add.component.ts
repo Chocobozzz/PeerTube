@@ -7,7 +7,7 @@ import { FormReactive, USER_USERNAME, USER_PASSWORD } from '../../../shared';
 
 @Component({
   selector: 'my-user-add',
-  template: require('./user-add.component.html')
+  templateUrl: './user-add.component.html'
 })
 export class UserAddComponent extends FormReactive implements OnInit {
   error: string = null;

@@ -6,7 +6,7 @@ import { AuthService, FormReactive } from '../shared';
 
 @Component({
   selector: 'my-login',
-  template: require('./login.component.html')
+  templateUrl: './login.component.html'
 })
 
 export class LoginComponent extends FormReactive implements OnInit {
