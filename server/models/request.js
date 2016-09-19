@@ -19,14 +19,15 @@ let timer = null
 
 const RequestSchema = mongoose.Schema({
   request: mongoose.Schema.Types.Mixed,
-  to: [ { type: mongoose.Schema.Types.ObjectId, ref: 'users' } ]
+  to: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Pod' } ]
 })
 
 RequestSchema.statics = {
   activate,
   deactivate,
   flush,
-  forceSend
+  forceSend,
+  list
 }
 
 RequestSchema.pre('save', function (next) {
@@ -53,7 +54,7 @@ mongoose.model('Request', RequestSchema)
 
 function activate () {
   logger.info('Requests scheduler activated.')
-  timer = setInterval(makeRequests.bind(this), constants.INTERVAL)
+  timer = setInterval(makeRequests.bind(this), constants.REQUESTS_INTERVAL)
 }
 
 function deactivate () {
@@ -70,6 +71,10 @@ function flush () {
 function forceSend () {
   logger.info('Force requests scheduler sending.')
   makeRequests.call(this)
+}
+
+function list (callback) {
+  this.find({ }, callback)
 }
 
 // ---------------------------------------------------------------------------

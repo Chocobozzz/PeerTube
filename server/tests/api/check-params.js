@@ -13,6 +13,7 @@ const usersUtils = require('../utils/users')
 
 describe('Test parameters validator', function () {
   let server = null
+  let userAccessToken = null
 
   // ---------------------------------------------------------------
 
@@ -496,7 +497,6 @@ describe('Test parameters validator', function () {
   describe('Of the users API', function () {
     const path = '/api/v1/users/'
     let userId = null
-    let userAccessToken = null
 
     describe('When listing users', function () {
       it('Should fail with a bad start pagination', function (done) {
@@ -718,6 +718,25 @@ describe('Test parameters validator', function () {
 
     describe('When removing a video', function () {
       it('Should check when removing a video')
+    })
+  })
+
+  describe('Of the requests API', function () {
+    const path = '/api/v1/requests/stats'
+
+    it('Should fail with an non authenticated user', function (done) {
+      request(server.url)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect(401, done)
+    })
+
+    it('Should fail with a non admin user', function (done) {
+      request(server.url)
+        .get(path)
+        .set('Authorization', 'Bearer ' + userAccessToken)
+        .set('Accept', 'application/json')
+        .expect(403, done)
     })
   })
 
