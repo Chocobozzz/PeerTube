@@ -23,7 +23,7 @@ function authenticate (req, res, next) {
       return res.sendStatus(500)
     }
 
-    if (res.statusCode === 401 || res.statusCode === 400) return res.end()
+    if (res.statusCode === 401 || res.statusCode === 400 || res.statusCode === 503) return res.end()
 
     return next()
   })

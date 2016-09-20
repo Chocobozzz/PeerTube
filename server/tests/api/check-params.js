@@ -697,13 +697,6 @@ describe('Test parameters validator', function () {
           .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(404, done)
       })
-
-      it('Should success with the correct parameters', function (done) {
-        request(server.url)
-          .delete(path + userId)
-          .set('Authorization', 'Bearer ' + server.accessToken)
-          .expect(204, done)
-      })
     })
   })
 
