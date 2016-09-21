@@ -74,7 +74,7 @@ describe('Test basic friends', function () {
   })
 
   it('Should make friends', function (done) {
-    this.timeout(10000)
+    this.timeout(40000)
 
     series([
       // The second pod make friend with the third
@@ -83,7 +83,7 @@ describe('Test basic friends', function () {
       },
       // Wait for the request between pods
       function (next) {
-        setTimeout(next, 1000)
+        setTimeout(next, 11000)
       },
       // The second pod should have the third as a friend
       function (next) {
@@ -179,6 +179,8 @@ describe('Test basic friends', function () {
   })
 
   it('Should allow pod 2 to make friend again', function (done) {
+    this.timeout(20000)
+
     const server = servers[1]
     podsUtils.makeFriends(server.url, server.accessToken, function () {
       setTimeout(function () {
