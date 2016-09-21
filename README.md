@@ -111,6 +111,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 ### Dependencies
 
   * **NodeJS >= 4.2**
+  * **npm >= 3.0**
   * OpenSSL (cli)
   * MongoDB
   * ffmpeg xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin (for electron)
@@ -123,6 +124,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
         # apt-get update
         # apt-get install ffmpeg mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin
+        # npm install -g npm@3
         # npm install -g electron-prebuilt
 
 #### Other distribution... (PR welcome)
