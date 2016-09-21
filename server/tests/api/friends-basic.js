@@ -125,7 +125,7 @@ describe('Test basic friends', function () {
       },
       // Wait for the request between pods
       function (next) {
-        setTimeout(next, 1000)
+        setTimeout(next, 11000)
       }
     ],
     // Now each pod should be friend with the other ones
@@ -181,9 +181,11 @@ describe('Test basic friends', function () {
   it('Should allow pod 2 to make friend again', function (done) {
     const server = servers[1]
     podsUtils.makeFriends(server.url, server.accessToken, function () {
-      each(servers, function (server, callback) {
-        testMadeFriends(servers, server, callback)
-      }, done)
+      setTimeout(function () {
+        each(servers, function (server, callback) {
+          testMadeFriends(servers, server, callback)
+        }, done)
+      }, 11000)
     })
   })
 
