@@ -8,7 +8,7 @@ import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 import { ProgressbarModule } from 'ng2-bootstrap/components/progressbar';
 import { PaginationModule } from 'ng2-bootstrap/components/pagination';
-import { FileSelectDirective } from 'ng2-file-upload/ng2-file-upload';
+import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -84,7 +84,6 @@ const APP_PROVIDERS = [
     AdminComponent,
     AppComponent,
     BytesPipe,
-    FileSelectDirective,
     FriendAddComponent,
     FriendListComponent,
     FriendsComponent,
@@ -113,7 +112,8 @@ const APP_PROVIDERS = [
     RouterModule.forRoot(routes),
 
     ProgressbarModule,
-    PaginationModule
+    PaginationModule,
+    FileUploadModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,
