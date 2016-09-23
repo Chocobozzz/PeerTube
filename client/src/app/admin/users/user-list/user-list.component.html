@@ -5,6 +5,7 @@
     <tr>
       <th class="table-column-id">ID</th>
       <th>Username</th>
+      <th>Created Date</th>
       <th class="text-right">Remove</th>
     </tr>
   </thead>
@@ -13,6 +14,7 @@
     <tr *ngFor="let user of users">
       <td>{{ user.id }}</td>
       <td>{{ user.username }}</td>
+      <td>{{ user.createdDate | date: 'medium' }}</td>
       <td class="text-right">
         <span class="glyphicon glyphicon-remove" *ngIf="!user.isAdmin()" (click)="removeUser(user)"></span>
       </td>
