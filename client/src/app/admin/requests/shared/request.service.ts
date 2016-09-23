@@ -16,6 +16,7 @@ export class RequestService {
   getStats(): Observable<RequestStats> {
     return this.authHttp.get(RequestService.BASE_REQUEST_URL + 'stats')
                         .map(this.restExtractor.extractDataGet)
+                        .map((data) => new RequestStats(data))
                         .catch((res) => this.restExtractor.handleError(res));
   }
 }

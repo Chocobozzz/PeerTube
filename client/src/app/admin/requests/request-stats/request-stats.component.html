@@ -3,12 +3,12 @@
 <div *ngIf="stats !== null">
   <div>
     <span class="label-description">Interval seconds between requests:</span>
-    {{ secondsInterval }}
+    {{ stats.secondsInterval }}
   </div>
 
   <div>
     <span class="label-description">Remaining time before the scheduled request:</span>
-    {{ remainingSeconds }}
+    {{ stats.remainingSeconds }}
   </div>
 
   <div>
