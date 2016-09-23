@@ -32,7 +32,8 @@ function getStatsRequests (req, res, next) {
 
     return res.json({
       requests: requests,
-      remainingMilliSeconds: remainingMilliSeconds
+      remainingMilliSeconds: remainingMilliSeconds,
+      milliSecondsInterval: constants.REQUESTS_INTERVAL
     })
   })
 }

@@ -15,3 +15,6 @@ thumbnails
 config/production.yaml
 ffmpeg
 .tags
+*.sublime-project
+*.sublime-workspace
+torrent/
