@@ -15,7 +15,7 @@
       <td>{{ friend.id }}</td>
       <td>{{ friend.url }}</td>
       <td>{{ friend.score }}</td>
-      <td>{{ friend.createdDate }}</td>
+      <td>{{ friend.createdDate | date: 'medium' }}</td>
     </tr>
   </tbody>
 </table>
