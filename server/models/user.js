@@ -57,7 +57,8 @@ function toFormatedJSON () {
   return {
     id: this._id,
     username: this.username,
-    role: this.role
+    role: this.role,
+    createdDate: this.createdDate
   }
 }
 // ------------------------------ STATICS ------------------------------
