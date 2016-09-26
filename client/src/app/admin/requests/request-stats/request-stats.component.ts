@@ -32,7 +32,7 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
         this.runInterval();
       },
 
-      err => alert(err)
+      err => alert(err.text)
     );
   }
 

@@ -36,7 +36,7 @@ export class VideoMiniatureComponent {
     if (confirm('Do you really want to remove this video?')) {
       this.videoService.removeVideo(id).subscribe(
         status => this.removed.emit(true),
-        error => alert(error)
+        error => alert(error.text)
       );
     }
   }

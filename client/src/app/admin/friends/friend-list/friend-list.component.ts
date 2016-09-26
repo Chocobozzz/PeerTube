@@ -24,7 +24,7 @@ export class FriendListComponent implements OnInit {
         alert('Quit friends!');
         this.getFriends();
       },
-      error => alert(error)
+      error => alert(error.text)
     );
   }
 
@@ -32,7 +32,7 @@ export class FriendListComponent implements OnInit {
     this.friendService.getFriends().subscribe(
       friends => this.friends = friends,
 
-      err => alert(err)
+      err => alert(err.text)
     );
   }
 }

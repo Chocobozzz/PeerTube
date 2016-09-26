@@ -87,7 +87,7 @@ export class FriendAddComponent implements OnInit {
           this.router.navigate([ '/admin/friends/list' ]);
         // }
       },
-      error => alert(error)
+      error => alert(error.text)
     );
   }
 
