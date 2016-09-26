@@ -28,6 +28,7 @@ UserSchema.methods = {
 UserSchema.statics = {
   countTotal: countTotal,
   getByUsername: getByUsername,
+  list: list,
   listForApi: listForApi,
   loadById: loadById,
   loadByUsername: loadByUsername
@@ -69,6 +70,10 @@ function countTotal (callback) {
 
 function getByUsername (username) {
   return this.findOne({ username: username })
+}
+
+function list (callback) {
+  return this.find(callback)
 }
 
 function listForApi (start, count, sort, callback) {

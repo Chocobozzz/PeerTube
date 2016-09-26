@@ -32,6 +32,7 @@ if (miss.length !== 0) {
 // ----------- PeerTube modules -----------
 const customValidators = require('./server/helpers/custom-validators')
 const installer = require('./server/initializers/installer')
+const migrator = require('./server/initializers/migrator')
 const mongoose = require('mongoose')
 const routes = require('./server/controllers')
 const utils = require('./server/helpers/utils')
@@ -127,31 +128,36 @@ app.use(function (err, req, res, next) {
 installer.installApplication(function (err) {
   if (err) throw err
 
-  // Create/activate the webtorrent module
-  webtorrent.create(function () {
-    function cleanForExit () {
-      utils.cleanForExit(webtorrent.app)
-    }
+  // Run the migration scripts if needed
+  migrator.migrate(function (err) {
+    if (err) throw err
 
-    function exitGracefullyOnSignal () {
-      process.exit(-1)
-    }
+    // Create/activate the webtorrent module
+    webtorrent.create(function () {
+      function cleanForExit () {
+        utils.cleanForExit(webtorrent.app)
+      }
 
-    process.on('exit', cleanForExit)
-    process.on('SIGINT', exitGracefullyOnSignal)
-    process.on('SIGTERM', exitGracefullyOnSignal)
+      function exitGracefullyOnSignal () {
+        process.exit(-1)
+      }
 
-    // ----------- Make the server listening -----------
-    server.listen(port, function () {
-      // Activate the pool requests
-      Request.activate()
+      process.on('exit', cleanForExit)
+      process.on('SIGINT', exitGracefullyOnSignal)
+      process.on('SIGTERM', exitGracefullyOnSignal)
 
-      Video.seedAllExisting(function (err) {
-        if (err) throw err
+      // ----------- Make the server listening -----------
+      server.listen(port, function () {
+        // Activate the pool requests
+        Request.activate()
 
-        logger.info('Seeded all the videos')
-        logger.info('Server listening on port %d', port)
-        app.emit('ready')
+        Video.seedAllExisting(function (err) {
+          if (err) throw err
+
+          logger.info('Seeded all the videos')
+          logger.info('Server listening on port %d', port)
+          app.emit('ready')
+        })
       })
     })
   })

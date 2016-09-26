@@ -6,6 +6,7 @@ const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 
 // Bootstrap models
+require('../models/application')
 require('../models/user')
 require('../models/oauth-client')
 require('../models/oauth-token')
