@@ -13,6 +13,7 @@ const constants = require('./constants')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 
+const Application = mongoose.model('Application')
 const Client = mongoose.model('OAuthClient')
 const User = mongoose.model('User')
 
@@ -117,7 +118,9 @@ function createOAuthAdminIfNotExist (callback) {
       logger.info('Username: ' + username)
       logger.info('User password: ' + password)
 
-      return callback(null)
+      logger.info('Creating Application collection.')
+      const application = new Application({ mongoSchemaVersion: constants.LAST_MONGO_SCHEMA_VERSION })
+      application.save(callback)
     })
   })
 }
