@@ -62,9 +62,13 @@ const MONGO_MIGRATION_SCRIPTS = [
   {
     script: '0010-users-password',
     version: 10
+  },
+  {
+    script: '0015-admin-role',
+    version: 15
   }
 ]
-const LAST_MONGO_SCHEMA_VERSION = 10
+const LAST_MONGO_SCHEMA_VERSION = 15
 
 // Time to wait between requests to the friends (10 min)
 let REQUESTS_INTERVAL = 600000
