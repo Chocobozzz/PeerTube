@@ -1,3 +1,4 @@
+# Correspond to your reverse proxy "listen" configuration
 webserver:
   https: false
   host: 'example.com'
