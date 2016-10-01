@@ -3,3 +3,6 @@ webserver:
   https: false
   host: 'example.com'
   port: 80
+
+database:
+  suffix: '-prod'
