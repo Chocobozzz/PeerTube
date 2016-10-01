@@ -10,6 +10,7 @@ const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
 const admin = middlewares.admin
 const oAuth = middlewares.oauth
+const podsMiddleware = middlewares.pods
 const checkSignature = middlewares.secure.checkSignature
 const validators = middlewares.validators.pods
 const signatureValidator = middlewares.validators.remote.signature
@@ -19,11 +20,16 @@ const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
 router.get('/', listPods)
-router.post('/', validators.podsAdd, addPods)
+router.post('/',
+  validators.podsAdd,
+  podsMiddleware.setBodyUrlPort,
+  addPods
+)
 router.post('/makefriends',
   oAuth.authenticate,
   admin.ensureIsAdmin,
   validators.makeFriends,
+  podsMiddleware.setBodyUrlsPort,
   makeFriends
 )
 router.get('/quitfriends',
