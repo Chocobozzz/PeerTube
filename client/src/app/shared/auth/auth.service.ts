@@ -41,7 +41,10 @@ export class AuthService {
           console.log('Client credentials loaded.');
         },
         error => {
-          alert(error);
+          alert(
+            `Cannot retrieve OAuth Client credentials: ${error.text}. \n` +
+            'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
+          );
         }
       );
 
