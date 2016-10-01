@@ -20,7 +20,8 @@ OAuthTokenSchema.path('user').required(true)
 OAuthTokenSchema.statics = {
   getByRefreshTokenAndPopulateClient: getByRefreshTokenAndPopulateClient,
   getByTokenAndPopulateUser: getByTokenAndPopulateUser,
-  getByRefreshToken: getByRefreshToken
+  getByRefreshToken: getByRefreshToken,
+  removeByUserId: removeByUserId
 }
 
 mongoose.model('OAuthToken', OAuthTokenSchema)
@@ -52,4 +53,8 @@ function getByTokenAndPopulateUser (bearerToken) {
 
 function getByRefreshToken (refreshToken) {
   return this.findOne({ refreshToken: refreshToken }).exec()
+}
+
+function removeByUserId (userId, callback) {
+  return this.remove({ user: userId }, callback)
 }

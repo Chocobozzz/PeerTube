@@ -4,6 +4,8 @@ const customUsersValidators = require('../helpers/custom-validators').users
 const modelUtils = require('./utils')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 
+const OAuthToken = mongoose.model('OAuthToken')
+
 // ---------------------------------------------------------------------------
 
 const UserSchema = mongoose.Schema({
@@ -44,6 +46,12 @@ UserSchema.pre('save', function (next) {
 
     return next()
   })
+})
+
+UserSchema.pre('remove', function (next) {
+  const user = this
+
+  OAuthToken.removeByUserId(user._id, next)
 })
 
 mongoose.model('User', UserSchema)
