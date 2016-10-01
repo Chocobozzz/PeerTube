@@ -30,6 +30,7 @@ function getStatsRequests (req, res, next) {
 
     return res.json({
       requests: requests,
+      maxRequestsInParallel: constants.REQUESTS_IN_PARALLEL,
       remainingMilliSeconds: Request.remainingMilliSeconds(),
       milliSecondsInterval: constants.REQUESTS_INTERVAL
     })

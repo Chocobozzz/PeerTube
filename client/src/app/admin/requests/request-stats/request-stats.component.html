@@ -12,6 +12,11 @@
   </div>
 
   <div>
+    <span class="label-description">Maximum number of requests per interval:</span>
+    {{ stats.maxRequestsInParallel }}
+  </div>
+
+  <div>
     <span class="label-description">Remaining requests:</span>
     {{ stats.requests.length }}
   </div>
