@@ -7,10 +7,11 @@ const peertubeCrypto = require('../helpers/peertube-crypto')
 const Pod = mongoose.model('Pod')
 
 const secureMiddleware = {
+  checkSignature: checkSignature,
   decryptBody: decryptBody
 }
 
-function decryptBody (req, res, next) {
+function checkSignature (req, res, next) {
   const url = req.body.signature.url
   Pod.loadByUrl(url, function (err, pod) {
     if (err) {
@@ -28,26 +29,30 @@ function decryptBody (req, res, next) {
     const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, url, req.body.signature.signature)
 
     if (signatureOk === true) {
-      peertubeCrypto.decrypt(req.body.key, req.body.data, function (err, decrypted) {
-        if (err) {
-          logger.error('Cannot decrypt data.', { error: err })
-          return res.sendStatus(500)
-        }
-
-        try {
-          req.body.data = JSON.parse(decrypted)
-          delete req.body.key
-        } catch (err) {
-          logger.error('Error in JSON.parse', { error: err })
-          return res.sendStatus(500)
-        }
-
-        next()
-      })
-    } else {
-      logger.error('Signature is not okay in decryptBody for %s.', req.body.signature.url)
-      return res.sendStatus(403)
+      return next()
     }
+
+    logger.error('Signature is not okay in decryptBody for %s.', req.body.signature.url)
+    return res.sendStatus(403)
+  })
+}
+
+function decryptBody (req, res, next) {
+  peertubeCrypto.decrypt(req.body.key, req.body.data, function (err, decrypted) {
+    if (err) {
+      logger.error('Cannot decrypt data.', { error: err })
+      return res.sendStatus(500)
+    }
+
+    try {
+      req.body.data = JSON.parse(decrypted)
+      delete req.body.key
+    } catch (err) {
+      logger.error('Error in JSON.parse', { error: err })
+      return res.sendStatus(500)
+    }
+
+    next()
   })
 }
 

@@ -10,6 +10,7 @@ const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
 const admin = middlewares.admin
 const oAuth = middlewares.oauth
+const checkSignature = middlewares.secure.checkSignature
 const validators = middlewares.validators.pods
 const signatureValidator = middlewares.validators.remote.signature
 
@@ -31,7 +32,11 @@ router.get('/quitfriends',
   quitFriends
 )
 // Post because this is a secured request
-router.post('/remove', signatureValidator, removePods)
+router.post('/remove',
+  signatureValidator,
+  checkSignature,
+  removePods
+)
 
 // ---------------------------------------------------------------------------
 
