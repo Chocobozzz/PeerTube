@@ -60,7 +60,6 @@
     "request": "^2.57.0",
     "request-replay": "^1.0.2",
     "scripty": "^1.5.0",
-    "segfault-handler": "^1.0.0",
     "ursa": "^0.9.1",
     "webtorrent": "^0.96.0",
     "winston": "^2.1.1",

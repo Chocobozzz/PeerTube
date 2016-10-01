@@ -65,9 +65,6 @@ app.use(expressValidator({
 
 // ----------- Views, routes and static files -----------
 
-// Catch sefaults
-require('segfault-handler').registerHandler()
-
 // API routes
 const apiRoute = '/api/' + constants.API_VERSION
 app.use(apiRoute, routes.api)
