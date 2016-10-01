@@ -95,10 +95,12 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [ ] Validate the prototype (test PeerTube in a real world with many pods and videos)
 - [ ] Manage API breaks
 - [ ] Add "DDOS" security (check if a pod don't send too many requests for example)
-- [ ] Admin panel
-  - [ ] Stats about videos
+- [X] Admin panel
+  - [X] Stats
   - [X] Friends list
   - [X] Manage users (create/remove)
+- [ ] User playlists
+- [ ] User subscriptions (by tags, author...)
 
 
 ## Installation
