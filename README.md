@@ -164,6 +164,10 @@ Finally, run the server with the `production` `NODE_ENV` variable set.
 
     $ NODE_ENV=production npm start
 
+**Nginx template** (reverse proxy): https://github.com/Chocobozzz/PeerTube/tree/master/support/nginx
+
+**Systemd template**: https://github.com/Chocobozzz/PeerTube/tree/master/support/systemd
+
 ### Other commands
 
 To print all available command run:
