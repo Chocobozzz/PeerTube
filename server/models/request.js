@@ -100,8 +100,7 @@ function makeRequest (toPod, requestsToMake, callback) {
         'Error sending secure request to %s pod.',
         toPod.url,
         {
-          error: err || new Error('Status code not 20x'),
-          statusCode: res.statusCode
+          error: err || new Error('Status code not 20x : ' + res.statusCode)
         }
       )
 
