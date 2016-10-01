@@ -96,7 +96,14 @@ function makeRequest (toPod, requestsToMake, callback) {
   // The function fire some useful callbacks
   requests.makeSecureRequest(params, function (err, res) {
     if (err || (res.statusCode !== 200 && res.statusCode !== 201 && res.statusCode !== 204)) {
-      logger.error('Error sending secure request to %s pod.', toPod.url, { error: err || new Error('Status code not 20x') })
+      logger.error(
+        'Error sending secure request to %s pod.',
+        toPod.url,
+        {
+          error: err || new Error('Status code not 20x'),
+          statusCode: res.statusCode
+        }
+      )
 
       return callback(false)
     }
@@ -160,12 +167,6 @@ function makeRequests () {
         }
 
         makeRequest(toPod, requestToMake.datas, function (success) {
-          if (err) {
-            logger.error('Errors when sent request to %s.', toPod.url, { error: err })
-            // Do not stop the process just for one error
-            return callbackEach()
-          }
-
           if (success === true) {
             logger.debug('Removing requests for %s pod.', toPodId, { requestsIds: requestToMake.ids })
 
