@@ -43,7 +43,7 @@ function create (options, callback) {
 
     // Run a timeout of 30s after which we exit the process
     const timeoutWebtorrentProcess = setTimeout(function () {
-      throw new Error('Timeout : cannot run the webtorrent process. Please ensure you have electron-prebuilt npm package installed with xvfb-run.')
+      throw new Error('Timeout : cannot run the webtorrent process. Please ensure you have electron npm package installed with xvfb-run.')
     }, 30000)
 
     ipc.server.on(processKey + '.ready', function () {

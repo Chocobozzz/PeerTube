@@ -22,7 +22,7 @@ services:
 before_install: if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
 
 before_script:
-  - npm install electron-prebuilt -g
+  - npm install electron -g
   - npm run build
   - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"
   - tar xf ffmpeg-release-3.0.2-64bit-static.tar.xz

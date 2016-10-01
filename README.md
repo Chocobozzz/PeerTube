@@ -127,7 +127,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
         # apt-get update
         # apt-get install ffmpeg mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin
         # npm install -g npm@3
-        # npm install -g electron-prebuilt
+        # npm install -g electron
 
 #### Other distribution... (PR welcome)
 
