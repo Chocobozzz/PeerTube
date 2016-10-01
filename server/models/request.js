@@ -176,6 +176,7 @@ function makeRequests () {
 
         // Maybe the pod is not our friend anymore so simply remove it
         if (!toPod) {
+          logger.info('Removing %d requests of unexisting pod %s.', requestToMake.ids.length, toPodId)
           removePodOf.call(self, requestToMake.ids, toPodId)
           return callbackEach()
         }
