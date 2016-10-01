@@ -81,8 +81,8 @@ styles:
   dropdowns: true
   button-groups: true
   input-groups: true
-  navs: false
-  navbar: false
+  navs: true
+  navbar: true
   breadcrumbs: false
   pagination: true
   pager: false
@@ -115,8 +115,8 @@ scripts:
   alert: false
   button: false
   carousel: false
-  collapse: false
-  dropdown: false
+  collapse: true
+  dropdown: true
   modal: false
   tooltip: false
   popover: false

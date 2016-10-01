@@ -1,17 +1,18 @@
-<div class="input-group">
-  <div class="input-group-btn" dropdown>
-    <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" dropdownToggle>
-      {{ getStringChoice(searchCriterias.field) }} <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
-      <li *ngFor="let choice of choiceKeys" class="dropdown-item">
-        <a class="dropdown-item" href="#" (click)="choose($event, choice)">{{ getStringChoice(choice) }}</a>
-      </li>
-    </ul>
+<form class="navbar-form">
+  <div class="input-group">
+    <div class="dropdown clearfix input-group-btn">
+      <button id="simple-btn-keyboard-nav" class="btn btn-primary dropdown-toggle"
+              type="button" data-toggle="dropdown" dropdownToggle>
+        {{ getStringChoice(searchCriterias.field) }} <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
+        <li *ngFor="let choice of choiceKeys" class="dropdown-item">
+          <a class="dropdown-item" href="#" (click)="choose($event, choice)">{{ getStringChoice(choice) }}</a>
+        </li>
+      </ul>
+    </div>
+    <input
+        type="text" id="search-video" name="search-video" class="form-control"
+        placeholder="Search a video..." [(ngModel)]="searchCriterias.value" (keyup.enter)="doSearch()">
   </div>
-
-  <input
-    type="text" id="search-video" name="search-video" class="form-control" placeholder="Search a video..." class="form-control"
-    [(ngModel)]="searchCriterias.value" (keyup.enter)="doSearch()"
-  >
-</div>
+</form>
