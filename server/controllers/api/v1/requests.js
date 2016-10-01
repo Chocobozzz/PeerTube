@@ -28,11 +28,9 @@ function getStatsRequests (req, res, next) {
   Request.list(function (err, requests) {
     if (err) return next(err)
 
-    const remainingMilliSeconds = constants.REQUESTS_INTERVAL - (Date.now() % constants.REQUESTS_INTERVAL)
-
     return res.json({
       requests: requests,
-      remainingMilliSeconds: remainingMilliSeconds,
+      remainingMilliSeconds: Request.remainingMilliSeconds(),
       milliSecondsInterval: constants.REQUESTS_INTERVAL
     })
   })

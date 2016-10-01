@@ -14,6 +14,7 @@ const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
 let timer = null
+let lastRequestTimestamp = 0
 
 // ---------------------------------------------------------------------------
 
@@ -27,7 +28,8 @@ RequestSchema.statics = {
   deactivate,
   flush,
   forceSend,
-  list
+  list,
+  remainingMilliSeconds
 }
 
 RequestSchema.pre('save', function (next) {
@@ -54,12 +56,19 @@ mongoose.model('Request', RequestSchema)
 
 function activate () {
   logger.info('Requests scheduler activated.')
-  timer = setInterval(makeRequests.bind(this), constants.REQUESTS_INTERVAL)
+  lastRequestTimestamp = Date.now()
+
+  const self = this
+  timer = setInterval(function () {
+    lastRequestTimestamp = Date.now()
+    makeRequests.call(self)
+  }, constants.REQUESTS_INTERVAL)
 }
 
 function deactivate () {
   logger.info('Requests scheduler deactivated.')
   clearInterval(timer)
+  timer = null
 }
 
 function flush () {
@@ -75,6 +84,12 @@ function forceSend () {
 
 function list (callback) {
   this.find({ }, callback)
+}
+
+function remainingMilliSeconds () {
+  if (timer === null) return -1
+
+  return constants.REQUESTS_INTERVAL - (Date.now() - lastRequestTimestamp)
 }
 
 // ---------------------------------------------------------------------------
@@ -159,7 +174,7 @@ function makeRequests () {
           return callbackEach()
         }
 
-        // Maybe the pod is not our friend anymore so simply remove them
+        // Maybe the pod is not our friend anymore so simply remove it
         if (!toPod) {
           removePodOf.call(self, requestToMake.ids, toPodId)
           return callbackEach()
