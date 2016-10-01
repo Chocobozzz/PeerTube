@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http, URLSearchParams } from '@angular/http';
+import { Headers, Http, Response, URLSearchParams } from '@angular/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
@@ -20,7 +21,11 @@ export class AuthService {
   private loginChanged: Subject<AuthStatus>;
   private user: AuthUser = null;
 
-  constructor(private http: Http, private restExtractor: RestExtractor) {
+  constructor(
+    private http: Http,
+    private restExtractor: RestExtractor,
+    private router: Router
+   ) {
     this.loginChanged = new Subject<AuthStatus>();
     this.loginChangedSource = this.loginChanged.asObservable();
 
@@ -142,7 +147,21 @@ export class AuthService {
     return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
                     .map(this.restExtractor.extractDataGet)
                     .map(res => this.handleRefreshToken(res))
-                    .catch((res) => this.restExtractor.handleError(res));
+                    .catch((res: Response) => {
+                      // The refresh token is invalid?
+                      if (res.status === 400 && res.json() && res.json().error === 'invalid_grant') {
+                        console.error('Cannot refresh token -> logout...');
+                        this.logout();
+                        this.router.navigate(['/login']);
+
+                        return Observable.throw({
+                          json: '',
+                          text: 'You need to reconnect.'
+                        });
+                      }
+
+                      return this.restExtractor.handleError(res);
+                    });
   }
 
   private fetchUserInformations (obj: any) {
