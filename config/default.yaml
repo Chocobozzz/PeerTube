@@ -19,8 +19,5 @@ storage:
   thumbnails: 'thumbnails/'
   torrents: 'torrents/'
 
-network:
-  friends: []
-
 electron:
   debug: false

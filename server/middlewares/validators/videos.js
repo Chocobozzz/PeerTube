@@ -4,20 +4,21 @@ const mongoose = require('mongoose')
 
 const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
-const customValidators = require('../../helpers/custom-validators')
+const customVideosValidators = require('../../helpers/custom-validators').videos
 const logger = require('../../helpers/logger')
 
 const Video = mongoose.model('Video')
 
 const validatorsVideos = {
-  videosAdd: videosAdd,
-  videosGet: videosGet,
-  videosRemove: videosRemove,
-  videosSearch: videosSearch
+  videosAdd,
+  videosGet,
+  videosRemove,
+  videosSearch
 }
 
 function videosAdd (req, res, next) {
   req.checkFiles('videofile[0].originalname', 'Should have an input video').notEmpty()
+  // TODO: move to constants and function
   req.checkFiles('videofile[0].mimetype', 'Should have a correct mime type').matches(/video\/(webm)|(mp4)|(ogg)/i)
   req.checkBody('name', 'Should have a valid name').isVideoNameValid()
   req.checkBody('description', 'Should have a valid description').isVideoDescriptionValid()
@@ -33,8 +34,8 @@ function videosAdd (req, res, next) {
         return res.status(400).send('Cannot retrieve metadata of the file.')
       }
 
-      if (!customValidators.isVideoDurationValid(duration)) {
-        return res.status(400).send('Duration of the video file is too big (max: ' + constants.VIDEOS_CONSTRAINTS_FIELDS.DURATION.max + 's).')
+      if (!customVideosValidators.isVideoDurationValid(duration)) {
+        return res.status(400).send('Duration of the video file is too big (max: ' + constants.CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')
       }
 
       videoFile.duration = duration
@@ -76,6 +77,7 @@ function videosRemove (req, res, next) {
 
       if (!video) return res.status(404).send('Video not found')
       else if (video.isOwned() === false) return res.status(403).send('Cannot remove video of another pod')
+      else if (video.author !== res.locals.oauth.token.user.username) return res.status(403).send('Cannot remove video of another user')
 
       next()
     })

@@ -1,11 +1,11 @@
 'use strict'
 
-const config = require('config')
 const express = require('express')
 const mongoose = require('mongoose')
 const multer = require('multer')
 const waterfall = require('async/waterfall')
 
+const constants = require('../../../initializers/constants')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
@@ -20,13 +20,12 @@ const sort = middlewares.sort
 const utils = require('../../../helpers/utils')
 
 const router = express.Router()
-const uploads = config.get('storage.uploads')
 const Video = mongoose.model('Video')
 
 // multer configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, uploads)
+    cb(null, constants.CONFIG.STORAGE.UPLOAD_DIR)
   },
 
   filename: function (req, file, cb) {
@@ -142,7 +141,7 @@ function getVideo (req, res, next) {
 }
 
 function listVideos (req, res, next) {
-  Video.list(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
+  Video.listForApi(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList, videosTotal))

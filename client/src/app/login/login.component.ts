@@ -1,35 +1,67 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../shared';
+import { AuthService, FormReactive } from '../shared';
 
 @Component({
   selector: 'my-login',
-  template: require('./login.component.html')
+  templateUrl: './login.component.html'
 })
 
-export class LoginComponent {
+export class LoginComponent extends FormReactive implements OnInit {
   error: string = null;
+
+  form: FormGroup;
+  formErrors = {
+    'username': '',
+    'password': ''
+  };
+  validationMessages = {
+    'username': {
+      'required': 'Username is required.',
+    },
+    'password': {
+      'required': 'Password is required.'
+    }
+  };
 
   constructor(
     private authService: AuthService,
+    private formBuilder: FormBuilder,
     private router: Router
-  ) {}
+  ) {
+    super();
+  }
 
-  login(username: string, password: string) {
+  buildForm() {
+    this.form = this.formBuilder.group({
+      username: [ '', Validators.required ],
+      password: [ '', Validators.required ],
+    });
+
+    this.form.valueChanges.subscribe(data => this.onValueChanged(data));
+  }
+
+  ngOnInit() {
+    this.buildForm();
+  }
+
+  login() {
+    this.error = null;
+
+    const { username, password } = this.form.value;
+
     this.authService.login(username, password).subscribe(
-      result => {
-        this.error = null;
+      result => this.router.navigate(['/videos/list']),
 
-        this.router.navigate(['/videos/list']);
-      },
       error => {
-        console.error(error);
+        console.error(error.json);
 
-        if (error.error === 'invalid_grant') {
+        if (error.json.error === 'invalid_grant') {
           this.error = 'Credentials are invalid.';
         } else {
-          this.error = `${error.error}: ${error.error_description}`;
+          this.error = `${error.json.error}: ${error.json.error_description}`;
         }
       }
     );

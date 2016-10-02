@@ -1,9 +1,9 @@
 'use strict'
 
 // Order of the tests we want to execute
-require('./checkParams')
-require('./friendsBasic')
+require('./check-params')
+require('./friends-basic')
 require('./users')
-require('./singlePod')
-require('./multiplePods')
-require('./friendsAdvanced')
+require('./single-pod')
+require('./multiple-pods')
+require('./friends-advanced')

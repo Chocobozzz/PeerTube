@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "async": "^2.0.0",
+    "bcrypt": "^0.8.7",
     "bittorrent-tracker": "^8.0.0",
     "body-parser": "^1.12.4",
     "concurrently": "^2.0.0",
@@ -59,7 +60,6 @@
     "request": "^2.57.0",
     "request-replay": "^1.0.2",
     "scripty": "^1.5.0",
-    "segfault-handler": "^1.0.0",
     "ursa": "^0.9.1",
     "winston": "^2.1.1",
     "ws": "^1.1.1"
@@ -67,9 +67,9 @@
   "devDependencies": {
     "chai": "^3.3.0",
     "commander": "^2.9.0",
-    "mocha": "^2.3.3",
-    "standard": "^7.0.1",
-    "supertest": "^1.1.0"
+    "mocha": "^3.0.1",
+    "standard": "^8.0.0",
+    "supertest": "^2.0.0"
   },
   "standard": {
     "ignore": [

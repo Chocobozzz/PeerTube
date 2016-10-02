@@ -28,7 +28,7 @@ export class AuthHttp extends Http {
     return super.request(url, options)
                 .catch((err) => {
                   if (err.status === 401) {
-                    return this.handleTokenExpired(err, url, options);
+                    return this.handleTokenExpired(url, options);
                   }
 
                   return Observable.throw(err);
@@ -49,26 +49,29 @@ export class AuthHttp extends Http {
     return this.request(url, options);
   }
 
-  post(url: string, options?: RequestOptionsArgs): Observable<Response> {
+  post(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
     if (!options) options = {};
     options.method = RequestMethod.Post;
+    options.body = body;
 
     return this.request(url, options);
   }
 
-  put(url: string, options?: RequestOptionsArgs): Observable<Response> {
+  put(url: string, body: any, options?: RequestOptionsArgs): Observable<Response> {
     if (!options) options = {};
     options.method = RequestMethod.Put;
+    options.body = body;
 
     return this.request(url, options);
   }
 
-  private handleTokenExpired(err: Response, url: string | Request, options: RequestOptionsArgs) {
-    return this.authService.refreshAccessToken().flatMap(() => {
-      this.setAuthorizationHeader(options.headers);
+  private handleTokenExpired(url: string | Request, options: RequestOptionsArgs) {
+    return this.authService.refreshAccessToken()
+                           .flatMap(() => {
+                              this.setAuthorizationHeader(options.headers);
 
-      return super.request(url, options);
-    });
+                              return super.request(url, options);
+                            });
   }
 
   private setAuthorizationHeader(headers: Headers) {

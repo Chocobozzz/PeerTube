@@ -1,8 +1,8 @@
 language: node_js
 
 node_js:
-  - "4.4"
-  - "6.2"
+  - "4.5"
+  - "6.6"
 
 env:
   - CXX=g++-4.8
@@ -19,8 +19,10 @@ sudo: false
 services:
   - mongodb
 
+before_install: if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
+
 before_script:
-  - npm install electron-prebuilt -g
+  - npm install electron -g
   - npm run build
   - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"
   - tar xf ffmpeg-release-3.0.2-64bit-static.tar.xz

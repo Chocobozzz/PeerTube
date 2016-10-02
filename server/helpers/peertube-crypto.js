@@ -1,30 +1,38 @@
 'use strict'
 
-const config = require('config')
+const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const fs = require('fs')
 const openssl = require('openssl-wrapper')
-const path = require('path')
 const ursa = require('ursa')
 
+const constants = require('../initializers/constants')
 const logger = require('./logger')
 
-const certDir = path.join(__dirname, '..', '..', config.get('storage.certs'))
 const algorithm = 'aes-256-ctr'
 
 const peertubeCrypto = {
-  checkSignature: checkSignature,
-  createCertsIfNotExist: createCertsIfNotExist,
-  decrypt: decrypt,
-  encrypt: encrypt,
-  getCertDir: getCertDir,
-  sign: sign
+  checkSignature,
+  comparePassword,
+  createCertsIfNotExist,
+  cryptPassword,
+  decrypt,
+  encrypt,
+  sign
 }
 
 function checkSignature (publicKey, rawData, hexSignature) {
   const crt = ursa.createPublicKey(publicKey)
   const isValid = crt.hashAndVerify('sha256', new Buffer(rawData).toString('hex'), hexSignature, 'hex')
   return isValid
+}
+
+function comparePassword (plainPassword, hashPassword, callback) {
+  bcrypt.compare(plainPassword, hashPassword, function (err, isPasswordMatch) {
+    if (err) return callback(err)
+
+    return callback(null, isPasswordMatch)
+  })
 }
 
 function createCertsIfNotExist (callback) {
@@ -39,8 +47,18 @@ function createCertsIfNotExist (callback) {
   })
 }
 
+function cryptPassword (password, callback) {
+  bcrypt.genSalt(constants.BCRYPT_SALT_SIZE, function (err, salt) {
+    if (err) return callback(err)
+
+    bcrypt.hash(password, salt, function (err, hash) {
+      return callback(err, hash)
+    })
+  })
+}
+
 function decrypt (key, data, callback) {
-  fs.readFile(getCertDir() + 'peertube.key.pem', function (err, file) {
+  fs.readFile(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem', function (err, file) {
     if (err) return callback(err)
 
     const myPrivateKey = ursa.createPrivateKey(file)
@@ -67,12 +85,8 @@ function encrypt (publicKey, data, callback) {
   })
 }
 
-function getCertDir () {
-  return certDir
-}
-
 function sign (data) {
-  const myKey = ursa.createPrivateKey(fs.readFileSync(certDir + 'peertube.key.pem'))
+  const myKey = ursa.createPrivateKey(fs.readFileSync(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem'))
   const signature = myKey.hashAndSign('sha256', data, 'utf8', 'hex')
 
   return signature
@@ -85,7 +99,7 @@ module.exports = peertubeCrypto
 // ---------------------------------------------------------------------------
 
 function certsExist (callback) {
-  fs.exists(certDir + 'peertube.key.pem', function (exists) {
+  fs.exists(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem', function (exists) {
     return callback(exists)
   })
 }
@@ -99,15 +113,25 @@ function createCerts (callback) {
     }
 
     logger.info('Generating a RSA key...')
-    openssl.exec('genrsa', { 'out': certDir + 'peertube.key.pem', '2048': false }, function (err) {
+
+    let options = {
+      'out': constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem',
+      '2048': false
+    }
+    openssl.exec('genrsa', options, function (err) {
       if (err) {
         logger.error('Cannot create private key on this pod.')
         return callback(err)
       }
       logger.info('RSA key generated.')
 
+      options = {
+        'in': constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem',
+        'pubout': true,
+        'out': constants.CONFIG.STORAGE.CERT_DIR + 'peertube.pub'
+      }
       logger.info('Manage public key...')
-      openssl.exec('rsa', { 'in': certDir + 'peertube.key.pem', 'pubout': true, 'out': certDir + 'peertube.pub' }, function (err) {
+      openssl.exec('rsa', options, function (err) {
         if (err) {
           logger.error('Cannot create public key on this pod.')
           return callback(err)

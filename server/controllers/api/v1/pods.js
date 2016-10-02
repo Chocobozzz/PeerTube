@@ -8,7 +8,10 @@ const waterfall = require('async/waterfall')
 const logger = require('../../../helpers/logger')
 const friends = require('../../../lib/friends')
 const middlewares = require('../../../middlewares')
+const admin = middlewares.admin
 const oAuth = middlewares.oauth
+const podsMiddleware = middlewares.pods
+const checkSignature = middlewares.secure.checkSignature
 const validators = middlewares.validators.pods
 const signatureValidator = middlewares.validators.remote.signature
 
@@ -16,12 +19,30 @@ const router = express.Router()
 const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
-router.get('/', listPodsUrl)
-router.post('/', validators.podsAdd, addPods)
-router.get('/makefriends', oAuth.authenticate, validators.makeFriends, makeFriends)
-router.get('/quitfriends', oAuth.authenticate, quitFriends)
+router.get('/', listPods)
+router.post('/',
+  validators.podsAdd,
+  podsMiddleware.setBodyUrlPort,
+  addPods
+)
+router.post('/makefriends',
+  oAuth.authenticate,
+  admin.ensureIsAdmin,
+  validators.makeFriends,
+  podsMiddleware.setBodyUrlsPort,
+  makeFriends
+)
+router.get('/quitfriends',
+  oAuth.authenticate,
+  admin.ensureIsAdmin,
+  quitFriends
+)
 // Post because this is a secured request
-router.post('/remove', signatureValidator, removePods)
+router.post('/remove',
+  signatureValidator,
+  checkSignature,
+  removePods
+)
 
 // ---------------------------------------------------------------------------
 
@@ -64,20 +85,27 @@ function addPods (req, res, next) {
   })
 }
 
-function listPodsUrl (req, res, next) {
-  Pod.listOnlyUrls(function (err, podsUrlList) {
+function listPods (req, res, next) {
+  Pod.list(function (err, podsUrlList) {
     if (err) return next(err)
 
-    res.json(podsUrlList)
+    res.json(getFormatedPods(podsUrlList))
   })
 }
 
 function makeFriends (req, res, next) {
-  friends.makeFriends(function (err) {
-    if (err) return next(err)
+  const urls = req.body.urls
 
-    res.type('json').status(204).end()
+  friends.makeFriends(urls, function (err) {
+    if (err) {
+      logger.error('Could not make friends.', { error: err })
+      return
+    }
+
+    logger.info('Made friends!')
   })
+
+  res.type('json').status(204).end()
 }
 
 function removePods (req, res, next) {
@@ -124,4 +152,16 @@ function quitFriends (req, res, next) {
 
     res.type('json').status(204).end()
   })
+}
+
+// ---------------------------------------------------------------------------
+
+function getFormatedPods (pods) {
+  const formatedPods = []
+
+  pods.forEach(function (pod) {
+    formatedPods.push(pod.toFormatedJSON())
+  })
+
+  return formatedPods
 }

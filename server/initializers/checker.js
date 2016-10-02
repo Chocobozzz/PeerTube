@@ -7,9 +7,9 @@ const Client = mongoose.model('OAuthClient')
 const User = mongoose.model('User')
 
 const checker = {
-  checkConfig: checkConfig,
-  clientsExist: clientsExist,
-  usersExist: usersExist
+  checkConfig,
+  clientsExist,
+  usersExist
 }
 
 // Check the config files
@@ -17,8 +17,8 @@ function checkConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.host', 'webserver.port',
     'database.host', 'database.port', 'database.suffix',
-    'storage.certs', 'storage.uploads', 'storage.logs',
-    'network.friends', 'electron.debug' ]
+    'storage.certs', 'storage.uploads', 'storage.logs', 'storage.thumbnails',
+    'electron.debug' ]
   const miss = []
 
   for (const key of required) {
@@ -39,10 +39,10 @@ function clientsExist (callback) {
 }
 
 function usersExist (callback) {
-  User.list(function (err, users) {
+  User.countTotal(function (err, totalUsers) {
     if (err) return callback(err)
 
-    return callback(null, users.length !== 0)
+    return callback(null, totalUsers !== 0)
   })
 }
 

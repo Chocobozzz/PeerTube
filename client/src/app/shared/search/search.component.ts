@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-
-import { DROPDOWN_DIRECTIVES} from  'ng2-bootstrap/components/dropdown';
+import { Router } from '@angular/router';
 
 import { Search } from './search.model';
 import { SearchField } from './search-field.type';
 import { SearchService } from './search.service';
 
 @Component({
-    selector: 'my-search',
-    template: require('./search.component.html'),
-    directives: [ DROPDOWN_DIRECTIVES ]
+  selector: 'my-search',
+  templateUrl: './search.component.html'
 })
 
 export class SearchComponent implements OnInit {
@@ -25,10 +23,10 @@ export class SearchComponent implements OnInit {
     value: ''
   };
 
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit() {
-    // Subscribe is the search changed
+    // Subscribe if the search changed
     // Usually changed by videos list component
     this.searchService.updateSearch.subscribe(
       newSearchCriterias => {
@@ -58,6 +56,10 @@ export class SearchComponent implements OnInit {
   }
 
   doSearch() {
+    if (this.router.url.indexOf('/videos/list') === -1) {
+      this.router.navigate([ '/videos/list' ]);
+    }
+
     this.searchService.searchUpdated.next(this.searchCriterias);
   }
 

@@ -11,7 +11,11 @@ const constants = require('../initializers/constants')
 const PodSchema = mongoose.Schema({
   url: String,
   publicKey: String,
-  score: { type: Number, max: constants.FRIEND_SCORE.MAX }
+  score: { type: Number, max: constants.FRIEND_SCORE.MAX },
+  createdDate: {
+    type: Date,
+    default: Date.now
+  }
 })
 
 // TODO: set options (TLD...)
@@ -19,16 +23,19 @@ PodSchema.path('url').validate(validator.isURL)
 PodSchema.path('publicKey').required(true)
 PodSchema.path('score').validate(function (value) { return !isNaN(value) })
 
+PodSchema.methods = {
+  toFormatedJSON
+}
+
 PodSchema.statics = {
-  countAll: countAll,
-  incrementScores: incrementScores,
-  list: list,
-  listAllIds: listAllIds,
-  listOnlyUrls: listOnlyUrls,
-  listBadPods: listBadPods,
-  load: load,
-  loadByUrl: loadByUrl,
-  removeAll: removeAll
+  countAll,
+  incrementScores,
+  list,
+  listAllIds,
+  listBadPods,
+  load,
+  loadByUrl,
+  removeAll
 }
 
 PodSchema.pre('save', function (next) {
@@ -45,6 +52,19 @@ PodSchema.pre('save', function (next) {
 })
 
 const Pod = mongoose.model('Pod', PodSchema)
+
+// ------------------------------ METHODS ------------------------------
+
+function toFormatedJSON () {
+  const json = {
+    id: this._id,
+    url: this.url,
+    score: this.score,
+    createdDate: this.createdDate
+  }
+
+  return json
+}
 
 // ------------------------------ Statics ------------------------------
 
@@ -67,10 +87,6 @@ function listAllIds (callback) {
 
     return callback(null, map(pods, '_id'))
   })
-}
-
-function listOnlyUrls (callback) {
-  return this.find({}, { _id: 0, url: 1 }, callback)
 }
 
 function listBadPods (callback) {

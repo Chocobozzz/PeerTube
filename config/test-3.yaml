@@ -15,7 +15,3 @@ storage:
   logs: 'test3/logs/'
   thumbnails: 'test3/thumbnails/'
   torrents: 'test3/torrents/'
-
-network:
-  friends:
-    - 'http://localhost:9001'

@@ -32,6 +32,7 @@ if (miss.length !== 0) {
 // ----------- PeerTube modules -----------
 const customValidators = require('./server/helpers/custom-validators')
 const installer = require('./server/initializers/installer')
+const migrator = require('./server/initializers/migrator')
 const mongoose = require('mongoose')
 const routes = require('./server/controllers')
 const Request = mongoose.model('Request')
@@ -46,17 +47,20 @@ const port = config.get('listen.port')
 // For the logger
 app.use(morgan('combined', { stream: logger.stream }))
 // For body requests
-app.use(bodyParser.json())
+app.use(bodyParser.json({ limit: '500kb' }))
 app.use(bodyParser.urlencoded({ extended: false }))
 // Validate some params for the API
 app.use(expressValidator({
-  customValidators: customValidators
+  customValidators: Object.assign(
+    {},
+    customValidators.misc,
+    customValidators.pods,
+    customValidators.users,
+    customValidators.videos
+  )
 }))
 
 // ----------- Views, routes and static files -----------
-
-// Catch sefaults
-require('segfault-handler').registerHandler()
 
 // API routes
 const apiRoute = '/api/' + constants.API_VERSION
@@ -125,14 +129,19 @@ app.use(function (err, req, res, next) {
 installer.installApplication(function (err) {
   if (err) throw err
 
-  // ----------- Make the server listening -----------
-  server.listen(port, function () {
-    // Activate the pool requests
-    Request.activate()
+  // Run the migration scripts if needed
+  migrator.migrate(function (err) {
+    if (err) throw err
 
-    logger.info('Seeded all the videos')
-    logger.info('Server listening on port %d', port)
-    app.emit('ready')
+    // ----------- Make the server listening -----------
+    server.listen(port, function () {
+      // Activate the pool requests
+      Request.activate()
+
+      logger.info('Seeded all the videos')
+      logger.info('Server listening on port %d', port)
+      app.emit('ready')
+    })
   })
 })
 

@@ -2,31 +2,31 @@
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form novalidate (ngSubmit)="upload()" [ngFormModel]="videoForm">
+<form novalidate (ngSubmit)="upload()" [formGroup]="form">
   <div class="form-group">
     <label for="name">Name</label>
     <input
-      type="text" class="form-control" name="name" id="name"
-      ngControl="name" #name="ngForm" [(ngModel)]="video.name"
+      type="text" class="form-control" id="name"
+      formControlName="name"
     >
-    <div [hidden]="name.valid || name.pristine" class="alert alert-warning">
-      A name is required and should be between 3 and 50 characters long
+    <div *ngIf="formErrors.name" class="alert alert-danger">
+      {{ formErrors.name }}
     </div>
   </div>
 
   <div class="form-group">
     <label for="tags">Tags</label>
     <input
-      type="text" class="form-control" name="tags" id="tags"
-      ngControl="tags" #tags="ngForm" [disabled]="isTagsInputDisabled" (keyup)="onTagKeyPress($event)" [(ngModel)]="currentTag"
+      type="text" class="form-control" id="currentTag"
+      formControlName="currentTag" (keyup)="onTagKeyPress($event)"
     >
-    <div [hidden]="tags.valid || tags.pristine" class="alert alert-warning">
-      A tag should be between 2 and 10 characters (alphanumeric) long
+    <div *ngIf="formErrors.currentTag" class="alert alert-danger">
+      {{ formErrors.currentTag }}
     </div>
   </div>
 
   <div class="tags">
-    <div class="label label-primary tag" *ngFor="let tag of video.tags">
+    <div class="label label-primary tag" *ngFor="let tag of tags">
       {{ tag }}
       <span class="remove" (click)="removeTag(tag)">x</span>
     </div>
@@ -53,12 +53,12 @@
   <div class="form-group">
     <label for="description">Description</label>
     <textarea
-      name="description" id="description" class="form-control" placeholder="Description..."
-      ngControl="description"  #description="ngForm" [(ngModel)]="video.description"
+      id="description" class="form-control" placeholder="Description..."
+      formControlName="description"
     >
     </textarea>
-    <div [hidden]="description.valid || description.pristine" class="alert alert-warning">
-        A description is required and should be between 3 and 250 characters long
+    <div *ngIf="formErrors.description" class="alert alert-danger">
+      {{ formErrors.description }}
     </div>
   </div>
 
@@ -69,7 +69,7 @@
   <div class="form-group">
     <input
       type="submit" value="Upload" class="btn btn-default form-control" [title]="getInvalidFieldsTitle()"
-      [disabled]="!videoForm.valid || video.tags.length === 0 || filename === null"
+      [disabled]="!form.valid || tags.length === 0 || filename === null"
     >
   </div>
 </form>

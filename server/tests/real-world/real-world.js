@@ -1,6 +1,6 @@
 'use strict'
 
-const each = require('each')
+const each = require('async/each')
 const isEqual = require('lodash/isEqual')
 const program = require('commander')
 const series = require('async/series')
@@ -8,7 +8,10 @@ const series = require('async/series')
 process.env.NODE_ENV = 'test'
 const constants = require('../../initializers/constants')
 
-const utils = require('../api/utils')
+const loginUtils = require('../utils/login')
+const podsUtils = require('../utils/pods')
+const serversUtils = require('../utils/servers')
+const videosUtils = require('../utils/videos')
 
 program
   .option('-c, --create [weight]', 'Weight for creating videos')
@@ -97,7 +100,7 @@ function runServers (numberOfPods, callback) {
   series([
     // Run servers
     function (next) {
-      utils.flushAndRunMultipleServers(numberOfPods, function (serversRun) {
+      serversUtils.flushAndRunMultipleServers(numberOfPods, function (serversRun) {
         servers = serversRun
         next()
       })
@@ -105,7 +108,7 @@ function runServers (numberOfPods, callback) {
     // Get the access tokens
     function (next) {
       each(servers, function (server, callbackEach) {
-        utils.loginAndGetAccessToken(server, function (err, accessToken) {
+        loginUtils.loginAndGetAccessToken(server, function (err, accessToken) {
           if (err) return callbackEach(err)
 
           server.accessToken = accessToken
@@ -115,26 +118,26 @@ function runServers (numberOfPods, callback) {
     },
     function (next) {
       const server = servers[1]
-      utils.makeFriends(server.url, server.accessToken, next)
+      podsUtils.makeFriends(server.url, server.accessToken, next)
     },
     function (next) {
       const server = servers[0]
-      utils.makeFriends(server.url, server.accessToken, next)
+      podsUtils.makeFriends(server.url, server.accessToken, next)
     },
     function (next) {
       setTimeout(next, 1000)
     },
     function (next) {
       const server = servers[3]
-      utils.makeFriends(server.url, server.accessToken, next)
+      podsUtils.makeFriends(server.url, server.accessToken, next)
     },
     function (next) {
       const server = servers[5]
-      utils.makeFriends(server.url, server.accessToken, next)
+      podsUtils.makeFriends(server.url, server.accessToken, next)
     },
     function (next) {
       const server = servers[4]
-      utils.makeFriends(server.url, server.accessToken, next)
+      podsUtils.makeFriends(server.url, server.accessToken, next)
     },
     function (next) {
       setTimeout(next, 1000)
@@ -151,7 +154,7 @@ function exitServers (servers, callback) {
     if (server.app) process.kill(-server.app.pid)
   })
 
-  if (flushAtExit) utils.flushTests(callback)
+  if (flushAtExit) serversUtils.flushTests(callback)
 }
 
 function upload (servers, numServer, callback) {
@@ -164,13 +167,13 @@ function upload (servers, numServer, callback) {
 
   console.log('Upload video to server ' + numServer)
 
-  utils.uploadVideo(servers[numServer].url, servers[numServer].accessToken, name, description, tags, file, callback)
+  videosUtils.uploadVideo(servers[numServer].url, servers[numServer].accessToken, name, description, tags, file, callback)
 }
 
 function remove (servers, numServer, callback) {
   if (!callback) callback = function () {}
 
-  utils.getVideosList(servers[numServer].url, function (err, res) {
+  videosUtils.getVideosList(servers[numServer].url, function (err, res) {
     if (err) throw err
 
     const videos = res.body.data
@@ -179,14 +182,14 @@ function remove (servers, numServer, callback) {
     const toRemove = videos[getRandomInt(0, videos.length)].id
 
     console.log('Removing video from server ' + numServer)
-    utils.removeVideo(servers[numServer].url, servers[numServer].accessToken, toRemove, callback)
+    videosUtils.removeVideo(servers[numServer].url, servers[numServer].accessToken, toRemove, callback)
   })
 }
 
 function checkIntegrity (servers, callback) {
   const videos = []
   each(servers, function (server, callback) {
-    utils.getAllVideosListBy(server.url, function (err, res) {
+    videosUtils.getAllVideosListBy(server.url, function (err, res) {
       if (err) throw err
       const serverVideos = res.body.data
       for (const serverVideo of serverVideos) {

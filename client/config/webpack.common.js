@@ -5,9 +5,11 @@ const helpers = require('./helpers')
  * Webpack Plugins
  */
 
-var CopyWebpackPlugin = (CopyWebpackPlugin = require('copy-webpack-plugin'), CopyWebpackPlugin.default || CopyWebpackPlugin)
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin
+const AssetsPlugin = require('assets-webpack-plugin')
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
 const WebpackNotifierPlugin = require('webpack-notifier')
 
 /*
@@ -15,7 +17,8 @@ const WebpackNotifierPlugin = require('webpack-notifier')
  */
 const METADATA = {
   title: 'PeerTube',
-  baseUrl: '/'
+  baseUrl: '/',
+  isDevServer: helpers.isWebpackDevServer()
 }
 
 /*
@@ -23,247 +26,241 @@ const METADATA = {
  *
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
-module.exports = {
-  /*
-   * Static metadata for index.html
-   *
-   * See: (custom attribute)
-   */
-  metadata: METADATA,
+module.exports = function (options) {
+  var isProd = options.env === 'production'
 
-  /*
-   * Cache generated modules and chunks to improve performance for multiple incremental builds.
-   * This is enabled by default in watch mode.
-   * You can pass false to disable it.
-   *
-   * See: http://webpack.github.io/docs/configuration.html#cache
-   */
-  // cache: false,
-
-  /*
-   * The entry point for the bundle
-   * Our Angular.js app
-   *
-   * See: http://webpack.github.io/docs/configuration.html#entry
-   */
-  entry: {
-    'polyfills': './src/polyfills.ts',
-    'vendor': './src/vendor.ts',
-    'main': './src/main.ts'
-  },
-
-  /*
-   * Options affecting the resolving of modules.
-   *
-   * See: http://webpack.github.io/docs/configuration.html#resolve
-   */
-  resolve: {
+  return {
     /*
-     * An array of extensions that should be used to resolve modules.
+     * Static metadata for index.html
      *
-     * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
+     * See: (custom attribute)
      */
-    extensions: [ '', '.ts', '.js', '.scss' ],
+    metadata: METADATA,
 
-    // Make sure root is src
-    root: helpers.root('src'),
-
-    // remove other default values
-    modulesDirectories: [ 'node_modules' ],
-
-    packageAlias: 'browser'
-
-  },
-
-  output: {
-    publicPath: '/client/'
-  },
-
-  /*
-   * Options affecting the normal modules.
-   *
-   * See: http://webpack.github.io/docs/configuration.html#module
-   */
-  module: {
     /*
-     * An array of applied pre and post loaders.
+     * Cache generated modules and chunks to improve performance for multiple incremental builds.
+     * This is enabled by default in watch mode.
+     * You can pass false to disable it.
      *
-     * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
+     * See: http://webpack.github.io/docs/configuration.html#cache
      */
-    preLoaders: [
+    // cache: false,
+
+    /*
+     * The entry point for the bundle
+     * Our Angular.js app
+     *
+     * See: http://webpack.github.io/docs/configuration.html#entry
+     */
+    entry: {
+      'polyfills': './src/polyfills.ts',
+      'vendor': './src/vendor.ts',
+      'main': './src/main.ts'
+    },
+
+    /*
+     * Options affecting the resolving of modules.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#resolve
+     */
+    resolve: {
+      /*
+       * An array of extensions that should be used to resolve modules.
+       *
+       * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
+       */
+      extensions: [ '', '.ts', '.js', '.scss' ],
+
+      // Make sure root is src
+      root: helpers.root('src'),
+
+      // remove other default values
+      modulesDirectories: [ 'node_modules' ]
+    },
+
+    output: {
+      publicPath: '/client/'
+    },
+
+    /*
+     * Options affecting the normal modules.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#module
+     */
+    module: {
+      /*
+       * An array of applied pre and post loaders.
+       *
+       * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
+       */
+      preLoaders: [
+        {
+          test: /\.ts$/,
+          loader: 'string-replace-loader',
+          query: {
+            search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
+            replace: '$1.import($3).then(mod => (mod.__esModule && mod.default) ? mod.default : mod)',
+            flags: 'g'
+          },
+          include: [helpers.root('src')]
+        }
+      ],
 
       /*
-       * Tslint loader support for *.ts files
+       * An array of automatically applied loaders.
        *
-       * See: https://github.com/wbuchwalter/tslint-loader
+       * IMPORTANT: The loaders here are resolved relative to the resource which they are applied to.
+       * This means they are not resolved relative to the configuration file.
+       *
+       * See: http://webpack.github.io/docs/configuration.html#module-loaders
        */
-      // { test: /\.ts$/, loader: 'tslint-loader', exclude: [ helpers.root('node_modules') ] },
+      loaders: [
+
+        /*
+         * Typescript loader support for .ts and Angular 2 async routes via .async.ts
+         *
+         * See: https://github.com/s-panferov/awesome-typescript-loader
+         */
+        {
+          test: /\.ts$/,
+          loaders: [
+            '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
+            'awesome-typescript-loader',
+            'angular2-template-loader'
+          ],
+          exclude: [/\.(spec|e2e)\.ts$/]
+        },
+
+        /*
+         * Json loader support for *.json files.
+         *
+         * See: https://github.com/webpack/json-loader
+         */
+        {
+          test: /\.json$/,
+          loader: 'json-loader'
+        },
+
+        {
+          test: /\.(sass|scss)$/,
+          loaders: ['css-to-string-loader', 'css-loader?sourceMap', 'resolve-url', 'sass-loader?sourceMap']
+        },
+        { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000&minetype=application/font-woff' },
+        { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file' },
+
+        /* Raw loader support for *.html
+         * Returns file content as string
+         *
+         * See: https://github.com/webpack/raw-loader
+         */
+        {
+          test: /\.html$/,
+          loader: 'raw-loader',
+          exclude: [ helpers.root('src/index.html') ]
+        }
+
+      ]
+
+    },
+
+    sassLoader: {
+      precision: 10
+    },
+
+    /*
+     * Add additional plugins to the compiler.
+     *
+     * See: http://webpack.github.io/docs/configuration.html#plugins
+     */
+    plugins: [
+      new AssetsPlugin({
+        path: helpers.root('dist'),
+        filename: 'webpack-assets.json',
+        prettyPrint: true
+      }),
 
       /*
-       * Source map loader support for *.js files
-       * Extracts SourceMaps for source files that as added as sourceMappingURL comment.
+       * Plugin: ForkCheckerPlugin
+       * Description: Do type checking in a separate process, so webpack don't need to wait.
        *
-       * See: https://github.com/webpack/source-map-loader
+       * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
        */
-      {
-        test: /\.js$/,
-        loader: 'source-map-loader',
-        exclude: [
-          // these packages have problems with their sourcemaps
-          helpers.root('node_modules/rxjs'),
-          helpers.root('node_modules/@angular')
-        ]
-      }
+      new ForkCheckerPlugin(),
 
+      /*
+       * Plugin: CommonsChunkPlugin
+       * Description: Shares common code between the pages.
+       * It identifies common modules and put them into a commons chunk.
+       *
+       * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
+       * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
+       */
+      new webpack.optimize.CommonsChunkPlugin({
+        name: [ 'polyfills', 'vendor' ].reverse()
+      }),
+
+      /**
+       * Plugin: ContextReplacementPlugin
+       * Description: Provides context to Angular's use of System.import
+       *
+       * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
+       * See: https://github.com/angular/angular/issues/11580
+      */
+      new ContextReplacementPlugin(
+        // The (\\|\/) piece accounts for path separators in *nix and Windows
+        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+        helpers.root('src') // location of your src
+      ),
+
+      /*
+       * Plugin: CopyWebpackPlugin
+       * Description: Copy files and directories in webpack.
+       *
+       * Copies project static assets.
+       *
+       * See: https://www.npmjs.com/package/copy-webpack-plugin
+       */
+      new CopyWebpackPlugin([
+        {
+          from: 'src/assets',
+          to: 'assets'
+        },
+        {
+          from: 'node_modules/webtorrent/webtorrent.min.js',
+          to: 'assets/webtorrent'
+        }
+      ]),
+
+      /*
+       * Plugin: HtmlWebpackPlugin
+       * Description: Simplifies creation of HTML files to serve your webpack bundles.
+       * This is especially useful for webpack bundles that include a hash in the filename
+       * which changes every compilation.
+       *
+       * See: https://github.com/ampedandwired/html-webpack-plugin
+       */
+      new HtmlWebpackPlugin({
+        template: 'src/index.html',
+        chunksSortMode: 'dependency'
+      }),
+
+      new WebpackNotifierPlugin({ alwaysNotify: true })
     ],
 
     /*
-     * An array of automatically applied loaders.
+     * Include polyfills or mocks for various node stuff
+     * Description: Node configuration
      *
-     * IMPORTANT: The loaders here are resolved relative to the resource which they are applied to.
-     * This means they are not resolved relative to the configuration file.
-     *
-     * See: http://webpack.github.io/docs/configuration.html#module-loaders
+     * See: https://webpack.github.io/docs/configuration.html#node
      */
-    loaders: [
-
-      /*
-       * Typescript loader support for .ts and Angular 2 async routes via .async.ts
-       *
-       * See: https://github.com/s-panferov/awesome-typescript-loader
-       */
-      {
-        test: /\.ts$/,
-        loader: 'awesome-typescript-loader',
-        exclude: [/\.(spec|e2e)\.ts$/]
-      },
-
-      /*
-       * Json loader support for *.json files.
-       *
-       * See: https://github.com/webpack/json-loader
-       */
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-
-      {
-        test: /\.scss$/,
-        exclude: /node_modules/,
-        loaders: [ 'raw-loader', 'sass-loader' ]
-      },
-
-      {
-        test: /\.(woff2?|ttf|eot|svg)$/,
-        loader: 'url?limit=10000&name=assets/fonts/[hash].[ext]'
-      },
-
-      /* Raw loader support for *.html
-       * Returns file content as string
-       *
-       * See: https://github.com/webpack/raw-loader
-       */
-      {
-        test: /\.html$/,
-        loader: 'raw-loader',
-        exclude: [ helpers.root('src/index.html') ]
-      }
-
-    ]
-
-  },
-
-  sassLoader: {
-    precision: 10
-  },
-
-  /*
-   * Add additional plugins to the compiler.
-   *
-   * See: http://webpack.github.io/docs/configuration.html#plugins
-   */
-  plugins: [
-
-    /*
-     * Plugin: ForkCheckerPlugin
-     * Description: Do type checking in a separate process, so webpack don't need to wait.
-     *
-     * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
-     */
-    new ForkCheckerPlugin(),
-
-    /*
-     * Plugin: OccurenceOrderPlugin
-     * Description: Varies the distribution of the ids to get the smallest id length
-     * for often used ids.
-     *
-     * See: https://webpack.github.io/docs/list-of-plugins.html#occurrenceorderplugin
-     * See: https://github.com/webpack/docs/wiki/optimization#minimize
-     */
-    new webpack.optimize.OccurenceOrderPlugin(true),
-
-    /*
-     * Plugin: CommonsChunkPlugin
-     * Description: Shares common code between the pages.
-     * It identifies common modules and put them into a commons chunk.
-     *
-     * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
-     * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
-     */
-    new webpack.optimize.CommonsChunkPlugin({
-      name: [ 'polyfills', 'vendor' ].reverse()
-    }),
-
-    /*
-     * Plugin: CopyWebpackPlugin
-     * Description: Copy files and directories in webpack.
-     *
-     * Copies project static assets.
-     *
-     * See: https://www.npmjs.com/package/copy-webpack-plugin
-     */
-    new CopyWebpackPlugin([
-      {
-        from: 'src/assets',
-        to: 'assets'
-      },
-      {
-        from: 'node_modules/webtorrent/webtorrent.min.js',
-        to: 'assets/webtorrent'
-      }
-    ]),
-
-    /*
-     * Plugin: HtmlWebpackPlugin
-     * Description: Simplifies creation of HTML files to serve your webpack bundles.
-     * This is especially useful for webpack bundles that include a hash in the filename
-     * which changes every compilation.
-     *
-     * See: https://github.com/ampedandwired/html-webpack-plugin
-     */
-    new HtmlWebpackPlugin({
-      template: 'src/index.html',
-      chunksSortMode: 'dependency'
-    }),
-
-    new WebpackNotifierPlugin({ alwaysNotify: true })
-  ],
-
-  /*
-   * Include polyfills or mocks for various node stuff
-   * Description: Node configuration
-   *
-   * See: https://webpack.github.io/docs/configuration.html#node
-   */
-  node: {
-    global: 'window',
-    crypto: 'empty',
-    fs: 'empty',
-    events: true,
-    module: false,
-    clearImmediate: false,
-    setImmediate: false
+    node: {
+      global: 'window',
+      crypto: 'empty',
+      fs: 'empty',
+      events: true,
+      module: false,
+      clearImmediate: false,
+      setImmediate: false
+    }
   }
-
 }

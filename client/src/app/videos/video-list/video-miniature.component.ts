@@ -1,16 +1,12 @@
-import { DatePipe } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { SortField, Video, VideoService } from '../shared';
 import { User } from '../../shared';
 
 @Component({
   selector: 'my-video-miniature',
-  styles: [ require('./video-miniature.component.scss') ],
-  template: require('./video-miniature.component.html'),
-  directives: [ ROUTER_DIRECTIVES ],
-  pipes: [ DatePipe ]
+  styleUrls: [ './video-miniature.component.scss' ],
+  templateUrl: './video-miniature.component.html'
 })
 
 export class VideoMiniatureComponent {
@@ -40,7 +36,7 @@ export class VideoMiniatureComponent {
     if (confirm('Do you really want to remove this video?')) {
       this.videoService.removeVideo(id).subscribe(
         status => this.removed.emit(true),
-        error => alert(error)
+        error => alert(error.text)
       );
     }
   }

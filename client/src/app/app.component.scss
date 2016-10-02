@@ -12,40 +12,6 @@ header div {
   margin-bottom: 30px;
 }
 
-menu {
-  @media screen and (max-width: 600px) {
-    margin-right: 3px !important;
-    padding: 3px !important;
-    min-height: 400px !important;
-  }
-
-  min-height: 600px;
-  margin-right: 20px;
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
-
-  .panel-button {
-    margin: 8px;
-    cursor: pointer;
-    transition: margin 0.2s;
-
-    &:hover {
-      margin-left: 15px;
-    }
-
-    a {
-      color: #333333;
-    }
-  }
-
-  .glyphicon {
-    margin: 5px;
-  }
-}
-
-.panel-block:not(:last-child) {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
 .router-outlet-container {
   @media screen and (max-width: 400px) {
     padding: 0 3px 0 3px;

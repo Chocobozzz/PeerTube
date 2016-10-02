@@ -1,0 +1,29 @@
+<h3>Friends list</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th class="table-column-id">ID</th>
+      <th>Url</th>
+      <th>Score</th>
+      <th>Created Date</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let friend of friends">
+      <td>{{ friend.id }}</td>
+      <td>{{ friend.url }}</td>
+      <td>{{ friend.score }}</td>
+      <td>{{ friend.createdDate | date: 'medium' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<a *ngIf="friends?.length !== 0" class="add-user btn btn-danger pull-left" (click)="quitFriends()">
+  Quit friends
+</a>
+
+<a *ngIf="friends?.length === 0" class="add-user btn btn-success pull-right" [routerLink]="['/admin/friends/add']">
+  Make friends
+</a>

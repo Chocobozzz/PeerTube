@@ -1,11 +1,11 @@
-import { RouterConfig } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { VideoAddComponent } from './video-add';
 import { VideoListComponent } from './video-list';
 import { VideosComponent } from './videos.component';
 import { VideoWatchComponent } from './video-watch';
 
-export const VideosRoutes: RouterConfig = [
+export const VideosRoutes: Routes = [
   {
     path: 'videos',
     component: VideosComponent,

@@ -5,23 +5,29 @@ const friends = require('../../lib/friends')
 const logger = require('../../helpers/logger')
 
 const validatorsPod = {
-  makeFriends: makeFriends,
-  podsAdd: podsAdd
+  makeFriends,
+  podsAdd
 }
 
 function makeFriends (req, res, next) {
-  friends.hasFriends(function (err, hasFriends) {
-    if (err) {
-      logger.error('Cannot know if we have friends.', { error: err })
-      res.sendStatus(500)
-    }
+  req.checkBody('urls', 'Should have an array of unique urls').isEachUniqueUrlValid()
 
-    if (hasFriends === true) {
-      // We need to quit our friends before make new ones
-      res.sendStatus(409)
-    } else {
-      return next()
-    }
+  logger.debug('Checking makeFriends parameters', { parameters: req.body })
+
+  checkErrors(req, res, function () {
+    friends.hasFriends(function (err, hasFriends) {
+      if (err) {
+        logger.error('Cannot know if we have friends.', { error: err })
+        res.sendStatus(500)
+      }
+
+      if (hasFriends === true) {
+        // We need to quit our friends before make new ones
+        res.sendStatus(409)
+      } else {
+        return next()
+      }
+    })
   })
 }
 

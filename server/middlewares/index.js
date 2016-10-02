@@ -1,19 +1,23 @@
 'use strict'
 
-const oauth = require('./oauth')
-const pagination = require('./pagination')
+const adminMiddleware = require('./admin')
+const oauthMiddleware = require('./oauth')
+const paginationMiddleware = require('./pagination')
+const podsMiddleware = require('./pods')
 const validatorsMiddleware = require('./validators')
-const search = require('./search')
-const sort = require('./sort')
+const searchMiddleware = require('./search')
+const sortMiddleware = require('./sort')
 const secureMiddleware = require('./secure')
 
 const middlewares = {
-  oauth: oauth,
-  pagination: pagination,
-  validators: validatorsMiddleware,
-  search: search,
-  sort: sort,
-  secure: secureMiddleware
+  admin: adminMiddleware,
+  oauth: oauthMiddleware,
+  pagination: paginationMiddleware,
+  pods: podsMiddleware,
+  search: searchMiddleware,
+  secure: secureMiddleware,
+  sort: sortMiddleware,
+  validators: validatorsMiddleware
 }
 
 // ---------------------------------------------------------------------------

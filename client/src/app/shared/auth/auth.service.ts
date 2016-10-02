@@ -1,32 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response, URLSearchParams } from '@angular/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
 import { AuthStatus } from './auth-status.model';
-import { User } from './user.model';
+import { AuthUser } from './auth-user.model';
+import { RestExtractor } from '../rest';
 
 @Injectable()
 export class AuthService {
-  private static BASE_CLIENT_URL = '/api/v1/users/client';
+  private static BASE_CLIENT_URL = '/api/v1/clients/local';
   private static BASE_TOKEN_URL = '/api/v1/users/token';
+  private static BASE_USER_INFORMATIONS_URL = '/api/v1/users/me';
 
   loginChangedSource: Observable<AuthStatus>;
 
   private clientId: string;
   private clientSecret: string;
   private loginChanged: Subject<AuthStatus>;
-  private user: User = null;
+  private user: AuthUser = null;
 
-  constructor(private http: Http) {
+  constructor(
+    private http: Http,
+    private restExtractor: RestExtractor,
+    private router: Router
+   ) {
     this.loginChanged = new Subject<AuthStatus>();
     this.loginChangedSource = this.loginChanged.asObservable();
 
     // Fetch the client_id/client_secret
     // FIXME: save in local storage?
     this.http.get(AuthService.BASE_CLIENT_URL)
-      .map(res => res.json())
-      .catch(this.handleError)
+      .map(this.restExtractor.extractDataGet)
+      .catch((res) => this.restExtractor.handleError(res))
       .subscribe(
         result => {
           this.clientId = result.client_id;
@@ -34,12 +41,15 @@ export class AuthService {
           console.log('Client credentials loaded.');
         },
         error => {
-          alert(error);
+          alert(
+            `Cannot retrieve OAuth Client credentials: ${error.text}. \n` +
+            'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
+          );
         }
       );
 
     // Return null if there is nothing to load
-    this.user = User.load();
+    this.user = AuthUser.load();
   }
 
   getRefreshToken() {
@@ -64,8 +74,14 @@ export class AuthService {
     return this.user.getTokenType();
   }
 
-  getUser(): User {
+  getUser(): AuthUser {
     return this.user;
+  }
+
+  isAdmin() {
+    if (this.user === null) return false;
+
+    return this.user.isAdmin();
   }
 
   isLoggedIn() {
@@ -94,21 +110,23 @@ export class AuthService {
     };
 
     return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
-                    .map(res => res.json())
+                    .map(this.restExtractor.extractDataGet)
                     .map(res => {
                       res.username = username;
                       return res;
                     })
+                    .flatMap(res => this.fetchUserInformations(res))
                     .map(res => this.handleLogin(res))
-                    .catch(this.handleError);
+                    .catch((res) => this.restExtractor.handleError(res));
   }
 
   logout() {
     // TODO: make an HTTP request to revoke the tokens
     this.user = null;
-    User.flush();
 
-    this.setStatus(AuthStatus.LoggedIn);
+    AuthUser.flush();
+
+    this.setStatus(AuthStatus.LoggedOut);
   }
 
   refreshAccessToken() {
@@ -131,36 +149,64 @@ export class AuthService {
     };
 
     return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
-                    .map(res => res.json())
+                    .map(this.restExtractor.extractDataGet)
                     .map(res => this.handleRefreshToken(res))
-                    .catch(this.handleError);
+                    .catch((res: Response) => {
+                      // The refresh token is invalid?
+                      if (res.status === 400 && res.json() && res.json().error === 'invalid_grant') {
+                        console.error('Cannot refresh token -> logout...');
+                        this.logout();
+                        this.router.navigate(['/login']);
+
+                        return Observable.throw({
+                          json: '',
+                          text: 'You need to reconnect.'
+                        });
+                      }
+
+                      return this.restExtractor.handleError(res);
+                    });
   }
 
-  private setStatus(status: AuthStatus) {
-    this.loginChanged.next(status);
+  private fetchUserInformations (obj: any) {
+    // Do not call authHttp here to avoid circular dependencies headaches
+
+    const headers = new Headers();
+    headers.set('Authorization', `Bearer ${obj.access_token}`);
+
+    return this.http.get(AuthService.BASE_USER_INFORMATIONS_URL, { headers })
+             .map(res => res.json())
+             .map(res => {
+               obj.id = res.id;
+               obj.role = res.role;
+               return obj;
+             }
+    );
   }
 
   private handleLogin (obj: any) {
+    const id = obj.id;
     const username = obj.username;
-    const hash_tokens = {
+    const role = obj.role;
+    const hashTokens = {
       access_token: obj.access_token,
       token_type: obj.token_type,
       refresh_token: obj.refresh_token
     };
 
-    this.user = new User(username, hash_tokens);
+    this.user = new AuthUser({ id, username, role }, hashTokens);
     this.user.save();
 
     this.setStatus(AuthStatus.LoggedIn);
-  }
-
-  private handleError (error: Response) {
-    console.error(error);
-    return Observable.throw(error.json() || { error: 'Server error' });
   }
 
   private handleRefreshToken (obj: any) {
     this.user.refreshTokens(obj.access_token, obj.refresh_token);
     this.user.save();
   }
+
+  private setStatus(status: AuthStatus) {
+    this.loginChanged.next(status);
+  }
+
 }

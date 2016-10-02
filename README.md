@@ -60,6 +60,7 @@ Want to see in action?
 
    * You can directly test in your browser with this [demo server](http://peertube.cpy.re). Don't forget to use the latest version of Firefox/Chromium/(Opera?) and check your firewall configuration (for WebRTC)
    * You can find [a video](https://vimeo.com/164881662 "Yes Vimeo, please don't judge me") to see how the "decentralization feature" looks like
+   * Experimental demo servers that share videos (they are in the same network): [peertube2](http://peertube2.cpy.re), [peertube3](http://peertube3.cpy.re). Since I do experiments with them, sometimes they might not work correctly.
 
 ## Why
 
@@ -95,10 +96,12 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [ ] Validate the prototype (test PeerTube in a real world with many pods and videos)
 - [ ] Manage API breaks
 - [ ] Add "DDOS" security (check if a pod don't send too many requests for example)
-- [ ] Admin panel
-  - [ ] Stats about the network (how many friends, how many requests per hour...)
-  - [ ] Stats about videos
-  - [ ] Manage users (create/remove)
+- [X] Admin panel
+  - [X] Stats
+  - [X] Friends list
+  - [X] Manage users (create/remove)
+- [ ] User playlists
+- [ ] User subscriptions (by tags, author...)
 
 
 ## Installation
@@ -111,6 +114,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 ### Dependencies
 
   * **NodeJS >= 4.2**
+  * **npm >= 3.0**
   * OpenSSL (cli)
   * MongoDB
   * ffmpeg xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin (for electron)
@@ -123,7 +127,8 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
         # apt-get update
         # apt-get install ffmpeg mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin
-        # npm install -g electron-prebuilt
+        # npm install -g npm@3
+        # npm install -g electron
 
 #### Other distribution... (PR welcome)
 
@@ -159,6 +164,10 @@ Then edit the `config/production.yaml` file according to your webserver configur
 Finally, run the server with the `production` `NODE_ENV` variable set.
 
     $ NODE_ENV=production npm start
+
+**Nginx template** (reverse proxy): https://github.com/Chocobozzz/PeerTube/tree/master/support/nginx
+
+**Systemd template**: https://github.com/Chocobozzz/PeerTube/tree/master/support/systemd
 
 ### Other commands
 

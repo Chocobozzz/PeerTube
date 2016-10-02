@@ -4,7 +4,7 @@ const checkErrors = require('./utils').checkErrors
 const logger = require('../../helpers/logger')
 
 const validatorsPagination = {
-  pagination: pagination
+  pagination
 }
 
 function pagination (req, res, next) {

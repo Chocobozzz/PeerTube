@@ -4,13 +4,17 @@ const express = require('express')
 
 const router = express.Router()
 
+const clientsController = require('./clients')
 const podsController = require('./pods')
 const remoteController = require('./remote')
+const requestsController = require('./requests')
 const usersController = require('./users')
 const videosController = require('./videos')
 
+router.use('/clients', clientsController)
 router.use('/pods', podsController)
 router.use('/remote', remoteController)
+router.use('/requests', requestsController)
 router.use('/users', usersController)
 router.use('/videos', videosController)
 router.use('/*', badRequest)

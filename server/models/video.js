@@ -11,8 +11,9 @@ const magnet = require('magnet-uri')
 const mongoose = require('mongoose')
 
 const constants = require('../initializers/constants')
-const customValidators = require('../helpers/custom-validators')
+const customVideosValidators = require('../helpers/custom-validators').videos
 const logger = require('../helpers/logger')
+const modelUtils = require('./utils')
 const utils = require('../helpers/utils')
 
 const http = config.get('webserver.https') === true ? 'https' : 'http'
@@ -42,34 +43,35 @@ const VideoSchema = mongoose.Schema({
   }
 })
 
-VideoSchema.path('name').validate(customValidators.isVideoNameValid)
-VideoSchema.path('description').validate(customValidators.isVideoDescriptionValid)
-VideoSchema.path('magnetUri').validate(customValidators.isVideoMagnetUriValid)
-VideoSchema.path('podUrl').validate(customValidators.isVideoPodUrlValid)
-VideoSchema.path('author').validate(customValidators.isVideoAuthorValid)
-VideoSchema.path('duration').validate(customValidators.isVideoDurationValid)
+VideoSchema.path('name').validate(customVideosValidators.isVideoNameValid)
+VideoSchema.path('description').validate(customVideosValidators.isVideoDescriptionValid)
+VideoSchema.path('magnetUri').validate(customVideosValidators.isVideoMagnetUriValid)
+VideoSchema.path('podUrl').validate(customVideosValidators.isVideoPodUrlValid)
+VideoSchema.path('author').validate(customVideosValidators.isVideoAuthorValid)
+VideoSchema.path('duration').validate(customVideosValidators.isVideoDurationValid)
 // The tumbnail can be the path or the data in base 64
 // The pre save hook will convert the base 64 data in a file on disk and replace the thumbnail key by the filename
 VideoSchema.path('thumbnail').validate(function (value) {
-  return customValidators.isVideoThumbnailValid(value) || customValidators.isVideoThumbnail64Valid(value)
+  return customVideosValidators.isVideoThumbnailValid(value) || customVideosValidators.isVideoThumbnail64Valid(value)
 })
-VideoSchema.path('tags').validate(customValidators.isVideoTagsValid)
+VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
 
 VideoSchema.methods = {
-  isOwned: isOwned,
-  toFormatedJSON: toFormatedJSON,
-  toRemoteJSON: toRemoteJSON
+  isOwned,
+  toFormatedJSON,
+  toRemoteJSON
 }
 
 VideoSchema.statics = {
-  getDurationFromFile: getDurationFromFile,
-  list: list,
-  listByUrlAndMagnet: listByUrlAndMagnet,
-  listByUrls: listByUrls,
-  listOwned: listOwned,
-  listRemotes: listRemotes,
-  load: load,
-  search: search
+  getDurationFromFile,
+  listForApi,
+  listByUrlAndMagnet,
+  listByUrls,
+  listOwned,
+  listOwnedByAuthor,
+  listRemotes,
+  load,
+  search
 }
 
 VideoSchema.pre('remove', function (next) {
@@ -101,8 +103,8 @@ VideoSchema.pre('save', function (next) {
   const tasks = []
 
   if (video.isOwned()) {
-    const videoPath = pathUtils.join(uploadsDir, video.filename)
-    this.podUrl = http + '://' + host + ':' + port
+    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.UPLOAD_DIR, video.filename)
+    this.podUrl = constants.CONFIG.WEBSERVER.URL
 
     tasks.push(
       // TODO: refractoring
@@ -174,7 +176,7 @@ function toRemoteJSON (callback) {
   const self = this
 
   // Convert thumbnail to base64
-  fs.readFile(pathUtils.join(thumbnailsDir, this.thumbnail), function (err, thumbnailData) {
+  fs.readFile(pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, this.thumbnail), function (err, thumbnailData) {
     if (err) {
       logger.error('Cannot read the thumbnail of the video')
       return callback(err)
@@ -207,9 +209,9 @@ function getDurationFromFile (videoPath, callback) {
   })
 }
 
-function list (start, count, sort, callback) {
+function listForApi (start, count, sort, callback) {
   const query = {}
-  return findWithCount.call(this, query, start, count, sort, callback)
+  return modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
 function listByUrlAndMagnet (fromUrl, magnetUri, callback) {
@@ -223,6 +225,10 @@ function listByUrls (fromUrls, callback) {
 function listOwned (callback) {
   // If filename is not null this is *our* video
   this.find({ filename: { $ne: null } }, callback)
+}
+
+function listOwnedByAuthor (author, callback) {
+  this.find({ filename: { $ne: null }, author: author }, callback)
 }
 
 function listRemotes (callback) {
@@ -242,36 +248,17 @@ function search (value, field, start, count, sort, callback) {
     query[field] = new RegExp(value)
   }
 
-  findWithCount.call(this, query, start, count, sort, callback)
+  modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
 // ---------------------------------------------------------------------------
 
-function findWithCount (query, start, count, sort, callback) {
-  const self = this
-
-  parallel([
-    function (asyncCallback) {
-      self.find(query).skip(start).limit(count).sort(sort).exec(asyncCallback)
-    },
-    function (asyncCallback) {
-      self.count(query, asyncCallback)
-    }
-  ], function (err, results) {
-    if (err) return callback(err)
-
-    const videos = results[0]
-    const totalVideos = results[1]
-    return callback(null, videos, totalVideos)
-  })
-}
-
 function removeThumbnail (video, callback) {
-  fs.unlink(thumbnailsDir + video.thumbnail, callback)
+  fs.unlink(constants.CONFIG.STORAGE.THUMBNAILS_DIR + video.thumbnail, callback)
 }
 
 function removeFile (video, callback) {
-  fs.unlink(uploadsDir + video.filename, callback)
+  fs.unlink(constants.CONFIG.STORAGE.UPLOAD_DIR + video.filename, callback)
 }
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
@@ -288,7 +275,7 @@ function createThumbnail (videoPath, callback) {
     })
     .thumbnail({
       count: 1,
-      folder: thumbnailsDir,
+      folder: constants.CONFIG.STORAGE.THUMBNAILS_DIR,
       size: constants.THUMBNAILS_SIZE,
       filename: filename
     })
@@ -300,7 +287,7 @@ function generateThumbnailFromBase64 (data, callback) {
     if (err) return callback(err)
 
     const thumbnailName = randomString + '.jpg'
-    fs.writeFile(thumbnailsDir + thumbnailName, data, { encoding: 'base64' }, function (err) {
+    fs.writeFile(constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName, data, { encoding: 'base64' }, function (err) {
       if (err) return callback(err)
 
       return callback(null, thumbnailName)

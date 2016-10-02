@@ -3,74 +3,35 @@
     "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "noImplicitAny": false,
-    "noEmitHelpers": true
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "strictNullChecks": false,
+    "baseUrl": "./src",
+    "paths": [
+    ],
+    "lib": [
+      "dom",
+      "es6"
+    ],
+    "types": [
+      "node",
+      "source-map",
+      "uglify-js",
+      "webpack"
+    ]
   },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
   "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true
+    "forkChecker": true,
+    "useWebpackText": true
   },
   "compileOnSave": false,
   "buildOnSave": false,
-  "atom": {
-    "rewriteTsconfig": true
-  },
-  "filesGlob": [
-    "**/*.ts",
-    "!node_modules/**"
-  ],
-  "exclude": [
-    "node_modules",
-    "typings/main",
-    "typings/main.d.ts"
-  ],
-  "files": [
-    "src/app/app.component.ts",
-    "src/app/app.routes.ts",
-    "src/app/friends/friend.service.ts",
-    "src/app/friends/index.ts",
-    "src/app/login/index.ts",
-    "src/app/login/login.component.ts",
-    "src/app/login/login.routes.ts",
-    "src/app/shared/auth/auth-http.service.ts",
-    "src/app/shared/auth/auth-status.model.ts",
-    "src/app/shared/auth/auth.service.ts",
-    "src/app/shared/auth/index.ts",
-    "src/app/shared/auth/user.model.ts",
-    "src/app/shared/index.ts",
-    "src/app/shared/search/index.ts",
-    "src/app/shared/search/search-field.type.ts",
-    "src/app/shared/search/search.component.ts",
-    "src/app/shared/search/search.model.ts",
-    "src/app/shared/search/search.service.ts",
-    "src/app/videos/index.ts",
-    "src/app/videos/shared/index.ts",
-    "src/app/videos/shared/loader/index.ts",
-    "src/app/videos/shared/loader/loader.component.ts",
-    "src/app/videos/shared/pagination.model.ts",
-    "src/app/videos/shared/sort-field.type.ts",
-    "src/app/videos/shared/video.model.ts",
-    "src/app/videos/shared/video.service.ts",
-    "src/app/videos/video-add/index.ts",
-    "src/app/videos/video-add/video-add.component.ts",
-    "src/app/videos/video-list/index.ts",
-    "src/app/videos/video-list/video-list.component.ts",
-    "src/app/videos/video-list/video-miniature.component.ts",
-    "src/app/videos/video-list/video-sort.component.ts",
-    "src/app/videos/video-watch/index.ts",
-    "src/app/videos/video-watch/video-watch.component.ts",
-    "src/app/videos/video-watch/webtorrent.service.ts",
-    "src/app/videos/videos.component.ts",
-    "src/app/videos/videos.routes.ts",
-    "src/custom-typings.d.ts",
-    "src/main.ts",
-    "src/polyfills.ts",
-    "src/vendor.ts",
-    "typings/globals/es6-shim/index.d.ts",
-    "typings/globals/jasmine/index.d.ts",
-    "typings/globals/node/index.d.ts",
-    "typings/index.d.ts"
-  ]
+  "atom": { "rewriteTsconfig": false }
 }

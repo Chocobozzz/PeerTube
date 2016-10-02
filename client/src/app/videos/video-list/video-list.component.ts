@@ -1,39 +1,30 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
-import { ActivatedRoute, Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { PAGINATION_DIRECTIVES } from 'ng2-bootstrap/components/pagination';
-
 import {
-  LoaderComponent,
-  Pagination,
   SortField,
   Video,
   VideoService
 } from '../shared';
-import { AuthService, Search, SearchField, User } from '../../shared';
-import { VideoMiniatureComponent } from './video-miniature.component';
-import { VideoSortComponent } from './video-sort.component';
+import { AuthService, AuthUser, RestPagination, Search, SearchField } from '../../shared';
 import { SearchService } from '../../shared';
 
 @Component({
   selector: 'my-videos-list',
-  styles: [ require('./video-list.component.scss') ],
-  pipes: [ AsyncPipe ],
-  template: require('./video-list.component.html'),
-  directives: [ LoaderComponent, PAGINATION_DIRECTIVES, ROUTER_DIRECTIVES, VideoMiniatureComponent, VideoSortComponent ]
+  styleUrls: [ './video-list.component.scss' ],
+  templateUrl: './video-list.component.html'
 })
 
 export class VideoListComponent implements OnInit, OnDestroy {
   loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  pagination: Pagination = {
+  pagination: RestPagination = {
     currentPage: 1,
     itemsPerPage: 9,
     totalItems: null
   };
   sort: SortField;
-  user: User = null;
+  user: AuthUser = null;
   videos: Video[] = [];
 
   private search: Search;
@@ -51,7 +42,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
-      this.user = User.load();
+      this.user = AuthUser.load();
     }
 
     // Subscribe to route changes
@@ -66,6 +57,8 @@ export class VideoListComponent implements OnInit, OnDestroy {
     // Subscribe to search changes
     this.subSearch = this.searchService.searchUpdated.subscribe(search => {
       this.search = search;
+      // Reset pagination
+      this.pagination.currentPage = 1;
 
       this.navigateToNewParams();
     });
@@ -76,7 +69,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
     this.subSearch.unsubscribe();
   }
 
-  getVideos(detectChanges = true) {
+  getVideos() {
     this.loading.next(true);
     this.videos = [];
 
@@ -97,7 +90,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
         this.loading.next(false);
       },
-      error => alert(error)
+      error => alert(error.text)
     );
   }
 
@@ -153,7 +146,11 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
     this.sort = <SortField>routeParams['sort'] || '-createdDate';
 
-    this.pagination.currentPage = parseInt(routeParams['page']) || 1;
+    if (routeParams['page'] !== undefined) {
+      this.pagination.currentPage = parseInt(routeParams['page']);
+    } else {
+      this.pagination.currentPage = 1;
+    }
 
     this.changeDetector.detectChanges();
   }

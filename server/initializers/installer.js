@@ -9,14 +9,16 @@ const path = require('path')
 const series = require('async/series')
 
 const checker = require('./checker')
+const constants = require('./constants')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 
+const Application = mongoose.model('Application')
 const Client = mongoose.model('OAuthClient')
 const User = mongoose.model('User')
 
 const installer = {
-  installApplication: installApplication
+  installApplication
 }
 
 function installApplication (callback) {
@@ -34,7 +36,7 @@ function installApplication (callback) {
     },
 
     function createOAuthUser (callbackAsync) {
-      createOAuthUserIfNotExist(callbackAsync)
+      createOAuthAdminIfNotExist(callbackAsync)
     }
   ], callback)
 }
@@ -80,7 +82,7 @@ function createOAuthClientIfNotExist (callback) {
   })
 }
 
-function createOAuthUserIfNotExist (callback) {
+function createOAuthAdminIfNotExist (callback) {
   checker.usersExist(function (err, exist) {
     if (err) return callback(err)
 
@@ -90,6 +92,7 @@ function createOAuthUserIfNotExist (callback) {
     logger.info('Creating the administrator.')
 
     const username = 'root'
+    const role = constants.USER_ROLES.ADMIN
     let password = ''
 
     // Do not generate a random password for tests
@@ -104,17 +107,20 @@ function createOAuthUserIfNotExist (callback) {
     }
 
     const user = new User({
-      username: username,
-      password: password
+      username,
+      password,
+      role
     })
 
     user.save(function (err, createdUser) {
       if (err) return callback(err)
 
-      logger.info('Username: ' + createdUser.username)
-      logger.info('User password: ' + createdUser.password)
+      logger.info('Username: ' + username)
+      logger.info('User password: ' + password)
 
-      return callback(null)
+      logger.info('Creating Application collection.')
+      const application = new Application({ mongoSchemaVersion: constants.LAST_MONGO_SCHEMA_VERSION })
+      application.save(callback)
     })
   })
 }

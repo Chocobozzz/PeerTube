@@ -14,4 +14,11 @@ uploads
 thumbnails
 config/production.yaml
 ffmpeg
+<<<<<<< HEAD
 torrents
+=======
+.tags
+*.sublime-project
+*.sublime-workspace
+torrents/
+>>>>>>> master

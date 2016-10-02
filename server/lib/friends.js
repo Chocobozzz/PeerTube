@@ -1,6 +1,5 @@
 'use strict'
 
-const config = require('config')
 const each = require('async/each')
 const eachLimit = require('async/eachLimit')
 const eachSeries = require('async/eachSeries')
@@ -11,24 +10,20 @@ const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
-const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
 
-const http = config.get('webserver.https') ? 'https' : 'http'
-const host = config.get('webserver.host')
-const port = config.get('webserver.port')
 const Pod = mongoose.model('Pod')
 const Request = mongoose.model('Request')
 const Video = mongoose.model('Video')
 
 const friends = {
-  addVideoToFriends: addVideoToFriends,
-  hasFriends: hasFriends,
-  getMyCertificate: getMyCertificate,
-  makeFriends: makeFriends,
-  quitFriends: quitFriends,
-  removeVideoToFriends: removeVideoToFriends,
-  sendOwnedVideosToPod: sendOwnedVideosToPod
+  addVideoToFriends,
+  hasFriends,
+  getMyCertificate,
+  makeFriends,
+  quitFriends,
+  removeVideoToFriends,
+  sendOwnedVideosToPod
 }
 
 function addVideoToFriends (video) {
@@ -45,10 +40,10 @@ function hasFriends (callback) {
 }
 
 function getMyCertificate (callback) {
-  fs.readFile(peertubeCrypto.getCertDir() + 'peertube.pub', 'utf8', callback)
+  fs.readFile(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.pub', 'utf8', callback)
 }
 
-function makeFriends (callback) {
+function makeFriends (urls, callback) {
   const podsScore = {}
 
   logger.info('Make friends!')
@@ -57,8 +52,6 @@ function makeFriends (callback) {
       logger.error('Cannot read public cert.')
       return callback(err)
     }
-
-    const urls = config.get('network.friends')
 
     eachSeries(urls, function (url, callbackEach) {
       computeForeignPodsList(url, podsScore, callbackEach)
@@ -205,7 +198,12 @@ function getForeignPodsList (url, callback) {
   request.get(url + path, function (err, response, body) {
     if (err) return callback(err)
 
-    callback(null, JSON.parse(body))
+    try {
+      const json = JSON.parse(body)
+      return callback(null, json)
+    } catch (err) {
+      return callback(err)
+    }
   })
 }
 
@@ -220,7 +218,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       url: pod.url + '/api/' + constants.API_VERSION + '/pods/',
       method: 'POST',
       json: {
-        url: http + '://' + host + ':' + port,
+        url: constants.CONFIG.WEBSERVER.URL,
         publicKey: cert
       }
     }

@@ -14,19 +14,22 @@ const Pod = mongoose.model('Pod')
 const Video = mongoose.model('Video')
 
 let timer = null
+let lastRequestTimestamp = 0
 
 // ---------------------------------------------------------------------------
 
 const RequestSchema = mongoose.Schema({
   request: mongoose.Schema.Types.Mixed,
-  to: [ { type: mongoose.Schema.Types.ObjectId, ref: 'users' } ]
+  to: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Pod' } ]
 })
 
 RequestSchema.statics = {
   activate,
   deactivate,
   flush,
-  forceSend
+  forceSend,
+  list,
+  remainingMilliSeconds
 }
 
 RequestSchema.pre('save', function (next) {
@@ -53,12 +56,19 @@ mongoose.model('Request', RequestSchema)
 
 function activate () {
   logger.info('Requests scheduler activated.')
-  timer = setInterval(makeRequests.bind(this), constants.INTERVAL)
+  lastRequestTimestamp = Date.now()
+
+  const self = this
+  timer = setInterval(function () {
+    lastRequestTimestamp = Date.now()
+    makeRequests.call(self)
+  }, constants.REQUESTS_INTERVAL)
 }
 
 function deactivate () {
   logger.info('Requests scheduler deactivated.')
   clearInterval(timer)
+  timer = null
 }
 
 function flush () {
@@ -70,6 +80,16 @@ function flush () {
 function forceSend () {
   logger.info('Force requests scheduler sending.')
   makeRequests.call(this)
+}
+
+function list (callback) {
+  this.find({ }, callback)
+}
+
+function remainingMilliSeconds () {
+  if (timer === null) return -1
+
+  return constants.REQUESTS_INTERVAL - (Date.now() - lastRequestTimestamp)
 }
 
 // ---------------------------------------------------------------------------
@@ -91,7 +111,13 @@ function makeRequest (toPod, requestsToMake, callback) {
   // The function fire some useful callbacks
   requests.makeSecureRequest(params, function (err, res) {
     if (err || (res.statusCode !== 200 && res.statusCode !== 201 && res.statusCode !== 204)) {
-      logger.error('Error sending secure request to %s pod.', toPod.url, { error: err || new Error('Status code not 20x') })
+      logger.error(
+        'Error sending secure request to %s pod.',
+        toPod.url,
+        {
+          error: err || new Error('Status code not 20x : ' + res.statusCode)
+        }
+      )
 
       return callback(false)
     }
@@ -148,19 +174,14 @@ function makeRequests () {
           return callbackEach()
         }
 
-        // Maybe the pod is not our friend anymore so simply remove them
+        // Maybe the pod is not our friend anymore so simply remove it
         if (!toPod) {
+          logger.info('Removing %d requests of unexisting pod %s.', requestToMake.ids.length, toPodId)
           removePodOf.call(self, requestToMake.ids, toPodId)
           return callbackEach()
         }
 
         makeRequest(toPod, requestToMake.datas, function (success) {
-          if (err) {
-            logger.error('Errors when sent request to %s.', toPod.url, { error: err })
-            // Do not stop the process just for one error
-            return callbackEach()
-          }
-
           if (success === true) {
             logger.debug('Removing requests for %s pod.', toPodId, { requestsIds: requestToMake.ids })
 

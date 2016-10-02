@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams } from '@angular/http';
+import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { Pagination } from './pagination.model';
 import { Search } from '../../shared';
 import { SortField } from './sort-field.type';
-import { AuthHttp, AuthService } from '../../shared';
+import { AuthHttp, AuthService, RestExtractor, RestPagination, RestService, ResultList } from '../../shared';
 import { Video } from './video.model';
 
 @Injectable()
@@ -15,68 +14,51 @@ export class VideoService {
   constructor(
     private authService: AuthService,
     private authHttp: AuthHttp,
-    private http: Http
+    private http: Http,
+    private restExtractor: RestExtractor,
+    private restService: RestService
   ) {}
 
-  getVideo(id: string) {
+  getVideo(id: string): Observable<Video> {
     return this.http.get(VideoService.BASE_VIDEO_URL + id)
-                    .map(res => <Video> res.json())
-                    .catch(this.handleError);
+                    .map(this.restExtractor.extractDataGet)
+                    .catch((res) => this.restExtractor.handleError(res));
   }
 
-  getVideos(pagination: Pagination, sort: SortField) {
-    const params = this.createPaginationParams(pagination);
-
-    if (sort) params.set('sort', sort);
+  getVideos(pagination: RestPagination, sort: SortField) {
+    const params = this.restService.buildRestGetParams(pagination, sort);
 
     return this.http.get(VideoService.BASE_VIDEO_URL, { search: params })
                     .map(res => res.json())
                     .map(this.extractVideos)
-                    .catch(this.handleError);
+                    .catch((res) => this.restExtractor.handleError(res));
   }
 
   removeVideo(id: string) {
     return this.authHttp.delete(VideoService.BASE_VIDEO_URL + id)
-                        .map(res => <number> res.status)
-                        .catch(this.handleError);
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 
-  searchVideos(search: Search, pagination: Pagination, sort: SortField) {
-    const params = this.createPaginationParams(pagination);
+  searchVideos(search: Search, pagination: RestPagination, sort: SortField) {
+    const params = this.restService.buildRestGetParams(pagination, sort);
 
     if (search.field) params.set('field', search.field);
-    if (sort) params.set('sort', sort);
 
     return this.http.get(VideoService.BASE_VIDEO_URL + 'search/' + encodeURIComponent(search.value), { search: params })
-                    .map(res => res.json())
+                    .map(this.restExtractor.extractDataList)
                     .map(this.extractVideos)
-                    .catch(this.handleError);
+                    .catch((res) => this.restExtractor.handleError(res));
   }
 
-  private createPaginationParams(pagination: Pagination) {
-    const params = new URLSearchParams();
-    const start: number = (pagination.currentPage - 1) * pagination.itemsPerPage;
-    const count: number = pagination.itemsPerPage;
-
-    params.set('start', start.toString());
-    params.set('count', count.toString());
-
-    return params;
-  }
-
-  private extractVideos(body: any) {
-    const videos_json = body.data;
-    const totalVideos = body.total;
+  private extractVideos(result: ResultList) {
+    const videosJson = result.data;
+    const totalVideos = result.total;
     const videos = [];
-    for (const video_json of videos_json) {
-      videos.push(new Video(video_json));
+    for (const videoJson of videosJson) {
+      videos.push(new Video(videoJson));
     }
 
     return { videos, totalVideos };
-  }
-
-  private handleError(error: Response) {
-    console.error(error);
-    return Observable.throw(error.json().error || 'Server error');
   }
 }
