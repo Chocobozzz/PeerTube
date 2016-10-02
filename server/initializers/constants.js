@@ -3,10 +3,31 @@
 const config = require('config')
 const path = require('path')
 
-// API version of our pod
+// ---------------------------------------------------------------------------
+
+// API version
 const API_VERSION = 'v1'
 
-const BCRYPT_SALT_SIZE = 10
+// Number of results by default for the pagination
+const PAGINATION_COUNT_DEFAULT = 15
+
+// Sortable columns per schema
+const SEARCHABLE_COLUMNS = {
+  VIDEOS: [ 'name', 'magnetUri', 'podUrl', 'author', 'tags' ]
+}
+
+// Sortable columns per schema
+const SORTABLE_COLUMNS = {
+  USERS: [ 'username', '-username', 'createdDate', '-createdDate' ],
+  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
+}
+
+const OAUTH_LIFETIME = {
+  ACCESS_TOKEN: 3600 * 4, // 4 hours
+  REFRESH_TOKEN: 1209600 // 2 weeks
+}
+
+// ---------------------------------------------------------------------------
 
 const CONFIG = {
   DATABASE: {
@@ -31,6 +52,8 @@ const CONFIG = {
 }
 CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOST + ':' + CONFIG.WEBSERVER.PORT
 
+// ---------------------------------------------------------------------------
+
 const CONSTRAINTS_FIELDS = {
   USERS: {
     USERNAME: { min: 3, max: 20 }, // Length
@@ -48,11 +71,15 @@ const CONSTRAINTS_FIELDS = {
   }
 }
 
+// ---------------------------------------------------------------------------
+
 // Score a pod has when we create it as a friend
 const FRIEND_SCORE = {
   BASE: 100,
   MAX: 1000
 }
+
+// ---------------------------------------------------------------------------
 
 const MONGO_MIGRATION_SCRIPTS = [
   {
@@ -70,16 +97,7 @@ const MONGO_MIGRATION_SCRIPTS = [
 ]
 const LAST_MONGO_SCHEMA_VERSION = 15
 
-// Time to wait between requests to the friends (10 min)
-let REQUESTS_INTERVAL = 600000
-
-const OAUTH_LIFETIME = {
-  ACCESS_TOKEN: 3600 * 4, // 4 hours
-  REFRESH_TOKEN: 1209600 // 2 weeks
-}
-
-// Number of results by default for the pagination
-const PAGINATION_COUNT_DEFAULT = 15
+// ---------------------------------------------------------------------------
 
 // Number of points we add/remove from a friend after a successful/bad request
 const PODS_SCORE = {
@@ -87,29 +105,22 @@ const PODS_SCORE = {
   BONUS: 10
 }
 
+// Time to wait between requests to the friends (10 min)
+let REQUESTS_INTERVAL = 600000
+
 // Number of requests in parallel we can make
 const REQUESTS_IN_PARALLEL = 10
 
-// How many requests we put in request (request scheduler)
+// How many requests we put in request
 const REQUESTS_LIMIT = 10
 
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
 
-// Sortable columns per schema
-const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'podUrl', 'author', 'tags' ]
-}
+// ---------------------------------------------------------------------------
 
-// Seeds in parallel we send to electron when "seed all"
-// Once a video is in seeding state we seed another video etc
-const SEEDS_IN_PARALLEL = 3
-
-// Sortable columns per schema
-const SORTABLE_COLUMNS = {
-  USERS: [ 'username', '-username', 'createdDate', '-createdDate' ],
-  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
-}
+// Password encryption
+const BCRYPT_SALT_SIZE = 10
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
@@ -122,36 +133,42 @@ const USER_ROLES = {
   USER: 'user'
 }
 
+// Seeds in parallel we send to electron when "seed all"
+// Once a video is in seeding state we seed another video etc
+const SEEDS_IN_PARALLEL = 3
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
+  CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
   FRIEND_SCORE.BASE = 20
   REQUESTS_INTERVAL = 10000
-  CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
 }
 
 // ---------------------------------------------------------------------------
 
 module.exports = {
-  API_VERSION: API_VERSION,
-  BCRYPT_SALT_SIZE: BCRYPT_SALT_SIZE,
-  CONFIG: CONFIG,
-  CONSTRAINTS_FIELDS: CONSTRAINTS_FIELDS,
-  FRIEND_SCORE: FRIEND_SCORE,
-  LAST_MONGO_SCHEMA_VERSION: LAST_MONGO_SCHEMA_VERSION,
-  MONGO_MIGRATION_SCRIPTS: MONGO_MIGRATION_SCRIPTS,
-  OAUTH_LIFETIME: OAUTH_LIFETIME,
-  PAGINATION_COUNT_DEFAULT: PAGINATION_COUNT_DEFAULT,
-  PODS_SCORE: PODS_SCORE,
-  REQUESTS_IN_PARALLEL: REQUESTS_IN_PARALLEL,
-  REQUESTS_INTERVAL: REQUESTS_INTERVAL,
-  REQUESTS_LIMIT: REQUESTS_LIMIT,
-  RETRY_REQUESTS: RETRY_REQUESTS,
-  SEARCHABLE_COLUMNS: SEARCHABLE_COLUMNS,
-  SEEDS_IN_PARALLEL: SEEDS_IN_PARALLEL,
-  SORTABLE_COLUMNS: SORTABLE_COLUMNS,
-  THUMBNAILS_SIZE: THUMBNAILS_SIZE,
-  THUMBNAILS_STATIC_PATH: THUMBNAILS_STATIC_PATH,
-  USER_ROLES: USER_ROLES
+  API_VERSION,
+  BCRYPT_SALT_SIZE,
+  CONFIG,
+  CONSTRAINTS_FIELDS,
+  FRIEND_SCORE,
+  LAST_MONGO_SCHEMA_VERSION,
+  MONGO_MIGRATION_SCRIPTS,
+  OAUTH_LIFETIME,
+  PAGINATION_COUNT_DEFAULT,
+  PODS_SCORE,
+  REQUESTS_IN_PARALLEL,
+  REQUESTS_INTERVAL,
+  REQUESTS_LIMIT,
+  RETRY_REQUESTS,
+  SEARCHABLE_COLUMNS,
+  SEEDS_IN_PARALLEL,
+  SORTABLE_COLUMNS,
+  THUMBNAILS_SIZE,
+  THUMBNAILS_STATIC_PATH,
+  USER_ROLES
 }
 
 // ---------------------------------------------------------------------------
