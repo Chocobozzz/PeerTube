@@ -7,9 +7,9 @@ const constants = require('../../initializers/constants')
 const USERS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.USERS
 
 const usersValidators = {
-  isUserPasswordValid: isUserPasswordValid,
-  isUserRoleValid: isUserRoleValid,
-  isUserUsernameValid: isUserUsernameValid
+  isUserPasswordValid,
+  isUserRoleValid,
+  isUserUsernameValid
 }
 
 function isUserPasswordValid (value) {

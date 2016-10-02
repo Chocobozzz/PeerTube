@@ -8,17 +8,17 @@ const miscValidators = require('./misc')
 const VIDEOS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEOS
 
 const videosValidators = {
-  isEachRemoteVideosValid: isEachRemoteVideosValid,
-  isVideoAuthorValid: isVideoAuthorValid,
-  isVideoDateValid: isVideoDateValid,
-  isVideoDescriptionValid: isVideoDescriptionValid,
-  isVideoDurationValid: isVideoDurationValid,
-  isVideoMagnetUriValid: isVideoMagnetUriValid,
-  isVideoNameValid: isVideoNameValid,
-  isVideoPodUrlValid: isVideoPodUrlValid,
-  isVideoTagsValid: isVideoTagsValid,
-  isVideoThumbnailValid: isVideoThumbnailValid,
-  isVideoThumbnail64Valid: isVideoThumbnail64Valid
+  isEachRemoteVideosValid,
+  isVideoAuthorValid,
+  isVideoDateValid,
+  isVideoDescriptionValid,
+  isVideoDurationValid,
+  isVideoMagnetUriValid,
+  isVideoNameValid,
+  isVideoPodUrlValid,
+  isVideoTagsValid,
+  isVideoThumbnailValid,
+  isVideoThumbnail64Valid
 }
 
 function isEachRemoteVideosValid (requests) {

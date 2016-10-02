@@ -1,8 +1,8 @@
 'use strict'
 
 const miscValidators = {
-  exists: exists,
-  isArray: isArray
+  exists,
+  isArray
 }
 
 function exists (value) {

@@ -12,8 +12,8 @@ const oAuthServer = new OAuthServer({
 })
 
 const oAuth = {
-  authenticate: authenticate,
-  token: token
+  authenticate,
+  token
 }
 
 function authenticate (req, res, next) {

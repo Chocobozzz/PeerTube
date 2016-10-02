@@ -5,7 +5,7 @@ const validator = require('express-validator').validator
 const miscValidators = require('./misc')
 
 const podsValidators = {
-  isEachUniqueUrlValid: isEachUniqueUrlValid
+  isEachUniqueUrlValid
 }
 
 function isEachUniqueUrlValid (urls) {

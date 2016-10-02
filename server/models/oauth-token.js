@@ -18,10 +18,10 @@ OAuthTokenSchema.path('client').required(true)
 OAuthTokenSchema.path('user').required(true)
 
 OAuthTokenSchema.statics = {
-  getByRefreshTokenAndPopulateClient: getByRefreshTokenAndPopulateClient,
-  getByTokenAndPopulateUser: getByTokenAndPopulateUser,
-  getByRefreshToken: getByRefreshToken,
-  removeByUserId: removeByUserId
+  getByRefreshTokenAndPopulateClient,
+  getByTokenAndPopulateUser,
+  getByRefreshToken,
+  removeByUserId
 }
 
 mongoose.model('OAuthToken', OAuthTokenSchema)

@@ -1,7 +1,7 @@
 'use strict'
 
 const miscsUtils = {
-  dateIsValid: dateIsValid
+  dateIsValid
 }
 
 // ---------------------- Export functions --------------------

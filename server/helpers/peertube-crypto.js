@@ -12,13 +12,13 @@ const logger = require('./logger')
 const algorithm = 'aes-256-ctr'
 
 const peertubeCrypto = {
-  checkSignature: checkSignature,
-  comparePassword: comparePassword,
-  createCertsIfNotExist: createCertsIfNotExist,
-  cryptPassword: cryptPassword,
-  decrypt: decrypt,
-  encrypt: encrypt,
-  sign: sign
+  checkSignature,
+  comparePassword,
+  createCertsIfNotExist,
+  cryptPassword,
+  decrypt,
+  encrypt,
+  sign
 }
 
 function checkSignature (publicKey, rawData, hexSignature) {

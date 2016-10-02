@@ -3,8 +3,8 @@
 const request = require('supertest')
 
 const loginUtils = {
-  login: login,
-  loginAndGetAccessToken: loginAndGetAccessToken
+  login,
+  loginAndGetAccessToken
 }
 
 // ---------------------- Export functions --------------------

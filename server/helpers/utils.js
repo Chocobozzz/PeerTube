@@ -5,8 +5,8 @@ const crypto = require('crypto')
 const logger = require('./logger')
 
 const utils = {
-  cleanForExit: cleanForExit,
-  generateRandomString: generateRandomString
+  cleanForExit,
+  generateRandomString
 }
 
 function generateRandomString (size, callback) {

@@ -3,7 +3,7 @@
 const constants = require('../initializers/constants')
 
 const paginationMiddleware = {
-  setPagination: setPagination
+  setPagination
 }
 
 function setPagination (req, res, next) {

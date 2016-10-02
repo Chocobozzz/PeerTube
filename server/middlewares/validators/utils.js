@@ -5,7 +5,7 @@ const util = require('util')
 const logger = require('../../helpers/logger')
 
 const validatorsUtils = {
-  checkErrors: checkErrors
+  checkErrors
 }
 
 function checkErrors (req, res, next, statusCode) {

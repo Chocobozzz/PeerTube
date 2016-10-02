@@ -7,8 +7,8 @@ const peertubeCrypto = require('../helpers/peertube-crypto')
 const Pod = mongoose.model('Pod')
 
 const secureMiddleware = {
-  checkSignature: checkSignature,
-  decryptBody: decryptBody
+  checkSignature,
+  decryptBody
 }
 
 function checkSignature (req, res, next) {

@@ -1,7 +1,7 @@
 'use strict'
 
 const searchMiddleware = {
-  setVideosSearch: setVideosSearch
+  setVideosSearch
 }
 
 function setVideosSearch (req, res, next) {

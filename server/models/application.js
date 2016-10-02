@@ -10,8 +10,8 @@ const ApplicationSchema = mongoose.Schema({
 })
 
 ApplicationSchema.statics = {
-  loadMongoSchemaVersion: loadMongoSchemaVersion,
-  updateMongoSchemaVersion: updateMongoSchemaVersion
+  loadMongoSchemaVersion,
+  updateMongoSchemaVersion
 }
 
 mongoose.model('Application', ApplicationSchema)

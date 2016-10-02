@@ -7,9 +7,9 @@ const Client = mongoose.model('OAuthClient')
 const User = mongoose.model('User')
 
 const checker = {
-  checkConfig: checkConfig,
-  clientsExist: clientsExist,
-  usersExist: usersExist
+  checkConfig,
+  clientsExist,
+  usersExist
 }
 
 // Check the config files

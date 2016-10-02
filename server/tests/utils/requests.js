@@ -3,9 +3,9 @@
 const request = require('supertest')
 
 const requestsUtils = {
-  makePostUploadRequest: makePostUploadRequest,
-  makePostBodyRequest: makePostBodyRequest,
-  makePutBodyRequest: makePutBodyRequest
+  makePostUploadRequest,
+  makePostBodyRequest,
+  makePutBodyRequest
 }
 
 // ---------------------- Export functions --------------------

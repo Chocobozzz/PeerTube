@@ -5,8 +5,8 @@ const urlModule = require('url')
 const logger = require('../helpers/logger')
 
 const podsMiddleware = {
-  setBodyUrlsPort: setBodyUrlsPort,
-  setBodyUrlPort: setBodyUrlPort
+  setBodyUrlsPort,
+  setBodyUrlPort
 }
 
 function setBodyUrlsPort (req, res, next) {

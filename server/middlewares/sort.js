@@ -1,8 +1,8 @@
 'use strict'
 
 const sortMiddleware = {
-  setUsersSort: setUsersSort,
-  setVideosSort: setVideosSort
+  setUsersSort,
+  setVideosSort
 }
 
 function setUsersSort (req, res, next) {

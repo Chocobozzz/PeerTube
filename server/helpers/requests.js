@@ -7,8 +7,8 @@ const constants = require('../initializers/constants')
 const peertubeCrypto = require('./peertube-crypto')
 
 const requests = {
-  makeRetryRequest: makeRetryRequest,
-  makeSecureRequest: makeSecureRequest
+  makeRetryRequest,
+  makeSecureRequest
 }
 
 function makeRetryRequest (params, callback) {

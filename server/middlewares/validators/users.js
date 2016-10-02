@@ -8,9 +8,9 @@ const logger = require('../../helpers/logger')
 const User = mongoose.model('User')
 
 const validatorsUsers = {
-  usersAdd: usersAdd,
-  usersRemove: usersRemove,
-  usersUpdate: usersUpdate
+  usersAdd,
+  usersRemove,
+  usersUpdate
 }
 
 function usersAdd (req, res, next) {

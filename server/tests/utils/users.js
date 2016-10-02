@@ -3,12 +3,12 @@
 const request = require('supertest')
 
 const usersUtils = {
-  createUser: createUser,
-  getUserInformation: getUserInformation,
-  getUsersList: getUsersList,
-  getUsersListPaginationAndSort: getUsersListPaginationAndSort,
-  removeUser: removeUser,
-  updateUser: updateUser
+  createUser,
+  getUserInformation,
+  getUsersList,
+  getUsersListPaginationAndSort,
+  removeUser,
+  updateUser
 }
 
 // ---------------------- Export functions --------------------

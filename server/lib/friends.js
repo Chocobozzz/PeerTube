@@ -17,13 +17,13 @@ const Request = mongoose.model('Request')
 const Video = mongoose.model('Video')
 
 const friends = {
-  addVideoToFriends: addVideoToFriends,
-  hasFriends: hasFriends,
-  getMyCertificate: getMyCertificate,
-  makeFriends: makeFriends,
-  quitFriends: quitFriends,
-  removeVideoToFriends: removeVideoToFriends,
-  sendOwnedVideosToPod: sendOwnedVideosToPod
+  addVideoToFriends,
+  hasFriends,
+  getMyCertificate,
+  makeFriends,
+  quitFriends,
+  removeVideoToFriends,
+  sendOwnedVideosToPod
 }
 
 function addVideoToFriends (video) {

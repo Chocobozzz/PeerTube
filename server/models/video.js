@@ -47,22 +47,22 @@ VideoSchema.path('thumbnail').validate(function (value) {
 VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
 
 VideoSchema.methods = {
-  isOwned: isOwned,
-  toFormatedJSON: toFormatedJSON,
-  toRemoteJSON: toRemoteJSON
+  isOwned,
+  toFormatedJSON,
+  toRemoteJSON
 }
 
 VideoSchema.statics = {
-  getDurationFromFile: getDurationFromFile,
-  listForApi: listForApi,
-  listByUrlAndMagnet: listByUrlAndMagnet,
-  listByUrls: listByUrls,
-  listOwned: listOwned,
-  listOwnedByAuthor: listOwnedByAuthor,
-  listRemotes: listRemotes,
-  load: load,
-  search: search,
-  seedAllExisting: seedAllExisting
+  getDurationFromFile,
+  listForApi,
+  listByUrlAndMagnet,
+  listByUrls,
+  listOwned,
+  listOwnedByAuthor,
+  listRemotes,
+  load,
+  search,
+  seedAllExisting
 }
 
 VideoSchema.pre('remove', function (next) {

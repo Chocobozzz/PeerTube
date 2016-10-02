@@ -3,9 +3,9 @@
 const request = require('supertest')
 
 const podsUtils = {
-  getFriendsList: getFriendsList,
-  makeFriends: makeFriends,
-  quitFriends: quitFriends
+  getFriendsList,
+  makeFriends,
+  quitFriends
 }
 
 // ---------------------- Export functions --------------------

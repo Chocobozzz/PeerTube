@@ -24,18 +24,18 @@ PodSchema.path('publicKey').required(true)
 PodSchema.path('score').validate(function (value) { return !isNaN(value) })
 
 PodSchema.methods = {
-  toFormatedJSON: toFormatedJSON
+  toFormatedJSON
 }
 
 PodSchema.statics = {
-  countAll: countAll,
-  incrementScores: incrementScores,
-  list: list,
-  listAllIds: listAllIds,
-  listBadPods: listBadPods,
-  load: load,
-  loadByUrl: loadByUrl,
-  removeAll: removeAll
+  countAll,
+  incrementScores,
+  list,
+  listAllIds,
+  listBadPods,
+  load,
+  loadByUrl,
+  removeAll
 }
 
 PodSchema.pre('save', function (next) {

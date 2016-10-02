@@ -5,17 +5,17 @@ const pathUtils = require('path')
 const request = require('supertest')
 
 const videosUtils = {
-  getAllVideosListBy: getAllVideosListBy,
-  getVideo: getVideo,
-  getVideosList: getVideosList,
-  getVideosListPagination: getVideosListPagination,
-  getVideosListSort: getVideosListSort,
-  removeVideo: removeVideo,
-  searchVideo: searchVideo,
-  searchVideoWithPagination: searchVideoWithPagination,
-  searchVideoWithSort: searchVideoWithSort,
-  testVideoImage: testVideoImage,
-  uploadVideo: uploadVideo
+  getAllVideosListBy,
+  getVideo,
+  getVideosList,
+  getVideosListPagination,
+  getVideosListSort,
+  removeVideo,
+  searchVideo,
+  searchVideoWithPagination,
+  searchVideoWithSort,
+  testVideoImage,
+  uploadVideo
 }
 
 // ---------------------- Export functions --------------------

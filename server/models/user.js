@@ -23,17 +23,17 @@ UserSchema.path('username').required(customUsersValidators.isUserUsernameValid)
 UserSchema.path('role').validate(customUsersValidators.isUserRoleValid)
 
 UserSchema.methods = {
-  isPasswordMatch: isPasswordMatch,
-  toFormatedJSON: toFormatedJSON
+  isPasswordMatch,
+  toFormatedJSON
 }
 
 UserSchema.statics = {
-  countTotal: countTotal,
-  getByUsername: getByUsername,
-  list: list,
-  listForApi: listForApi,
-  loadById: loadById,
-  loadByUsername: loadByUsername
+  countTotal,
+  getByUsername,
+  list,
+  listForApi,
+  loadById,
+  loadByUsername
 }
 
 UserSchema.pre('save', function (next) {

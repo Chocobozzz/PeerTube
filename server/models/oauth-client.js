@@ -11,9 +11,9 @@ const OAuthClientSchema = mongoose.Schema({
 OAuthClientSchema.path('clientSecret').required(true)
 
 OAuthClientSchema.statics = {
-  getByIdAndSecret: getByIdAndSecret,
-  list: list,
-  loadFirstClient: loadFirstClient
+  getByIdAndSecret,
+  list,
+  loadFirstClient
 }
 
 mongoose.model('OAuthClient', OAuthClientSchema)

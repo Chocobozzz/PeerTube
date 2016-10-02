@@ -4,9 +4,9 @@ const checkErrors = require('./utils').checkErrors
 const logger = require('../../helpers/logger')
 
 const validatorsRemote = {
-  dataToDecrypt: dataToDecrypt,
-  remoteVideos: remoteVideos,
-  signature: signature
+  dataToDecrypt,
+  remoteVideos,
+  signature
 }
 
 function dataToDecrypt (req, res, next) {

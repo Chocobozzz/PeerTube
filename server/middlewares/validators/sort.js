@@ -5,8 +5,8 @@ const constants = require('../../initializers/constants')
 const logger = require('../../helpers/logger')
 
 const validatorsSort = {
-  usersSort: usersSort,
-  videosSort: videosSort
+  usersSort,
+  videosSort
 }
 
 function usersSort (req, res, next) {

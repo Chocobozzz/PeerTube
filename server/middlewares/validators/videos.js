@@ -10,10 +10,10 @@ const logger = require('../../helpers/logger')
 const Video = mongoose.model('Video')
 
 const validatorsVideos = {
-  videosAdd: videosAdd,
-  videosGet: videosGet,
-  videosRemove: videosRemove,
-  videosSearch: videosSearch
+  videosAdd,
+  videosGet,
+  videosRemove,
+  videosSearch
 }
 
 function videosAdd (req, res, next) {

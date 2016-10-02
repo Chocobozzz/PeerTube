@@ -3,7 +3,7 @@
 const parallel = require('async/parallel')
 
 const utils = {
-  listForApiWithCount: listForApiWithCount
+  listForApiWithCount
 }
 
 function listForApiWithCount (query, start, count, sort, callback) {

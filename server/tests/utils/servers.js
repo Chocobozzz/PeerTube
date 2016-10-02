@@ -6,9 +6,9 @@ const fork = childProcess.fork
 const pathUtils = require('path')
 
 const serversUtils = {
-  flushAndRunMultipleServers: flushAndRunMultipleServers,
-  flushTests: flushTests,
-  runServer: runServer
+  flushAndRunMultipleServers,
+  flushTests,
+  runServer
 }
 
 // ---------------------- Export functions --------------------

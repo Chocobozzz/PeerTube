@@ -4,7 +4,7 @@ const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 
 const adminMiddleware = {
-  ensureIsAdmin: ensureIsAdmin
+  ensureIsAdmin
 }
 
 function ensureIsAdmin (req, res, next) {

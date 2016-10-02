@@ -18,7 +18,7 @@ const Client = mongoose.model('OAuthClient')
 const User = mongoose.model('User')
 
 const installer = {
-  installApplication: installApplication
+  installApplication
 }
 
 function installApplication (callback) {
@@ -107,9 +107,9 @@ function createOAuthAdminIfNotExist (callback) {
     }
 
     const user = new User({
-      username: username,
-      password: password,
-      role: role
+      username,
+      password,
+      role
     })
 
     user.save(function (err, createdUser) {

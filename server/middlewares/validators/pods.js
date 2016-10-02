@@ -5,8 +5,8 @@ const friends = require('../../lib/friends')
 const logger = require('../../helpers/logger')
 
 const validatorsPod = {
-  makeFriends: makeFriends,
-  podsAdd: podsAdd
+  makeFriends,
+  podsAdd
 }
 
 function makeFriends (req, res, next) {

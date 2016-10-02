@@ -8,12 +8,12 @@ const User = mongoose.model('User')
 
 // See https://github.com/oauthjs/node-oauth2-server/wiki/Model-specification for the model specifications
 const OAuthModel = {
-  getAccessToken: getAccessToken,
-  getClient: getClient,
-  getRefreshToken: getRefreshToken,
-  getUser: getUser,
-  revokeToken: revokeToken,
-  saveToken: saveToken
+  getAccessToken,
+  getClient,
+  getRefreshToken,
+  getUser,
+  revokeToken,
+  saveToken
 }
 
 // ---------------------------------------------------------------------------
