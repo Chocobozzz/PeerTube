@@ -113,11 +113,11 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 ### Dependencies
 
-  * **NodeJS >= 4.2**
-  * **npm >= 3.0**
+  * **NodeJS >= 4.x**
+  * **npm >= 3.x**
   * OpenSSL (cli)
   * MongoDB
-  * ffmpeg xvfb-run libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin (for electron)
+  * ffmpeg
 
 #### Debian
 
@@ -126,7 +126,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   * Run:
 
         # apt-get update
-        # apt-get install ffmpeg mongodb
+        # apt-get install ffmpeg mongodb openssl
         # npm install -g npm@3
 
 #### Other distribution... (PR welcome)
