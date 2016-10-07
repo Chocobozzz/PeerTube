@@ -1,24 +1,16 @@
-node_modules
-schemes/
-certs/
-logs/
+node_modules/
 test1/
 test2/
 test3/
 test4/
 test5/
 test6/
-public/stylesheets/global.css
-public/stylesheets/vendor
-uploads
-thumbnails
+uploads/
+thumbnails/
+certs/
+logs/
+torrents/
 config/production.yaml
-ffmpeg
-<<<<<<< HEAD
-torrents
-=======
-.tags
+ffmpeg/
 *.sublime-project
 *.sublime-workspace
-torrents/
->>>>>>> master
