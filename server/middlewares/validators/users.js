@@ -47,6 +47,8 @@ function usersRemove (req, res, next) {
 
       if (!user) return res.status(404).send('User not found')
 
+      if (user.username === 'root') return res.status(400).send('Cannot remove the root user')
+
       next()
     })
   })

@@ -497,6 +497,7 @@ describe('Test parameters validator', function () {
   describe('Of the users API', function () {
     const path = '/api/v1/users/'
     let userId = null
+    let rootId = null
 
     describe('When listing users', function () {
       it('Should fail with a bad start pagination', function (done) {
@@ -626,6 +627,7 @@ describe('Test parameters validator', function () {
           if (err) throw err
 
           userId = res.body.data[1].id
+          rootId = res.body.data[2].id
           done()
         })
       })
@@ -687,6 +689,13 @@ describe('Test parameters validator', function () {
       it('Should fail with an incorrect id', function (done) {
         request(server.url)
           .delete(path + 'bla-bla')
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .expect(400, done)
+      })
+
+      it('Should fail with the root user', function (done) {
+        request(server.url)
+          .delete(path + rootId)
           .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(400, done)
       })
