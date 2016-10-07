@@ -1,5 +1,5 @@
 <!--
-  Problem with the demonstration server? 
+  Problem with the demonstration server?
     -> Please retry in a few hours or send me directly an email: https://github.com/Chocobozzz
   Bug?
     -> Please check first you're running on the latest version of Firefox/Chromium

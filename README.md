@@ -121,14 +121,13 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 #### Debian
 
-  * Install NodeJS 4.2: [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  * Install NodeJS 4.x (actual LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
   * Add jessie backports to your *source.list*: http://backports.debian.org/Instructions/
   * Run:
 
         # apt-get update
-        # apt-get install ffmpeg mongodb openssl xvfb curl sudo git build-essential libgtk2.0-0 libgconf-2-4 libnss3 libasound2 libxtst6 libxss1 libnotify-bin
+        # apt-get install ffmpeg mongodb
         # npm install -g npm@3
-        # npm install -g electron
 
 #### Other distribution... (PR welcome)
 
@@ -201,9 +200,8 @@ See [ARCHITECTURE.md](https://github.com/Chocobozzz/PeerTube/blob/master/ARCHITE
     * If a user upload a video, the server seeds it and sends the video informations (name, short description, torrent URI...) to each server of the network
     * Each server has a RSA key to encrypt and sign communications with other servers
   * A server is a tracker responsible for all the videos uploaded in it
-  * Even if nobody watches a video, it is seeded by the server where the video was uploaded
+  * Even if nobody watches a video, it is seeded by the server (throught [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the video was uploaded
   * A network can live and evolve by expelling bad pod (with too many downtimes for example)
-  * A server **would** run webtorrent-hybrid to be a bridge with webrtc/standard bittorrent protocol
 
 See the ARCHITECTURE.md for more informations. Do not hesitate to give your opinion :)
 
@@ -211,19 +209,19 @@ Here are some simple schemes:
 
 <p align="center">
 
-<img src="https://lutim.cpy.re/Q7mnNdJP" alt="Decentralized" />
+<img src="https://lutim.cpy.re/isWwz8tt" alt="Decentralized" />
 
-<img src="https://lutim.cpy.re/0riSzAp1" alt="Watch a video" />
+<img src="https://lutim.cpy.re/VLheltQk" alt="Watch a video" />
 
-<img src="https://lutim.cpy.re/OzMSOtxG" alt="Watch a P2P video" />
+<img src="https://lutim.cpy.re/worHQwKv" alt="Watch a P2P video" />
 
-<img src="https://lutim.cpy.re/uVjNNRa9" alt="Join a network" />
+<img src="https://lutim.cpy.re/MyeS4q1g" alt="Join a network" />
 
-<img src="https://lutim.cpy.re/udTMqcb0" alt="Many networks"
+<img src="https://lutim.cpy.re/PqpTTzdP" alt="Many networks"
 
 </p>
 
 ### Frontend
 
 There already is a frontend (Angular 2) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
-The backend uses bittorrent protocol, so users could use their favorite bittorrent client to download/play the video with its torrent URI.
+The backend uses BitTorrent protocol, so users could use their favorite BitTorrent client to download/play the video with its torrent URI.

@@ -5,7 +5,7 @@
   - **Network:** several servers communicating each others with this software compose a network
   - **Pod:** a server of the network (inspired from Diaspora, no really signification)
   - **Friend:** a pod that communicates with yours
-  - **Origin pod:** the pod on which the video was uploaded and which is seeding the video
+  - **Origin pod:** the pod on which the video was uploaded and which is seeding (throught WebSeed protocol) the video
   - **Make friend:** the action of a server which will join a network (and so become friend with all pods that compose this network)
 
 ## Base
@@ -55,9 +55,9 @@
   * A pod has an administrator that can add/remove users, make friends and quit friends
   * A pod has different user accounts that can upload videos
   * All pods have an index of all videos of the network (name, origin pod url, small description, uploader username, magnet Uri, thumbnail name, created date and the thumbnail file). For example, a test with 1000000 videos with alphanum characters and the following lengths: name = 50, author = 50, url = 25, description = 250, magnerUri = 200, thumbnail name = 50 has a mongodb size of ~ 4GB. To this, we add 1 000 000 thumbnails of 5-15 KB so 15GB maximum
-  * After having uploaded a video, the server seeds it, adds the meta data in its database and makes a secure request to all of its friends
+  * After having uploaded a video, the server seeds it (WebSeed protocol), adds the meta data in its database and makes a secure request to all of its friends
   * If a user wants to watch a video, he asks its pod the magnetUri and the frontend adds the torrent (with WebTorrent), creates the HTML5 video tag and streams the file into it
-  * A user watching a video seeds it too (bittorent) so another user who is watching the same video can get the data from the origin server and the user 1 (etc)
+  * A user watching a video seeds it too (BitTorrent) so another user who is watching the same video can get the data from the origin server and the user 1 (etc)
 
 ## Ideas
 
@@ -65,10 +65,6 @@
    user asks its pod -> user pod asks origin video pod -> origin video pod responds with the informations -> user pod responds to the user (and puts in cache the informations ?). We could extend this scheme with other informations
   * Redondance: if the origin pod is down, the video is not accessible anymore (no tracker/seeds). We could imagine a redondance between pods that keep seeding the video
   * Server could transcode the video to lower qualities (cost in CPU and disk space)
-  * Server could seed at the demand: for now the server seeds all the videos but it has two drawbacks:
-    - Seeding has a cost (if a pod has 1000 videos it could be an issue)
-    - After a restart the server has to reseed all the videos (with 1000 videos it could long)
-  If this solution is choosen, the frontend has to notify the origin pod that it has to seed the video
   * Add subtitles to videos
   * Avoid stocking friends URL schemes (http/https)
 
