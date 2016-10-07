@@ -1,10 +1,13 @@
 'use strict'
 
-const eachLimit = require('async/eachLimit')
+const config = require('config')
+const createTorrent = require('create-torrent')
 const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
 const parallel = require('async/parallel')
+const parseTorrent = require('parse-torrent')
 const pathUtils = require('path')
+const magnet = require('magnet-uri')
 const mongoose = require('mongoose')
 
 const constants = require('../initializers/constants')
@@ -12,7 +15,14 @@ const customVideosValidators = require('../helpers/custom-validators').videos
 const logger = require('../helpers/logger')
 const modelUtils = require('./utils')
 const utils = require('../helpers/utils')
-const webtorrent = require('../lib/webtorrent')
+
+const http = config.get('webserver.https') === true ? 'https' : 'http'
+const host = config.get('webserver.host')
+const port = config.get('webserver.port')
+const uploadsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.uploads'))
+const thumbnailsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.thumbnails'))
+const torrentsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.torrents'))
+const webseedBaseUrl = http + '://' + host + ':' + port + constants.STATIC_PATHS.WEBSEED
 
 // ---------------------------------------------------------------------------
 
@@ -61,8 +71,7 @@ VideoSchema.statics = {
   listOwnedByAuthor,
   listRemotes,
   load,
-  search,
-  seedAllExisting
+  search
 }
 
 VideoSchema.pre('remove', function (next) {
@@ -98,8 +107,21 @@ VideoSchema.pre('save', function (next) {
     this.podUrl = constants.CONFIG.WEBSERVER.URL
 
     tasks.push(
+      // TODO: refractoring
       function (callback) {
-        seed(videoPath, callback)
+        createTorrent(videoPath, { announceList: [ [ 'ws://' + host + ':' + port + '/tracker/socket' ] ], urlList: [ webseedBaseUrl + video.filename ] }, function (err, torrent) {
+          if (err) return callback(err)
+
+          fs.writeFile(torrentsDir + video.filename + '.torrent', torrent, function (err) {
+            if (err) return callback(err)
+
+            const parsedTorrent = parseTorrent(torrent)
+            parsedTorrent.xs = video.podUrl + constants.STATIC_PATHS.TORRENTS + video.filename + '.torrent'
+            video.magnetUri = magnet.encode(parsedTorrent)
+
+            callback(null)
+          })
+        })
       },
       function (callback) {
         createThumbnail(videoPath, callback)
@@ -109,7 +131,6 @@ VideoSchema.pre('save', function (next) {
     parallel(tasks, function (err, results) {
       if (err) return next(err)
 
-      video.magnetUri = results[0].magnetURI
       video.thumbnail = results[1]
 
       return next()
@@ -144,7 +165,7 @@ function toFormatedJSON () {
     author: this.author,
     duration: this.duration,
     tags: this.tags,
-    thumbnailPath: constants.THUMBNAILS_STATIC_PATH + '/' + this.thumbnail,
+    thumbnailPath: constants.STATIC_PATHS.THUMBNAILS + '/' + this.thumbnail,
     createdDate: this.createdDate
   }
 
@@ -230,17 +251,6 @@ function search (value, field, start, count, sort, callback) {
   modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
-function seedAllExisting (callback) {
-  listOwned.call(this, function (err, videos) {
-    if (err) return callback(err)
-
-    eachLimit(videos, constants.SEEDS_IN_PARALLEL, function (video, callbackEach) {
-      const videoPath = pathUtils.join(constants.CONFIG.STORAGE.UPLOAD_DIR, video.filename)
-      seed(videoPath, callbackEach)
-    }, callback)
-  })
-}
-
 // ---------------------------------------------------------------------------
 
 function removeThumbnail (video, callback) {
@@ -253,12 +263,7 @@ function removeFile (video, callback) {
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
 function removeTorrent (video, callback) {
-  try {
-    webtorrent.remove(video.magnetUri, callback)
-  } catch (err) {
-    logger.warn('Cannot remove the torrent from WebTorrent', { err: err })
-    return callback(null)
-  }
+  fs.unlink(torrentsDir + video.filename + '.torrent')
 }
 
 function createThumbnail (videoPath, callback) {
@@ -274,16 +279,6 @@ function createThumbnail (videoPath, callback) {
       size: constants.THUMBNAILS_SIZE,
       filename: filename
     })
-}
-
-function seed (path, callback) {
-  logger.info('Seeding %s...', path)
-
-  webtorrent.seed(path, function (torrent) {
-    logger.info('%s seeded (%s).', path, torrent.magnetURI)
-
-    return callback(null, torrent)
-  })
 }
 
 function generateThumbnailFromBase64 (data, callback) {

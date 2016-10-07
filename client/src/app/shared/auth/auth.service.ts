@@ -123,6 +123,7 @@ export class AuthService {
   logout() {
     // TODO: make an HTTP request to revoke the tokens
     this.user = null;
+
     AuthUser.flush();
 
     this.setStatus(AuthStatus.LoggedOut);

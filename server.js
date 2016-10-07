@@ -35,10 +35,7 @@ const installer = require('./server/initializers/installer')
 const migrator = require('./server/initializers/migrator')
 const mongoose = require('mongoose')
 const routes = require('./server/controllers')
-const utils = require('./server/helpers/utils')
-const webtorrent = require('./server/lib/webtorrent')
 const Request = mongoose.model('Request')
-const Video = mongoose.model('Video')
 
 // Get configurations
 const port = config.get('listen.port')
@@ -76,9 +73,16 @@ app.use('/client/*', function (req, res, next) {
   res.sendStatus(404)
 })
 
+const torrentsPhysicalPath = path.join(__dirname, config.get('storage.torrents'))
+app.use(constants.STATIC_PATHS.TORRENTS, express.static(torrentsPhysicalPath, { maxAge: 0 }))
+
+// Uploads path for webseeding
+const uploadsPhysicalPath = path.join(__dirname, config.get('storage.uploads'))
+app.use(constants.STATIC_PATHS.WEBSEED, express.static(uploadsPhysicalPath, { maxAge: 0 }))
+
 // Thumbnails path for express
 const thumbnailsPhysicalPath = path.join(__dirname, config.get('storage.thumbnails'))
-app.use(constants.THUMBNAILS_STATIC_PATH, express.static(thumbnailsPhysicalPath, { maxAge: 0 }))
+app.use(constants.STATIC_PATHS.THUMBNAILS, express.static(thumbnailsPhysicalPath, { maxAge: 0 }))
 
 // Client application
 app.use('/*', function (req, res, next) {
@@ -129,33 +133,14 @@ installer.installApplication(function (err) {
   migrator.migrate(function (err) {
     if (err) throw err
 
-    // Create/activate the webtorrent module
-    webtorrent.create(function () {
-      function cleanForExit () {
-        utils.cleanForExit(webtorrent.app)
-      }
+    // ----------- Make the server listening -----------
+    server.listen(port, function () {
+      // Activate the pool requests
+      Request.activate()
 
-      function exitGracefullyOnSignal () {
-        process.exit(-1)
-      }
-
-      process.on('exit', cleanForExit)
-      process.on('SIGINT', exitGracefullyOnSignal)
-      process.on('SIGTERM', exitGracefullyOnSignal)
-
-      // ----------- Make the server listening -----------
-      server.listen(port, function () {
-        // Activate the pool requests
-        Request.activate()
-
-        Video.seedAllExisting(function (err) {
-          if (err) throw err
-
-          logger.info('Seeded all the videos')
-          logger.info('Server listening on port %d', port)
-          app.emit('ready')
-        })
-      })
+      logger.info('Seeded all the videos')
+      logger.info('Server listening on port %d', port)
+      app.emit('ready')
     })
   })
 })

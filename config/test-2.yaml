@@ -14,3 +14,4 @@ storage:
   uploads: 'test2/uploads/'
   logs: 'test2/logs/'
   thumbnails: 'test2/thumbnails/'
+  torrents: 'test2/torrents/'

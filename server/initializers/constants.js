@@ -122,11 +122,15 @@ const RETRY_REQUESTS = 5
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
 
+// Express static paths (router)
+const STATIC_PATHS = {
+  THUMBNAILS: '/static/thumbnails',
+  TORRENTS: '/static/torrents/',
+  WEBSEED: '/static/webseed/'
+}
+
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
-
-// Path for access to thumbnails with express router
-const THUMBNAILS_STATIC_PATH = '/static/thumbnails'
 
 const USER_ROLES = {
   ADMIN: 'admin',
@@ -166,8 +170,8 @@ module.exports = {
   SEARCHABLE_COLUMNS,
   SEEDS_IN_PARALLEL,
   SORTABLE_COLUMNS,
+  STATIC_PATHS,
   THUMBNAILS_SIZE,
-  THUMBNAILS_STATIC_PATH,
   USER_ROLES
 }
 
