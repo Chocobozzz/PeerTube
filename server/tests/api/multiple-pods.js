@@ -3,16 +3,14 @@
 const chai = require('chai')
 const each = require('async/each')
 const expect = chai.expect
-const pathUtils = require('path')
 const series = require('async/series')
+const webtorrent = new (require('webtorrent'))()
 
 const loginUtils = require('../utils/login')
 const miscsUtils = require('../utils/miscs')
 const podsUtils = require('../utils/pods')
 const serversUtils = require('../utils/servers')
 const videosUtils = require('../utils/videos')
-const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
-webtorrent.silent = true
 
 describe('Test multiple pods', function () {
   let servers = []
@@ -53,9 +51,6 @@ describe('Test multiple pods', function () {
       function (next) {
         const server = servers[0]
         podsUtils.makeFriends(server.url, server.accessToken, next)
-      },
-      function (next) {
-        webtorrent.create({ host: 'client', port: '1' }, next)
       }
     ], done)
   })
@@ -415,7 +410,6 @@ describe('Test multiple pods', function () {
     servers.forEach(function (server) {
       process.kill(-server.app.pid)
     })
-    process.kill(-webtorrent.app.pid)
 
     // Keep the logs if the test failed
     if (this.ok) {

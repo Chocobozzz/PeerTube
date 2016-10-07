@@ -19,9 +19,6 @@ const utils = require('../helpers/utils')
 const http = config.get('webserver.https') === true ? 'https' : 'http'
 const host = config.get('webserver.host')
 const port = config.get('webserver.port')
-const uploadsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.uploads'))
-const thumbnailsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.thumbnails'))
-const torrentsDir = pathUtils.join(__dirname, '..', '..', config.get('storage.torrents'))
 const webseedBaseUrl = http + '://' + host + ':' + port + constants.STATIC_PATHS.WEBSEED
 
 // ---------------------------------------------------------------------------
@@ -112,7 +109,7 @@ VideoSchema.pre('save', function (next) {
         createTorrent(videoPath, { announceList: [ [ 'ws://' + host + ':' + port + '/tracker/socket' ] ], urlList: [ webseedBaseUrl + video.filename ] }, function (err, torrent) {
           if (err) return callback(err)
 
-          fs.writeFile(torrentsDir + video.filename + '.torrent', torrent, function (err) {
+          fs.writeFile(constants.CONFIG.STORAGE.TORRENTS_DIR + video.filename + '.torrent', torrent, function (err) {
             if (err) return callback(err)
 
             const parsedTorrent = parseTorrent(torrent)
@@ -263,7 +260,7 @@ function removeFile (video, callback) {
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
 function removeTorrent (video, callback) {
-  fs.unlink(torrentsDir + video.filename + '.torrent')
+  fs.unlink(constants.CONFIG.STORAGE.TORRENTS_DIR + video.filename + '.torrent', callback)
 }
 
 function createThumbnail (videoPath, callback) {

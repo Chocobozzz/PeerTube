@@ -7,13 +7,12 @@ const fs = require('fs')
 const keyBy = require('lodash/keyBy')
 const pathUtils = require('path')
 const series = require('async/series')
+const webtorrent = new (require('webtorrent'))()
 
 const loginUtils = require('../utils/login')
 const miscsUtils = require('../utils/miscs')
 const serversUtils = require('../utils/servers')
 const videosUtils = require('../utils/videos')
-const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
-webtorrent.silent = true
 
 describe('Test a single pod', function () {
   let server = null
@@ -39,9 +38,6 @@ describe('Test a single pod', function () {
           server.accessToken = token
           next()
         })
-      },
-      function (next) {
-        webtorrent.create({ host: 'client', port: '1' }, next)
       }
     ], done)
   })
@@ -496,7 +492,6 @@ describe('Test a single pod', function () {
 
   after(function (done) {
     process.kill(-server.app.pid)
-    process.kill(-webtorrent.app.pid)
 
     // Keep the logs if the test failed
     if (this.ok) {

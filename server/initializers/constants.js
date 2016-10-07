@@ -42,7 +42,8 @@ const CONFIG = {
     CERT_DIR: path.join(__dirname, '..', '..', config.get('storage.certs')),
     LOG_DIR: path.join(__dirname, '..', '..', config.get('storage.logs')),
     UPLOAD_DIR: path.join(__dirname, '..', '..', config.get('storage.uploads')),
-    THUMBNAILS_DIR: path.join(__dirname, '..', '..', config.get('storage.thumbnails'))
+    THUMBNAILS_DIR: path.join(__dirname, '..', '..', config.get('storage.thumbnails')),
+    TORRENTS_DIR: path.join(__dirname, '..', '..', config.get('storage.torrents'))
   },
   WEBSERVER: {
     SCHEME: config.get('webserver.https') === true ? 'https' : 'http',

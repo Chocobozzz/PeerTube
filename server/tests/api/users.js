@@ -2,7 +2,6 @@
 
 const chai = require('chai')
 const expect = chai.expect
-const pathUtils = require('path')
 const series = require('async/series')
 
 const loginUtils = require('../utils/login')
@@ -10,8 +9,6 @@ const podsUtils = require('../utils/pods')
 const serversUtils = require('../utils/servers')
 const usersUtils = require('../utils/users')
 const videosUtils = require('../utils/videos')
-const webtorrent = require(pathUtils.join(__dirname, '../../lib/webtorrent'))
-webtorrent.silent = true
 
 describe('Test users', function () {
   let server = null
