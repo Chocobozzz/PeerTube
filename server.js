@@ -2,6 +2,7 @@
 
 // ----------- Node modules -----------
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const express = require('express')
 const expressValidator = require('express-validator')
 const http = require('http')
@@ -74,11 +75,11 @@ app.use('/client/*', function (req, res, next) {
 })
 
 const torrentsPhysicalPath = path.join(__dirname, config.get('storage.torrents'))
-app.use(constants.STATIC_PATHS.TORRENTS, express.static(torrentsPhysicalPath, { maxAge: 0 }))
+app.use(constants.STATIC_PATHS.TORRENTS, cors(), express.static(torrentsPhysicalPath, { maxAge: 0 }))
 
 // Uploads path for webseeding
 const uploadsPhysicalPath = path.join(__dirname, config.get('storage.uploads'))
-app.use(constants.STATIC_PATHS.WEBSEED, express.static(uploadsPhysicalPath, { maxAge: 0 }))
+app.use(constants.STATIC_PATHS.WEBSEED, cors(), express.static(uploadsPhysicalPath, { maxAge: 0 }))
 
 // Thumbnails path for express
 const thumbnailsPhysicalPath = path.join(__dirname, config.get('storage.thumbnails'))
