@@ -1,9 +1,24 @@
-body {
-  padding: 20px;
+body { padding-top: $navbar-height; }
 
-  @media screen and (max-width: 400px) {
-    padding: 3px;
+nav {
+  .navbar-brand {
+    font-weight: bolder;
+    font-size: 24px;
+    transition: color 0.5s;
+    &:hover { transition: color 0.5s; }
   }
+
+  .form-control {
+    border-color: #fff;
+    border-left: 1px solid transparent;
+  }
+  .form-control:focus {
+    border-color: #000;
+    border-left: 1px solid transparent;
+    box-shadow: inset 0 0 2px #000;
+  }
+
+  #simple-btn-keyboard-nav { border-right: 1px solid transparent; }
 }
 
 menu {

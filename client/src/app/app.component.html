@@ -1,18 +1,22 @@
-<div class="container">
-
-  <header class="row">
-    <div class="col-md-2">
-      <h4 id="peertube-title">
-        <a [routerLink]="['/videos/list']">PeerTube</a>
-      </h4>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed pull-right" data-toggle="collapse" data-target="#search-bar"
+              aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a id="#peertube-title" class="navbar-brand" [routerLink]="['/videos/list']">PeerTube</a>
     </div>
-
-    <div class="col-md-9">
+    <div id="search-bar" class="collapse navbar-collapse">
       <my-search></my-search>
     </div>
-  </header>
+  </div>
+</nav>
 
-
+<div class="container-fluid">
   <div class="row">
     <my-menu *ngIf="isInAdmin() === false"></my-menu>
     <my-menu-admin *ngIf="isInAdmin() === true"></my-menu-admin>
