@@ -18,7 +18,7 @@ export const VIDEO_DESCRIPTION = {
 };
 
 export const VIDEO_TAGS = {
-  VALIDATORS: [ Validators.pattern('^[a-zA-Z0-9]{2,10}$') ],
+  VALIDATORS: [ Validators.pattern('^[a-zA-Z0-9]{0,10}$') ],
   MESSAGES: {
     'pattern': 'A tag should be between 2 and 10 alphanumeric characters long.'
   }

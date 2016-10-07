@@ -110,7 +110,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     if (event.keyCode === 13) {
       // Check if the tag is valid and does not already exist
       if (
-        currentTag !== '' &&
+        currentTag.length >= 2 &&
         this.form.controls['currentTag'].valid &&
         this.tags.indexOf(currentTag) === -1
       ) {
@@ -137,7 +137,13 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     // TODO: wait for https://github.com/valor-software/ng2-file-upload/pull/242
     item.alias = 'videofile';
 
+    // FIXME: remove
+    // Run detection change for progress bar
+    const interval = setInterval(() => { ; }, 250);
+
     item.onSuccess = () => {
+      clearInterval(interval);
+
       console.log('Video uploaded.');
 
       // Print all the videos once it's finished
@@ -145,6 +151,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     };
 
     item.onError = (response: string, status: number) => {
+      clearInterval(interval);
+
       // We need to handle manually these cases beceause we use the FileUpload component
       if (status === 400) {
         this.error = response;
@@ -162,7 +170,6 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         console.error(this.error);
       }
     };
-
 
     this.uploader.uploadAll();
   }

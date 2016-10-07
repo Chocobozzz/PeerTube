@@ -54,7 +54,7 @@
     "intl": "^1.2.4",
     "json-loader": "^0.5.4",
     "ng2-bootstrap": "1.1.5",
-    "ng2-file-upload": "^1.0.3",
+    "ng2-file-upload": "^1.1.0",
     "node-sass": "^3.10.0",
     "normalize.css": "^4.1.1",
     "raw-loader": "^0.5.1",
