@@ -38,7 +38,7 @@
     "bcrypt": "^0.8.7",
     "bittorrent-tracker": "^8.0.0",
     "body-parser": "^1.12.4",
-    "concurrently": "^2.0.0",
+    "concurrently": "^3.1.0",
     "config": "^1.14.0",
     "cors": "^2.8.1",
     "create-torrent": "^3.24.5",
