@@ -3,7 +3,7 @@
 const program = require('commander')
 const fs = require('fs')
 
-const utils = require('../../api/utils')
+const utils = require('../../utils/videos')
 
 program
   .option('-u, --url <url>', 'Server url')

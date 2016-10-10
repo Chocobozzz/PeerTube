@@ -2,7 +2,8 @@
 
 const program = require('commander')
 
-const utils = require('../../api/utils')
+const utilsClient = require('../../utils/clients')
+const utilsLogin = require('../../utils/login')
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -30,13 +31,13 @@ const server = {
   }
 }
 
-utils.getClient(program.url, function (err, res) {
+utilsClient.getClient(program.url, function (err, res) {
   if (err) throw err
 
   server.client.id = res.body.client_id
   server.client.secret = res.body.client_secret
 
-  utils.loginAndGetAccessToken(server, function (err, accessToken) {
+  utilsLogin.loginAndGetAccessToken(server, function (err, accessToken) {
     if (err) throw err
 
     console.log(accessToken)

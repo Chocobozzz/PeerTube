@@ -9,7 +9,7 @@ const clientsUtils = {
 // ---------------------- Export functions --------------------
 
 function getClient (url, end) {
-  const path = '/api/v1/users/client'
+  const path = '/api/v1/clients/local'
 
   request(url)
     .get(path)
