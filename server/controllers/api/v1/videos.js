@@ -116,9 +116,6 @@ function addVideo (req, res, next) {
 
   ], function andFinally (err) {
     if (err) {
-      // TODO unseed the video
-      // TODO remove thumbnail
-      // TODO delete from DB
       logger.error('Cannot insert the video.')
       return next(err)
     }
