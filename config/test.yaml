@@ -7,6 +7,3 @@ webserver:
 database:
   host: 'localhost'
   port: 27017
-
-electron:
-  debug: false

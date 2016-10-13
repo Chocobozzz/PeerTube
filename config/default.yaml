@@ -18,6 +18,3 @@ storage:
   logs: 'logs/'
   thumbnails: 'thumbnails/'
   torrents: 'torrents/'
-
-electron:
-  debug: false

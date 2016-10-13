@@ -35,9 +35,6 @@ const CONFIG = {
     HOST: config.get('database.host'),
     PORT: config.get('database.port')
   },
-  ELECTRON: {
-    DEBUG: config.get('electron.debug')
-  },
   STORAGE: {
     CERT_DIR: path.join(__dirname, '..', '..', config.get('storage.certs')),
     LOG_DIR: path.join(__dirname, '..', '..', config.get('storage.logs')),
@@ -138,10 +135,6 @@ const USER_ROLES = {
   USER: 'user'
 }
 
-// Seeds in parallel we send to electron when "seed all"
-// Once a video is in seeding state we seed another video etc
-const SEEDS_IN_PARALLEL = 3
-
 // ---------------------------------------------------------------------------
 
 // Special constants for a test instance
@@ -169,7 +162,6 @@ module.exports = {
   REQUESTS_LIMIT,
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
-  SEEDS_IN_PARALLEL,
   SORTABLE_COLUMNS,
   STATIC_PATHS,
   THUMBNAILS_SIZE,
