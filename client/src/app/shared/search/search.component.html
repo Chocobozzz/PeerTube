@@ -3,8 +3,8 @@
     <button id="simple-btn-keyboard-nav" type="button" class="btn btn-default" dropdownToggle>
       {{ getStringChoice(searchCriterias.field) }} <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav">
-      <li *ngFor="let choice of choiceKeys" class="dropdown-item">
+    <ul class="dropdown-menu" role="menu" aria-labelledby="simple-btn-keyboard-nav" dropdownMenu>
+      <li *ngFor="let choice of choiceKeys" class="dropdown-item" role="menu-item">
         <a class="dropdown-item" href="#" (click)="choose($event, choice)">{{ getStringChoice(choice) }}</a>
       </li>
     </ul>

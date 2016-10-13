@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
+import { DropdownModule } from 'ng2-bootstrap/components/dropdown';
 import { ProgressbarModule } from 'ng2-bootstrap/components/progressbar';
 import { PaginationModule } from 'ng2-bootstrap/components/pagination';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
@@ -111,6 +112,7 @@ const APP_PROVIDERS = [
     HttpModule,
     RouterModule.forRoot(routes),
 
+    DropdownModule,
     ProgressbarModule,
     PaginationModule,
     FileUploadModule
