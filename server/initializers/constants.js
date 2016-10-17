@@ -44,6 +44,7 @@ const CONFIG = {
   },
   WEBSERVER: {
     SCHEME: config.get('webserver.https') === true ? 'https' : 'http',
+    WS: config.get('webserver.https') === true ? 'wss' : 'ws',
     HOST: config.get('webserver.host'),
     PORT: config.get('webserver.port')
   }

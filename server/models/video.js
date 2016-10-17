@@ -1,6 +1,5 @@
 'use strict'
 
-const config = require('config')
 const createTorrent = require('create-torrent')
 const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
@@ -15,11 +14,6 @@ const customVideosValidators = require('../helpers/custom-validators').videos
 const logger = require('../helpers/logger')
 const modelUtils = require('./utils')
 const utils = require('../helpers/utils')
-
-const http = config.get('webserver.https') === true ? 'https' : 'http'
-const host = config.get('webserver.host')
-const port = config.get('webserver.port')
-const webseedBaseUrl = http + '://' + host + ':' + port + constants.STATIC_PATHS.WEBSEED
 
 // ---------------------------------------------------------------------------
 
@@ -106,7 +100,16 @@ VideoSchema.pre('save', function (next) {
     tasks.push(
       // TODO: refractoring
       function (callback) {
-        createTorrent(videoPath, { announceList: [ [ 'ws://' + host + ':' + port + '/tracker/socket' ] ], urlList: [ webseedBaseUrl + video.filename ] }, function (err, torrent) {
+        const options = {
+          announceList: [
+            [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOST + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
+          ],
+          urlList: [
+            constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.filename
+          ]
+        }
+
+        createTorrent(videoPath, options, function (err, torrent) {
           if (err) return callback(err)
 
           fs.writeFile(constants.CONFIG.STORAGE.TORRENTS_DIR + video.filename + '.torrent', torrent, function (err) {
