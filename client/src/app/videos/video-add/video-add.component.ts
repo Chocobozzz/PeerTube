@@ -130,6 +130,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   removeTag(tag: string) {
     this.tags.splice(this.tags.indexOf(tag), 1);
+    this.form.get('currentTag').enable();
   }
 
   upload() {

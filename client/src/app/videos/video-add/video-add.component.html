@@ -2,7 +2,7 @@
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form novalidate (ngSubmit)="upload()" [formGroup]="form">
+<form novalidate [formGroup]="form">
   <div class="form-group">
     <label for="name">Name</label>
     <input
@@ -68,8 +68,9 @@
 
   <div class="form-group">
     <input
-      type="submit" value="Upload" class="btn btn-default form-control" [title]="getInvalidFieldsTitle()"
-      [disabled]="!form.valid || tags.length === 0 || filename === null"
+      type="button" value="Upload" class="btn btn-default form-control"
+      [title]="getInvalidFieldsTitle()" [disabled]="!form.valid || tags.length === 0 || filename === null"
+      (click)="upload()"
     >
   </div>
 </form>
