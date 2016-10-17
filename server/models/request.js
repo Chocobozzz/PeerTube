@@ -185,14 +185,14 @@ function makeRequests () {
           if (success === true) {
             logger.debug('Removing requests for %s pod.', toPodId, { requestsIds: requestToMake.ids })
 
-            // Remove the pod id of these request ids
-            removePodOf.call(self, requestToMake.ids, toPodId)
             goodPods.push(toPodId)
+
+            // Remove the pod id of these request ids
+            removePodOf.call(self, requestToMake.ids, toPodId, callbackEach)
           } else {
             badPods.push(toPodId)
+            callbackEach()
           }
-
-          callbackEach()
         })
       })
     }, function () {
