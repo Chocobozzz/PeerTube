@@ -30,7 +30,7 @@ server {
       add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
     }
 
-    alias /your/installation/PeerTube/uploads;
+    alias /your/installation/PeerTube/videos;
   }
 
   # Websocket tracker
