@@ -172,6 +172,14 @@ You can check the application (CORS headers, tracker websocket...) by running:
 
     $ NODE_ENV=production npm run check
 
+### Upgrade
+
+The following commands will upgrade the source (according to your current branch), upgrade node modules and rebuild client application:
+
+    # systemctl stop peertube
+    $ npm run upgrade
+    # systemctl start peertube
+
 ### Other commands
 
 To print all available command run:
