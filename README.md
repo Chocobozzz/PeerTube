@@ -168,6 +168,10 @@ Finally, run the server with the `production` `NODE_ENV` variable set.
 
 **Systemd template**: https://github.com/Chocobozzz/PeerTube/tree/master/support/systemd
 
+You can check the application (CORS headers, tracker websocket...) by running:
+
+    $ NODE_ENV=production npm run check
+
 ### Other commands
 
 To print all available command run:
