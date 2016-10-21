@@ -5,7 +5,7 @@
   "private": true,
   "licence": "GPLv3",
   "engines": {
-    "node": ">=4.2.0"
+    "node": ">=4.x"
   },
   "author": {
     "name": "Florian Bigard",
@@ -30,6 +30,7 @@
     "play": "scripty",
     "dev": "scripty",
     "start": "node server",
+    "check": "scripty",
     "test": "scripty",
     "help": "scripty",
     "postinstall": "cd client && npm install"
@@ -90,5 +91,8 @@
       "describe",
       "include"
     ]
+  },
+  "scripty": {
+    "silent": true
   }
 }
