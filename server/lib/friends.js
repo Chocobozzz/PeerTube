@@ -97,25 +97,13 @@ function quitFriends (callback) {
           // Don't stop the process
         }
 
-        return callbackAsync()
+        return callbackAsync(null, pods)
       })
     },
 
-    function removePodsFromDB (callbackAsync) {
-      Pod.removeAll(function (err) {
-        return callbackAsync(err)
-      })
-    },
-
-    function listRemoteVideos (callbackAsync) {
-      logger.info('Broke friends, so sad :(')
-
-      Video.listRemotes(callbackAsync)
-    },
-
-    function removeTheRemoteVideos (videosList, callbackAsync) {
-      each(videosList, function (video, callbackEach) {
-        video.remove(callbackEach)
+    function removePodsFromDB (pods, callbackAsync) {
+      each(pods, function (pod, callbackEach) {
+        pod.remove(callbackEach)
       }, callbackAsync)
     }
   ], function (err) {

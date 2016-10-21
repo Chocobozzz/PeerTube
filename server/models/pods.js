@@ -1,10 +1,13 @@
 'use strict'
 
+const each = require('async/each')
 const mongoose = require('mongoose')
 const map = require('lodash/map')
 const validator = require('express-validator').validator
 
 const constants = require('../initializers/constants')
+
+const Video = mongoose.model('Video')
 
 // ---------------------------------------------------------------------------
 
@@ -48,6 +51,17 @@ PodSchema.pre('save', function (next) {
 
     self.score = constants.FRIEND_SCORE.BASE
     return next()
+  })
+})
+
+PodSchema.pre('remove', function (next) {
+  // Remove the videos owned by this pod too
+  Video.listByUrl(this.url, function (err, videos) {
+    if (err) return next(err)
+
+    each(videos, function (video, callbackEach) {
+      video.remove(callbackEach)
+    }, next)
   })
 })
 

@@ -10,9 +10,10 @@ require('../models/application')
 require('../models/oauth-token')
 require('../models/user')
 require('../models/oauth-client')
-require('../models/pods')
 require('../models/video')
 // Request model needs Video model
+require('../models/pods')
+// Request model needs Pod model
 require('../models/request')
 
 const database = {

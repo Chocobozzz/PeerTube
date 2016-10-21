@@ -1,6 +1,5 @@
 'use strict'
 
-const each = require('async/each')
 const express = require('express')
 const mongoose = require('mongoose')
 const waterfall = require('async/waterfall')
@@ -17,7 +16,6 @@ const signatureValidator = middlewares.validators.remote.signature
 
 const router = express.Router()
 const Pod = mongoose.model('Pod')
-const Video = mongoose.model('Video')
 
 router.get('/', listPods)
 router.post('/',
@@ -117,27 +115,7 @@ function removePods (req, res, next) {
     },
 
     function removePod (pod, callback) {
-      pod.remove(function (err) {
-        // Be sure we only return one argument in the callback
-        return callback(err)
-      })
-    },
-
-    function (callback) {
-      Video.listByUrls([ url ], function (err, videosList) {
-        if (err) {
-          logger.error('Cannot list videos from url.', { error: err })
-          return callback(err)
-        }
-
-        return callback(null, videosList)
-      })
-    },
-
-    function removeTheRemoteVideos (videosList, callback) {
-      each(videosList, function (video, callbackEach) {
-        video.remove(callbackEach)
-      }, callback)
+      pod.remove(callback)
     }
   ], function (err) {
     if (err) return next(err)

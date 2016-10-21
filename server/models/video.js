@@ -57,7 +57,7 @@ VideoSchema.statics = {
   getDurationFromFile,
   listForApi,
   listByUrlAndMagnet,
-  listByUrls,
+  listByUrl,
   listOwned,
   listOwnedByAuthor,
   listRemotes,
@@ -218,8 +218,8 @@ function listByUrlAndMagnet (fromUrl, magnetUri, callback) {
   this.find({ podUrl: fromUrl, magnetUri: magnetUri }, callback)
 }
 
-function listByUrls (fromUrls, callback) {
-  this.find({ podUrl: { $in: fromUrls } }, callback)
+function listByUrl (fromUrl, callback) {
+  this.find({ podUrl: fromUrl }, callback)
 }
 
 function listOwned (callback) {

@@ -2,7 +2,6 @@
 
 const each = require('async/each')
 const eachLimit = require('async/eachLimit')
-const map = require('lodash/map')
 const mongoose = require('mongoose')
 const waterfall = require('async/waterfall')
 
@@ -11,7 +10,6 @@ const logger = require('../helpers/logger')
 const requests = require('../helpers/requests')
 
 const Pod = mongoose.model('Pod')
-const Video = mongoose.model('Video')
 
 let timer = null
 let lastRequestTimestamp = 0
@@ -218,54 +216,13 @@ function removeBadPods () {
       })
     },
 
-    function listVideosOfTheseBadPods (pods, callback) {
-      if (pods.length === 0) return callback(null)
-
-      const urls = map(pods, 'url')
-
-      Video.listByUrls(urls, function (err, videosList) {
-        if (err) {
-          logger.error('Cannot list videos urls.', { error: err, urls: urls })
-          return callback(null, pods, [])
-        }
-
-        return callback(null, pods, videosList)
-      })
-    },
-
-    function removeVideosOfTheseBadPods (pods, videosList, callback) {
-      // We don't have to remove pods, skip
-      if (typeof pods === 'function') {
-        callback = pods
-        return callback(null)
-      }
-
-      each(videosList, function (video, callbackEach) {
-        video.remove(callbackEach)
-      }, function (err) {
-        if (err) {
-          // Don't stop the process
-          logger.error('Error while removing videos of bad pods.', { error: err })
-          return
-        }
-
-        return callback(null, pods)
-      })
-    },
-
-    function removeBadPodsFromDB (pods, callback) {
-      // We don't have to remove pods, skip
-      if (typeof pods === 'function') {
-        callback = pods
-        return callback(null)
-      }
+    function removeTheseBadPods (pods, callback) {
+      if (pods.length === 0) return callback(null, 0)
 
       each(pods, function (pod, callbackEach) {
         pod.remove(callbackEach)
       }, function (err) {
-        if (err) return callback(err)
-
-        return callback(null, pods.length)
+        return callback(err, pods.length)
       })
     }
   ], function (err, numberOfPodsRemoved) {
