@@ -11,6 +11,8 @@ const path = require('path')
 const TrackerServer = require('bittorrent-tracker').Server
 const WebSocketServer = require('ws').Server
 
+process.title = 'peertube'
+
 // Create our main app
 const app = express()
 

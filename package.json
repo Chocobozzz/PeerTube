@@ -31,6 +31,7 @@
     "dev": "scripty",
     "start": "node server",
     "check": "scripty",
+    "upgrade": "scripty",
     "test": "scripty",
     "help": "scripty",
     "postinstall": "cd client && npm install"

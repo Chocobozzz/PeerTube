@@ -16,5 +16,6 @@ printf "  play                 -> Run 3 fresh nodes so that you can test the com
 printf "  dev                  -> Watch, run the livereload and run the server so that you can develop the application\n"
 printf "  start                -> Run the server\n"
 printf "  check                -> Check the server (according to NODE_ENV)\n"
+printf "  upgrade -- [branch]  -> Upgrade the application according to the [branch] parameter\n"
 printf "  test                 -> Run the tests\n"
 printf "  help                 -> Print this help\n"
