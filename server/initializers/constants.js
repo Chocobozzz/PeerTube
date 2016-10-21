@@ -38,7 +38,7 @@ const CONFIG = {
   STORAGE: {
     CERT_DIR: path.join(__dirname, '..', '..', config.get('storage.certs')),
     LOG_DIR: path.join(__dirname, '..', '..', config.get('storage.logs')),
-    UPLOAD_DIR: path.join(__dirname, '..', '..', config.get('storage.uploads')),
+    VIDEOS_DIR: path.join(__dirname, '..', '..', config.get('storage.videos')),
     THUMBNAILS_DIR: path.join(__dirname, '..', '..', config.get('storage.thumbnails')),
     TORRENTS_DIR: path.join(__dirname, '..', '..', config.get('storage.torrents'))
   },

@@ -11,7 +11,7 @@ database:
 # From the project root directory
 storage:
   certs: 'test6/certs/'
-  uploads: 'test6/uploads/'
+  videos: 'test6/videos/'
   logs: 'test6/logs/'
   thumbnails: 'test6/thumbnails/'
   torrents: 'test6/torrents/'

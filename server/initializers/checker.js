@@ -17,7 +17,7 @@ function checkConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.host', 'webserver.port',
     'database.host', 'database.port', 'database.suffix',
-    'storage.certs', 'storage.uploads', 'storage.logs', 'storage.thumbnails'
+    'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails'
   ]
   const miss = []
 

@@ -94,7 +94,7 @@ VideoSchema.pre('save', function (next) {
   const tasks = []
 
   if (video.isOwned()) {
-    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.UPLOAD_DIR, video.filename)
+    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.filename)
     this.podUrl = constants.CONFIG.WEBSERVER.URL
 
     tasks.push(
@@ -258,7 +258,7 @@ function removeThumbnail (video, callback) {
 }
 
 function removeFile (video, callback) {
-  fs.unlink(constants.CONFIG.STORAGE.UPLOAD_DIR + video.filename, callback)
+  fs.unlink(constants.CONFIG.STORAGE.VIDEOS_DIR + video.filename, callback)
 }
 
 // Maybe the torrent is not seeded, but we catch the error to don't stop the removing process

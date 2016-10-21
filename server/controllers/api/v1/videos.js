@@ -25,7 +25,7 @@ const Video = mongoose.model('Video')
 // multer configuration
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, constants.CONFIG.STORAGE.UPLOAD_DIR)
+    cb(null, constants.CONFIG.STORAGE.VIDEOS_DIR)
   },
 
   filename: function (req, file, cb) {
