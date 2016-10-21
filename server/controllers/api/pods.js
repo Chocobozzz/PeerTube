@@ -4,9 +4,9 @@ const express = require('express')
 const mongoose = require('mongoose')
 const waterfall = require('async/waterfall')
 
-const logger = require('../../../helpers/logger')
-const friends = require('../../../lib/friends')
-const middlewares = require('../../../middlewares')
+const logger = require('../../helpers/logger')
+const friends = require('../../lib/friends')
+const middlewares = require('../../middlewares')
 const admin = middlewares.admin
 const oAuth = middlewares.oauth
 const podsMiddleware = middlewares.pods

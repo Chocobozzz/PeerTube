@@ -3,8 +3,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 
-const constants = require('../../../initializers/constants')
-const middlewares = require('../../../middlewares')
+const constants = require('../../initializers/constants')
+const middlewares = require('../../middlewares')
 const admin = middlewares.admin
 const oAuth = middlewares.oauth
 

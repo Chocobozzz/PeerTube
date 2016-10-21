@@ -5,10 +5,10 @@ const mongoose = require('mongoose')
 const multer = require('multer')
 const waterfall = require('async/waterfall')
 
-const constants = require('../../../initializers/constants')
-const logger = require('../../../helpers/logger')
-const friends = require('../../../lib/friends')
-const middlewares = require('../../../middlewares')
+const constants = require('../../initializers/constants')
+const logger = require('../../helpers/logger')
+const friends = require('../../lib/friends')
+const middlewares = require('../../middlewares')
 const oAuth = middlewares.oauth
 const pagination = middlewares.pagination
 const validators = middlewares.validators
@@ -17,7 +17,7 @@ const validatorsSort = validators.sort
 const validatorsVideos = validators.videos
 const search = middlewares.search
 const sort = middlewares.sort
-const utils = require('../../../helpers/utils')
+const utils = require('../../helpers/utils')
 
 const router = express.Router()
 const Video = mongoose.model('Video')

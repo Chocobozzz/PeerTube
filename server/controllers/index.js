@@ -1,8 +1,6 @@
 'use strict'
 
-const constants = require('../initializers/constants')
-
-const apiController = require('./api/' + constants.API_VERSION)
+const apiController = require('./api/')
 
 module.exports = {
   api: apiController

@@ -5,10 +5,10 @@ const eachSeries = require('async/eachSeries')
 const express = require('express')
 const mongoose = require('mongoose')
 
-const middlewares = require('../../../middlewares')
+const middlewares = require('../../middlewares')
 const secureMiddleware = middlewares.secure
 const validators = middlewares.validators.remote
-const logger = require('../../../helpers/logger')
+const logger = require('../../helpers/logger')
 
 const router = express.Router()
 const Video = mongoose.model('Video')

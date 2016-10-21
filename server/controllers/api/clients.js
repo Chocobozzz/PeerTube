@@ -3,7 +3,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 
-const constants = require('../../../initializers/constants')
+const constants = require('../../initializers/constants')
 
 const Client = mongoose.model('OAuthClient')
 
