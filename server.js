@@ -68,22 +68,22 @@ const apiRoute = '/api/' + constants.API_VERSION
 app.use(apiRoute, routes.api)
 
 // Static files
-app.use('/client', express.static(path.join(__dirname, '/client/dist'), { maxAge: 0 }))
+app.use('/client', express.static(path.join(__dirname, '/client/dist'), { maxAge: constants.STATIC_MAX_AGE }))
 // 404 for static files not found
 app.use('/client/*', function (req, res, next) {
   res.sendStatus(404)
 })
 
 const torrentsPhysicalPath = path.join(__dirname, config.get('storage.torrents'))
-app.use(constants.STATIC_PATHS.TORRENTS, cors(), express.static(torrentsPhysicalPath, { maxAge: '7d' }))
+app.use(constants.STATIC_PATHS.TORRENTS, cors(), express.static(torrentsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Videos path for webseeding
 const videosPhysicalPath = path.join(__dirname, config.get('storage.videos'))
-app.use(constants.STATIC_PATHS.WEBSEED, cors(), express.static(videosPhysicalPath, { maxAge: '7d' }))
+app.use(constants.STATIC_PATHS.WEBSEED, cors(), express.static(videosPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Thumbnails path for express
 const thumbnailsPhysicalPath = path.join(__dirname, config.get('storage.thumbnails'))
-app.use(constants.STATIC_PATHS.THUMBNAILS, express.static(thumbnailsPhysicalPath, { maxAge: '7d' }))
+app.use(constants.STATIC_PATHS.THUMBNAILS, express.static(thumbnailsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Client application
 app.use('/*', function (req, res, next) {

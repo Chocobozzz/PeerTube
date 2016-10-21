@@ -128,6 +128,9 @@ const STATIC_PATHS = {
   WEBSEED: '/static/webseed/'
 }
 
+// Cache control
+let STATIC_MAX_AGE = '30d'
+
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
 
@@ -143,6 +146,7 @@ if (isTestInstance() === true) {
   CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
   FRIEND_SCORE.BASE = 20
   REQUESTS_INTERVAL = 10000
+  STATIC_MAX_AGE = 0
 }
 
 // ---------------------------------------------------------------------------
@@ -164,6 +168,7 @@ module.exports = {
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS,
+  STATIC_MAX_AGE,
   STATIC_PATHS,
   THUMBNAILS_SIZE,
   USER_ROLES

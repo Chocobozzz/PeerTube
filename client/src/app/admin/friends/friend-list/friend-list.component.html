@@ -20,7 +20,7 @@
   </tbody>
 </table>
 
-<a *ngIf="friends?.length !== 0" class="add-user btn btn-danger pull-left" (click)="quitFriends()">
+<a *ngIf="friends && friends.length !== 0" class="add-user btn btn-danger pull-left" (click)="quitFriends()">
   Quit friends
 </a>
 
