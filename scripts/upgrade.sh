@@ -3,7 +3,7 @@
 
 git pull origin $(git rev-parse --abbrev-ref HEAD) || exit -1
 
-if [[ `pgrep peertube` > /dev/null ]]; then
+if pgrep peertube > /dev/null; then
   echo 'PeerTube is running!'
   exit 0
 fi
