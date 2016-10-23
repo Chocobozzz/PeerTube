@@ -128,7 +128,9 @@ function makeRequest (toPod, requestsToMake, callback) {
 function makeRequests () {
   const self = this
 
-  listWithLimit.call(self, constants.REQUESTS_LIMIT, function (err, requests) {
+  // We limit the size of the requests (REQUESTS_LIMIT)
+  // We don't want to stuck with the same failing requests so we get a random list
+  listWithLimitAndRandom.call(self, constants.REQUESTS_LIMIT, function (err, requests) {
     if (err) {
       logger.error('Cannot get the list of requests.', { err: err })
       return // Abort
@@ -249,8 +251,17 @@ function updatePodsScore (goodPods, badPods) {
   })
 }
 
-function listWithLimit (limit, callback) {
-  this.find({ }, { _id: 1, request: 1, to: 1 }).sort({ _id: 1 }).limit(limit).exec(callback)
+function listWithLimitAndRandom (limit, callback) {
+  const self = this
+
+  self.count(function (err, count) {
+    if (err) return callback(err)
+
+    let start = Math.floor(Math.random() * count) - limit
+    if (start < 0) start = 0
+
+    self.find({ }, { _id: 1, request: 1, to: 1 }).sort({ _id: 1 }).skip(start).limit(limit).exec(callback)
+  })
 }
 
 function removeAll (callback) {
