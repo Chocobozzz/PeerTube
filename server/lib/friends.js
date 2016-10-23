@@ -273,7 +273,7 @@ function isMe (url) {
   const hostname = parsedUrl.hostname
   const port = parseInt(parsedUrl.port)
 
-  const myHostname = constants.CONFIG.WEBSERVER.HOST
+  const myHostname = constants.CONFIG.WEBSERVER.HOSTNAME
   const myPort = constants.CONFIG.WEBSERVER.PORT
 
   return hostname === myHostname && port === myPort

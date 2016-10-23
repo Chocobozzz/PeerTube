@@ -8,7 +8,7 @@ winston.emitErrs = true
 
 const constants = require('../initializers/constants')
 
-const label = constants.CONFIG.WEBSERVER.HOST + ':' + constants.CONFIG.WEBSERVER.PORT
+const label = constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT
 
 // Create the directory if it does not exist
 mkdirp.sync(constants.CONFIG.STORAGE.LOG_DIR)

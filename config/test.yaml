@@ -5,5 +5,5 @@ webserver:
   https: false
 
 database:
-  host: 'localhost'
+  hostname: 'localhost'
   port: 27017

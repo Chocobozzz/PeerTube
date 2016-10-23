@@ -2,7 +2,7 @@ listen:
   port: 9002
 
 webserver:
-  host: 'localhost'
+  hostname: 'localhost'
   port: 9002
 
 database:

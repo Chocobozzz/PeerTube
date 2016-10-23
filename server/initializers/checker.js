@@ -15,8 +15,8 @@ const checker = {
 // Check the config files
 function checkConfig () {
   const required = [ 'listen.port',
-    'webserver.https', 'webserver.host', 'webserver.port',
-    'database.host', 'database.port', 'database.suffix',
+    'webserver.https', 'webserver.hostname', 'webserver.port',
+    'database.hostname', 'database.port', 'database.suffix',
     'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails'
   ]
   const miss = []

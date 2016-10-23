@@ -32,7 +32,7 @@ const OAUTH_LIFETIME = {
 const CONFIG = {
   DATABASE: {
     DBNAME: 'peertube' + config.get('database.suffix'),
-    HOST: config.get('database.host'),
+    HOSTNAME: config.get('database.hostname'),
     PORT: config.get('database.port')
   },
   STORAGE: {
@@ -45,11 +45,11 @@ const CONFIG = {
   WEBSERVER: {
     SCHEME: config.get('webserver.https') === true ? 'https' : 'http',
     WS: config.get('webserver.https') === true ? 'wss' : 'ws',
-    HOST: config.get('webserver.host'),
+    HOSTNAME: config.get('webserver.hostname'),
     PORT: config.get('webserver.port')
   }
 }
-CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOST + ':' + CONFIG.WEBSERVER.PORT
+CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
 // ---------------------------------------------------------------------------
 

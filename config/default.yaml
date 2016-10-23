@@ -3,11 +3,11 @@ listen:
 
 webserver:
   https: false
-  host: 'localhost'
+  hostname: 'localhost'
   port: 9000
 
 database:
-  host: 'localhost'
+  hostname: 'localhost'
   port: 27017
   suffix: '-dev'
 

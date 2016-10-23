@@ -22,7 +22,7 @@ const database = {
 
 function connect () {
   mongoose.Promise = global.Promise
-  mongoose.connect('mongodb://' + constants.CONFIG.DATABASE.HOST + ':' + constants.CONFIG.DATABASE.PORT + '/' + constants.CONFIG.DATABASE.DBNAME)
+  mongoose.connect('mongodb://' + constants.CONFIG.DATABASE.HOSTNAME + ':' + constants.CONFIG.DATABASE.PORT + '/' + constants.CONFIG.DATABASE.DBNAME)
   mongoose.connection.on('error', function () {
     throw new Error('Mongodb connection error.')
   })

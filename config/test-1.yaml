@@ -2,7 +2,7 @@ listen:
   port: 9001
 
 webserver:
-  host: 'localhost'
+  hostname: 'localhost'
   port: 9001
 
 database:

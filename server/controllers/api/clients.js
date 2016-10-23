@@ -13,9 +13,9 @@ router.get('/local', getLocalClient)
 
 // Get the client credentials for the PeerTube front end
 function getLocalClient (req, res, next) {
-  const serverHost = constants.CONFIG.WEBSERVER.HOST
+  const serverHostname = constants.CONFIG.WEBSERVER.HOSTNAME
   const serverPort = constants.CONFIG.WEBSERVER.PORT
-  let headerHostShouldBe = serverHost
+  let headerHostShouldBe = serverHostname
   if (serverPort !== 80 && serverPort !== 443) {
     headerHostShouldBe += ':' + serverPort
   }

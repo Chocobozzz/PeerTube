@@ -102,7 +102,7 @@ VideoSchema.pre('save', function (next) {
       function (callback) {
         const options = {
           announceList: [
-            [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOST + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
+            [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
           ],
           urlList: [
             constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.filename
