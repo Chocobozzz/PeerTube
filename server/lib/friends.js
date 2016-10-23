@@ -6,6 +6,7 @@ const eachSeries = require('async/eachSeries')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const request = require('request')
+const urlUtil = require('url')
 const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
@@ -173,8 +174,11 @@ function computeWinningPods (urls, podsScore) {
   // Only add a pod if it exists in more than a half base pods
   const podsList = []
   const baseScore = urls.length / 2
-  Object.keys(podsScore).forEach(function (pod) {
-    if (podsScore[pod] > baseScore) podsList.push({ url: pod })
+  Object.keys(podsScore).forEach(function (podUrl) {
+    // If the pod is not me and with a good score we add it
+    if (isMe(podUrl) === false && podsScore[podUrl] > baseScore) {
+      podsList.push({ url: podUrl })
+    }
   })
 
   return podsList
@@ -261,4 +265,16 @@ function createRequest (type, data, to) {
   req.save(function (err) {
     if (err) logger.error('Cannot save the request.', { error: err })
   })
+}
+
+function isMe (url) {
+  const parsedUrl = urlUtil.parse(url)
+
+  const hostname = parsedUrl.hostname
+  const port = parseInt(parsedUrl.port)
+
+  const myHostname = constants.CONFIG.WEBSERVER.HOST
+  const myPort = constants.CONFIG.WEBSERVER.PORT
+
+  return hostname === myHostname && port === myPort
 }
