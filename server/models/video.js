@@ -245,7 +245,7 @@ function search (value, field, start, count, sort, callback) {
   if (field === 'magnetUri' || field === 'tags') {
     query[field] = value
   } else {
-    query[field] = new RegExp(value)
+    query[field] = new RegExp(value, 'i')
   }
 
   modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
