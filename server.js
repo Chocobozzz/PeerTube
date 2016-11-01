@@ -139,6 +139,8 @@ installer.installApplication(function (err) {
       Request.activate()
 
       logger.info('Server listening on port %d', port)
+      logger.info('Webserver: %s', constants.CONFIG.WEBSERVER.URL)
+
       app.emit('ready')
     })
   })
