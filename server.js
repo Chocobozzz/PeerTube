@@ -141,7 +141,6 @@ installer.installApplication(function (err) {
       // Activate the pool requests
       Request.activate()
 
-      logger.info('Seeded all the videos')
       logger.info('Server listening on port %d', port)
       app.emit('ready')
     })
