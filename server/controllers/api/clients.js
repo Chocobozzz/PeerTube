@@ -4,6 +4,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 
 const constants = require('../../initializers/constants')
+const logger = require('../../helpers/logger')
 
 const Client = mongoose.model('OAuthClient')
 
@@ -22,6 +23,7 @@ function getLocalClient (req, res, next) {
 
   // Don't make this check if this is a test instance
   if (process.env.NODE_ENV !== 'test' && req.get('host') !== headerHostShouldBe) {
+    logger.info('Getting client tokens for host %s is forbidden (expected %s).', req.get('host'), headerHostShouldBe)
     return res.type('json').status(403).end()
   }
 
