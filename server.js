@@ -26,9 +26,14 @@ database.connect()
 // ----------- Checker -----------
 const checker = require('./server/initializers/checker')
 
-const miss = checker.checkConfig()
-if (miss.length !== 0) {
-  throw new Error('Miss some configurations keys : ' + miss)
+const missed = checker.checkMissedConfig()
+if (missed.length !== 0) {
+  throw new Error('Miss some configurations keys : ' + missed)
+}
+
+const errorMessage = checker.checkConfig()
+if (errorMessage !== null) {
+  throw new Error(errorMessage)
 }
 
 // ----------- PeerTube modules -----------

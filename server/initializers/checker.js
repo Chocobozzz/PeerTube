@@ -8,12 +8,25 @@ const User = mongoose.model('User')
 
 const checker = {
   checkConfig,
+  checkMissedConfig,
   clientsExist,
   usersExist
 }
 
-// Check the config files
+// Some checks on configuration files
 function checkConfig () {
+  if (config.has('webserver.host')) {
+    let errorMessage = '`host` config key was renamed to `hostname` but it seems you still have a `host` key in your configuration files!'
+    errorMessage += ' Please ensure to rename your `host` configuration to `hostname`.'
+
+    return errorMessage
+  }
+
+  return null
+}
+
+// Check the config files
+function checkMissedConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'database.hostname', 'database.port', 'database.suffix',
