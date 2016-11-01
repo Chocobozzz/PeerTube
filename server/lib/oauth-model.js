@@ -60,7 +60,7 @@ function getUser (username, password) {
 }
 
 function revokeToken (token) {
-  return OAuthToken.getByRefreshToken(token.refreshToken).then(function (tokenDB) {
+  return OAuthToken.getByRefreshTokenAndPopulateUser(token.refreshToken).then(function (tokenDB) {
     if (tokenDB) tokenDB.remove()
 
     /*
@@ -72,6 +72,7 @@ function revokeToken (token) {
     */
     const expiredToken = tokenDB
     expiredToken.refreshTokenExpiresAt = new Date('2015-05-28T06:59:53.000Z')
+
     return expiredToken
   })
 }

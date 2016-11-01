@@ -20,7 +20,7 @@ OAuthTokenSchema.path('user').required(true)
 OAuthTokenSchema.statics = {
   getByRefreshTokenAndPopulateClient,
   getByTokenAndPopulateUser,
-  getByRefreshToken,
+  getByRefreshTokenAndPopulateUser,
   removeByUserId
 }
 
@@ -51,8 +51,8 @@ function getByTokenAndPopulateUser (bearerToken) {
   return this.findOne({ accessToken: bearerToken }).populate('user').exec()
 }
 
-function getByRefreshToken (refreshToken) {
-  return this.findOne({ refreshToken: refreshToken }).exec()
+function getByRefreshTokenAndPopulateUser (refreshToken) {
+  return this.findOne({ refreshToken: refreshToken }).populate('user').exec()
 }
 
 function removeByUserId (userId, callback) {
