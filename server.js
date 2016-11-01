@@ -77,15 +77,15 @@ app.use('/client/*', function (req, res, next) {
   res.sendStatus(404)
 })
 
-const torrentsPhysicalPath = path.join(__dirname, constants.CONFIG.STORAGE.TORRENTS_DIR)
+const torrentsPhysicalPath = constants.CONFIG.STORAGE.TORRENTS_DIR
 app.use(constants.STATIC_PATHS.TORRENTS, cors(), express.static(torrentsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Videos path for webseeding
-const videosPhysicalPath = path.join(__dirname, constants.CONFIG.STORAGE.VIDEOS_DIR)
+const videosPhysicalPath = constants.CONFIG.STORAGE.VIDEOS_DIR
 app.use(constants.STATIC_PATHS.WEBSEED, cors(), express.static(videosPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Thumbnails path for express
-const thumbnailsPhysicalPath = path.join(__dirname, constants.CONFIG.STORAGE.THUMBNAILS_DIR)
+const thumbnailsPhysicalPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR
 app.use(constants.STATIC_PATHS.THUMBNAILS, express.static(thumbnailsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Client application
