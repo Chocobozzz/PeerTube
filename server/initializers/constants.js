@@ -1,6 +1,7 @@
 'use strict'
 
 const config = require('config')
+const maxBy = require('lodash/maxBy')
 const path = require('path')
 
 // ---------------------------------------------------------------------------
@@ -92,9 +93,13 @@ const MONGO_MIGRATION_SCRIPTS = [
   {
     script: '0015-admin-role',
     version: 15
+  },
+  {
+    script: '0020-requests-endpoint',
+    version: 20
   }
 ]
-const LAST_MONGO_SCHEMA_VERSION = 15
+const LAST_MONGO_SCHEMA_VERSION = (maxBy(MONGO_MIGRATION_SCRIPTS, 'version'))['version']
 
 // ---------------------------------------------------------------------------
 
@@ -115,6 +120,10 @@ const REQUESTS_LIMIT = 10
 
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
+
+const REQUEST_ENDPOINTS = {
+  VIDEOS: 'videos'
+}
 
 // ---------------------------------------------------------------------------
 
@@ -162,6 +171,7 @@ module.exports = {
   OAUTH_LIFETIME,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,
+  REQUEST_ENDPOINTS,
   REQUESTS_IN_PARALLEL,
   REQUESTS_INTERVAL,
   REQUESTS_LIMIT,

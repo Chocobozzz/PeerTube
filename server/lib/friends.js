@@ -28,7 +28,7 @@ const friends = {
 }
 
 function addVideoToFriends (video) {
-  createRequest('add', video)
+  createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, video)
 }
 
 function hasFriends (callback) {
@@ -119,7 +119,7 @@ function quitFriends (callback) {
 }
 
 function removeVideoToFriends (videoParams) {
-  createRequest('remove', videoParams)
+  createRequest('remove', constants.REQUEST_ENDPOINTS.VIDEOS, videoParams)
 }
 
 function sendOwnedVideosToPod (podId) {
@@ -137,7 +137,7 @@ function sendOwnedVideosToPod (podId) {
           return
         }
 
-        createRequest('add', remoteVideo, [ podId ])
+        createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, remoteVideo, [ podId ])
       })
     })
   })
@@ -250,8 +250,9 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   })
 }
 
-function createRequest (type, data, to) {
+function createRequest (type, endpoint, data, to) {
   const req = new Request({
+    endpoint,
     request: {
       type: type,
       data: data

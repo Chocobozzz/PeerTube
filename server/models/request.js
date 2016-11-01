@@ -2,6 +2,7 @@
 
 const each = require('async/each')
 const eachLimit = require('async/eachLimit')
+const values = require('lodash/values')
 const mongoose = require('mongoose')
 const waterfall = require('async/waterfall')
 
@@ -18,7 +19,16 @@ let lastRequestTimestamp = 0
 
 const RequestSchema = mongoose.Schema({
   request: mongoose.Schema.Types.Mixed,
-  to: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Pod' } ]
+  endpoint: {
+    type: String,
+    enum: [ values(constants.REQUEST_ENDPOINTS) ]
+  },
+  to: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Pod'
+    }
+  ]
 })
 
 RequestSchema.statics = {
@@ -93,7 +103,7 @@ function remainingMilliSeconds () {
 // ---------------------------------------------------------------------------
 
 // Make a requests to friends of a certain type
-function makeRequest (toPod, requestsToMake, callback) {
+function makeRequest (toPod, requestEndpoint, requestsToMake, callback) {
   if (!callback) callback = function () {}
 
   const params = {
@@ -101,7 +111,7 @@ function makeRequest (toPod, requestsToMake, callback) {
     encrypt: true, // Security
     sign: true, // To prove our identity
     method: 'POST',
-    path: '/api/' + constants.API_VERSION + '/remote/videos',
+    path: '/api/' + constants.API_VERSION + '/remote/' + requestEndpoint,
     data: requestsToMake // Requests we need to make
   }
 
@@ -144,31 +154,34 @@ function makeRequests () {
 
     logger.info('Making requests to friends.')
 
-    // Requests by pods id
-    const requestsToMake = {}
+    // We want to group requests by destinations pod and endpoint
+    const requestsToMakeGrouped = {}
 
     requests.forEach(function (poolRequest) {
       poolRequest.to.forEach(function (toPodId) {
-        if (!requestsToMake[toPodId]) {
-          requestsToMake[toPodId] = {
-            ids: [],
-            datas: []
+        const hashKey = toPodId + poolRequest.endpoint
+        if (!requestsToMakeGrouped[hashKey]) {
+          requestsToMakeGrouped[hashKey] = {
+            toPodId,
+            endpoint: poolRequest.endpoint,
+            ids: [], // pool request ids, to delete them from the DB in the future
+            datas: [] // requests data,
           }
         }
 
-        requestsToMake[toPodId].ids.push(poolRequest._id)
-        requestsToMake[toPodId].datas.push(poolRequest.request)
+        requestsToMakeGrouped[hashKey].ids.push(poolRequest._id)
+        requestsToMakeGrouped[hashKey].datas.push(poolRequest.request)
       })
     })
 
     const goodPods = []
     const badPods = []
 
-    eachLimit(Object.keys(requestsToMake), constants.REQUESTS_IN_PARALLEL, function (toPodId, callbackEach) {
-      const requestToMake = requestsToMake[toPodId]
+    eachLimit(Object.keys(requestsToMakeGrouped), constants.REQUESTS_IN_PARALLEL, function (hashKey, callbackEach) {
+      const requestToMake = requestsToMakeGrouped[hashKey]
 
       // FIXME: mongodb request inside a loop :/
-      Pod.load(toPodId, function (err, toPod) {
+      Pod.load(requestToMake.toPodId, function (err, toPod) {
         if (err) {
           logger.error('Error finding pod by id.', { err: err })
           return callbackEach()
@@ -176,21 +189,23 @@ function makeRequests () {
 
         // Maybe the pod is not our friend anymore so simply remove it
         if (!toPod) {
-          logger.info('Removing %d requests of unexisting pod %s.', requestToMake.ids.length, toPodId)
-          removePodOf.call(self, requestToMake.ids, toPodId)
+          const requestIdsToDelete = requestToMake.ids
+
+          logger.info('Removing %d requests of unexisting pod %s.', requestIdsToDelete.length, requestToMake.toPodId)
+          removePodOf.call(self, requestIdsToDelete, requestToMake.toPodId)
           return callbackEach()
         }
 
-        makeRequest(toPod, requestToMake.datas, function (success) {
+        makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, function (success) {
           if (success === true) {
-            logger.debug('Removing requests for %s pod.', toPodId, { requestsIds: requestToMake.ids })
+            logger.debug('Removing requests for %s pod.', requestToMake.toPodId, { requestsIds: requestToMake.ids })
 
-            goodPods.push(toPodId)
+            goodPods.push(requestToMake.toPodId)
 
             // Remove the pod id of these request ids
-            removePodOf.call(self, requestToMake.ids, toPodId, callbackEach)
+            removePodOf.call(self, requestToMake.ids, requestToMake.toPodId, callbackEach)
           } else {
-            badPods.push(toPodId)
+            badPods.push(requestToMake.toPodId)
             callbackEach()
           }
         })
@@ -260,7 +275,7 @@ function listWithLimitAndRandom (limit, callback) {
     let start = Math.floor(Math.random() * count) - limit
     if (start < 0) start = 0
 
-    self.find({ }, { _id: 1, request: 1, to: 1 }).sort({ _id: 1 }).skip(start).limit(limit).exec(callback)
+    self.find().sort({ _id: 1 }).skip(start).limit(limit).exec(callback)
   })
 }
 
