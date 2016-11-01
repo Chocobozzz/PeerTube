@@ -40,9 +40,6 @@ const mongoose = require('mongoose')
 const routes = require('./server/controllers')
 const Request = mongoose.model('Request')
 
-// Get configurations
-const port = config.get('listen.port')
-
 // ----------- Command line -----------
 
 // ----------- App -----------
@@ -129,6 +126,7 @@ app.use(function (err, req, res, next) {
   res.sendStatus(err.status || 500)
 })
 
+const port = constants.CONFIG.LISTEN.PORT
 installer.installApplication(function (err) {
   if (err) throw err
 

@@ -31,6 +31,9 @@ const OAUTH_LIFETIME = {
 // ---------------------------------------------------------------------------
 
 const CONFIG = {
+  LISTEN: {
+    PORT: config.get('listen.port')
+  },
   DATABASE: {
     DBNAME: 'peertube' + config.get('database.suffix'),
     HOSTNAME: config.get('database.hostname'),
