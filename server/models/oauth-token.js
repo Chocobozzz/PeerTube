@@ -38,7 +38,9 @@ function getByRefreshTokenAndPopulateClient (refreshToken) {
       client: {
         id: token.client._id.toString()
       },
-      user: token.user
+      user: {
+        id: token.user
+      }
     }
 
     return tokenInfos
