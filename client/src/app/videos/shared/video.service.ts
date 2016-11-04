@@ -22,6 +22,7 @@ export class VideoService {
   getVideo(id: string): Observable<Video> {
     return this.http.get(VideoService.BASE_VIDEO_URL + id)
                     .map(this.restExtractor.extractDataGet)
+                    .map(video_hash => new Video(video_hash))
                     .catch((res) => this.restExtractor.handleError(res));
   }
 

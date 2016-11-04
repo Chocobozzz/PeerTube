@@ -21,6 +21,7 @@ export class Video {
       port = ':' + port;
     }
 
+
     return author + '@' + host + port;
   }
 

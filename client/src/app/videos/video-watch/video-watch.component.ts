@@ -18,7 +18,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   numPeers: number;
   uploadSpeed: number;
-  video: Video;
+  video: Video = null;
 
   private errorTimer: NodeJS.Timer;
   private sub: any;
@@ -31,6 +31,28 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private videoService: VideoService,
     private webTorrentService: WebTorrentService
   ) {}
+
+  ngOnInit() {
+    this.sub = this.route.params.subscribe(routeParams => {
+      let id = routeParams['id'];
+      this.videoService.getVideo(id).subscribe(
+        video => {
+          this.video = video;
+          this.loadVideo();
+        },
+        error => alert(error.text)
+      );
+    });
+  }
+
+  ngOnDestroy() {
+    console.log('Removing video from webtorrent.');
+    clearInterval(this.torrentInfosInterval);
+    clearTimeout(this.errorTimer);
+    this.webTorrentService.remove(this.video.magnetUri);
+
+    this.sub.unsubscribe();
+  }
 
   loadVideo() {
     // Reset the error
@@ -62,28 +84,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       });
 
       this.runInProgress(torrent);
-    });
-  }
-
-  ngOnDestroy() {
-    console.log('Removing video from webtorrent.');
-    clearInterval(this.torrentInfosInterval);
-    clearTimeout(this.errorTimer);
-    this.webTorrentService.remove(this.video.magnetUri);
-
-    this.sub.unsubscribe();
-  }
-
-  ngOnInit() {
-    this.sub = this.route.params.subscribe(routeParams => {
-      let id = routeParams['id'];
-      this.videoService.getVideo(id).subscribe(
-        video => {
-          this.video = video;
-          this.loadVideo();
-        },
-        error => alert(error.text)
-      );
     });
   }
 

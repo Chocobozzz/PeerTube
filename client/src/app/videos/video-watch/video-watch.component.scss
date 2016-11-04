@@ -24,3 +24,56 @@ my-loader {
     height: 300px;
   }
 }
+
+#video-info {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+  padding-top: 5px;
+
+  #video-name-actions {
+
+    #video-name {
+      font-size: 20px;
+    }
+
+    .btn .glyphicon {
+      position: relative;
+      top: 2px;
+    }
+
+    #magnet-uri {
+      font-weight: bold;
+      opacity: 0.85;
+    }
+  }
+
+  #video-by-date {
+    font-size: 13px;
+    opacity: 0.6;
+
+    a {
+      color: black;
+    }
+
+    #video-date:before {
+      content: '\002022';
+      margin: 0 5px;
+    }
+  }
+
+  #video-tags {
+    margin-top: 10px;
+
+    a {
+      margin-right: 5px;
+    }
+  }
+
+  #video-description {
+    margin-top: 15px;
+
+    #description-label {
+      font-weight: bold;
+    }
+  }
+}

@@ -1,23 +1,74 @@
-<div *ngIf="error" class="alert alert-danger">
-  The video load seems to be abnormally long. You could:
-  <ul>
-    <li>Check your browser console to see potentials errors</li>
-    <li>Your firewall or NAT could be too restrictive for WebRTC (there is no TURN server)</li>
-    <li>
-      Report an issue on
-      <a href="https://github.com/Chocobozzz/PeerTube/issues" title="Report an issue">
-        https://github.com/Chocobozzz/PeerTube/issues
-      </a>
-    </li>
-  </ul>
+<div *ngIf="error" class="row">
+  <div class="alert alert-danger">
+    The video load seems to be abnormally long.
+    <ul>
+      <li>Maybe the server {{ video.podUrl }} is down :(</li>
+      <li>
+        If not, you can report an issue on
+        <a href="https://github.com/Chocobozzz/PeerTube/issues" title="Report an issue">
+          https://github.com/Chocobozzz/PeerTube/issues
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
 
-<div class="embed-responsive embed-responsive-19by9">
-  <my-loader [loading]="loading"></my-loader>
+<div class="row">
+  <div class="col-md-12">
+    <div class="embed-responsive embed-responsive-19by9">
+      <my-loader [loading]="loading"></my-loader>
+    </div>
+  </div>
 </div>
 
-<div id="torrent-info">
+<div id="torrent-info" class="row">
   <div id="torrent-info-download" class="col-md-4 col-sm-4 col-xs-4">Download: {{ downloadSpeed | bytes }}/s</div>
   <div id="torrent-info-upload" class="col-md-4 col-sm-4 col-xs-4">Upload: {{ uploadSpeed | bytes }}/s</div>
   <div id="torrent-info-peers" class="col-md-4 col-sm-4 col-xs-4">Number of peers: {{ numPeers }}</div>
-<div>
+</div>
+
+<div *ngIf="video !== null" id="video-info">
+  <div class="row" id="video-name-actions">
+    <div class="col-md-8">
+      <div class="row">
+        <div id="video-name" class="col-md-12">
+          {{ video.name }}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12" id="video-by-date">
+          <span id="video-by">
+              from
+              <a [routerLink]="['/videos/list', { field: 'author', search: video.author }]" class="video-miniature-author">
+                {{ video.by }}
+              </a>
+            </span>
+          <span id="video-date">on {{ video.createdDate | date:'short' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="video-actions" class="col-md-4 text-right">
+      <button title="Get magnet URI" id="magnet-uri" class="btn btn-default">
+        <span class="glyphicon glyphicon-magnet"></span> Magnet
+      </button>
+    </div>
+  </div>
+
+  <div id="video-tags" class="row">
+    <div class="col-md-12">
+      <a *ngFor="let tag of video.tags" [routerLink]="['/videos/list', { field: 'tags', search: tag }]" class="label label-primary">
+        {{ tag }}
+      </a>
+    </div>
+  </div>
+
+  <div id="video-description" class="row">
+    <div class="col-md-12">
+      <div id="description-label">Description</div>
+      {{ video.description }}
+    </div>
+  </div>
+</div>
+
