@@ -159,8 +159,8 @@ export class AuthService {
                         this.router.navigate(['/login']);
 
                         return Observable.throw({
-                          json: '',
-                          text: 'You need to reconnect.'
+                          json: () => '',
+                          text: () => 'You need to reconnect.'
                         });
                       }
 

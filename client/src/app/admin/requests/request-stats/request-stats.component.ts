@@ -27,7 +27,6 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
   getStats() {
     this.requestService.getStats().subscribe(
       stats => {
-        console.log(stats);
         this.stats = stats;
         this.runInterval();
       },
