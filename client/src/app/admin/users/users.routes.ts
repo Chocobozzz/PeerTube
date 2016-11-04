@@ -16,11 +16,21 @@ export const UsersRoutes: Routes = [
         },
         {
           path: 'list',
-          component: UserListComponent
+          component: UserListComponent,
+          data: {
+            meta: {
+              titleSuffix: ' - Users list'
+            }
+          }
         },
         {
           path: 'add',
-          component: UserAddComponent
+          component: UserAddComponent,
+          data: {
+            meta: {
+              titleSuffix: ' - Add a user'
+            }
+          }
         }
       ]
     }

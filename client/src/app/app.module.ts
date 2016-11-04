@@ -6,11 +6,15 @@ import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
+
 import { DropdownModule } from 'ng2-bootstrap/components/dropdown';
 import { ProgressbarModule } from 'ng2-bootstrap/components/progressbar';
 import { PaginationModule } from 'ng2-bootstrap/components/pagination';
 import { ModalModule } from 'ng2-bootstrap/components/modal';
+
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
+
+import { MetaConfig, MetaModule } from 'ng2-meta';
 
 /*
  * Platform and Environment providers/directives/pipes
@@ -51,6 +55,15 @@ import {
   VideoService,
   WebTorrentService
 } from './videos';
+
+const metaConfig: MetaConfig = {
+  //Append a title suffix such as a site name to all titles
+  //Defaults to false
+  useTitleSuffix: true,
+  defaults: {
+    title: 'PeerTube'
+  }
+};
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -117,7 +130,10 @@ const APP_PROVIDERS = [
     ProgressbarModule,
     PaginationModule,
     ModalModule,
-    FileUploadModule
+
+    FileUploadModule,
+
+    MetaModule.forRoot(metaConfig)
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

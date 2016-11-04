@@ -12,11 +12,21 @@ export const VideosRoutes: Routes = [
     children: [
       {
         path: 'list',
-        component: VideoListComponent
+        component: VideoListComponent,
+        data: {
+          meta: {
+            titleSuffix: ' - Videos list'
+          }
+        }
       },
       {
         path: 'add',
-        component: VideoAddComponent
+        component: VideoAddComponent,
+        data: {
+          meta: {
+            titleSuffix: ' - Add a video'
+          }
+        }
       },
       {
         path: 'watch/:id',

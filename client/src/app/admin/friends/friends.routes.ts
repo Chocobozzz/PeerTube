@@ -16,11 +16,21 @@ export const FriendsRoutes: Routes = [
         },
         {
           path: 'list',
-          component: FriendListComponent
+          component: FriendListComponent,
+          data: {
+            meta: {
+              titleSuffix: ' - Friends list'
+            }
+          }
         },
         {
           path: 'add',
-          component: FriendAddComponent
+          component: FriendAddComponent,
+          data: {
+            meta: {
+              titleSuffix: ' - Add friends'
+            }
+          }
         }
       ]
     }

@@ -53,6 +53,7 @@
     "json-loader": "^0.5.4",
     "ng2-bootstrap": "1.1.16",
     "ng2-file-upload": "^1.1.0",
+    "ng2-meta": "github:chocobozzz/ng2-meta",
     "node-sass": "^3.10.0",
     "normalize.css": "^5.0.0",
     "raw-loader": "^0.5.1",
