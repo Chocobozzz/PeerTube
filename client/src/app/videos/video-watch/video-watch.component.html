@@ -50,7 +50,7 @@
     </div>
 
     <div id="video-actions" class="col-md-4 text-right">
-      <button title="Get magnet URI" id="magnet-uri" class="btn btn-default">
+      <button title="Get magnet URI" id="magnet-uri" class="btn btn-default" (click)="showMagnetUriModal()">
         <span class="glyphicon glyphicon-magnet"></span> Magnet
       </button>
     </div>
@@ -72,3 +72,20 @@
   </div>
 </div>
 
+<div *ngIf="video !== null" bsModal #magnetUriModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="magnetUriModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="hideMagnetUriModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Magnet Uri</h4>
+      </div>
+
+      <div class="modal-body">
+        <input #magnetUriInput (click)="magnetUriInput.select()" type="text" class="form-control input-sm" readonly [value]="video.magnetUri" />
+      </div>
+    </div>
+  </div>
+</div>

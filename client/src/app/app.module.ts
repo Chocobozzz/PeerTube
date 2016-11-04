@@ -9,6 +9,7 @@ import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 import { DropdownModule } from 'ng2-bootstrap/components/dropdown';
 import { ProgressbarModule } from 'ng2-bootstrap/components/progressbar';
 import { PaginationModule } from 'ng2-bootstrap/components/pagination';
+import { ModalModule } from 'ng2-bootstrap/components/modal';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 
 /*
@@ -115,6 +116,7 @@ const APP_PROVIDERS = [
     DropdownModule,
     ProgressbarModule,
     PaginationModule,
+    ModalModule,
     FileUploadModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection

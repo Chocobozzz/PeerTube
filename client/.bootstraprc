@@ -97,10 +97,10 @@ styles:
   panels: false
   wells: false
   responsive-embed: true
-  close: false
+  close: true
 
   # Components w/ JavaScript
-  modals: false
+  modals: true
   tooltip: false
   popovers: false
   carousel: false

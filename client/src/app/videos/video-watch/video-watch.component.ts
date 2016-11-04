@@ -1,5 +1,7 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { ModalDirective } from 'ng2-bootstrap/components/modal';
 
 import { Video, VideoService } from '../shared';
 import { WebTorrentService } from './webtorrent.service';
@@ -12,6 +14,8 @@ import { WebTorrentService } from './webtorrent.service';
 
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOADTIME_TOO_LONG: number = 30000;
+
+  @ViewChild('magnetUriModal') magnetUriModal: ModalDirective;
 
   downloadSpeed: number;
   error: boolean = false;
@@ -85,6 +89,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.runInProgress(torrent);
     });
+  }
+
+  showMagnetUriModal() {
+    this.magnetUriModal.show();
+  }
+
+  hideMagnetUriModal() {
+    this.magnetUriModal.hide();
   }
 
   private loadTooLong() {
