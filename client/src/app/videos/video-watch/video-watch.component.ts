@@ -2,6 +2,7 @@ import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@an
 import { ActivatedRoute } from '@angular/router';
 
 import { ModalDirective } from 'ng2-bootstrap/components/modal';
+import { MetaService } from 'ng2-meta';
 
 import { Video, VideoService } from '../shared';
 import { WebTorrentService } from './webtorrent.service';
@@ -33,6 +34,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private route: ActivatedRoute,
     private videoService: VideoService,
+    private metaService: MetaService,
     private webTorrentService: WebTorrentService
   ) {}
 
@@ -42,6 +44,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.videoService.getVideo(id).subscribe(
         video => {
           this.video = video;
+          this.setOpenGraphTags();
           this.loadVideo();
         },
         error => alert(error.text)
@@ -102,6 +105,25 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private loadTooLong() {
     this.error = true;
     console.error('The video load seems to be abnormally long.');
+  }
+
+  private setOpenGraphTags() {
+    this.metaService.setTag('og:type', 'video');
+
+    this.metaService.setTag('og:title', this.video.name);
+    this.metaService.setTag('name', this.video.name);
+
+    this.metaService.setTag('og:description', this.video.description);
+    this.metaService.setTag('description', this.video.description);
+
+    this.metaService.setTag('og:image', this.video.thumbnailPath);
+
+    this.metaService.setTag('og:duration', this.video.duration);
+
+    this.metaService.setTag('og:site_name', 'PeerTube');
+
+    this.metaService.setTag('og:url', window.location.href);
+    this.metaService.setTag('url', window.location.href);
   }
 
   private runInProgress(torrent: any) {
