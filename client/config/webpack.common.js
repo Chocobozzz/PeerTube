@@ -10,6 +10,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin
 const AssetsPlugin = require('assets-webpack-plugin')
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const WebpackNotifierPlugin = require('webpack-notifier')
 
 /*
@@ -30,12 +32,6 @@ module.exports = function (options) {
   var isProd = options.env === 'production'
 
   return {
-    /*
-     * Static metadata for index.html
-     *
-     * See: (custom attribute)
-     */
-    metadata: METADATA,
 
     /*
      * Cache generated modules and chunks to improve performance for multiple incremental builds.
@@ -69,17 +65,9 @@ module.exports = function (options) {
        *
        * See: http://webpack.github.io/docs/configuration.html#resolve-extensions
        */
-      extensions: [ '', '.ts', '.js', '.scss' ],
+      extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      // Make sure root is src
-      root: helpers.root('src'),
-
-      // remove other default values
-      modulesDirectories: [ 'node_modules' ]
-    },
-
-    output: {
-      publicPath: '/client/'
+      modules: [helpers.root('src'), 'node_modules']
     },
 
     /*
@@ -88,33 +76,8 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#module
      */
     module: {
-      /*
-       * An array of applied pre and post loaders.
-       *
-       * See: http://webpack.github.io/docs/configuration.html#module-preloaders-module-postloaders
-       */
-      preLoaders: [
-        {
-          test: /\.ts$/,
-          loader: 'string-replace-loader',
-          query: {
-            search: '(System|SystemJS)(.*[\\n\\r]\\s*\\.|\\.)import\\((.+)\\)',
-            replace: '$1.import($3).then(mod => (mod.__esModule && mod.default) ? mod.default : mod)',
-            flags: 'g'
-          },
-          include: [helpers.root('src')]
-        }
-      ],
 
-      /*
-       * An array of automatically applied loaders.
-       *
-       * IMPORTANT: The loaders here are resolved relative to the resource which they are applied to.
-       * This means they are not resolved relative to the configuration file.
-       *
-       * See: http://webpack.github.io/docs/configuration.html#module-loaders
-       */
-      loaders: [
+      rules: [
 
         /*
          * Typescript loader support for .ts and Angular 2 async routes via .async.ts
@@ -163,10 +126,6 @@ module.exports = function (options) {
 
     },
 
-    sassLoader: {
-      precision: 10
-    },
-
     /*
      * Add additional plugins to the compiler.
      *
@@ -205,7 +164,7 @@ module.exports = function (options) {
        *
        * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
        * See: https://github.com/angular/angular/issues/11580
-      */
+       */
       new ContextReplacementPlugin(
         // The (\\|\/) piece accounts for path separators in *nix and Windows
         /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
@@ -241,10 +200,36 @@ module.exports = function (options) {
        */
       new HtmlWebpackPlugin({
         template: 'src/index.html',
-        chunksSortMode: 'dependency'
+        title: METADATA.title,
+        chunksSortMode: 'dependency',
+        metadata: METADATA
       }),
 
-      new WebpackNotifierPlugin({ alwaysNotify: true })
+      /*
+      * Plugin: ScriptExtHtmlWebpackPlugin
+      * Description: Enhances html-webpack-plugin functionality
+      * with different deployment options for your scripts including:
+      *
+      * See: https://github.com/numical/script-ext-html-webpack-plugin
+      */
+      new ScriptExtHtmlWebpackPlugin({
+        defaultAttribute: 'defer'
+      }),
+
+      new WebpackNotifierPlugin({ alwaysNotify: true }),
+
+      /**
+      * Plugin LoaderOptionsPlugin (experimental)
+      *
+      * See: https://gist.github.com/sokra/27b24881210b56bbaff7
+      */
+      new LoaderOptionsPlugin({
+        options: {
+          sassLoader: {
+            precision: 10
+          }
+        }
+      })
     ],
 
     /*
@@ -254,10 +239,9 @@ module.exports = function (options) {
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: 'window',
+      global: 'true',
       crypto: 'empty',
-      fs: 'empty',
-      events: true,
+      process: true,
       module: false,
       clearImmediate: false,
       setImmediate: false

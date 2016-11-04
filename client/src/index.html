@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base href="/">
-
-    <title>PeerTube</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -12,11 +10,16 @@
 
     <!-- TODO: bundle it with webpack when https://github.com/webpack/webpack/pull/1931 will be merged -->
     <script src="/client/assets/webtorrent/webtorrent.min.js"></script>
+
+    <!-- base url -->
+    <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
   </head>
 
   <!-- 3. Display the application -->
   <body>
+
     <my-app>
     </my-app>
+
   </body>
 </html>
