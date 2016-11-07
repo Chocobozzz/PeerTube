@@ -62,6 +62,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   loadVideo() {
+
+    console.log('<iframe width="560" height="315" src="' + window.location.origin + '/videos/embed/' + this.video.id + '" frameborder="0" allowfullscreen></iframe>');
+
     // Reset the error
     this.error = false;
     // We are loading the video

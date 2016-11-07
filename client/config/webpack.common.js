@@ -119,7 +119,7 @@ module.exports = function (options) {
         {
           test: /\.html$/,
           loader: 'raw-loader',
-          exclude: [ helpers.root('src/index.html') ]
+          exclude: [ helpers.root('src/index.html'), helpers.root('src/standalone/videos/embed.html') ]
         }
 
       ]
@@ -187,6 +187,26 @@ module.exports = function (options) {
         {
           from: 'node_modules/webtorrent/webtorrent.min.js',
           to: 'assets/webtorrent'
+        },
+        {
+          from: 'node_modules/video.js/dist/video.min.js',
+          to: 'assets/video-js'
+        },
+        {
+          from: 'node_modules/video.js/dist/video-js.min.css',
+          to: 'assets/video-js'
+        },
+        {
+          from: 'node_modules/videojs-dock/dist/videojs-dock.min.js',
+          to: 'assets/video-js'
+        },
+        {
+          from: 'node_modules/videojs-dock/dist/videojs-dock.css',
+          to: 'assets/video-js'
+        },
+        {
+          from: 'src/standalone',
+          to: 'standalone'
         }
       ]),
 
@@ -213,6 +233,7 @@ module.exports = function (options) {
       * See: https://github.com/numical/script-ext-html-webpack-plugin
       */
       new ScriptExtHtmlWebpackPlugin({
+        sync: [ 'webtorrent.min.js' ],
         defaultAttribute: 'defer'
       }),
 

@@ -89,6 +89,9 @@ const thumbnailsPhysicalPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR
 app.use(constants.STATIC_PATHS.THUMBNAILS, express.static(thumbnailsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Client application
+app.use('/videos/embed', function (req, res, next) {
+  res.sendFile(path.join(__dirname, 'client/dist/standalone/videos/embed.html'))
+})
 app.use('/*', function (req, res, next) {
   res.sendFile(path.join(__dirname, 'client/dist/index.html'))
 })
