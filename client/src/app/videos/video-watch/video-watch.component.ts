@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ModalDirective } from 'ng2-bootstrap/components/modal';
 import { MetaService } from 'ng2-meta';
+import * as videojs from 'video.js';
 
 import { Video, VideoService } from '../shared';
 import { WebTorrentService } from './webtorrent.service';
@@ -22,6 +23,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   error: boolean = false;
   loading: boolean = false;
   numPeers: number;
+  player: VideoJSPlayer;
   uploadSpeed: number;
   video: Video = null;
 
@@ -50,6 +52,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         error => alert(error.text)
       );
     });
+
+    const videojsOptions = {
+      controls: true,
+      autoplay: false
+    };
+
+    const self = this;
+    videojs('video-container', videojsOptions, function () {
+      self.player = this;
+    });
   }
 
   ngOnDestroy() {
@@ -62,7 +74,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   loadVideo() {
-
     console.log('<iframe width="560" height="315" src="' + window.location.origin + '/videos/embed/' + this.video.id + '" frameborder="0" allowfullscreen></iframe>');
 
     // Reset the error
@@ -86,7 +97,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.loading = false;
 
       console.log('Added ' + this.video.magnetUri + '.');
-      torrent.files[0].appendTo(this.elementRef.nativeElement.querySelector('.embed-responsive'), (err) => {
+      torrent.files[0].renderTo('#video-container video', { autoplay: true }, (err) => {
         if (err) {
           alert('Cannot append the file.');
           console.error(err);

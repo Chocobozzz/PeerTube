@@ -32,6 +32,7 @@
     "@types/node": "^6.0.38",
     "@types/source-map": "^0.1.26",
     "@types/uglify-js": "^2.0.27",
+    "@types/videojs": "0.0.30",
     "@types/webpack": "^1.12.29",
     "angular-pipes": "^4.0.0",
     "angular2-template-loader": "^0.6.0",
