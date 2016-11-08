@@ -72,12 +72,13 @@
 
   var urlParts = window.location.href.split('/')
   var videoId = urlParts[urlParts.length - 1]
-  var videoContainer = document.getElementById('video-container')
 
   loadVideoInfos(videoId, function (videoInfos) {
     var magnetUri = videoInfos.magnetUri
-    var thumbnailUrl = 'http://' + videoInfos.podUrl + videoInfos.thumbnailPath
-    videoContainer.poster = thumbnailUrl
+    // FIXME: use poster?
+    // var videoContainer = document.getElementById('video-container')
+    // var thumbnailUrl = 'http://' + videoInfos.podUrl + videoInfos.thumbnailPath
+    // videoContainer.poster = thumbnailUrl
 
     videojs('video-container', { controls: true, autoplay: false }, function () {
       var player = this
