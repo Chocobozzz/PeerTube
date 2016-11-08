@@ -25,6 +25,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   numPeers: number;
   player: VideoJSPlayer;
+  playerElement: Element;
   uploadSpeed: number;
   video: Video = null;
 
@@ -54,23 +55,30 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       );
     });
 
+    this.playerElement = this.elementRef.nativeElement.querySelector('#video-container');
+
     const videojsOptions = {
       controls: true,
       autoplay: false
     };
 
     const self = this;
-    videojs('video-container', videojsOptions, function () {
+    videojs(this.playerElement, videojsOptions, function () {
       self.player = this;
     });
   }
 
   ngOnDestroy() {
+    // Remove WebTorrent stuff
     console.log('Removing video from webtorrent.');
     clearInterval(this.torrentInfosInterval);
     clearTimeout(this.errorTimer);
     this.webTorrentService.remove(this.video.magnetUri);
 
+    // Remove player
+    videojs(this.playerElement).dispose();
+
+    // Unsubscribe route subscription
     this.sub.unsubscribe();
   }
 
@@ -96,7 +104,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.loading = false;
 
       console.log('Added ' + this.video.magnetUri + '.');
-      torrent.files[0].renderTo('#video-container video', { autoplay: true }, (err) => {
+      torrent.files[0].renderTo(this.playerElement, { autoplay: true }, (err) => {
         if (err) {
           alert('Cannot append the file.');
           console.error(err);
