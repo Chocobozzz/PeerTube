@@ -18,6 +18,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOADTIME_TOO_LONG: number = 30000;
 
   @ViewChild('magnetUriModal') magnetUriModal: ModalDirective;
+  @ViewChild('shareModal') shareModal: ModalDirective;
 
   downloadSpeed: number;
   error: boolean = false;
@@ -74,8 +75,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   loadVideo() {
-    console.log('<iframe width="560" height="315" src="' + window.location.origin + '/videos/embed/' + this.video.id + '" frameborder="0" allowfullscreen></iframe>');
-
     // Reset the error
     this.error = false;
     // We are loading the video
@@ -114,6 +113,25 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   hideMagnetUriModal() {
     this.magnetUriModal.hide();
+  }
+
+  showShareModal() {
+    this.shareModal.show();
+  }
+
+  hideShareModal() {
+    this.shareModal.hide();
+  }
+
+  getVideoIframeCode() {
+    return '<iframe width="560" height="315" ' +
+           'src="' + window.location.origin + '/videos/embed/' + this.video.id + '" ' +
+           'frameborder="0" allowfullscreen>' +
+           '</iframe>';
+  }
+
+  getVideoUrl() {
+    return window.location.href;
   }
 
   private loadTooLong() {

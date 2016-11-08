@@ -39,7 +39,7 @@
       top: 2px;
     }
 
-    #magnet-uri {
+    #magnet-uri, #share {
       font-weight: bold;
       opacity: 0.85;
     }
@@ -73,5 +73,12 @@
     #description-label {
       font-weight: bold;
     }
+  }
+}
+
+.modal-content {
+  input {
+    /* Force blank on readonly inputs */
+    background-color: #fff;
   }
 }
