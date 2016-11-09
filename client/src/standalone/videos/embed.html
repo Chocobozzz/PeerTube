@@ -34,6 +34,19 @@
       .vjs-poster {
         background-size: 100% auto;
       }
+
+      .vjs-peertube-link {
+        color: white;
+        text-decoration: none;
+        font-size: 1.3em;
+        line-height: 2.20;
+        transition: all .4s;
+      }
+
+      .vjs-peertube-link:hover {
+        text-shadow: 0 0 1em #fff;
+      }
+
     </style>
   </head>
 
@@ -82,6 +95,28 @@
 
     videojs('video-container', { controls: true, autoplay: false }, function () {
       var player = this
+
+      var Button = videojs.getComponent('Button')
+      var peertubeLinkButton = videojs.extend(Button, {
+        constructor: function () {
+          Button.apply(this, arguments)
+        },
+
+        createEl: function () {
+          var link = document.createElement('a')
+          link.href = window.location.href.replace('embed', 'watch')
+          link.innerHTML = 'PeerTube'
+          link.title = 'Go to the video page'
+          link.className = 'vjs-peertube-link'
+
+          return link
+        }
+      })
+      videojs.registerComponent('PeerTubeLinkButton', peertubeLinkButton)
+
+      var controlBar = player.getChild('controlBar')
+      var addedLink = controlBar.addChild('PeerTubeLinkButton', {})
+      controlBar.el().insertBefore(addedLink.el(), controlBar.fullscreenToggle.el())
 
       player.dock({
         title: videoInfos.name
