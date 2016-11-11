@@ -44,6 +44,7 @@ const CONFIG = {
     LOG_DIR: path.join(__dirname, '..', '..', config.get('storage.logs')),
     VIDEOS_DIR: path.join(__dirname, '..', '..', config.get('storage.videos')),
     THUMBNAILS_DIR: path.join(__dirname, '..', '..', config.get('storage.thumbnails')),
+    PREVIEWS_DIR: path.join(__dirname, '..', '..', config.get('storage.previews')),
     TORRENTS_DIR: path.join(__dirname, '..', '..', config.get('storage.torrents'))
   },
   WEBSERVER: {
@@ -135,6 +136,7 @@ const BCRYPT_SALT_SIZE = 10
 
 // Express static paths (router)
 const STATIC_PATHS = {
+  PREVIEWS: '/static/previews',
   THUMBNAILS: '/static/thumbnails',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/'
@@ -145,6 +147,7 @@ let STATIC_MAX_AGE = '30d'
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
+const PREVIEWS_SIZE = '640x480'
 
 const USER_ROLES = {
   ADMIN: 'admin',
@@ -179,6 +182,7 @@ module.exports = {
   REQUESTS_INTERVAL,
   REQUESTS_LIMIT,
   RETRY_REQUESTS,
+  PREVIEWS_SIZE,
   SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS,
   STATIC_MAX_AGE,

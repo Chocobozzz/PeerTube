@@ -71,7 +71,8 @@ const apiRoute = '/api/' + constants.API_VERSION
 app.use(apiRoute, routes.api)
 app.use('/', routes.client)
 
-// Static files
+// Static client files
+// TODO: move in client
 app.use('/client', express.static(path.join(__dirname, '/client/dist'), { maxAge: constants.STATIC_MAX_AGE }))
 // 404 for static files not found
 app.use('/client/*', function (req, res, next) {
@@ -88,6 +89,10 @@ app.use(constants.STATIC_PATHS.WEBSEED, cors(), express.static(videosPhysicalPat
 // Thumbnails path for express
 const thumbnailsPhysicalPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR
 app.use(constants.STATIC_PATHS.THUMBNAILS, express.static(thumbnailsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
+
+// Video previews path for express
+const previewsPhysicalPath = constants.CONFIG.STORAGE.PREVIEWS_DIR
+app.use(constants.STATIC_PATHS.PREVIEWS, express.static(previewsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
 // Always serve index client page
 app.use('/*', function (req, res, next) {

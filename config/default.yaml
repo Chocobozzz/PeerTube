@@ -16,5 +16,6 @@ storage:
   certs: 'certs/'
   videos: 'videos/'
   logs: 'logs/'
+  previews: 'previews/'
   thumbnails: 'thumbnails/'
   torrents: 'torrents/'

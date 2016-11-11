@@ -82,6 +82,9 @@ VideoSchema.pre('remove', function (next) {
       },
       function (callback) {
         removeTorrent(video, callback)
+      },
+      function (callback) {
+        removePreview(video, callback)
       }
     )
   }
@@ -125,6 +128,9 @@ VideoSchema.pre('save', function (next) {
       },
       function (callback) {
         createThumbnail(videoPath, callback)
+      },
+      function (callback) {
+        createPreview(videoPath, callback)
       }
     )
 
@@ -261,9 +267,28 @@ function removeFile (video, callback) {
   fs.unlink(constants.CONFIG.STORAGE.VIDEOS_DIR + video.filename, callback)
 }
 
-// Maybe the torrent is not seeded, but we catch the error to don't stop the removing process
 function removeTorrent (video, callback) {
   fs.unlink(constants.CONFIG.STORAGE.TORRENTS_DIR + video.filename + '.torrent', callback)
+}
+
+function removePreview (video, callback) {
+  // Same name than video thumnail
+  // TODO: refractoring
+  fs.unlink(constants.CONFIG.STORAGE.PREVIEWS_DIR + video.thumbnail, callback)
+}
+
+function createPreview (videoPath, callback) {
+  const filename = pathUtils.basename(videoPath) + '.jpg'
+  ffmpeg(videoPath)
+    .on('error', callback)
+    .on('end', function () {
+      callback(null, filename)
+    })
+    .thumbnail({
+      count: 1,
+      folder: constants.CONFIG.STORAGE.PREVIEWS_DIR,
+      filename: filename
+    })
 }
 
 function createThumbnail (videoPath, callback) {
