@@ -299,7 +299,12 @@ function load (id, callback) {
 function search (value, field, start, count, sort, callback) {
   const query = {}
   // Make an exact search with the magnet
-  if (field === 'magnetUri' || field === 'tags') {
+  if (field === 'magnetUri') {
+    const infoHash = magnetUtil.decode(value).infoHash
+    query.magnet = {
+      infoHash
+    }
+  } else if (field === 'tags') {
     query[field] = value
   } else {
     query[field] = new RegExp(value, 'i')
