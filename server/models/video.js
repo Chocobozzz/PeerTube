@@ -13,14 +13,17 @@ const constants = require('../initializers/constants')
 const customVideosValidators = require('../helpers/custom-validators').videos
 const logger = require('../helpers/logger')
 const modelUtils = require('./utils')
-const utils = require('../helpers/utils')
 
 // ---------------------------------------------------------------------------
 
 // TODO: add indexes on searchable columns
 const VideoSchema = mongoose.Schema({
   name: String,
-  filename: String,
+  extname: {
+    type: String,
+    enum: [ '.mp4', '.webm', '.ogv' ]
+  },
+  remoteId: mongoose.Schema.Types.ObjectId,
   description: String,
   magnetUri: String,
   podUrl: String,
@@ -48,6 +51,9 @@ VideoSchema.path('thumbnail').validate(function (value) {
 VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
 
 VideoSchema.methods = {
+  getFilename,
+  getJPEGName,
+  getTorrentName,
   isOwned,
   toFormatedJSON,
   toRemoteJSON
@@ -56,7 +62,7 @@ VideoSchema.methods = {
 VideoSchema.statics = {
   getDurationFromFile,
   listForApi,
-  listByUrlAndMagnet,
+  listByUrlAndRemoteId,
   listByUrl,
   listOwned,
   listOwnedByAuthor,
@@ -97,7 +103,7 @@ VideoSchema.pre('save', function (next) {
   const tasks = []
 
   if (video.isOwned()) {
-    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.filename)
+    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.getFilename())
     this.podUrl = constants.CONFIG.WEBSERVER.URL
 
     tasks.push(
@@ -108,18 +114,18 @@ VideoSchema.pre('save', function (next) {
             [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
           ],
           urlList: [
-            constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.filename
+            constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.getFilename()
           ]
         }
 
         createTorrent(videoPath, options, function (err, torrent) {
           if (err) return callback(err)
 
-          fs.writeFile(constants.CONFIG.STORAGE.TORRENTS_DIR + video.filename + '.torrent', torrent, function (err) {
+          fs.writeFile(constants.CONFIG.STORAGE.TORRENTS_DIR + video.getTorrentName(), torrent, function (err) {
             if (err) return callback(err)
 
             const parsedTorrent = parseTorrent(torrent)
-            parsedTorrent.xs = video.podUrl + constants.STATIC_PATHS.TORRENTS + video.filename + '.torrent'
+            parsedTorrent.xs = video.podUrl + constants.STATIC_PATHS.TORRENTS + video.getTorrentName()
             video.magnetUri = magnet.encode(parsedTorrent)
 
             callback(null)
@@ -127,28 +133,16 @@ VideoSchema.pre('save', function (next) {
         })
       },
       function (callback) {
-        createThumbnail(videoPath, callback)
+        createThumbnail(video, videoPath, callback)
       },
       function (callback) {
-        createPreview(videoPath, callback)
+        createPreview(video, videoPath, callback)
       }
     )
 
-    parallel(tasks, function (err, results) {
-      if (err) return next(err)
-
-      video.thumbnail = results[1]
-
-      return next()
-    })
+    parallel(tasks, next)
   } else {
-    generateThumbnailFromBase64(video.thumbnail, function (err, thumbnailName) {
-      if (err) return next(err)
-
-      video.thumbnail = thumbnailName
-
-      return next()
-    })
+    generateThumbnailFromBase64(video, video.thumbnail, next)
   }
 })
 
@@ -156,8 +150,20 @@ mongoose.model('Video', VideoSchema)
 
 // ------------------------------ METHODS ------------------------------
 
+function getFilename () {
+  return this._id + this.extname
+}
+
+function getJPEGName () {
+  return this._id + '.jpg'
+}
+
+function getTorrentName () {
+  return this._id + '.torrent'
+}
+
 function isOwned () {
-  return this.filename !== null
+  return this.remoteId === null
 }
 
 function toFormatedJSON () {
@@ -171,7 +177,7 @@ function toFormatedJSON () {
     author: this.author,
     duration: this.duration,
     tags: this.tags,
-    thumbnailPath: constants.STATIC_PATHS.THUMBNAILS + '/' + this.thumbnail,
+    thumbnailPath: constants.STATIC_PATHS.THUMBNAILS + '/' + this.getJPEGName(),
     createdDate: this.createdDate
   }
 
@@ -182,7 +188,8 @@ function toRemoteJSON (callback) {
   const self = this
 
   // Convert thumbnail to base64
-  fs.readFile(pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, this.thumbnail), function (err, thumbnailData) {
+  const thumbnailPath = pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, this.getJPEGName())
+  fs.readFile(thumbnailPath, function (err, thumbnailData) {
     if (err) {
       logger.error('Cannot read the thumbnail of the video')
       return callback(err)
@@ -192,7 +199,7 @@ function toRemoteJSON (callback) {
       name: self.name,
       description: self.description,
       magnetUri: self.magnetUri,
-      filename: null,
+      remoteId: self._id,
       author: self.author,
       duration: self.duration,
       thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
@@ -220,8 +227,8 @@ function listForApi (start, count, sort, callback) {
   return modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
-function listByUrlAndMagnet (fromUrl, magnetUri, callback) {
-  this.find({ podUrl: fromUrl, magnetUri: magnetUri }, callback)
+function listByUrlAndRemoteId (fromUrl, remoteId, callback) {
+  this.find({ podUrl: fromUrl, remoteId: remoteId }, callback)
 }
 
 function listByUrl (fromUrl, callback) {
@@ -229,16 +236,16 @@ function listByUrl (fromUrl, callback) {
 }
 
 function listOwned (callback) {
-  // If filename is not null this is *our* video
-  this.find({ filename: { $ne: null } }, callback)
+  // If remoteId is null this is *our* video
+  this.find({ remoteId: null }, callback)
 }
 
 function listOwnedByAuthor (author, callback) {
-  this.find({ filename: { $ne: null }, author: author }, callback)
+  this.find({ remoteId: null, author: author }, callback)
 }
 
 function listRemotes (callback) {
-  this.find({ filename: null }, callback)
+  this.find({ remoteId: { $ne: null } }, callback)
 }
 
 function load (id, callback) {
@@ -260,62 +267,61 @@ function search (value, field, start, count, sort, callback) {
 // ---------------------------------------------------------------------------
 
 function removeThumbnail (video, callback) {
-  fs.unlink(constants.CONFIG.STORAGE.THUMBNAILS_DIR + video.thumbnail, callback)
+  fs.unlink(constants.CONFIG.STORAGE.THUMBNAILS_DIR + video.getJPEGName(), callback)
 }
 
 function removeFile (video, callback) {
-  fs.unlink(constants.CONFIG.STORAGE.VIDEOS_DIR + video.filename, callback)
+  fs.unlink(constants.CONFIG.STORAGE.VIDEOS_DIR + video.getFilename(), callback)
 }
 
 function removeTorrent (video, callback) {
-  fs.unlink(constants.CONFIG.STORAGE.TORRENTS_DIR + video.filename + '.torrent', callback)
+  fs.unlink(constants.CONFIG.STORAGE.TORRENTS_DIR + video.getTorrentName(), callback)
 }
 
 function removePreview (video, callback) {
   // Same name than video thumnail
   // TODO: refractoring
-  fs.unlink(constants.CONFIG.STORAGE.PREVIEWS_DIR + video.thumbnail, callback)
+  fs.unlink(constants.CONFIG.STORAGE.PREVIEWS_DIR + video.getJPEGName(), callback)
 }
 
-function createPreview (videoPath, callback) {
-  const filename = pathUtils.basename(videoPath) + '.jpg'
-  ffmpeg(videoPath)
-    .on('error', callback)
-    .on('end', function () {
-      callback(null, filename)
-    })
-    .thumbnail({
-      count: 1,
-      folder: constants.CONFIG.STORAGE.PREVIEWS_DIR,
-      filename: filename
-    })
+function createPreview (video, videoPath, callback) {
+  generateImage(video, videoPath, constants.CONFIG.STORAGE.PREVIEWS_DIR, callback)
 }
 
-function createThumbnail (videoPath, callback) {
-  const filename = pathUtils.basename(videoPath) + '.jpg'
-  ffmpeg(videoPath)
-    .on('error', callback)
-    .on('end', function () {
-      callback(null, filename)
-    })
-    .thumbnail({
-      count: 1,
-      folder: constants.CONFIG.STORAGE.THUMBNAILS_DIR,
-      size: constants.THUMBNAILS_SIZE,
-      filename: filename
-    })
+function createThumbnail (video, videoPath, callback) {
+  generateImage(video, videoPath, constants.CONFIG.STORAGE.THUMBNAILS_DIR, constants.THUMBNAILS_SIZE, callback)
 }
 
-function generateThumbnailFromBase64 (data, callback) {
-  // Creating the thumbnail for this remote video
-  utils.generateRandomString(16, function (err, randomString) {
+function generateThumbnailFromBase64 (video, thumbnailData, callback) {
+  // Creating the thumbnail for this remote video)
+
+  const thumbnailName = video.getJPEGName()
+  const thumbnailPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName
+  fs.writeFile(thumbnailPath, thumbnailData, { encoding: 'base64' }, function (err) {
     if (err) return callback(err)
 
-    const thumbnailName = randomString + '.jpg'
-    fs.writeFile(constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName, data, { encoding: 'base64' }, function (err) {
-      if (err) return callback(err)
-
-      return callback(null, thumbnailName)
-    })
+    return callback(null, thumbnailName)
   })
+}
+
+function generateImage (video, videoPath, folder, size, callback) {
+  const filename = video.getJPEGName()
+  const options = {
+    filename,
+    count: 1,
+    folder
+  }
+
+  if (!callback) {
+    callback = size
+  } else {
+    options.size = size
+  }
+
+  ffmpeg(videoPath)
+    .on('error', callback)
+    .on('end', function () {
+      callback(null, filename)
+    })
+    .thumbnail(options)
 }

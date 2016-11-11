@@ -1,8 +1,10 @@
 'use strict'
 
 const express = require('express')
+const fs = require('fs')
 const mongoose = require('mongoose')
 const multer = require('multer')
+const path = require('path')
 const waterfall = require('async/waterfall')
 
 const constants = require('../../initializers/constants')
@@ -85,11 +87,14 @@ function addVideo (req, res, next) {
   const videoInfos = req.body
 
   waterfall([
+    function createVideoObject (callback) {
+      const id = mongoose.Types.ObjectId()
 
-    function insertIntoDB (callback) {
       const videoData = {
+        _id: id,
         name: videoInfos.name,
-        filename: videoFile.filename,
+        remoteId: null,
+        extname: path.extname(videoFile.filename),
         description: videoInfos.description,
         author: res.locals.oauth.token.user.username,
         duration: videoFile.duration,
@@ -97,7 +102,23 @@ function addVideo (req, res, next) {
       }
 
       const video = new Video(videoData)
-      video.save(function (err, video) {
+
+      return callback(null, video)
+    },
+
+     // Set the videoname the same as the MongoDB id
+    function renameVideoFile (video, callback) {
+      const videoDir = constants.CONFIG.STORAGE.VIDEOS_DIR
+      const source = path.join(videoDir, videoFile.filename)
+      const destination = path.join(videoDir, video.getFilename())
+
+      fs.rename(source, destination, function (err) {
+        return callback(err, video)
+      })
+    },
+
+    function insertIntoDB (video, callback) {
+      video.save(function (err, video, videoFile) {
         // Assert there are only one argument sent to the next function (video)
         return callback(err, video)
       })
@@ -164,7 +185,7 @@ function removeVideo (req, res, next) {
     function sendInformationToFriends (video, callback) {
       const params = {
         name: video.name,
-        magnetUri: video.magnetUri
+        remoteId: video._id
       }
 
       friends.removeVideoToFriends(params)

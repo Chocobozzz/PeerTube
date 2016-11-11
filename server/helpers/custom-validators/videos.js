@@ -35,12 +35,13 @@ function isEachRemoteVideosValid (requests) {
         isVideoNameValid(video.name) &&
         isVideoPodUrlValid(video.podUrl) &&
         isVideoTagsValid(video.tags) &&
-        isVideoThumbnail64Valid(video.thumbnailBase64)
+        isVideoThumbnail64Valid(video.thumbnailBase64) &&
+        isVideoRemoteIdValid(video.remoteId)
       ) ||
       (
         isRequestTypeRemoveValid(request.type) &&
         isVideoNameValid(video.name) &&
-        isVideoMagnetUriValid(video.magnetUri)
+        isVideoRemoteIdValid(video.remoteId)
       )
     })
 }
@@ -90,6 +91,10 @@ function isVideoThumbnailValid (value) {
 function isVideoThumbnail64Valid (value) {
   return validator.isBase64(value) &&
          validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL64)
+}
+
+function isVideoRemoteIdValid (value) {
+  return validator.isMongoId(value)
 }
 
 // ---------------------------------------------------------------------------

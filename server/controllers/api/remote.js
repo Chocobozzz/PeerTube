@@ -64,7 +64,7 @@ function addRemoteVideo (videoToCreateData, callback) {
 
 function removeRemoteVideo (videoToRemoveData, fromUrl, callback) {
   // We need the list because we have to remove some other stuffs (thumbnail etc)
-  Video.listByUrlAndMagnet(fromUrl, videoToRemoveData.magnetUri, function (err, videosList) {
+  Video.listByUrlAndRemoteId(fromUrl, videoToRemoveData.remoteId, function (err, videosList) {
     if (err) {
       logger.error('Cannot list videos from url and magnets.', { error: err })
       return callback(err)
