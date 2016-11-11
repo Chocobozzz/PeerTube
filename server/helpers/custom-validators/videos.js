@@ -31,7 +31,7 @@ function isEachRemoteVideosValid (requests) {
         isVideoDateValid(video.createdDate) &&
         isVideoDescriptionValid(video.description) &&
         isVideoDurationValid(video.duration) &&
-        isVideoMagnetValid(video.magnetUri) &&
+        isVideoMagnetValid(video.magnet) &&
         isVideoNameValid(video.name) &&
         isVideoPodUrlValid(video.podUrl) &&
         isVideoTagsValid(video.tags) &&
@@ -63,7 +63,7 @@ function isVideoDurationValid (value) {
 }
 
 function isVideoMagnetValid (value) {
-  return validator.isLength(value.infoHash, VIDEOS_CONSTRAINTS_FIELDS.MAGNET.XT)
+  return validator.isLength(value.infoHash, VIDEOS_CONSTRAINTS_FIELDS.MAGNET.INFO_HASH)
 }
 
 function isVideoNameValid (value) {

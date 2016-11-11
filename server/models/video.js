@@ -160,7 +160,7 @@ function generateMagnetUri () {
     baseUrlHttp = constants.CONFIG.WEBSERVER.URL
     baseUrlWs = constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT
   } else {
-    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + this.podUrl
+    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + this.podUrl
     baseUrlWs = constants.REMOTE_SCHEME.WS + this.podUrl
   }
 

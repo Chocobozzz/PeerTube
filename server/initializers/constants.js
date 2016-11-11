@@ -67,7 +67,7 @@ const CONSTRAINTS_FIELDS = {
     NAME: { min: 3, max: 50 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
     MAGNET: {
-      XT: { min: 10 } // Length
+      INFO_HASH: { min: 10, max: 50 } // Length
     },
     DURATION: { min: 1, max: 7200 }, // Number
     TAGS: { min: 1, max: 3 }, // Number of total tags

@@ -33,25 +33,36 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function addOpenGraphTags (htmlStringPage, video) {
-  const thumbnailUrl = constants.CONFIG.WEBSERVER.URL + video.thumbnailPath
   const videoUrl = constants.CONFIG.WEBSERVER.URL + '/videos/watch/'
+  let baseUrlHttp
+
+  if (video.isOwned()) {
+    baseUrlHttp = constants.CONFIG.WEBSERVER.URL
+  } else {
+    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + video.podUrl
+  }
+
+  // We fetch the remote preview (bigger than the thumbnail)
+  // This should not overhead the remote server since social websites put in a cache the OpenGraph tags
+  // We can't use the thumbnail because these social websites want bigger images (> 200x200 for Facebook for example)
+  const previewUrl = baseUrlHttp + constants.STATIC_PATHS.PREVIEWS + video.getPreviewName()
 
   const metaTags = {
     'og:type': 'video',
     'og:title': video.name,
-    'og:image': thumbnailUrl,
+    'og:image': previewUrl,
     'og:url': videoUrl,
     'og:description': video.description,
 
     'name': video.name,
     'description': video.description,
-    'image': thumbnailUrl,
+    'image': previewUrl,
 
     'twitter:card': 'summary_large_image',
     'twitter:site': '@Chocobozzz',
     'twitter:title': video.name,
     'twitter:description': video.description,
-    'twitter:image': thumbnailUrl
+    'twitter:image': previewUrl
   }
 
   let tagsString = ''
