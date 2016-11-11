@@ -69,6 +69,7 @@ app.use(expressValidator({
 // API routes
 const apiRoute = '/api/' + constants.API_VERSION
 app.use(apiRoute, routes.api)
+app.use('/', routes.client)
 
 // Static files
 app.use('/client', express.static(path.join(__dirname, '/client/dist'), { maxAge: constants.STATIC_MAX_AGE }))
@@ -88,12 +89,9 @@ app.use(constants.STATIC_PATHS.WEBSEED, cors(), express.static(videosPhysicalPat
 const thumbnailsPhysicalPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR
 app.use(constants.STATIC_PATHS.THUMBNAILS, express.static(thumbnailsPhysicalPath, { maxAge: constants.STATIC_MAX_AGE }))
 
-// Client application
-app.use('/videos/embed', function (req, res, next) {
-  res.sendFile(path.join(__dirname, 'client/dist/standalone/videos/embed.html'))
-})
+// Always serve index client page
 app.use('/*', function (req, res, next) {
-  res.sendFile(path.join(__dirname, 'client/dist/index.html'))
+  res.sendFile(path.join(__dirname, './client/dist/index.html'))
 })
 
 // ----------- Tracker -----------
