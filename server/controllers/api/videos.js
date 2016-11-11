@@ -110,7 +110,7 @@ function addVideo (req, res, next) {
     function renameVideoFile (video, callback) {
       const videoDir = constants.CONFIG.STORAGE.VIDEOS_DIR
       const source = path.join(videoDir, videoFile.filename)
-      const destination = path.join(videoDir, video.getFilename())
+      const destination = path.join(videoDir, video.getVideoFilename())
 
       fs.rename(source, destination, function (err) {
         return callback(err, video)
@@ -118,7 +118,7 @@ function addVideo (req, res, next) {
     },
 
     function insertIntoDB (video, callback) {
-      video.save(function (err, video, videoFile) {
+      video.save(function (err, video) {
         // Assert there are only one argument sent to the next function (video)
         return callback(err, video)
       })

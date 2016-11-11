@@ -13,7 +13,7 @@ const videosValidators = {
   isVideoDateValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
-  isVideoMagnetUriValid,
+  isVideoMagnetValid,
   isVideoNameValid,
   isVideoPodUrlValid,
   isVideoTagsValid,
@@ -31,7 +31,7 @@ function isEachRemoteVideosValid (requests) {
         isVideoDateValid(video.createdDate) &&
         isVideoDescriptionValid(video.description) &&
         isVideoDurationValid(video.duration) &&
-        isVideoMagnetUriValid(video.magnetUri) &&
+        isVideoMagnetValid(video.magnetUri) &&
         isVideoNameValid(video.name) &&
         isVideoPodUrlValid(video.podUrl) &&
         isVideoTagsValid(video.tags) &&
@@ -62,8 +62,8 @@ function isVideoDurationValid (value) {
   return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
-function isVideoMagnetUriValid (value) {
-  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.MAGNET_URI)
+function isVideoMagnetValid (value) {
+  return validator.isLength(value.infoHash, VIDEOS_CONSTRAINTS_FIELDS.MAGNET.XT)
 }
 
 function isVideoNameValid (value) {

@@ -66,7 +66,9 @@ const CONSTRAINTS_FIELDS = {
   VIDEOS: {
     NAME: { min: 3, max: 50 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
-    MAGNET_URI: { min: 10 }, // Length
+    MAGNET: {
+      XT: { min: 10 } // Length
+    },
     DURATION: { min: 1, max: 7200 }, // Number
     TAGS: { min: 1, max: 3 }, // Number of total tags
     TAG: { min: 2, max: 10 }, // Length
@@ -131,13 +133,18 @@ const REQUEST_ENDPOINTS = {
 
 // ---------------------------------------------------------------------------
 
+const REMOTE_SCHEME = {
+  HTTP: 'https',
+  WS: 'WS'
+}
+
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
 
 // Express static paths (router)
 const STATIC_PATHS = {
-  PREVIEWS: '/static/previews',
-  THUMBNAILS: '/static/thumbnails',
+  PREVIEWS: '/static/previews/',
+  THUMBNAILS: '/static/thumbnails/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/'
 }
@@ -161,6 +168,8 @@ if (isTestInstance() === true) {
   CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
   FRIEND_SCORE.BASE = 20
   REQUESTS_INTERVAL = 10000
+  REMOTE_SCHEME.HTTP = 'http'
+  REMOTE_SCHEME.WS = 'ws'
   STATIC_MAX_AGE = 0
 }
 
@@ -177,12 +186,13 @@ module.exports = {
   OAUTH_LIFETIME,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,
+  PREVIEWS_SIZE,
+  REMOTE_SCHEME,
   REQUEST_ENDPOINTS,
   REQUESTS_IN_PARALLEL,
   REQUESTS_INTERVAL,
   REQUESTS_LIMIT,
   RETRY_REQUESTS,
-  PREVIEWS_SIZE,
   SEARCHABLE_COLUMNS,
   SORTABLE_COLUMNS,
   STATIC_MAX_AGE,
