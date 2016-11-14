@@ -124,7 +124,6 @@ VideoSchema.pre('save', function (next) {
             const parsedTorrent = parseTorrent(torrent)
             video.magnet.infoHash = parsedTorrent.infoHash
 
-            console.log(parsedTorrent)
             callback(null)
           })
         })
