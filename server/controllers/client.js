@@ -5,11 +5,9 @@ const express = require('express')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const path = require('path')
+const validator = require('express-validator').validator
 
 const constants = require('../initializers/constants')
-const middlewares = require('../middlewares')
-const validators = middlewares.validators
-const validatorsVideos = validators.videos
 
 const Video = mongoose.model('Video')
 const router = express.Router()
@@ -20,7 +18,7 @@ const indexPath = path.join(__dirname, '../../client/dist/index.html')
 
 // Special route that add OpenGraph tags
 // Do not use a template engine for a so little thing
-router.use('/videos/watch/:id', validatorsVideos.videosGet, generateWatchHtmlPage)
+router.use('/videos/watch/:id', generateWatchHtmlPage)
 
 router.use('/videos/embed', function (req, res, next) {
   res.sendFile(embedPath)
@@ -76,19 +74,27 @@ function addOpenGraphTags (htmlStringPage, video) {
 }
 
 function generateWatchHtmlPage (req, res, next) {
+  const videoId = req.params.id
+
+  // Let Angular application handle errors
+  if (!validator.isMongoId(videoId)) return res.sendFile(indexPath)
+
   parallel({
     file: function (callback) {
       fs.readFile(indexPath, callback)
     },
 
     video: function (callback) {
-      Video.load(req.params.id, callback)
+      Video.load(videoId, callback)
     }
   }, function (err, results) {
     if (err) return next(err)
 
     const html = results.file.toString()
     const video = results.video
+
+    // Let Angular application handle errors
+    if (!video) return res.sendFile(indexPath)
 
     const htmlStringPageWithTags = addOpenGraphTags(html, video)
     res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
