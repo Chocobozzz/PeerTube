@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th class="table-column-id">ID</th>
-      <th>Url</th>
+      <th>Host</th>
       <th>Score</th>
       <th>Created Date</th>
     </tr>
@@ -13,7 +13,7 @@
   <tbody>
     <tr *ngFor="let friend of friends">
       <td>{{ friend.id }}</td>
-      <td>{{ friend.url }}</td>
+      <td>{{ friend.host }}</td>
       <td>{{ friend.score }}</td>
       <td>{{ friend.createdDate | date: 'medium' }}</td>
     </tr>

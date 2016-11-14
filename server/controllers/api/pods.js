@@ -20,14 +20,14 @@ const Pod = mongoose.model('Pod')
 router.get('/', listPods)
 router.post('/',
   validators.podsAdd,
-  podsMiddleware.setBodyUrlPort,
+  podsMiddleware.setBodyHostPort,
   addPods
 )
 router.post('/makefriends',
   oAuth.authenticate,
   admin.ensureIsAdmin,
   validators.makeFriends,
-  podsMiddleware.setBodyUrlsPort,
+  podsMiddleware.setBodyHostsPort,
   makeFriends
 )
 router.get('/quitfriends',
@@ -84,17 +84,17 @@ function addPods (req, res, next) {
 }
 
 function listPods (req, res, next) {
-  Pod.list(function (err, podsUrlList) {
+  Pod.list(function (err, podsList) {
     if (err) return next(err)
 
-    res.json(getFormatedPods(podsUrlList))
+    res.json(getFormatedPods(podsList))
   })
 }
 
 function makeFriends (req, res, next) {
-  const urls = req.body.urls
+  const hosts = req.body.hosts
 
-  friends.makeFriends(urls, function (err) {
+  friends.makeFriends(hosts, function (err) {
     if (err) {
       logger.error('Could not make friends.', { error: err })
       return
@@ -107,11 +107,11 @@ function makeFriends (req, res, next) {
 }
 
 function removePods (req, res, next) {
-  const url = req.body.signature.url
+  const host = req.body.signature.host
 
   waterfall([
     function loadPod (callback) {
-      Pod.loadByUrl(url, callback)
+      Pod.loadByHost(host, callback)
     },
 
     function removePod (pod, callback) {

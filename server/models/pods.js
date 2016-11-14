@@ -12,7 +12,7 @@ const Video = mongoose.model('Video')
 // ---------------------------------------------------------------------------
 
 const PodSchema = mongoose.Schema({
-  url: String,
+  host: String,
   publicKey: String,
   score: { type: Number, max: constants.FRIEND_SCORE.MAX },
   createdDate: {
@@ -21,8 +21,7 @@ const PodSchema = mongoose.Schema({
   }
 })
 
-// TODO: set options (TLD...)
-PodSchema.path('url').validate(validator.isURL)
+PodSchema.path('host').validate(validator.isURL)
 PodSchema.path('publicKey').required(true)
 PodSchema.path('score').validate(function (value) { return !isNaN(value) })
 
@@ -37,14 +36,14 @@ PodSchema.statics = {
   listAllIds,
   listBadPods,
   load,
-  loadByUrl,
+  loadByHost,
   removeAll
 }
 
 PodSchema.pre('save', function (next) {
   const self = this
 
-  Pod.loadByUrl(this.url, function (err, pod) {
+  Pod.loadByHost(this.host, function (err, pod) {
     if (err) return next(err)
 
     if (pod) return next(new Error('Pod already exists.'))
@@ -56,7 +55,7 @@ PodSchema.pre('save', function (next) {
 
 PodSchema.pre('remove', function (next) {
   // Remove the videos owned by this pod too
-  Video.listByUrl(this.url, function (err, videos) {
+  Video.listByHost(this.host, function (err, videos) {
     if (err) return next(err)
 
     each(videos, function (video, callbackEach) {
@@ -72,7 +71,7 @@ const Pod = mongoose.model('Pod', PodSchema)
 function toFormatedJSON () {
   const json = {
     id: this._id,
-    url: this.url,
+    host: this.host,
     score: this.score,
     createdDate: this.createdDate
   }
@@ -111,8 +110,8 @@ function load (id, callback) {
   return this.findById(id, callback)
 }
 
-function loadByUrl (url, callback) {
-  return this.findOne({ url: url }, callback)
+function loadByHost (host, callback) {
+  return this.findOne({ host }, callback)
 }
 
 function removeAll (callback) {

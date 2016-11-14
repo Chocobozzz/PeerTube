@@ -15,7 +15,7 @@ const videosValidators = {
   isVideoDurationValid,
   isVideoMagnetValid,
   isVideoNameValid,
-  isVideoPodUrlValid,
+  isVideoPodHostValid,
   isVideoTagsValid,
   isVideoThumbnailValid,
   isVideoThumbnail64Valid
@@ -33,7 +33,7 @@ function isEachRemoteVideosValid (requests) {
         isVideoDurationValid(video.duration) &&
         isVideoMagnetValid(video.magnet) &&
         isVideoNameValid(video.name) &&
-        isVideoPodUrlValid(video.podUrl) &&
+        isVideoPodHostValid(video.podHost) &&
         isVideoTagsValid(video.tags) &&
         isVideoThumbnail64Valid(video.thumbnailBase64) &&
         isVideoRemoteIdValid(video.remoteId)
@@ -70,7 +70,7 @@ function isVideoNameValid (value) {
   return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
 }
 
-function isVideoPodUrlValid (value) {
+function isVideoPodHostValid (value) {
   // TODO: set options (TLD...)
   return validator.isURL(value)
 }

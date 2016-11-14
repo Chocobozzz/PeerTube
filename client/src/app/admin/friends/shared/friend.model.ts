@@ -1,6 +1,6 @@
 export interface Friend {
   id: string;
-  url: string;
+  host: string;
   score: number;
   createdDate: Date;
 }

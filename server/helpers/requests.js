@@ -25,7 +25,7 @@ function makeRetryRequest (params, callback) {
 
 function makeSecureRequest (params, callback) {
   const requestParams = {
-    url: params.toPod.url + params.path
+    url: constants.REMOTE_SCHEME.HTTP + '://' + params.toPod.host + params.path
   }
 
   // Add data with POST requst ?
@@ -34,9 +34,11 @@ function makeSecureRequest (params, callback) {
 
     // Add signature if it is specified in the params
     if (params.sign === true) {
+      const host = constants.CONFIG.WEBSERVER.HOST
+
       requestParams.json.signature = {
-        url: constants.CONFIG.WEBSERVER.URL,
-        signature: peertubeCrypto.sign(constants.CONFIG.WEBSERVER.URL)
+        host,
+        signature: peertubeCrypto.sign(host)
       }
     }
 

@@ -1,38 +1,36 @@
 'use strict'
 
-const urlModule = require('url')
-
-const logger = require('../helpers/logger')
+const constants = require('../initializers/constants')
 
 const podsMiddleware = {
-  setBodyUrlsPort,
-  setBodyUrlPort
+  setBodyHostsPort,
+  setBodyHostPort
 }
 
-function setBodyUrlsPort (req, res, next) {
-  for (let i = 0; i < req.body.urls.length; i++) {
-    const urlWithPort = getUrlWithPort(req.body.urls[i])
+function setBodyHostsPort (req, res, next) {
+  for (let i = 0; i < req.body.hosts.length; i++) {
+    const hostWithPort = getHostWithPort(req.body.hosts[i])
 
     // Problem with the url parsing?
-    if (urlWithPort === null) {
+    if (hostWithPort === null) {
       return res.sendStatus(500)
     }
 
-    req.body.urls[i] = urlWithPort
+    req.body.hosts[i] = hostWithPort
   }
 
   return next()
 }
 
-function setBodyUrlPort (req, res, next) {
-  const urlWithPort = getUrlWithPort(req.body.url)
+function setBodyHostPort (req, res, next) {
+  const hostWithPort = getHostWithPort(req.body.host)
 
   // Problem with the url parsing?
-  if (urlWithPort === null) {
+  if (hostWithPort === null) {
     return res.sendStatus(500)
   }
 
-  req.body.url = urlWithPort
+  req.body.host = hostWithPort
 
   return next()
 }
@@ -43,20 +41,16 @@ module.exports = podsMiddleware
 
 // ---------------------------------------------------------------------------
 
-function getUrlWithPort (url) {
-  const urlObj = urlModule.parse(url)
+function getHostWithPort (host) {
+  const splitted = host.split(':')
 
-  // Add the port if it is not specified
-  if (urlObj.port === null) {
-    if (urlObj.protocol === 'http:') {
-      return url + ':80'
-    } else if (urlObj.protocol === 'https:') {
-      return url + ':443'
-    } else {
-      logger.error('Unknown url protocol: ' + urlObj.protocol)
-      return null
-    }
+  console.log(splitted)
+  // The port was not specified
+  if (splitted.length === 1) {
+    if (constants.REMOTE_SCHEME.HTTP === 'https') return host + ':443'
+
+    return host + ':80'
   }
 
-  return url
+  return host
 }

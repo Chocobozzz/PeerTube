@@ -27,10 +27,10 @@ function remoteVideos (req, res, next) {
 }
 
 function signature (req, res, next) {
-  req.checkBody('signature.url', 'Should have a signature url').isURL()
+  req.checkBody('signature.host', 'Should have a signature host').isURL()
   req.checkBody('signature.signature', 'Should have a signature').notEmpty()
 
-  logger.debug('Checking signature parameters', { parameters: { signatureUrl: req.body.signature.url } })
+  logger.debug('Checking signature parameters', { parameters: { signatureHost: req.body.signature.host } })
 
   checkErrors(req, res, next)
 }

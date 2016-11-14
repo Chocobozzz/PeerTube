@@ -10,7 +10,7 @@ const validatorsPod = {
 }
 
 function makeFriends (req, res, next) {
-  req.checkBody('urls', 'Should have an array of unique urls').isEachUniqueUrlValid()
+  req.checkBody('hosts', 'Should have an array of unique hosts').isEachUniqueHostValid()
 
   logger.debug('Checking makeFriends parameters', { parameters: req.body })
 
@@ -32,7 +32,7 @@ function makeFriends (req, res, next) {
 }
 
 function podsAdd (req, res, next) {
-  req.checkBody('url', 'Should have an url').notEmpty().isURL({ require_protocol: true })
+  req.checkBody('host', 'Should have an host').notEmpty().isURL()
   req.checkBody('publicKey', 'Should have a public key').notEmpty()
 
   // TODO: check we don't have it already

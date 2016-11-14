@@ -6,7 +6,6 @@ const eachSeries = require('async/eachSeries')
 const fs = require('fs')
 const mongoose = require('mongoose')
 const request = require('request')
-const urlUtil = require('url')
 const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
@@ -44,7 +43,7 @@ function getMyCertificate (callback) {
   fs.readFile(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.pub', 'utf8', callback)
 }
 
-function makeFriends (urls, callback) {
+function makeFriends (hosts, callback) {
   const podsScore = {}
 
   logger.info('Make friends!')
@@ -54,13 +53,13 @@ function makeFriends (urls, callback) {
       return callback(err)
     }
 
-    eachSeries(urls, function (url, callbackEach) {
-      computeForeignPodsList(url, podsScore, callbackEach)
+    eachSeries(hosts, function (host, callbackEach) {
+      computeForeignPodsList(host, podsScore, callbackEach)
     }, function (err) {
       if (err) return callback(err)
 
       logger.debug('Pods scores computed.', { podsScore: podsScore })
-      const podsList = computeWinningPods(urls, podsScore)
+      const podsList = computeWinningPods(hosts, podsScore)
       logger.debug('Pods that we keep.', { podsToKeep: podsList })
 
       makeRequestsToWinningPods(cert, podsList, callback)
@@ -149,45 +148,45 @@ module.exports = friends
 
 // ---------------------------------------------------------------------------
 
-function computeForeignPodsList (url, podsScore, callback) {
-  getForeignPodsList(url, function (err, foreignPodsList) {
+function computeForeignPodsList (host, podsScore, callback) {
+  getForeignPodsList(host, function (err, foreignPodsList) {
     if (err) return callback(err)
 
     if (!foreignPodsList) foreignPodsList = []
 
     // Let's give 1 point to the pod we ask the friends list
-    foreignPodsList.push({ url: url })
+    foreignPodsList.push({ host })
 
     foreignPodsList.forEach(function (foreignPod) {
-      const foreignPodUrl = foreignPod.url
+      const foreignPodHost = foreignPod.host
 
-      if (podsScore[foreignPodUrl]) podsScore[foreignPodUrl]++
-      else podsScore[foreignPodUrl] = 1
+      if (podsScore[foreignPodHost]) podsScore[foreignPodHost]++
+      else podsScore[foreignPodHost] = 1
     })
 
     callback()
   })
 }
 
-function computeWinningPods (urls, podsScore) {
+function computeWinningPods (hosts, podsScore) {
   // Build the list of pods to add
   // Only add a pod if it exists in more than a half base pods
   const podsList = []
-  const baseScore = urls.length / 2
-  Object.keys(podsScore).forEach(function (podUrl) {
+  const baseScore = hosts.length / 2
+  Object.keys(podsScore).forEach(function (podHost) {
     // If the pod is not me and with a good score we add it
-    if (isMe(podUrl) === false && podsScore[podUrl] > baseScore) {
-      podsList.push({ url: podUrl })
+    if (isMe(podHost) === false && podsScore[podHost] > baseScore) {
+      podsList.push({ host: podHost })
     }
   })
 
   return podsList
 }
 
-function getForeignPodsList (url, callback) {
+function getForeignPodsList (host, callback) {
   const path = '/api/' + constants.API_VERSION + '/pods'
 
-  request.get(url + path, function (err, response, body) {
+  request.get(constants.REMOTE_SCHEME.HTTP + '://' + host + path, function (err, response, body) {
     if (err) return callback(err)
 
     try {
@@ -207,26 +206,26 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
 
   eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
     const params = {
-      url: pod.url + '/api/' + constants.API_VERSION + '/pods/',
+      url: constants.REMOTE_SCHEME.HTTP + '://' + pod.host + '/api/' + constants.API_VERSION + '/pods/',
       method: 'POST',
       json: {
-        url: constants.CONFIG.WEBSERVER.URL,
+        host: constants.CONFIG.WEBSERVER.HOST,
         publicKey: cert
       }
     }
 
     requests.makeRetryRequest(params, function (err, res, body) {
       if (err) {
-        logger.error('Error with adding %s pod.', pod.url, { error: err })
+        logger.error('Error with adding %s pod.', pod.host, { error: err })
         // Don't break the process
         return callbackEach()
       }
 
       if (res.statusCode === 200) {
-        const podObj = new Pod({ url: pod.url, publicKey: body.cert })
+        const podObj = new Pod({ host: pod.host, publicKey: body.cert })
         podObj.save(function (err, podCreated) {
           if (err) {
-            logger.error('Cannot add friend %s pod.', pod.url, { error: err })
+            logger.error('Cannot add friend %s pod.', pod.host, { error: err })
             return callbackEach()
           }
 
@@ -236,7 +235,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
           return callbackEach()
         })
       } else {
-        logger.error('Status not 200 for %s pod.', pod.url)
+        logger.error('Status not 200 for %s pod.', pod.host)
         return callbackEach()
       }
     })
@@ -268,14 +267,6 @@ function createRequest (type, endpoint, data, to) {
   })
 }
 
-function isMe (url) {
-  const parsedUrl = urlUtil.parse(url)
-
-  const hostname = parsedUrl.hostname
-  const port = parseInt(parsedUrl.port)
-
-  const myHostname = constants.CONFIG.WEBSERVER.HOSTNAME
-  const myPort = constants.CONFIG.WEBSERVER.PORT
-
-  return hostname === myHostname && port === myPort
+function isMe (host) {
+  return host === constants.CONFIG.WEBSERVER.HOST
 }

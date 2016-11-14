@@ -3,13 +3,13 @@
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
 <form (ngSubmit)="makeFriends()" [formGroup]="form">
-  <div class="form-group"  *ngFor="let url of urls; let id = index; trackBy:customTrackBy">
-    <label for="username">Url</label>
+  <div class="form-group"  *ngFor="let host of hosts; let id = index; trackBy:customTrackBy">
+    <label for="username">Host</label>
 
     <div class="input-group">
       <input
-        type="text" class="form-control" placeholder="http://domain.com"
-        [id]="'url-' + id" [formControlName]="'url-' + id"
+        type="text" class="form-control" placeholder="domain.tld"
+        [id]="'host-' + id" [formControlName]="'host-' + id"
       />
       <span class="input-group-btn">
         <button *ngIf="displayAddField(id)" (click)="addField()" class="btn btn-default" type="button">+</button>
@@ -17,8 +17,8 @@
       </span>
     </div>
 
-    <div [hidden]="form.controls['url-' + id].valid || form.controls['url-' + id].pristine" class="alert alert-warning">
-      It should be a valid url.
+    <div [hidden]="form.controls['host-' + id].valid || form.controls['host-' + id].pristine" class="alert alert-warning">
+      It should be a valid host.
     </div>
   </div>
 

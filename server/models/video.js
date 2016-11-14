@@ -28,10 +28,9 @@ const VideoSchema = mongoose.Schema({
   magnet: {
     infoHash: String
   },
-  podUrl: String,
+  podHost: String,
   author: String,
   duration: Number,
-  thumbnail: String,
   tags: [ String ],
   createdDate: {
     type: Date,
@@ -41,14 +40,9 @@ const VideoSchema = mongoose.Schema({
 
 VideoSchema.path('name').validate(customVideosValidators.isVideoNameValid)
 VideoSchema.path('description').validate(customVideosValidators.isVideoDescriptionValid)
-VideoSchema.path('podUrl').validate(customVideosValidators.isVideoPodUrlValid)
+VideoSchema.path('podHost').validate(customVideosValidators.isVideoPodHostValid)
 VideoSchema.path('author').validate(customVideosValidators.isVideoAuthorValid)
 VideoSchema.path('duration').validate(customVideosValidators.isVideoDurationValid)
-// The tumbnail can be the path or the data in base 64
-// The pre save hook will convert the base 64 data in a file on disk and replace the thumbnail key by the filename
-VideoSchema.path('thumbnail').validate(function (value) {
-  return customVideosValidators.isVideoThumbnailValid(value) || customVideosValidators.isVideoThumbnail64Valid(value)
-})
 VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
 
 VideoSchema.methods = {
@@ -65,8 +59,8 @@ VideoSchema.methods = {
 VideoSchema.statics = {
   getDurationFromFile,
   listForApi,
-  listByUrlAndRemoteId,
-  listByUrl,
+  listByHostAndRemoteId,
+  listByHost,
   listOwned,
   listOwnedByAuthor,
   listRemotes,
@@ -107,7 +101,7 @@ VideoSchema.pre('save', function (next) {
 
   if (video.isOwned()) {
     const videoPath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
-    this.podUrl = constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT
+    this.podHost = constants.CONFIG.WEBSERVER.HOST
 
     tasks.push(
       // TODO: refractoring
@@ -160,8 +154,8 @@ function generateMagnetUri () {
     baseUrlHttp = constants.CONFIG.WEBSERVER.URL
     baseUrlWs = constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT
   } else {
-    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + this.podUrl
-    baseUrlWs = constants.REMOTE_SCHEME.WS + this.podUrl
+    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + this.podHost
+    baseUrlWs = constants.REMOTE_SCHEME.WS + this.podHost
   }
 
   const xs = baseUrlHttp + constants.STATIC_PATHS.TORRENTS + this.getTorrentName()
@@ -215,7 +209,7 @@ function toFormatedJSON () {
     id: this._id,
     name: this.name,
     description: this.description,
-    podUrl: this.podUrl,
+    podHost: this.podHost,
     isLocal: this.isOwned(),
     magnetUri: this.generateMagnetUri(),
     author: this.author,
@@ -249,7 +243,7 @@ function toRemoteJSON (callback) {
       thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
       tags: self.tags,
       createdDate: self.createdDate,
-      podUrl: self.podUrl
+      podHost: self.podHost
     }
 
     return callback(null, remoteVideo)
@@ -271,12 +265,12 @@ function listForApi (start, count, sort, callback) {
   return modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
 }
 
-function listByUrlAndRemoteId (fromUrl, remoteId, callback) {
-  this.find({ podUrl: fromUrl, remoteId: remoteId }, callback)
+function listByHostAndRemoteId (fromHost, remoteId, callback) {
+  this.find({ podHost: fromHost, remoteId: remoteId }, callback)
 }
 
-function listByUrl (fromUrl, callback) {
-  this.find({ podUrl: fromUrl }, callback)
+function listByHost (fromHost, callback) {
+  this.find({ podHost: fromHost }, callback)
 }
 
 function listOwned (callback) {

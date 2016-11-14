@@ -14,7 +14,7 @@ const PAGINATION_COUNT_DEFAULT = 15
 
 // Sortable columns per schema
 const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'podUrl', 'author', 'tags' ]
+  VIDEOS: [ 'name', 'magnetUri', 'podHost', 'author', 'tags' ]
 }
 
 // Sortable columns per schema
@@ -55,6 +55,7 @@ const CONFIG = {
   }
 }
 CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
+CONFIG.WEBSERVER.HOST = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
 // ---------------------------------------------------------------------------
 

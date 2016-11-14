@@ -21,9 +21,9 @@ export class FriendService {
                         .catch((res) => this.restExtractor.handleError(res));
   }
 
-  makeFriends(notEmptyUrls) {
+  makeFriends(notEmptyHosts) {
     const body = {
-      urls: notEmptyUrls
+      hosts: notEmptyHosts
     };
 
     return this.authHttp.post(FriendService.BASE_FRIEND_URL + 'makefriends', body)

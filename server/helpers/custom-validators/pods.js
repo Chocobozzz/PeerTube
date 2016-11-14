@@ -5,14 +5,14 @@ const validator = require('express-validator').validator
 const miscValidators = require('./misc')
 
 const podsValidators = {
-  isEachUniqueUrlValid
+  isEachUniqueHostValid
 }
 
-function isEachUniqueUrlValid (urls) {
-  return miscValidators.isArray(urls) &&
-    urls.length !== 0 &&
-    urls.every(function (url) {
-      return validator.isURL(url) && urls.indexOf(url) === urls.lastIndexOf(url)
+function isEachUniqueHostValid (hosts) {
+  return miscValidators.isArray(hosts) &&
+    hosts.length !== 0 &&
+    hosts.every(function (host) {
+      return validator.isURL(host) && host.split('://').length === 1 && hosts.indexOf(host) === hosts.lastIndexOf(host)
     })
 }
 

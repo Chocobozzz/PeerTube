@@ -12,27 +12,27 @@ const secureMiddleware = {
 }
 
 function checkSignature (req, res, next) {
-  const url = req.body.signature.url
-  Pod.loadByUrl(url, function (err, pod) {
+  const host = req.body.signature.host
+  Pod.loadByHost(host, function (err, pod) {
     if (err) {
-      logger.error('Cannot get signed url in decryptBody.', { error: err })
+      logger.error('Cannot get signed host in decryptBody.', { error: err })
       return res.sendStatus(500)
     }
 
     if (pod === null) {
-      logger.error('Unknown pod %s.', url)
+      logger.error('Unknown pod %s.', host)
       return res.sendStatus(403)
     }
 
-    logger.debug('Decrypting body from %s.', url)
+    logger.debug('Decrypting body from %s.', host)
 
-    const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, url, req.body.signature.signature)
+    const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, host, req.body.signature.signature)
 
     if (signatureOk === true) {
       return next()
     }
 
-    logger.error('Signature is not okay in decryptBody for %s.', req.body.signature.url)
+    logger.error('Signature is not okay in decryptBody for %s.', req.body.signature.host)
     return res.sendStatus(403)
   })
 }

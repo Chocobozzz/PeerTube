@@ -30,7 +30,7 @@ module.exports = router
 
 function remoteVideos (req, res, next) {
   const requests = req.body.data
-  const fromUrl = req.body.signature.url
+  const fromHost = req.body.signature.host
 
   // We need to process in the same order to keep consistency
   // TODO: optimization
@@ -40,7 +40,7 @@ function remoteVideos (req, res, next) {
     if (request.type === 'add') {
       addRemoteVideo(videoData, callbackEach)
     } else if (request.type === 'remove') {
-      removeRemoteVideo(videoData, fromUrl, callbackEach)
+      removeRemoteVideo(videoData, fromHost, callbackEach)
     } else {
       logger.error('Unkown remote request type %s.', request.type)
     }
@@ -62,16 +62,16 @@ function addRemoteVideo (videoToCreateData, callback) {
   video.save(callback)
 }
 
-function removeRemoteVideo (videoToRemoveData, fromUrl, callback) {
+function removeRemoteVideo (videoToRemoveData, fromHost, callback) {
   // We need the list because we have to remove some other stuffs (thumbnail etc)
-  Video.listByUrlAndRemoteId(fromUrl, videoToRemoveData.remoteId, function (err, videosList) {
+  Video.listByHostAndRemoteId(fromHost, videoToRemoveData.remoteId, function (err, videosList) {
     if (err) {
-      logger.error('Cannot list videos from url and magnets.', { error: err })
+      logger.error('Cannot list videos from host and magnets.', { error: err })
       return callback(err)
     }
 
     if (videosList.length === 0) {
-      logger.error('No remote video was found for this pod.', { magnetUri: videoToRemoveData.magnetUri, podUrl: fromUrl })
+      logger.error('No remote video was found for this pod.', { magnetUri: videoToRemoveData.magnetUri, podHost: fromHost })
     }
 
     each(videosList, function (video, callbackEach) {

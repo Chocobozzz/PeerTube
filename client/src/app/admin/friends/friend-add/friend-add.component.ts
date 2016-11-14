@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { validateUrl } from '../../../shared';
+import { validateHost } from '../../../shared';
 import { FriendService } from '../shared';
 
 @Component({
@@ -12,7 +12,7 @@ import { FriendService } from '../shared';
 })
 export class FriendAddComponent implements OnInit {
   form: FormGroup;
-  urls = [ ];
+  hosts = [ ];
   error: string = null;
 
   constructor(private router: Router, private friendService: FriendService) {}
@@ -23,8 +23,8 @@ export class FriendAddComponent implements OnInit {
   }
 
   addField() {
-    this.form.addControl(`url-${this.urls.length}`, new FormControl('', [ validateUrl ]));
-    this.urls.push('');
+    this.form.addControl(`host-${this.hosts.length}`, new FormControl('', [ validateHost ]));
+    this.hosts.push('');
   }
 
   customTrackBy(index: number, obj: any): any {
@@ -32,52 +32,52 @@ export class FriendAddComponent implements OnInit {
   }
 
   displayAddField(index: number) {
-    return index === (this.urls.length - 1);
+    return index === (this.hosts.length - 1);
   }
 
   displayRemoveField(index: number) {
-    return (index !== 0 || this.urls.length > 1) && index !== (this.urls.length - 1);
+    return (index !== 0 || this.hosts.length > 1) && index !== (this.hosts.length - 1);
   }
 
   isFormValid() {
     // Do not check the last input
-    for (let i = 0; i < this.urls.length - 1; i++) {
-      if (!this.form.controls[`url-${i}`].valid) return false;
+    for (let i = 0; i < this.hosts.length - 1; i++) {
+      if (!this.form.controls[`host-${i}`].valid) return false;
     }
 
-    const lastIndex = this.urls.length - 1;
+    const lastIndex = this.hosts.length - 1;
     // If the last input (which is not the first) is empty, it's ok
-    if (this.urls[lastIndex] === '' && lastIndex !== 0) {
+    if (this.hosts[lastIndex] === '' && lastIndex !== 0) {
       return true;
     } else {
-      return this.form.controls[`url-${lastIndex}`].valid;
+      return this.form.controls[`host-${lastIndex}`].valid;
     }
   }
 
   removeField(index: number) {
     // Remove the last control
-    this.form.removeControl(`url-${this.urls.length - 1}`);
-    this.urls.splice(index, 1);
+    this.form.removeControl(`host-${this.hosts.length - 1}`);
+    this.hosts.splice(index, 1);
   }
 
   makeFriends() {
     this.error = '';
 
-    const notEmptyUrls = this.getNotEmptyUrls();
-    if (notEmptyUrls.length === 0) {
-      this.error = 'You need to specify at less 1 url.';
+    const notEmptyHosts = this.getNotEmptyHosts();
+    if (notEmptyHosts.length === 0) {
+      this.error = 'You need to specify at least 1 host.';
       return;
     }
 
-    if (!this.isUrlsUnique(notEmptyUrls)) {
-      this.error = 'Urls need to be unique.';
+    if (!this.isHostsUnique(notEmptyHosts)) {
+      this.error = 'Hosts need to be unique.';
       return;
     }
 
-    const confirmMessage = 'Are you sure to make friends with:\n - ' + notEmptyUrls.join('\n - ');
+    const confirmMessage = 'Are you sure to make friends with:\n - ' + notEmptyHosts.join('\n - ');
     if (!confirm(confirmMessage)) return;
 
-    this.friendService.makeFriends(notEmptyUrls).subscribe(
+    this.friendService.makeFriends(notEmptyHosts).subscribe(
       status => {
         // TODO: extractdatastatus
         // if (status === 409) {
@@ -91,18 +91,18 @@ export class FriendAddComponent implements OnInit {
     );
   }
 
-  private getNotEmptyUrls() {
-    const notEmptyUrls = [];
+  private getNotEmptyHosts() {
+    const notEmptyHosts = [];
 
-    Object.keys(this.form.value).forEach((urlKey) => {
-      const url = this.form.value[urlKey];
-      if (url !== '') notEmptyUrls.push(url);
+    Object.keys(this.form.value).forEach((hostKey) => {
+      const host = this.form.value[hostKey];
+      if (host !== '') notEmptyHosts.push(host);
     });
 
-    return notEmptyUrls;
+    return notEmptyHosts;
   }
 
-  private isUrlsUnique(urls: string[]) {
-    return urls.every(url => urls.indexOf(url) === urls.lastIndexOf(url));
+  private isHostsUnique(hosts: string[]) {
+    return hosts.every(host => hosts.indexOf(host) === hosts.lastIndexOf(host));
   }
 }

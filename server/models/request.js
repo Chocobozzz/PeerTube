@@ -121,7 +121,7 @@ function makeRequest (toPod, requestEndpoint, requestsToMake, callback) {
     if (err || (res.statusCode !== 200 && res.statusCode !== 201 && res.statusCode !== 204)) {
       logger.error(
         'Error sending secure request to %s pod.',
-        toPod.url,
+        toPod.host,
         {
           error: err || new Error('Status code not 20x : ' + res.statusCode)
         }

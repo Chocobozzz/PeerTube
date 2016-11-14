@@ -8,21 +8,12 @@ export class Video {
   isLocal: boolean;
   magnetUri: string;
   name: string;
-  podUrl: string;
+  podHost: string;
   tags: string[];
   thumbnailPath: string;
 
-  private static createByString(author: string, podUrl: string) {
-    let [ host, port ] = podUrl.replace(/^https?:\/\//, '').split(':');
-
-    if (port === '80' || port === '443') {
-      port = '';
-    } else {
-      port = ':' + port;
-    }
-
-
-    return author + '@' + host + port;
+  private static createByString(author: string, podHost: string) {
+    return author + '@' + podHost;
   }
 
   private static createDurationString(duration: number) {
@@ -43,7 +34,7 @@ export class Video {
     isLocal: boolean,
     magnetUri: string,
     name: string,
-    podUrl: string,
+    podHost: string,
     tags: string[],
     thumbnailPath: string
   }) {
@@ -55,11 +46,11 @@ export class Video {
     this.isLocal = hash.isLocal;
     this.magnetUri = hash.magnetUri;
     this.name = hash.name;
-    this.podUrl = hash.podUrl;
+    this.podHost = hash.podHost;
     this.tags = hash.tags;
     this.thumbnailPath = hash.thumbnailPath;
 
-    this.by = Video.createByString(hash.author, hash.podUrl);
+    this.by = Video.createByString(hash.author, hash.podHost);
   }
 
   isRemovableBy(user) {
