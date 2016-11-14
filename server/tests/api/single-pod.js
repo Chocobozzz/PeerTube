@@ -77,7 +77,7 @@ describe('Test a single pod', function () {
       const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('localhost:9001')
+      expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
@@ -111,7 +111,7 @@ describe('Test a single pod', function () {
       const video = res.body
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('localhost:9001')
+      expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
@@ -138,7 +138,7 @@ describe('Test a single pod', function () {
       const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('localhost:9001')
+      expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
@@ -153,8 +153,8 @@ describe('Test a single pod', function () {
     })
   })
 
-  it('Should search the video by podUrl', function (done) {
-    videosUtils.searchVideo(server.url, '9001', 'podUrl', function (err, res) {
+  it('Should search the video by podHost', function (done) {
+    videosUtils.searchVideo(server.url, '9001', 'podHost', function (err, res) {
       if (err) throw err
 
       expect(res.body.total).to.equal(1)
@@ -164,7 +164,7 @@ describe('Test a single pod', function () {
       const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('localhost:9001')
+      expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
@@ -190,7 +190,7 @@ describe('Test a single pod', function () {
       const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
       expect(video.description).to.equal('my super description')
-      expect(video.podUrl).to.equal('localhost:9001')
+      expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
@@ -425,7 +425,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search all the 9001 port videos', function (done) {
-    videosUtils.searchVideoWithPagination(server.url, '9001', 'podUrl', 0, 15, function (err, res) {
+    videosUtils.searchVideoWithPagination(server.url, '9001', 'podHost', 0, 15, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
@@ -437,7 +437,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search all the localhost videos', function (done) {
-    videosUtils.searchVideoWithPagination(server.url, 'localhost', 'podUrl', 0, 15, function (err, res) {
+    videosUtils.searchVideoWithPagination(server.url, 'localhost', 'podHost', 0, 15, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data

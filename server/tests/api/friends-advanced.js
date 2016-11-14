@@ -203,7 +203,7 @@ describe('Test advanced friends', function () {
           const result = res.body
           expect(result.length).to.equal(3)
           for (const pod of result) {
-            expect(pod.url).not.equal(servers[3].url)
+            expect(pod.host).not.equal(servers[3].host)
           }
 
           done()

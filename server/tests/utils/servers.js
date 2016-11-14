@@ -47,6 +47,7 @@ function runServer (number, callback) {
   const server = {
     app: null,
     url: `http://localhost:${9000 + number}`,
+    host: `localhost:${9000 + number}`,
     client: {
       id: null,
       secret: null

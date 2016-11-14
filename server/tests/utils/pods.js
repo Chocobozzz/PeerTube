@@ -30,25 +30,25 @@ function makeFriends (url, accessToken, expectedStatus, end) {
   // Which pod makes friends with which pod
   const friendsMatrix = {
     'http://localhost:9001': [
-      'http://localhost:9002'
+      'localhost:9002'
     ],
     'http://localhost:9002': [
-      'http://localhost:9003'
+      'localhost:9003'
     ],
     'http://localhost:9003': [
-      'http://localhost:9001'
+      'localhost:9001'
     ],
     'http://localhost:9004': [
-      'http://localhost:9002'
+      'localhost:9002'
     ],
     'http://localhost:9005': [
-      'http://localhost:9001',
-      'http://localhost:9004'
+      'localhost:9001',
+      'localhost:9004'
     ],
     'http://localhost:9006': [
-      'http://localhost:9001',
-      'http://localhost:9002',
-      'http://localhost:9003'
+      'localhost:9001',
+      'localhost:9002',
+      'localhost:9003'
     ]
   }
   const path = '/api/v1/pods/makefriends'
@@ -58,7 +58,7 @@ function makeFriends (url, accessToken, expectedStatus, end) {
     .post(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
-    .send({ 'urls': friendsMatrix[url] })
+    .send({ 'hosts': friendsMatrix[url] })
     .expect(expectedStatus)
     .end(function (err, res) {
       if (err) throw err

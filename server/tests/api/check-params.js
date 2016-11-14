@@ -67,10 +67,10 @@ describe('Test parameters validator', function () {
 
       describe('When making friends', function () {
         const body = {
-          urls: [ 'http://localhost:9002' ]
+          hosts: [ 'localhost:9002' ]
         }
 
-        it('Should fail without urls', function (done) {
+        it('Should fail without hosts', function (done) {
           request(server.url)
             .post(path + '/makefriends')
             .set('Authorization', 'Bearer ' + server.accessToken)
@@ -78,28 +78,37 @@ describe('Test parameters validator', function () {
             .expect(400, done)
         })
 
-        it('Should fail with urls is not an array', function (done) {
+        it('Should fail if hosts is not an array', function (done) {
           request(server.url)
             .post(path + '/makefriends')
-            .send({ urls: 'http://localhost:9002' })
+            .send({ hosts: 'localhost:9002' })
             .set('Authorization', 'Bearer ' + server.accessToken)
             .set('Accept', 'application/json')
             .expect(400, done)
         })
 
-        it('Should fail if the array is not composed by urls', function (done) {
+        it('Should fail if the array is not composed by hosts', function (done) {
           request(server.url)
             .post(path + '/makefriends')
-            .send({ urls: [ 'http://localhost:9002', 'localhost:coucou' ] })
+            .send({ hosts: [ 'localhost:9002', 'localhost:coucou' ] })
             .set('Authorization', 'Bearer ' + server.accessToken)
             .set('Accept', 'application/json')
             .expect(400, done)
         })
 
-        it('Should fail if urls are not unique', function (done) {
+        it('Should fail if the array is composed with http schemes', function (done) {
           request(server.url)
             .post(path + '/makefriends')
-            .send({ urls: [ 'http://localhost:9002', 'http://localhost:9002' ] })
+            .send({ hosts: [ 'localhost:9002', 'http://localhost:9003' ] })
+            .set('Authorization', 'Bearer ' + server.accessToken)
+            .set('Accept', 'application/json')
+            .expect(400, done)
+        })
+
+        it('Should fail if hosts are not unique', function (done) {
+          request(server.url)
+            .post(path + '/makefriends')
+            .send({ urls: [ 'localhost:9002', 'localhost:9002' ] })
             .set('Authorization', 'Bearer ' + server.accessToken)
             .set('Accept', 'application/json')
             .expect(400, done)
@@ -153,27 +162,27 @@ describe('Test parameters validator', function () {
 
       it('Should fail without public key', function (done) {
         const data = {
-          url: 'http://coucou.com'
+          host: 'coucou.com'
         }
         requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
       })
 
-      it('Should fail without an url', function (done) {
+      it('Should fail without an host', function (done) {
         const data = {
           publicKey: 'mysuperpublickey'
         }
         requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
       })
 
-      it('Should fail with an incorrect url', function (done) {
+      it('Should fail with an incorrect host', function (done) {
         const data = {
-          url: 'coucou.com',
+          host: 'http://coucou.com',
           publicKey: 'mysuperpublickey'
         }
         requestsUtils.makePostBodyRequest(server.url, path, null, data, function () {
-          data.url = 'http://coucou'
+          data.host = 'http://coucou'
           requestsUtils.makePostBodyRequest(server.url, path, null, data, function () {
-            data.url = 'coucou'
+            data.host = 'coucou'
             requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
           })
         })
@@ -181,7 +190,7 @@ describe('Test parameters validator', function () {
 
       it('Should succeed with the correct parameters', function (done) {
         const data = {
-          url: 'http://coucou.com',
+          host: 'coucou.com',
           publicKey: 'mysuperpublickey'
         }
         requestsUtils.makePostBodyRequest(server.url, path, null, data, done, 200)

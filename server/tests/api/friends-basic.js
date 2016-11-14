@@ -22,7 +22,7 @@ describe('Test basic friends', function () {
     const friends = []
     for (let i = 0; i < servers.length; i++) {
       if (servers[i].url === serverToTest.url) continue
-      friends.push(servers[i].url)
+      friends.push(servers[i].host)
     }
 
     podsUtils.getFriendsList(serverToTest.url, function (err, res) {
@@ -32,12 +32,12 @@ describe('Test basic friends', function () {
       expect(result).to.be.an('array')
       expect(result.length).to.equal(2)
 
-      const resultUrls = [ result[0].url, result[1].url ]
-      expect(resultUrls[0]).to.not.equal(resultUrls[1])
+      const resultHosts = [ result[0].host, result[1].host ]
+      expect(resultHosts[0]).to.not.equal(resultHosts[1])
 
-      const errorString = 'Friends url do not correspond for ' + serverToTest.url
-      expect(friends).to.contain(resultUrls[0], errorString)
-      expect(friends).to.contain(resultUrls[1], errorString)
+      const errorString = 'Friends host do not correspond for ' + serverToTest.host
+      expect(friends).to.contain(resultHosts[0], errorString)
+      expect(friends).to.contain(resultHosts[1], errorString)
       callback()
     })
   }
@@ -95,7 +95,7 @@ describe('Test basic friends', function () {
           expect(result.length).to.equal(1)
 
           const pod = result[0]
-          expect(pod.url).to.equal(servers[2].url)
+          expect(pod.host).to.equal(servers[2].host)
           expect(pod.score).to.equal(20)
           expect(miscsUtils.dateIsValid(pod.createdDate)).to.be.true
 
@@ -112,7 +112,7 @@ describe('Test basic friends', function () {
           expect(result.length).to.equal(1)
 
           const pod = result[0]
-          expect(pod.url).to.equal(servers[1].url)
+          expect(pod.host).to.equal(servers[1].host)
           expect(pod.score).to.equal(20)
           expect(miscsUtils.dateIsValid(pod.createdDate)).to.be.true
 
@@ -170,7 +170,7 @@ describe('Test basic friends', function () {
             const result = res.body
             expect(result).to.be.an('array')
             expect(result.length).to.equal(1)
-            expect(result[0].url).not.to.be.equal(servers[1].url)
+            expect(result[0].host).not.to.be.equal(servers[1].host)
             callback()
           })
         }, next)

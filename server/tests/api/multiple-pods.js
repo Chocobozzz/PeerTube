@@ -100,7 +100,7 @@ describe('Test multiple pods', function () {
               const video = videos[0]
               expect(video.name).to.equal('my super name for pod 1')
               expect(video.description).to.equal('my super description for pod 1')
-              expect(video.podUrl).to.equal('localhost:9001')
+              expect(video.podHost).to.equal('localhost:9001')
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(10)
               expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
@@ -162,7 +162,7 @@ describe('Test multiple pods', function () {
               const video = videos[1]
               expect(video.name).to.equal('my super name for pod 2')
               expect(video.description).to.equal('my super description for pod 2')
-              expect(video.podUrl).to.equal('localhost:9002')
+              expect(video.podHost).to.equal('localhost:9002')
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(5)
               expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
@@ -241,7 +241,7 @@ describe('Test multiple pods', function () {
 
               expect(video1.name).to.equal('my super name for pod 3')
               expect(video1.description).to.equal('my super description for pod 3')
-              expect(video1.podUrl).to.equal('localhost:9003')
+              expect(video1.podHost).to.equal('localhost:9003')
               expect(video1.magnetUri).to.exist
               expect(video1.duration).to.equal(5)
               expect(video1.tags).to.deep.equal([ 'tag1p3' ])
@@ -250,7 +250,7 @@ describe('Test multiple pods', function () {
 
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.description).to.equal('my super description for pod 3-2')
-              expect(video2.podUrl).to.equal('localhost:9003')
+              expect(video2.podHost).to.equal('localhost:9003')
               expect(video2.magnetUri).to.exist
               expect(video2.duration).to.equal(5)
               expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
