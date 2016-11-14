@@ -104,6 +104,22 @@ const MONGO_MIGRATION_SCRIPTS = [
   {
     script: '0020-requests-endpoint',
     version: 20
+  },
+  {
+    script: '0025-video-filenames',
+    version: 25
+  },
+  {
+    script: '0030-video-magnet',
+    version: 30
+  },
+  {
+    script: '0035-url-to-host',
+    version: 35
+  },
+  {
+    script: '0040-video-remote-id',
+    version: 40
   }
 ]
 const LAST_MONGO_SCHEMA_VERSION = (maxBy(MONGO_MIGRATION_SCRIPTS, 'version'))['version']

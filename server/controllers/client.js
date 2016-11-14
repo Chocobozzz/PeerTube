@@ -39,7 +39,7 @@ function addOpenGraphTags (htmlStringPage, video) {
   if (video.isOwned()) {
     baseUrlHttp = constants.CONFIG.WEBSERVER.URL
   } else {
-    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + video.podUrl
+    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + video.podHost
   }
 
   // We fetch the remote preview (bigger than the thumbnail)
@@ -88,7 +88,7 @@ function generateWatchHtmlPage (req, res, next) {
     if (err) return next(err)
 
     const html = results.file.toString()
-    const video = results.video.toFormatedJSON()
+    const video = results.video
 
     const htmlStringPageWithTags = addOpenGraphTags(html, video)
     res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
