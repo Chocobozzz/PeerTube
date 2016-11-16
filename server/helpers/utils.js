@@ -6,7 +6,8 @@ const logger = require('./logger')
 
 const utils = {
   cleanForExit,
-  generateRandomString
+  generateRandomString,
+  isTestInstance
 }
 
 function generateRandomString (size, callback) {
@@ -20,6 +21,10 @@ function generateRandomString (size, callback) {
 function cleanForExit (webtorrentProcess) {
   logger.info('Gracefully exiting.')
   process.kill(-webtorrentProcess.pid)
+}
+
+function isTestInstance () {
+  return (process.env.NODE_ENV === 'test')
 }
 
 // ---------------------------------------------------------------------------

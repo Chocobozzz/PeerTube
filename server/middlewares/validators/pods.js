@@ -1,8 +1,10 @@
 'use strict'
 
 const checkErrors = require('./utils').checkErrors
+const constants = require('../../initializers/constants')
 const friends = require('../../lib/friends')
 const logger = require('../../helpers/logger')
+const utils = require('../../helpers/utils')
 
 const validatorsPod = {
   makeFriends,
@@ -10,6 +12,11 @@ const validatorsPod = {
 }
 
 function makeFriends (req, res, next) {
+  // Force https if the administrator wants to make friends
+  if (utils.isTestInstance() === false && constants.CONFIG.WEBSERVER.SCHEME === 'http') {
+    return res.status(400).send('Cannot make friends with a non HTTPS webserver.')
+  }
+
   req.checkBody('hosts', 'Should have an array of unique hosts').isEachUniqueHostValid()
 
   logger.debug('Checking makeFriends parameters', { parameters: req.body })

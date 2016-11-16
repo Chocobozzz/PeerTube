@@ -152,7 +152,7 @@ const REQUEST_ENDPOINTS = {
 
 const REMOTE_SCHEME = {
   HTTP: 'https',
-  WS: 'WS'
+  WS: 'wss'
 }
 
 // Password encryption
@@ -220,6 +220,7 @@ module.exports = {
 
 // ---------------------------------------------------------------------------
 
+// This method exists in utils module but we want to let the constants module independent
 function isTestInstance () {
   return (process.env.NODE_ENV === 'test')
 }
