@@ -68,7 +68,7 @@
     "ts-helpers": "^1.1.1",
     "tslint": "3.15.1",
     "tslint-loader": "^2.1.4",
-    "typescript": "^2.0.0",
+    "typescript": "~2.0.9",
     "url-loader": "^0.5.7",
     "video.js": "^5.11.9",
     "videojs-dock": "^2.0.2",
