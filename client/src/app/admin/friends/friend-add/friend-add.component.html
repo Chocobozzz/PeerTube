@@ -22,5 +22,9 @@
     </div>
   </div>
 
+  <div *ngIf="canMakeFriends() === false"  class="alert alert-warning">
+    It seems that you are not on a HTTPS pod. Your webserver need to have TLS activated in order to make friends.
+  </div>
+
   <input type="submit" value="Make friends" class="btn btn-default" [disabled]="!isFormValid()">
 </form>

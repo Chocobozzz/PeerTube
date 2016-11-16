@@ -27,6 +27,10 @@ export class FriendAddComponent implements OnInit {
     this.hosts.push('');
   }
 
+  canMakeFriends() {
+    return window.location.protocol === 'https://';
+  }
+
   customTrackBy(index: number, obj: any): any {
     return index;
   }
