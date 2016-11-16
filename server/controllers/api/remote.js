@@ -55,11 +55,15 @@ function remoteVideos (req, res, next) {
 function addRemoteVideo (videoToCreateData, callback) {
   logger.debug('Adding remote video %s.', videoToCreateData.magnetUri)
 
-  // Mongoose pre hook will automatically create the thumbnail on disk
-  videoToCreateData.thumbnail = videoToCreateData.thumbnailBase64
-
   const video = new Video(videoToCreateData)
-  video.save(callback)
+  Video.generateThumbnailFromBase64(video, videoToCreateData.thumbnailBase64, function (err) {
+    if (err) {
+      logger.error('Cannot generate thumbnail from base 64 data.', { error: err })
+      return callback(err)
+    }
+
+    video.save(callback)
+  })
 }
 
 function removeRemoteVideo (videoToRemoveData, fromHost, callback) {

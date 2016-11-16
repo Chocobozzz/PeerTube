@@ -57,6 +57,7 @@ VideoSchema.methods = {
 }
 
 VideoSchema.statics = {
+  generateThumbnailFromBase64,
   getDurationFromFile,
   listForApi,
   listByHostAndRemoteId,
@@ -136,10 +137,10 @@ VideoSchema.pre('save', function (next) {
       }
     )
 
-    parallel(tasks, next)
-  } else {
-    generateThumbnailFromBase64(video, video.thumbnail, next)
+    return parallel(tasks, next)
   }
+
+  return next()
 })
 
 mongoose.model('Video', VideoSchema)
@@ -251,6 +252,18 @@ function toRemoteJSON (callback) {
 
 // ------------------------------ STATICS ------------------------------
 
+function generateThumbnailFromBase64 (video, thumbnailData, callback) {
+  // Creating the thumbnail for a remote video
+
+  const thumbnailName = video.getThumbnailName()
+  const thumbnailPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName
+  fs.writeFile(thumbnailPath, thumbnailData, { encoding: 'base64' }, function (err) {
+    if (err) return callback(err)
+
+    return callback(null, thumbnailName)
+  })
+}
+
 function getDurationFromFile (videoPath, callback) {
   ffmpeg.ffprobe(videoPath, function (err, metadata) {
     if (err) return callback(err)
@@ -331,18 +344,6 @@ function createPreview (video, videoPath, callback) {
 
 function createThumbnail (video, videoPath, callback) {
   generateImage(video, videoPath, constants.CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName(), constants.THUMBNAILS_SIZE, callback)
-}
-
-function generateThumbnailFromBase64 (video, thumbnailData, callback) {
-  // Creating the thumbnail for this remote video)
-
-  const thumbnailName = video.getThumbnailName()
-  const thumbnailPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName
-  fs.writeFile(thumbnailPath, thumbnailData, { encoding: 'base64' }, function (err) {
-    if (err) return callback(err)
-
-    return callback(null, thumbnailName)
-  })
 }
 
 function generateImage (video, videoPath, folder, imageName, size, callback) {
