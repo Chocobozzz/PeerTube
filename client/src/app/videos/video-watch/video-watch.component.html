@@ -15,9 +15,12 @@
 
 <div class="row">
   <div class="col-md-12">
-    <div class="embed-responsive embed-responsive-19by9">
+    <!-- We need the video container for videojs so we just hide it -->
+    <div [hidden]="videoNotFound" class="embed-responsive embed-responsive-19by9">
        <video id="video-container" class="video-js vjs-default-skin vjs-big-play-centered"></video>
     </div>
+
+    <div *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
   </div>
 </div>
 

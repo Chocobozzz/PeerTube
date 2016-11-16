@@ -28,6 +28,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playerElement: Element;
   uploadSpeed: number;
   video: Video = null;
+  videoNotFound = false;
 
   private errorTimer: NodeJS.Timer;
   private sub: any;
@@ -51,7 +52,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           this.setOpenGraphTags();
           this.loadVideo();
         },
-        error => alert(error.text)
+        error => {
+          this.videoNotFound = true;
+        }
       );
     });
 
@@ -73,7 +76,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     console.log('Removing video from webtorrent.');
     clearInterval(this.torrentInfosInterval);
     clearTimeout(this.errorTimer);
-    this.webTorrentService.remove(this.video.magnetUri);
+
+    if (this.video !== null) {
+      this.webTorrentService.remove(this.video.magnetUri);
+    }
 
     // Remove player
     videojs(this.playerElement).dispose();
