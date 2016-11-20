@@ -1,2 +1,3 @@
+export * from './login-routing.module';
 export * from './login.component';
-export * from './login.routes';
+export * from './login.module';

@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
-import { AuthService, FormReactive, VIDEO_NAME, VIDEO_DESCRIPTION, VIDEO_TAGS } from '../../shared';
+import { AuthService } from '../../core';
+import { FormReactive, VIDEO_NAME, VIDEO_DESCRIPTION, VIDEO_TAGS } from '../../shared';
 
 @Component({
   selector: 'my-videos-add',

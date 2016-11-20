@@ -4,7 +4,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { Search } from '../../shared';
 import { SortField } from './sort-field.type';
-import { AuthHttp, AuthService, RestExtractor, RestPagination, RestService, ResultList } from '../../shared';
+import { AuthService } from '../../core';
+import { AuthHttp, RestExtractor, RestPagination, RestService, ResultList } from '../../shared';
 import { Video } from './video.model';
 
 @Injectable()

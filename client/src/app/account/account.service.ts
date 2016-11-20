@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { AuthHttp, AuthService, RestExtractor } from '../shared';
+import { AuthService } from '../core';
+import { AuthHttp, RestExtractor } from '../shared';
 
 @Injectable()
 export class AccountService {

@@ -7,11 +7,12 @@ import {
   RequestMethod,
   RequestOptions,
   RequestOptionsArgs,
-  Response
+  Response,
+  XHRBackend
 } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
-import { AuthService } from './auth.service';
+import { AuthService } from '../../core';
 
 @Injectable()
 export class AuthHttp extends Http {
@@ -78,3 +79,13 @@ export class AuthHttp extends Http {
     headers.set('Authorization', this.authService.getRequestHeaderValue());
   }
 }
+
+export const AUTH_HTTP_PROVIDERS = [
+  {
+    provide: AuthHttp,
+    useFactory: (backend: XHRBackend, defaultOptions: RequestOptions, authService: AuthService) => {
+      return new AuthHttp(backend, defaultOptions, authService);
+    },
+    deps: [ XHRBackend, RequestOptions, AuthService ]
+  },
+];

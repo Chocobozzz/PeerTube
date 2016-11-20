@@ -1,62 +1,22 @@
 import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpModule, RequestOptions, XHRBackend } from '@angular/http';
-import { RouterModule } from '@angular/router';
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
-import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
+import { MetaModule, MetaConfig } from 'ng2-meta';
 
-import { DropdownModule } from 'ng2-bootstrap/components/dropdown';
-import { ProgressbarModule } from 'ng2-bootstrap/components/progressbar';
-import { PaginationModule } from 'ng2-bootstrap/components/pagination';
-import { ModalModule } from 'ng2-bootstrap/components/modal';
-
-import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
-
-import { MetaConfig, MetaModule } from 'ng2-meta';
-
-/*
- * Platform and Environment providers/directives/pipes
- */
 import { ENV_PROVIDERS } from './environment';
-import { routes } from './app.routes';
-// App is our top level component
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppState } from './app.service';
 
-import {
-  AdminComponent,
-  FriendsComponent,
-  FriendAddComponent,
-  FriendListComponent,
-  FriendService,
-  MenuAdminComponent,
-  RequestsComponent,
-  RequestStatsComponent,
-  RequestService,
-  UsersComponent,
-  UserAddComponent,
-  UserListComponent,
-  UserService
-} from './admin';
-import { AccountComponent, AccountService } from './account';
-import { LoginComponent } from './login';
+import { AccountModule } from './account';
+import { AdminModule } from './admin';
+import { CoreModule } from './core';
+import { LoginModule } from './login';
+import { SharedModule } from './shared';
+import { VideosModule } from './videos';
+
 import { MenuComponent } from './menu.component';
-import { AuthService, AuthHttp, RestExtractor, RestService, SearchComponent, SearchService } from './shared';
-import {
-  LoaderComponent,
-  VideosComponent,
-  VideoAddComponent,
-  VideoListComponent,
-  VideoMiniatureComponent,
-  VideoSortComponent,
-  VideoWatchComponent,
-  VideoShareComponent,
-  VideoMagnetComponent,
-  VideoService,
-  WebTorrentService
-} from './videos';
 
 const metaConfig: MetaConfig = {
   //Append a title suffix such as a site name to all titles
@@ -69,75 +29,31 @@ const metaConfig: MetaConfig = {
 
 // Application wide providers
 const APP_PROVIDERS = [
-  AppState,
-
-  {
-    provide: AuthHttp,
-    useFactory: (backend: XHRBackend, defaultOptions: RequestOptions, authService: AuthService) => {
-      return new AuthHttp(backend, defaultOptions, authService);
-    },
-    deps: [ XHRBackend, RequestOptions, AuthService ]
-  },
-
-  AuthService,
-  RestExtractor,
-  RestService,
-
-  VideoService,
-  SearchService,
-  FriendService,
-  RequestService,
-  UserService,
-  AccountService,
-  WebTorrentService
+  AppState
 ];
-/**
- * `AppModule` is the main entry point into Angular2's bootstraping process
- */
+
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
-    AccountComponent,
-    AdminComponent,
     AppComponent,
-    BytesPipe,
-    FriendAddComponent,
-    FriendListComponent,
-    FriendsComponent,
-    LoaderComponent,
-    LoginComponent,
-    MenuAdminComponent,
-    MenuComponent,
-    RequestsComponent,
-    RequestStatsComponent,
-    SearchComponent,
-    UserAddComponent,
-    UserListComponent,
-    UsersComponent,
-    VideoAddComponent,
-    VideoListComponent,
-    VideoMiniatureComponent,
-    VideosComponent,
-    VideoSortComponent,
-    VideoWatchComponent,
-    VideoShareComponent,
-    VideoMagnetComponent
+    MenuComponent
   ],
-  imports: [ // import Angular's modules
+  imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpModule,
-    RouterModule.forRoot(routes),
 
-    DropdownModule,
-    ProgressbarModule,
-    PaginationModule,
-    ModalModule,
+    CoreModule,
+    SharedModule,
 
-    FileUploadModule,
+    AppRoutingModule,
 
-    MetaModule.forRoot(metaConfig)
+    MetaModule.forRoot(metaConfig),
+
+    AccountModule,
+    AdminModule,
+    CoreModule,
+    LoginModule,
+    SharedModule,
+    VideosModule
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

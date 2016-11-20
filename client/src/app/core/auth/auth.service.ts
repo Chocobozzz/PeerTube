@@ -4,9 +4,10 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-import { AuthStatus } from './auth-status.model';
-import { AuthUser } from './auth-user.model';
-import { RestExtractor } from '../rest';
+// Do not use the barrel (dependency loop)
+import { AuthStatus } from '../../shared/auth/auth-status.model';
+import { AuthUser } from '../../shared/auth/auth-user.model';
+import { RestExtractor } from '../../shared/rest';
 
 @Injectable()
 export class AuthService {
