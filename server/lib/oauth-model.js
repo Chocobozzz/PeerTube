@@ -32,7 +32,7 @@ function getClient (clientId, clientSecret) {
   return OAuthClient.getByIdAndSecret(mongoId, clientSecret)
 }
 
-function getRefreshToken (refreshToken, callback) {
+function getRefreshToken (refreshToken) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
   return OAuthToken.getByRefreshTokenAndPopulateClient(refreshToken)
