@@ -100,7 +100,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   - [X] Stats
   - [X] Friends list
   - [X] Manage users (create/remove)
-- [ ] OpenGraph tags
+- [X] OpenGraph tags
 - [ ] User playlists
 - [ ] User subscriptions (by tags, author...)
 - [ ] Signaling a video to the admin pod
