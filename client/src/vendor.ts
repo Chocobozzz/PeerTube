@@ -17,10 +17,19 @@ import '@angularclass/hmr';
 // RxJS
 import 'rxjs/Observable';
 import 'rxjs/Subject';
+import 'rxjs/ReplaySubject';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/throw';
 
 import 'bootstrap-loader';
+
+import 'angular-pipes/src/math/bytes.pipe';
 import 'ng2-file-upload';
+import 'video.js';
+import 'ng2-meta';
+import 'ng2-bootstrap/components/pagination';
+import 'ng2-bootstrap/components/dropdown';
+import 'ng2-bootstrap/components/progressbar';
+import 'ng2-bootstrap/components/modal';
