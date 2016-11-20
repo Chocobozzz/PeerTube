@@ -35,4 +35,8 @@ export class VideoShareComponent {
   getVideoUrl() {
     return window.location.href;
   }
+
+  notSecure() {
+    return window.location.protocol === 'http:';
+  }
 }

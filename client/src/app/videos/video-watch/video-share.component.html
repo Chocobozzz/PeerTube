@@ -19,6 +19,10 @@
           <label>Embed</label>
           <input #shareInput (click)="shareInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoIframeCode()" />
         </div>
+
+        <div *ngIf="notSecure()" class="alert alert-warning">
+          The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
+        </div>
       </div>
     </div>
   </div>
