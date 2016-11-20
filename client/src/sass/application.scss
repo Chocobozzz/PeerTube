@@ -50,6 +50,10 @@ menu {
   display: none !important;
 }
 
+input.readonly {
+  /* Force blank on readonly inputs */
+  background-color: #fff !important;
+}
 
 footer {
   border-top: 1px solid rgba(0, 0, 0, 0.2);

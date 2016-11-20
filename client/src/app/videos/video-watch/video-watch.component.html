@@ -79,46 +79,5 @@
   </div>
 </div>
 
-<div *ngIf="video !== null" bsModal #magnetUriModal="bs-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="magnetUriModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content modal-lg">
-
-      <div class="modal-header">
-        <button type="button" class="close" aria-label="Close" (click)="hideMagnetUriModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">Magnet Uri</h4>
-      </div>
-
-      <div class="modal-body">
-        <input #magnetUriInput (click)="magnetUriInput.select()" type="text" class="form-control input-sm" readonly [value]="video.magnetUri" />
-      </div>
-    </div>
-  </div>
-</div>
-
-<div *ngIf="video !== null" bsModal #shareModal="bs-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="shareModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <button type="button" class="close" aria-label="Close" (click)="hideShareModal()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">Share</h4>
-      </div>
-
-      <div class="modal-body">
-        <div class="form-group">
-          <label>URL</label>
-          <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm" readonly [value]="getVideoUrl()" />
-        </div>
-
-        <div class="form-group">
-          <label>Embed</label>
-          <input #shareInput (click)="shareInput.select()" type="text" class="form-control input-sm" readonly [value]="getVideoIframeCode()" />
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<my-video-share #videoShareModal *ngIf="video !== null" [video]="video"></my-video-share>
+<my-video-magnet #videoMagnetModal *ngIf="video !== null" [video]="video"></my-video-magnet>

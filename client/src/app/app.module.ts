@@ -52,6 +52,8 @@ import {
   VideoMiniatureComponent,
   VideoSortComponent,
   VideoWatchComponent,
+  VideoShareComponent,
+  VideoMagnetComponent,
   VideoService,
   WebTorrentService
 } from './videos';
@@ -118,6 +120,8 @@ const APP_PROVIDERS = [
     VideosComponent,
     VideoSortComponent,
     VideoWatchComponent,
+    VideoShareComponent,
+    VideoMagnetComponent
   ],
   imports: [ // import Angular's modules
     BrowserModule,

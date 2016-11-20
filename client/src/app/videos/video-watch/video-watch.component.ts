@@ -1,10 +1,11 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { ModalDirective } from 'ng2-bootstrap/components/modal';
 import { MetaService } from 'ng2-meta';
 import * as videojs from 'video.js';
 
+import { VideoMagnetComponent } from './video-magnet.component';
+import { VideoShareComponent } from './video-share.component';
 import { Video, VideoService } from '../shared';
 import { WebTorrentService } from './webtorrent.service';
 
@@ -17,8 +18,8 @@ import { WebTorrentService } from './webtorrent.service';
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOADTIME_TOO_LONG: number = 30000;
 
-  @ViewChild('magnetUriModal') magnetUriModal: ModalDirective;
-  @ViewChild('shareModal') shareModal: ModalDirective;
+  @ViewChild('videoMagnetModal') videoMagnetModal: VideoMagnetComponent;
+  @ViewChild('videoShareModal') videoShareModal: VideoShareComponent;
 
   downloadSpeed: number;
   error: boolean = false;
@@ -121,31 +122,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     });
   }
 
-  showMagnetUriModal() {
-    this.magnetUriModal.show();
-  }
-
-  hideMagnetUriModal() {
-    this.magnetUriModal.hide();
-  }
-
   showShareModal() {
-    this.shareModal.show();
+    this.videoShareModal.show();
   }
 
-  hideShareModal() {
-    this.shareModal.hide();
-  }
-
-  getVideoIframeCode() {
-    return '<iframe width="560" height="315" ' +
-           'src="' + window.location.origin + '/videos/embed/' + this.video.id + '" ' +
-           'frameborder="0" allowfullscreen>' +
-           '</iframe>';
-  }
-
-  getVideoUrl() {
-    return window.location.href;
+  showMagnetUriModal() {
+    this.videoMagnetModal.show();
   }
 
   private loadTooLong() {
