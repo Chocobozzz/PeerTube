@@ -179,6 +179,7 @@ module.exports = function (options) {
        *
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
+      // Used by embed.html
       new CopyWebpackPlugin([
         {
           from: 'src/assets',

@@ -28,7 +28,7 @@ export class FriendAddComponent implements OnInit {
   }
 
   canMakeFriends() {
-    return window.location.protocol === 'https://';
+    return window.location.protocol === 'https:';
   }
 
   customTrackBy(index: number, obj: any): any {
