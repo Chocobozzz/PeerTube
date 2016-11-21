@@ -2,7 +2,6 @@
   Use remote id as identifier
 */
 
-const each = require('async/each')
 const map = require('lodash/map')
 const mongoose = require('mongoose')
 const readline = require('readline')
@@ -40,8 +39,8 @@ exports.up = function (callback) {
       const urls = map(pods, 'url')
       logger.info('Saying goodbye to: ' + urls.join(', '))
 
-      friends.quitFriends(function () {
-        setVideosRemoteId(callback)
+      setVideosRemoteId(function () {
+        friends.quitFriends(callback)
       })
     })
   })
@@ -52,12 +51,9 @@ exports.down = function (callback) {
 }
 
 function setVideosRemoteId (callback) {
-  Video.find({}, function (err, videos) {
-    if (err) return callback(err)
+  Video.update({ filename: { $ne: null } }, { remoteId: null }, function (err) {
+    if (err) throw err
 
-    each(videos, function (video, callbackEach) {
-      video.remoteId = null
-      video.save(callbackEach)
-    }, callback)
+    Video.update({ filename: null }, { remoteId: mongoose.Types.ObjectId() }, callback)
   })
 }
