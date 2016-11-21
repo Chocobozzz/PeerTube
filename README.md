@@ -137,7 +137,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
     $ git clone https://github.com/Chocobozzz/PeerTube
     $ cd PeerTube
-    $ npm install
+    $ npm install # Or npm install --unsafe-perm for root user
     $ npm run build
 
 ## Usage
