@@ -53,7 +53,7 @@ function remoteVideos (req, res, next) {
 }
 
 function addRemoteVideo (videoToCreateData, callback) {
-  logger.debug('Adding remote video %s.', videoToCreateData.magnetUri)
+  logger.debug('Adding remote video "%s".', videoToCreateData.name)
 
   const video = new Video(videoToCreateData)
   Video.generateThumbnailFromBase64(video, videoToCreateData.thumbnailBase64, function (err) {
