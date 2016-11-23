@@ -155,7 +155,7 @@ function generateMagnetUri () {
     baseUrlWs = constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT
   } else {
     baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + this.podHost
-    baseUrlWs = constants.REMOTE_SCHEME.WS + this.podHost
+    baseUrlWs = constants.REMOTE_SCHEME.WS + '://' + this.podHost
   }
 
   const xs = baseUrlHttp + constants.STATIC_PATHS.TORRENTS + this.getTorrentName()
