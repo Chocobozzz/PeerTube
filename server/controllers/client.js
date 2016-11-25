@@ -13,8 +13,9 @@ const Video = mongoose.model('Video')
 const router = express.Router()
 
 const opengraphComment = '<!-- opengraph tags -->'
-const embedPath = path.join(__dirname, '../../client/dist/standalone/videos/embed.html')
-const indexPath = path.join(__dirname, '../../client/dist/index.html')
+const distPath = path.join(__dirname, '../../client/dist')
+const embedPath = path.join(distPath, 'standalone/videos/embed.html')
+const indexPath = path.join(distPath, 'index.html')
 
 // Special route that add OpenGraph tags
 // Do not use a template engine for a so little thing
@@ -22,6 +23,14 @@ router.use('/videos/watch/:id', generateWatchHtmlPage)
 
 router.use('/videos/embed', function (req, res, next) {
   res.sendFile(embedPath)
+})
+
+// Static HTML/CSS/JS client files
+router.use('/client', express.static(distPath, { maxAge: constants.STATIC_MAX_AGE }))
+
+// 404 for static files not found
+router.use('/client/*', function (req, res, next) {
+  res.sendStatus(404)
 })
 
 // ---------------------------------------------------------------------------
