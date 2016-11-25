@@ -67,7 +67,11 @@ module.exports = function (options) {
        */
       extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      modules: [helpers.root('src'), 'node_modules']
+      modules: [helpers.root('src'), 'node_modules'],
+
+      alias: {
+        'video.js': 'video.js/dist/alt/video.novtt'
+      }
     },
 
     /*
