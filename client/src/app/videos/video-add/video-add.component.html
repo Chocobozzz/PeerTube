@@ -15,7 +15,7 @@
   </div>
 
   <div class="form-group">
-    <label for="tags">Tags</label>
+    <label for="tags">Tags</label> <span class="little-information">(press enter to add the tag)</span>
     <input
       type="text" class="form-control" id="currentTag"
       formControlName="currentTag" (keyup)="onTagKeyPress($event)"
@@ -32,6 +32,10 @@
     </div>
   </div>
 
+  <div *ngIf="tagsError" class="alert alert-danger">
+    {{ tagsError }}
+  </div>
+
   <div class="form-group">
     <label for="videofile">File</label>
     <div class="btn btn-default btn-file" [ngClass]="{ 'disabled': filename !== null }" >
@@ -39,6 +43,7 @@
       <input
         type="file" name="videofile" id="videofile"
         ng2FileSelect [uploader]="uploader" [disabled]="filename !== null"
+        (change)="fileChanged()"
       >
     </div>
   </div>
@@ -48,6 +53,10 @@
       <span class="filename">{{ filename }}</span>
       <span class="glyphicon glyphicon-remove" (click)="removeFile()"></span>
     </div>
+  </div>
+
+  <div *ngIf="fileError" class="alert alert-danger">
+    {{ fileError }}
   </div>
 
   <div class="form-group">
@@ -69,7 +78,6 @@
   <div class="form-group">
     <input
       type="button" value="Upload" class="btn btn-default form-control"
-      [title]="getInvalidFieldsTitle()" [disabled]="!form.valid || tags.length === 0 || filename === null"
       (click)="upload()"
     >
   </div>

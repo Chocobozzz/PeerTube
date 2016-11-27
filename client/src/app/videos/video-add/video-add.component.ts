@@ -30,6 +30,10 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     currentTag: VIDEO_TAGS.MESSAGES
   };
 
+  // Special error messages
+  tagsError = '';
+  fileError = '';
+
   constructor(
     private authService: AuthService,
     private elementRef: ElementRef,
@@ -57,30 +61,6 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.form.valueChanges.subscribe(data => this.onValueChanged(data));
   }
 
-  getInvalidFieldsTitle() {
-    let title = '';
-    const nameControl = this.form.controls['name'];
-    const descriptionControl = this.form.controls['description'];
-
-    if (!nameControl.valid) {
-      title += 'A name is required\n';
-    }
-
-    if (this.tags.length === 0) {
-      title += 'At least one tag is required\n';
-    }
-
-    if (this.filename === null) {
-      title += 'A file is required\n';
-    }
-
-    if (!descriptionControl.valid) {
-      title += 'A description is required\n';
-    }
-
-    return title;
-  }
-
   ngOnInit() {
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
@@ -104,6 +84,24 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.buildForm();
   }
 
+  checkForm() {
+    this.forceCheck();
+
+    if (this.tags.length === 0) {
+      this.tagsError = 'You have 0 tags';
+    }
+
+    if (this.filename === null) {
+      this.fileError = 'You did not add a file.';
+    }
+
+    return this.form.valid === true && this.tagsError === '' && this.fileError === '';
+  }
+
+  fileChanged() {
+    this.fileError = '';
+  }
+
   onTagKeyPress(event: KeyboardEvent) {
     const currentTag = this.form.value['currentTag'];
 
@@ -121,6 +119,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         if (this.tags.length >= 3) {
           this.form.get('currentTag').disable();
         }
+
+        this.tagsError = '';
       }
     }
   }
@@ -135,6 +135,10 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   upload() {
+    if (this.checkForm() === false) {
+      return;
+    }
+
     const item = this.uploader.queue[0];
     // TODO: wait for https://github.com/valor-software/ng2-file-upload/pull/242
     item.alias = 'videofile';
