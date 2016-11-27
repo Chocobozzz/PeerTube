@@ -33,7 +33,6 @@ function isEachRemoteVideosValid (requests) {
         isVideoDurationValid(video.duration) &&
         isVideoMagnetValid(video.magnet) &&
         isVideoNameValid(video.name) &&
-        isVideoPodHostValid(video.podHost) &&
         isVideoTagsValid(video.tags) &&
         isVideoThumbnail64Valid(video.thumbnailBase64) &&
         isVideoRemoteIdValid(video.remoteId)

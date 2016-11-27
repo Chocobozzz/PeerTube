@@ -38,7 +38,7 @@ function remoteVideos (req, res, next) {
     const videoData = request.data
 
     if (request.type === 'add') {
-      addRemoteVideo(videoData, callbackEach)
+      addRemoteVideo(videoData, fromHost, callbackEach)
     } else if (request.type === 'remove') {
       removeRemoteVideo(videoData, fromHost, callbackEach)
     } else {
@@ -52,10 +52,11 @@ function remoteVideos (req, res, next) {
   return res.type('json').status(204).end()
 }
 
-function addRemoteVideo (videoToCreateData, callback) {
+function addRemoteVideo (videoToCreateData, fromHost, callback) {
   logger.debug('Adding remote video "%s".', videoToCreateData.name)
 
   const video = new Video(videoToCreateData)
+  video.podHost = fromHost
   Video.generateThumbnailFromBase64(video, videoToCreateData.thumbnailBase64, function (err) {
     if (err) {
       logger.error('Cannot generate thumbnail from base 64 data.', { error: err })

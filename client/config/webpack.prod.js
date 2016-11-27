@@ -227,7 +227,7 @@ module.exports = function (env) {
               [/\*/, /(?:)/],
               [/\[?\(?/, /(?:)/]
             ],
-            customAttrAssign: [/\)?\]?=/]
+            customAttrAssign: [/\)?]?=/]
           },
 
           // FIXME: Remove

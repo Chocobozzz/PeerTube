@@ -243,7 +243,6 @@ function toRemoteJSON (callback) {
       thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
       tags: self.tags,
       createdDate: self.createdDate,
-      podHost: self.podHost,
       extname: self.extname
     }
 
