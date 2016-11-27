@@ -4,18 +4,8 @@ const checkErrors = require('./utils').checkErrors
 const logger = require('../../helpers/logger')
 
 const validatorsRemote = {
-  dataToDecrypt,
   remoteVideos,
   signature
-}
-
-function dataToDecrypt (req, res, next) {
-  req.checkBody('key', 'Should have a key').notEmpty()
-  req.checkBody('data', 'Should have data').notEmpty()
-
-  logger.debug('Checking dataToDecrypt parameters', { parameters: { keyLength: req.body.key.length, bodyLength: req.body.data.length } })
-
-  checkErrors(req, res, next)
 }
 
 function remoteVideos (req, res, next) {

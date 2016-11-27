@@ -15,9 +15,7 @@ const Video = mongoose.model('Video')
 
 router.post('/videos',
   validators.signature,
-  validators.dataToDecrypt,
   secureMiddleware.checkSignature,
-  secureMiddleware.decryptBody,
   validators.remoteVideos,
   remoteVideos
 )

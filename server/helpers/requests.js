@@ -44,21 +44,8 @@ function makeSecureRequest (params, callback) {
 
     // If there are data informations
     if (params.data) {
-      // Encrypt data
-      if (params.encrypt === true) {
-        peertubeCrypto.encrypt(params.toPod.publicKey, JSON.stringify(params.data), function (err, encrypted) {
-          if (err) return callback(err)
-
-          requestParams.json.data = encrypted.data
-          requestParams.json.key = encrypted.key
-
-          request.post(requestParams, callback)
-        })
-      } else {
-        // No encryption
-        requestParams.json.data = params.data
-        request.post(requestParams, callback)
-      }
+      requestParams.json.data = params.data
+      request.post(requestParams, callback)
     } else {
       // No data
       request.post(requestParams, callback)

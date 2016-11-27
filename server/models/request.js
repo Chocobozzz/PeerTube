@@ -108,8 +108,7 @@ function makeRequest (toPod, requestEndpoint, requestsToMake, callback) {
 
   const params = {
     toPod: toPod,
-    encrypt: true, // Security
-    sign: true, // To prove our identity
+    sign: true, // Prove our identity
     method: 'POST',
     path: '/api/' + constants.API_VERSION + '/remote/' + requestEndpoint,
     data: requestsToMake // Requests we need to make

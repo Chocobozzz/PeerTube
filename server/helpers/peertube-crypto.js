@@ -16,8 +16,6 @@ const peertubeCrypto = {
   comparePassword,
   createCertsIfNotExist,
   cryptPassword,
-  decrypt,
-  encrypt,
   sign
 }
 
@@ -54,34 +52,6 @@ function cryptPassword (password, callback) {
     bcrypt.hash(password, salt, function (err, hash) {
       return callback(err, hash)
     })
-  })
-}
-
-function decrypt (key, data, callback) {
-  fs.readFile(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem', function (err, file) {
-    if (err) return callback(err)
-
-    const myPrivateKey = ursa.createPrivateKey(file)
-    const decryptedKey = myPrivateKey.decrypt(key, 'hex', 'utf8')
-    const decryptedData = symetricDecrypt(data, decryptedKey)
-
-    return callback(null, decryptedData)
-  })
-}
-
-function encrypt (publicKey, data, callback) {
-  const crt = ursa.createPublicKey(publicKey)
-
-  symetricEncrypt(data, function (err, dataEncrypted) {
-    if (err) return callback(err)
-
-    const key = crt.encrypt(dataEncrypted.password, 'utf8', 'hex')
-    const encrypted = {
-      data: dataEncrypted.crypted,
-      key: key
-    }
-
-    callback(null, encrypted)
   })
 }
 
@@ -149,23 +119,5 @@ function generatePassword (callback) {
     if (err) return callback(err)
 
     callback(null, buf.toString('utf8'))
-  })
-}
-
-function symetricDecrypt (text, password) {
-  const decipher = crypto.createDecipher(algorithm, password)
-  let dec = decipher.update(text, 'hex', 'utf8')
-  dec += decipher.final('utf8')
-  return dec
-}
-
-function symetricEncrypt (text, callback) {
-  generatePassword(function (err, password) {
-    if (err) return callback(err)
-
-    const cipher = crypto.createCipher(algorithm, password)
-    let crypted = cipher.update(text, 'utf8', 'hex')
-    crypted += cipher.final('hex')
-    callback(null, { crypted: crypted, password: password })
   })
 }
