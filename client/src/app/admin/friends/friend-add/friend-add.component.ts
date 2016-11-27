@@ -83,13 +83,8 @@ export class FriendAddComponent implements OnInit {
 
     this.friendService.makeFriends(notEmptyHosts).subscribe(
       status => {
-        // TODO: extractdatastatus
-        // if (status === 409) {
-        //   alert('Already made friends!');
-        // } else {
-          alert('Make friends request sent!');
-          this.router.navigate([ '/admin/friends/list' ]);
-        // }
+        alert('Make friends request sent!');
+        this.router.navigate([ '/admin/friends/list' ]);
       },
       error => alert(error.text)
     );
