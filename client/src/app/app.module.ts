@@ -16,8 +16,6 @@ import { LoginModule } from './login';
 import { SharedModule } from './shared';
 import { VideosModule } from './videos';
 
-import { MenuComponent } from './menu.component';
-
 const metaConfig: MetaConfig = {
   //Append a title suffix such as a site name to all titles
   //Defaults to false
@@ -35,8 +33,7 @@ const APP_PROVIDERS = [
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
-    AppComponent,
-    MenuComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
