@@ -108,8 +108,13 @@
           link.innerHTML = 'PeerTube'
           link.title = 'Go to the video page'
           link.className = 'vjs-peertube-link'
+          link.target = '_blank'
 
           return link
+        },
+
+        handleClick: function () {
+          player.pause()
         }
       })
       videojs.registerComponent('PeerTubeLinkButton', peertubeLinkButton)
