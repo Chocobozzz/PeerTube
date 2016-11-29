@@ -30,6 +30,10 @@ const videosRoutes: Routes = [
         }
       },
       {
+        path: ':id',
+        redirectTo: 'watch/:id'
+      },
+      {
         path: 'watch/:id',
         component: VideoWatchComponent
       }
