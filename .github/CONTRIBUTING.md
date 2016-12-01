@@ -28,6 +28,8 @@ Do not hesitate to talk about the functionnality you want to develop by creating
 
 The client is a web application developed with [TypeScript](https://www.typescriptlang.org/)/[Angular2](https://angular.io/)
 
+Newcommer? You can find a documentation of the server code/architecture [here](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/client/code.md).
+
 
 ## Write documentation
 
