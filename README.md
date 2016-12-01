@@ -148,7 +148,7 @@ If you want to run PeerTube for production (bad idea for now :) ):
 
     $ cp config/production.yaml.example config/production.yaml
 
-Then edit the `config/production.yaml` file according to your webserver configuration.
+Then edit the `config/production.yaml` file according to your webserver configuration. Keys set in this file will override those of `config/default.yml'.
 
 Finally, run the server with the `production` `NODE_ENV` variable set.
 
