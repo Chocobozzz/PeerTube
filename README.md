@@ -142,17 +142,6 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 ## Usage
 
-### Development
-
-    $ npm run dev
-
-### Test with 3 fresh nodes
-
-    $ npm run clean:server:test
-    $ npm run play
-
-Then you will can access to the three nodes at `http://localhost:900{1,2,3}` with the `root` as username and `test{1,2,3}` for the password. If you call "make friends" on `http://localhost:9002`, the pod 2 and 3 will become friends. Then if you call "make friends" on `http://localhost:9001` it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
-
 ### Production
 
 If you want to run PeerTube for production (bad idea for now :) ):
@@ -181,6 +170,17 @@ The following commands will upgrade the source (according to your current branch
     $ npm run upgrade
     # systemctl start peertube
 
+### Development
+
+    $ npm run dev
+
+### Test with 3 fresh nodes
+
+    $ npm run clean:server:test
+    $ npm run play
+
+Then you will can access to the three nodes at `http://localhost:900{1,2,3}` with the `root` as username and `test{1,2,3}` for the password. If you call "make friends" on `http://localhost:9002`, the pod 2 and 3 will become friends. Then if you call "make friends" on `http://localhost:9001` it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
+
 ### Other commands
 
 To print all available command run:
@@ -196,6 +196,8 @@ You can test it inside Docker with the [PeerTube-Docker repository](https://gith
 See the [contributing guide](https://github.com/Chocobozzz/PeerTube/blob/master/.github/CONTRIBUTING.md).
 
 See the [server code documentation](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/code.md).
+
+See the [client code documentation](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/client/code.md).
 
 
 ## Architecture
