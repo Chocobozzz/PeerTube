@@ -148,7 +148,7 @@ If you want to run PeerTube for production (bad idea for now :) ):
 
     $ cp config/production.yaml.example config/production.yaml
 
-Then edit the `config/production.yaml` file according to your webserver configuration. Keys set in this file will override those of `config/default.yml'.
+Then edit the `config/production.yaml` file according to your webserver configuration. Keys set in this file will override those of `config/default.yml`.
 
 Finally, run the server with the `production` `NODE_ENV` variable set.
 
@@ -171,6 +171,8 @@ The following commands will upgrade the source (according to your current branch
     # systemctl start peertube
 
 ### Development
+
+In this mode, the server will run requests between pods more quickly, the videos duration are limited to a few seconds and the client files are automatically compiled when we modify them:
 
     $ npm run dev
 
