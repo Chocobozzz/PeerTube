@@ -3,13 +3,12 @@
 const parallel = require('async/parallel')
 const express = require('express')
 const fs = require('fs')
-const mongoose = require('mongoose')
 const path = require('path')
 const validator = require('express-validator').validator
 
 const constants = require('../initializers/constants')
+const db = require('../initializers/database')
 
-const Video = mongoose.model('Video')
 const router = express.Router()
 
 const opengraphComment = '<!-- opengraph tags -->'
@@ -45,14 +44,14 @@ function addOpenGraphTags (htmlStringPage, video) {
   if (video.isOwned()) {
     basePreviewUrlHttp = constants.CONFIG.WEBSERVER.URL
   } else {
-    basePreviewUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + video.podHost
+    basePreviewUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + video.Author.Pod.host
   }
 
   // We fetch the remote preview (bigger than the thumbnail)
   // This should not overhead the remote server since social websites put in a cache the OpenGraph tags
   // We can't use the thumbnail because these social websites want bigger images (> 200x200 for Facebook for example)
   const previewUrl = basePreviewUrlHttp + constants.STATIC_PATHS.PREVIEWS + video.getPreviewName()
-  const videoUrl = constants.CONFIG.WEBSERVER.URL + '/videos/watch/' + video._id
+  const videoUrl = constants.CONFIG.WEBSERVER.URL + '/videos/watch/' + video.id
 
   const metaTags = {
     'og:type': 'video',
@@ -86,7 +85,7 @@ function generateWatchHtmlPage (req, res, next) {
   const videoId = req.params.id
 
   // Let Angular application handle errors
-  if (!validator.isMongoId(videoId)) return res.sendFile(indexPath)
+  if (!validator.isUUID(videoId, 4)) return res.sendFile(indexPath)
 
   parallel({
     file: function (callback) {
@@ -94,7 +93,7 @@ function generateWatchHtmlPage (req, res, next) {
     },
 
     video: function (callback) {
-      Video.load(videoId, callback)
+      db.Video.loadAndPopulateAuthorAndPod(videoId, callback)
     }
   }, function (err, results) {
     if (err) return next(err)

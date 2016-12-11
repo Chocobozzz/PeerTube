@@ -1,42 +1,71 @@
-const mongoose = require('mongoose')
-
 const logger = require('../helpers/logger')
 
 // ---------------------------------------------------------------------------
 
-const OAuthTokenSchema = mongoose.Schema({
-  accessToken: String,
-  accessTokenExpiresAt: Date,
-  client: { type: mongoose.Schema.Types.ObjectId, ref: 'OAuthClient' },
-  refreshToken: String,
-  refreshTokenExpiresAt: Date,
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-})
+module.exports = function (sequelize, DataTypes) {
+  const OAuthToken = sequelize.define('OAuthToken',
+    {
+      accessToken: {
+        type: DataTypes.STRING
+      },
+      accessTokenExpiresAt: {
+        type: DataTypes.DATE
+      },
+      refreshToken: {
+        type: DataTypes.STRING
+      },
+      refreshTokenExpiresAt: {
+        type: DataTypes.DATE
+      }
+    },
+    {
+      classMethods: {
+        associate,
 
-OAuthTokenSchema.path('accessToken').required(true)
-OAuthTokenSchema.path('client').required(true)
-OAuthTokenSchema.path('user').required(true)
+        getByRefreshTokenAndPopulateClient,
+        getByTokenAndPopulateUser,
+        getByRefreshTokenAndPopulateUser,
+        removeByUserId
+      }
+    }
+  )
 
-OAuthTokenSchema.statics = {
-  getByRefreshTokenAndPopulateClient,
-  getByTokenAndPopulateUser,
-  getByRefreshTokenAndPopulateUser,
-  removeByUserId
+  return OAuthToken
 }
 
-mongoose.model('OAuthToken', OAuthTokenSchema)
+// TODO: validation
+// OAuthTokenSchema.path('accessToken').required(true)
+// OAuthTokenSchema.path('client').required(true)
+// OAuthTokenSchema.path('user').required(true)
 
 // ---------------------------------------------------------------------------
 
+function associate (models) {
+  this.belongsTo(models.User, {
+    foreignKey: {
+      name: 'userId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+}
+
 function getByRefreshTokenAndPopulateClient (refreshToken) {
-  return this.findOne({ refreshToken: refreshToken }).populate('client').exec().then(function (token) {
+  const query = {
+    where: {
+      refreshToken: refreshToken
+    },
+    include: [ this.associations.OAuthClient ]
+  }
+
+  return this.findOne(query).then(function (token) {
     if (!token) return token
 
     const tokenInfos = {
       refreshToken: token.refreshToken,
       refreshTokenExpiresAt: token.refreshTokenExpiresAt,
       client: {
-        id: token.client._id.toString()
+        id: token.client.id
       },
       user: {
         id: token.user
@@ -50,13 +79,41 @@ function getByRefreshTokenAndPopulateClient (refreshToken) {
 }
 
 function getByTokenAndPopulateUser (bearerToken) {
-  return this.findOne({ accessToken: bearerToken }).populate('user').exec()
+  const query = {
+    where: {
+      accessToken: bearerToken
+    },
+    include: [ this.sequelize.models.User ]
+  }
+
+  return this.findOne(query).then(function (token) {
+    if (token) token.user = token.User
+
+    return token
+  })
 }
 
 function getByRefreshTokenAndPopulateUser (refreshToken) {
-  return this.findOne({ refreshToken: refreshToken }).populate('user').exec()
+  const query = {
+    where: {
+      refreshToken: refreshToken
+    },
+    include: [ this.sequelize.models.User ]
+  }
+
+  return this.findOne(query).then(function (token) {
+    token.user = token.User
+
+    return token
+  })
 }
 
 function removeByUserId (userId, callback) {
-  return this.remove({ user: userId }, callback)
+  const query = {
+    where: {
+      userId: userId
+    }
+  }
+
+  return this.destroy(query).asCallback(callback)
 }

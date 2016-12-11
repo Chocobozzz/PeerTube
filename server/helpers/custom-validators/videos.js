@@ -13,7 +13,7 @@ const videosValidators = {
   isVideoDateValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
-  isVideoMagnetValid,
+  isVideoInfoHashValid,
   isVideoNameValid,
   isVideoPodHostValid,
   isVideoTagsValid,
@@ -28,14 +28,15 @@ function isEachRemoteVideosValid (requests) {
       return (
         isRequestTypeAddValid(request.type) &&
         isVideoAuthorValid(video.author) &&
-        isVideoDateValid(video.createdDate) &&
+        isVideoDateValid(video.createdAt) &&
         isVideoDescriptionValid(video.description) &&
         isVideoDurationValid(video.duration) &&
-        isVideoMagnetValid(video.magnet) &&
+        isVideoInfoHashValid(video.infoHash) &&
         isVideoNameValid(video.name) &&
         isVideoTagsValid(video.tags) &&
         isVideoThumbnail64Valid(video.thumbnailBase64) &&
-        isVideoRemoteIdValid(video.remoteId)
+        isVideoRemoteIdValid(video.remoteId) &&
+        isVideoExtnameValid(video.extname)
       ) ||
       (
         isRequestTypeRemoveValid(request.type) &&
@@ -61,8 +62,12 @@ function isVideoDurationValid (value) {
   return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
-function isVideoMagnetValid (value) {
-  return validator.isLength(value.infoHash, VIDEOS_CONSTRAINTS_FIELDS.MAGNET.INFO_HASH)
+function isVideoExtnameValid (value) {
+  return VIDEOS_CONSTRAINTS_FIELDS.EXTNAME.indexOf(value) !== -1
+}
+
+function isVideoInfoHashValid (value) {
+  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
 function isVideoNameValid (value) {
@@ -93,7 +98,7 @@ function isVideoThumbnail64Valid (value) {
 }
 
 function isVideoRemoteIdValid (value) {
-  return validator.isMongoId(value)
+  return validator.isUUID(value, 4)
 }
 
 // ---------------------------------------------------------------------------

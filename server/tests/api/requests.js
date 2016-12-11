@@ -69,7 +69,7 @@ describe('Test requests stats', function () {
     })
   })
 
-  it('Should have the correct request', function (done) {
+  it('Should have the correct total request', function (done) {
     this.timeout(15000)
 
     const server = servers[0]
@@ -83,35 +83,10 @@ describe('Test requests stats', function () {
         if (err) throw err
 
         const body = res.body
-        expect(body.requests).to.have.lengthOf(1)
-
-        const request = body.requests[0]
-        expect(request.to).to.have.lengthOf(1)
-        expect(request.request.type).to.equal('add')
+        expect(body.totalRequests).to.equal(1)
 
         // Wait one cycle
         setTimeout(done, 10000)
-      })
-    })
-  })
-
-  it('Should have the correct requests', function (done) {
-    const server = servers[0]
-
-    uploadVideo(server, function (err) {
-      if (err) throw err
-
-      getRequestsStats(server, function (err, res) {
-        if (err) throw err
-
-        const body = res.body
-        expect(body.requests).to.have.lengthOf(2)
-
-        const request = body.requests[1]
-        expect(request.to).to.have.lengthOf(1)
-        expect(request.request.type).to.equal('add')
-
-        done()
       })
     })
   })

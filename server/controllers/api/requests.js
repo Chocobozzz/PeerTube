@@ -1,14 +1,12 @@
 'use strict'
 
 const express = require('express')
-const mongoose = require('mongoose')
 
 const constants = require('../../initializers/constants')
+const db = require('../../initializers/database')
 const middlewares = require('../../middlewares')
 const admin = middlewares.admin
 const oAuth = middlewares.oauth
-
-const Request = mongoose.model('Request')
 
 const router = express.Router()
 
@@ -25,13 +23,13 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function getStatsRequests (req, res, next) {
-  Request.list(function (err, requests) {
+  db.Request.countTotalRequests(function (err, totalRequests) {
     if (err) return next(err)
 
     return res.json({
-      requests: requests,
+      totalRequests: totalRequests,
       maxRequestsInParallel: constants.REQUESTS_IN_PARALLEL,
-      remainingMilliSeconds: Request.remainingMilliSeconds(),
+      remainingMilliSeconds: db.Request.remainingMilliSeconds(),
       milliSecondsInterval: constants.REQUESTS_INTERVAL
     })
   })

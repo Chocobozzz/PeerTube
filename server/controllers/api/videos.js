@@ -2,12 +2,12 @@
 
 const express = require('express')
 const fs = require('fs')
-const mongoose = require('mongoose')
 const multer = require('multer')
 const path = require('path')
 const waterfall = require('async/waterfall')
 
 const constants = require('../../initializers/constants')
+const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
 const friends = require('../../lib/friends')
 const middlewares = require('../../middlewares')
@@ -22,7 +22,6 @@ const sort = middlewares.sort
 const utils = require('../../helpers/utils')
 
 const router = express.Router()
-const Video = mongoose.model('Video')
 
 // multer configuration
 const storage = multer.diskStorage({
@@ -87,40 +86,60 @@ function addVideo (req, res, next) {
   const videoInfos = req.body
 
   waterfall([
-    function createVideoObject (callback) {
-      const id = mongoose.Types.ObjectId()
 
+    function findOrCreateAuthor (callback) {
+      const username = res.locals.oauth.token.user.username
+
+      const query = {
+        where: {
+          name: username,
+          podId: null
+        },
+        defaults: {
+          name: username,
+          podId: null // null because it is OUR pod
+        }
+      }
+
+      db.Author.findOrCreate(query).asCallback(function (err, result) {
+        // [ instance, wasCreated ]
+        return callback(err, result[0])
+      })
+    },
+
+    function createVideoObject (author, callback) {
       const videoData = {
-        _id: id,
         name: videoInfos.name,
         remoteId: null,
         extname: path.extname(videoFile.filename),
         description: videoInfos.description,
-        author: res.locals.oauth.token.user.username,
         duration: videoFile.duration,
-        tags: videoInfos.tags
+        tags: videoInfos.tags,
+        authorId: author.id
       }
 
-      const video = new Video(videoData)
+      const video = db.Video.build(videoData)
 
-      return callback(null, video)
+      return callback(null, author, video)
     },
 
-     // Set the videoname the same as the MongoDB id
-    function renameVideoFile (video, callback) {
+     // Set the videoname the same as the id
+    function renameVideoFile (author, video, callback) {
       const videoDir = constants.CONFIG.STORAGE.VIDEOS_DIR
       const source = path.join(videoDir, videoFile.filename)
       const destination = path.join(videoDir, video.getVideoFilename())
 
       fs.rename(source, destination, function (err) {
-        return callback(err, video)
+        return callback(err, author, video)
       })
     },
 
-    function insertIntoDB (video, callback) {
-      video.save(function (err, video) {
-        // Assert there are only one argument sent to the next function (video)
-        return callback(err, video)
+    function insertIntoDB (author, video, callback) {
+      video.save().asCallback(function (err, videoCreated) {
+        // Do not forget to add Author informations to the created video
+        videoCreated.Author = author
+
+        return callback(err, videoCreated)
       })
     },
 
@@ -147,7 +166,7 @@ function addVideo (req, res, next) {
 }
 
 function getVideo (req, res, next) {
-  Video.load(req.params.id, function (err, video) {
+  db.Video.loadAndPopulateAuthorAndPod(req.params.id, function (err, video) {
     if (err) return next(err)
 
     if (!video) {
@@ -159,7 +178,7 @@ function getVideo (req, res, next) {
 }
 
 function listVideos (req, res, next) {
-  Video.listForApi(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
+  db.Video.listForApi(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
     if (err) return next(err)
 
     res.json(getFormatedVideos(videosList, videosTotal))
@@ -171,11 +190,11 @@ function removeVideo (req, res, next) {
 
   waterfall([
     function getVideo (callback) {
-      Video.load(videoId, callback)
+      db.Video.load(videoId, callback)
     },
 
     function removeFromDB (video, callback) {
-      video.remove(function (err) {
+      video.destroy().asCallback(function (err) {
         if (err) return callback(err)
 
         return callback(null, video)
@@ -185,7 +204,7 @@ function removeVideo (req, res, next) {
     function sendInformationToFriends (video, callback) {
       const params = {
         name: video.name,
-        remoteId: video._id
+        remoteId: video.id
       }
 
       friends.removeVideoToFriends(params)
@@ -203,7 +222,7 @@ function removeVideo (req, res, next) {
 }
 
 function searchVideos (req, res, next) {
-  Video.search(req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort,
+  db.Video.searchAndPopulateAuthorAndPod(req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort,
   function (err, videosList, videosTotal) {
     if (err) return next(err)
 

@@ -1,13 +1,10 @@
 'use strict'
 
-const mongoose = require('mongoose')
-
 const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
 const customVideosValidators = require('../../helpers/custom-validators').videos
+const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
-
-const Video = mongoose.model('Video')
 
 const validatorsVideos = {
   videosAdd,
@@ -29,7 +26,7 @@ function videosAdd (req, res, next) {
   checkErrors(req, res, function () {
     const videoFile = req.files.videofile[0]
 
-    Video.getDurationFromFile(videoFile.path, function (err, duration) {
+    db.Video.getDurationFromFile(videoFile.path, function (err, duration) {
       if (err) {
         return res.status(400).send('Cannot retrieve metadata of the file.')
       }
@@ -45,12 +42,12 @@ function videosAdd (req, res, next) {
 }
 
 function videosGet (req, res, next) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosGet parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    Video.load(req.params.id, function (err, video) {
+    db.Video.load(req.params.id, function (err, video) {
       if (err) {
         logger.error('Error in videosGet request validator.', { error: err })
         return res.sendStatus(500)
@@ -64,12 +61,12 @@ function videosGet (req, res, next) {
 }
 
 function videosRemove (req, res, next) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    Video.load(req.params.id, function (err, video) {
+    db.Video.loadAndPopulateAuthor(req.params.id, function (err, video) {
       if (err) {
         logger.error('Error in videosRemove request validator.', { error: err })
         return res.sendStatus(500)
@@ -77,7 +74,7 @@ function videosRemove (req, res, next) {
 
       if (!video) return res.status(404).send('Video not found')
       else if (video.isOwned() === false) return res.status(403).send('Cannot remove video of another pod')
-      else if (video.author !== res.locals.oauth.token.user.username) return res.status(403).send('Cannot remove video of another user')
+      else if (video.Author.name !== res.locals.oauth.token.user.username) return res.status(403).send('Cannot remove video of another user')
 
       next()
     })

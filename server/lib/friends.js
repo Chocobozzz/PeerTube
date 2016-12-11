@@ -4,17 +4,13 @@ const each = require('async/each')
 const eachLimit = require('async/eachLimit')
 const eachSeries = require('async/eachSeries')
 const fs = require('fs')
-const mongoose = require('mongoose')
 const request = require('request')
 const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
+const db = require('../initializers/database')
 const logger = require('../helpers/logger')
 const requests = require('../helpers/requests')
-
-const Pod = mongoose.model('Pod')
-const Request = mongoose.model('Request')
-const Video = mongoose.model('Video')
 
 const friends = {
   addVideoToFriends,
@@ -31,7 +27,7 @@ function addVideoToFriends (video) {
 }
 
 function hasFriends (callback) {
-  Pod.countAll(function (err, count) {
+  db.Pod.countAll(function (err, count) {
     if (err) return callback(err)
 
     const hasFriends = (count !== 0)
@@ -69,13 +65,13 @@ function makeFriends (hosts, callback) {
 
 function quitFriends (callback) {
   // Stop pool requests
-  Request.deactivate()
+  db.Request.deactivate()
   // Flush pool requests
-  Request.flush()
+  db.Request.flush()
 
   waterfall([
     function getPodsList (callbackAsync) {
-      return Pod.list(callbackAsync)
+      return db.Pod.list(callbackAsync)
     },
 
     function announceIQuitMyFriends (pods, callbackAsync) {
@@ -103,12 +99,12 @@ function quitFriends (callback) {
 
     function removePodsFromDB (pods, callbackAsync) {
       each(pods, function (pod, callbackEach) {
-        pod.remove(callbackEach)
+        pod.destroy().asCallback(callbackEach)
       }, callbackAsync)
     }
   ], function (err) {
     // Don't forget to re activate the scheduler, even if there was an error
-    Request.activate()
+    db.Request.activate()
 
     if (err) return callback(err)
 
@@ -122,7 +118,7 @@ function removeVideoToFriends (videoParams) {
 }
 
 function sendOwnedVideosToPod (podId) {
-  Video.listOwned(function (err, videosList) {
+  db.Video.listOwnedAndPopulateAuthor(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of videos we own.')
       return
@@ -200,9 +196,9 @@ function getForeignPodsList (host, callback) {
 
 function makeRequestsToWinningPods (cert, podsList, callback) {
   // Stop pool requests
-  Request.deactivate()
+  db.Request.deactivate()
   // Flush pool requests
-  Request.forceSend()
+  db.Request.forceSend()
 
   eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
     const params = {
@@ -222,8 +218,8 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       }
 
       if (res.statusCode === 200) {
-        const podObj = new Pod({ host: pod.host, publicKey: body.cert })
-        podObj.save(function (err, podCreated) {
+        const podObj = db.Pod.build({ host: pod.host, publicKey: body.cert })
+        podObj.save().asCallback(function (err, podCreated) {
           if (err) {
             logger.error('Cannot add friend %s pod.', pod.host, { error: err })
             return callbackEach()
@@ -242,28 +238,57 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   }, function endRequests () {
     // Final callback, we've ended all the requests
     // Now we made new friends, we can re activate the pool of requests
-    Request.activate()
+    db.Request.activate()
 
     logger.debug('makeRequestsToWinningPods finished.')
     return callback()
   })
 }
 
+// Wrapper that populate "to" argument with all our friends if it is not specified
 function createRequest (type, endpoint, data, to) {
-  const req = new Request({
+  if (to) return _createRequest(type, endpoint, data, to)
+
+  // If the "to" pods is not specified, we send the request to all our friends
+  db.Pod.listAllIds(function (err, podIds) {
+    if (err) {
+      logger.error('Cannot get pod ids', { error: err })
+      return
+    }
+
+    return _createRequest(type, endpoint, data, podIds)
+  })
+}
+
+function _createRequest (type, endpoint, data, to) {
+  const pods = []
+
+  // If there are no destination pods abort
+  if (to.length === 0) return
+
+  to.forEach(function (toPod) {
+    pods.push(db.Pod.build({ id: toPod }))
+  })
+
+  const createQuery = {
     endpoint,
     request: {
       type: type,
       data: data
     }
-  })
-
-  if (to) {
-    req.to = to
   }
 
-  req.save(function (err) {
-    if (err) logger.error('Cannot save the request.', { error: err })
+  // We run in transaction to keep coherency between Request and RequestToPod tables
+  db.sequelize.transaction(function (t) {
+    const dbRequestOptions = {
+      transaction: t
+    }
+
+    return db.Request.create(createQuery, dbRequestOptions).then(function (request) {
+      return request.setPods(pods, dbRequestOptions)
+    })
+  }).asCallback(function (err) {
+    if (err) logger.error('Error in createRequest transaction.', { error: err })
   })
 }
 

@@ -1,33 +1,63 @@
-const mongoose = require('mongoose')
+module.exports = function (sequelize, DataTypes) {
+  const OAuthClient = sequelize.define('OAuthClient',
+    {
+      clientId: {
+        type: DataTypes.STRING
+      },
+      clientSecret: {
+        type: DataTypes.STRING
+      },
+      grants: {
+        type: DataTypes.ARRAY(DataTypes.STRING)
+      },
+      redirectUris: {
+        type: DataTypes.ARRAY(DataTypes.STRING)
+      }
+    },
+    {
+      classMethods: {
+        associate,
 
-// ---------------------------------------------------------------------------
+        getByIdAndSecret,
+        list,
+        loadFirstClient
+      }
+    }
+  )
 
-const OAuthClientSchema = mongoose.Schema({
-  clientSecret: String,
-  grants: Array,
-  redirectUris: Array
-})
-
-OAuthClientSchema.path('clientSecret').required(true)
-
-OAuthClientSchema.statics = {
-  getByIdAndSecret,
-  list,
-  loadFirstClient
+  return OAuthClient
 }
 
-mongoose.model('OAuthClient', OAuthClientSchema)
+// TODO: validation
+// OAuthClientSchema.path('clientSecret').required(true)
 
 // ---------------------------------------------------------------------------
 
+function associate (models) {
+  this.hasMany(models.OAuthToken, {
+    foreignKey: {
+      name: 'oAuthClientId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+}
+
 function list (callback) {
-  return this.find(callback)
+  return this.findAll().asCallback(callback)
 }
 
 function loadFirstClient (callback) {
-  return this.findOne({}, callback)
+  return this.findOne().asCallback(callback)
 }
 
-function getByIdAndSecret (id, clientSecret) {
-  return this.findOne({ _id: id, clientSecret: clientSecret }).exec()
+function getByIdAndSecret (clientId, clientSecret) {
+  const query = {
+    where: {
+      clientId: clientId,
+      clientSecret: clientSecret
+    }
+  }
+
+  return this.findOne(query)
 }

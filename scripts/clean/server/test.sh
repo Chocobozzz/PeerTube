@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 for i in $(seq 1 6); do
-  printf "use peertube-test%s;\ndb.dropDatabase();" "$i" | mongo
+  dropdb "peertube_test$i"
   rm -rf "./test$i"
+  createdb "peertube_test$i"
 done

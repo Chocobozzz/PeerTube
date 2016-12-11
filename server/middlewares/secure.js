@@ -1,10 +1,8 @@
 'use strict'
 
+const db = require('../initializers/database')
 const logger = require('../helpers/logger')
-const mongoose = require('mongoose')
 const peertubeCrypto = require('../helpers/peertube-crypto')
-
-const Pod = mongoose.model('Pod')
 
 const secureMiddleware = {
   checkSignature
@@ -12,7 +10,7 @@ const secureMiddleware = {
 
 function checkSignature (req, res, next) {
   const host = req.body.signature.host
-  Pod.loadByHost(host, function (err, pod) {
+  db.Pod.loadByHost(host, function (err, pod) {
     if (err) {
       logger.error('Cannot get signed host in body.', { error: err })
       return res.sendStatus(500)

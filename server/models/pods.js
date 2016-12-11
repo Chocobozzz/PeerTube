@@ -1,79 +1,62 @@
 'use strict'
 
-const each = require('async/each')
-const mongoose = require('mongoose')
 const map = require('lodash/map')
-const validator = require('express-validator').validator
 
 const constants = require('../initializers/constants')
 
-const Video = mongoose.model('Video')
-
 // ---------------------------------------------------------------------------
 
-const PodSchema = mongoose.Schema({
-  host: String,
-  publicKey: String,
-  score: { type: Number, max: constants.FRIEND_SCORE.MAX },
-  createdDate: {
-    type: Date,
-    default: Date.now
-  }
-})
+module.exports = function (sequelize, DataTypes) {
+  const Pod = sequelize.define('Pod',
+    {
+      host: {
+        type: DataTypes.STRING
+      },
+      publicKey: {
+        type: DataTypes.STRING(5000)
+      },
+      score: {
+        type: DataTypes.INTEGER,
+        defaultValue: constants.FRIEND_SCORE.BASE
+      }
+      // Check createdAt
+    },
+    {
+      classMethods: {
+        associate,
 
-PodSchema.path('host').validate(validator.isURL)
-PodSchema.path('publicKey').required(true)
-PodSchema.path('score').validate(function (value) { return !isNaN(value) })
+        countAll,
+        incrementScores,
+        list,
+        listAllIds,
+        listBadPods,
+        load,
+        loadByHost,
+        removeAll
+      },
+      instanceMethods: {
+        toFormatedJSON
+      }
+    }
+  )
 
-PodSchema.methods = {
-  toFormatedJSON
+  return Pod
 }
 
-PodSchema.statics = {
-  countAll,
-  incrementScores,
-  list,
-  listAllIds,
-  listBadPods,
-  load,
-  loadByHost,
-  removeAll
-}
-
-PodSchema.pre('save', function (next) {
-  const self = this
-
-  Pod.loadByHost(this.host, function (err, pod) {
-    if (err) return next(err)
-
-    if (pod) return next(new Error('Pod already exists.'))
-
-    self.score = constants.FRIEND_SCORE.BASE
-    return next()
-  })
-})
-
-PodSchema.pre('remove', function (next) {
-  // Remove the videos owned by this pod too
-  Video.listByHost(this.host, function (err, videos) {
-    if (err) return next(err)
-
-    each(videos, function (video, callbackEach) {
-      video.remove(callbackEach)
-    }, next)
-  })
-})
-
-const Pod = mongoose.model('Pod', PodSchema)
+// TODO: max score -> constants.FRIENDS_SCORE.MAX
+// TODO: validation
+// PodSchema.path('host').validate(validator.isURL)
+// PodSchema.path('publicKey').required(true)
+// PodSchema.path('score').validate(function (value) { return !isNaN(value) })
 
 // ------------------------------ METHODS ------------------------------
 
 function toFormatedJSON () {
   const json = {
-    id: this._id,
+    id: this.id,
     host: this.host,
     score: this.score,
-    createdDate: this.createdDate
+    createdAt: this.createdAt
   }
 
   return json
@@ -81,39 +64,76 @@ function toFormatedJSON () {
 
 // ------------------------------ Statics ------------------------------
 
+function associate (models) {
+  this.belongsToMany(models.Request, {
+    foreignKey: 'podId',
+    through: models.RequestToPod,
+    onDelete: 'CASCADE'
+  })
+}
+
 function countAll (callback) {
-  return this.count(callback)
+  return this.count().asCallback(callback)
 }
 
 function incrementScores (ids, value, callback) {
   if (!callback) callback = function () {}
-  return this.update({ _id: { $in: ids } }, { $inc: { score: value } }, { multi: true }, callback)
+
+  const update = {
+    score: this.sequelize.literal('score +' + value)
+  }
+
+  const query = {
+    where: {
+      id: {
+        $in: ids
+      }
+    }
+  }
+
+  return this.update(update, query).asCallback(callback)
 }
 
 function list (callback) {
-  return this.find(callback)
+  return this.findAll().asCallback(callback)
 }
 
 function listAllIds (callback) {
-  return this.find({}, { _id: 1 }, function (err, pods) {
+  const query = {
+    attributes: [ 'id' ]
+  }
+
+  return this.findAll(query).asCallback(function (err, pods) {
     if (err) return callback(err)
 
-    return callback(null, map(pods, '_id'))
+    return callback(null, map(pods, 'id'))
   })
 }
 
 function listBadPods (callback) {
-  return this.find({ score: 0 }, callback)
+  const query = {
+    where: {
+      score: { $lte: 0 }
+    }
+  }
+
+  return this.findAll(query).asCallback(callback)
 }
 
 function load (id, callback) {
-  return this.findById(id, callback)
+  return this.findById(id).asCallback(callback)
 }
 
 function loadByHost (host, callback) {
-  return this.findOne({ host }, callback)
+  const query = {
+    where: {
+      host: host
+    }
+  }
+
+  return this.findOne(query).asCallback(callback)
 }
 
 function removeAll (callback) {
-  return this.remove({}, callback)
+  return this.destroy().asCallback(callback)
 }

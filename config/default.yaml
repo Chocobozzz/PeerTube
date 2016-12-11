@@ -8,8 +8,8 @@ webserver:
 
 database:
   hostname: 'localhost'
-  port: 27017
-  suffix: '-dev'
+  port: 5432
+  suffix: '_dev'
 
 # From the project root directory
 storage:

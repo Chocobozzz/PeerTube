@@ -7,70 +7,134 @@ const magnetUtil = require('magnet-uri')
 const parallel = require('async/parallel')
 const parseTorrent = require('parse-torrent')
 const pathUtils = require('path')
-const mongoose = require('mongoose')
 
 const constants = require('../initializers/constants')
-const customVideosValidators = require('../helpers/custom-validators').videos
 const logger = require('../helpers/logger')
 const modelUtils = require('./utils')
 
 // ---------------------------------------------------------------------------
 
+module.exports = function (sequelize, DataTypes) {
 // TODO: add indexes on searchable columns
-const VideoSchema = mongoose.Schema({
-  name: String,
-  extname: {
-    type: String,
-    enum: [ '.mp4', '.webm', '.ogv' ]
-  },
-  remoteId: mongoose.Schema.Types.ObjectId,
-  description: String,
-  magnet: {
-    infoHash: String
-  },
-  podHost: String,
-  author: String,
-  duration: Number,
-  tags: [ String ],
-  createdDate: {
-    type: Date,
-    default: Date.now
+  const Video = sequelize.define('Video',
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+      },
+      name: {
+        type: DataTypes.STRING
+      },
+      extname: {
+        // TODO: enum?
+        type: DataTypes.STRING
+      },
+      remoteId: {
+        type: DataTypes.UUID
+      },
+      description: {
+        type: DataTypes.STRING
+      },
+      infoHash: {
+        type: DataTypes.STRING
+      },
+      duration: {
+        type: DataTypes.INTEGER
+      },
+      tags: {
+        type: DataTypes.ARRAY(DataTypes.STRING)
+      }
+    },
+    {
+      classMethods: {
+        associate,
+
+        generateThumbnailFromBase64,
+        getDurationFromFile,
+        listForApi,
+        listByHostAndRemoteId,
+        listOwnedAndPopulateAuthor,
+        listOwnedByAuthor,
+        load,
+        loadAndPopulateAuthor,
+        loadAndPopulateAuthorAndPod,
+        searchAndPopulateAuthorAndPod
+      },
+      instanceMethods: {
+        generateMagnetUri,
+        getVideoFilename,
+        getThumbnailName,
+        getPreviewName,
+        getTorrentName,
+        isOwned,
+        toFormatedJSON,
+        toRemoteJSON
+      },
+      hooks: {
+        beforeCreate,
+        afterDestroy
+      }
+    }
+  )
+
+  return Video
+}
+
+// TODO: Validation
+// VideoSchema.path('name').validate(customVideosValidators.isVideoNameValid)
+// VideoSchema.path('description').validate(customVideosValidators.isVideoDescriptionValid)
+// VideoSchema.path('podHost').validate(customVideosValidators.isVideoPodHostValid)
+// VideoSchema.path('author').validate(customVideosValidators.isVideoAuthorValid)
+// VideoSchema.path('duration').validate(customVideosValidators.isVideoDurationValid)
+// VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
+
+function beforeCreate (video, options, next) {
+  const tasks = []
+
+  if (video.isOwned()) {
+    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
+
+    tasks.push(
+      // TODO: refractoring
+      function (callback) {
+        const options = {
+          announceList: [
+            [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
+          ],
+          urlList: [
+            constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.getVideoFilename()
+          ]
+        }
+
+        createTorrent(videoPath, options, function (err, torrent) {
+          if (err) return callback(err)
+
+          fs.writeFile(constants.CONFIG.STORAGE.TORRENTS_DIR + video.getTorrentName(), torrent, function (err) {
+            if (err) return callback(err)
+
+            const parsedTorrent = parseTorrent(torrent)
+            video.infoHash = parsedTorrent.infoHash
+
+            callback(null)
+          })
+        })
+      },
+      function (callback) {
+        createThumbnail(video, videoPath, callback)
+      },
+      function (callback) {
+        createPreview(video, videoPath, callback)
+      }
+    )
+
+    return parallel(tasks, next)
   }
-})
 
-VideoSchema.path('name').validate(customVideosValidators.isVideoNameValid)
-VideoSchema.path('description').validate(customVideosValidators.isVideoDescriptionValid)
-VideoSchema.path('podHost').validate(customVideosValidators.isVideoPodHostValid)
-VideoSchema.path('author').validate(customVideosValidators.isVideoAuthorValid)
-VideoSchema.path('duration').validate(customVideosValidators.isVideoDurationValid)
-VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
-
-VideoSchema.methods = {
-  generateMagnetUri,
-  getVideoFilename,
-  getThumbnailName,
-  getPreviewName,
-  getTorrentName,
-  isOwned,
-  toFormatedJSON,
-  toRemoteJSON
+  return next()
 }
 
-VideoSchema.statics = {
-  generateThumbnailFromBase64,
-  getDurationFromFile,
-  listForApi,
-  listByHostAndRemoteId,
-  listByHost,
-  listOwned,
-  listOwnedByAuthor,
-  listRemotes,
-  load,
-  search
-}
-
-VideoSchema.pre('remove', function (next) {
-  const video = this
+function afterDestroy (video, options, next) {
   const tasks = []
 
   tasks.push(
@@ -94,58 +158,19 @@ VideoSchema.pre('remove', function (next) {
   }
 
   parallel(tasks, next)
-})
-
-VideoSchema.pre('save', function (next) {
-  const video = this
-  const tasks = []
-
-  if (video.isOwned()) {
-    const videoPath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
-    this.podHost = constants.CONFIG.WEBSERVER.HOST
-
-    tasks.push(
-      // TODO: refractoring
-      function (callback) {
-        const options = {
-          announceList: [
-            [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
-          ],
-          urlList: [
-            constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.getVideoFilename()
-          ]
-        }
-
-        createTorrent(videoPath, options, function (err, torrent) {
-          if (err) return callback(err)
-
-          fs.writeFile(constants.CONFIG.STORAGE.TORRENTS_DIR + video.getTorrentName(), torrent, function (err) {
-            if (err) return callback(err)
-
-            const parsedTorrent = parseTorrent(torrent)
-            video.magnet.infoHash = parsedTorrent.infoHash
-
-            callback(null)
-          })
-        })
-      },
-      function (callback) {
-        createThumbnail(video, videoPath, callback)
-      },
-      function (callback) {
-        createPreview(video, videoPath, callback)
-      }
-    )
-
-    return parallel(tasks, next)
-  }
-
-  return next()
-})
-
-mongoose.model('Video', VideoSchema)
+}
 
 // ------------------------------ METHODS ------------------------------
+
+function associate (models) {
+  this.belongsTo(models.Author, {
+    foreignKey: {
+      name: 'authorId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+}
 
 function generateMagnetUri () {
   let baseUrlHttp, baseUrlWs
@@ -154,8 +179,8 @@ function generateMagnetUri () {
     baseUrlHttp = constants.CONFIG.WEBSERVER.URL
     baseUrlWs = constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT
   } else {
-    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + this.podHost
-    baseUrlWs = constants.REMOTE_SCHEME.WS + '://' + this.podHost
+    baseUrlHttp = constants.REMOTE_SCHEME.HTTP + '://' + this.Author.Pod.host
+    baseUrlWs = constants.REMOTE_SCHEME.WS + '://' + this.Author.Pod.host
   }
 
   const xs = baseUrlHttp + constants.STATIC_PATHS.TORRENTS + this.getTorrentName()
@@ -166,7 +191,7 @@ function generateMagnetUri () {
     xs,
     announce,
     urlList,
-    infoHash: this.magnet.infoHash,
+    infoHash: this.infoHash,
     name: this.name
   }
 
@@ -174,20 +199,20 @@ function generateMagnetUri () {
 }
 
 function getVideoFilename () {
-  if (this.isOwned()) return this._id + this.extname
+  if (this.isOwned()) return this.id + this.extname
 
   return this.remoteId + this.extname
 }
 
 function getThumbnailName () {
   // We always have a copy of the thumbnail
-  return this._id + '.jpg'
+  return this.id + '.jpg'
 }
 
 function getPreviewName () {
   const extension = '.jpg'
 
-  if (this.isOwned()) return this._id + extension
+  if (this.isOwned()) return this.id + extension
 
   return this.remoteId + extension
 }
@@ -195,7 +220,7 @@ function getPreviewName () {
 function getTorrentName () {
   const extension = '.torrent'
 
-  if (this.isOwned()) return this._id + extension
+  if (this.isOwned()) return this.id + extension
 
   return this.remoteId + extension
 }
@@ -205,18 +230,27 @@ function isOwned () {
 }
 
 function toFormatedJSON () {
+  let podHost
+
+  if (this.Author.Pod) {
+    podHost = this.Author.Pod.host
+  } else {
+    // It means it's our video
+    podHost = constants.CONFIG.WEBSERVER.HOST
+  }
+
   const json = {
-    id: this._id,
+    id: this.id,
     name: this.name,
     description: this.description,
-    podHost: this.podHost,
+    podHost,
     isLocal: this.isOwned(),
     magnetUri: this.generateMagnetUri(),
-    author: this.author,
+    author: this.Author.name,
     duration: this.duration,
     tags: this.tags,
     thumbnailPath: constants.STATIC_PATHS.THUMBNAILS + '/' + this.getThumbnailName(),
-    createdDate: this.createdDate
+    createdAt: this.createdAt
   }
 
   return json
@@ -236,13 +270,13 @@ function toRemoteJSON (callback) {
     const remoteVideo = {
       name: self.name,
       description: self.description,
-      magnet: self.magnet,
-      remoteId: self._id,
-      author: self.author,
+      infoHash: self.infoHash,
+      remoteId: self.id,
+      author: self.Author.name,
       duration: self.duration,
       thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
       tags: self.tags,
-      createdDate: self.createdDate,
+      createdAt: self.createdAt,
       extname: self.extname
     }
 
@@ -273,50 +307,168 @@ function getDurationFromFile (videoPath, callback) {
 }
 
 function listForApi (start, count, sort, callback) {
-  const query = {}
-  return modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
+  const query = {
+    offset: start,
+    limit: count,
+    order: [ modelUtils.getSort(sort) ],
+    include: [
+      {
+        model: this.sequelize.models.Author,
+        include: [ this.sequelize.models.Pod ]
+      }
+    ]
+  }
+
+  return this.findAndCountAll(query).asCallback(function (err, result) {
+    if (err) return callback(err)
+
+    return callback(null, result.rows, result.count)
+  })
 }
 
 function listByHostAndRemoteId (fromHost, remoteId, callback) {
-  this.find({ podHost: fromHost, remoteId: remoteId }, callback)
+  const query = {
+    where: {
+      remoteId: remoteId
+    },
+    include: [
+      {
+        model: this.sequelize.models.Author,
+        include: [
+          {
+            model: this.sequelize.models.Pod,
+            where: {
+              host: fromHost
+            }
+          }
+        ]
+      }
+    ]
+  }
+
+  return this.findAll(query).asCallback(callback)
 }
 
-function listByHost (fromHost, callback) {
-  this.find({ podHost: fromHost }, callback)
-}
-
-function listOwned (callback) {
+function listOwnedAndPopulateAuthor (callback) {
   // If remoteId is null this is *our* video
-  this.find({ remoteId: null }, callback)
+  const query = {
+    where: {
+      remoteId: null
+    },
+    include: [ this.sequelize.models.Author ]
+  }
+
+  return this.findAll(query).asCallback(callback)
 }
 
 function listOwnedByAuthor (author, callback) {
-  this.find({ remoteId: null, author: author }, callback)
-}
+  const query = {
+    where: {
+      remoteId: null
+    },
+    include: [
+      {
+        model: this.sequelize.models.Author,
+        where: {
+          name: author
+        }
+      }
+    ]
+  }
 
-function listRemotes (callback) {
-  this.find({ remoteId: { $ne: null } }, callback)
+  return this.findAll(query).asCallback(callback)
 }
 
 function load (id, callback) {
-  this.findById(id, callback)
+  return this.findById(id).asCallback(callback)
 }
 
-function search (value, field, start, count, sort, callback) {
-  const query = {}
+function loadAndPopulateAuthor (id, callback) {
+  const options = {
+    include: [ this.sequelize.models.Author ]
+  }
+
+  return this.findById(id, options).asCallback(callback)
+}
+
+function loadAndPopulateAuthorAndPod (id, callback) {
+  const options = {
+    include: [
+      {
+        model: this.sequelize.models.Author,
+        include: [ this.sequelize.models.Pod ]
+      }
+    ]
+  }
+
+  return this.findById(id, options).asCallback(callback)
+}
+
+function searchAndPopulateAuthorAndPod (value, field, start, count, sort, callback) {
+  const podInclude = {
+    model: this.sequelize.models.Pod
+  }
+  const authorInclude = {
+    model: this.sequelize.models.Author,
+    include: [
+      podInclude
+    ]
+  }
+
+  const query = {
+    where: {},
+    include: [
+      authorInclude
+    ],
+    offset: start,
+    limit: count,
+    order: [ modelUtils.getSort(sort) ]
+  }
+
+  // TODO: include our pod for podHost searches (we are not stored in the database)
   // Make an exact search with the magnet
   if (field === 'magnetUri') {
     const infoHash = magnetUtil.decode(value).infoHash
-    query.magnet = {
-      infoHash
-    }
+    query.where.infoHash = infoHash
   } else if (field === 'tags') {
-    query[field] = value
+    query.where[field] = value
+  } else if (field === 'host') {
+    const whereQuery = {
+      '$Author.Pod.host$': {
+        $like: '%' + value + '%'
+      }
+    }
+
+    // Include our pod? (not stored in the database)
+    if (constants.CONFIG.WEBSERVER.HOST.indexOf(value) !== -1) {
+      query.where = {
+        $or: [
+          whereQuery,
+          {
+            remoteId: null
+          }
+        ]
+      }
+    } else {
+      query.where = whereQuery
+    }
+  } else if (field === 'author') {
+    query.where = {
+      '$Author.name$': {
+        $like: '%' + value + '%'
+      }
+    }
   } else {
-    query[field] = new RegExp(value, 'i')
+    query.where[field] = {
+      $like: '%' + value + '%'
+    }
   }
 
-  modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
+  return this.findAndCountAll(query).asCallback(function (err, result) {
+    if (err) return callback(err)
+
+    return callback(null, result.rows, result.count)
+  })
 }
 
 // ---------------------------------------------------------------------------

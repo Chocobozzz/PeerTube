@@ -14,13 +14,13 @@ const PAGINATION_COUNT_DEFAULT = 15
 
 // Sortable columns per schema
 const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'podHost', 'author', 'tags' ]
+  VIDEOS: [ 'name', 'magnetUri', 'host', 'author', 'tags' ]
 }
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  USERS: [ 'username', '-username', 'createdDate', '-createdDate' ],
-  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
+  USERS: [ 'username', '-username', 'createdAt', '-createdAt' ],
+  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdAt', '-createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -67,9 +67,8 @@ const CONSTRAINTS_FIELDS = {
   VIDEOS: {
     NAME: { min: 3, max: 50 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
-    MAGNET: {
-      INFO_HASH: { min: 10, max: 50 } // Length
-    },
+    EXTNAME: [ '.mp4', '.ogv', '.webm' ],
+    INFO_HASH: { min: 10, max: 50 }, // Length
     DURATION: { min: 1, max: 7200 }, // Number
     TAGS: { min: 1, max: 3 }, // Number of total tags
     TAG: { min: 2, max: 10 }, // Length
@@ -88,7 +87,7 @@ const FRIEND_SCORE = {
 
 // ---------------------------------------------------------------------------
 
-const MONGO_MIGRATION_SCRIPTS = [
+const MIGRATION_SCRIPTS = [
   {
     script: '0005-create-application',
     version: 5
@@ -122,7 +121,7 @@ const MONGO_MIGRATION_SCRIPTS = [
     version: 40
   }
 ]
-const LAST_MONGO_SCHEMA_VERSION = (maxBy(MONGO_MIGRATION_SCRIPTS, 'version'))['version']
+const LAST_SQL_SCHEMA_VERSION = (maxBy(MIGRATION_SCRIPTS, 'version'))['version']
 
 // ---------------------------------------------------------------------------
 
@@ -198,8 +197,8 @@ module.exports = {
   CONFIG,
   CONSTRAINTS_FIELDS,
   FRIEND_SCORE,
-  LAST_MONGO_SCHEMA_VERSION,
-  MONGO_MIGRATION_SCRIPTS,
+  LAST_SQL_SCHEMA_VERSION,
+  MIGRATION_SCRIPTS,
   OAUTH_LIFETIME,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,

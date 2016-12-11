@@ -22,7 +22,8 @@ const logger = new winston.Logger({
       json: true,
       maxsize: 5242880,
       maxFiles: 5,
-      colorize: false
+      colorize: false,
+      prettyPrint: true
     }),
     new winston.transports.Console({
       level: 'debug',
@@ -30,7 +31,8 @@ const logger = new winston.Logger({
       handleExceptions: true,
       humanReadableUnhandledException: true,
       json: false,
-      colorize: true
+      colorize: true,
+      prettyPrint: true
     })
   ],
   exitOnError: true

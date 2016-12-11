@@ -1,31 +1,36 @@
-const mongoose = require('mongoose')
+module.exports = function (sequelize, DataTypes) {
+  const Application = sequelize.define('Application',
+    {
+      sqlSchemaVersion: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0
+      }
+    },
+    {
+      classMethods: {
+        loadSqlSchemaVersion,
+        updateSqlSchemaVersion
+      }
+    }
+  )
 
-// ---------------------------------------------------------------------------
-
-const ApplicationSchema = mongoose.Schema({
-  mongoSchemaVersion: {
-    type: Number,
-    default: 0
-  }
-})
-
-ApplicationSchema.statics = {
-  loadMongoSchemaVersion,
-  updateMongoSchemaVersion
+  return Application
 }
 
-mongoose.model('Application', ApplicationSchema)
-
 // ---------------------------------------------------------------------------
 
-function loadMongoSchemaVersion (callback) {
-  return this.findOne({}, { mongoSchemaVersion: 1 }, function (err, data) {
-    const version = data ? data.mongoSchemaVersion : 0
+function loadSqlSchemaVersion (callback) {
+  const query = {
+    attributes: [ 'sqlSchemaVersion' ]
+  }
+
+  return this.findOne(query).asCallback(function (err, data) {
+    const version = data ? data.sqlSchemaVersion : 0
 
     return callback(err, version)
   })
 }
 
-function updateMongoSchemaVersion (newVersion, callback) {
-  return this.update({}, { mongoSchemaVersion: newVersion }, callback)
+function updateSqlSchemaVersion (newVersion, callback) {
+  return this.update({ sqlSchemaVersion: newVersion }).asCallback(callback)
 }

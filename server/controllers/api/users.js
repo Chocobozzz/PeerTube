@@ -2,10 +2,10 @@
 
 const each = require('async/each')
 const express = require('express')
-const mongoose = require('mongoose')
 const waterfall = require('async/waterfall')
 
 const constants = require('../../initializers/constants')
+const db = require('../../initializers/database')
 const friends = require('../../lib/friends')
 const logger = require('../../helpers/logger')
 const middlewares = require('../../middlewares')
@@ -16,9 +16,6 @@ const sort = middlewares.sort
 const validatorsPagination = middlewares.validators.pagination
 const validatorsSort = middlewares.validators.sort
 const validatorsUsers = middlewares.validators.users
-
-const User = mongoose.model('User')
-const Video = mongoose.model('Video')
 
 const router = express.Router()
 
@@ -62,13 +59,13 @@ module.exports = router
 // ---------------------------------------------------------------------------
 
 function createUser (req, res, next) {
-  const user = new User({
+  const user = db.User.build({
     username: req.body.username,
     password: req.body.password,
     role: constants.USER_ROLES.USER
   })
 
-  user.save(function (err, createdUser) {
+  user.save().asCallback(function (err, createdUser) {
     if (err) return next(err)
 
     return res.type('json').status(204).end()
@@ -76,7 +73,7 @@ function createUser (req, res, next) {
 }
 
 function getUserInformation (req, res, next) {
-  User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
+  db.User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
     if (err) return next(err)
 
     return res.json(user.toFormatedJSON())
@@ -84,7 +81,7 @@ function getUserInformation (req, res, next) {
 }
 
 function listUsers (req, res, next) {
-  User.listForApi(req.query.start, req.query.count, req.query.sort, function (err, usersList, usersTotal) {
+  db.User.listForApi(req.query.start, req.query.count, req.query.sort, function (err, usersList, usersTotal) {
     if (err) return next(err)
 
     res.json(getFormatedUsers(usersList, usersTotal))
@@ -94,18 +91,19 @@ function listUsers (req, res, next) {
 function removeUser (req, res, next) {
   waterfall([
     function getUser (callback) {
-      User.loadById(req.params.id, callback)
+      db.User.loadById(req.params.id, callback)
     },
 
+    // TODO: use foreignkey?
     function getVideos (user, callback) {
-      Video.listOwnedByAuthor(user.username, function (err, videos) {
+      db.Video.listOwnedByAuthor(user.username, function (err, videos) {
         return callback(err, user, videos)
       })
     },
 
     function removeVideosFromDB (user, videos, callback) {
       each(videos, function (video, callbackEach) {
-        video.remove(callbackEach)
+        video.destroy().asCallback(callbackEach)
       }, function (err) {
         return callback(err, user, videos)
       })
@@ -115,7 +113,7 @@ function removeUser (req, res, next) {
       videos.forEach(function (video) {
         const params = {
           name: video.name,
-          magnetUri: video.magnetUri
+          remoteId: video.id
         }
 
         friends.removeVideoToFriends(params)
@@ -125,7 +123,7 @@ function removeUser (req, res, next) {
     },
 
     function removeUserFromDB (user, callback) {
-      user.remove(callback)
+      user.destroy().asCallback(callback)
     }
   ], function andFinally (err) {
     if (err) {
@@ -138,11 +136,11 @@ function removeUser (req, res, next) {
 }
 
 function updateUser (req, res, next) {
-  User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
+  db.User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
     if (err) return next(err)
 
     user.password = req.body.password
-    user.save(function (err) {
+    user.save().asCallback(function (err) {
       if (err) return next(err)
 
       return res.sendStatus(204)

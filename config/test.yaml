@@ -6,4 +6,4 @@ webserver:
 
 database:
   hostname: 'localhost'
-  port: 27017
+  port: 5432

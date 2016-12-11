@@ -3,19 +3,15 @@
 const config = require('config')
 const each = require('async/each')
 const mkdirp = require('mkdirp')
-const mongoose = require('mongoose')
 const passwordGenerator = require('password-generator')
 const path = require('path')
 const series = require('async/series')
 
 const checker = require('./checker')
 const constants = require('./constants')
+const db = require('./database')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
-
-const Application = mongoose.model('Application')
-const Client = mongoose.model('OAuthClient')
-const User = mongoose.model('User')
 
 const installer = {
   installApplication
@@ -23,6 +19,11 @@ const installer = {
 
 function installApplication (callback) {
   series([
+    function createDatabase (callbackAsync) {
+      db.sequelize.sync().asCallback(callbackAsync)
+      // db.sequelize.sync({ force: true }).asCallback(callbackAsync)
+    },
+
     function createDirectories (callbackAsync) {
       createDirectoriesIfNotExist(callbackAsync)
     },
@@ -65,16 +66,18 @@ function createOAuthClientIfNotExist (callback) {
 
     logger.info('Creating a default OAuth Client.')
 
-    const secret = passwordGenerator(32, false)
-    const client = new Client({
+    const id = passwordGenerator(32, false, /[a-z0-9]/)
+    const secret = passwordGenerator(32, false, /[a-zA-Z0-9]/)
+    const client = db.OAuthClient.build({
+      clientId: id,
       clientSecret: secret,
       grants: [ 'password', 'refresh_token' ]
     })
 
-    client.save(function (err, createdClient) {
+    client.save().asCallback(function (err, createdClient) {
       if (err) return callback(err)
 
-      logger.info('Client id: ' + createdClient._id)
+      logger.info('Client id: ' + createdClient.clientId)
       logger.info('Client secret: ' + createdClient.clientSecret)
 
       return callback(null)
@@ -106,21 +109,21 @@ function createOAuthAdminIfNotExist (callback) {
       password = passwordGenerator(8, true)
     }
 
-    const user = new User({
+    const user = db.User.build({
       username,
       password,
       role
     })
 
-    user.save(function (err, createdUser) {
+    user.save().asCallback(function (err, createdUser) {
       if (err) return callback(err)
 
       logger.info('Username: ' + username)
       logger.info('User password: ' + password)
 
       logger.info('Creating Application collection.')
-      const application = new Application({ mongoSchemaVersion: constants.LAST_MONGO_SCHEMA_VERSION })
-      application.save(callback)
+      const application = db.Application.build({ sqlSchemaVersion: constants.LAST_SQL_SCHEMA_VERSION })
+      application.save().asCallback(callback)
     })
   })
 }

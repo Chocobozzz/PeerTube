@@ -465,7 +465,7 @@ describe('Test parameters validator', function () {
 
       it('Should return 404 with an incorrect video', function (done) {
         request(server.url)
-          .get(path + '123456789012345678901234')
+          .get(path + '4da6fde3-88f7-4d16-b119-108df5630b06')
           .set('Accept', 'application/json')
           .expect(404, done)
       })
@@ -490,7 +490,7 @@ describe('Test parameters validator', function () {
 
       it('Should fail with a video which does not exist', function (done) {
         request(server.url)
-          .delete(path + '123456789012345678901234')
+          .delete(path + '4da6fde3-88f7-4d16-b119-108df5630b06')
           .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(404, done)
       })
@@ -711,7 +711,7 @@ describe('Test parameters validator', function () {
 
       it('Should return 404 with a non existing id', function (done) {
         request(server.url)
-          .delete(path + '579f982228c99c221d8092b8')
+          .delete(path + '45')
           .set('Authorization', 'Bearer ' + server.accessToken)
           .expect(404, done)
       })

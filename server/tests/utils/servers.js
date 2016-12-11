@@ -60,12 +60,12 @@ function runServer (number, callback) {
 
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
-    'Connected to mongodb': false,
+    'Database is ready': false,
     'Server listening on port': false
   }
 
   const regexps = {
-    client_id: 'Client id: ([a-f0-9]+)',
+    client_id: 'Client id: (.+)',
     client_secret: 'Client secret: (.+)',
     user_username: 'Username: (.+)',
     user_password: 'User password: (.+)'

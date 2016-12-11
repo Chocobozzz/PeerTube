@@ -1,60 +1,60 @@
-const mongoose = require('mongoose')
-
-const customUsersValidators = require('../helpers/custom-validators').users
 const modelUtils = require('./utils')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 
-const OAuthToken = mongoose.model('OAuthToken')
-
 // ---------------------------------------------------------------------------
 
-const UserSchema = mongoose.Schema({
-  createdDate: {
-    type: Date,
-    default: Date.now
-  },
-  password: String,
-  username: String,
-  role: String
-})
+module.exports = function (sequelize, DataTypes) {
+  const User = sequelize.define('User',
+    {
+      password: {
+        type: DataTypes.STRING
+      },
+      username: {
+        type: DataTypes.STRING
+      },
+      role: {
+        type: DataTypes.STRING
+      }
+    },
+    {
+      classMethods: {
+        associate,
 
-UserSchema.path('password').required(customUsersValidators.isUserPasswordValid)
-UserSchema.path('username').required(customUsersValidators.isUserUsernameValid)
-UserSchema.path('role').validate(customUsersValidators.isUserRoleValid)
+        countTotal,
+        getByUsername,
+        list,
+        listForApi,
+        loadById,
+        loadByUsername
+      },
+      instanceMethods: {
+        isPasswordMatch,
+        toFormatedJSON
+      },
+      hooks: {
+        beforeCreate: beforeCreateOrUpdate,
+        beforeUpdate: beforeCreateOrUpdate
+      }
+    }
+  )
 
-UserSchema.methods = {
-  isPasswordMatch,
-  toFormatedJSON
+  return User
 }
 
-UserSchema.statics = {
-  countTotal,
-  getByUsername,
-  list,
-  listForApi,
-  loadById,
-  loadByUsername
-}
+// TODO: Validation
+// UserSchema.path('password').required(customUsersValidators.isUserPasswordValid)
+// UserSchema.path('username').required(customUsersValidators.isUserUsernameValid)
+// UserSchema.path('role').validate(customUsersValidators.isUserRoleValid)
 
-UserSchema.pre('save', function (next) {
-  const user = this
-
-  peertubeCrypto.cryptPassword(this.password, function (err, hash) {
+function beforeCreateOrUpdate (user, options, next) {
+  peertubeCrypto.cryptPassword(user.password, function (err, hash) {
     if (err) return next(err)
 
     user.password = hash
 
     return next()
   })
-})
-
-UserSchema.pre('remove', function (next) {
-  const user = this
-
-  OAuthToken.removeByUserId(user._id, next)
-})
-
-mongoose.model('User', UserSchema)
+}
 
 // ------------------------------ METHODS ------------------------------
 
@@ -64,35 +64,63 @@ function isPasswordMatch (password, callback) {
 
 function toFormatedJSON () {
   return {
-    id: this._id,
+    id: this.id,
     username: this.username,
     role: this.role,
-    createdDate: this.createdDate
+    createdAt: this.createdAt
   }
 }
 // ------------------------------ STATICS ------------------------------
 
+function associate (models) {
+  this.hasMany(models.OAuthToken, {
+    foreignKey: 'userId',
+    onDelete: 'cascade'
+  })
+}
+
 function countTotal (callback) {
-  return this.count(callback)
+  return this.count().asCallback(callback)
 }
 
 function getByUsername (username) {
-  return this.findOne({ username: username })
+  const query = {
+    where: {
+      username: username
+    }
+  }
+
+  return this.findOne(query)
 }
 
 function list (callback) {
-  return this.find(callback)
+  return this.find().asCallback(callback)
 }
 
 function listForApi (start, count, sort, callback) {
-  const query = {}
-  return modelUtils.listForApiWithCount.call(this, query, start, count, sort, callback)
+  const query = {
+    offset: start,
+    limit: count,
+    order: [ modelUtils.getSort(sort) ]
+  }
+
+  return this.findAndCountAll(query).asCallback(function (err, result) {
+    if (err) return callback(err)
+
+    return callback(null, result.rows, result.count)
+  })
 }
 
 function loadById (id, callback) {
-  return this.findById(id, callback)
+  return this.findById(id).asCallback(callback)
 }
 
 function loadByUsername (username, callback) {
-  return this.findOne({ username: username }, callback)
+  const query = {
+    where: {
+      username: username
+    }
+  }
+
+  return this.findOne(query).asCallback(callback)
 }

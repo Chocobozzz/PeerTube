@@ -261,8 +261,8 @@ describe('Test users', function () {
     })
   })
 
-  it('Should list only the second user by createdDate desc', function (done) {
-    usersUtils.getUsersListPaginationAndSort(server.url, 0, 1, '-createdDate', function (err, res) {
+  it('Should list only the second user by createdAt desc', function (done) {
+    usersUtils.getUsersListPaginationAndSort(server.url, 0, 1, '-createdAt', function (err, res) {
       if (err) throw err
 
       const result = res.body
@@ -279,8 +279,8 @@ describe('Test users', function () {
     })
   })
 
-  it('Should list all the users by createdDate asc', function (done) {
-    usersUtils.getUsersListPaginationAndSort(server.url, 0, 2, 'createdDate', function (err, res) {
+  it('Should list all the users by createdAt asc', function (done) {
+    usersUtils.getUsersListPaginationAndSort(server.url, 0, 2, 'createdAt', function (err, res) {
       if (err) throw err
 
       const result = res.body

@@ -82,7 +82,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
-      expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
+      expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -116,7 +116,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
-      expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
+      expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -142,7 +142,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
-      expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
+      expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -154,7 +154,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search the video by podHost', function (done) {
-    videosUtils.searchVideo(server.url, '9001', 'podHost', function (err, res) {
+    videosUtils.searchVideo(server.url, '9001', 'host', function (err, res) {
       if (err) throw err
 
       expect(res.body.total).to.equal(1)
@@ -168,7 +168,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
-      expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
+      expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -194,7 +194,7 @@ describe('Test a single pod', function () {
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
-      expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
+      expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -425,7 +425,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search all the 9001 port videos', function (done) {
-    videosUtils.searchVideoWithPagination(server.url, '9001', 'podHost', 0, 15, function (err, res) {
+    videosUtils.searchVideoWithPagination(server.url, '9001', 'host', 0, 15, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
@@ -437,7 +437,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search all the localhost videos', function (done) {
-    videosUtils.searchVideoWithPagination(server.url, 'localhost', 'podHost', 0, 15, function (err, res) {
+    videosUtils.searchVideoWithPagination(server.url, 'localhost', 'host', 0, 15, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data

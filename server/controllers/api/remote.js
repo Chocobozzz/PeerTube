@@ -3,15 +3,15 @@
 const each = require('async/each')
 const eachSeries = require('async/eachSeries')
 const express = require('express')
-const mongoose = require('mongoose')
+const waterfall = require('async/waterfall')
 
+const db = require('../../initializers/database')
 const middlewares = require('../../middlewares')
 const secureMiddleware = middlewares.secure
 const validators = middlewares.validators.remote
 const logger = require('../../helpers/logger')
 
 const router = express.Router()
-const Video = mongoose.model('Video')
 
 router.post('/videos',
   validators.signature,
@@ -53,34 +53,99 @@ function remoteVideos (req, res, next) {
 function addRemoteVideo (videoToCreateData, fromHost, callback) {
   logger.debug('Adding remote video "%s".', videoToCreateData.name)
 
-  const video = new Video(videoToCreateData)
-  video.podHost = fromHost
-  Video.generateThumbnailFromBase64(video, videoToCreateData.thumbnailBase64, function (err) {
-    if (err) {
-      logger.error('Cannot generate thumbnail from base 64 data.', { error: err })
-      return callback(err)
+  waterfall([
+
+    function findOrCreatePod (callback) {
+      fromHost
+
+      const query = {
+        where: {
+          host: fromHost
+        },
+        defaults: {
+          host: fromHost
+        }
+      }
+
+      db.Pod.findOrCreate(query).asCallback(function (err, result) {
+        // [ instance, wasCreated ]
+        return callback(err, result[0])
+      })
+    },
+
+    function findOrCreateAuthor (pod, callback) {
+      const username = videoToCreateData.author
+
+      const query = {
+        where: {
+          name: username,
+          podId: pod.id
+        },
+        defaults: {
+          name: username,
+          podId: pod.id
+        }
+      }
+
+      db.Author.findOrCreate(query).asCallback(function (err, result) {
+        // [ instance, wasCreated ]
+        return callback(err, result[0])
+      })
+    },
+
+    function createVideoObject (author, callback) {
+      const videoData = {
+        name: videoToCreateData.name,
+        remoteId: videoToCreateData.remoteId,
+        extname: videoToCreateData.extname,
+        infoHash: videoToCreateData.infoHash,
+        description: videoToCreateData.description,
+        authorId: author.id,
+        duration: videoToCreateData.duration,
+        tags: videoToCreateData.tags
+      }
+
+      const video = db.Video.build(videoData)
+
+      return callback(null, video)
+    },
+
+    function generateThumbnail (video, callback) {
+      db.Video.generateThumbnailFromBase64(video, videoToCreateData.thumbnailBase64, function (err) {
+        if (err) {
+          logger.error('Cannot generate thumbnail from base 64 data.', { error: err })
+          return callback(err)
+        }
+
+        video.save().asCallback(callback)
+      })
+    },
+
+    function insertIntoDB (video, callback) {
+      video.save().asCallback(callback)
     }
 
-    video.save(callback)
-  })
+  ], callback)
 }
 
 function removeRemoteVideo (videoToRemoveData, fromHost, callback) {
+  // TODO: use bulkDestroy?
+
   // We need the list because we have to remove some other stuffs (thumbnail etc)
-  Video.listByHostAndRemoteId(fromHost, videoToRemoveData.remoteId, function (err, videosList) {
+  db.Video.listByHostAndRemoteId(fromHost, videoToRemoveData.remoteId, function (err, videosList) {
     if (err) {
-      logger.error('Cannot list videos from host and magnets.', { error: err })
+      logger.error('Cannot list videos from host and remote id.', { error: err.message })
       return callback(err)
     }
 
     if (videosList.length === 0) {
-      logger.error('No remote video was found for this pod.', { magnetUri: videoToRemoveData.magnetUri, podHost: fromHost })
+      logger.error('No remote video was found for this pod.', { remoteId: videoToRemoveData.remoteId, podHost: fromHost })
     }
 
     each(videosList, function (video, callbackEach) {
-      logger.debug('Removing remote video %s.', video.magnetUri)
+      logger.debug('Removing remote video %s.', video.remoteId)
 
-      video.remove(callbackEach)
+      video.destroy().asCallback(callbackEach)
     }, callback)
   })
 }

@@ -25,7 +25,7 @@ function getAllVideosListBy (url, end) {
 
   request(url)
     .get(path)
-    .query({ sort: 'createdDate' })
+    .query({ sort: 'createdAt' })
     .query({ start: 0 })
     .query({ count: 10000 })
     .set('Accept', 'application/json')
