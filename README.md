@@ -44,6 +44,10 @@ Prototype of a decentralized video streaming platform using P2P (bittorrent) dir
   <a href="http://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
   </a>
+  
+  <a href="https://kiwiirc.com/client/irc.freenode.net/#peertube">
+    <img src="https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg" alt="PeerTube Freenode IRC" />
+  </a>
 </p>
 
 <br />
