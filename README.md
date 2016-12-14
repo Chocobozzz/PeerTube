@@ -3,7 +3,7 @@
 </h1>
 
 <h4 align="center">
-Prototype of a decentralized video streaming platform using P2P (bittorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+Prototype of a decentralized video streaming platform using P2P (BitTorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
 </h4>
 
 <p align="center">
@@ -46,7 +46,7 @@ Prototype of a decentralized video streaming platform using P2P (bittorrent) dir
   </a>
   
   <a href="https://kiwiirc.com/client/irc.freenode.net/#peertube">
-    <img src="https://img.shields.io/badge/chat-on%20freenode-brightgreen.svg" alt="PeerTube Freenode IRC" />
+    <img src="https://img.shields.io/badge/%23peertube-on%20freenode-brightgreen.svg" alt="PeerTube Freenode IRC" />
   </a>
 </p>
 
