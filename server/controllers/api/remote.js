@@ -56,8 +56,6 @@ function addRemoteVideo (videoToCreateData, fromHost, callback) {
   waterfall([
 
     function findOrCreatePod (callback) {
-      fromHost
-
       const query = {
         where: {
           host: fromHost
