@@ -456,7 +456,7 @@ describe('Test parameters validator', function () {
           })
       })
 
-      it('Should fail without a mongodb id', function (done) {
+      it('Should fail without a correct uuid', function (done) {
         request(server.url)
           .get(path + 'coucou')
           .set('Accept', 'application/json')
@@ -481,7 +481,7 @@ describe('Test parameters validator', function () {
           .expect(400, done)
       })
 
-      it('Should fail without a mongodb id', function (done) {
+      it('Should fail without a correct uuid', function (done) {
         request(server.url)
           .delete(path + 'hello')
           .set('Authorization', 'Bearer ' + server.accessToken)

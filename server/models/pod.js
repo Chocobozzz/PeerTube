@@ -19,7 +19,6 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.INTEGER,
         defaultValue: constants.FRIEND_SCORE.BASE
       }
-      // Check createdAt
     },
     {
       classMethods: {
@@ -68,7 +67,7 @@ function associate (models) {
   this.belongsToMany(models.Request, {
     foreignKey: 'podId',
     through: models.RequestToPod,
-    onDelete: 'CASCADE'
+    onDelete: 'cascade'
   })
 }
 

@@ -50,28 +50,35 @@ function remoteVideos (req, res, next) {
   return res.type('json').status(204).end()
 }
 
-function addRemoteVideo (videoToCreateData, fromHost, callback) {
+function addRemoteVideo (videoToCreateData, fromHost, finalCallback) {
   logger.debug('Adding remote video "%s".', videoToCreateData.name)
 
   waterfall([
 
-    function findOrCreatePod (callback) {
+    function startTransaction (callback) {
+      db.sequelize.transaction().asCallback(function (err, t) {
+        return callback(err, t)
+      })
+    },
+
+    function findOrCreatePod (t, callback) {
       const query = {
         where: {
           host: fromHost
         },
         defaults: {
           host: fromHost
-        }
+        },
+        transaction: t
       }
 
       db.Pod.findOrCreate(query).asCallback(function (err, result) {
         // [ instance, wasCreated ]
-        return callback(err, result[0])
+        return callback(err, t, result[0])
       })
     },
 
-    function findOrCreateAuthor (pod, callback) {
+    function findOrCreateAuthor (t, pod, callback) {
       const username = videoToCreateData.author
 
       const query = {
@@ -82,16 +89,45 @@ function addRemoteVideo (videoToCreateData, fromHost, callback) {
         defaults: {
           name: username,
           podId: pod.id
-        }
+        },
+        transaction: t
       }
 
       db.Author.findOrCreate(query).asCallback(function (err, result) {
         // [ instance, wasCreated ]
-        return callback(err, result[0])
+        return callback(err, t, result[0])
       })
     },
 
-    function createVideoObject (author, callback) {
+    function findOrCreateTags (t, author, callback) {
+      const tags = videoToCreateData.tags
+      const tagInstances = []
+
+      each(tags, function (tag, callbackEach) {
+        const query = {
+          where: {
+            name: tag
+          },
+          defaults: {
+            name: tag
+          },
+          transaction: t
+        }
+
+        db.Tag.findOrCreate(query).asCallback(function (err, res) {
+          if (err) return callbackEach(err)
+
+          // res = [ tag, isCreated ]
+          const tag = res[0]
+          tagInstances.push(tag)
+          return callbackEach()
+        })
+      }, function (err) {
+        return callback(err, t, author, tagInstances)
+      })
+    },
+
+    function createVideoObject (t, author, tagInstances, callback) {
       const videoData = {
         name: videoToCreateData.name,
         remoteId: videoToCreateData.remoteId,
@@ -99,31 +135,58 @@ function addRemoteVideo (videoToCreateData, fromHost, callback) {
         infoHash: videoToCreateData.infoHash,
         description: videoToCreateData.description,
         authorId: author.id,
-        duration: videoToCreateData.duration,
-        tags: videoToCreateData.tags
+        duration: videoToCreateData.duration
       }
 
       const video = db.Video.build(videoData)
 
-      return callback(null, video)
+      return callback(null, t, tagInstances, video)
     },
 
-    function generateThumbnail (video, callback) {
+    function generateThumbnail (t, tagInstances, video, callback) {
       db.Video.generateThumbnailFromBase64(video, videoToCreateData.thumbnailBase64, function (err) {
         if (err) {
           logger.error('Cannot generate thumbnail from base 64 data.', { error: err })
           return callback(err)
         }
 
-        video.save().asCallback(callback)
+        return callback(err, t, tagInstances, video)
       })
     },
 
-    function insertIntoDB (video, callback) {
-      video.save().asCallback(callback)
+    function insertVideoIntoDB (t, tagInstances, video, callback) {
+      const options = {
+        transaction: t
+      }
+
+      video.save(options).asCallback(function (err, videoCreated) {
+        return callback(err, t, tagInstances, videoCreated)
+      })
+    },
+
+    function associateTagsToVideo (t, tagInstances, video, callback) {
+      const options = { transaction: t }
+
+      video.setTags(tagInstances, options).asCallback(function (err) {
+        return callback(err, t)
+      })
     }
 
-  ], callback)
+  ], function (err, t) {
+    if (err) {
+      logger.error('Cannot insert the remote video.')
+
+      // Abort transaction?
+      if (t) t.rollback()
+
+      return finalCallback(err)
+    }
+
+    // Commit transaction
+    t.commit()
+
+    return finalCallback()
+  })
 }
 
 function removeRemoteVideo (videoToRemoveData, fromHost, callback) {

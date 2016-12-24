@@ -1,5 +1,6 @@
 'use strict'
 
+const each = require('async/each')
 const express = require('express')
 const fs = require('fs')
 const multer = require('multer')
@@ -87,7 +88,13 @@ function addVideo (req, res, next) {
 
   waterfall([
 
-    function findOrCreateAuthor (callback) {
+    function startTransaction (callback) {
+      db.sequelize.transaction().asCallback(function (err, t) {
+        return callback(err, t)
+      })
+    },
+
+    function findOrCreateAuthor (t, callback) {
       const username = res.locals.oauth.token.user.username
 
       const query = {
@@ -98,67 +105,117 @@ function addVideo (req, res, next) {
         defaults: {
           name: username,
           podId: null // null because it is OUR pod
-        }
+        },
+        transaction: t
       }
 
       db.Author.findOrCreate(query).asCallback(function (err, result) {
         // [ instance, wasCreated ]
-        return callback(err, result[0])
+        return callback(err, t, result[0])
       })
     },
 
-    function createVideoObject (author, callback) {
+    function findOrCreateTags (t, author, callback) {
+      const tags = videoInfos.tags
+      const tagInstances = []
+
+      each(tags, function (tag, callbackEach) {
+        const query = {
+          where: {
+            name: tag
+          },
+          defaults: {
+            name: tag
+          },
+          transaction: t
+        }
+
+        db.Tag.findOrCreate(query).asCallback(function (err, res) {
+          if (err) return callbackEach(err)
+
+          // res = [ tag, isCreated ]
+          const tag = res[0]
+          tagInstances.push(tag)
+          return callbackEach()
+        })
+      }, function (err) {
+        return callback(err, t, author, tagInstances)
+      })
+    },
+
+    function createVideoObject (t, author, tagInstances, callback) {
       const videoData = {
         name: videoInfos.name,
         remoteId: null,
         extname: path.extname(videoFile.filename),
         description: videoInfos.description,
         duration: videoFile.duration,
-        tags: videoInfos.tags,
         authorId: author.id
       }
 
       const video = db.Video.build(videoData)
 
-      return callback(null, author, video)
+      return callback(null, t, author, tagInstances, video)
     },
 
      // Set the videoname the same as the id
-    function renameVideoFile (author, video, callback) {
+    function renameVideoFile (t, author, tagInstances, video, callback) {
       const videoDir = constants.CONFIG.STORAGE.VIDEOS_DIR
       const source = path.join(videoDir, videoFile.filename)
       const destination = path.join(videoDir, video.getVideoFilename())
 
       fs.rename(source, destination, function (err) {
-        return callback(err, author, video)
+        return callback(err, t, author, tagInstances, video)
       })
     },
 
-    function insertIntoDB (author, video, callback) {
-      video.save().asCallback(function (err, videoCreated) {
+    function insertVideoIntoDB (t, author, tagInstances, video, callback) {
+      const options = { transaction: t }
+
+      // Add tags association
+      video.save(options).asCallback(function (err, videoCreated) {
+        if (err) return callback(err)
+
         // Do not forget to add Author informations to the created video
         videoCreated.Author = author
 
-        return callback(err, videoCreated)
+        return callback(err, t, tagInstances, videoCreated)
       })
     },
 
-    function sendToFriends (video, callback) {
+    function associateTagsToVideo (t, tagInstances, video, callback) {
+      const options = { transaction: t }
+
+      video.setTags(tagInstances, options).asCallback(function (err) {
+        video.Tags = tagInstances
+
+        return callback(err, t, video)
+      })
+    },
+
+    function sendToFriends (t, video, callback) {
       video.toRemoteJSON(function (err, remoteVideo) {
         if (err) return callback(err)
 
         // Now we'll add the video's meta data to our friends
         friends.addVideoToFriends(remoteVideo)
 
-        return callback(null)
+        return callback(null, t)
       })
     }
 
-  ], function andFinally (err) {
+  ], function andFinally (err, t) {
     if (err) {
       logger.error('Cannot insert the video.')
+
+      // Abort transaction?
+      if (t) t.rollback()
+
       return next(err)
     }
+
+    // Commit transaction
+    t.commit()
 
     // TODO : include Location of the new video -> 201
     return res.type('json').status(204).end()
@@ -166,7 +223,7 @@ function addVideo (req, res, next) {
 }
 
 function getVideo (req, res, next) {
-  db.Video.loadAndPopulateAuthorAndPod(req.params.id, function (err, video) {
+  db.Video.loadAndPopulateAuthorAndPodAndTags(req.params.id, function (err, video) {
     if (err) return next(err)
 
     if (!video) {
@@ -222,12 +279,14 @@ function removeVideo (req, res, next) {
 }
 
 function searchVideos (req, res, next) {
-  db.Video.searchAndPopulateAuthorAndPod(req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort,
-  function (err, videosList, videosTotal) {
-    if (err) return next(err)
+  db.Video.searchAndPopulateAuthorAndPodAndTags(
+    req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort,
+    function (err, videosList, videosTotal) {
+      if (err) return next(err)
 
-    res.json(getFormatedVideos(videosList, videosTotal))
-  })
+      res.json(getFormatedVideos(videosList, videosTotal))
+    }
+  )
 }
 
 // ---------------------------------------------------------------------------

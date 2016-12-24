@@ -4,6 +4,7 @@ const createTorrent = require('create-torrent')
 const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
 const magnetUtil = require('magnet-uri')
+const map = require('lodash/map')
 const parallel = require('async/parallel')
 const parseTorrent = require('parse-torrent')
 const pathUtils = require('path')
@@ -41,9 +42,6 @@ module.exports = function (sequelize, DataTypes) {
       },
       duration: {
         type: DataTypes.INTEGER
-      },
-      tags: {
-        type: DataTypes.ARRAY(DataTypes.STRING)
       }
     },
     {
@@ -54,12 +52,12 @@ module.exports = function (sequelize, DataTypes) {
         getDurationFromFile,
         listForApi,
         listByHostAndRemoteId,
-        listOwnedAndPopulateAuthor,
+        listOwnedAndPopulateAuthorAndTags,
         listOwnedByAuthor,
         load,
         loadAndPopulateAuthor,
-        loadAndPopulateAuthorAndPod,
-        searchAndPopulateAuthorAndPod
+        loadAndPopulateAuthorAndPodAndTags,
+        searchAndPopulateAuthorAndPodAndTags
       },
       instanceMethods: {
         generateMagnetUri,
@@ -170,6 +168,12 @@ function associate (models) {
     },
     onDelete: 'cascade'
   })
+
+  this.belongsToMany(models.Tag, {
+    foreignKey: 'videoId',
+    through: models.VideoTag,
+    onDelete: 'cascade'
+  })
 }
 
 function generateMagnetUri () {
@@ -248,7 +252,7 @@ function toFormatedJSON () {
     magnetUri: this.generateMagnetUri(),
     author: this.Author.name,
     duration: this.duration,
-    tags: this.tags,
+    tags: map(this.Tags, 'name'),
     thumbnailPath: constants.STATIC_PATHS.THUMBNAILS + '/' + this.getThumbnailName(),
     createdAt: this.createdAt
   }
@@ -275,7 +279,7 @@ function toRemoteJSON (callback) {
       author: self.Author.name,
       duration: self.duration,
       thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
-      tags: self.tags,
+      tags: map(self.Tags, 'name'),
       createdAt: self.createdAt,
       extname: self.extname
     }
@@ -310,12 +314,15 @@ function listForApi (start, count, sort, callback) {
   const query = {
     offset: start,
     limit: count,
+    distinct: true, // For the count, a video can have many tags
     order: [ modelUtils.getSort(sort) ],
     include: [
       {
         model: this.sequelize.models.Author,
-        include: [ this.sequelize.models.Pod ]
-      }
+        include: [ { model: this.sequelize.models.Pod, required: false } ]
+      },
+
+      this.sequelize.models.Tag
     ]
   }
 
@@ -337,6 +344,7 @@ function listByHostAndRemoteId (fromHost, remoteId, callback) {
         include: [
           {
             model: this.sequelize.models.Pod,
+            required: true,
             where: {
               host: fromHost
             }
@@ -349,13 +357,13 @@ function listByHostAndRemoteId (fromHost, remoteId, callback) {
   return this.findAll(query).asCallback(callback)
 }
 
-function listOwnedAndPopulateAuthor (callback) {
+function listOwnedAndPopulateAuthorAndTags (callback) {
   // If remoteId is null this is *our* video
   const query = {
     where: {
       remoteId: null
     },
-    include: [ this.sequelize.models.Author ]
+    include: [ this.sequelize.models.Author, this.sequelize.models.Tag ]
   }
 
   return this.findAll(query).asCallback(callback)
@@ -391,23 +399,26 @@ function loadAndPopulateAuthor (id, callback) {
   return this.findById(id, options).asCallback(callback)
 }
 
-function loadAndPopulateAuthorAndPod (id, callback) {
+function loadAndPopulateAuthorAndPodAndTags (id, callback) {
   const options = {
     include: [
       {
         model: this.sequelize.models.Author,
-        include: [ this.sequelize.models.Pod ]
-      }
+        include: [ { model: this.sequelize.models.Pod, required: false } ]
+      },
+      this.sequelize.models.Tag
     ]
   }
 
   return this.findById(id, options).asCallback(callback)
 }
 
-function searchAndPopulateAuthorAndPod (value, field, start, count, sort, callback) {
+function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort, callback) {
   const podInclude = {
-    model: this.sequelize.models.Pod
+    model: this.sequelize.models.Pod,
+    required: false
   }
+
   const authorInclude = {
     model: this.sequelize.models.Author,
     include: [
@@ -415,53 +426,59 @@ function searchAndPopulateAuthorAndPod (value, field, start, count, sort, callba
     ]
   }
 
+  const tagInclude = {
+    model: this.sequelize.models.Tag
+  }
+
   const query = {
     where: {},
-    include: [
-      authorInclude
-    ],
     offset: start,
     limit: count,
+    distinct: true, // For the count, a video can have many tags
     order: [ modelUtils.getSort(sort) ]
   }
 
-  // TODO: include our pod for podHost searches (we are not stored in the database)
   // Make an exact search with the magnet
   if (field === 'magnetUri') {
     const infoHash = magnetUtil.decode(value).infoHash
     query.where.infoHash = infoHash
   } else if (field === 'tags') {
-    query.where[field] = value
+    const escapedValue = this.sequelize.escape('%' + value + '%')
+    query.where = {
+      id: {
+        $in: this.sequelize.literal(
+          '(SELECT "VideoTags"."videoId" FROM "Tags" INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId" WHERE name LIKE ' + escapedValue + ')'
+        )
+      }
+    }
   } else if (field === 'host') {
-    const whereQuery = {
-      '$Author.Pod.host$': {
+    // FIXME: Include our pod? (not stored in the database)
+    podInclude.where = {
+      host: {
+        $like: '%' + value + '%'
+      }
+    }
+    podInclude.required = true
+  } else if (field === 'author') {
+    authorInclude.where = {
+      name: {
         $like: '%' + value + '%'
       }
     }
 
-    // Include our pod? (not stored in the database)
-    if (constants.CONFIG.WEBSERVER.HOST.indexOf(value) !== -1) {
-      query.where = {
-        $or: [
-          whereQuery,
-          {
-            remoteId: null
-          }
-        ]
-      }
-    } else {
-      query.where = whereQuery
-    }
-  } else if (field === 'author') {
-    query.where = {
-      '$Author.name$': {
-        $like: '%' + value + '%'
-      }
-    }
+    // authorInclude.or = true
   } else {
     query.where[field] = {
       $like: '%' + value + '%'
     }
+  }
+
+  query.include = [
+    authorInclude, tagInclude
+  ]
+
+  if (tagInclude.where) {
+    // query.include.push([ this.sequelize.models.Tag ])
   }
 
   return this.findAndCountAll(query).asCallback(function (err, result) {

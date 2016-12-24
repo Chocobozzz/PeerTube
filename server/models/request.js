@@ -79,9 +79,11 @@ function deactivate () {
   timer = null
 }
 
-function flush () {
+function flush (callback) {
   removeAll.call(this, function (err) {
     if (err) logger.error('Cannot flush the requests.', { error: err })
+
+    return callback(err)
   })
 }
 
@@ -298,7 +300,7 @@ function listWithLimitAndRandom (limit, callback) {
 
 function removeAll (callback) {
   // Delete all requests
-  this.destroy({ truncate: true }).asCallback(callback)
+  this.truncate({ cascade: true }).asCallback(callback)
 }
 
 function removeWithEmptyTo (callback) {

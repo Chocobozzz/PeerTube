@@ -93,7 +93,7 @@ function generateWatchHtmlPage (req, res, next) {
     },
 
     video: function (callback) {
-      db.Video.loadAndPopulateAuthorAndPod(videoId, callback)
+      db.Video.loadAndPopulateAuthorAndPodAndTags(videoId, callback)
     }
   }, function (err, results) {
     if (err) return next(err)

@@ -66,10 +66,12 @@ function makeFriends (hosts, callback) {
 function quitFriends (callback) {
   // Stop pool requests
   db.Request.deactivate()
-  // Flush pool requests
-  db.Request.flush()
 
   waterfall([
+    function flushRequests (callbackAsync) {
+      db.Request.flush(callbackAsync)
+    },
+
     function getPodsList (callbackAsync) {
       return db.Pod.list(callbackAsync)
     },
@@ -118,7 +120,7 @@ function removeVideoToFriends (videoParams) {
 }
 
 function sendOwnedVideosToPod (podId) {
-  db.Video.listOwnedAndPopulateAuthor(function (err, videosList) {
+  db.Video.listOwnedAndPopulateAuthorAndTags(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of videos we own.')
       return
@@ -226,7 +228,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
           }
 
           // Add our videos to the request scheduler
-          sendOwnedVideosToPod(podCreated._id)
+          sendOwnedVideosToPod(podCreated.id)
 
           return callbackEach()
         })

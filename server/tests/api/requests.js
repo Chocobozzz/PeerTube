@@ -79,15 +79,16 @@ describe('Test requests stats', function () {
     uploadVideo(server, function (err) {
       if (err) throw err
 
-      getRequestsStats(server, function (err, res) {
-        if (err) throw err
+      setTimeout(function () {
+        getRequestsStats(server, function (err, res) {
+          if (err) throw err
 
-        const body = res.body
-        expect(body.totalRequests).to.equal(1)
+          const body = res.body
+          expect(body.totalRequests).to.equal(1)
 
-        // Wait one cycle
-        setTimeout(done, 10000)
-      })
+          done()
+        })
+      }, 1000)
     })
   })
 

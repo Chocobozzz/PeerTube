@@ -6,13 +6,24 @@ const Sequelize = require('sequelize')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
+const utils = require('../helpers/utils')
 
 const database = {}
 
 const sequelize = new Sequelize(constants.CONFIG.DATABASE.DBNAME, 'peertube', 'peertube', {
   dialect: 'postgres',
   host: constants.CONFIG.DATABASE.HOSTNAME,
-  port: constants.CONFIG.DATABASE.PORT
+  port: constants.CONFIG.DATABASE.PORT,
+  benchmark: utils.isTestInstance(),
+
+  logging: function (message, benchmark) {
+    let newMessage = message
+    if (benchmark !== undefined) {
+      newMessage += ' | ' + benchmark + 'ms'
+    }
+
+    logger.debug(newMessage)
+  }
 })
 
 const modelDirectory = path.join(__dirname, '..', 'models')
