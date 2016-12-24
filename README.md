@@ -234,7 +234,7 @@ Here are some simple schemes:
 
 <img src="https://lutim.cpy.re/MyeS4q1g" alt="Join a network" />
 
-<img src="https://lutim.cpy.re/PqpTTzdP" alt="Many networks"
+<img src="https://lutim.cpy.re/PqpTTzdP" alt="Many networks" />
 
 </p>
 
