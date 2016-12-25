@@ -6,9 +6,9 @@ The server is a web server developed with [NodeJS](https://nodejs.org)/[Express]
 ## Technologies
 
   * [NodeJS](https://nodejs.org) -> Language
-  * [MongoDB](https://www.mongodb.com/) -> Database
+  * [PostgreSQL](https://www.postgresql.org/) -> Database
   * [Express](http://expressjs.com) -> Web server framework
-  * [Mongoose](http://mongoosejs.com/) -> MongoDB object modeling
+  * [Sequelize](http://docs.sequelizejs.com/en/v3/) -> SQL ORM
   * [WebTorrent](https://webtorrent.io/) -> BitTorrent tracker and torrent creation
   * [Mocha](https://mochajs.org/) -> Test framework
 
@@ -28,7 +28,7 @@ All other server files are in the [server](https://github.com/Chocobozzz/PeerTub
     |__ initializers -> functions used at the server startup (installer, database, constants...)
     |__ lib          -> library function (WebTorrent, OAuth2, friends logic...)
     |__ middlewares  -> middlewares for controllers (requests validators, requests pagination...)
-    |__ models       -> Mongoose models for each MongoDB collection (videos, users, pods...)
+    |__ models       -> Sequelize models for each SQL tables (videos, users, pods...)
     |__ tests        -> API tests and real world simulations (to test the decentralized feature...)
 
 
@@ -41,7 +41,7 @@ Uses [JavaScript Standard Style](http://standardjs.com/).
 
   * Install [the dependencies](https://github.com/Chocobozzz/PeerTube#dependencies)
   * Run `npm install` at the root directory to install all the dependencies
-  * Run MongoDB
+  * Run PostgreSQL and create the database `peertube_dev`.
   * Run `npm run dev` to compile the client and automatically run the server. If the client files are already compiled you can simply run `NODE_ENV=test node server`
 
 The `NODE_ENV=test` is set to speed up communications between pods (see [constants.js](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.js)).
@@ -62,7 +62,7 @@ A video is seeded by the server throught the [WebSeed](http://www.bittorrent.org
 
 ![Architecture scheme](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/upload-video.png)
 
-When a user uploads a video, the rest API create the torrent file and then adds it to its Mongo database.
+When a user uploads a video, the rest API create the torrent file and then adds it to its database.
 
 If a user wants to watch the video, the tracker will indicate all other users that are watching the video + the HTTP url for the WebSeed.
 
