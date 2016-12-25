@@ -9,8 +9,6 @@ const ursa = require('ursa')
 const constants = require('../initializers/constants')
 const logger = require('./logger')
 
-const algorithm = 'aes-256-ctr'
-
 const peertubeCrypto = {
   checkSignature,
   comparePassword,
@@ -111,13 +109,5 @@ function createCerts (callback) {
         return callback(null)
       })
     })
-  })
-}
-
-function generatePassword (callback) {
-  crypto.randomBytes(32, function (err, buf) {
-    if (err) return callback(err)
-
-    callback(null, buf.toString('utf8'))
   })
 }

@@ -1,7 +1,6 @@
 'use strict'
 
 const config = require('config')
-const maxBy = require('lodash/maxBy')
 const path = require('path')
 
 // ---------------------------------------------------------------------------

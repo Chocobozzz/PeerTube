@@ -1,14 +1,14 @@
-/*
-  This is just an example.
-*/
+// /*
+//   This is just an example.
+// */
 
-const db = require('../database')
+// const db = require('../database')
 
-// options contains the transaction
-exports.up = function (options, callback) {
-  // db.Application.create({ migrationVersion: 42 }, { transaction: options.transaction }).asCallback(callback)
-}
+// // options contains the transaction
+// exports.up = function (options, callback) {
+//   db.Application.create({ migrationVersion: 42 }, { transaction: options.transaction }).asCallback(callback)
+// }
 
-exports.down = function (options, callback) {
-  throw new Error('Not implemented.')
-}
+// exports.down = function (options, callback) {
+//   throw new Error('Not implemented.')
+// }
