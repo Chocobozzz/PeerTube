@@ -36,7 +36,7 @@ before_script:
   - psql -c 'create database peertube_test4;' -U postgres
   - psql -c 'create database peertube_test5;' -U postgres
   - psql -c 'create database peertube_test6;' -U postgres
-  - psql -c 'create user peertube with password \'peertube\';' -U postgres
+  - psql -c "create user peertube with password 'peertube';" -U postgres
 
 after_failure:
   - cat test1/logs/all-logs.log
