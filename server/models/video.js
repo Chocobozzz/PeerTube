@@ -16,7 +16,7 @@ const modelUtils = require('./utils')
 // ---------------------------------------------------------------------------
 
 module.exports = function (sequelize, DataTypes) {
-// TODO: add indexes on searchable columns
+  // TODO: add indexes on searchable columns
   const Video = sequelize.define('Video',
     {
       id: {
@@ -50,6 +50,7 @@ module.exports = function (sequelize, DataTypes) {
 
         generateThumbnailFromBase64,
         getDurationFromFile,
+        list,
         listForApi,
         listByHostAndRemoteId,
         listOwnedAndPopulateAuthorAndTags,
@@ -308,6 +309,10 @@ function getDurationFromFile (videoPath, callback) {
 
     return callback(null, Math.floor(metadata.format.duration))
   })
+}
+
+function list (callback) {
+  return this.find().asCallback()
 }
 
 function listForApi (start, count, sort, callback) {

@@ -20,6 +20,7 @@ const constants = require('./server/initializers/constants')
 const logger = require('./server/helpers/logger')
 // Initialize database and models
 const db = require('./server/initializers/database')
+db.init()
 
 // ----------- Checker -----------
 const checker = require('./server/initializers/checker')

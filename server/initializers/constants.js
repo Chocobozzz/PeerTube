@@ -37,7 +37,9 @@ const CONFIG = {
   DATABASE: {
     DBNAME: 'peertube' + config.get('database.suffix'),
     HOSTNAME: config.get('database.hostname'),
-    PORT: config.get('database.port')
+    PORT: config.get('database.port'),
+    USERNAME: config.get('database.username'),
+    PASSWORD: config.get('database.password')
   },
   STORAGE: {
     CERT_DIR: path.join(__dirname, '..', '..', config.get('storage.certs')),
@@ -87,41 +89,7 @@ const FRIEND_SCORE = {
 
 // ---------------------------------------------------------------------------
 
-const MIGRATION_SCRIPTS = [
-  {
-    script: '0005-create-application',
-    version: 5
-  },
-  {
-    script: '0010-users-password',
-    version: 10
-  },
-  {
-    script: '0015-admin-role',
-    version: 15
-  },
-  {
-    script: '0020-requests-endpoint',
-    version: 20
-  },
-  {
-    script: '0025-video-filenames',
-    version: 25
-  },
-  {
-    script: '0030-video-magnet',
-    version: 30
-  },
-  {
-    script: '0035-url-to-host',
-    version: 35
-  },
-  {
-    script: '0040-video-remote-id',
-    version: 40
-  }
-]
-const LAST_SQL_SCHEMA_VERSION = (maxBy(MIGRATION_SCRIPTS, 'version'))['version']
+const LAST_MIGRATION_VERSION = 0
 
 // ---------------------------------------------------------------------------
 
@@ -197,8 +165,7 @@ module.exports = {
   CONFIG,
   CONSTRAINTS_FIELDS,
   FRIEND_SCORE,
-  LAST_SQL_SCHEMA_VERSION,
-  MIGRATION_SCRIPTS,
+  LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,

@@ -103,7 +103,7 @@ function runServer (number, callback) {
       if (serverRunString[key] === false) dontContinue = true
     }
 
-    // If no, there is maybe one thing not already initialized (mongodb...)
+    // If no, there is maybe one thing not already initialized (client/user credentials generation...)
     if (dontContinue === true) return
 
     server.app.stdout.removeListener('data', onStdout)

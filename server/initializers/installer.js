@@ -121,9 +121,8 @@ function createOAuthAdminIfNotExist (callback) {
       logger.info('Username: ' + username)
       logger.info('User password: ' + password)
 
-      logger.info('Creating Application collection.')
-      const application = db.Application.build({ sqlSchemaVersion: constants.LAST_SQL_SCHEMA_VERSION })
-      application.save().asCallback(callback)
+      logger.info('Creating Application table.')
+      db.Application.create({ migrationVersion: constants.LAST_MIGRATION_VERSION }).asCallback(callback)
     })
   })
 }

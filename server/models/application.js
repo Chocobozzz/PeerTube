@@ -1,15 +1,15 @@
 module.exports = function (sequelize, DataTypes) {
   const Application = sequelize.define('Application',
     {
-      sqlSchemaVersion: {
+      migrationVersion: {
         type: DataTypes.INTEGER,
         defaultValue: 0
       }
     },
     {
       classMethods: {
-        loadSqlSchemaVersion,
-        updateSqlSchemaVersion
+        loadMigrationVersion,
+        updateMigrationVersion
       }
     }
   )
@@ -19,18 +19,28 @@ module.exports = function (sequelize, DataTypes) {
 
 // ---------------------------------------------------------------------------
 
-function loadSqlSchemaVersion (callback) {
+function loadMigrationVersion (callback) {
   const query = {
-    attributes: [ 'sqlSchemaVersion' ]
+    attributes: [ 'migrationVersion' ]
   }
 
   return this.findOne(query).asCallback(function (err, data) {
-    const version = data ? data.sqlSchemaVersion : 0
+    const version = data ? data.migrationVersion : 0
 
     return callback(err, version)
   })
 }
 
-function updateSqlSchemaVersion (newVersion, callback) {
-  return this.update({ sqlSchemaVersion: newVersion }).asCallback(callback)
+function updateMigrationVersion (newVersion, transaction, callback) {
+  const options = {
+    where: {}
+  }
+
+  if (!callback) {
+    transaction = callback
+  } else {
+    options.transaction = transaction
+  }
+
+  return this.update({ migrationVersion: newVersion }, options).asCallback(callback)
 }
