@@ -135,7 +135,8 @@ function addRemoteVideo (videoToCreateData, fromHost, finalCallback) {
         infoHash: videoToCreateData.infoHash,
         description: videoToCreateData.description,
         authorId: author.id,
-        duration: videoToCreateData.duration
+        duration: videoToCreateData.duration,
+        createdAt: videoToCreateData.createdAt
       }
 
       const video = db.Video.build(videoData)
