@@ -5,31 +5,24 @@
 // TODO: document this script
 
 const fs = require('fs')
-const mongoose = require('mongoose')
 const parseTorrent = require('parse-torrent')
 
 const constants = require('../server/initializers/constants')
-const database = require('../server/initializers/database')
-
-database.connect()
+const db = require('../server/initializers/database')
 
 const friends = require('../server/lib/friends')
-const Video = mongoose.model('Video')
 
-friends.hasFriends(function (err, hasFriends) {
-  if (err) throw err
-
-  if (hasFriends === true) {
-    console.log('Cannot update host because you have friends!')
-    process.exit(-1)
-  }
-
-  console.log('Updating videos host in database.')
-  Video.update({ }, { podHost: constants.CONFIG.WEBSERVER.HOST }, { multi: true }, function (err) {
+db.init(true, function () {
+  friends.hasFriends(function (err, hasFriends) {
     if (err) throw err
 
+    if (hasFriends === true) {
+      console.log('Cannot update host because you have friends!')
+      process.exit(-1)
+    }
+
     console.log('Updating torrent files.')
-    Video.find().lean().exec(function (err, videos) {
+    db.Video.list(function (err, videos) {
       if (err) throw err
 
       videos.forEach(function (video) {
