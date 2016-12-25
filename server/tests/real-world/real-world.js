@@ -30,9 +30,9 @@ let integrityInterval = parseInt(program.integrity) || 60000
 
 const numberOfPods = 6
 // Wait requests between pods
-const requestsMaxPerInterval = constants.INTERVAL / actionInterval
+const requestsMaxPerInterval = constants.REQUESTS_INTERVAL / actionInterval
 const intervalsToMakeAllRequests = Math.ceil(requestsMaxPerInterval / constants.REQUESTS_LIMIT)
-const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.INTERVAL) + 1000
+const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.REQUESTS_INTERVAL) + 1000
 
 integrityInterval += waitForBeforeIntegrityCheck
 
@@ -160,9 +160,9 @@ function exitServers (servers, callback) {
 function upload (servers, numServer, callback) {
   if (!callback) callback = function () {}
 
-  const name = 'my super name for pod 1'
-  const description = 'my super description for pod 1'
-  const tags = [ 'tag1p1', 'tag2p1' ]
+  const name = Date.now() + ' name'
+  const description = Date.now() + ' description'
+  const tags = [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
   const file = 'video_short1.webm'
 
   console.log('Upload video to server ' + numServer)
@@ -205,6 +205,7 @@ function checkIntegrity (servers, callback) {
     for (const video of videos) {
       if (!isEqual(video, videos[0])) {
         console.error('Integrity not ok!')
+
         process.exit(-1)
       }
     }
