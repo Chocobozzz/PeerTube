@@ -320,7 +320,7 @@ function listForApi (start, count, sort, callback) {
     offset: start,
     limit: count,
     distinct: true, // For the count, a video can have many tags
-    order: [ modelUtils.getSort(sort) ],
+    order: [ modelUtils.getSort(sort), [ this.sequelize.models.Tag, 'name', 'ASC' ] ],
     include: [
       {
         model: this.sequelize.models.Author,
@@ -440,7 +440,7 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
     offset: start,
     limit: count,
     distinct: true, // For the count, a video can have many tags
-    order: [ modelUtils.getSort(sort) ]
+    order: [ modelUtils.getSort(sort), [ this.sequelize.models.Tag, 'name', 'ASC' ] ]
   }
 
   // Make an exact search with the magnet
