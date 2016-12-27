@@ -1,7 +1,6 @@
 'use strict'
 
 const bcrypt = require('bcrypt')
-const crypto = require('crypto')
 const fs = require('fs')
 const openssl = require('openssl-wrapper')
 const ursa = require('ursa')

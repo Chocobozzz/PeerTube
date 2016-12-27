@@ -1,3 +1,4 @@
+const eachSeries = require('async/eachSeries')
 const rimraf = require('rimraf')
 
 const constants = require('../../../server/initializers/constants')
@@ -10,14 +11,15 @@ db.init(true, function () {
     console.info('Tables of %s deleted.', db.sequelize.config.database)
 
     const STORAGE = constants.CONFIG.STORAGE
-    Object.keys(STORAGE).forEach(function (storage) {
+    eachSeries(Object.keys(STORAGE), function (storage, callbackEach) {
       const storageDir = STORAGE[storage]
 
       rimraf(storageDir, function (err) {
-        if (err) throw err
-
-        console.info('Deleting %s.', storageDir)
+        console.info('%s deleted.', storageDir)
+        return callbackEach(err)
       })
+    }, function () {
+      process.exit(0)
     })
   })
 })
