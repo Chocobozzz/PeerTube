@@ -1,3 +1,6 @@
+listen:
+  port: 9000
+
 # Correspond to your reverse proxy "listen" configuration
 webserver:
   https: false
@@ -5,4 +8,17 @@ webserver:
   port: 80
 
 database:
+  hostname: 'localhost'
+  port: 5432
   suffix: '_prod'
+  username: peertube
+  password: peertube
+
+# From the project root directory
+storage:
+  certs: 'certs/'
+  videos: 'videos/'
+  logs: 'logs/'
+  previews: 'previews/'
+  thumbnails: 'thumbnails/'
+  torrents: 'torrents/'
