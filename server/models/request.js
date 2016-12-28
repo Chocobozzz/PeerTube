@@ -3,6 +3,7 @@
 const each = require('async/each')
 const eachLimit = require('async/eachLimit')
 const waterfall = require('async/waterfall')
+const values = require('lodash/values')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
@@ -17,11 +18,12 @@ module.exports = function (sequelize, DataTypes) {
   const Request = sequelize.define('Request',
     {
       request: {
-        type: DataTypes.JSON
+        type: DataTypes.JSON,
+        allowNull: false
       },
       endpoint: {
-        // TODO: enum?
-        type: DataTypes.STRING
+        type: DataTypes.ENUM(values(constants.REQUEST_ENDPOINTS)),
+        allowNull: false
       }
     },
     {
@@ -196,7 +198,7 @@ function makeRequests () {
 
         makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, function (success) {
           if (success === true) {
-            logger.debug('Removing requests for %s pod.', requestToMake.toPodId, { requestsIds: requestToMake.ids })
+            logger.debug('Removing requests for pod %s.', requestToMake.toPodId, { requestsIds: requestToMake.ids })
 
             goodPods.push(requestToMake.toPodId)
 
@@ -261,13 +263,13 @@ function updatePodsScore (goodPods, badPods) {
 
   if (goodPods.length !== 0) {
     Pod.incrementScores(goodPods, constants.PODS_SCORE.BONUS, function (err) {
-      if (err) logger.error('Cannot increment scores of good pods.')
+      if (err) logger.error('Cannot increment scores of good pods.', { error: err })
     })
   }
 
   if (badPods.length !== 0) {
     Pod.incrementScores(badPods, constants.PODS_SCORE.MALUS, function (err) {
-      if (err) logger.error('Cannot decrement scores of bad pods.')
+      if (err) logger.error('Cannot decrement scores of bad pods.', { error: err })
       removeBadPods.call(self)
     })
   }

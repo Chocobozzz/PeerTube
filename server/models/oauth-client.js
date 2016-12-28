@@ -1,11 +1,15 @@
+'use strict'
+
 module.exports = function (sequelize, DataTypes) {
   const OAuthClient = sequelize.define('OAuthClient',
     {
       clientId: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
       clientSecret: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
       grants: {
         type: DataTypes.ARRAY(DataTypes.STRING)
@@ -27,9 +31,6 @@ module.exports = function (sequelize, DataTypes) {
 
   return OAuthClient
 }
-
-// TODO: validation
-// OAuthClientSchema.path('clientSecret').required(true)
 
 // ---------------------------------------------------------------------------
 

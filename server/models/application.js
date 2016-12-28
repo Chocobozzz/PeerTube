@@ -1,9 +1,15 @@
+'use strict'
+
 module.exports = function (sequelize, DataTypes) {
   const Application = sequelize.define('Application',
     {
       migrationVersion: {
         type: DataTypes.INTEGER,
-        defaultValue: 0
+        defaultValue: 0,
+        allowNull: false,
+        validate: {
+          isInt: true
+        }
       }
     },
     {

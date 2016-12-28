@@ -15,7 +15,6 @@ const videosValidators = {
   isVideoDurationValid,
   isVideoInfoHashValid,
   isVideoNameValid,
-  isVideoPodHostValid,
   isVideoTagsValid,
   isVideoThumbnailValid,
   isVideoThumbnail64Valid
@@ -72,11 +71,6 @@ function isVideoInfoHashValid (value) {
 
 function isVideoNameValid (value) {
   return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
-}
-
-function isVideoPodHostValid (value) {
-  // TODO: set options (TLD...)
-  return validator.isURL(value)
 }
 
 function isVideoTagsValid (tags) {

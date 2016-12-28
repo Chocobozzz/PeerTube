@@ -1,5 +1,11 @@
+'use strict'
+
+const values = require('lodash/values')
+
 const modelUtils = require('./utils')
+const constants = require('../initializers/constants')
 const peertubeCrypto = require('../helpers/peertube-crypto')
+const customUsersValidators = require('../helpers/custom-validators').users
 
 // ---------------------------------------------------------------------------
 
@@ -7,13 +13,28 @@ module.exports = function (sequelize, DataTypes) {
   const User = sequelize.define('User',
     {
       password: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          passwordValid: function (value) {
+            const res = customUsersValidators.isUserPasswordValid(value)
+            if (res === false) throw new Error('Password not valid.')
+          }
+        }
       },
       username: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          usernameValid: function (value) {
+            const res = customUsersValidators.isUserUsernameValid(value)
+            if (res === false) throw new Error('Username not valid.')
+          }
+        }
       },
       role: {
-        type: DataTypes.STRING
+        type: DataTypes.ENUM(values(constants.USER_ROLES)),
+        allowNull: false
       }
     },
     {
@@ -40,11 +61,6 @@ module.exports = function (sequelize, DataTypes) {
 
   return User
 }
-
-// TODO: Validation
-// UserSchema.path('password').required(customUsersValidators.isUserPasswordValid)
-// UserSchema.path('username').required(customUsersValidators.isUserUsernameValid)
-// UserSchema.path('role').validate(customUsersValidators.isUserRoleValid)
 
 function beforeCreateOrUpdate (user, options, next) {
   peertubeCrypto.cryptPassword(user.password, function (err, hash) {

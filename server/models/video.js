@@ -8,10 +8,12 @@ const map = require('lodash/map')
 const parallel = require('async/parallel')
 const parseTorrent = require('parse-torrent')
 const pathUtils = require('path')
+const values = require('lodash/values')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
 const modelUtils = require('./utils')
+const customVideosValidators = require('../helpers/custom-validators').videos
 
 // ---------------------------------------------------------------------------
 
@@ -22,26 +24,61 @@ module.exports = function (sequelize, DataTypes) {
       id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true
+        primaryKey: true,
+        validate: {
+          isUUID: 4
+        }
       },
       name: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          nameValid: function (value) {
+            const res = customVideosValidators.isVideoNameValid(value)
+            if (res === false) throw new Error('Video name is not valid.')
+          }
+        }
       },
       extname: {
-        // TODO: enum?
-        type: DataTypes.STRING
+        type: DataTypes.ENUM(values(constants.CONSTRAINTS_FIELDS.VIDEOS.EXTNAME)),
+        allowNull: false
       },
       remoteId: {
-        type: DataTypes.UUID
+        type: DataTypes.UUID,
+        allowNull: true,
+        validate: {
+          isUUID: 4
+        }
       },
       description: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          descriptionValid: function (value) {
+            const res = customVideosValidators.isVideoDescriptionValid(value)
+            if (res === false) throw new Error('Video description is not valid.')
+          }
+        }
       },
       infoHash: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          infoHashValid: function (value) {
+            const res = customVideosValidators.isVideoInfoHashValid(value)
+            if (res === false) throw new Error('Video info hash is not valid.')
+          }
+        }
       },
       duration: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          durationValid: function (value) {
+            const res = customVideosValidators.isVideoDurationValid(value)
+            if (res === false) throw new Error('Video duration is not valid.')
+          }
+        }
       }
     },
     {
@@ -71,6 +108,7 @@ module.exports = function (sequelize, DataTypes) {
         toRemoteJSON
       },
       hooks: {
+        beforeValidate,
         beforeCreate,
         afterDestroy
       }
@@ -80,13 +118,14 @@ module.exports = function (sequelize, DataTypes) {
   return Video
 }
 
-// TODO: Validation
-// VideoSchema.path('name').validate(customVideosValidators.isVideoNameValid)
-// VideoSchema.path('description').validate(customVideosValidators.isVideoDescriptionValid)
-// VideoSchema.path('podHost').validate(customVideosValidators.isVideoPodHostValid)
-// VideoSchema.path('author').validate(customVideosValidators.isVideoAuthorValid)
-// VideoSchema.path('duration').validate(customVideosValidators.isVideoDurationValid)
-// VideoSchema.path('tags').validate(customVideosValidators.isVideoTagsValid)
+function beforeValidate (video, options, next) {
+  if (video.isOwned()) {
+    // 40 hexa length
+    video.infoHash = '0123456789abcdef0123456789abcdef01234567'
+  }
+
+  return next(null)
+}
 
 function beforeCreate (video, options, next) {
   const tasks = []
@@ -113,9 +152,8 @@ function beforeCreate (video, options, next) {
             if (err) return callback(err)
 
             const parsedTorrent = parseTorrent(torrent)
-            video.infoHash = parsedTorrent.infoHash
-
-            callback(null)
+            video.set('infoHash', parsedTorrent.infoHash)
+            video.validate().asCallback(callback)
           })
         })
       },

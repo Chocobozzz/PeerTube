@@ -96,6 +96,7 @@ function createOAuthAdminIfNotExist (callback) {
 
     const username = 'root'
     const role = constants.USER_ROLES.ADMIN
+    const createOptions = {}
     let password = ''
 
     // Do not generate a random password for tests
@@ -105,17 +106,20 @@ function createOAuthAdminIfNotExist (callback) {
       if (process.env.NODE_APP_INSTANCE) {
         password += process.env.NODE_APP_INSTANCE
       }
+
+      // Our password is weak so do not validate it
+      createOptions.validate = false
     } else {
       password = passwordGenerator(8, true)
     }
 
-    const user = db.User.build({
+    const userData = {
       username,
       password,
       role
-    })
+    }
 
-    user.save().asCallback(function (err, createdUser) {
+    db.User.create(userData, createOptions).asCallback(function (err, createdUser) {
       if (err) return callback(err)
 
       logger.info('Username: ' + username)

@@ -3,6 +3,7 @@
 const map = require('lodash/map')
 
 const constants = require('../initializers/constants')
+const customPodsValidators = require('../helpers/custom-validators').pods
 
 // ---------------------------------------------------------------------------
 
@@ -10,14 +11,27 @@ module.exports = function (sequelize, DataTypes) {
   const Pod = sequelize.define('Pod',
     {
       host: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isHost: function (value) {
+            const res = customPodsValidators.isHostValid(value)
+            if (res === false) throw new Error('Host not valid.')
+          }
+        }
       },
       publicKey: {
-        type: DataTypes.STRING(5000)
+        type: DataTypes.STRING(5000),
+        allowNull: false
       },
       score: {
         type: DataTypes.INTEGER,
-        defaultValue: constants.FRIEND_SCORE.BASE
+        defaultValue: constants.FRIEND_SCORE.BASE,
+        allowNull: false,
+        validate: {
+          isInt: true,
+          max: constants.FRIEND_SCORE.MAX
+        }
       }
     },
     {
@@ -41,12 +55,6 @@ module.exports = function (sequelize, DataTypes) {
 
   return Pod
 }
-
-// TODO: max score -> constants.FRIENDS_SCORE.MAX
-// TODO: validation
-// PodSchema.path('host').validate(validator.isURL)
-// PodSchema.path('publicKey').required(true)
-// PodSchema.path('score').validate(function (value) { return !isNaN(value) })
 
 // ------------------------------ METHODS ------------------------------
 
@@ -82,15 +90,17 @@ function incrementScores (ids, value, callback) {
     score: this.sequelize.literal('score +' + value)
   }
 
-  const query = {
+  const options = {
     where: {
       id: {
         $in: ids
       }
-    }
+    },
+    // In this case score is a literal and not an integer so we do not validate it
+    validate: false
   }
 
-  return this.update(update, query).asCallback(callback)
+  return this.update(update, options).asCallback(callback)
 }
 
 function list (callback) {

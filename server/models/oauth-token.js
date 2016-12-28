@@ -1,3 +1,5 @@
+'use strict'
+
 const logger = require('../helpers/logger')
 
 // ---------------------------------------------------------------------------
@@ -6,16 +8,20 @@ module.exports = function (sequelize, DataTypes) {
   const OAuthToken = sequelize.define('OAuthToken',
     {
       accessToken: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
       accessTokenExpiresAt: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        allowNull: false
       },
       refreshToken: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
       },
       refreshTokenExpiresAt: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        allowNull: false
       }
     },
     {
@@ -32,11 +38,6 @@ module.exports = function (sequelize, DataTypes) {
 
   return OAuthToken
 }
-
-// TODO: validation
-// OAuthTokenSchema.path('accessToken').required(true)
-// OAuthTokenSchema.path('client').required(true)
-// OAuthTokenSchema.path('user').required(true)
 
 // ---------------------------------------------------------------------------
 
