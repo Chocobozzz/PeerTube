@@ -17,7 +17,7 @@ const videosValidators = {
   isVideoNameValid,
   isVideoTagsValid,
   isVideoThumbnailValid,
-  isVideoThumbnail64Valid
+  isVideoThumbnailDataValid
 }
 
 function isEachRemoteVideosValid (requests) {
@@ -33,7 +33,7 @@ function isEachRemoteVideosValid (requests) {
         isVideoInfoHashValid(video.infoHash) &&
         isVideoNameValid(video.name) &&
         isVideoTagsValid(video.tags) &&
-        isVideoThumbnail64Valid(video.thumbnailBase64) &&
+        isVideoThumbnailDataValid(video.thumbnailData) &&
         isVideoRemoteIdValid(video.remoteId) &&
         isVideoExtnameValid(video.extname)
       ) ||
@@ -86,9 +86,8 @@ function isVideoThumbnailValid (value) {
   return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL)
 }
 
-function isVideoThumbnail64Valid (value) {
-  return validator.isBase64(value) &&
-         validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL64)
+function isVideoThumbnailDataValid (value) {
+  return validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL_DATA)
 }
 
 function isVideoRemoteIdValid (value) {

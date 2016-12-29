@@ -1,12 +1,10 @@
 'use strict'
 
-const each = require('async/each')
 const express = require('express')
 const waterfall = require('async/waterfall')
 
 const constants = require('../../initializers/constants')
 const db = require('../../initializers/database')
-const friends = require('../../lib/friends')
 const logger = require('../../helpers/logger')
 const middlewares = require('../../middlewares')
 const admin = middlewares.admin

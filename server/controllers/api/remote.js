@@ -147,9 +147,9 @@ function addRemoteVideo (videoToCreateData, fromHost, finalCallback) {
     },
 
     function generateThumbnail (t, tagInstances, video, callback) {
-      db.Video.generateThumbnailFromBase64(video, videoToCreateData.thumbnailBase64, function (err) {
+      db.Video.generateThumbnailFromData(video, videoToCreateData.thumbnailData, function (err) {
         if (err) {
-          logger.error('Cannot generate thumbnail from base 64 data.', { error: err })
+          logger.error('Cannot generate thumbnail from data.', { error: err })
           return callback(err)
         }
 

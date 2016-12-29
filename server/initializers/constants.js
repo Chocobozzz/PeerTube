@@ -74,7 +74,7 @@ const CONSTRAINTS_FIELDS = {
     TAGS: { min: 1, max: 3 }, // Number of total tags
     TAG: { min: 2, max: 10 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
-    THUMBNAIL64: { min: 0, max: 20000 } // Bytes
+    THUMBNAIL_DATA: { min: 0, max: 20000 } // Bytes
   }
 }
 

@@ -1,5 +1,6 @@
 'use strict'
 
+const Buffer = require('safe-buffer').Buffer
 const createTorrent = require('create-torrent')
 const ffmpeg = require('fluent-ffmpeg')
 const fs = require('fs')
@@ -106,7 +107,7 @@ module.exports = function (sequelize, DataTypes) {
       classMethods: {
         associate,
 
-        generateThumbnailFromBase64,
+        generateThumbnailFromData,
         getDurationFromFile,
         list,
         listForApi,
@@ -336,7 +337,7 @@ function toFormatedJSON () {
 function toRemoteJSON (callback) {
   const self = this
 
-  // Convert thumbnail to base64
+  // Get thumbnail data to send to the other pod
   const thumbnailPath = pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
   fs.readFile(thumbnailPath, function (err, thumbnailData) {
     if (err) {
@@ -351,7 +352,7 @@ function toRemoteJSON (callback) {
       remoteId: self.id,
       author: self.Author.name,
       duration: self.duration,
-      thumbnailBase64: new Buffer(thumbnailData).toString('base64'),
+      thumbnailData: thumbnailData.toString('binary'),
       tags: map(self.Tags, 'name'),
       createdAt: self.createdAt,
       extname: self.extname
@@ -363,12 +364,12 @@ function toRemoteJSON (callback) {
 
 // ------------------------------ STATICS ------------------------------
 
-function generateThumbnailFromBase64 (video, thumbnailData, callback) {
+function generateThumbnailFromData (video, thumbnailData, callback) {
   // Creating the thumbnail for a remote video
 
   const thumbnailName = video.getThumbnailName()
   const thumbnailPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName
-  fs.writeFile(thumbnailPath, thumbnailData, { encoding: 'base64' }, function (err) {
+  fs.writeFile(thumbnailPath, Buffer.from(thumbnailData, 'binary'), function (err) {
     if (err) return callback(err)
 
     return callback(null, thumbnailName)
