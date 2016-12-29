@@ -26,6 +26,10 @@ function checkSignature (req, res, next) {
     const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, host, req.body.signature.signature)
 
     if (signatureOk === true) {
+      res.locals.secure = {
+        pod
+      }
+
       return next()
     }
 

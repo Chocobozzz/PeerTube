@@ -29,7 +29,9 @@ module.exports = function (sequelize, DataTypes) {
         }
       ],
       classMethods: {
-        associate
+        associate,
+
+        findOrCreateAuthor
       }
     }
   )
@@ -54,5 +56,30 @@ function associate (models) {
       allowNull: true
     },
     onDelete: 'cascade'
+  })
+}
+
+function findOrCreateAuthor (name, podId, userId, transaction, callback) {
+  if (!callback) {
+    callback = transaction
+    transaction = null
+  }
+
+  const author = {
+    name,
+    podId,
+    userId
+  }
+
+  const query = {
+    where: author,
+    defaults: author
+  }
+
+  if (transaction) query.transaction = transaction
+
+  this.findOrCreate(query).asCallback(function (err, result) {
+    // [ instance, wasCreated ]
+    return callback(err, result[0])
   })
 }

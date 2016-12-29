@@ -1,6 +1,5 @@
 'use strict'
 
-const each = require('async/each')
 const express = require('express')
 const fs = require('fs')
 const multer = require('multer')
@@ -97,51 +96,20 @@ function addVideo (req, res, next) {
     function findOrCreateAuthor (t, callback) {
       const user = res.locals.oauth.token.User
 
-      const query = {
-        where: {
-          name: user.username,
-          podId: null,
-          userId: user.id
-        },
-        defaults: {
-          name: user.username,
-          podId: null, // null because it is OUR pod
-          userId: user.id
-        },
-        transaction: t
-      }
+      const name = user.username
+      // null because it is OUR pod
+      const podId = null
+      const userId = user.id
 
-      db.Author.findOrCreate(query).asCallback(function (err, result) {
-        const authorInstance = result[0]
-
+      db.Author.findOrCreateAuthor(name, podId, userId, t, function (err, authorInstance) {
         return callback(err, t, authorInstance)
       })
     },
 
     function findOrCreateTags (t, author, callback) {
       const tags = videoInfos.tags
-      const tagInstances = []
 
-      each(tags, function (tag, callbackEach) {
-        const query = {
-          where: {
-            name: tag
-          },
-          defaults: {
-            name: tag
-          },
-          transaction: t
-        }
-
-        db.Tag.findOrCreate(query).asCallback(function (err, res) {
-          if (err) return callbackEach(err)
-
-          // res = [ tag, isCreated ]
-          const tag = res[0]
-          tagInstances.push(tag)
-          return callbackEach()
-        })
-      }, function (err) {
+      db.Tag.findOrCreateTags(tags, t, function (err, tagInstances) {
         return callback(err, t, author, tagInstances)
       })
     },

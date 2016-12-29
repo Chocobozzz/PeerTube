@@ -28,7 +28,7 @@ module.exports = router
 
 function remoteVideos (req, res, next) {
   const requests = req.body.data
-  const fromHost = req.body.signature.host
+  const fromPod = res.locals.secure.pod
 
   // We need to process in the same order to keep consistency
   // TODO: optimization
@@ -36,9 +36,9 @@ function remoteVideos (req, res, next) {
     const videoData = request.data
 
     if (request.type === 'add') {
-      addRemoteVideo(videoData, fromHost, callbackEach)
+      addRemoteVideo(videoData, fromPod, callbackEach)
     } else if (request.type === 'remove') {
-      removeRemoteVideo(videoData, fromHost, callbackEach)
+      removeRemoteVideo(videoData, fromPod, callbackEach)
     } else {
       logger.error('Unkown remote request type %s.', request.type)
     }
@@ -50,7 +50,7 @@ function remoteVideos (req, res, next) {
   return res.type('json').status(204).end()
 }
 
-function addRemoteVideo (videoToCreateData, fromHost, finalCallback) {
+function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
   logger.debug('Adding remote video "%s".', videoToCreateData.name)
 
   waterfall([
@@ -61,70 +61,21 @@ function addRemoteVideo (videoToCreateData, fromHost, finalCallback) {
       })
     },
 
-    function findOrCreatePod (t, callback) {
-      const query = {
-        where: {
-          host: fromHost
-        },
-        defaults: {
-          host: fromHost
-        },
-        transaction: t
-      }
+    function findOrCreateAuthor (t, callback) {
+      const name = videoToCreateData.author
+      const podId = fromPod.id
+      // This author is from another pod so we do not associate a user
+      const userId = null
 
-      db.Pod.findOrCreate(query).asCallback(function (err, result) {
-        // [ instance, wasCreated ]
-        return callback(err, t, result[0])
-      })
-    },
-
-    function findOrCreateAuthor (t, pod, callback) {
-      const username = videoToCreateData.author
-
-      const query = {
-        where: {
-          name: username,
-          podId: pod.id,
-          userId: null
-        },
-        defaults: {
-          name: username,
-          podId: pod.id,
-          userId: null
-        },
-        transaction: t
-      }
-
-      db.Author.findOrCreate(query).asCallback(function (err, result) {
-        // [ instance, wasCreated ]
-        return callback(err, t, result[0])
+      db.Author.findOrCreateAuthor(name, podId, userId, t, function (err, authorInstance) {
+        return callback(err, t, authorInstance)
       })
     },
 
     function findOrCreateTags (t, author, callback) {
       const tags = videoToCreateData.tags
-      const tagInstances = []
 
-      each(tags, function (tag, callbackEach) {
-        const query = {
-          where: {
-            name: tag
-          },
-          defaults: {
-            name: tag
-          },
-          transaction: t
-        }
-
-        db.Tag.findOrCreate(query).asCallback(function (err, res) {
-          if (err) return callbackEach(err)
-
-          // res = [ tag, isCreated ]
-          const tag = res[0]
-          tagInstances.push(tag)
-          return callbackEach()
-        })
-      }, function (err) {
+      db.Tag.findOrCreateTags(tags, t, function (err, tagInstances) {
         return callback(err, t, author, tagInstances)
       })
     },
@@ -192,18 +143,18 @@ function addRemoteVideo (videoToCreateData, fromHost, finalCallback) {
   })
 }
 
-function removeRemoteVideo (videoToRemoveData, fromHost, callback) {
+function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
   // TODO: use bulkDestroy?
 
   // We need the list because we have to remove some other stuffs (thumbnail etc)
-  db.Video.listByHostAndRemoteId(fromHost, videoToRemoveData.remoteId, function (err, videosList) {
+  db.Video.listByHostAndRemoteId(fromPod.host, videoToRemoveData.remoteId, function (err, videosList) {
     if (err) {
       logger.error('Cannot list videos from host and remote id.', { error: err.message })
       return callback(err)
     }
 
     if (videosList.length === 0) {
-      logger.error('No remote video was found for this pod.', { remoteId: videoToRemoveData.remoteId, podHost: fromHost })
+      logger.error('No remote video was found for this pod.', { remoteId: videoToRemoveData.remoteId, podHost: fromPod.host })
     }
 
     each(videosList, function (video, callbackEach) {
