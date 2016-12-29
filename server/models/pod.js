@@ -35,6 +35,14 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     {
+      indexes: [
+        {
+          fields: [ 'host' ]
+        },
+        {
+          fields: [ 'score' ]
+        }
+      ],
       classMethods: {
         associate,
 

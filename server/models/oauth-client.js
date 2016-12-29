@@ -19,9 +19,17 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     {
+      indexes: [
+        {
+          fields: [ 'clientId' ],
+          unique: true
+        },
+        {
+          fields: [ 'clientId', 'clientSecret' ],
+          unique: true
+        }
+      ],
       classMethods: {
-        associate,
-
         getByIdAndSecret,
         list,
         loadFirstClient
@@ -33,16 +41,6 @@ module.exports = function (sequelize, DataTypes) {
 }
 
 // ---------------------------------------------------------------------------
-
-function associate (models) {
-  this.hasMany(models.OAuthToken, {
-    foreignKey: {
-      name: 'oAuthClientId',
-      allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-}
 
 function list (callback) {
   return this.findAll().asCallback(callback)

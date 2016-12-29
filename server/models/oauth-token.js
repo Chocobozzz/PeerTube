@@ -25,6 +25,22 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     {
+      indexes: [
+        {
+          fields: [ 'refreshToken' ],
+          unique: true
+        },
+        {
+          fields: [ 'accessToken' ],
+          unique: true
+        },
+        {
+          fields: [ 'userId' ]
+        },
+        {
+          fields: [ 'oAuthClientId' ]
+        }
+      ],
       classMethods: {
         associate,
 
@@ -45,6 +61,14 @@ function associate (models) {
   this.belongsTo(models.User, {
     foreignKey: {
       name: 'userId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+
+  this.belongsTo(models.OAuthClient, {
+    foreignKey: {
+      name: 'oAuthClientId',
       allowNull: false
     },
     onDelete: 'cascade'

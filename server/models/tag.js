@@ -11,6 +11,13 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     {
+      timestamps: false,
+      indexes: [
+        {
+          fields: [ 'name' ],
+          unique: true
+        }
+      ],
       classMethods: {
         associate
       }

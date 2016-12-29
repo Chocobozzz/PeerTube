@@ -38,6 +38,11 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     {
+      indexes: [
+        {
+          fields: [ 'username' ]
+        }
+      ],
       classMethods: {
         associate,
 

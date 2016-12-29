@@ -4,6 +4,18 @@
 
 module.exports = function (sequelize, DataTypes) {
   const RequestToPod = sequelize.define('RequestToPod', {}, {
+    indexes: [
+      {
+        fields: [ 'requestId' ]
+      },
+      {
+        fields: [ 'podId' ]
+      },
+      {
+        fields: [ 'requestId', 'podId' ],
+        unique: true
+      }
+    ],
     classMethods: {
       removePodOf
     }

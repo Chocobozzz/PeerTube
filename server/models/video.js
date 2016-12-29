@@ -82,6 +82,26 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     {
+      indexes: [
+        {
+          fields: [ 'authorId' ]
+        },
+        {
+          fields: [ 'remoteId' ]
+        },
+        {
+          fields: [ 'name' ]
+        },
+        {
+          fields: [ 'createdAt' ]
+        },
+        {
+          fields: [ 'duration' ]
+        },
+        {
+          fields: [ 'infoHash' ]
+        }
+      ],
       classMethods: {
         associate,
 

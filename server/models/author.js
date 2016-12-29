@@ -17,6 +17,14 @@ module.exports = function (sequelize, DataTypes) {
       }
     },
     {
+      indexes: [
+        {
+          fields: [ 'name' ]
+        },
+        {
+          fields: [ 'podId' ]
+        }
+      ],
       classMethods: {
         associate
       }
