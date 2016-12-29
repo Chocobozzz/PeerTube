@@ -23,6 +23,9 @@ module.exports = function (sequelize, DataTypes) {
         },
         {
           fields: [ 'podId' ]
+        },
+        {
+          fields: [ 'userId' ]
         }
       ],
       classMethods: {
@@ -40,6 +43,14 @@ function associate (models) {
   this.belongsTo(models.Pod, {
     foreignKey: {
       name: 'podId',
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+
+  this.belongsTo(models.User, {
+    foreignKey: {
+      name: 'userId',
       allowNull: true
     },
     onDelete: 'cascade'

@@ -84,11 +84,13 @@ function addRemoteVideo (videoToCreateData, fromHost, finalCallback) {
       const query = {
         where: {
           name: username,
-          podId: pod.id
+          podId: pod.id,
+          userId: null
         },
         defaults: {
           name: username,
-          podId: pod.id
+          podId: pod.id,
+          userId: null
         },
         transaction: t
       }

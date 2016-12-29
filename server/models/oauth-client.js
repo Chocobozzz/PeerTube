@@ -30,8 +30,8 @@ module.exports = function (sequelize, DataTypes) {
         }
       ],
       classMethods: {
+        countTotal,
         getByIdAndSecret,
-        list,
         loadFirstClient
       }
     }
@@ -42,8 +42,8 @@ module.exports = function (sequelize, DataTypes) {
 
 // ---------------------------------------------------------------------------
 
-function list (callback) {
-  return this.findAll().asCallback(callback)
+function countTotal (callback) {
+  return this.count().asCallback(callback)
 }
 
 function loadFirstClient (callback) {

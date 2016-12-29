@@ -42,10 +42,10 @@ function checkMissedConfig () {
 }
 
 function clientsExist (callback) {
-  db.OAuthClient.list(function (err, clients) {
+  db.OAuthClient.countTotal(function (err, totalClients) {
     if (err) return callback(err)
 
-    return callback(null, clients.length !== 0)
+    return callback(null, totalClients !== 0)
   })
 }
 

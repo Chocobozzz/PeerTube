@@ -95,23 +95,26 @@ function addVideo (req, res, next) {
     },
 
     function findOrCreateAuthor (t, callback) {
-      const username = res.locals.oauth.token.user.username
+      const user = res.locals.oauth.token.User
 
       const query = {
         where: {
-          name: username,
-          podId: null
+          name: user.username,
+          podId: null,
+          userId: user.id
         },
         defaults: {
-          name: username,
-          podId: null // null because it is OUR pod
+          name: user.username,
+          podId: null, // null because it is OUR pod
+          userId: user.id
         },
         transaction: t
       }
 
       db.Author.findOrCreate(query).asCallback(function (err, result) {
-        // [ instance, wasCreated ]
-        return callback(err, t, result[0])
+        const authorInstance = result[0]
+
+        return callback(err, t, authorInstance)
       })
     },
 

@@ -94,6 +94,11 @@ function toFormatedJSON () {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
+  this.hasOne(models.Author, {
+    foreignKey: 'userId',
+    onDelete: 'cascade'
+  })
+
   this.hasMany(models.OAuthToken, {
     foreignKey: 'userId',
     onDelete: 'cascade'
