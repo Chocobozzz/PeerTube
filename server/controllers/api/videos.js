@@ -249,27 +249,15 @@ function removeVideo (req, res, next) {
   const videoId = req.params.id
 
   waterfall([
-    function getVideo (callback) {
-      db.Video.load(videoId, callback)
-    },
-
-    function removeFromDB (video, callback) {
-      video.destroy().asCallback(function (err) {
-        if (err) return callback(err)
-
-        return callback(null, video)
+    function loadVideo (callback) {
+      db.Video.load(videoId, function (err, video) {
+        return callback(err, video)
       })
     },
 
-    function sendInformationToFriends (video, callback) {
-      const params = {
-        name: video.name,
-        remoteId: video.id
-      }
-
-      friends.removeVideoToFriends(params)
-
-      return callback(null)
+    function deleteVideo (video, callback) {
+      // Informations to other pods will be sent by the afterDestroy video hook
+      video.destroy().asCallback(callback)
     }
   ], function andFinally (err) {
     if (err) {

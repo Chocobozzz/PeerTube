@@ -113,7 +113,7 @@ function removePods (req, res, next) {
       db.Pod.loadByHost(host, callback)
     },
 
-    function removePod (pod, callback) {
+    function deletePod (pod, callback) {
       pod.destroy().asCallback(callback)
     }
   ], function (err) {

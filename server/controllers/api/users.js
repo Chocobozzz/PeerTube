@@ -90,39 +90,11 @@ function listUsers (req, res, next) {
 
 function removeUser (req, res, next) {
   waterfall([
-    function getUser (callback) {
+    function loadUser (callback) {
       db.User.loadById(req.params.id, callback)
     },
 
-    // TODO: use foreignkey?
-    function getVideos (user, callback) {
-      db.Video.listOwnedByAuthor(user.username, function (err, videos) {
-        return callback(err, user, videos)
-      })
-    },
-
-    function removeVideosFromDB (user, videos, callback) {
-      each(videos, function (video, callbackEach) {
-        video.destroy().asCallback(callbackEach)
-      }, function (err) {
-        return callback(err, user, videos)
-      })
-    },
-
-    function sendInformationToFriends (user, videos, callback) {
-      videos.forEach(function (video) {
-        const params = {
-          name: video.name,
-          remoteId: video.id
-        }
-
-        friends.removeVideoToFriends(params)
-      })
-
-      return callback(null, user)
-    },
-
-    function removeUserFromDB (user, callback) {
+    function deleteUser (user, callback) {
       user.destroy().asCallback(callback)
     }
   ], function andFinally (err) {

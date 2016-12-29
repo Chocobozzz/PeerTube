@@ -12,6 +12,7 @@ const values = require('lodash/values')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
+const friends = require('../lib/friends')
 const modelUtils = require('./utils')
 const customVideosValidators = require('../helpers/custom-validators').videos
 
@@ -205,11 +206,24 @@ function afterDestroy (video, options, next) {
       function (callback) {
         removeFile(video, callback)
       },
+
       function (callback) {
         removeTorrent(video, callback)
       },
+
       function (callback) {
         removePreview(video, callback)
+      },
+
+      function (callback) {
+        const params = {
+          name: video.name,
+          remoteId: video.id
+        }
+
+        friends.removeVideoToFriends(params)
+
+        return callback()
       }
     )
   }
