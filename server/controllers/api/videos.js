@@ -50,6 +50,12 @@ router.get('/',
   pagination.setPagination,
   listVideos
 )
+router.put('/:id',
+  oAuth.authenticate,
+  reqFiles,
+  validatorsVideos.videosUpdate,
+  updateVideo
+)
 router.post('/',
   oAuth.authenticate,
   reqFiles,
@@ -165,7 +171,7 @@ function addVideo (req, res, next) {
     },
 
     function sendToFriends (t, video, callback) {
-      video.toRemoteJSON(function (err, remoteVideo) {
+      video.toAddRemoteJSON(function (err, remoteVideo) {
         if (err) return callback(err)
 
         // Now we'll add the video's meta data to our friends
@@ -173,6 +179,83 @@ function addVideo (req, res, next) {
 
         return callback(null, t)
       })
+    }
+
+  ], function andFinally (err, t) {
+    if (err) {
+      logger.error('Cannot insert the video.')
+
+      // Abort transaction?
+      if (t) t.rollback()
+
+      return next(err)
+    }
+
+    // Commit transaction
+    t.commit()
+
+    // TODO : include Location of the new video -> 201
+    return res.type('json').status(204).end()
+  })
+}
+
+function updateVideo (req, res, next) {
+  let videoInstance = res.locals.video
+  const videoInfosToUpdate = req.body
+
+  waterfall([
+
+    function startTransaction (callback) {
+      db.sequelize.transaction().asCallback(function (err, t) {
+        return callback(err, t)
+      })
+    },
+
+    function findOrCreateTags (t, callback) {
+      if (videoInfosToUpdate.tags) {
+        db.Tag.findOrCreateTags(videoInfosToUpdate.tags, t, function (err, tagInstances) {
+          return callback(err, t, tagInstances)
+        })
+      } else {
+        return callback(null, t, null)
+      }
+    },
+
+    function updateVideoIntoDB (t, tagInstances, callback) {
+      const options = { transaction: t }
+
+      if (videoInfosToUpdate.name) videoInstance.set('name', videoInfosToUpdate.name)
+      if (videoInfosToUpdate.description) videoInstance.set('description', videoInfosToUpdate.description)
+
+      // Add tags association
+      videoInstance.save(options).asCallback(function (err) {
+        if (err) return callback(err)
+
+        return callback(err, t, tagInstances)
+      })
+    },
+
+    function associateTagsToVideo (t, tagInstances, callback) {
+      if (tagInstances) {
+        const options = { transaction: t }
+
+        videoInstance.setTags(tagInstances, options).asCallback(function (err) {
+          videoInstance.Tags = tagInstances
+
+          return callback(err, t)
+        })
+      } else {
+        return callback(null, t)
+      }
+    },
+
+    function sendToFriends (t, callback) {
+      const json = videoInstance.toUpdateRemoteJSON()
+
+      // Now we'll update the video's meta data to our friends
+      friends.updateVideoToFriends(json)
+
+      return callback(null, t)
     }
 
   ], function andFinally (err, t) {

@@ -127,7 +127,8 @@ module.exports = function (sequelize, DataTypes) {
         getTorrentName,
         isOwned,
         toFormatedJSON,
-        toRemoteJSON
+        toAddRemoteJSON,
+        toUpdateRemoteJSON
       },
       hooks: {
         beforeValidate,
@@ -334,7 +335,7 @@ function toFormatedJSON () {
   return json
 }
 
-function toRemoteJSON (callback) {
+function toAddRemoteJSON (callback) {
   const self = this
 
   // Get thumbnail data to send to the other pod
@@ -360,6 +361,22 @@ function toRemoteJSON (callback) {
 
     return callback(null, remoteVideo)
   })
+}
+
+function toUpdateRemoteJSON (callback) {
+  const json = {
+    name: this.name,
+    description: this.description,
+    infoHash: this.infoHash,
+    remoteId: this.id,
+    author: this.Author.name,
+    duration: this.duration,
+    tags: map(this.Tags, 'name'),
+    createdAt: this.createdAt,
+    extname: this.extname
+  }
+
+  return json
 }
 
 // ------------------------------ STATICS ------------------------------

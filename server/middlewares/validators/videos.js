@@ -8,6 +8,7 @@ const logger = require('../../helpers/logger')
 
 const validatorsVideos = {
   videosAdd,
+  videosUpdate,
   videosGet,
   videosRemove,
   videosSearch
@@ -41,22 +42,26 @@ function videosAdd (req, res, next) {
   })
 }
 
+function videosUpdate (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkBody('name', 'Should have a valid name').optional().isVideoNameValid()
+  req.checkBody('description', 'Should have a valid description').optional().isVideoDescriptionValid()
+  req.checkBody('tags', 'Should have correct tags').optional().isVideoTagsValid()
+
+  logger.debug('Checking videosUpdate parameters', { parameters: req.body })
+
+  checkErrors(req, res, function () {
+    checkVideoExists(req.params.id, res, next)
+  })
+}
+
 function videosGet (req, res, next) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosGet parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    db.Video.load(req.params.id, function (err, video) {
-      if (err) {
-        logger.error('Error in videosGet request validator.', { error: err })
-        return res.sendStatus(500)
-      }
-
-      if (!video) return res.status(404).send('Video not found')
-
-      next()
-    })
+    checkVideoExists(req.params.id, res, next)
   })
 }
 
@@ -94,3 +99,19 @@ function videosSearch (req, res, next) {
 // ---------------------------------------------------------------------------
 
 module.exports = validatorsVideos
+
+// ---------------------------------------------------------------------------
+
+function checkVideoExists (id, res, callback) {
+  db.Video.loadAndPopulateAuthorAndPodAndTags(id, function (err, video) {
+    if (err) {
+      logger.error('Error in video request validator.', { error: err })
+      return res.sendStatus(500)
+    }
+
+    if (!video) return res.status(404).send('Video not found')
+
+    res.locals.video = video
+    callback()
+  })
+}

@@ -14,6 +14,7 @@ const requests = require('../helpers/requests')
 
 const friends = {
   addVideoToFriends,
+  updateVideoToFriends,
   hasFriends,
   getMyCertificate,
   makeFriends,
@@ -24,6 +25,10 @@ const friends = {
 
 function addVideoToFriends (video) {
   createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, video)
+}
+
+function updateVideoToFriends (video) {
+  createRequest('update', constants.REQUEST_ENDPOINTS.VIDEOS, video)
 }
 
 function hasFriends (callback) {
@@ -127,7 +132,7 @@ function sendOwnedVideosToPod (podId) {
     }
 
     videosList.forEach(function (video) {
-      video.toRemoteJSON(function (err, remoteVideo) {
+      video.toAddRemoteJSON(function (err, remoteVideo) {
         if (err) {
           logger.error('Cannot convert video to remote.', { error: err })
           // Don't break the process

@@ -495,7 +495,83 @@ describe('Test a single pod', function () {
       expect(videos[2].name === 'video_short2.webm name')
       expect(videos[3].name === 'video_short3.webm name')
 
+      videoId = videos[3].id
+
       done()
+    })
+  })
+
+  it('Should update a video', function (done) {
+    const name = 'my super video updated'
+    const description = 'my super description updated'
+    const tags = [ 'tagup1', 'tagup2' ]
+
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, name, description, tags, done)
+  })
+
+  it('Should have the video updated', function (done) {
+    videosUtils.getVideo(server.url, videoId, function (err, res) {
+      if (err) throw err
+
+      const video = res.body
+
+      expect(video.name).to.equal('my super video updated')
+      expect(video.description).to.equal('my super description updated')
+      expect(video.podHost).to.equal('localhost:9001')
+      expect(video.author).to.equal('root')
+      expect(video.isLocal).to.be.true
+      expect(video.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
+      expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+
+      done()
+    })
+  })
+
+  it('Should update only the tags of a video', function (done) {
+    const tags = [ 'tag1', 'tag2', 'supertag' ]
+
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, null, tags, function (err) {
+      if (err) throw err
+
+      videosUtils.getVideo(server.url, videoId, function (err, res) {
+        if (err) throw err
+
+        const video = res.body
+
+        expect(video.name).to.equal('my super video updated')
+        expect(video.description).to.equal('my super description updated')
+        expect(video.podHost).to.equal('localhost:9001')
+        expect(video.author).to.equal('root')
+        expect(video.isLocal).to.be.true
+        expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
+        expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+
+        done()
+      })
+    })
+  })
+
+  it('Should update only the description of a video', function (done) {
+    const description = 'hello everybody'
+
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, description, null, function (err) {
+      if (err) throw err
+
+      videosUtils.getVideo(server.url, videoId, function (err, res) {
+        if (err) throw err
+
+        const video = res.body
+
+        expect(video.name).to.equal('my super video updated')
+        expect(video.description).to.equal('hello everybody')
+        expect(video.podHost).to.equal('localhost:9001')
+        expect(video.author).to.equal('root')
+        expect(video.isLocal).to.be.true
+        expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
+        expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+
+        done()
+      })
     })
   })
 

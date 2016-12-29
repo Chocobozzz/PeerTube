@@ -15,7 +15,8 @@ const videosUtils = {
   searchVideoWithPagination,
   searchVideoWithSort,
   testVideoImage,
-  uploadVideo
+  uploadVideo,
+  updateVideo
 }
 
 // ---------------------- Export functions --------------------
@@ -192,6 +193,31 @@ function uploadVideo (url, accessToken, name, description, tags, fixture, specia
   req.attach('videofile', filepath)
      .expect(specialStatus)
      .end(end)
+}
+
+function updateVideo (url, accessToken, id, name, description, tags, specialStatus, end) {
+  if (!end) {
+    end = specialStatus
+    specialStatus = 204
+  }
+
+  const path = '/api/v1/videos/' + id
+
+  const req = request(url)
+              .put(path)
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + accessToken)
+
+  if (name) req.field('name', name)
+  if (description) req.field('description', description)
+
+  if (tags) {
+    for (let i = 0; i < tags.length; i++) {
+      req.field('tags[' + i + ']', tags[i])
+    }
+  }
+
+  req.expect(specialStatus).end(end)
 }
 
 // ---------------------------------------------------------------------------

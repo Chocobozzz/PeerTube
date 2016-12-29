@@ -10,6 +10,7 @@ const loginUtils = require('../utils/login')
 const requestsUtils = require('../utils/requests')
 const serversUtils = require('../utils/servers')
 const usersUtils = require('../utils/users')
+const videosUtils = require('../utils/videos')
 
 describe('Test parameters validator', function () {
   let server = null
@@ -436,6 +437,106 @@ describe('Test parameters validator', function () {
             requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done, 204)
           }, false)
         }, false)
+      })
+    })
+
+    describe('When updating a video', function () {
+      let videoId
+
+      before(function (done) {
+        videosUtils.getVideosList(server.url, function (err, res) {
+          if (err) throw err
+
+          videoId = res.body.data[0].id
+
+          return done()
+        })
+      })
+
+      it('Should fail with nothing', function (done) {
+        const data = {}
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+      })
+
+      it('Should fail without a valid uuid', function (done) {
+        const data = {
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + 'blabla', server.accessToken, data, done)
+      })
+
+      it('Should fail with an unknown id', function (done) {
+        const data = {
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + '4da6fde3-88f7-4d16-b119-108df5630b06', server.accessToken, data, done)
+      })
+
+      it('Should fail with a long name', function (done) {
+        const data = {
+          name: 'My very very very very very very very very very very very very very very very very long name',
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+      })
+
+      it('Should fail with a long description', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description which is very very very very very very very very very very very very very very' +
+                       'very very very very very very very very very very very very very very very very very very very very very' +
+                       'very very very very very very very very very very very very very very very long',
+          tags: [ 'tag1', 'tag2' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+      })
+
+      it('Should fail with too many tags', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+      })
+
+      it('Should fail with not enough tags', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+      })
+
+      it('Should fail with a tag length too low', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'tag1', 't' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+      })
+
+      it('Should fail with a tag length too big', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'mysupertagtoolong', 'tag1' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+      })
+
+      it('Should fail with malformed tags', function (done) {
+        const data = {
+          name: 'my super name',
+          description: 'my super description',
+          tags: [ 'my tag' ]
+        }
+        requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
       })
     })
 
