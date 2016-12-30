@@ -78,7 +78,7 @@ function videosRemove (req, res, next) {
         return res.status(403).send('Cannot remove video of another pod')
       }
 
-      if (res.locals.video.authorId !== res.locals.oauth.token.User.id) {
+      if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
         return res.status(403).send('Cannot remove video of another user')
       }
 
