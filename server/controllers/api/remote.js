@@ -1,6 +1,5 @@
 'use strict'
 
-const each = require('async/each')
 const eachSeries = require('async/eachSeries')
 const express = require('express')
 const waterfall = require('async/waterfall')

@@ -34,7 +34,7 @@ function flushAndRunMultipleServers (totalServers, serversRun) {
         runServer(j, function (app, url) {
           anotherServerDone(j, app, url)
         })
-      }, 1000 * j)
+      }, 1000 * (j - 1))
     }
   })
 }

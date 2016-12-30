@@ -4,7 +4,8 @@ const request = require('supertest')
 
 const loginUtils = {
   login,
-  loginAndGetAccessToken
+  loginAndGetAccessToken,
+  getUserAccessToken
 }
 
 // ---------------------- Export functions --------------------
@@ -37,6 +38,14 @@ function login (url, client, user, expectedStatus, end) {
 
 function loginAndGetAccessToken (server, callback) {
   login(server.url, server.client, server.user, 200, function (err, res) {
+    if (err) return callback(err)
+
+    return callback(null, res.body.access_token)
+  })
+}
+
+function getUserAccessToken (server, user, callback) {
+  login(server.url, server.client, user, 200, function (err, res) {
     if (err) return callback(err)
 
     return callback(null, res.body.access_token)
