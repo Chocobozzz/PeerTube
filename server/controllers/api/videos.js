@@ -200,7 +200,7 @@ function addVideo (req, res, next) {
 }
 
 function updateVideo (req, res, next) {
-  let videoInstance = res.locals.video
+  const videoInstance = res.locals.video
   const videoInfosToUpdate = req.body
 
   waterfall([
@@ -275,15 +275,8 @@ function updateVideo (req, res, next) {
 }
 
 function getVideo (req, res, next) {
-  db.Video.loadAndPopulateAuthorAndPodAndTags(req.params.id, function (err, video) {
-    if (err) return next(err)
-
-    if (!video) {
-      return res.type('json').status(204).end()
-    }
-
-    res.json(video.toFormatedJSON())
-  })
+  const videoInstance = res.locals.video
+  res.json(videoInstance.toFormatedJSON())
 }
 
 function listVideos (req, res, next) {
@@ -295,20 +288,9 @@ function listVideos (req, res, next) {
 }
 
 function removeVideo (req, res, next) {
-  const videoId = req.params.id
+  const videoInstance = res.locals.video
 
-  waterfall([
-    function loadVideo (callback) {
-      db.Video.load(videoId, function (err, video) {
-        return callback(err, video)
-      })
-    },
-
-    function deleteVideo (video, callback) {
-      // Informations to other pods will be sent by the afterDestroy video hook
-      video.destroy().asCallback(callback)
-    }
-  ], function andFinally (err) {
+  videoInstance.destroy().asCallback(function (err) {
     if (err) {
       logger.error('Errors when removed the video.', { error: err })
       return next(err)

@@ -71,15 +71,16 @@ function videosRemove (req, res, next) {
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    db.Video.loadAndPopulateAuthor(req.params.id, function (err, video) {
-      if (err) {
-        logger.error('Error in videosRemove request validator.', { error: err })
-        return res.sendStatus(500)
+    checkVideoExists(req.params.id, res, function () {
+      // We need to make additional checks
+
+      if (res.locals.video.isOwned() === false) {
+        return res.status(403).send('Cannot remove video of another pod')
       }
 
-      if (!video) return res.status(404).send('Video not found')
-      else if (video.isOwned() === false) return res.status(403).send('Cannot remove video of another pod')
-      else if (video.Author.name !== res.locals.oauth.token.user.username) return res.status(403).send('Cannot remove video of another user')
+      if (res.locals.video.authorId !== res.locals.oauth.token.User.id) {
+        return res.status(403).send('Cannot remove video of another user')
+      }
 
       next()
     })
