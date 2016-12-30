@@ -229,8 +229,6 @@ function updateVideo (req, res, next) {
 
       // Add tags association
       videoInstance.save(options).asCallback(function (err) {
-        if (err) return callback(err)
-
         return callback(err, t, tagInstances)
       })
     },

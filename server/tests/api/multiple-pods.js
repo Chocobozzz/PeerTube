@@ -299,8 +299,8 @@ describe('Test multiple pods', function () {
         if (err) throw err
 
         const video = res.body.data[0]
-        toRemove.push(res.body.data[2].id)
-        toRemove.push(res.body.data[3].id)
+        toRemove.push(res.body.data[2])
+        toRemove.push(res.body.data[3])
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -368,16 +368,51 @@ describe('Test multiple pods', function () {
         })
       })
     })
+  })
 
-    it('Should remove the file 3 and 3-2 by asking pod 3', function (done) {
+  describe('Should manipulate these videos', function () {
+    it('Should update the video 3 by asking pod 3', function (done) {
+      this.timeout(15000)
+
+      const name = 'my super video updated'
+      const description = 'my super description updated'
+      const tags = [ 'tagup1', 'tagup2' ]
+
+      videosUtils.updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, name, description, tags, function (err) {
+        if (err) throw err
+
+        setTimeout(done, 11000)
+      })
+    })
+
+    it('Should have the video 3 updated on each pod', function (done) {
+      each(servers, function (server, callback) {
+        videosUtils.getVideosList(server.url, function (err, res) {
+          if (err) throw err
+
+          const videos = res.body.data
+          const videoUpdated = videos.find(function (video) {
+            return video.name === 'my super video updated'
+          })
+
+          expect(!!videoUpdated).to.be.true
+          expect(videoUpdated.description).to.equal('my super description updated')
+          expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
+
+          callback()
+        })
+      }, done)
+    })
+
+    it('Should remove the videos 3 and 3-2 by asking pod 3', function (done) {
       this.timeout(15000)
 
       series([
         function (next) {
-          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0], next)
+          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, next)
         },
         function (next) {
-          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[1], next)
+          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[1].id, next)
         }],
         function (err) {
           if (err) throw err
@@ -394,11 +429,11 @@ describe('Test multiple pods', function () {
           const videos = res.body.data
           expect(videos).to.be.an('array')
           expect(videos.length).to.equal(2)
-          expect(videos[0].id).not.to.equal(videos[1].id)
-          expect(videos[0].id).not.to.equal(toRemove[0])
-          expect(videos[1].id).not.to.equal(toRemove[0])
-          expect(videos[0].id).not.to.equal(toRemove[1])
-          expect(videos[1].id).not.to.equal(toRemove[1])
+          expect(videos[0].name).not.to.equal(videos[1].name)
+          expect(videos[0].name).not.to.equal(toRemove[0].name)
+          expect(videos[1].name).not.to.equal(toRemove[0].name)
+          expect(videos[0].name).not.to.equal(toRemove[1].name)
+          expect(videos[1].name).not.to.equal(toRemove[1].name)
 
           callback()
         })

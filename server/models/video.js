@@ -111,10 +111,10 @@ module.exports = function (sequelize, DataTypes) {
         getDurationFromFile,
         list,
         listForApi,
-        listByHostAndRemoteId,
         listOwnedAndPopulateAuthorAndTags,
         listOwnedByAuthor,
         load,
+        loadByHostAndRemoteId,
         loadAndPopulateAuthor,
         loadAndPopulateAuthorAndPodAndTags,
         searchAndPopulateAuthorAndPodAndTags
@@ -428,7 +428,7 @@ function listForApi (start, count, sort, callback) {
   })
 }
 
-function listByHostAndRemoteId (fromHost, remoteId, callback) {
+function loadByHostAndRemoteId (fromHost, remoteId, callback) {
   const query = {
     where: {
       remoteId: remoteId
@@ -449,7 +449,7 @@ function listByHostAndRemoteId (fromHost, remoteId, callback) {
     ]
   }
 
-  return this.findAll(query).asCallback(callback)
+  return this.findOne(query).asCallback(callback)
 }
 
 function listOwnedAndPopulateAuthorAndTags (callback) {

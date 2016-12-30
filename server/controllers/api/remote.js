@@ -35,12 +35,21 @@ function remoteVideos (req, res, next) {
   eachSeries(requests, function (request, callbackEach) {
     const videoData = request.data
 
-    if (request.type === 'add') {
-      addRemoteVideo(videoData, fromPod, callbackEach)
-    } else if (request.type === 'remove') {
-      removeRemoteVideo(videoData, fromPod, callbackEach)
-    } else {
-      logger.error('Unkown remote request type %s.', request.type)
+    switch (request.type) {
+      case 'add':
+        addRemoteVideo(videoData, fromPod, callbackEach)
+        break
+
+      case 'update':
+        updateRemoteVideo(videoData, fromPod, callbackEach)
+        break
+
+      case 'remove':
+        removeRemoteVideo(videoData, fromPod, callbackEach)
+        break
+
+      default:
+        logger.error('Unkown remote request type %s.', request.type)
     }
   }, function (err) {
     if (err) logger.error('Error managing remote videos.', { error: err })
@@ -143,24 +152,85 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
   })
 }
 
-function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
-  // TODO: use bulkDestroy?
+function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
+  logger.debug('Updating remote video "%s".', videoAttributesToUpdate.name)
 
-  // We need the list because we have to remove some other stuffs (thumbnail etc)
-  db.Video.listByHostAndRemoteId(fromPod.host, videoToRemoveData.remoteId, function (err, videosList) {
+  waterfall([
+
+    function startTransaction (callback) {
+      db.sequelize.transaction().asCallback(function (err, t) {
+        return callback(err, t)
+      })
+    },
+
+    function findVideo (t, callback) {
+      db.Video.loadByHostAndRemoteId(fromPod.host, videoAttributesToUpdate.remoteId, function (err, videoInstance) {
+        if (err || !videoInstance) {
+          logger.error('Cannot load video from host and remote id.', { error: err.message })
+          return callback(err)
+        }
+
+        return callback(null, t, videoInstance)
+      })
+    },
+
+    function findOrCreateTags (t, videoInstance, callback) {
+      const tags = videoAttributesToUpdate.tags
+
+      db.Tag.findOrCreateTags(tags, t, function (err, tagInstances) {
+        return callback(err, t, videoInstance, tagInstances)
+      })
+    },
+
+    function updateVideoIntoDB (t, videoInstance, tagInstances, callback) {
+      const options = { transaction: t }
+
+      videoInstance.set('name', videoAttributesToUpdate.name)
+      videoInstance.set('description', videoAttributesToUpdate.description)
+      videoInstance.set('infoHash', videoAttributesToUpdate.infoHash)
+      videoInstance.set('duration', videoAttributesToUpdate.duration)
+      videoInstance.set('createdAt', videoAttributesToUpdate.createdAt)
+      videoInstance.set('extname', videoAttributesToUpdate.extname)
+
+      videoInstance.save(options).asCallback(function (err) {
+        return callback(err, t, videoInstance, tagInstances)
+      })
+    },
+
+    function associateTagsToVideo (t, videoInstance, tagInstances, callback) {
+      const options = { transaction: t }
+
+      videoInstance.setTags(tagInstances, options).asCallback(function (err) {
+        return callback(err, t)
+      })
+    }
+
+  ], function (err, t) {
     if (err) {
-      logger.error('Cannot list videos from host and remote id.', { error: err.message })
+      logger.error('Cannot update the remote video.')
+
+      // Abort transaction?
+      if (t) t.rollback()
+
+      return finalCallback(err)
+    }
+
+    // Commit transaction
+    t.commit()
+
+    return finalCallback()
+  })
+}
+
+function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
+  // We need the instance because we have to remove some other stuffs (thumbnail etc)
+  db.Video.loadByHostAndRemoteId(fromPod.host, videoToRemoveData.remoteId, function (err, video) {
+    if (err || !video) {
+      logger.error('Cannot load video from host and remote id.', { error: err.message })
       return callback(err)
     }
 
-    if (videosList.length === 0) {
-      logger.error('No remote video was found for this pod.', { remoteId: videoToRemoveData.remoteId, podHost: fromPod.host })
-    }
-
-    each(videosList, function (video, callbackEach) {
-      logger.debug('Removing remote video %s.', video.remoteId)
-
-      video.destroy().asCallback(callbackEach)
-    }, callback)
+    logger.debug('Removing remote video %s.', video.remoteId)
+    video.destroy().asCallback(callback)
   })
 }

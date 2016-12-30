@@ -38,6 +38,17 @@ function isEachRemoteVideosValid (requests) {
         isVideoExtnameValid(video.extname)
       ) ||
       (
+        isRequestTypeUpdateValid(request.type) &&
+        isVideoDateValid(video.createdAt) &&
+        isVideoDescriptionValid(video.description) &&
+        isVideoDurationValid(video.duration) &&
+        isVideoInfoHashValid(video.infoHash) &&
+        isVideoNameValid(video.name) &&
+        isVideoTagsValid(video.tags) &&
+        isVideoRemoteIdValid(video.remoteId) &&
+        isVideoExtnameValid(video.extname)
+      ) ||
+      (
         isRequestTypeRemoveValid(request.type) &&
         isVideoNameValid(video.name) &&
         isVideoRemoteIdValid(video.remoteId)
@@ -102,6 +113,10 @@ module.exports = videosValidators
 
 function isRequestTypeAddValid (value) {
   return value === 'add'
+}
+
+function isRequestTypeUpdateValid (value) {
+  return value === 'update'
 }
 
 function isRequestTypeRemoveValid (value) {
