@@ -28,6 +28,7 @@ function isEachRemoteVideosValid (requests) {
         isRequestTypeAddValid(request.type) &&
         isVideoAuthorValid(video.author) &&
         isVideoDateValid(video.createdAt) &&
+        isVideoDateValid(video.updatedAt) &&
         isVideoDescriptionValid(video.description) &&
         isVideoDurationValid(video.duration) &&
         isVideoInfoHashValid(video.infoHash) &&
@@ -40,6 +41,7 @@ function isEachRemoteVideosValid (requests) {
       (
         isRequestTypeUpdateValid(request.type) &&
         isVideoDateValid(video.createdAt) &&
+        isVideoDateValid(video.updatedAt) &&
         isVideoDescriptionValid(video.description) &&
         isVideoDurationValid(video.duration) &&
         isVideoInfoHashValid(video.infoHash) &&

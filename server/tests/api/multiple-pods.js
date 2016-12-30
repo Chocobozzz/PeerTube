@@ -105,6 +105,7 @@ describe('Test multiple pods', function () {
               expect(video.duration).to.equal(10)
               expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
               expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
               expect(video.author).to.equal('root')
 
               if (server.url !== 'http://localhost:9001') {
@@ -167,6 +168,7 @@ describe('Test multiple pods', function () {
               expect(video.duration).to.equal(5)
               expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
               expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
               expect(video.author).to.equal('root')
 
               if (server.url !== 'http://localhost:9002') {
@@ -247,6 +249,7 @@ describe('Test multiple pods', function () {
               expect(video1.tags).to.deep.equal([ 'tag1p3' ])
               expect(video1.author).to.equal('root')
               expect(miscsUtils.dateIsValid(video1.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video1.updatedAt)).to.be.true
 
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.description).to.equal('my super description for pod 3-2')
@@ -256,6 +259,7 @@ describe('Test multiple pods', function () {
               expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
               expect(video2.author).to.equal('root')
               expect(miscsUtils.dateIsValid(video2.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video2.updatedAt)).to.be.true
 
               if (server.url !== 'http://localhost:9003') {
                 expect(video1.isLocal).to.be.false
@@ -398,6 +402,7 @@ describe('Test multiple pods', function () {
           expect(!!videoUpdated).to.be.true
           expect(videoUpdated.description).to.equal('my super description updated')
           expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
+          expect(miscsUtils.dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true
 
           callback()
         })

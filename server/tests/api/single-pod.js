@@ -83,6 +83,7 @@ describe('Test a single pod', function () {
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+      expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -117,6 +118,7 @@ describe('Test a single pod', function () {
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+      expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -143,6 +145,7 @@ describe('Test a single pod', function () {
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+      expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -170,6 +173,7 @@ describe('Test a single pod', function () {
   //     expect(video.isLocal).to.be.true
   //     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
   //     expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+  //     expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
   //     videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
   //       if (err) throw err
@@ -196,6 +200,7 @@ describe('Test a single pod', function () {
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+      expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -522,6 +527,7 @@ describe('Test a single pod', function () {
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+      expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
       done()
     })
@@ -545,6 +551,7 @@ describe('Test a single pod', function () {
         expect(video.isLocal).to.be.true
         expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
         expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+        expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
         done()
       })
@@ -569,6 +576,7 @@ describe('Test a single pod', function () {
         expect(video.isLocal).to.be.true
         expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
         expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+        expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
         done()
       })

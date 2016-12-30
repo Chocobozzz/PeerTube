@@ -20,7 +20,6 @@ const customVideosValidators = require('../helpers/custom-validators').videos
 // ---------------------------------------------------------------------------
 
 module.exports = function (sequelize, DataTypes) {
-  // TODO: add indexes on searchable columns
   const Video = sequelize.define('Video',
     {
       id: {
@@ -329,7 +328,8 @@ function toFormatedJSON () {
     duration: this.duration,
     tags: map(this.Tags, 'name'),
     thumbnailPath: constants.STATIC_PATHS.THUMBNAILS + '/' + this.getThumbnailName(),
-    createdAt: this.createdAt
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
   }
 
   return json
@@ -356,6 +356,7 @@ function toAddRemoteJSON (callback) {
       thumbnailData: thumbnailData.toString('binary'),
       tags: map(self.Tags, 'name'),
       createdAt: self.createdAt,
+      updatedAt: self.updatedAt,
       extname: self.extname
     }
 
@@ -373,6 +374,7 @@ function toUpdateRemoteJSON (callback) {
     duration: this.duration,
     tags: map(this.Tags, 'name'),
     createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
     extname: this.extname
   }
 

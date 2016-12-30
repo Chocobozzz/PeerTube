@@ -98,7 +98,8 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
         description: videoToCreateData.description,
         authorId: author.id,
         duration: videoToCreateData.duration,
-        createdAt: videoToCreateData.createdAt
+        createdAt: videoToCreateData.createdAt,
+        updatedAt: videoToCreateData.updatedAt
       }
 
       const video = db.Video.build(videoData)
@@ -190,6 +191,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
       videoInstance.set('infoHash', videoAttributesToUpdate.infoHash)
       videoInstance.set('duration', videoAttributesToUpdate.duration)
       videoInstance.set('createdAt', videoAttributesToUpdate.createdAt)
+      videoInstance.set('updatedAt', videoAttributesToUpdate.updatedAt)
       videoInstance.set('extname', videoAttributesToUpdate.extname)
 
       videoInstance.save(options).asCallback(function (err) {
