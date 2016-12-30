@@ -4,15 +4,15 @@ const eachSeries = require('async/eachSeries')
 const express = require('express')
 const waterfall = require('async/waterfall')
 
-const db = require('../../initializers/database')
-const middlewares = require('../../middlewares')
+const db = require('../../../initializers/database')
+const middlewares = require('../../../middlewares')
 const secureMiddleware = middlewares.secure
 const validators = middlewares.validators.remote
-const logger = require('../../helpers/logger')
+const logger = require('../../../helpers/logger')
 
 const router = express.Router()
 
-router.post('/videos',
+router.post('/',
   validators.signature,
   secureMiddleware.checkSignature,
   validators.remoteVideos,

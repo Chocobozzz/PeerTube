@@ -5,9 +5,14 @@ const crypto = require('crypto')
 const logger = require('./logger')
 
 const utils = {
+  badRequest,
   cleanForExit,
   generateRandomString,
   isTestInstance
+}
+
+function badRequest (req, res, next) {
+  res.type('json').status(400).end()
 }
 
 function generateRandomString (size, callback) {
