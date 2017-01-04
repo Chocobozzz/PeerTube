@@ -1,19 +1,10 @@
 'use strict'
 
-const checkErrors = require('./utils').checkErrors
-const logger = require('../../helpers/logger')
+const checkErrors = require('../utils').checkErrors
+const logger = require('../../../helpers/logger')
 
-const validatorsRemote = {
-  remoteVideos,
+const validatorsRemoteSignature = {
   signature
-}
-
-function remoteVideos (req, res, next) {
-  req.checkBody('data').isEachRemoteVideosValid()
-
-  logger.debug('Checking remoteVideos parameters', { parameters: req.body })
-
-  checkErrors(req, res, next)
 }
 
 function signature (req, res, next) {
@@ -27,4 +18,4 @@ function signature (req, res, next) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = validatorsRemote
+module.exports = validatorsRemoteSignature

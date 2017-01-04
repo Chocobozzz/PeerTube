@@ -11,6 +11,7 @@ const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
 const friends = require('../../lib/friends')
 const middlewares = require('../../middlewares')
+const admin = middlewares.admin
 const oAuth = middlewares.oauth
 const pagination = middlewares.pagination
 const validators = middlewares.validators
@@ -42,6 +43,21 @@ const storage = multer.diskStorage({
 })
 
 const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
+
+router.get('/abuse',
+  oAuth.authenticate,
+  admin.ensureIsAdmin,
+  validatorsPagination.pagination,
+  validatorsSort.videoAbusesSort,
+  sort.setVideoAbusesSort,
+  pagination.setPagination,
+  listVideoAbuses
+)
+router.post('/:id/abuse',
+  oAuth.authenticate,
+  validatorsVideos.videoAbuseReport,
+  reportVideoAbuse
+)
 
 router.get('/',
   validatorsPagination.pagination,
@@ -283,7 +299,7 @@ function listVideos (req, res, next) {
   db.Video.listForApi(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
     if (err) return next(err)
 
-    res.json(getFormatedVideos(videosList, videosTotal))
+    res.json(utils.getFormatedObjects(videosList, videosTotal))
   })
 }
 
@@ -306,22 +322,45 @@ function searchVideos (req, res, next) {
     function (err, videosList, videosTotal) {
       if (err) return next(err)
 
-      res.json(getFormatedVideos(videosList, videosTotal))
+      res.json(utils.getFormatedObjects(videosList, videosTotal))
     }
   )
 }
 
-// ---------------------------------------------------------------------------
+function listVideoAbuses (req, res, next) {
+  db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort, function (err, abusesList, abusesTotal) {
+    if (err) return next(err)
 
-function getFormatedVideos (videos, videosTotal) {
-  const formatedVideos = []
-
-  videos.forEach(function (video) {
-    formatedVideos.push(video.toFormatedJSON())
+    res.json(utils.getFormatedObjects(abusesList, abusesTotal))
   })
-
-  return {
-    total: videosTotal,
-    data: formatedVideos
-  }
 }
+
+function reportVideoAbuse (req, res, next) {
+  const videoInstance = res.locals.video
+  const reporterUsername = res.locals.oauth.token.User.username
+
+  const abuse = {
+    reporterUsername,
+    reason: req.body.reason,
+    videoId: videoInstance.id,
+    reporterPodId: null // This is our pod that reported this abuse
+  }
+
+  db.VideoAbuse.create(abuse).asCallback(function (err) {
+    if (err) return next(err)
+
+    // We send the information to the destination pod
+    if (videoInstance.isOwned() === false) {
+      const reportData = {
+        reporterUsername,
+        reportReason: abuse.reason,
+        videoRemoteId: videoInstance.remoteId
+      }
+
+      friends.reportAbuseVideoToFriend(reportData, videoInstance)
+    }
+
+    return res.type('json').status(204).end()
+  })
+}
+

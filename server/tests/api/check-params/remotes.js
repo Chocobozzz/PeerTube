@@ -47,6 +47,10 @@ describe('Test remote videos API validators', function () {
     it('Should check when removing a video')
   })
 
+  describe('When reporting abuse on a video', function () {
+    it('Should check when reporting a video abuse')
+  })
+
   after(function (done) {
     process.kill(-server.app.pid)
 

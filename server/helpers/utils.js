@@ -8,7 +8,8 @@ const utils = {
   badRequest,
   cleanForExit,
   generateRandomString,
-  isTestInstance
+  isTestInstance,
+  getFormatedObjects
 }
 
 function badRequest (req, res, next) {
@@ -30,6 +31,19 @@ function cleanForExit (webtorrentProcess) {
 
 function isTestInstance () {
   return (process.env.NODE_ENV === 'test')
+}
+
+function getFormatedObjects (objects, objectsTotal) {
+  const formatedObjects = []
+
+  objects.forEach(function (object) {
+    formatedObjects.push(object.toFormatedJSON())
+  })
+
+  return {
+    total: objectsTotal,
+    data: formatedObjects
+  }
 }
 
 // ---------------------------------------------------------------------------

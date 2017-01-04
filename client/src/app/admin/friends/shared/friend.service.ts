@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { Friend } from './friend.model';
-import { AuthHttp, RestExtractor } from '../../../shared';
+import { AuthHttp, RestExtractor, ResultList } from '../../../shared';
 
 @Injectable()
 export class FriendService {
@@ -13,11 +13,10 @@ export class FriendService {
     private restExtractor: RestExtractor
   ) {}
 
-  getFriends(): Observable<Friend[]> {
+  getFriends() {
     return this.authHttp.get(FriendService.BASE_FRIEND_URL)
-                        // Not implemented as a data list by the server yet
-                        // .map(this.restExtractor.extractDataList)
-                        .map((res) => res.json())
+                        .map(this.restExtractor.extractDataList)
+                        .map(this.extractFriends)
                         .catch((res) => this.restExtractor.handleError(res));
   }
 
@@ -35,5 +34,12 @@ export class FriendService {
     return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'quitfriends')
                         .map(res => res.status)
                         .catch((res) => this.restExtractor.handleError(res));
+  }
+
+  private extractFriends(result: ResultList) {
+    const friends: Friend[] = result.data;
+    const totalFriends = result.total;
+
+    return { friends, totalFriends };
   }
 }

@@ -15,6 +15,7 @@ const requests = require('../helpers/requests')
 const friends = {
   addVideoToFriends,
   updateVideoToFriends,
+  reportAbuseVideoToFriend,
   hasFriends,
   getMyCertificate,
   makeFriends,
@@ -23,12 +24,20 @@ const friends = {
   sendOwnedVideosToPod
 }
 
-function addVideoToFriends (video) {
-  createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, video)
+function addVideoToFriends (videoData) {
+  createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, videoData)
 }
 
-function updateVideoToFriends (video) {
-  createRequest('update', constants.REQUEST_ENDPOINTS.VIDEOS, video)
+function updateVideoToFriends (videoData) {
+  createRequest('update', constants.REQUEST_ENDPOINTS.VIDEOS, videoData)
+}
+
+function removeVideoToFriends (videoParams) {
+  createRequest('remove', constants.REQUEST_ENDPOINTS.VIDEOS, videoParams)
+}
+
+function reportAbuseVideoToFriend (reportData, video) {
+  createRequest('report-abuse', constants.REQUEST_ENDPOINTS.VIDEOS, reportData, [ video.Author.podId ])
 }
 
 function hasFriends (callback) {
@@ -120,10 +129,6 @@ function quitFriends (callback) {
   })
 }
 
-function removeVideoToFriends (videoParams) {
-  createRequest('remove', constants.REQUEST_ENDPOINTS.VIDEOS, videoParams)
-}
-
 function sendOwnedVideosToPod (podId) {
   db.Video.listOwnedAndPopulateAuthorAndTags(function (err, videosList) {
     if (err) {
@@ -152,10 +157,10 @@ module.exports = friends
 // ---------------------------------------------------------------------------
 
 function computeForeignPodsList (host, podsScore, callback) {
-  getForeignPodsList(host, function (err, foreignPodsList) {
+  getForeignPodsList(host, function (err, res) {
     if (err) return callback(err)
 
-    if (!foreignPodsList) foreignPodsList = []
+    const foreignPodsList = res.data
 
     // Let's give 1 point to the pod we ask the friends list
     foreignPodsList.push({ host })
@@ -252,11 +257,11 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   })
 }
 
-// Wrapper that populate "to" argument with all our friends if it is not specified
-function createRequest (type, endpoint, data, to) {
-  if (to) return _createRequest(type, endpoint, data, to)
+// Wrapper that populate "toIds" argument with all our friends if it is not specified
+function createRequest (type, endpoint, data, toIds) {
+  if (toIds) return _createRequest(type, endpoint, data, toIds)
 
-  // If the "to" pods is not specified, we send the request to all our friends
+  // If the "toIds" pods is not specified, we send the request to all our friends
   db.Pod.listAllIds(function (err, podIds) {
     if (err) {
       logger.error('Cannot get pod ids', { error: err })
@@ -267,13 +272,13 @@ function createRequest (type, endpoint, data, to) {
   })
 }
 
-function _createRequest (type, endpoint, data, to) {
+function _createRequest (type, endpoint, data, toIds) {
   const pods = []
 
   // If there are no destination pods abort
-  if (to.length === 0) return
+  if (toIds.length === 0) return
 
-  to.forEach(function (toPod) {
+  toIds.forEach(function (toPod) {
     pods.push(db.Pod.build({ id: toPod }))
   })
 

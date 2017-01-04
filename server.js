@@ -57,7 +57,8 @@ app.use(expressValidator({
     customValidators.misc,
     customValidators.pods,
     customValidators.users,
-    customValidators.videos
+    customValidators.videos,
+    customValidators.remote.videos
   )
 }))
 

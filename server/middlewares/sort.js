@@ -2,10 +2,17 @@
 
 const sortMiddleware = {
   setUsersSort,
+  setVideoAbusesSort,
   setVideosSort
 }
 
 function setUsersSort (req, res, next) {
+  if (!req.query.sort) req.query.sort = '-createdAt'
+
+  return next()
+}
+
+function setVideoAbusesSort (req, res, next) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
   return next()

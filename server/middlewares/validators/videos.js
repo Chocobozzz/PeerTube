@@ -11,7 +11,9 @@ const validatorsVideos = {
   videosUpdate,
   videosGet,
   videosRemove,
-  videosSearch
+  videosSearch,
+
+  videoAbuseReport
 }
 
 function videosAdd (req, res, next) {
@@ -95,6 +97,17 @@ function videosSearch (req, res, next) {
   logger.debug('Checking videosSearch parameters', { parameters: req.params })
 
   checkErrors(req, res, next)
+}
+
+function videoAbuseReport (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkBody('reason', 'Should have a valid reason').isVideoAbuseReasonValid()
+
+  logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
+
+  checkErrors(req, res, function () {
+    checkVideoExists(req.params.id, res, next)
+  })
 }
 
 // ---------------------------------------------------------------------------

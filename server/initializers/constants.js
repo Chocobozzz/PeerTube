@@ -19,6 +19,7 @@ const SEARCHABLE_COLUMNS = {
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
   USERS: [ 'username', '-username', 'createdAt', '-createdAt' ],
+  VIDEO_ABUSES: [ 'createdAt', '-createdAt' ],
   VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdAt', '-createdAt' ]
 }
 
@@ -64,6 +65,9 @@ const CONSTRAINTS_FIELDS = {
   USERS: {
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 } // Length
+  },
+  VIDEO_ABUSES: {
+    REASON: { min: 2, max: 300 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 50 }, // Length

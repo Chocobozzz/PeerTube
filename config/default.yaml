@@ -10,8 +10,8 @@ database:
   hostname: 'localhost'
   port: 5432
   suffix: '_dev'
-  username: peertube
-  password: peertube
+  username: 'peertube'
+  password: 'peertube'
 
 # From the project root directory
 storage:

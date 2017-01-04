@@ -5,6 +5,7 @@ const waterfall = require('async/waterfall')
 
 const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
+const utils = require('../../helpers/utils')
 const friends = require('../../lib/friends')
 const middlewares = require('../../middlewares')
 const admin = middlewares.admin
@@ -36,7 +37,7 @@ router.get('/quitfriends',
 )
 // Post because this is a secured request
 router.post('/remove',
-  signatureValidator,
+  signatureValidator.signature,
   checkSignature,
   removePods
 )
@@ -86,7 +87,7 @@ function listPods (req, res, next) {
   db.Pod.list(function (err, podsList) {
     if (err) return next(err)
 
-    res.json(getFormatedPods(podsList))
+    res.json(utils.getFormatedObjects(podsList, podsList.length))
   })
 }
 
@@ -129,16 +130,4 @@ function quitFriends (req, res, next) {
 
     res.type('json').status(204).end()
   })
-}
-
-// ---------------------------------------------------------------------------
-
-function getFormatedPods (pods) {
-  const formatedPods = []
-
-  pods.forEach(function (pod) {
-    formatedPods.push(pod.toFormatedJSON())
-  })
-
-  return formatedPods
 }

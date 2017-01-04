@@ -7,15 +7,16 @@ const waterfall = require('async/waterfall')
 const db = require('../../../initializers/database')
 const middlewares = require('../../../middlewares')
 const secureMiddleware = middlewares.secure
-const validators = middlewares.validators.remote
+const videosValidators = middlewares.validators.remote.videos
+const signatureValidators = middlewares.validators.remote.signature
 const logger = require('../../../helpers/logger')
 
 const router = express.Router()
 
 router.post('/',
-  validators.signature,
+  signatureValidators.signature,
   secureMiddleware.checkSignature,
-  validators.remoteVideos,
+  videosValidators.remoteVideos,
   remoteVideos
 )
 
@@ -32,19 +33,23 @@ function remoteVideos (req, res, next) {
   // We need to process in the same order to keep consistency
   // TODO: optimization
   eachSeries(requests, function (request, callbackEach) {
-    const videoData = request.data
+    const data = request.data
 
     switch (request.type) {
       case 'add':
-        addRemoteVideo(videoData, fromPod, callbackEach)
+        addRemoteVideo(data, fromPod, callbackEach)
         break
 
       case 'update':
-        updateRemoteVideo(videoData, fromPod, callbackEach)
+        updateRemoteVideo(data, fromPod, callbackEach)
         break
 
       case 'remove':
-        removeRemoteVideo(videoData, fromPod, callbackEach)
+        removeRemoteVideo(data, fromPod, callbackEach)
+        break
+
+      case 'report-abuse':
+        reportAbuseRemoteVideo(data, fromPod, callbackEach)
         break
 
       default:
@@ -164,13 +169,8 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
     },
 
     function findVideo (t, callback) {
-      db.Video.loadByHostAndRemoteId(fromPod.host, videoAttributesToUpdate.remoteId, function (err, videoInstance) {
-        if (err || !videoInstance) {
-          logger.error('Cannot load video from host and remote id.', { error: err.message })
-          return callback(err)
-        }
-
-        return callback(null, t, videoInstance)
+      fetchVideo(fromPod.host, videoAttributesToUpdate.remoteId, function (err, videoInstance) {
+        return callback(err, t, videoInstance)
       })
     },
 
@@ -225,13 +225,45 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
 
 function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
   // We need the instance because we have to remove some other stuffs (thumbnail etc)
-  db.Video.loadByHostAndRemoteId(fromPod.host, videoToRemoveData.remoteId, function (err, video) {
-    if (err || !video) {
-      logger.error('Cannot load video from host and remote id.', { error: err.message })
-      return callback(err)
-    }
+  fetchVideo(fromPod.host, videoToRemoveData.remoteId, function (err, video) {
+    if (err) return callback(err)
 
     logger.debug('Removing remote video %s.', video.remoteId)
     video.destroy().asCallback(callback)
+  })
+}
+
+function reportAbuseRemoteVideo (reportData, fromPod, callback) {
+  db.Video.load(reportData.videoRemoteId, function (err, video) {
+    if (err || !video) {
+      if (!err) err = new Error('video not found')
+
+      logger.error('Cannot load video from host and remote id.', { error: err })
+      return callback(err)
+    }
+
+    logger.debug('Reporting remote abuse for video %s.', video.id)
+
+    const videoAbuseData = {
+      reporterUsername: reportData.reporterUsername,
+      reason: reportData.reportReason,
+      reporterPodId: fromPod.id,
+      videoId: video.id
+    }
+
+    db.VideoAbuse.create(videoAbuseData).asCallback(callback)
+  })
+}
+
+function fetchVideo (podHost, remoteId, callback) {
+  db.Video.loadByHostAndRemoteId(podHost, remoteId, function (err, video) {
+    if (err || !video) {
+      if (!err) err = new Error('video not found')
+
+      logger.error('Cannot load video from host and remote id.', { error: err })
+      return callback(err)
+    }
+
+    return callback(null, video)
   })
 }

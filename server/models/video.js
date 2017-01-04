@@ -248,6 +248,14 @@ function associate (models) {
     through: models.VideoTag,
     onDelete: 'cascade'
   })
+
+  this.hasMany(models.VideoAbuse, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
 }
 
 function generateMagnetUri () {

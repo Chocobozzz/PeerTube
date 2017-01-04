@@ -6,6 +6,7 @@ const waterfall = require('async/waterfall')
 const constants = require('../../initializers/constants')
 const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
+const utils = require('../../helpers/utils')
 const middlewares = require('../../middlewares')
 const admin = middlewares.admin
 const oAuth = middlewares.oauth
@@ -82,7 +83,7 @@ function listUsers (req, res, next) {
   db.User.listForApi(req.query.start, req.query.count, req.query.sort, function (err, usersList, usersTotal) {
     if (err) return next(err)
 
-    res.json(getFormatedUsers(usersList, usersTotal))
+    res.json(utils.getFormatedObjects(usersList, usersTotal))
   })
 }
 
@@ -120,19 +121,4 @@ function updateUser (req, res, next) {
 
 function success (req, res, next) {
   res.end()
-}
-
-// ---------------------------------------------------------------------------
-
-function getFormatedUsers (users, usersTotal) {
-  const formatedUsers = []
-
-  users.forEach(function (user) {
-    formatedUsers.push(user.toFormatedJSON())
-  })
-
-  return {
-    total: usersTotal,
-    data: formatedUsers
-  }
 }

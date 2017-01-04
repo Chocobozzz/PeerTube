@@ -6,29 +6,38 @@ const logger = require('../../helpers/logger')
 
 const validatorsSort = {
   usersSort,
+  videoAbusesSort,
   videosSort
 }
 
 function usersSort (req, res, next) {
   const sortableColumns = constants.SORTABLE_COLUMNS.USERS
 
-  req.checkQuery('sort', 'Should have correct sortable column').optional().isIn(sortableColumns)
+  checkSort(req, res, next, sortableColumns)
+}
 
-  logger.debug('Checking sort parameters', { parameters: req.query })
+function videoAbusesSort (req, res, next) {
+  const sortableColumns = constants.SORTABLE_COLUMNS.VIDEO_ABUSES
 
-  checkErrors(req, res, next)
+  checkSort(req, res, next, sortableColumns)
 }
 
 function videosSort (req, res, next) {
   const sortableColumns = constants.SORTABLE_COLUMNS.VIDEOS
 
+  checkSort(req, res, next, sortableColumns)
+}
+
+// ---------------------------------------------------------------------------
+
+module.exports = validatorsSort
+
+// ---------------------------------------------------------------------------
+
+function checkSort (req, res, next, sortableColumns) {
   req.checkQuery('sort', 'Should have correct sortable column').optional().isIn(sortableColumns)
 
   logger.debug('Checking sort parameters', { parameters: req.query })
 
   checkErrors(req, res, next)
 }
-
-// ---------------------------------------------------------------------------
-
-module.exports = validatorsSort
