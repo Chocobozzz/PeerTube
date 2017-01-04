@@ -1,9 +1,9 @@
 'use strict'
 
+const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 const fs = require('fs')
 const openssl = require('openssl-wrapper')
-const ursa = require('ursa')
 
 const constants = require('../initializers/constants')
 const logger = require('./logger')
@@ -16,10 +16,49 @@ const peertubeCrypto = {
   sign
 }
 
-function checkSignature (publicKey, rawData, hexSignature) {
-  const crt = ursa.createPublicKey(publicKey)
-  const isValid = crt.hashAndVerify('sha256', new Buffer(rawData).toString('hex'), hexSignature, 'hex')
+function checkSignature (publicKey, data, hexSignature) {
+  const verify = crypto.createVerify(constants.SIGNATURE_ALGORITHM)
+
+  let dataString
+  if (typeof data === 'string') {
+    dataString = data
+  } else {
+    try {
+      dataString = JSON.stringify(data)
+    } catch (err) {
+      logger.error('Cannot check signature.', { error: err })
+      return false
+    }
+  }
+
+  verify.update(dataString, 'utf8')
+
+  const isValid = verify.verify(publicKey, hexSignature, constants.SIGNATURE_ENCODING)
   return isValid
+}
+
+function sign (data) {
+  const sign = crypto.createSign(constants.SIGNATURE_ALGORITHM)
+
+  let dataString
+  if (typeof data === 'string') {
+    dataString = data
+  } else {
+    try {
+      dataString = JSON.stringify(data)
+    } catch (err) {
+      logger.error('Cannot sign data.', { error: err })
+      return ''
+    }
+  }
+
+  sign.update(dataString, 'utf8')
+
+  // TODO: make async
+  const myKey = fs.readFileSync(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem')
+  const signature = sign.sign(myKey, constants.SIGNATURE_ENCODING)
+
+  return signature
 }
 
 function comparePassword (plainPassword, hashPassword, callback) {
@@ -50,13 +89,6 @@ function cryptPassword (password, callback) {
       return callback(err, hash)
     })
   })
-}
-
-function sign (data) {
-  const myKey = ursa.createPrivateKey(fs.readFileSync(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem'))
-  const signature = myKey.hashAndSign('sha256', data, 'utf8', 'hex')
-
-  return signature
 }
 
 // ---------------------------------------------------------------------------

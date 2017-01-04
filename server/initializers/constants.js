@@ -118,15 +118,20 @@ const REQUEST_ENDPOINTS = {
   VIDEOS: 'videos'
 }
 
-// ---------------------------------------------------------------------------
-
 const REMOTE_SCHEME = {
   HTTP: 'https',
   WS: 'wss'
 }
 
+// ---------------------------------------------------------------------------
+
+const SIGNATURE_ALGORITHM = 'RSA-SHA256'
+const SIGNATURE_ENCODING = 'hex'
+
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
+
+// ---------------------------------------------------------------------------
 
 // Express static paths (router)
 const STATIC_PATHS = {
@@ -142,6 +147,8 @@ let STATIC_MAX_AGE = '30d'
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
 const PREVIEWS_SIZE = '640x480'
+
+// ---------------------------------------------------------------------------
 
 const USER_ROLES = {
   ADMIN: 'admin',
@@ -180,6 +187,8 @@ module.exports = {
   REQUESTS_LIMIT,
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
+  SIGNATURE_ALGORITHM,
+  SIGNATURE_ENCODING,
   SORTABLE_COLUMNS,
   STATIC_MAX_AGE,
   STATIC_PATHS,

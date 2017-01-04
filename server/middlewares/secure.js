@@ -23,7 +23,14 @@ function checkSignature (req, res, next) {
 
     logger.debug('Checking signature from %s.', host)
 
-    const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, host, req.body.signature.signature)
+    let signatureShouldBe
+    if (req.body.data) {
+      signatureShouldBe = req.body.data
+    } else {
+      signatureShouldBe = host
+    }
+
+    const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, signatureShouldBe, req.body.signature.signature)
 
     if (signatureOk === true) {
       res.locals.secure = {
