@@ -218,7 +218,6 @@ function afterDestroy (video, options, next) {
 
       function (callback) {
         const params = {
-          name: video.name,
           remoteId: video.id
         }
 

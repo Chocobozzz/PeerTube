@@ -39,7 +39,6 @@ function isEachRemoteRequestVideosValid (requests) {
       ) ||
       (
         isRequestTypeRemoveValid(request.type) &&
-        videosValidators.isVideoNameValid(video.name) &&
         videosValidators.isVideoRemoteIdValid(video.remoteId)
       ) ||
       (
