@@ -24,16 +24,33 @@ const friends = {
   sendOwnedVideosToPod
 }
 
-function addVideoToFriends (videoData) {
-  createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, videoData)
+function addVideoToFriends (videoData, transaction, callback) {
+  const options = {
+    type: 'add',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: videoData,
+    transaction
+  }
+  createRequest(options, callback)
 }
 
-function updateVideoToFriends (videoData) {
-  createRequest('update', constants.REQUEST_ENDPOINTS.VIDEOS, videoData)
+function updateVideoToFriends (videoData, transaction, callback) {
+  const options = {
+    type: 'update',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: videoData,
+    transaction
+  }
+  createRequest(options, callback)
 }
 
 function removeVideoToFriends (videoParams) {
-  createRequest('remove', constants.REQUEST_ENDPOINTS.VIDEOS, videoParams)
+  const options = {
+    type: 'remove',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: videoParams
+  }
+  createRequest(options)
 }
 
 function reportAbuseVideoToFriend (reportData, video) {
@@ -258,25 +275,35 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
 }
 
 // Wrapper that populate "toIds" argument with all our friends if it is not specified
-function createRequest (type, endpoint, data, toIds) {
-  if (toIds) return _createRequest(type, endpoint, data, toIds)
+// { type, endpoint, data, toIds, transaction }
+function createRequest (options, callback) {
+  if (!callback) callback = function () {}
+  if (options.toIds) return _createRequest(options, callback)
 
   // If the "toIds" pods is not specified, we send the request to all our friends
-  db.Pod.listAllIds(function (err, podIds) {
+  db.Pod.listAllIds(options.transaction, function (err, podIds) {
     if (err) {
       logger.error('Cannot get pod ids', { error: err })
       return
     }
 
-    return _createRequest(type, endpoint, data, podIds)
+    const newOptions = Object.assign(options, { toIds: podIds })
+    return _createRequest(newOptions, callback)
   })
 }
 
-function _createRequest (type, endpoint, data, toIds) {
+// { type, endpoint, data, toIds, transaction }
+function _createRequest (options, callback) {
+  const type = options.type
+  const endpoint = options.endpoint
+  const data = options.data
+  const toIds = options.toIds
+  const transaction = options.transaction
+
   const pods = []
 
   // If there are no destination pods abort
-  if (toIds.length === 0) return
+  if (toIds.length === 0) return callback(null)
 
   toIds.forEach(function (toPod) {
     pods.push(db.Pod.build({ id: toPod }))
@@ -290,17 +317,14 @@ function _createRequest (type, endpoint, data, toIds) {
     }
   }
 
-  // We run in transaction to keep coherency between Request and RequestToPod tables
-  db.sequelize.transaction(function (t) {
-    const dbRequestOptions = {
-      transaction: t
-    }
+  const dbRequestOptions = {
+    transaction
+  }
 
-    return db.Request.create(createQuery, dbRequestOptions).then(function (request) {
-      return request.setPods(pods, dbRequestOptions)
-    })
-  }).asCallback(function (err) {
-    if (err) logger.error('Error in createRequest transaction.', { error: err })
+  return db.Request.create(createQuery, dbRequestOptions).asCallback(function (err, request) {
+    if (err) return callback(err)
+
+    return request.setPods(pods, dbRequestOptions).asCallback(callback)
   })
 }
 

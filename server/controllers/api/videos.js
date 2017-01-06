@@ -70,13 +70,13 @@ router.put('/:id',
   oAuth.authenticate,
   reqFiles,
   validatorsVideos.videosUpdate,
-  updateVideo
+  updateVideoRetryWrapper
 )
 router.post('/',
   oAuth.authenticate,
   reqFiles,
   validatorsVideos.videosAdd,
-  addVideo
+  addVideoRetryWrapper
 )
 router.get('/:id',
   validatorsVideos.videosGet,
@@ -103,19 +103,37 @@ module.exports = router
 
 // ---------------------------------------------------------------------------
 
-function addVideo (req, res, next) {
-  const videoFile = req.files.videofile[0]
+// Wrapper to video add that retry the function if there is a database error
+// We need this because we run the transaction in SERIALIZABLE isolation that can fail
+function addVideoRetryWrapper (req, res, next) {
+  utils.transactionRetryer(
+    function (callback) {
+      return addVideo(req, res, req.files.videofile[0], callback)
+    },
+    function (err) {
+      if (err) {
+        logger.error('Cannot insert the video with many retries.', { error: err })
+        return next(err)
+      }
+
+      // TODO : include Location of the new video -> 201
+      return res.type('json').status(204).end()
+    }
+  )
+}
+
+function addVideo (req, res, videoFile, callback) {
   const videoInfos = req.body
 
   waterfall([
 
-    function startTransaction (callback) {
-      db.sequelize.transaction().asCallback(function (err, t) {
-        return callback(err, t)
+    function startTransaction (callbackWaterfall) {
+      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
+        return callbackWaterfall(err, t)
       })
     },
 
-    function findOrCreateAuthor (t, callback) {
+    function findOrCreateAuthor (t, callbackWaterfall) {
       const user = res.locals.oauth.token.User
 
       const name = user.username
@@ -124,19 +142,19 @@ function addVideo (req, res, next) {
       const userId = user.id
 
       db.Author.findOrCreateAuthor(name, podId, userId, t, function (err, authorInstance) {
-        return callback(err, t, authorInstance)
+        return callbackWaterfall(err, t, authorInstance)
       })
     },
 
-    function findOrCreateTags (t, author, callback) {
+    function findOrCreateTags (t, author, callbackWaterfall) {
       const tags = videoInfos.tags
 
       db.Tag.findOrCreateTags(tags, t, function (err, tagInstances) {
-        return callback(err, t, author, tagInstances)
+        return callbackWaterfall(err, t, author, tagInstances)
       })
     },
 
-    function createVideoObject (t, author, tagInstances, callback) {
+    function createVideoObject (t, author, tagInstances, callbackWaterfall) {
       const videoData = {
         name: videoInfos.name,
         remoteId: null,
@@ -148,74 +166,97 @@ function addVideo (req, res, next) {
 
       const video = db.Video.build(videoData)
 
-      return callback(null, t, author, tagInstances, video)
+      return callbackWaterfall(null, t, author, tagInstances, video)
     },
 
      // Set the videoname the same as the id
-    function renameVideoFile (t, author, tagInstances, video, callback) {
+    function renameVideoFile (t, author, tagInstances, video, callbackWaterfall) {
       const videoDir = constants.CONFIG.STORAGE.VIDEOS_DIR
       const source = path.join(videoDir, videoFile.filename)
       const destination = path.join(videoDir, video.getVideoFilename())
 
       fs.rename(source, destination, function (err) {
-        return callback(err, t, author, tagInstances, video)
+        if (err) return callbackWaterfall(err)
+
+        // This is important in case if there is another attempt
+        videoFile.filename = video.getVideoFilename()
+        return callbackWaterfall(null, t, author, tagInstances, video)
       })
     },
 
-    function insertVideoIntoDB (t, author, tagInstances, video, callback) {
+    function insertVideoIntoDB (t, author, tagInstances, video, callbackWaterfall) {
       const options = { transaction: t }
 
       // Add tags association
       video.save(options).asCallback(function (err, videoCreated) {
-        if (err) return callback(err)
+        if (err) return callbackWaterfall(err)
 
         // Do not forget to add Author informations to the created video
         videoCreated.Author = author
 
-        return callback(err, t, tagInstances, videoCreated)
+        return callbackWaterfall(err, t, tagInstances, videoCreated)
       })
     },
 
-    function associateTagsToVideo (t, tagInstances, video, callback) {
+    function associateTagsToVideo (t, tagInstances, video, callbackWaterfall) {
       const options = { transaction: t }
 
       video.setTags(tagInstances, options).asCallback(function (err) {
         video.Tags = tagInstances
 
-        return callback(err, t, video)
+        return callbackWaterfall(err, t, video)
       })
     },
 
-    function sendToFriends (t, video, callback) {
+    function sendToFriends (t, video, callbackWaterfall) {
       video.toAddRemoteJSON(function (err, remoteVideo) {
-        if (err) return callback(err)
+        if (err) return callbackWaterfall(err)
 
         // Now we'll add the video's meta data to our friends
-        friends.addVideoToFriends(remoteVideo)
-
-        return callback(null, t)
+        friends.addVideoToFriends(remoteVideo, t, function (err) {
+          return callbackWaterfall(err, t)
+        })
       })
     }
 
   ], function andFinally (err, t) {
     if (err) {
-      logger.error('Cannot insert the video.')
+      // This is just a debug because we will retry the insert
+      logger.debug('Cannot insert the video.', { error: err })
 
       // Abort transaction?
       if (t) t.rollback()
 
-      return next(err)
+      return callback(err)
     }
 
     // Commit transaction
     t.commit()
 
-    // TODO : include Location of the new video -> 201
-    return res.type('json').status(204).end()
+    logger.info('Video with name %s created.', videoInfos.name)
+
+    return callback(null)
   })
 }
 
-function updateVideo (req, res, next) {
+function updateVideoRetryWrapper (req, res, next) {
+  utils.transactionRetryer(
+    function (callback) {
+      return updateVideo(req, res, callback)
+    },
+    function (err) {
+      if (err) {
+        logger.error('Cannot update the video with many retries.', { error: err })
+        return next(err)
+      }
+
+      // TODO : include Location of the new video -> 201
+      return res.type('json').status(204).end()
+    }
+  )
+}
+
+function updateVideo (req, res, finalCallback) {
   const videoInstance = res.locals.video
   const videoInfosToUpdate = req.body
 
@@ -267,26 +308,25 @@ function updateVideo (req, res, next) {
       const json = videoInstance.toUpdateRemoteJSON()
 
       // Now we'll update the video's meta data to our friends
-      friends.updateVideoToFriends(json)
-
-      return callback(null, t)
+      friends.updateVideoToFriends(json, t, function (err) {
+        return callback(err, t)
+      })
     }
 
   ], function andFinally (err, t) {
     if (err) {
-      logger.error('Cannot insert the video.')
+      logger.debug('Cannot update the video.', { error: err })
 
       // Abort transaction?
       if (t) t.rollback()
 
-      return next(err)
+      return finalCallback(err)
     }
 
     // Commit transaction
     t.commit()
 
-    // TODO : include Location of the new video -> 201
-    return res.type('json').status(204).end()
+    return finalCallback(null)
   })
 }
 

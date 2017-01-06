@@ -1,6 +1,7 @@
 'use strict'
 
 const crypto = require('crypto')
+const retry = require('async/retry')
 
 const logger = require('./logger')
 
@@ -9,7 +10,8 @@ const utils = {
   cleanForExit,
   generateRandomString,
   isTestInstance,
-  getFormatedObjects
+  getFormatedObjects,
+  transactionRetryer
 }
 
 function badRequest (req, res, next) {
@@ -44,6 +46,18 @@ function getFormatedObjects (objects, objectsTotal) {
     total: objectsTotal,
     data: formatedObjects
   }
+}
+
+function transactionRetryer (func, callback) {
+  retry({
+    times: 5,
+
+    errorFilter: function (err) {
+      const willRetry = (err.name === 'SequelizeDatabaseError')
+      logger.debug('Maybe retrying the transaction function.', { willRetry })
+      return willRetry
+    }
+  }, func, callback)
 }
 
 // ---------------------------------------------------------------------------

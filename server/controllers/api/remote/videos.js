@@ -10,6 +10,7 @@ const secureMiddleware = middlewares.secure
 const videosValidators = middlewares.validators.remote.videos
 const signatureValidators = middlewares.validators.remote.signature
 const logger = require('../../../helpers/logger')
+const utils = require('../../../helpers/utils')
 
 const router = express.Router()
 
@@ -37,11 +38,11 @@ function remoteVideos (req, res, next) {
 
     switch (request.type) {
       case 'add':
-        addRemoteVideo(data, fromPod, callbackEach)
+        addRemoteVideoRetryWrapper(data, fromPod, callbackEach)
         break
 
       case 'update':
-        updateRemoteVideo(data, fromPod, callbackEach)
+        updateRemoteVideoRetryWrapper(data, fromPod, callbackEach)
         break
 
       case 'remove':
@@ -63,13 +64,30 @@ function remoteVideos (req, res, next) {
   return res.type('json').status(204).end()
 }
 
+// Handle retries on fail
+function addRemoteVideoRetryWrapper (videoToCreateData, fromPod, finalCallback) {
+  utils.transactionRetryer(
+    function (callback) {
+      return addRemoteVideo(videoToCreateData, fromPod, callback)
+    },
+    function (err) {
+      if (err) {
+        logger.error('Cannot insert the remote video with many retries.', { error: err })
+        return finalCallback(err)
+      }
+
+      return finalCallback()
+    }
+  )
+}
+
 function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
-  logger.debug('Adding remote video "%s".', videoToCreateData.name)
+  logger.debug('Adding remote video "%s".', videoToCreateData.remoteId)
 
   waterfall([
 
     function startTransaction (callback) {
-      db.sequelize.transaction().asCallback(function (err, t) {
+      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
         return callback(err, t)
       })
     },
@@ -103,6 +121,7 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
         authorId: author.id,
         duration: videoToCreateData.duration,
         createdAt: videoToCreateData.createdAt,
+        // FIXME: updatedAt does not seems to be considered by Sequelize
         updatedAt: videoToCreateData.updatedAt
       }
 
@@ -142,7 +161,8 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
 
   ], function (err, t) {
     if (err) {
-      logger.error('Cannot insert the remote video.')
+      // This is just a debug because we will retry the insert
+      logger.debug('Cannot insert the remote video.', { error: err })
 
       // Abort transaction?
       if (t) t.rollback()
@@ -157,8 +177,25 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
   })
 }
 
+// Handle retries on fail
+function updateRemoteVideoRetryWrapper (videoAttributesToUpdate, fromPod, finalCallback) {
+  utils.transactionRetryer(
+    function (callback) {
+      return updateRemoteVideo(videoAttributesToUpdate, fromPod, callback)
+    },
+    function (err) {
+      if (err) {
+        logger.error('Cannot update the remote video with many retries.', { error: err })
+        return finalCallback(err)
+      }
+
+      return finalCallback()
+    }
+  )
+}
+
 function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
-  logger.debug('Updating remote video "%s".', videoAttributesToUpdate.name)
+  logger.debug('Updating remote video "%s".', videoAttributesToUpdate.remoteId)
 
   waterfall([
 
@@ -208,7 +245,8 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
 
   ], function (err, t) {
     if (err) {
-      logger.error('Cannot update the remote video.')
+      // This is just a debug because we will retry the insert
+      logger.debug('Cannot update the remote video.', { error: err })
 
       // Abort transaction?
       if (t) t.rollback()
@@ -238,7 +276,7 @@ function reportAbuseRemoteVideo (reportData, fromPod, callback) {
     if (err || !video) {
       if (!err) err = new Error('video not found')
 
-      logger.error('Cannot load video from host and remote id.', { error: err })
+      logger.error('Cannot load video from id.', { error: err, id: reportData.videoRemoteId })
       return callback(err)
     }
 
@@ -260,7 +298,7 @@ function fetchVideo (podHost, remoteId, callback) {
     if (err || !video) {
       if (!err) err = new Error('video not found')
 
-      logger.error('Cannot load video from host and remote id.', { error: err })
+      logger.error('Cannot load video from host and remote id.', { error: err, podHost, remoteId })
       return callback(err)
     }
 

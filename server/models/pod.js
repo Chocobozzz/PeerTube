@@ -115,10 +115,17 @@ function list (callback) {
   return this.findAll().asCallback(callback)
 }
 
-function listAllIds (callback) {
+function listAllIds (transaction, callback) {
+  if (!callback) {
+    callback = transaction
+    transaction = null
+  }
+
   const query = {
     attributes: [ 'id' ]
   }
+
+  if (transaction) query.transaction = transaction
 
   return this.findAll(query).asCallback(function (err, pods) {
     if (err) return callback(err)
