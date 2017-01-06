@@ -2,6 +2,7 @@
 
 const each = require('async/each')
 const isEqual = require('lodash/isEqual')
+const differenceWith = require('lodash/differenceWith')
 const program = require('commander')
 const series = require('async/series')
 
@@ -20,27 +21,34 @@ program
   .option('-a, --action [interval]', 'Interval in ms for an action')
   .option('-i, --integrity [interval]', 'Interval in ms for an integrity check')
   .option('-f, --flush', 'Flush datas on exit')
+  .option('-d, --difference', 'Display difference if integrity is not okay')
   .parse(process.argv)
 
-const createWeight = parseInt(program.create) || 5
-const removeWeight = parseInt(program.remove) || 4
+const createWeight = program.create !== undefined ? parseInt(program.create) : 5
+const removeWeight = program.remove !== undefined ? parseInt(program.remove) : 4
 const flushAtExit = program.flush || false
-const actionInterval = parseInt(program.action) || 500
-let integrityInterval = parseInt(program.integrity) || 60000
+const actionInterval = program.action !== undefined ? parseInt(program.action) : 500
+let integrityInterval = program.integrity !== undefined ? parseInt(program.integrity) : 60000
+const displayDiffOnFail = program.integrity || false
 
 const numberOfPods = 6
+
 // Wait requests between pods
-const requestsMaxPerInterval = constants.REQUESTS_INTERVAL / actionInterval
+const baseRequestInterval = integrityInterval < constants.REQUESTS_INTERVAL ? integrityInterval : constants.REQUESTS_INTERVAL
+const requestsMaxPerInterval = baseRequestInterval / actionInterval
 const intervalsToMakeAllRequests = Math.ceil(requestsMaxPerInterval / constants.REQUESTS_LIMIT)
 const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.REQUESTS_INTERVAL) + 1000
-
-integrityInterval += waitForBeforeIntegrityCheck
 
 console.log('Create weight: %d, remove weight: %d.', createWeight, removeWeight)
 if (flushAtExit) {
   console.log('Program will flush data on exit.')
 } else {
   console.log('Program will not flush data on exit.')
+}
+if (displayDiffOnFail) {
+  console.log('Program will display diff on failure.')
+} else {
+  console.log('Program will not display diff on failure')
 }
 console.log('Interval in ms for each action: %d.', actionInterval)
 console.log('Interval in ms for each integrity check: %d.', integrityInterval)
@@ -73,6 +81,8 @@ runServers(numberOfPods, function (err, servers) {
   }, actionInterval)
 
   setInterval(function () {
+    if (checking === true) return
+
     console.log('Checking integrity...')
     checking = true
 
@@ -196,6 +206,7 @@ function checkIntegrity (servers, callback) {
         delete serverVideo.id
         delete serverVideo.isLocal
         delete serverVideo.thumbnailPath
+        delete serverVideo.updatedAt
       }
 
       videos.push(serverVideos)
@@ -205,6 +216,10 @@ function checkIntegrity (servers, callback) {
     for (const video of videos) {
       if (!isEqual(video, videos[0])) {
         console.error('Integrity not ok!')
+
+        if (displayDiffOnFail) {
+          console.log(differenceWith(videos[0], video, isEqual))
+        }
 
         process.exit(-1)
       }
