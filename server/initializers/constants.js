@@ -108,8 +108,10 @@ let REQUESTS_INTERVAL = 600000
 // Number of requests in parallel we can make
 const REQUESTS_IN_PARALLEL = 10
 
-// How many requests we put in request
-const REQUESTS_LIMIT = 10
+// To how many pods we send requests
+const REQUESTS_LIMIT_PODS = 10
+// How many requests we send to a pod per interval
+const REQUESTS_LIMIT_PER_POD = 5
 
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
@@ -184,7 +186,8 @@ module.exports = {
   REQUEST_ENDPOINTS,
   REQUESTS_IN_PARALLEL,
   REQUESTS_INTERVAL,
-  REQUESTS_LIMIT,
+  REQUESTS_LIMIT_PODS,
+  REQUESTS_LIMIT_PER_POD,
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
   SIGNATURE_ALGORITHM,

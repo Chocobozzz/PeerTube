@@ -138,9 +138,9 @@ function makeRequests () {
   const self = this
   const RequestToPod = this.sequelize.models.RequestToPod
 
-  // We limit the size of the requests (REQUESTS_LIMIT)
+  // We limit the size of the requests
   // We don't want to stuck with the same failing requests so we get a random list
-  listWithLimitAndRandom.call(self, constants.REQUESTS_LIMIT, function (err, requests) {
+  listWithLimitAndRandom.call(self, constants.REQUESTS_LIMIT_PODS, constants.REQUESTS_LIMIT_PER_POD, function (err, requests) {
     if (err) {
       logger.error('Cannot get the list of requests.', { err: err })
       return // Abort
@@ -156,13 +156,15 @@ function makeRequests () {
 
     // We want to group requests by destinations pod and endpoint
     const requestsToMakeGrouped = {}
+    Object.keys(requests).forEach(function (toPodId) {
+      requests[toPodId].forEach(function (data) {
+        const request = data.request
+        const pod = data.pod
+        const hashKey = toPodId + request.endpoint
 
-    requests.forEach(function (request) {
-      request.Pods.forEach(function (toPod) {
-        const hashKey = toPod.id + request.endpoint
         if (!requestsToMakeGrouped[hashKey]) {
           requestsToMakeGrouped[hashKey] = {
-            toPodId: toPod.id,
+            toPod: pod,
             endpoint: request.endpoint,
             ids: [], // request ids, to delete them from the DB in the future
             datas: [] // requests data,
@@ -179,36 +181,29 @@ function makeRequests () {
 
     eachLimit(Object.keys(requestsToMakeGrouped), constants.REQUESTS_IN_PARALLEL, function (hashKey, callbackEach) {
       const requestToMake = requestsToMakeGrouped[hashKey]
+      const toPod = requestToMake.toPod
 
-      // FIXME: SQL request inside a loop :/
-      self.sequelize.models.Pod.load(requestToMake.toPodId, function (err, toPod) {
-        if (err) {
-          logger.error('Error finding pod by id.', { err: err })
-          return callbackEach()
+      // Maybe the pod is not our friend anymore so simply remove it
+      if (!toPod) {
+        const requestIdsToDelete = requestToMake.ids
+
+        logger.info('Removing %d requests of unexisting pod %s.', requestIdsToDelete.length, requestToMake.toPod.id)
+        RequestToPod.removePodOf.call(self, requestIdsToDelete, requestToMake.toPod.id)
+        return callbackEach()
+      }
+
+      makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, function (success) {
+        if (success === true) {
+          logger.debug('Removing requests for pod %s.', requestToMake.toPod.id, { requestsIds: requestToMake.ids })
+
+          goodPods.push(requestToMake.toPod.id)
+
+          // Remove the pod id of these request ids
+          RequestToPod.removePodOf(requestToMake.ids, requestToMake.toPod.id, callbackEach)
+        } else {
+          badPods.push(requestToMake.toPod.id)
+          callbackEach()
         }
-
-        // Maybe the pod is not our friend anymore so simply remove it
-        if (!toPod) {
-          const requestIdsToDelete = requestToMake.ids
-
-          logger.info('Removing %d requests of unexisting pod %s.', requestIdsToDelete.length, requestToMake.toPodId)
-          RequestToPod.removePodOf.call(self, requestIdsToDelete, requestToMake.toPodId)
-          return callbackEach()
-        }
-
-        makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, function (success) {
-          if (success === true) {
-            logger.debug('Removing requests for pod %s.', requestToMake.toPodId, { requestsIds: requestToMake.ids })
-
-            goodPods.push(requestToMake.toPodId)
-
-            // Remove the pod id of these request ids
-            RequestToPod.removePodOf(requestToMake.ids, requestToMake.toPodId, callbackEach)
-          } else {
-            badPods.push(requestToMake.toPodId)
-            callbackEach()
-          }
-        })
       })
     }, function () {
       // All the requests were made, we update the pods score
@@ -275,29 +270,60 @@ function updatePodsScore (goodPods, badPods) {
   }
 }
 
-function listWithLimitAndRandom (limit, callback) {
+function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
   const self = this
+  const Pod = this.sequelize.models.Pod
 
-  self.count().asCallback(function (err, count) {
+  Pod.listRandomPodIdsWithRequest(limitPods, function (err, podIds) {
     if (err) return callback(err)
 
-    // Optimization...
-    if (count === 0) return callback(null, [])
+    // We don't have friends that have requests
+    if (podIds.length === 0) return callback(null, [])
 
-    let start = Math.floor(Math.random() * count) - limit
-    if (start < 0) start = 0
-
+    // The the first x requests of these pods
+    // It is very important to sort by id ASC to keep the requests order!
     const query = {
       order: [
         [ 'id', 'ASC' ]
       ],
-      // offset: start,
-      // limit: limit,
-      include: [ this.sequelize.models.Pod ]
+      include: [
+        {
+          model: self.sequelize.models.Pod,
+          where: {
+            id: {
+              $in: podIds
+            }
+          }
+        }
+      ]
     }
 
-    self.findAll(query).asCallback(callback)
+    self.findAll(query).asCallback(function (err, requests) {
+      if (err) return callback(err)
+
+      const requestsGrouped = groupAndTruncateRequests(requests, limitRequestsPerPod)
+      return callback(err, requestsGrouped)
+    })
   })
+}
+
+function groupAndTruncateRequests (requests, limitRequestsPerPod) {
+  const requestsGrouped = {}
+
+  requests.forEach(function (request) {
+    request.Pods.forEach(function (pod) {
+      if (!requestsGrouped[pod.id]) requestsGrouped[pod.id] = []
+
+      if (requestsGrouped[pod.id].length < limitRequestsPerPod) {
+        requestsGrouped[pod.id].push({
+          request,
+          pod
+        })
+      }
+    })
+  })
+
+  return requestsGrouped
 }
 
 function removeAll (callback) {

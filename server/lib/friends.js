@@ -54,7 +54,13 @@ function removeVideoToFriends (videoParams) {
 }
 
 function reportAbuseVideoToFriend (reportData, video) {
-  createRequest('report-abuse', constants.REQUEST_ENDPOINTS.VIDEOS, reportData, [ video.Author.podId ])
+  const options = {
+    type: 'report-abuse',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: reportData,
+    toIds: [ video.Author.podId ]
+  }
+  createRequest(options)
 }
 
 function hasFriends (callback) {
@@ -161,7 +167,13 @@ function sendOwnedVideosToPod (podId) {
           return
         }
 
-        createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, remoteVideo, [ podId ])
+        const options = {
+          type: 'add',
+          endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+          data: remoteVideo,
+          toIds: [ podId ]
+        }
+        createRequest(options)
       })
     })
   })

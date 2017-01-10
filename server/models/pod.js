@@ -50,6 +50,7 @@ module.exports = function (sequelize, DataTypes) {
         incrementScores,
         list,
         listAllIds,
+        listRandomPodIdsWithRequest,
         listBadPods,
         load,
         loadByHost,
@@ -131,6 +132,42 @@ function listAllIds (transaction, callback) {
     if (err) return callback(err)
 
     return callback(null, map(pods, 'id'))
+  })
+}
+
+function listRandomPodIdsWithRequest (limit, callback) {
+  const self = this
+
+  self.count().asCallback(function (err, count) {
+    if (err) return callback(err)
+
+    // Optimization...
+    if (count === 0) return callback(null, [])
+
+    let start = Math.floor(Math.random() * count) - limit
+    if (start < 0) start = 0
+
+    const query = {
+      attributes: [ 'id' ],
+      order: [
+        [ 'id', 'ASC' ]
+      ],
+      offset: start,
+      limit: limit,
+      where: {
+        id: {
+          $in: [
+            this.sequelize.literal('SELECT "podId" FROM "RequestToPods"')
+          ]
+        }
+      }
+    }
+
+    return this.findAll(query).asCallback(function (err, pods) {
+      if (err) return callback(err)
+
+      return callback(null, map(pods, 'id'))
+    })
   })
 }
 
