@@ -56,7 +56,7 @@ router.get('/abuse',
 router.post('/:id/abuse',
   oAuth.authenticate,
   validatorsVideos.videoAbuseReport,
-  reportVideoAbuse
+  reportVideoAbuseRetryWrapper
 )
 
 router.get('/',
@@ -375,7 +375,23 @@ function listVideoAbuses (req, res, next) {
   })
 }
 
-function reportVideoAbuse (req, res, next) {
+function reportVideoAbuseRetryWrapper (req, res, next) {
+  utils.transactionRetryer(
+    function (callback) {
+      return reportVideoAbuse(req, res, callback)
+    },
+    function (err) {
+      if (err) {
+        logger.error('Cannot report abuse to the video with many retries.', { error: err })
+        return next(err)
+      }
+
+      return res.type('json').status(204).end()
+    }
+  )
+}
+
+function reportVideoAbuse (req, res, finalCallback) {
   const videoInstance = res.locals.video
   const reporterUsername = res.locals.oauth.token.User.username
 
@@ -386,21 +402,49 @@ function reportVideoAbuse (req, res, next) {
     reporterPodId: null // This is our pod that reported this abuse
   }
 
-  db.VideoAbuse.create(abuse).asCallback(function (err) {
-    if (err) return next(err)
+  waterfall([
 
-    // We send the information to the destination pod
-    if (videoInstance.isOwned() === false) {
-      const reportData = {
-        reporterUsername,
-        reportReason: abuse.reason,
-        videoRemoteId: videoInstance.remoteId
+    function startTransaction (callback) {
+      db.sequelize.transaction().asCallback(function (err, t) {
+        return callback(err, t)
+      })
+    },
+
+    function createAbuse (t, callback) {
+      db.VideoAbuse.create(abuse).asCallback(function (err, abuse) {
+        return callback(err, t, abuse)
+      })
+    },
+
+    function sendToFriendsIfNeeded (t, abuse, callback) {
+      // We send the information to the destination pod
+      if (videoInstance.isOwned() === false) {
+        const reportData = {
+          reporterUsername,
+          reportReason: abuse.reason,
+          videoRemoteId: videoInstance.remoteId
+        }
+
+        friends.reportAbuseVideoToFriend(reportData, videoInstance)
       }
 
-      friends.reportAbuseVideoToFriend(reportData, videoInstance)
+      return callback(null, t)
     }
 
-    return res.type('json').status(204).end()
+  ], function andFinally (err, t) {
+    if (err) {
+      logger.debug('Cannot update the video.', { error: err })
+
+      // Abort transaction?
+      if (t) t.rollback()
+
+      return finalCallback(err)
+    }
+
+    // Commit transaction
+    t.commit()
+
+    return finalCallback(null)
   })
 }
 
