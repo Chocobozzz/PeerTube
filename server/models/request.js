@@ -174,7 +174,7 @@ function makeRequests () {
       })
     })
 
-    logger.info('Making requests to friends.', { requests: requestsToMakeGrouped })
+    logger.info('Making requests to friends.')
 
     const goodPods = []
     const badPods = []

@@ -264,7 +264,7 @@ function updateVideo (req, res, finalCallback) {
   waterfall([
 
     function startTransaction (callback) {
-      db.sequelize.transaction().asCallback(function (err, t) {
+      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
         return callback(err, t)
       })
     },

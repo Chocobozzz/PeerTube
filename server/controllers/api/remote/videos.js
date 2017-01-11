@@ -203,7 +203,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
   waterfall([
 
     function startTransaction (callback) {
-      db.sequelize.transaction().asCallback(function (err, t) {
+      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
         return callback(err, t)
       })
     },
