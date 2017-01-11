@@ -53,6 +53,14 @@ function videosUpdate (req, res, next) {
   logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
+    if (res.locals.video.isOwned() === false) {
+      return res.status(403).send('Cannot update video of another pod')
+    }
+
+    if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+      return res.status(403).send('Cannot update video of another user')
+    }
+
     checkVideoExists(req.params.id, res, next)
   })
 }

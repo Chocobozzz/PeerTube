@@ -378,6 +378,10 @@ describe('Test videos API validator', function () {
       }
       requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
     })
+
+    it('Should fail with a video of another user')
+
+    it('Should fail with a video of another pod')
   })
 
   describe('When getting a video', function () {
