@@ -152,8 +152,6 @@ function makeRequests () {
       return
     }
 
-    logger.info('Making requests to friends.')
-
     // We want to group requests by destinations pod and endpoint
     const requestsToMakeGrouped = {}
     Object.keys(requests).forEach(function (toPodId) {
@@ -175,6 +173,8 @@ function makeRequests () {
         requestsToMakeGrouped[hashKey].datas.push(request.request)
       })
     })
+
+    logger.info('Making requests to friends.', { requests: requestsToMakeGrouped })
 
     const goodPods = []
     const badPods = []

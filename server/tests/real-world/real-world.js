@@ -36,7 +36,7 @@ const numberOfPods = 6
 // Wait requests between pods
 const baseRequestInterval = integrityInterval < constants.REQUESTS_INTERVAL ? integrityInterval : constants.REQUESTS_INTERVAL
 const requestsMaxPerInterval = baseRequestInterval / actionInterval
-const intervalsToMakeAllRequests = Math.ceil(requestsMaxPerInterval / constants.REQUESTS_LIMIT)
+const intervalsToMakeAllRequests = Math.ceil(requestsMaxPerInterval / (constants.REQUESTS_LIMIT_PER_POD * numberOfPods))
 const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.REQUESTS_INTERVAL) + 1000
 
 console.log('Create weight: %d, remove weight: %d.', createWeight, removeWeight)

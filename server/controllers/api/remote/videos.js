@@ -73,10 +73,10 @@ function addRemoteVideoRetryWrapper (videoToCreateData, fromPod, finalCallback) 
     function (err) {
       if (err) {
         logger.error('Cannot insert the remote video with many retries.', { error: err })
-        return finalCallback(err)
       }
 
-      return finalCallback()
+      // Do not return the error, continue the process
+      return finalCallback(null)
     }
   )
 }
@@ -174,7 +174,7 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
     t.commit().asCallback(function (err) {
       if (err) return finalCallback(err)
 
-      logger.info('Remote video %s inserted.', videoToCreateData.videoToCreateData.name)
+      logger.info('Remote video %s inserted.', videoToCreateData.name)
       return finalCallback(null)
     })
   })
@@ -189,10 +189,10 @@ function updateRemoteVideoRetryWrapper (videoAttributesToUpdate, fromPod, finalC
     function (err) {
       if (err) {
         logger.error('Cannot update the remote video with many retries.', { error: err })
-        return finalCallback(err)
       }
 
-      return finalCallback()
+      // Do not return the error, continue the process
+      return finalCallback(null)
     }
   )
 }
@@ -270,10 +270,18 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
 function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
   // We need the instance because we have to remove some other stuffs (thumbnail etc)
   fetchVideo(fromPod.host, videoToRemoveData.remoteId, function (err, video) {
-    if (err) return callback(err)
+    // Do not return the error, continue the process
+    if (err) return callback(null)
 
     logger.debug('Removing remote video %s.', video.remoteId)
-    video.destroy().asCallback(callback)
+    video.destroy().asCallback(function (err) {
+      // Do not return the error, continue the process
+      if (err) {
+        logger.error('Cannot remove remote video with id %s.', videoToRemoveData.remoteId, { error: err })
+      }
+
+      return callback(null)
+    })
   })
 }
 
@@ -283,7 +291,8 @@ function reportAbuseRemoteVideo (reportData, fromPod, callback) {
       if (!err) err = new Error('video not found')
 
       logger.error('Cannot load video from id.', { error: err, id: reportData.videoRemoteId })
-      return callback(err)
+      // Do not return the error, continue the process
+      return callback(null)
     }
 
     logger.debug('Reporting remote abuse for video %s.', video.id)
@@ -295,7 +304,13 @@ function reportAbuseRemoteVideo (reportData, fromPod, callback) {
       videoId: video.id
     }
 
-    db.VideoAbuse.create(videoAbuseData).asCallback(callback)
+    db.VideoAbuse.create(videoAbuseData).asCallback(function (err) {
+      if (err) {
+        logger.error('Cannot create remote abuse video.', { error: err })
+      }
+
+      return callback(null)
+    })
   })
 }
 
