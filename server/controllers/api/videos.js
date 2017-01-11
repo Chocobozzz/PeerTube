@@ -231,11 +231,12 @@ function addVideo (req, res, videoFile, callback) {
     }
 
     // Commit transaction
-    t.commit()
+    t.commit().asCallback(function (err) {
+      if (err) return callback(err)
 
-    logger.info('Video with name %s created.', videoInfos.name)
-
-    return callback(null)
+      logger.info('Video with name %s created.', videoInfos.name)
+      return callback(null)
+    })
   })
 }
 
@@ -324,9 +325,12 @@ function updateVideo (req, res, finalCallback) {
     }
 
     // Commit transaction
-    t.commit()
+    t.commit().asCallback(function (err) {
+      if (err) return finalCallback(err)
 
-    return finalCallback(null)
+      logger.info('Video with name %s updated.', videoInfosToUpdate.name)
+      return finalCallback(null)
+    })
   })
 }
 
@@ -442,9 +446,12 @@ function reportVideoAbuse (req, res, finalCallback) {
     }
 
     // Commit transaction
-    t.commit()
+    t.commit().asCallback(function (err) {
+      if (err) return finalCallback(err)
 
-    return finalCallback(null)
+      logger.info('Abuse report for video %s created.', videoInstance.name)
+      return finalCallback(null)
+    })
   })
 }
 

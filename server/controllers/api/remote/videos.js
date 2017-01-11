@@ -171,9 +171,12 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
     }
 
     // Commit transaction
-    t.commit()
+    t.commit().asCallback(function (err) {
+      if (err) return finalCallback(err)
 
-    return finalCallback()
+      logger.info('Remote video %s inserted.', videoToCreateData.videoToCreateData.name)
+      return finalCallback(null)
+    })
   })
 }
 
@@ -254,10 +257,13 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
       return finalCallback(err)
     }
 
-    // Commit transaction
-    t.commit()
+   // Commit transaction
+    t.commit().asCallback(function (err) {
+      if (err) return finalCallback(err)
 
-    return finalCallback()
+      logger.info('Remote video %s updated', videoAttributesToUpdate.name)
+      return finalCallback(null)
+    })
   })
 }
 

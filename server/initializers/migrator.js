@@ -91,7 +91,7 @@ function executeMigration (actualVersion, entity, callback) {
           return callback(err)
         }
 
-        t.commit()
+        t.commit().asCallback(callback)
       })
     })
   })
