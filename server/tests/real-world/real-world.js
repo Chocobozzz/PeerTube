@@ -30,16 +30,16 @@ const removeWeight = program.remove !== undefined ? parseInt(program.remove) : 4
 const updateWeight = program.update !== undefined ? parseInt(program.update) : 4
 const flushAtExit = program.flush || false
 const actionInterval = program.action !== undefined ? parseInt(program.action) : 500
-let integrityInterval = program.integrity !== undefined ? parseInt(program.integrity) : 60000
+const integrityInterval = program.integrity !== undefined ? parseInt(program.integrity) : 60000
 const displayDiffOnFail = program.integrity || false
 
 const numberOfPods = 6
 
 // Wait requests between pods
-const baseRequestInterval = integrityInterval < constants.REQUESTS_INTERVAL ? integrityInterval : constants.REQUESTS_INTERVAL
+const baseRequestInterval = integrityInterval < constants.REQUESTS_INTERVAL ? constants.REQUESTS_INTERVAL : integrityInterval
 const requestsMaxPerInterval = baseRequestInterval / actionInterval
 const intervalsToMakeAllRequests = Math.ceil(requestsMaxPerInterval / constants.REQUESTS_LIMIT_PER_POD)
-const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.REQUESTS_INTERVAL) + 1000
+const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.REQUESTS_INTERVAL) - integrityInterval + 1000
 
 console.log('Create weight: %d, update weight: %d, remove weight: %d.', createWeight, updateWeight, removeWeight)
 if (flushAtExit) {

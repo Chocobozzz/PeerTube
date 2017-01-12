@@ -96,7 +96,7 @@ describe('Test a single pod', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          webtorrent.remove(video.magnetUri, done)
+          done()
         })
       })
     })
