@@ -44,7 +44,7 @@ Prototype of a decentralized video streaming platform using P2P (BitTorrent) dir
   <a href="http://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
   </a>
-  
+
   <a href="https://kiwiirc.com/client/irc.freenode.net/#peertube">
     <img src="https://img.shields.io/badge/%23peertube-on%20freenode-brightgreen.svg" alt="PeerTube Freenode IRC" />
   </a>
@@ -122,7 +122,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   * **npm >= 3.x**
   * OpenSSL (cli)
   * PostgreSQL
-  * ffmpeg
+  * FFmpeg
 
 #### Debian
 
@@ -139,7 +139,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 ### Sources
 
-    $ git clone https://github.com/Chocobozzz/PeerTube
+    $ git clone -b master https://github.com/Chocobozzz/PeerTube
     $ cd PeerTube
     $ npm install # Or npm install --unsafe-perm for root user
     $ npm run build
