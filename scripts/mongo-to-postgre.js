@@ -126,7 +126,8 @@ function migrateVideos (videoMongo, dbSequelize, finalCallback) {
 
           dbSequelize.Pod.findOrCreate(query).asCallback(function (err, result) {
             // [ instance, wasCreated ]
-            return callback(err, t, result[0])
+            const res = result ? result[0] : null
+            return callback(err, t, res)
           })
         },
 
@@ -148,7 +149,8 @@ function migrateVideos (videoMongo, dbSequelize, finalCallback) {
 
           dbSequelize.Author.findOrCreate(query).asCallback(function (err, result) {
             // [ instance, wasCreated ]
-            return callback(err, t, result[0])
+            const res = result ? result[0] : null
+            return callback(err, t, res)
           })
         },
 
@@ -235,9 +237,7 @@ function migrateVideos (videoMongo, dbSequelize, finalCallback) {
         }
 
         // Commit transaction
-        t.commit()
-
-        return callbackEach()
+        return t.commit().asCallback(callbackEach)
       })
     }, finalCallback)
   })
