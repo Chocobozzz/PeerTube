@@ -58,17 +58,25 @@ function getVideosList (url, end) {
     .end(end)
 }
 
-function getVideosListPagination (url, start, count, end) {
+function getVideosListPagination (url, start, count, sort, end) {
+  if (!end) {
+    end = sort
+    sort = null
+  }
+
   const path = '/api/v1/videos'
 
-  request(url)
-    .get(path)
-    .query({ start: start })
-    .query({ count: count })
-    .set('Accept', 'application/json')
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .end(end)
+  const req = request(url)
+              .get(path)
+              .query({ start: start })
+              .query({ count: count })
+
+  if (sort) req.query({ sort })
+
+  req.set('Accept', 'application/json')
+     .expect(200)
+     .expect('Content-Type', /json/)
+     .end(end)
 }
 
 function getVideosListSort (url, sort, end) {
@@ -116,18 +124,26 @@ function searchVideo (url, search, field, end) {
      .end(end)
 }
 
-function searchVideoWithPagination (url, search, field, start, count, end) {
+function searchVideoWithPagination (url, search, field, start, count, sort, end) {
+  if (!end) {
+    end = sort
+    sort = null
+  }
+
   const path = '/api/v1/videos'
 
-  request(url)
-    .get(path + '/search/' + search)
-    .query({ start: start })
-    .query({ count: count })
-    .query({ field: field })
-    .set('Accept', 'application/json')
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .end(end)
+  const req = request(url)
+              .get(path + '/search/' + search)
+              .query({ start: start })
+              .query({ count: count })
+              .query({ field: field })
+
+  if (sort) req.query({ sort })
+
+  req.set('Accept', 'application/json')
+     .expect(200)
+     .expect('Content-Type', /json/)
+     .end(end)
 }
 
 function searchVideoWithSort (url, search, sort, end) {

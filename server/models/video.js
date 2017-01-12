@@ -335,7 +335,7 @@ function toFormatedJSON () {
     author: this.Author.name,
     duration: this.duration,
     tags: map(this.Tags, 'name'),
-    thumbnailPath: constants.STATIC_PATHS.THUMBNAILS + '/' + this.getThumbnailName(),
+    thumbnailPath: pathUtils.join(constants.STATIC_PATHS.THUMBNAILS, this.getThumbnailName()),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   }

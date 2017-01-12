@@ -338,69 +338,69 @@ describe('Test a single pod', function () {
   })
 
   it('Should list only the two first videos', function (done) {
-    videosUtils.getVideosListPagination(server.url, 0, 2, function (err, res) {
+    videosUtils.getVideosListPagination(server.url, 0, 2, 'name', function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
       expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(2)
-      expect(videos[0].name === videosListBase[0].name)
-      expect(videos[1].name === videosListBase[1].name)
+      expect(videos[0].name).to.equal(videosListBase[0].name)
+      expect(videos[1].name).to.equal(videosListBase[1].name)
 
       done()
     })
   })
 
   it('Should list only the next three videos', function (done) {
-    videosUtils.getVideosListPagination(server.url, 2, 3, function (err, res) {
+    videosUtils.getVideosListPagination(server.url, 2, 3, 'name', function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
       expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(3)
-      expect(videos[0].name === videosListBase[2].name)
-      expect(videos[1].name === videosListBase[3].name)
-      expect(videos[2].name === videosListBase[4].name)
+      expect(videos[0].name).to.equal(videosListBase[2].name)
+      expect(videos[1].name).to.equal(videosListBase[3].name)
+      expect(videos[2].name).to.equal(videosListBase[4].name)
 
       done()
     })
   })
 
   it('Should list the last video', function (done) {
-    videosUtils.getVideosListPagination(server.url, 5, 6, function (err, res) {
+    videosUtils.getVideosListPagination(server.url, 5, 6, 'name', function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
       expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(1)
-      expect(videos[0].name === videosListBase[5].name)
+      expect(videos[0].name).to.equal(videosListBase[5].name)
 
       done()
     })
   })
 
   it('Should search the first video', function (done) {
-    videosUtils.searchVideoWithPagination(server.url, 'webm', 'name', 0, 1, function (err, res) {
+    videosUtils.searchVideoWithPagination(server.url, 'webm', 'name', 0, 1, 'name', function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
       expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(1)
-      expect(videos[0].name === 'video_short.webm name')
+      expect(videos[0].name).to.equal('video_short1.webm name')
 
       done()
     })
   })
 
   it('Should search the last two videos', function (done) {
-    videosUtils.searchVideoWithPagination(server.url, 'webm', 'name', 2, 2, function (err, res) {
+    videosUtils.searchVideoWithPagination(server.url, 'webm', 'name', 2, 2, 'name', function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
       expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(2)
-      expect(videos[0].name === 'video_short2.webm name')
-      expect(videos[1].name === 'video_short3.webm name')
+      expect(videos[0].name).to.equal('video_short3.webm name')
+      expect(videos[1].name).to.equal('video_short.webm name')
 
       done()
     })
@@ -476,12 +476,12 @@ describe('Test a single pod', function () {
       const videos = res.body.data
       expect(res.body.total).to.equal(6)
       expect(videos.length).to.equal(6)
-      expect(videos[5].name === 'video_short.mp4 name')
-      expect(videos[4].name === 'video_short.ogv name')
-      expect(videos[3].name === 'video_short.webm name')
-      expect(videos[2].name === 'video_short1.webm name')
-      expect(videos[1].name === 'video_short2.webm name')
-      expect(videos[0].name === 'video_short3.webm name')
+      expect(videos[0].name).to.equal('video_short.webm name')
+      expect(videos[1].name).to.equal('video_short.ogv name')
+      expect(videos[2].name).to.equal('video_short.mp4 name')
+      expect(videos[3].name).to.equal('video_short3.webm name')
+      expect(videos[4].name).to.equal('video_short2.webm name')
+      expect(videos[5].name).to.equal('video_short1.webm name')
 
       done()
     })
@@ -495,12 +495,12 @@ describe('Test a single pod', function () {
       expect(res.body.total).to.equal(4)
       expect(videos.length).to.equal(4)
 
-      expect(videos[0].name === 'video_short.webm name')
-      expect(videos[1].name === 'video_short1.webm name')
-      expect(videos[2].name === 'video_short2.webm name')
-      expect(videos[3].name === 'video_short3.webm name')
+      expect(videos[0].name).to.equal('video_short1.webm name')
+      expect(videos[1].name).to.equal('video_short2.webm name')
+      expect(videos[2].name).to.equal('video_short3.webm name')
+      expect(videos[3].name).to.equal('video_short.webm name')
 
-      videoId = videos[3].id
+      videoId = videos[2].id
 
       done()
     })
@@ -534,8 +534,6 @@ describe('Test a single pod', function () {
       videosUtils.testVideoImage(server.url, 'video_short3.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
         expect(test).to.equal(true)
-
-        videoId = video.id
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
