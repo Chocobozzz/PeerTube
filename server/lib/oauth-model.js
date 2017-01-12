@@ -1,10 +1,5 @@
-const mongoose = require('mongoose')
-
+const db = require('../initializers/database')
 const logger = require('../helpers/logger')
-
-const OAuthClient = mongoose.model('OAuthClient')
-const OAuthToken = mongoose.model('OAuthToken')
-const User = mongoose.model('User')
 
 // See https://github.com/oauthjs/node-oauth2-server/wiki/Model-specification for the model specifications
 const OAuthModel = {
@@ -21,27 +16,25 @@ const OAuthModel = {
 function getAccessToken (bearerToken) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
-  return OAuthToken.getByTokenAndPopulateUser(bearerToken)
+  return db.OAuthToken.getByTokenAndPopulateUser(bearerToken)
 }
 
 function getClient (clientId, clientSecret) {
   logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ').')
 
-  // TODO req validator
-  const mongoId = new mongoose.mongo.ObjectID(clientId)
-  return OAuthClient.getByIdAndSecret(mongoId, clientSecret)
+  return db.OAuthClient.getByIdAndSecret(clientId, clientSecret)
 }
 
 function getRefreshToken (refreshToken) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
-  return OAuthToken.getByRefreshTokenAndPopulateClient(refreshToken)
+  return db.OAuthToken.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 
 function getUser (username, password) {
   logger.debug('Getting User (username: ' + username + ', password: ' + password + ').')
 
-  return User.getByUsername(username).then(function (user) {
+  return db.User.getByUsername(username).then(function (user) {
     if (!user) return null
 
     // We need to return a promise
@@ -60,8 +53,8 @@ function getUser (username, password) {
 }
 
 function revokeToken (token) {
-  return OAuthToken.getByRefreshTokenAndPopulateUser(token.refreshToken).then(function (tokenDB) {
-    if (tokenDB) tokenDB.remove()
+  return db.OAuthToken.getByRefreshTokenAndPopulateUser(token.refreshToken).then(function (tokenDB) {
+    if (tokenDB) tokenDB.destroy()
 
     /*
       * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js
@@ -80,18 +73,19 @@ function revokeToken (token) {
 function saveToken (token, client, user) {
   logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
 
-  const tokenObj = new OAuthToken({
+  const tokenToCreate = {
     accessToken: token.accessToken,
     accessTokenExpiresAt: token.accessTokenExpiresAt,
-    client: client.id,
     refreshToken: token.refreshToken,
     refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-    user: user.id
-  })
+    oAuthClientId: client.id,
+    userId: user.id
+  }
 
-  return tokenObj.save().then(function (tokenCreated) {
+  return db.OAuthToken.create(tokenToCreate).then(function (tokenCreated) {
     tokenCreated.client = client
     tokenCreated.user = user
+
     return tokenCreated
   }).catch(function (err) {
     throw err

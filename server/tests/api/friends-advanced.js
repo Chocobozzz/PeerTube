@@ -86,7 +86,7 @@ describe('Test advanced friends', function () {
         getFriendsList(5, function (err, res) {
           if (err) throw err
 
-          expect(res.body.length).to.equal(0)
+          expect(res.body.data.length).to.equal(0)
 
           done()
         })
@@ -111,7 +111,7 @@ describe('Test advanced friends', function () {
           getFriendsList(i, function (err, res) {
             if (err) throw err
 
-            expect(res.body.length).to.equal(0)
+            expect(res.body.data.length).to.equal(0)
 
             callback()
           })
@@ -140,7 +140,7 @@ describe('Test advanced friends', function () {
           getFriendsList(i, function (err, res) {
             if (err) throw err
 
-            expect(res.body.length).to.equal(3)
+            expect(res.body.data.length).to.equal(3)
 
             callback()
           })
@@ -182,7 +182,7 @@ describe('Test advanced friends', function () {
           if (err) throw err
 
           // Pod 4 didn't know pod 1 and 2 removed it
-          expect(res.body.length).to.equal(3)
+          expect(res.body.data.length).to.equal(3)
           next()
         })
       },
@@ -200,7 +200,7 @@ describe('Test advanced friends', function () {
           if (err) throw err
 
           // Pod 4 should not be our friend
-          const result = res.body
+          const result = res.body.data
           expect(result.length).to.equal(3)
           for (const pod of result) {
             expect(pod.host).not.equal(servers[3].host)

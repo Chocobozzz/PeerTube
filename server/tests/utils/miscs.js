@@ -6,12 +6,14 @@ const miscsUtils = {
 
 // ---------------------- Export functions --------------------
 
-function dateIsValid (dateString) {
+function dateIsValid (dateString, interval) {
   const dateToCheck = new Date(dateString)
   const now = new Date()
 
   // Check if the interval is more than 2 minutes
-  if (now - dateToCheck > 120000) return false
+  if (!interval) interval = 120000
+
+  if (now - dateToCheck > interval) return false
 
   return true
 }

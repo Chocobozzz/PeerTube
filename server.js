@@ -17,10 +17,10 @@ const app = express()
 
 // ----------- Database -----------
 const constants = require('./server/initializers/constants')
-const database = require('./server/initializers/database')
 const logger = require('./server/helpers/logger')
-
-database.connect()
+// Initialize database and models
+const db = require('./server/initializers/database')
+db.init()
 
 // ----------- Checker -----------
 const checker = require('./server/initializers/checker')
@@ -39,9 +39,7 @@ if (errorMessage !== null) {
 const customValidators = require('./server/helpers/custom-validators')
 const installer = require('./server/initializers/installer')
 const migrator = require('./server/initializers/migrator')
-const mongoose = require('mongoose')
 const routes = require('./server/controllers')
-const Request = mongoose.model('Request')
 
 // ----------- Command line -----------
 
@@ -59,7 +57,8 @@ app.use(expressValidator({
     customValidators.misc,
     customValidators.pods,
     customValidators.users,
-    customValidators.videos
+    customValidators.videos,
+    customValidators.remote.videos
   )
 }))
 
@@ -130,7 +129,7 @@ installer.installApplication(function (err) {
     // ----------- Make the server listening -----------
     server.listen(port, function () {
       // Activate the pool requests
-      Request.activate()
+      db.Request.activate()
 
       logger.info('Server listening on port %d', port)
       logger.info('Webserver: %s', constants.CONFIG.WEBSERVER.URL)

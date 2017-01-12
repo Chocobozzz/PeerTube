@@ -1,10 +1,8 @@
 'use strict'
 
 const config = require('config')
-const mongoose = require('mongoose')
 
-const Client = mongoose.model('OAuthClient')
-const User = mongoose.model('User')
+const db = require('./database')
 
 const checker = {
   checkConfig,
@@ -29,7 +27,7 @@ function checkConfig () {
 function checkMissedConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.hostname', 'webserver.port',
-    'database.hostname', 'database.port', 'database.suffix',
+    'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
     'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews'
   ]
   const miss = []
@@ -44,15 +42,15 @@ function checkMissedConfig () {
 }
 
 function clientsExist (callback) {
-  Client.list(function (err, clients) {
+  db.OAuthClient.countTotal(function (err, totalClients) {
     if (err) return callback(err)
 
-    return callback(null, clients.length !== 0)
+    return callback(null, totalClients !== 0)
   })
 }
 
 function usersExist (callback) {
-  User.countTotal(function (err, totalUsers) {
+  db.User.countTotal(function (err, totalUsers) {
     if (err) return callback(err)
 
     return callback(null, totalUsers !== 0)

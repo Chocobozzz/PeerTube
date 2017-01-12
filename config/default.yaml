@@ -8,8 +8,10 @@ webserver:
 
 database:
   hostname: 'localhost'
-  port: 27017
-  suffix: '-dev'
+  port: 5432
+  suffix: '_dev'
+  username: 'peertube'
+  password: 'peertube'
 
 # From the project root directory
 storage:

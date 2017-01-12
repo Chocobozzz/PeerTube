@@ -28,7 +28,7 @@ describe('Test basic friends', function () {
     podsUtils.getFriendsList(serverToTest.url, function (err, res) {
       if (err) throw err
 
-      const result = res.body
+      const result = res.body.data
       expect(result).to.be.an('array')
       expect(result.length).to.equal(2)
 
@@ -65,7 +65,7 @@ describe('Test basic friends', function () {
       podsUtils.getFriendsList(server.url, function (err, res) {
         if (err) throw err
 
-        const result = res.body
+        const result = res.body.data
         expect(result).to.be.an('array')
         expect(result.length).to.equal(0)
         callback()
@@ -90,14 +90,14 @@ describe('Test basic friends', function () {
         podsUtils.getFriendsList(servers[1].url, function (err, res) {
           if (err) throw err
 
-          const result = res.body
+          const result = res.body.data
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
 
           const pod = result[0]
           expect(pod.host).to.equal(servers[2].host)
           expect(pod.score).to.equal(20)
-          expect(miscsUtils.dateIsValid(pod.createdDate)).to.be.true
+          expect(miscsUtils.dateIsValid(pod.createdAt)).to.be.true
 
           next()
         })
@@ -107,14 +107,14 @@ describe('Test basic friends', function () {
         podsUtils.getFriendsList(servers[2].url, function (err, res) {
           if (err) throw err
 
-          const result = res.body
+          const result = res.body.data
           expect(result).to.be.an('array')
           expect(result.length).to.equal(1)
 
           const pod = result[0]
           expect(pod.host).to.equal(servers[1].host)
           expect(pod.score).to.equal(20)
-          expect(miscsUtils.dateIsValid(pod.createdDate)).to.be.true
+          expect(miscsUtils.dateIsValid(pod.createdAt)).to.be.true
 
           next()
         })
@@ -154,7 +154,7 @@ describe('Test basic friends', function () {
         podsUtils.getFriendsList(servers[1].url, function (err, res) {
           if (err) throw err
 
-          const result = res.body
+          const result = res.body.data
           expect(result).to.be.an('array')
           expect(result.length).to.equal(0)
 
@@ -167,7 +167,7 @@ describe('Test basic friends', function () {
           podsUtils.getFriendsList(url, function (err, res) {
             if (err) throw err
 
-            const result = res.body
+            const result = res.body.data
             expect(result).to.be.an('array')
             expect(result.length).to.equal(1)
             expect(result[0].host).not.to.be.equal(servers[1].host)

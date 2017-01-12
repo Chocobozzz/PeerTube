@@ -5,10 +5,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
-import { DropdownModule } from 'ng2-bootstrap/components/dropdown';
-import { ProgressbarModule } from 'ng2-bootstrap/components/progressbar';
-import { PaginationModule } from 'ng2-bootstrap/components/pagination';
-import { ModalModule } from 'ng2-bootstrap/components/modal';
+import { DropdownModule } from 'ng2-bootstrap/dropdown';
+import { ProgressbarModule } from 'ng2-bootstrap/progressbar';
+import { PaginationModule } from 'ng2-bootstrap/pagination';
+import { ModalModule } from 'ng2-bootstrap/modal';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 
 import { AUTH_HTTP_PROVIDERS } from './auth';
@@ -23,11 +23,12 @@ import { SearchComponent, SearchService } from './search';
     HttpModule,
     RouterModule,
 
-    DropdownModule,
-    FileUploadModule,
-    ModalModule,
-    PaginationModule,
-    ProgressbarModule
+    DropdownModule.forRoot(),
+    ModalModule.forRoot(),
+    PaginationModule.forRoot(),
+    ProgressbarModule.forRoot(),
+
+    FileUploadModule
   ],
 
   declarations: [

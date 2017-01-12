@@ -7,18 +7,18 @@ export class RequestStats {
   maxRequestsInParallel: number;
   milliSecondsInterval: number;
   remainingMilliSeconds: number;
-  requests: Request[];
+  totalRequests: number;
 
   constructor(hash: {
     maxRequestsInParallel: number,
     milliSecondsInterval: number,
     remainingMilliSeconds: number,
-    requests: Request[];
+    totalRequests: number;
   }) {
     this.maxRequestsInParallel = hash.maxRequestsInParallel;
     this.milliSecondsInterval = hash.milliSecondsInterval;
     this.remainingMilliSeconds = hash.remainingMilliSeconds;
-    this.requests = hash.requests;
+    this.totalRequests = hash.totalRequests;
   }
 
   get remainingSeconds() {

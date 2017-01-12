@@ -121,7 +121,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   * **NodeJS >= 4.x**
   * **npm >= 3.x**
   * OpenSSL (cli)
-  * MongoDB
+  * PostgreSQL
   * ffmpeg
 
 #### Debian
@@ -131,7 +131,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   * Run:
 
         # apt-get update
-        # apt-get install ffmpeg mongodb openssl
+        # apt-get install ffmpeg postgresql-9.4 openssl
         # npm install -g npm@3
 
 #### Other distribution... (PR welcome)
@@ -238,7 +238,7 @@ Here are some simple schemes:
 
 <img src="https://lutim.cpy.re/MyeS4q1g" alt="Join a network" />
 
-<img src="https://lutim.cpy.re/PqpTTzdP" alt="Many networks"
+<img src="https://lutim.cpy.re/PqpTTzdP" alt="Many networks" />
 
 </p>
 

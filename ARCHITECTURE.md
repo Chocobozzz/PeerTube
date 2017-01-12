@@ -54,7 +54,16 @@
   * A pod is a websocket tracker which is responsible for all the video uploaded in it
   * A pod has an administrator that can add/remove users, make friends and quit friends
   * A pod has different user accounts that can upload videos
-  * All pods have an index of all videos of the network (name, origin pod url, small description, uploader username, magnet Uri, thumbnail name, created date and the thumbnail file). For example, a test with 1000000 videos with alphanum characters and the following lengths: name = 50, author = 50, url = 25, description = 250, magnerUri = 200, thumbnail name = 50 has a mongodb size of ~ 4GB. To this, we add 1 000 000 thumbnails of 5-15 KB so 15GB maximum
+  * All pods have an index of all videos of the network (name, origin pod url, small description, uploader username, magnet Uri, thumbnail name, created date and the thumbnail file). For example, a test with 1000000 videos (3 tags each) with alphanum characters and the following lengths: name = 50, author = 50, podHost = 25, description = 250, videoExtension = 4, remoteId = 50, infoHash = 50 and tag = 10 has a PostgreSQL size of ~ 2GB with all the useful indexes. To this, we add 1 000 000 thumbnails of 5-15 KB so 15GB maximum
+
+          table_name | row_estimate |   index    |   toast    |   table
+        pod          |       983416 | 140 MB     | 83 MB      | 57 MB
+        author       |        1e+06 | 229 MB     | 140 MB     | 89 MB
+        tag          |  2.96758e+06 | 309 MB     | 182 MB     | 127 MB
+        video        |        1e+06 | 723 MB     | 263 MB     | 460 MB
+        video_tag    |        3e+06 | 316 MB     | 212 MB     | 104 MB
+
+
   * After having uploaded a video, the server seeds it (WebSeed protocol), adds the meta data in its database and makes a secure request to all of its friends
   * If a user wants to watch a video, he asks its pod the magnetUri and the frontend adds the torrent (with WebTorrent), creates the HTML5 video tag and streams the file into it
   * A user watching a video seeds it too (BitTorrent) so another user who is watching the same video can get the data from the origin server and the user 1 (etc)

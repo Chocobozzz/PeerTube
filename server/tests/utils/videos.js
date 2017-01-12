@@ -15,7 +15,8 @@ const videosUtils = {
   searchVideoWithPagination,
   searchVideoWithSort,
   testVideoImage,
-  uploadVideo
+  uploadVideo,
+  updateVideo
 }
 
 // ---------------------- Export functions --------------------
@@ -25,7 +26,7 @@ function getAllVideosListBy (url, end) {
 
   request(url)
     .get(path)
-    .query({ sort: 'createdDate' })
+    .query({ sort: 'createdAt' })
     .query({ start: 0 })
     .query({ count: 10000 })
     .set('Accept', 'application/json')
@@ -57,17 +58,25 @@ function getVideosList (url, end) {
     .end(end)
 }
 
-function getVideosListPagination (url, start, count, end) {
+function getVideosListPagination (url, start, count, sort, end) {
+  if (!end) {
+    end = sort
+    sort = null
+  }
+
   const path = '/api/v1/videos'
 
-  request(url)
-    .get(path)
-    .query({ start: start })
-    .query({ count: count })
-    .set('Accept', 'application/json')
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .end(end)
+  const req = request(url)
+              .get(path)
+              .query({ start: start })
+              .query({ count: count })
+
+  if (sort) req.query({ sort })
+
+  req.set('Accept', 'application/json')
+     .expect(200)
+     .expect('Content-Type', /json/)
+     .end(end)
 }
 
 function getVideosListSort (url, sort, end) {
@@ -115,18 +124,26 @@ function searchVideo (url, search, field, end) {
      .end(end)
 }
 
-function searchVideoWithPagination (url, search, field, start, count, end) {
+function searchVideoWithPagination (url, search, field, start, count, sort, end) {
+  if (!end) {
+    end = sort
+    sort = null
+  }
+
   const path = '/api/v1/videos'
 
-  request(url)
-    .get(path + '/search/' + search)
-    .query({ start: start })
-    .query({ count: count })
-    .query({ field: field })
-    .set('Accept', 'application/json')
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .end(end)
+  const req = request(url)
+              .get(path + '/search/' + search)
+              .query({ start: start })
+              .query({ count: count })
+              .query({ field: field })
+
+  if (sort) req.query({ sort })
+
+  req.set('Accept', 'application/json')
+     .expect(200)
+     .expect('Content-Type', /json/)
+     .end(end)
 }
 
 function searchVideoWithSort (url, search, sort, end) {
@@ -192,6 +209,31 @@ function uploadVideo (url, accessToken, name, description, tags, fixture, specia
   req.attach('videofile', filepath)
      .expect(specialStatus)
      .end(end)
+}
+
+function updateVideo (url, accessToken, id, name, description, tags, specialStatus, end) {
+  if (!end) {
+    end = specialStatus
+    specialStatus = 204
+  }
+
+  const path = '/api/v1/videos/' + id
+
+  const req = request(url)
+              .put(path)
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + accessToken)
+
+  if (name) req.field('name', name)
+  if (description) req.field('description', description)
+
+  if (tags) {
+    for (let i = 0; i < tags.length; i++) {
+      req.field('tags[' + i + ']', tags[i])
+    }
+  }
+
+  req.expect(specialStatus).end(end)
 }
 
 // ---------------------------------------------------------------------------

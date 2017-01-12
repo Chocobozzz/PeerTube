@@ -14,8 +14,8 @@ export class SearchComponent implements OnInit {
   fieldChoices = {
     name: 'Name',
     author: 'Author',
-    podUrl: 'Pod Url',
-    magnetUri: 'Magnet Uri',
+    host: 'Pod Host',
+    magnetUri: 'Magnet URI',
     tags: 'Tags'
   };
   searchCriterias: Search = {

@@ -1,28 +1,23 @@
 'use strict'
 
-const parallel = require('async/parallel')
-
 const utils = {
-  listForApiWithCount
+  getSort
 }
 
-function listForApiWithCount (query, start, count, sort, callback) {
-  const self = this
+// Translate for example "-name" to [ 'name', 'DESC' ]
+function getSort (value) {
+  let field
+  let direction
 
-  parallel([
-    function (asyncCallback) {
-      self.find(query).skip(start).limit(count).sort(sort).exec(asyncCallback)
-    },
-    function (asyncCallback) {
-      self.count(query, asyncCallback)
-    }
-  ], function (err, results) {
-    if (err) return callback(err)
+  if (value.substring(0, 1) === '-') {
+    direction = 'DESC'
+    field = value.substring(1)
+  } else {
+    direction = 'ASC'
+    field = value
+  }
 
-    const data = results[0]
-    const total = results[1]
-    return callback(null, data, total)
-  })
+  return [ field, direction ]
 }
 
 // ---------------------------------------------------------------------------

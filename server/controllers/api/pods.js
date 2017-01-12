@@ -1,10 +1,11 @@
 'use strict'
 
 const express = require('express')
-const mongoose = require('mongoose')
 const waterfall = require('async/waterfall')
 
+const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
+const utils = require('../../helpers/utils')
 const friends = require('../../lib/friends')
 const middlewares = require('../../middlewares')
 const admin = middlewares.admin
@@ -15,7 +16,6 @@ const validators = middlewares.validators.pods
 const signatureValidator = middlewares.validators.remote.signature
 
 const router = express.Router()
-const Pod = mongoose.model('Pod')
 
 router.get('/', listPods)
 router.post('/',
@@ -37,7 +37,7 @@ router.get('/quitfriends',
 )
 // Post because this is a secured request
 router.post('/remove',
-  signatureValidator,
+  signatureValidator.signature,
   checkSignature,
   removePods
 )
@@ -53,15 +53,15 @@ function addPods (req, res, next) {
 
   waterfall([
     function addPod (callback) {
-      const pod = new Pod(informations)
-      pod.save(function (err, podCreated) {
+      const pod = db.Pod.build(informations)
+      pod.save().asCallback(function (err, podCreated) {
         // Be sure about the number of parameters for the callback
         return callback(err, podCreated)
       })
     },
 
     function sendMyVideos (podCreated, callback) {
-      friends.sendOwnedVideosToPod(podCreated._id)
+      friends.sendOwnedVideosToPod(podCreated.id)
 
       callback(null)
     },
@@ -84,10 +84,10 @@ function addPods (req, res, next) {
 }
 
 function listPods (req, res, next) {
-  Pod.list(function (err, podsList) {
+  db.Pod.list(function (err, podsList) {
     if (err) return next(err)
 
-    res.json(getFormatedPods(podsList))
+    res.json(utils.getFormatedObjects(podsList, podsList.length))
   })
 }
 
@@ -111,11 +111,11 @@ function removePods (req, res, next) {
 
   waterfall([
     function loadPod (callback) {
-      Pod.loadByHost(host, callback)
+      db.Pod.loadByHost(host, callback)
     },
 
-    function removePod (pod, callback) {
-      pod.remove(callback)
+    function deletePod (pod, callback) {
+      pod.destroy().asCallback(callback)
     }
   ], function (err) {
     if (err) return next(err)
@@ -130,16 +130,4 @@ function quitFriends (req, res, next) {
 
     res.type('json').status(204).end()
   })
-}
-
-// ---------------------------------------------------------------------------
-
-function getFormatedPods (pods) {
-  const formatedPods = []
-
-  pods.forEach(function (pod) {
-    formatedPods.push(pod.toFormatedJSON())
-  })
-
-  return formatedPods
 }

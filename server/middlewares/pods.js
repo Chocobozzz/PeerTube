@@ -44,7 +44,6 @@ module.exports = podsMiddleware
 function getHostWithPort (host) {
   const splitted = host.split(':')
 
-  console.log(splitted)
   // The port was not specified
   if (splitted.length === 1) {
     if (constants.REMOTE_SCHEME.HTTP === 'https') return host + ':443'

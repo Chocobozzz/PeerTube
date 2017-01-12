@@ -17,8 +17,8 @@ export class VideoSortComponent {
     '-name': 'Name - Desc',
     'duration': 'Duration - Asc',
     '-duration': 'Duration - Desc',
-    'createdDate': 'Created Date - Asc',
-    '-createdDate': 'Created Date - Desc'
+    'createdAt': 'Created Date - Asc',
+    '-createdAt': 'Created Date - Desc'
   };
 
   get choiceKeys() {

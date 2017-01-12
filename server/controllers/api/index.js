@@ -2,6 +2,8 @@
 
 const express = require('express')
 
+const utils = require('../../helpers/utils')
+
 const router = express.Router()
 
 const clientsController = require('./clients')
@@ -18,7 +20,7 @@ router.use('/requests', requestsController)
 router.use('/users', usersController)
 router.use('/videos', videosController)
 router.use('/ping', pong)
-router.use('/*', badRequest)
+router.use('/*', utils.badRequest)
 
 // ---------------------------------------------------------------------------
 
@@ -28,8 +30,4 @@ module.exports = router
 
 function pong (req, res, next) {
   return res.send('pong').status(200).end()
-}
-
-function badRequest (req, res, next) {
-  res.type('json').status(400).end()
 }

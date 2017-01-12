@@ -1,19 +1,19 @@
 'use strict'
 
-const mongoose = require('mongoose')
-
 const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
 const customVideosValidators = require('../../helpers/custom-validators').videos
+const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
-
-const Video = mongoose.model('Video')
 
 const validatorsVideos = {
   videosAdd,
+  videosUpdate,
   videosGet,
   videosRemove,
-  videosSearch
+  videosSearch,
+
+  videoAbuseReport
 }
 
 function videosAdd (req, res, next) {
@@ -29,7 +29,7 @@ function videosAdd (req, res, next) {
   checkErrors(req, res, function () {
     const videoFile = req.files.videofile[0]
 
-    Video.getDurationFromFile(videoFile.path, function (err, duration) {
+    db.Video.getDurationFromFile(videoFile.path, function (err, duration) {
       if (err) {
         return res.status(400).send('Cannot retrieve metadata of the file.')
       }
@@ -44,40 +44,56 @@ function videosAdd (req, res, next) {
   })
 }
 
-function videosGet (req, res, next) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+function videosUpdate (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkBody('name', 'Should have a valid name').optional().isVideoNameValid()
+  req.checkBody('description', 'Should have a valid description').optional().isVideoDescriptionValid()
+  req.checkBody('tags', 'Should have correct tags').optional().isVideoTagsValid()
 
-  logger.debug('Checking videosGet parameters', { parameters: req.params })
+  logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
-    Video.load(req.params.id, function (err, video) {
-      if (err) {
-        logger.error('Error in videosGet request validator.', { error: err })
-        return res.sendStatus(500)
+    checkVideoExists(req.params.id, res, function () {
+      // We need to make additional checks
+      if (res.locals.video.isOwned() === false) {
+        return res.status(403).send('Cannot update video of another pod')
       }
 
-      if (!video) return res.status(404).send('Video not found')
+      if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+        return res.status(403).send('Cannot update video of another user')
+      }
 
       next()
     })
   })
 }
 
+function videosGet (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+
+  logger.debug('Checking videosGet parameters', { parameters: req.params })
+
+  checkErrors(req, res, function () {
+    checkVideoExists(req.params.id, res, next)
+  })
+}
+
 function videosRemove (req, res, next) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    Video.load(req.params.id, function (err, video) {
-      if (err) {
-        logger.error('Error in videosRemove request validator.', { error: err })
-        return res.sendStatus(500)
+    checkVideoExists(req.params.id, res, function () {
+      // We need to make additional checks
+
+      if (res.locals.video.isOwned() === false) {
+        return res.status(403).send('Cannot remove video of another pod')
       }
 
-      if (!video) return res.status(404).send('Video not found')
-      else if (video.isOwned() === false) return res.status(403).send('Cannot remove video of another pod')
-      else if (video.author !== res.locals.oauth.token.user.username) return res.status(403).send('Cannot remove video of another user')
+      if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+        return res.status(403).send('Cannot remove video of another user')
+      }
 
       next()
     })
@@ -94,6 +110,33 @@ function videosSearch (req, res, next) {
   checkErrors(req, res, next)
 }
 
+function videoAbuseReport (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkBody('reason', 'Should have a valid reason').isVideoAbuseReasonValid()
+
+  logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
+
+  checkErrors(req, res, function () {
+    checkVideoExists(req.params.id, res, next)
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 module.exports = validatorsVideos
+
+// ---------------------------------------------------------------------------
+
+function checkVideoExists (id, res, callback) {
+  db.Video.loadAndPopulateAuthorAndPodAndTags(id, function (err, video) {
+    if (err) {
+      logger.error('Error in video request validator.', { error: err })
+      return res.sendStatus(500)
+    }
+
+    if (!video) return res.status(404).send('Video not found')
+
+    res.locals.video = video
+    callback()
+  })
+}

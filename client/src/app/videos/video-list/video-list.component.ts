@@ -145,7 +145,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.sort = <SortField>routeParams['sort'] || '-createdDate';
+    this.sort = <SortField>routeParams['sort'] || '-createdAt';
 
     if (routeParams['page'] !== undefined) {
       this.pagination.currentPage = parseInt(routeParams['page']);

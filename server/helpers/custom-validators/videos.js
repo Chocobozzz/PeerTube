@@ -6,43 +6,22 @@ const constants = require('../../initializers/constants')
 const usersValidators = require('./users')
 const miscValidators = require('./misc')
 const VIDEOS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEOS
+const VIDEO_ABUSES_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
 const videosValidators = {
-  isEachRemoteVideosValid,
   isVideoAuthorValid,
   isVideoDateValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
-  isVideoMagnetValid,
+  isVideoInfoHashValid,
   isVideoNameValid,
-  isVideoPodHostValid,
   isVideoTagsValid,
   isVideoThumbnailValid,
-  isVideoThumbnail64Valid
-}
-
-function isEachRemoteVideosValid (requests) {
-  return miscValidators.isArray(requests) &&
-    requests.every(function (request) {
-      const video = request.data
-      return (
-        isRequestTypeAddValid(request.type) &&
-        isVideoAuthorValid(video.author) &&
-        isVideoDateValid(video.createdDate) &&
-        isVideoDescriptionValid(video.description) &&
-        isVideoDurationValid(video.duration) &&
-        isVideoMagnetValid(video.magnet) &&
-        isVideoNameValid(video.name) &&
-        isVideoTagsValid(video.tags) &&
-        isVideoThumbnail64Valid(video.thumbnailBase64) &&
-        isVideoRemoteIdValid(video.remoteId)
-      ) ||
-      (
-        isRequestTypeRemoveValid(request.type) &&
-        isVideoNameValid(video.name) &&
-        isVideoRemoteIdValid(video.remoteId)
-      )
-    })
+  isVideoThumbnailDataValid,
+  isVideoExtnameValid,
+  isVideoRemoteIdValid,
+  isVideoAbuseReasonValid,
+  isVideoAbuseReporterUsernameValid
 }
 
 function isVideoAuthorValid (value) {
@@ -61,17 +40,16 @@ function isVideoDurationValid (value) {
   return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
-function isVideoMagnetValid (value) {
-  return validator.isLength(value.infoHash, VIDEOS_CONSTRAINTS_FIELDS.MAGNET.INFO_HASH)
+function isVideoExtnameValid (value) {
+  return VIDEOS_CONSTRAINTS_FIELDS.EXTNAME.indexOf(value) !== -1
+}
+
+function isVideoInfoHashValid (value) {
+  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
 function isVideoNameValid (value) {
   return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
-}
-
-function isVideoPodHostValid (value) {
-  // TODO: set options (TLD...)
-  return validator.isURL(value)
 }
 
 function isVideoTagsValid (tags) {
@@ -87,25 +65,22 @@ function isVideoThumbnailValid (value) {
   return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL)
 }
 
-function isVideoThumbnail64Valid (value) {
-  return validator.isBase64(value) &&
-         validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL64)
+function isVideoThumbnailDataValid (value) {
+  return validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL_DATA)
 }
 
 function isVideoRemoteIdValid (value) {
-  return validator.isMongoId(value)
+  return validator.isUUID(value, 4)
+}
+
+function isVideoAbuseReasonValid (value) {
+  return validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
+}
+
+function isVideoAbuseReporterUsernameValid (value) {
+  return usersValidators.isUserUsernameValid(value)
 }
 
 // ---------------------------------------------------------------------------
 
 module.exports = videosValidators
-
-// ---------------------------------------------------------------------------
-
-function isRequestTypeAddValid (value) {
-  return value === 'add'
-}
-
-function isRequestTypeRemoveValid (value) {
-  return value === 'remove'
-}

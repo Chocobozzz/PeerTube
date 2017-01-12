@@ -1,7 +1,6 @@
 'use strict'
 
 const config = require('config')
-const maxBy = require('lodash/maxBy')
 const path = require('path')
 
 // ---------------------------------------------------------------------------
@@ -14,13 +13,14 @@ const PAGINATION_COUNT_DEFAULT = 15
 
 // Sortable columns per schema
 const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'podHost', 'author', 'tags' ]
+  VIDEOS: [ 'name', 'magnetUri', 'host', 'author', 'tags' ]
 }
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  USERS: [ 'username', '-username', 'createdDate', '-createdDate' ],
-  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdDate', '-createdDate' ]
+  USERS: [ 'username', '-username', 'createdAt', '-createdAt' ],
+  VIDEO_ABUSES: [ 'createdAt', '-createdAt' ],
+  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdAt', '-createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -37,7 +37,9 @@ const CONFIG = {
   DATABASE: {
     DBNAME: 'peertube' + config.get('database.suffix'),
     HOSTNAME: config.get('database.hostname'),
-    PORT: config.get('database.port')
+    PORT: config.get('database.port'),
+    USERNAME: config.get('database.username'),
+    PASSWORD: config.get('database.password')
   },
   STORAGE: {
     CERT_DIR: path.join(__dirname, '..', '..', config.get('storage.certs')),
@@ -64,17 +66,19 @@ const CONSTRAINTS_FIELDS = {
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 } // Length
   },
+  VIDEO_ABUSES: {
+    REASON: { min: 2, max: 300 } // Length
+  },
   VIDEOS: {
     NAME: { min: 3, max: 50 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
-    MAGNET: {
-      INFO_HASH: { min: 10, max: 50 } // Length
-    },
+    EXTNAME: [ '.mp4', '.ogv', '.webm' ],
+    INFO_HASH: { min: 40, max: 40 }, // Length, infohash is 20 bytes length but we represent it in hexa so 20 * 2
     DURATION: { min: 1, max: 7200 }, // Number
     TAGS: { min: 1, max: 3 }, // Number of total tags
     TAG: { min: 2, max: 10 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
-    THUMBNAIL64: { min: 0, max: 20000 } // Bytes
+    THUMBNAIL_DATA: { min: 0, max: 20000 } // Bytes
   }
 }
 
@@ -88,41 +92,7 @@ const FRIEND_SCORE = {
 
 // ---------------------------------------------------------------------------
 
-const MONGO_MIGRATION_SCRIPTS = [
-  {
-    script: '0005-create-application',
-    version: 5
-  },
-  {
-    script: '0010-users-password',
-    version: 10
-  },
-  {
-    script: '0015-admin-role',
-    version: 15
-  },
-  {
-    script: '0020-requests-endpoint',
-    version: 20
-  },
-  {
-    script: '0025-video-filenames',
-    version: 25
-  },
-  {
-    script: '0030-video-magnet',
-    version: 30
-  },
-  {
-    script: '0035-url-to-host',
-    version: 35
-  },
-  {
-    script: '0040-video-remote-id',
-    version: 40
-  }
-]
-const LAST_MONGO_SCHEMA_VERSION = (maxBy(MONGO_MIGRATION_SCRIPTS, 'version'))['version']
+const LAST_MIGRATION_VERSION = 0
 
 // ---------------------------------------------------------------------------
 
@@ -138,8 +108,10 @@ let REQUESTS_INTERVAL = 600000
 // Number of requests in parallel we can make
 const REQUESTS_IN_PARALLEL = 10
 
-// How many requests we put in request
-const REQUESTS_LIMIT = 10
+// To how many pods we send requests
+const REQUESTS_LIMIT_PODS = 10
+// How many requests we send to a pod per interval
+const REQUESTS_LIMIT_PER_POD = 5
 
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
@@ -148,15 +120,20 @@ const REQUEST_ENDPOINTS = {
   VIDEOS: 'videos'
 }
 
-// ---------------------------------------------------------------------------
-
 const REMOTE_SCHEME = {
   HTTP: 'https',
   WS: 'wss'
 }
 
+// ---------------------------------------------------------------------------
+
+const SIGNATURE_ALGORITHM = 'RSA-SHA256'
+const SIGNATURE_ENCODING = 'hex'
+
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
+
+// ---------------------------------------------------------------------------
 
 // Express static paths (router)
 const STATIC_PATHS = {
@@ -172,6 +149,8 @@ let STATIC_MAX_AGE = '30d'
 // Videos thumbnail size
 const THUMBNAILS_SIZE = '200x110'
 const PREVIEWS_SIZE = '640x480'
+
+// ---------------------------------------------------------------------------
 
 const USER_ROLES = {
   ADMIN: 'admin',
@@ -198,8 +177,7 @@ module.exports = {
   CONFIG,
   CONSTRAINTS_FIELDS,
   FRIEND_SCORE,
-  LAST_MONGO_SCHEMA_VERSION,
-  MONGO_MIGRATION_SCRIPTS,
+  LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,
@@ -208,9 +186,12 @@ module.exports = {
   REQUEST_ENDPOINTS,
   REQUESTS_IN_PARALLEL,
   REQUESTS_INTERVAL,
-  REQUESTS_LIMIT,
+  REQUESTS_LIMIT_PODS,
+  REQUESTS_LIMIT_PER_POD,
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
+  SIGNATURE_ALGORITHM,
+  SIGNATURE_ENCODING,
   SORTABLE_COLUMNS,
   STATIC_MAX_AGE,
   STATIC_PATHS,

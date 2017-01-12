@@ -7,9 +7,6 @@ export class AuthUser extends User {
     USERNAME: 'username'
   };
 
-  id: string;
-  role: string;
-  username: string;
   tokens: Tokens;
 
   static load() {
@@ -17,7 +14,7 @@ export class AuthUser extends User {
     if (usernameLocalStorage) {
       return new AuthUser(
         {
-          id: localStorage.getItem(this.KEYS.ID),
+          id: parseInt(localStorage.getItem(this.KEYS.ID)),
           username: localStorage.getItem(this.KEYS.USERNAME),
           role: localStorage.getItem(this.KEYS.ROLE)
         },
@@ -35,7 +32,7 @@ export class AuthUser extends User {
     Tokens.flush();
   }
 
-  constructor(userHash: { id: string, username: string, role: string }, hashTokens: any) {
+  constructor(userHash: { id: number, username: string, role: string }, hashTokens: any) {
     super(userHash);
     this.tokens = new Tokens(hashTokens);
   }
@@ -58,7 +55,7 @@ export class AuthUser extends User {
   }
 
   save() {
-    localStorage.setItem(AuthUser.KEYS.ID, this.id);
+    localStorage.setItem(AuthUser.KEYS.ID, this.id.toString());
     localStorage.setItem(AuthUser.KEYS.USERNAME, this.username);
     localStorage.setItem(AuthUser.KEYS.ROLE, this.role);
     this.tokens.save();

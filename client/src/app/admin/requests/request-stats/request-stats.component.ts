@@ -19,7 +19,7 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.stats.secondsInterval !== null) {
+    if (this.stats !== null && this.stats.secondsInterval !== null) {
       clearInterval(this.interval);
     }
   }

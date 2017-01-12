@@ -4,20 +4,18 @@ const each = require('async/each')
 const eachLimit = require('async/eachLimit')
 const eachSeries = require('async/eachSeries')
 const fs = require('fs')
-const mongoose = require('mongoose')
 const request = require('request')
 const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
+const db = require('../initializers/database')
 const logger = require('../helpers/logger')
 const requests = require('../helpers/requests')
 
-const Pod = mongoose.model('Pod')
-const Request = mongoose.model('Request')
-const Video = mongoose.model('Video')
-
 const friends = {
   addVideoToFriends,
+  updateVideoToFriends,
+  reportAbuseVideoToFriend,
   hasFriends,
   getMyCertificate,
   makeFriends,
@@ -26,12 +24,47 @@ const friends = {
   sendOwnedVideosToPod
 }
 
-function addVideoToFriends (video) {
-  createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, video)
+function addVideoToFriends (videoData, transaction, callback) {
+  const options = {
+    type: 'add',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: videoData,
+    transaction
+  }
+  createRequest(options, callback)
+}
+
+function updateVideoToFriends (videoData, transaction, callback) {
+  const options = {
+    type: 'update',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: videoData,
+    transaction
+  }
+  createRequest(options, callback)
+}
+
+function removeVideoToFriends (videoParams) {
+  const options = {
+    type: 'remove',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: videoParams
+  }
+  createRequest(options)
+}
+
+function reportAbuseVideoToFriend (reportData, video) {
+  const options = {
+    type: 'report-abuse',
+    endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+    data: reportData,
+    toIds: [ video.Author.podId ]
+  }
+  createRequest(options)
 }
 
 function hasFriends (callback) {
-  Pod.countAll(function (err, count) {
+  db.Pod.countAll(function (err, count) {
     if (err) return callback(err)
 
     const hasFriends = (count !== 0)
@@ -69,13 +102,15 @@ function makeFriends (hosts, callback) {
 
 function quitFriends (callback) {
   // Stop pool requests
-  Request.deactivate()
-  // Flush pool requests
-  Request.flush()
+  db.Request.deactivate()
 
   waterfall([
+    function flushRequests (callbackAsync) {
+      db.Request.flush(callbackAsync)
+    },
+
     function getPodsList (callbackAsync) {
-      return Pod.list(callbackAsync)
+      return db.Pod.list(callbackAsync)
     },
 
     function announceIQuitMyFriends (pods, callbackAsync) {
@@ -103,12 +138,12 @@ function quitFriends (callback) {
 
     function removePodsFromDB (pods, callbackAsync) {
       each(pods, function (pod, callbackEach) {
-        pod.remove(callbackEach)
+        pod.destroy().asCallback(callbackEach)
       }, callbackAsync)
     }
   ], function (err) {
     // Don't forget to re activate the scheduler, even if there was an error
-    Request.activate()
+    db.Request.activate()
 
     if (err) return callback(err)
 
@@ -117,26 +152,28 @@ function quitFriends (callback) {
   })
 }
 
-function removeVideoToFriends (videoParams) {
-  createRequest('remove', constants.REQUEST_ENDPOINTS.VIDEOS, videoParams)
-}
-
 function sendOwnedVideosToPod (podId) {
-  Video.listOwned(function (err, videosList) {
+  db.Video.listOwnedAndPopulateAuthorAndTags(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of videos we own.')
       return
     }
 
     videosList.forEach(function (video) {
-      video.toRemoteJSON(function (err, remoteVideo) {
+      video.toAddRemoteJSON(function (err, remoteVideo) {
         if (err) {
           logger.error('Cannot convert video to remote.', { error: err })
           // Don't break the process
           return
         }
 
-        createRequest('add', constants.REQUEST_ENDPOINTS.VIDEOS, remoteVideo, [ podId ])
+        const options = {
+          type: 'add',
+          endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
+          data: remoteVideo,
+          toIds: [ podId ]
+        }
+        createRequest(options)
       })
     })
   })
@@ -149,10 +186,10 @@ module.exports = friends
 // ---------------------------------------------------------------------------
 
 function computeForeignPodsList (host, podsScore, callback) {
-  getForeignPodsList(host, function (err, foreignPodsList) {
+  getForeignPodsList(host, function (err, res) {
     if (err) return callback(err)
 
-    if (!foreignPodsList) foreignPodsList = []
+    const foreignPodsList = res.data
 
     // Let's give 1 point to the pod we ask the friends list
     foreignPodsList.push({ host })
@@ -200,9 +237,9 @@ function getForeignPodsList (host, callback) {
 
 function makeRequestsToWinningPods (cert, podsList, callback) {
   // Stop pool requests
-  Request.deactivate()
+  db.Request.deactivate()
   // Flush pool requests
-  Request.forceSend()
+  db.Request.forceSend()
 
   eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
     const params = {
@@ -222,15 +259,15 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       }
 
       if (res.statusCode === 200) {
-        const podObj = new Pod({ host: pod.host, publicKey: body.cert })
-        podObj.save(function (err, podCreated) {
+        const podObj = db.Pod.build({ host: pod.host, publicKey: body.cert })
+        podObj.save().asCallback(function (err, podCreated) {
           if (err) {
             logger.error('Cannot add friend %s pod.', pod.host, { error: err })
             return callbackEach()
           }
 
           // Add our videos to the request scheduler
-          sendOwnedVideosToPod(podCreated._id)
+          sendOwnedVideosToPod(podCreated.id)
 
           return callbackEach()
         })
@@ -242,28 +279,64 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   }, function endRequests () {
     // Final callback, we've ended all the requests
     // Now we made new friends, we can re activate the pool of requests
-    Request.activate()
+    db.Request.activate()
 
     logger.debug('makeRequestsToWinningPods finished.')
     return callback()
   })
 }
 
-function createRequest (type, endpoint, data, to) {
-  const req = new Request({
+// Wrapper that populate "toIds" argument with all our friends if it is not specified
+// { type, endpoint, data, toIds, transaction }
+function createRequest (options, callback) {
+  if (!callback) callback = function () {}
+  if (options.toIds) return _createRequest(options, callback)
+
+  // If the "toIds" pods is not specified, we send the request to all our friends
+  db.Pod.listAllIds(options.transaction, function (err, podIds) {
+    if (err) {
+      logger.error('Cannot get pod ids', { error: err })
+      return
+    }
+
+    const newOptions = Object.assign(options, { toIds: podIds })
+    return _createRequest(newOptions, callback)
+  })
+}
+
+// { type, endpoint, data, toIds, transaction }
+function _createRequest (options, callback) {
+  const type = options.type
+  const endpoint = options.endpoint
+  const data = options.data
+  const toIds = options.toIds
+  const transaction = options.transaction
+
+  const pods = []
+
+  // If there are no destination pods abort
+  if (toIds.length === 0) return callback(null)
+
+  toIds.forEach(function (toPod) {
+    pods.push(db.Pod.build({ id: toPod }))
+  })
+
+  const createQuery = {
     endpoint,
     request: {
       type: type,
       data: data
     }
-  })
-
-  if (to) {
-    req.to = to
   }
 
-  req.save(function (err) {
-    if (err) logger.error('Cannot save the request.', { error: err })
+  const dbRequestOptions = {
+    transaction
+  }
+
+  return db.Request.create(createQuery, dbRequestOptions).asCallback(function (err, request) {
+    if (err) return callback(err)
+
+    return request.setPods(pods, dbRequestOptions).asCallback(callback)
   })
 }
 

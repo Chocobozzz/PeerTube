@@ -1,12 +1,10 @@
 'use strict'
 
 const express = require('express')
-const mongoose = require('mongoose')
 
 const constants = require('../../initializers/constants')
+const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
-
-const Client = mongoose.model('OAuthClient')
 
 const router = express.Router()
 
@@ -27,12 +25,12 @@ function getLocalClient (req, res, next) {
     return res.type('json').status(403).end()
   }
 
-  Client.loadFirstClient(function (err, client) {
+  db.OAuthClient.loadFirstClient(function (err, client) {
     if (err) return next(err)
     if (!client) return next(new Error('No client available.'))
 
     res.json({
-      client_id: client._id,
+      client_id: client.clientId,
       client_secret: client.clientSecret
     })
   })

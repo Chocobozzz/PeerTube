@@ -2,6 +2,7 @@
 
 const each = require('async/each')
 const isEqual = require('lodash/isEqual')
+const differenceWith = require('lodash/differenceWith')
 const program = require('commander')
 const series = require('async/series')
 
@@ -16,31 +17,40 @@ const videosUtils = require('../utils/videos')
 program
   .option('-c, --create [weight]', 'Weight for creating videos')
   .option('-r, --remove [weight]', 'Weight for removing videos')
+  .option('-u, --update [weight]', 'Weight for updating videos')
   .option('-p, --pods [n]', 'Number of pods to run (3 or 6)', /^3|6$/, 3)
   .option('-a, --action [interval]', 'Interval in ms for an action')
   .option('-i, --integrity [interval]', 'Interval in ms for an integrity check')
   .option('-f, --flush', 'Flush datas on exit')
+  .option('-d, --difference', 'Display difference if integrity is not okay')
   .parse(process.argv)
 
-const createWeight = parseInt(program.create) || 5
-const removeWeight = parseInt(program.remove) || 4
+const createWeight = program.create !== undefined ? parseInt(program.create) : 5
+const removeWeight = program.remove !== undefined ? parseInt(program.remove) : 4
+const updateWeight = program.update !== undefined ? parseInt(program.update) : 4
 const flushAtExit = program.flush || false
-const actionInterval = parseInt(program.action) || 500
-let integrityInterval = parseInt(program.integrity) || 60000
+const actionInterval = program.action !== undefined ? parseInt(program.action) : 500
+const integrityInterval = program.integrity !== undefined ? parseInt(program.integrity) : 60000
+const displayDiffOnFail = program.integrity || false
 
 const numberOfPods = 6
+
 // Wait requests between pods
-const requestsMaxPerInterval = constants.INTERVAL / actionInterval
-const intervalsToMakeAllRequests = Math.ceil(requestsMaxPerInterval / constants.REQUESTS_LIMIT)
-const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.INTERVAL) + 1000
+const baseRequestInterval = integrityInterval < constants.REQUESTS_INTERVAL ? constants.REQUESTS_INTERVAL : integrityInterval
+const requestsMaxPerInterval = baseRequestInterval / actionInterval
+const intervalsToMakeAllRequests = Math.ceil(requestsMaxPerInterval / constants.REQUESTS_LIMIT_PER_POD)
+const waitForBeforeIntegrityCheck = (intervalsToMakeAllRequests * constants.REQUESTS_INTERVAL) - integrityInterval + 1000
 
-integrityInterval += waitForBeforeIntegrityCheck
-
-console.log('Create weight: %d, remove weight: %d.', createWeight, removeWeight)
+console.log('Create weight: %d, update weight: %d, remove weight: %d.', createWeight, updateWeight, removeWeight)
 if (flushAtExit) {
   console.log('Program will flush data on exit.')
 } else {
   console.log('Program will not flush data on exit.')
+}
+if (displayDiffOnFail) {
+  console.log('Program will display diff on failure.')
+} else {
+  console.log('Program will not display diff on failure')
 }
 console.log('Interval in ms for each action: %d.', actionInterval)
 console.log('Interval in ms for each integrity check: %d.', integrityInterval)
@@ -63,16 +73,20 @@ runServers(numberOfPods, function (err, servers) {
   setInterval(function () {
     if (checking === true) return
 
-    const rand = getRandomInt(0, createWeight + removeWeight)
+    const rand = getRandomInt(0, createWeight + updateWeight + removeWeight)
 
     if (rand < createWeight) {
       upload(servers, getRandomNumServer(servers))
+    } else if (rand < createWeight + updateWeight) {
+      update(servers, getRandomNumServer(servers))
     } else {
       remove(servers, getRandomNumServer(servers))
     }
   }, actionInterval)
 
   setInterval(function () {
+    if (checking === true) return
+
     console.log('Checking integrity...')
     checking = true
 
@@ -160,14 +174,34 @@ function exitServers (servers, callback) {
 function upload (servers, numServer, callback) {
   if (!callback) callback = function () {}
 
-  const name = 'my super name for pod 1'
-  const description = 'my super description for pod 1'
-  const tags = [ 'tag1p1', 'tag2p1' ]
+  const name = Date.now() + ' name'
+  const description = Date.now() + ' description'
+  const tags = [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
   const file = 'video_short1.webm'
 
   console.log('Upload video to server ' + numServer)
 
   videosUtils.uploadVideo(servers[numServer].url, servers[numServer].accessToken, name, description, tags, file, callback)
+}
+
+function update (servers, numServer, callback) {
+  if (!callback) callback = function () {}
+
+  videosUtils.getVideosList(servers[numServer].url, function (err, res) {
+    if (err) throw err
+
+    const videos = res.body.data.filter(function (video) { return video.isLocal })
+    if (videos.length === 0) return callback()
+
+    const toUpdate = videos[getRandomInt(0, videos.length)].id
+    const name = Date.now() + ' name'
+    const description = Date.now() + ' description'
+    const tags = [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
+
+    console.log('Updating video of server ' + numServer)
+
+    videosUtils.updateVideo(servers[numServer].url, servers[numServer].accessToken, toUpdate, name, description, tags, callback)
+  })
 }
 
 function remove (servers, numServer, callback) {
@@ -196,6 +230,7 @@ function checkIntegrity (servers, callback) {
         delete serverVideo.id
         delete serverVideo.isLocal
         delete serverVideo.thumbnailPath
+        delete serverVideo.updatedAt
       }
 
       videos.push(serverVideos)
@@ -205,6 +240,11 @@ function checkIntegrity (servers, callback) {
     for (const video of videos) {
       if (!isEqual(video, videos[0])) {
         console.error('Integrity not ok!')
+
+        if (displayDiffOnFail) {
+          console.log(differenceWith(videos[0], video, isEqual))
+        }
+
         process.exit(-1)
       }
     }

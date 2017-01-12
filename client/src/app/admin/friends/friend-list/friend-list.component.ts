@@ -30,7 +30,7 @@ export class FriendListComponent implements OnInit {
 
   private getFriends() {
     this.friendService.getFriends().subscribe(
-      friends => this.friends = friends,
+      res => this.friends = res.friends,
 
       err => alert(err.text)
     );

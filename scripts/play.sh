@@ -5,7 +5,9 @@ if [ ! -f server.js ]; then
   exit -1
 fi
 
-for i in 1 2 3; do
+max=${1:-3}
+
+for i in $(seq 1 $max); do
   NODE_ENV=test NODE_APP_INSTANCE=$i node server.js &
   sleep 1
 done

@@ -34,7 +34,7 @@ function flushAndRunMultipleServers (totalServers, serversRun) {
         runServer(j, function (app, url) {
           anotherServerDone(j, app, url)
         })
-      }, 1000 * j)
+      }, 1000 * (j - 1))
     }
   })
 }
@@ -60,12 +60,12 @@ function runServer (number, callback) {
 
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
-    'Connected to mongodb': false,
+    'Database is ready': false,
     'Server listening on port': false
   }
 
   const regexps = {
-    client_id: 'Client id: ([a-f0-9]+)',
+    client_id: 'Client id: (.+)',
     client_secret: 'Client secret: (.+)',
     user_username: 'Username: (.+)',
     user_password: 'User password: (.+)'
@@ -103,7 +103,7 @@ function runServer (number, callback) {
       if (serverRunString[key] === false) dontContinue = true
     }
 
-    // If no, there is maybe one thing not already initialized (mongodb...)
+    // If no, there is maybe one thing not already initialized (client/user credentials generation...)
     if (dontContinue === true) return
 
     server.app.stdout.removeListener('data', onStdout)

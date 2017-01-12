@@ -4,7 +4,8 @@ const chai = require('chai')
 const each = require('async/each')
 const expect = chai.expect
 const series = require('async/series')
-const webtorrent = new (require('webtorrent'))()
+const WebTorrent = require('webtorrent')
+const webtorrent = new WebTorrent()
 
 const loginUtils = require('../utils/login')
 const miscsUtils = require('../utils/miscs')
@@ -104,7 +105,8 @@ describe('Test multiple pods', function () {
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(10)
               expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
-              expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
               expect(video.author).to.equal('root')
 
               if (server.url !== 'http://localhost:9001') {
@@ -166,7 +168,8 @@ describe('Test multiple pods', function () {
               expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(5)
               expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
-              expect(miscsUtils.dateIsValid(video.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
               expect(video.author).to.equal('root')
 
               if (server.url !== 'http://localhost:9002') {
@@ -246,7 +249,8 @@ describe('Test multiple pods', function () {
               expect(video1.duration).to.equal(5)
               expect(video1.tags).to.deep.equal([ 'tag1p3' ])
               expect(video1.author).to.equal('root')
-              expect(miscsUtils.dateIsValid(video1.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video1.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video1.updatedAt)).to.be.true
 
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.description).to.equal('my super description for pod 3-2')
@@ -255,7 +259,8 @@ describe('Test multiple pods', function () {
               expect(video2.duration).to.equal(5)
               expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
               expect(video2.author).to.equal('root')
-              expect(miscsUtils.dateIsValid(video2.createdDate)).to.be.true
+              expect(miscsUtils.dateIsValid(video2.createdAt)).to.be.true
+              expect(miscsUtils.dateIsValid(video2.updatedAt)).to.be.true
 
               if (server.url !== 'http://localhost:9003') {
                 expect(video1.isLocal).to.be.false
@@ -299,8 +304,8 @@ describe('Test multiple pods', function () {
         if (err) throw err
 
         const video = res.body.data[0]
-        toRemove.push(res.body.data[2].id)
-        toRemove.push(res.body.data[3].id)
+        toRemove.push(res.body.data[2])
+        toRemove.push(res.body.data[3])
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -368,16 +373,68 @@ describe('Test multiple pods', function () {
         })
       })
     })
+  })
 
-    it('Should remove the file 3 and 3-2 by asking pod 3', function (done) {
+  describe('Should manipulate these videos', function () {
+    it('Should update the video 3 by asking pod 3', function (done) {
+      this.timeout(15000)
+
+      const name = 'my super video updated'
+      const description = 'my super description updated'
+      const tags = [ 'tagup1', 'tagup2' ]
+
+      videosUtils.updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, name, description, tags, function (err) {
+        if (err) throw err
+
+        setTimeout(done, 11000)
+      })
+    })
+
+    it('Should have the video 3 updated on each pod', function (done) {
+      this.timeout(200000)
+
+      each(servers, function (server, callback) {
+        // Avoid "duplicate torrent" errors
+        const webtorrent = new WebTorrent()
+
+        videosUtils.getVideosList(server.url, function (err, res) {
+          if (err) throw err
+
+          const videos = res.body.data
+          const videoUpdated = videos.find(function (video) {
+            return video.name === 'my super video updated'
+          })
+
+          expect(!!videoUpdated).to.be.true
+          expect(videoUpdated.description).to.equal('my super description updated')
+          expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
+          expect(miscsUtils.dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true
+
+          videosUtils.testVideoImage(server.url, 'video_short3.webm', videoUpdated.thumbnailPath, function (err, test) {
+            if (err) throw err
+            expect(test).to.equal(true)
+
+            webtorrent.add(videoUpdated.magnetUri, function (torrent) {
+              expect(torrent.files).to.exist
+              expect(torrent.files.length).to.equal(1)
+              expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+              callback()
+            })
+          })
+        })
+      }, done)
+    })
+
+    it('Should remove the videos 3 and 3-2 by asking pod 3', function (done) {
       this.timeout(15000)
 
       series([
         function (next) {
-          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0], next)
+          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, next)
         },
         function (next) {
-          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[1], next)
+          videosUtils.removeVideo(servers[2].url, servers[2].accessToken, toRemove[1].id, next)
         }],
         function (err) {
           if (err) throw err
@@ -394,11 +451,11 @@ describe('Test multiple pods', function () {
           const videos = res.body.data
           expect(videos).to.be.an('array')
           expect(videos.length).to.equal(2)
-          expect(videos[0].id).not.to.equal(videos[1].id)
-          expect(videos[0].id).not.to.equal(toRemove[0])
-          expect(videos[1].id).not.to.equal(toRemove[0])
-          expect(videos[0].id).not.to.equal(toRemove[1])
-          expect(videos[1].id).not.to.equal(toRemove[1])
+          expect(videos[0].name).not.to.equal(videos[1].name)
+          expect(videos[0].name).not.to.equal(toRemove[0].name)
+          expect(videos[1].name).not.to.equal(toRemove[0].name)
+          expect(videos[0].name).not.to.equal(toRemove[1].name)
+          expect(videos[1].name).not.to.equal(toRemove[1].name)
 
           callback()
         })

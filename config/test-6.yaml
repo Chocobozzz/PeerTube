@@ -6,7 +6,7 @@ webserver:
   port: 9006
 
 database:
-  suffix: '-test6'
+  suffix: '_test6'
 
 # From the project root directory
 storage:

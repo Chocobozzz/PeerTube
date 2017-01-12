@@ -1,11 +1,8 @@
 'use strict'
 
-const mongoose = require('mongoose')
-
 const checkErrors = require('./utils').checkErrors
+const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
-
-const User = mongoose.model('User')
 
 const validatorsUsers = {
   usersAdd,
@@ -20,7 +17,7 @@ function usersAdd (req, res, next) {
   logger.debug('Checking usersAdd parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
-    User.loadByUsername(req.body.username, function (err, user) {
+    db.User.loadByUsername(req.body.username, function (err, user) {
       if (err) {
         logger.error('Error in usersAdd request validator.', { error: err })
         return res.sendStatus(500)
@@ -34,12 +31,12 @@ function usersAdd (req, res, next) {
 }
 
 function usersRemove (req, res, next) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+  req.checkParams('id', 'Should have a valid id').notEmpty().isInt()
 
   logger.debug('Checking usersRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    User.loadById(req.params.id, function (err, user) {
+    db.User.loadById(req.params.id, function (err, user) {
       if (err) {
         logger.error('Error in usersRemove request validator.', { error: err })
         return res.sendStatus(500)
@@ -55,7 +52,7 @@ function usersRemove (req, res, next) {
 }
 
 function usersUpdate (req, res, next) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isMongoId()
+  req.checkParams('id', 'Should have a valid id').notEmpty().isInt()
   // Add old password verification
   req.checkBody('password', 'Should have a valid password').isUserPasswordValid()
 
