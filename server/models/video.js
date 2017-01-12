@@ -141,7 +141,8 @@ module.exports = function (sequelize, DataTypes) {
 }
 
 function beforeValidate (video, options, next) {
-  if (video.isOwned()) {
+  // Put a fake infoHash if it does not exists yet
+  if (video.isOwned() && !video.infoHash) {
     // 40 hexa length
     video.infoHash = '0123456789abcdef0123456789abcdef01234567'
   }

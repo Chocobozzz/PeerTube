@@ -259,6 +259,7 @@ function updateVideoRetryWrapper (req, res, next) {
 
 function updateVideo (req, res, finalCallback) {
   const videoInstance = res.locals.video
+  const videoFieldsSave = videoInstance.toJSON()
   const videoInfosToUpdate = req.body
 
   waterfall([
@@ -280,12 +281,13 @@ function updateVideo (req, res, finalCallback) {
     },
 
     function updateVideoIntoDB (t, tagInstances, callback) {
-      const options = { transaction: t }
+      const options = {
+        transaction: t
+      }
 
       if (videoInfosToUpdate.name) videoInstance.set('name', videoInfosToUpdate.name)
       if (videoInfosToUpdate.description) videoInstance.set('description', videoInfosToUpdate.description)
 
-      // Add tags association
       videoInstance.save(options).asCallback(function (err) {
         return callback(err, t, tagInstances)
       })
@@ -320,6 +322,14 @@ function updateVideo (req, res, finalCallback) {
 
       // Abort transaction?
       if (t) t.rollback()
+
+      // Force fields we want to update
+      // If the transaction is retried, sequelize will think the object has not changed
+      // So it will skip the SQL request, even if the last one was ROLLBACKed!
+      Object.keys(videoFieldsSave).forEach(function (key) {
+        const value = videoFieldsSave[key]
+        videoInstance.set(key, value)
+      })
 
       return finalCallback(err)
     }

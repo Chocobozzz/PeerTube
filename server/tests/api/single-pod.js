@@ -96,7 +96,7 @@ describe('Test a single pod', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          done()
+          webtorrent.remove(video.magnetUri, done)
         })
       })
     })
@@ -515,6 +515,8 @@ describe('Test a single pod', function () {
   })
 
   it('Should have the video updated', function (done) {
+    this.timeout(60000)
+
     videosUtils.getVideo(server.url, videoId, function (err, res) {
       if (err) throw err
 
@@ -529,7 +531,20 @@ describe('Test a single pod', function () {
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
       expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
-      done()
+      videosUtils.testVideoImage(server.url, 'video_short3.webm', video.thumbnailPath, function (err, test) {
+        if (err) throw err
+        expect(test).to.equal(true)
+
+        videoId = video.id
+
+        webtorrent.add(video.magnetUri, function (torrent) {
+          expect(torrent.files).to.exist
+          expect(torrent.files.length).to.equal(1)
+          expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+          done()
+        })
+      })
     })
   })
 

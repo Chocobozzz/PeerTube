@@ -4,7 +4,8 @@ const chai = require('chai')
 const each = require('async/each')
 const expect = chai.expect
 const series = require('async/series')
-const webtorrent = new (require('webtorrent'))()
+const WebTorrent = require('webtorrent')
+const webtorrent = new WebTorrent()
 
 const loginUtils = require('../utils/login')
 const miscsUtils = require('../utils/miscs')
@@ -311,7 +312,7 @@ describe('Test multiple pods', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          done()
+          webtorrent.remove(video.magnetUri, done)
         })
       })
     })
@@ -330,7 +331,7 @@ describe('Test multiple pods', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          done()
+          webtorrent.remove(video.magnetUri, done)
         })
       })
     })
@@ -349,7 +350,7 @@ describe('Test multiple pods', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          done()
+          webtorrent.remove(video.magnetUri, done)
         })
       })
     })
@@ -368,7 +369,7 @@ describe('Test multiple pods', function () {
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
 
-          done()
+          webtorrent.remove(video.magnetUri, done)
         })
       })
     })
@@ -390,7 +391,12 @@ describe('Test multiple pods', function () {
     })
 
     it('Should have the video 3 updated on each pod', function (done) {
+      this.timeout(200000)
+
       each(servers, function (server, callback) {
+        // Avoid "duplicate torrent" errors
+        const webtorrent = new WebTorrent()
+
         videosUtils.getVideosList(server.url, function (err, res) {
           if (err) throw err
 
@@ -404,7 +410,18 @@ describe('Test multiple pods', function () {
           expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
           expect(miscsUtils.dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true
 
-          callback()
+          videosUtils.testVideoImage(server.url, 'video_short3.webm', videoUpdated.thumbnailPath, function (err, test) {
+            if (err) throw err
+            expect(test).to.equal(true)
+
+            webtorrent.add(videoUpdated.magnetUri, function (torrent) {
+              expect(torrent.files).to.exist
+              expect(torrent.files.length).to.equal(1)
+              expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+              webtorrent.remove(videoUpdated.magnetUri, callback)
+            })
+          })
         })
       }, done)
     })
