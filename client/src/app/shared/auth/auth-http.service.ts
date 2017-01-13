@@ -80,12 +80,14 @@ export class AuthHttp extends Http {
   }
 }
 
+export function useFactory(backend: XHRBackend, defaultOptions: RequestOptions, authService: AuthService) {
+  return new AuthHttp(backend, defaultOptions, authService);
+}
+
 export const AUTH_HTTP_PROVIDERS = [
   {
     provide: AuthHttp,
-    useFactory: (backend: XHRBackend, defaultOptions: RequestOptions, authService: AuthService) => {
-      return new AuthHttp(backend, defaultOptions, authService);
-    },
+    useFactory,
     deps: [ XHRBackend, RequestOptions, AuthService ]
   },
 ];

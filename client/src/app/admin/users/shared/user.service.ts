@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
 import { AuthHttp, RestExtractor, ResultList, User } from '../../../shared';
 

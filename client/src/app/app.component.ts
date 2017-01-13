@@ -1,7 +1,7 @@
 import { Component, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MetaService } from 'ng2-meta';
+import { MetaService } from 'ng2-meta/src';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',

@@ -9,14 +9,15 @@ const commonConfig = require('./webpack.common.js') // the settings that are com
 /**
  * Webpack Plugins
  */
-// const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const DefinePlugin = require('webpack/lib/DefinePlugin')
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const IgnorePlugin = require('webpack/lib/IgnorePlugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
-// const IgnorePlugin = require('webpack/lib/IgnorePlugin')
-// const DedupePlugin = require('webpack/lib/optimize/DedupePlugin')
+const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
+const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
+const V8LazyParseWebpackPlugin = require('v8-lazy-parse-webpack-plugin')
 
 /**
  * Webpack Constants
@@ -154,21 +155,66 @@ module.exports = function (env) {
         // comments: true, //debug
 
         beautify: false, // prod
+        output: {
+          comments: false
+        }, // prod
         mangle: {
-          screw_ie8: true,
-          keep_fnames: true
+          screw_ie8: true
         }, // prod
         compress: {
           screw_ie8: true,
-          warnings: false
-        }, // prod
-        comments: false // prod
+          warnings: false,
+          conditionals: true,
+          unused: true,
+          comparisons: true,
+          sequences: true,
+          dead_code: true,
+          evaluate: true,
+          if_return: true,
+          join_vars: true,
+          negate_iife: false // we need this for lazy v8
+        }
       }),
 
       new NormalModuleReplacementPlugin(
         /angular2-hmr/,
-        helpers.root('config/modules/angular2-hmr-prod.js')
+        helpers.root('config/empty.js')
       ),
+
+      new NormalModuleReplacementPlugin(
+        /zone\.js(\\|\/)dist(\\|\/)long-stack-trace-zone/,
+        helpers.root('config/empty.js')
+      ),
+
+      // AoT
+      // new NormalModuleReplacementPlugin(
+      //   /@angular(\\|\/)upgrade/,
+      //   helpers.root('config/empty.js')
+      // ),
+      // new NormalModuleReplacementPlugin(
+      //   /@angular(\\|\/)compiler/,
+      //   helpers.root('config/empty.js')
+      // ),
+      // new NormalModuleReplacementPlugin(
+      //   /@angular(\\|\/)platform-browser-dynamic/,
+      //   helpers.root('config/empty.js')
+      // ),
+      // new NormalModuleReplacementPlugin(
+      //   /dom(\\|\/)debug(\\|\/)ng_probe/,
+      //   helpers.root('config/empty.js')
+      // ),
+      // new NormalModuleReplacementPlugin(
+      //   /dom(\\|\/)debug(\\|\/)by/,
+      //   helpers.root('config/empty.js')
+      // ),
+      // new NormalModuleReplacementPlugin(
+      //   /src(\\|\/)debug(\\|\/)debug_node/,
+      //   helpers.root('config/empty.js')
+      // ),
+      // new NormalModuleReplacementPlugin(
+      //   /src(\\|\/)debug(\\|\/)debug_renderer/,
+      //   helpers.root('config/empty.js')
+      // ),
 
       /**
       * Plugin: IgnorePlugin
@@ -228,7 +274,7 @@ module.exports = function (env) {
               [/\*/, /(?:)/],
               [/\[?\(?/, /(?:)/]
             ],
-            customAttrAssign: [/\)?]?=/]
+            customAttrAssign: [/\)?\]?=/]
           },
 
           // FIXME: Remove

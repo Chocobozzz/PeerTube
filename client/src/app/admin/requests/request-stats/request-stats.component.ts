@@ -1,3 +1,4 @@
+import { setInterval } from 'timers'
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { RequestService, RequestStats } from '../shared';

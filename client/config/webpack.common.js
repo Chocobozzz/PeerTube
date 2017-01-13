@@ -1,17 +1,20 @@
-const webpack = require('webpack')
 const helpers = require('./helpers')
 
 /*
  * Webpack Plugins
  */
 
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin
 const AssetsPlugin = require('assets-webpack-plugin')
+const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const ngcWebpack = require('ngc-webpack')
+
 const WebpackNotifierPlugin = require('webpack-notifier')
 
 /*
@@ -29,7 +32,8 @@ const METADATA = {
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  var isProd = options.env === 'production'
+  const isProd = options.env === 'production'
+  const AOT = isProd
 
   return {
 
@@ -49,9 +53,10 @@ module.exports = function (options) {
      * See: http://webpack.github.io/docs/configuration.html#entry
      */
     entry: {
-      'polyfills': './src/polyfills.ts',
-      'vendor': './src/vendor.ts',
-      'main': './src/main.ts'
+      'polyfills': './src/polyfills.browser.ts',
+      'main': AOT
+              ? './src/main.browser.aot.ts'
+              : './src/main.browser.ts'
     },
 
     /*
@@ -67,7 +72,7 @@ module.exports = function (options) {
        */
       extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      modules: [helpers.root('src'), 'node_modules'],
+      modules: [ helpers.root('src'), helpers.root('node_modules') ],
 
       alias: {
         'video.js': 'video.js/dist/alt/video.novtt'
@@ -90,10 +95,18 @@ module.exports = function (options) {
          */
         {
           test: /\.ts$/,
-          loaders: [
+          use: [
             '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-            'awesome-typescript-loader',
-            'angular2-template-loader'
+            'awesome-typescript-loader?{configFileName: "tsconfig.webpack.json"}',
+            'angular2-template-loader',
+            {
+              loader: 'ng-router-loader',
+              options: {
+                loader: 'async-system',
+                genDir: 'compiled',
+                aot: AOT
+              }
+            }
           ],
           exclude: [/\.(spec|e2e)\.ts$/]
         },
@@ -110,10 +123,11 @@ module.exports = function (options) {
 
         {
           test: /\.(sass|scss)$/,
-          loaders: ['css-to-string-loader', 'css-loader?sourceMap', 'resolve-url', 'sass-loader?sourceMap']
+          use: ['css-to-string-loader', 'css-loader?sourceMap', 'resolve-url-loader', 'sass-loader?sourceMap'],
+          exclude: [ helpers.root('src', 'styles') ]
         },
-        { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url?limit=10000&minetype=application/font-woff' },
-        { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file' },
+        { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'url-loader?limit=10000&minetype=application/font-woff' },
+        { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'file-loader' },
 
         /* Raw loader support for *.html
          * Returns file content as string
@@ -148,7 +162,7 @@ module.exports = function (options) {
        *
        * See: https://github.com/s-panferov/awesome-typescript-loader#forkchecker-boolean-defaultfalse
        */
-      new ForkCheckerPlugin(),
+      new CheckerPlugin(),
 
       /*
        * Plugin: CommonsChunkPlugin
@@ -158,8 +172,21 @@ module.exports = function (options) {
        * See: https://webpack.github.io/docs/list-of-plugins.html#commonschunkplugin
        * See: https://github.com/webpack/docs/wiki/optimization#multi-page-app
        */
-      new webpack.optimize.CommonsChunkPlugin({
-        name: [ 'polyfills', 'vendor' ].reverse()
+      new CommonsChunkPlugin({
+        name: 'polyfills',
+        chunks: ['polyfills']
+      }),
+
+      // This enables tree shaking of the vendor modules
+      new CommonsChunkPlugin({
+        name: 'vendor',
+        chunks: ['main'],
+        minChunks: module => /node_modules\//.test(module.resource)
+      }),
+
+      // Specify the correct order the scripts will be injected in
+      new CommonsChunkPlugin({
+        name: ['polyfills', 'vendor'].reverse()
       }),
 
       /**
@@ -171,8 +198,11 @@ module.exports = function (options) {
        */
       new ContextReplacementPlugin(
         // The (\\|\/) piece accounts for path separators in *nix and Windows
-        /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-        helpers.root('src') // location of your src
+        /angular(\\|\/)core(\\|\/)src(\\|\/)linker/,
+        helpers.root('src'), // location of your src
+        {
+          // your Angular Async Route paths relative to this root directory
+        }
       ),
 
       /*
@@ -255,6 +285,34 @@ module.exports = function (options) {
             precision: 10
           }
         }
+      }),
+
+      // Fix Angular 2
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)async/,
+        helpers.root('node_modules/@angular/core/src/facade/async.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)collection/,
+        helpers.root('node_modules/@angular/core/src/facade/collection.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)errors/,
+        helpers.root('node_modules/@angular/core/src/facade/errors.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)lang/,
+        helpers.root('node_modules/@angular/core/src/facade/lang.js')
+      ),
+      new NormalModuleReplacementPlugin(
+        /facade(\\|\/)math/,
+        helpers.root('node_modules/@angular/core/src/facade/math.js')
+      ),
+
+      new ngcWebpack.NgcWebpackPlugin({
+        disabled: !AOT,
+        tsConfig: helpers.root('tsconfig.webpack.json'),
+        resourceOverride: helpers.root('config/resource-override.js')
       })
     ],
 
@@ -270,7 +328,9 @@ module.exports = function (options) {
       process: true,
       module: false,
       clearImmediate: false,
-      setImmediate: false
+      setImmediate: false,
+      setInterval: false,
+      setTimeout: false
     }
   }
 }

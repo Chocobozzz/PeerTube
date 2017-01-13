@@ -3,6 +3,8 @@ import { Headers, Http, Response, URLSearchParams } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
 
 // Do not use the barrel (dependency loop)
 import { AuthStatus } from '../../shared/auth/auth-status.model';

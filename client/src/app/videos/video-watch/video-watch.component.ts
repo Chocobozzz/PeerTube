@@ -1,7 +1,8 @@
+import { setInterval, setTimeout } from 'timers'
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { MetaService } from 'ng2-meta';
+import { MetaService } from 'ng2-meta/src';
 import * as videojs from 'video.js';
 
 import { VideoMagnetComponent } from './video-magnet.component';
