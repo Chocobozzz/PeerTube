@@ -2,7 +2,7 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
-import { MetaModule, MetaConfig } from 'ng2-meta/src';
+import { MetaModule, MetaConfig } from 'ng2-meta';
 import 'bootstrap-loader';
 
 import { ENV_PROVIDERS } from './environment';
