@@ -172,11 +172,11 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
 // Handle retries on fail
 function updateRemoteVideoRetryWrapper (videoAttributesToUpdate, fromPod, finalCallback) {
   const options = {
-    arguments: [ fromPod, videoAttributesToUpdate ],
+    arguments: [ videoAttributesToUpdate, fromPod ],
     errorMessage: 'Cannot update the remote video with many retries'
   }
 
-  databaseUtils.retryWrapper(updateRemoteVideo, options, finalCallback)
+  databaseUtils.retryTransactionWrapper(updateRemoteVideo, options, finalCallback)
 }
 
 function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
