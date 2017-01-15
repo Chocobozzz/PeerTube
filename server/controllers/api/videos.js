@@ -106,20 +106,17 @@ module.exports = router
 // Wrapper to video add that retry the function if there is a database error
 // We need this because we run the transaction in SERIALIZABLE isolation that can fail
 function addVideoRetryWrapper (req, res, next) {
-  utils.transactionRetryer(
-    function (callback) {
-      return addVideo(req, res, req.files.videofile[0], callback)
-    },
-    function (err) {
-      if (err) {
-        logger.error('Cannot insert the video with many retries.', { error: err })
-        return next(err)
-      }
+  const options = {
+    arguments: [ req, res, req.files.videofile[0] ],
+    errorMessage: 'Cannot insert the video with many retries.'
+  }
 
-      // TODO : include Location of the new video -> 201
-      return res.type('json').status(204).end()
-    }
-  )
+  utils.retryWrapper(addVideo, options, function (err) {
+    if (err) return next(err)
+
+    // TODO : include Location of the new video -> 201
+    return res.type('json').status(204).end()
+  })
 }
 
 function addVideo (req, res, videoFile, callback) {
@@ -241,20 +238,17 @@ function addVideo (req, res, videoFile, callback) {
 }
 
 function updateVideoRetryWrapper (req, res, next) {
-  utils.transactionRetryer(
-    function (callback) {
-      return updateVideo(req, res, callback)
-    },
-    function (err) {
-      if (err) {
-        logger.error('Cannot update the video with many retries.', { error: err })
-        return next(err)
-      }
+  const options = {
+    arguments: [ req, res ],
+    errorMessage: 'Cannot update the video with many retries.'
+  }
 
-      // TODO : include Location of the new video -> 201
-      return res.type('json').status(204).end()
-    }
-  )
+  utils.retryWrapper(updateVideo, options, function (err) {
+    if (err) return next(err)
+
+    // TODO : include Location of the new video -> 201
+    return res.type('json').status(204).end()
+  })
 }
 
 function updateVideo (req, res, finalCallback) {

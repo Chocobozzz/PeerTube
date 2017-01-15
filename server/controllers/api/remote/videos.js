@@ -66,19 +66,12 @@ function remoteVideos (req, res, next) {
 
 // Handle retries on fail
 function addRemoteVideoRetryWrapper (videoToCreateData, fromPod, finalCallback) {
-  utils.transactionRetryer(
-    function (callback) {
-      return addRemoteVideo(videoToCreateData, fromPod, callback)
-    },
-    function (err) {
-      if (err) {
-        logger.error('Cannot insert the remote video with many retries.', { error: err })
-      }
+  const options = {
+    arguments: [ videoToCreateData, fromPod ],
+    errorMessage: 'Cannot insert the remote video with many retries.'
+  }
 
-      // Do not return the error, continue the process
-      return finalCallback(null)
-    }
-  )
+  utils.retryWrapper(addRemoteVideo, options, finalCallback)
 }
 
 function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
@@ -182,19 +175,12 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
 
 // Handle retries on fail
 function updateRemoteVideoRetryWrapper (videoAttributesToUpdate, fromPod, finalCallback) {
-  utils.transactionRetryer(
-    function (callback) {
-      return updateRemoteVideo(videoAttributesToUpdate, fromPod, callback)
-    },
-    function (err) {
-      if (err) {
-        logger.error('Cannot update the remote video with many retries.', { error: err })
-      }
+  const options = {
+    arguments: [ fromPod, videoAttributesToUpdate ],
+    errorMessage: 'Cannot update the remote video with many retries'
+  }
 
-      // Do not return the error, continue the process
-      return finalCallback(null)
-    }
-  )
+  utils.retryWrapper(updateRemoteVideo, options, finalCallback)
 }
 
 function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
