@@ -20,6 +20,7 @@ const validatorsSort = validators.sort
 const validatorsVideos = validators.videos
 const search = middlewares.search
 const sort = middlewares.sort
+const databaseUtils = require('../../helpers/database-utils')
 const utils = require('../../helpers/utils')
 
 const router = express.Router()
@@ -111,7 +112,7 @@ function addVideoRetryWrapper (req, res, next) {
     errorMessage: 'Cannot insert the video with many retries.'
   }
 
-  utils.retryWrapper(addVideo, options, function (err) {
+  databaseUtils.retryTransactionWrapper(addVideo, options, function (err) {
     if (err) return next(err)
 
     // TODO : include Location of the new video -> 201
@@ -124,11 +125,7 @@ function addVideo (req, res, videoFile, callback) {
 
   waterfall([
 
-    function startTransaction (callbackWaterfall) {
-      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
-        return callbackWaterfall(err, t)
-      })
-    },
+    databaseUtils.startSerializableTransaction,
 
     function findOrCreateAuthor (t, callbackWaterfall) {
       const user = res.locals.oauth.token.User
@@ -243,7 +240,7 @@ function updateVideoRetryWrapper (req, res, next) {
     errorMessage: 'Cannot update the video with many retries.'
   }
 
-  utils.retryWrapper(updateVideo, options, function (err) {
+  databaseUtils.retryTransactionWrapper(updateVideo, options, function (err) {
     if (err) return next(err)
 
     // TODO : include Location of the new video -> 201
@@ -258,11 +255,7 @@ function updateVideo (req, res, finalCallback) {
 
   waterfall([
 
-    function startTransaction (callback) {
-      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
-        return callback(err, t)
-      })
-    },
+    databaseUtils.startSerializableTransaction,
 
     function findOrCreateTags (t, callback) {
       if (videoInfosToUpdate.tags) {
@@ -384,19 +377,16 @@ function listVideoAbuses (req, res, next) {
 }
 
 function reportVideoAbuseRetryWrapper (req, res, next) {
-  utils.transactionRetryer(
-    function (callback) {
-      return reportVideoAbuse(req, res, callback)
-    },
-    function (err) {
-      if (err) {
-        logger.error('Cannot report abuse to the video with many retries.', { error: err })
-        return next(err)
-      }
+  const options = {
+    arguments: [ req, res ],
+    errorMessage: 'Cannot report abuse to the video with many retries.'
+  }
 
-      return res.type('json').status(204).end()
-    }
-  )
+  databaseUtils.retryTransactionWrapper(reportVideoAbuse, options, function (err) {
+    if (err) return next(err)
+
+    return res.type('json').status(204).end()
+  })
 }
 
 function reportVideoAbuse (req, res, finalCallback) {

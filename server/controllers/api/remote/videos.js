@@ -10,7 +10,7 @@ const secureMiddleware = middlewares.secure
 const videosValidators = middlewares.validators.remote.videos
 const signatureValidators = middlewares.validators.remote.signature
 const logger = require('../../../helpers/logger')
-const utils = require('../../../helpers/utils')
+const databaseUtils = require('../../../helpers/database-utils')
 
 const router = express.Router()
 
@@ -71,7 +71,7 @@ function addRemoteVideoRetryWrapper (videoToCreateData, fromPod, finalCallback) 
     errorMessage: 'Cannot insert the remote video with many retries.'
   }
 
-  utils.retryWrapper(addRemoteVideo, options, finalCallback)
+  databaseUtils.retryTransactionWrapper(addRemoteVideo, options, finalCallback)
 }
 
 function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
@@ -79,11 +79,7 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
 
   waterfall([
 
-    function startTransaction (callback) {
-      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
-        return callback(err, t)
-      })
-    },
+    databaseUtils.startSerializableTransaction,
 
     function findOrCreateAuthor (t, callback) {
       const name = videoToCreateData.author
@@ -180,7 +176,7 @@ function updateRemoteVideoRetryWrapper (videoAttributesToUpdate, fromPod, finalC
     errorMessage: 'Cannot update the remote video with many retries'
   }
 
-  utils.retryWrapper(updateRemoteVideo, options, finalCallback)
+  databaseUtils.retryWrapper(updateRemoteVideo, options, finalCallback)
 }
 
 function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
@@ -188,11 +184,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
 
   waterfall([
 
-    function startTransaction (callback) {
-      db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
-        return callback(err, t)
-      })
-    },
+    databaseUtils.startSerializableTransaction,
 
     function findVideo (t, callback) {
       fetchVideo(fromPod.host, videoAttributesToUpdate.remoteId, function (err, videoInstance) {

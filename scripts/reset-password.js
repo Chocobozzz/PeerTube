@@ -6,7 +6,6 @@
 
 const program = require('commander')
 
-const constants = require('../server/initializers/constants')
 const db = require('../server/initializers/database')
 
 program
