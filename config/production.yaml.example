@@ -7,6 +7,7 @@ webserver:
   hostname: 'example.com'
   port: 80
 
+# Your database name will be "peertube"+database.suffix
 database:
   hostname: 'localhost'
   port: 5432
