@@ -203,7 +203,7 @@ function computeForeignPodsList (host, podsScore, callback) {
       else podsScore[foreignPodHost] = 1
     })
 
-    callback()
+    return callback()
   })
 }
 
@@ -212,6 +212,7 @@ function computeWinningPods (hosts, podsScore) {
   // Only add a pod if it exists in more than a half base pods
   const podsList = []
   const baseScore = hosts.length / 2
+
   Object.keys(podsScore).forEach(function (podHost) {
     // If the pod is not me and with a good score we add it
     if (isMe(podHost) === false && podsScore[podHost] > baseScore) {

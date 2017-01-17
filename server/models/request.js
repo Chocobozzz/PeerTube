@@ -118,13 +118,8 @@ function makeRequest (toPod, requestEndpoint, requestsToMake, callback) {
   // The function fire some useful callbacks
   requests.makeSecureRequest(params, function (err, res) {
     if (err || (res.statusCode !== 200 && res.statusCode !== 201 && res.statusCode !== 204)) {
-      logger.error(
-        'Error sending secure request to %s pod.',
-        toPod.host,
-        {
-          error: err ? err.message : 'Status code not 20x : ' + res.statusCode
-        }
-      )
+      err = err ? err.message : 'Status code not 20x : ' + res.statusCode
+      logger.error('Error sending secure request to %s pod.', toPod.host, { error: err })
 
       return callback(false)
     }
@@ -153,26 +148,7 @@ function makeRequests () {
     }
 
     // We want to group requests by destinations pod and endpoint
-    const requestsToMakeGrouped = {}
-    Object.keys(requests).forEach(function (toPodId) {
-      requests[toPodId].forEach(function (data) {
-        const request = data.request
-        const pod = data.pod
-        const hashKey = toPodId + request.endpoint
-
-        if (!requestsToMakeGrouped[hashKey]) {
-          requestsToMakeGrouped[hashKey] = {
-            toPod: pod,
-            endpoint: request.endpoint,
-            ids: [], // request ids, to delete them from the DB in the future
-            datas: [] // requests data,
-          }
-        }
-
-        requestsToMakeGrouped[hashKey].ids.push(request.id)
-        requestsToMakeGrouped[hashKey].datas.push(request.request)
-      })
-    })
+    const requestsToMakeGrouped = buildRequestObjects(requests)
 
     logger.info('Making requests to friends.')
 
@@ -188,22 +164,20 @@ function makeRequests () {
         const requestIdsToDelete = requestToMake.ids
 
         logger.info('Removing %d requests of unexisting pod %s.', requestIdsToDelete.length, requestToMake.toPod.id)
-        RequestToPod.removePodOf.call(self, requestIdsToDelete, requestToMake.toPod.id)
-        return callbackEach()
+        return RequestToPod.removePodOf(requestIdsToDelete, requestToMake.toPod.id, callbackEach)
       }
 
       makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, function (success) {
-        if (success === true) {
-          logger.debug('Removing requests for pod %s.', requestToMake.toPod.id, { requestsIds: requestToMake.ids })
-
-          goodPods.push(requestToMake.toPod.id)
-
-          // Remove the pod id of these request ids
-          RequestToPod.removePodOf(requestToMake.ids, requestToMake.toPod.id, callbackEach)
-        } else {
+        if (success === false) {
           badPods.push(requestToMake.toPod.id)
-          callbackEach()
+          return callbackEach()
         }
+
+        logger.debug('Removing requests for pod %s.', requestToMake.toPod.id, { requestsIds: requestToMake.ids })
+        goodPods.push(requestToMake.toPod.id)
+
+        // Remove the pod id of these request ids
+        RequestToPod.removePodOf(requestToMake.ids, requestToMake.toPod.id, callbackEach)
       })
     }, function () {
       // All the requests were made, we update the pods score
@@ -214,6 +188,32 @@ function makeRequests () {
       })
     })
   })
+}
+
+function buildRequestObjects (requests) {
+  const requestsToMakeGrouped = {}
+
+  Object.keys(requests).forEach(function (toPodId) {
+    requests[toPodId].forEach(function (data) {
+      const request = data.request
+      const pod = data.pod
+      const hashKey = toPodId + request.endpoint
+
+      if (!requestsToMakeGrouped[hashKey]) {
+        requestsToMakeGrouped[hashKey] = {
+          toPod: pod,
+          endpoint: request.endpoint,
+          ids: [], // request ids, to delete them from the DB in the future
+          datas: [] // requests data,
+        }
+      }
+
+      requestsToMakeGrouped[hashKey].ids.push(request.id)
+      requestsToMakeGrouped[hashKey].datas.push(request.request)
+    })
+  })
+
+  return requestsToMakeGrouped
 }
 
 // Remove pods with a score of 0 (too many requests where they were unreachable)
