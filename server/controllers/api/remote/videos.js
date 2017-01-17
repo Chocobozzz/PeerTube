@@ -5,12 +5,22 @@ const express = require('express')
 const waterfall = require('async/waterfall')
 
 const db = require('../../../initializers/database')
+const constants = require('../../../initializers/constants')
 const middlewares = require('../../../middlewares')
 const secureMiddleware = middlewares.secure
 const videosValidators = middlewares.validators.remote.videos
 const signatureValidators = middlewares.validators.remote.signature
 const logger = require('../../../helpers/logger')
 const databaseUtils = require('../../../helpers/database-utils')
+
+const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
+
+// Functions to call when processing a remote request
+const functionsHash = {}
+functionsHash[ENDPOINT_ACTIONS.ADD] = addRemoteVideoRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.UPDATE] = updateRemoteVideoRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.REMOVE] = removeRemoteVideo
+functionsHash[ENDPOINT_ACTIONS.REPORT_ABUSE] = reportAbuseRemoteVideo
 
 const router = express.Router()
 
@@ -36,26 +46,14 @@ function remoteVideos (req, res, next) {
   eachSeries(requests, function (request, callbackEach) {
     const data = request.data
 
-    switch (request.type) {
-      case 'add':
-        addRemoteVideoRetryWrapper(data, fromPod, callbackEach)
-        break
-
-      case 'update':
-        updateRemoteVideoRetryWrapper(data, fromPod, callbackEach)
-        break
-
-      case 'remove':
-        removeRemoteVideo(data, fromPod, callbackEach)
-        break
-
-      case 'report-abuse':
-        reportAbuseRemoteVideo(data, fromPod, callbackEach)
-        break
-
-      default:
-        logger.error('Unkown remote request type %s.', request.type)
+    // Get the function we need to call in order to process the request
+    const fun = functionsHash[request.type]
+    if (fun === undefined) {
+      logger.error('Unkown remote request type %s.', request.type)
+      return callbackEach(null)
     }
+
+    fun.call(this, data, fromPod, callbackEach)
   }, function (err) {
     if (err) logger.error('Error managing remote videos.', { error: err })
   })
@@ -141,7 +139,9 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
     },
 
     function associateTagsToVideo (t, tagInstances, video, callback) {
-      const options = { transaction: t }
+      const options = {
+        transaction: t
+      }
 
       video.setTags(tagInstances, options).asCallback(function (err) {
         return callback(err, t)
