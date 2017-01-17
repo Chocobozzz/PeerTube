@@ -157,8 +157,7 @@ function beforeCreate (video, options, next) {
     const videoPath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
 
     tasks.push(
-      // TODO: refractoring
-      function (callback) {
+      function createVideoTorrent (callback) {
         const options = {
           announceList: [
             [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
@@ -171,7 +170,8 @@ function beforeCreate (video, options, next) {
         createTorrent(videoPath, options, function (err, torrent) {
           if (err) return callback(err)
 
-          fs.writeFile(constants.CONFIG.STORAGE.TORRENTS_DIR + video.getTorrentName(), torrent, function (err) {
+          const filePath = pathUtils.join(constants.CONFIG.STORAGE.TORRENTS_DIR, video.getTorrentName())
+          fs.writeFile(filePath, torrent, function (err) {
             if (err) return callback(err)
 
             const parsedTorrent = parseTorrent(torrent)
@@ -180,10 +180,12 @@ function beforeCreate (video, options, next) {
           })
         })
       },
-      function (callback) {
+
+      function createVideoThumbnail (callback) {
         createThumbnail(video, videoPath, callback)
       },
-      function (callback) {
+
+      function createVIdeoPreview (callback) {
         createPreview(video, videoPath, callback)
       }
     )
@@ -205,19 +207,19 @@ function afterDestroy (video, options, next) {
 
   if (video.isOwned()) {
     tasks.push(
-      function (callback) {
+      function removeVideoFile (callback) {
         removeFile(video, callback)
       },
 
-      function (callback) {
+      function removeVideoTorrent (callback) {
         removeTorrent(video, callback)
       },
 
-      function (callback) {
+      function removeVideoPreview (callback) {
         removePreview(video, callback)
       },
 
-      function (callback) {
+      function removeVideoToFriends (callback) {
         const params = {
           remoteId: video.id
         }
@@ -395,7 +397,7 @@ function generateThumbnailFromData (video, thumbnailData, callback) {
   // Creating the thumbnail for a remote video
 
   const thumbnailName = video.getThumbnailName()
-  const thumbnailPath = constants.CONFIG.STORAGE.THUMBNAILS_DIR + thumbnailName
+  const thumbnailPath = pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
   fs.writeFile(thumbnailPath, Buffer.from(thumbnailData, 'binary'), function (err) {
     if (err) return callback(err)
 
@@ -596,15 +598,18 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
 // ---------------------------------------------------------------------------
 
 function removeThumbnail (video, callback) {
-  fs.unlink(constants.CONFIG.STORAGE.THUMBNAILS_DIR + video.getThumbnailName(), callback)
+  const thumbnailPath = pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
+  fs.unlink(thumbnailPath, callback)
 }
 
 function removeFile (video, callback) {
-  fs.unlink(constants.CONFIG.STORAGE.VIDEOS_DIR + video.getVideoFilename(), callback)
+  const filePath = pathUtils.join(constants.CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
+  fs.unlink(filePath, callback)
 }
 
 function removeTorrent (video, callback) {
-  fs.unlink(constants.CONFIG.STORAGE.TORRENTS_DIR + video.getTorrentName(), callback)
+  const torrenPath = pathUtils.join(constants.CONFIG.STORAGE.TORRENTS_DIR, video.getTorrentName())
+  fs.unlink(torrenPath, callback)
 }
 
 function removePreview (video, callback) {

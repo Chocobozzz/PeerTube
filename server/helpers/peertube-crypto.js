@@ -4,6 +4,7 @@ const crypto = require('crypto')
 const bcrypt = require('bcrypt')
 const fs = require('fs')
 const openssl = require('openssl-wrapper')
+const pathUtils = require('path')
 
 const constants = require('../initializers/constants')
 const logger = require('./logger')
@@ -13,6 +14,8 @@ const peertubeCrypto = {
   comparePassword,
   createCertsIfNotExist,
   cryptPassword,
+  getMyPrivateCert,
+  getMyPublicCert,
   sign
 }
 
@@ -55,7 +58,8 @@ function sign (data) {
   sign.update(dataString, 'utf8')
 
   // TODO: make async
-  const myKey = fs.readFileSync(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem')
+  const certPath = pathUtils.join(constants.CONFIG.STORAGE.CERT_DIR, constants.PRIVATE_CERT_NAME)
+  const myKey = fs.readFileSync(certPath)
   const signature = sign.sign(myKey, constants.SIGNATURE_ENCODING)
 
   return signature
@@ -91,6 +95,16 @@ function cryptPassword (password, callback) {
   })
 }
 
+function getMyPrivateCert (callback) {
+  const certPath = pathUtils.join(constants.CONFIG.STORAGE.CERT_DIR, constants.PRIVATE_CERT_NAME)
+  fs.readFile(certPath, 'utf8', callback)
+}
+
+function getMyPublicCert (callback) {
+  const certPath = pathUtils.join(constants.CONFIG.STORAGE.CERT_DIR, constants.PUBLIC_CERT_NAME)
+  fs.readFile(certPath, 'utf8', callback)
+}
+
 // ---------------------------------------------------------------------------
 
 module.exports = peertubeCrypto
@@ -98,7 +112,8 @@ module.exports = peertubeCrypto
 // ---------------------------------------------------------------------------
 
 function certsExist (callback) {
-  fs.exists(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem', function (exists) {
+  const certPath = pathUtils.join(constants.CONFIG.STORAGE.CERT_DIR, constants.PRIVATE_CERT_NAME)
+  fs.exists(certPath, function (exists) {
     return callback(exists)
   })
 }
@@ -113,24 +128,27 @@ function createCerts (callback) {
 
     logger.info('Generating a RSA key...')
 
-    let options = {
-      'out': constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem',
+    const privateCertPath = pathUtils.join(constants.CONFIG.STORAGE.CERT_DIR, constants.PRIVATE_CERT_NAME)
+    const genRsaOptions = {
+      'out': privateCertPath,
       '2048': false
     }
-    openssl.exec('genrsa', options, function (err) {
+    openssl.exec('genrsa', genRsaOptions, function (err) {
       if (err) {
         logger.error('Cannot create private key on this pod.')
         return callback(err)
       }
-      logger.info('RSA key generated.')
 
-      options = {
-        'in': constants.CONFIG.STORAGE.CERT_DIR + 'peertube.key.pem',
+      logger.info('RSA key generated.')
+      logger.info('Managing public key...')
+
+      const publicCertPath = pathUtils.join(constants.CONFIG.STORAGE.CERT_DIR, 'peertube.pub')
+      const rsaOptions = {
+        'in': privateCertPath,
         'pubout': true,
-        'out': constants.CONFIG.STORAGE.CERT_DIR + 'peertube.pub'
+        'out': publicCertPath
       }
-      logger.info('Manage public key...')
-      openssl.exec('rsa', options, function (err) {
+      openssl.exec('rsa', rsaOptions, function (err) {
         if (err) {
           logger.error('Cannot create public key on this pod.')
           return callback(err)

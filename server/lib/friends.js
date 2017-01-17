@@ -3,13 +3,13 @@
 const each = require('async/each')
 const eachLimit = require('async/eachLimit')
 const eachSeries = require('async/eachSeries')
-const fs = require('fs')
 const request = require('request')
 const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
 const db = require('../initializers/database')
 const logger = require('../helpers/logger')
+const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
 
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
@@ -19,7 +19,6 @@ const friends = {
   updateVideoToFriends,
   reportAbuseVideoToFriend,
   hasFriends,
-  getMyCertificate,
   makeFriends,
   quitFriends,
   removeVideoToFriends,
@@ -74,15 +73,11 @@ function hasFriends (callback) {
   })
 }
 
-function getMyCertificate (callback) {
-  fs.readFile(constants.CONFIG.STORAGE.CERT_DIR + 'peertube.pub', 'utf8', callback)
-}
-
 function makeFriends (hosts, callback) {
   const podsScore = {}
 
   logger.info('Make friends!')
-  getMyCertificate(function (err, cert) {
+  peertubeCrypto.getMyPublicCert(function (err, cert) {
     if (err) {
       logger.error('Cannot read public cert.')
       return callback(err)

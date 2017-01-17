@@ -12,7 +12,7 @@ const db = require('../initializers/database')
 const router = express.Router()
 
 const opengraphComment = '<!-- opengraph tags -->'
-const distPath = path.join(__dirname, '../../client/dist')
+const distPath = path.join(__dirname, '..', '..', 'client/dist')
 const embedPath = path.join(distPath, 'standalone/videos/embed.html')
 const indexPath = path.join(distPath, 'index.html')
 

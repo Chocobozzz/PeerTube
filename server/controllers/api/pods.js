@@ -5,6 +5,7 @@ const waterfall = require('async/waterfall')
 
 const db = require('../../initializers/database')
 const logger = require('../../helpers/logger')
+const peertubeCrypto = require('../../helpers/peertube-crypto')
 const utils = require('../../helpers/utils')
 const friends = require('../../lib/friends')
 const middlewares = require('../../middlewares')
@@ -67,7 +68,7 @@ function addPods (req, res, next) {
     },
 
     function fetchMyCertificate (callback) {
-      friends.getMyCertificate(function (err, cert) {
+      peertubeCrypto.getMyPublicCert(function (err, cert) {
         if (err) {
           logger.error('Cannot read cert file.')
           return callback(err)
