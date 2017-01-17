@@ -389,11 +389,7 @@ function reportVideoAbuse (req, res, finalCallback) {
 
   waterfall([
 
-    function startTransaction (callback) {
-      db.sequelize.transaction().asCallback(function (err, t) {
-        return callback(err, t)
-      })
-    },
+    databaseUtils.startSerializableTransaction,
 
     function createAbuse (t, callback) {
       db.VideoAbuse.create(abuse).asCallback(function (err, abuse) {

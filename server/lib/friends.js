@@ -12,6 +12,8 @@ const db = require('../initializers/database')
 const logger = require('../helpers/logger')
 const requests = require('../helpers/requests')
 
+const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
+
 const friends = {
   addVideoToFriends,
   updateVideoToFriends,
@@ -26,7 +28,7 @@ const friends = {
 
 function addVideoToFriends (videoData, transaction, callback) {
   const options = {
-    type: 'add',
+    type: ENDPOINT_ACTIONS.ADD,
     endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
     data: videoData,
     transaction
@@ -36,7 +38,7 @@ function addVideoToFriends (videoData, transaction, callback) {
 
 function updateVideoToFriends (videoData, transaction, callback) {
   const options = {
-    type: 'update',
+    type: ENDPOINT_ACTIONS.UPDATE,
     endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
     data: videoData,
     transaction
@@ -46,7 +48,7 @@ function updateVideoToFriends (videoData, transaction, callback) {
 
 function removeVideoToFriends (videoParams) {
   const options = {
-    type: 'remove',
+    type: ENDPOINT_ACTIONS.REMOVE,
     endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
     data: videoParams
   }
@@ -55,7 +57,7 @@ function removeVideoToFriends (videoParams) {
 
 function reportAbuseVideoToFriend (reportData, video) {
   const options = {
-    type: 'report-abuse',
+    type: ENDPOINT_ACTIONS.REPORT_ABUSE,
     endpoint: constants.REQUEST_ENDPOINTS.VIDEOS,
     data: reportData,
     toIds: [ video.Author.podId ]

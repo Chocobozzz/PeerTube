@@ -1,7 +1,10 @@
 'use strict'
 
+const constants = require('../../../initializers/constants')
 const videosValidators = require('../videos')
 const miscValidators = require('../misc')
+
+const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
 
 const remoteVideosValidators = {
   isEachRemoteRequestVideosValid
@@ -13,29 +16,13 @@ function isEachRemoteRequestVideosValid (requests) {
       const video = request.data
       return (
         isRequestTypeAddValid(request.type) &&
+        isCommonVideoAttrbiutesValid(video) &&
         videosValidators.isVideoAuthorValid(video.author) &&
-        videosValidators.isVideoDateValid(video.createdAt) &&
-        videosValidators.isVideoDateValid(video.updatedAt) &&
-        videosValidators.isVideoDescriptionValid(video.description) &&
-        videosValidators.isVideoDurationValid(video.duration) &&
-        videosValidators.isVideoInfoHashValid(video.infoHash) &&
-        videosValidators.isVideoNameValid(video.name) &&
-        videosValidators.isVideoTagsValid(video.tags) &&
-        videosValidators.isVideoThumbnailDataValid(video.thumbnailData) &&
-        videosValidators.isVideoRemoteIdValid(video.remoteId) &&
-        videosValidators.isVideoExtnameValid(video.extname)
+        videosValidators.isVideoThumbnailDataValid(video.thumbnailData)
       ) ||
       (
         isRequestTypeUpdateValid(request.type) &&
-        videosValidators.isVideoDateValid(video.createdAt) &&
-        videosValidators.isVideoDateValid(video.updatedAt) &&
-        videosValidators.isVideoDescriptionValid(video.description) &&
-        videosValidators.isVideoDurationValid(video.duration) &&
-        videosValidators.isVideoInfoHashValid(video.infoHash) &&
-        videosValidators.isVideoNameValid(video.name) &&
-        videosValidators.isVideoTagsValid(video.tags) &&
-        videosValidators.isVideoRemoteIdValid(video.remoteId) &&
-        videosValidators.isVideoExtnameValid(video.extname)
+        isCommonVideoAttrbiutesValid(video)
       ) ||
       (
         isRequestTypeRemoveValid(request.type) &&
@@ -56,18 +43,30 @@ module.exports = remoteVideosValidators
 
 // ---------------------------------------------------------------------------
 
+function isCommonVideoAttrbiutesValid (video) {
+  return videosValidators.isVideoDateValid(video.createdAt) &&
+         videosValidators.isVideoDateValid(video.updatedAt) &&
+         videosValidators.isVideoDescriptionValid(video.description) &&
+         videosValidators.isVideoDurationValid(video.duration) &&
+         videosValidators.isVideoInfoHashValid(video.infoHash) &&
+         videosValidators.isVideoNameValid(video.name) &&
+         videosValidators.isVideoTagsValid(video.tags) &&
+         videosValidators.isVideoRemoteIdValid(video.remoteId) &&
+         videosValidators.isVideoExtnameValid(video.extname)
+}
+
 function isRequestTypeAddValid (value) {
-  return value === 'add'
+  return value === ENDPOINT_ACTIONS.ADD
 }
 
 function isRequestTypeUpdateValid (value) {
-  return value === 'update'
+  return value === ENDPOINT_ACTIONS.UPDATE
 }
 
 function isRequestTypeRemoveValid (value) {
-  return value === 'remove'
+  return value === ENDPOINT_ACTIONS.REMOVE
 }
 
 function isRequestTypeReportAbuseValid (value) {
-  return value === 'report-abuse'
+  return value === ENDPOINT_ACTIONS.REPORT_ABUSE
 }
