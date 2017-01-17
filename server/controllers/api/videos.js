@@ -120,14 +120,14 @@ function addVideoRetryWrapper (req, res, next) {
   })
 }
 
-function addVideo (req, res, videoFile, callback) {
+function addVideo (req, res, videoFile, finalCallback) {
   const videoInfos = req.body
 
   waterfall([
 
     databaseUtils.startSerializableTransaction,
 
-    function findOrCreateAuthor (t, callbackWaterfall) {
+    function findOrCreateAuthor (t, callback) {
       const user = res.locals.oauth.token.User
 
       const name = user.username
@@ -136,19 +136,19 @@ function addVideo (req, res, videoFile, callback) {
       const userId = user.id
 
       db.Author.findOrCreateAuthor(name, podId, userId, t, function (err, authorInstance) {
-        return callbackWaterfall(err, t, authorInstance)
+        return callback(err, t, authorInstance)
       })
     },
 
-    function findOrCreateTags (t, author, callbackWaterfall) {
+    function findOrCreateTags (t, author, callback) {
       const tags = videoInfos.tags
 
       db.Tag.findOrCreateTags(tags, t, function (err, tagInstances) {
-        return callbackWaterfall(err, t, author, tagInstances)
+        return callback(err, t, author, tagInstances)
       })
     },
 
-    function createVideoObject (t, author, tagInstances, callbackWaterfall) {
+    function createVideoObject (t, author, tagInstances, callback) {
       const videoData = {
         name: videoInfos.name,
         remoteId: null,
@@ -160,77 +160,70 @@ function addVideo (req, res, videoFile, callback) {
 
       const video = db.Video.build(videoData)
 
-      return callbackWaterfall(null, t, author, tagInstances, video)
+      return callback(null, t, author, tagInstances, video)
     },
 
      // Set the videoname the same as the id
-    function renameVideoFile (t, author, tagInstances, video, callbackWaterfall) {
+    function renameVideoFile (t, author, tagInstances, video, callback) {
       const videoDir = constants.CONFIG.STORAGE.VIDEOS_DIR
       const source = path.join(videoDir, videoFile.filename)
       const destination = path.join(videoDir, video.getVideoFilename())
 
       fs.rename(source, destination, function (err) {
-        if (err) return callbackWaterfall(err)
+        if (err) return callback(err)
 
         // This is important in case if there is another attempt
         videoFile.filename = video.getVideoFilename()
-        return callbackWaterfall(null, t, author, tagInstances, video)
+        return callback(null, t, author, tagInstances, video)
       })
     },
 
-    function insertVideoIntoDB (t, author, tagInstances, video, callbackWaterfall) {
+    function insertVideoIntoDB (t, author, tagInstances, video, callback) {
       const options = { transaction: t }
 
       // Add tags association
       video.save(options).asCallback(function (err, videoCreated) {
-        if (err) return callbackWaterfall(err)
+        if (err) return callback(err)
 
         // Do not forget to add Author informations to the created video
         videoCreated.Author = author
 
-        return callbackWaterfall(err, t, tagInstances, videoCreated)
+        return callback(err, t, tagInstances, videoCreated)
       })
     },
 
-    function associateTagsToVideo (t, tagInstances, video, callbackWaterfall) {
+    function associateTagsToVideo (t, tagInstances, video, callback) {
       const options = { transaction: t }
 
       video.setTags(tagInstances, options).asCallback(function (err) {
         video.Tags = tagInstances
 
-        return callbackWaterfall(err, t, video)
+        return callback(err, t, video)
       })
     },
 
-    function sendToFriends (t, video, callbackWaterfall) {
+    function sendToFriends (t, video, callback) {
       video.toAddRemoteJSON(function (err, remoteVideo) {
-        if (err) return callbackWaterfall(err)
+        if (err) return callback(err)
 
         // Now we'll add the video's meta data to our friends
         friends.addVideoToFriends(remoteVideo, t, function (err) {
-          return callbackWaterfall(err, t)
+          return callback(err, t)
         })
       })
-    }
+    },
+
+    databaseUtils.commitTransaction
 
   ], function andFinally (err, t) {
     if (err) {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot insert the video.', { error: err })
-
-      // Abort transaction?
-      if (t) t.rollback()
-
-      return callback(err)
+      return databaseUtils.rollbackTransaction(err, t, finalCallback)
     }
 
-    // Commit transaction
-    t.commit().asCallback(function (err) {
-      if (err) return callback(err)
-
-      logger.info('Video with name %s created.', videoInfos.name)
-      return callback(null)
-    })
+    logger.info('Video with name %s created.', videoInfos.name)
+    return finalCallback(null)
   })
 }
 
@@ -301,14 +294,13 @@ function updateVideo (req, res, finalCallback) {
       friends.updateVideoToFriends(json, t, function (err) {
         return callback(err, t)
       })
-    }
+    },
+
+    databaseUtils.commitTransaction
 
   ], function andFinally (err, t) {
     if (err) {
       logger.debug('Cannot update the video.', { error: err })
-
-      // Abort transaction?
-      if (t) t.rollback()
 
       // Force fields we want to update
       // If the transaction is retried, sequelize will think the object has not changed
@@ -318,16 +310,11 @@ function updateVideo (req, res, finalCallback) {
         videoInstance.set(key, value)
       })
 
-      return finalCallback(err)
+      return databaseUtils.rollbackTransaction(err, t, finalCallback)
     }
 
-    // Commit transaction
-    t.commit().asCallback(function (err) {
-      if (err) return finalCallback(err)
-
-      logger.info('Video with name %s updated.', videoInfosToUpdate.name)
-      return finalCallback(null)
-    })
+    logger.info('Video with name %s updated.', videoInfosToUpdate.name)
+    return finalCallback(null)
   })
 }
 
@@ -427,25 +414,18 @@ function reportVideoAbuse (req, res, finalCallback) {
       }
 
       return callback(null, t)
-    }
+    },
+
+    databaseUtils.commitTransaction
 
   ], function andFinally (err, t) {
     if (err) {
       logger.debug('Cannot update the video.', { error: err })
-
-      // Abort transaction?
-      if (t) t.rollback()
-
-      return finalCallback(err)
+      return databaseUtils.rollbackTransaction(err, t, finalCallback)
     }
 
-    // Commit transaction
-    t.commit().asCallback(function (err) {
-      if (err) return finalCallback(err)
-
-      logger.info('Abuse report for video %s created.', videoInstance.name)
-      return finalCallback(null)
-    })
+    logger.info('Abuse report for video %s created.', videoInstance.name)
+    return finalCallback(null)
   })
 }
 

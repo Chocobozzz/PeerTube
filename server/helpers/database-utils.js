@@ -6,9 +6,27 @@ const db = require('../initializers/database')
 const logger = require('./logger')
 
 const utils = {
+  commitTransaction,
   retryTransactionWrapper,
-  transactionRetryer,
-  startSerializableTransaction
+  rollbackTransaction,
+  startSerializableTransaction,
+  transactionRetryer
+}
+
+function commitTransaction (t, callback) {
+  return t.commit().asCallback(callback)
+}
+
+function rollbackTransaction (err, t, callback) {
+  // Try to rollback transaction
+  if (t) {
+    // Do not catch err, report the original one
+    t.rollback().asCallback(function () {
+      return callback(err)
+    })
+  } else {
+    return callback(err)
+  }
 }
 
 // { arguments, errorMessage }

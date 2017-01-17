@@ -146,26 +146,19 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
       video.setTags(tagInstances, options).asCallback(function (err) {
         return callback(err, t)
       })
-    }
+    },
+
+    databaseUtils.commitTransaction
 
   ], function (err, t) {
     if (err) {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot insert the remote video.', { error: err })
-
-      // Abort transaction?
-      if (t) t.rollback()
-
-      return finalCallback(err)
+      return databaseUtils.rollbackTransaction(err, t, finalCallback)
     }
 
-    // Commit transaction
-    t.commit().asCallback(function (err) {
-      if (err) return finalCallback(err)
-
-      logger.info('Remote video %s inserted.', videoToCreateData.name)
-      return finalCallback(null)
-    })
+    logger.info('Remote video %s inserted.', videoToCreateData.name)
+    return finalCallback(null)
   })
 }
 
@@ -222,26 +215,19 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
       videoInstance.setTags(tagInstances, options).asCallback(function (err) {
         return callback(err, t)
       })
-    }
+    },
+
+    databaseUtils.commitTransaction
 
   ], function (err, t) {
     if (err) {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot update the remote video.', { error: err })
-
-      // Abort transaction?
-      if (t) t.rollback()
-
-      return finalCallback(err)
+      return databaseUtils.rollbackTransaction(err, t, finalCallback)
     }
 
-   // Commit transaction
-    t.commit().asCallback(function (err) {
-      if (err) return finalCallback(err)
-
-      logger.info('Remote video %s updated', videoAttributesToUpdate.name)
-      return finalCallback(null)
-    })
+    logger.info('Remote video %s updated', videoAttributesToUpdate.name)
+    return finalCallback(null)
   })
 }
 
