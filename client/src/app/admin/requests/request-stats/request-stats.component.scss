@@ -1,6 +1,19 @@
 .label-description {
   display: inline-block;
-  width: 350px;
   font-weight: bold;
   color: black;
+}
+
+.requests-general {
+  .label-description {
+    width: 320px;
+  }
+}
+
+.requests-limit {
+  margin-top: 20px;
+
+  .label-description {
+    width: 430px;
+  }
 }

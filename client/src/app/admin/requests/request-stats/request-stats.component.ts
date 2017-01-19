@@ -17,6 +17,7 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getStats();
+    this.runInterval();
   }
 
   ngOnDestroy() {
@@ -27,10 +28,7 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
 
   getStats() {
     this.requestService.getStats().subscribe(
-      stats => {
-        this.stats = stats;
-        this.runInterval();
-      },
+      stats => this.stats = stats,
 
       err => alert(err.text)
     );
@@ -42,7 +40,6 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
 
       if (this.stats.remainingMilliSeconds <= 0) {
         setTimeout(() => this.getStats(), this.stats.remainingMilliSeconds + 100);
-        clearInterval(this.interval);
       }
     }, 1000);
   }

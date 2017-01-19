@@ -4,18 +4,21 @@ export interface Request {
 }
 
 export class RequestStats {
-  maxRequestsInParallel: number;
+  requestsLimitPods: number;
+  requestsLimitPerPod: number;
   milliSecondsInterval: number;
   remainingMilliSeconds: number;
   totalRequests: number;
 
   constructor(hash: {
-    maxRequestsInParallel: number,
+    requestsLimitPods: number,
+    requestsLimitPerPod: number,
     milliSecondsInterval: number,
     remainingMilliSeconds: number,
     totalRequests: number;
   }) {
-    this.maxRequestsInParallel = hash.maxRequestsInParallel;
+    this.requestsLimitPods = hash.requestsLimitPods;
+    this.requestsLimitPerPod = hash.requestsLimitPerPod;
     this.milliSecondsInterval = hash.milliSecondsInterval;
     this.remainingMilliSeconds = hash.remainingMilliSeconds;
     this.totalRequests = hash.totalRequests;

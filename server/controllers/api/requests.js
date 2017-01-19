@@ -28,7 +28,8 @@ function getStatsRequests (req, res, next) {
 
     return res.json({
       totalRequests: totalRequests,
-      maxRequestsInParallel: constants.REQUESTS_IN_PARALLEL,
+      requestsLimitPods: constants.REQUESTS_LIMIT_PODS,
+      requestsLimitPerPod: constants.REQUESTS_LIMIT_PER_POD,
       remainingMilliSeconds: db.Request.remainingMilliSeconds(),
       milliSecondsInterval: constants.REQUESTS_INTERVAL
     })
