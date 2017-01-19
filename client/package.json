@@ -85,7 +85,9 @@
     "zone.js": "~0.7.2"
   },
   "devDependencies": {
+    "add-asset-html-webpack-plugin": "^1.0.2",
     "codelyzer": "2.0.0-beta.4",
-    "standard": "^8.0.0"
+    "standard": "^8.0.0",
+    "webpack-dll-bundles-plugin": "^1.0.0-beta.5"
   }
 }

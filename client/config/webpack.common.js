@@ -323,7 +323,7 @@ module.exports = function (options) {
      * See: https://webpack.github.io/docs/configuration.html#node
      */
     node: {
-      global: 'true',
+      global: true,
       crypto: 'empty',
       process: true,
       module: false,
