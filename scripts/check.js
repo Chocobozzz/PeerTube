@@ -84,8 +84,8 @@ function checkCORSWebSeed (callback) {
 
 function checkTracker (callback) {
   const trackerUrl = constants.CONFIG.WEBSERVER.WS + '://' +
-                     constants.CONFIG.WEBSERVER.HOST + ':' +
-                     constants.CONFIG.WEBSERVER.PORT + '/tracker/socket'
+                     constants.CONFIG.WEBSERVER.HOST +
+                     '/tracker/socket'
   console.log('Checking tracker websocket (%s)...', trackerUrl)
 
   let ws = null
