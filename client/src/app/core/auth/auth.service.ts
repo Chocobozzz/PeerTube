@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/throw';
 
 // Do not use the barrel (dependency loop)
 import { AuthStatus } from '../../shared/auth/auth-status.model';
