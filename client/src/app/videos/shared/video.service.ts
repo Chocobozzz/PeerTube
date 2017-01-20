@@ -55,6 +55,17 @@ export class VideoService {
                     .catch((res) => this.restExtractor.handleError(res));
   }
 
+  reportVideo(id: string, reason: string) {
+    const body = {
+      reason
+    };
+    const url = VideoService.BASE_VIDEO_URL + id + '/abuse';
+
+    return this.authHttp.post(url, body)
+                    .map(this.restExtractor.extractDataBool)
+                    .catch((res) => this.restExtractor.handleError(res));
+  }
+
   private extractVideos(result: ResultList) {
     const videosJson = result.data;
     const totalVideos = result.total;

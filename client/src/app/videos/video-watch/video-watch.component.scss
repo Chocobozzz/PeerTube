@@ -47,9 +47,13 @@
       top: 2px;
     }
 
-    #magnet-uri, #share {
+    #magnet-uri, #share, #more {
       font-weight: bold;
       opacity: 0.85;
+    }
+
+    #more-menu .dropdown-item .glyphicon {
+      margin-right: 5px;
     }
   }
 

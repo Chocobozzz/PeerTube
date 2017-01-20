@@ -4,7 +4,13 @@ import { VideosRoutingModule } from './videos-routing.module';
 import { VideosComponent } from './videos.component';
 import { VideoAddComponent } from './video-add';
 import { VideoListComponent, VideoMiniatureComponent, VideoSortComponent } from './video-list';
-import { VideoWatchComponent, VideoMagnetComponent, VideoShareComponent, WebTorrentService } from './video-watch';
+import {
+  VideoWatchComponent,
+  VideoMagnetComponent,
+  VideoReportComponent,
+  VideoShareComponent,
+  WebTorrentService
+} from './video-watch';
 import { LoaderComponent, VideoService } from './shared';
 import { SharedModule } from '../shared';
 
@@ -26,6 +32,7 @@ import { SharedModule } from '../shared';
     VideoWatchComponent,
     VideoMagnetComponent,
     VideoShareComponent,
+    VideoReportComponent,
 
     LoaderComponent
   ],

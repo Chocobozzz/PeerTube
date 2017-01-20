@@ -5,8 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { MetaService } from 'ng2-meta';
 import * as videojs from 'video.js';
 
+import { AuthService } from '../../core';
 import { VideoMagnetComponent } from './video-magnet.component';
 import { VideoShareComponent } from './video-share.component';
+import { VideoReportComponent } from './video-report.component';
 import { Video, VideoService } from '../shared';
 import { WebTorrentService } from './webtorrent.service';
 
@@ -21,6 +23,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   @ViewChild('videoMagnetModal') videoMagnetModal: VideoMagnetComponent;
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent;
+  @ViewChild('videoReportModal') videoReportModal: VideoReportComponent;
 
   downloadSpeed: number;
   error: boolean = false;
@@ -42,7 +45,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private videoService: VideoService,
     private metaService: MetaService,
-    private webTorrentService: WebTorrentService
+    private webTorrentService: WebTorrentService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -123,12 +127,21 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     });
   }
 
+  showReportModal(event: Event) {
+    event.preventDefault();
+    this.videoReportModal.show();
+  }
+
   showShareModal() {
     this.videoShareModal.show();
   }
 
   showMagnetUriModal() {
     this.videoMagnetModal.show();
+  }
+
+  isUserLoggedIn() {
+    return this.authService.isLoggedIn();
   }
 
   private loadTooLong() {

@@ -61,7 +61,6 @@ function transactionRetryer (func, callback) {
 }
 
 function startSerializableTransaction (callback) {
-  console.log(db)
   db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
     // We force to return only two parameters
     return callback(err, t)

@@ -60,6 +60,19 @@
       <button title="Get magnet URI" id="magnet-uri" class="btn btn-default" (click)="showMagnetUriModal()">
         <span class="glyphicon glyphicon-magnet"></span> Magnet
       </button>
+
+      <div *ngIf="isUserLoggedIn()" class="btn-group" dropdown>
+        <button id="single-button" type="button" id="more" class="btn btn-default" dropdownToggle>
+          <span class="glyphicon glyphicon-option-horizontal"></span> More
+        </button>
+        <ul dropdownMenu id="more-menu" role="menu" aria-labelledby="single-button">
+          <li role="menuitem">
+            <a class="dropdown-item" href="#" (click)="showReportModal($event)">
+              <span class="glyphicon glyphicon-alert"></span> Report
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -79,5 +92,8 @@
   </div>
 </div>
 
-<my-video-share #videoShareModal *ngIf="video !== null" [video]="video"></my-video-share>
-<my-video-magnet #videoMagnetModal *ngIf="video !== null" [video]="video"></my-video-magnet>
+<template [ngIf]="video !== null">
+  <my-video-share #videoShareModal [video]="video"></my-video-share>
+  <my-video-magnet #videoMagnetModal [video]="video"></my-video-magnet>
+  <my-video-report #videoReportModal [video]="video"></my-video-report>
+</template>
