@@ -10,10 +10,9 @@ const db = require('../server/initializers/database')
 
 program
   .option('-u, --user [user]', 'User')
-  .option('-p, --password [new password]', 'New password')
   .parse(process.argv)
 
-if (program.user === undefined || program.password === undefined) {
+if (program.user === undefined) {
   console.error('All parameters are mandatory.')
   process.exit(-1)
 }
@@ -30,15 +29,32 @@ db.init(true, function () {
       return
     }
 
-    user.password = program.password
-    user.save().asCallback(function (err) {
-      if (err) {
-        console.error(err)
-        return
+    const readline = require('readline')
+    const Writable = require('stream').Writable
+    const mutableStdout = new Writable({
+      write: function (chunk, encoding, callback) {
+        callback()
       }
+    })
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: mutableStdout,
+      terminal: true
+    })
 
-      console.log('User pasword updated.')
-      process.exit(0)
+    console.log('New password?')
+    rl.on('line', function (password) {
+      user.password = password
+
+      user.save().asCallback(function (err) {
+        if (err) {
+          console.error(err)
+        } else {
+          console.log('User password updated.')
+        }
+
+        process.exit(0)
+      })
     })
   })
 })
