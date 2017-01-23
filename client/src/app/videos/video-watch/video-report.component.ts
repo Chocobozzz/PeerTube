@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { ModalDirective } from 'ng2-bootstrap/modal';
 
-import { FormReactive, VIDEO_REPORT_REASON } from '../../shared';
+import { FormReactive, VideoAbuseService, VIDEO_ABUSE_REASON } from '../../shared';
 import { Video, VideoService } from '../shared';
 
 @Component({
@@ -21,12 +21,12 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     reason: ''
   };
   validationMessages = {
-    reason: VIDEO_REPORT_REASON.MESSAGES
+    reason: VIDEO_ABUSE_REASON.MESSAGES
   };
 
   constructor(
     private formBuilder: FormBuilder,
-    private videoService: VideoService
+    private videoAbuseService: VideoAbuseService
    ) {
     super();
   }
@@ -37,7 +37,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   buildForm() {
     this.form = this.formBuilder.group({
-      reason: [ '', VIDEO_REPORT_REASON.VALIDATORS ]
+      reason: [ '', VIDEO_ABUSE_REASON.VALIDATORS ]
     });
 
     this.form.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -54,7 +54,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   report() {
     const reason = this.form.value['reason']
 
-    this.videoService.reportVideo(this.video.id, reason)
+    this.videoAbuseService.reportVideo(this.video.id, reason)
                      .subscribe(
                        // TODO: move alert to beautiful notifications
                        ok => {

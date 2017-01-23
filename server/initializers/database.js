@@ -70,7 +70,7 @@ function init (silent, callback) {
       }
     })
 
-    if (!silent) logger.info('Database is ready.')
+    if (!silent) logger.info('Database %s is ready.', dbname)
 
     return callback(null)
   })

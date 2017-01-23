@@ -5,6 +5,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { FriendsComponent, FriendAddComponent, FriendListComponent, FriendService } from './friends';
 import { RequestsComponent, RequestStatsComponent, RequestService } from './requests';
 import { UsersComponent, UserAddComponent, UserListComponent, UserService } from './users';
+import { VideoAbusesComponent, VideoAbuseListComponent } from './video-abuses';
 import { MenuAdminComponent } from './menu-admin.component';
 import { SharedModule } from '../shared';
 
@@ -27,6 +28,9 @@ import { SharedModule } from '../shared';
     UsersComponent,
     UserAddComponent,
     UserListComponent,
+
+    VideoAbusesComponent,
+    VideoAbuseListComponent,
 
     MenuAdminComponent
   ],

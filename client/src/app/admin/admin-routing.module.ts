@@ -5,6 +5,7 @@ import { AdminComponent } from './admin.component';
 import { FriendsRoutes } from './friends';
 import { RequestsRoutes } from './requests';
 import { UsersRoutes } from './users';
+import { VideoAbusesRoutes } from './video-abuses';
 
 const adminRoutes: Routes = [
   {
@@ -18,7 +19,8 @@ const adminRoutes: Routes = [
       },
       ...FriendsRoutes,
       ...RequestsRoutes,
-      ...UsersRoutes
+      ...UsersRoutes,
+      ...VideoAbusesRoutes
     ]
   }
 ];

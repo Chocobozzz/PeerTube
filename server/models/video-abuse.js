@@ -106,7 +106,8 @@ function toFormatedJSON () {
     reporterPodHost,
     reason: this.reason,
     reporterUsername: this.reporterUsername,
-    videoId: this.videoId
+    videoId: this.videoId,
+    createdAt: this.createdAt
   }
 
   return json

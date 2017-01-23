@@ -1,0 +1,27 @@
+<h3>Video abuses list</h3>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th class="cell-id">ID</th>
+      <th class="cell-reason">Reason</th>
+      <th>Reporter pod host</th>
+      <th>Reporter username</th>
+      <th>Video</th>
+      <th>Created at</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let videoAbuse of videoAbuses">
+      <td>{{ videoAbuse.id }}</td>
+      <td>{{ videoAbuse.reason }}</td>
+      <td>{{ videoAbuse.reporterPodHost }}</td>
+      <td>{{ videoAbuse.reporterUsername }}</td>
+      <td>
+        <a [routerLink]="buildVideoLink(videoAbuse)" title="Go to video">{{ videoAbuse.videoId }}</a>
+      </td>
+      <td>{{ videoAbuse.createdAt | date: 'medium' }}</td>
+    </tr>
+  </tbody>
+</table>

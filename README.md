@@ -37,10 +37,6 @@ Prototype of a decentralized video streaming platform using P2P (BitTorrent) dir
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg" alt="devDependency Status" />
   </a>
 
-  <a href="https://codeclimate.com/github/Chocobozzz/PeerTube">
-    <img src="https://codeclimate.com/github/Chocobozzz/PeerTube/badges/gpa.svg" alt="Code climate" />
-  </a>
-
   <a href="http://standardjs.com/">
     <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
   </a>

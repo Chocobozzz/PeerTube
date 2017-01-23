@@ -1,6 +1,6 @@
 import { Validators } from '@angular/forms';
 
-export const VIDEO_REPORT_REASON = {
+export const VIDEO_ABUSE_REASON = {
   VALIDATORS: [ Validators.required, Validators.minLength(2), Validators.maxLength(300) ],
   MESSAGES: {
     'required': 'Report reason name is required.',

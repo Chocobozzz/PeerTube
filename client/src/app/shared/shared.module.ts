@@ -14,6 +14,7 @@ import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 import { AUTH_HTTP_PROVIDERS } from './auth';
 import { RestExtractor, RestService } from './rest';
 import { SearchComponent, SearchService } from './search';
+import { VideoAbuseService } from './video-abuse';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import { SearchComponent, SearchService } from './search';
     AUTH_HTTP_PROVIDERS,
     RestExtractor,
     RestService,
-    SearchService
+    SearchService,
+    VideoAbuseService
   ]
 })
 export class SharedModule { }
