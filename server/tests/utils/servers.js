@@ -60,9 +60,10 @@ function runServer (number, callback) {
 
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
-    'Database is ready': false,
     'Server listening on port': false
   }
+  const key = 'Database peertube_test' + number + ' is ready'
+  serverRunString[key] = false
 
   const regexps = {
     client_id: 'Client id: (.+)',
