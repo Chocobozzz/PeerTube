@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AuthService } from './auth';
-import { MenuComponent } from './menu';
+import { MenuComponent, MenuAdminComponent } from './menu';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 
 @NgModule({
@@ -13,8 +13,14 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
     HttpModule,
     RouterModule
   ],
-  declarations: [ MenuComponent ],
-  exports: [ MenuComponent ],
+  declarations: [
+    MenuComponent,
+    MenuAdminComponent
+  ],
+  exports: [
+    MenuComponent,
+    MenuAdminComponent
+  ],
   providers: [ AuthService ]
 })
 export class CoreModule {

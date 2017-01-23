@@ -6,6 +6,10 @@ const routes: Routes = [
     path: '',
     redirectTo: '/videos/list',
     pathMatch: 'full'
+  },
+  {
+    path: 'admin',
+    loadChildren: './+admin#AdminModule'
   }
 ];
 

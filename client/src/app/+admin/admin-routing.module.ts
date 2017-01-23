@@ -9,7 +9,7 @@ import { VideoAbusesRoutes } from './video-abuses';
 
 const adminRoutes: Routes = [
   {
-    path: 'admin',
+    path: '',
     component: AdminComponent,
     children: [
       {

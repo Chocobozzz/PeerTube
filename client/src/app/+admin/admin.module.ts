@@ -6,7 +6,6 @@ import { FriendsComponent, FriendAddComponent, FriendListComponent, FriendServic
 import { RequestsComponent, RequestStatsComponent, RequestService } from './requests';
 import { UsersComponent, UserAddComponent, UserListComponent, UserService } from './users';
 import { VideoAbusesComponent, VideoAbuseListComponent } from './video-abuses';
-import { MenuAdminComponent } from './menu-admin.component';
 import { SharedModule } from '../shared';
 
 @NgModule({
@@ -30,14 +29,11 @@ import { SharedModule } from '../shared';
     UserListComponent,
 
     VideoAbusesComponent,
-    VideoAbuseListComponent,
-
-    MenuAdminComponent
+    VideoAbuseListComponent
   ],
 
   exports: [
-    AdminComponent,
-    MenuAdminComponent
+    AdminComponent
   ],
 
   providers: [

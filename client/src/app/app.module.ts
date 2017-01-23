@@ -11,7 +11,6 @@ import { AppComponent } from './app.component';
 import { AppState } from './app.service';
 
 import { AccountModule } from './account';
-import { AdminModule } from './admin';
 import { CoreModule } from './core';
 import { LoginModule } from './login';
 import { SharedModule } from './shared';
@@ -47,7 +46,6 @@ const APP_PROVIDERS = [
     MetaModule.forRoot(metaConfig),
 
     AccountModule,
-    AdminModule,
     CoreModule,
     LoginModule,
     SharedModule,
