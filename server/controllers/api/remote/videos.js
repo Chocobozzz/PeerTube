@@ -79,6 +79,16 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
 
     databaseUtils.startSerializableTransaction,
 
+    function assertRemoteIdAndHostUnique (t, callback) {
+      db.Video.loadByHostAndRemoteId(fromPod.host, videoToCreateData.remoteId, function (err, video) {
+        if (err) return callback(err)
+
+        if (video) return callback(new Error('RemoteId and host pair is not unique.'))
+
+        return callback(null, t)
+      })
+    },
+
     function findOrCreateAuthor (t, callback) {
       const name = videoToCreateData.author
       const podId = fromPod.id
