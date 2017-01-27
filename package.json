@@ -27,6 +27,7 @@
     "danger:clean:dev": "scripty",
     "danger:clean:prod": "scripty",
     "danger:clean:modules": "scripty",
+    "reset-password": "scripty",
     "play": "scripty",
     "dev": "scripty",
     "start": "node server",

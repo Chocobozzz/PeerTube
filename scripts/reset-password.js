@@ -2,8 +2,6 @@
 
 'use strict'
 
-// TODO: document this script
-
 const program = require('commander')
 
 const db = require('../server/initializers/database')

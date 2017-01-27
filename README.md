@@ -154,6 +154,10 @@ Finally, run the server with the `production` `NODE_ENV` variable set.
 
     $ NODE_ENV=production npm start
 
+The administrator password is automatically generated and can be found in the logs. You can set another password with:
+
+    $ NODE_ENV=production npm run reset-password -- -u root
+
 **Nginx template** (reverse proxy): https://github.com/Chocobozzz/PeerTube/tree/master/support/nginx
 
 **Systemd template**: https://github.com/Chocobozzz/PeerTube/tree/master/support/systemd
@@ -175,6 +179,8 @@ The following commands will upgrade the source (according to your current branch
 In this mode, the server will run requests between pods more quickly, the videos duration are limited to a few seconds and the client files are automatically compiled when we modify them:
 
     $ npm run dev
+
+The administrator password is displayed in the command output and can be found in the logs.
 
 ### Test with 3 fresh nodes
 
