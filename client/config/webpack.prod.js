@@ -12,6 +12,7 @@ const commonConfig = require('./webpack.common.js') // the settings that are com
 const DefinePlugin = require('webpack/lib/DefinePlugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
+const OptimizeJsPlugin = require('optimize-js-plugin')
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
 const WebpackMd5Hash = require('webpack-md5-hash')
 
@@ -97,6 +98,17 @@ module.exports = function (env) {
        * See: https://www.npmjs.com/package/webpack-md5-hash
        */
       new WebpackMd5Hash(),
+
+      /**
+       * Webpack plugin to optimize a JavaScript file for faster initial load
+       * by wrapping eagerly-invoked functions.
+       *
+       * See: https://github.com/vigneshshanmugam/optimize-js-plugin
+       */
+
+      new OptimizeJsPlugin({
+        sourceMap: false
+      }),
 
       /**
        * Plugin: DedupePlugin
