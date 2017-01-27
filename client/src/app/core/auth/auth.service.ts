@@ -7,6 +7,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import 'rxjs/add/observable/throw';
 
+import { NotificationsService } from 'angular2-notifications';
+
 // Do not use the barrel (dependency loop)
 import { AuthStatus } from '../../shared/auth/auth-status.model';
 import { AuthUser } from '../../shared/auth/auth-user.model';
@@ -27,6 +29,7 @@ export class AuthService {
 
   constructor(
     private http: Http,
+    private notificationsService: NotificationsService,
     private restExtractor: RestExtractor,
     private router: Router
    ) {
@@ -44,11 +47,14 @@ export class AuthService {
           this.clientSecret = result.client_secret;
           console.log('Client credentials loaded.');
         },
+
         error => {
-          alert(
-            `Cannot retrieve OAuth Client credentials: ${error.text}. \n` +
-            'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
-          );
+          let errorMessage = `Cannot retrieve OAuth Client credentials: ${error.text}. \n`;
+          errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.';
+
+          // We put a bigger timeout
+          // This is an important message
+          this.notificationsService.error('Error', errorMessage, { timeOut: 7000 });
         }
       );
 

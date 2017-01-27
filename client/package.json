@@ -36,6 +36,7 @@
     "@types/videojs": "0.0.30",
     "@types/webpack": "^2.0.0",
     "angular-pipes": "^5.0.0",
+    "angular2-notifications": "^0.4.49",
     "angular2-template-loader": "^0.6.0",
     "assets-webpack-plugin": "^3.4.0",
     "awesome-typescript-loader": "~3.0.0-beta.17",

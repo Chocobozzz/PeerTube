@@ -1,6 +1,5 @@
 <h3>Account</h3>
 
-<div *ngIf="information" class="alert alert-success">{{ information }}</div>
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
 <form role="form" (ngSubmit)="changePassword()" [formGroup]="form">

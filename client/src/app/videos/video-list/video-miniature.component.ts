@@ -1,5 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
+import { NotificationsService } from 'angular2-notifications';
+
 import { SortField, Video, VideoService } from '../shared';
 import { User } from '../../shared';
 
@@ -18,7 +20,10 @@ export class VideoMiniatureComponent {
 
   hovering = false;
 
-  constructor(private videoService: VideoService) {}
+  constructor(
+    private notificationsService: NotificationsService,
+    private videoService: VideoService
+  ) {}
 
   displayRemoveIcon() {
     return this.hovering && this.video.isRemovableBy(this.user);
@@ -36,7 +41,8 @@ export class VideoMiniatureComponent {
     if (confirm('Do you really want to remove this video?')) {
       this.videoService.removeVideo(id).subscribe(
         status => this.removed.emit(true),
-        error => alert(error.text)
+
+        error => this.notificationsService.error('Error', error.text)
       );
     }
   }

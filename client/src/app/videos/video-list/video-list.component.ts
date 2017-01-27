@@ -2,6 +2,8 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { NotificationsService } from 'angular2-notifications';
+
 import {
   SortField,
   Video,
@@ -33,6 +35,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
   private subSearch: any;
 
   constructor(
+    private notificationsService: NotificationsService,
     private authService: AuthService,
     private changeDetector: ChangeDetectorRef,
     private router: Router,
@@ -91,7 +94,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
         this.loading.next(false);
       },
-      error => alert(error.text)
+      error => this.notificationsService.error('Error', error.text)
     );
   }
 
@@ -107,6 +110,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
   }
 
   onRemoved(video: Video) {
+    this.notificationsService.success('Success', `Video ${video.name} deleted.`);
     this.getVideos();
   }
 

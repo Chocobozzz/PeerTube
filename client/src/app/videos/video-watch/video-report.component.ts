@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { ModalDirective } from 'ng2-bootstrap/modal';
+import { NotificationsService } from 'angular2-notifications';
 
 import { FormReactive, VideoAbuseService, VIDEO_ABUSE_REASON } from '../../shared';
 import { Video, VideoService } from '../shared';
@@ -26,7 +27,8 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private videoAbuseService: VideoAbuseService
+    private videoAbuseService: VideoAbuseService,
+    private notificationsService: NotificationsService
    ) {
     super();
   }
@@ -56,13 +58,12 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
     this.videoAbuseService.reportVideo(this.video.id, reason)
                      .subscribe(
-                       // TODO: move alert to beautiful notifications
-                       ok => {
-                         alert('Video reported.');
+                       () => {
+                         this.notificationsService.success('Success', 'Video reported.');
                          this.hide();
                        },
 
-                       err => alert(err.text)
+                       err => this.notificationsService.error('Error', err.text);
                       )
   }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { NotificationsService } from 'angular2-notifications';
+
 import { User } from '../../../shared';
 import { UserService } from '../shared';
 
@@ -12,7 +14,10 @@ export class UserListComponent implements OnInit {
   totalUsers: number;
   users: User[];
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private notificationsService: NotificationsService,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.getUsers();
@@ -25,7 +30,7 @@ export class UserListComponent implements OnInit {
         this.totalUsers = totalUsers;
       },
 
-      err => alert(err.text)
+      err => this.notificationsService.error('Error', err.text)
     );
   }
 
@@ -33,9 +38,12 @@ export class UserListComponent implements OnInit {
   removeUser(user: User) {
     if (confirm('Are you sure?')) {
       this.userService.removeUser(user).subscribe(
-        () => this.getUsers(),
+        () => {
+          this.notificationsService.success('Success', `User ${user.username} deleted.`);
+          this.getUsers();
+        },
 
-        err => alert(err.text)
+        err => this.notificationsService.error('Error', err.text)
       );
     }
   }

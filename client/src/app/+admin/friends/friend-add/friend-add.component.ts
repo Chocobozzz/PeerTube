@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { NotificationsService } from 'angular2-notifications';
+
 import { validateHost } from '../../../shared';
 import { FriendService } from '../shared';
 
@@ -15,7 +17,11 @@ export class FriendAddComponent implements OnInit {
   hosts = [ ];
   error: string = null;
 
-  constructor(private router: Router, private friendService: FriendService) {}
+  constructor(
+    private router: Router,
+    private notificationsService: NotificationsService,
+    private friendService: FriendService
+  ) {}
 
   ngOnInit() {
     this.form = new FormGroup({});
@@ -83,10 +89,11 @@ export class FriendAddComponent implements OnInit {
 
     this.friendService.makeFriends(notEmptyHosts).subscribe(
       status => {
-        alert('Make friends request sent!');
+        this.notificationsService.success('Sucess', 'Make friends request sent!');
         this.router.navigate([ '/admin/friends/list' ]);
       },
-      error => alert(error.text)
+
+      err => this.notificationsService.error('Error', err.text)
     );
   }
 

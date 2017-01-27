@@ -1,8 +1,9 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { MetaService } from 'ng2-meta';
 import * as videojs from 'video.js';
+import { MetaService } from 'ng2-meta';
+import { NotificationsService } from 'angular2-notifications';
 
 import { AuthService } from '../../core';
 import { VideoMagnetComponent } from './video-magnet.component';
@@ -45,7 +46,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private videoService: VideoService,
     private metaService: MetaService,
     private webTorrentService: WebTorrentService,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationsService: NotificationsService
   ) {}
 
   ngOnInit() {
@@ -117,7 +119,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       console.log('Added ' + this.video.magnetUri + '.');
       torrent.files[0].renderTo(this.playerElement, { autoplay: true }, (err) => {
         if (err) {
-          alert('Cannot append the file.');
+          this.notificationsService.error('Error', 'Cannot append the file in the video element.');
           console.error(err);
         }
       });

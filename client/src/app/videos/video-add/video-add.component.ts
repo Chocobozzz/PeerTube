@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
+import { NotificationsService } from 'angular2-notifications';
 
 import { AuthService } from '../../core';
 import { FormReactive, VIDEO_NAME, VIDEO_DESCRIPTION, VIDEO_TAGS } from '../../shared';
@@ -38,7 +39,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     private authService: AuthService,
     private elementRef: ElementRef,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationsService: NotificationsService
   ) {
     super();
   }
@@ -151,6 +153,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       clearInterval(interval);
 
       console.log('Video uploaded.');
+      this.notificationsService.success('Success', 'Video uploaded.');
+
 
       // Print all the videos once it's finished
       this.router.navigate(['/videos/list']);

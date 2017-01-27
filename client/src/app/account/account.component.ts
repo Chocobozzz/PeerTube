@@ -1,7 +1,8 @@
-import {  } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { NotificationsService } from 'angular2-notifications';
 
 import { AccountService } from './account.service';
 import { FormReactive, USER_PASSWORD } from '../shared';
@@ -12,7 +13,6 @@ import { FormReactive, USER_PASSWORD } from '../shared';
 })
 
 export class AccountComponent extends FormReactive implements OnInit {
-  information: string = null;
   error: string = null;
 
   form: FormGroup;
@@ -26,9 +26,10 @@ export class AccountComponent extends FormReactive implements OnInit {
   };
 
   constructor(
-    private accountService: AccountService,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private notificationsService: NotificationsService,
+    private accountService: AccountService
   ) {
     super();
   }
@@ -50,7 +51,6 @@ export class AccountComponent extends FormReactive implements OnInit {
     const newPassword = this.form.value['new-password'];
     const newConfirmedPassword = this.form.value['new-confirmed-password'];
 
-    this.information = null;
     this.error = null;
 
     if (newPassword !== newConfirmedPassword) {
@@ -59,7 +59,7 @@ export class AccountComponent extends FormReactive implements OnInit {
     }
 
     this.accountService.changePassword(newPassword).subscribe(
-      ok => this.information = 'Password updated.',
+      () => this.notificationsService.success('Success', 'Password updated.'),
 
       err => this.error = err
     );

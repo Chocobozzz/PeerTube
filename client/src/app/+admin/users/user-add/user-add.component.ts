@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { NotificationsService } from 'angular2-notifications';
+
 import { UserService } from '../shared';
 import { FormReactive, USER_USERNAME, USER_PASSWORD } from '../../../shared';
 
@@ -25,6 +27,7 @@ export class UserAddComponent extends FormReactive implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
+    private notificationsService: NotificationsService,
     private userService: UserService
   ) {
     super();
@@ -49,7 +52,10 @@ export class UserAddComponent extends FormReactive implements OnInit {
     const { username, password } = this.form.value;
 
     this.userService.addUser(username, password).subscribe(
-      ok => this.router.navigate([ '/admin/users/list' ]),
+      () => {
+        this.notificationsService.success('Success', `User ${username} created.`);
+        this.router.navigate([ '/admin/users/list' ]);
+      },
 
       err => this.error = err.text
     );

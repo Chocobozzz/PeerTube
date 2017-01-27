@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
+import { SimpleNotificationsModule } from 'angular2-notifications';
+
 import { AuthService } from './auth';
 import { MenuComponent, MenuAdminComponent } from './menu';
 import { throwIfAlreadyLoaded } from './module-import-guard';
@@ -11,13 +13,17 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
   imports: [
     CommonModule,
     HttpModule,
-    RouterModule
+    RouterModule,
+
+    SimpleNotificationsModule
   ],
   declarations: [
     MenuComponent,
     MenuAdminComponent
   ],
   exports: [
+    SimpleNotificationsModule,
+
     MenuComponent,
     MenuAdminComponent
   ],

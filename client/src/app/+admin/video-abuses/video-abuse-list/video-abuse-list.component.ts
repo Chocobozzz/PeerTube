@@ -1,5 +1,6 @@
-import { setInterval } from 'timers'
 import { Component, OnInit } from '@angular/core';
+
+import { NotificationsService } from 'angular2-notifications';
 
 import { VideoAbuseService, VideoAbuse} from '../../../shared';
 
@@ -11,7 +12,10 @@ import { VideoAbuseService, VideoAbuse} from '../../../shared';
 export class VideoAbuseListComponent implements OnInit {
   videoAbuses: VideoAbuse[];
 
-  constructor(private videoAbuseService: VideoAbuseService) {  }
+  constructor(
+    private notificationsService: NotificationsService,
+    private videoAbuseService: VideoAbuseService
+  ) {  }
 
   ngOnInit() {
     this.getVideoAbuses();
@@ -25,7 +29,7 @@ export class VideoAbuseListComponent implements OnInit {
     this.videoAbuseService.getVideoAbuses().subscribe(
       res => this.videoAbuses = res.videoAbuses,
 
-      err => alert(err.text)
+      err => this.notificationsService.error('Error', err.text)
     );
   }
 }

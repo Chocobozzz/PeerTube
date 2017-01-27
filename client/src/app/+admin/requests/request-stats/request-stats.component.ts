@@ -1,5 +1,6 @@
-import { setInterval } from 'timers'
 import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { NotificationsService } from 'angular2-notifications';
 
 import { RequestService, RequestStats } from '../shared';
 
@@ -11,9 +12,13 @@ import { RequestService, RequestStats } from '../shared';
 export class RequestStatsComponent implements OnInit, OnDestroy {
   stats: RequestStats = null;
 
-  private interval: NodeJS.Timer = null;
+  private interval: number = null;
+  private timeout: number = null;
 
-  constructor(private requestService: RequestService) {  }
+  constructor(
+    private notificationsService: NotificationsService,
+    private requestService: RequestService
+  ) {  }
 
   ngOnInit() {
     this.getStats();
@@ -21,8 +26,12 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.stats !== null && this.stats.secondsInterval !== null) {
-      clearInterval(this.interval);
+    if (this.interval !== null) {
+      window.clearInterval(this.interval);
+    }
+
+    if (this.timeout !== null) {
+      window.clearTimeout(this.timeout);
     }
   }
 
@@ -30,16 +39,16 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
     this.requestService.getStats().subscribe(
       stats => this.stats = stats,
 
-      err => alert(err.text)
+      err => this.notificationsService.error('Error', err.text)
     );
   }
 
   private runInterval() {
-    this.interval = setInterval(() => {
+    this.interval = window.setInterval(() => {
       this.stats.remainingMilliSeconds -= 1000;
 
       if (this.stats.remainingMilliSeconds <= 0) {
-        setTimeout(() => this.getStats(), this.stats.remainingMilliSeconds + 100);
+        this.timeout = window.setTimeout(() => this.getStats(), this.stats.remainingMilliSeconds + 100);
       }
     }, 1000);
   }

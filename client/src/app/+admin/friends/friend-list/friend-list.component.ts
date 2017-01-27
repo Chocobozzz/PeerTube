@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { NotificationsService } from 'angular2-notifications';
+
 import { Friend, FriendService } from '../shared';
 
 @Component({
@@ -10,7 +12,10 @@ import { Friend, FriendService } from '../shared';
 export class FriendListComponent implements OnInit {
   friends: Friend[];
 
-  constructor(private friendService: FriendService) {  }
+  constructor(
+    private notificationsService: NotificationsService,
+    private friendService: FriendService
+  ) {  }
 
   ngOnInit() {
     this.getFriends();
@@ -21,10 +26,12 @@ export class FriendListComponent implements OnInit {
 
     this.friendService.quitFriends().subscribe(
       status => {
-        alert('Quit friends!');
+        this.notificationsService.success('Sucess', 'Friends left!');
+
         this.getFriends();
       },
-      error => alert(error.text)
+
+      err => this.notificationsService.error('Error', err.text)
     );
   }
 
@@ -32,7 +39,7 @@ export class FriendListComponent implements OnInit {
     this.friendService.getFriends().subscribe(
       res => this.friends = res.friends,
 
-      err => alert(err.text)
+      err => this.notificationsService.error('Error', err.text)
     );
   }
 }
