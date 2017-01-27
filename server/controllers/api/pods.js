@@ -20,8 +20,8 @@ const router = express.Router()
 
 router.get('/', listPods)
 router.post('/',
+  podsMiddleware.setBodyHostPort, // We need to modify the host before running the validator!
   validators.podsAdd,
-  podsMiddleware.setBodyHostPort,
   addPods
 )
 router.post('/makefriends',

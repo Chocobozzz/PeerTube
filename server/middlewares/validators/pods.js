@@ -2,6 +2,7 @@
 
 const checkErrors = require('./utils').checkErrors
 const constants = require('../../initializers/constants')
+const db = require('../../initializers/database')
 const friends = require('../../lib/friends')
 const logger = require('../../helpers/logger')
 const utils = require('../../helpers/utils')
@@ -30,23 +31,34 @@ function makeFriends (req, res, next) {
 
       if (hasFriends === true) {
         // We need to quit our friends before make new ones
-        res.sendStatus(409)
-      } else {
-        return next()
+        return res.sendStatus(409)
       }
+
+      return next()
     })
   })
 }
 
 function podsAdd (req, res, next) {
-  req.checkBody('host', 'Should have an host').notEmpty().isURL()
+  req.checkBody('host', 'Should have an host').isHostValid()
   req.checkBody('publicKey', 'Should have a public key').notEmpty()
-
-  // TODO: check we don't have it already
-
   logger.debug('Checking podsAdd parameters', { parameters: req.body })
 
-  checkErrors(req, res, next)
+  checkErrors(req, res, function () {
+    db.Pod.loadByHost(req.body.host, function (err, pod) {
+      if (err) {
+        logger.error('Cannot load pod by host.', { error: err })
+        res.sendStatus(500)
+      }
+
+      // Pod with this host already exists
+      if (pod) {
+        return res.sendStatus(409)
+      }
+
+      return next()
+    })
+  })
 }
 
 // ---------------------------------------------------------------------------

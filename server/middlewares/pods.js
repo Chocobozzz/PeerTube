@@ -8,6 +8,8 @@ const podsMiddleware = {
 }
 
 function setBodyHostsPort (req, res, next) {
+  if (!req.body.hosts) return next()
+
   for (let i = 0; i < req.body.hosts.length; i++) {
     const hostWithPort = getHostWithPort(req.body.hosts[i])
 
@@ -23,6 +25,8 @@ function setBodyHostsPort (req, res, next) {
 }
 
 function setBodyHostPort (req, res, next) {
+  if (!req.body.host) return next()
+
   const hostWithPort = getHostWithPort(req.body.host)
 
   // Problem with the url parsing?

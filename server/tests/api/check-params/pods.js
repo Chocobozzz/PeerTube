@@ -189,6 +189,14 @@ describe('Test pods API validators', function () {
       }
       requestsUtils.makePostBodyRequest(server.url, path, null, data, done, 200)
     })
+
+    it('Should fail with a host that already exists', function (done) {
+      const data = {
+        host: 'coucou.com',
+        publicKey: 'mysuperpublickey'
+      }
+      requestsUtils.makePostBodyRequest(server.url, path, null, data, done, 409)
+    })
   })
 
   after(function (done) {

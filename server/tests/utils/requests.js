@@ -36,7 +36,8 @@ function makePostUploadRequest (url, path, token, fields, attaches, done, status
     req.attach(attach, value)
   })
 
-  req.expect(statusCodeExpected, done)
+  req.expect(statusCodeExpected)
+     .end(done)
 }
 
 function makePostBodyRequest (url, path, token, fields, done, statusCodeExpected) {
@@ -48,7 +49,9 @@ function makePostBodyRequest (url, path, token, fields, done, statusCodeExpected
 
   if (token) req.set('Authorization', 'Bearer ' + token)
 
-  req.send(fields).expect(statusCodeExpected, done)
+  req.send(fields)
+     .expect(statusCodeExpected)
+     .end(done)
 }
 
 function makePutBodyRequest (url, path, token, fields, done, statusCodeExpected) {
@@ -60,7 +63,9 @@ function makePutBodyRequest (url, path, token, fields, done, statusCodeExpected)
 
   if (token) req.set('Authorization', 'Bearer ' + token)
 
-  req.send(fields).expect(statusCodeExpected, done)
+  req.send(fields)
+     .expect(statusCodeExpected)
+     .end(done)
 }
 
 // ---------------------------------------------------------------------------
