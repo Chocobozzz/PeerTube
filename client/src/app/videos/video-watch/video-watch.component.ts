@@ -1,4 +1,3 @@
-import { setInterval, setTimeout } from 'timers'
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -19,7 +18,7 @@ import { WebTorrentService } from './webtorrent.service';
 })
 
 export class VideoWatchComponent implements OnInit, OnDestroy {
-  private static LOADTIME_TOO_LONG: number = 30000;
+  private static LOADTIME_TOO_LONG: number = 20000;
 
   @ViewChild('videoMagnetModal') videoMagnetModal: VideoMagnetComponent;
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent;
@@ -35,9 +34,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   video: Video = null;
   videoNotFound = false;
 
-  private errorTimer: NodeJS.Timer;
+  private errorTimer: number;
   private sub: any;
-  private torrentInfosInterval: NodeJS.Timer;
+  private torrentInfosInterval: number;
 
   constructor(
     private elementRef: ElementRef,
@@ -80,8 +79,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     // Remove WebTorrent stuff
     console.log('Removing video from webtorrent.');
-    clearInterval(this.torrentInfosInterval);
-    clearTimeout(this.errorTimer);
+    window.clearInterval(this.torrentInfosInterval);
+    window.clearTimeout(this.errorTimer);
 
     if (this.video !== null) {
       this.webTorrentService.remove(this.video.magnetUri);
@@ -104,11 +103,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // The callback might never return if there are network issues
     // So we create a timer to inform the user the load is abnormally long
-    this.errorTimer = setTimeout(() => this.loadTooLong(), VideoWatchComponent.LOADTIME_TOO_LONG);
+    this.errorTimer = window.setTimeout(() => this.loadTooLong(), VideoWatchComponent.LOADTIME_TOO_LONG);
 
     this.webTorrentService.add(this.video.magnetUri, (torrent) => {
       // Clear the error timer
-      clearTimeout(this.errorTimer);
+      window.clearTimeout(this.errorTimer);
       // Maybe the error was fired by the timer, so reset it
       this.error = false;
 
@@ -170,7 +169,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private runInProgress(torrent: any) {
     // Refresh each second
-    this.torrentInfosInterval = setInterval(() => {
+    this.torrentInfosInterval = window.setInterval(() => {
       this.ngZone.run(() => {
         this.downloadSpeed = torrent.downloadSpeed;
         this.numPeers = torrent.numPeers;
