@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
 
+import { ConfirmService } from '../../../core';
 import { User } from '../../../shared';
 import { UserService } from '../shared';
 
@@ -16,6 +17,7 @@ export class UserListComponent implements OnInit {
 
   constructor(
     private notificationsService: NotificationsService,
+    private confirmService: ConfirmService,
     private userService: UserService
   ) {}
 
@@ -36,15 +38,19 @@ export class UserListComponent implements OnInit {
 
 
   removeUser(user: User) {
-    if (confirm('Are you sure?')) {
-      this.userService.removeUser(user).subscribe(
-        () => {
-          this.notificationsService.success('Success', `User ${user.username} deleted.`);
-          this.getUsers();
-        },
+    this.confirmService.confirm('Do you really want to delete this user?', 'Delete').subscribe(
+      res => {
+        if (res === false) return;
 
-        err => this.notificationsService.error('Error', err.text)
-      );
-    }
+        this.userService.removeUser(user).subscribe(
+          () => {
+            this.notificationsService.success('Success', `User ${user.username} deleted.`);
+            this.getUsers();
+          },
+
+          err => this.notificationsService.error('Error', err.text)
+        );
+      }
+    );
   }
 }

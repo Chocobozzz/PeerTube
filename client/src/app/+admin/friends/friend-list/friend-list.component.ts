@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
 
+import { ConfirmService } from '../../../core';
 import { Friend, FriendService } from '../shared';
 
 @Component({
@@ -14,6 +15,7 @@ export class FriendListComponent implements OnInit {
 
   constructor(
     private notificationsService: NotificationsService,
+    private confirmService: ConfirmService,
     private friendService: FriendService
   ) {  }
 
@@ -22,16 +24,21 @@ export class FriendListComponent implements OnInit {
   }
 
   quitFriends() {
-    if (!confirm('Are you sure?')) return;
+    const confirmMessage = 'Do you really want to quit your friends? All their videos will be deleted.';
+    this.confirmService.confirm(confirmMessage, 'Quit friends').subscribe(
+      res => {
+        if (res === false) return;
 
-    this.friendService.quitFriends().subscribe(
-      status => {
-        this.notificationsService.success('Sucess', 'Friends left!');
+        this.friendService.quitFriends().subscribe(
+          status => {
+            this.notificationsService.success('Sucess', 'Friends left!');
 
-        this.getFriends();
-      },
+            this.getFriends();
+          },
 
-      err => this.notificationsService.error('Error', err.text)
+          err => this.notificationsService.error('Error', err.text)
+        );
+      }
     );
   }
 

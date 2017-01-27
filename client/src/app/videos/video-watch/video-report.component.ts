@@ -57,13 +57,13 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     const reason = this.form.value['reason']
 
     this.videoAbuseService.reportVideo(this.video.id, reason)
-                     .subscribe(
-                       () => {
-                         this.notificationsService.success('Success', 'Video reported.');
-                         this.hide();
-                       },
+                          .subscribe(
+                            () => {
+                              this.notificationsService.success('Success', 'Video reported.');
+                              this.hide();
+                            },
 
-                       err => this.notificationsService.error('Error', err.text);
-                      )
+                            err => this.notificationsService.error('Error', err.text)
+                           );
   }
 }

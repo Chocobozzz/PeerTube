@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { NotificationsService } from 'angular2-notifications';
 
+import { ConfirmService } from '../../../core';
 import { validateHost } from '../../../shared';
 import { FriendService } from '../shared';
 
@@ -20,6 +21,7 @@ export class FriendAddComponent implements OnInit {
   constructor(
     private router: Router,
     private notificationsService: NotificationsService,
+    private confirmService: ConfirmService,
     private friendService: FriendService
   ) {}
 
@@ -84,16 +86,20 @@ export class FriendAddComponent implements OnInit {
       return;
     }
 
-    const confirmMessage = 'Are you sure to make friends with:\n - ' + notEmptyHosts.join('\n - ');
-    if (!confirm(confirmMessage)) return;
+    const confirmMessage = 'Are you sure to make friends with:<br /> - ' + notEmptyHosts.join('<br /> - ');
+    this.confirmService.confirm(confirmMessage, 'Make friends').subscribe(
+      res => {
+        if (res === false) return;
 
-    this.friendService.makeFriends(notEmptyHosts).subscribe(
-      status => {
-        this.notificationsService.success('Sucess', 'Make friends request sent!');
-        this.router.navigate([ '/admin/friends/list' ]);
-      },
+        this.friendService.makeFriends(notEmptyHosts).subscribe(
+          status => {
+            this.notificationsService.success('Sucess', 'Make friends request sent!');
+            this.router.navigate([ '/admin/friends/list' ]);
+          },
 
-      err => this.notificationsService.error('Error', err.text)
+          err => this.notificationsService.error('Error', err.text)
+        );
+      }
     );
   }
 

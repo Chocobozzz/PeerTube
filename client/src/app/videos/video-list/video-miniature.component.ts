@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
 
+import { ConfirmService } from '../../core';
 import { SortField, Video, VideoService } from '../shared';
 import { User } from '../../shared';
 
@@ -22,6 +23,7 @@ export class VideoMiniatureComponent {
 
   constructor(
     private notificationsService: NotificationsService,
+    private confirmService: ConfirmService,
     private videoService: VideoService
   ) {}
 
@@ -38,12 +40,16 @@ export class VideoMiniatureComponent {
   }
 
   removeVideo(id: string) {
-    if (confirm('Do you really want to remove this video?')) {
-      this.videoService.removeVideo(id).subscribe(
-        status => this.removed.emit(true),
+    this.confirmService.confirm('Do you really want to delete this video?', 'Delete').subscribe(
+      res => {
+        if (res === false) return;
 
-        error => this.notificationsService.error('Error', error.text)
-      );
-    }
+        this.videoService.removeVideo(id).subscribe(
+          status => this.removed.emit(true),
+
+          error => this.notificationsService.error('Error', error.text)
+        );
+      }
+    );
   }
 }
