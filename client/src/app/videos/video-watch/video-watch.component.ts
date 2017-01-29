@@ -1,5 +1,6 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import * as videojs from 'video.js';
 import { MetaService } from 'ng2-meta';
@@ -36,7 +37,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   videoNotFound = false;
 
   private errorTimer: number;
-  private sub: any;
+  private paramsSub: Subscription;
+  private errorsSub: Subscription;
+  private warningsSub: Subscription;
   private torrentInfosInterval: number;
 
   constructor(
@@ -51,7 +54,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.sub = this.route.params.subscribe(routeParams => {
+    this.paramsSub = this.route.params.subscribe(routeParams => {
       let id = routeParams['id'];
       this.videoService.getVideo(id).subscribe(
         video => {
@@ -76,6 +79,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     videojs(this.playerElement, videojsOptions, function () {
       self.player = this;
     });
+
+    this.errorsSub = this.webTorrentService.errors.subscribe(err => this.notificationsService.error('Error', err.message));
+    this.warningsSub = this.webTorrentService.errors.subscribe(err => this.notificationsService.alert('Warning', err.message));
   }
 
   ngOnDestroy() {
@@ -91,8 +97,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // Remove player
     videojs(this.playerElement).dispose();
 
-    // Unsubscribe route subscription
-    this.sub.unsubscribe();
+    // Unsubscribe subscriptions
+    this.paramsSub.unsubscribe();
+    this.errorsSub.unsubscribe();
+    this.warningsSub.unsubscribe();
   }
 
   loadVideo() {

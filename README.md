@@ -26,7 +26,7 @@ Prototype of a decentralized video streaming platform using P2P (BitTorrent) dir
   <br />
 
   <a href="https://travis-ci.org/Chocobozzz/PeerTube">
-    <img src="https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=master" alt="Build Status" />
+    <img src="https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=develop" alt="Build Status" />
   </a>
 
   <a href="https://david-dm.org/Chocobozzz/PeerTube">

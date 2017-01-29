@@ -1,19 +1,22 @@
-// Don't use webtorrent typings for now
-// It misses some little things I'll fix later
-// <reference path="../../../../typings/globals/webtorrent/index.d.ts" />
-
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
-// import WebTorrent = require('webtorrent');
-declare var WebTorrent: any;
+declare const WebTorrent;
 
 @Injectable()
 export class WebTorrentService {
+  errors = new Subject<Error>();
+  warnings = new Subject<Error>();
+
+  // TODO: use WebTorrent @type
   // private client: WebTorrent.Client;
   private client: any;
 
   constructor() {
     this.client = new WebTorrent({ dht: false });
+
+    this.client.on('error', (err) => this.errors.next(err))
+    this.client.on('warning', (err) => this.warnings.next(err))
   }
 
   add(magnetUri: string, callback: Function) {

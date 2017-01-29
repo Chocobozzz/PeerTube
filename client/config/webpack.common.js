@@ -8,6 +8,7 @@ const AssetsPlugin = require('assets-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
+const ProvidePlugin = require('webpack/lib/ProvidePlugin')
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
