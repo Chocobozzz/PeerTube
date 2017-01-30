@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { AuthHttp, RestExtractor, ResultList, User } from '../../../shared';
+import { AuthHttp, RestExtractor, RestDataSource, User } from '../../../shared';
 
 @Injectable()
 export class UserService {
@@ -25,25 +25,11 @@ export class UserService {
                         .catch(this.restExtractor.handleError);
   }
 
-  getUsers() {
-    return this.authHttp.get(UserService.BASE_USERS_URL)
-                 .map(this.restExtractor.extractDataList)
-                 .map(this.extractUsers)
-                 .catch((res) => this.restExtractor.handleError(res));
+  getDataSource() {
+    return new RestDataSource(this.authHttp, UserService.BASE_USERS_URL);
   }
 
   removeUser(user: User) {
     return this.authHttp.delete(UserService.BASE_USERS_URL + user.id);
-  }
-
-  private extractUsers(result: ResultList) {
-    const usersJson = result.data;
-    const totalUsers = result.total;
-    const users = [];
-    for (const userJson of usersJson) {
-      users.push(new User(userJson));
-    }
-
-    return { users, totalUsers };
   }
 }

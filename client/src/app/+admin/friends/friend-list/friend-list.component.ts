@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
+import { ServerDataSource } from 'ng2-smart-table';
 
 import { ConfirmService } from '../../../core';
+import { Utils } from '../../../shared';
 import { Friend, FriendService } from '../shared';
 
 @Component({
@@ -10,17 +12,51 @@ import { Friend, FriendService } from '../shared';
   templateUrl: './friend-list.component.html',
   styleUrls: [ './friend-list.component.scss' ]
 })
-export class FriendListComponent implements OnInit {
-  friends: Friend[];
+export class FriendListComponent {
+  friendsSource = null;
+  tableSettings = {
+    attr: {
+      class: 'table-hover'
+    },
+    hideSubHeader: true,
+    actions: {
+      position: 'right',
+      add: false,
+      edit: false,
+      delete: false
+    },
+    columns: {
+      id: {
+        title: 'ID',
+        sort: false,
+        sortDirection: 'asc'
+      },
+      host: {
+        title: 'Host',
+        sort: false
+      },
+      score: {
+        title: 'Score',
+        sort: false
+      },
+      createdAt: {
+        title: 'Created Date',
+        sort: false,
+        valuePrepareFunction: Utils.dateToHuman
+      }
+    }
+  }
 
   constructor(
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private friendService: FriendService
-  ) {  }
+  ) {
+    this.friendsSource = this.friendService.getDataSource();
+  }
 
-  ngOnInit() {
-    this.getFriends();
+  hasFriends() {
+    return this.friendsSource.count() != 0;
   }
 
   quitFriends() {
@@ -33,20 +69,12 @@ export class FriendListComponent implements OnInit {
           status => {
             this.notificationsService.success('Sucess', 'Friends left!');
 
-            this.getFriends();
+            this.friendsSource.refresh();
           },
 
           err => this.notificationsService.error('Error', err.text)
         );
       }
-    );
-  }
-
-  private getFriends() {
-    this.friendService.getFriends().subscribe(
-      res => this.friends = res.friends,
-
-      err => this.notificationsService.error('Error', err.text)
     );
   }
 }

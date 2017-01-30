@@ -10,6 +10,7 @@ import { ProgressbarModule } from 'ng2-bootstrap/progressbar';
 import { PaginationModule } from 'ng2-bootstrap/pagination';
 import { ModalModule } from 'ng2-bootstrap/modal';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { AUTH_HTTP_PROVIDERS } from './auth';
 import { RestExtractor, RestService } from './rest';
@@ -29,7 +30,8 @@ import { VideoAbuseService } from './video-abuse';
     PaginationModule.forRoot(),
     ProgressbarModule.forRoot(),
 
-    FileUploadModule
+    FileUploadModule,
+    Ng2SmartTableModule
   ],
 
   declarations: [
@@ -49,6 +51,7 @@ import { VideoAbuseService } from './video-abuse';
     ModalModule,
     PaginationModule,
     ProgressbarModule,
+    Ng2SmartTableModule,
     BytesPipe,
 
     SearchComponent

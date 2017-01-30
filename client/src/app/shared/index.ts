@@ -5,3 +5,4 @@ export * from './search';
 export * from './users';
 export * from './video-abuse';
 export * from './shared.module';
+export * from './utils';

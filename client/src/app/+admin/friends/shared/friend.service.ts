@@ -3,8 +3,10 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+import { ServerDataSource } from 'ng2-smart-table';
+
 import { Friend } from './friend.model';
-import { AuthHttp, RestExtractor, ResultList } from '../../../shared';
+import { AuthHttp, RestExtractor, RestDataSource, ResultList } from '../../../shared';
 
 @Injectable()
 export class FriendService {
@@ -15,11 +17,8 @@ export class FriendService {
     private restExtractor: RestExtractor
   ) {}
 
-  getFriends() {
-    return this.authHttp.get(FriendService.BASE_FRIEND_URL)
-                        .map(this.restExtractor.extractDataList)
-                        .map(this.extractFriends)
-                        .catch((res) => this.restExtractor.handleError(res));
+  getDataSource() {
+    return new RestDataSource(this.authHttp, FriendService.BASE_FRIEND_URL);
   }
 
   makeFriends(notEmptyHosts) {
@@ -36,12 +35,5 @@ export class FriendService {
     return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'quitfriends')
                         .map(res => res.status)
                         .catch((res) => this.restExtractor.handleError(res));
-  }
-
-  private extractFriends(result: ResultList) {
-    const friends: Friend[] = result.data;
-    const totalFriends = result.total;
-
-    return { friends, totalFriends };
   }
 }

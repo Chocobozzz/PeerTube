@@ -58,6 +58,7 @@
     "ng2-bootstrap": "1.1.16-10",
     "ng2-file-upload": "^1.1.4-2",
     "ng2-meta": "https://github.com/chocobozzz/ng2-meta#build",
+    "ng2-smart-table": "^0.5.1-0",
     "ngc-webpack": "1.1.0",
     "node-sass": "^4.1.1",
     "normalize.css": "^5.0.0",

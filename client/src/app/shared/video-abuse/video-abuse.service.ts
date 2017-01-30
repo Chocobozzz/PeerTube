@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 
 import { AuthService } from '../core';
 import { AuthHttp } from '../auth';
-import { RestExtractor, ResultList } from '../rest';
+import { RestDataSource, RestExtractor, ResultList } from '../rest';
 import { VideoAbuse } from './video-abuse.model';
 
 @Injectable()
@@ -18,10 +18,8 @@ export class VideoAbuseService {
     private restExtractor: RestExtractor
   ) {}
 
-  getVideoAbuses() {
-    return this.authHttp.get(VideoAbuseService.BASE_VIDEO_ABUSE_URL + 'abuse')
-                        .map(this.restExtractor.extractDataList)
-                        .map(this.extractVideoAbuses)
+  getDataSource() {
+    return new RestDataSource(this.authHttp, VideoAbuseService.BASE_VIDEO_ABUSE_URL + 'abuse');
   }
 
   reportVideo(id: string, reason: string) {

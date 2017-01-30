@@ -42,8 +42,23 @@ menu {
   }
 }
 
-.table-column-id {
-  width: 200px;
+.ng2-smart-table-container {
+  .ng2-smart-table {
+
+    thead tr {
+      border-top: 1px solid rgb(233, 235, 236)
+    }
+
+    td, th {
+      padding: 8px !important;
+      color: #333333 !important;
+      font-size: 14px !important;
+    }
+  }
+
+  .ng2-smart-pagination-nav .page-link {
+    font-size: 11px !important;
+  }
 }
 
 [hidden] {
@@ -53,6 +68,10 @@ menu {
 input.readonly {
   /* Force blank on readonly inputs */
   background-color: #fff !important;
+}
+
+.glyphicon-black {
+  color: black;
 }
 
 footer {
