@@ -39,7 +39,7 @@
     "angular2-notifications": "^0.4.49",
     "angular2-template-loader": "^0.6.0",
     "assets-webpack-plugin": "^3.4.0",
-    "awesome-typescript-loader": "~3.0.0-beta.17",
+    "awesome-typescript-loader": "3.0.0-beta.18",
     "bootstrap": "^3.3.6",
     "bootstrap-loader": "2.0.0-beta.18",
     "bootstrap-sass": "^3.3.6",
