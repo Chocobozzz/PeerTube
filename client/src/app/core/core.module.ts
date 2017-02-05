@@ -18,7 +18,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard';
     RouterModule,
 
     ModalModule,
-    SimpleNotificationsModule
+    SimpleNotificationsModule.forRoot()
   ],
 
   declarations: [
