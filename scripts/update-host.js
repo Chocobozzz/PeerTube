@@ -2,8 +2,6 @@
 
 'use strict'
 
-// TODO: document this script
-
 const fs = require('fs')
 const parseTorrent = require('parse-torrent')
 
