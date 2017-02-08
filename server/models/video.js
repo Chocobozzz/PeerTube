@@ -414,7 +414,7 @@ function getDurationFromFile (videoPath, callback) {
 }
 
 function list (callback) {
-  return this.find().asCallback()
+  return this.findAll().asCallback(callback)
 }
 
 function listForApi (start, count, sort, callback) {

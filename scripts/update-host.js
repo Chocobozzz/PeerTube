@@ -26,9 +26,9 @@ db.init(true, function () {
       if (err) throw err
 
       videos.forEach(function (video) {
-        const torrentName = video._id + '.torrent'
+        const torrentName = video.id + '.torrent'
         const torrentPath = constants.CONFIG.STORAGE.TORRENTS_DIR + torrentName
-        const filename = video._id + video.extname
+        const filename = video.id + video.extname
 
         const parsed = parseTorrent(fs.readFileSync(torrentPath))
         parsed.announce = [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOST + '/tracker/socket' ]
