@@ -101,7 +101,10 @@ module.exports = function (env) {
               }
             }
           ],
-          exclude: [/\.(spec|e2e)\.ts$/]
+          exclude: [
+            /\.(spec|e2e)\.ts$/,
+            /node_modules\//
+          ]
         }
       ]
     },

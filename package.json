@@ -71,14 +71,14 @@
     "scripty": "^1.5.0",
     "sequelize": "^3.27.0",
     "winston": "^2.1.1",
-    "ws": "^1.1.1"
+    "ws": "^2.0.0"
   },
   "devDependencies": {
     "chai": "^3.3.0",
     "commander": "^2.9.0",
     "mocha": "^3.0.1",
     "standard": "^8.0.0",
-    "supertest": "^2.0.0",
+    "supertest": "^3.0.0",
     "webtorrent": "^0.98.0"
   },
   "standard": {
