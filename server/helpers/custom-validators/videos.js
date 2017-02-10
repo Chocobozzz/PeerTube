@@ -21,7 +21,8 @@ const videosValidators = {
   isVideoExtnameValid,
   isVideoRemoteIdValid,
   isVideoAbuseReasonValid,
-  isVideoAbuseReporterUsernameValid
+  isVideoAbuseReporterUsernameValid,
+  isVideoFile
 }
 
 function isVideoAuthorValid (value) {
@@ -79,6 +80,21 @@ function isVideoAbuseReasonValid (value) {
 
 function isVideoAbuseReporterUsernameValid (value) {
   return usersValidators.isUserUsernameValid(value)
+}
+
+function isVideoFile (value, files) {
+  // Should have files
+  if (!files) return false
+
+  // Should have videofile file
+  const videofile = files.videofile
+  if (!videofile || videofile.length === 0) return false
+
+  // The file should exist
+  const file = videofile[0]
+  if (!file || !file.originalname) return false
+
+  return new RegExp('^video/(webm|mp4|ogg)$', 'i').test(file.mimetype)
 }
 
 // ---------------------------------------------------------------------------
