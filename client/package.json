@@ -72,7 +72,7 @@
     "source-map-loader": "^0.1.5",
     "string-replace-loader": "^1.0.3",
     "style-loader": "^0.13.1",
-    "ts-helpers": "^1.1.1",
+    "tslib": "^1.5.0",
     "tslint": "~4.3.1",
     "tslint-loader": "^3.3.0",
     "typescript": "~2.1.0",
