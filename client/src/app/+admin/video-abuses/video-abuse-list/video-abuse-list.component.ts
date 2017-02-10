@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
 
-import { Utils, VideoAbuseService, VideoAbuse} from '../../../shared';
+import { Utils, VideoAbuseService, VideoAbuse } from '../../../shared';
 
 @Component({
 	selector: 'my-video-abuse-list',
@@ -55,7 +55,7 @@ export class VideoAbuseListComponent {
         valuePrepareFunction: Utils.dateToHuman
       }
     }
-  }
+  };
 
   constructor(
     private notificationsService: NotificationsService,

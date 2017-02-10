@@ -15,8 +15,8 @@ export class WebTorrentService {
   constructor() {
     this.client = new WebTorrent({ dht: false });
 
-    this.client.on('error', (err) => this.errors.next(err))
-    this.client.on('warning', (err) => this.warnings.next(err))
+    this.client.on('error', (err) => this.errors.next(err));
+    this.client.on('warning', (err) => this.warnings.next(err));
   }
 
   add(magnetUri: string, callback: Function) {

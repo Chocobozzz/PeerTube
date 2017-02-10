@@ -54,7 +54,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   }
 
   report() {
-    const reason = this.form.value['reason']
+    const reason = this.form.value['reason'];
 
     this.videoAbuseService.reportVideo(this.video.id, reason)
                           .subscribe(

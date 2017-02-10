@@ -45,7 +45,7 @@ export class FriendListComponent {
         valuePrepareFunction: Utils.dateToHuman
       }
     }
-  }
+  };
 
   constructor(
     private notificationsService: NotificationsService,
@@ -56,7 +56,7 @@ export class FriendListComponent {
   }
 
   hasFriends() {
-    return this.friendsSource.count() != 0;
+    return this.friendsSource.count() !== 0;
   }
 
   quitFriends() {

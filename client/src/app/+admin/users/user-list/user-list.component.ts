@@ -49,7 +49,7 @@ export class UserListComponent {
         valuePrepareFunction: Utils.dateToHuman
       }
     }
-  }
+  };
 
   constructor(
     private notificationsService: NotificationsService,

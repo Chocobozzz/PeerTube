@@ -8,14 +8,14 @@ export class RestDataSource extends ServerDataSource {
      endPoint: endpoint,
      sortFieldKey: 'sort',
      dataKey: 'data'
-   }
+   };
 
    super(http, options);
  }
 
  protected extractTotalFromResponse(res) {
     const rawData = res.json();
-    return rawData ? parseInt(rawData.total): 0;
+    return rawData ? parseInt(rawData.total) : 0;
   }
 
  protected addSortRequestOptions(requestOptions: RequestOptionsArgs) {
