@@ -4,6 +4,7 @@ const express = require('express')
 const waterfall = require('async/waterfall')
 
 const db = require('../../initializers/database')
+const constants = require('../../initializers/constants')
 const logger = require('../../helpers/logger')
 const peertubeCrypto = require('../../helpers/peertube-crypto')
 const utils = require('../../helpers/utils')
@@ -80,7 +81,7 @@ function addPods (req, res, next) {
   ], function (err, cert) {
     if (err) return next(err)
 
-    return res.json({ cert: cert })
+    return res.json({ cert: cert, email: constants.CONFIG.ADMIN.EMAIL })
   })
 }
 

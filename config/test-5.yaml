@@ -15,3 +15,6 @@ storage:
   logs: 'test5/logs/'
   thumbnails: 'test5/thumbnails/'
   torrents: 'test5/torrents/'
+
+admin:
+  email: 'admin5@example.com'

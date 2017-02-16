@@ -35,6 +35,10 @@ export class FriendListComponent {
         title: 'Host',
         sort: false
       },
+      email: {
+        title: 'Email',
+        sort: false
+      },
       score: {
         title: 'Score',
         sort: false

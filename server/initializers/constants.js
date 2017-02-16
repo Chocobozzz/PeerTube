@@ -54,6 +54,9 @@ const CONFIG = {
     WS: config.get('webserver.https') === true ? 'wss' : 'ws',
     HOSTNAME: config.get('webserver.hostname'),
     PORT: config.get('webserver.port')
+  },
+  ADMIN: {
+    EMAIL: config.get('admin.email')
   }
 }
 CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
@@ -92,7 +95,7 @@ const FRIEND_SCORE = {
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 0
+const LAST_MIGRATION_VERSION = 5
 
 // ---------------------------------------------------------------------------
 

@@ -64,7 +64,7 @@ function getMigrationScripts (callback) {
 }
 
 function executeMigration (actualVersion, entity, callback) {
-  const versionScript = entity.version
+  const versionScript = parseInt(entity.version)
 
   // Do not execute old migration scripts
   if (versionScript <= actualVersion) return callback(null)
@@ -78,7 +78,12 @@ function executeMigration (actualVersion, entity, callback) {
   db.sequelize.transaction().asCallback(function (err, t) {
     if (err) return callback(err)
 
-    migrationScript.up({ transaction: t }, function (err) {
+    const options = {
+      transaction: t,
+      queryInterface: db.sequelize.getQueryInterface(),
+      Sequelize: db.Sequelize
+    }
+    migrationScript.up(options, function (err) {
       if (err) {
         t.rollback()
         return callback(err)

@@ -245,6 +245,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       method: 'POST',
       json: {
         host: constants.CONFIG.WEBSERVER.HOST,
+        email: constants.CONFIG.ADMIN.EMAIL,
         publicKey: cert
       }
     }
@@ -257,7 +258,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       }
 
       if (res.statusCode === 200) {
-        const podObj = db.Pod.build({ host: pod.host, publicKey: body.cert })
+        const podObj = db.Pod.build({ host: pod.host, publicKey: body.cert, email: body.email })
         podObj.save().asCallback(function (err, podCreated) {
           if (err) {
             logger.error('Cannot add friend %s pod.', pod.host, { error: err })

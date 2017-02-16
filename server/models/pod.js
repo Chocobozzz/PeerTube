@@ -32,6 +32,10 @@ module.exports = function (sequelize, DataTypes) {
           isInt: true,
           max: constants.FRIEND_SCORE.MAX
         }
+      },
+      email: {
+        type: DataTypes.STRING(400),
+        allowNull: false
       }
     },
     {
@@ -71,6 +75,7 @@ function toFormatedJSON () {
   const json = {
     id: this.id,
     host: this.host,
+    email: this.email,
     score: this.score,
     createdAt: this.createdAt
   }

@@ -96,6 +96,7 @@ describe('Test basic friends', function () {
 
           const pod = result[0]
           expect(pod.host).to.equal(servers[2].host)
+          expect(pod.email).to.equal('admin3@example.com')
           expect(pod.score).to.equal(20)
           expect(miscsUtils.dateIsValid(pod.createdAt)).to.be.true
 
@@ -113,6 +114,7 @@ describe('Test basic friends', function () {
 
           const pod = result[0]
           expect(pod.host).to.equal(servers[1].host)
+          expect(pod.email).to.equal('admin2@example.com')
           expect(pod.score).to.equal(20)
           expect(miscsUtils.dateIsValid(pod.createdAt)).to.be.true
 

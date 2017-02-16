@@ -22,3 +22,6 @@ storage:
   previews: 'previews/'
   thumbnails: 'thumbnails/'
   torrents: 'torrents/'
+
+admin:
+  email: 'admin@example.com'

@@ -40,7 +40,8 @@ function makeFriends (req, res, next) {
 }
 
 function podsAdd (req, res, next) {
-  req.checkBody('host', 'Should have an host').isHostValid()
+  req.checkBody('host', 'Should have a host').isHostValid()
+  req.checkBody('email', 'Should have an email').isEmail()
   req.checkBody('publicKey', 'Should have a public key').notEmpty()
   logger.debug('Checking podsAdd parameters', { parameters: req.body })
 
