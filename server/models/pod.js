@@ -41,7 +41,8 @@ module.exports = function (sequelize, DataTypes) {
     {
       indexes: [
         {
-          fields: [ 'host' ]
+          fields: [ 'host' ],
+          unique: true
         },
         {
           fields: [ 'score' ]

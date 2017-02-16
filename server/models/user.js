@@ -40,7 +40,8 @@ module.exports = function (sequelize, DataTypes) {
     {
       indexes: [
         {
-          fields: [ 'username' ]
+          fields: [ 'username' ],
+          unique: true
         }
       ],
       classMethods: {

@@ -25,7 +25,12 @@ module.exports = function (sequelize, DataTypes) {
           fields: [ 'podId' ]
         },
         {
-          fields: [ 'userId' ]
+          fields: [ 'userId' ],
+          unique: true
+        },
+        {
+          fields: [ 'name', 'podId' ],
+          unique: true
         }
       ],
       classMethods: {
