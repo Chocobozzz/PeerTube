@@ -20,7 +20,7 @@ const constants = require('./server/initializers/constants')
 const logger = require('./server/helpers/logger')
 // Initialize database and models
 const db = require('./server/initializers/database')
-db.init()
+db.init(onDatabaseInitDone)
 
 // ----------- Checker -----------
 const checker = require('./server/initializers/checker')
@@ -119,25 +119,27 @@ app.use(function (err, req, res, next) {
 
 // ----------- Run -----------
 
-const port = constants.CONFIG.LISTEN.PORT
-installer.installApplication(function (err) {
-  if (err) throw err
-
-  // Run the migration scripts if needed
+function onDatabaseInitDone () {
+  const port = constants.CONFIG.LISTEN.PORT
+    // Run the migration scripts if needed
   migrator.migrate(function (err) {
     if (err) throw err
 
-    // ----------- Make the server listening -----------
-    server.listen(port, function () {
-      // Activate the communication with friends
-      friends.activate()
+    installer.installApplication(function (err) {
+      if (err) throw err
 
-      logger.info('Server listening on port %d', port)
-      logger.info('Webserver: %s', constants.CONFIG.WEBSERVER.URL)
+      // ----------- Make the server listening -----------
+      server.listen(port, function () {
+        // Activate the communication with friends
+        friends.activate()
 
-      app.emit('ready')
+        logger.info('Server listening on port %d', port)
+        logger.info('Webserver: %s', constants.CONFIG.WEBSERVER.URL)
+
+        app.emit('ready')
+      })
     })
   })
-})
+}
 
 module.exports = app

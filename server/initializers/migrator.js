@@ -1,5 +1,6 @@
 'use strict'
 
+const waterfall = require('async/waterfall')
 const eachSeries = require('async/eachSeries')
 const fs = require('fs')
 const path = require('path')
@@ -12,30 +13,52 @@ const migrator = {
   migrate: migrate
 }
 
-function migrate (callback) {
-  db.Application.loadMigrationVersion(function (err, actualVersion) {
-    if (err) return callback(err)
+function migrate (finalCallback) {
+  waterfall([
 
-    // If there are a new migration scripts
-    if (actualVersion < constants.LAST_MIGRATION_VERSION) {
+    function checkApplicationTableExists (callback) {
+      db.sequelize.getQueryInterface().showAllTables().asCallback(function (err, tables) {
+        if (err) return callback(err)
+
+        // No tables, we don't need to migrate anything
+        // The installer will do that
+        if (tables.length === 0) return finalCallback(null)
+
+        return callback(null)
+      })
+    },
+
+    function loadMigrationVersion (callback) {
+      db.Application.loadMigrationVersion(callback)
+    },
+
+    function abortMigrationIfNotNeeded (actualVersion, callback) {
+      // No need migrations
+      if (actualVersion >= constants.LAST_MIGRATION_VERSION) return finalCallback(null)
+
+      return callback(null, actualVersion)
+    },
+
+    function getMigrations (actualVersion, callback) {
+      // If there are a new migration scripts
       logger.info('Begin migrations.')
 
       getMigrationScripts(function (err, migrationScripts) {
+        return callback(err, actualVersion, migrationScripts)
+      })
+    },
+
+    function doMigrations (actualVersion, migrationScripts, callback) {
+      eachSeries(migrationScripts, function (entity, callbackEach) {
+        executeMigration(actualVersion, entity, callbackEach)
+      }, function (err) {
         if (err) return callback(err)
 
-        eachSeries(migrationScripts, function (entity, callbackEach) {
-          executeMigration(actualVersion, entity, callbackEach)
-        }, function (err) {
-          if (err) return callback(err)
-
-          logger.info('Migrations finished. New migration version schema: %s', constants.LAST_MIGRATION_VERSION)
-          return callback(null)
-        })
+        logger.info('Migrations finished. New migration version schema: %s', constants.LAST_MIGRATION_VERSION)
+        return callback(null)
       })
-    } else {
-      return callback(null)
     }
-  })
+  ], finalCallback)
 }
 
 // ---------------------------------------------------------------------------
@@ -81,6 +104,7 @@ function executeMigration (actualVersion, entity, callback) {
     const options = {
       transaction: t,
       queryInterface: db.sequelize.getQueryInterface(),
+      sequelize: db.sequelize,
       Sequelize: db.Sequelize
     }
     migrationScript.up(options, function (err) {

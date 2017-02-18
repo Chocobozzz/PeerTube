@@ -16,13 +16,13 @@ exports.up = function (utils, finalCallback) {
   waterfall([
 
     function addEmailColumn (callback) {
-      q.addColumn('Pods', 'email', data, { transaction: utils.transaction }).asCallback(function (err) {
+      q.addColumn('Users', 'email', data, { transaction: utils.transaction }).asCallback(function (err) {
         return callback(err)
       })
     },
 
     function updateWithFakeEmails (callback) {
-      const query = 'UPDATE "Pods" SET "email" = \'dummy@example.com\''
+      const query = 'UPDATE "Users" SET "email" = CONCAT("username", \'@example.com\')'
       utils.sequelize.query(query, { transaction: utils.transaction }).asCallback(function (err) {
         return callback(err)
       })
@@ -31,7 +31,7 @@ exports.up = function (utils, finalCallback) {
     function nullOnDefault (callback) {
       data.defaultValue = null
 
-      q.changeColumn('Pods', 'email', data, { transaction: utils.transaction }).asCallback(callback)
+      q.changeColumn('Users', 'email', data, { transaction: utils.transaction }).asCallback(callback)
     }
   ], finalCallback)
 }
