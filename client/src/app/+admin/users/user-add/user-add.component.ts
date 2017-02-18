@@ -5,7 +5,12 @@ import { Router } from '@angular/router';
 import { NotificationsService } from 'angular2-notifications';
 
 import { UserService } from '../shared';
-import { FormReactive, USER_USERNAME, USER_PASSWORD } from '../../../shared';
+import {
+  FormReactive,
+  USER_USERNAME,
+  USER_EMAIL,
+  USER_PASSWORD
+} from '../../../shared';
 
 @Component({
   selector: 'my-user-add',
@@ -17,10 +22,12 @@ export class UserAddComponent extends FormReactive implements OnInit {
   form: FormGroup;
   formErrors = {
     'username': '',
+    'email': '',
     'password': ''
   };
   validationMessages = {
     'username': USER_USERNAME.MESSAGES,
+    'email': USER_EMAIL.MESSAGES,
     'password': USER_PASSWORD.MESSAGES,
   };
 
@@ -36,6 +43,7 @@ export class UserAddComponent extends FormReactive implements OnInit {
   buildForm() {
     this.form = this.formBuilder.group({
       username: [ '', USER_USERNAME.VALIDATORS ],
+      email:    [ '', USER_EMAIL.VALIDATORS ],
       password: [ '', USER_PASSWORD.VALIDATORS ],
     });
 
@@ -49,9 +57,9 @@ export class UserAddComponent extends FormReactive implements OnInit {
   addUser() {
     this.error = null;
 
-    const { username, password } = this.form.value;
+    const { username, password, email } = this.form.value;
 
-    this.userService.addUser(username, password).subscribe(
+    this.userService.addUser(username, password, email).subscribe(
       () => {
         this.notificationsService.success('Success', `User ${username} created.`);
         this.router.navigate([ '/admin/users/list' ]);

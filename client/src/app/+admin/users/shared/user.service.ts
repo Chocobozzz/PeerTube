@@ -14,9 +14,10 @@ export class UserService {
     private restExtractor: RestExtractor
   ) {}
 
-  addUser(username: string, password: string) {
+  addUser(username: string, password: string, email: string) {
     const body = {
       username,
+      email,
       password
     };
 

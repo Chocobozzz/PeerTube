@@ -61,6 +61,7 @@ function createUser (req, res, next) {
   const user = db.User.build({
     username: req.body.username,
     password: req.body.password,
+    email: req.body.email,
     role: constants.USER_ROLES.USER
   })
 

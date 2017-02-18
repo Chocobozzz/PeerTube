@@ -39,7 +39,7 @@ describe('Test pods API validators', function () {
     ], done)
   })
 
-  describe('When making friends', function () {
+  describe('When managing friends', function () {
     let userAccessToken = null
 
     before(function (done) {
@@ -156,13 +156,32 @@ describe('Test pods API validators', function () {
 
     it('Should fail without public key', function (done) {
       const data = {
+        email: 'testexample.com',
         host: 'coucou.com'
+      }
+      requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
+    })
+
+    it('Should fail without an email', function (done) {
+      const data = {
+        host: 'coucou.com',
+        publicKey: 'mysuperpublickey'
+      }
+      requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
+    })
+
+    it('Should fail without an invalid email', function (done) {
+      const data = {
+        host: 'coucou.com',
+        email: 'testexample.com',
+        publicKey: 'mysuperpublickey'
       }
       requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
     })
 
     it('Should fail without an host', function (done) {
       const data = {
+        email: 'testexample.com',
         publicKey: 'mysuperpublickey'
       }
       requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
@@ -171,6 +190,7 @@ describe('Test pods API validators', function () {
     it('Should fail with an incorrect host', function (done) {
       const data = {
         host: 'http://coucou.com',
+        email: 'testexample.com',
         publicKey: 'mysuperpublickey'
       }
       requestsUtils.makePostBodyRequest(server.url, path, null, data, function () {
@@ -185,6 +205,7 @@ describe('Test pods API validators', function () {
     it('Should succeed with the correct parameters', function (done) {
       const data = {
         host: 'coucou.com',
+        email: 'test@example.com',
         publicKey: 'mysuperpublickey'
       }
       requestsUtils.makePostBodyRequest(server.url, path, null, data, done, 200)
@@ -193,6 +214,7 @@ describe('Test pods API validators', function () {
     it('Should fail with a host that already exists', function (done) {
       const data = {
         host: 'coucou.com',
+        email: 'test@example.com',
         publicKey: 'mysuperpublickey'
       }
       requestsUtils.makePostBodyRequest(server.url, path, null, data, done, 409)

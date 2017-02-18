@@ -92,6 +92,7 @@ describe('Test users API validators', function () {
     it('Should fail with a too small username', function (done) {
       const data = {
         username: 'ji',
+        email: 'test@example.com',
         password: 'mysuperpassword'
       }
 
@@ -101,6 +102,7 @@ describe('Test users API validators', function () {
     it('Should fail with a too long username', function (done) {
       const data = {
         username: 'mysuperusernamewhichisverylong',
+        email: 'test@example.com',
         password: 'mysuperpassword'
       }
 
@@ -110,6 +112,26 @@ describe('Test users API validators', function () {
     it('Should fail with an incorrect username', function (done) {
       const data = {
         username: 'my username',
+        email: 'test@example.com',
+        password: 'mysuperpassword'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
+    })
+
+    it('Should fail with a missing email', function (done) {
+      const data = {
+        username: 'ji',
+        password: 'mysuperpassword'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
+    })
+
+    it('Should fail with an invalid email', function (done) {
+      const data = {
+        username: 'mysuperusernamewhichisverylong',
+        email: 'testexample.com',
         password: 'mysuperpassword'
       }
 
@@ -119,6 +141,7 @@ describe('Test users API validators', function () {
     it('Should fail with a too small password', function (done) {
       const data = {
         username: 'myusername',
+        email: 'test@example.com',
         password: 'bla'
       }
 
@@ -128,6 +151,7 @@ describe('Test users API validators', function () {
     it('Should fail with a too long password', function (done) {
       const data = {
         username: 'myusername',
+        email: 'test@example.com',
         password: 'my super long password which is very very very very very very very very very very very very very very' +
                   'very very very very very very very very very very very very very very very veryv very very very very' +
                   'very very very very very very very very very very very very very very very very very very very very long'
@@ -139,6 +163,7 @@ describe('Test users API validators', function () {
     it('Should fail with an non authenticated user', function (done) {
       const data = {
         username: 'myusername',
+        email: 'test@example.com',
         password: 'my super password'
       }
 
@@ -148,6 +173,17 @@ describe('Test users API validators', function () {
     it('Should fail if we add a user with the same username', function (done) {
       const data = {
         username: 'user1',
+        email: 'test@example.com',
+        password: 'my super password'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done, 409)
+    })
+
+    it('Should fail if we add a user with the same email', function (done) {
+      const data = {
+        username: 'myusername',
+        email: 'user1@example.com',
         password: 'my super password'
       }
 
@@ -157,6 +193,7 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct params', function (done) {
       const data = {
         username: 'user2',
+        email: 'test@example.com',
         password: 'my super password'
       }
 
@@ -166,6 +203,7 @@ describe('Test users API validators', function () {
     it('Should fail with a non admin user', function (done) {
       server.user = {
         username: 'user1',
+        email: 'test@example.com',
         password: 'my super password'
       }
 
@@ -176,6 +214,7 @@ describe('Test users API validators', function () {
 
         const data = {
           username: 'user3',
+          email: 'test@example.com',
           password: 'my super password'
         }
 

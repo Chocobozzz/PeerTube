@@ -20,12 +20,17 @@ function createUser (url, accessToken, username, password, specialStatus, end) {
   }
 
   const path = '/api/v1/users'
+  const body = {
+    username,
+    password,
+    email: username + '@example.com'
+  }
 
   request(url)
     .post(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
-    .send({ username: username, password: password })
+    .send(body)
     .expect(specialStatus)
     .end(end)
 }

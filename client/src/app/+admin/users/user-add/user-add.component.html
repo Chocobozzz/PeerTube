@@ -15,6 +15,17 @@
   </div>
 
   <div class="form-group">
+    <label for="email">Email</label>
+    <input
+      type="text" class="form-control" id="email" placeholder="Email"
+      formControlName="email"
+    >
+    <div *ngIf="formErrors.email" class="alert alert-danger">
+      {{ formErrors.email }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="password">Password</label>
     <input
       type="password" class="form-control" id="password" placeholder="Password"

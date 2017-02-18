@@ -84,7 +84,9 @@ function findOrCreateAuthor (name, podId, userId, transaction, callback) {
   if (transaction) query.transaction = transaction
 
   this.findOrCreate(query).asCallback(function (err, result) {
+    if (err) return callback(err)
+
     // [ instance, wasCreated ]
-    return callback(err, result[0])
+    return callback(null, result[0])
   })
 }

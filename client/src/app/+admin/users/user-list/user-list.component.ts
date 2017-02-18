@@ -40,6 +40,9 @@ export class UserListComponent {
       username: {
         title: 'Username'
       },
+      email: {
+        title: 'Email'
+      },
       role: {
         title: 'Role',
         sort: false

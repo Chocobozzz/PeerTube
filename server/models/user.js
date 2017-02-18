@@ -32,6 +32,13 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmail: true
+        }
+      },
       role: {
         type: DataTypes.ENUM(values(constants.USER_ROLES)),
         allowNull: false
@@ -41,6 +48,10 @@ module.exports = function (sequelize, DataTypes) {
       indexes: [
         {
           fields: [ 'username' ],
+          unique: true
+        },
+        {
+          fields: [ 'email' ],
           unique: true
         }
       ],
@@ -52,7 +63,8 @@ module.exports = function (sequelize, DataTypes) {
         list,
         listForApi,
         loadById,
-        loadByUsername
+        loadByUsername,
+        loadByUsernameOrEmail
       },
       instanceMethods: {
         isPasswordMatch,
@@ -88,6 +100,7 @@ function toFormatedJSON () {
   return {
     id: this.id,
     username: this.username,
+    email: this.email,
     role: this.role,
     createdAt: this.createdAt
   }
@@ -146,6 +159,16 @@ function loadByUsername (username, callback) {
   const query = {
     where: {
       username: username
+    }
+  }
+
+  return this.findOne(query).asCallback(callback)
+}
+
+function loadByUsernameOrEmail (username, email, callback) {
+  const query = {
+    where: {
+      $or: [ { username }, { email } ]
     }
   }
 

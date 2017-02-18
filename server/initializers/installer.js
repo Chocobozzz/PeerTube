@@ -96,6 +96,7 @@ function createOAuthAdminIfNotExist (callback) {
 
     const username = 'root'
     const role = constants.USER_ROLES.ADMIN
+    const email = constants.CONFIG.ADMIN.EMAIL
     const createOptions = {}
     let password = ''
 
@@ -115,6 +116,7 @@ function createOAuthAdminIfNotExist (callback) {
 
     const userData = {
       username,
+      email,
       password,
       role
     }

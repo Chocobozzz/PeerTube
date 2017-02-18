@@ -186,6 +186,7 @@ describe('Test users', function () {
       const user = res.body
 
       expect(user.username).to.equal('user_1')
+      expect(user.email).to.equal('user_1@example.com')
       expect(user.id).to.exist
 
       done()
@@ -216,9 +217,11 @@ describe('Test users', function () {
 
       const user = users[0]
       expect(user.username).to.equal('user_1')
+      expect(user.email).to.equal('user_1@example.com')
 
       const rootUser = users[1]
       expect(rootUser.username).to.equal('root')
+      expect(rootUser.email).to.equal('admin1@example.com')
       userId = user.id
 
       done()
@@ -238,6 +241,7 @@ describe('Test users', function () {
 
       const user = users[0]
       expect(user.username).to.equal('root')
+      expect(user.email).to.equal('admin1@example.com')
 
       done()
     })
@@ -256,6 +260,7 @@ describe('Test users', function () {
 
       const user = users[0]
       expect(user.username).to.equal('user_1')
+      expect(user.email).to.equal('user_1@example.com')
 
       done()
     })
@@ -274,6 +279,7 @@ describe('Test users', function () {
 
       const user = users[0]
       expect(user.username).to.equal('user_1')
+      expect(user.email).to.equal('user_1@example.com')
 
       done()
     })
@@ -291,7 +297,9 @@ describe('Test users', function () {
       expect(users.length).to.equal(2)
 
       expect(users[0].username).to.equal('root')
+      expect(users[0].email).to.equal('admin1@example.com')
       expect(users[1].username).to.equal('user_1')
+      expect(users[1].email).to.equal('user_1@example.com')
 
       done()
     })

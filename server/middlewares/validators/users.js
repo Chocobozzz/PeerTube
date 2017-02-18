@@ -13,11 +13,12 @@ const validatorsUsers = {
 function usersAdd (req, res, next) {
   req.checkBody('username', 'Should have a valid username').isUserUsernameValid()
   req.checkBody('password', 'Should have a valid password').isUserPasswordValid()
+  req.checkBody('email', 'Should have a valid email').isEmail()
 
   logger.debug('Checking usersAdd parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
-    db.User.loadByUsername(req.body.username, function (err, user) {
+    db.User.loadByUsernameOrEmail(req.body.username, req.body.email, function (err, user) {
       if (err) {
         logger.error('Error in usersAdd request validator.', { error: err })
         return res.sendStatus(500)
