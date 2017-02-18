@@ -14,7 +14,7 @@ const requests = require('../helpers/requests')
 const RequestScheduler = require('./request-scheduler')
 
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
-const requestScheduler = new RequestScheduler('')
+const requestScheduler = new RequestScheduler()
 
 const friends = {
   activate,

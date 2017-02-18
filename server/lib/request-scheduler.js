@@ -9,9 +9,7 @@ const requests = require('../helpers/requests')
 
 module.exports = class RequestScheduler {
 
-  constructor (name) {
-    this.name = name
-
+  constructor () {
     this.lastRequestTimestamp = 0
     this.timer = null
   }

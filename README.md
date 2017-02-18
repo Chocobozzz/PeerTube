@@ -3,7 +3,7 @@
 </h1>
 
 <h4 align="center">
-Prototype of a decentralized video streaming platform using P2P (BitTorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+Decentralized video streaming platform using P2P (BitTorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
 </h4>
 
 <p align="center">
@@ -92,7 +92,7 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   - [X] Connection
   - [X] Account rights (upload...)
 - [X] Make the network auto sufficient (eject bad pods etc)
-- [ ] Validate the prototype (test PeerTube in a real world with many pods and videos)
+- [X] Validate the prototype (test PeerTube in a real world)
 - [ ] Manage API breaks
 - [ ] Add "DDOS" security (check if a pod don't send too many requests for example)
 - [X] Admin panel
