@@ -11,10 +11,13 @@ const db = require('../initializers/database')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
+const RequestScheduler = require('./request-scheduler')
 
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
+const requestScheduler = new RequestScheduler('')
 
 const friends = {
+  activate,
   addVideoToFriends,
   updateVideoToFriends,
   reportAbuseVideoToFriend,
@@ -23,6 +26,10 @@ const friends = {
   quitFriends,
   removeVideoToFriends,
   sendOwnedVideosToPod
+}
+
+function activate () {
+  requestScheduler.activate()
 }
 
 function addVideoToFriends (videoData, transaction, callback) {
@@ -99,11 +106,11 @@ function makeFriends (hosts, callback) {
 
 function quitFriends (callback) {
   // Stop pool requests
-  db.Request.deactivate()
+  requestScheduler.deactivate()
 
   waterfall([
     function flushRequests (callbackAsync) {
-      db.Request.flush(callbackAsync)
+      requestScheduler.flush(callbackAsync)
     },
 
     function getPodsList (callbackAsync) {
@@ -140,7 +147,7 @@ function quitFriends (callback) {
     }
   ], function (err) {
     // Don't forget to re activate the scheduler, even if there was an error
-    db.Request.activate()
+    requestScheduler.activate()
 
     if (err) return callback(err)
 
@@ -235,9 +242,9 @@ function getForeignPodsList (host, callback) {
 
 function makeRequestsToWinningPods (cert, podsList, callback) {
   // Stop pool requests
-  db.Request.deactivate()
+  requestScheduler.deactivate()
   // Flush pool requests
-  db.Request.forceSend()
+  requestScheduler.forceSend()
 
   eachLimit(podsList, constants.REQUESTS_IN_PARALLEL, function (pod, callbackEach) {
     const params = {
@@ -278,7 +285,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   }, function endRequests () {
     // Final callback, we've ended all the requests
     // Now we made new friends, we can re activate the pool of requests
-    db.Request.activate()
+    requestScheduler.activate()
 
     logger.debug('makeRequestsToWinningPods finished.')
     return callback()
@@ -289,7 +296,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
 // { type, endpoint, data, toIds, transaction }
 function createRequest (options, callback) {
   if (!callback) callback = function () {}
-  if (options.toIds) return _createRequest(options, callback)
+  if (options.toIds) return requestScheduler.createRequest(options, callback)
 
   // If the "toIds" pods is not specified, we send the request to all our friends
   db.Pod.listAllIds(options.transaction, function (err, podIds) {
@@ -299,43 +306,7 @@ function createRequest (options, callback) {
     }
 
     const newOptions = Object.assign(options, { toIds: podIds })
-    return _createRequest(newOptions, callback)
-  })
-}
-
-// { type, endpoint, data, toIds, transaction }
-function _createRequest (options, callback) {
-  const type = options.type
-  const endpoint = options.endpoint
-  const data = options.data
-  const toIds = options.toIds
-  const transaction = options.transaction
-
-  const pods = []
-
-  // If there are no destination pods abort
-  if (toIds.length === 0) return callback(null)
-
-  toIds.forEach(function (toPod) {
-    pods.push(db.Pod.build({ id: toPod }))
-  })
-
-  const createQuery = {
-    endpoint,
-    request: {
-      type: type,
-      data: data
-    }
-  }
-
-  const dbRequestOptions = {
-    transaction
-  }
-
-  return db.Request.create(createQuery, dbRequestOptions).asCallback(function (err, request) {
-    if (err) return callback(err)
-
-    return request.setPods(pods, dbRequestOptions).asCallback(callback)
+    return requestScheduler.createRequest(newOptions, callback)
   })
 }
 

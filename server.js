@@ -37,6 +37,7 @@ if (errorMessage !== null) {
 
 // ----------- PeerTube modules -----------
 const customValidators = require('./server/helpers/custom-validators')
+const friends = require('./server/lib/friends')
 const installer = require('./server/initializers/installer')
 const migrator = require('./server/initializers/migrator')
 const routes = require('./server/controllers')
@@ -128,8 +129,8 @@ installer.installApplication(function (err) {
 
     // ----------- Make the server listening -----------
     server.listen(port, function () {
-      // Activate the pool requests
-      db.Request.activate()
+      // Activate the communication with friends
+      friends.activate()
 
       logger.info('Server listening on port %d', port)
       logger.info('Webserver: %s', constants.CONFIG.WEBSERVER.URL)

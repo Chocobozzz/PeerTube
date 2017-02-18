@@ -1,16 +1,11 @@
 'use strict'
 
 const each = require('async/each')
-const eachLimit = require('async/eachLimit')
 const waterfall = require('async/waterfall')
 const values = require('lodash/values')
 
 const constants = require('../initializers/constants')
 const logger = require('../helpers/logger')
-const requests = require('../helpers/requests')
-
-let timer = null
-let lastRequestTimestamp = 0
 
 // ---------------------------------------------------------------------------
 
@@ -30,12 +25,13 @@ module.exports = function (sequelize, DataTypes) {
       classMethods: {
         associate,
 
-        activate,
+        listWithLimitAndRandom,
+
         countTotalRequests,
-        deactivate,
-        flush,
-        forceSend,
-        remainingMilliSeconds
+        removeBadPods,
+        updatePodsScore,
+        removeAll,
+        removeWithEmptyTo
       }
     }
   )
@@ -56,164 +52,12 @@ function associate (models) {
   })
 }
 
-function activate () {
-  logger.info('Requests scheduler activated.')
-  lastRequestTimestamp = Date.now()
-
-  const self = this
-  timer = setInterval(function () {
-    lastRequestTimestamp = Date.now()
-    makeRequests.call(self)
-  }, constants.REQUESTS_INTERVAL)
-}
-
 function countTotalRequests (callback) {
   const query = {
     include: [ this.sequelize.models.Pod ]
   }
 
   return this.count(query).asCallback(callback)
-}
-
-function deactivate () {
-  logger.info('Requests scheduler deactivated.')
-  clearInterval(timer)
-  timer = null
-}
-
-function flush (callback) {
-  removeAll.call(this, function (err) {
-    if (err) logger.error('Cannot flush the requests.', { error: err })
-
-    return callback(err)
-  })
-}
-
-function forceSend () {
-  logger.info('Force requests scheduler sending.')
-  makeRequests.call(this)
-}
-
-function remainingMilliSeconds () {
-  if (timer === null) return -1
-
-  return constants.REQUESTS_INTERVAL - (Date.now() - lastRequestTimestamp)
-}
-
-// ---------------------------------------------------------------------------
-
-// Make a requests to friends of a certain type
-function makeRequest (toPod, requestEndpoint, requestsToMake, callback) {
-  if (!callback) callback = function () {}
-
-  const params = {
-    toPod: toPod,
-    sign: true, // Prove our identity
-    method: 'POST',
-    path: '/api/' + constants.API_VERSION + '/remote/' + requestEndpoint,
-    data: requestsToMake // Requests we need to make
-  }
-
-  // Make multiple retry requests to all of pods
-  // The function fire some useful callbacks
-  requests.makeSecureRequest(params, function (err, res) {
-    if (err || (res.statusCode !== 200 && res.statusCode !== 201 && res.statusCode !== 204)) {
-      err = err ? err.message : 'Status code not 20x : ' + res.statusCode
-      logger.error('Error sending secure request to %s pod.', toPod.host, { error: err })
-
-      return callback(false)
-    }
-
-    return callback(true)
-  })
-}
-
-// Make all the requests of the scheduler
-function makeRequests () {
-  const self = this
-  const RequestToPod = this.sequelize.models.RequestToPod
-
-  // We limit the size of the requests
-  // We don't want to stuck with the same failing requests so we get a random list
-  listWithLimitAndRandom.call(self, constants.REQUESTS_LIMIT_PODS, constants.REQUESTS_LIMIT_PER_POD, function (err, requests) {
-    if (err) {
-      logger.error('Cannot get the list of requests.', { err: err })
-      return // Abort
-    }
-
-    // If there are no requests, abort
-    if (requests.length === 0) {
-      logger.info('No requests to make.')
-      return
-    }
-
-    // We want to group requests by destinations pod and endpoint
-    const requestsToMakeGrouped = buildRequestObjects(requests)
-
-    logger.info('Making requests to friends.')
-
-    const goodPods = []
-    const badPods = []
-
-    eachLimit(Object.keys(requestsToMakeGrouped), constants.REQUESTS_IN_PARALLEL, function (hashKey, callbackEach) {
-      const requestToMake = requestsToMakeGrouped[hashKey]
-      const toPod = requestToMake.toPod
-
-      // Maybe the pod is not our friend anymore so simply remove it
-      if (!toPod) {
-        const requestIdsToDelete = requestToMake.ids
-
-        logger.info('Removing %d requests of unexisting pod %s.', requestIdsToDelete.length, requestToMake.toPod.id)
-        return RequestToPod.removePodOf(requestIdsToDelete, requestToMake.toPod.id, callbackEach)
-      }
-
-      makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, function (success) {
-        if (success === false) {
-          badPods.push(requestToMake.toPod.id)
-          return callbackEach()
-        }
-
-        logger.debug('Removing requests for pod %s.', requestToMake.toPod.id, { requestsIds: requestToMake.ids })
-        goodPods.push(requestToMake.toPod.id)
-
-        // Remove the pod id of these request ids
-        RequestToPod.removePodOf(requestToMake.ids, requestToMake.toPod.id, callbackEach)
-      })
-    }, function () {
-      // All the requests were made, we update the pods score
-      updatePodsScore.call(self, goodPods, badPods)
-      // Flush requests with no pod
-      removeWithEmptyTo.call(self, function (err) {
-        if (err) logger.error('Error when removing requests with no pods.', { error: err })
-      })
-    })
-  })
-}
-
-function buildRequestObjects (requests) {
-  const requestsToMakeGrouped = {}
-
-  Object.keys(requests).forEach(function (toPodId) {
-    requests[toPodId].forEach(function (data) {
-      const request = data.request
-      const pod = data.pod
-      const hashKey = toPodId + request.endpoint
-
-      if (!requestsToMakeGrouped[hashKey]) {
-        requestsToMakeGrouped[hashKey] = {
-          toPod: pod,
-          endpoint: request.endpoint,
-          ids: [], // request ids, to delete them from the DB in the future
-          datas: [] // requests data,
-        }
-      }
-
-      requestsToMakeGrouped[hashKey].ids.push(request.id)
-      requestsToMakeGrouped[hashKey].datas.push(request.request)
-    })
-  })
-
-  return requestsToMakeGrouped
 }
 
 // Remove pods with a score of 0 (too many requests where they were unreachable)
@@ -307,25 +151,6 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-function groupAndTruncateRequests (requests, limitRequestsPerPod) {
-  const requestsGrouped = {}
-
-  requests.forEach(function (request) {
-    request.Pods.forEach(function (pod) {
-      if (!requestsGrouped[pod.id]) requestsGrouped[pod.id] = []
-
-      if (requestsGrouped[pod.id].length < limitRequestsPerPod) {
-        requestsGrouped[pod.id].push({
-          request,
-          pod
-        })
-      }
-    })
-  })
-
-  return requestsGrouped
-}
-
 function removeAll (callback) {
   // Delete all requests
   this.truncate({ cascade: true }).asCallback(callback)
@@ -345,4 +170,25 @@ function removeWithEmptyTo (callback) {
   }
 
   this.destroy(query).asCallback(callback)
+}
+
+// ---------------------------------------------------------------------------
+
+function groupAndTruncateRequests (requests, limitRequestsPerPod) {
+  const requestsGrouped = {}
+
+  requests.forEach(function (request) {
+    request.Pods.forEach(function (pod) {
+      if (!requestsGrouped[pod.id]) requestsGrouped[pod.id] = []
+
+      if (requestsGrouped[pod.id].length < limitRequestsPerPod) {
+        requestsGrouped[pod.id].push({
+          request,
+          pod
+        })
+      }
+    })
+  })
+
+  return requestsGrouped
 }
