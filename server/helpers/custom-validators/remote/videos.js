@@ -1,5 +1,7 @@
 'use strict'
 
+const has = require('lodash/has')
+
 const constants = require('../../../initializers/constants')
 const videosValidators = require('../videos')
 const miscValidators = require('../misc')
@@ -7,7 +9,8 @@ const miscValidators = require('../misc')
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
 
 const remoteVideosValidators = {
-  isEachRemoteRequestVideosValid
+  isEachRemoteRequestVideosValid,
+  isEachRemoteRequestVideosQaduValid
 }
 
 function isEachRemoteRequestVideosValid (requests) {
@@ -16,13 +19,13 @@ function isEachRemoteRequestVideosValid (requests) {
       const video = request.data
       return (
         isRequestTypeAddValid(request.type) &&
-        isCommonVideoAttrbiutesValid(video) &&
+        isCommonVideoAttributesValid(video) &&
         videosValidators.isVideoAuthorValid(video.author) &&
         videosValidators.isVideoThumbnailDataValid(video.thumbnailData)
       ) ||
       (
         isRequestTypeUpdateValid(request.type) &&
-        isCommonVideoAttrbiutesValid(video)
+        isCommonVideoAttributesValid(video)
       ) ||
       (
         isRequestTypeRemoveValid(request.type) &&
@@ -37,13 +40,27 @@ function isEachRemoteRequestVideosValid (requests) {
     })
 }
 
+function isEachRemoteRequestVideosQaduValid (requests) {
+  return miscValidators.isArray(requests) &&
+    requests.every(function (request) {
+      const video = request.data
+
+      return (
+        videosValidators.isVideoRemoteIdValid(video.remoteId) &&
+        (has(video, 'views') === false || videosValidators.isVideoViewsValid) &&
+        (has(video, 'likes') === false || videosValidators.isVideoLikesValid) &&
+        (has(video, 'dislikes') === false || videosValidators.isVideoDislikesValid)
+      )
+    })
+}
+
 // ---------------------------------------------------------------------------
 
 module.exports = remoteVideosValidators
 
 // ---------------------------------------------------------------------------
 
-function isCommonVideoAttrbiutesValid (video) {
+function isCommonVideoAttributesValid (video) {
   return videosValidators.isVideoDateValid(video.createdAt) &&
          videosValidators.isVideoDateValid(video.updatedAt) &&
          videosValidators.isVideoDescriptionValid(video.description) &&

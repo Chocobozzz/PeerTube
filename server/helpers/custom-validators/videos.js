@@ -22,7 +22,10 @@ const videosValidators = {
   isVideoRemoteIdValid,
   isVideoAbuseReasonValid,
   isVideoAbuseReporterUsernameValid,
-  isVideoFile
+  isVideoFile,
+  isVideoViewsValid,
+  isVideoLikesValid,
+  isVideoDislikesValid
 }
 
 function isVideoAuthorValid (value) {
@@ -80,6 +83,18 @@ function isVideoAbuseReasonValid (value) {
 
 function isVideoAbuseReporterUsernameValid (value) {
   return usersValidators.isUserUsernameValid(value)
+}
+
+function isVideoViewsValid (value) {
+  return validator.isInt(value, { min: 0 })
+}
+
+function isVideoLikesValid (value) {
+  return validator.isInt(value, { min: 0 })
+}
+
+function isVideoDislikesValid (value) {
+  return validator.isInt(value, { min: 0 })
 }
 
 function isVideoFile (value, files) {

@@ -320,6 +320,22 @@ function updateVideo (req, res, finalCallback) {
 
 function getVideo (req, res, next) {
   const videoInstance = res.locals.video
+
+  if (videoInstance.isOwned()) {
+    // The increment is done directly in the database, not using the instance value
+    videoInstance.increment('views').asCallback(function (err) {
+      if (err) {
+        logger.error('Cannot add view to video %d.', videoInstance.id)
+        return
+      }
+
+      // FIXME: make a real view system
+      // For example, only add a view when a user watch a video during 30s etc
+      friends.quickAndDirtyUpdateVideoToFriends(videoInstance.id, constants.REQUEST_VIDEO_QADU_TYPES.VIEWS)
+    })
+  }
+
+  // Do not wait the view system
   res.json(videoInstance.toFormatedJSON())
 }
 

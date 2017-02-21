@@ -12,15 +12,19 @@ const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
 const RequestScheduler = require('./request-scheduler')
+const RequestVideoQaduScheduler = require('./request-video-qadu-scheduler')
 
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
+
 const requestScheduler = new RequestScheduler()
+const requestSchedulerVideoQadu = new RequestVideoQaduScheduler()
 
 const friends = {
   activate,
   addVideoToFriends,
   updateVideoToFriends,
   reportAbuseVideoToFriend,
+  quickAndDirtyUpdateVideoToFriends,
   hasFriends,
   makeFriends,
   quitFriends,
@@ -30,6 +34,7 @@ const friends = {
 
 function activate () {
   requestScheduler.activate()
+  requestSchedulerVideoQadu.activate()
 }
 
 function addVideoToFriends (videoData, transaction, callback) {
@@ -71,6 +76,15 @@ function reportAbuseVideoToFriend (reportData, video) {
   createRequest(options)
 }
 
+function quickAndDirtyUpdateVideoToFriends (videoId, type, transaction, callback) {
+  const options = {
+    videoId,
+    type,
+    transaction
+  }
+  return createVideoQaduRequest(options, callback)
+}
+
 function hasFriends (callback) {
   db.Pod.countAll(function (err, count) {
     if (err) return callback(err)
@@ -110,7 +124,11 @@ function quitFriends (callback) {
 
   waterfall([
     function flushRequests (callbackAsync) {
-      requestScheduler.flush(callbackAsync)
+      requestScheduler.flush(err => callbackAsync(err))
+    },
+
+    function flushVideoQaduRequests (callbackAsync) {
+      requestSchedulerVideoQadu.flush(err => callbackAsync(err))
     },
 
     function getPodsList (callbackAsync) {
@@ -308,6 +326,12 @@ function createRequest (options, callback) {
     const newOptions = Object.assign(options, { toIds: podIds })
     return requestScheduler.createRequest(newOptions, callback)
   })
+}
+
+function createVideoQaduRequest (options, callback) {
+  if (!callback) callback = function () {}
+
+  requestSchedulerVideoQadu.createRequest(options, callback)
 }
 
 function isMe (host) {

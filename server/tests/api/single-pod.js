@@ -129,6 +129,17 @@ describe('Test a single pod', function () {
     })
   })
 
+  it('Should have the views updated', function (done) {
+    videosUtils.getVideo(server.url, videoId, function (err, res) {
+      if (err) throw err
+
+      const video = res.body
+      expect(video.views).to.equal(1)
+
+      done()
+    })
+  })
+
   it('Should search the video by name by default', function (done) {
     videosUtils.searchVideo(server.url, 'my', function (err, res) {
       if (err) throw err

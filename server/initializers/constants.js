@@ -5,7 +5,7 @@ const path = require('path')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 10
+const LAST_MIGRATION_VERSION = 15
 
 // ---------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ const SEARCHABLE_COLUMNS = {
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', '-id', 'username', '-username', 'createdAt', '-createdAt' ],
   VIDEO_ABUSES: [ 'id', '-id', 'createdAt', '-createdAt' ],
-  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdAt', '-createdAt' ]
+  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdAt', '-createdAt', 'views', '-views' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -116,11 +116,16 @@ const REQUESTS_LIMIT_PODS = 10
 // How many requests we send to a pod per interval
 const REQUESTS_LIMIT_PER_POD = 5
 
+const REQUESTS_VIDEO_QADU_LIMIT_PODS = 10
+// The QADU requests are not big
+const REQUESTS_VIDEO_QADU_LIMIT_PER_POD = 50
+
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
 
 const REQUEST_ENDPOINTS = {
-  VIDEOS: 'videos'
+  VIDEOS: 'videos',
+  QADU: 'videos/qadu'
 }
 const REQUEST_ENDPOINT_ACTIONS = {}
 REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
@@ -128,6 +133,12 @@ REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
   UPDATE: 'update',
   REMOVE: 'remove',
   REPORT_ABUSE: 'report-abuse'
+}
+
+const REQUEST_VIDEO_QADU_TYPES = {
+  LIKES: 'likes',
+  DISLIKES: 'dislikes',
+  VIEWS: 'views'
 }
 
 const REMOTE_SCHEME = {
@@ -199,10 +210,13 @@ module.exports = {
   REMOTE_SCHEME,
   REQUEST_ENDPOINT_ACTIONS,
   REQUEST_ENDPOINTS,
+  REQUEST_VIDEO_QADU_TYPES,
   REQUESTS_IN_PARALLEL,
   REQUESTS_INTERVAL,
   REQUESTS_LIMIT_PER_POD,
   REQUESTS_LIMIT_PODS,
+  REQUESTS_VIDEO_QADU_LIMIT_PER_POD,
+  REQUESTS_VIDEO_QADU_LIMIT_PODS,
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
   SIGNATURE_ALGORITHM,

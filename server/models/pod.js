@@ -1,8 +1,11 @@
 'use strict'
 
+const each = require('async/each')
 const map = require('lodash/map')
+const waterfall = require('async/waterfall')
 
 const constants = require('../initializers/constants')
+const logger = require('../helpers/logger')
 const customPodsValidators = require('../helpers/custom-validators').pods
 
 // ---------------------------------------------------------------------------
@@ -62,6 +65,7 @@ module.exports = function (sequelize, DataTypes) {
         listBadPods,
         load,
         loadByHost,
+        updatePodsScore,
         removeAll
       },
       instanceMethods: {
@@ -144,7 +148,7 @@ function listAllIds (transaction, callback) {
   })
 }
 
-function listRandomPodIdsWithRequest (limit, callback) {
+function listRandomPodIdsWithRequest (limit, tableRequestPod, callback) {
   const self = this
 
   self.count().asCallback(function (err, count) {
@@ -166,7 +170,7 @@ function listRandomPodIdsWithRequest (limit, callback) {
       where: {
         id: {
           $in: [
-            this.sequelize.literal('SELECT "podId" FROM "RequestToPods"')
+            this.sequelize.literal('SELECT "podId" FROM "' + tableRequestPod + '"')
           ]
         }
       }
@@ -206,4 +210,59 @@ function loadByHost (host, callback) {
 
 function removeAll (callback) {
   return this.destroy().asCallback(callback)
+}
+
+function updatePodsScore (goodPods, badPods) {
+  const self = this
+
+  logger.info('Updating %d good pods and %d bad pods scores.', goodPods.length, badPods.length)
+
+  if (goodPods.length !== 0) {
+    this.incrementScores(goodPods, constants.PODS_SCORE.BONUS, function (err) {
+      if (err) logger.error('Cannot increment scores of good pods.', { error: err })
+    })
+  }
+
+  if (badPods.length !== 0) {
+    this.incrementScores(badPods, constants.PODS_SCORE.MALUS, function (err) {
+      if (err) logger.error('Cannot decrement scores of bad pods.', { error: err })
+      removeBadPods.call(self)
+    })
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+// Remove pods with a score of 0 (too many requests where they were unreachable)
+function removeBadPods () {
+  const self = this
+
+  waterfall([
+    function findBadPods (callback) {
+      self.sequelize.models.Pod.listBadPods(function (err, pods) {
+        if (err) {
+          logger.error('Cannot find bad pods.', { error: err })
+          return callback(err)
+        }
+
+        return callback(null, pods)
+      })
+    },
+
+    function removeTheseBadPods (pods, callback) {
+      each(pods, function (pod, callbackEach) {
+        pod.destroy().asCallback(callbackEach)
+      }, function (err) {
+        return callback(err, pods.length)
+      })
+    }
+  ], function (err, numberOfPodsRemoved) {
+    if (err) {
+      logger.error('Cannot remove bad pods.', { error: err })
+    } else if (numberOfPodsRemoved) {
+      logger.info('Removed %d pods.', numberOfPodsRemoved)
+    } else {
+      logger.info('No need to remove bad pods.')
+    }
+  })
 }

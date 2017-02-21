@@ -58,6 +58,8 @@ function makeSecureRequest (params, callback) {
     requestParams.json.data = params.data
   }
 
+  console.log(requestParams.json.data)
+
   request.post(requestParams, callback)
 }
 

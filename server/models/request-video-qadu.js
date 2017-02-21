@@ -1,5 +1,16 @@
 'use strict'
 
+/*
+  Request Video for Quick And Dirty Updates like:
+   - views
+   - likes
+   - dislikes
+
+  We can't put it in the same system than basic requests for efficiency.
+  Moreover we don't want to slow down the basic requests with a lot of views/likes/dislikes requests.
+  So we put it an independant request scheduler.
+*/
+
 const values = require('lodash/values')
 
 const constants = require('../initializers/constants')
@@ -7,18 +18,23 @@ const constants = require('../initializers/constants')
 // ---------------------------------------------------------------------------
 
 module.exports = function (sequelize, DataTypes) {
-  const Request = sequelize.define('Request',
+  const RequestVideoQadu = sequelize.define('RequestVideoQadu',
     {
-      request: {
-        type: DataTypes.JSON,
-        allowNull: false
-      },
-      endpoint: {
-        type: DataTypes.ENUM(values(constants.REQUEST_ENDPOINTS)),
+      type: {
+        type: DataTypes.ENUM(values(constants.REQUEST_VIDEO_QADU_TYPES)),
         allowNull: false
       }
     },
     {
+      timestamps: false,
+      indexes: [
+        {
+          fields: [ 'podId' ]
+        },
+        {
+          fields: [ 'videoId' ]
+        }
+      ],
       classMethods: {
         associate,
 
@@ -26,23 +42,30 @@ module.exports = function (sequelize, DataTypes) {
 
         countTotalRequests,
         removeAll,
-        removeWithEmptyTo
+        removeByRequestIdsAndPod
       }
     }
   )
 
-  return Request
+  return RequestVideoQadu
 }
 
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.belongsToMany(models.Pod, {
+  this.belongsTo(models.Pod, {
     foreignKey: {
-      name: 'requestId',
+      name: 'podId',
       allowNull: false
     },
-    through: models.RequestToPod,
+    onDelete: 'CASCADE'
+  })
+
+  this.belongsTo(models.Video, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
     onDelete: 'CASCADE'
   })
 }
@@ -59,18 +82,13 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
   const self = this
   const Pod = this.sequelize.models.Pod
 
-  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestToPods', function (err, podIds) {
+  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestVideoQadus', function (err, podIds) {
     if (err) return callback(err)
 
     // We don't have friends that have requests
     if (podIds.length === 0) return callback(null, [])
 
-    // The first x requests of these pods
-    // It is very important to sort by id ASC to keep the requests order!
     const query = {
-      order: [
-        [ 'id', 'ASC' ]
-      ],
       include: [
         {
           model: self.sequelize.models.Pod,
@@ -79,6 +97,9 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
               $in: podIds
             }
           }
+        },
+        {
+          model: self.sequelize.models.Video
         }
       ]
     }
@@ -92,25 +113,22 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-function removeAll (callback) {
-  // Delete all requests
-  this.truncate({ cascade: true }).asCallback(callback)
-}
-
-function removeWithEmptyTo (callback) {
-  if (!callback) callback = function () {}
-
+function removeByRequestIdsAndPod (ids, podId, callback) {
   const query = {
     where: {
       id: {
-        $notIn: [
-          this.sequelize.literal('SELECT "requestId" FROM "RequestToPods"')
-        ]
-      }
+        $in: ids
+      },
+      podId
     }
   }
 
   this.destroy(query).asCallback(callback)
+}
+
+function removeAll (callback) {
+  // Delete all requests
+  this.truncate({ cascade: true }).asCallback(callback)
 }
 
 // ---------------------------------------------------------------------------
@@ -119,16 +137,17 @@ function groupAndTruncateRequests (requests, limitRequestsPerPod) {
   const requestsGrouped = {}
 
   requests.forEach(function (request) {
-    request.Pods.forEach(function (pod) {
-      if (!requestsGrouped[pod.id]) requestsGrouped[pod.id] = []
+    const pod = request.Pod
 
-      if (requestsGrouped[pod.id].length < limitRequestsPerPod) {
-        requestsGrouped[pod.id].push({
-          request,
-          pod
-        })
-      }
-    })
+    if (!requestsGrouped[pod.id]) requestsGrouped[pod.id] = []
+
+    if (requestsGrouped[pod.id].length < limitRequestsPerPod) {
+      requestsGrouped[pod.id].push({
+        request: request,
+        video: request.Video,
+        pod
+      })
+    }
   })
 
   return requestsGrouped

@@ -80,6 +80,15 @@ module.exports = function (sequelize, DataTypes) {
             if (res === false) throw new Error('Video duration is not valid.')
           }
         }
+      },
+      views: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          min: 0,
+          isInt: true
+        }
       }
     },
     {
@@ -101,6 +110,9 @@ module.exports = function (sequelize, DataTypes) {
         },
         {
           fields: [ 'infoHash' ]
+        },
+        {
+          fields: [ 'views' ]
         }
       ],
       classMethods: {
@@ -336,6 +348,7 @@ function toFormatedJSON () {
     magnetUri: this.generateMagnetUri(),
     author: this.Author.name,
     duration: this.duration,
+    views: this.views,
     tags: map(this.Tags, 'name'),
     thumbnailPath: pathUtils.join(constants.STATIC_PATHS.THUMBNAILS, this.getThumbnailName()),
     createdAt: this.createdAt,

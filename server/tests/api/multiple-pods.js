@@ -3,6 +3,7 @@
 const chai = require('chai')
 const each = require('async/each')
 const expect = chai.expect
+const parallel = require('async/parallel')
 const series = require('async/series')
 const WebTorrent = require('webtorrent')
 const webtorrent = new WebTorrent()
@@ -375,6 +376,63 @@ describe('Test multiple pods', function () {
     })
   })
 
+  describe('Should update video views', function () {
+    let videoId1
+    let videoId2
+
+    before(function (done) {
+      videosUtils.getVideosList(servers[2].url, function (err, res) {
+        if (err) throw err
+
+        const videos = res.body.data.filter(video => video.isLocal === true)
+        videoId1 = videos[0].id
+        videoId2 = videos[1].id
+
+        done()
+      })
+    })
+
+    it('Should views multiple videos on owned servers', function (done) {
+      this.timeout(30000)
+
+      parallel([
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, videoId1, callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, videoId1, callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, videoId1, callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, videoId2, callback)
+        }
+      ], function (err) {
+        if (err) throw err
+
+        setTimeout(done, 22000)
+      })
+    })
+
+    it('Should have views updated on each pod', function (done) {
+      each(servers, function (server, callback) {
+        videosUtils.getVideosList(server.url, function (err, res) {
+          if (err) throw err
+
+          const videos = res.body.data
+          expect(videos.find(video => video.views === 3)).to.be.exist
+          expect(videos.find(video => video.views === 1)).to.be.exist
+
+          callback()
+        })
+      }, done)
+    })
+  })
+/*
   describe('Should manipulate these videos', function () {
     it('Should update the video 3 by asking pod 3', function (done) {
       this.timeout(15000)
@@ -462,7 +520,7 @@ describe('Test multiple pods', function () {
       }, done)
     })
   })
-
+*/
   after(function (done) {
     servers.forEach(function (server) {
       process.kill(-server.app.pid)

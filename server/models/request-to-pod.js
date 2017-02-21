@@ -17,7 +17,7 @@ module.exports = function (sequelize, DataTypes) {
       }
     ],
     classMethods: {
-      removePodOf
+      removeByRequestIdsAndPod
     }
   })
 
@@ -26,7 +26,7 @@ module.exports = function (sequelize, DataTypes) {
 
 // ---------------------------------------------------------------------------
 
-function removePodOf (requestsIds, podId, callback) {
+function removeByRequestIdsAndPod (requestsIds, podId, callback) {
   if (!callback) callback = function () {}
 
   const query = {

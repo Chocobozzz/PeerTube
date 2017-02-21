@@ -31,6 +31,13 @@ router.post('/',
   remoteVideos
 )
 
+router.post('/qadu',
+  signatureValidators.signature,
+  secureMiddleware.checkSignature,
+  videosValidators.remoteQaduVideos,
+  remoteVideosQadu
+)
+
 // ---------------------------------------------------------------------------
 
 module.exports = router
@@ -60,6 +67,73 @@ function remoteVideos (req, res, next) {
 
   // We don't need to keep the other pod waiting
   return res.type('json').status(204).end()
+}
+
+function remoteVideosQadu (req, res, next) {
+  const requests = req.body.data
+  const fromPod = res.locals.secure.pod
+
+  eachSeries(requests, function (request, callbackEach) {
+    const videoData = request.data
+
+    quickAndDirtyUpdateVideoRetryWrapper(videoData, fromPod, callbackEach)
+  }, function (err) {
+    if (err) logger.error('Error managing remote videos.', { error: err })
+  })
+
+  return res.type('json').status(204).end()
+}
+
+function quickAndDirtyUpdateVideoRetryWrapper (videoData, fromPod, finalCallback) {
+  const options = {
+    arguments: [ videoData, fromPod ],
+    errorMessage: 'Cannot update quick and dirty the remote video with many retries.'
+  }
+
+  databaseUtils.retryTransactionWrapper(quickAndDirtyUpdateVideo, options, finalCallback)
+}
+
+function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
+  waterfall([
+    databaseUtils.startSerializableTransaction,
+
+    function findVideo (t, callback) {
+      fetchVideo(fromPod.host, videoData.remoteId, function (err, videoInstance) {
+        return callback(err, t, videoInstance)
+      })
+    },
+
+    function updateVideoIntoDB (t, videoInstance, callback) {
+      const options = { transaction: t }
+
+      if (videoData.views) {
+        videoInstance.set('views', videoData.views)
+      }
+
+      if (videoData.likes) {
+        videoInstance.set('likes', videoData.likes)
+      }
+
+      if (videoData.dislikes) {
+        videoInstance.set('dislikes', videoData.dislikes)
+      }
+
+      videoInstance.save(options).asCallback(function (err) {
+        return callback(err, t)
+      })
+    },
+
+    databaseUtils.commitTransaction
+
+  ], function (err, t) {
+    if (err) {
+      logger.debug('Cannot quick and dirty update the remote video.', { error: err })
+      return databaseUtils.rollbackTransaction(err, t, finalCallback)
+    }
+
+    logger.info('Remote video %s quick and dirty updated', videoData.name)
+    return finalCallback(null)
+  })
 }
 
 // Handle retries on fail
