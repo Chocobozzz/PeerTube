@@ -22,9 +22,9 @@ const SEARCHABLE_COLUMNS = {
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  USERS: [ 'id', '-id', 'username', '-username', 'createdAt', '-createdAt' ],
-  VIDEO_ABUSES: [ 'id', '-id', 'createdAt', '-createdAt' ],
-  VIDEOS: [ 'name', '-name', 'duration', '-duration', 'createdAt', '-createdAt', 'views', '-views' ]
+  USERS: [ 'id', 'username', 'createdAt' ],
+  VIDEO_ABUSES: [ 'id', 'createdAt' ],
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'views' ]
 }
 
 const OAUTH_LIFETIME = {

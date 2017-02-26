@@ -10,22 +10,21 @@ const validatorsSort = {
   videosSort
 }
 
-function usersSort (req, res, next) {
-  const sortableColumns = constants.SORTABLE_COLUMNS.USERS
+// Initialize constants here for better performances
+const SORTABLE_USERS_COLUMNS = createSortableColumns(constants.SORTABLE_COLUMNS.USERS)
+const SORTABLE_VIDEO_ABUSES_COLUMNS = createSortableColumns(constants.SORTABLE_COLUMNS.VIDEO_ABUSES)
+const SORTABLE_VIDEOS_COLUMNS = createSortableColumns(constants.SORTABLE_COLUMNS.VIDEOS)
 
-  checkSort(req, res, next, sortableColumns)
+function usersSort (req, res, next) {
+  checkSort(req, res, next, SORTABLE_USERS_COLUMNS)
 }
 
 function videoAbusesSort (req, res, next) {
-  const sortableColumns = constants.SORTABLE_COLUMNS.VIDEO_ABUSES
-
-  checkSort(req, res, next, sortableColumns)
+  checkSort(req, res, next, SORTABLE_VIDEO_ABUSES_COLUMNS)
 }
 
 function videosSort (req, res, next) {
-  const sortableColumns = constants.SORTABLE_COLUMNS.VIDEOS
-
-  checkSort(req, res, next, sortableColumns)
+  checkSort(req, res, next, SORTABLE_VIDEOS_COLUMNS)
 }
 
 // ---------------------------------------------------------------------------
@@ -40,4 +39,10 @@ function checkSort (req, res, next, sortableColumns) {
   logger.debug('Checking sort parameters', { parameters: req.query })
 
   checkErrors(req, res, next)
+}
+
+function createSortableColumns (sortableColumns) {
+  const sortableColumnDesc = sortableColumns.map(sortableColumn => '-' + sortableColumn)
+
+  return sortableColumns.concat(sortableColumnDesc)
 }
