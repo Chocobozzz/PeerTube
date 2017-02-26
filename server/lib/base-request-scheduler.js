@@ -95,14 +95,6 @@ module.exports = class BaseRequestScheduler {
         const requestToMake = requestsToMakeGrouped[hashKey]
         const toPod = requestToMake.toPod
 
-        // Maybe the pod is not our friend anymore so simply remove it
-        if (!toPod) {
-          const requestIdsToDelete = requestToMake.ids
-
-          logger.info('Removing %d "%s" of unexisting pod %s.', requestIdsToDelete.length, this.description, requestToMake.toPod.id)
-          return this.getRequestToPodModel().removePodOf(requestIdsToDelete, requestToMake.toPod.id, callbackEach)
-        }
-
         this.makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, (success) => {
           if (success === false) {
             badPods.push(requestToMake.toPod.id)

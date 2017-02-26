@@ -45,12 +45,7 @@ module.exports = class RequestVideoQaduScheduler extends BaseRequestScheduler {
           }
         }
 
-        if (!requestsToMakeGrouped[hashKey].videos[video.id]) {
-          requestsToMakeGrouped[hashKey].videos[video.id] = {}
-        }
-
-        const videoData = requestsToMakeGrouped[hashKey].videos[video.id]
-
+        const videoData = {}
         switch (request.type) {
           case constants.REQUEST_VIDEO_QADU_TYPES.LIKES:
             videoData.likes = video.likes
@@ -72,10 +67,14 @@ module.exports = class RequestVideoQaduScheduler extends BaseRequestScheduler {
         // Do not forget the remoteId so the remote pod can identify the video
         videoData.remoteId = video.id
         requestsToMakeGrouped[hashKey].ids.push(request.id)
+
+        // Maybe there are multiple quick and dirty update for the same video
+        // We use this hashmap to dedupe them
         requestsToMakeGrouped[hashKey].videos[video.id] = videoData
       })
     })
 
+    // Now we deduped similar quick and dirty updates, we can build our requests datas
     Object.keys(requestsToMakeGrouped).forEach(hashKey => {
       Object.keys(requestsToMakeGrouped[hashKey].videos).forEach(videoId => {
         const videoData = requestsToMakeGrouped[hashKey].videos[videoId]
