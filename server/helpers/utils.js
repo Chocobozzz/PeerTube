@@ -6,6 +6,7 @@ const logger = require('./logger')
 
 const utils = {
   badRequest,
+  createEmptyCallback,
   cleanForExit,
   generateRandomString,
   isTestInstance,
@@ -27,6 +28,12 @@ function generateRandomString (size, callback) {
 function cleanForExit (webtorrentProcess) {
   logger.info('Gracefully exiting.')
   process.kill(-webtorrentProcess.pid)
+}
+
+function createEmptyCallback () {
+  return function (err) {
+    if (err) logger.error('Error in empty callback.', { error: err })
+  }
 }
 
 function isTestInstance () {

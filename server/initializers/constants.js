@@ -85,7 +85,13 @@ const CONSTRAINTS_FIELDS = {
     TAGS: { min: 1, max: 3 }, // Number of total tags
     TAG: { min: 2, max: 10 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
-    THUMBNAIL_DATA: { min: 0, max: 20000 } // Bytes
+    THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes
+    VIEWS: { min: 0 },
+    LIKES: { min: 0 },
+    DISLIKES: { min: 0 }
+  },
+  VIDEO_EVENTS: {
+    COUNT: { min: 0 }
   }
 }
 
@@ -120,12 +126,17 @@ const REQUESTS_VIDEO_QADU_LIMIT_PODS = 10
 // The QADU requests are not big
 const REQUESTS_VIDEO_QADU_LIMIT_PER_POD = 50
 
+const REQUESTS_VIDEO_EVENT_LIMIT_PODS = 10
+// The EVENTS requests are not big
+const REQUESTS_VIDEO_EVENT_LIMIT_PER_POD = 50
+
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
 
 const REQUEST_ENDPOINTS = {
   VIDEOS: 'videos',
-  QADU: 'videos/qadu'
+  QADU: 'videos/qadu',
+  EVENT: 'videos/events'
 }
 const REQUEST_ENDPOINT_ACTIONS = {}
 REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
@@ -136,6 +147,12 @@ REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
 }
 
 const REQUEST_VIDEO_QADU_TYPES = {
+  LIKES: 'likes',
+  DISLIKES: 'dislikes',
+  VIEWS: 'views'
+}
+
+const REQUEST_VIDEO_EVENT_TYPES = {
   LIKES: 'likes',
   DISLIKES: 'dislikes',
   VIEWS: 'views'
@@ -210,6 +227,7 @@ module.exports = {
   REMOTE_SCHEME,
   REQUEST_ENDPOINT_ACTIONS,
   REQUEST_ENDPOINTS,
+  REQUEST_VIDEO_EVENT_TYPES,
   REQUEST_VIDEO_QADU_TYPES,
   REQUESTS_IN_PARALLEL,
   REQUESTS_INTERVAL,
@@ -217,6 +235,8 @@ module.exports = {
   REQUESTS_LIMIT_PODS,
   REQUESTS_VIDEO_QADU_LIMIT_PER_POD,
   REQUESTS_VIDEO_QADU_LIMIT_PODS,
+  REQUESTS_VIDEO_EVENT_LIMIT_PER_POD,
+  REQUESTS_VIDEO_EVENT_LIMIT_PODS,
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
   SIGNATURE_ALGORITHM,

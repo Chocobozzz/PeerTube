@@ -377,19 +377,44 @@ describe('Test multiple pods', function () {
   })
 
   describe('Should update video views', function () {
-    let videoId1
-    let videoId2
+    let localVideosPod3 = []
+    let remoteVideosPod1 = []
+    let remoteVideosPod2 = []
+    let remoteVideosPod3 = []
 
     before(function (done) {
-      videosUtils.getVideosList(servers[2].url, function (err, res) {
-        if (err) throw err
+      parallel([
+        function (callback) {
+          videosUtils.getVideosList(servers[0].url, function (err, res) {
+            if (err) throw err
 
-        const videos = res.body.data.filter(video => video.isLocal === true)
-        videoId1 = videos[0].id
-        videoId2 = videos[1].id
+            remoteVideosPod1 = res.body.data.filter(video => video.isLocal === false).map(video => video.id)
 
-        done()
-      })
+            callback()
+          })
+        },
+
+        function (callback) {
+          videosUtils.getVideosList(servers[1].url, function (err, res) {
+            if (err) throw err
+
+            remoteVideosPod2 = res.body.data.filter(video => video.isLocal === false).map(video => video.id)
+
+            callback()
+          })
+        },
+
+        function (callback) {
+          videosUtils.getVideosList(servers[2].url, function (err, res) {
+            if (err) throw err
+
+            localVideosPod3 = res.body.data.filter(video => video.isLocal === true).map(video => video.id)
+            remoteVideosPod3 = res.body.data.filter(video => video.isLocal === false).map(video => video.id)
+
+            callback()
+          })
+        }
+      ], done)
     })
 
     it('Should views multiple videos on owned servers', function (done) {
@@ -397,42 +422,115 @@ describe('Test multiple pods', function () {
 
       parallel([
         function (callback) {
-          videosUtils.getVideo(servers[2].url, videoId1, callback)
+          videosUtils.getVideo(servers[2].url, localVideosPod3[0], callback)
         },
 
         function (callback) {
-          videosUtils.getVideo(servers[2].url, videoId1, callback)
+          videosUtils.getVideo(servers[2].url, localVideosPod3[0], callback)
         },
 
         function (callback) {
-          videosUtils.getVideo(servers[2].url, videoId1, callback)
+          videosUtils.getVideo(servers[2].url, localVideosPod3[0], callback)
         },
 
         function (callback) {
-          videosUtils.getVideo(servers[2].url, videoId2, callback)
+          videosUtils.getVideo(servers[2].url, localVideosPod3[1], callback)
+        },
+
+        function (callback) {
+          setTimeout(done, 22000)
         }
       ], function (err) {
         if (err) throw err
 
-        setTimeout(done, 22000)
+        each(servers, function (server, callback) {
+          videosUtils.getVideosList(server.url, function (err, res) {
+            if (err) throw err
+
+            const videos = res.body.data
+            expect(videos.find(video => video.views === 3)).to.be.exist
+            expect(videos.find(video => video.views === 1)).to.be.exist
+
+            callback()
+          })
+        }, done)
       })
     })
 
-    it('Should have views updated on each pod', function (done) {
-      each(servers, function (server, callback) {
-        videosUtils.getVideosList(server.url, function (err, res) {
-          if (err) throw err
+    it('Should views multiple videos on each servers', function (done) {
+      this.timeout(30000)
 
-          const videos = res.body.data
-          expect(videos.find(video => video.views === 3)).to.be.exist
-          expect(videos.find(video => video.views === 1)).to.be.exist
+      parallel([
+        function (callback) {
+          videosUtils.getVideo(servers[0].url, remoteVideosPod1[0], callback)
+        },
 
-          callback()
-        })
-      }, done)
+        function (callback) {
+          videosUtils.getVideo(servers[1].url, remoteVideosPod2[0], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[1].url, remoteVideosPod2[0], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, remoteVideosPod3[0], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, remoteVideosPod3[1], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, remoteVideosPod3[1], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, remoteVideosPod3[1], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, localVideosPod3[1], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, localVideosPod3[1], callback)
+        },
+
+        function (callback) {
+          videosUtils.getVideo(servers[2].url, localVideosPod3[1], callback)
+        },
+
+        function (callback) {
+          setTimeout(done, 22000)
+        }
+      ], function (err) {
+        if (err) throw err
+
+        let baseVideos = null
+        each(servers, function (server, callback) {
+          videosUtils.getVideosList(server.url, function (err, res) {
+            if (err) throw err
+
+            const videos = res.body
+
+            // Initialize base videos for future comparisons
+            if (baseVideos === null) {
+              baseVideos = videos
+              return callback()
+            }
+
+            for (let i = 0; i < baseVideos.length; i++) {
+              expect(baseVideos[i].views).to.equal(videos[i].views)
+            }
+
+            callback()
+          })
+        }, done)
+      })
     })
   })
-/*
+
   describe('Should manipulate these videos', function () {
     it('Should update the video 3 by asking pod 3', function (done) {
       this.timeout(15000)
@@ -520,7 +618,7 @@ describe('Test multiple pods', function () {
       }, done)
     })
   })
-*/
+
   after(function (done) {
     servers.forEach(function (server) {
       process.kill(-server.app.pid)

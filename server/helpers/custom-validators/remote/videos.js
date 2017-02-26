@@ -1,6 +1,7 @@
 'use strict'
 
 const has = require('lodash/has')
+const values = require('lodash/values')
 
 const constants = require('../../../initializers/constants')
 const videosValidators = require('../videos')
@@ -10,13 +11,17 @@ const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_EN
 
 const remoteVideosValidators = {
   isEachRemoteRequestVideosValid,
-  isEachRemoteRequestVideosQaduValid
+  isEachRemoteRequestVideosQaduValid,
+  isEachRemoteRequestVideosEventsValid
 }
 
 function isEachRemoteRequestVideosValid (requests) {
   return miscValidators.isArray(requests) &&
     requests.every(function (request) {
       const video = request.data
+
+      if (!video) return false
+
       return (
         isRequestTypeAddValid(request.type) &&
         isCommonVideoAttributesValid(video) &&
@@ -45,11 +50,28 @@ function isEachRemoteRequestVideosQaduValid (requests) {
     requests.every(function (request) {
       const video = request.data
 
+      if (!video) return false
+
       return (
         videosValidators.isVideoRemoteIdValid(video.remoteId) &&
         (has(video, 'views') === false || videosValidators.isVideoViewsValid) &&
         (has(video, 'likes') === false || videosValidators.isVideoLikesValid) &&
         (has(video, 'dislikes') === false || videosValidators.isVideoDislikesValid)
+      )
+    })
+}
+
+function isEachRemoteRequestVideosEventsValid (requests) {
+  return miscValidators.isArray(requests) &&
+    requests.every(function (request) {
+      const eventData = request.data
+
+      if (!eventData) return false
+
+      return (
+        videosValidators.isVideoRemoteIdValid(eventData.remoteId) &&
+        values(constants.REQUEST_VIDEO_EVENT_TYPES).indexOf(eventData.eventType) !== -1 &&
+        videosValidators.isVideoEventCountValid(eventData.count)
       )
     })
 }

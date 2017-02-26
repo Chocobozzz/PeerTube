@@ -12,7 +12,7 @@ module.exports = class RequestVideoQaduScheduler extends BaseRequestScheduler {
 
     // We limit the size of the requests
     this.limitPods = constants.REQUESTS_VIDEO_QADU_LIMIT_PODS
-    this.limitPerPod = constants.REQUESTS_VIDEO_QADU_LIMIT_PODS
+    this.limitPerPod = constants.REQUESTS_VIDEO_QADU_LIMIT_PER_POD
 
     this.description = 'video QADU requests'
   }

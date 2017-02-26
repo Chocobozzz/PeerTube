@@ -11,13 +11,16 @@ const db = require('../initializers/database')
 const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
+const utils = require('../helpers/utils')
 const RequestScheduler = require('./request-scheduler')
 const RequestVideoQaduScheduler = require('./request-video-qadu-scheduler')
+const RequestVideoEventScheduler = require('./request-video-event-scheduler')
 
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
 
 const requestScheduler = new RequestScheduler()
 const requestSchedulerVideoQadu = new RequestVideoQaduScheduler()
+const requestSchedulerVideoEvent = new RequestVideoEventScheduler()
 
 const friends = {
   activate,
@@ -25,6 +28,7 @@ const friends = {
   updateVideoToFriends,
   reportAbuseVideoToFriend,
   quickAndDirtyUpdateVideoToFriends,
+  addEventToRemoteVideo,
   hasFriends,
   makeFriends,
   quitFriends,
@@ -35,6 +39,7 @@ const friends = {
 function activate () {
   requestScheduler.activate()
   requestSchedulerVideoQadu.activate()
+  requestSchedulerVideoEvent.activate()
 }
 
 function addVideoToFriends (videoData, transaction, callback) {
@@ -83,6 +88,15 @@ function quickAndDirtyUpdateVideoToFriends (videoId, type, transaction, callback
     transaction
   }
   return createVideoQaduRequest(options, callback)
+}
+
+function addEventToRemoteVideo (videoId, type, transaction, callback) {
+  const options = {
+    videoId,
+    type,
+    transaction
+  }
+  createVideoEventRequest(options, callback)
 }
 
 function hasFriends (callback) {
@@ -329,9 +343,15 @@ function createRequest (options, callback) {
 }
 
 function createVideoQaduRequest (options, callback) {
-  if (!callback) callback = function () {}
+  if (!callback) callback = utils.createEmptyCallback()
 
   requestSchedulerVideoQadu.createRequest(options, callback)
+}
+
+function createVideoEventRequest (options, callback) {
+  if (!callback) callback = utils.createEmptyCallback()
+
+  requestSchedulerVideoEvent.createRequest(options, callback)
 }
 
 function isMe (host) {

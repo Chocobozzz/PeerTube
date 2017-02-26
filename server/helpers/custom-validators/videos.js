@@ -7,6 +7,7 @@ const usersValidators = require('./users')
 const miscValidators = require('./misc')
 const VIDEOS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEO_ABUSES
+const VIDEO_EVENTS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEO_EVENTS
 
 const videosValidators = {
   isVideoAuthorValid,
@@ -25,7 +26,8 @@ const videosValidators = {
   isVideoFile,
   isVideoViewsValid,
   isVideoLikesValid,
-  isVideoDislikesValid
+  isVideoDislikesValid,
+  isVideoEventCountValid
 }
 
 function isVideoAuthorValid (value) {
@@ -86,15 +88,19 @@ function isVideoAbuseReporterUsernameValid (value) {
 }
 
 function isVideoViewsValid (value) {
-  return validator.isInt(value, { min: 0 })
+  return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
 
 function isVideoLikesValid (value) {
-  return validator.isInt(value, { min: 0 })
+  return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.LIKES)
 }
 
 function isVideoDislikesValid (value) {
-  return validator.isInt(value, { min: 0 })
+  return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DISLIKES)
+}
+
+function isVideoEventCountValid (value) {
+  return validator.isInt(value + '', VIDEO_EVENTS_CONSTRAINTS_FIELDS.COUNT)
 }
 
 function isVideoFile (value, files) {

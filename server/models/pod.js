@@ -148,7 +148,12 @@ function listAllIds (transaction, callback) {
   })
 }
 
-function listRandomPodIdsWithRequest (limit, tableRequestPod, callback) {
+function listRandomPodIdsWithRequest (limit, tableWithPods, tableWithPodsJoins, callback) {
+  if (!callback) {
+    callback = tableWithPodsJoins
+    tableWithPodsJoins = ''
+  }
+
   const self = this
 
   self.count().asCallback(function (err, count) {
@@ -170,7 +175,7 @@ function listRandomPodIdsWithRequest (limit, tableRequestPod, callback) {
       where: {
         id: {
           $in: [
-            this.sequelize.literal('SELECT "podId" FROM "' + tableRequestPod + '"')
+            this.sequelize.literal(`SELECT DISTINCT "${tableWithPods}"."podId" FROM "${tableWithPods}" ${tableWithPodsJoins}`)
           ]
         }
       }

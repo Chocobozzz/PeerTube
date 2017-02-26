@@ -48,6 +48,8 @@ function associate (models) {
 }
 
 function countTotalRequests (callback) {
+  // We need to include Pod because there are no cascade delete when a pod is removed
+  // So we could count requests that do not have existing pod anymore
   const query = {
     include: [ this.sequelize.models.Pod ]
   }

@@ -71,10 +71,7 @@ function associate (models) {
 }
 
 function countTotalRequests (callback) {
-  const query = {
-    include: [ this.sequelize.models.Pod ]
-  }
-
+  const query = {}
   return this.count(query).asCallback(callback)
 }
 

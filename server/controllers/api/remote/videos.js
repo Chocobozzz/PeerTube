@@ -38,6 +38,13 @@ router.post('/qadu',
   remoteVideosQadu
 )
 
+router.post('/events',
+  signatureValidators.signature,
+  secureMiddleware.checkSignature,
+  videosValidators.remoteEventsVideos,
+  remoteVideosEvents
+)
+
 // ---------------------------------------------------------------------------
 
 module.exports = router
@@ -84,6 +91,84 @@ function remoteVideosQadu (req, res, next) {
   return res.type('json').status(204).end()
 }
 
+function remoteVideosEvents (req, res, next) {
+  const requests = req.body.data
+  const fromPod = res.locals.secure.pod
+
+  eachSeries(requests, function (request, callbackEach) {
+    const eventData = request.data
+
+    processVideosEventsRetryWrapper(eventData, fromPod, callbackEach)
+  }, function (err) {
+    if (err) logger.error('Error managing remote videos.', { error: err })
+  })
+
+  return res.type('json').status(204).end()
+}
+
+function processVideosEventsRetryWrapper (eventData, fromPod, finalCallback) {
+  const options = {
+    arguments: [ eventData, fromPod ],
+    errorMessage: 'Cannot process videos events with many retries.'
+  }
+
+  databaseUtils.retryTransactionWrapper(processVideosEvents, options, finalCallback)
+}
+
+function processVideosEvents (eventData, fromPod, finalCallback) {
+  waterfall([
+    databaseUtils.startSerializableTransaction,
+
+    function findVideo (t, callback) {
+      fetchOwnedVideo(eventData.remoteId, function (err, videoInstance) {
+        return callback(err, t, videoInstance)
+      })
+    },
+
+    function updateVideoIntoDB (t, videoInstance, callback) {
+      const options = { transaction: t }
+
+      let columnToUpdate
+
+      switch (eventData.eventType) {
+        case constants.REQUEST_VIDEO_EVENT_TYPES.VIEWS:
+          columnToUpdate = 'views'
+          break
+
+        case constants.REQUEST_VIDEO_EVENT_TYPES.LIKES:
+          columnToUpdate = 'likes'
+          break
+
+        case constants.REQUEST_VIDEO_EVENT_TYPES.DISLIKES:
+          columnToUpdate = 'dislikes'
+          break
+
+        default:
+          return callback(new Error('Unknown video event type.'))
+      }
+
+      const query = {}
+      query[columnToUpdate] = eventData.count
+
+      videoInstance.increment(query, options).asCallback(function (err) {
+        return callback(err, t)
+      })
+    },
+
+    databaseUtils.commitTransaction
+
+  ], function (err, t) {
+    if (err) {
+      console.log(err)
+      logger.debug('Cannot process a video event.', { error: err })
+      return databaseUtils.rollbackTransaction(err, t, finalCallback)
+    }
+
+    logger.info('Remote video event processed for video %s.', eventData.remoteId)
+    return finalCallback(null)
+  })
+}
+
 function quickAndDirtyUpdateVideoRetryWrapper (videoData, fromPod, finalCallback) {
   const options = {
     arguments: [ videoData, fromPod ],
@@ -98,7 +183,7 @@ function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
     databaseUtils.startSerializableTransaction,
 
     function findVideo (t, callback) {
-      fetchVideo(fromPod.host, videoData.remoteId, function (err, videoInstance) {
+      fetchRemoteVideo(fromPod.host, videoData.remoteId, function (err, videoInstance) {
         return callback(err, t, videoInstance)
       })
     },
@@ -264,7 +349,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
     databaseUtils.startSerializableTransaction,
 
     function findVideo (t, callback) {
-      fetchVideo(fromPod.host, videoAttributesToUpdate.remoteId, function (err, videoInstance) {
+      fetchRemoteVideo(fromPod.host, videoAttributesToUpdate.remoteId, function (err, videoInstance) {
         return callback(err, t, videoInstance)
       })
     },
@@ -317,7 +402,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
 
 function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
   // We need the instance because we have to remove some other stuffs (thumbnail etc)
-  fetchVideo(fromPod.host, videoToRemoveData.remoteId, function (err, video) {
+  fetchRemoteVideo(fromPod.host, videoToRemoveData.remoteId, function (err, video) {
     // Do not return the error, continue the process
     if (err) return callback(null)
 
@@ -334,7 +419,7 @@ function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
 }
 
 function reportAbuseRemoteVideo (reportData, fromPod, callback) {
-  db.Video.load(reportData.videoRemoteId, function (err, video) {
+  fetchOwnedVideo(reportData.videoRemoteId, function (err, video) {
     if (err || !video) {
       if (!err) err = new Error('video not found')
 
@@ -362,7 +447,20 @@ function reportAbuseRemoteVideo (reportData, fromPod, callback) {
   })
 }
 
-function fetchVideo (podHost, remoteId, callback) {
+function fetchOwnedVideo (id, callback) {
+  db.Video.load(id, function (err, video) {
+    if (err || !video) {
+      if (!err) err = new Error('video not found')
+
+      logger.error('Cannot load owned video from id.', { error: err, id })
+      return callback(err)
+    }
+
+    return callback(null, video)
+  })
+}
+
+function fetchRemoteVideo (podHost, remoteId, callback) {
   db.Video.loadByHostAndRemoteId(podHost, remoteId, function (err, video) {
     if (err || !video) {
       if (!err) err = new Error('video not found')

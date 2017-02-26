@@ -333,6 +333,9 @@ function getVideo (req, res, next) {
       // For example, only add a view when a user watch a video during 30s etc
       friends.quickAndDirtyUpdateVideoToFriends(videoInstance.id, constants.REQUEST_VIDEO_QADU_TYPES.VIEWS)
     })
+  } else {
+    // Just send the event to our friends
+    friends.addEventToRemoteVideo(videoInstance.id, constants.REQUEST_VIDEO_EVENT_TYPES.VIEWS)
   }
 
   // Do not wait the view system
