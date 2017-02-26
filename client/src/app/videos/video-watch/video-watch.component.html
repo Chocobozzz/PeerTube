@@ -57,17 +57,20 @@
         <span class="glyphicon glyphicon-share"></span> Share
       </button>
 
-      <button title="Get magnet URI" id="magnet-uri" class="btn btn-default" (click)="showMagnetUriModal()">
-        <span class="glyphicon glyphicon-magnet"></span> Magnet
-      </button>
-
-      <div *ngIf="isUserLoggedIn()" class="btn-group" dropdown>
+      <div class="btn-group" dropdown>
         <button id="single-button" type="button" id="more" class="btn btn-default" dropdownToggle>
           <span class="glyphicon glyphicon-option-horizontal"></span> More
         </button>
+
         <ul dropdownMenu id="more-menu" role="menu" aria-labelledby="single-button">
           <li role="menuitem">
-            <a class="dropdown-item" href="#" (click)="showReportModal($event)">
+            <a class="dropdown-item" title="Get magnet URI" href="#" (click)="showMagnetUriModal($event)">
+               <span class="glyphicon glyphicon-magnet"></span> Magnet
+            </a>
+          </li>
+
+          <li *ngIf="isUserLoggedIn()" role="menuitem">
+            <a class="dropdown-item" title="Report this video" href="#" (click)="showReportModal($event)">
               <span class="glyphicon glyphicon-alert"></span> Report
             </a>
           </li>
@@ -76,11 +79,15 @@
     </div>
   </div>
 
-  <div id="video-tags" class="row">
-    <div class="col-md-12">
+  <div id="video-tags-views" class="row">
+    <div class="col-md-8">
       <a *ngFor="let tag of video.tags" [routerLink]="['/videos/list', { field: 'tags', search: tag }]" class="label label-primary">
         {{ tag }}
       </a>
+    </div>
+
+    <div id="video-views" class="col-md-4 text-right">
+      {{ video.views }} views
     </div>
   </div>
 

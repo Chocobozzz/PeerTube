@@ -79,12 +79,17 @@
       }
     }
 
-    .video-miniature-author, .video-miniature-created-at {
+    .video-miniature-author, .video-miniature-views-created-at {
       display: block;
       margin-left: 1px;
       font-size: 12px;
       color: #337ab7;
       opacity: 0.9;
+
+      .video-miniature-created-at::before {
+        content: '\002022';
+        margin: 0 2px 0 1px;
+      }
     }
 
     .video-miniature-author {

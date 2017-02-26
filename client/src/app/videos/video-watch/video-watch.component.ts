@@ -145,7 +145,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoShareModal.show();
   }
 
-  showMagnetUriModal() {
+  showMagnetUriModal(event: Event) {
+    event.preventDefault();
     this.videoMagnetModal.show();
   }
 
