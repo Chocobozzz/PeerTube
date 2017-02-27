@@ -15,10 +15,20 @@ export class RequestService {
     private restExtractor: RestExtractor
   ) {}
 
-  getStats(): Observable<RequestStats> {
+  getStats(): Observable<{ [ id: string ]: RequestStats }> {
     return this.authHttp.get(RequestService.BASE_REQUEST_URL + 'stats')
                         .map(this.restExtractor.extractDataGet)
-                        .map((data) => new RequestStats(data))
+                        .map(this.buildRequestObjects)
                         .catch((res) => this.restExtractor.handleError(res));
+  }
+
+  private buildRequestObjects(data: any) {
+    const requestSchedulers = {};
+
+    Object.keys(data).forEach(requestSchedulerName => {
+      requestSchedulers[requestSchedulerName] = new RequestStats(data[requestSchedulerName]);
+    });
+
+    return requestSchedulers;
   }
 }

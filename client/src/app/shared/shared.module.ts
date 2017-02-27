@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
+import { KeysPipe } from 'angular-pipes/src/object/keys.pipe';
 import { DropdownModule } from 'ng2-bootstrap/dropdown';
 import { ProgressbarModule } from 'ng2-bootstrap/progressbar';
 import { PaginationModule } from 'ng2-bootstrap/pagination';
@@ -36,6 +37,7 @@ import { VideoAbuseService } from './video-abuse';
 
   declarations: [
     BytesPipe,
+    KeysPipe,
     SearchComponent
   ],
 
@@ -53,6 +55,7 @@ import { VideoAbuseService } from './video-abuse';
     ProgressbarModule,
     Ng2SmartTableModule,
     BytesPipe,
+    KeysPipe,
 
     SearchComponent
   ],

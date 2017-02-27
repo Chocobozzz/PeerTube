@@ -12,6 +12,7 @@ module.exports = class BaseRequestScheduler {
   constructor (options) {
     this.lastRequestTimestamp = 0
     this.timer = null
+    this.requestInterval = constants.REQUESTS_INTERVAL
   }
 
   activate () {
@@ -21,7 +22,7 @@ module.exports = class BaseRequestScheduler {
     this.timer = setInterval(() => {
       this.lastRequestTimestamp = Date.now()
       this.makeRequests()
-    }, constants.REQUESTS_INTERVAL)
+    }, this.requestInterval)
   }
 
   deactivate () {
@@ -39,6 +40,10 @@ module.exports = class BaseRequestScheduler {
     if (this.timer === null) return -1
 
     return constants.REQUESTS_INTERVAL - (Date.now() - this.lastRequestTimestamp)
+  }
+
+  remainingRequestsCount (callback) {
+    return this.getRequestModel().countTotalRequests(callback)
   }
 
   // ---------------------------------------------------------------------------

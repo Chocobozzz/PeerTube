@@ -10,10 +10,30 @@ import { RequestService, RequestStats } from '../shared';
   styleUrls: [ './request-stats.component.scss' ]
 })
 export class RequestStatsComponent implements OnInit, OnDestroy {
-  stats: RequestStats = null;
+  statsTitles = {
+    requestScheduler: 'Basic request scheduler',
+    requestVideoEventScheduler: 'Video events request scheduler',
+    requestVideoQaduScheduler: 'Quick and dirty video updates request scheduler'
+  };
 
-  private interval: number = null;
-  private timeout: number = null;
+  stats: { [ id: string ]: RequestStats } = {
+    requestScheduler: null,
+    requestVideoEventScheduler: null,
+    requestVideoQaduScheduler: null
+  };
+
+  private intervals: { [ id: string ]: number } = {
+    requestScheduler: null,
+    requestVideoEventScheduler: null,
+    requestVideoQaduScheduler: null
+  };
+
+  private timeouts: { [ id: string ]: number } = {
+    requestScheduler: null,
+    requestVideoEventScheduler: null,
+    requestVideoQaduScheduler: null
+  };
+
 
   constructor(
     private notificationsService: NotificationsService,
@@ -22,17 +42,19 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getStats();
-    this.runInterval();
+    this.runIntervals();
   }
 
   ngOnDestroy() {
-    if (this.interval !== null) {
-      window.clearInterval(this.interval);
-    }
+    Object.keys(this.stats).forEach(requestSchedulerName => {
+      if (this.intervals[requestSchedulerName] !== null) {
+        window.clearInterval(this.intervals[requestSchedulerName]);
+      }
 
-    if (this.timeout !== null) {
-      window.clearTimeout(this.timeout);
-    }
+      if (this.timeouts[requestSchedulerName] !== null) {
+        window.clearTimeout(this.timeouts[requestSchedulerName]);
+      }
+    });
   }
 
   getStats() {
@@ -43,14 +65,18 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
     );
   }
 
-  private runInterval() {
-    this.interval = window.setInterval(() => {
-      this.stats.remainingMilliSeconds -= 1000;
+  private runIntervals() {
+    Object.keys(this.intervals).forEach(requestSchedulerName => {
+      this.intervals[requestSchedulerName] = window.setInterval(() => {
+        const stats = this.stats[requestSchedulerName];
 
-      if (this.stats.remainingMilliSeconds <= 0) {
-        this.timeout = window.setTimeout(() => this.getStats(), this.stats.remainingMilliSeconds + 100);
-      }
-    }, 1000);
+        stats.remainingMilliSeconds -= 1000;
+
+        if (stats.remainingMilliSeconds <= 0) {
+          this.timeouts[requestSchedulerName] = window.setTimeout(() => this.getStats(), stats.remainingMilliSeconds + 100);
+        }
+      }, 1000);
+    });
   }
 
 
