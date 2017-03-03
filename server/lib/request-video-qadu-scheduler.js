@@ -6,7 +6,6 @@ const db = require('../initializers/database')
 const logger = require('../helpers/logger')
 
 module.exports = class RequestVideoQaduScheduler extends BaseRequestScheduler {
-
   constructor () {
     super()
 

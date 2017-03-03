@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-expressions */
+
 'use strict'
 
 const series = require('async/series')

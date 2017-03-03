@@ -6,7 +6,6 @@ const db = require('../initializers/database')
 const logger = require('../helpers/logger')
 
 module.exports = class RequestScheduler extends BaseRequestScheduler {
-
   constructor () {
     super()
 

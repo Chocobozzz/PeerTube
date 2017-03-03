@@ -8,7 +8,6 @@ const logger = require('../helpers/logger')
 const requests = require('../helpers/requests')
 
 module.exports = class BaseRequestScheduler {
-
   constructor (options) {
     this.lastRequestTimestamp = 0
     this.timer = null

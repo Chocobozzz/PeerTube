@@ -41,7 +41,7 @@
   "dependencies": {
     "async": "^2.0.0",
     "bcrypt": "^1.0.2",
-    "bittorrent-tracker": "^8.0.0",
+    "bittorrent-tracker": "^9.0.0",
     "body-parser": "^1.12.4",
     "concurrently": "^3.1.0",
     "config": "^1.14.0",
@@ -77,7 +77,7 @@
     "chai": "^3.3.0",
     "commander": "^2.9.0",
     "mocha": "^3.0.1",
-    "standard": "^8.0.0",
+    "standard": "^9.0.0",
     "supertest": "^3.0.0",
     "webtorrent": "^0.98.0"
   },

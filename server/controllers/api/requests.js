@@ -3,7 +3,6 @@
 const express = require('express')
 const parallel = require('async/parallel')
 
-const constants = require('../../initializers/constants')
 const friends = require('../../lib/friends')
 const middlewares = require('../../middlewares')
 const admin = middlewares.admin

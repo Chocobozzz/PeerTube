@@ -443,4 +443,3 @@ function reportVideoAbuse (req, res, finalCallback) {
     return finalCallback(null)
   })
 }
-
