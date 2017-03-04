@@ -16,6 +16,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { AUTH_HTTP_PROVIDERS } from './auth';
 import { RestExtractor, RestService } from './rest';
 import { SearchComponent, SearchService } from './search';
+import { UserService } from './users';
 import { VideoAbuseService } from './video-abuse';
 
 @NgModule({
@@ -65,7 +66,8 @@ import { VideoAbuseService } from './video-abuse';
     RestExtractor,
     RestService,
     SearchService,
-    VideoAbuseService
+    VideoAbuseService,
+    UserService
   ]
 })
 export class SharedModule { }

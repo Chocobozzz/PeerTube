@@ -1,14 +1,17 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { MetaService } from 'ng2-meta';
+
+import { AuthService } from './core';
+import { UserService } from './shared';
+
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ]
 })
-
-export class AppComponent {
+export class AppComponent implements OnInit {
   notificationOptions = {
     timeOut: 3000,
     lastOnBottom: true,
@@ -25,8 +28,17 @@ export class AppComponent {
   constructor(
     private router: Router,
     private metaService: MetaService,
+    private authService: AuthService,
+    private userService: UserService,
     viewContainerRef: ViewContainerRef
   ) {}
+
+  ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      // The service will automatically redirect to the login page if the token is not valid anymore
+      this.userService.checkTokenValidity();
+    }
+  }
 
   isInAdmin() {
     return this.router.url.indexOf('/admin/') !== -1;

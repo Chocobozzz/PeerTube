@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 
 import { NotificationsService } from 'angular2-notifications';
 
-import { AccountService } from './account.service';
-import { FormReactive, USER_PASSWORD } from '../shared';
+import { FormReactive, UserService, USER_PASSWORD } from '../shared';
 
 @Component({
   selector: 'my-account',
@@ -29,7 +28,7 @@ export class AccountComponent extends FormReactive implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,
-    private accountService: AccountService
+    private userService: UserService
   ) {
     super();
   }
@@ -58,7 +57,7 @@ export class AccountComponent extends FormReactive implements OnInit {
       return;
     }
 
-    this.accountService.changePassword(newPassword).subscribe(
+    this.userService.changePassword(newPassword).subscribe(
       () => this.notificationsService.success('Success', 'Password updated.'),
 
       err => this.error = err

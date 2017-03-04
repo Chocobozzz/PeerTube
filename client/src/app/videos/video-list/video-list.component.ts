@@ -9,8 +9,8 @@ import {
   Video,
   VideoService
 } from '../shared';
-import { AuthService } from '../../core';
-import { AuthUser, RestPagination, Search, SearchField } from '../../shared';
+import { AuthService, AuthUser } from '../../core';
+import { RestPagination, Search, SearchField } from '../../shared';
 import { SearchService } from '../../shared';
 
 @Component({

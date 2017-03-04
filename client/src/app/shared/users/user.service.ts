@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { AuthService } from '../core';
-import { AuthHttp, RestExtractor } from '../shared';
+import { AuthService } from '../../core';
+import { AuthHttp } from '../auth';
+import { RestExtractor } from '../rest';
 
 @Injectable()
-export class AccountService {
+export class UserService {
   private static BASE_USERS_URL = '/api/v1/users/';
 
   constructor(
@@ -15,8 +16,15 @@ export class AccountService {
     private restExtractor: RestExtractor
   ) {}
 
+  checkTokenValidity() {
+    const url = UserService.BASE_USERS_URL + 'me';
+
+    // AuthHttp will redirect us to the login page if the oken is not valid anymore
+    this.authHttp.get(url).subscribe(() => { ; });
+  }
+
   changePassword(newPassword: string) {
-    const url = AccountService.BASE_USERS_URL + this.authService.getUser().id;
+    const url = UserService.BASE_USERS_URL + this.authService.getUser().id;
     const body = {
       password: newPassword
     };

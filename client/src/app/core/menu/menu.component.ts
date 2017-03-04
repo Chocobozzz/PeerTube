@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from '../auth';
-import { AuthStatus } from '../../shared';
+import { AuthService, AuthStatus } from '../auth';
 
 @Component({
   selector: 'my-menu',

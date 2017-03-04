@@ -1,4 +1,5 @@
-import { User } from '../users';
+// Do not use the barrel (dependency loop)
+import { User } from '../../shared/users/user.model';
 
 export class AuthUser extends User {
   private static KEYS = {

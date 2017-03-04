@@ -19,8 +19,6 @@ import { SharedModule } from '../shared';
     AccountComponent
   ],
 
-  providers: [
-    AccountService
-  ]
+  providers: []
 })
 export class AccountModule { }

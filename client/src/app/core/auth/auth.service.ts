@@ -9,9 +9,9 @@ import 'rxjs/add/observable/throw';
 
 import { NotificationsService } from 'angular2-notifications';
 
+import { AuthStatus } from './auth-status.model';
+import { AuthUser } from './auth-user.model';
 // Do not use the barrel (dependency loop)
-import { AuthStatus } from '../../shared/auth/auth-status.model';
-import { AuthUser } from '../../shared/auth/auth-user.model';
 import { RestExtractor } from '../../shared/rest';
 
 @Injectable()
