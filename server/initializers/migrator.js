@@ -37,7 +37,7 @@ function migrate (finalCallback) {
         db.Application.create({
           migrationVersion: 0
         }, function (err) {
-          return callabck(err, 0)
+          return callback(err, 0)
         })
       }
 
