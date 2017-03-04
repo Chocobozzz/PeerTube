@@ -45,7 +45,7 @@ module.exports = class RequestVideoEventScheduler extends BaseRequestScheduler {
         if (!requestsToMakeGrouped[toPodId]) {
           requestsToMakeGrouped[toPodId] = {
             toPod: eventToProcess.pod,
-            endpoint: constants.REQUEST_ENDPOINTS.EVENT,
+            endpoint: constants.REQUEST_VIDEO_EVENT_ENDPOINT,
             ids: [], // request ids, to delete them from the DB in the future
             datas: [] // requests data
           }

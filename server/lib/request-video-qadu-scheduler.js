@@ -37,7 +37,7 @@ module.exports = class RequestVideoQaduScheduler extends BaseRequestScheduler {
         if (!requestsToMakeGrouped[hashKey]) {
           requestsToMakeGrouped[hashKey] = {
             toPod: pod,
-            endpoint: constants.REQUEST_ENDPOINTS.QADU,
+            endpoint: constants.REQUEST_VIDEO_QADU_ENDPOINT,
             ids: [], // request ids, to delete them from the DB in the future
             datas: [], // requests data
             videos: {}
