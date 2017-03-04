@@ -91,7 +91,8 @@ function isCommonVideoAttributesValid (video) {
          videosValidators.isVideoNameValid(video.name) &&
          videosValidators.isVideoTagsValid(video.tags) &&
          videosValidators.isVideoRemoteIdValid(video.remoteId) &&
-         videosValidators.isVideoExtnameValid(video.extname)
+         videosValidators.isVideoExtnameValid(video.extname) &&
+         videosValidators.isVideoViewsValid(video.views)
 }
 
 function isRequestTypeAddValid (value) {

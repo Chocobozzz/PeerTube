@@ -155,7 +155,8 @@ function addVideo (req, res, videoFile, finalCallback) {
         extname: path.extname(videoFile.filename),
         description: videoInfos.description,
         duration: videoFile.duration,
-        authorId: author.id
+        authorId: author.id,
+        views: videoInfos.views
       }
 
       const video = db.Video.build(videoData)

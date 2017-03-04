@@ -380,7 +380,8 @@ function toAddRemoteJSON (callback) {
       tags: map(self.Tags, 'name'),
       createdAt: self.createdAt,
       updatedAt: self.updatedAt,
-      extname: self.extname
+      extname: self.extname,
+      views: self.views
     }
 
     return callback(null, remoteVideo)
@@ -398,7 +399,8 @@ function toUpdateRemoteJSON (callback) {
     tags: map(this.Tags, 'name'),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
-    extname: this.extname
+    extname: this.extname,
+    views: this.views
   }
 
   return json
