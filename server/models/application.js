@@ -31,7 +31,7 @@ function loadMigrationVersion (callback) {
   }
 
   return this.findOne(query).asCallback(function (err, data) {
-    const version = data ? data.migrationVersion : 0
+    const version = data ? data.migrationVersion : null
 
     return callback(err, version)
   })

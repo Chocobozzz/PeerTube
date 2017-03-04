@@ -32,6 +32,18 @@ function migrate (finalCallback) {
       db.Application.loadMigrationVersion(callback)
     },
 
+    function createMigrationRowIfNotExists (actualVersion, callback) {
+      if (actualVersion === null) {
+        db.Application.create({
+          migrationVersion: 0
+        }, function (err) {
+          return callabck(err, 0)
+        })
+      }
+
+      return callback(null, actualVersion)
+    },
+
     function abortMigrationIfNotNeeded (actualVersion, callback) {
       // No need migrations
       if (actualVersion >= constants.LAST_MIGRATION_VERSION) return finalCallback(null)
