@@ -12,7 +12,7 @@ export class VideoSortComponent {
 
   @Input() currentSort: SortField;
 
-  sortChoices = {
+  sortChoices: { [ id: SortField ]: string } = {
     'name': 'Name - Asc',
     '-name': 'Name - Desc',
     'duration': 'Duration - Asc',
@@ -20,7 +20,9 @@ export class VideoSortComponent {
     'createdAt': 'Created Date - Asc',
     '-createdAt': 'Created Date - Desc',
     'views': 'Views - Asc',
-    '-views': 'Views - Desc'
+    '-views': 'Views - Desc',
+    'likes': 'Likes - Asc',
+    '-likes': 'Likes - Desc'
   };
 
   get choiceKeys() {

@@ -18,7 +18,6 @@ import { SearchService } from '../../shared';
   styleUrls: [ './video-list.component.scss' ],
   templateUrl: './video-list.component.html'
 })
-
 export class VideoListComponent implements OnInit, OnDestroy {
   loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
   pagination: RestPagination = {
