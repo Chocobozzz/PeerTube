@@ -16,7 +16,8 @@ const videosUtils = {
   searchVideoWithSort,
   testVideoImage,
   uploadVideo,
-  updateVideo
+  updateVideo,
+  rateVideo
 }
 
 // ---------------------- Export functions --------------------
@@ -234,6 +235,23 @@ function updateVideo (url, accessToken, id, name, description, tags, specialStat
   }
 
   req.expect(specialStatus).end(end)
+}
+
+function rateVideo (url, accessToken, id, rating, specialStatus, end) {
+  if (!end) {
+    end = specialStatus
+    specialStatus = 204
+  }
+
+  const path = '/api/v1/videos/' + id + '/rate'
+
+  request(url)
+    .put(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .send({ rating })
+    .expect(specialStatus)
+    .end(end)
 }
 
 // ---------------------------------------------------------------------------

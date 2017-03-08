@@ -10,7 +10,7 @@ import { AuthService } from '../../core';
 import { VideoMagnetComponent } from './video-magnet.component';
 import { VideoShareComponent } from './video-share.component';
 import { VideoReportComponent } from './video-report.component';
-import { Video, VideoService } from '../shared';
+import { RateType, Video, VideoService } from '../shared';
 import { WebTorrentService } from './webtorrent.service';
 
 @Component({
@@ -33,6 +33,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   player: VideoJSPlayer;
   playerElement: Element;
   uploadSpeed: number;
+  userRating: RateType = null;
   video: Video = null;
   videoNotFound = false;
 
@@ -61,6 +62,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           this.video = video;
           this.setOpenGraphTags();
           this.loadVideo();
+          this.checkUserRating();
         },
         error => {
           this.videoNotFound = true;
@@ -136,6 +138,40 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     });
   }
 
+  setLike() {
+    if (this.isUserLoggedIn() === false) return;
+    // Already liked this video
+    if (this.userRating === 'like') return;
+
+    this.videoService.setVideoLike(this.video.id)
+                     .subscribe(
+                      () => {
+                        // Update the video like attribute
+                        this.updateVideoRating(this.userRating, 'like');
+                        this.userRating = 'like';
+                      },
+
+                      err => this.notificationsService.error('Error', err.text)
+                     );
+  }
+
+  setDislike() {
+    if (this.isUserLoggedIn() === false) return;
+    // Already disliked this video
+    if (this.userRating === 'dislike') return;
+
+    this.videoService.setVideoDislike(this.video.id)
+                     .subscribe(
+                      () => {
+                        // Update the video dislike attribute
+                        this.updateVideoRating(this.userRating, 'dislike');
+                        this.userRating = 'dislike';
+                      },
+
+                      err => this.notificationsService.error('Error', err.text)
+                     );
+  }
+
   showReportModal(event: Event) {
     event.preventDefault();
     this.videoReportModal.show();
@@ -152,6 +188,38 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isUserLoggedIn() {
     return this.authService.isLoggedIn();
+  }
+
+  private checkUserRating() {
+    // Unlogged users do not have ratings
+    if (this.isUserLoggedIn() === false) return;
+
+    this.videoService.getUserVideoRating(this.video.id)
+                     .subscribe(
+                       ratingObject => {
+                         if (ratingObject) {
+                           this.userRating = ratingObject.rating;
+                         }
+                       },
+
+                       err => this.notificationsService.error('Error', err.text)
+                      );
+  }
+
+  private updateVideoRating(oldRating: RateType, newRating: RateType) {
+    let likesToIncrement = 0;
+    let dislikesToIncrement = 0;
+
+    if (oldRating) {
+      if (oldRating === 'like') likesToIncrement--;
+      if (oldRating === 'dislike') dislikesToIncrement--;
+    }
+
+    if (newRating === 'like') likesToIncrement++;
+    if (newRating === 'dislike') dislikesToIncrement++;
+
+    this.video.likes += likesToIncrement;
+    this.video.dislikes += dislikesToIncrement;
   }
 
   private loadTooLong() {

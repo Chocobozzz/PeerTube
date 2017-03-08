@@ -12,6 +12,8 @@ export class Video {
   tags: string[];
   thumbnailPath: string;
   views: number;
+  likes: number;
+  dislikes: number;
 
   private static createByString(author: string, podHost: string) {
     return author + '@' + podHost;
@@ -38,7 +40,9 @@ export class Video {
     podHost: string,
     tags: string[],
     thumbnailPath: string,
-    views: number
+    views: number,
+    likes: number,
+    dislikes: number,
   }) {
     this.author  = hash.author;
     this.createdAt = new Date(hash.createdAt);
@@ -52,6 +56,8 @@ export class Video {
     this.tags = hash.tags;
     this.thumbnailPath = hash.thumbnailPath;
     this.views = hash.views;
+    this.likes = hash.likes;
+    this.dislikes = hash.dislikes;
 
     this.by = Video.createByString(hash.author, hash.podHost);
   }

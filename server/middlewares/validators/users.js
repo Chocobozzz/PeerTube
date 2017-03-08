@@ -7,7 +7,8 @@ const logger = require('../../helpers/logger')
 const validatorsUsers = {
   usersAdd,
   usersRemove,
-  usersUpdate
+  usersUpdate,
+  usersVideoRating
 }
 
 function usersAdd (req, res, next) {
@@ -60,6 +61,25 @@ function usersUpdate (req, res, next) {
   logger.debug('Checking usersUpdate parameters', { parameters: req.body })
 
   checkErrors(req, res, next)
+}
+
+function usersVideoRating (req, res, next) {
+  req.checkParams('videoId', 'Should have a valid video id').notEmpty().isUUID(4)
+
+  logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
+
+  checkErrors(req, res, function () {
+    db.Video.load(req.params.videoId, function (err, video) {
+      if (err) {
+        logger.error('Error in user request validator.', { error: err })
+        return res.sendStatus(500)
+      }
+
+      if (!video) return res.status(404).send('Video not found')
+
+      next()
+    })
+  })
 }
 
 // ---------------------------------------------------------------------------

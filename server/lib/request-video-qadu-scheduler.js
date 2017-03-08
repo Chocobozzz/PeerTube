@@ -44,14 +44,17 @@ module.exports = class RequestVideoQaduScheduler extends BaseRequestScheduler {
           }
         }
 
-        const videoData = {}
+        // Maybe another attribute was filled for this video
+        let videoData = requestsToMakeGrouped[hashKey].videos[video.id]
+        if (!videoData) videoData = {}
+
         switch (request.type) {
           case constants.REQUEST_VIDEO_QADU_TYPES.LIKES:
             videoData.likes = video.likes
             break
 
           case constants.REQUEST_VIDEO_QADU_TYPES.DISLIKES:
-            videoData.likes = video.dislikes
+            videoData.dislikes = video.dislikes
             break
 
           case constants.REQUEST_VIDEO_QADU_TYPES.VIEWS:

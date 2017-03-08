@@ -5,6 +5,7 @@ const request = require('supertest')
 const usersUtils = {
   createUser,
   getUserInformation,
+  getUserVideoRating,
   getUsersList,
   getUsersListPaginationAndSort,
   removeUser,
@@ -37,6 +38,18 @@ function createUser (url, accessToken, username, password, specialStatus, end) {
 
 function getUserInformation (url, accessToken, end) {
   const path = '/api/v1/users/me'
+
+  request(url)
+    .get(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getUserVideoRating (url, accessToken, videoId, end) {
+  const path = '/api/v1/users/me/videos/' + videoId + '/rating'
 
   request(url)
     .get(path)

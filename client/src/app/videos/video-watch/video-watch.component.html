@@ -32,7 +32,7 @@
 
 <div *ngIf="video !== null" id="video-info">
   <div class="row" id="video-name-actions">
-    <div class="col-md-8">
+    <div class="col-md-6">
       <div class="row">
         <div id="video-name" class="col-md-12">
           {{ video.name }}
@@ -52,7 +52,23 @@
       </div>
     </div>
 
-    <div id="video-actions" class="col-md-4 text-right">
+    <div id="video-actions" class="col-md-6 text-right">
+      <div id="rates">
+        <button
+          id="likes" class="btn btn-default"
+          [ngClass]="{ 'not-interactive-btn': !isUserLoggedIn(), 'activated-btn': userRating === 'like' }" (click)="setLike()"
+        >
+          <span class="glyphicon glyphicon-thumbs-up"></span> {{ video.likes }}
+        </button>
+
+        <button
+          id="dislikes" class="btn btn-default"
+          [ngClass]="{ 'not-interactive-btn': !isUserLoggedIn(), 'activated-btn': userRating === 'dislike' }" (click)="setDislike()"
+        >
+          <span class=" glyphicon glyphicon-thumbs-down"></span> {{ video.dislikes }}
+        </button>
+      </div>
+
       <button id="share" class="btn btn-default" (click)="showShareModal()">
         <span class="glyphicon glyphicon-share"></span> Share
       </button>

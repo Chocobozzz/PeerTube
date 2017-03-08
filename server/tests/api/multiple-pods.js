@@ -4,6 +4,7 @@
 
 const chai = require('chai')
 const each = require('async/each')
+const eachSeries = require('async/eachSeries')
 const expect = chai.expect
 const parallel = require('async/parallel')
 const series = require('async/series')
@@ -378,7 +379,7 @@ describe('Test multiple pods', function () {
     })
   })
 
-  describe('Should update video views', function () {
+  describe('Should update video views, likes and dislikes', function () {
     let localVideosPod3 = []
     let remoteVideosPod1 = []
     let remoteVideosPod2 = []
@@ -419,7 +420,7 @@ describe('Test multiple pods', function () {
       ], done)
     })
 
-    it('Should views multiple videos on owned servers', function (done) {
+    it('Should view multiple videos on owned servers', function (done) {
       this.timeout(30000)
 
       parallel([
@@ -440,18 +441,18 @@ describe('Test multiple pods', function () {
         },
 
         function (callback) {
-          setTimeout(done, 22000)
+          setTimeout(callback, 22000)
         }
       ], function (err) {
         if (err) throw err
 
-        each(servers, function (server, callback) {
+        eachSeries(servers, function (server, callback) {
           videosUtils.getVideosList(server.url, function (err, res) {
             if (err) throw err
 
             const videos = res.body.data
-            expect(videos.find(video => video.views === 3)).to.be.exist
-            expect(videos.find(video => video.views === 1)).to.be.exist
+            expect(videos.find(video => video.views === 3)).to.exist
+            expect(videos.find(video => video.views === 1)).to.exist
 
             callback()
           })
@@ -459,7 +460,7 @@ describe('Test multiple pods', function () {
       })
     })
 
-    it('Should views multiple videos on each servers', function (done) {
+    it('Should view multiple videos on each servers', function (done) {
       this.timeout(30000)
 
       parallel([
@@ -504,17 +505,17 @@ describe('Test multiple pods', function () {
         },
 
         function (callback) {
-          setTimeout(done, 22000)
+          setTimeout(callback, 22000)
         }
       ], function (err) {
         if (err) throw err
 
         let baseVideos = null
-        each(servers, function (server, callback) {
+        eachSeries(servers, function (server, callback) {
           videosUtils.getVideosList(server.url, function (err, res) {
             if (err) throw err
 
-            const videos = res.body
+            const videos = res.body.data
 
             // Initialize base videos for future comparisons
             if (baseVideos === null) {
@@ -522,9 +523,73 @@ describe('Test multiple pods', function () {
               return callback()
             }
 
-            for (let i = 0; i < baseVideos.length; i++) {
-              expect(baseVideos[i].views).to.equal(videos[i].views)
+            baseVideos.forEach(baseVideo => {
+              const sameVideo = videos.find(video => video.name === baseVideo.name)
+              expect(baseVideo.views).to.equal(sameVideo.views)
+            })
+
+            callback()
+          })
+        }, done)
+      })
+    })
+
+    it('Should like and dislikes videos on different services', function (done) {
+      this.timeout(30000)
+
+      parallel([
+        function (callback) {
+          videosUtils.rateVideo(servers[0].url, servers[0].accessToken, remoteVideosPod1[0], 'like', callback)
+        },
+
+        function (callback) {
+          videosUtils.rateVideo(servers[0].url, servers[0].accessToken, remoteVideosPod1[0], 'dislike', callback)
+        },
+
+        function (callback) {
+          videosUtils.rateVideo(servers[0].url, servers[0].accessToken, remoteVideosPod1[0], 'like', callback)
+        },
+
+        function (callback) {
+          videosUtils.rateVideo(servers[2].url, servers[2].accessToken, localVideosPod3[1], 'like', callback)
+        },
+
+        function (callback) {
+          videosUtils.rateVideo(servers[2].url, servers[2].accessToken, localVideosPod3[1], 'dislike', callback)
+        },
+
+        function (callback) {
+          videosUtils.rateVideo(servers[2].url, servers[2].accessToken, remoteVideosPod3[1], 'dislike', callback)
+        },
+
+        function (callback) {
+          videosUtils.rateVideo(servers[2].url, servers[2].accessToken, remoteVideosPod3[0], 'like', callback)
+        },
+
+        function (callback) {
+          setTimeout(callback, 22000)
+        }
+      ], function (err) {
+        if (err) throw err
+
+        let baseVideos = null
+        eachSeries(servers, function (server, callback) {
+          videosUtils.getVideosList(server.url, function (err, res) {
+            if (err) throw err
+
+            const videos = res.body.data
+
+            // Initialize base videos for future comparisons
+            if (baseVideos === null) {
+              baseVideos = videos
+              return callback()
             }
+
+            baseVideos.forEach(baseVideo => {
+              const sameVideo = videos.find(video => video.name === baseVideo.name)
+              expect(baseVideo.likes).to.equal(sameVideo.likes)
+              expect(baseVideo.dislikes).to.equal(sameVideo.dislikes)
+            })
 
             callback()
           })

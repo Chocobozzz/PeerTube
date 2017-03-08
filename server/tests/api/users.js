@@ -10,6 +10,7 @@ const loginUtils = require('../utils/login')
 const podsUtils = require('../utils/pods')
 const serversUtils = require('../utils/servers')
 const usersUtils = require('../utils/users')
+const requestsUtils = require('../utils/requests')
 const videosUtils = require('../utils/videos')
 
 describe('Test users', function () {
@@ -138,6 +139,23 @@ describe('Test users', function () {
     videosUtils.uploadVideo(server.url, accessToken, name, description, tags, video, 204, done)
   })
 
+  it('Should retrieve a video rating', function (done) {
+    videosUtils.rateVideo(server.url, accessToken, videoId, 'like', function (err) {
+      if (err) throw err
+
+      usersUtils.getUserVideoRating(server.url, accessToken, videoId, function (err, res) {
+        if (err) throw err
+
+        const rating = res.body
+
+        expect(rating.videoId).to.equal(videoId)
+        expect(rating.rating).to.equal('like')
+
+        done()
+      })
+    })
+  })
+
   it('Should not be able to remove the video with an incorrect token', function (done) {
     videosUtils.removeVideo(server.url, 'bad_token', videoId, 401, done)
   })
@@ -150,9 +168,20 @@ describe('Test users', function () {
 
   it('Should logout (revoke token)')
 
+  it('Should not be able to get the user informations')
+
   it('Should not be able to upload a video')
 
   it('Should not be able to remove a video')
+
+  it('Should not be able to rate a video', function (done) {
+    const path = '/api/v1/videos/'
+    const data = {
+      rating: 'likes'
+    }
+
+    requestsUtils.makePutBodyRequest(server.url, path + videoId, 'wrong token', data, done, 401)
+  })
 
   it('Should be able to login again')
 

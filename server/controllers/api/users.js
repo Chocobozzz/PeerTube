@@ -18,7 +18,16 @@ const validatorsUsers = middlewares.validators.users
 
 const router = express.Router()
 
-router.get('/me', oAuth.authenticate, getUserInformation)
+router.get('/me',
+  oAuth.authenticate,
+  getUserInformation
+)
+
+router.get('/me/videos/:videoId/rating',
+  oAuth.authenticate,
+  validatorsUsers.usersVideoRating,
+  getUserVideoRating
+)
 
 router.get('/',
   validatorsPagination.pagination,
@@ -77,6 +86,22 @@ function getUserInformation (req, res, next) {
     if (err) return next(err)
 
     return res.json(user.toFormatedJSON())
+  })
+}
+
+function getUserVideoRating (req, res, next) {
+  const videoId = req.params.videoId
+  const userId = res.locals.oauth.token.User.id
+
+  db.UserVideoRate.load(userId, videoId, function (err, ratingObj) {
+    if (err) return next(err)
+
+    const rating = ratingObj ? ratingObj.type : 'none'
+
+    res.json({
+      videoId,
+      rating
+    })
   })
 }
 

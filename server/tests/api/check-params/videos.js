@@ -420,6 +420,48 @@ describe('Test videos API validator', function () {
     it('Should succeed with the correct parameters')
   })
 
+  describe('When rating a video', function () {
+    let videoId
+
+    before(function (done) {
+      videosUtils.getVideosList(server.url, function (err, res) {
+        if (err) throw err
+
+        videoId = res.body.data[0].id
+
+        return done()
+      })
+    })
+
+    it('Should fail without a valid uuid', function (done) {
+      const data = {
+        rating: 'like'
+      }
+      requestsUtils.makePutBodyRequest(server.url, path + 'blabla/rate', server.accessToken, data, done)
+    })
+
+    it('Should fail with an unknown id', function (done) {
+      const data = {
+        rating: 'like'
+      }
+      requestsUtils.makePutBodyRequest(server.url, path + '4da6fde3-88f7-4d16-b119-108df5630b06/rate', server.accessToken, data, done, 404)
+    })
+
+    it('Should fail with a wrong rating', function (done) {
+      const data = {
+        rating: 'likes'
+      }
+      requestsUtils.makePutBodyRequest(server.url, path + videoId + '/rate', server.accessToken, data, done)
+    })
+
+    it('Should succeed with the correct parameters', function (done) {
+      const data = {
+        rating: 'like'
+      }
+      requestsUtils.makePutBodyRequest(server.url, path + videoId + '/rate', server.accessToken, data, done, 204)
+    })
+  })
+
   describe('When removing a video', function () {
     it('Should have 404 with nothing', function (done) {
       request(server.url)

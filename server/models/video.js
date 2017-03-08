@@ -89,6 +89,24 @@ module.exports = function (sequelize, DataTypes) {
           min: 0,
           isInt: true
         }
+      },
+      likes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          min: 0,
+          isInt: true
+        }
+      },
+      dislikes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        validate: {
+          min: 0,
+          isInt: true
+        }
       }
     },
     {
@@ -113,6 +131,9 @@ module.exports = function (sequelize, DataTypes) {
         },
         {
           fields: [ 'views' ]
+        },
+        {
+          fields: [ 'likes' ]
         }
       ],
       classMethods: {
@@ -349,6 +370,8 @@ function toFormatedJSON () {
     author: this.Author.name,
     duration: this.duration,
     views: this.views,
+    likes: this.likes,
+    dislikes: this.dislikes,
     tags: map(this.Tags, 'name'),
     thumbnailPath: pathUtils.join(constants.STATIC_PATHS.THUMBNAILS, this.getThumbnailName()),
     createdAt: this.createdAt,
@@ -381,7 +404,9 @@ function toAddRemoteJSON (callback) {
       createdAt: self.createdAt,
       updatedAt: self.updatedAt,
       extname: self.extname,
-      views: self.views
+      views: self.views,
+      likes: self.likes,
+      dislikes: self.dislikes
     }
 
     return callback(null, remoteVideo)
@@ -400,7 +425,9 @@ function toUpdateRemoteJSON (callback) {
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     extname: this.extname,
-    views: this.views
+    views: this.views,
+    likes: this.likes,
+    dislikes: this.dislikes
   }
 
   return json

@@ -609,6 +609,40 @@ describe('Test a single pod', function () {
     })
   })
 
+  it('Should like a video', function (done) {
+    videosUtils.rateVideo(server.url, server.accessToken, videoId, 'like', function (err) {
+      if (err) throw err
+
+      videosUtils.getVideo(server.url, videoId, function (err, res) {
+        if (err) throw err
+
+        const video = res.body
+
+        expect(video.likes).to.equal(1)
+        expect(video.dislikes).to.equal(0)
+
+        done()
+      })
+    })
+  })
+
+  it('Should dislike the same video', function (done) {
+    videosUtils.rateVideo(server.url, server.accessToken, videoId, 'dislike', function (err) {
+      if (err) throw err
+
+      videosUtils.getVideo(server.url, videoId, function (err, res) {
+        if (err) throw err
+
+        const video = res.body
+
+        expect(video.likes).to.equal(0)
+        expect(video.dislikes).to.equal(1)
+
+        done()
+      })
+    })
+  })
+
   after(function (done) {
     process.kill(-server.app.pid)
 

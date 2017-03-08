@@ -5,7 +5,7 @@ const path = require('path')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 15
+const LAST_MIGRATION_VERSION = 25
 
 // ---------------------------------------------------------------------------
 
@@ -93,6 +93,11 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_EVENTS: {
     COUNT: { min: 0 }
   }
+}
+
+const VIDEO_RATE_TYPES = {
+  LIKE: 'like',
+  DISLIKE: 'dislike'
 }
 
 // ---------------------------------------------------------------------------
@@ -249,7 +254,8 @@ module.exports = {
   STATIC_MAX_AGE,
   STATIC_PATHS,
   THUMBNAILS_SIZE,
-  USER_ROLES
+  USER_ROLES,
+  VIDEO_RATE_TYPES
 }
 
 // ---------------------------------------------------------------------------

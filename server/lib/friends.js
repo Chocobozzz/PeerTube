@@ -3,6 +3,7 @@
 const each = require('async/each')
 const eachLimit = require('async/eachLimit')
 const eachSeries = require('async/eachSeries')
+const series = require('async/series')
 const request = require('request')
 const waterfall = require('async/waterfall')
 
@@ -28,7 +29,9 @@ const friends = {
   updateVideoToFriends,
   reportAbuseVideoToFriend,
   quickAndDirtyUpdateVideoToFriends,
+  quickAndDirtyUpdatesVideoToFriends,
   addEventToRemoteVideo,
+  addEventsToRemoteVideo,
   hasFriends,
   makeFriends,
   quitFriends,
@@ -84,22 +87,50 @@ function reportAbuseVideoToFriend (reportData, video) {
   createRequest(options)
 }
 
-function quickAndDirtyUpdateVideoToFriends (videoId, type, transaction, callback) {
+function quickAndDirtyUpdateVideoToFriends (qaduParams, transaction, callback) {
   const options = {
-    videoId,
-    type,
+    videoId: qaduParams.videoId,
+    type: qaduParams.type,
     transaction
   }
   return createVideoQaduRequest(options, callback)
 }
 
-function addEventToRemoteVideo (videoId, type, transaction, callback) {
+function quickAndDirtyUpdatesVideoToFriends (qadusParams, transaction, finalCallback) {
+  const tasks = []
+
+  qadusParams.forEach(function (qaduParams) {
+    const fun = function (callback) {
+      quickAndDirtyUpdateVideoToFriends(qaduParams, transaction, callback)
+    }
+
+    tasks.push(fun)
+  })
+
+  series(tasks, finalCallback)
+}
+
+function addEventToRemoteVideo (eventParams, transaction, callback) {
   const options = {
-    videoId,
-    type,
+    videoId: eventParams.videoId,
+    type: eventParams.type,
     transaction
   }
   createVideoEventRequest(options, callback)
+}
+
+function addEventsToRemoteVideo (eventsParams, transaction, finalCallback) {
+  const tasks = []
+
+  eventsParams.forEach(function (eventParams) {
+    const fun = function (callback) {
+      addEventToRemoteVideo(eventParams, transaction, callback)
+    }
+
+    tasks.push(fun)
+  })
+
+  series(tasks, finalCallback)
 }
 
 function hasFriends (callback) {

@@ -83,6 +83,9 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
     if (podIds.length === 0) return callback(null, [])
 
     const query = {
+      order: [
+        [ 'id', 'ASC' ]
+      ],
       include: [
         {
           model: self.sequelize.models.Video,

@@ -1,6 +1,7 @@
 'use strict'
 
 const validator = require('express-validator').validator
+const values = require('lodash/values')
 
 const constants = require('../../initializers/constants')
 const usersValidators = require('./users')
@@ -26,6 +27,7 @@ const videosValidators = {
   isVideoFile,
   isVideoViewsValid,
   isVideoLikesValid,
+  isVideoRatingTypeValid,
   isVideoDislikesValid,
   isVideoEventCountValid
 }
@@ -101,6 +103,10 @@ function isVideoDislikesValid (value) {
 
 function isVideoEventCountValid (value) {
   return validator.isInt(value + '', VIDEO_EVENTS_CONSTRAINTS_FIELDS.COUNT)
+}
+
+function isVideoRatingTypeValid (value) {
+  return values(constants.VIDEO_RATE_TYPES).indexOf(value) !== -1
 }
 
 function isVideoFile (value, files) {

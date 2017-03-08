@@ -6,8 +6,16 @@ import 'rxjs/add/operator/map';
 
 import { Search } from '../../shared';
 import { SortField } from './sort-field.type';
+import { RateType } from './rate-type.type';
 import { AuthService } from '../../core';
-import { AuthHttp, RestExtractor, RestPagination, RestService, ResultList } from '../../shared';
+import {
+  AuthHttp,
+  RestExtractor,
+  RestPagination,
+  RestService,
+  ResultList,
+  UserService
+} from '../../shared';
 import { Video } from './video.model';
 
 @Injectable()
@@ -56,14 +64,41 @@ export class VideoService {
   }
 
   reportVideo(id: string, reason: string) {
+    const url = VideoService.BASE_VIDEO_URL + id + '/abuse';
     const body = {
       reason
     };
-    const url = VideoService.BASE_VIDEO_URL + id + '/abuse';
 
     return this.authHttp.post(url, body)
-                    .map(this.restExtractor.extractDataBool)
-                    .catch((res) => this.restExtractor.handleError(res));
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
+  }
+
+  setVideoLike(id: string) {
+    return this.setVideoRate(id, 'like');
+  }
+
+  setVideoDislike(id: string) {
+    return this.setVideoRate(id, 'dislike');
+  }
+
+  getUserVideoRating(id: string) {
+    const url = UserService.BASE_USERS_URL + '/me/videos/' + id + '/rating';
+
+    return this.authHttp.get(url)
+                        .map(this.restExtractor.extractDataGet)
+                        .catch((res) => this.restExtractor.handleError(res));
+  }
+
+  private setVideoRate(id: string, rateType: RateType) {
+    const url = VideoService.BASE_VIDEO_URL + id + '/rate';
+    const body = {
+      rating: rateType
+    };
+
+    return this.authHttp.put(url, body)
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 
   private extractVideos(result: ResultList) {

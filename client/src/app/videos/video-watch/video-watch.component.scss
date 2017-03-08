@@ -47,6 +47,34 @@
       top: 2px;
     }
 
+    #rates {
+      display: inline-block;
+      margin-right: 20px;
+
+      // Remove focus style
+      .btn:focus {
+        outline: 0;
+      }
+
+      .activated-btn {
+        color: #333;
+        background-color: #e6e6e6;
+        border-color: #8c8c8c;
+      }
+
+      .not-interactive-btn {
+        cursor: default;
+
+        &:hover, &:focus, &:active {
+          color: #333;
+          background-color: #fff;
+          border-color: #ccc;
+          box-shadow: none;
+          outline: 0;
+        }
+      }
+    }
+
     #share, #more {
       font-weight: bold;
       opacity: 0.85;

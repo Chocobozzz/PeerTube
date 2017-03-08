@@ -13,7 +13,9 @@ const validatorsVideos = {
   videosRemove,
   videosSearch,
 
-  videoAbuseReport
+  videoAbuseReport,
+
+  videoRate
 }
 
 function videosAdd (req, res, next) {
@@ -113,6 +115,17 @@ function videoAbuseReport (req, res, next) {
   req.checkBody('reason', 'Should have a valid reason').isVideoAbuseReasonValid()
 
   logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
+
+  checkErrors(req, res, function () {
+    checkVideoExists(req.params.id, res, next)
+  })
+}
+
+function videoRate (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkBody('rating', 'Should have a valid rate type').isVideoRatingTypeValid()
+
+  logger.debug('Checking videoRate parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
     checkVideoExists(req.params.id, res, next)

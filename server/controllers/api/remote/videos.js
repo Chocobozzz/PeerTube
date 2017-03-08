@@ -11,6 +11,7 @@ const secureMiddleware = middlewares.secure
 const videosValidators = middlewares.validators.remote.videos
 const signatureValidators = middlewares.validators.remote.signature
 const logger = require('../../../helpers/logger')
+const friends = require('../../../lib/friends')
 const databaseUtils = require('../../../helpers/database-utils')
 
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
@@ -129,18 +130,22 @@ function processVideosEvents (eventData, fromPod, finalCallback) {
       const options = { transaction: t }
 
       let columnToUpdate
+      let qaduType
 
       switch (eventData.eventType) {
         case constants.REQUEST_VIDEO_EVENT_TYPES.VIEWS:
           columnToUpdate = 'views'
+          qaduType = constants.REQUEST_VIDEO_QADU_TYPES.VIEWS
           break
 
         case constants.REQUEST_VIDEO_EVENT_TYPES.LIKES:
           columnToUpdate = 'likes'
+          qaduType = constants.REQUEST_VIDEO_QADU_TYPES.LIKES
           break
 
         case constants.REQUEST_VIDEO_EVENT_TYPES.DISLIKES:
           columnToUpdate = 'dislikes'
+          qaduType = constants.REQUEST_VIDEO_QADU_TYPES.DISLIKES
           break
 
         default:
@@ -151,6 +156,19 @@ function processVideosEvents (eventData, fromPod, finalCallback) {
       query[columnToUpdate] = eventData.count
 
       videoInstance.increment(query, options).asCallback(function (err) {
+        return callback(err, t, videoInstance, qaduType)
+      })
+    },
+
+    function sendQaduToFriends (t, videoInstance, qaduType, callback) {
+      const qadusParams = [
+        {
+          videoId: videoInstance.id,
+          type: qaduType
+        }
+      ]
+
+      friends.quickAndDirtyUpdatesVideoToFriends(qadusParams, t, function (err) {
         return callback(err, t)
       })
     },
@@ -159,7 +177,6 @@ function processVideosEvents (eventData, fromPod, finalCallback) {
 
   ], function (err, t) {
     if (err) {
-      console.log(err)
       logger.debug('Cannot process a video event.', { error: err })
       return databaseUtils.rollbackTransaction(err, t, finalCallback)
     }
@@ -278,7 +295,10 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
         duration: videoToCreateData.duration,
         createdAt: videoToCreateData.createdAt,
         // FIXME: updatedAt does not seems to be considered by Sequelize
-        updatedAt: videoToCreateData.updatedAt
+        updatedAt: videoToCreateData.updatedAt,
+        views: videoToCreateData.views,
+        likes: videoToCreateData.likes,
+        dislikes: videoToCreateData.dislikes
       }
 
       const video = db.Video.build(videoData)
@@ -372,6 +392,9 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
       videoInstance.set('createdAt', videoAttributesToUpdate.createdAt)
       videoInstance.set('updatedAt', videoAttributesToUpdate.updatedAt)
       videoInstance.set('extname', videoAttributesToUpdate.extname)
+      videoInstance.set('views', videoAttributesToUpdate.views)
+      videoInstance.set('likes', videoAttributesToUpdate.likes)
+      videoInstance.set('dislikes', videoAttributesToUpdate.dislikes)
 
       videoInstance.save(options).asCallback(function (err) {
         return callback(err, t, videoInstance, tagInstances)

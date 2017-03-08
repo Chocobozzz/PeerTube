@@ -9,11 +9,13 @@ const loginUtils = require('../../utils/login')
 const requestsUtils = require('../../utils/requests')
 const serversUtils = require('../../utils/servers')
 const usersUtils = require('../../utils/users')
+const videosUtils = require('../../utils/videos')
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
   let userId = null
   let rootId = null
+  let videoId = null
   let server = null
   let userAccessToken = null
 
@@ -46,6 +48,23 @@ describe('Test users API validators', function () {
         const password = 'my super password'
 
         usersUtils.createUser(server.url, server.accessToken, username, password, next)
+      },
+      function (next) {
+        const name = 'my super name for pod'
+        const description = 'my super description for pod'
+        const tags = [ 'tag' ]
+        const file = 'video_short2.webm'
+        videosUtils.uploadVideo(server.url, server.accessToken, name, description, tags, file, next)
+      },
+      function (next) {
+        videosUtils.getVideosList(server.url, function (err, res) {
+          if (err) throw err
+
+          const videos = res.body.data
+          videoId = videos[0].id
+
+          next()
+        })
       },
       function (next) {
         const user = {
@@ -286,6 +305,63 @@ describe('Test users API validators', function () {
         .set('Authorization', 'Bearer ' + userAccessToken)
         .set('Accept', 'application/json')
         .expect(200, done)
+    })
+  })
+
+  describe('When getting my video rating', function () {
+    it('Should fail with a non authenticated user', function (done) {
+      request(server.url)
+        .get(path + 'me/videos/' + videoId + '/rating')
+        .set('Authorization', 'Bearer faketoken')
+        .set('Accept', 'application/json')
+        .expect(401, done)
+    })
+
+    it('Should fail with an incorrect video uuid', function (done) {
+      request(server.url)
+        .get(path + 'me/videos/blabla/rating')
+        .set('Authorization', 'Bearer ' + userAccessToken)
+        .set('Accept', 'application/json')
+        .expect(400, done)
+    })
+
+    it('Should fail with an unknown video', function (done) {
+      request(server.url)
+        .get(path + 'me/videos/4da6fde3-88f7-4d16-b119-108df5630b06/rating')
+        .set('Authorization', 'Bearer ' + userAccessToken)
+        .set('Accept', 'application/json')
+        .expect(404, done)
+    })
+
+    it('Should success with the correct parameters', function (done) {
+      request(server.url)
+        .get(path + 'me/videos/' + videoId + '/rating')
+        .set('Authorization', 'Bearer ' + userAccessToken)
+        .set('Accept', 'application/json')
+        .expect(200, done)
+    })
+  })
+
+  describe('When removing an user', function () {
+    it('Should fail with an incorrect id', function (done) {
+      request(server.url)
+        .delete(path + 'bla-bla')
+        .set('Authorization', 'Bearer ' + server.accessToken)
+        .expect(400, done)
+    })
+
+    it('Should fail with the root user', function (done) {
+      request(server.url)
+        .delete(path + rootId)
+        .set('Authorization', 'Bearer ' + server.accessToken)
+        .expect(400, done)
+    })
+
+    it('Should return 404 with a non existing id', function (done) {
+      request(server.url)
+        .delete(path + '45')
+        .set('Authorization', 'Bearer ' + server.accessToken)
+        .expect(404, done)
     })
   })
 
