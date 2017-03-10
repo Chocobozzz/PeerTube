@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as videojs from 'video.js';
-import { MetaService } from 'ng2-meta';
+import { MetaService } from '@nglibs/meta';
 import { NotificationsService } from 'angular2-notifications';
 
 import { AuthService } from '../../core';
@@ -228,6 +228,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setOpenGraphTags() {
+    this.metaService.setTitle(this.video.name);
+
     this.metaService.setTag('og:type', 'video');
 
     this.metaService.setTag('og:title', this.video.name);

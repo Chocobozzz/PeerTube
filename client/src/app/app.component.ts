@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MetaService } from 'ng2-meta';
-
 import { AuthService } from './core';
 import { UserService } from './shared';
 
@@ -27,7 +25,6 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private metaService: MetaService,
     private authService: AuthService,
     private userService: UserService,
     viewContainerRef: ViewContainerRef

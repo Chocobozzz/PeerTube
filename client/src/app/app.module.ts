@@ -2,7 +2,7 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { removeNgStyles, createNewHosts } from '@angularclass/hmr';
 
-import { MetaModule, MetaConfig } from 'ng2-meta';
+import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@nglibs/meta';
 import 'bootstrap-loader';
 
 import { ENV_PROVIDERS } from './environment';
@@ -16,14 +16,17 @@ import { LoginModule } from './login';
 import { SharedModule } from './shared';
 import { VideosModule } from './videos';
 
-const metaConfig: MetaConfig = {
-  //Append a title suffix such as a site name to all titles
-  //Defaults to false
-  useTitleSuffix: true,
-  defaults: {
-    title: 'PeerTube'
-  }
-};
+export function metaFactory(): MetaLoader {
+  return new MetaStaticLoader({
+    pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
+    pageTitleSeparator: ' - ',
+    applicationName: 'PeerTube',
+    defaults: {
+      title: 'PeerTube',
+      description: 'PeerTube, a decentralized video streaming platform using P2P (BitTorrent) directly in the web browser'
+    }
+  });
+}
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -43,7 +46,10 @@ const APP_PROVIDERS = [
 
     AppRoutingModule,
 
-    MetaModule.forRoot(metaConfig),
+    MetaModule.forRoot({
+      provide: MetaLoader,
+      useFactory: (metaFactory)
+    }),
 
     AccountModule,
     CoreModule,
