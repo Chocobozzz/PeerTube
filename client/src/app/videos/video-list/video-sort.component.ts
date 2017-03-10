@@ -12,7 +12,7 @@ export class VideoSortComponent {
 
   @Input() currentSort: SortField;
 
-  sortChoices: { [ id: SortField ]: string } = {
+  sortChoices: { [ P in SortField ]: string } = {
     'name': 'Name - Asc',
     '-name': 'Name - Desc',
     'duration': 'Duration - Asc',
