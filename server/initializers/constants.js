@@ -61,6 +61,9 @@ const CONFIG = {
   },
   ADMIN: {
     EMAIL: config.get('admin.email')
+  },
+  SIGNUP: {
+    ENABLED: config.get('signup.enabled')
   }
 }
 CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT

@@ -7,3 +7,6 @@ webserver:
 database:
   hostname: 'localhost'
   port: 5432
+
+signup:
+  enabled: true

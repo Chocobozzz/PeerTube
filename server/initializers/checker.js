@@ -29,7 +29,7 @@ function checkMissedConfig () {
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
     'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews',
-    'admin.email'
+    'admin.email', 'signup.enabled'
   ]
   const miss = []
 
