@@ -9,7 +9,7 @@ const loginRoutes: Routes = [
     component: LoginComponent,
     data: {
       meta: {
-        titleSuffix: ' - Login'
+        title: 'Login'
       }
     }
   }

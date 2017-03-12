@@ -16,7 +16,7 @@ const videosRoutes: Routes = [
         component: VideoListComponent,
         data: {
           meta: {
-            titleSuffix: ' - Videos list'
+            title: 'Videos list'
           }
         }
       },
@@ -25,7 +25,7 @@ const videosRoutes: Routes = [
         component: VideoAddComponent,
         data: {
           meta: {
-            titleSuffix: ' - Add a video'
+            title: 'Add a video'
           }
         }
       },

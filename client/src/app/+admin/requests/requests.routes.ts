@@ -18,7 +18,7 @@ export const RequestsRoutes: Routes = [
           component: RequestStatsComponent,
           data: {
             meta: {
-              titleSuffix: ' - Request stats'
+              title: 'Request stats'
             }
           }
         }

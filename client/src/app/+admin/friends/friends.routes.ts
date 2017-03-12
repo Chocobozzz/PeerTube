@@ -19,7 +19,7 @@ export const FriendsRoutes: Routes = [
           component: FriendListComponent,
           data: {
             meta: {
-              titleSuffix: ' - Friends list'
+              title: 'Friends list'
             }
           }
         },
@@ -28,7 +28,7 @@ export const FriendsRoutes: Routes = [
           component: FriendAddComponent,
           data: {
             meta: {
-              titleSuffix: ' - Add friends'
+              title: 'Add friends'
             }
           }
         }

@@ -9,7 +9,7 @@ const accountRoutes: Routes = [
     component: AccountComponent,
     data: {
       meta: {
-        titleSuffix: ' - My account'
+        title: 'My account'
       }
     }
   }

@@ -46,16 +46,16 @@ const APP_PROVIDERS = [
 
     AppRoutingModule,
 
-    MetaModule.forRoot({
-      provide: MetaLoader,
-      useFactory: (metaFactory)
-    }),
-
     AccountModule,
     CoreModule,
     LoginModule,
     SharedModule,
-    VideosModule
+    VideosModule,
+
+    MetaModule.forRoot({
+      provide: MetaLoader,
+      useFactory: (metaFactory)
+    })
   ],
   providers: [ // expose our Services and Providers into Angular's dependency injection
     ENV_PROVIDERS,

@@ -19,7 +19,7 @@ export const VideoAbusesRoutes: Routes = [
           component: VideoAbuseListComponent,
           data: {
             meta: {
-              titleSuffix: ' - Video abuses list'
+              title: 'Video abuses list'
             }
           }
         }
