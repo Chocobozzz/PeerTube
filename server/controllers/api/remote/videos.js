@@ -196,6 +196,8 @@ function quickAndDirtyUpdateVideoRetryWrapper (videoData, fromPod, finalCallback
 }
 
 function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
+  let videoName
+
   waterfall([
     databaseUtils.startSerializableTransaction,
 
@@ -207,6 +209,8 @@ function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
 
     function updateVideoIntoDB (t, videoInstance, callback) {
       const options = { transaction: t }
+
+      videoName = videoInstance.name
 
       if (videoData.views) {
         videoInstance.set('views', videoData.views)
@@ -233,7 +237,7 @@ function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
       return databaseUtils.rollbackTransaction(err, t, finalCallback)
     }
 
-    logger.info('Remote video %s quick and dirty updated', videoData.name)
+    logger.info('Remote video %s quick and dirty updated', videoName)
     return finalCallback(null)
   })
 }
