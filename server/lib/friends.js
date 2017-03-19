@@ -186,7 +186,7 @@ function quitFriends (callback) {
     function announceIQuitMyFriends (pods, callbackAsync) {
       const requestParams = {
         method: 'POST',
-        path: '/api/' + constants.API_VERSION + '/pods/remove',
+        path: '/api/' + constants.API_VERSION + '/remote/pods/remove',
         sign: true
       }
 
