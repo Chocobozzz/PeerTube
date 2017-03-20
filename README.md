@@ -104,7 +104,8 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [ ] User subscriptions (by tags, author...)
 - [X] Signaling a video to the admin origin pod
 - [X] Videos view count
-- [ ] Videos likes/dislikes
+- [X] Videos likes/dislikes
+- [ ] Videos comments?
 
 ## Installation
 
