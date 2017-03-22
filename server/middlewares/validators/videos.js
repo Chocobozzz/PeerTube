@@ -21,6 +21,7 @@ const validatorsVideos = {
 function videosAdd (req, res, next) {
   req.checkBody('videofile', 'Should have a valid file').isVideoFile(req.files)
   req.checkBody('name', 'Should have a valid name').isVideoNameValid()
+  req.checkBody('category', 'Should have a valid category').isVideoCategoryValid()
   req.checkBody('description', 'Should have a valid description').isVideoDescriptionValid()
   req.checkBody('tags', 'Should have correct tags').isVideoTagsValid()
 
@@ -47,6 +48,7 @@ function videosAdd (req, res, next) {
 function videosUpdate (req, res, next) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
   req.checkBody('name', 'Should have a valid name').optional().isVideoNameValid()
+  req.checkBody('category', 'Should have a valid category').optional().isVideoCategoryValid()
   req.checkBody('description', 'Should have a valid description').optional().isVideoDescriptionValid()
   req.checkBody('tags', 'Should have correct tags').optional().isVideoTagsValid()
 

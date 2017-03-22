@@ -15,6 +15,18 @@
   </div>
 
   <div class="form-group">
+    <label for="category">Category</label>
+    <select class="form-control" id="category" formControlName="category">
+      <option></option>
+      <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
+    </select>
+
+    <div *ngIf="formErrors.category" class="alert alert-danger">
+      {{ formErrors.category }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="tags">Tags</label> <span class="little-information">(press enter to add the tag)</span>
     <input
       type="text" class="form-control" id="currentTag"

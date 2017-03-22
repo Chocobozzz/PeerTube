@@ -87,9 +87,10 @@ describe('Test users', function () {
 
     const name = 'my super name'
     const description = 'my super description'
+    const category = 5
     const tags = [ 'tag1', 'tag2' ]
     const video = 'video_short.webm'
-    videosUtils.uploadVideo(server.url, accessToken, name, description, tags, video, 401, done)
+    videosUtils.uploadVideo(server.url, accessToken, name, category, description, tags, video, 401, done)
   })
 
   it('Should not be able to make friends', function (done) {
@@ -113,10 +114,11 @@ describe('Test users', function () {
 
   it('Should upload the video with the correct token', function (done) {
     const name = 'my super name'
+    const category = 5
     const description = 'my super description'
     const tags = [ 'tag1', 'tag2' ]
     const video = 'video_short.webm'
-    videosUtils.uploadVideo(server.url, accessToken, name, description, tags, video, 204, function (err, res) {
+    videosUtils.uploadVideo(server.url, accessToken, name, category, description, tags, video, 204, function (err, res) {
       if (err) throw err
 
       videosUtils.getVideosList(server.url, function (err, res) {
@@ -133,10 +135,11 @@ describe('Test users', function () {
 
   it('Should upload the video again with the correct token', function (done) {
     const name = 'my super name 2'
+    const category = 5
     const description = 'my super description 2'
     const tags = [ 'tag1' ]
     const video = 'video_short.webm'
-    videosUtils.uploadVideo(server.url, accessToken, name, description, tags, video, 204, done)
+    videosUtils.uploadVideo(server.url, accessToken, name, category, description, tags, video, 204, done)
   })
 
   it('Should retrieve a video rating', function (done) {
@@ -228,10 +231,11 @@ describe('Test users', function () {
     this.timeout(5000)
 
     const name = 'my super name'
+    const category = 5
     const description = 'my super description'
     const tags = [ 'tag1', 'tag2', 'tag3' ]
     const file = 'video_short.webm'
-    videosUtils.uploadVideo(server.url, accessTokenUser, name, description, tags, file, done)
+    videosUtils.uploadVideo(server.url, accessTokenUser, name, category, description, tags, file, done)
   })
 
   it('Should list all the users', function (done) {

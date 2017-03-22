@@ -5,7 +5,7 @@ const path = require('path')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 25
+const LAST_MIGRATION_VERSION = 30
 
 // ---------------------------------------------------------------------------
 
@@ -101,6 +101,27 @@ const CONSTRAINTS_FIELDS = {
 const VIDEO_RATE_TYPES = {
   LIKE: 'like',
   DISLIKE: 'dislike'
+}
+
+const VIDEO_CATEGORIES = {
+  1: 'Music',
+  2: 'Films',
+  3: 'Vehicles',
+  4: 'Art',
+  5: 'Sports',
+  6: 'Travels',
+  7: 'Gaming',
+  8: 'People',
+  9: 'Comedy',
+  10: 'Entertainment',
+  11: 'News',
+  12: 'Howto',
+  13: 'Education',
+  14: 'Activism',
+  15: 'Science & Technology',
+  16: 'Animals',
+  17: 'Kids',
+  18: 'Food'
 }
 
 // ---------------------------------------------------------------------------
@@ -258,6 +279,7 @@ module.exports = {
   STATIC_PATHS,
   THUMBNAILS_SIZE,
   USER_ROLES,
+  VIDEO_CATEGORIES,
   VIDEO_RATE_TYPES
 }
 

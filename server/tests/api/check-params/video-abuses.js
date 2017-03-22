@@ -62,10 +62,11 @@ describe('Test video abuses API validators', function () {
       // Upload some videos on each pods
       function (next) {
         const name = 'my super name for pod'
+        const category = 2
         const description = 'my super description for pod'
         const tags = [ 'tag' ]
         const file = 'video_short2.webm'
-        videosUtils.uploadVideo(server.url, server.accessToken, name, description, tags, file, next)
+        videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, file, next)
       },
       function (next) {
         videosUtils.getVideosList(server.url, function (err, res) {

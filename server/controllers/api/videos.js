@@ -45,6 +45,8 @@ const storage = multer.diskStorage({
 
 const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
 
+router.get('/categories', listVideoCategories)
+
 router.get('/abuse',
   oAuth.authenticate,
   admin.ensureIsAdmin,
@@ -109,6 +111,10 @@ router.get('/search/:value',
 module.exports = router
 
 // ---------------------------------------------------------------------------
+
+function listVideoCategories (req, res, next) {
+  res.json(constants.VIDEO_CATEGORIES)
+}
 
 function rateVideoRetryWrapper (req, res, next) {
   const options = {
@@ -300,6 +306,7 @@ function addVideo (req, res, videoFile, finalCallback) {
         name: videoInfos.name,
         remoteId: null,
         extname: path.extname(videoFile.filename),
+        category: videoInfos.category,
         description: videoInfos.description,
         duration: videoFile.duration,
         authorId: author.id
@@ -413,6 +420,7 @@ function updateVideo (req, res, finalCallback) {
       }
 
       if (videoInfosToUpdate.name) videoInstance.set('name', videoInfosToUpdate.name)
+      if (videoInfosToUpdate.category) videoInstance.set('category', videoInfosToUpdate.category)
       if (videoInfosToUpdate.description) videoInstance.set('description', videoInfosToUpdate.description)
 
       videoInstance.save(options).asCallback(function (err) {

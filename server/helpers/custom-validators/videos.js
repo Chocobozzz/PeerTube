@@ -13,6 +13,7 @@ const VIDEO_EVENTS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.VIDEO_EVENT
 const videosValidators = {
   isVideoAuthorValid,
   isVideoDateValid,
+  isVideoCategoryValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoInfoHashValid,
@@ -38,6 +39,10 @@ function isVideoAuthorValid (value) {
 
 function isVideoDateValid (value) {
   return validator.isDate(value)
+}
+
+function isVideoCategoryValid (value) {
+  return constants.VIDEO_CATEGORIES[value] !== undefined
 }
 
 function isVideoDescriptionValid (value) {

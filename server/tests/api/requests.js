@@ -18,11 +18,12 @@ describe('Test requests stats', function () {
 
   function uploadVideo (server, callback) {
     const name = 'my super video'
+    const category = 5
     const description = 'my super description'
     const tags = [ 'tag1', 'tag2' ]
     const fixture = 'video_short.webm'
 
-    videosUtils.uploadVideo(server.url, server.accessToken, name, description, tags, fixture, callback)
+    videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, fixture, callback)
   }
 
   function getRequestsStats (server, callback) {

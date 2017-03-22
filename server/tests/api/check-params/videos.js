@@ -112,6 +112,7 @@ describe('Test videos API validator', function () {
 
     it('Should fail without name', function (done) {
       const data = {
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -124,6 +125,32 @@ describe('Test videos API validator', function () {
     it('Should fail with a long name', function (done) {
       const data = {
         name: 'My very very very very very very very very very very very very very very very very long name',
+        category: 5,
+        description: 'my super description',
+        tags: [ 'tag1', 'tag2' ]
+      }
+      const attach = {
+        'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
+      }
+      requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
+    })
+
+    it('Should fail without a category', function (done) {
+      const data = {
+        name: 'my super name',
+        description: 'my super description',
+        tags: [ 'tag1', 'tag2' ]
+      }
+      const attach = {
+        'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
+      }
+      requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
+    })
+
+    it('Should fail with a bad category', function (done) {
+      const data = {
+        name: 'my super name',
+        category: 125,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -136,6 +163,7 @@ describe('Test videos API validator', function () {
     it('Should fail without description', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         tags: [ 'tag1', 'tag2' ]
       }
       const attach = {
@@ -147,6 +175,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a long description', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description which is very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very long',
@@ -161,6 +190,7 @@ describe('Test videos API validator', function () {
     it('Should fail without tags', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description'
       }
       const attach = {
@@ -172,6 +202,7 @@ describe('Test videos API validator', function () {
     it('Should fail with too many tags', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
       }
@@ -184,6 +215,7 @@ describe('Test videos API validator', function () {
     it('Should fail with not enough tags', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ ]
       }
@@ -196,6 +228,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a tag length too low', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 't' ]
       }
@@ -208,6 +241,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a tag length too big', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'mysupertagtoolong', 'tag1' ]
       }
@@ -220,6 +254,7 @@ describe('Test videos API validator', function () {
     it('Should fail with malformed tags', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'my tag' ]
       }
@@ -232,6 +267,7 @@ describe('Test videos API validator', function () {
     it('Should fail without an input file', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -242,6 +278,7 @@ describe('Test videos API validator', function () {
     it('Should fail without an incorrect input file', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -254,6 +291,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a too big duration', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -266,6 +304,7 @@ describe('Test videos API validator', function () {
     it('Should succeed with the correct parameters', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -302,6 +341,7 @@ describe('Test videos API validator', function () {
 
     it('Should fail without a valid uuid', function (done) {
       const data = {
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -310,6 +350,7 @@ describe('Test videos API validator', function () {
 
     it('Should fail with an unknown id', function (done) {
       const data = {
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -319,6 +360,17 @@ describe('Test videos API validator', function () {
     it('Should fail with a long name', function (done) {
       const data = {
         name: 'My very very very very very very very very very very very very very very very very long name',
+        category: 5,
+        description: 'my super description',
+        tags: [ 'tag1', 'tag2' ]
+      }
+      requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+    })
+
+    it('Should fail with a bad category', function (done) {
+      const data = {
+        name: 'my super name',
+        category: 128,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -328,6 +380,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a long description', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description which is very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very long',
@@ -339,6 +392,7 @@ describe('Test videos API validator', function () {
     it('Should fail with too many tags', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
       }
@@ -348,6 +402,7 @@ describe('Test videos API validator', function () {
     it('Should fail with not enough tags', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ ]
       }
@@ -357,6 +412,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a tag length too low', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'tag1', 't' ]
       }
@@ -366,6 +422,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a tag length too big', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'mysupertagtoolong', 'tag1' ]
       }
@@ -375,6 +432,7 @@ describe('Test videos API validator', function () {
     it('Should fail with malformed tags', function (done) {
       const data = {
         name: 'my super name',
+        category: 5,
         description: 'my super description',
         tags: [ 'my tag' ]
       }

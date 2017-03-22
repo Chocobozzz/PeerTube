@@ -201,13 +201,14 @@ function upload (servers, numServer, callback) {
   if (!callback) callback = function () {}
 
   const name = Date.now() + ' name'
+  const category = 4
   const description = Date.now() + ' description'
   const tags = [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
   const file = 'video_short1.webm'
 
   console.log('Uploading video to server ' + numServer)
 
-  videosUtils.uploadVideo(servers[numServer].url, servers[numServer].accessToken, name, description, tags, file, callback)
+  videosUtils.uploadVideo(servers[numServer].url, servers[numServer].accessToken, name, category, description, tags, file, callback)
 }
 
 function update (servers, numServer, callback) {

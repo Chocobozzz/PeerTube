@@ -51,6 +51,16 @@ module.exports = function (sequelize, DataTypes) {
           isUUID: 4
         }
       },
+      category: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          categoryValid: function (value) {
+            const res = customVideosValidators.isVideoCategoryValid(value)
+            if (res === false) throw new Error('Video category is not valid.')
+          }
+        }
+      },
       description: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -360,9 +370,15 @@ function toFormatedJSON () {
     podHost = constants.CONFIG.WEBSERVER.HOST
   }
 
+  // Maybe our pod is not up to date and there are new categories since our version
+  let categoryLabel = constants.VIDEO_CATEGORIES[this.category]
+  if (!categoryLabel) categoryLabel = 'Misc'
+
   const json = {
     id: this.id,
     name: this.name,
+    category: this.category,
+    categoryLabel,
     description: this.description,
     podHost,
     isLocal: this.isOwned(),
@@ -394,6 +410,7 @@ function toAddRemoteJSON (callback) {
 
     const remoteVideo = {
       name: self.name,
+      category: self.category,
       description: self.description,
       infoHash: self.infoHash,
       remoteId: self.id,
@@ -416,6 +433,7 @@ function toAddRemoteJSON (callback) {
 function toUpdateRemoteJSON (callback) {
   const json = {
     name: this.name,
+    category: this.category,
     description: this.description,
     infoHash: this.infoHash,
     remoteId: this.id,

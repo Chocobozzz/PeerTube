@@ -5,6 +5,7 @@ const pathUtils = require('path')
 const request = require('supertest')
 
 const videosUtils = {
+  getVideoCategories,
   getAllVideosListBy,
   getVideo,
   getVideosList,
@@ -21,6 +22,17 @@ const videosUtils = {
 }
 
 // ---------------------- Export functions --------------------
+
+function getVideoCategories (url, end) {
+  const path = '/api/v1/videos/categories'
+
+  request(url)
+    .get(path)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
 
 function getAllVideosListBy (url, end) {
   const path = '/api/v1/videos'
@@ -181,7 +193,7 @@ function testVideoImage (url, videoName, imagePath, callback) {
   }
 }
 
-function uploadVideo (url, accessToken, name, description, tags, fixture, specialStatus, end) {
+function uploadVideo (url, accessToken, name, category, description, tags, fixture, specialStatus, end) {
   if (!end) {
     end = specialStatus
     specialStatus = 204
@@ -194,6 +206,7 @@ function uploadVideo (url, accessToken, name, description, tags, fixture, specia
               .set('Accept', 'application/json')
               .set('Authorization', 'Bearer ' + accessToken)
               .field('name', name)
+              .field('category', category)
               .field('description', description)
 
   for (let i = 0; i < tags.length; i++) {
@@ -212,7 +225,7 @@ function uploadVideo (url, accessToken, name, description, tags, fixture, specia
      .end(end)
 }
 
-function updateVideo (url, accessToken, id, name, description, tags, specialStatus, end) {
+function updateVideo (url, accessToken, id, name, category, description, tags, specialStatus, end) {
   if (!end) {
     end = specialStatus
     specialStatus = 204
@@ -226,6 +239,7 @@ function updateVideo (url, accessToken, id, name, description, tags, specialStat
               .set('Authorization', 'Bearer ' + accessToken)
 
   if (name) req.field('name', name)
+  if (category) req.field('category', category)
   if (description) req.field('description', description)
 
   if (tags) {

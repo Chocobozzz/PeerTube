@@ -2,6 +2,7 @@ import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService } from './core';
+import { VideoService } from './videos';
 import { UserService } from './shared';
 
 @Component({
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private userService: UserService,
+    private videoService: VideoService,
     viewContainerRef: ViewContainerRef
   ) {}
 
@@ -35,6 +37,8 @@ export class AppComponent implements OnInit {
       // The service will automatically redirect to the login page if the token is not valid anymore
       this.userService.checkTokenValidity();
     }
+
+    this.videoService.loadVideoCategories();
   }
 
   isInAdmin() {

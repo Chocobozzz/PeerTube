@@ -6,7 +6,14 @@ import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { NotificationsService } from 'angular2-notifications';
 
 import { AuthService } from '../../core';
-import { FormReactive, VIDEO_NAME, VIDEO_DESCRIPTION, VIDEO_TAGS } from '../../shared';
+import {
+  FormReactive,
+  VIDEO_NAME,
+  VIDEO_CATEGORY,
+  VIDEO_DESCRIPTION,
+  VIDEO_TAGS
+} from '../../shared';
+import { VideoService } from '../shared';
 
 @Component({
   selector: 'my-videos-add',
@@ -17,16 +24,19 @@ import { FormReactive, VIDEO_NAME, VIDEO_DESCRIPTION, VIDEO_TAGS } from '../../s
 export class VideoAddComponent extends FormReactive implements OnInit {
   tags: string[] = [];
   uploader: FileUploader;
+  videoCategories = [];
 
   error: string = null;
   form: FormGroup;
   formErrors = {
     name: '',
+    category: '',
     description: '',
     currentTag: ''
   };
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
+    category: VIDEO_CATEGORY.MESSAGES,
     description: VIDEO_DESCRIPTION.MESSAGES,
     currentTag: VIDEO_TAGS.MESSAGES
   };
@@ -40,7 +50,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     private elementRef: ElementRef,
     private formBuilder: FormBuilder,
     private router: Router,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private videoService: VideoService
   ) {
     super();
   }
@@ -56,6 +67,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   buildForm() {
     this.form = this.formBuilder.group({
       name: [ '', VIDEO_NAME.VALIDATORS ],
+      category: [ '', VIDEO_CATEGORY.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
       currentTag: [ '', VIDEO_TAGS.VALIDATORS ]
     });
@@ -64,6 +76,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit() {
+    this.videoCategories = this.videoService.videoCategories;
+
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
       queueLimit: 1,
@@ -73,9 +87,11 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
     this.uploader.onBuildItemForm = (item, form) => {
       const name = this.form.value['name'];
+      const category = this.form.value['category'];
       const description = this.form.value['description'];
 
       form.append('name', name);
+      form.append('category', category);
       form.append('description', description);
 
       for (let i = 0; i < this.tags.length; i++) {

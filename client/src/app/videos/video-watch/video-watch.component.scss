@@ -111,8 +111,16 @@
     }
   }
 
+  #video-category {
+    margin-top: 10px;
+
+    #category-label {
+      font-weight: bold;
+    }
+  }
+
   #video-description {
-    margin-top: 15px;
+    margin-top: 10px;
 
     #description-label {
       font-weight: bold;

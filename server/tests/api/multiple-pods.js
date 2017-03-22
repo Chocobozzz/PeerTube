@@ -81,10 +81,11 @@ describe('Test multiple pods', function () {
       series([
         function (next) {
           const name = 'my super name for pod 1'
+          const category = 5
           const description = 'my super description for pod 1'
           const tags = [ 'tag1p1', 'tag2p1' ]
           const file = 'video_short1.webm'
-          videosUtils.uploadVideo(servers[0].url, servers[0].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[0].url, servers[0].accessToken, name, category, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -104,6 +105,8 @@ describe('Test multiple pods', function () {
               expect(videos.length).to.equal(1)
               const video = videos[0]
               expect(video.name).to.equal('my super name for pod 1')
+              expect(video.category).to.equal(5)
+              expect(video.categoryLabel).to.equal('Sports')
               expect(video.description).to.equal('my super description for pod 1')
               expect(video.podHost).to.equal('localhost:9001')
               expect(video.magnetUri).to.exist
@@ -144,10 +147,11 @@ describe('Test multiple pods', function () {
       series([
         function (next) {
           const name = 'my super name for pod 2'
+          const category = 4
           const description = 'my super description for pod 2'
           const tags = [ 'tag1p2', 'tag2p2', 'tag3p2' ]
           const file = 'video_short2.webm'
-          videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, name, category, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -167,6 +171,8 @@ describe('Test multiple pods', function () {
               expect(videos.length).to.equal(2)
               const video = videos[1]
               expect(video.name).to.equal('my super name for pod 2')
+              expect(video.category).to.equal(4)
+              expect(video.categoryLabel).to.equal('Art')
               expect(video.description).to.equal('my super description for pod 2')
               expect(video.podHost).to.equal('localhost:9002')
               expect(video.magnetUri).to.exist
@@ -207,17 +213,19 @@ describe('Test multiple pods', function () {
       series([
         function (next) {
           const name = 'my super name for pod 3'
+          const category = 6
           const description = 'my super description for pod 3'
           const tags = [ 'tag1p3' ]
           const file = 'video_short3.webm'
-          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, category, description, tags, file, next)
         },
         function (next) {
           const name = 'my super name for pod 3-2'
+          const category = 7
           const description = 'my super description for pod 3-2'
           const tags = [ 'tag2p3', 'tag3p3', 'tag4p3' ]
           const file = 'video_short.webm'
-          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, description, tags, file, next)
+          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, category, description, tags, file, next)
         },
         function (next) {
           setTimeout(next, 22000)
@@ -247,6 +255,8 @@ describe('Test multiple pods', function () {
               }
 
               expect(video1.name).to.equal('my super name for pod 3')
+              expect(video1.category).to.equal(6)
+              expect(video1.categoryLabel).to.equal('Travels')
               expect(video1.description).to.equal('my super description for pod 3')
               expect(video1.podHost).to.equal('localhost:9003')
               expect(video1.magnetUri).to.exist
@@ -257,6 +267,8 @@ describe('Test multiple pods', function () {
               expect(miscsUtils.dateIsValid(video1.updatedAt)).to.be.true
 
               expect(video2.name).to.equal('my super name for pod 3-2')
+              expect(video2.category).to.equal(7)
+              expect(video2.categoryLabel).to.equal('Gaming')
               expect(video2.description).to.equal('my super description for pod 3-2')
               expect(video2.podHost).to.equal('localhost:9003')
               expect(video2.magnetUri).to.exist
@@ -603,10 +615,11 @@ describe('Test multiple pods', function () {
       this.timeout(15000)
 
       const name = 'my super video updated'
+      const category = 10
       const description = 'my super description updated'
       const tags = [ 'tagup1', 'tagup2' ]
 
-      videosUtils.updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, name, description, tags, function (err) {
+      videosUtils.updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, name, category, description, tags, function (err) {
         if (err) throw err
 
         setTimeout(done, 11000)
@@ -629,6 +642,8 @@ describe('Test multiple pods', function () {
           })
 
           expect(!!videoUpdated).to.be.true
+          expect(videoUpdated.category).to.equal(10)
+          expect(videoUpdated.categoryLabel).to.equal('Entertainment')
           expect(videoUpdated.description).to.equal('my super description updated')
           expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
           expect(miscsUtils.dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true

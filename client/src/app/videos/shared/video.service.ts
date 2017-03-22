@@ -22,6 +22,8 @@ import { Video } from './video.model';
 export class VideoService {
   private static BASE_VIDEO_URL = '/api/v1/videos/';
 
+  videoCategories: Array<{ id: number, label: string }> = [];
+
   constructor(
     private authService: AuthService,
     private authHttp: AuthHttp,
@@ -29,6 +31,19 @@ export class VideoService {
     private restExtractor: RestExtractor,
     private restService: RestService
   ) {}
+
+  loadVideoCategories() {
+    return this.http.get(VideoService.BASE_VIDEO_URL + 'categories')
+                    .map(this.restExtractor.extractDataGet)
+                    .subscribe(data => {
+                      Object.keys(data).forEach(categoryKey => {
+                        this.videoCategories.push({
+                          id: parseInt(categoryKey),
+                          label: data[categoryKey]
+                        });
+                      });
+                    });
+  }
 
   getVideo(id: string): Observable<Video> {
     return this.http.get(VideoService.BASE_VIDEO_URL + id)

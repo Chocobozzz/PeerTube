@@ -85,6 +85,7 @@ module.exports = remoteVideosValidators
 function isCommonVideoAttributesValid (video) {
   return videosValidators.isVideoDateValid(video.createdAt) &&
          videosValidators.isVideoDateValid(video.updatedAt) &&
+         videosValidators.isVideoCategoryValid(video.category) &&
          videosValidators.isVideoDescriptionValid(video.description) &&
          videosValidators.isVideoDurationValid(video.duration) &&
          videosValidators.isVideoInfoHashValid(video.infoHash) &&

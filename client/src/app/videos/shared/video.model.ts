@@ -2,6 +2,7 @@ export class Video {
   author: string;
   by: string;
   createdAt: Date;
+  categoryLabel: string;
   description: string;
   duration: string;
   id: string;
@@ -31,6 +32,7 @@ export class Video {
   constructor(hash: {
     author: string,
     createdAt: string,
+    categoryLabel: string,
     description: string,
     duration: number;
     id: string,
@@ -46,6 +48,7 @@ export class Video {
   }) {
     this.author  = hash.author;
     this.createdAt = new Date(hash.createdAt);
+    this.categoryLabel = hash.categoryLabel;
     this.description = hash.description;
     this.duration = Video.createDurationString(hash.duration);
     this.id = hash.id;

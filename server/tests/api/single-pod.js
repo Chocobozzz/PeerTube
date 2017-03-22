@@ -44,6 +44,19 @@ describe('Test a single pod', function () {
     ], done)
   })
 
+  it('Should list video categories', function (done) {
+    videosUtils.getVideoCategories(server.url, function (err, res) {
+      if (err) throw err
+
+      const categories = res.body
+      expect(Object.keys(categories)).to.have.length.above(10)
+
+      expect(categories[11]).to.equal('News')
+
+      done()
+    })
+  })
+
   it('Should not have videos', function (done) {
     videosUtils.getVideosList(server.url, function (err, res) {
       if (err) throw err
@@ -60,9 +73,10 @@ describe('Test a single pod', function () {
     this.timeout(5000)
     const name = 'my super name'
     const description = 'my super description'
+    const category = 2
     const tags = [ 'tag1', 'tag2', 'tag3' ]
     const file = 'video_short.webm'
-    videosUtils.uploadVideo(server.url, server.accessToken, name, description, tags, file, done)
+    videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, file, done)
   })
 
   it('Should seed the uploaded video', function (done) {
@@ -78,6 +92,8 @@ describe('Test a single pod', function () {
 
       const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
+      expect(video.category).to.equal(2)
+      expect(video.categoryLabel).to.equal('Films')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
@@ -113,6 +129,8 @@ describe('Test a single pod', function () {
 
       const video = res.body
       expect(video.name).to.equal('my super name')
+      expect(video.category).to.equal(2)
+      expect(video.categoryLabel).to.equal('Films')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
@@ -152,6 +170,8 @@ describe('Test a single pod', function () {
 
       const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
+      expect(video.category).to.equal(2)
+      expect(video.categoryLabel).to.equal('Films')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -207,6 +227,8 @@ describe('Test a single pod', function () {
 
       const video = res.body.data[0]
       expect(video.name).to.equal('my super name')
+      expect(video.category).to.equal(2)
+      expect(video.categoryLabel).to.equal('Films')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -301,9 +323,10 @@ describe('Test a single pod', function () {
     each(videos, function (video, callbackEach) {
       const name = video + ' name'
       const description = video + ' description'
+      const category = 2
       const tags = [ 'tag1', 'tag2', 'tag3' ]
 
-      videosUtils.uploadVideo(server.url, server.accessToken, name, description, tags, video, callbackEach)
+      videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, video, callbackEach)
     }, done)
   })
 
@@ -468,7 +491,7 @@ describe('Test a single pod', function () {
   //   })
   // })
 
-  it('Should search the good magnetUri video', function (done) {
+  it('Should search the right magnetUri video', function (done) {
     const video = videosListBase[0]
     videosUtils.searchVideoWithPagination(server.url, encodeURIComponent(video.magnetUri), 'magnetUri', 0, 15, function (err, res) {
       if (err) throw err
@@ -521,10 +544,11 @@ describe('Test a single pod', function () {
 
   it('Should update a video', function (done) {
     const name = 'my super video updated'
+    const category = 4
     const description = 'my super description updated'
     const tags = [ 'tagup1', 'tagup2' ]
 
-    videosUtils.updateVideo(server.url, server.accessToken, videoId, name, description, tags, done)
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, name, category, description, tags, done)
   })
 
   it('Should have the video updated', function (done) {
@@ -536,6 +560,8 @@ describe('Test a single pod', function () {
       const video = res.body
 
       expect(video.name).to.equal('my super video updated')
+      expect(video.category).to.equal(4)
+      expect(video.categoryLabel).to.equal('Art')
       expect(video.description).to.equal('my super description updated')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -562,7 +588,7 @@ describe('Test a single pod', function () {
   it('Should update only the tags of a video', function (done) {
     const tags = [ 'tag1', 'tag2', 'supertag' ]
 
-    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, null, tags, function (err) {
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, null, null, tags, function (err) {
       if (err) throw err
 
       videosUtils.getVideo(server.url, videoId, function (err, res) {
@@ -571,6 +597,8 @@ describe('Test a single pod', function () {
         const video = res.body
 
         expect(video.name).to.equal('my super video updated')
+        expect(video.category).to.equal(4)
+        expect(video.categoryLabel).to.equal('Art')
         expect(video.description).to.equal('my super description updated')
         expect(video.podHost).to.equal('localhost:9001')
         expect(video.author).to.equal('root')
@@ -587,7 +615,7 @@ describe('Test a single pod', function () {
   it('Should update only the description of a video', function (done) {
     const description = 'hello everybody'
 
-    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, description, null, function (err) {
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, null, description, null, function (err) {
       if (err) throw err
 
       videosUtils.getVideo(server.url, videoId, function (err, res) {
@@ -596,6 +624,8 @@ describe('Test a single pod', function () {
         const video = res.body
 
         expect(video.name).to.equal('my super video updated')
+        expect(video.category).to.equal(4)
+        expect(video.categoryLabel).to.equal('Art')
         expect(video.description).to.equal('hello everybody')
         expect(video.podHost).to.equal('localhost:9001')
         expect(video.author).to.equal('root')
