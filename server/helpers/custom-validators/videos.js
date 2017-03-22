@@ -69,8 +69,7 @@ function isVideoTagsValid (tags) {
   return miscValidators.isArray(tags) &&
          validator.isInt(tags.length, VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
          tags.every(function (tag) {
-           return validator.isAlphanumeric(tag) &&
-                  validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
+           return validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
          })
 }
 

@@ -105,10 +105,6 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   checkForm() {
     this.forceCheck();
 
-    if (this.tags.length === 0) {
-      this.tagsError = 'You have 0 tags';
-    }
-
     if (this.filename === null) {
       this.fileError = 'You did not add a file.';
     }
@@ -121,25 +117,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   onTagKeyPress(event: KeyboardEvent) {
-    const currentTag = this.form.value['currentTag'];
-
     // Enter press
     if (event.keyCode === 13) {
-      // Check if the tag is valid and does not already exist
-      if (
-        currentTag.length >= 2 &&
-        this.form.controls['currentTag'].valid &&
-        this.tags.indexOf(currentTag) === -1
-      ) {
-        this.tags.push(currentTag);
-        this.form.patchValue({ currentTag: '' });
-
-        if (this.tags.length >= 3) {
-          this.form.get('currentTag').disable();
-        }
-
-        this.tagsError = '';
-      }
+      this.addTagIfPossible();
     }
   }
 
@@ -153,6 +133,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   upload() {
+    // Maybe the user forgot to press "enter" when he filled the field
+    this.addTagIfPossible();
+
     if (this.checkForm() === false) {
       return;
     }
@@ -198,5 +181,26 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     };
 
     this.uploader.uploadAll();
+  }
+
+  private addTagIfPossible() {
+    const currentTag = this.form.value['currentTag'];
+    if (currentTag === undefined) return;
+
+    // Check if the tag is valid and does not already exist
+    if (
+      currentTag.length >= 2 &&
+      this.form.controls['currentTag'].valid &&
+      this.tags.indexOf(currentTag) === -1
+    ) {
+      this.tags.push(currentTag);
+      this.form.patchValue({ currentTag: '' });
+
+      if (this.tags.length >= 3) {
+        this.form.get('currentTag').disable();
+      }
+
+      this.tagsError = '';
+    }
   }
 }

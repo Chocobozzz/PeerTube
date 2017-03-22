@@ -23,7 +23,7 @@ function videosAdd (req, res, next) {
   req.checkBody('name', 'Should have a valid name').isVideoNameValid()
   req.checkBody('category', 'Should have a valid category').isVideoCategoryValid()
   req.checkBody('description', 'Should have a valid description').isVideoDescriptionValid()
-  req.checkBody('tags', 'Should have correct tags').isVideoTagsValid()
+  req.checkBody('tags', 'Should have correct tags').optional().isVideoTagsValid()
 
   logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 

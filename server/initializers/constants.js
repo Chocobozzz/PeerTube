@@ -85,7 +85,7 @@ const CONSTRAINTS_FIELDS = {
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, infohash is 20 bytes length but we represent it in hexa so 20 * 2
     DURATION: { min: 1, max: 7200 }, // Number
-    TAGS: { min: 1, max: 3 }, // Number of total tags
+    TAGS: { min: 0, max: 3 }, // Number of total tags
     TAG: { min: 2, max: 10 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
     THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes

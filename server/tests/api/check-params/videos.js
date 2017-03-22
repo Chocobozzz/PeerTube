@@ -251,19 +251,6 @@ describe('Test videos API validator', function () {
       requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
     })
 
-    it('Should fail with malformed tags', function (done) {
-      const data = {
-        name: 'my super name',
-        category: 5,
-        description: 'my super description',
-        tags: [ 'my tag' ]
-      }
-      const attach = {
-        'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
-      requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
-    })
-
     it('Should fail without an input file', function (done) {
       const data = {
         name: 'my super name',
