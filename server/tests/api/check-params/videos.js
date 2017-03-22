@@ -187,37 +187,12 @@ describe('Test videos API validator', function () {
       requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
     })
 
-    it('Should fail without tags', function (done) {
-      const data = {
-        name: 'my super name',
-        category: 5,
-        description: 'my super description'
-      }
-      const attach = {
-        'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
-      requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
-    })
-
     it('Should fail with too many tags', function (done) {
       const data = {
         name: 'my super name',
         category: 5,
         description: 'my super description',
         tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
-      }
-      const attach = {
-        'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
-      requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
-    })
-
-    it('Should fail with not enough tags', function (done) {
-      const data = {
-        name: 'my super name',
-        category: 5,
-        description: 'my super description',
-        tags: [ ]
       }
       const attach = {
         'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -386,16 +361,6 @@ describe('Test videos API validator', function () {
       requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
     })
 
-    it('Should fail with not enough tags', function (done) {
-      const data = {
-        name: 'my super name',
-        category: 5,
-        description: 'my super description',
-        tags: [ ]
-      }
-      requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
-    })
-
     it('Should fail with a tag length too low', function (done) {
       const data = {
         name: 'my super name',
@@ -412,16 +377,6 @@ describe('Test videos API validator', function () {
         category: 5,
         description: 'my super description',
         tags: [ 'mysupertagtoolong', 'tag1' ]
-      }
-      requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
-    })
-
-    it('Should fail with malformed tags', function (done) {
-      const data = {
-        name: 'my super name',
-        category: 5,
-        description: 'my super description',
-        tags: [ 'my tag' ]
       }
       requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
     })
