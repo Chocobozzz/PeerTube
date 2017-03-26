@@ -31,14 +31,12 @@ describe('Test advanced friends', function () {
   }
 
   function uploadVideo (podNumber, callback) {
-    const name = 'my super video'
-    const category = 5
-    const description = 'my super description'
-    const tags = [ 'tag1', 'tag2' ]
-    const fixture = 'video_short.webm'
+    const videoAttributes = {
+      tags: [ 'tag1', 'tag2' ]
+    }
     const server = servers[podNumber - 1]
 
-    return videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, fixture, callback)
+    return videosUtils.uploadVideo(server.url, server.accessToken, videoAttributes, callback)
   }
 
   function getVideos (podNumber, callback) {

@@ -200,15 +200,16 @@ function exitServers (servers, callback) {
 function upload (servers, numServer, callback) {
   if (!callback) callback = function () {}
 
-  const name = Date.now() + ' name'
-  const category = 4
-  const description = Date.now() + ' description'
-  const tags = [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
-  const file = 'video_short1.webm'
-
   console.log('Uploading video to server ' + numServer)
 
-  videosUtils.uploadVideo(servers[numServer].url, servers[numServer].accessToken, name, category, description, tags, file, callback)
+  const videoAttributes = {
+    name: Date.now() + ' name',
+    category: 4,
+    description: Date.now() + ' description',
+    tags: [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ],
+    fixture: 'video_short1.webm'
+  }
+  videosUtils.uploadVideo(servers[numServer].url, servers[numServer].accessToken, videoAttributes, callback)
 }
 
 function update (servers, numServer, callback) {
@@ -221,13 +222,15 @@ function update (servers, numServer, callback) {
     if (videos.length === 0) return callback()
 
     const toUpdate = videos[getRandomInt(0, videos.length)].id
-    const name = Date.now() + ' name'
-    const description = Date.now() + ' description'
-    const tags = [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
+    const attributes = {
+      name: Date.now() + ' name',
+      description: Date.now() + ' description',
+      tags: [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
+    }
 
     console.log('Updating video of server ' + numServer)
 
-    videosUtils.updateVideo(servers[numServer].url, servers[numServer].accessToken, toUpdate, name, description, tags, callback)
+    videosUtils.updateVideo(servers[numServer].url, servers[numServer].accessToken, toUpdate, attributes, callback)
   })
 }
 

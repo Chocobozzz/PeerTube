@@ -70,13 +70,12 @@ describe('Test a single pod', function () {
   })
 
   it('Should upload the video', function (done) {
-    this.timeout(5000)
-    const name = 'my super name'
-    const description = 'my super description'
-    const category = 2
-    const tags = [ 'tag1', 'tag2', 'tag3' ]
-    const file = 'video_short.webm'
-    videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, file, done)
+    const videoAttributes = {
+      name: 'my super name',
+      category: 2,
+      tags: [ 'tag1', 'tag2', 'tag3' ]
+    }
+    videosUtils.uploadVideo(server.url, server.accessToken, videoAttributes, done)
   })
 
   it('Should seed the uploaded video', function (done) {
@@ -321,12 +320,15 @@ describe('Test a single pod', function () {
       'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
     ]
     each(videos, function (video, callbackEach) {
-      const name = video + ' name'
-      const description = video + ' description'
-      const category = 2
-      const tags = [ 'tag1', 'tag2', 'tag3' ]
+      const videoAttributes = {
+        name: video + ' name',
+        description: video + ' description',
+        category: 2,
+        tags: [ 'tag1', 'tag2', 'tag3' ],
+        fixture: video
+      }
 
-      videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, video, callbackEach)
+      videosUtils.uploadVideo(server.url, server.accessToken, videoAttributes, callbackEach)
     }, done)
   })
 
@@ -543,12 +545,13 @@ describe('Test a single pod', function () {
   })
 
   it('Should update a video', function (done) {
-    const name = 'my super video updated'
-    const category = 4
-    const description = 'my super description updated'
-    const tags = [ 'tagup1', 'tagup2' ]
-
-    videosUtils.updateVideo(server.url, server.accessToken, videoId, name, category, description, tags, done)
+    const attributes = {
+      name: 'my super video updated',
+      category: 4,
+      description: 'my super description updated',
+      tags: [ 'tagup1', 'tagup2' ]
+    }
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, attributes, done)
   })
 
   it('Should have the video updated', function (done) {
@@ -586,9 +589,11 @@ describe('Test a single pod', function () {
   })
 
   it('Should update only the tags of a video', function (done) {
-    const tags = [ 'tag1', 'tag2', 'supertag' ]
+    const attributes = {
+      tags: [ 'tag1', 'tag2', 'supertag' ]
+    }
 
-    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, null, null, tags, function (err) {
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, attributes, function (err) {
       if (err) throw err
 
       videosUtils.getVideo(server.url, videoId, function (err, res) {
@@ -613,9 +618,11 @@ describe('Test a single pod', function () {
   })
 
   it('Should update only the description of a video', function (done) {
-    const description = 'hello everybody'
+    const attributes = {
+      description: 'hello everybody'
+    }
 
-    videosUtils.updateVideo(server.url, server.accessToken, videoId, null, null, description, null, function (err) {
+    videosUtils.updateVideo(server.url, server.accessToken, videoId, attributes, function (err) {
       if (err) throw err
 
       videosUtils.getVideo(server.url, videoId, function (err, res) {

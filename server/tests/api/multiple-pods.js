@@ -80,12 +80,13 @@ describe('Test multiple pods', function () {
 
       series([
         function (next) {
-          const name = 'my super name for pod 1'
-          const category = 5
-          const description = 'my super description for pod 1'
-          const tags = [ 'tag1p1', 'tag2p1' ]
-          const file = 'video_short1.webm'
-          videosUtils.uploadVideo(servers[0].url, servers[0].accessToken, name, category, description, tags, file, next)
+          const videoAttributes = {
+            name: 'my super name for pod 1',
+            description: 'my super description for pod 1',
+            tags: [ 'tag1p1', 'tag2p1' ],
+            fixture: 'video_short1.webm'
+          }
+          videosUtils.uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -146,12 +147,14 @@ describe('Test multiple pods', function () {
 
       series([
         function (next) {
-          const name = 'my super name for pod 2'
-          const category = 4
-          const description = 'my super description for pod 2'
-          const tags = [ 'tag1p2', 'tag2p2', 'tag3p2' ]
-          const file = 'video_short2.webm'
-          videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, name, category, description, tags, file, next)
+          const videoAttributes = {
+            name: 'my super name for pod 2',
+            category: 4,
+            description: 'my super description for pod 2',
+            tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
+            fixture: 'video_short2.webm'
+          }
+          videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes, next)
         },
         function (next) {
           setTimeout(next, 11000)
@@ -212,20 +215,24 @@ describe('Test multiple pods', function () {
 
       series([
         function (next) {
-          const name = 'my super name for pod 3'
-          const category = 6
-          const description = 'my super description for pod 3'
-          const tags = [ 'tag1p3' ]
-          const file = 'video_short3.webm'
-          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, category, description, tags, file, next)
+          const videoAttributes = {
+            name: 'my super name for pod 3',
+            category: 6,
+            description: 'my super description for pod 3',
+            tags: [ 'tag1p3' ],
+            fixture: 'video_short3.webm'
+          }
+          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes, next)
         },
         function (next) {
-          const name = 'my super name for pod 3-2'
-          const category = 7
-          const description = 'my super description for pod 3-2'
-          const tags = [ 'tag2p3', 'tag3p3', 'tag4p3' ]
-          const file = 'video_short.webm'
-          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, name, category, description, tags, file, next)
+          const videoAttributes = {
+            name: 'my super name for pod 3-2',
+            category: 7,
+            description: 'my super description for pod 3-2',
+            tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
+            fixture: 'video_short.webm'
+          }
+          videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes, next)
         },
         function (next) {
           setTimeout(next, 22000)
@@ -614,12 +621,13 @@ describe('Test multiple pods', function () {
     it('Should update the video 3 by asking pod 3', function (done) {
       this.timeout(15000)
 
-      const name = 'my super video updated'
-      const category = 10
-      const description = 'my super description updated'
-      const tags = [ 'tagup1', 'tagup2' ]
-
-      videosUtils.updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, name, category, description, tags, function (err) {
+      const attributes = {
+        name: 'my super video updated',
+        category: 10,
+        description: 'my super description updated',
+        tags: [ 'tagup1', 'tagup2' ]
+      }
+      videosUtils.updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, attributes, function (err) {
         if (err) throw err
 
         setTimeout(done, 11000)

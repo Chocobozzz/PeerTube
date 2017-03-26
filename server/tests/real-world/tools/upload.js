@@ -49,10 +49,17 @@ function list (val) {
   return val.split(',')
 }
 
-function upload (url, accessToken, name, category, description, tags, file) {
+function upload (url, accessToken, name, category, description, tags, fixture) {
   console.log('Uploading %s video...', program.name)
 
-  utils.uploadVideo(url, accessToken, name, category, description, tags, file, function (err) {
+  const videoAttributes = {
+    name,
+    category,
+    description,
+    tags,
+    fixture
+  }
+  utils.uploadVideo(url, accessToken, videoAttributes, function (err) {
     if (err) throw err
 
     console.log('Video uploaded.')

@@ -193,7 +193,7 @@ function testVideoImage (url, videoName, imagePath, callback) {
   }
 }
 
-function uploadVideo (url, accessToken, name, category, description, tags, fixture, specialStatus, end) {
+function uploadVideo (url, accessToken, videoAttributesArg, specialStatus, end) {
   if (!end) {
     end = specialStatus
     specialStatus = 204
@@ -201,23 +201,33 @@ function uploadVideo (url, accessToken, name, category, description, tags, fixtu
 
   const path = '/api/v1/videos'
 
+  // Default attributes
+  let attributes = {
+    name: 'my super video',
+    category: 5,
+    description: 'my super description',
+    tags: [ 'tag' ],
+    fixture: 'video_short.webm'
+  }
+  attributes = Object.assign(attributes, videoAttributesArg)
+
   const req = request(url)
               .post(path)
               .set('Accept', 'application/json')
               .set('Authorization', 'Bearer ' + accessToken)
-              .field('name', name)
-              .field('category', category)
-              .field('description', description)
+              .field('name', attributes.name)
+              .field('category', attributes.category)
+              .field('description', attributes.description)
 
-  for (let i = 0; i < tags.length; i++) {
-    req.field('tags[' + i + ']', tags[i])
+  for (let i = 0; i < attributes.tags.length; i++) {
+    req.field('tags[' + i + ']', attributes.tags[i])
   }
 
   let filepath = ''
-  if (pathUtils.isAbsolute(fixture)) {
-    filepath = fixture
+  if (pathUtils.isAbsolute(attributes.fixture)) {
+    filepath = attributes.fixture
   } else {
-    filepath = pathUtils.join(__dirname, '..', 'api', 'fixtures', fixture)
+    filepath = pathUtils.join(__dirname, '..', 'api', 'fixtures', attributes.fixture)
   }
 
   req.attach('videofile', filepath)
@@ -225,7 +235,7 @@ function uploadVideo (url, accessToken, name, category, description, tags, fixtu
      .end(end)
 }
 
-function updateVideo (url, accessToken, id, name, category, description, tags, specialStatus, end) {
+function updateVideo (url, accessToken, id, attributes, specialStatus, end) {
   if (!end) {
     end = specialStatus
     specialStatus = 204
@@ -238,13 +248,13 @@ function updateVideo (url, accessToken, id, name, category, description, tags, s
               .set('Accept', 'application/json')
               .set('Authorization', 'Bearer ' + accessToken)
 
-  if (name) req.field('name', name)
-  if (category) req.field('category', category)
-  if (description) req.field('description', description)
+  if (attributes.name) req.field('name', attributes.name)
+  if (attributes.category) req.field('category', attributes.category)
+  if (attributes.description) req.field('description', attributes.description)
 
-  if (tags) {
-    for (let i = 0; i < tags.length; i++) {
-      req.field('tags[' + i + ']', tags[i])
+  if (attributes.tags) {
+    for (let i = 0; i < attributes.tags.length; i++) {
+      req.field('tags[' + i + ']', attributes.tags[i])
     }
   }
 

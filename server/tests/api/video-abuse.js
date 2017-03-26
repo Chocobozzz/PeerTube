@@ -45,20 +45,18 @@ describe('Test video abuses', function () {
       },
       // Upload some videos on each pods
       function (next) {
-        const name = 'my super name for pod 1'
-        const category = 5
-        const description = 'my super description for pod 1'
-        const tags = [ 'tag' ]
-        const file = 'video_short2.webm'
-        videosUtils.uploadVideo(servers[0].url, servers[0].accessToken, name, category, description, tags, file, next)
+        const videoAttributes = {
+          name: 'my super name for pod 1',
+          description: 'my super description for pod 1'
+        }
+        videosUtils.uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes, next)
       },
       function (next) {
-        const name = 'my super name for pod 2'
-        const category = 5
-        const description = 'my super description for pod 2'
-        const tags = [ 'tag' ]
-        const file = 'video_short2.webm'
-        videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, name, category, description, tags, file, next)
+        const videoAttributes = {
+          name: 'my super name for pod 2',
+          description: 'my super description for pod 2'
+        }
+        videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes, next)
       },
       // Wait videos propagation
       function (next) {

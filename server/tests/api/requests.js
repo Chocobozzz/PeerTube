@@ -13,17 +13,16 @@ const serversUtils = require('../utils/servers')
 const videosUtils = require('../utils/videos')
 
 describe('Test requests stats', function () {
+  const requestSchedulerNames = [ 'requestScheduler', 'requestVideoQaduScheduler', 'requestVideoEventScheduler' ]
   const path = '/api/v1/requests/stats'
   let servers = []
 
   function uploadVideo (server, callback) {
-    const name = 'my super video'
-    const category = 5
-    const description = 'my super description'
-    const tags = [ 'tag1', 'tag2' ]
-    const fixture = 'video_short.webm'
+    const videoAttributes = {
+      tags: [ 'tag1', 'tag2' ]
+    }
 
-    videosUtils.uploadVideo(server.url, server.accessToken, name, category, description, tags, fixture, callback)
+    videosUtils.uploadVideo(server.url, server.accessToken, videoAttributes, callback)
   }
 
   function getRequestsStats (server, callback) {
@@ -64,9 +63,13 @@ describe('Test requests stats', function () {
     getRequestsStats(server, function (err, res) {
       if (err) throw err
 
-      const body = res.body
-      expect(body.remainingMilliSeconds).to.be.at.least(0)
-      expect(body.remainingMilliSeconds).to.be.at.most(10000)
+      const requestSchedulers = res.body
+      for (const requestSchedulerName of requestSchedulerNames) {
+        const requestScheduler = requestSchedulers[requestSchedulerName]
+
+        expect(requestScheduler.remainingMilliSeconds).to.be.at.least(0)
+        expect(requestScheduler.remainingMilliSeconds).to.be.at.most(10000)
+      }
 
       done()
     })
@@ -86,8 +89,9 @@ describe('Test requests stats', function () {
         getRequestsStats(server, function (err, res) {
           if (err) throw err
 
-          const body = res.body
-          expect(body.totalRequests).to.equal(1)
+          const requestSchedulers = res.body
+          const requestScheduler = requestSchedulers.requestScheduler
+          expect(requestScheduler.totalRequests).to.equal(1)
 
           done()
         })
