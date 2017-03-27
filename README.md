@@ -15,7 +15,7 @@ Decentralized video streaming platform using P2P (BitTorrent) directly in the we
     <img src="https://david-dm.org/Chocobozzz/PeerTube.svg?path=client" alt="Dependency Status" />
   </a>
 
-  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client#info=devDependencies">
+  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client#info=dev">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
   </a>
 </p>
@@ -33,7 +33,7 @@ Decentralized video streaming platform using P2P (BitTorrent) directly in the we
     <img src="https://david-dm.org/Chocobozzz/PeerTube.svg" alt="Dependencies Status" />
   </a>
 
-  <a href="https://david-dm.org/Chocobozzz/PeerTube#info=devDependencies">
+  <a href="https://david-dm.org/Chocobozzz/PeerTube#info=dev">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg" alt="devDependency Status" />
   </a>
 
