@@ -82,6 +82,8 @@ describe('Test multiple pods', function () {
         function (next) {
           const videoAttributes = {
             name: 'my super name for pod 1',
+            category: 5,
+            licence: 4,
             description: 'my super description for pod 1',
             tags: [ 'tag1p1', 'tag2p1' ],
             fixture: 'video_short1.webm'
@@ -108,6 +110,8 @@ describe('Test multiple pods', function () {
               expect(video.name).to.equal('my super name for pod 1')
               expect(video.category).to.equal(5)
               expect(video.categoryLabel).to.equal('Sports')
+              expect(video.licence).to.equal(4)
+              expect(video.licenceLabel).to.equal('Attribution - Non Commercial')
               expect(video.description).to.equal('my super description for pod 1')
               expect(video.podHost).to.equal('localhost:9001')
               expect(video.magnetUri).to.exist
@@ -150,6 +154,7 @@ describe('Test multiple pods', function () {
           const videoAttributes = {
             name: 'my super name for pod 2',
             category: 4,
+            licence: 3,
             description: 'my super description for pod 2',
             tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
             fixture: 'video_short2.webm'
@@ -176,6 +181,8 @@ describe('Test multiple pods', function () {
               expect(video.name).to.equal('my super name for pod 2')
               expect(video.category).to.equal(4)
               expect(video.categoryLabel).to.equal('Art')
+              expect(video.licence).to.equal(3)
+              expect(video.licenceLabel).to.equal('Attribution - No Derivatives')
               expect(video.description).to.equal('my super description for pod 2')
               expect(video.podHost).to.equal('localhost:9002')
               expect(video.magnetUri).to.exist
@@ -218,6 +225,7 @@ describe('Test multiple pods', function () {
           const videoAttributes = {
             name: 'my super name for pod 3',
             category: 6,
+            licence: 5,
             description: 'my super description for pod 3',
             tags: [ 'tag1p3' ],
             fixture: 'video_short3.webm'
@@ -228,6 +236,7 @@ describe('Test multiple pods', function () {
           const videoAttributes = {
             name: 'my super name for pod 3-2',
             category: 7,
+            licence: 6,
             description: 'my super description for pod 3-2',
             tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
             fixture: 'video_short.webm'
@@ -264,6 +273,8 @@ describe('Test multiple pods', function () {
               expect(video1.name).to.equal('my super name for pod 3')
               expect(video1.category).to.equal(6)
               expect(video1.categoryLabel).to.equal('Travels')
+              expect(video1.licence).to.equal(5)
+              expect(video1.licenceLabel).to.equal('Attribution - Non Commercial - Share Alike')
               expect(video1.description).to.equal('my super description for pod 3')
               expect(video1.podHost).to.equal('localhost:9003')
               expect(video1.magnetUri).to.exist
@@ -276,6 +287,8 @@ describe('Test multiple pods', function () {
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.category).to.equal(7)
               expect(video2.categoryLabel).to.equal('Gaming')
+              expect(video2.licence).to.equal(6)
+              expect(video2.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
               expect(video2.description).to.equal('my super description for pod 3-2')
               expect(video2.podHost).to.equal('localhost:9003')
               expect(video2.magnetUri).to.exist
@@ -624,6 +637,7 @@ describe('Test multiple pods', function () {
       const attributes = {
         name: 'my super video updated',
         category: 10,
+        licence: 7,
         description: 'my super description updated',
         tags: [ 'tagup1', 'tagup2' ]
       }
@@ -652,6 +666,8 @@ describe('Test multiple pods', function () {
           expect(!!videoUpdated).to.be.true
           expect(videoUpdated.category).to.equal(10)
           expect(videoUpdated.categoryLabel).to.equal('Entertainment')
+          expect(videoUpdated.licence).to.equal(7)
+          expect(videoUpdated.licenceLabel).to.equal('Public Domain Dedication')
           expect(videoUpdated.description).to.equal('my super description updated')
           expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
           expect(miscsUtils.dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true

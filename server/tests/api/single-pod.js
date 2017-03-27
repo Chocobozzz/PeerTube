@@ -57,6 +57,19 @@ describe('Test a single pod', function () {
     })
   })
 
+  it('Should list video licences', function (done) {
+    videosUtils.getVideoLicences(server.url, function (err, res) {
+      if (err) throw err
+
+      const licences = res.body
+      expect(Object.keys(licences)).to.have.length.above(5)
+
+      expect(licences[3]).to.equal('Attribution - No Derivatives')
+
+      done()
+    })
+  })
+
   it('Should not have videos', function (done) {
     videosUtils.getVideosList(server.url, function (err, res) {
       if (err) throw err
@@ -73,6 +86,7 @@ describe('Test a single pod', function () {
     const videoAttributes = {
       name: 'my super name',
       category: 2,
+      licence: 6,
       tags: [ 'tag1', 'tag2', 'tag3' ]
     }
     videosUtils.uploadVideo(server.url, server.accessToken, videoAttributes, done)
@@ -93,6 +107,8 @@ describe('Test a single pod', function () {
       expect(video.name).to.equal('my super name')
       expect(video.category).to.equal(2)
       expect(video.categoryLabel).to.equal('Films')
+      expect(video.licence).to.equal(6)
+      expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
@@ -130,6 +146,8 @@ describe('Test a single pod', function () {
       expect(video.name).to.equal('my super name')
       expect(video.category).to.equal(2)
       expect(video.categoryLabel).to.equal('Films')
+      expect(video.licence).to.equal(6)
+      expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
@@ -171,6 +189,8 @@ describe('Test a single pod', function () {
       expect(video.name).to.equal('my super name')
       expect(video.category).to.equal(2)
       expect(video.categoryLabel).to.equal('Films')
+      expect(video.licence).to.equal(6)
+      expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -228,6 +248,8 @@ describe('Test a single pod', function () {
       expect(video.name).to.equal('my super name')
       expect(video.category).to.equal(2)
       expect(video.categoryLabel).to.equal('Films')
+      expect(video.licence).to.equal(6)
+      expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -324,6 +346,7 @@ describe('Test a single pod', function () {
         name: video + ' name',
         description: video + ' description',
         category: 2,
+        licence: 1,
         tags: [ 'tag1', 'tag2', 'tag3' ],
         fixture: video
       }
@@ -548,6 +571,7 @@ describe('Test a single pod', function () {
     const attributes = {
       name: 'my super video updated',
       category: 4,
+      licence: 2,
       description: 'my super description updated',
       tags: [ 'tagup1', 'tagup2' ]
     }
@@ -565,6 +589,8 @@ describe('Test a single pod', function () {
       expect(video.name).to.equal('my super video updated')
       expect(video.category).to.equal(4)
       expect(video.categoryLabel).to.equal('Art')
+      expect(video.licence).to.equal(2)
+      expect(video.licenceLabel).to.equal('Attribution - Share Alike')
       expect(video.description).to.equal('my super description updated')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -604,6 +630,8 @@ describe('Test a single pod', function () {
         expect(video.name).to.equal('my super video updated')
         expect(video.category).to.equal(4)
         expect(video.categoryLabel).to.equal('Art')
+        expect(video.licence).to.equal(2)
+        expect(video.licenceLabel).to.equal('Attribution - Share Alike')
         expect(video.description).to.equal('my super description updated')
         expect(video.podHost).to.equal('localhost:9001')
         expect(video.author).to.equal('root')
@@ -633,6 +661,8 @@ describe('Test a single pod', function () {
         expect(video.name).to.equal('my super video updated')
         expect(video.category).to.equal(4)
         expect(video.categoryLabel).to.equal('Art')
+        expect(video.licence).to.equal(2)
+        expect(video.licenceLabel).to.equal('Attribution - Share Alike')
         expect(video.description).to.equal('hello everybody')
         expect(video.podHost).to.equal('localhost:9001')
         expect(video.author).to.equal('root')

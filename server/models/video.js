@@ -61,6 +61,16 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       },
+      licence: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          licenceValid: function (value) {
+            const res = customVideosValidators.isVideoLicenceValid(value)
+            if (res === false) throw new Error('Video licence is not valid.')
+          }
+        }
+      },
       description: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -374,11 +384,17 @@ function toFormatedJSON () {
   let categoryLabel = constants.VIDEO_CATEGORIES[this.category]
   if (!categoryLabel) categoryLabel = 'Misc'
 
+  // Maybe our pod is not up to date and there are new licences since our version
+  let licenceLabel = constants.VIDEO_LICENCES[this.licence]
+  if (!licenceLabel) licenceLabel = 'Unknown'
+
   const json = {
     id: this.id,
     name: this.name,
     category: this.category,
     categoryLabel,
+    licence: this.licence,
+    licenceLabel,
     description: this.description,
     podHost,
     isLocal: this.isOwned(),
@@ -411,6 +427,7 @@ function toAddRemoteJSON (callback) {
     const remoteVideo = {
       name: self.name,
       category: self.category,
+      licence: self.licence,
       description: self.description,
       infoHash: self.infoHash,
       remoteId: self.id,
@@ -434,6 +451,7 @@ function toUpdateRemoteJSON (callback) {
   const json = {
     name: this.name,
     category: this.category,
+    licence: this.licence,
     description: this.description,
     infoHash: this.infoHash,
     remoteId: this.id,

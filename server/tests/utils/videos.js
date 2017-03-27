@@ -6,6 +6,7 @@ const request = require('supertest')
 
 const videosUtils = {
   getVideoCategories,
+  getVideoLicences,
   getAllVideosListBy,
   getVideo,
   getVideosList,
@@ -25,6 +26,17 @@ const videosUtils = {
 
 function getVideoCategories (url, end) {
   const path = '/api/v1/videos/categories'
+
+  request(url)
+    .get(path)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getVideoLicences (url, end) {
+  const path = '/api/v1/videos/licences'
 
   request(url)
     .get(path)
@@ -205,6 +217,7 @@ function uploadVideo (url, accessToken, videoAttributesArg, specialStatus, end) 
   let attributes = {
     name: 'my super video',
     category: 5,
+    licence: 4,
     description: 'my super description',
     tags: [ 'tag' ],
     fixture: 'video_short.webm'
@@ -217,6 +230,7 @@ function uploadVideo (url, accessToken, videoAttributesArg, specialStatus, end) 
               .set('Authorization', 'Bearer ' + accessToken)
               .field('name', attributes.name)
               .field('category', attributes.category)
+              .field('licence', attributes.licence)
               .field('description', attributes.description)
 
   for (let i = 0; i < attributes.tags.length; i++) {
@@ -250,6 +264,7 @@ function updateVideo (url, accessToken, id, attributes, specialStatus, end) {
 
   if (attributes.name) req.field('name', attributes.name)
   if (attributes.category) req.field('category', attributes.category)
+  if (attributes.licence) req.field('licence', attributes.licence)
   if (attributes.description) req.field('description', attributes.description)
 
   if (attributes.tags) {

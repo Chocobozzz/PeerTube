@@ -5,7 +5,7 @@ const path = require('path')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 30
+const LAST_MIGRATION_VERSION = 35
 
 // ---------------------------------------------------------------------------
 
@@ -122,6 +122,17 @@ const VIDEO_CATEGORIES = {
   16: 'Animals',
   17: 'Kids',
   18: 'Food'
+}
+
+// See https://creativecommons.org/licenses/?lang=en
+const VIDEO_LICENCES = {
+  1: 'Attribution',
+  2: 'Attribution - Share Alike',
+  3: 'Attribution - No Derivatives',
+  4: 'Attribution - Non Commercial',
+  5: 'Attribution - Non Commercial - Share Alike',
+  6: 'Attribution - Non Commercial - No Derivatives',
+  7: 'Public Domain Dedication'
 }
 
 // ---------------------------------------------------------------------------
@@ -280,6 +291,7 @@ module.exports = {
   THUMBNAILS_SIZE,
   USER_ROLES,
   VIDEO_CATEGORIES,
+  VIDEO_LICENCES,
   VIDEO_RATE_TYPES
 }
 

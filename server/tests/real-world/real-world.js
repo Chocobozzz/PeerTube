@@ -205,6 +205,7 @@ function upload (servers, numServer, callback) {
   const videoAttributes = {
     name: Date.now() + ' name',
     category: 4,
+    licence: 2,
     description: Date.now() + ' description',
     tags: [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ],
     fixture: 'video_short1.webm'
