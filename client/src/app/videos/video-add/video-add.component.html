@@ -27,6 +27,18 @@
   </div>
 
   <div class="form-group">
+    <label for="licence">Licence</label>
+    <select class="form-control" id="licence" formControlName="licence">
+      <option></option>
+      <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
+    </select>
+
+    <div *ngIf="formErrors.licence" class="alert alert-danger">
+      {{ formErrors.licence }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="tags">Tags</label> <span class="little-information">(press enter to add the tag)</span>
     <input
       type="text" class="form-control" id="currentTag"

@@ -3,6 +3,7 @@ export class Video {
   by: string;
   createdAt: Date;
   categoryLabel: string;
+  licenceLabel: string;
   description: string;
   duration: string;
   id: string;
@@ -33,6 +34,7 @@ export class Video {
     author: string,
     createdAt: string,
     categoryLabel: string,
+    licenceLabel: string,
     description: string,
     duration: number;
     id: string,
@@ -49,6 +51,7 @@ export class Video {
     this.author  = hash.author;
     this.createdAt = new Date(hash.createdAt);
     this.categoryLabel = hash.categoryLabel;
+    this.licenceLabel = hash.licenceLabel;
     this.description = hash.description;
     this.duration = Video.createDurationString(hash.duration);
     this.id = hash.id;

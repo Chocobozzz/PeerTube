@@ -23,6 +23,7 @@ export class VideoService {
   private static BASE_VIDEO_URL = '/api/v1/videos/';
 
   videoCategories: Array<{ id: number, label: string }> = [];
+  videoLicences: Array<{ id: number, label: string }> = [];
 
   constructor(
     private authService: AuthService,
@@ -40,6 +41,19 @@ export class VideoService {
                         this.videoCategories.push({
                           id: parseInt(categoryKey),
                           label: data[categoryKey]
+                        });
+                      });
+                    });
+  }
+
+  loadVideoLicences() {
+    return this.http.get(VideoService.BASE_VIDEO_URL + 'licences')
+                    .map(this.restExtractor.extractDataGet)
+                    .subscribe(data => {
+                      Object.keys(data).forEach(licenceKey => {
+                        this.videoLicences.push({
+                          id: parseInt(licenceKey),
+                          label: data[licenceKey]
                         });
                       });
                     });

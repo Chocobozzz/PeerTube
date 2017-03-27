@@ -39,6 +39,7 @@ export class AppComponent implements OnInit {
     }
 
     this.videoService.loadVideoCategories();
+    this.videoService.loadVideoLicences();
   }
 
   isInAdmin() {

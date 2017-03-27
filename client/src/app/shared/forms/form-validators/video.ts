@@ -8,12 +8,21 @@ export const VIDEO_NAME = {
     'maxlength': 'Video name cannot be more than 50 characters long.'
   }
 };
+
 export const VIDEO_CATEGORY = {
   VALIDATORS: [ Validators.required ],
   MESSAGES: {
     'required': 'Video category is required.'
   }
 };
+
+export const VIDEO_LICENCE = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    'required': 'Video licence is required.'
+  }
+};
+
 export const VIDEO_DESCRIPTION = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(250) ],
   MESSAGES: {

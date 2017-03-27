@@ -10,6 +10,7 @@ import {
   FormReactive,
   VIDEO_NAME,
   VIDEO_CATEGORY,
+  VIDEO_LICENCE,
   VIDEO_DESCRIPTION,
   VIDEO_TAGS
 } from '../../shared';
@@ -25,18 +26,21 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   tags: string[] = [];
   uploader: FileUploader;
   videoCategories = [];
+  videoLicences = [];
 
   error: string = null;
   form: FormGroup;
   formErrors = {
     name: '',
     category: '',
+    licence: '',
     description: '',
     currentTag: ''
   };
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
+    licence: VIDEO_LICENCE.MESSAGES,
     description: VIDEO_DESCRIPTION.MESSAGES,
     currentTag: VIDEO_TAGS.MESSAGES
   };
@@ -68,6 +72,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.form = this.formBuilder.group({
       name: [ '', VIDEO_NAME.VALIDATORS ],
       category: [ '', VIDEO_CATEGORY.VALIDATORS ],
+      licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
       currentTag: [ '', VIDEO_TAGS.VALIDATORS ]
     });
@@ -77,6 +82,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   ngOnInit() {
     this.videoCategories = this.videoService.videoCategories;
+    this.videoLicences = this.videoService.videoLicences;
 
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
@@ -88,10 +94,12 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.uploader.onBuildItemForm = (item, form) => {
       const name = this.form.value['name'];
       const category = this.form.value['category'];
+      const licence = this.form.value['licence'];
       const description = this.form.value['description'];
 
       form.append('name', name);
       form.append('category', category);
+      form.append('licence', licence);
       form.append('description', description);
 
       for (let i = 0; i < this.tags.length; i++) {
