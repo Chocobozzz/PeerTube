@@ -15,6 +15,7 @@ const videosValidators = {
   isVideoDateValid,
   isVideoCategoryValid,
   isVideoLicenceValid,
+  isVideoNSFWValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoInfoHashValid,
@@ -48,6 +49,10 @@ function isVideoCategoryValid (value) {
 
 function isVideoLicenceValid (value) {
   return constants.VIDEO_LICENCES[value] !== undefined
+}
+
+function isVideoNSFWValid (value) {
+  return validator.isBoolean(value)
 }
 
 function isVideoDescriptionValid (value) {

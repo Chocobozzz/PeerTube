@@ -313,6 +313,7 @@ function addVideo (req, res, videoFile, finalCallback) {
         extname: path.extname(videoFile.filename),
         category: videoInfos.category,
         licence: videoInfos.licence,
+        nsfw: videoInfos.nsfw,
         description: videoInfos.description,
         duration: videoFile.duration,
         authorId: author.id
@@ -428,6 +429,7 @@ function updateVideo (req, res, finalCallback) {
       if (videoInfosToUpdate.name) videoInstance.set('name', videoInfosToUpdate.name)
       if (videoInfosToUpdate.category) videoInstance.set('category', videoInfosToUpdate.category)
       if (videoInfosToUpdate.licence) videoInstance.set('licence', videoInfosToUpdate.licence)
+      if (videoInfosToUpdate.nsfw) videoInstance.set('nsfw', videoInfosToUpdate.nsfw)
       if (videoInfosToUpdate.description) videoInstance.set('description', videoInfosToUpdate.description)
 
       videoInstance.save(options).asCallback(function (err) {

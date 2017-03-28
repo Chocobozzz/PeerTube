@@ -71,6 +71,16 @@ module.exports = function (sequelize, DataTypes) {
           }
         }
       },
+      nsfw: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        validate: {
+          nsfwValid: function (value) {
+            const res = customVideosValidators.isVideoNSFWValid(value)
+            if (res === false) throw new Error('Video nsfw attribute is not valid.')
+          }
+        }
+      },
       description: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -395,6 +405,7 @@ function toFormatedJSON () {
     categoryLabel,
     licence: this.licence,
     licenceLabel,
+    nsfw: this.nsfw,
     description: this.description,
     podHost,
     isLocal: this.isOwned(),
@@ -428,6 +439,7 @@ function toAddRemoteJSON (callback) {
       name: self.name,
       category: self.category,
       licence: self.licence,
+      nsfw: self.nsfw,
       description: self.description,
       infoHash: self.infoHash,
       remoteId: self.id,
@@ -452,6 +464,7 @@ function toUpdateRemoteJSON (callback) {
     name: this.name,
     category: this.category,
     licence: this.licence,
+    nsfw: this.nsfw,
     description: this.description,
     infoHash: this.infoHash,
     remoteId: this.id,

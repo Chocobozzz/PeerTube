@@ -23,6 +23,7 @@ function videosAdd (req, res, next) {
   req.checkBody('name', 'Should have a valid name').isVideoNameValid()
   req.checkBody('category', 'Should have a valid category').isVideoCategoryValid()
   req.checkBody('licence', 'Should have a valid licence').isVideoLicenceValid()
+  req.checkBody('nsfw', 'Should have a valid NSFW attribute').isVideoNSFWValid()
   req.checkBody('description', 'Should have a valid description').isVideoDescriptionValid()
   req.checkBody('tags', 'Should have correct tags').optional().isVideoTagsValid()
 
@@ -51,6 +52,7 @@ function videosUpdate (req, res, next) {
   req.checkBody('name', 'Should have a valid name').optional().isVideoNameValid()
   req.checkBody('category', 'Should have a valid category').optional().isVideoCategoryValid()
   req.checkBody('licence', 'Should have a valid licence').optional().isVideoLicenceValid()
+  req.checkBody('nsfw', 'Should have a valid NSFW attribute').optional().isVideoNSFWValid()
   req.checkBody('description', 'Should have a valid description').optional().isVideoDescriptionValid()
   req.checkBody('tags', 'Should have correct tags').optional().isVideoTagsValid()
 

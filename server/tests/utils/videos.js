@@ -218,6 +218,7 @@ function uploadVideo (url, accessToken, videoAttributesArg, specialStatus, end) 
     name: 'my super video',
     category: 5,
     licence: 4,
+    nsfw: true,
     description: 'my super description',
     tags: [ 'tag' ],
     fixture: 'video_short.webm'
@@ -231,6 +232,7 @@ function uploadVideo (url, accessToken, videoAttributesArg, specialStatus, end) 
               .field('name', attributes.name)
               .field('category', attributes.category)
               .field('licence', attributes.licence)
+              .field('nsfw', attributes.nsfw)
               .field('description', attributes.description)
 
   for (let i = 0; i < attributes.tags.length; i++) {
@@ -265,6 +267,7 @@ function updateVideo (url, accessToken, id, attributes, specialStatus, end) {
   if (attributes.name) req.field('name', attributes.name)
   if (attributes.category) req.field('category', attributes.category)
   if (attributes.licence) req.field('licence', attributes.licence)
+  if (attributes.nsfw) req.field('nsfw', attributes.nsfw)
   if (attributes.description) req.field('description', attributes.description)
 
   if (attributes.tags) {
