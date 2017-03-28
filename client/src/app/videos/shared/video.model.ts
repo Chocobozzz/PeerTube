@@ -85,8 +85,8 @@ export class Video {
     this.by = Video.createByString(hash.author, hash.podHost);
   }
 
-  isRemovableBy(user: User) {
-    return this.isLocal === true && user && this.author === user.username;
+  isRemovableBy(user) {
+    return user && ((this.isLocal === true && this.author === user.username) || user.isAdmin() === true);
   }
 
   isVideoNSFWForUser(user: User) {

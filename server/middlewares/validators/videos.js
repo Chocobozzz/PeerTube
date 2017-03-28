@@ -95,15 +95,10 @@ function videosRemove (req, res, next) {
     checkVideoExists(req.params.id, res, function () {
       // We need to make additional checks
 
-      if (res.locals.video.isOwned() === false) {
-        return res.status(403).send('Cannot remove video of another pod')
-      }
-
-      if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
-        return res.status(403).send('Cannot remove video of another user')
-      }
-
-      next()
+      // Check if the user who did the request is able to delete the video
+      checkUserCanDeleteVideo(res.locals.oauth.token.User.id, res, function() {
+	next()
+      })
     })
   })
 }
@@ -158,4 +153,31 @@ function checkVideoExists (id, res, callback) {
     res.locals.video = video
     callback()
   })
+}
+
+function checkUserCanDeleteVideo (userId, res, callback) {
+  // Retrieve the user who did the request
+  db.User.loadById(userId, function (err, user) {
+    if (err) {
+      logger.error('Error in video request validator.', { error : err })
+      return res.sendStatus(500)
+    }
+
+    // Check if the user can delete the video
+    // 	The user can delete it if s/he an admin
+    // 	Or if s/he is the video's author
+    if (user.isAdmin() === false) {
+      if (res.locals.video.isOwned() === false) {
+	return res.status(403).send('Cannot remove video of another pod')
+      }
+
+      if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+	return res.status(403).send('Cannot remove video of another user')
+      }
+    }
+
+    // If we reach this comment, we can delete the video
+  })
+
+  callback();
 }
