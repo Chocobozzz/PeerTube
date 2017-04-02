@@ -767,7 +767,8 @@ function generateImage (video, videoPath, folder, imageName, size, callback) {
 function blacklistVideo (video, callback) {
   video.sequelize.models.BlacklistedVideo.create({
     remoteId: video.remoteId,
-    localId: video.localId
+    localId: video.localId,
+    remotePodId: video.Author.Pod.id
   })
 
   return callback()

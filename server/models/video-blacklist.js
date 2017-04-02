@@ -5,7 +5,7 @@ const modelUtils = require('./utils')
 // ---------------------------------------------------------------------------
 
 module.exports = function (sequelize, DataTypes) {
-  const Blacklist = sequelize.define('BlacklistedVideo',
+  const BlacklistedVideo = sequelize.define('BlacklistedVideo',
     {
       remoteId: {
 	type: DataTypes.UUID,
@@ -40,7 +40,8 @@ module.exports = function (sequelize, DataTypes) {
         countTotal,
         list,
         listForApi,
-        loadById
+	loadById,
+	loadByPod
       },
       instanceMethods: {
         toFormatedJSON
@@ -49,7 +50,7 @@ module.exports = function (sequelize, DataTypes) {
     }
   )
 
-  return Blacklist
+  return BlacklistedVideo
 }
 
 
@@ -59,6 +60,7 @@ function toFormatedJSON () {
   return {
     remoteId: this.remoteId,
     localId: this.localId,
+    remotePodId: this.remotePodId,
     createdAt: this.createdAt
   }
 }
@@ -67,6 +69,10 @@ function toFormatedJSON () {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
+  this.belongsTo(models.Pod, {
+    foreignKey: 'remotePodId',
+    onDelete: 'cascade'
+  })
 }
 
 function countTotal (callback) {
@@ -99,16 +105,6 @@ function loadByPod (remotePodId, callback) {
   const query = {
     where: {
       remotePodId: remotePodId
-    }
-  }
-
-  return this.findAll(query).asCallback(callback)
-}
-
-function loadByAdmin (adminId, callback) {
-  const query = {
-    where: {
-      blacklistedBy: adminId
     }
   }
 
