@@ -304,13 +304,6 @@ function afterDestroy (video, options, next) {
       }
     )
   }
-  else  {
-    tasks.push(
-      function addVideoToBlacklist(callback) {
-	blacklistVideo(video, callback)
-      }
-    )
-  }
 
   parallel(tasks, next)
 }
@@ -761,15 +754,4 @@ function generateImage (video, videoPath, folder, imageName, size, callback) {
       callback(null, imageName)
     })
     .thumbnail(options)
-}
-
-
-function blacklistVideo (video, callback) {
-  video.sequelize.models.BlacklistedVideo.create({
-    remoteId: video.remoteId,
-    localId: video.localId,
-    remotePodId: video.Author.Pod.id
-  })
-
-  return callback()
 }
