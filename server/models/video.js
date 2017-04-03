@@ -304,6 +304,13 @@ function afterDestroy (video, options, next) {
       }
     )
   }
+  else {
+    tasks.push(
+      function removeVideoFromBlacklist (callback) {
+	removeFromBlacklist(video, callback)
+      }
+    )
+  }
 
   parallel(tasks, next)
 }
@@ -754,4 +761,33 @@ function generateImage (video, videoPath, folder, imageName, size, callback) {
       callback(null, imageName)
     })
     .thumbnail(options)
+}
+
+function removeFromBlacklist (video, callback) {
+  // Find the blacklisted video
+  video.sequelize.models.BlacklistedVideo.loadById(video.remoteId, function (err, video) {
+    // If an error occured, stop here
+    if (err) {
+      logger.error('Error when fetching video from blacklist.', { error: err })
+
+      return callback(err)
+    }
+
+    // If we found the video, remove it from the blacklist
+    if (video) {
+      video.destroy().asCallback(function (err) {
+	if (err) {
+	  logger.error('Error when removing video from blacklist.', { error: err })
+
+	  return callback(err)
+	}
+
+	return callback()
+      })
+    }
+    // If haven't found it, simply ignore it and do nothing
+    else {
+      return callback()
+    }
+  })
 }
