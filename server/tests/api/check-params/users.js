@@ -270,6 +270,14 @@ describe('Test users API validators', function () {
       requestsUtils.makePutBodyRequest(server.url, path + userId, userAccessToken, data, done)
     })
 
+    it('Should fail with an invalid display NSFW attribute', function (done) {
+      const data = {
+        displayNSFW: -1
+      }
+
+      requestsUtils.makePutBodyRequest(server.url, path + userId, userAccessToken, data, done)
+    })
+
     it('Should fail with an non authenticated user', function (done) {
       const data = {
         password: 'my super password'
@@ -280,7 +288,8 @@ describe('Test users API validators', function () {
 
     it('Should succeed with the correct params', function (done) {
       const data = {
-        password: 'my super password'
+        password: 'my super password',
+        displayNSFW: true
       }
 
       requestsUtils.makePutBodyRequest(server.url, path + userId, userAccessToken, data, done, 204)

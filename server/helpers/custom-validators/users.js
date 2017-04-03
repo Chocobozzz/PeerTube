@@ -9,7 +9,8 @@ const USERS_CONSTRAINTS_FIELDS = constants.CONSTRAINTS_FIELDS.USERS
 const usersValidators = {
   isUserPasswordValid,
   isUserRoleValid,
-  isUserUsernameValid
+  isUserUsernameValid,
+  isUserDisplayNSFWValid
 }
 
 function isUserPasswordValid (value) {
@@ -24,6 +25,10 @@ function isUserUsernameValid (value) {
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
   return validator.matches(value, new RegExp(`^[a-zA-Z0-9._]{${min},${max}}$`))
+}
+
+function isUserDisplayNSFWValid (value) {
+  return validator.isBoolean(value)
 }
 
 // ---------------------------------------------------------------------------

@@ -39,6 +39,17 @@ module.exports = function (sequelize, DataTypes) {
           isEmail: true
         }
       },
+      displayNSFW: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        validate: {
+          nsfwValid: function (value) {
+            const res = customUsersValidators.isUserDisplayNSFWValid(value)
+            if (res === false) throw new Error('Display NSFW is not valid.')
+          }
+        }
+      },
       role: {
         type: DataTypes.ENUM(values(constants.USER_ROLES)),
         allowNull: false
@@ -101,6 +112,7 @@ function toFormatedJSON () {
     id: this.id,
     username: this.username,
     email: this.email,
+    displayNSFW: this.displayNSFW,
     role: this.role,
     createdAt: this.createdAt
   }

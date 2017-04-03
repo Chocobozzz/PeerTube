@@ -101,14 +101,18 @@ function removeUser (url, userId, accessToken, expectedStatus, end) {
     .end(end)
 }
 
-function updateUser (url, userId, accessToken, newPassword, end) {
+function updateUser (url, userId, accessToken, newPassword, displayNSFW, end) {
   const path = '/api/v1/users/' + userId
+
+  const toSend = {}
+  if (newPassword !== undefined && newPassword !== null) toSend.password = newPassword
+  if (displayNSFW !== undefined && displayNSFW !== null) toSend.displayNSFW = displayNSFW
 
   request(url)
     .put(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
-    .send({ password: newPassword })
+    .send(toSend)
     .expect(204)
     .end(end)
 }

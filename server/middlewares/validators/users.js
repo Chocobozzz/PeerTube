@@ -56,7 +56,8 @@ function usersRemove (req, res, next) {
 function usersUpdate (req, res, next) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isInt()
   // Add old password verification
-  req.checkBody('password', 'Should have a valid password').isUserPasswordValid()
+  req.checkBody('password', 'Should have a valid password').optional().isUserPasswordValid()
+  req.checkBody('displayNSFW', 'Should have a valid display Not Safe For Work attribute').optional().isUserDisplayNSFWValid()
 
   logger.debug('Checking usersUpdate parameters', { parameters: req.body })
 

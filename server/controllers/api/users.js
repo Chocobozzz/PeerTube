@@ -71,6 +71,7 @@ function createUser (req, res, next) {
     username: req.body.username,
     password: req.body.password,
     email: req.body.email,
+    displayNSFW: false,
     role: constants.USER_ROLES.USER
   })
 
@@ -136,7 +137,9 @@ function updateUser (req, res, next) {
   db.User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
     if (err) return next(err)
 
-    user.password = req.body.password
+    if (req.body.password) user.password = req.body.password
+    if (req.body.displayNSFW !== undefined) user.displayNSFW = req.body.displayNSFW
+
     user.save().asCallback(function (err) {
       if (err) return next(err)
 

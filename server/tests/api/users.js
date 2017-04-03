@@ -209,6 +209,7 @@ describe('Test users', function () {
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
+      expect(user.displayNSFW).to.be.falsy
       expect(user.id).to.exist
 
       done()
@@ -237,10 +238,13 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
+      expect(user.displayNSFW).to.be.falsy
 
       const rootUser = users[1]
       expect(rootUser.username).to.equal('root')
       expect(rootUser.email).to.equal('admin1@example.com')
+      expect(rootUser.displayNSFW).to.be.falsy
+
       userId = user.id
 
       done()
@@ -261,6 +265,7 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('root')
       expect(user.email).to.equal('admin1@example.com')
+      expect(user.displayNSFW).to.be.falsy
 
       done()
     })
@@ -280,6 +285,7 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
+      expect(user.displayNSFW).to.be.falsy
 
       done()
     })
@@ -299,6 +305,7 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
+      expect(user.displayNSFW).to.be.falsy
 
       done()
     })
@@ -317,19 +324,41 @@ describe('Test users', function () {
 
       expect(users[0].username).to.equal('root')
       expect(users[0].email).to.equal('admin1@example.com')
+      expect(users[0].displayNSFW).to.be.falsy
+
       expect(users[1].username).to.equal('user_1')
       expect(users[1].email).to.equal('user_1@example.com')
+      expect(users[1].displayNSFW).to.be.falsy
 
       done()
     })
   })
 
   it('Should update the user password', function (done) {
-    usersUtils.updateUser(server.url, userId, accessTokenUser, 'new password', function (err, res) {
+    usersUtils.updateUser(server.url, userId, accessTokenUser, 'new password', null, function (err, res) {
       if (err) throw err
 
       server.user.password = 'new password'
       loginUtils.login(server.url, server.client, server.user, 200, done)
+    })
+  })
+
+  it('Should be able to change the NSFW display attribute', function (done) {
+    usersUtils.updateUser(server.url, userId, accessTokenUser, null, true, function (err, res) {
+      if (err) throw err
+
+      usersUtils.getUserInformation(server.url, accessTokenUser, function (err, res) {
+        if (err) throw err
+
+        const user = res.body
+
+        expect(user.username).to.equal('user_1')
+        expect(user.email).to.equal('user_1@example.com')
+        expect(user.displayNSFW).to.be.truthy
+        expect(user.id).to.exist
+
+        done()
+      })
     })
   })
 
