@@ -97,7 +97,6 @@ router.get('/:id',
 router.delete('/:id',
   oAuth.authenticate,
   validatorsVideos.videosRemove,
-  addVideoToBlacklist,
   removeVideo
 )
 
@@ -109,6 +108,13 @@ router.get('/search/:value',
   pagination.setPagination,
   search.setVideosSearch,
   searchVideos
+)
+
+router.post('/:id/blacklist',
+  oAuth.authenticate,
+  admin.ensureIsAdmin,
+  validatorsVideos.videosBlacklist,
+  addVideoToBlacklist
 )
 
 // ---------------------------------------------------------------------------
@@ -639,7 +645,6 @@ function addVideoToBlacklist (req, res, next) {
     .asCallback(function (err) {
       if (err) {
 	logger.error('Errors when blacklisting video ', { error: err })
-
 	return next(err)
       }
     })

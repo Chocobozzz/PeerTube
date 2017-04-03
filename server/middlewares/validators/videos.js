@@ -15,7 +15,9 @@ const validatorsVideos = {
 
   videoAbuseReport,
 
-  videoRate
+  videoRate,
+
+  videosBlacklist
 }
 
 function videosAdd (req, res, next) {
@@ -180,4 +182,15 @@ function checkUserCanDeleteVideo (userId, res, callback) {
   })
 
   callback();
+}
+
+
+function videosBlacklist (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+
+  logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
+
+  checkErrors(req, res, function () {
+    checkVideoExists(req.params.id, res, next)
+  })
 }
