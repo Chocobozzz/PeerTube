@@ -15,6 +15,21 @@
     display: inline-block;
     position: relative;
 
+    &:hover {
+      text-decoration: none !important;
+    }
+
+    .thumbnail-nsfw {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      font-size: 30px;
+      line-height: 110px;
+
+      width: 200px;
+      height: 110px;
+    }
+
     .video-miniature-duration {
       position: absolute;
       right: 5px;

@@ -26,4 +26,8 @@ export class WebTorrentService {
   remove(magnetUri: string) {
     return this.client.remove(magnetUri);
   }
+
+  has(magnetUri: string) {
+    return this.client.get(magnetUri) !== null;
+  }
 }

@@ -5,7 +5,8 @@ export class AuthUser extends User {
   private static KEYS = {
     ID: 'id',
     ROLE: 'role',
-    USERNAME: 'username'
+    USERNAME: 'username',
+    DISPLAY_NSFW: 'display_nsfw'
   };
 
   tokens: Tokens;
@@ -17,7 +18,8 @@ export class AuthUser extends User {
         {
           id: parseInt(localStorage.getItem(this.KEYS.ID)),
           username: localStorage.getItem(this.KEYS.USERNAME),
-          role: localStorage.getItem(this.KEYS.ROLE)
+          role: localStorage.getItem(this.KEYS.ROLE),
+          displayNSFW: localStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true'
         },
         Tokens.load()
       );
@@ -30,10 +32,16 @@ export class AuthUser extends User {
     localStorage.removeItem(this.KEYS.USERNAME);
     localStorage.removeItem(this.KEYS.ID);
     localStorage.removeItem(this.KEYS.ROLE);
+    localStorage.removeItem(this.KEYS.DISPLAY_NSFW);
     Tokens.flush();
   }
 
-  constructor(userHash: { id: number, username: string, role: string }, hashTokens: any) {
+  constructor(userHash: {
+    id: number,
+    username: string,
+    role: string,
+    displayNSFW: boolean
+  }, hashTokens: any) {
     super(userHash);
     this.tokens = new Tokens(hashTokens);
   }
@@ -59,6 +67,7 @@ export class AuthUser extends User {
     localStorage.setItem(AuthUser.KEYS.ID, this.id.toString());
     localStorage.setItem(AuthUser.KEYS.USERNAME, this.username);
     localStorage.setItem(AuthUser.KEYS.ROLE, this.role);
+    localStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW);
     this.tokens.save();
   }
 }

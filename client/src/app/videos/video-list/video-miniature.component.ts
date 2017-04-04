@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { NotificationsService } from 'angular2-notifications';
 
-import { ConfirmService } from '../../core';
+import { ConfirmService, ConfigService } from '../../core';
 import { SortField, Video, VideoService } from '../shared';
 import { User } from '../../shared';
 
@@ -24,11 +24,19 @@ export class VideoMiniatureComponent {
   constructor(
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
+    private configService: ConfigService,
     private videoService: VideoService
   ) {}
 
   displayRemoveIcon() {
     return this.hovering && this.video.isRemovableBy(this.user);
+  }
+
+  getVideoName() {
+    if (this.isVideoNSFWForThisUser())
+      return 'NSFW';
+
+    return this.video.name;
   }
 
   onBlur() {
@@ -51,5 +59,9 @@ export class VideoMiniatureComponent {
         );
       }
     );
+  }
+
+  isVideoNSFWForThisUser() {
+    return this.video.isVideoNSFWForUser(this.user);
   }
 }

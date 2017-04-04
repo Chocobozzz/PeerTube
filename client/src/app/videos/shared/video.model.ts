@@ -1,3 +1,5 @@
+import { User } from '../../shared';
+
 export class Video {
   author: string;
   by: string;
@@ -16,6 +18,7 @@ export class Video {
   views: number;
   likes: number;
   dislikes: number;
+  nsfw: boolean;
 
   private static createByString(author: string, podHost: string) {
     return author + '@' + podHost;
@@ -47,6 +50,7 @@ export class Video {
     views: number,
     likes: number,
     dislikes: number,
+    nsfw: boolean
   }) {
     this.author  = hash.author;
     this.createdAt = new Date(hash.createdAt);
@@ -64,11 +68,17 @@ export class Video {
     this.views = hash.views;
     this.likes = hash.likes;
     this.dislikes = hash.dislikes;
+    this.nsfw = hash.nsfw;
 
     this.by = Video.createByString(hash.author, hash.podHost);
   }
 
-  isRemovableBy(user) {
+  isRemovableBy(user: User) {
     return this.isLocal === true && user && this.author === user.username;
+  }
+
+  isVideoNSFWForUser(user: User) {
+    // If the video is NSFW and the user is not logged in, or the user does not want to display NSFW videos...
+    return (this.nsfw && (!user || user.displayNSFW === false));
   }
 }

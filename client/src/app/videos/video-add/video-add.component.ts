@@ -71,6 +71,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   buildForm() {
     this.form = this.formBuilder.group({
       name: [ '', VIDEO_NAME.VALIDATORS ],
+      nsfw: [ false ],
       category: [ '', VIDEO_CATEGORY.VALIDATORS ],
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
@@ -93,12 +94,14 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
     this.uploader.onBuildItemForm = (item, form) => {
       const name = this.form.value['name'];
+      const nsfw = this.form.value['nsfw'];
       const category = this.form.value['category'];
       const licence = this.form.value['licence'];
       const description = this.form.value['description'];
 
       form.append('name', name);
       form.append('category', category);
+      form.append('nsfw', nsfw);
       form.append('licence', licence);
       form.append('description', description);
 

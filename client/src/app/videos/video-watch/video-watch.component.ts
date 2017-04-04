@@ -1,12 +1,13 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
 import * as videojs from 'video.js';
 import { MetaService } from '@nglibs/meta';
 import { NotificationsService } from 'angular2-notifications';
 
-import { AuthService } from '../../core';
+import { AuthService, ConfirmService } from '../../core';
 import { VideoMagnetComponent } from './video-magnet.component';
 import { VideoShareComponent } from './video-share.component';
 import { VideoReportComponent } from './video-report.component';
@@ -47,7 +48,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private ngZone: NgZone,
     private route: ActivatedRoute,
+    private router: Router,
     private videoService: VideoService,
+    private confirmService: ConfirmService,
     private metaService: MetaService,
     private webTorrentService: WebTorrentService,
     private authService: AuthService,
@@ -58,15 +61,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.paramsSub = this.route.params.subscribe(routeParams => {
       let id = routeParams['id'];
       this.videoService.getVideo(id).subscribe(
-        video => {
-          this.video = video;
-          this.setOpenGraphTags();
-          this.loadVideo();
-          this.checkUserRating();
-        },
-        error => {
-          this.videoNotFound = true;
-        }
+        video => this.onVideoFetched(video),
+
+        error => this.videoNotFound = true
       );
     });
 
@@ -92,7 +89,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     window.clearInterval(this.torrentInfosInterval);
     window.clearTimeout(this.errorTimer);
 
-    if (this.video !== null) {
+    if (this.video !== null && this.webTorrentService.has(this.video.magnetUri)) {
       this.webTorrentService.remove(this.video.magnetUri);
     }
 
@@ -204,6 +201,29 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
                        err => this.notificationsService.error('Error', err.text)
                       );
+  }
+
+  private onVideoFetched(video: Video) {
+    this.video = video;
+
+    let observable;
+    if (this.video.isVideoNSFWForUser(this.authService.getUser())) {
+      observable = this.confirmService.confirm('This video is not safe for work. Are you sure you want to watch it?', 'NSFW');
+    } else {
+      observable = Observable.of(true);
+    }
+
+    observable.subscribe(
+      res => {
+        if (res === false) {
+          return this.router.navigate([ '/videos/list' ]);
+        }
+
+        this.setOpenGraphTags();
+        this.loadVideo();
+        this.checkUserRating();
+      }
+    );
   }
 
   private updateVideoRating(oldRating: RateType, newRating: RateType) {

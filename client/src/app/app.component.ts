@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AuthService } from './core';
+import { AuthService, ConfigService } from './core';
 import { VideoService } from './videos';
 import { UserService } from './shared';
 
@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private configService: ConfigService,
     private userService: UserService,
     private videoService: VideoService,
     viewContainerRef: ViewContainerRef
@@ -38,6 +39,7 @@ export class AppComponent implements OnInit {
       this.userService.checkTokenValidity();
     }
 
+    this.configService.loadConfig();
     this.videoService.loadVideoCategories();
     this.videoService.loadVideoLicences();
   }
