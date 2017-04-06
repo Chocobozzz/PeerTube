@@ -1,0 +1,16 @@
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<form role="form" (ngSubmit)="updateDetails()" [formGroup]="form">
+  <div class="form-group">
+    <label for="displayNSFW">Display NSFW videos</label>
+    <input
+      type="checkbox" id="displayNSFW"
+      formControlName="displayNSFW"
+    >
+    <div *ngIf="formErrors['displayNSFW']" class="alert alert-danger">
+      {{ formErrors['displayNSFW'] }}
+    </div>
+  </div>
+
+  <input type="submit" value="Update" class="btn btn-default" [disabled]="!form.valid">
+</form>

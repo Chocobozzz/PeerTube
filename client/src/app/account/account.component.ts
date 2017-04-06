@@ -4,63 +4,25 @@ import { Router } from '@angular/router';
 
 import { NotificationsService } from 'angular2-notifications';
 
-import { FormReactive, UserService, USER_PASSWORD } from '../shared';
+import { AuthService } from '../core';
+import {
+  FormReactive,
+  User,
+  UserService,
+  USER_PASSWORD
+} from '../shared';
 
 @Component({
   selector: 'my-account',
-  templateUrl: './account.component.html'
+  templateUrl: './account.component.html',
+  styleUrls: [ './account.component.scss' ]
 })
+export class AccountComponent implements OnInit {
+  user: User = null;
 
-export class AccountComponent extends FormReactive implements OnInit {
-  error: string = null;
-
-  form: FormGroup;
-  formErrors = {
-    'new-password': '',
-    'new-confirmed-password': ''
-  };
-  validationMessages = {
-    'new-password': USER_PASSWORD.MESSAGES,
-    'new-confirmed-password': USER_PASSWORD.MESSAGES
-  };
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private notificationsService: NotificationsService,
-    private userService: UserService
-  ) {
-    super();
-  }
-
-  buildForm() {
-    this.form = this.formBuilder.group({
-      'new-password': [ '', USER_PASSWORD.VALIDATORS ],
-      'new-confirmed-password': [ '', USER_PASSWORD.VALIDATORS ],
-    });
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data));
-  }
+  constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    this.buildForm();
-  }
-
-  changePassword() {
-    const newPassword = this.form.value['new-password'];
-    const newConfirmedPassword = this.form.value['new-confirmed-password'];
-
-    this.error = null;
-
-    if (newPassword !== newConfirmedPassword) {
-      this.error = 'The new password and the confirmed password do not correspond.';
-      return;
-    }
-
-    this.userService.changePassword(newPassword).subscribe(
-      () => this.notificationsService.success('Success', 'Password updated.'),
-
-      err => this.error = err
-    );
+    this.user = this.authService.getUser();
   }
 }

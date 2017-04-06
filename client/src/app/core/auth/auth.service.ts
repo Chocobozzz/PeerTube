@@ -125,7 +125,7 @@ export class AuthService {
                       res.username = username;
                       return res;
                     })
-                    .flatMap(res => this.fetchUserInformations(res))
+                    .flatMap(res => this.mergeUserInformations(res))
                     .map(res => this.handleLogin(res))
                     .catch((res) => this.restExtractor.handleError(res));
   }
@@ -178,7 +178,23 @@ export class AuthService {
                     });
   }
 
-  private fetchUserInformations (obj: any) {
+  refreshUserInformations() {
+    const obj = {
+      access_token: this.user.getAccessToken()
+    };
+
+    this.mergeUserInformations(obj)
+        .subscribe(
+          res => {
+            this.user.displayNSFW = res.displayNSFW;
+            this.user.role = res.role;
+
+            this.user.save();
+          }
+        );
+  }
+
+  private mergeUserInformations(obj: { access_token: string }) {
     // Do not call authHttp here to avoid circular dependencies headaches
 
     const headers = new Headers();
@@ -187,9 +203,13 @@ export class AuthService {
     return this.http.get(AuthService.BASE_USER_INFORMATIONS_URL, { headers })
              .map(res => res.json())
              .map(res => {
-               obj.id = res.id;
-               obj.role = res.role;
-               return obj;
+               const newProperties = {
+                 id: res.id,
+                 role: res.role,
+                 displayNSFW: res.displayNSFW
+               };
+
+               return Object.assign(obj, newProperties);
              }
     );
   }
@@ -198,13 +218,14 @@ export class AuthService {
     const id = obj.id;
     const username = obj.username;
     const role = obj.role;
+    const displayNSFW = obj.displayNSFW;
     const hashTokens = {
       access_token: obj.access_token,
       token_type: obj.token_type,
       refresh_token: obj.refresh_token
     };
 
-    this.user = new AuthUser({ id, username, role }, hashTokens);
+    this.user = new AuthUser({ id, username, role, displayNSFW }, hashTokens);
     this.user.save();
 
     this.setStatus(AuthStatus.LoggedIn);

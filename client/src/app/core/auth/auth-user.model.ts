@@ -67,7 +67,7 @@ export class AuthUser extends User {
     localStorage.setItem(AuthUser.KEYS.ID, this.id.toString());
     localStorage.setItem(AuthUser.KEYS.USERNAME, this.username);
     localStorage.setItem(AuthUser.KEYS.ROLE, this.role);
-    localStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW);
+    localStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW));
     this.tokens.save();
   }
 }

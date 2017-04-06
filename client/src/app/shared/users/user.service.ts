@@ -33,4 +33,12 @@ export class UserService {
                         .map(this.restExtractor.extractDataBool)
                         .catch((res) => this.restExtractor.handleError(res));
   }
+
+  updateDetails(details: { displayNSFW: boolean }) {
+    const url = UserService.BASE_USERS_URL + this.authService.getUser().id;
+
+    return this.authHttp.put(url, details)
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
+  }
 }
