@@ -11,6 +11,7 @@ import {
   VIDEO_NAME,
   VIDEO_CATEGORY,
   VIDEO_LICENCE,
+  VIDEO_LANGUAGE,
   VIDEO_DESCRIPTION,
   VIDEO_TAGS
 } from '../../shared';
@@ -27,6 +28,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   uploader: FileUploader;
   videoCategories = [];
   videoLicences = [];
+  videoLanguages = [];
 
   error: string = null;
   form: FormGroup;
@@ -34,6 +36,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     name: '',
     category: '',
     licence: '',
+    language: '',
     description: '',
     currentTag: ''
   };
@@ -41,6 +44,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     name: VIDEO_NAME.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
+    language: VIDEO_LANGUAGE.MESSAGES,
     description: VIDEO_DESCRIPTION.MESSAGES,
     currentTag: VIDEO_TAGS.MESSAGES
   };
@@ -74,6 +78,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       nsfw: [ false ],
       category: [ '', VIDEO_CATEGORY.VALIDATORS ],
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
+      language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
       currentTag: [ '', VIDEO_TAGS.VALIDATORS ]
     });
@@ -84,6 +89,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   ngOnInit() {
     this.videoCategories = this.videoService.videoCategories;
     this.videoLicences = this.videoService.videoLicences;
+    this.videoLanguages = this.videoService.videoLanguages;
 
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
@@ -97,12 +103,19 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       const nsfw = this.form.value['nsfw'];
       const category = this.form.value['category'];
       const licence = this.form.value['licence'];
+      const language = this.form.value['language'];
       const description = this.form.value['description'];
 
       form.append('name', name);
       form.append('category', category);
       form.append('nsfw', nsfw);
       form.append('licence', licence);
+
+      // Language is optional
+      if (language) {
+        form.append('language', language);
+      }
+
       form.append('description', description);
 
       for (let i = 0; i < this.tags.length; i++) {

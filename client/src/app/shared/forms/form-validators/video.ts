@@ -23,6 +23,11 @@ export const VIDEO_LICENCE = {
   }
 };
 
+export const VIDEO_LANGUAGE = {
+  VALIDATORS: [ ],
+  MESSAGES: {}
+};
+
 export const VIDEO_DESCRIPTION = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(250) ],
   MESSAGES: {

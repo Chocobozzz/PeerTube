@@ -47,6 +47,18 @@
   </div>
 
   <div class="form-group">
+    <label for="language">Language</label>
+    <select class="form-control" id="language" formControlName="language">
+      <option></option>
+      <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
+    </select>
+
+    <div *ngIf="formErrors.language" class="alert alert-danger">
+      {{ formErrors.language }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="tags">Tags</label> <span class="little-information">(press enter to add the tag)</span>
     <input
       type="text" class="form-control" id="currentTag"

@@ -24,6 +24,7 @@ export class VideoService {
 
   videoCategories: Array<{ id: number, label: string }> = [];
   videoLicences: Array<{ id: number, label: string }> = [];
+  videoLanguages: Array<{ id: number, label: string }> = [];
 
   constructor(
     private authService: AuthService,
@@ -54,6 +55,19 @@ export class VideoService {
                         this.videoLicences.push({
                           id: parseInt(licenceKey),
                           label: data[licenceKey]
+                        });
+                      });
+                    });
+  }
+
+  loadVideoLanguages() {
+    return this.http.get(VideoService.BASE_VIDEO_URL + 'languages')
+                    .map(this.restExtractor.extractDataGet)
+                    .subscribe(data => {
+                      Object.keys(data).forEach(languageKey => {
+                        this.videoLanguages.push({
+                          id: parseInt(languageKey),
+                          label: data[languageKey]
                         });
                       });
                     });
