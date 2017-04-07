@@ -182,7 +182,8 @@ In this mode, the server will run requests between pods more quickly, the videos
 
     $ npm run dev
 
-The administrator password is displayed in the command output and can be found in the logs.
+**Username**: *root* <br/>
+**Password**: *test*
 
 ### Test with 3 fresh nodes
 
