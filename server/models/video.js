@@ -64,10 +64,21 @@ module.exports = function (sequelize, DataTypes) {
       licence: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        defaultValue: null,
         validate: {
           licenceValid: function (value) {
             const res = customVideosValidators.isVideoLicenceValid(value)
             if (res === false) throw new Error('Video licence is not valid.')
+          }
+        }
+      },
+      language: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        validate: {
+          languageValid: function (value) {
+            const res = customVideosValidators.isVideoLanguageValid(value)
+            if (res === false) throw new Error('Video language is not valid.')
           }
         }
       },
@@ -398,6 +409,10 @@ function toFormatedJSON () {
   let licenceLabel = constants.VIDEO_LICENCES[this.licence]
   if (!licenceLabel) licenceLabel = 'Unknown'
 
+  // Language is an optional attribute
+  let languageLabel = constants.VIDEO_LANGUAGES[this.language]
+  if (!languageLabel) languageLabel = 'Unknown'
+
   const json = {
     id: this.id,
     name: this.name,
@@ -405,6 +420,8 @@ function toFormatedJSON () {
     categoryLabel,
     licence: this.licence,
     licenceLabel,
+    language: this.language,
+    languageLabel,
     nsfw: this.nsfw,
     description: this.description,
     podHost,
@@ -439,6 +456,7 @@ function toAddRemoteJSON (callback) {
       name: self.name,
       category: self.category,
       licence: self.licence,
+      language: self.language,
       nsfw: self.nsfw,
       description: self.description,
       infoHash: self.infoHash,
@@ -464,6 +482,7 @@ function toUpdateRemoteJSON (callback) {
     name: this.name,
     category: this.category,
     licence: this.licence,
+    language: this.language,
     nsfw: this.nsfw,
     description: this.description,
     infoHash: this.infoHash,

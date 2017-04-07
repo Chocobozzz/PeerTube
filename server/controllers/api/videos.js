@@ -47,6 +47,7 @@ const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCo
 
 router.get('/categories', listVideoCategories)
 router.get('/licences', listVideoLicences)
+router.get('/languages', listVideoLanguages)
 
 router.get('/abuse',
   oAuth.authenticate,
@@ -119,6 +120,10 @@ function listVideoCategories (req, res, next) {
 
 function listVideoLicences (req, res, next) {
   res.json(constants.VIDEO_LICENCES)
+}
+
+function listVideoLanguages (req, res, next) {
+  res.json(constants.VIDEO_LANGUAGES)
 }
 
 function rateVideoRetryWrapper (req, res, next) {
@@ -313,6 +318,7 @@ function addVideo (req, res, videoFile, finalCallback) {
         extname: path.extname(videoFile.filename),
         category: videoInfos.category,
         licence: videoInfos.licence,
+        language: videoInfos.language,
         nsfw: videoInfos.nsfw,
         description: videoInfos.description,
         duration: videoFile.duration,
@@ -429,6 +435,7 @@ function updateVideo (req, res, finalCallback) {
       if (videoInfosToUpdate.name) videoInstance.set('name', videoInfosToUpdate.name)
       if (videoInfosToUpdate.category) videoInstance.set('category', videoInfosToUpdate.category)
       if (videoInfosToUpdate.licence) videoInstance.set('licence', videoInfosToUpdate.licence)
+      if (videoInfosToUpdate.language) videoInstance.set('language', videoInfosToUpdate.language)
       if (videoInfosToUpdate.nsfw) videoInstance.set('nsfw', videoInfosToUpdate.nsfw)
       if (videoInfosToUpdate.description) videoInstance.set('description', videoInfosToUpdate.description)
 

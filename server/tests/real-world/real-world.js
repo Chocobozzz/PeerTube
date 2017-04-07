@@ -21,7 +21,7 @@ program
   .option('-u, --update [weight]', 'Weight for updating videos')
   .option('-v, --view [weight]', 'Weight for viewing videos')
   .option('-l, --like [weight]', 'Weight for liking videos')
-  .option('-s --dislike [weight]', 'Weight for disliking videos')
+  .option('-s, --dislike [weight]', 'Weight for disliking videos')
   .option('-p, --pods [n]', 'Number of pods to run (3 or 6)', /^3|6$/, 3)
   .option('-a, --action [interval]', 'Interval in ms for an action')
   .option('-i, --integrity [interval]', 'Interval in ms for an integrity check')
@@ -207,6 +207,7 @@ function upload (servers, numServer, callback) {
     category: 4,
     nsfw: false,
     licence: 2,
+    language: 1,
     description: Date.now() + ' description',
     tags: [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ],
     fixture: 'video_short1.webm'

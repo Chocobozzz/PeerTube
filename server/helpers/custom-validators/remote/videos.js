@@ -87,6 +87,7 @@ function isCommonVideoAttributesValid (video) {
          videosValidators.isVideoDateValid(video.updatedAt) &&
          videosValidators.isVideoCategoryValid(video.category) &&
          videosValidators.isVideoLicenceValid(video.licence) &&
+         videosValidators.isVideoLanguageValid(video.language) &&
          videosValidators.isVideoNSFWValid(video.nsfw) &&
          videosValidators.isVideoDescriptionValid(video.description) &&
          videosValidators.isVideoDurationValid(video.duration) &&

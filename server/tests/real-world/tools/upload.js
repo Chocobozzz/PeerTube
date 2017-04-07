@@ -12,6 +12,7 @@ program
   .option('-x, --nsfw', 'Video is Not Safe For Work')
   .option('-c, --category <category number>', 'Category number')
   .option('-l, --licence <licence number>', 'Licence number')
+  .option('-g, --language <language number>', 'Language number')
   .option('-d, --description <description>', 'Video description')
   .option('-t, --tags <tags>', 'Video tags', list)
   .option('-f, --file <file>', 'Video absolute file path')
@@ -23,6 +24,7 @@ if (
   !program.name ||
   !program.category ||
   !program.licence ||
+  !program.language ||
   !program.nsfw ||
   !program.description ||
   !program.tags ||
@@ -42,6 +44,7 @@ fs.access(program.file, fs.F_OK, function (err) {
     program.name,
     program.category,
     program.licence,
+    program.language,
     program.nsfw,
     program.description,
     program.tags,
@@ -55,13 +58,14 @@ function list (val) {
   return val.split(',')
 }
 
-function upload (url, accessToken, name, category, licence, nsfw, description, tags, fixture) {
+function upload (url, accessToken, name, category, licence, language, nsfw, description, tags, fixture) {
   console.log('Uploading %s video...', program.name)
 
   const videoAttributes = {
     name,
     category,
     licence,
+    language,
     nsfw,
     description,
     tags,

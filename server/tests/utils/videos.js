@@ -7,6 +7,7 @@ const request = require('supertest')
 const videosUtils = {
   getVideoCategories,
   getVideoLicences,
+  getVideoLanguages,
   getAllVideosListBy,
   getVideo,
   getVideosList,
@@ -37,6 +38,17 @@ function getVideoCategories (url, end) {
 
 function getVideoLicences (url, end) {
   const path = '/api/v1/videos/licences'
+
+  request(url)
+    .get(path)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end(end)
+}
+
+function getVideoLanguages (url, end) {
+  const path = '/api/v1/videos/languages'
 
   request(url)
     .get(path)
@@ -218,6 +230,7 @@ function uploadVideo (url, accessToken, videoAttributesArg, specialStatus, end) 
     name: 'my super video',
     category: 5,
     licence: 4,
+    language: 3,
     nsfw: true,
     description: 'my super description',
     tags: [ 'tag' ],
@@ -232,6 +245,7 @@ function uploadVideo (url, accessToken, videoAttributesArg, specialStatus, end) 
               .field('name', attributes.name)
               .field('category', attributes.category)
               .field('licence', attributes.licence)
+              .field('language', attributes.language)
               .field('nsfw', attributes.nsfw)
               .field('description', attributes.description)
 
@@ -267,6 +281,7 @@ function updateVideo (url, accessToken, id, attributes, specialStatus, end) {
   if (attributes.name) req.field('name', attributes.name)
   if (attributes.category) req.field('category', attributes.category)
   if (attributes.licence) req.field('licence', attributes.licence)
+  if (attributes.language) req.field('language', attributes.language)
   if (attributes.nsfw) req.field('nsfw', attributes.nsfw)
   if (attributes.description) req.field('description', attributes.description)
 

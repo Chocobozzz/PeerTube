@@ -114,6 +114,7 @@ describe('Test videos API validator', function () {
       const data = {
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -129,6 +130,7 @@ describe('Test videos API validator', function () {
         name: 'My very very very very very very very very very very very very very very very very long name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -143,6 +145,7 @@ describe('Test videos API validator', function () {
       const data = {
         name: 'my super name',
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -158,6 +161,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 125,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -172,6 +176,7 @@ describe('Test videos API validator', function () {
       const data = {
         name: 'my super name',
         category: 5,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -187,6 +192,23 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 125,
+        language: 6,
+        nsfw: false,
+        description: 'my super description',
+        tags: [ 'tag1', 'tag2' ]
+      }
+      const attach = {
+        'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
+      }
+      requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, done)
+    })
+
+    it('Should fail with a bad language', function (done) {
+      const data = {
+        name: 'my super name',
+        category: 5,
+        licence: 4,
+        language: 563,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -202,6 +224,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 4,
+        language: 6,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
       }
@@ -216,6 +239,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 4,
+        language: 6,
         nsfw: 2,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -231,6 +255,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         tags: [ 'tag1', 'tag2' ]
       }
@@ -245,6 +270,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description which is very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very very very very very very very' +
@@ -262,6 +288,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
@@ -277,6 +304,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 't' ]
@@ -292,6 +320,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'mysupertagtoolong', 'tag1' ]
@@ -307,6 +336,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -320,6 +350,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -335,6 +366,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -350,6 +382,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -389,6 +422,7 @@ describe('Test videos API validator', function () {
       const data = {
         category: 5,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -400,6 +434,7 @@ describe('Test videos API validator', function () {
       const data = {
         category: 5,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -412,6 +447,7 @@ describe('Test videos API validator', function () {
         name: 'My very very very very very very very very very very very very very very very very long name',
         category: 5,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -424,6 +460,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 128,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -436,6 +473,20 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 128,
+        language: 6,
+        nsfw: false,
+        description: 'my super description',
+        tags: [ 'tag1', 'tag2' ]
+      }
+      requestsUtils.makePutBodyRequest(server.url, path + videoId, server.accessToken, data, done)
+    })
+
+    it('Should fail with a bad language', function (done) {
+      const data = {
+        name: 'my super name',
+        category: 5,
+        licence: 3,
+        language: 896,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -448,6 +499,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 5,
+        language: 6,
         nsfw: -4,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
@@ -460,6 +512,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description which is very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very very very very very very very' +
@@ -474,6 +527,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
@@ -486,6 +540,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'tag1', 't' ]
@@ -498,6 +553,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 2,
+        language: 6,
         nsfw: false,
         description: 'my super description',
         tags: [ 'mysupertagtoolong', 'tag1' ]

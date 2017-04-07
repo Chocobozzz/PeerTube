@@ -5,7 +5,7 @@ const path = require('path')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 45
+const LAST_MIGRATION_VERSION = 50
 
 // ---------------------------------------------------------------------------
 
@@ -133,6 +133,24 @@ const VIDEO_LICENCES = {
   5: 'Attribution - Non Commercial - Share Alike',
   6: 'Attribution - Non Commercial - No Derivatives',
   7: 'Public Domain Dedication'
+}
+
+// See https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers#Nationalencyklopedin
+const VIDEO_LANGUAGES = {
+  1: 'English',
+  2: 'Spanish',
+  3: 'Mandarin',
+  4: 'Hindi',
+  5: 'Arabic',
+  6: 'Portuguese',
+  7: 'Bengali',
+  8: 'Russian',
+  9: 'Japanese',
+  10: 'Punjabi',
+  11: 'German',
+  12: 'Korean',
+  13: 'French',
+  14: 'Italien'
 }
 
 // ---------------------------------------------------------------------------
@@ -291,6 +309,7 @@ module.exports = {
   THUMBNAILS_SIZE,
   USER_ROLES,
   VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES
 }

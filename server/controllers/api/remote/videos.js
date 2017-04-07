@@ -296,6 +296,7 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
         infoHash: videoToCreateData.infoHash,
         category: videoToCreateData.category,
         licence: videoToCreateData.licence,
+        language: videoToCreateData.language,
         nsfw: videoToCreateData.nsfw,
         description: videoToCreateData.description,
         authorId: author.id,
@@ -395,6 +396,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
       videoInstance.set('name', videoAttributesToUpdate.name)
       videoInstance.set('category', videoAttributesToUpdate.category)
       videoInstance.set('licence', videoAttributesToUpdate.licence)
+      videoInstance.set('language', videoAttributesToUpdate.language)
       videoInstance.set('nsfw', videoAttributesToUpdate.nsfw)
       videoInstance.set('description', videoAttributesToUpdate.description)
       videoInstance.set('infoHash', videoAttributesToUpdate.infoHash)
