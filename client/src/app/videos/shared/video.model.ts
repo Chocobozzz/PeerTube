@@ -89,6 +89,10 @@ export class Video {
     return user && ((this.isLocal === true && this.author === user.username) || user.isAdmin() === true);
   }
 
+  isBlackistableBy(user) {
+    return user && user.isAdmin() === true && this.isLocal === false;
+  }
+
   isVideoNSFWForUser(user: User) {
     // If the video is NSFW and the user is not logged in, or the user does not want to display NSFW videos...
     return (this.nsfw && (!user || user.displayNSFW === false));
