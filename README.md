@@ -93,13 +93,14 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   - [X] Account rights (upload...)
 - [X] Make the network auto sufficient (eject bad pods etc)
 - [X] Validate the prototype (test PeerTube in a real world)
-- [ ] Manage API breaks
+- [ ] Manage inter pod API breaks
 - [ ] Add "DDOS" security (check if a pod don't send too many requests for example)
 - [X] Admin panel
   - [X] Stats
   - [X] Friends list
   - [X] Manage users (create/remove)
 - [X] OpenGraph tags
+- [ ] User registration
 - [ ] User playlists
 - [ ] User subscriptions (by tags, author...)
 - [X] Signaling a video to the admin origin pod
@@ -108,6 +109,8 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 - [ ] Videos comments?
 
 ## Installation
+
+See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installation commands.
 
 ### Front compatibility
 
@@ -160,15 +163,12 @@ The administrator password is automatically generated and can be found in the lo
 
     $ NODE_ENV=production npm run reset-password -- -u root
 
-**Nginx template** (reverse proxy): https://github.com/Chocobozzz/PeerTube/tree/master/support/nginx
-
+**Nginx template** (reverse proxy): https://github.com/Chocobozzz/PeerTube/tree/master/support/nginx <br />
 **Systemd template**: https://github.com/Chocobozzz/PeerTube/tree/master/support/systemd
 
 You can check the application (CORS headers, tracker websocket...) by running:
 
     $ NODE_ENV=production npm run check
-
-See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installation commands.
 
 ### Upgrade
 
