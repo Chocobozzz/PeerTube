@@ -519,6 +519,7 @@ describe('Test users API validators', function () {
 
   after(function (done) {
     process.kill(-server.app.pid)
+    process.kill(-serverWithRegistrationDisabled.app.pid)
 
     // Keep the logs if the test failed
     if (this.ok) {
