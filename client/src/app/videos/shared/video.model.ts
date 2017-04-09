@@ -86,7 +86,7 @@ export class Video {
   }
 
   isRemovableBy(user) {
-    return user && ((this.isLocal === true && this.author === user.username) || user.isAdmin() === true);
+    return user && this.isLocal === true && (this.author === user.username || user.isAdmin() === true);
   }
 
   isBlackistableBy(user) {
