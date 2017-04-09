@@ -4,6 +4,7 @@ const request = require('supertest')
 
 const usersUtils = {
   createUser,
+  registerUser,
   getUserInformation,
   getUserVideoRating,
   getUsersList,
@@ -31,6 +32,27 @@ function createUser (url, accessToken, username, password, specialStatus, end) {
     .post(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
+    .send(body)
+    .expect(specialStatus)
+    .end(end)
+}
+
+function registerUser (url, username, password, specialStatus, end) {
+  if (!end) {
+    end = specialStatus
+    specialStatus = 204
+  }
+
+  const path = '/api/v1/users/register'
+  const body = {
+    username,
+    password,
+    email: username + '@example.com'
+  }
+
+  request(url)
+    .post(path)
+    .set('Accept', 'application/json')
     .send(body)
     .expect(specialStatus)
     .end(end)

@@ -18,3 +18,6 @@ storage:
 
 admin:
   email: 'admin2@example.com'
+
+signup:
+  enabled: false

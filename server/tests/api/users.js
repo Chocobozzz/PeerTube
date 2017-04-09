@@ -383,6 +383,19 @@ describe('Test users', function () {
     })
   })
 
+  it('Should register a new user', function (done) {
+    usersUtils.registerUser(server.url, 'user_15', 'my super password', done)
+  })
+
+  it('Should be able to login with this registered user', function (done) {
+    server.user = {
+      username: 'user_15',
+      password: 'my super password'
+    }
+
+    loginUtils.loginAndGetAccessToken(server, done)
+  })
+
   after(function (done) {
     process.kill(-server.app.pid)
 

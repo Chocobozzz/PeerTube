@@ -17,6 +17,7 @@ describe('Test users API validators', function () {
   let rootId = null
   let videoId = null
   let server = null
+  let serverWithRegistrationDisabled = null
   let userAccessToken = null
 
   // ---------------------------------------------------------------
@@ -29,8 +30,15 @@ describe('Test users API validators', function () {
         serversUtils.flushTests(next)
       },
       function (next) {
-        serversUtils.runServer(1, function (server1) {
-          server = server1
+        serversUtils.runServer(1, function (serverCreated) {
+          server = serverCreated
+
+          next()
+        })
+      },
+      function (next) {
+        serversUtils.runServer(2, function (serverCreated) {
+          serverWithRegistrationDisabled = serverCreated
 
           next()
         })
@@ -391,6 +399,121 @@ describe('Test users API validators', function () {
         .delete(path + '45')
         .set('Authorization', 'Bearer ' + server.accessToken)
         .expect(404, done)
+    })
+  })
+
+  describe('When register a new user', function () {
+    const registrationPath = path + '/register'
+
+    it('Should fail with a too small username', function (done) {
+      const data = {
+        username: 'ji',
+        email: 'test@example.com',
+        password: 'mysuperpassword'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done)
+    })
+
+    it('Should fail with a too long username', function (done) {
+      const data = {
+        username: 'mysuperusernamewhichisverylong',
+        email: 'test@example.com',
+        password: 'mysuperpassword'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done)
+    })
+
+    it('Should fail with an incorrect username', function (done) {
+      const data = {
+        username: 'my username',
+        email: 'test@example.com',
+        password: 'mysuperpassword'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done)
+    })
+
+    it('Should fail with a missing email', function (done) {
+      const data = {
+        username: 'ji',
+        password: 'mysuperpassword'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done)
+    })
+
+    it('Should fail with an invalid email', function (done) {
+      const data = {
+        username: 'mysuperusernamewhichisverylong',
+        email: 'testexample.com',
+        password: 'mysuperpassword'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done)
+    })
+
+    it('Should fail with a too small password', function (done) {
+      const data = {
+        username: 'myusername',
+        email: 'test@example.com',
+        password: 'bla'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done)
+    })
+
+    it('Should fail with a too long password', function (done) {
+      const data = {
+        username: 'myusername',
+        email: 'test@example.com',
+        password: 'my super long password which is very very very very very very very very very very very very very very' +
+                  'very very very very very very very very very very very very very very very veryv very very very very' +
+                  'very very very very very very very very very very very very very very very very very very very very long'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done)
+    })
+
+    it('Should fail if we register a user with the same username', function (done) {
+      const data = {
+        username: 'root',
+        email: 'test@example.com',
+        password: 'my super password'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done, 409)
+    })
+
+    it('Should fail if we register a user with the same email', function (done) {
+      const data = {
+        username: 'myusername',
+        email: 'admin1@example.com',
+        password: 'my super password'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done, 409)
+    })
+
+    it('Should succeed with the correct params', function (done) {
+      const data = {
+        username: 'user3',
+        email: 'test3@example.com',
+        password: 'my super password'
+      }
+
+      requestsUtils.makePostBodyRequest(server.url, registrationPath, server.accessToken, data, done, 204)
+    })
+
+    it('Should fail on a server with registration disabled', function (done) {
+      const data = {
+        username: 'user4',
+        email: 'test4@example.com',
+        password: 'my super password 4'
+      }
+
+      requestsUtils.makePostBodyRequest(serverWithRegistrationDisabled.url, registrationPath, serverWithRegistrationDisabled.accessToken, data, done, 400)
     })
   })
 

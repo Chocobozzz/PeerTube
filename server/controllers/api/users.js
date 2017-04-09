@@ -44,6 +44,12 @@ router.post('/',
   createUser
 )
 
+router.post('/register',
+  ensureRegistrationEnabled,
+  validatorsUsers.usersAdd,
+  createUser
+)
+
 router.put('/:id',
   oAuth.authenticate,
   validatorsUsers.usersUpdate,
@@ -65,6 +71,16 @@ router.post('/token', oAuth.token, success)
 module.exports = router
 
 // ---------------------------------------------------------------------------
+
+function ensureRegistrationEnabled (req, res, next) {
+  const registrationEnabled = constants.CONFIG.SIGNUP.ENABLED
+
+  if (registrationEnabled === true) {
+    return next()
+  }
+
+  return res.status(400).send('User registration is not enabled.')
+}
 
 function createUser (req, res, next) {
   const user = db.User.build({
