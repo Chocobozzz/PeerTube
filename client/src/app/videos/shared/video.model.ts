@@ -5,8 +5,11 @@ export class Video {
   by: string;
   createdAt: Date;
   categoryLabel: string;
+  category: string;
   licenceLabel: string;
+  licence: string;
   languageLabel: string;
+  language: string;
   description: string;
   duration: string;
   id: string;
@@ -38,8 +41,11 @@ export class Video {
     author: string,
     createdAt: string,
     categoryLabel: string,
+    category: string,
     licenceLabel: string,
+    licence: string,
     languageLabel: string;
+    language: string;
     description: string,
     duration: number;
     id: string,
@@ -57,8 +63,11 @@ export class Video {
     this.author  = hash.author;
     this.createdAt = new Date(hash.createdAt);
     this.categoryLabel = hash.categoryLabel;
+    this.category = hash.category;
     this.licenceLabel = hash.licenceLabel;
+    this.licence = hash.licence;
     this.languageLabel = hash.languageLabel;
+    this.language = hash.language;
     this.description = hash.description;
     this.duration = Video.createDurationString(hash.duration);
     this.id = hash.id;
@@ -83,5 +92,34 @@ export class Video {
   isVideoNSFWForUser(user: User) {
     // If the video is NSFW and the user is not logged in, or the user does not want to display NSFW videos...
     return (this.nsfw && (!user || user.displayNSFW === false));
+  }
+
+  patch(values: Object) {
+    Object.keys(values).forEach((key) => {
+      this[key] = values[key];
+    });
+  }
+
+  toJSON() {
+    return {
+      author: this.author,
+      createdAt: this.createdAt,
+      category: this.category,
+      licence: this.licence,
+      language: this.language,
+      description: this.description,
+      duration: this.duration,
+      id: this.id,
+      isLocal: this.isLocal,
+      magnetUri: this.magnetUri,
+      name: this.name,
+      podHost: this.podHost,
+      tags: this.tags,
+      thumbnailPath: this.thumbnailPath,
+      views: this.views,
+      likes: this.likes,
+      dislikes: this.dislikes,
+      nsfw: this.nsfw
+    };
   }
 }

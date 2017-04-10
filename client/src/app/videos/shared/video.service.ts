@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -78,6 +78,23 @@ export class VideoService {
                     .map(this.restExtractor.extractDataGet)
                     .map(video_hash => new Video(video_hash))
                     .catch((res) => this.restExtractor.handleError(res));
+  }
+
+  updateVideo(video: Video) {
+    const body = {
+      name: video.name,
+      category: video.category,
+      licence: video.licence,
+      language: video.language,
+      description: video.description,
+      tags: video.tags
+    };
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, body, options)
+                        .map(this.restExtractor.extractDataBool)
+                        .catch(this.restExtractor.handleError);
   }
 
   getVideos(pagination: RestPagination, sort: SortField) {

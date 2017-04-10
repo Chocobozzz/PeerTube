@@ -79,6 +79,12 @@
         </button>
 
         <ul dropdownMenu id="more-menu" role="menu" aria-labelledby="single-button">
+          <li *ngIf="canUserUpdateVideo()" role="menuitem">
+            <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.id ]">
+              <span class="glyphicon glyphicon-pencil"></span> Update
+            </a>
+          </li>
+
           <li role="menuitem">
             <a class="dropdown-item" title="Get magnet URI" href="#" (click)="showMagnetUriModal($event)">
                <span class="glyphicon glyphicon-magnet"></span> Magnet

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
 import { NotificationsService } from 'angular2-notifications';
@@ -15,20 +15,20 @@ import {
   VIDEO_DESCRIPTION,
   VIDEO_TAGS
 } from '../../shared';
-import { VideoService } from '../shared';
+import { Video, VideoService } from '../shared';
 
 @Component({
-  selector: 'my-videos-add',
-  styleUrls: [ './video-add.component.scss' ],
-  templateUrl: './video-add.component.html'
+  selector: 'my-videos-update',
+  styleUrls: [ './video-edit.component.scss' ],
+  templateUrl: './video-update.component.html'
 })
 
-export class VideoAddComponent extends FormReactive implements OnInit {
+export class VideoUpdateComponent extends FormReactive implements OnInit {
   tags: string[] = [];
-  uploader: FileUploader;
   videoCategories = [];
   videoLicences = [];
   videoLanguages = [];
+  video: Video;
 
   error: string = null;
   form: FormGroup;
@@ -57,19 +57,12 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     private authService: AuthService,
     private elementRef: ElementRef,
     private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
     private videoService: VideoService
   ) {
     super();
-  }
-
-  get filename() {
-    if (this.uploader.queue.length === 0) {
-      return null;
-    }
-
-    return this.uploader.queue[0].file.name;
   }
 
   buildForm() {
@@ -87,58 +80,31 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit() {
+    this.buildForm();
+
     this.videoCategories = this.videoService.videoCategories;
     this.videoLicences = this.videoService.videoLicences;
     this.videoLanguages = this.videoService.videoLanguages;
 
-    this.uploader = new FileUploader({
-      authToken: this.authService.getRequestHeaderValue(),
-      queueLimit: 1,
-      url: '/api/v1/videos',
-      removeAfterUpload: true
-    });
+    const id = this.route.snapshot.params['id'];
+    this.videoService.getVideo(id)
+                     .subscribe(
+                       video => {
+                         this.video = video;
 
-    this.uploader.onBuildItemForm = (item, form) => {
-      const name = this.form.value['name'];
-      const nsfw = this.form.value['nsfw'];
-      const category = this.form.value['category'];
-      const licence = this.form.value['licence'];
-      const language = this.form.value['language'];
-      const description = this.form.value['description'];
+                         this.hydrateFormFromVideo();
+                       },
 
-      form.append('name', name);
-      form.append('category', category);
-      form.append('nsfw', nsfw);
-      form.append('licence', licence);
-
-      // Language is optional
-      if (language) {
-        form.append('language', language);
-      }
-
-      form.append('description', description);
-
-      for (let i = 0; i < this.tags.length; i++) {
-        form.append(`tags[${i}]`, this.tags[i]);
-      }
-    };
-
-    this.buildForm();
+                       err => this.error = 'Cannot fetch video.'
+                     );
   }
 
   checkForm() {
     this.forceCheck();
 
-    if (this.filename === null) {
-      this.fileError = 'You did not add a file.';
-    }
-
     return this.form.valid === true && this.tagsError === '' && this.fileError === '';
   }
 
-  fileChanged() {
-    this.fileError = '';
-  }
 
   onTagKeyPress(event: KeyboardEvent) {
     // Enter press
@@ -147,16 +113,12 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     }
   }
 
-  removeFile() {
-    this.uploader.clearQueue();
-  }
-
   removeTag(tag: string) {
     this.tags.splice(this.tags.indexOf(tag), 1);
     this.form.get('currentTag').enable();
   }
 
-  upload() {
+  update() {
     // Maybe the user forgot to press "enter" when he filled the field
     this.addTagIfPossible();
 
@@ -164,47 +126,21 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       return;
     }
 
-    const item = this.uploader.queue[0];
-    // TODO: wait for https://github.com/valor-software/ng2-file-upload/pull/242
-    item.alias = 'videofile';
+    this.video.patch(this.form.value);
 
-    // FIXME: remove
-    // Run detection change for progress bar
-    const interval = setInterval(() => { ; }, 250);
+    this.videoService.updateVideo(this.video)
+                     .subscribe(
+                       () => {
+                         this.notificationsService.success('Success', 'Video updated.');
+                         this.router.navigate([ '/videos/watch', this.video.id ]);
+                       },
 
-    item.onSuccess = () => {
-      clearInterval(interval);
+                       err => {
+                         this.error = 'Cannot update the video.';
+                         console.error(err);
+                       }
+                      );
 
-      console.log('Video uploaded.');
-      this.notificationsService.success('Success', 'Video uploaded.');
-
-
-      // Print all the videos once it's finished
-      this.router.navigate(['/videos/list']);
-    };
-
-    item.onError = (response: string, status: number) => {
-      clearInterval(interval);
-
-      // We need to handle manually these cases beceause we use the FileUpload component
-      if (status === 400) {
-        this.error = response;
-      } else if (status === 401) {
-        this.error = 'Access token was expired, refreshing token...';
-        this.authService.refreshAccessToken().subscribe(
-          () => {
-            // Update the uploader request header
-            this.uploader.authToken = this.authService.getRequestHeaderValue();
-            this.error += ' access token refreshed. Please retry your request.';
-          }
-        );
-      } else {
-        this.error = 'Unknow error';
-        console.error(this.error);
-      }
-    };
-
-    this.uploader.uploadAll();
   }
 
   private addTagIfPossible() {
@@ -226,5 +162,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
       this.tagsError = '';
     }
+  }
+
+  private hydrateFormFromVideo() {
+    this.form.patchValue(this.video.toJSON());
   }
 }

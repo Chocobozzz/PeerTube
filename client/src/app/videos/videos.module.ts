@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { VideosRoutingModule } from './videos-routing.module';
 import { VideosComponent } from './videos.component';
-import { VideoAddComponent } from './video-add';
+import { VideoAddComponent, VideoUpdateComponent } from './video-edit';
 import { VideoListComponent, VideoMiniatureComponent, VideoSortComponent } from './video-list';
 import {
   VideoWatchComponent,
@@ -24,6 +24,7 @@ import { SharedModule } from '../shared';
     VideosComponent,
 
     VideoAddComponent,
+    VideoUpdateComponent,
 
     VideoListComponent,
     VideoMiniatureComponent,

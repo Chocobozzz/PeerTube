@@ -1,5 +1,5 @@
 export * from './shared';
-export * from './video-add';
+export * from './video-edit';
 export * from './video-list';
 export * from './video-watch';
 export * from './videos-routing.module';

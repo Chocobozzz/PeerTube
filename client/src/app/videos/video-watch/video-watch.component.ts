@@ -187,6 +187,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn();
   }
 
+  canUserUpdateVideo() {
+    return this.authService.getUser() !== null &&
+           this.authService.getUser().username === this.video.author;
+  }
+
   private checkUserRating() {
     // Unlogged users do not have ratings
     if (this.isUserLoggedIn() === false) return;
