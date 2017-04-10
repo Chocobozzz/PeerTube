@@ -13,6 +13,7 @@ import { AppState } from './app.service';
 import { AccountModule } from './account';
 import { CoreModule } from './core';
 import { LoginModule } from './login';
+import { SignupModule } from './signup';
 import { SharedModule } from './shared';
 import { VideosModule } from './videos';
 
@@ -49,6 +50,7 @@ const APP_PROVIDERS = [
     AccountModule,
     CoreModule,
     LoginModule,
+    SignupModule,
     SharedModule,
     VideosModule,
 

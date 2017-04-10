@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
@@ -11,6 +12,7 @@ export class UserService {
   static BASE_USERS_URL = '/api/v1/users/';
 
   constructor(
+    private http: Http,
     private authHttp: AuthHttp,
     private authService: AuthService,
     private restExtractor: RestExtractor
@@ -40,5 +42,17 @@ export class UserService {
     return this.authHttp.put(url, details)
                         .map(this.restExtractor.extractDataBool)
                         .catch((res) => this.restExtractor.handleError(res));
+  }
+
+  signup(username: string, password: string, email: string) {
+    const body = {
+      username,
+      email,
+      password
+    };
+
+    return this.http.post(UserService.BASE_USERS_URL + 'register', body)
+                        .map(this.restExtractor.extractDataBool)
+                        .catch(this.restExtractor.handleError);
   }
 }

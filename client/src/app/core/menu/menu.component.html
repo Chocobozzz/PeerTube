@@ -12,6 +12,11 @@
       </span>
     </div>
 
+    <div *ngIf="!isLoggedIn && isRegistrationEnabled()" id="panel-user-register" class="panel-button">
+      <span class="hidden-xs glyphicon glyphicon-user"></span>
+      <a [routerLink]="['/signup']">Signup</a>
+    </div>
+
     <div *ngIf="isLoggedIn" id="panel-user-account" class="panel-button">
       <span class="hidden-xs glyphicon glyphicon-user"></span>
       <a [routerLink]="['/account']">My account</a>

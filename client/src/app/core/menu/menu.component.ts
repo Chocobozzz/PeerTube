@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthService, AuthStatus } from '../auth';
+import { ConfigService } from '../config';
 
 @Component({
   selector: 'my-menu',
@@ -12,6 +13,7 @@ export class MenuComponent implements OnInit {
 
   constructor (
     private authService: AuthService,
+    private configService: ConfigService,
     private router: Router
   ) {}
 
@@ -31,6 +33,10 @@ export class MenuComponent implements OnInit {
         }
       }
     );
+  }
+
+  isRegistrationEnabled() {
+    return this.configService.getConfig().signup.enabled;
   }
 
   isUserAdmin() {
