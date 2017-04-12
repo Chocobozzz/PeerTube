@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 
+// import { TagInputModule } from 'ng2-tag-input';
+
 import { VideosRoutingModule } from './videos-routing.module';
 import { VideosComponent } from './videos.component';
 import { VideoAddComponent, VideoUpdateComponent } from './video-edit';
@@ -16,6 +18,8 @@ import { SharedModule } from '../shared';
 
 @NgModule({
   imports: [
+    // TagInputModule,
+
     VideosRoutingModule,
     SharedModule
   ],

@@ -78,7 +78,7 @@
           <span class="glyphicon glyphicon-option-horizontal"></span> More
         </button>
 
-        <ul dropdownMenu id="more-menu" role="menu" aria-labelledby="single-button">
+        <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
           <li *ngIf="canUserUpdateVideo()" role="menuitem">
             <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.id ]">
               <span class="glyphicon glyphicon-pencil"></span> Update
@@ -142,8 +142,8 @@
   </div>
 </div>
 
-<template [ngIf]="video !== null">
+<ng-template [ngIf]="video !== null">
   <my-video-share #videoShareModal [video]="video"></my-video-share>
   <my-video-magnet #videoMagnetModal [video]="video"></my-video-magnet>
   <my-video-report #videoReportModal [video]="video"></my-video-report>
-</template>
+</ng-template>

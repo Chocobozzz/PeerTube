@@ -6,10 +6,10 @@ import { RouterModule } from '@angular/router';
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
 import { KeysPipe } from 'angular-pipes/src/object/keys.pipe';
-import { DropdownModule } from 'ng2-bootstrap/dropdown';
-import { ProgressbarModule } from 'ng2-bootstrap/progressbar';
-import { PaginationModule } from 'ng2-bootstrap/pagination';
-import { ModalModule } from 'ng2-bootstrap/modal';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 
@@ -27,7 +27,7 @@ import { VideoAbuseService } from './video-abuse';
     HttpModule,
     RouterModule,
 
-    DropdownModule.forRoot(),
+    BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
     PaginationModule.forRoot(),
     ProgressbarModule.forRoot(),
@@ -49,7 +49,7 @@ import { VideoAbuseService } from './video-abuse';
     HttpModule,
     RouterModule,
 
-    DropdownModule,
+    BsDropdownModule,
     FileUploadModule,
     ModalModule,
     PaginationModule,
