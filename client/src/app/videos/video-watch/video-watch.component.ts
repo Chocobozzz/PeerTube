@@ -169,6 +169,26 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                      );
   }
 
+  removeVideo(event: Event) {
+    event.preventDefault();
+    this.confirmService.confirm('Do you really want to delete this video?', 'Delete').subscribe(
+      res => {
+        if (res === false) return;
+
+        this.videoService.removeVideo(this.video.id)
+			 .subscribe(
+			   status => {
+			     this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
+			     // Go back to the video-list.
+			     this.router.navigate(['/videos/list'])
+			   },
+
+			   error => this.notificationsService.error('Error', error.text)
+        );
+      }
+    );
+  }
+
   showReportModal(event: Event) {
     event.preventDefault();
     this.videoReportModal.show();
@@ -190,6 +210,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   canUserUpdateVideo() {
     return this.authService.getUser() !== null &&
            this.authService.getUser().username === this.video.author;
+  }
+
+  isVideoRemovable() {
+    return this.video.isRemovableBy(this.authService.getUser());
   }
 
   private checkUserRating() {

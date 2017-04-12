@@ -96,6 +96,12 @@
               <span class="glyphicon glyphicon-alert"></span> Report
             </a>
           </li>
+
+	  <li *ngIf="isVideoRemovable()" role="menuitem">
+	    <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
+	      <span class="glyphicon glyphicon-remove"></span> Delete
+	    </a>
+	  </li>
         </ul>
       </div>
     </div>
