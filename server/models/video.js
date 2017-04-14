@@ -535,6 +535,8 @@ function list (callback) {
 }
 
 function listForApi (start, count, sort, callback) {
+
+  // Exclude Blakclisted videos from the list
   const query = {
     offset: start,
     limit: count,
@@ -547,7 +549,12 @@ function listForApi (start, count, sort, callback) {
       },
 
       this.sequelize.models.Tag
-    ]
+    ],
+    where: {
+      id: { $notIn: this.sequelize.literal(
+	'(SELECT "BlacklistedVideos"."localId" FROM "BlacklistedVideos")'
+      )}
+    }
   }
 
   return this.findAndCountAll(query).asCallback(function (err, result) {
