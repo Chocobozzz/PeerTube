@@ -80,7 +80,7 @@ function countTotal (callback) {
 }
 
 function list (callback) {
-  return this.find().asCallback(callback)
+  return this.findAll().asCallback(callback)
 }
 
 function listForApi (start, count, sort, callback) {
