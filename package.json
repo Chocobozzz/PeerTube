@@ -50,7 +50,7 @@
     "debug": "^2.2.0",
     "dezalgo": "^1.0.3",
     "express": "^4.12.4",
-    "express-oauth-server": "https://github.com/Chocobozzz/express-oauth-server",
+    "express-oauth-server": "2.0.0-b1",
     "express-validator": "^3.1.0",
     "fluent-ffmpeg": "^2.1.0",
     "js-yaml": "^3.5.4",
