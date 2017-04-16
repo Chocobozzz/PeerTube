@@ -66,10 +66,10 @@ module.exports = class BaseRequestScheduler {
         err = err ? err.message : 'Status code not 20x : ' + res.statusCode
         logger.error('Error sending secure request to %s pod.', toPod.host, { error: err })
 
-        return callback(false)
+        return callback(err)
       }
 
-      return callback(true)
+      return callback(null)
     })
   }
 
@@ -99,8 +99,8 @@ module.exports = class BaseRequestScheduler {
         const requestToMake = requestsToMakeGrouped[hashKey]
         const toPod = requestToMake.toPod
 
-        this.makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, (success) => {
-          if (success === false) {
+        this.makeRequest(toPod, requestToMake.endpoint, requestToMake.datas, (err) => {
+          if (err) {
             badPods.push(requestToMake.toPod.id)
             return callbackEach()
           }

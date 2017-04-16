@@ -74,7 +74,9 @@ function comparePassword (plainPassword, hashPassword, callback) {
 }
 
 function createCertsIfNotExist (callback) {
-  certsExist(function (exist) {
+  certsExist(function (err, exist) {
+    if (err) return callback(err)
+
     if (exist === true) {
       return callback(null)
     }
@@ -113,13 +115,17 @@ module.exports = peertubeCrypto
 
 function certsExist (callback) {
   const certPath = pathUtils.join(constants.CONFIG.STORAGE.CERT_DIR, constants.PRIVATE_CERT_NAME)
-  fs.exists(certPath, function (exists) {
-    return callback(exists)
+  fs.access(certPath, function (err) {
+    // If there is an error the certificates do not exist
+    const exists = !err
+    return callback(null, exists)
   })
 }
 
 function createCerts (callback) {
-  certsExist(function (exist) {
+  certsExist(function (err, exist) {
+    if (err) return callback(err)
+
     if (exist === true) {
       const string = 'Certs already exist.'
       logger.warning(string)

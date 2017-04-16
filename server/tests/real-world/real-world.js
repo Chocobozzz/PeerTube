@@ -102,7 +102,9 @@ runServers(numberOfPods, function (err, servers) {
     checking = true
 
     const waitingInterval = setInterval(function () {
-      isThereAwaitingRequests(servers, function (res) {
+      isThereAwaitingRequests(servers, function (err, res) {
+        if (err) throw err
+
         if (res === true) {
           console.log('A server has awaiting requests, waiting...')
           return
@@ -360,6 +362,6 @@ function isThereAwaitingRequests (servers, callback) {
   }, function (err) {
     if (err) throw err
 
-    return callback(noRequests === false)
+    return callback(null, noRequests === false)
   })
 }

@@ -6,7 +6,6 @@ const helpers = require('./helpers')
 
 const AssetsPlugin = require('assets-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
