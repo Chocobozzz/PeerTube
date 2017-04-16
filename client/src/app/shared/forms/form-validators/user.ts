@@ -1,7 +1,5 @@
 import { Validators } from '@angular/forms';
 
-import { validateEmail } from './email.validator';
-
 export const USER_USERNAME = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(20) ],
   MESSAGES: {
@@ -11,7 +9,7 @@ export const USER_USERNAME = {
   }
 };
 export const USER_EMAIL = {
-  VALIDATORS: [ Validators.required, validateEmail ],
+  VALIDATORS: [ Validators.required, Validators.email ],
   MESSAGES: {
     'required': 'Email is required.',
     'email': 'Email must be valid.',
