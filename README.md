@@ -100,13 +100,15 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   - [X] Friends list
   - [X] Manage users (create/remove)
 - [X] OpenGraph tags
-- [ ] User registration
-- [ ] User playlists
-- [ ] User subscriptions (by tags, author...)
-- [X] Signaling a video to the admin origin pod
+- [X] Update video
 - [X] Videos view count
 - [X] Videos likes/dislikes
 - [ ] Videos comments?
+- [X] User registration
+- [ ] User playlists
+- [ ] User subscriptions (by tags, author...)
+- [X] Signaling a video to the admin origin pod
+
 
 ## Installation
 
