@@ -30,6 +30,9 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   videoLanguages = [];
   video: Video;
 
+  tagValidators = VIDEO_TAGS.VALIDATORS;
+  tagValidatorsMessages = VIDEO_TAGS.MESSAGES;
+
   error: string = null;
   form: FormGroup;
   formErrors = {
@@ -37,20 +40,16 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     category: '',
     licence: '',
     language: '',
-    description: '',
-    currentTag: ''
+    description: ''
   };
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
-    description: VIDEO_DESCRIPTION.MESSAGES,
-    currentTag: VIDEO_TAGS.MESSAGES
+    description: VIDEO_DESCRIPTION.MESSAGES
   };
 
-  // Special error messages
-  tagsError = '';
   fileError = '';
 
   constructor(
@@ -73,7 +72,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
-      currentTag: [ '', VIDEO_TAGS.VALIDATORS ]
+      tags: [ '' ]
     });
 
     this.form.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -99,33 +98,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                      );
   }
 
-  checkForm() {
-    this.forceCheck();
-
-    return this.form.valid === true && this.tagsError === '' && this.fileError === '';
-  }
-
-
-  onTagKeyPress(event: KeyboardEvent) {
-    // Enter press
-    if (event.keyCode === 13) {
-      this.addTagIfPossible();
-    }
-  }
-
-  removeTag(tag: string) {
-    this.tags.splice(this.tags.indexOf(tag), 1);
-    this.form.get('currentTag').enable();
-  }
-
   update() {
-    // Maybe the user forgot to press "enter" when he filled the field
-    this.addTagIfPossible();
-
-    if (this.checkForm() === false) {
-      return;
-    }
-
     this.video.patch(this.form.value);
 
     this.videoService.updateVideo(this.video)
@@ -141,27 +114,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                        }
                       );
 
-  }
-
-  private addTagIfPossible() {
-    const currentTag = this.form.value['currentTag'];
-    if (currentTag === undefined) return;
-
-    // Check if the tag is valid and does not already exist
-    if (
-      currentTag.length >= 2 &&
-      this.form.controls['currentTag'].valid &&
-      this.tags.indexOf(currentTag) === -1
-    ) {
-      this.tags.push(currentTag);
-      this.form.patchValue({ currentTag: '' });
-
-      if (this.tags.length >= 3) {
-        this.form.get('currentTag').disable();
-      }
-
-      this.tagsError = '';
-    }
   }
 
   private hydrateFormFromVideo() {

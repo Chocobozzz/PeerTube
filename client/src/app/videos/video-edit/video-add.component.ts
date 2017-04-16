@@ -30,6 +30,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   videoLicences = [];
   videoLanguages = [];
 
+  tagValidators = VIDEO_TAGS.VALIDATORS;
+  tagValidatorsMessages = VIDEO_TAGS.MESSAGES;
+
   error: string = null;
   form: FormGroup;
   formErrors = {
@@ -37,20 +40,17 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     category: '',
     licence: '',
     language: '',
-    description: '',
-    currentTag: ''
+    description: ''
   };
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
-    description: VIDEO_DESCRIPTION.MESSAGES,
-    currentTag: VIDEO_TAGS.MESSAGES
+    description: VIDEO_DESCRIPTION.MESSAGES
   };
 
   // Special error messages
-  tagsError = '';
   fileError = '';
 
   constructor(
@@ -80,7 +80,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
-      currentTag: [ '', VIDEO_TAGS.VALIDATORS ]
+      tags: [ '']
     });
 
     this.form.valueChanges.subscribe(data => this.onValueChanged(data));
@@ -105,6 +105,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       const licence = this.form.value['licence'];
       const language = this.form.value['language'];
       const description = this.form.value['description'];
+      const tags = this.form.value['tags'];
 
       form.append('name', name);
       form.append('category', category);
@@ -118,8 +119,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
       form.append('description', description);
 
-      for (let i = 0; i < this.tags.length; i++) {
-        form.append(`tags[${i}]`, this.tags[i]);
+      for (let i = 0; i < tags.length; i++) {
+        form.append(`tags[${i}]`, tags[i]);
       }
     };
 
@@ -133,33 +134,18 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       this.fileError = 'You did not add a file.';
     }
 
-    return this.form.valid === true && this.tagsError === '' && this.fileError === '';
+    return this.form.valid === true && this.fileError === '';
   }
 
   fileChanged() {
     this.fileError = '';
   }
 
-  onTagKeyPress(event: KeyboardEvent) {
-    // Enter press
-    if (event.keyCode === 13) {
-      this.addTagIfPossible();
-    }
-  }
-
   removeFile() {
     this.uploader.clearQueue();
   }
 
-  removeTag(tag: string) {
-    this.tags.splice(this.tags.indexOf(tag), 1);
-    this.form.get('currentTag').enable();
-  }
-
   upload() {
-    // Maybe the user forgot to press "enter" when he filled the field
-    this.addTagIfPossible();
-
     if (this.checkForm() === false) {
       return;
     }
@@ -205,26 +191,5 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     };
 
     this.uploader.uploadAll();
-  }
-
-  private addTagIfPossible() {
-    const currentTag = this.form.value['currentTag'];
-    if (currentTag === undefined) return;
-
-    // Check if the tag is valid and does not already exist
-    if (
-      currentTag.length >= 2 &&
-      this.form.controls['currentTag'].valid &&
-      this.tags.indexOf(currentTag) === -1
-    ) {
-      this.tags.push(currentTag);
-      this.form.patchValue({ currentTag: '' });
-
-      if (this.tags.length >= 3) {
-        this.form.get('currentTag').disable();
-      }
-
-      this.tagsError = '';
-    }
   }
 }

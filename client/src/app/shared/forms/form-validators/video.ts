@@ -38,8 +38,9 @@ export const VIDEO_DESCRIPTION = {
 };
 
 export const VIDEO_TAGS = {
-  VALIDATORS: [ Validators.maxLength(10) ],
+  VALIDATORS: [ Validators.minLength(2), Validators.maxLength(10) ],
   MESSAGES: {
+    'minlength': 'A tag should be more than 2 characters long.',
     'maxlength': 'A tag should be less than 10 characters long.'
   }
 };

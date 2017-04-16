@@ -59,25 +59,11 @@
   </div>
 
   <div class="form-group">
-    <label for="tags">Tags</label> <span class="little-information">(press enter to add the tag)</span>
-    <input
-      type="text" class="form-control" id="currentTag"
-      formControlName="currentTag" (keyup)="onTagKeyPress($event)"
-    >
-    <div *ngIf="formErrors.currentTag" class="alert alert-danger">
-      {{ formErrors.currentTag }}
-    </div>
-  </div>
-
-  <div class="tags">
-    <div class="label label-primary tag" *ngFor="let tag of tags">
-      {{ tag }}
-      <span class="remove" (click)="removeTag(tag)">x</span>
-    </div>
-  </div>
-
-  <div *ngIf="tagsError" class="alert alert-danger">
-    {{ tagsError }}
+    <label for="tags" class="label-tags">Tags</label> <span class="little-information">(press enter to add the tag)</span>
+    <tag-input
+      [ngModel]="tags" [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
+      formControlName="tags" maxItems="3" modelAsStrings="true"
+    ></tag-input>
   </div>
 
   <div class="form-group">
