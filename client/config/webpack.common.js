@@ -72,11 +72,7 @@ module.exports = function (options) {
        */
       extensions: [ '.ts', '.js', '.json', '.scss' ],
 
-      modules: [ helpers.root('src'), helpers.root('node_modules') ],
-
-      alias: {
-        'video.js': 'video.js/dist/alt/video.novtt'
-      }
+      modules: [ helpers.root('src'), helpers.root('node_modules') ]
     },
 
     /*
@@ -222,22 +218,6 @@ module.exports = function (options) {
         {
           from: 'node_modules/webtorrent/webtorrent.min.js',
           to: 'assets/webtorrent'
-        },
-        {
-          from: 'node_modules/video.js/dist/video.min.js',
-          to: 'assets/video-js'
-        },
-        {
-          from: 'node_modules/video.js/dist/video-js.min.css',
-          to: 'assets/video-js'
-        },
-        {
-          from: 'node_modules/videojs-dock/dist/videojs-dock.min.js',
-          to: 'assets/video-js'
-        },
-        {
-          from: 'node_modules/videojs-dock/dist/videojs-dock.css',
-          to: 'assets/video-js'
         },
         {
           from: 'src/standalone',

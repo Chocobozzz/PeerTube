@@ -78,7 +78,7 @@
     "tslint-loader": "^3.3.0",
     "typescript": "~2.2.0",
     "url-loader": "^0.5.7",
-    "video.js": "^5.11.9",
+    "video.js": "^5.19.2",
     "videojs-dock": "^2.0.2",
     "webpack": "^2.2.0",
     "webpack-md5-hash": "0.0.5",
