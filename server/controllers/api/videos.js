@@ -639,7 +639,7 @@ function addVideoToBlacklist (req, res, next) {
   if (videoInstance.isOwned() === false) {
     db.BlacklistedVideo.create({
       remoteId: videoInstance.remoteId,
-      localId: videoInstance.localId,
+      localId: videoInstance.id,
       remotePodId: videoInstance.Author.Pod.id
     })
     .asCallback(function (err) {
@@ -647,7 +647,10 @@ function addVideoToBlacklist (req, res, next) {
 	logger.error('Errors when blacklisting video ', { error: err })
 	return next(err)
       }
+
+      return res.type('json').status(204).end()
     })
+    return
   }
 
   next()
