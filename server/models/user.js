@@ -80,7 +80,7 @@ module.exports = function (sequelize, DataTypes) {
       instanceMethods: {
         isPasswordMatch,
         toFormatedJSON,
-	isAdmin
+        isAdmin
       },
       hooks: {
         beforeCreate: beforeCreateOrUpdate,

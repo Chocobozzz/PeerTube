@@ -303,11 +303,10 @@ function afterDestroy (video, options, next) {
         return callback()
       }
     )
-  }
-  else {
+  } else {
     tasks.push(
       function removeVideoFromBlacklist (callback) {
-	removeFromBlacklist(video, callback)
+        removeFromBlacklist(video, callback)
       }
     )
   }
@@ -535,7 +534,6 @@ function list (callback) {
 }
 
 function listForApi (start, count, sort, callback) {
-
   // Exclude Blakclisted videos from the list
   const query = {
     offset: start,
@@ -552,7 +550,7 @@ function listForApi (start, count, sort, callback) {
     ],
     where: {
       id: { $notIn: this.sequelize.literal(
-	'(SELECT "BlacklistedVideos"."localId" FROM "BlacklistedVideos")'
+        '(SELECT "BlacklistedVideos"."localId" FROM "BlacklistedVideos")'
       )}
     }
   }
@@ -783,17 +781,16 @@ function removeFromBlacklist (video, callback) {
     // If we found the video, remove it from the blacklist
     if (video) {
       video.destroy().asCallback(function (err) {
-	if (err) {
-	  logger.error('Error when removing video from blacklist.', { error: err })
+        if (err) {
+          logger.error('Error when removing video from blacklist.', { error: err })
 
-	  return callback(err)
-	}
+          return callback(err)
+        }
 
-	return callback()
+        return callback()
       })
-    }
-    // If haven't found it, simply ignore it and do nothing
-    else {
+    } else {
+      // If haven't found it, simply ignore it and do nothing
       return callback()
     }
   })

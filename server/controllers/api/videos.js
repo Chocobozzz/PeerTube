@@ -632,7 +632,6 @@ function reportVideoAbuse (req, res, finalCallback) {
   })
 }
 
-
 function addVideoToBlacklist (req, res, next) {
   const videoInstance = res.locals.video
 
@@ -644,8 +643,8 @@ function addVideoToBlacklist (req, res, next) {
     })
     .asCallback(function (err) {
       if (err) {
-	logger.error('Errors when blacklisting video ', { error: err })
-	return next(err)
+        logger.error('Errors when blacklisting video ', { error: err })
+        return next(err)
       }
 
       return res.type('json').status(204).end()

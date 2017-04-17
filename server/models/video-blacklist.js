@@ -8,30 +8,30 @@ module.exports = function (sequelize, DataTypes) {
   const BlacklistedVideo = sequelize.define('BlacklistedVideo',
     {
       remoteId: {
-	type: DataTypes.UUID,
-	defaultValue: DataTypes.UUIDV4,
-	primaryKey: true,
-	validate: {
-	  isUUID: 4
-	}
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        validate: {
+          isUUID: 4
+        }
       },
       localId: {
         type: DataTypes.UUID,
-	defaultValue: DataTypes.UUIDV4,
-	allowNull: false,
-	validate: {
-	  isUUID: 4
-	}
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        validate: {
+          isUUID: 4
+        }
       }
     },
     {
       indexes: [
-	{
-	  fields: [ 'remoteId' ]
-	},
+        {
+          fields: [ 'remoteId' ]
+        },
         {
           fields: [ 'localId' ],
-	  unique: true
+          unique: true
         }
       ],
       classMethods: {
@@ -40,8 +40,8 @@ module.exports = function (sequelize, DataTypes) {
         countTotal,
         list,
         listForApi,
-	loadById,
-	loadByPod
+        loadById,
+        loadByPod
       },
       instanceMethods: {
         toFormatedJSON
@@ -53,7 +53,6 @@ module.exports = function (sequelize, DataTypes) {
   return BlacklistedVideo
 }
 
-
 // ------------------------------ METHODS ------------------------------
 
 function toFormatedJSON () {
@@ -64,7 +63,6 @@ function toFormatedJSON () {
     createdAt: this.createdAt
   }
 }
-
 
 // ------------------------------ STATICS ------------------------------
 
