@@ -150,6 +150,12 @@ export class VideoService {
                         .catch((res) => this.restExtractor.handleError(res));
   }
 
+  blacklistVideo(id: string) {
+    return this.authHttp.post(VideoService.BASE_VIDEO_URL + id + '/blacklist', {})
+			.map(this.restExtractor.extractDataBool)
+			.catch((res) => this.restExtractor.handleError(res));
+  }
+
   private setVideoRate(id: string, rateType: RateType) {
     const url = VideoService.BASE_VIDEO_URL + id + '/rate';
     const body = {
