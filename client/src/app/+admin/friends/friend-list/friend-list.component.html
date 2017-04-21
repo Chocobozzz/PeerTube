@@ -2,10 +2,10 @@
 
 <ng2-smart-table [settings]="tableSettings" [source]="friendsSource"></ng2-smart-table>
 
-<a *ngIf="hasFriends()" class="add-user btn btn-danger pull-left" (click)="quitFriends()">
+<a *ngIf="hasFriends()" class="btn btn-danger pull-left" (click)="quitFriends()">
   Quit friends
 </a>
 
-<a *ngIf="!hasFriends()" class="add-user btn btn-success pull-right" [routerLink]="['/admin/friends/add']">
+<a *ngIf="!hasFriends()" class="btn btn-success pull-right" [routerLink]="['/admin/friends/add']">
   Make friends
 </a>

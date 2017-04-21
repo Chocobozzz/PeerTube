@@ -1,44 +1,44 @@
-<menu class="col-md-2 col-sm-3 col-xs-3">
+<menu>
   <div class="panel-block">
     <div id="panel-user-login" class="panel-button">
-      <span *ngIf="!isLoggedIn" >
+      <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">
         <span class="hidden-xs glyphicon glyphicon-log-in"></span>
-        <a [routerLink]="['/login']">Login</a>
-      </span>
+        Login
+      </a>
 
-      <span *ngIf="isLoggedIn">
+      <a *ngIf="isLoggedIn" (click)="logout()">
         <span class="hidden-xs glyphicon glyphicon-log-out"></span>
-        <a *ngIf="isLoggedIn" (click)="logout()">Logout</a>
-      </span>
+        Logout
+      </a>
     </div>
 
-    <div *ngIf="!isLoggedIn && isRegistrationEnabled()" id="panel-user-register" class="panel-button">
+    <a *ngIf="!isLoggedIn && isRegistrationEnabled()" routerLink="/signup" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-user"></span>
-      <a [routerLink]="['/signup']">Signup</a>
-    </div>
+      Signup
+    </a>
 
-    <div *ngIf="isLoggedIn" id="panel-user-account" class="panel-button">
+    <a *ngIf="isLoggedIn" routerLink="/account" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-user"></span>
-      <a [routerLink]="['/account']">My account</a>
-    </div>
+      My account
+    </a>
   </div>
 
   <div class="panel-block">
-    <div id="panel-get-videos" class="panel-button">
+    <a routerLink="/videos/list" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-list"></span>
-      <a [routerLink]="['/videos/list']">See videos</a>
-    </div>
+      See videos
+    </a>
 
-    <div id="panel-upload-video" class="panel-button" *ngIf="isLoggedIn">
+    <a *ngIf="isLoggedIn" routerLink="/videos/add" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cloud-upload"></span>
-      <a [routerLink]="['/videos/add']">Upload a video</a>
-    </div>
+      Upload a video
+    </a>
   </div>
 
-  <div class="panel-block" *ngIf="isUserAdmin()">
-    <div id="panel-get-videos" class="panel-button">
+  <div class="panel-block">
+    <a *ngIf="isUserAdmin()" routerLink="/admin" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cog"></span>
-      <a [routerLink]="['/admin']">Administration</a>
-    </div>
+      Administration
+    </a>
   </div>
 </menu>

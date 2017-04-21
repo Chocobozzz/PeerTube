@@ -1,37 +1,38 @@
 <h3>Requests stats</h3>
 
-<div *ngFor="let requestSchedulerName of statsTitles | keys">
-  <div class="block" *ngIf="stats[requestSchedulerName] !== null">
-    <h4>{{ statsTitles[requestSchedulerName] }}</h4>
+<div *ngFor="let requestSchedulerName of statsTitles | keys" class="col-lg-4 col-md-12">
+  <div class="panel panel-default" *ngIf="stats[requestSchedulerName] !== null">
+    <div class="panel-heading">{{ statsTitles[requestSchedulerName] }}</div>
 
-    <div class="requests-general">
-      <div>
-        <span class="label-description">Remaining requests:</span>
-        {{ stats[requestSchedulerName].totalRequests }}
+    <div class="panel-body">
+      <div class="requests-general">
+        <div>
+          <span class="label-description">Remaining requests:</span>
+          {{ stats[requestSchedulerName].totalRequests }}
+        </div>
+
+        <div>
+          <span class="label-description">Interval seconds between requests:</span>
+          {{ stats[requestSchedulerName].secondsInterval }}
+        </div>
+
+        <div>
+          <span class="label-description">Remaining time before the scheduled request:</span>
+          {{ stats[requestSchedulerName].remainingSeconds }}
+        </div>
       </div>
 
-      <div>
-        <span class="label-description">Interval seconds between requests:</span>
-        {{ stats[requestSchedulerName].secondsInterval }}
-      </div>
+      <div class="requests-limit">
+        <div>
+          <span class="label-description">Maximum number of different pods for a scheduled request:</span>
+          {{ stats[requestSchedulerName].requestsLimitPods }}
+        </div>
 
-      <div>
-        <span class="label-description">Remaining time before the scheduled request:</span>
-        {{ stats[requestSchedulerName].remainingSeconds }}
+        <div>
+          <span class="label-description">Maximum number of requests per pod for a scheduled request:</span>
+          {{ stats[requestSchedulerName].requestsLimitPerPod }}
+        </div>
       </div>
     </div>
-
-    <div class="requests-limit">
-      <div>
-        <span class="label-description">Maximum number of different pods for a scheduled request:</span>
-        {{ stats[requestSchedulerName].requestsLimitPods }}
-      </div>
-
-      <div>
-        <span class="label-description">Maximum number of requests per pod for a scheduled request:</span>
-        {{ stats[requestSchedulerName].requestsLimitPerPod }}
-      </div>
-    </div>
-
   </div>
 </div>

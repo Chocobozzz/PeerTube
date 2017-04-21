@@ -1,31 +1,31 @@
-<menu class="col-md-2 col-sm-3 col-xs-3">
+<menu>
 
   <div class="panel-block">
-    <div id="panel-users" class="panel-button">
+    <a routerLink="/admin/users/list" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-user"></span>
-      <a [routerLink]="['/admin/users/list']">List users</a>
-    </div>
+      List users
+    </a>
 
-    <div id="panel-friends" class="panel-button">
+    <a routerLink="/admin/friends/list" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cloud"></span>
-      <a [routerLink]="['/admin/friends/list']">List friends</a>
-    </div>
+      List friends
+    </a>
 
-    <div id="panel-request-stats" class="panel-button">
+    <a routerLink="/admin/requests/stats" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-stats"></span>
-      <a [routerLink]="['/admin/requests/stats']">Request stats</a>
-    </div>
+      Request stats
+    </a>
 
-    <div id="panel-video-abuses" class="panel-button">
+    <a routerLink="/admin/video-abuses/list" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-alert"></span>
-      <a [routerLink]="['/admin/video-abuses/list']">Video abuses</a>
-    </div>
+      Video abuses
+    </a>
   </div>
 
   <div class="panel-block">
-    <div id="panel-quit-administration" class="panel-button">
+    <a routerLink="/videos/list" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cog"></span>
-      <a [routerLink]="['/videos/list']">Quit admin.</a>
-    </div>
+      Quit admin.
+    </a>
   </div>
 </menu>

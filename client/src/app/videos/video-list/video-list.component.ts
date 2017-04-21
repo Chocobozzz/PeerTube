@@ -22,7 +22,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
   loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
   pagination: RestPagination = {
     currentPage: 1,
-    itemsPerPage: 9,
+    itemsPerPage: 25,
     totalItems: null
   };
   sort: SortField;

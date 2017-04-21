@@ -1,15 +1,11 @@
 @import "../../../sass/pre-customizations.scss";
 
 .video-miniature {
-  @media screen and (max-width: 400px) {
-    padding: 0;
-  }
-
   margin-top: 30px;
   display: inline-block;
   position: relative;
-  min-width: 220px;
   height: 190px;
+  width: 220px;
 
   .video-miniature-thumbnail {
     display: inline-block;
@@ -30,37 +26,48 @@
       height: 110px;
     }
 
-    .video-miniature-duration {
+    img, .thumbnail-nsfw {
+      border-radius: 3px;
+    }
+
+    .video-miniature-thumbnail-overlay {
       position: absolute;
-      right: 5px;
-      bottom: 2px;
+      right: 0px;
+      bottom: 0px;
       display: inline-block;
-      background-color: rgba(0, 0, 0, 0.8);
-      color: rgba(255, 255, 255, 0.8);
-      padding: 2px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 3px 5px;
       font-size: 11px;
+      font-weight: bold;
+      width: 100%;
+
+      .video-miniature-thumbnail-overlay-views {
+
+      }
+
+      .video-miniature-thumbnail-overlay-duration {
+        float: right;
+      }
     }
   }
 
   .video-miniature-informations {
     width: 200px;
 
-    .video-miniature-name-tags {
+    .video-miniature-name {
+      height: 23px;
       display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: bold;
+      transition: color 0.2s;
+      font-size: 15px;
+      color: $video-miniature-title-color;
 
-      .video-miniature-name {
-        height: 23px;
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-weight: bold;
-        transition: color 0.2s;
-        font-size: 15px;
-
-        &:hover {
-          text-decoration: none;
-        }
+      &:hover {
+        text-decoration: none;
       }
 
       .video-miniature-tags {
@@ -84,8 +91,8 @@
     .video-miniature-author, .video-miniature-views-created-at {
       display: block;
       margin-left: 1px;
-      font-size: 12px;
-      color: #337ab7;
+      font-size: 11px;
+      color: $video-miniature-other-infos;
       opacity: 0.9;
 
       .video-miniature-created-at::before {

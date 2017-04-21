@@ -1,0 +1,26 @@
+menu {
+  background-color: $black-background;
+  padding: 20px;
+  margin: 0;
+  height: 100%;
+
+  a {
+    display: block;
+    height: 30px;
+    color: #9cabb8;
+    cursor: pointer;
+
+    &:hover, &:focus {
+      text-decoration: none !important;
+      outline: none !important;
+    }
+
+    .glyphicon {
+      margin-right: 20px;
+    }
+
+    &:hover, &.active {
+      color: #fff;
+    }
+  }
+}

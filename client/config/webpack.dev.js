@@ -90,23 +90,24 @@ module.exports = function (env) {
 
     module: {
 
-      rules: [
-        {
-          test: /\.ts$/,
-          use: [
-            {
-              loader: 'tslint-loader',
-              options: {
-                configFile: 'tslint.json'
-              }
-            }
-          ],
-          exclude: [
-            /\.(spec|e2e)\.ts$/,
-            /node_modules\//
-          ]
-        }
-      ]
+      // Too slow, life is short
+      // rules: [
+      //   {
+      //     test: /\.ts$/,
+      //     use: [
+      //       {
+      //         loader: 'tslint-loader',
+      //         options: {
+      //           configFile: 'tslint.json'
+      //         }
+      //       }
+      //     ],
+      //     exclude: [
+      //       /\.(spec|e2e)\.ts$/,
+      //       /node_modules\//
+      //     ]
+      //   }
+      // ]
     },
 
     plugins: [
@@ -202,6 +203,7 @@ module.exports = function (env) {
           tslint: {
             emitErrors: false,
             failOnHint: false,
+            typeCheck: true,
             resourcePath: 'src'
           },
 

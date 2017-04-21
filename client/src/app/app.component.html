@@ -1,31 +1,31 @@
-<div class="container">
-
-  <header class="row">
-    <div class="col-md-2">
-      <h4 id="peertube-title">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 col-sm-3 col-xs-3 title-menu-left">
+      <h4 id="peertube-title" class="title-menu-left-block header">
         <a [routerLink]="['/videos/list']">PeerTube</a>
       </h4>
+
+      <div class="title-menu-left-block menu">
+        <my-menu *ngIf="isInAdmin() === false"></my-menu>
+        <my-menu-admin *ngIf="isInAdmin() === true"></my-menu-admin>
+      </div>
     </div>
 
-    <div class="col-md-9">
-      <my-search></my-search>
-    </div>
-  </header>
+    <div class="col-md-10 col-sm-9 col-xs-9 main-col">
+      <div class="header">
+        <my-search></my-search>
+      </div>
 
-
-  <div class="row">
-    <my-menu *ngIf="isInAdmin() === false"></my-menu>
-    <my-menu-admin *ngIf="isInAdmin() === true"></my-menu-admin>
-
-    <div class="col-md-9 col-sm-8 col-xs-8 router-outlet-container">
-      <router-outlet></router-outlet>
+      <div class="main-row">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   </div>
-
-  <simple-notifications [options]="notificationOptions"></simple-notifications>
-  <my-confirm></my-confirm>
 
   <footer>
     PeerTube, CopyLeft 2015-2017
   </footer>
 </div>
+
+<my-confirm></my-confirm>
+<simple-notifications [options]="notificationOptions"></simple-notifications>

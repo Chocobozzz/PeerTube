@@ -1,44 +1,81 @@
 @import '../../node_modules/video.js/dist/video-js.css';
 
-body {
-  padding: 20px;
+[hidden] {
+  display: none !important;
+}
 
-  @media screen and (max-width: 400px) {
-    padding: 3px;
+input.readonly {
+  /* Force blank on readonly inputs */
+  background-color: #fff !important;
+}
+
+.form-control, .btn {
+  border-radius: 0;
+}
+
+.glyphicon-black {
+  color: black;
+}
+
+.header {
+  height: $header-height;
+
+  .search-col {
+    height: 100%;
+    margin-left: -15px;
+    padding: 0;
   }
 }
 
-menu {
-  @media screen and (max-width: 600px) {
-    margin-right: 3px !important;
-    padding: 3px !important;
-    min-height: 400px !important;
-  }
+.main-col {
+  padding: 0;
 
-  min-height: 600px;
-  margin-right: 20px;
-  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  .main-row {
+    padding: 15px 30px;
 
-  .panel-block:not(:last-child) {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .panel-button {
-    margin: 8px;
-    cursor: pointer;
-    transition: margin 0.2s;
-
-    &:hover {
-      margin-left: 15px;
+    @media screen and (min-width: 1400px) {
+      padding: 15px 40px;
     }
+
+    @media screen and (min-width: 1600px) {
+      padding: 15px 50px;
+    }
+
+    @media screen and (min-width: 1800px) {
+      padding: 15px 60px;
+    }
+  }
+}
+
+.title-menu-left {
+  height: calc(100vh - #{$header-height});
+  padding-right: 0;
+
+  .title-menu-left-block {
+    margin-left: -15px;
+
+    &.menu {
+      height: 100%;
+    }
+  }
+
+  #peertube-title {
+    background-color: #fff;
+    border-right: 2px solid $header-border-color;
+    font-size: 25px;
+    line-height: $header-height;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
 
     a {
-      color: #333333;
-    }
-  }
+      color: inherit !important;
 
-  .glyphicon {
-    margin: 5px;
+      &:hover {
+        color: inherit !important;
+        text-decoration: none !important;
+      }
+    }
   }
 }
 
@@ -61,19 +98,6 @@ ng2-smart-table {
   .glyphicon {
     font-family: 'Glyphicons Halflings' !important;
   }
-}
-
-[hidden] {
-  display: none !important;
-}
-
-input.readonly {
-  /* Force blank on readonly inputs */
-  background-color: #fff !important;
-}
-
-.glyphicon-black {
-  color: black;
 }
 
 footer {

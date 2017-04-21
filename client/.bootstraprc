@@ -10,9 +10,9 @@ useCustomIconFontPath: true
 
 # Webpack loaders, order matters
 styleLoaders:
-  - style
-  - css
-  - sass
+  - style-loader
+  - css-loader
+  - sass-loader
 
 # Extract styles to stand-alone css file
 # Different settings for different environments can be used,
@@ -94,7 +94,7 @@ styles:
   progress-bars: true
   media: true
   list-group: false
-  panels: false
+  panels: true
   wells: false
   responsive-embed: true
   close: true

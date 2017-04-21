@@ -1,23 +1,8 @@
-.block {
-  margin-bottom: 40px;
-}
-
 .label-description {
-  display: inline-block;
   font-weight: bold;
   color: black;
 }
 
-.requests-general {
-  .label-description {
-    width: 320px;
-  }
-}
-
 .requests-limit {
   margin-top: 20px;
-
-  .label-description {
-    width: 430px;
-  }
 }

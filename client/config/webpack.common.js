@@ -119,8 +119,25 @@ module.exports = function (options) {
 
         {
           test: /\.(sass|scss)$/,
-          use: ['css-to-string-loader', 'css-loader?sourceMap', 'resolve-url-loader', 'sass-loader?sourceMap'],
-          exclude: [ helpers.root('src', 'styles') ]
+          use: [
+            'css-to-string-loader',
+            'css-loader?sourceMap',
+            'resolve-url-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'sass-resources-loader',
+              options: {
+                resources: [
+                  helpers.root('src/sass/_variables.scss')
+                ]
+              }
+            }
+          ]
         },
         { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'url-loader?limit=10000&minetype=application/font-woff' },
         { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'file-loader' },
@@ -133,7 +150,10 @@ module.exports = function (options) {
         {
           test: /\.html$/,
           loader: 'raw-loader',
-          exclude: [ helpers.root('src/index.html'), helpers.root('src/standalone/videos/embed.html') ]
+          exclude: [
+            helpers.root('src/index.html'),
+            helpers.root('src/standalone/videos/embed.html')
+          ]
         }
 
       ]
@@ -262,7 +282,8 @@ module.exports = function (options) {
       new LoaderOptionsPlugin({
         options: {
           sassLoader: {
-            precision: 10
+            precision: 10,
+            includePaths: [ helpers.root('src/sass') ]
           }
         }
       }),
