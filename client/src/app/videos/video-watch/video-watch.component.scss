@@ -37,10 +37,15 @@
     font-size: 18px;
     height: $video-watch-title-height;
     line-height: $video-watch-title-height;
-    padding: 0 30px;
+
+    .video-name {
+      padding-left: $video-watch-info-padding-left;
+    }
 
     .video-views {
       text-align: right;
+      // Keep a symmetry with the video name
+      padding-right: $video-watch-info-padding-left
     }
   }
 
@@ -94,6 +99,8 @@
     .video-small-block-author {
       font-size: 15px;
       font-weight: bold;
+      text-align: left;
+      padding-left: $video-watch-info-padding-left;
     }
 
     .video-small-block-share, .video-small-block-more {
@@ -144,7 +151,7 @@
     margin-top: 30px;
 
     .video-details-date-description {
-      padding-left: 30px;
+      padding-left: $video-watch-info-padding-left;
 
       .video-details-date {
         font-weight: bold;

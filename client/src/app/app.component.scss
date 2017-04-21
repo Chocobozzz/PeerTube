@@ -30,10 +30,15 @@
   }
 }
 
+my-search {
+  // Fix col-md-* padding
+  padding: 0;
+}
+
 footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 10px;
+  border-top: 1px solid $footer-border-color;
+  padding: 10px 0;
   text-align: center;
-  font-size: small;
-  margin: 30px 10px 0 10px;
+  font-size: 11px;
+  margin-top: 30px;
 }

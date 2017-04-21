@@ -3,18 +3,12 @@
     margin-left: 0;
   }
 
-  margin-bottom: 20px;
   border-bottom: 1px solid #f1f1f1;
   height: 40px;
   line-height: 40px;
 
-  my-video-sort {
-    padding-right: 0;
-  }
-
   .videos-total-results {
     font-size: 13px;
-    padding-left: 0;
   }
 
   my-loader {
@@ -26,6 +20,7 @@
 .videos-miniatures {
   min-height: 720px;
   text-align: center;
+  padding-top: 0;
 
   my-video-miniature {
     text-align: left;

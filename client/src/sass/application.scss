@@ -41,9 +41,8 @@ input.readonly {
 }
 
 .main-col {
-  padding: 0;
 
-  .main-row {
+  .content-padding {
     padding: 15px 30px;
 
     @media screen and (min-width: 1400px) {

@@ -64,7 +64,6 @@
       font-weight: bold;
       transition: color 0.2s;
       font-size: 15px;
-      color: $video-miniature-title-color;
 
       &:hover {
         text-decoration: none;
@@ -88,17 +87,12 @@
       }
     }
 
-    .video-miniature-author, .video-miniature-views-created-at {
+    .video-miniature-author, .video-miniature-created-at {
       display: block;
       margin-left: 1px;
       font-size: 11px;
       color: $video-miniature-other-infos;
       opacity: 0.9;
-
-      .video-miniature-created-at::before {
-        content: '\002022';
-        margin: 0 2px 0 1px;
-      }
     }
 
     .video-miniature-author {

@@ -1,16 +1,19 @@
-<div class="row col-md-12 videos-info">
-  <div class="col-md-9 col-xs-5 videos-total-results">
-    <span *ngIf="pagination.totalItems !== null">{{ pagination.totalItems }} videos</span>
+<div class="row">
+  <div class="content-padding">
+    <div class="videos-info">
+      <div class="col-md-9 col-xs-5 videos-total-results">
+        <span *ngIf="pagination.totalItems !== null">{{ pagination.totalItems }} videos</span>
 
-    <my-loader [loading]="loading | async"></my-loader>
+        <my-loader [loading]="loading | async"></my-loader>
+      </div>
+
+      <my-video-sort class="col-md-3 col-xs-7" [currentSort]="sort" (sort)="onSort($event)"></my-video-sort>
+    </div>
   </div>
-
-
-  <my-video-sort class="col-md-3 col-xs-7" [currentSort]="sort" (sort)="onSort($event)"></my-video-sort>
 </div>
 
-<div class="videos-miniatures">
-  <div class="col-md-12 no-video" *ngIf="isThereNoVideo()">There is no video.</div>
+<div class="content-padding videos-miniatures">
+  <div class="no-video" *ngIf="isThereNoVideo()">There is no video.</div>
 
   <my-video-miniature
     class="ng-animate"
