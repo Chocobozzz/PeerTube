@@ -1,13 +1,25 @@
 menu {
   background-color: $black-background;
-  padding: 20px;
+  padding: 25px;
   margin: 0;
   height: 100%;
 
+  .panel-block {
+    margin-bottom: 15px;
+  }
+
+  .block-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    color: $menu-color-block;
+    margin-bottom: 10px;
+  }
+
   a {
     display: block;
+    margin-left: 5px;
     height: 30px;
-    color: #9cabb8;
+    color: $menu-color-link;
     cursor: pointer;
     transition: color 0.3s;
 
@@ -17,7 +29,7 @@ menu {
     }
 
     .glyphicon {
-      margin-right: 20px;
+      margin-right: 15px;
     }
 
     &:hover, &.active {

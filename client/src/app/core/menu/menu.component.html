@@ -1,5 +1,7 @@
 <menu>
   <div class="panel-block">
+    <div class="block-title">Account</div>
+
     <div id="panel-user-login" class="panel-button">
       <a *ngIf="!isLoggedIn" routerLink="/login" routerLinkActive="active">
         <span class="hidden-xs glyphicon glyphicon-log-in"></span>
@@ -24,6 +26,8 @@
   </div>
 
   <div class="panel-block">
+    <div class="block-title">Videos</div>
+
     <a routerLink="/videos/list" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-list"></span>
       See videos
@@ -35,8 +39,10 @@
     </a>
   </div>
 
-  <div class="panel-block">
-    <a *ngIf="isUserAdmin()" routerLink="/admin" routerLinkActive="active">
+  <div *ngIf="isUserAdmin()" class="panel-block">
+    <div class="block-title">Other</div>
+
+    <a routerLink="/admin" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cog"></span>
       Administration
     </a>
