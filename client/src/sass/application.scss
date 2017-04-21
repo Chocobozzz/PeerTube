@@ -13,6 +13,10 @@ input.readonly {
   border-radius: 0;
 }
 
+.dropdown-menu {
+  border-radius: 0;
+}
+
 .glyphicon-black {
   color: black;
 }
@@ -61,7 +65,7 @@ input.readonly {
 
   #peertube-title {
     background-color: #fff;
-    border-right: 2px solid $header-border-color;
+    border-right: 1px solid $header-border-color;
     font-size: 25px;
     line-height: $header-height;
     text-align: center;

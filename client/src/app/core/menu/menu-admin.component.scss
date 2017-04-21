@@ -9,6 +9,7 @@ menu {
     height: 30px;
     color: #9cabb8;
     cursor: pointer;
+    transition: color 0.3s;
 
     &:hover, &:focus {
       text-decoration: none !important;

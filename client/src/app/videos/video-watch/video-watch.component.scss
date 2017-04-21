@@ -32,102 +32,136 @@
 }
 
 #video-info {
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  margin-top: 10px;
-  padding-top: 5px;
+  .video-name-views {
+    font-weight: bold;
+    font-size: 18px;
+    height: $video-watch-title-height;
+    line-height: $video-watch-title-height;
+    padding: 0 30px;
 
-  #video-name-actions {
-
-    #video-name {
-      font-size: 20px;
+    .video-views {
+      text-align: right;
     }
+  }
 
-    .btn .glyphicon {
-      position: relative;
-      top: 2px;
-    }
+  .video-small-blocks {
+    height: 150px;
+    color: $video-watch-info-color;
+    border-color: $video-watch-border-color;
+    border-width: 1px 0px;
+    border-style: solid;
 
-    #rates {
-      display: inline-block;
-      margin-right: 20px;
+    .video-small-block {
+      height: $video-watch-info-height;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
 
-      // Remove focus style
-      .btn:focus {
-        outline: 0;
+      a {
+        cursor: pointer;
+        transition: color 0.3s;
+
+        &, &:hover {
+          color: inherit;
+          text-decoration:none;
+        }
+
+        &:hover {
+          color: #000 !important;
+        }
       }
 
-      .activated-btn {
-        color: #333;
-        background-color: #e6e6e6;
-        border-color: #8c8c8c;
+      .option .glyphicon {
+        font-size: 22px;
+        color: inherit;
+        opacity: 0.9;
+        margin-bottom: 10px;
       }
 
-      .not-interactive-btn {
-        cursor: default;
+      .video-small-block-text {
+        font-size: 15px;
+        font-weight: bold;
+      }
+    }
 
-        &:hover, &:focus, &:active {
-          color: #333;
-          background-color: #fff;
-          border-color: #ccc;
-          box-shadow: none;
-          outline: 0;
+    .video-small-block:not(:last-child) {
+      border-width: 0 1px 0 0;
+      border-color: $video-watch-border-color;
+      border-style: solid;
+    }
+
+    .video-small-block-author {
+      font-size: 15px;
+      font-weight: bold;
+    }
+
+    .video-small-block-share, .video-small-block-more {
+      a.option {
+        display: block;
+
+        .glyphicon {
+          display: block;
         }
       }
     }
 
-    #share, #more {
+    .video-small-block-more .video-small-block-dropdown {
+      position: relative;
+
+      .dropdown-item .glyphicon {
+        margin-right: 5px;
+      }
+    }
+
+    .video-small-block-rating {
+
+      .video-small-block-like {
+        margin-bottom: 10px;
+      }
+
+      .video-small-block-text {
+        vertical-align: top;
+      }
+
+      .glyphicon {
+        font-size: 18px;
+        margin: 0 10px 0 0;
+      }
+
+      .interactive {
+        cursor: pointer;
+        transition: color 0.3s;
+
+        &.activated, &:hover {
+          color: #000;
+        }
+      }
+    }
+  }
+
+  .video-details {
+    margin-top: 30px;
+
+    .video-details-date-description {
+      padding-left: 30px;
+
+      .video-details-date {
+        font-weight: bold;
+        margin-bottom: 30px;
+      }
+    }
+
+    .video-details-attributes {
       font-weight: bold;
-      opacity: 0.85;
-    }
+      font-size: 12px;
 
-    #more-menu .dropdown-item .glyphicon {
-      margin-right: 5px;
-    }
-  }
-
-  #video-by-date {
-    font-size: 13px;
-    opacity: 0.6;
-
-    a {
-      color: black;
-    }
-
-    #video-date:before {
-      content: '\002022';
-      margin: 0 5px;
-    }
-  }
-
-  #video-tags-views {
-    margin-top: 10px;
-
-    a {
-      margin-right: 5px;
-    }
-
-    #video-views {
-      font-weight: bold;
-    }
-  }
-
-  #video-category {
-    margin-top: 10px;
-
-    #category-label {
-      font-weight: bold;
-    }
-  }
-
-  #video-licence #licence-label, #video-language #language-label {
-    font-weight: bold;
-  }
-
-  #video-description {
-    margin-top: 10px;
-
-    #description-label {
-      font-weight: bold;
+      .video-details-attribute-label {
+        color: $video-watch-info-color;
+        display: inline-block;
+        width: 60px;
+        margin-right: 5px;
+      }
     }
   }
 }
