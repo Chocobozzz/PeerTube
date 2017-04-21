@@ -1,0 +1,39 @@
+.title-menu-left {
+  height: calc(100vh - #{$header-height});
+  padding-right: 0;
+
+  .title-menu-left-block {
+    margin-left: -15px;
+
+    &.menu {
+      height: 100%;
+    }
+  }
+
+  #peertube-title {
+    background-color: #fff;
+    border-right: 1px solid $header-border-color;
+    font-size: 25px;
+    line-height: $header-height;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    a {
+      color: inherit !important;
+
+      &:hover {
+        color: inherit !important;
+        text-decoration: none !important;
+      }
+    }
+  }
+}
+
+footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  text-align: center;
+  font-size: small;
+  margin: 30px 10px 0 10px;
+}
