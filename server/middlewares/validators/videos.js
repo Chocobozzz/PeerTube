@@ -179,9 +179,8 @@ function checkUserCanDeleteVideo (userId, res, callback) {
     }
 
     // If we reach this comment, we can delete the video
+    callback()
   })
-
-  callback()
 }
 
 function videosBlacklist (req, res, next) {
