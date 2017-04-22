@@ -6,31 +6,11 @@ const modelUtils = require('./utils')
 
 module.exports = function (sequelize, DataTypes) {
   const BlacklistedVideo = sequelize.define('BlacklistedVideo',
-    {
-      remoteId: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        validate: {
-          isUUID: 4
-        }
-      },
-      localId: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        validate: {
-          isUUID: 4
-        }
-      }
-    },
+    {},
     {
       indexes: [
         {
-          fields: [ 'remoteId' ]
-        },
-        {
-          fields: [ 'localId' ],
+          fields: [ 'videoId' ],
           unique: true
         }
       ],
@@ -41,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
         list,
         listForApi,
         loadById,
-        loadByPod
+        loadByVideoId
       },
       instanceMethods: {
         toFormatedJSON
@@ -57,9 +37,8 @@ module.exports = function (sequelize, DataTypes) {
 
 function toFormatedJSON () {
   return {
-    remoteId: this.remoteId,
-    localId: this.localId,
-    remotePodId: this.remotePodId,
+    id: this.id,
+    videoId: this.videoId,
     createdAt: this.createdAt
   }
 }
@@ -67,8 +46,8 @@ function toFormatedJSON () {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.belongsTo(models.Pod, {
-    foreignKey: 'remotePodId',
+  this.belongsTo(models.Video, {
+    foreignKey: 'videoId',
     onDelete: 'cascade'
   })
 }
@@ -99,12 +78,12 @@ function loadById (id, callback) {
   return this.findById(id).asCallback(callback)
 }
 
-function loadByPod (remotePodId, callback) {
+function loadByVideoId (id, callback) {
   const query = {
     where: {
-      remotePodId: remotePodId
+      videoId: id
     }
   }
 
-  return this.findAll(query).asCallback(callback)
+  return this.find(query).asCallback(callback)
 }
