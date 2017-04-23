@@ -51,5 +51,6 @@ footer {
   padding: 10px 0;
   text-align: center;
   font-size: 11px;
-  margin-top: 30px;
+  margin-top: $footer-margin;
+  height: $footer-height;
 }

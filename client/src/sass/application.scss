@@ -40,6 +40,10 @@ input.readonly {
   position: fixed;
 }
 
+.main-row {
+  min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
+}
+
 .main-col {
 
   .content-padding {

@@ -22,7 +22,7 @@
   </my-video-miniature>
 </div>
 
-<pagination *ngIf="pagination.totalItems !== null"
+<pagination *ngIf="pagination.totalItems !== null && pagination.totalItems !== 0"
   [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage" [maxSize]="6" [boundaryLinks]="true" [rotate]="false"
   [(ngModel)]="pagination.currentPage" (pageChanged)="onPageChanged($event)"
 ></pagination>
