@@ -1,9 +1,9 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-2 col-sm-3 col-xs-3 title-menu-left">
-      <h4 id="peertube-title" class="title-menu-left-block header">
-        <a [routerLink]="['/videos/list']">PeerTube</a>
-      </h4>
+      <div id="peertube-title" class="title-menu-left-block header">
+        <a [routerLink]="['/videos/list']" title="Homepage"></a>
+      </div>
 
       <div class="title-menu-left-block menu">
         <my-menu *ngIf="isInAdmin() === false"></my-menu>
