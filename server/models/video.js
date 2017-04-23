@@ -546,7 +546,7 @@ function listForApi (start, count, sort, callback) {
     ],
     where: {
       id: { $notIn: this.sequelize.literal(
-        '(SELECT "BlacklistedVideos"."localId" FROM "BlacklistedVideos")'
+        '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
       )}
     }
   }
@@ -658,7 +658,7 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
   const query = {
     where: {
       id: { $notIn: this.sequelize.literal(
-        '(SELECT "BlacklistedVideos"."localId" FROM "BlacklistedVideos")'
+        '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
       )}
     },
     offset: start,

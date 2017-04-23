@@ -635,22 +635,13 @@ function reportVideoAbuse (req, res, finalCallback) {
 function addVideoToBlacklist (req, res, next) {
   const videoInstance = res.locals.video
 
-  if (videoInstance.isOwned() === false) {
-    db.BlacklistedVideo.create({
-      remoteId: videoInstance.remoteId,
-      localId: videoInstance.id,
-      remotePodId: videoInstance.Author.Pod.id
-    })
-    .asCallback(function (err) {
-      if (err) {
-        logger.error('Errors when blacklisting video ', { error: err })
-        return next(err)
-      }
-
-      return res.type('json').status(204).end()
-    })
-    return
-  }
-
-  next()
+  db.BlacklistedVideo.create({
+    videoId: videoInstance.id
+  })
+  .asCallback(function (err) {
+    if (err) {
+      logger.error('Errors when blacklisting video ', { error: err })
+      return next(err)
+    }
+  })
 }
