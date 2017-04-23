@@ -183,12 +183,22 @@ function checkUserCanDeleteVideo (userId, res, callback) {
   })
 }
 
+function checkVideoIsBlacklistable (req, res, callback) {
+  if (res.local.video.isOwned() === true) {
+        return res.status(403).send('Cannot blacklist a local video')
+  }
+
+  callback()
+}
+
 function videosBlacklist (req, res, next) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    checkVideoExists(req.params.id, res, next)
+    checkVideoExists(req.params.id, res, function() {
+      checkVideoIsBlacklistable(req, res, next)
+    })
   })
 }
