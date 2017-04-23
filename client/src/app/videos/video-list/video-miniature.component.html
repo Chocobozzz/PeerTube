@@ -24,6 +24,12 @@
       <a [routerLink]="['/videos/watch', video.id]" [attr.title]="getVideoName()" class="video-miniature-name">{{ getVideoName() }}</a>
     </span>
 
+    <div class="video-miniature-tags">
+      <span *ngFor="let tag of video.tags" class="video-miniature-tag">
+        <a [routerLink]="['/videos/list', { field: 'tags', search: tag, sort: currentSort }]" class="label label-primary">{{ tag }}</a>
+      </span>
+    </div>
+
     <a [routerLink]="['/videos/list', { field: 'author', search: video.author, sort: currentSort }]" class="video-miniature-author">{{ video.by }}</a>
     <span class="video-miniature-created-at">{{ video.createdAt | date:'short' }}</span>
   </div>

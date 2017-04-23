@@ -80,7 +80,7 @@
       .option .glyphicon {
         font-size: 22px;
         color: inherit;
-        opacity: 0.9;
+        opacity: 0.6;
         margin-bottom: 10px;
       }
 
@@ -168,6 +168,16 @@
         display: inline-block;
         width: 60px;
         margin-right: 5px;
+      }
+    }
+
+    .video-details-tags {
+      display: inline-block;
+
+      a {
+        display: inline-block;
+        margin-right: 3px;
+        font-size: 11px;
       }
     }
   }

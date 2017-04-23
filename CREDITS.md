@@ -11,7 +11,7 @@
 Inspirations from:
 
  * [Aurélien Salomon](https://dribbble.com/shots/1338727-Youtube-Redesign)
- * [Adrien Thomas](https://dribbble.com/shots/1363194-YouTube-Redesign-Profil-page)
+ * [Wojciech Zieliński](https://dribbble.com/shots/3000315-youtube-concept)
 
 # Fonts
 

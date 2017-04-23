@@ -157,6 +157,19 @@
           {{ video.languageLabel }}
         </span>
       </div>
+
+      <div class="video-details-attribute">
+        <span class="video-details-attribute-label">
+          Tags:
+        </span>
+
+        <div class="video-details-tags">
+          <a *ngFor="let tag of video.tags" [routerLink]="['/videos/list', { field: 'tags', search: tag }]" class="label label-primary">
+            {{ tag }}
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
