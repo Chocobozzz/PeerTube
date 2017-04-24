@@ -643,5 +643,7 @@ function addVideoToBlacklist (req, res, next) {
       logger.error('Errors when blacklisting video ', { error: err })
       return next(err)
     }
+
+    return res.type('json').status(204).end()
   })
 }
