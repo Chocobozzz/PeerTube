@@ -184,7 +184,7 @@ function checkUserCanDeleteVideo (userId, res, callback) {
 }
 
 function checkVideoIsBlacklistable (req, res, callback) {
-  if (res.local.video.isOwned() === true) {
+  if (res.locals.video.isOwned() === true) {
         return res.status(403).send('Cannot blacklist a local video')
   }
 
