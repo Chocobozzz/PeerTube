@@ -137,6 +137,18 @@ function videoRate (req, res, next) {
   })
 }
 
+function videosBlacklist (req, res, next) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+
+  logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
+
+  checkErrors(req, res, function () {
+    checkVideoExists(req.params.id, res, function () {
+      checkVideoIsBlacklistable(req, res, next)
+    })
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 module.exports = validatorsVideos
@@ -166,8 +178,8 @@ function checkUserCanDeleteVideo (userId, res, callback) {
     }
 
     // Check if the user can delete the video
-    //  The user can delete it if s/he an admin
-    //  Or if s/he is the video's author
+    // The user can delete it if s/he is an admin
+    // Or if s/he is the video's author
     if (user.isAdmin() === false) {
       if (res.locals.video.isOwned() === false) {
         return res.status(403).send('Cannot remove video of another pod')
@@ -185,20 +197,8 @@ function checkUserCanDeleteVideo (userId, res, callback) {
 
 function checkVideoIsBlacklistable (req, res, callback) {
   if (res.locals.video.isOwned() === true) {
-        return res.status(403).send('Cannot blacklist a local video')
+    return res.status(403).send('Cannot blacklist a local video')
   }
 
   callback()
-}
-
-function videosBlacklist (req, res, next) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
-
-  logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
-
-  checkErrors(req, res, function () {
-    checkVideoExists(req.params.id, res, function() {
-      checkVideoIsBlacklistable(req, res, next)
-    })
-  })
 }

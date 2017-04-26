@@ -152,8 +152,8 @@ export class VideoService {
 
   blacklistVideo(id: string) {
     return this.authHttp.post(VideoService.BASE_VIDEO_URL + id + '/blacklist', {})
-			.map(this.restExtractor.extractDataBool)
-			.catch((res) => this.restExtractor.handleError(res));
+                        .map(this.restExtractor.extractDataBool)
+                        .catch((res) => this.restExtractor.handleError(res));
   }
 
   private setVideoRate(id: string, rateType: RateType) {

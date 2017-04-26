@@ -635,10 +635,11 @@ function reportVideoAbuse (req, res, finalCallback) {
 function addVideoToBlacklist (req, res, next) {
   const videoInstance = res.locals.video
 
-  db.BlacklistedVideo.create({
+  const toCreate = {
     videoId: videoInstance.id
-  })
-  .asCallback(function (err) {
+  }
+
+  db.BlacklistedVideo.create(toCreate).asCallback(function (err) {
     if (err) {
       logger.error('Errors when blacklisting video ', { error: err })
       return next(err)

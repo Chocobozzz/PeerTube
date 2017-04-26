@@ -770,7 +770,6 @@ function removeFromBlacklist (video, callback) {
     // If an error occured, stop here
     if (err) {
       logger.error('Error when fetching video from blacklist.', { error: err })
-
       return callback(err)
     }
 
