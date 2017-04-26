@@ -36,7 +36,7 @@
     "update-host": "scripty",
     "test": "scripty",
     "help": "scripty",
-    "postinstall": "cd client && npm install"
+    "postinstall": "cd client && yarn install"
   },
   "dependencies": {
     "async": "^2.0.0",

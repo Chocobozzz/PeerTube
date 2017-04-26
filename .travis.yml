@@ -19,8 +19,6 @@ sudo: false
 services:
   - postgresql
 
-before_install: if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi
-
 before_script:
   - npm run build
   - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"

@@ -123,6 +123,7 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 
   * **NodeJS >= 6.x**
   * **npm >= 3.x**
+  * yarn
   * OpenSSL (cli)
   * PostgreSQL
   * FFmpeg
@@ -130,6 +131,7 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 #### Debian
 
   * Install NodeJS 6.x (actual LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  * Install yarn: [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
   * Add jessie backports to your *source.list*: http://backports.debian.org/Instructions/
   * Run:
 
@@ -143,7 +145,7 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 
     $ git clone -b master https://github.com/Chocobozzz/PeerTube
     $ cd PeerTube
-    $ npm install # Or npm install --unsafe-perm for root user
+    $ yarn install
     $ npm run build
 
 ## Usage
