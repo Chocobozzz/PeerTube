@@ -60,14 +60,14 @@ export class AppComponent implements OnInit {
       md: 10,
       sm: 9,
       xs: 9
-    }
+    };
 
     // Take all width is the menu is not displayed
     if (this.isMenuDisplayed === false) {
       Object.keys(colSizes).forEach(col => colSizes[col] = 12);
     }
 
-    const classes = [ "main-col" ];
+    const classes = [ 'main-col' ];
     Object.keys(colSizes).forEach(col => classes.push(`col-${col}-${colSizes[col]}`));
 
     return classes;
