@@ -16,6 +16,7 @@ const logger = require('../helpers/logger')
 const friends = require('../lib/friends')
 const modelUtils = require('./utils')
 const customVideosValidators = require('../helpers/custom-validators').videos
+const db = require('../initializers/database')
 
 // ---------------------------------------------------------------------------
 
@@ -201,7 +202,8 @@ module.exports = function (sequelize, DataTypes) {
         isOwned,
         toFormatedJSON,
         toAddRemoteJSON,
-        toUpdateRemoteJSON
+        toUpdateRemoteJSON,
+        removeFromBlacklist
       },
       hooks: {
         beforeValidate,
@@ -528,6 +530,7 @@ function list (callback) {
 }
 
 function listForApi (start, count, sort, callback) {
+  // Exclude Blakclisted videos from the list
   const query = {
     offset: start,
     limit: count,
@@ -540,7 +543,12 @@ function listForApi (start, count, sort, callback) {
       },
 
       this.sequelize.models.Tag
-    ]
+    ],
+    where: {
+      id: { $notIn: this.sequelize.literal(
+        '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
+      )}
+    }
   }
 
   return this.findAndCountAll(query).asCallback(function (err, result) {
@@ -648,7 +656,11 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
   }
 
   const query = {
-    where: {},
+    where: {
+      id: { $notIn: this.sequelize.literal(
+        '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
+      )}
+    },
     offset: start,
     limit: count,
     distinct: true, // For the count, a video can have many tags
@@ -661,13 +673,9 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
     query.where.infoHash = infoHash
   } else if (field === 'tags') {
     const escapedValue = this.sequelize.escape('%' + value + '%')
-    query.where = {
-      id: {
-        $in: this.sequelize.literal(
-          '(SELECT "VideoTags"."videoId" FROM "Tags" INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId" WHERE name LIKE ' + escapedValue + ')'
-        )
-      }
-    }
+    query.where.id.$in = this.sequelize.literal(
+      '(SELECT "VideoTags"."videoId" FROM "Tags" INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId" WHERE name LIKE ' + escapedValue + ')'
+    )
   } else if (field === 'host') {
     // FIXME: Include our pod? (not stored in the database)
     podInclude.where = {
@@ -754,4 +762,24 @@ function generateImage (video, videoPath, folder, imageName, size, callback) {
       callback(null, imageName)
     })
     .thumbnail(options)
+}
+
+function removeFromBlacklist (video, callback) {
+  // Find the blacklisted video
+  db.BlacklistedVideo.loadByVideoId(video.id, function (err, video) {
+    // If an error occured, stop here
+    if (err) {
+      logger.error('Error when fetching video from blacklist.', { error: err })
+
+      return callback(err)
+    }
+
+    // If we found the video, remove it from the blacklist
+    if (video) {
+      video.destroy().asCallback(callback)
+    } else {
+      // If haven't found it, simply ignore it and do nothing
+      return callback()
+    }
+  })
 }

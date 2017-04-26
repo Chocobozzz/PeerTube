@@ -93,11 +93,13 @@ router.get('/:id',
   validatorsVideos.videosGet,
   getVideo
 )
+
 router.delete('/:id',
   oAuth.authenticate,
   validatorsVideos.videosRemove,
   removeVideo
 )
+
 router.get('/search/:value',
   validatorsVideos.videosSearch,
   validatorsPagination.pagination,
@@ -106,6 +108,13 @@ router.get('/search/:value',
   pagination.setPagination,
   search.setVideosSearch,
   searchVideos
+)
+
+router.post('/:id/blacklist',
+  oAuth.authenticate,
+  admin.ensureIsAdmin,
+  validatorsVideos.videosBlacklist,
+  addVideoToBlacklist
 )
 
 // ---------------------------------------------------------------------------
@@ -620,5 +629,21 @@ function reportVideoAbuse (req, res, finalCallback) {
 
     logger.info('Abuse report for video %s created.', videoInstance.name)
     return finalCallback(null)
+  })
+}
+
+function addVideoToBlacklist (req, res, next) {
+  const videoInstance = res.locals.video
+
+  db.BlacklistedVideo.create({
+    videoId: videoInstance.id
+  })
+  .asCallback(function (err) {
+    if (err) {
+      logger.error('Errors when blacklisting video ', { error: err })
+      return next(err)
+    }
+
+    return res.type('json').status(204).end()
   })
 }

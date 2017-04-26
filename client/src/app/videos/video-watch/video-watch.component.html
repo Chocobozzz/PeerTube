@@ -96,6 +96,18 @@
               <span class="glyphicon glyphicon-alert"></span> Report
             </a>
           </li>
+
+	  <li *ngIf="isVideoRemovable()" role="menuitem">
+	    <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
+	      <span class="glyphicon glyphicon-remove"></span> Delete
+	    </a>
+	  </li>
+
+	  <li *ngIf="isVideoBlacklistable()" role="menuitem">
+	    <a class="dropdown-item" title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
+	      <span class="glyphicon glyphicon-eye-close"></span> Blacklist
+	    </a>
+	  </li>
         </ul>
       </div>
     </div>

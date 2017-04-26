@@ -79,7 +79,8 @@ module.exports = function (sequelize, DataTypes) {
       },
       instanceMethods: {
         isPasswordMatch,
-        toFormatedJSON
+        toFormatedJSON,
+        isAdmin
       },
       hooks: {
         beforeCreate: beforeCreateOrUpdate,
@@ -117,6 +118,11 @@ function toFormatedJSON () {
     createdAt: this.createdAt
   }
 }
+
+function isAdmin () {
+  return this.role === constants.USER_ROLES.ADMIN
+}
+
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {

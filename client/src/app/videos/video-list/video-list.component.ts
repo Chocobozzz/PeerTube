@@ -108,11 +108,6 @@ export class VideoListComponent implements OnInit, OnDestroy {
     this.navigateToNewParams();
   }
 
-  onRemoved(video: Video) {
-    this.notificationsService.success('Success', `Video ${video.name} deleted.`);
-    this.getVideos();
-  }
-
   onSort(sort: SortField) {
     this.sort = sort;
 

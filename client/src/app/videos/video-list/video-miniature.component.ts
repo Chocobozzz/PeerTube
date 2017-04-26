@@ -13,8 +13,6 @@ import { User } from '../../shared';
 })
 
 export class VideoMiniatureComponent {
-  @Output() removed = new EventEmitter<any>();
-
   @Input() currentSort: SortField;
   @Input() user: User;
   @Input() video: Video;
@@ -27,10 +25,6 @@ export class VideoMiniatureComponent {
     private configService: ConfigService,
     private videoService: VideoService
   ) {}
-
-  displayRemoveIcon() {
-    return this.hovering && this.video.isRemovableBy(this.user);
-  }
 
   getVideoName() {
     if (this.isVideoNSFWForThisUser())
@@ -45,20 +39,6 @@ export class VideoMiniatureComponent {
 
   onHover() {
     this.hovering = true;
-  }
-
-  removeVideo(id: string) {
-    this.confirmService.confirm('Do you really want to delete this video?', 'Delete').subscribe(
-      res => {
-        if (res === false) return;
-
-        this.videoService.removeVideo(id).subscribe(
-          status => this.removed.emit(true),
-
-          error => this.notificationsService.error('Error', error.text)
-        );
-      }
-    );
   }
 
   isVideoNSFWForThisUser() {

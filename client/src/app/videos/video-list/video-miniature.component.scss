@@ -42,20 +42,6 @@
     }
   }
 
-  .video-miniature-remove {
-    display: inline-block;
-    position: absolute;
-    left: 16px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: rgba(255, 255, 255, 0.8);
-    padding: 2px;
-    cursor: pointer;
-
-    &:hover {
-      color: rgba(255, 255, 255, 0.9);
-    }
-  }
-
   .video-miniature-informations {
     width: 200px;
 
