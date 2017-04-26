@@ -14,6 +14,8 @@ addons:
       - g++-4.8
   postgresql: "9.4"
 
+cache: yarn
+
 sudo: false
 
 services:
