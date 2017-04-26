@@ -1,49 +1,79 @@
+.main-row {
+  min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
+}
+
 .title-menu-left {
+  position: fixed;
   height: calc(100vh - #{$header-height});
-  padding-right: 0;
+  padding: 0;
 
-  .title-menu-left-block {
-    margin-left: -15px;
-
-    &.menu {
-      height: 100%;
-    }
-  }
-
-  #peertube-title {
-    background-color: #fff;
-    border-right: 1px solid $header-border-color;
-    font-size: 25px;
-    line-height: $header-height;
-    text-align: center;
-    margin-top: 0;
-    margin-bottom: 0;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-
-    a {
-      color: inherit !important;
-      display: block;
-      background: url(/client/assets/logo.png) no-repeat;
-      background-size: contain;
-      width: 180px;
-      height: 22px;
-      margin: auto;
-
-      &:hover {
-        color: inherit !important;
-        text-decoration: none !important;
-      }
-    }
+  .title-menu-left-block.menu {
+    height: 100%;
   }
 }
 
-my-search {
-  // Fix col-md-* padding
-  padding: 0;
+.header {
+  height: $header-height;
+
+  .fake-title-block {
+    display: inline-block;
+  }
+
+  .top-left-block {
+    background-color: #fff;
+    border-right: 1px solid $header-border-color;
+    line-height: $header-height;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    position: fixed;
+
+    &.border-bottom {
+      border-bottom: 1px solid $header-border-color;
+    }
+
+    .hamburger-block {
+      margin-right: 20px;
+      margin-left: 15px;
+
+      .glyphicon {
+        position: relative;
+        top: 4px;
+      }
+    }
+
+    #peertube-title {
+
+      a {
+        color: inherit !important;
+        display: block;
+        background: url(/client/assets/logo.png) no-repeat;
+        background-size: contain;
+        background-position: center;
+        width: 180px;
+        height: 100%;
+        margin: auto;
+
+        &:hover {
+          color: inherit !important;
+          text-decoration: none !important;
+        }
+      }
+    }
+  }
+
+  my-search {
+    position: fixed;
+    z-index: 1000;
+    // Fix col-md-* padding
+    padding: 0;
+  }
+
+  .search-col {
+    height: 100%;
+    margin-left: -15px;
+    padding: 0;
+  }
 }
 
 footer {

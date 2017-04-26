@@ -24,6 +24,8 @@ export class AppComponent implements OnInit {
     rtl: false
   };
 
+  isMenuDisplayed = true;
+
   constructor(
     private router: Router,
     private authService: AuthService,
@@ -47,5 +49,27 @@ export class AppComponent implements OnInit {
 
   isInAdmin() {
     return this.router.url.indexOf('/admin/') !== -1;
+  }
+
+  toggleMenu() {
+    this.isMenuDisplayed = !this.isMenuDisplayed;
+  }
+
+  getMainColClasses() {
+    const colSizes = {
+      md: 10,
+      sm: 9,
+      xs: 9
+    }
+
+    // Take all width is the menu is not displayed
+    if (this.isMenuDisplayed === false) {
+      Object.keys(colSizes).forEach(col => colSizes[col] = 12);
+    }
+
+    const classes = [ "main-col" ];
+    Object.keys(colSizes).forEach(col => classes.push(`col-${col}-${colSizes[col]}`));
+
+    return classes;
   }
 }

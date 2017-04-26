@@ -21,29 +21,6 @@ input.readonly {
   color: black;
 }
 
-.header {
-  height: $header-height;
-
-  my-search {
-    position: fixed;
-    z-index: 1000;
-  }
-
-  .search-col {
-    height: 100%;
-    margin-left: -15px;
-    padding: 0;
-  }
-}
-
-.title-menu-left {
-  position: fixed;
-}
-
-.main-row {
-  min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
-}
-
 .main-col {
 
   .content-padding {
