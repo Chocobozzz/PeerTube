@@ -14,11 +14,6 @@
     </div>
   </a>
 
-  <span
-    *ngIf="displayRemoveIcon()" (click)="removeVideo(video.id)"
-    class="video-miniature-remove glyphicon glyphicon-remove"
-  ></span>
-
   <div class="video-miniature-informations">
     <span class="video-miniature-name">
       <a [routerLink]="['/videos/watch', video.id]" [attr.title]="getVideoName()" class="video-miniature-name">{{ getVideoName() }}</a>
