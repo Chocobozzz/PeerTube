@@ -121,7 +121,7 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 
 ### Dependencies
 
-  * **NodeJS >= 4.x**
+  * **NodeJS >= 6.x**
   * **npm >= 3.x**
   * OpenSSL (cli)
   * PostgreSQL
@@ -129,13 +129,12 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 
 #### Debian
 
-  * Install NodeJS 4.x (actual LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  * Install NodeJS 6.x (actual LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
   * Add jessie backports to your *source.list*: http://backports.debian.org/Instructions/
   * Run:
 
         # apt-get update
         # apt-get install ffmpeg postgresql-9.4 openssl
-        # npm install -g npm@3
 
 #### Other distribution... (PR welcome)
 

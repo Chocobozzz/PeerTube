@@ -1,12 +1,24 @@
 #!/usr/bin/env sh
 
+nodeMinVersion="v6.0.0"
+npmMinVersion="3.0.0"
 
-git pull origin $(git rev-parse --abbrev-ref HEAD) || exit -1
+if [[ $(node --version) < $nodeMinVersion ]]; then
+  echo 'You need node >= 6'
+  exit 0
+fi
+
+if [[ $(npm --version) < $npmMinVersion ]]; then
+  echo 'You need npm >= 3'
+  exit 0
+fi
 
 if pgrep peertube > /dev/null; then
   echo 'PeerTube is running!'
   exit 0
 fi
+
+git pull origin $(git rev-parse --abbrev-ref HEAD) || exit -1
 
 npm install
 npm update
