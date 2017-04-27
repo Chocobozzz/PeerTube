@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
 nodeMinVersion="v6.0.0"
 npmMinVersion="3.0.0"
