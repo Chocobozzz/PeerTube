@@ -20,8 +20,10 @@
   }
 
   .top-left-block {
+    z-index: 100;
     background-color: #fff;
     border-right: 1px solid $header-border-color;
+    height: $header-height;
     line-height: $header-height;
     margin-top: 0;
     margin-bottom: 0;
@@ -37,6 +39,7 @@
       margin-left: 15px;
 
       .glyphicon {
+        cursor: pointer;
         position: relative;
         top: 4px;
       }
