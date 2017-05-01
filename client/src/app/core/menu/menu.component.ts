@@ -7,7 +7,7 @@ import { ConfigService } from '../config';
 @Component({
   selector: 'my-menu',
   templateUrl: './menu.component.html',
-  styleUrls: [ './menu-admin.component.scss' ]
+  styleUrls: [ './menu.component.scss' ]
 })
 export class MenuComponent implements OnInit {
   isLoggedIn: boolean;

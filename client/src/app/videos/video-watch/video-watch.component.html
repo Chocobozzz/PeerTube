@@ -30,30 +30,30 @@
 
 <div *ngIf="video !== null" id="video-info">
   <div class="row video-name-views">
-    <div class="col-md-8 video-name">
+    <div class="col-xs-8 col-md-8 video-name">
       {{ video.name }}
     </div>
 
-    <div class="col-md-4 pull-right video-views">
+    <div class="col-xs-4 col-md-4 pull-right video-views">
       {{ video.views}} views
     </div>
   </div>
 
   <div class="row video-small-blocks">
-    <div class="col-md-3 video-small-block video-small-block-author">
+    <div class="col-xs-5 col-xs-3 col-md-3 video-small-block video-small-block-author">
       <a title="Access to all videos of this user" [routerLink]="['/videos/list', { field: 'author', search: video.author }]">
         {{ video.by }}
       </a>
     </div>
 
-    <div class="col-md-3 video-small-block video-small-block-share">
+    <div class="col-xs-2 col-md-3 video-small-block video-small-block-share">
       <a class="option" (click)="showShareModal()" title="Share the video">
         <span class="glyphicon glyphicon-share"></span>
         <span class="video-small-block-text">Share</span>
       </a>
     </div>
 
-    <div class="col-md-3 video-small-block video-small-block-more">
+    <div class="col-xs-2 col-md-3 video-small-block video-small-block-more">
       <div class="video-small-block-dropdown" dropdown dropup="true" placement="right">
         <a class="option" title="Access to more options" dropdownToggle>
           <span class="glyphicon glyphicon-option-horizontal"></span>
@@ -94,7 +94,7 @@
       </div>
     </div>
 
-    <div class="col-md-3 video-small-block video-small-block-rating">
+    <div class="col-xs-3 col-md-3 video-small-block video-small-block-rating">
       <div class="video-small-block-like">
         <span
           class="glyphicon glyphicon-thumbs-up" title="Like this video"
@@ -120,7 +120,7 @@
   </div>
 
   <div class="row video-details">
-    <div class="video-details-date-description col-md-9">
+    <div class="video-details-date-description col-xs-8 col-md-9">
       <div class="video-details-date">
         Published on {{ video.createdAt | date:'short' }}
       </div>
@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <div class="video-details-attributes col-md-3">
+    <div class="video-details-attributes col-xs-4 col-md-3">
       <div class="video-details-attribute">
         <span class="video-details-attribute-label">
           Category:

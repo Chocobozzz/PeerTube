@@ -2,11 +2,11 @@
   <div class="row header">
 
     <div class="col-md-2 col-sm-3 col-xs-3 top-left-block" [ngClass]="{ 'border-bottom': isMenuDisplayed === false }">
-      <div class="hamburger-block">
-        <span (click)="toggleMenu()" class="glyphicon glyphicon-menu-hamburger"></span>
+      <div class="hamburger-block" (click)="toggleMenu()">
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
       </div>
 
-      <div id="peertube-title" class="title-menu-left-block header">
+      <div id="peertube-title">
         <a [routerLink]="['/videos/list']" title="Homepage"></a>
       </div>
     </div>

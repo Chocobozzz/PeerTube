@@ -1,8 +1,19 @@
 menu {
   background-color: $black-background;
-  padding: 25px;
+  padding: 15px;
   margin: 0;
   height: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  @media screen and (max-width: 550px) {
+    font-size: 90%;
+  }
+
+  @media screen and (min-width: 1200px) {
+    padding: 25px;
+  }
 
   .panel-block {
     margin-bottom: 15px;

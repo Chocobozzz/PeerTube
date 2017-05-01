@@ -47,6 +47,7 @@
       // Keep a symmetry with the video name
       padding-right: $video-watch-info-padding-left
     }
+
   }
 
   .video-small-blocks {
@@ -66,6 +67,9 @@
       a {
         cursor: pointer;
         transition: color 0.3s;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &, &:hover {
           color: inherit;
@@ -178,6 +182,55 @@
         display: inline-block;
         margin-right: 3px;
         font-size: 11px;
+      }
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    .video-name-views {
+      font-size: 16px !important;
+    }
+  }
+
+  @media screen and (max-width: 800px) {
+    .video-name-views {
+      .video-name {
+        padding-left: 5px;
+        padding-right: 0px;
+      }
+
+      .video-views {
+        padding-left: 0px;
+        padding-right: 5px;
+      }
+    }
+
+    .video-small-blocks {
+      a, .video-small-block-text {
+        font-size: 13px !important;
+      }
+
+      .glyphicon {
+        font-size: 18px !important;
+      }
+
+      .video-small-block-author {
+        padding-left: 10px;
+      }
+    }
+
+    .video-details {
+      .video-details-date-description {
+        padding-left: 10px;
+        font-size: 13px !important;
+      }
+
+      .video-details-attributes {
+        font-size: 11px !important;
+
+        .video-details-attribute-label {
+          width: 50px;
+        }
       }
     }
   }

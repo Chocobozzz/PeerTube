@@ -45,6 +45,11 @@ export class AppComponent implements OnInit {
     this.videoService.loadVideoCategories();
     this.videoService.loadVideoLicences();
     this.videoService.loadVideoLanguages();
+
+    // Do not display menu on small screens
+    if (window.innerWidth < 600) {
+      this.isMenuDisplayed = false;
+    }
   }
 
   isInAdmin() {

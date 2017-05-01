@@ -29,13 +29,14 @@
     margin-bottom: 0;
     display: flex;
     position: fixed;
+    padding: 0;
 
     &.border-bottom {
       border-bottom: 1px solid $header-border-color;
     }
 
     .hamburger-block {
-      margin-right: 20px;
+      margin-right: 15px;
       margin-left: 15px;
 
       .glyphicon {
@@ -53,14 +54,71 @@
         background: url(/client/assets/logo.png) no-repeat;
         background-size: contain;
         background-position: center;
-        width: 180px;
         height: 100%;
         margin: auto;
+        width: 135px;
 
         &:hover {
           color: inherit !important;
           text-decoration: none !important;
         }
+      }
+    }
+
+    @media screen and (max-width: 500px) {
+      #peertube-title {
+        display: none;
+      }
+
+      .hamburger-block {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    @media screen and (min-width: 500px) and (max-width: 600px) {
+      #peertube-title a {
+        width: 80px;
+      }
+    }
+
+    @media screen and (min-width: 600px) and (max-width: 700px) {
+      #peertube-title a {
+        width: 100px;
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      #peertube-title a {
+        width: 120px;
+      }
+    }
+
+    @media screen and (min-width: 1000px) {
+      #peertube-title a {
+        width: 120px;
+      }
+    }
+
+    @media screen and (min-width: 1200px) {
+      padding-left: 15px;
+
+      .hamburger-block {
+        margin-right: 15px;
+      }
+
+      #peertube-title a {
+        width: 135px;
+      }
+    }
+
+    @media screen and (min-width: 1600px) {
+      .hamburger-block {
+        margin-right: 20px;
+      }
+
+      #peertube-title a {
+        width: 180px;
       }
     }
   }
