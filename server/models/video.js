@@ -544,11 +544,7 @@ function listForApi (start, count, sort, callback) {
 
       this.sequelize.models.Tag
     ],
-    where: {
-      id: { $notIn: this.sequelize.literal(
-        '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
-      )}
-    }
+    where: createBaseVideosWhere.call(this)
   }
 
   return this.findAndCountAll(query).asCallback(function (err, result) {
@@ -656,11 +652,7 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
   }
 
   const query = {
-    where: {
-      id: { $notIn: this.sequelize.literal(
-        '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
-      )}
-    },
+    where: createBaseVideosWhere.call(this),
     offset: start,
     limit: count,
     distinct: true, // For the count, a video can have many tags
@@ -714,6 +706,16 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
 }
 
 // ---------------------------------------------------------------------------
+
+function createBaseVideosWhere () {
+  return {
+    id: {
+      $notIn: this.sequelize.literal(
+        '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
+      )
+    }
+  }
+}
 
 function removeThumbnail (video, callback) {
   const thumbnailPath = pathUtils.join(constants.CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
