@@ -2,7 +2,7 @@
 
 const request = require('supertest')
 
-const videosUtils = {
+const videosAbuseUtils = {
   getVideoAbusesList,
   getVideoAbusesListPagination,
   getVideoAbusesListSort,
@@ -70,4 +70,4 @@ function getVideoAbusesListSort (url, token, sort, end) {
 
 // ---------------------------------------------------------------------------
 
-module.exports = videosUtils
+module.exports = videosAbuseUtils

@@ -38,7 +38,7 @@ describe('Test video abuses', function () {
           })
         }, next)
       },
-      // Pod 1 make friends too
+      // Pod 1 makes friend with pod 2
       function (next) {
         const server = servers[0]
         podsUtils.makeFriends(server.url, server.accessToken, next)

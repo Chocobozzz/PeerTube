@@ -129,7 +129,7 @@ describe('Test video abuses API validators', function () {
     const basePath = '/api/v1/videos/'
 
     it('Should fail with nothing', function (done) {
-      const path = basePath + server.video + '/abuse'
+      const path = basePath + server.video.id + '/abuse'
       const data = {}
       requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
     })
@@ -142,7 +142,7 @@ describe('Test video abuses API validators', function () {
 
     it('Should fail with a non authenticated user', function (done) {
       const data = {}
-      const path = basePath + server.video + '/abuse'
+      const path = basePath + server.video.id + '/abuse'
       requestsUtils.makePostBodyRequest(server.url, path, 'hello', data, done, 401)
     })
 
@@ -150,7 +150,7 @@ describe('Test video abuses API validators', function () {
       const data = {
         reason: 'h'
       }
-      const path = basePath + server.video + '/abuse'
+      const path = basePath + server.video.id + '/abuse'
       requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
     })
 
@@ -161,7 +161,7 @@ describe('Test video abuses API validators', function () {
                 '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' +
                 '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
       }
-      const path = basePath + server.video + '/abuse'
+      const path = basePath + server.video.id + '/abuse'
       requestsUtils.makePostBodyRequest(server.url, path, server.accessToken, data, done)
     })
   })
