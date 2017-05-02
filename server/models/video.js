@@ -7,6 +7,7 @@ const fs = require('fs')
 const magnetUtil = require('magnet-uri')
 const map = require('lodash/map')
 const parallel = require('async/parallel')
+const series = require('async/series')
 const parseTorrent = require('parse-torrent')
 const pathUtils = require('path')
 const values = require('lodash/values')
@@ -17,6 +18,7 @@ const friends = require('../lib/friends')
 const modelUtils = require('./utils')
 const customVideosValidators = require('../helpers/custom-validators').videos
 const db = require('../initializers/database')
+const jobScheduler = require('../lib/jobs/job-scheduler')
 
 // ---------------------------------------------------------------------------
 
@@ -203,6 +205,7 @@ module.exports = function (sequelize, DataTypes) {
         toFormatedJSON,
         toAddRemoteJSON,
         toUpdateRemoteJSON,
+        transcodeVideofile,
         removeFromBlacklist
       },
       hooks: {
@@ -234,37 +237,29 @@ function beforeCreate (video, options, next) {
 
     tasks.push(
       function createVideoTorrent (callback) {
-        const options = {
-          announceList: [
-            [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
-          ],
-          urlList: [
-            constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.getVideoFilename()
-          ]
-        }
-
-        createTorrent(videoPath, options, function (err, torrent) {
-          if (err) return callback(err)
-
-          const filePath = pathUtils.join(constants.CONFIG.STORAGE.TORRENTS_DIR, video.getTorrentName())
-          fs.writeFile(filePath, torrent, function (err) {
-            if (err) return callback(err)
-
-            const parsedTorrent = parseTorrent(torrent)
-            video.set('infoHash', parsedTorrent.infoHash)
-            video.validate().asCallback(callback)
-          })
-        })
+        createTorrentFromVideo(video, videoPath, callback)
       },
 
       function createVideoThumbnail (callback) {
         createThumbnail(video, videoPath, callback)
       },
 
-      function createVIdeoPreview (callback) {
+      function createVideoPreview (callback) {
         createPreview(video, videoPath, callback)
       }
     )
+
+    if (constants.CONFIG.TRANSCODING.ENABLED === true) {
+      tasks.push(
+        function createVideoTranscoderJob (callback) {
+          const dataInput = {
+            id: video.id
+          }
+
+          jobScheduler.createJob(options.transaction, 'videoTranscoder', dataInput, callback)
+        }
+      )
+    }
 
     return parallel(tasks, next)
   }
@@ -503,6 +498,59 @@ function toUpdateRemoteJSON (callback) {
   return json
 }
 
+function transcodeVideofile (finalCallback) {
+  const video = this
+
+  const videosDirectory = constants.CONFIG.STORAGE.VIDEOS_DIR
+  const newExtname = '.mp4'
+  const videoInputPath = pathUtils.join(videosDirectory, video.getVideoFilename())
+  const videoOutputPath = pathUtils.join(videosDirectory, video.id + '-transcoded' + newExtname)
+
+  ffmpeg(videoInputPath)
+    .output(videoOutputPath)
+    .videoCodec('libx264')
+    .outputOption('-threads ' + constants.CONFIG.TRANSCODING.THREADS)
+    .outputOption('-movflags faststart')
+    .on('error', finalCallback)
+    .on('end', function () {
+      series([
+        function removeOldFile (callback) {
+          fs.unlink(videoInputPath, callback)
+        },
+
+        function moveNewFile (callback) {
+          // Important to do this before getVideoFilename() to take in account the new file extension
+          video.set('extname', newExtname)
+
+          const newVideoPath = pathUtils.join(videosDirectory, video.getVideoFilename())
+          fs.rename(videoOutputPath, newVideoPath, callback)
+        },
+
+        function torrent (callback) {
+          const newVideoPath = pathUtils.join(videosDirectory, video.getVideoFilename())
+          createTorrentFromVideo(video, newVideoPath, callback)
+        },
+
+        function videoExtension (callback) {
+          video.save().asCallback(callback)
+        }
+
+      ], function (err) {
+        if (err) {
+          // Autodescruction...
+          video.destroy().asCallback(function (err) {
+            if (err) logger.error('Cannot destruct video after transcoding failure.', { error: err })
+          })
+
+          return finalCallback(err)
+        }
+
+        return finalCallback(null)
+      })
+    })
+    .run()
+}
+
 // ------------------------------ STATICS ------------------------------
 
 function generateThumbnailFromData (video, thumbnailData, callback) {
@@ -735,6 +783,30 @@ function removeTorrent (video, callback) {
 function removePreview (video, callback) {
   // Same name than video thumnail
   fs.unlink(constants.CONFIG.STORAGE.PREVIEWS_DIR + video.getPreviewName(), callback)
+}
+
+function createTorrentFromVideo (video, videoPath, callback) {
+  const options = {
+    announceList: [
+      [ constants.CONFIG.WEBSERVER.WS + '://' + constants.CONFIG.WEBSERVER.HOSTNAME + ':' + constants.CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
+    ],
+    urlList: [
+      constants.CONFIG.WEBSERVER.URL + constants.STATIC_PATHS.WEBSEED + video.getVideoFilename()
+    ]
+  }
+
+  createTorrent(videoPath, options, function (err, torrent) {
+    if (err) return callback(err)
+
+    const filePath = pathUtils.join(constants.CONFIG.STORAGE.TORRENTS_DIR, video.getTorrentName())
+    fs.writeFile(filePath, torrent, function (err) {
+      if (err) return callback(err)
+
+      const parsedTorrent = parseTorrent(torrent)
+      video.set('infoHash', parsedTorrent.infoHash)
+      video.validate().asCallback(callback)
+    })
+  })
 }
 
 function createPreview (video, videoPath, callback) {

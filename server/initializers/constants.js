@@ -64,6 +64,10 @@ const CONFIG = {
   },
   SIGNUP: {
     ENABLED: config.get('signup.enabled')
+  },
+  TRANSCODING: {
+    ENABLED: config.get('transcoding.enabled'),
+    THREADS: config.get('transcoding.threads')
   }
 }
 CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
@@ -223,6 +227,18 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
+const JOB_STATES = {
+  PENDING: 'pending',
+  PROCESSING: 'processing',
+  ERROR: 'error',
+  SUCCESS: 'success'
+}
+// How many maximum jobs we fetch from the database per cycle
+const JOBS_FETCH_LIMIT_PER_CYCLE = 10
+const JOBS_CONCURRENCY = 1
+// 1 minutes
+let JOBS_FETCHING_INTERVAL = 60000
+
 // ---------------------------------------------------------------------------
 
 const PRIVATE_CERT_NAME = 'peertube.key.pem'
@@ -264,6 +280,7 @@ if (isTestInstance() === true) {
   CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
   FRIEND_SCORE.BASE = 20
   REQUESTS_INTERVAL = 10000
+  JOBS_FETCHING_INTERVAL = 10000
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
   STATIC_MAX_AGE = 0
@@ -277,6 +294,10 @@ module.exports = {
   CONFIG,
   CONSTRAINTS_FIELDS,
   FRIEND_SCORE,
+  JOBS_FETCHING_INTERVAL,
+  JOB_STATES,
+  JOBS_CONCURRENCY,
+  JOBS_FETCH_LIMIT_PER_CYCLE,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   PAGINATION_COUNT_DEFAULT,

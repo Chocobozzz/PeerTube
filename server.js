@@ -40,6 +40,7 @@ const customValidators = require('./server/helpers/custom-validators')
 const friends = require('./server/lib/friends')
 const installer = require('./server/initializers/installer')
 const migrator = require('./server/initializers/migrator')
+const jobScheduler = require('./server/lib/jobs/job-scheduler')
 const routes = require('./server/controllers')
 
 // ----------- Command line -----------
@@ -132,6 +133,9 @@ function onDatabaseInitDone () {
       server.listen(port, function () {
         // Activate the communication with friends
         friends.activate()
+
+        // Activate job scheduler
+        jobScheduler.activate()
 
         logger.info('Server listening on port %d', port)
         logger.info('Webserver: %s', constants.CONFIG.WEBSERVER.URL)
