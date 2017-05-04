@@ -32,5 +32,5 @@ signup:
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # Uses a lot of CPU!
 transcoding:
-  enabled: true
+  enabled: false
   threads: 2

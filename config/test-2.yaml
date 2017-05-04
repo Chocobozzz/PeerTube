@@ -21,3 +21,6 @@ admin:
 
 signup:
   enabled: false
+
+transcoding:
+  enabled: true

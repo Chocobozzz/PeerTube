@@ -18,6 +18,3 @@ storage:
 
 admin:
   email: 'admin6@example.com'
-
-transcoding:
-  enabled: true
