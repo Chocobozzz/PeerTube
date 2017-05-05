@@ -29,6 +29,11 @@ const missed = checker.checkMissedConfig()
 if (missed.length !== 0) {
   throw new Error('Miss some configurations keys : ' + missed)
 }
+checker.checkFFmpeg(function (err) {
+  if (err) {
+    throw err
+  }
+})
 
 const errorMessage = checker.checkConfig()
 if (errorMessage !== null) {

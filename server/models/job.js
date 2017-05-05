@@ -39,14 +39,14 @@ module.exports = function (sequelize, DataTypes) {
 
 // ---------------------------------------------------------------------------
 
-function listWithLimit (limit, callback) {
+function listWithLimit (limit, state, callback) {
   const query = {
     order: [
       [ 'id', 'ASC' ]
     ],
     limit: limit,
     where: {
-      state: constants.JOB_STATES.PENDING
+      state
     }
   }
 
