@@ -2,10 +2,12 @@
 
 const config = require('config')
 
+const constants = require('./constants')
 const db = require('./database')
 
 const checker = {
   checkConfig,
+  checkFFmpeg,
   checkMissedConfig,
   clientsExist,
   usersExist
@@ -40,6 +42,29 @@ function checkMissedConfig () {
   }
 
   return miss
+}
+
+// Check the available codecs
+function checkFFmpeg (callback) {
+  const Ffmpeg = require('fluent-ffmpeg')
+
+  Ffmpeg.getAvailableCodecs(function (err, codecs) {
+    if (err) return callback(err)
+    if (constants.CONFIG.TRANSCODING.ENABLED === false) return callback(null)
+
+    const canEncode = [ 'libx264' ]
+    canEncode.forEach(function (codec) {
+      if (codecs[codec] === undefined) {
+        return callback(new Error('Unknown codec ' + codec + ' in FFmpeg.'))
+      }
+
+      if (codecs[codec].canEncode !== true) {
+        return callback(new Error('Unavailable encode codec ' + codec + ' in FFmpeg'))
+      }
+    })
+
+    return callback(null)
+  })
 }
 
 function clientsExist (callback) {
