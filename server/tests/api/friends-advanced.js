@@ -169,7 +169,7 @@ describe('Test advanced friends', function () {
         uploadVideo(2, next)
       },
       function (next) {
-        setTimeout(next, 11000)
+        setTimeout(next, 22000)
       },
       // Rerun server 4
       function (next) {

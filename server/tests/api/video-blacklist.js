@@ -53,7 +53,7 @@ describe('Test video blacklists', function () {
       },
       // Wait videos propagation
       function (next) {
-        setTimeout(next, 11000)
+        setTimeout(next, 22000)
       },
       function (next) {
         videosUtils.getVideosList(servers[0].url, function (err, res) {
