@@ -229,8 +229,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   canUserUpdateVideo() {
-    return this.authService.getUser() !== null &&
-           this.authService.getUser().username === this.video.author;
+    return this.video.isUpdatableBy(this.authService.getUser());
   }
 
   isVideoRemovable() {

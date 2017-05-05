@@ -93,6 +93,10 @@ export class Video {
     return user && user.isAdmin() === true && this.isLocal === false;
   }
 
+  isUpdatableBy(user) {
+    return user && this.isLocal === true && user.username === this.author;
+  }
+
   isVideoNSFWForUser(user: User) {
     // If the video is NSFW and the user is not logged in, or the user does not want to display NSFW videos...
     return (this.nsfw && (!user || user.displayNSFW === false));

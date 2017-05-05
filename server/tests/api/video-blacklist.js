@@ -17,7 +17,7 @@ describe('Test video blacklists', function () {
   let servers = []
 
   before(function (done) {
-    this.timeout(30000)
+    this.timeout(40000)
 
     series([
       // Run servers
