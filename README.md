@@ -58,8 +58,8 @@ Decentralized video streaming platform using P2P (BitTorrent) directly in the we
 
 Want to see in action?
 
-   * You can directly test in your browser with this [demo server](http://peertube.cpy.re). Don't forget to use the latest version of Firefox/Chromium/(Opera?) and check your firewall configuration (for WebRTC)
-   * You can find [a video](https://vimeo.com/164881662 "Yes Vimeo, please don't judge me") to see how the "decentralization feature" looks like
+   * [Demo server](http://peertube.cpy.re)
+   * [Video](https://vimeo.com/164881662 "Yes Vimeo, please don't judge me") to see how the "decentralization feature" looks like
    * Experimental demo servers that share videos (they are in the same network): [peertube2](http://peertube2.cpy.re), [peertube3](http://peertube3.cpy.re). Since I do experiments with them, sometimes they might not work correctly.
 
 ## Why
