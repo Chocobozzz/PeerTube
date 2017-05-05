@@ -1,5 +1,3 @@
-@import "../../../sass/pre-customizations.scss";
-
 .video-miniature {
   margin-top: 30px;
   display: inline-block;
@@ -71,7 +69,7 @@
       }
 
       .video-miniature-tags {
-        // Fix for chrome when tags a long
+        // Fix for chrome when tags are long
         width: 201px;
 
         .video-miniature-tag {
@@ -81,7 +79,6 @@
           top: -2px;
 
           .label {
-            line-height: $line-height-base;
             transition: background-color 0.2s;
           }
         }

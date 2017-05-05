@@ -23,19 +23,6 @@
 
   my-video-miniature {
     text-align: left;
-    transition: all 0.5s ease;
-
-    &.ng-enter {
-      opacity: 0;
-    }
-
-    &.ng-enter-active {
-      opacity: 1;
-    }
-
-    &.ng-leave {
-      opacity: 0;
-    }
   }
 
   .no-video {

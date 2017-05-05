@@ -5,7 +5,7 @@ import { TagInputModule } from 'ng2-tag-input';
 import { VideosRoutingModule } from './videos-routing.module';
 import { VideosComponent } from './videos.component';
 import { VideoAddComponent, VideoUpdateComponent } from './video-edit';
-import { VideoListComponent, VideoMiniatureComponent, VideoSortComponent } from './video-list';
+import { LoaderComponent, VideoListComponent, VideoMiniatureComponent, VideoSortComponent } from './video-list';
 import {
   VideoWatchComponent,
   VideoMagnetComponent,
@@ -13,7 +13,7 @@ import {
   VideoShareComponent,
   WebTorrentService
 } from './video-watch';
-import { LoaderComponent, VideoService } from './shared';
+import { VideoService } from './shared';
 import { SharedModule } from '../shared';
 
 @NgModule({

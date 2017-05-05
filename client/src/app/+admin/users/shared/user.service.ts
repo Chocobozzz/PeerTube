@@ -6,7 +6,6 @@ import { AuthHttp, RestExtractor, RestDataSource, User } from '../../../shared';
 
 @Injectable()
 export class UserService {
-  // TODO: merge this constant with account
   private static BASE_USERS_URL = '/api/v1/users/';
 
   constructor(

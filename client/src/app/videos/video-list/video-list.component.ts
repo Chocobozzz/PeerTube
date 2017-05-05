@@ -76,10 +76,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
     this.loading.next(true);
     this.videos = [];
 
-    this.changeDetector.detectChanges();
-
     let observable = null;
-
     if (this.search.value) {
       observable = this.videoService.searchVideos(this.search, this.pagination, this.sort);
     } else {
@@ -150,8 +147,6 @@ export class VideoListComponent implements OnInit, OnDestroy {
     } else {
       this.pagination.currentPage = 1;
     }
-
-    this.changeDetector.detectChanges();
   }
 
   private navigateToNewParams() {

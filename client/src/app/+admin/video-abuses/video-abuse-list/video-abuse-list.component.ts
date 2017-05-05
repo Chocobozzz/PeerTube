@@ -6,8 +6,7 @@ import { Utils, VideoAbuseService, VideoAbuse } from '../../../shared';
 
 @Component({
 	selector: 'my-video-abuse-list',
-	templateUrl: './video-abuse-list.component.html',
-  styleUrls: [ './video-abuse-list.component.scss' ]
+	templateUrl: './video-abuse-list.component.html'
 })
 export class VideoAbuseListComponent {
   videoAbusesSource = null;

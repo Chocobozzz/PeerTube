@@ -6,32 +6,32 @@ import { UserListComponent } from './user-list';
 
 export const UsersRoutes: Routes = [
   {
-      path: 'users',
-      component: UsersComponent,
-      children: [
-        {
-          path: '',
-          redirectTo: 'list',
-          pathMatch: 'full'
-        },
-        {
-          path: 'list',
-          component: UserListComponent,
-          data: {
-            meta: {
-              title: 'Users list'
-            }
-          }
-        },
-        {
-          path: 'add',
-          component: UserAddComponent,
-          data: {
-            meta: {
-              title: 'Add a user'
-            }
+    path: 'users',
+    component: UsersComponent,
+    children: [
+      {
+        path: '',
+        redirectTo: 'list',
+        pathMatch: 'full'
+      },
+      {
+        path: 'list',
+        component: UserListComponent,
+        data: {
+          meta: {
+            title: 'Users list'
           }
         }
-      ]
-    }
+      },
+      {
+        path: 'add',
+        component: UserAddComponent,
+        data: {
+          meta: {
+            title: 'Add a user'
+          }
+        }
+      }
+    ]
+  }
 ];

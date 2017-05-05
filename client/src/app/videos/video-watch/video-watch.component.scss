@@ -13,6 +13,10 @@
 
 .embed-responsive {
   height: 500px;
+
+  @media screen and (max-width: 600px) {
+    height: 300px;
+  }
 }
 
 #torrent-info {
@@ -22,12 +26,6 @@
 
   div {
     min-width: 60px;
-  }
-}
-
-.embed-responsive {
-  @media screen and (max-width: 600px) {
-    height: 300px;
   }
 }
 

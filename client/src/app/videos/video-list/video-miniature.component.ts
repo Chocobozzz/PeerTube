@@ -17,8 +17,6 @@ export class VideoMiniatureComponent {
   @Input() user: User;
   @Input() video: Video;
 
-  hovering = false;
-
   constructor(
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
@@ -31,14 +29,6 @@ export class VideoMiniatureComponent {
       return 'NSFW';
 
     return this.video.name;
-  }
-
-  onBlur() {
-    this.hovering = false;
-  }
-
-  onHover() {
-    this.hovering = true;
   }
 
   isVideoNSFWForThisUser() {
