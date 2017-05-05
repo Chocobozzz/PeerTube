@@ -76,31 +76,31 @@ function processJob (job, callback) {
     return jobHandler.process(job.handlerInputData, function (err, result) {
       if (err) {
         logger.error('Error in job handler %s.', job.handlerName, { error: err })
-        return onJobError(jobHandler, job, callback)
+        return onJobError(jobHandler, job, result, callback)
       }
 
-      return onJobSuccess(jobHandler, job, callback)
+      return onJobSuccess(jobHandler, job, result, callback)
     })
   })
 }
 
-function onJobError (jobHandler, job, callback) {
+function onJobError (jobHandler, job, jobResult, callback) {
   job.state = constants.JOB_STATES.ERROR
 
   job.save().asCallback(function (err) {
     if (err) return cannotSaveJobError(err, callback)
 
-    return jobHandler.onError(err, job.id, callback)
+    return jobHandler.onError(err, job.id, jobResult, callback)
   })
 }
 
-function onJobSuccess (jobHandler, job, callback) {
+function onJobSuccess (jobHandler, job, jobResult, callback) {
   job.state = constants.JOB_STATES.SUCCESS
 
   job.save().asCallback(function (err) {
     if (err) return cannotSaveJobError(err, callback)
 
-    return jobHandler.onSuccess(err, job.id, callback)
+    return jobHandler.onSuccess(err, job.id, jobResult, callback)
   })
 }
 

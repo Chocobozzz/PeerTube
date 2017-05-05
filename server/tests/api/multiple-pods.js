@@ -76,6 +76,7 @@ describe('Test multiple pods', function () {
 
   describe('Should upload the video and propagate on each pod', function () {
     it('Should upload the video on pod 1 and propagate on each pod', function (done) {
+      // Pod 1 has video transcoding activated
       this.timeout(15000)
 
       series([
@@ -152,7 +153,7 @@ describe('Test multiple pods', function () {
     })
 
     it('Should upload the video on pod 2 and propagate on each pod', function (done) {
-      this.timeout(15000)
+      this.timeout(30000)
 
       series([
         function (next) {
@@ -169,7 +170,7 @@ describe('Test multiple pods', function () {
           videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes, next)
         },
         function (next) {
-          setTimeout(next, 11000)
+          setTimeout(next, 22000)
         }],
         // All pods should have this video
         function (err) {

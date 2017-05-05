@@ -379,6 +379,9 @@ function addVideo (req, res, videoFile, finalCallback) {
     },
 
     function sendToFriends (t, video, callback) {
+      // Let transcoding job send the video to friends because the videofile extension might change
+      if (constants.CONFIG.TRANSCODING.ENABLED === true) return callback(null, t)
+
       video.toAddRemoteJSON(function (err, remoteVideo) {
         if (err) return callback(err)
 

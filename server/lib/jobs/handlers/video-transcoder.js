@@ -2,6 +2,7 @@
 
 const db = require('../../../initializers/database')
 const logger = require('../../../helpers/logger')
+const friends = require('../../../lib/friends')
 
 const VideoTranscoderHandler = {
   process,
@@ -12,21 +13,29 @@ const VideoTranscoderHandler = {
 // ---------------------------------------------------------------------------
 
 function process (data, callback) {
-  db.Video.load(data.id, function (err, video) {
+  db.Video.loadAndPopulateAuthorAndPodAndTags(data.id, function (err, video) {
     if (err) return callback(err)
 
-    video.transcodeVideofile(callback)
+    video.transcodeVideofile(function (err) {
+      return callback(err, video)
+    })
   })
 }
 
-function onError (err, jobId, callback) {
+function onError (err, jobId, video, callback) {
   logger.error('Error when transcoding video file in job %d.', jobId, { error: err })
   return callback()
 }
 
-function onSuccess (data, jobId, callback) {
+function onSuccess (data, jobId, video, callback) {
   logger.info('Job %d is a success.', jobId)
-  return callback()
+
+  video.toAddRemoteJSON(function (err, remoteVideo) {
+    if (err) return callback(err)
+
+    // Now we'll add the video's meta data to our friends
+    friends.addVideoToFriends(remoteVideo, null, callback)
+  })
 }
 
 // ---------------------------------------------------------------------------
