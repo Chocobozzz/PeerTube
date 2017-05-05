@@ -81,14 +81,17 @@ export class VideoService {
   }
 
   updateVideo(video: Video) {
+    const language = video.language ? video.language : null;
+
     const body = {
       name: video.name,
       category: video.category,
       licence: video.licence,
-      language: video.language,
+      language,
       description: video.description,
       tags: video.tags
     };
+
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
 

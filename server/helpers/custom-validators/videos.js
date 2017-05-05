@@ -53,7 +53,7 @@ function isVideoLicenceValid (value) {
 }
 
 function isVideoLanguageValid (value) {
-  return constants.VIDEO_LANGUAGES[value] !== undefined
+  return value === null || constants.VIDEO_LANGUAGES[value] !== undefined
 }
 
 function isVideoNSFWValid (value) {

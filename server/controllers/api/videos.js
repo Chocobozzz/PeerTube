@@ -444,12 +444,12 @@ function updateVideo (req, res, finalCallback) {
         transaction: t
       }
 
-      if (videoInfosToUpdate.name) videoInstance.set('name', videoInfosToUpdate.name)
-      if (videoInfosToUpdate.category) videoInstance.set('category', videoInfosToUpdate.category)
-      if (videoInfosToUpdate.licence) videoInstance.set('licence', videoInfosToUpdate.licence)
-      if (videoInfosToUpdate.language) videoInstance.set('language', videoInfosToUpdate.language)
-      if (videoInfosToUpdate.nsfw) videoInstance.set('nsfw', videoInfosToUpdate.nsfw)
-      if (videoInfosToUpdate.description) videoInstance.set('description', videoInfosToUpdate.description)
+      if (videoInfosToUpdate.name !== undefined) videoInstance.set('name', videoInfosToUpdate.name)
+      if (videoInfosToUpdate.category !== undefined) videoInstance.set('category', videoInfosToUpdate.category)
+      if (videoInfosToUpdate.licence !== undefined) videoInstance.set('licence', videoInfosToUpdate.licence)
+      if (videoInfosToUpdate.language !== undefined) videoInstance.set('language', videoInfosToUpdate.language)
+      if (videoInfosToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfosToUpdate.nsfw)
+      if (videoInfosToUpdate.description !== undefined) videoInstance.set('description', videoInfosToUpdate.description)
 
       videoInstance.save(options).asCallback(function (err) {
         return callback(err, t, tagInstances)

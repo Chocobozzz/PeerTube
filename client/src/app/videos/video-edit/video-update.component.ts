@@ -98,7 +98,17 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                      );
   }
 
+  checkForm() {
+    this.forceCheck();
+
+    return this.form.valid;
+  }
+
   update() {
+    if (this.checkForm() === false) {
+      return;
+    }
+
     this.video.patch(this.form.value);
 
     this.videoService.updateVideo(this.video)
