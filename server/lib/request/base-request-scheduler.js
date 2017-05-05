@@ -2,10 +2,10 @@
 
 const eachLimit = require('async/eachLimit')
 
-const constants = require('../initializers/constants')
-const db = require('../initializers/database')
-const logger = require('../helpers/logger')
-const requests = require('../helpers/requests')
+const constants = require('../../initializers/constants')
+const db = require('../../initializers/database')
+const logger = require('../../helpers/logger')
+const requests = require('../../helpers/requests')
 
 module.exports = class BaseRequestScheduler {
   constructor (options) {

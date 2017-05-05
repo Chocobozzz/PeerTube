@@ -24,6 +24,8 @@ function checkSignature (req, res, next) {
     logger.debug('Checking signature from %s.', host)
 
     let signatureShouldBe
+    // If there is data in the body the sender used it for its signature
+    // If there is no data we just use its host as signature
     if (req.body.data) {
       signatureShouldBe = req.body.data
     } else {

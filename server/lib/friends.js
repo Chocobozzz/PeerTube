@@ -13,9 +13,9 @@ const logger = require('../helpers/logger')
 const peertubeCrypto = require('../helpers/peertube-crypto')
 const requests = require('../helpers/requests')
 const utils = require('../helpers/utils')
-const RequestScheduler = require('./request-scheduler')
-const RequestVideoQaduScheduler = require('./request-video-qadu-scheduler')
-const RequestVideoEventScheduler = require('./request-video-event-scheduler')
+const RequestScheduler = require('./request/request-scheduler')
+const RequestVideoQaduScheduler = require('./request/request-video-qadu-scheduler')
+const RequestVideoEventScheduler = require('./request/request-video-event-scheduler')
 
 const ENDPOINT_ACTIONS = constants.REQUEST_ENDPOINT_ACTIONS[constants.REQUEST_ENDPOINTS.VIDEOS]
 

@@ -1,8 +1,8 @@
 'use strict'
 
 const BaseRequestScheduler = require('./base-request-scheduler')
-const constants = require('../initializers/constants')
-const db = require('../initializers/database')
+const constants = require('../../initializers/constants')
+const db = require('../../initializers/database')
 
 module.exports = class RequestVideoEventScheduler extends BaseRequestScheduler {
   constructor () {

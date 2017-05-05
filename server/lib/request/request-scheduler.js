@@ -1,9 +1,9 @@
 'use strict'
 
-const constants = require('../initializers/constants')
+const constants = require('../../initializers/constants')
 const BaseRequestScheduler = require('./base-request-scheduler')
-const db = require('../initializers/database')
-const logger = require('../helpers/logger')
+const db = require('../../initializers/database')
+const logger = require('../../helpers/logger')
 
 module.exports = class RequestScheduler extends BaseRequestScheduler {
   constructor () {

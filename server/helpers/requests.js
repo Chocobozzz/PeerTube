@@ -40,7 +40,7 @@ function makeSecureRequest (params, callback) {
 
     let dataToSign
     if (params.data) {
-      dataToSign = dataToSign = params.data
+      dataToSign = params.data
     } else {
       // We do not have data to sign so we just take our host
       // It is not ideal but the connection should be in HTTPS
