@@ -71,8 +71,7 @@ export class FriendListComponent {
 
         this.friendService.quitFriends().subscribe(
           status => {
-            this.notificationsService.success('Sucess', 'Friends left!')
-
+            this.notificationsService.success('Success', 'Friends left!');
             this.friendsSource.refresh()
           },
 
