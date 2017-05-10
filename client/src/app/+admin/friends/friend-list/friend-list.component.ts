@@ -15,6 +15,7 @@ import { FriendService } from '../shared'
 export class FriendListComponent {
   friendsSource = null
   tableSettings = {
+    mode: 'external',
     attr: {
       class: 'table-hover'
     },
@@ -23,7 +24,10 @@ export class FriendListComponent {
       position: 'right',
       add: false,
       edit: false,
-      delete: false
+      delete: true
+    },
+    delete: {
+      deleteButtonContent: Utils.getRowDeleteButton()
     },
     columns: {
       id: {
@@ -63,8 +67,8 @@ export class FriendListComponent {
     return this.friendsSource.count() !== 0
   }
 
-  quitFriends () {
-    const confirmMessage = 'Do you really want to quit your friends? All their videos will be deleted.'
+  quitFriends() {
+    const confirmMessage = 'Do you really want to quit your friends? All their videos will be deleted.';
     this.confirmService.confirm(confirmMessage, 'Quit friends').subscribe(
       res => {
         if (res === false) return
@@ -79,5 +83,26 @@ export class FriendListComponent {
         )
       }
     )
+  }
+
+  removeFriend({ data }) {
+    const confirmMessage = 'Do you really want to remove this friend ? All its videos will be deleted.';
+    const friend: Friend = data;
+
+    this.confirmService.confirm(confirmMessage, 'Remove').subscribe(
+      res => {
+	if (res === false) return;
+
+	this.friendService.removeFriend(friend).subscribe(
+	  status => {
+	    this.notificationsService.success('Success', 'Friend removed');
+
+	    this.friendsSource.refresh();
+	  },
+
+	  err => this.notificationsService.error('Error', err.text)
+	);
+      }
+    );
   }
 }

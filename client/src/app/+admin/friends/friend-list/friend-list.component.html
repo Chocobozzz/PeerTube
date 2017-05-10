@@ -2,7 +2,7 @@
   <div class="content-padding">
     <h3>Friends list</h3>
 
-    <ng2-smart-table [settings]="tableSettings" [source]="friendsSource"></ng2-smart-table>
+    <ng2-smart-table [settings]="tableSettings" [source]="friendsSource" (delete)="removeFriend($event)"></ng2-smart-table>
 
     <a *ngIf="hasFriends()" class="btn btn-danger pull-left" (click)="quitFriends()">
       Quit friends
