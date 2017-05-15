@@ -16,3 +16,4 @@
 /ffmpeg/
 /*.sublime-project
 /*.sublime-workspace
+/dist
