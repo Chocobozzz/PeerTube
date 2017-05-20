@@ -242,6 +242,55 @@ function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
 }
 
+function removeFriend (podId, callback) {
+  // Stop pool requests
+  requestScheduler.deactivate()
+
+  waterfall([
+    function flushRequests (callbackAsync) {
+      requestScheduler.flush(err => callbackAsync(err))
+    },
+
+    function flushVideoQaduRequests (callbackAsync) {
+      requestVideoQaduScheduler.flush(err => callbackAsync(err))
+    },
+
+    function getPod (callbackAsync) {
+      return db.Pod.load(podId, callbackAsync)
+    },
+
+    function announceIQuitMyFriends (pod, callbackAsync) {
+      const requestParams = {
+        method: 'POST',
+        path: '/api/' + constants.API_VERSION + '/remote/pods/remove',
+        sign: true
+      }
+
+      requestParams.toPod = pod
+      requests.makeSecureRequest(requestParams, function (err) {
+        if (err) {
+          logger.error('Some errors while quitting friend.', { err: err })
+          // Continue anyway
+        }
+
+        return callbackAsync(null, pod)
+      })
+    },
+
+    function removePodFromDB (pod, callbackAsync) {
+      pod.destroy().asCallback(callbackAsync)
+    }
+  ], function (err) {
+    // Don't forget to re activate the scheduler, even if there was an error
+    requestScheduler.activate()
+
+    if (err) return callback(err)
+
+    logger.info('Removed friend.')
+    return callback(null)
+  })
+}
+
 function getRequestScheduler () {
   return requestScheduler
 }
