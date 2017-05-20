@@ -259,7 +259,7 @@ function removeFriend (podId, callback) {
       return db.Pod.load(podId, callbackAsync)
     },
 
-    function announceIQuitMyFriends (pod, callbackAsync) {
+    function announceIQuitThisFriend (pod, callbackAsync) {
       const requestParams = {
         method: 'POST',
         path: '/api/' + constants.API_VERSION + '/remote/pods/remove',
