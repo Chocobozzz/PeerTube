@@ -119,3 +119,11 @@ function quitFriendsController (req: express.Request, res: express.Response, nex
     res.type('json').status(204).end()
   })
 }
+
+function removeFriend (req, res, next) {
+  friends.removeFriend(req.params.id, function (err) {
+    if (err) return next(err)
+
+    res.type('json').status(204).end()
+  })
+}
