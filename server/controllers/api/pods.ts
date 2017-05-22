@@ -1,7 +1,7 @@
 import express = require('express')
 import { waterfall } from 'async'
 
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import { CONFIG } from '../../initializers'
 import {
   logger,
@@ -35,12 +35,12 @@ podsRouter.post('/makefriends',
   ensureIsAdmin,
   makeFriendsValidator,
   setBodyHostsPort,
-  makeFriends
+  makeFriendsController
 )
 podsRouter.get('/quitfriends',
   authenticate,
   ensureIsAdmin,
-  quitFriends
+  quitFriendsController
 )
 
 // ---------------------------------------------------------------------------

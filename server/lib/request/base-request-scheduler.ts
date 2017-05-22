@@ -1,6 +1,6 @@
-import { eachLimit } from 'async/eachLimit'
+import * as eachLimit from 'async/eachLimit'
 
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import { logger, makeSecureRequest } from '../../helpers'
 import {
   API_VERSION,

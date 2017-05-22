@@ -1,4 +1,4 @@
-const db = require('../initializers/database')
+import { database as db } from '../initializers/database'
 import { logger } from '../helpers'
 
 // ---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ function saveToken (token, client, user) {
     userId: user.id
   }
 
-  return db.OAuthToken.create(tokenToCreate).then(function (tokenCreated) {
+  return db.OAuthToken.create(tokenToCreate).then(function (tokenCreated: any) {
     tokenCreated.client = client
     tokenCreated.user = user
 

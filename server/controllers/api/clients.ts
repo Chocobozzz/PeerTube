@@ -2,7 +2,7 @@ import express = require('express')
 
 import { CONFIG } from '../../initializers';
 import { logger } from '../../helpers'
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 
 const clientsRouter = express.Router()
 

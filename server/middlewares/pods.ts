@@ -1,6 +1,4 @@
-'use strict'
-
-const constants = require('../initializers/constants')
+import { REMOTE_SCHEME } from '../initializers'
 
 function setBodyHostsPort (req, res, next) {
   if (!req.body.hosts) return next()
@@ -48,7 +46,7 @@ function getHostWithPort (host) {
 
   // The port was not specified
   if (splitted.length === 1) {
-    if (constants.REMOTE_SCHEME.HTTP === 'https') return host + ':443'
+    if (REMOTE_SCHEME.HTTP === 'https') return host + ':443'
 
     return host + ':80'
   }

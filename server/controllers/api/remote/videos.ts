@@ -1,7 +1,7 @@
 import express = require('express')
 import { eachSeries, waterfall } from 'async'
 
-const db = require('../../../initializers/database')
+import { database as db } from '../../../initializers/database'
 import {
   REQUEST_ENDPOINT_ACTIONS,
   REQUEST_ENDPOINTS,

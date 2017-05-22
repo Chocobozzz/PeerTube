@@ -4,7 +4,7 @@ import multer = require('multer')
 import path = require('path')
 import { waterfall } from 'async'
 
-const db = require('../../../initializers/database')
+import { database as db } from '../../../initializers/database'
 import {
   CONFIG,
   REQUEST_VIDEO_QADU_TYPES,

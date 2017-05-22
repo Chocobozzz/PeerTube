@@ -1,11 +1,25 @@
 import { values } from 'lodash'
+import * as Sequelize from 'sequelize'
 
 import { REQUEST_ENDPOINTS } from '../initializers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  RequestClass,
+  RequestInstance,
+  RequestAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const Request = sequelize.define('Request',
+  RequestMethods
+} from './request-interface'
+
+let Request: Sequelize.Model<RequestInstance, RequestAttributes>
+let countTotalRequests: RequestMethods.CountTotalRequests
+let listWithLimitAndRandom: RequestMethods.ListWithLimitAndRandom
+let removeWithEmptyTo: RequestMethods.RemoveWithEmptyTo
+let removeAll: RequestMethods.RemoveAll
+
+export default function (sequelize, DataTypes) {
+  Request = sequelize.define('Request',
     {
       request: {
         type: DataTypes.JSON,
@@ -15,19 +29,19 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.ENUM(values(REQUEST_ENDPOINTS)),
         allowNull: false
       }
-    },
-    {
-      classMethods: {
-        associate,
-
-        listWithLimitAndRandom,
-
-        countTotalRequests,
-        removeAll,
-        removeWithEmptyTo
-      }
     }
   )
+
+  const classMethods = [
+    associate,
+
+    listWithLimitAndRandom,
+
+    countTotalRequests,
+    removeAll,
+    removeWithEmptyTo
+  ]
+  addMethodsToModel(Request, classMethods)
 
   return Request
 }
@@ -35,7 +49,7 @@ module.exports = function (sequelize, DataTypes) {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.belongsToMany(models.Pod, {
+  Request.belongsToMany(models.Pod, {
     foreignKey: {
       name: 'requestId',
       allowNull: false
@@ -45,19 +59,18 @@ function associate (models) {
   })
 }
 
-function countTotalRequests (callback) {
+countTotalRequests = function (callback) {
   // We need to include Pod because there are no cascade delete when a pod is removed
   // So we could count requests that do not have existing pod anymore
   const query = {
-    include: [ this.sequelize.models.Pod ]
+    include: [ Request['sequelize'].models.Pod ]
   }
 
-  return this.count(query).asCallback(callback)
+  return Request.count(query).asCallback(callback)
 }
 
-function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
-  const self = this
-  const Pod = this.sequelize.models.Pod
+listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
+  const Pod = Request['sequelize'].models.Pod
 
   Pod.listRandomPodIdsWithRequest(limitPods, 'RequestToPods', function (err, podIds) {
     if (err) return callback(err)
@@ -73,7 +86,7 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
       ],
       include: [
         {
-          model: self.sequelize.models.Pod,
+          model: Request['sequelize'].models.Pod,
           where: {
             id: {
               $in: podIds
@@ -83,7 +96,7 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
       ]
     }
 
-    self.findAll(query).asCallback(function (err, requests) {
+    Request.findAll(query).asCallback(function (err, requests) {
       if (err) return callback(err)
 
       const requestsGrouped = groupAndTruncateRequests(requests, limitRequestsPerPod)
@@ -92,25 +105,25 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-function removeAll (callback) {
+removeAll = function (callback) {
   // Delete all requests
-  this.truncate({ cascade: true }).asCallback(callback)
+  Request.truncate({ cascade: true }).asCallback(callback)
 }
 
-function removeWithEmptyTo (callback) {
+removeWithEmptyTo = function (callback) {
   if (!callback) callback = function () { /* empty */ }
 
   const query = {
     where: {
       id: {
         $notIn: [
-          this.sequelize.literal('SELECT "requestId" FROM "RequestToPods"')
+          Sequelize.literal('SELECT "requestId" FROM "RequestToPods"')
         ]
       }
     }
   }
 
-  this.destroy(query).asCallback(callback)
+  Request.destroy(query).asCallback(callback)
 }
 
 // ---------------------------------------------------------------------------

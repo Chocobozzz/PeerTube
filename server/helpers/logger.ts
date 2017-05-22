@@ -36,13 +36,6 @@ const logger = new winston.Logger({
   exitOnError: true
 })
 
-// TODO: useful?
-// logger.stream = {
-//   write: function (message) {
-//     logger.info(message)
-//   }
-// }
-
 // ---------------------------------------------------------------------------
 
 export { logger }

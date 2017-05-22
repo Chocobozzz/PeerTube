@@ -1,9 +1,20 @@
 import { each } from 'async'
+import * as Sequelize from 'sequelize'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  TagClass,
+  TagInstance,
+  TagAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const Tag = sequelize.define('Tag',
+  TagMethods
+} from './tag-interface'
+
+let Tag: Sequelize.Model<TagInstance, TagAttributes>
+let findOrCreateTags: TagMethods.FindOrCreateTags
+
+export default function (sequelize, DataTypes) {
+  Tag = sequelize.define('Tag',
     {
       name: {
         type: DataTypes.STRING,
@@ -17,14 +28,16 @@ module.exports = function (sequelize, DataTypes) {
           fields: [ 'name' ],
           unique: true
         }
-      ],
-      classMethods: {
-        associate,
-
-        findOrCreateTags
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    findOrCreateTags
+  ]
+  addMethodsToModel(Tag, classMethods)
 
   return Tag
 }
@@ -32,20 +45,19 @@ module.exports = function (sequelize, DataTypes) {
 // ---------------------------------------------------------------------------
 
 function associate (models) {
-  this.belongsToMany(models.Video, {
+  Tag.belongsToMany(models.Video, {
     foreignKey: 'tagId',
     through: models.VideoTag,
     onDelete: 'cascade'
   })
 }
 
-function findOrCreateTags (tags, transaction, callback) {
+findOrCreateTags = function (tags, transaction, callback) {
   if (!callback) {
     callback = transaction
     transaction = null
   }
 
-  const self = this
   const tagInstances = []
 
   each(tags, function (tag, callbackEach) {
@@ -60,7 +72,7 @@ function findOrCreateTags (tags, transaction, callback) {
 
     if (transaction) query.transaction = transaction
 
-    self.findOrCreate(query).asCallback(function (err, res) {
+    Tag.findOrCreate(query).asCallback(function (err, res) {
       if (err) return callbackEach(err)
 
       // res = [ tag, isCreated ]

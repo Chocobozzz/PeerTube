@@ -1,4 +1,4 @@
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
 import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
 import { logger, isVideoDurationValid } from '../../helpers'

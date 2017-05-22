@@ -10,13 +10,27 @@
 */
 
 import { values } from 'lodash'
+import * as Sequelize from 'sequelize'
 
 import { REQUEST_VIDEO_QADU_TYPES } from '../initializers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  RequestVideoQaduClass,
+  RequestVideoQaduInstance,
+  RequestVideoQaduAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const RequestVideoQadu = sequelize.define('RequestVideoQadu',
+  RequestVideoQaduMethods
+} from './request-video-qadu-interface'
+
+let RequestVideoQadu: Sequelize.Model<RequestVideoQaduInstance, RequestVideoQaduAttributes>
+let countTotalRequests: RequestVideoQaduMethods.CountTotalRequests
+let listWithLimitAndRandom: RequestVideoQaduMethods.ListWithLimitAndRandom
+let removeByRequestIdsAndPod: RequestVideoQaduMethods.RemoveByRequestIdsAndPod
+let removeAll: RequestVideoQaduMethods.RemoveAll
+
+export default function (sequelize, DataTypes) {
+  RequestVideoQadu = sequelize.define('RequestVideoQadu',
     {
       type: {
         type: DataTypes.ENUM(values(REQUEST_VIDEO_QADU_TYPES)),
@@ -32,18 +46,19 @@ module.exports = function (sequelize, DataTypes) {
         {
           fields: [ 'videoId' ]
         }
-      ],
-      classMethods: {
-        associate,
-
-        listWithLimitAndRandom,
-
-        countTotalRequests,
-        removeAll,
-        removeByRequestIdsAndPod
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    listWithLimitAndRandom,
+    countTotalRequests,
+    removeAll,
+    removeByRequestIdsAndPod
+  ]
+  addMethodsToModel(RequestVideoQadu, classMethods)
 
   return RequestVideoQadu
 }
@@ -51,7 +66,7 @@ module.exports = function (sequelize, DataTypes) {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.belongsTo(models.Pod, {
+  RequestVideoQadu.belongsTo(models.Pod, {
     foreignKey: {
       name: 'podId',
       allowNull: false
@@ -59,7 +74,7 @@ function associate (models) {
     onDelete: 'CASCADE'
   })
 
-  this.belongsTo(models.Video, {
+  RequestVideoQadu.belongsTo(models.Video, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
@@ -68,14 +83,13 @@ function associate (models) {
   })
 }
 
-function countTotalRequests (callback) {
+countTotalRequests = function (callback) {
   const query = {}
-  return this.count(query).asCallback(callback)
+  return RequestVideoQadu.count(query).asCallback(callback)
 }
 
-function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
-  const self = this
-  const Pod = this.sequelize.models.Pod
+listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
+  const Pod = RequestVideoQadu['sequelize'].models.Pod
 
   Pod.listRandomPodIdsWithRequest(limitPods, 'RequestVideoQadus', function (err, podIds) {
     if (err) return callback(err)
@@ -86,7 +100,7 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
     const query = {
       include: [
         {
-          model: self.sequelize.models.Pod,
+          model: RequestVideoQadu['sequelize'].models.Pod,
           where: {
             id: {
               $in: podIds
@@ -94,12 +108,12 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
           }
         },
         {
-          model: self.sequelize.models.Video
+          model: RequestVideoQadu['sequelize'].models.Video
         }
       ]
     }
 
-    self.findAll(query).asCallback(function (err, requests) {
+    RequestVideoQadu.findAll(query).asCallback(function (err, requests) {
       if (err) return callback(err)
 
       const requestsGrouped = groupAndTruncateRequests(requests, limitRequestsPerPod)
@@ -108,7 +122,7 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-function removeByRequestIdsAndPod (ids, podId, callback) {
+removeByRequestIdsAndPod = function (ids, podId, callback) {
   const query = {
     where: {
       id: {
@@ -118,12 +132,12 @@ function removeByRequestIdsAndPod (ids, podId, callback) {
     }
   }
 
-  this.destroy(query).asCallback(callback)
+  RequestVideoQadu.destroy(query).asCallback(callback)
 }
 
-function removeAll (callback) {
+removeAll = function (callback) {
   // Delete all requests
-  this.truncate({ cascade: true }).asCallback(callback)
+  RequestVideoQadu.truncate({ cascade: true }).asCallback(callback)
 }
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,8 @@
-const db = require('../initializers/database')
-const logger = require('../helpers/logger')
-const peertubeCrypto = require('../helpers/peertube-crypto')
+import { database as db } from '../initializers'
+import {
+  logger,
+  checkSignature as peertubeCryptoCheckSignature
+} from '../helpers'
 
 function checkSignature (req, res, next) {
   const host = req.body.signature.host
@@ -26,7 +28,7 @@ function checkSignature (req, res, next) {
       signatureShouldBe = host
     }
 
-    const signatureOk = peertubeCrypto.checkSignature(pod.publicKey, signatureShouldBe, req.body.signature.signature)
+    const signatureOk = peertubeCryptoCheckSignature(pod.publicKey, signatureShouldBe, req.body.signature.signature)
 
     if (signatureOk === true) {
       res.locals.secure = {

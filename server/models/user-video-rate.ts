@@ -3,13 +3,24 @@
 
 */
 import { values } from 'lodash'
+import * as Sequelize from 'sequelize'
 
 import { VIDEO_RATE_TYPES } from '../initializers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  UserVideoRateClass,
+  UserVideoRateInstance,
+  UserVideoRateAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const UserVideoRate = sequelize.define('UserVideoRate',
+  UserVideoRateMethods
+} from './user-video-rate-interface'
+
+let UserVideoRate: Sequelize.Model<UserVideoRateInstance, UserVideoRateAttributes>
+let load: UserVideoRateMethods.Load
+
+export default function (sequelize, DataTypes) {
+  UserVideoRate = sequelize.define('UserVideoRate',
     {
       type: {
         type: DataTypes.ENUM(values(VIDEO_RATE_TYPES)),
@@ -22,14 +33,16 @@ module.exports = function (sequelize, DataTypes) {
           fields: [ 'videoId', 'userId', 'type' ],
           unique: true
         }
-      ],
-      classMethods: {
-        associate,
-
-        load
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    load
+  ]
+  addMethodsToModel(UserVideoRate, classMethods)
 
   return UserVideoRate
 }
@@ -37,7 +50,7 @@ module.exports = function (sequelize, DataTypes) {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.belongsTo(models.Video, {
+  UserVideoRate.belongsTo(models.Video, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
@@ -45,7 +58,7 @@ function associate (models) {
     onDelete: 'CASCADE'
   })
 
-  this.belongsTo(models.User, {
+  UserVideoRate.belongsTo(models.User, {
     foreignKey: {
       name: 'userId',
       allowNull: false
@@ -54,21 +67,14 @@ function associate (models) {
   })
 }
 
-function load (userId, videoId, transaction, callback) {
-  if (!callback) {
-    callback = transaction
-    transaction = null
-  }
-
-  const query = {
+load = function (userId, videoId, transaction, callback) {
+  const options: Sequelize.FindOptions = {
     where: {
       userId,
       videoId
     }
   }
-
-  const options: any = {}
   if (transaction) options.transaction = transaction
 
-  return this.findOne(query, options).asCallback(callback)
+  return UserVideoRate.findOne(options).asCallback(callback)
 }

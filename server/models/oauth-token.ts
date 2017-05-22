@@ -1,9 +1,24 @@
+import * as Sequelize from 'sequelize'
+
 import { logger } from '../helpers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  OAuthTokenClass,
+  OAuthTokenInstance,
+  OAuthTokenAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const OAuthToken = sequelize.define('OAuthToken',
+  OAuthTokenMethods
+} from './oauth-token-interface'
+
+let OAuthToken: Sequelize.Model<OAuthTokenInstance, OAuthTokenAttributes>
+let getByRefreshTokenAndPopulateClient: OAuthTokenMethods.GetByRefreshTokenAndPopulateClient
+let getByTokenAndPopulateUser: OAuthTokenMethods.GetByTokenAndPopulateUser
+let getByRefreshTokenAndPopulateUser: OAuthTokenMethods.GetByRefreshTokenAndPopulateUser
+let removeByUserId: OAuthTokenMethods.RemoveByUserId
+
+export default function (sequelize, DataTypes) {
+  OAuthToken = sequelize.define('OAuthToken',
     {
       accessToken: {
         type: DataTypes.STRING,
@@ -38,17 +53,19 @@ module.exports = function (sequelize, DataTypes) {
         {
           fields: [ 'oAuthClientId' ]
         }
-      ],
-      classMethods: {
-        associate,
-
-        getByRefreshTokenAndPopulateClient,
-        getByTokenAndPopulateUser,
-        getByRefreshTokenAndPopulateUser,
-        removeByUserId
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    getByRefreshTokenAndPopulateClient,
+    getByTokenAndPopulateUser,
+    getByRefreshTokenAndPopulateUser,
+    removeByUserId
+  ]
+  addMethodsToModel(OAuthToken, classMethods)
 
   return OAuthToken
 }
@@ -56,7 +73,7 @@ module.exports = function (sequelize, DataTypes) {
 // ---------------------------------------------------------------------------
 
 function associate (models) {
-  this.belongsTo(models.User, {
+  OAuthToken.belongsTo(models.User, {
     foreignKey: {
       name: 'userId',
       allowNull: false
@@ -64,7 +81,7 @@ function associate (models) {
     onDelete: 'cascade'
   })
 
-  this.belongsTo(models.OAuthClient, {
+  OAuthToken.belongsTo(models.OAuthClient, {
     foreignKey: {
       name: 'oAuthClientId',
       allowNull: false
@@ -73,25 +90,25 @@ function associate (models) {
   })
 }
 
-function getByRefreshTokenAndPopulateClient (refreshToken) {
+getByRefreshTokenAndPopulateClient = function (refreshToken) {
   const query = {
     where: {
       refreshToken: refreshToken
     },
-    include: [ this.associations.OAuthClient ]
+    include: [ OAuthToken['sequelize'].models.OAuthClient ]
   }
 
-  return this.findOne(query).then(function (token) {
+  return OAuthToken.findOne(query).then(function (token) {
     if (!token) return token
 
     const tokenInfos = {
       refreshToken: token.refreshToken,
       refreshTokenExpiresAt: token.refreshTokenExpiresAt,
       client: {
-        id: token.client.id
+        id: token['client'].id
       },
       user: {
-        id: token.user
+        id: token['user']
       }
     }
 
@@ -101,42 +118,42 @@ function getByRefreshTokenAndPopulateClient (refreshToken) {
   })
 }
 
-function getByTokenAndPopulateUser (bearerToken) {
+getByTokenAndPopulateUser = function (bearerToken) {
   const query = {
     where: {
       accessToken: bearerToken
     },
-    include: [ this.sequelize.models.User ]
+    include: [ OAuthToken['sequelize'].models.User ]
   }
 
-  return this.findOne(query).then(function (token) {
-    if (token) token.user = token.User
+  return OAuthToken.findOne(query).then(function (token) {
+    if (token) token['user'] = token.User
 
     return token
   })
 }
 
-function getByRefreshTokenAndPopulateUser (refreshToken) {
+getByRefreshTokenAndPopulateUser = function (refreshToken) {
   const query = {
     where: {
       refreshToken: refreshToken
     },
-    include: [ this.sequelize.models.User ]
+    include: [ OAuthToken['sequelize'].models.User ]
   }
 
-  return this.findOne(query).then(function (token) {
-    token.user = token.User
+  return OAuthToken.findOne(query).then(function (token) {
+    token['user'] = token.User
 
     return token
   })
 }
 
-function removeByUserId (userId, callback) {
+removeByUserId = function (userId, callback) {
   const query = {
     where: {
       userId: userId
     }
   }
 
-  return this.destroy(query).asCallback(callback)
+  return OAuthToken.destroy(query).asCallback(callback)
 }

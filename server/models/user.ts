@@ -1,4 +1,5 @@
 import { values } from 'lodash'
+import * as Sequelize from 'sequelize'
 
 import { getSort } from './utils'
 import { USER_ROLES } from '../initializers'
@@ -10,10 +11,29 @@ import {
   isUserDisplayNSFWValid
 } from '../helpers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  UserClass,
+  UserInstance,
+  UserAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const User = sequelize.define('User',
+  UserMethods
+} from './user-interface'
+
+let User: Sequelize.Model<UserInstance, UserAttributes>
+let isPasswordMatch: UserMethods.IsPasswordMatch
+let toFormatedJSON: UserMethods.ToFormatedJSON
+let isAdmin: UserMethods.IsAdmin
+let countTotal: UserMethods.CountTotal
+let getByUsername: UserMethods.GetByUsername
+let list: UserMethods.List
+let listForApi: UserMethods.ListForApi
+let loadById: UserMethods.LoadById
+let loadByUsername: UserMethods.LoadByUsername
+let loadByUsernameOrEmail: UserMethods.LoadByUsernameOrEmail
+
+export default function (sequelize, DataTypes) {
+  User = sequelize.define('User',
     {
       password: {
         type: DataTypes.STRING,
@@ -69,22 +89,6 @@ module.exports = function (sequelize, DataTypes) {
           unique: true
         }
       ],
-      classMethods: {
-        associate,
-
-        countTotal,
-        getByUsername,
-        list,
-        listForApi,
-        loadById,
-        loadByUsername,
-        loadByUsernameOrEmail
-      },
-      instanceMethods: {
-        isPasswordMatch,
-        toFormatedJSON,
-        isAdmin
-      },
       hooks: {
         beforeCreate: beforeCreateOrUpdate,
         beforeUpdate: beforeCreateOrUpdate
@@ -92,26 +96,46 @@ module.exports = function (sequelize, DataTypes) {
     }
   )
 
+  const classMethods = [
+    associate,
+
+    countTotal,
+    getByUsername,
+    list,
+    listForApi,
+    loadById,
+    loadByUsername,
+    loadByUsernameOrEmail
+  ]
+  const instanceMethods = [
+    isPasswordMatch,
+    toFormatedJSON,
+    isAdmin
+  ]
+  addMethodsToModel(User, classMethods, instanceMethods)
+
   return User
 }
 
-function beforeCreateOrUpdate (user, options, next) {
-  cryptPassword(user.password, function (err, hash) {
-    if (err) return next(err)
+function beforeCreateOrUpdate (user, options) {
+  return new Promise(function (resolve, reject) {
+    cryptPassword(user.password, function (err, hash) {
+      if (err) return reject(err)
 
-    user.password = hash
+      user.password = hash
 
-    return next()
+      return resolve()
+    })
   })
 }
 
 // ------------------------------ METHODS ------------------------------
 
-function isPasswordMatch (password, callback) {
+isPasswordMatch = function (password, callback) {
   return comparePassword(password, this.password, callback)
 }
 
-function toFormatedJSON () {
+toFormatedJSON = function () {
   return {
     id: this.id,
     username: this.username,
@@ -122,76 +146,76 @@ function toFormatedJSON () {
   }
 }
 
-function isAdmin () {
+isAdmin = function () {
   return this.role === USER_ROLES.ADMIN
 }
 
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.hasOne(models.Author, {
+  User.hasOne(models.Author, {
     foreignKey: 'userId',
     onDelete: 'cascade'
   })
 
-  this.hasMany(models.OAuthToken, {
+  User.hasMany(models.OAuthToken, {
     foreignKey: 'userId',
     onDelete: 'cascade'
   })
 }
 
-function countTotal (callback) {
+countTotal = function (callback) {
   return this.count().asCallback(callback)
 }
 
-function getByUsername (username) {
+getByUsername = function (username) {
   const query = {
     where: {
       username: username
     }
   }
 
-  return this.findOne(query)
+  return User.findOne(query)
 }
 
-function list (callback) {
-  return this.find().asCallback(callback)
+list = function (callback) {
+  return User.find().asCallback(callback)
 }
 
-function listForApi (start, count, sort, callback) {
+listForApi = function (start, count, sort, callback) {
   const query = {
     offset: start,
     limit: count,
     order: [ getSort(sort) ]
   }
 
-  return this.findAndCountAll(query).asCallback(function (err, result) {
+  return User.findAndCountAll(query).asCallback(function (err, result) {
     if (err) return callback(err)
 
     return callback(null, result.rows, result.count)
   })
 }
 
-function loadById (id, callback) {
-  return this.findById(id).asCallback(callback)
+loadById = function (id, callback) {
+  return User.findById(id).asCallback(callback)
 }
 
-function loadByUsername (username, callback) {
+loadByUsername = function (username, callback) {
   const query = {
     where: {
       username: username
     }
   }
 
-  return this.findOne(query).asCallback(callback)
+  return User.findOne(query).asCallback(callback)
 }
 
-function loadByUsernameOrEmail (username, email, callback) {
+loadByUsernameOrEmail = function (username, email, callback) {
   const query = {
     where: {
       $or: [ { username }, { email } ]
     }
   }
 
-  return this.findOne(query).asCallback(callback)
+  return User.findOne(query).asCallback(callback)
 }

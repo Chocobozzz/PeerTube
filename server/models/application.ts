@@ -1,5 +1,20 @@
-module.exports = function (sequelize, DataTypes) {
-  const Application = sequelize.define('Application',
+import * as Sequelize from 'sequelize'
+
+import { addMethodsToModel } from './utils'
+import {
+  ApplicationClass,
+  ApplicationAttributes,
+  ApplicationInstance,
+
+  ApplicationMethods
+} from './application-interface'
+
+let Application: Sequelize.Model<ApplicationInstance, ApplicationAttributes>
+let loadMigrationVersion: ApplicationMethods.LoadMigrationVersion
+let updateMigrationVersion: ApplicationMethods.UpdateMigrationVersion
+
+export default function defineApplication (sequelize: Sequelize.Sequelize, DataTypes) {
+  Application = sequelize.define<ApplicationInstance, ApplicationAttributes>('Application',
     {
       migrationVersion: {
         type: DataTypes.INTEGER,
@@ -9,34 +24,31 @@ module.exports = function (sequelize, DataTypes) {
           isInt: true
         }
       }
-    },
-    {
-      classMethods: {
-        loadMigrationVersion,
-        updateMigrationVersion
-      }
     }
   )
+
+  const classMethods = [ loadMigrationVersion, updateMigrationVersion ]
+  addMethodsToModel(Application, classMethods)
 
   return Application
 }
 
 // ---------------------------------------------------------------------------
 
-function loadMigrationVersion (callback) {
+loadMigrationVersion = function (callback: (err: Error, version: number) => void) {
   const query = {
     attributes: [ 'migrationVersion' ]
   }
 
-  return this.findOne(query).asCallback(function (err, data) {
+  return Application.findOne(query).asCallback(function (err, data) {
     const version = data ? data.migrationVersion : null
 
     return callback(err, version)
   })
 }
 
-function updateMigrationVersion (newVersion, transaction, callback) {
-  const options: { where?: any, transaction?: any } = {
+updateMigrationVersion = function (newVersion: number, transaction: any, callback: any) {
+  const options: Sequelize.UpdateOptions = {
     where: {}
   }
 
@@ -46,5 +58,5 @@ function updateMigrationVersion (newVersion, transaction, callback) {
     options.transaction = transaction
   }
 
-  return this.update({ migrationVersion: newVersion }, options).asCallback(callback)
+  return Application.update({ migrationVersion: newVersion }, options).asCallback(callback)
 }

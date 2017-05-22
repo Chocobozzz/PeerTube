@@ -1,4 +1,4 @@
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import { BaseRequestScheduler } from './base-request-scheduler'
 import {
   REQUESTS_VIDEO_EVENT_LIMIT_PODS,

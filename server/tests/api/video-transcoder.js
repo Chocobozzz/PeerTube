@@ -12,7 +12,7 @@ const loginUtils = require('../utils/login')
 const serversUtils = require('../utils/servers')
 const videosUtils = require('../utils/videos')
 
-describe('Test video blacklists', function () {
+describe('Test video transcoding', function () {
   let servers = []
 
   before(function (done) {

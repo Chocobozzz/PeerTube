@@ -6,20 +6,21 @@ import expressValidator = require('express-validator')
 // TODO: use .validator when express-validator typing will have validator field
 const validator = expressValidator['validator']
 
-const db = require('../initializers/database')
+import { database as db } from '../initializers/database'
 import {
   CONFIG,
   REMOTE_SCHEME,
   STATIC_PATHS,
   STATIC_MAX_AGE
 } from '../initializers'
+import { root } from '../helpers'
 
 const clientsRouter = express.Router()
 
 // TODO: move to constants
 const opengraphComment = '<!-- opengraph tags -->'
-const distPath = join(__dirname, '..', '..', 'client/dist')
-const embedPath = join(distPath, 'standalone/videos/embed.html')
+const distPath = join(root(), 'client', 'dist')
+const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const indexPath = join(distPath, 'index.html')
 
 // Special route that add OpenGraph tags

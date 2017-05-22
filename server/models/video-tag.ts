@@ -1,5 +1,18 @@
-module.exports = function (sequelize, DataTypes) {
-  const VideoTag = sequelize.define('VideoTag', {}, {
+import * as Sequelize from 'sequelize'
+
+import { addMethodsToModel } from './utils'
+import {
+  VideoTagClass,
+  VideoTagInstance,
+  VideoTagAttributes,
+
+  VideoTagMethods
+} from './video-tag-interface'
+
+let VideoTag: Sequelize.Model<VideoTagInstance, VideoTagAttributes>
+
+export default function (sequelize, DataTypes) {
+  VideoTag = sequelize.define('VideoTag', {}, {
     indexes: [
       {
         fields: [ 'videoId' ]

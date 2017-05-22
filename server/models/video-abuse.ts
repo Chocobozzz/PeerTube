@@ -1,9 +1,22 @@
+import * as Sequelize from 'sequelize'
+
 import { CONFIG } from '../initializers'
 import { isVideoAbuseReporterUsernameValid, isVideoAbuseReasonValid } from '../helpers'
-import { getSort } from './utils'
 
-module.exports = function (sequelize, DataTypes) {
-  const VideoAbuse = sequelize.define('VideoAbuse',
+import { addMethodsToModel, getSort } from './utils'
+import {
+  VideoAbuseClass,
+  VideoAbuseInstance,
+  VideoAbuseAttributes,
+
+  VideoAbuseMethods
+} from './video-abuse-interface'
+
+let VideoAbuse: Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes>
+let listForApi: VideoAbuseMethods.ListForApi
+
+export default function (sequelize, DataTypes) {
+  VideoAbuse = sequelize.define('VideoAbuse',
     {
       reporterUsername: {
         type: DataTypes.STRING,
@@ -34,60 +47,24 @@ module.exports = function (sequelize, DataTypes) {
         {
           fields: [ 'reporterPodId' ]
         }
-      ],
-      classMethods: {
-        associate,
-
-        listForApi
-      },
-      instanceMethods: {
-        toFormatedJSON
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    listForApi
+  ]
+  const instanceMethods = [
+    toFormatedJSON
+  ]
+  addMethodsToModel(VideoAbuse, classMethods, instanceMethods)
 
   return VideoAbuse
 }
 
-// ---------------------------------------------------------------------------
-
-function associate (models) {
-  this.belongsTo(models.Pod, {
-    foreignKey: {
-      name: 'reporterPodId',
-      allowNull: true
-    },
-    onDelete: 'cascade'
-  })
-
-  this.belongsTo(models.Video, {
-    foreignKey: {
-      name: 'videoId',
-      allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-}
-
-function listForApi (start, count, sort, callback) {
-  const query = {
-    offset: start,
-    limit: count,
-    order: [ getSort(sort) ],
-    include: [
-      {
-        model: this.sequelize.models.Pod,
-        required: false
-      }
-    ]
-  }
-
-  return this.findAndCountAll(query).asCallback(function (err, result) {
-    if (err) return callback(err)
-
-    return callback(null, result.rows, result.count)
-  })
-}
+// ------------------------------ METHODS ------------------------------
 
 function toFormatedJSON () {
   let reporterPodHost
@@ -110,3 +87,45 @@ function toFormatedJSON () {
 
   return json
 }
+
+// ------------------------------ STATICS ------------------------------
+
+function associate (models) {
+  VideoAbuse.belongsTo(models.Pod, {
+    foreignKey: {
+      name: 'reporterPodId',
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+
+  VideoAbuse.belongsTo(models.Video, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+}
+
+listForApi = function (start, count, sort, callback) {
+  const query = {
+    offset: start,
+    limit: count,
+    order: [ getSort(sort) ],
+    include: [
+      {
+        model: VideoAbuse['sequelize'].models.Pod,
+        required: false
+      }
+    ]
+  }
+
+  return VideoAbuse.findAndCountAll(query).asCallback(function (err, result) {
+    if (err) return callback(err)
+
+    return callback(null, result.rows, result.count)
+  })
+}
+
+

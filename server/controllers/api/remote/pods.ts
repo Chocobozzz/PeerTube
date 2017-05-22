@@ -1,7 +1,7 @@
 import express = require('express')
-import { waterfall } from 'async/waterfall'
+import * as waterfall from 'async/waterfall'
 
-const db = require('../../../initializers/database')
+import { database as db } from '../../../initializers/database'
 import { checkSignature, signatureValidator } from '../../../middlewares'
 
 const remotePodsRouter = express.Router()

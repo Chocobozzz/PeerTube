@@ -1,9 +1,24 @@
-import { getSort } from './utils'
+import * as Sequelize from 'sequelize'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel, getSort } from './utils'
+import {
+  BlacklistedVideoClass,
+  BlacklistedVideoInstance,
+  BlacklistedVideoAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const BlacklistedVideo = sequelize.define('BlacklistedVideo',
+  BlacklistedVideoMethods
+} from './video-blacklist-interface'
+
+let BlacklistedVideo: Sequelize.Model<BlacklistedVideoInstance, BlacklistedVideoAttributes>
+let toFormatedJSON: BlacklistedVideoMethods.ToFormatedJSON
+let countTotal: BlacklistedVideoMethods.CountTotal
+let list: BlacklistedVideoMethods.List
+let listForApi: BlacklistedVideoMethods.ListForApi
+let loadById: BlacklistedVideoMethods.LoadById
+let loadByVideoId: BlacklistedVideoMethods.LoadByVideoId
+
+export default function (sequelize, DataTypes) {
+  BlacklistedVideo = sequelize.define('BlacklistedVideo',
     {},
     {
       indexes: [
@@ -11,29 +26,30 @@ module.exports = function (sequelize, DataTypes) {
           fields: [ 'videoId' ],
           unique: true
         }
-      ],
-      classMethods: {
-        associate,
-
-        countTotal,
-        list,
-        listForApi,
-        loadById,
-        loadByVideoId
-      },
-      instanceMethods: {
-        toFormatedJSON
-      },
-      hooks: {}
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    countTotal,
+    list,
+    listForApi,
+    loadById,
+    loadByVideoId
+  ]
+  const instanceMethods = [
+    toFormatedJSON
+  ]
+  addMethodsToModel(BlacklistedVideo, classMethods, instanceMethods)
 
   return BlacklistedVideo
 }
 
 // ------------------------------ METHODS ------------------------------
 
-function toFormatedJSON () {
+toFormatedJSON = function () {
   return {
     id: this.id,
     videoId: this.videoId,
@@ -44,44 +60,44 @@ function toFormatedJSON () {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.belongsTo(models.Video, {
+  BlacklistedVideo.belongsTo(models.Video, {
     foreignKey: 'videoId',
     onDelete: 'cascade'
   })
 }
 
-function countTotal (callback) {
-  return this.count().asCallback(callback)
+countTotal = function (callback) {
+  return BlacklistedVideo.count().asCallback(callback)
 }
 
-function list (callback) {
-  return this.findAll().asCallback(callback)
+list = function (callback) {
+  return BlacklistedVideo.findAll().asCallback(callback)
 }
 
-function listForApi (start, count, sort, callback) {
+listForApi = function (start, count, sort, callback) {
   const query = {
     offset: start,
     limit: count,
     order: [ getSort(sort) ]
   }
 
-  return this.findAndCountAll(query).asCallback(function (err, result) {
+  return BlacklistedVideo.findAndCountAll(query).asCallback(function (err, result) {
     if (err) return callback(err)
 
     return callback(null, result.rows, result.count)
   })
 }
 
-function loadById (id, callback) {
-  return this.findById(id).asCallback(callback)
+loadById = function (id, callback) {
+  return BlacklistedVideo.findById(id).asCallback(callback)
 }
 
-function loadByVideoId (id, callback) {
+loadByVideoId = function (id, callback) {
   const query = {
     where: {
       videoId: id
     }
   }
 
-  return this.find(query).asCallback(callback)
+  return BlacklistedVideo.find(query).asCallback(callback)
 }

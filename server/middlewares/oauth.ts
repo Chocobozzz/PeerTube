@@ -1,11 +1,11 @@
 import OAuthServer = require('express-oauth-server')
 
-const constants = require('../initializers/constants')
-const logger = require('../helpers/logger')
+import { OAUTH_LIFETIME } from '../initializers'
+import { logger } from '../helpers'
 
 const oAuthServer = new OAuthServer({
-  accessTokenLifetime: constants.OAUTH_LIFETIME.ACCESS_TOKEN,
-  refreshTokenLifetime: constants.OAUTH_LIFETIME.REFRESH_TOKEN,
+  accessTokenLifetime: OAUTH_LIFETIME.ACCESS_TOKEN,
+  refreshTokenLifetime: OAUTH_LIFETIME.REFRESH_TOKEN,
   model: require('../lib/oauth-model')
 })
 

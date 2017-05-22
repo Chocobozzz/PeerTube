@@ -1,6 +1,6 @@
 import { forever, queue } from 'async'
 
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import {
   JOBS_FETCHING_INTERVAL,
   JOBS_FETCH_LIMIT_PER_CYCLE,
@@ -24,7 +24,7 @@ class JobScheduler {
 
     logger.info('Jobs scheduler activated.')
 
-    const jobsQueue = queue(this.processJob)
+    const jobsQueue = queue(this.processJob.bind(this))
 
     // Finish processing jobs from a previous start
     const state = JOB_STATES.PROCESSING
@@ -58,7 +58,7 @@ class JobScheduler {
     })
   }
 
-  createJob (transaction, handlerName, handlerInputData, callback) {
+  createJob (transaction, handlerName: string, handlerInputData: object, callback) {
     const createQuery = {
       state: JOB_STATES.PENDING,
       handlerName,

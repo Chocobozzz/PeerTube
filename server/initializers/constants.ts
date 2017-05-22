@@ -1,6 +1,9 @@
 import config = require('config')
 import { join } from 'path'
 
+// Do not use barrels, remain constants as independent as possible
+import { root, isTestInstance } from '../helpers/utils'
+
 // ---------------------------------------------------------------------------
 
 const LAST_MIGRATION_VERSION = 50
@@ -44,12 +47,12 @@ const CONFIG = {
     PASSWORD: config.get<string>('database.password')
   },
   STORAGE: {
-    CERT_DIR: join(__dirname, '..', '..', config.get<string>('storage.certs')),
-    LOG_DIR: join(__dirname, '..', '..', config.get<string>('storage.logs')),
-    VIDEOS_DIR: join(__dirname, '..', '..', config.get<string>('storage.videos')),
-    THUMBNAILS_DIR: join(__dirname, '..', '..', config.get<string>('storage.thumbnails')),
-    PREVIEWS_DIR: join(__dirname, '..', '..', config.get<string>('storage.previews')),
-    TORRENTS_DIR: join(__dirname, '..', '..', config.get<string>('storage.torrents'))
+    CERT_DIR: join(root(), config.get<string>('storage.certs')),
+    LOG_DIR: join(root(), config.get<string>('storage.logs')),
+    VIDEOS_DIR: join(root(), config.get<string>('storage.videos')),
+    THUMBNAILS_DIR: join(root(), config.get<string>('storage.thumbnails')),
+    PREVIEWS_DIR: join(root(), config.get<string>('storage.previews')),
+    TORRENTS_DIR: join(root(), config.get<string>('storage.torrents'))
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
@@ -333,11 +336,4 @@ export {
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES
-}
-
-// ---------------------------------------------------------------------------
-
-// This method exists in utils module but we want to let the constants module independent
-function isTestInstance () {
-  return (process.env.NODE_ENV === 'test')
 }

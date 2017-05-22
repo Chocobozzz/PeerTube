@@ -4,10 +4,10 @@ import { each, series } from 'async'
 import mkdirp = require('mkdirp')
 import passwordGenerator = require('password-generator')
 
-const db = require('./database')
+import { database as db } from './database'
 import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION } from './constants'
 import { clientsExist, usersExist } from './checker'
-import { logger, createCertsIfNotExist } from '../helpers'
+import { logger, createCertsIfNotExist, root } from '../helpers'
 
 function installApplication (callback) {
   series([
@@ -47,7 +47,7 @@ function createDirectoriesIfNotExist (callback) {
 
   each(Object.keys(storages), function (key, callbackEach) {
     const dir = storages[key]
-    mkdirp(join(__dirname, '..', '..', dir), callbackEach)
+    mkdirp(join(root(), dir), callbackEach)
   }, callback)
 }
 
@@ -65,7 +65,8 @@ function createOAuthClientIfNotExist (callback) {
     const client = db.OAuthClient.build({
       clientId: id,
       clientSecret: secret,
-      grants: [ 'password', 'refresh_token' ]
+      grants: [ 'password', 'refresh_token' ],
+      redirectUris: null
     })
 
     client.save().asCallback(function (err, createdClient) {

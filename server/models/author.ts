@@ -1,7 +1,21 @@
+import * as Sequelize from 'sequelize'
+
 import { isUserUsernameValid } from '../helpers'
 
-module.exports = function (sequelize, DataTypes) {
-  const Author = sequelize.define('Author',
+import { addMethodsToModel } from './utils'
+import {
+  AuthorClass,
+  AuthorInstance,
+  AuthorAttributes,
+
+  AuthorMethods
+} from './author-interface'
+
+let Author: Sequelize.Model<AuthorInstance, AuthorAttributes>
+let findOrCreateAuthor: AuthorMethods.FindOrCreateAuthor
+
+export default function defineAuthor (sequelize: Sequelize.Sequelize, DataTypes) {
+  Author = sequelize.define<AuthorInstance, AuthorAttributes>('Author',
     {
       name: {
         type: DataTypes.STRING,
@@ -30,14 +44,12 @@ module.exports = function (sequelize, DataTypes) {
           fields: [ 'name', 'podId' ],
           unique: true
         }
-      ],
-      classMethods: {
-        associate,
-
-        findOrCreateAuthor
-      }
+      ]
     }
   )
+
+  const classMethods = [ associate, findOrCreateAuthor ]
+  addMethodsToModel(Author, classMethods)
 
   return Author
 }
@@ -45,7 +57,7 @@ module.exports = function (sequelize, DataTypes) {
 // ---------------------------------------------------------------------------
 
 function associate (models) {
-  this.belongsTo(models.Pod, {
+  Author.belongsTo(models.Pod, {
     foreignKey: {
       name: 'podId',
       allowNull: true
@@ -53,7 +65,7 @@ function associate (models) {
     onDelete: 'cascade'
   })
 
-  this.belongsTo(models.User, {
+  Author.belongsTo(models.User, {
     foreignKey: {
       name: 'userId',
       allowNull: true
@@ -62,7 +74,7 @@ function associate (models) {
   })
 }
 
-function findOrCreateAuthor (name, podId, userId, transaction, callback) {
+findOrCreateAuthor = function (name, podId, userId, transaction, callback) {
   if (!callback) {
     callback = transaction
     transaction = null
@@ -81,7 +93,7 @@ function findOrCreateAuthor (name, podId, userId, transaction, callback) {
 
   if (transaction) query.transaction = transaction
 
-  this.findOrCreate(query).asCallback(function (err, result) {
+  Author.findOrCreate(query).asCallback(function (err, result) {
     if (err) return callback(err)
 
     // [ instance, wasCreated ]

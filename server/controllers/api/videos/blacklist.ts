@@ -1,6 +1,6 @@
 import express = require('express')
 
-const db = require('../../../initializers/database')
+import { database as db } from '../../../initializers/database'
 import { logger } from '../../../helpers'
 import {
   authenticate,

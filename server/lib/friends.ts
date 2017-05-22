@@ -1,7 +1,7 @@
 import { each, eachLimit, eachSeries, series, waterfall } from 'async'
 import request = require('request')
 
-const db = require('../initializers/database')
+import { database as db } from '../initializers/database'
 import {
   API_VERSION,
   CONFIG,
@@ -329,7 +329,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
   // Flush pool requests
   requestScheduler.forceSend()
 
-  eachLimit(podsList, REQUESTS_IN_PARALLEL, function (pod: any, callbackEach) {
+  eachLimit(podsList, REQUESTS_IN_PARALLEL, function (pod: { host: string }, callbackEach) {
     const params = {
       url: REMOTE_SCHEME.HTTP + '://' + pod.host + '/api/' + API_VERSION + '/pods/',
       method: 'POST',
@@ -340,7 +340,7 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
       }
     }
 
-    makeRetryRequest(params, function (err, res, body) {
+    makeRetryRequest(params, function (err, res, body: { cert: string, email: string }) {
       if (err) {
         logger.error('Error with adding %s pod.', pod.host, { error: err })
         // Don't break the process

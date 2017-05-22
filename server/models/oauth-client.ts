@@ -1,5 +1,21 @@
-module.exports = function (sequelize, DataTypes) {
-  const OAuthClient = sequelize.define('OAuthClient',
+import * as Sequelize from 'sequelize'
+
+import { addMethodsToModel } from './utils'
+import {
+  OAuthClientClass,
+  OAuthClientInstance,
+  OAuthClientAttributes,
+
+  OAuthClientMethods
+} from './oauth-client-interface'
+
+let OAuthClient: Sequelize.Model<OAuthClientInstance, OAuthClientAttributes>
+let countTotal: OAuthClientMethods.CountTotal
+let loadFirstClient: OAuthClientMethods.LoadFirstClient
+let getByIdAndSecret: OAuthClientMethods.GetByIdAndSecret
+
+export default function (sequelize, DataTypes) {
+  OAuthClient = sequelize.define('OAuthClient',
     {
       clientId: {
         type: DataTypes.STRING,
@@ -26,29 +42,40 @@ module.exports = function (sequelize, DataTypes) {
           fields: [ 'clientId', 'clientSecret' ],
           unique: true
         }
-      ],
-      classMethods: {
-        countTotal,
-        getByIdAndSecret,
-        loadFirstClient
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    countTotal,
+    getByIdAndSecret,
+    loadFirstClient
+  ]
+  addMethodsToModel(OAuthClient, classMethods)
 
   return OAuthClient
 }
 
 // ---------------------------------------------------------------------------
 
-function countTotal (callback) {
-  return this.count().asCallback(callback)
+function associate (models) {
+  OAuthClient.hasMany(models.OAuthToken, {
+    foreignKey: 'oAuthClientId',
+    onDelete: 'cascade'
+  })
 }
 
-function loadFirstClient (callback) {
-  return this.findOne().asCallback(callback)
+countTotal = function (callback) {
+  return OAuthClient.count().asCallback(callback)
 }
 
-function getByIdAndSecret (clientId, clientSecret) {
+loadFirstClient = function (callback) {
+  return OAuthClient.findOne().asCallback(callback)
+}
+
+getByIdAndSecret = function (clientId, clientSecret) {
   const query = {
     where: {
       clientId: clientId,
@@ -56,5 +83,5 @@ function getByIdAndSecret (clientId, clientSecret) {
     }
   }
 
-  return this.findOne(query)
+  return OAuthClient.findOne(query)
 }

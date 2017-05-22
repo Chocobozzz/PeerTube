@@ -3,14 +3,28 @@
 */
 
 import { values } from 'lodash'
+import * as Sequelize from 'sequelize'
 
 import { REQUEST_VIDEO_EVENT_TYPES } from '../initializers'
 import { isVideoEventCountValid } from '../helpers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  RequestVideoEventClass,
+  RequestVideoEventInstance,
+  RequestVideoEventAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const RequestVideoEvent = sequelize.define('RequestVideoEvent',
+  RequestVideoEventMethods
+} from './request-video-event-interface'
+
+let RequestVideoEvent: Sequelize.Model<RequestVideoEventInstance, RequestVideoEventAttributes>
+let countTotalRequests: RequestVideoEventMethods.CountTotalRequests
+let listWithLimitAndRandom: RequestVideoEventMethods.ListWithLimitAndRandom
+let removeByRequestIdsAndPod: RequestVideoEventMethods.RemoveByRequestIdsAndPod
+let removeAll: RequestVideoEventMethods.RemoveAll
+
+export default function (sequelize, DataTypes) {
+  RequestVideoEvent = sequelize.define('RequestVideoEvent',
     {
       type: {
         type: DataTypes.ENUM(values(REQUEST_VIDEO_EVENT_TYPES)),
@@ -33,18 +47,19 @@ module.exports = function (sequelize, DataTypes) {
         {
           fields: [ 'videoId' ]
         }
-      ],
-      classMethods: {
-        associate,
-
-        listWithLimitAndRandom,
-
-        countTotalRequests,
-        removeAll,
-        removeByRequestIdsAndPod
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    listWithLimitAndRandom,
+    countTotalRequests,
+    removeAll,
+    removeByRequestIdsAndPod
+  ]
+  addMethodsToModel(RequestVideoEvent, classMethods)
 
   return RequestVideoEvent
 }
@@ -52,7 +67,7 @@ module.exports = function (sequelize, DataTypes) {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  this.belongsTo(models.Video, {
+  RequestVideoEvent.belongsTo(models.Video, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
@@ -61,14 +76,13 @@ function associate (models) {
   })
 }
 
-function countTotalRequests (callback) {
+countTotalRequests = function (callback) {
   const query = {}
-  return this.count(query).asCallback(callback)
+  return RequestVideoEvent.count(query).asCallback(callback)
 }
 
-function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
-  const self = this
-  const Pod = this.sequelize.models.Pod
+listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
+  const Pod = RequestVideoEvent['sequelize'].models.Pod
 
   // We make a join between videos and authors to find the podId of our video event requests
   const podJoins = 'INNER JOIN "Videos" ON "Videos"."authorId" = "Authors"."id" ' +
@@ -86,13 +100,13 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
       ],
       include: [
         {
-          model: self.sequelize.models.Video,
+          model: RequestVideoEvent['sequelize'].models.Video,
           include: [
             {
-              model: self.sequelize.models.Author,
+              model: RequestVideoEvent['sequelize'].models.Author,
               include: [
                 {
-                  model: self.sequelize.models.Pod,
+                  model: RequestVideoEvent['sequelize'].models.Pod,
                   where: {
                     id: {
                       $in: podIds
@@ -106,7 +120,7 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
       ]
     }
 
-    self.findAll(query).asCallback(function (err, requests) {
+    RequestVideoEvent.findAll(query).asCallback(function (err, requests) {
       if (err) return callback(err)
 
       const requestsGrouped = groupAndTruncateRequests(requests, limitRequestsPerPod)
@@ -115,7 +129,7 @@ function listWithLimitAndRandom (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-function removeByRequestIdsAndPod (ids, podId, callback) {
+removeByRequestIdsAndPod = function (ids, podId, callback) {
   const query = {
     where: {
       id: {
@@ -124,10 +138,10 @@ function removeByRequestIdsAndPod (ids, podId, callback) {
     },
     include: [
       {
-        model: this.sequelize.models.Video,
+        model: RequestVideoEvent['sequelize'].models.Video,
         include: [
           {
-            model: this.sequelize.models.Author,
+            model: RequestVideoEvent['sequelize'].models.Author,
             where: {
               podId
             }
@@ -137,12 +151,12 @@ function removeByRequestIdsAndPod (ids, podId, callback) {
     ]
   }
 
-  this.destroy(query).asCallback(callback)
+  RequestVideoEvent.destroy(query).asCallback(callback)
 }
 
-function removeAll (callback) {
+removeAll = function (callback) {
   // Delete all requests
-  this.truncate({ cascade: true }).asCallback(callback)
+  RequestVideoEvent.truncate({ cascade: true }).asCallback(callback)
 }
 
 // ---------------------------------------------------------------------------

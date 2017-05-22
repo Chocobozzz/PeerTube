@@ -14,8 +14,14 @@ function getSort (value) {
   return [ field, direction ]
 }
 
+function addMethodsToModel (model: any, classMethods: Function[], instanceMethods: Function[] = []) {
+  classMethods.forEach(m => model[m.name] = m)
+  instanceMethods.forEach(m => model.prototype[m.name] = m)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  addMethodsToModel,
   getSort
 }

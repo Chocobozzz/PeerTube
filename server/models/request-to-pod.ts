@@ -1,5 +1,19 @@
-module.exports = function (sequelize, DataTypes) {
-  const RequestToPod = sequelize.define('RequestToPod', {}, {
+import * as Sequelize from 'sequelize'
+
+import { addMethodsToModel } from './utils'
+import {
+  RequestToPodClass,
+  RequestToPodInstance,
+  RequestToPodAttributes,
+
+  RequestToPodMethods
+} from './request-to-pod-interface'
+
+let RequestToPod: Sequelize.Model<RequestToPodInstance, RequestToPodAttributes>
+let removeByRequestIdsAndPod: RequestToPodMethods.RemoveByRequestIdsAndPod
+
+export default function (sequelize, DataTypes) {
+  RequestToPod = sequelize.define('RequestToPod', {}, {
     indexes: [
       {
         fields: [ 'requestId' ]
@@ -11,18 +25,20 @@ module.exports = function (sequelize, DataTypes) {
         fields: [ 'requestId', 'podId' ],
         unique: true
       }
-    ],
-    classMethods: {
-      removeByRequestIdsAndPod
-    }
+    ]
   })
+
+  const classMethods = [
+    removeByRequestIdsAndPod
+  ]
+  addMethodsToModel(RequestToPod, classMethods)
 
   return RequestToPod
 }
 
 // ---------------------------------------------------------------------------
 
-function removeByRequestIdsAndPod (requestsIds, podId, callback) {
+removeByRequestIdsAndPod = function (requestsIds, podId, callback) {
   if (!callback) callback = function () { /* empty */ }
 
   const query = {
@@ -34,5 +50,5 @@ function removeByRequestIdsAndPod (requestsIds, podId, callback) {
     }
   }
 
-  this.destroy(query).asCallback(callback)
+  RequestToPod.destroy(query).asCallback(callback)
 }

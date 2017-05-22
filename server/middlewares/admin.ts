@@ -1,4 +1,4 @@
-const logger = require('../helpers/logger')
+import { logger } from '../helpers'
 
 function ensureIsAdmin (req, res, next) {
   const user = res.locals.oauth.token.user

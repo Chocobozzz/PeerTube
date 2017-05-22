@@ -1,4 +1,4 @@
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
 import { logger } from '../../helpers'
 import { CONFIG } from '../../initializers'

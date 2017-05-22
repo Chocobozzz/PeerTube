@@ -1,4 +1,4 @@
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import { BaseRequestScheduler } from './base-request-scheduler'
 import { logger } from '../../helpers'
 import {
@@ -59,13 +59,14 @@ class RequestScheduler extends BaseRequestScheduler {
     const toIds = options.toIds
     const transaction = options.transaction
 
-    const pods = []
+    // TODO: check the setPods works
+    const podIds = []
 
     // If there are no destination pods abort
     if (toIds.length === 0) return callback(null)
 
     toIds.forEach(toPod => {
-      pods.push(db.Pod.build({ id: toPod }))
+      podIds.push(toPod)
     })
 
     const createQuery = {
@@ -83,7 +84,7 @@ class RequestScheduler extends BaseRequestScheduler {
     return db.Request.create(createQuery, dbRequestOptions).asCallback((err, request) => {
       if (err) return callback(err)
 
-      return request.setPods(pods, dbRequestOptions).asCallback(callback)
+      return request.setPods(podIds, dbRequestOptions).asCallback(callback)
     })
   }
 

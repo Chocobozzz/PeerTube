@@ -1,6 +1,6 @@
 import config = require('config')
 
-const db = require('./database')
+import { database as db } from './database'
 import { CONFIG } from './constants'
 
 // Some checks on configuration files

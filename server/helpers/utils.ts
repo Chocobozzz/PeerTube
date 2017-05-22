@@ -1,4 +1,5 @@
 import { pseudoRandomBytes } from 'crypto'
+import { join } from 'path'
 
 import { logger } from './logger'
 
@@ -42,6 +43,11 @@ function getFormatedObjects (objects, objectsTotal) {
   }
 }
 
+function root () {
+  // We are in /dist/helpers/utils.js
+  return join(__dirname, '..', '..', '..')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -50,5 +56,6 @@ export {
   cleanForExit,
   generateRandomString,
   isTestInstance,
-  getFormatedObjects
+  getFormatedObjects,
+  root
 }

@@ -1,11 +1,22 @@
 import { values } from 'lodash'
+import * as Sequelize from 'sequelize'
 
 import { JOB_STATES } from '../initializers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  JobClass,
+  JobInstance,
+  JobAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const Job = sequelize.define('Job',
+  JobMethods
+} from './job-interface'
+
+let Job: Sequelize.Model<JobInstance, JobAttributes>
+let listWithLimit: JobMethods.ListWithLimit
+
+export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes) {
+  Job = sequelize.define<JobInstance, JobAttributes>('Job',
     {
       state: {
         type: DataTypes.ENUM(values(JOB_STATES)),
@@ -25,19 +36,19 @@ module.exports = function (sequelize, DataTypes) {
         {
           fields: [ 'state' ]
         }
-      ],
-      classMethods: {
-        listWithLimit
-      }
+      ]
     }
   )
+
+  const classMethods = [ listWithLimit ]
+  addMethodsToModel(Job, classMethods)
 
   return Job
 }
 
 // ---------------------------------------------------------------------------
 
-function listWithLimit (limit, state, callback) {
+listWithLimit = function (limit, state, callback) {
   const query = {
     order: [
       [ 'id', 'ASC' ]
@@ -48,5 +59,5 @@ function listWithLimit (limit, state, callback) {
     }
   }
 
-  return this.findAll(query).asCallback(callback)
+  return Job.findAll(query).asCallback(callback)
 }

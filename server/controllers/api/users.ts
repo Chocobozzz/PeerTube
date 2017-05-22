@@ -1,7 +1,7 @@
 import express = require('express')
 import { waterfall } from 'async'
 
-const db = require('../../initializers/database')
+import { database as db } from '../../initializers/database'
 import { CONFIG, USER_ROLES } from '../../initializers'
 import { logger, getFormatedObjects } from '../../helpers'
 import {
@@ -114,7 +114,7 @@ function getUserVideoRating (req, res, next) {
   const videoId = req.params.videoId
   const userId = res.locals.oauth.token.User.id
 
-  db.UserVideoRate.load(userId, videoId, function (err, ratingObj) {
+  db.UserVideoRate.load(userId, videoId, null, function (err, ratingObj) {
     if (err) return next(err)
 
     const rating = ratingObj ? ratingObj.type : 'none'

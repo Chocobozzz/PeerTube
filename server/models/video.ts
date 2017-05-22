@@ -8,8 +8,9 @@ import { map, values } from 'lodash'
 import { parallel, series } from 'async'
 import parseTorrent = require('parse-torrent')
 import { join } from 'path'
+import * as Sequelize from 'sequelize'
 
-const db = require('../initializers/database')
+import { database as db } from '../initializers/database'
 import {
   logger,
   isVideoNameValid,
@@ -32,12 +33,42 @@ import {
   THUMBNAILS_SIZE
 } from '../initializers'
 import { JobScheduler, removeVideoToFriends } from '../lib'
-import { getSort } from './utils'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel, getSort } from './utils'
+import {
+  VideoClass,
+  VideoInstance,
+  VideoAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const Video = sequelize.define('Video',
+  VideoMethods
+} from './video-interface'
+
+let Video: Sequelize.Model<VideoInstance, VideoAttributes>
+let generateMagnetUri: VideoMethods.GenerateMagnetUri
+let getVideoFilename: VideoMethods.GetVideoFilename
+let getThumbnailName: VideoMethods.GetThumbnailName
+let getPreviewName: VideoMethods.GetPreviewName
+let getTorrentName: VideoMethods.GetTorrentName
+let isOwned: VideoMethods.IsOwned
+let toFormatedJSON: VideoMethods.ToFormatedJSON
+let toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
+let toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
+let transcodeVideofile: VideoMethods.TranscodeVideofile
+
+let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
+let getDurationFromFile: VideoMethods.GetDurationFromFile
+let list: VideoMethods.List
+let listForApi: VideoMethods.ListForApi
+let loadByHostAndRemoteId: VideoMethods.LoadByHostAndRemoteId
+let listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAndTags
+let listOwnedByAuthor: VideoMethods.ListOwnedByAuthor
+let load: VideoMethods.Load
+let loadAndPopulateAuthor: VideoMethods.LoadAndPopulateAuthor
+let loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
+let searchAndPopulateAuthorAndPodAndTags: VideoMethods.SearchAndPopulateAuthorAndPodAndTags
+
+export default function (sequelize, DataTypes) {
+  Video = sequelize.define('Video',
     {
       id: {
         type: DataTypes.UUID,
@@ -194,34 +225,6 @@ module.exports = function (sequelize, DataTypes) {
           fields: [ 'likes' ]
         }
       ],
-      classMethods: {
-        associate,
-
-        generateThumbnailFromData,
-        getDurationFromFile,
-        list,
-        listForApi,
-        listOwnedAndPopulateAuthorAndTags,
-        listOwnedByAuthor,
-        load,
-        loadByHostAndRemoteId,
-        loadAndPopulateAuthor,
-        loadAndPopulateAuthorAndPodAndTags,
-        searchAndPopulateAuthorAndPodAndTags
-      },
-      instanceMethods: {
-        generateMagnetUri,
-        getVideoFilename,
-        getThumbnailName,
-        getPreviewName,
-        getTorrentName,
-        isOwned,
-        toFormatedJSON,
-        toAddRemoteJSON,
-        toUpdateRemoteJSON,
-        transcodeVideofile,
-        removeFromBlacklist
-      },
       hooks: {
         beforeValidate,
         beforeCreate,
@@ -230,99 +233,139 @@ module.exports = function (sequelize, DataTypes) {
     }
   )
 
+  const classMethods = [
+    associate,
+
+    generateThumbnailFromData,
+    getDurationFromFile,
+    list,
+    listForApi,
+    listOwnedAndPopulateAuthorAndTags,
+    listOwnedByAuthor,
+    load,
+    loadByHostAndRemoteId,
+    loadAndPopulateAuthor,
+    loadAndPopulateAuthorAndPodAndTags,
+    searchAndPopulateAuthorAndPodAndTags
+  ]
+  const instanceMethods = [
+    generateMagnetUri,
+    getVideoFilename,
+    getThumbnailName,
+    getPreviewName,
+    getTorrentName,
+    isOwned,
+    toFormatedJSON,
+    toAddRemoteJSON,
+    toUpdateRemoteJSON,
+    transcodeVideofile,
+    removeFromBlacklist
+  ]
+  addMethodsToModel(Video, classMethods, instanceMethods)
+
   return Video
 }
 
-function beforeValidate (video, options, next) {
+function beforeValidate (video, options) {
   // Put a fake infoHash if it does not exists yet
   if (video.isOwned() && !video.infoHash) {
     // 40 hexa length
     video.infoHash = '0123456789abcdef0123456789abcdef01234567'
   }
-
-  return next(null)
 }
 
-function beforeCreate (video, options, next) {
-  const tasks = []
+function beforeCreate (video, options) {
+  return new Promise(function (resolve, reject) {
+    const tasks = []
 
-  if (video.isOwned()) {
-    const videoPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
+    if (video.isOwned()) {
+      const videoPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
+
+      tasks.push(
+        function createVideoTorrent (callback) {
+          createTorrentFromVideo(video, videoPath, callback)
+        },
+
+        function createVideoThumbnail (callback) {
+          createThumbnail(video, videoPath, callback)
+        },
+
+        function createVideoPreview (callback) {
+          createPreview(video, videoPath, callback)
+        }
+      )
+
+      if (CONFIG.TRANSCODING.ENABLED === true) {
+        tasks.push(
+          function createVideoTranscoderJob (callback) {
+            const dataInput = {
+              id: video.id
+            }
+
+            JobScheduler.Instance.createJob(options.transaction, 'videoTranscoder', dataInput, callback)
+          }
+        )
+      }
+
+      return parallel(tasks, function (err) {
+        if (err) return reject(err)
+
+        return resolve()
+      })
+    }
+
+    return resolve()
+  })
+}
+
+function afterDestroy (video, options) {
+  return new Promise(function (resolve, reject) {
+    const tasks = []
 
     tasks.push(
-      function createVideoTorrent (callback) {
-        createTorrentFromVideo(video, videoPath, callback)
-      },
-
-      function createVideoThumbnail (callback) {
-        createThumbnail(video, videoPath, callback)
-      },
-
-      function createVideoPreview (callback) {
-        createPreview(video, videoPath, callback)
+      function (callback) {
+        removeThumbnail(video, callback)
       }
     )
 
-    if (CONFIG.TRANSCODING.ENABLED === true) {
+    if (video.isOwned()) {
       tasks.push(
-        function createVideoTranscoderJob (callback) {
-          const dataInput = {
-            id: video.id
+        function removeVideoFile (callback) {
+          removeFile(video, callback)
+        },
+
+        function removeVideoTorrent (callback) {
+          removeTorrent(video, callback)
+        },
+
+        function removeVideoPreview (callback) {
+          removePreview(video, callback)
+        },
+
+        function notifyFriends (callback) {
+          const params = {
+            remoteId: video.id
           }
 
-          JobScheduler.Instance.createJob(options.transaction, 'videoTranscoder', dataInput, callback)
+          removeVideoToFriends(params)
+
+          return callback()
         }
       )
     }
 
-    return parallel(tasks, next)
-  }
+    parallel(tasks, function (err) {
+      if (err) return reject(err)
 
-  return next()
-}
-
-function afterDestroy (video, options, next) {
-  const tasks = []
-
-  tasks.push(
-    function (callback) {
-      removeThumbnail(video, callback)
-    }
-  )
-
-  if (video.isOwned()) {
-    tasks.push(
-      function removeVideoFile (callback) {
-        removeFile(video, callback)
-      },
-
-      function removeVideoTorrent (callback) {
-        removeTorrent(video, callback)
-      },
-
-      function removeVideoPreview (callback) {
-        removePreview(video, callback)
-      },
-
-      function removeVideoToFriends (callback) {
-        const params = {
-          remoteId: video.id
-        }
-
-        removeVideoToFriends(params)
-
-        return callback()
-      }
-    )
-  }
-
-  parallel(tasks, next)
+      return resolve()
+    })
+  })
 }
 
 // ------------------------------ METHODS ------------------------------
 
 function associate (models) {
-  this.belongsTo(models.Author, {
+  Video.belongsTo(models.Author, {
     foreignKey: {
       name: 'authorId',
       allowNull: false
@@ -330,13 +373,13 @@ function associate (models) {
     onDelete: 'cascade'
   })
 
-  this.belongsToMany(models.Tag, {
+  Video.belongsToMany(models.Tag, {
     foreignKey: 'videoId',
     through: models.VideoTag,
     onDelete: 'cascade'
   })
 
-  this.hasMany(models.VideoAbuse, {
+  Video.hasMany(models.VideoAbuse, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
@@ -345,7 +388,7 @@ function associate (models) {
   })
 }
 
-function generateMagnetUri () {
+generateMagnetUri = function () {
   let baseUrlHttp
   let baseUrlWs
 
@@ -372,18 +415,18 @@ function generateMagnetUri () {
   return magnetUtil.encode(magnetHash)
 }
 
-function getVideoFilename () {
+getVideoFilename = function () {
   if (this.isOwned()) return this.id + this.extname
 
   return this.remoteId + this.extname
 }
 
-function getThumbnailName () {
+getThumbnailName = function () {
   // We always have a copy of the thumbnail
   return this.id + '.jpg'
 }
 
-function getPreviewName () {
+getPreviewName = function () {
   const extension = '.jpg'
 
   if (this.isOwned()) return this.id + extension
@@ -391,7 +434,7 @@ function getPreviewName () {
   return this.remoteId + extension
 }
 
-function getTorrentName () {
+getTorrentName = function () {
   const extension = '.torrent'
 
   if (this.isOwned()) return this.id + extension
@@ -399,11 +442,11 @@ function getTorrentName () {
   return this.remoteId + extension
 }
 
-function isOwned () {
+isOwned = function () {
   return this.remoteId === null
 }
 
-function toFormatedJSON () {
+toFormatedJSON = function () {
   let podHost
 
   if (this.Author.Pod) {
@@ -453,43 +496,41 @@ function toFormatedJSON () {
   return json
 }
 
-function toAddRemoteJSON (callback) {
-  const self = this
-
+toAddRemoteJSON = function (callback) {
   // Get thumbnail data to send to the other pod
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
-  fs.readFile(thumbnailPath, function (err, thumbnailData) {
+  fs.readFile(thumbnailPath, (err, thumbnailData) => {
     if (err) {
       logger.error('Cannot read the thumbnail of the video')
       return callback(err)
     }
 
     const remoteVideo = {
-      name: self.name,
-      category: self.category,
-      licence: self.licence,
-      language: self.language,
-      nsfw: self.nsfw,
-      description: self.description,
-      infoHash: self.infoHash,
-      remoteId: self.id,
-      author: self.Author.name,
-      duration: self.duration,
+      name: this.name,
+      category: this.category,
+      licence: this.licence,
+      language: this.language,
+      nsfw: this.nsfw,
+      description: this.description,
+      infoHash: this.infoHash,
+      remoteId: this.id,
+      author: this.Author.name,
+      duration: this.duration,
       thumbnailData: thumbnailData.toString('binary'),
-      tags: map(self.Tags, 'name'),
-      createdAt: self.createdAt,
-      updatedAt: self.updatedAt,
-      extname: self.extname,
-      views: self.views,
-      likes: self.likes,
-      dislikes: self.dislikes
+      tags: map(this.Tags, 'name'),
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      extname: this.extname,
+      views: this.views,
+      likes: this.likes,
+      dislikes: this.dislikes
     }
 
     return callback(null, remoteVideo)
   })
 }
 
-function toUpdateRemoteJSON (callback) {
+toUpdateRemoteJSON = function (callback) {
   const json = {
     name: this.name,
     category: this.category,
@@ -513,7 +554,7 @@ function toUpdateRemoteJSON (callback) {
   return json
 }
 
-function transcodeVideofile (finalCallback) {
+transcodeVideofile = function (finalCallback) {
   const video = this
 
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
@@ -568,7 +609,7 @@ function transcodeVideofile (finalCallback) {
 
 // ------------------------------ STATICS ------------------------------
 
-function generateThumbnailFromData (video, thumbnailData, callback) {
+generateThumbnailFromData = function (video, thumbnailData, callback) {
   // Creating the thumbnail for a remote video
 
   const thumbnailName = video.getThumbnailName()
@@ -580,7 +621,7 @@ function generateThumbnailFromData (video, thumbnailData, callback) {
   })
 }
 
-function getDurationFromFile (videoPath, callback) {
+getDurationFromFile = function (videoPath, callback) {
   ffmpeg.ffprobe(videoPath, function (err, metadata) {
     if (err) return callback(err)
 
@@ -588,46 +629,46 @@ function getDurationFromFile (videoPath, callback) {
   })
 }
 
-function list (callback) {
-  return this.findAll().asCallback(callback)
+list = function (callback) {
+  return Video.findAll().asCallback(callback)
 }
 
-function listForApi (start, count, sort, callback) {
+listForApi = function (start, count, sort, callback) {
   // Exclude Blakclisted videos from the list
   const query = {
+    distinct: true,
     offset: start,
     limit: count,
-    distinct: true, // For the count, a video can have many tags
-    order: [ getSort(sort), [ this.sequelize.models.Tag, 'name', 'ASC' ] ],
+    order: [ getSort(sort), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ],
     include: [
       {
-        model: this.sequelize.models.Author,
-        include: [ { model: this.sequelize.models.Pod, required: false } ]
+        model: Video['sequelize'].models.Author,
+        include: [ { model: Video['sequelize'].models.Pod, required: false } ]
       },
 
-      this.sequelize.models.Tag
+      Video['sequelize'].models.Tag
     ],
-    where: createBaseVideosWhere.call(this)
+    where: createBaseVideosWhere()
   }
 
-  return this.findAndCountAll(query).asCallback(function (err, result) {
+  return Video.findAndCountAll(query).asCallback(function (err, result) {
     if (err) return callback(err)
 
     return callback(null, result.rows, result.count)
   })
 }
 
-function loadByHostAndRemoteId (fromHost, remoteId, callback) {
+loadByHostAndRemoteId = function (fromHost, remoteId, callback) {
   const query = {
     where: {
       remoteId: remoteId
     },
     include: [
       {
-        model: this.sequelize.models.Author,
+        model: Video['sequelize'].models.Author,
         include: [
           {
-            model: this.sequelize.models.Pod,
+            model: Video['sequelize'].models.Pod,
             required: true,
             where: {
               host: fromHost
@@ -638,29 +679,29 @@ function loadByHostAndRemoteId (fromHost, remoteId, callback) {
     ]
   }
 
-  return this.findOne(query).asCallback(callback)
+  return Video.findOne(query).asCallback(callback)
 }
 
-function listOwnedAndPopulateAuthorAndTags (callback) {
+listOwnedAndPopulateAuthorAndTags = function (callback) {
   // If remoteId is null this is *our* video
   const query = {
     where: {
       remoteId: null
     },
-    include: [ this.sequelize.models.Author, this.sequelize.models.Tag ]
+    include: [ Video['sequelize'].models.Author, Video['sequelize'].models.Tag ]
   }
 
-  return this.findAll(query).asCallback(callback)
+  return Video.findAll(query).asCallback(callback)
 }
 
-function listOwnedByAuthor (author, callback) {
+listOwnedByAuthor = function (author, callback) {
   const query = {
     where: {
       remoteId: null
     },
     include: [
       {
-        model: this.sequelize.models.Author,
+        model: Video['sequelize'].models.Author,
         where: {
           name: author
         }
@@ -668,58 +709,58 @@ function listOwnedByAuthor (author, callback) {
     ]
   }
 
-  return this.findAll(query).asCallback(callback)
+  return Video.findAll(query).asCallback(callback)
 }
 
-function load (id, callback) {
-  return this.findById(id).asCallback(callback)
+load = function (id, callback) {
+  return Video.findById(id).asCallback(callback)
 }
 
-function loadAndPopulateAuthor (id, callback) {
+loadAndPopulateAuthor = function (id, callback) {
   const options = {
-    include: [ this.sequelize.models.Author ]
+    include: [ Video['sequelize'].models.Author ]
   }
 
-  return this.findById(id, options).asCallback(callback)
+  return Video.findById(id, options).asCallback(callback)
 }
 
-function loadAndPopulateAuthorAndPodAndTags (id, callback) {
+loadAndPopulateAuthorAndPodAndTags = function (id, callback) {
   const options = {
     include: [
       {
-        model: this.sequelize.models.Author,
-        include: [ { model: this.sequelize.models.Pod, required: false } ]
+        model: Video['sequelize'].models.Author,
+        include: [ { model: Video['sequelize'].models.Pod, required: false } ]
       },
-      this.sequelize.models.Tag
+      Video['sequelize'].models.Tag
     ]
   }
 
-  return this.findById(id, options).asCallback(callback)
+  return Video.findById(id, options).asCallback(callback)
 }
 
-function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort, callback) {
+searchAndPopulateAuthorAndPodAndTags = function (value, field, start, count, sort, callback) {
   const podInclude: any = {
-    model: this.sequelize.models.Pod,
+    model: Video['sequelize'].models.Pod,
     required: false
   }
 
   const authorInclude: any = {
-    model: this.sequelize.models.Author,
+    model: Video['sequelize'].models.Author,
     include: [
       podInclude
     ]
   }
 
   const tagInclude: any = {
-    model: this.sequelize.models.Tag
+    model: Video['sequelize'].models.Tag
   }
 
   const query: any = {
-    where: createBaseVideosWhere.call(this),
+    distinct: true,
+    where: createBaseVideosWhere(),
     offset: start,
     limit: count,
-    distinct: true, // For the count, a video can have many tags
-    order: [ getSort(sort), [ this.sequelize.models.Tag, 'name', 'ASC' ] ]
+    order: [ getSort(sort), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ]
   }
 
   // Make an exact search with the magnet
@@ -727,8 +768,8 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
     const infoHash = magnetUtil.decode(value).infoHash
     query.where.infoHash = infoHash
   } else if (field === 'tags') {
-    const escapedValue = this.sequelize.escape('%' + value + '%')
-    query.where.id.$in = this.sequelize.literal(
+    const escapedValue = Video['sequelize'].escape('%' + value + '%')
+    query.where.id.$in = Video['sequelize'].literal(
       '(SELECT "VideoTags"."videoId" FROM "Tags" INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId" WHERE name LIKE ' + escapedValue + ')'
     )
   } else if (field === 'host') {
@@ -758,10 +799,10 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
   ]
 
   if (tagInclude.where) {
-    // query.include.push([ this.sequelize.models.Tag ])
+    // query.include.push([ Video['sequelize'].models.Tag ])
   }
 
-  return this.findAndCountAll(query).asCallback(function (err, result) {
+  return Video.findAndCountAll(query).asCallback(function (err, result) {
     if (err) return callback(err)
 
     return callback(null, result.rows, result.count)
@@ -773,7 +814,7 @@ function searchAndPopulateAuthorAndPodAndTags (value, field, start, count, sort,
 function createBaseVideosWhere () {
   return {
     id: {
-      $notIn: this.sequelize.literal(
+      $notIn: Video['sequelize'].literal(
         '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
       )
     }

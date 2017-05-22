@@ -1,13 +1,34 @@
 import { each, waterfall } from 'async'
 import { map } from 'lodash'
+import * as Sequelize from 'sequelize'
 
 import { FRIEND_SCORE, PODS_SCORE } from '../initializers'
 import { logger, isHostValid } from '../helpers'
 
-// ---------------------------------------------------------------------------
+import { addMethodsToModel } from './utils'
+import {
+  PodClass,
+  PodInstance,
+  PodAttributes,
 
-module.exports = function (sequelize, DataTypes) {
-  const Pod = sequelize.define('Pod',
+  PodMethods
+} from './pod-interface'
+
+let Pod: Sequelize.Model<PodInstance, PodAttributes>
+let toFormatedJSON: PodMethods.ToFormatedJSON
+let countAll: PodMethods.CountAll
+let incrementScores: PodMethods.IncrementScores
+let list: PodMethods.List
+let listAllIds: PodMethods.ListAllIds
+let listRandomPodIdsWithRequest: PodMethods.ListRandomPodIdsWithRequest
+let listBadPods: PodMethods.ListBadPods
+let load: PodMethods.Load
+let loadByHost: PodMethods.LoadByHost
+let removeAll: PodMethods.RemoveAll
+let updatePodsScore: PodMethods.UpdatePodsScore
+
+export default function (sequelize, DataTypes) {
+  Pod = sequelize.define('Pod',
     {
       host: {
         type: DataTypes.STRING,
@@ -49,33 +70,33 @@ module.exports = function (sequelize, DataTypes) {
         {
           fields: [ 'score' ]
         }
-      ],
-      classMethods: {
-        associate,
-
-        countAll,
-        incrementScores,
-        list,
-        listAllIds,
-        listRandomPodIdsWithRequest,
-        listBadPods,
-        load,
-        loadByHost,
-        updatePodsScore,
-        removeAll
-      },
-      instanceMethods: {
-        toFormatedJSON
-      }
+      ]
     }
   )
+
+  const classMethods = [
+    associate,
+
+    countAll,
+    incrementScores,
+    list,
+    listAllIds,
+    listRandomPodIdsWithRequest,
+    listBadPods,
+    load,
+    loadByHost,
+    updatePodsScore,
+    removeAll
+  ]
+  const instanceMethods = [ toFormatedJSON ]
+  addMethodsToModel(Pod, classMethods, instanceMethods)
 
   return Pod
 }
 
 // ------------------------------ METHODS ------------------------------
 
-function toFormatedJSON () {
+toFormatedJSON = function () {
   const json = {
     id: this.id,
     host: this.host,
@@ -90,22 +111,22 @@ function toFormatedJSON () {
 // ------------------------------ Statics ------------------------------
 
 function associate (models) {
-  this.belongsToMany(models.Request, {
+  Pod.belongsToMany(models.Request, {
     foreignKey: 'podId',
     through: models.RequestToPod,
     onDelete: 'cascade'
   })
 }
 
-function countAll (callback) {
-  return this.count().asCallback(callback)
+countAll = function (callback) {
+  return Pod.count().asCallback(callback)
 }
 
-function incrementScores (ids, value, callback) {
+incrementScores = function (ids, value, callback) {
   if (!callback) callback = function () { /* empty */ }
 
   const update = {
-    score: this.sequelize.literal('score +' + value)
+    score: Sequelize.literal('score +' + value)
   }
 
   const options = {
@@ -118,14 +139,14 @@ function incrementScores (ids, value, callback) {
     validate: false
   }
 
-  return this.update(update, options).asCallback(callback)
+  return Pod.update(update, options).asCallback(callback)
 }
 
-function list (callback) {
-  return this.findAll().asCallback(callback)
+list = function (callback) {
+  return Pod.findAll().asCallback(callback)
 }
 
-function listAllIds (transaction, callback) {
+listAllIds = function (transaction, callback) {
   if (!callback) {
     callback = transaction
     transaction = null
@@ -137,22 +158,20 @@ function listAllIds (transaction, callback) {
 
   if (transaction) query.transaction = transaction
 
-  return this.findAll(query).asCallback(function (err, pods) {
+  return Pod.findAll(query).asCallback(function (err, pods) {
     if (err) return callback(err)
 
     return callback(null, map(pods, 'id'))
   })
 }
 
-function listRandomPodIdsWithRequest (limit, tableWithPods, tableWithPodsJoins, callback) {
+listRandomPodIdsWithRequest = function (limit, tableWithPods, tableWithPodsJoins, callback) {
   if (!callback) {
     callback = tableWithPodsJoins
     tableWithPodsJoins = ''
   }
 
-  const self = this
-
-  self.count().asCallback(function (err, count) {
+  Pod.count().asCallback(function (err, count) {
     if (err) return callback(err)
 
     // Optimization...
@@ -171,13 +190,13 @@ function listRandomPodIdsWithRequest (limit, tableWithPods, tableWithPodsJoins, 
       where: {
         id: {
           $in: [
-            this.sequelize.literal(`SELECT DISTINCT "${tableWithPods}"."podId" FROM "${tableWithPods}" ${tableWithPodsJoins}`)
+            Sequelize.literal(`SELECT DISTINCT "${tableWithPods}"."podId" FROM "${tableWithPods}" ${tableWithPodsJoins}`)
           ]
         }
       }
     }
 
-    return this.findAll(query).asCallback(function (err, pods) {
+    return Pod.findAll(query).asCallback(function (err, pods) {
       if (err) return callback(err)
 
       return callback(null, map(pods, 'id'))
@@ -185,49 +204,47 @@ function listRandomPodIdsWithRequest (limit, tableWithPods, tableWithPodsJoins, 
   })
 }
 
-function listBadPods (callback) {
+listBadPods = function (callback) {
   const query = {
     where: {
       score: { $lte: 0 }
     }
   }
 
-  return this.findAll(query).asCallback(callback)
+  return Pod.findAll(query).asCallback(callback)
 }
 
-function load (id, callback) {
-  return this.findById(id).asCallback(callback)
+load = function (id, callback) {
+  return Pod.findById(id).asCallback(callback)
 }
 
-function loadByHost (host, callback) {
+loadByHost = function (host, callback) {
   const query = {
     where: {
       host: host
     }
   }
 
-  return this.findOne(query).asCallback(callback)
+  return Pod.findOne(query).asCallback(callback)
 }
 
-function removeAll (callback) {
-  return this.destroy().asCallback(callback)
+removeAll = function (callback) {
+  return Pod.destroy().asCallback(callback)
 }
 
-function updatePodsScore (goodPods, badPods) {
-  const self = this
-
+updatePodsScore = function (goodPods, badPods) {
   logger.info('Updating %d good pods and %d bad pods scores.', goodPods.length, badPods.length)
 
   if (goodPods.length !== 0) {
-    this.incrementScores(goodPods, PODS_SCORE.BONUS, function (err) {
+    incrementScores(goodPods, PODS_SCORE.BONUS, function (err) {
       if (err) logger.error('Cannot increment scores of good pods.', { error: err })
     })
   }
 
   if (badPods.length !== 0) {
-    this.incrementScores(badPods, PODS_SCORE.MALUS, function (err) {
+    incrementScores(badPods, PODS_SCORE.MALUS, function (err) {
       if (err) logger.error('Cannot decrement scores of bad pods.', { error: err })
-      removeBadPods.call(self)
+      removeBadPods()
     })
   }
 }
@@ -236,11 +253,9 @@ function updatePodsScore (goodPods, badPods) {
 
 // Remove pods with a score of 0 (too many requests where they were unreachable)
 function removeBadPods () {
-  const self = this
-
   waterfall([
     function findBadPods (callback) {
-      self.sequelize.models.Pod.listBadPods(function (err, pods) {
+      listBadPods(function (err, pods) {
         if (err) {
           logger.error('Cannot find bad pods.', { error: err })
           return callback(err)

@@ -82,7 +82,7 @@ function runServer (number, callback) {
     detached: true
   }
 
-  server.app = fork(pathUtils.join(__dirname, '..', '..', '..', 'server.js'), [], options)
+  server.app = fork(pathUtils.join(__dirname, '..', '..', '..', 'dist', 'server.js'), [], options)
   server.app.stdout.on('data', function onStdout (data) {
     let dontContinue = false
 

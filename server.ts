@@ -1,3 +1,7 @@
+if ([ 'dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) {
+  require('source-map-support').install()
+}
+
 // ----------- Node modules -----------
 import bodyParser = require('body-parser')
 import express = require('express')
@@ -20,8 +24,8 @@ const app = express()
 import { logger } from './server/helpers/logger'
 import { API_VERSION, CONFIG } from './server/initializers/constants'
 // Initialize database and models
-const db = require('./server/initializers/database')
-db.init(onDatabaseInitDone)
+import { database as db } from './server/initializers/database'
+db.init(false, onDatabaseInitDone)
 
 // ----------- Checker -----------
 import { checkMissedConfig, checkFFmpeg, checkConfig } from './server/initializers/checker'
@@ -52,7 +56,9 @@ import { apiRouter, clientsRouter, staticRouter } from './server/controllers'
 // ----------- App -----------
 
 // For the logger
-// app.use(morgan('combined', { stream: logger.stream }))
+app.use(morgan('combined', {
+  stream: { write: logger.info }
+}))
 // For body requests
 app.use(bodyParser.json({ limit: '500kb' }))
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -75,7 +81,7 @@ app.use('/', staticRouter)
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 app.use('/*', function (req, res, next) {
-  res.sendFile(path.join(__dirname, './client/dist/index.html'))
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'))
 })
 
 // ----------- Tracker -----------

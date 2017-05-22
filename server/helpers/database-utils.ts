@@ -1,7 +1,7 @@
 // TODO: import from ES6 when retry typing file will include errorFilter function
 import retry = require('async/retry')
 
-const db = require('../initializers/database')
+import { database as db } from '../initializers/database'
 import { logger } from './logger'
 
 function commitTransaction (t, callback) {
@@ -52,7 +52,7 @@ function transactionRetryer (func, callback) {
 }
 
 function startSerializableTransaction (callback) {
-  db.sequelize.transaction({ isolationLevel: 'SERIALIZABLE' }).asCallback(function (err, t) {
+  db.sequelize.transaction(/* { isolationLevel: 'SERIALIZABLE' } */).asCallback(function (err, t) {
     // We force to return only two parameters
     return callback(err, t)
   })

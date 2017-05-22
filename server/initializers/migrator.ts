@@ -1,10 +1,12 @@
 import { waterfall, eachSeries } from 'async'
 import fs = require('fs')
 import path = require('path')
+import * as Sequelize from 'sequelize'
 
-const db = require('./database')
+import { database as db } from './database'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { logger } from '../helpers'
+import { ApplicationInstance } from '../models'
 
 function migrate (finalCallback) {
   waterfall([
@@ -94,7 +96,7 @@ function getMigrationScripts (callback) {
 }
 
 function executeMigration (actualVersion, entity, callback) {
-  const versionScript = parseInt(entity.version)
+  const versionScript = parseInt(entity.version, 10)
 
   // Do not execute old migration scripts
   if (versionScript <= actualVersion) return callback(null)
@@ -112,7 +114,7 @@ function executeMigration (actualVersion, entity, callback) {
       transaction: t,
       queryInterface: db.sequelize.getQueryInterface(),
       sequelize: db.sequelize,
-      Sequelize: db.Sequelize
+      Sequelize: Sequelize
     }
     migrationScript.up(options, function (err) {
       if (err) {

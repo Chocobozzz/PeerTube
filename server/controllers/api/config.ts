@@ -1,6 +1,6 @@
 import express = require('express')
 
-import { CONFIG } from '../../initializers';
+import { CONFIG } from '../../initializers'
 
 const configRouter = express.Router()
 

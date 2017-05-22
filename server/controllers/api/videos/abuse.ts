@@ -1,7 +1,7 @@
 import express = require('express')
 import { waterfall } from 'async'
 
-const db = require('../../../initializers/database')
+import { database as db } from '../../../initializers/database'
 import friends = require('../../../lib/friends')
 import {
   logger,
