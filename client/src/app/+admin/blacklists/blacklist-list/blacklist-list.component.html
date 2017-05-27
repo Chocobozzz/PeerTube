@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="content-padding">
+
+    <h3>Blacklisted videos</h3>
+
+    <ng2-smart-table
+       [settings]="tableSettings" [source]="blacklistSource"
+       (delete)="removeVideoFromBlacklist($event)"
+    ></ng2-smart-table>
+  </div>
+</div>

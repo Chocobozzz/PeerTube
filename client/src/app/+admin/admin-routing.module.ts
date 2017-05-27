@@ -9,6 +9,7 @@ import { RequestSchedulersRoutes } from './request-schedulers'
 import { UsersRoutes } from './users'
 import { VideoAbusesRoutes } from './video-abuses'
 import { AdminGuard } from './admin-guard.service'
+import { BlacklistsRoutes } from './blacklists'
 
 const adminRoutes: Routes = [
   {
@@ -25,7 +26,8 @@ const adminRoutes: Routes = [
       ...FriendsRoutes,
       ...RequestSchedulersRoutes,
       ...UsersRoutes,
-      ...VideoAbusesRoutes
+      ...VideoAbusesRoutes,
+      ...BlacklistsRoutes
     ]
   }
 ]
