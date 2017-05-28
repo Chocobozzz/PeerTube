@@ -19,10 +19,17 @@ function setVideosSort (req: express.Request, res: express.Response, next: expre
   return next()
 }
 
+function setBlacklistsSort (req, res, next) {
+  if (!req.query.sort) req.query.sort = '-createdAt'
+
+  return next()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   setUsersSort,
   setVideoAbusesSort,
-  setVideosSort
+  setVideosSort,
+  setBlacklistsSort
 }

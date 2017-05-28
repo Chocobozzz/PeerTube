@@ -34,7 +34,8 @@ const SEARCHABLE_COLUMNS = {
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ]
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],
+  BLACKLISTS: [ 'id', 'videoId', 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
