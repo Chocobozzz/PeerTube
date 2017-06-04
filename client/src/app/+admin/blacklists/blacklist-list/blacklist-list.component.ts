@@ -37,6 +37,9 @@ export class BlacklistListComponent {
 	title: 'ID',
 	sortDirection: 'asc'
       },
+      videoId: {
+	title: 'Video ID'
+      },
       createdAt: {
 	title: 'Created Date',
 	valuePrepareFunction: Utils.dateToHuman
