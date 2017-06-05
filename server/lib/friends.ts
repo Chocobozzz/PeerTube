@@ -1,5 +1,5 @@
 import { each, eachLimit, eachSeries, series, waterfall } from 'async'
-import request = require('request')
+import * as request from 'request'
 
 import { database as db } from '../initializers/database'
 import {

@@ -1,12 +1,12 @@
-import safeBuffer = require('safe-buffer')
+import * as safeBuffer from 'safe-buffer'
 const Buffer = safeBuffer.Buffer
-import createTorrent = require('create-torrent')
-import ffmpeg = require('fluent-ffmpeg')
-import fs = require('fs')
-import magnetUtil = require('magnet-uri')
+import * as createTorrent from 'create-torrent'
+import * as ffmpeg from 'fluent-ffmpeg'
+import * as fs from 'fs'
+import * as magnetUtil from 'magnet-uri'
 import { map, values } from 'lodash'
 import { parallel, series } from 'async'
-import parseTorrent = require('parse-torrent')
+import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 

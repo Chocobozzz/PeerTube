@@ -1,8 +1,8 @@
 import { join } from 'path'
-import config = require('config')
+import * as config from 'config'
 import { each, series } from 'async'
-import mkdirp = require('mkdirp')
-import passwordGenerator = require('password-generator')
+import * as mkdirp from 'mkdirp'
+import * as passwordGenerator from 'password-generator'
 
 import { database as db } from './database'
 import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION } from './constants'

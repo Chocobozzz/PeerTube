@@ -1,5 +1,5 @@
 // TODO: import from ES6 when retry typing file will include errorFilter function
-import retry = require('async/retry')
+import * as retry from 'async/retry'
 
 import { database as db } from '../initializers/database'
 import { logger } from './logger'

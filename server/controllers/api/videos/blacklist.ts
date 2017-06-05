@@ -1,4 +1,4 @@
-import express = require('express')
+import * as express from 'express'
 
 import { database as db } from '../../../initializers/database'
 import { logger } from '../../../helpers'

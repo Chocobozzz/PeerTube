@@ -1,5 +1,5 @@
-import replay = require('request-replay')
-import request = require('request')
+import * as replay from 'request-replay'
+import * as request from 'request'
 
 import {
   RETRY_REQUESTS,

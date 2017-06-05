@@ -1,7 +1,5 @@
 import { values } from 'lodash'
-import expressValidator = require('express-validator')
-// TODO: use .validator when express-validator typing will have validator field
-const validator = expressValidator['validator']
+import * as validator from 'validator'
 
 import {
   CONSTRAINTS_FIELDS,

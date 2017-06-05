@@ -1,6 +1,6 @@
-import fs = require('fs')
+import * as fs from 'fs'
 import { join } from 'path'
-import Sequelize = require('sequelize')
+import * as Sequelize from 'sequelize'
 
 import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first

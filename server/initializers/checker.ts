@@ -1,4 +1,4 @@
-import config = require('config')
+import * as config from 'config'
 
 import { database as db } from './database'
 import { CONFIG } from './constants'

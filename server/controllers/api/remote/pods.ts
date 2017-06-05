@@ -1,4 +1,4 @@
-import express = require('express')
+import * as express from 'express'
 import * as waterfall from 'async/waterfall'
 
 import { database as db } from '../../../initializers/database'

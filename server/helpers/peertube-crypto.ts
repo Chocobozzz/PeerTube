@@ -1,7 +1,7 @@
-import crypto = require('crypto')
-import bcrypt = require('bcrypt')
-import fs = require('fs')
-import openssl = require('openssl-wrapper')
+import * as crypto from 'crypto'
+import * as bcrypt from 'bcrypt'
+import * as fs from 'fs'
+import * as openssl from 'openssl-wrapper'
 import { join } from 'path'
 
 import {

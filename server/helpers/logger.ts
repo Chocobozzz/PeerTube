@@ -1,7 +1,7 @@
 // Thanks http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-import mkdirp = require('mkdirp')
-import path = require('path')
-import winston = require('winston')
+import * as mkdirp from 'mkdirp'
+import * as path from 'path'
+import * as winston from 'winston'
 
 // Do not use barrel (dependencies issues)
 import { CONFIG } from '../initializers/constants'

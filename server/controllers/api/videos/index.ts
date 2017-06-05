@@ -1,7 +1,7 @@
-import express = require('express')
-import fs = require('fs')
-import multer = require('multer')
-import path = require('path')
+import * as express from 'express'
+import * as fs from 'fs'
+import * as multer from 'multer'
+import * as path from 'path'
 import { waterfall } from 'async'
 
 import { database as db } from '../../../initializers/database'

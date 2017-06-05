@@ -1,10 +1,8 @@
 import { parallel } from 'async'
-import express = require('express')
-import fs = require('fs')
+import * as express from 'express'
+import * as fs from 'fs'
 import { join } from 'path'
-import expressValidator = require('express-validator')
-// TODO: use .validator when express-validator typing will have validator field
-const validator = expressValidator['validator']
+import * as validator from 'validator'
 
 import { database as db } from '../initializers/database'
 import {

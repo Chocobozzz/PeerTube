@@ -3,13 +3,14 @@ if ([ 'dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) {
 }
 
 // ----------- Node modules -----------
-import bodyParser = require('body-parser')
-import express = require('express')
+import * as bodyParser from 'body-parser'
+import * as express from 'express'
+// FIXME: cannot import express-validator
 const expressValidator = require('express-validator')
-import http = require('http')
-import morgan = require('morgan')
-import path = require('path')
-import bittorrentTracker = require('bittorrent-tracker')
+import * as http from 'http'
+import * as morgan from 'morgan'
+import * as path from 'path'
+import * as bittorrentTracker from 'bittorrent-tracker'
 import { Server as WebSocketServer } from 'ws'
 
 const TrackerServer = bittorrentTracker.Server

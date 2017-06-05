@@ -1,8 +1,8 @@
-import express = require('express')
+import * as express from 'express'
 import { waterfall } from 'async'
 
 import { database as db } from '../../../initializers/database'
-import friends = require('../../../lib/friends')
+import * as friends from '../../../lib/friends'
 import {
   logger,
   getFormatedObjects,

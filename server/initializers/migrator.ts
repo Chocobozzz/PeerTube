@@ -1,6 +1,6 @@
 import { waterfall, eachSeries } from 'async'
-import fs = require('fs')
-import path = require('path')
+import * as fs from 'fs'
+import * as path from 'path'
 import * as Sequelize from 'sequelize'
 
 import { database as db } from './database'

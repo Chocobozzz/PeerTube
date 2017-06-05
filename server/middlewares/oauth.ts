@@ -1,4 +1,4 @@
-import OAuthServer = require('express-oauth-server')
+import * as OAuthServer from 'express-oauth-server'
 
 import { OAUTH_LIFETIME } from '../initializers'
 import { logger } from '../helpers'
