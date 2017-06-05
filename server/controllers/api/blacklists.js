@@ -37,6 +37,40 @@ function listBlacklist (req, res, next) {
   db.BlacklistedVideo.listForApi(req.query.start, req.query.count, req.query.sort, function (err, blacklistList, blacklistTotal) {
     if (err) return next(err)
 
-    res.json(utils.getFormatedObjects(blacklistList, blacklistTotal))
+    res.json(formatBlacklist(blacklistList, blacklistTotal))
   })
+}
+
+function formatBlacklist (objects, objectsTotal) {
+  const formatedObjects = []
+  var json = ''
+
+  objects.forEach((object) => {
+    json = object.toFormatedJSON()
+    if (json) {
+      formatedObjects.push(blacklistObjectToJSON(object, object.Video))
+    }
+  })
+
+  return {
+    total: objectsTotal,
+    data: formatedObjects
+  }
+}
+
+function blacklistObjectToJSON (blacklist, video) {
+  return {
+    id: blacklist.id,
+    videoId: blacklist.videoId,
+    remoteId: video.remoteId,
+    name: video.name,
+    nsfw: video.nsfw,
+    description: video.description,
+    duration: video.duration,
+    views: video.views,
+    likes: video.likes,
+    dislikes: video.dislikes,
+    createdAt: blacklist.createdAt,
+    updatedAt: blacklist.updatedAt
+  }
 }
