@@ -33,12 +33,32 @@ export class BlacklistListComponent {
       perPage: 10
     },
     columns: {
-      id: {
-	title: 'ID',
-	sortDirection: 'asc'
+      name: {
+	title: 'Name'
+      },
+      description: {
+	title: 'Description'
+      },
+      duration: {
+	title: 'Duration'
+      },
+      views: {
+	title: 'Views'
+      },
+      likes: {
+	title: 'Likes'
+      },
+      dislikes: {
+	title: 'Dislikes'
+      },
+      nsfw: {
+	title: 'NSFW'
+      },
+      remoteId: {
+	title: 'Remote ID'
       },
       videoId: {
-	title: 'Video ID'
+	title: 'Local ID'
       },
       createdAt: {
 	title: 'Created Date',
