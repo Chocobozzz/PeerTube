@@ -1,6 +1,8 @@
 import 'express-validator'
 import * as express from 'express'
 
+import database from '../initializers/database'
+
 function setUsersSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
@@ -20,7 +22,22 @@ function setVideosSort (req: express.Request, res: express.Response, next: expre
 }
 
 function setBlacklistsSort (req, res, next) {
+  var newSort = {}
+
   if (!req.query.sort) req.query.sort = '-createdAt'
+
+  // Set model we want to sort onto
+  if (req.query.sort === '-createdAt' ||
+      req.query.sort === 'createdAt') {
+    // If we want to sort onto the BlacklistedVideos relation, we won't specify it in the query parameter ...
+    newSort.sortModel = undefined
+  } else {
+    newSort.sortModel = database.Video
+  }
+
+  newSort.sortValue = req.query.sort
+
+  req.query.sort = newSort
 
   return next()
 }

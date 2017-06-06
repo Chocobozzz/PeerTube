@@ -57,9 +57,6 @@ export class BlacklistListComponent {
       remoteId: {
 	title: 'Remote ID'
       },
-      videoId: {
-	title: 'Local ID'
-      },
       createdAt: {
 	title: 'Created Date',
 	valuePrepareFunction: Utils.dateToHuman
@@ -83,6 +80,7 @@ export class BlacklistListComponent {
 	if (res === false) return;
 
 	console.log("OK !");
+	console.log(JSON.stringify(blacklistedVideo));
 	return;
       }
     );

@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 
-import { addMethodsToModel, getSort } from '../utils'
+import { addMethodsToModel, getSortOnModel } from '../utils'
 import {
   BlacklistedVideoInstance,
   BlacklistedVideoAttributes,
@@ -80,7 +80,7 @@ listForApi = function (start: number, count: number, sort: string) {
   const query = {
     offset: start,
     limit: count,
-    order: [ getSort(sort) ]
+    order: [ getSortOnModel(sort) ]
   }
 
   return BlacklistedVideo.findAndCountAll(query).then(({ rows, count }) => {

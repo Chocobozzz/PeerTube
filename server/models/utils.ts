@@ -19,9 +19,17 @@ function addMethodsToModel (model: any, classMethods: Function[], instanceMethod
   instanceMethods.forEach(m => model.prototype[m.name] = m)
 }
 
+function getSortOnModel (model, value) {
+  let sort = getSort(value)
+
+  if (model) return [ { model: model }, sort[0], sort[1] ]
+  return sort
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   addMethodsToModel,
-  getSort
+  getSort,
+  getSortOnModel
 }
