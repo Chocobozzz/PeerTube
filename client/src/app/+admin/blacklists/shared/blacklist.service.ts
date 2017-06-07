@@ -14,7 +14,7 @@ export class BlacklistService {
     return new RestDataSource(this.authHttp, BlacklistService.BASE_BLACKLISTS_URL);
   }
 
-  removeVideoFromBlacklist(entry: Blacklist) {
+  removeVideoFromBlacklist(entry) {
     return this.authHttp.delete(BlacklistService.BASE_BLACKLISTS_URL + entry.videoId);
   }
 }

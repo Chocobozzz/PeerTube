@@ -73,15 +73,20 @@ export class BlacklistListComponent {
   }
 
   removeVideoFromBlacklist({ data }) {
-    const blacklistedVideo: Blacklist = data;
+    const blacklistedVideo = data;
 
-    this.confirmService.confirm('Do you really want to remove this video from the blacklist ?', 'Remove').subscribe(
+    this.confirmService.confirm('Do you really want to remove this video from the blacklist ? It will be available again in the video list', 'Remove').subscribe(
       res => {
 	if (res === false) return;
 
-	console.log("OK !");
-	console.log(JSON.stringify(blacklistedVideo));
-	return;
+	this.blacklistService.removeVideoFromBlacklist(blacklistedVideo).subscribe(
+	  () => {
+	    this.notificationsService.success('Success', `Video ${blacklistedVideo.name} removed from the blacklist.`);
+	    this.blacklistSource.refresh();
+	  },
+
+	  err => this.notificationsService.error('Error', err.text)
+	);
       }
     );
   }
