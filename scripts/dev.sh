@@ -2,4 +2,4 @@
 
 NODE_ENV=test concurrently -k \
   "npm run watch:client" \
-  "npm start"
+  "tsc && npm start"

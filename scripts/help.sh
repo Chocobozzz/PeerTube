@@ -3,7 +3,7 @@
 printf "############# PeerTube help #############\n\n"
 printf "npm run ...\n"
 printf "  build                       -> Build the application for production (alias of build:client:prod)\n"
-printf "  build:client:dev            -> Build the client for development\n"
+printf "  build:server:prod           -> Build the server for production\n"
 printf "  build:client:prod           -> Build the client for production\n"
 printf "  clean                       -> Clean the application\n"
 printf "  clean:client                -> Clean the client build files (dist directory)\n"

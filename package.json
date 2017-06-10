@@ -17,8 +17,8 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "build": "npm run build:client:prod",
-    "build:client:dev": "scripty",
+    "build": "scripty",
+    "build:server:prod": "scripty",
     "build:client:prod": "scripty",
     "clean": "npm run clean:client",
     "clean:client": "scripty",
@@ -30,12 +30,13 @@
     "reset-password": "scripty",
     "play": "scripty",
     "dev": "scripty",
-    "start": "node server",
+    "start": "node dist/server",
     "check": "scripty",
     "upgrade": "scripty",
     "update-host": "scripty",
     "test": "scripty",
     "help": "scripty",
+    "tsc": "tsc",
     "postinstall": "cd client && yarn install"
   },
   "dependencies": {
