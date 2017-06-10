@@ -9,7 +9,7 @@ import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION } from './constants'
 import { clientsExist, usersExist } from './checker'
 import { logger, createCertsIfNotExist, root } from '../helpers'
 
-function installApplication (callback) {
+function installApplication (callback: (err: Error) => void) {
   series([
     function createDatabase (callbackAsync) {
       db.sequelize.sync().asCallback(callbackAsync)
@@ -42,7 +42,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function createDirectoriesIfNotExist (callback) {
+function createDirectoriesIfNotExist (callback: (err: Error) => void) {
   const storages = config.get('storage')
 
   each(Object.keys(storages), function (key, callbackEach) {
@@ -51,7 +51,7 @@ function createDirectoriesIfNotExist (callback) {
   }, callback)
 }
 
-function createOAuthClientIfNotExist (callback) {
+function createOAuthClientIfNotExist (callback: (err: Error) => void) {
   clientsExist(function (err, exist) {
     if (err) return callback(err)
 
@@ -80,7 +80,7 @@ function createOAuthClientIfNotExist (callback) {
   })
 }
 
-function createOAuthAdminIfNotExist (callback) {
+function createOAuthAdminIfNotExist (callback: (err: Error) => void) {
   usersExist(function (err, exist) {
     if (err) return callback(err)
 

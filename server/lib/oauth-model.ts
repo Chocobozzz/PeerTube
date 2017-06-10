@@ -1,27 +1,30 @@
+import { OAuthClientInstance, UserInstance } from '../models'
 import { database as db } from '../initializers/database'
 import { logger } from '../helpers'
 
+type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
+
 // ---------------------------------------------------------------------------
 
-function getAccessToken (bearerToken) {
+function getAccessToken (bearerToken: string) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
   return db.OAuthToken.getByTokenAndPopulateUser(bearerToken)
 }
 
-function getClient (clientId, clientSecret) {
+function getClient (clientId: string, clientSecret: string) {
   logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ').')
 
   return db.OAuthClient.getByIdAndSecret(clientId, clientSecret)
 }
 
-function getRefreshToken (refreshToken) {
+function getRefreshToken (refreshToken: string) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
   return db.OAuthToken.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 
-function getUser (username, password) {
+function getUser (username: string, password: string) {
   logger.debug('Getting User (username: ' + username + ', password: ' + password + ').')
 
   return db.User.getByUsername(username).then(function (user) {
@@ -42,7 +45,7 @@ function getUser (username, password) {
   })
 }
 
-function revokeToken (token) {
+function revokeToken (token: TokenInfo) {
   return db.OAuthToken.getByRefreshTokenAndPopulateUser(token.refreshToken).then(function (tokenDB) {
     if (tokenDB) tokenDB.destroy()
 
@@ -60,7 +63,7 @@ function revokeToken (token) {
   })
 }
 
-function saveToken (token, client, user) {
+function saveToken (token: TokenInfo, client: OAuthClientInstance, user: UserInstance) {
   logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
 
   const tokenToCreate = {

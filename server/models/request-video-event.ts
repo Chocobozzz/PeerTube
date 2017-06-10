@@ -5,16 +5,17 @@
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 
+import { database as db } from '../initializers/database'
 import { REQUEST_VIDEO_EVENT_TYPES } from '../initializers'
 import { isVideoEventCountValid } from '../helpers'
-
 import { addMethodsToModel } from './utils'
 import {
   RequestVideoEventClass,
   RequestVideoEventInstance,
   RequestVideoEventAttributes,
 
-  RequestVideoEventMethods
+  RequestVideoEventMethods,
+  RequestsVideoEventGrouped
 } from './request-video-event-interface'
 
 let RequestVideoEvent: Sequelize.Model<RequestVideoEventInstance, RequestVideoEventAttributes>
@@ -76,13 +77,13 @@ function associate (models) {
   })
 }
 
-countTotalRequests = function (callback) {
+countTotalRequests = function (callback: RequestVideoEventMethods.CountTotalRequestsCallback) {
   const query = {}
   return RequestVideoEvent.count(query).asCallback(callback)
 }
 
-listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
-  const Pod = RequestVideoEvent['sequelize'].models.Pod
+listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number, callback: RequestVideoEventMethods.ListWithLimitAndRandomCallback) {
+  const Pod = db.Pod
 
   // We make a join between videos and authors to find the podId of our video event requests
   const podJoins = 'INNER JOIN "Videos" ON "Videos"."authorId" = "Authors"."id" ' +
@@ -129,7 +130,7 @@ listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-removeByRequestIdsAndPod = function (ids, podId, callback) {
+removeByRequestIdsAndPod = function (ids: number[], podId: number, callback: RequestVideoEventMethods.RemoveByRequestIdsAndPodCallback) {
   const query = {
     where: {
       id: {
@@ -154,15 +155,15 @@ removeByRequestIdsAndPod = function (ids, podId, callback) {
   RequestVideoEvent.destroy(query).asCallback(callback)
 }
 
-removeAll = function (callback) {
+removeAll = function (callback: RequestVideoEventMethods.RemoveAllCallback) {
   // Delete all requests
   RequestVideoEvent.truncate({ cascade: true }).asCallback(callback)
 }
 
 // ---------------------------------------------------------------------------
 
-function groupAndTruncateRequests (events, limitRequestsPerPod) {
-  const eventsGrouped = {}
+function groupAndTruncateRequests (events: RequestVideoEventInstance[], limitRequestsPerPod: number) {
+  const eventsGrouped: RequestsVideoEventGrouped = {}
 
   events.forEach(function (event) {
     const pod = event.Video.Author.Pod

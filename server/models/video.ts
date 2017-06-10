@@ -11,6 +11,7 @@ import { join } from 'path'
 import * as Sequelize from 'sequelize'
 
 import { database as db } from '../initializers/database'
+import { VideoTagInstance } from './video-tag-interface'
 import {
   logger,
   isVideoNameValid,
@@ -266,7 +267,7 @@ export default function (sequelize, DataTypes) {
   return Video
 }
 
-function beforeValidate (video, options) {
+function beforeValidate (video: VideoInstance) {
   // Put a fake infoHash if it does not exists yet
   if (video.isOwned() && !video.infoHash) {
     // 40 hexa length
@@ -274,7 +275,7 @@ function beforeValidate (video, options) {
   }
 }
 
-function beforeCreate (video, options) {
+function beforeCreate (video: VideoInstance, options: { transaction: Sequelize.Transaction }) {
   return new Promise(function (resolve, reject) {
     const tasks = []
 
@@ -318,7 +319,7 @@ function beforeCreate (video, options) {
   })
 }
 
-function afterDestroy (video, options) {
+function afterDestroy (video: VideoInstance) {
   return new Promise(function (resolve, reject) {
     const tasks = []
 
@@ -401,7 +402,7 @@ generateMagnetUri = function () {
   }
 
   const xs = baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentName()
-  const announce = baseUrlWs + '/tracker/socket'
+  const announce = [ baseUrlWs + '/tracker/socket' ]
   const urlList = [ baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename() ]
 
   const magnetHash = {
@@ -496,7 +497,7 @@ toFormatedJSON = function () {
   return json
 }
 
-toAddRemoteJSON = function (callback) {
+toAddRemoteJSON = function (callback: VideoMethods.ToAddRemoteJSONCallback) {
   // Get thumbnail data to send to the other pod
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
   fs.readFile(thumbnailPath, (err, thumbnailData) => {
@@ -517,7 +518,7 @@ toAddRemoteJSON = function (callback) {
       author: this.Author.name,
       duration: this.duration,
       thumbnailData: thumbnailData.toString('binary'),
-      tags: map(this.Tags, 'name'),
+      tags: map<VideoTagInstance, string>(this.Tags, 'name'),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       extname: this.extname,
@@ -530,7 +531,7 @@ toAddRemoteJSON = function (callback) {
   })
 }
 
-toUpdateRemoteJSON = function (callback) {
+toUpdateRemoteJSON = function () {
   const json = {
     name: this.name,
     category: this.category,
@@ -542,7 +543,7 @@ toUpdateRemoteJSON = function (callback) {
     remoteId: this.id,
     author: this.Author.name,
     duration: this.duration,
-    tags: map(this.Tags, 'name'),
+    tags: map<VideoTagInstance, string>(this.Tags, 'name'),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     extname: this.extname,
@@ -554,7 +555,7 @@ toUpdateRemoteJSON = function (callback) {
   return json
 }
 
-transcodeVideofile = function (finalCallback) {
+transcodeVideofile = function (finalCallback: VideoMethods.TranscodeVideofileCallback) {
   const video = this
 
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
@@ -591,9 +592,9 @@ transcodeVideofile = function (finalCallback) {
           video.save().asCallback(callback)
         }
 
-      ], function (err) {
+      ], function (err: Error) {
         if (err) {
-          // Autodescruction...
+          // Autodesctruction...
           video.destroy().asCallback(function (err) {
             if (err) logger.error('Cannot destruct video after transcoding failure.', { error: err })
           })
@@ -609,7 +610,7 @@ transcodeVideofile = function (finalCallback) {
 
 // ------------------------------ STATICS ------------------------------
 
-generateThumbnailFromData = function (video, thumbnailData, callback) {
+generateThumbnailFromData = function (video: VideoInstance, thumbnailData: string, callback: VideoMethods.GenerateThumbnailFromDataCallback) {
   // Creating the thumbnail for a remote video
 
   const thumbnailName = video.getThumbnailName()
@@ -621,7 +622,7 @@ generateThumbnailFromData = function (video, thumbnailData, callback) {
   })
 }
 
-getDurationFromFile = function (videoPath, callback) {
+getDurationFromFile = function (videoPath: string, callback: VideoMethods.GetDurationFromFileCallback) {
   ffmpeg.ffprobe(videoPath, function (err, metadata) {
     if (err) return callback(err)
 
@@ -629,11 +630,11 @@ getDurationFromFile = function (videoPath, callback) {
   })
 }
 
-list = function (callback) {
+list = function (callback: VideoMethods.ListCallback) {
   return Video.findAll().asCallback(callback)
 }
 
-listForApi = function (start, count, sort, callback) {
+listForApi = function (start: number, count: number, sort: string, callback: VideoMethods.ListForApiCallback) {
   // Exclude Blakclisted videos from the list
   const query = {
     distinct: true,
@@ -658,7 +659,7 @@ listForApi = function (start, count, sort, callback) {
   })
 }
 
-loadByHostAndRemoteId = function (fromHost, remoteId, callback) {
+loadByHostAndRemoteId = function (fromHost: string, remoteId: string, callback: VideoMethods.LoadByHostAndRemoteIdCallback) {
   const query = {
     where: {
       remoteId: remoteId
@@ -682,7 +683,7 @@ loadByHostAndRemoteId = function (fromHost, remoteId, callback) {
   return Video.findOne(query).asCallback(callback)
 }
 
-listOwnedAndPopulateAuthorAndTags = function (callback) {
+listOwnedAndPopulateAuthorAndTags = function (callback: VideoMethods.ListOwnedAndPopulateAuthorAndTagsCallback) {
   // If remoteId is null this is *our* video
   const query = {
     where: {
@@ -694,7 +695,7 @@ listOwnedAndPopulateAuthorAndTags = function (callback) {
   return Video.findAll(query).asCallback(callback)
 }
 
-listOwnedByAuthor = function (author, callback) {
+listOwnedByAuthor = function (author: string, callback: VideoMethods.ListOwnedByAuthorCallback) {
   const query = {
     where: {
       remoteId: null
@@ -712,11 +713,11 @@ listOwnedByAuthor = function (author, callback) {
   return Video.findAll(query).asCallback(callback)
 }
 
-load = function (id, callback) {
+load = function (id: string, callback: VideoMethods.LoadCallback) {
   return Video.findById(id).asCallback(callback)
 }
 
-loadAndPopulateAuthor = function (id, callback) {
+loadAndPopulateAuthor = function (id: string, callback: VideoMethods.LoadAndPopulateAuthorCallback) {
   const options = {
     include: [ Video['sequelize'].models.Author ]
   }
@@ -724,7 +725,7 @@ loadAndPopulateAuthor = function (id, callback) {
   return Video.findById(id, options).asCallback(callback)
 }
 
-loadAndPopulateAuthorAndPodAndTags = function (id, callback) {
+loadAndPopulateAuthorAndPodAndTags = function (id: string, callback: VideoMethods.LoadAndPopulateAuthorAndPodAndTagsCallback) {
   const options = {
     include: [
       {
@@ -738,7 +739,14 @@ loadAndPopulateAuthorAndPodAndTags = function (id, callback) {
   return Video.findById(id, options).asCallback(callback)
 }
 
-searchAndPopulateAuthorAndPodAndTags = function (value, field, start, count, sort, callback) {
+searchAndPopulateAuthorAndPodAndTags = function (
+  value: string,
+  field: string,
+  start: number,
+  count: number,
+  sort: string,
+  callback: VideoMethods.SearchAndPopulateAuthorAndPodAndTagsCallback
+) {
   const podInclude: any = {
     model: Video['sequelize'].models.Pod,
     required: false
@@ -821,27 +829,27 @@ function createBaseVideosWhere () {
   }
 }
 
-function removeThumbnail (video, callback) {
+function removeThumbnail (video: VideoInstance, callback: (err: Error) => void) {
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
   fs.unlink(thumbnailPath, callback)
 }
 
-function removeFile (video, callback) {
+function removeFile (video: VideoInstance, callback: (err: Error) => void) {
   const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
   fs.unlink(filePath, callback)
 }
 
-function removeTorrent (video, callback) {
+function removeTorrent (video: VideoInstance, callback: (err: Error) => void) {
   const torrenPath = join(CONFIG.STORAGE.TORRENTS_DIR, video.getTorrentName())
   fs.unlink(torrenPath, callback)
 }
 
-function removePreview (video, callback) {
+function removePreview (video: VideoInstance, callback: (err: Error) => void) {
   // Same name than video thumnail
   fs.unlink(CONFIG.STORAGE.PREVIEWS_DIR + video.getPreviewName(), callback)
 }
 
-function createTorrentFromVideo (video, videoPath, callback) {
+function createTorrentFromVideo (video: VideoInstance, videoPath: string, callback: (err: Error) => void) {
   const options = {
     announceList: [
       [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
@@ -865,24 +873,23 @@ function createTorrentFromVideo (video, videoPath, callback) {
   })
 }
 
-function createPreview (video, videoPath, callback) {
-  generateImage(video, videoPath, CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName(), callback)
+function createPreview (video: VideoInstance, videoPath: string, callback: (err: Error) => void) {
+  generateImage(video, videoPath, CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName(), null, callback)
 }
 
-function createThumbnail (video, videoPath, callback) {
+function createThumbnail (video: VideoInstance, videoPath: string, callback: (err: Error) => void) {
   generateImage(video, videoPath, CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName(), THUMBNAILS_SIZE, callback)
 }
 
-function generateImage (video, videoPath, folder, imageName, size, callback?) {
+type GenerateImageCallback = (err: Error, imageName: string) => void
+function generateImage (video: VideoInstance, videoPath: string, folder: string, imageName: string, size: string, callback?: GenerateImageCallback) {
   const options: any = {
     filename: imageName,
     count: 1,
     folder
   }
 
-  if (!callback) {
-    callback = size
-  } else {
+  if (size) {
     options.size = size
   }
 
@@ -894,7 +901,7 @@ function generateImage (video, videoPath, folder, imageName, size, callback?) {
     .thumbnail(options)
 }
 
-function removeFromBlacklist (video, callback) {
+function removeFromBlacklist (video: VideoInstance, callback: (err: Error) => void) {
   // Find the blacklisted video
   db.BlacklistedVideo.loadByVideoId(video.id, function (err, video) {
     // If an error occured, stop here
@@ -908,7 +915,7 @@ function removeFromBlacklist (video, callback) {
       video.destroy().asCallback(callback)
     } else {
       // If haven't found it, simply ignore it and do nothing
-      return callback()
+      return callback(null)
     }
   })
 }

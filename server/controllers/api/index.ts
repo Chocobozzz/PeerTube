@@ -28,6 +28,6 @@ export { apiRouter }
 
 // ---------------------------------------------------------------------------
 
-function pong (req, res, next) {
+function pong (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.send('pong').status(200).end()
 }

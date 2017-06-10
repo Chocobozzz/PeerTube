@@ -1,8 +1,8 @@
-function exists (value) {
+function exists (value: any) {
   return value !== undefined && value !== null
 }
 
-function isArray (value) {
+function isArray (value: any) {
   return Array.isArray(value)
 }
 
@@ -11,4 +11,13 @@ function isArray (value) {
 export {
   exists,
   isArray
+}
+
+declare global {
+  namespace ExpressValidator {
+    export interface Validator {
+      exists,
+      isArray
+    }
+  }
 }

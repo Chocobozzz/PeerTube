@@ -1,13 +1,25 @@
 import * as Sequelize from 'sequelize'
 
-export namespace BlacklistedVideoMethods {
-  export type ToFormatedJSON = () => void
+// Don't use barrel, import just what we need
+import { BlacklistedVideo as FormatedBlacklistedVideo } from '../../shared/models/video-blacklist.model'
 
-  export type CountTotal = (callback) => void
-  export type List = (callback) => void
-  export type ListForApi = (start, count, sort, callback) => void
-  export type LoadById = (id, callback) => void
-  export type LoadByVideoId = (id, callback) => void
+export namespace BlacklistedVideoMethods {
+  export type ToFormatedJSON = () => FormatedBlacklistedVideo
+
+  export type CountTotalCallback = (err: Error, total: number) => void
+  export type CountTotal = (callback: CountTotalCallback) => void
+
+  export type ListCallback = (err: Error, backlistedVideoInstances: BlacklistedVideoInstance[]) => void
+  export type List = (callback: ListCallback) => void
+
+  export type ListForApiCallback = (err: Error, blacklistedVIdeoInstances?: BlacklistedVideoInstance[], total?: number) => void
+  export type ListForApi = (start: number, count: number, sort: string, callback: ListForApiCallback) => void
+
+  export type LoadByIdCallback = (err: Error, blacklistedVideoInstance: BlacklistedVideoInstance) => void
+  export type LoadById = (id: number, callback: LoadByIdCallback) => void
+
+  export type LoadByVideoIdCallback = (err: Error, blacklistedVideoInstance: BlacklistedVideoInstance) => void
+  export type LoadByVideoId = (id: string, callback: LoadByVideoIdCallback) => void
 }
 
 export interface BlacklistedVideoClass {

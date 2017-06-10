@@ -52,6 +52,12 @@
   version "4.14.64"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.64.tgz#979cf3a3d4a368670840bf9b3e448dc33ffe84ee"
 
+"@types/magnet-uri@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@types/magnet-uri/-/magnet-uri-5.1.1.tgz#861aaf64c92a3137dd848fefc55cd352a8ea851a"
+  dependencies:
+    "@types/node" "*"
+
 "@types/mime@*":
   version "0.0.29"
   resolved "https://registry.yarnpkg.com/@types/mime/-/mime-0.0.29.tgz#fbcfd330573b912ef59eeee14602bface630754b"
@@ -63,6 +69,12 @@
 "@types/morgan@^1.7.32":
   version "1.7.32"
   resolved "https://registry.yarnpkg.com/@types/morgan/-/morgan-1.7.32.tgz#fab1ece4dae172e1a377d563d33e3634fa04927d"
+  dependencies:
+    "@types/express" "*"
+
+"@types/multer@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/multer/-/multer-0.0.34.tgz#4b542b380dcf59bced8b66294654dc67a7fab383"
   dependencies:
     "@types/express" "*"
 

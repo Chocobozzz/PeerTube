@@ -1,4 +1,5 @@
 import { forever, queue } from 'async'
+import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../initializers/database'
 import {
@@ -7,7 +8,10 @@ import {
   JOB_STATES
 } from '../../initializers'
 import { logger } from '../../helpers'
-import { jobHandlers } from './handlers'
+import { JobInstance } from '../../models'
+import { JobHandler, jobHandlers } from './handlers'
+
+type JobQueueCallback = (err: Error) => void
 
 class JobScheduler {
 
@@ -24,7 +28,7 @@ class JobScheduler {
 
     logger.info('Jobs scheduler activated.')
 
-    const jobsQueue = queue(this.processJob.bind(this))
+    const jobsQueue = queue<JobInstance, JobQueueCallback>(this.processJob.bind(this))
 
     // Finish processing jobs from a previous start
     const state = JOB_STATES.PROCESSING
@@ -58,7 +62,7 @@ class JobScheduler {
     })
   }
 
-  createJob (transaction, handlerName: string, handlerInputData: object, callback) {
+  createJob (transaction: Sequelize.Transaction, handlerName: string, handlerInputData: object, callback: (err: Error) => void) {
     const createQuery = {
       state: JOB_STATES.PENDING,
       handlerName,
@@ -69,7 +73,7 @@ class JobScheduler {
     db.Job.create(createQuery, options).asCallback(callback)
   }
 
-  private enqueueJobs (err, jobsQueue, jobs) {
+  private enqueueJobs (err: Error, jobsQueue: AsyncQueue<JobInstance>, jobs: JobInstance[]) {
     if (err) {
       logger.error('Cannot list pending jobs.', { error: err })
     } else {
@@ -79,7 +83,7 @@ class JobScheduler {
     }
   }
 
-  private processJob (job, callback) {
+  private processJob (job: JobInstance, callback: (err: Error) => void) {
     const jobHandler = jobHandlers[job.handlerName]
 
     logger.info('Processing job %d with handler %s.', job.id, job.handlerName)
@@ -89,8 +93,8 @@ class JobScheduler {
       if (err) return this.cannotSaveJobError(err, callback)
 
       if (jobHandler === undefined) {
-        logger.error('Unknown job handler for job %s.', jobHandler.handlerName)
-        return callback()
+        logger.error('Unknown job handler for job %s.', job.handlerName)
+        return callback(null)
       }
 
       return jobHandler.process(job.handlerInputData, (err, result) => {
@@ -104,7 +108,7 @@ class JobScheduler {
     })
   }
 
-  private onJobError (jobHandler, job, jobResult, callback) {
+  private onJobError (jobHandler: JobHandler<any>, job: JobInstance, jobResult: any, callback: (err: Error) => void) {
     job.state = JOB_STATES.ERROR
 
     job.save().asCallback(err => {
@@ -114,7 +118,7 @@ class JobScheduler {
     })
   }
 
-  private onJobSuccess (jobHandler, job, jobResult, callback) {
+  private onJobSuccess (jobHandler: JobHandler<any>, job: JobInstance, jobResult: any, callback: (err: Error) => void) {
     job.state = JOB_STATES.SUCCESS
 
     job.save().asCallback(err => {
@@ -124,7 +128,7 @@ class JobScheduler {
     })
   }
 
-  private cannotSaveJobError (err, callback) {
+  private cannotSaveJobError (err: Error, callback: (err: Error) => void) {
     logger.error('Cannot save new job state.', { error: err })
     return callback(err)
   }

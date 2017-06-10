@@ -67,15 +67,15 @@ function associate (models) {
   })
 }
 
-countTotal = function (callback) {
+countTotal = function (callback: OAuthClientMethods.CountTotalCallback) {
   return OAuthClient.count().asCallback(callback)
 }
 
-loadFirstClient = function (callback) {
+loadFirstClient = function (callback: OAuthClientMethods.LoadFirstClientCallback) {
   return OAuthClient.findOne().asCallback(callback)
 }
 
-getByIdAndSecret = function (clientId, clientSecret) {
+getByIdAndSecret = function (clientId: string, clientSecret: string) {
   const query = {
     where: {
       clientId: clientId,

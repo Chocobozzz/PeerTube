@@ -1,11 +1,25 @@
 import * as Sequelize from 'sequelize'
+import * as Bluebird from 'bluebird'
 
 import { UserModel } from './user-interface'
 
+export type OAuthTokenInfo = {
+  refreshToken: string
+  refreshTokenExpiresAt: Date,
+  client: {
+    id: number
+  },
+  user: {
+    id: number
+  }
+}
+
 export namespace OAuthTokenMethods {
-  export type GetByRefreshTokenAndPopulateClient = (refreshToken) => void
-  export type GetByTokenAndPopulateUser = (bearerToken) => void
-  export type GetByRefreshTokenAndPopulateUser = (refreshToken) => any
+  export type GetByRefreshTokenAndPopulateClient = (refreshToken: string) => Bluebird<OAuthTokenInfo>
+  export type GetByTokenAndPopulateUser = (bearerToken: string) => Bluebird<OAuthTokenInstance>
+  export type GetByRefreshTokenAndPopulateUser = (refreshToken: string) => Bluebird<OAuthTokenInstance>
+
+  export type RemoveByUserIdCallback = (err: Error) => void
   export type RemoveByUserId = (userId, callback) => void
 }
 

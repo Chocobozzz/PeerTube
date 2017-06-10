@@ -1,3 +1,5 @@
+import * as Sequelize from 'sequelize'
+
 import { database as db } from '../../initializers/database'
 import { BaseRequestScheduler } from './base-request-scheduler'
 import { logger } from '../../helpers'
@@ -7,6 +9,12 @@ import {
   REQUEST_VIDEO_QADU_ENDPOINT,
   REQUEST_VIDEO_QADU_TYPES
 } from '../../initializers'
+
+export type RequestVideoQaduSchedulerOptions = {
+  type: string
+  videoId: string
+  transaction?: Sequelize.Transaction
+}
 
 class RequestVideoQaduScheduler extends BaseRequestScheduler {
   constructor () {
@@ -27,7 +35,7 @@ class RequestVideoQaduScheduler extends BaseRequestScheduler {
     return db.RequestVideoQadu
   }
 
-  buildRequestObjects (requests) {
+  buildRequestObjects (requests: { [ toPodId: number ]: any }[]) {
     const requestsToMakeGrouped = {}
 
     Object.keys(requests).forEach(toPodId => {
@@ -96,17 +104,12 @@ class RequestVideoQaduScheduler extends BaseRequestScheduler {
     return requestsToMakeGrouped
   }
 
-  // { type, videoId, transaction? }
-  createRequest (options, callback) {
-    const type = options.type
-    const videoId = options.videoId
-    const transaction = options.transaction
-
-    const dbRequestOptions: { transaction?: any } = {}
+  createRequest ({ type, videoId, transaction }: RequestVideoQaduSchedulerOptions, callback: (err: Error) => void) {
+    const dbRequestOptions: Sequelize.BulkCreateOptions = {}
     if (transaction) dbRequestOptions.transaction = transaction
 
     // Send the update to all our friends
-    db.Pod.listAllIds(options.transaction, function (err, podIds) {
+    db.Pod.listAllIds(transaction, function (err, podIds) {
       if (err) return callback(err)
 
       const queries = []

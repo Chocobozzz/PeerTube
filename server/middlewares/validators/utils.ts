@@ -1,9 +1,10 @@
+import 'express-validator'
+import * as express from 'express'
 import { inspect } from 'util'
 
 import { logger } from '../../helpers'
 
-function checkErrors (req, res, next, statusCode?) {
-  if (statusCode === undefined) statusCode = 400
+function checkErrors (req: express.Request, res: express.Response, next: express.NextFunction, statusCode = 400) {
   const errors = req.validationErrors()
 
   if (errors) {

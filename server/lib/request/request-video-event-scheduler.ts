@@ -1,3 +1,5 @@
+import * as Sequelize from 'sequelize'
+
 import { database as db } from '../../initializers/database'
 import { BaseRequestScheduler } from './base-request-scheduler'
 import {
@@ -5,6 +7,13 @@ import {
   REQUESTS_VIDEO_EVENT_LIMIT_PER_POD,
   REQUEST_VIDEO_EVENT_ENDPOINT
 } from '../../initializers'
+
+export type RequestVideoEventSchedulerOptions = {
+  type: string
+  videoId: string
+  count?: number
+  transaction?: Sequelize.Transaction
+}
 
 class RequestVideoEventScheduler extends BaseRequestScheduler {
   constructor () {
@@ -25,7 +34,7 @@ class RequestVideoEventScheduler extends BaseRequestScheduler {
     return db.RequestVideoEvent
   }
 
-  buildRequestObjects (eventsToProcess) {
+  buildRequestObjects (eventsToProcess: { [ toPodId: number ]: any }[]) {
     const requestsToMakeGrouped = {}
 
     /* Example:
@@ -87,16 +96,10 @@ class RequestVideoEventScheduler extends BaseRequestScheduler {
     return requestsToMakeGrouped
   }
 
-  // { type, videoId, count?, transaction? }
-  createRequest (options, callback) {
-    const type = options.type
-    const videoId = options.videoId
-    const transaction = options.transaction
-    let count = options.count
-
+  createRequest ({ type, videoId, count, transaction }: RequestVideoEventSchedulerOptions, callback: (err: Error) => void) {
     if (count === undefined) count = 1
 
-    const dbRequestOptions: { transaction?: any } = {}
+    const dbRequestOptions: Sequelize.CreateOptions = {}
     if (transaction) dbRequestOptions.transaction = transaction
 
     const createQuery = {

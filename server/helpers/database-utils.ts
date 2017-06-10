@@ -1,14 +1,15 @@
+import * as Sequelize from 'sequelize'
 // TODO: import from ES6 when retry typing file will include errorFilter function
 import * as retry from 'async/retry'
 
 import { database as db } from '../initializers/database'
 import { logger } from './logger'
 
-function commitTransaction (t, callback) {
+function commitTransaction (t: Sequelize.Transaction, callback: (err: Error) => void) {
   return t.commit().asCallback(callback)
 }
 
-function rollbackTransaction (err, t, callback) {
+function rollbackTransaction (err: Error, t: Sequelize.Transaction, callback: (err: Error) => void) {
   // Try to rollback transaction
   if (t) {
     // Do not catch err, report the original one
@@ -20,8 +21,8 @@ function rollbackTransaction (err, t, callback) {
   }
 }
 
-// { arguments, errorMessage }
-function retryTransactionWrapper (functionToRetry, options, finalCallback) {
+type RetryTransactionWrapperOptions = { errorMessage: string, arguments?: any[] }
+function retryTransactionWrapper (functionToRetry: Function, options: RetryTransactionWrapperOptions, finalCallback: Function) {
   const args = options.arguments ? options.arguments : []
 
   transactionRetryer(
@@ -39,7 +40,7 @@ function retryTransactionWrapper (functionToRetry, options, finalCallback) {
   )
 }
 
-function transactionRetryer (func, callback) {
+function transactionRetryer (func: Function, callback: (err: Error) => void) {
   retry({
     times: 5,
 
@@ -51,7 +52,7 @@ function transactionRetryer (func, callback) {
   }, func, callback)
 }
 
-function startSerializableTransaction (callback) {
+function startSerializableTransaction (callback: (err: Error, t: Sequelize.Transaction) => void) {
   db.sequelize.transaction(/* { isolationLevel: 'SERIALIZABLE' } */).asCallback(function (err, t) {
     // We force to return only two parameters
     return callback(err, t)

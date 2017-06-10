@@ -31,7 +31,7 @@ import {
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
-function isEachRemoteRequestVideosValid (requests) {
+function isEachRemoteRequestVideosValid (requests: any[]) {
   return isArray(requests) &&
     requests.every(function (request) {
       const video = request.data
@@ -61,7 +61,7 @@ function isEachRemoteRequestVideosValid (requests) {
     })
 }
 
-function isEachRemoteRequestVideosQaduValid (requests) {
+function isEachRemoteRequestVideosQaduValid (requests: any[]) {
   return isArray(requests) &&
     requests.every(function (request) {
       const video = request.data
@@ -70,14 +70,14 @@ function isEachRemoteRequestVideosQaduValid (requests) {
 
       return (
         isVideoRemoteIdValid(video.remoteId) &&
-        (has(video, 'views') === false || isVideoViewsValid) &&
-        (has(video, 'likes') === false || isVideoLikesValid) &&
-        (has(video, 'dislikes') === false || isVideoDislikesValid)
+        (has(video, 'views') === false || isVideoViewsValid(video.views)) &&
+        (has(video, 'likes') === false || isVideoLikesValid(video.likes)) &&
+        (has(video, 'dislikes') === false || isVideoDislikesValid(video.dislikes))
       )
     })
 }
 
-function isEachRemoteRequestVideosEventsValid (requests) {
+function isEachRemoteRequestVideosEventsValid (requests: any[]) {
   return isArray(requests) &&
     requests.every(function (request) {
       const eventData = request.data
@@ -100,9 +100,19 @@ export {
   isEachRemoteRequestVideosEventsValid
 }
 
+declare global {
+  namespace ExpressValidator {
+    export interface Validator {
+      isEachRemoteRequestVideosValid,
+      isEachRemoteRequestVideosQaduValid,
+      isEachRemoteRequestVideosEventsValid
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 
-function isCommonVideoAttributesValid (video) {
+function isCommonVideoAttributesValid (video: any) {
   return isVideoDateValid(video.createdAt) &&
          isVideoDateValid(video.updatedAt) &&
          isVideoCategoryValid(video.category) &&
@@ -121,18 +131,18 @@ function isCommonVideoAttributesValid (video) {
          isVideoDislikesValid(video.dislikes)
 }
 
-function isRequestTypeAddValid (value) {
+function isRequestTypeAddValid (value: string) {
   return value === ENDPOINT_ACTIONS.ADD
 }
 
-function isRequestTypeUpdateValid (value) {
+function isRequestTypeUpdateValid (value: string) {
   return value === ENDPOINT_ACTIONS.UPDATE
 }
 
-function isRequestTypeRemoveValid (value) {
+function isRequestTypeRemoveValid (value: string) {
   return value === ENDPOINT_ACTIONS.REMOVE
 }
 
-function isRequestTypeReportAbuseValid (value) {
+function isRequestTypeReportAbuseValid (value: string) {
   return value === ENDPOINT_ACTIONS.REPORT_ABUSE
 }

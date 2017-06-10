@@ -1,17 +1,35 @@
 import * as Sequelize from 'sequelize'
+import * as Bluebird from 'bluebird'
+
+// Don't use barrel, import just what we need
+import { User as FormatedUser } from '../../shared/models/user.model'
 
 export namespace UserMethods {
-  export type IsPasswordMatch = (password, callback) => void
-  export type ToFormatedJSON = () => void
+  export type IsPasswordMatchCallback = (err: Error, same: boolean) => void
+  export type IsPasswordMatch = (password: string, callback: IsPasswordMatchCallback) => void
+
+  export type ToFormatedJSON = () => FormatedUser
   export type IsAdmin = () => boolean
 
-  export type CountTotal = (callback) => void
-  export type GetByUsername = (username) => any
-  export type List = (callback) => void
-  export type ListForApi = (start, count, sort, callback) => void
-  export type LoadById = (id, callback) => void
-  export type LoadByUsername = (username, callback) => void
-  export type LoadByUsernameOrEmail = (username, email, callback) => void
+  export type CountTotalCallback = (err: Error, total: number) => void
+  export type CountTotal = (callback: CountTotalCallback) => void
+
+  export type GetByUsername = (username: string) => Bluebird<UserInstance>
+
+  export type ListCallback = (err: Error, userInstances: UserInstance[]) => void
+  export type List = (callback: ListCallback) => void
+
+  export type ListForApiCallback = (err: Error, userInstances?: UserInstance[], total?: number) => void
+  export type ListForApi = (start: number, count: number, sort: string, callback: ListForApiCallback) => void
+
+  export type LoadByIdCallback = (err: Error, userInstance: UserInstance) => void
+  export type LoadById = (id: number, callback: LoadByIdCallback) => void
+
+  export type LoadByUsernameCallback = (err: Error, userInstance: UserInstance) => void
+  export type LoadByUsername = (username: string, callback: LoadByUsernameCallback) => void
+
+  export type LoadByUsernameOrEmailCallback = (err: Error, userInstance: UserInstance) => void
+  export type LoadByUsernameOrEmail = (username: string, email: string, callback: LoadByUsernameOrEmailCallback) => void
 }
 
 export interface UserClass {

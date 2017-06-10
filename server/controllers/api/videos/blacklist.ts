@@ -25,7 +25,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addVideoToBlacklist (req, res, next) {
+function addVideoToBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoInstance = res.locals.video
 
   const toCreate = {

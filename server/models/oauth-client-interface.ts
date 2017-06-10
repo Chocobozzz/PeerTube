@@ -1,8 +1,12 @@
 import * as Sequelize from 'sequelize'
 
 export namespace OAuthClientMethods {
-  export type CountTotal = (callback) => void
-  export type LoadFirstClient = (callback) => void
+  export type CountTotalCallback = (err: Error, total: number) => void
+  export type CountTotal = (callback: CountTotalCallback) => void
+
+  export type LoadFirstClientCallback = (err: Error, client: OAuthClientInstance) => void
+  export type LoadFirstClient = (callback: LoadFirstClientCallback) => void
+
   export type GetByIdAndSecret = (clientId, clientSecret) => void
 }
 

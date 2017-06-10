@@ -1,9 +1,13 @@
+import 'express-validator'
+import * as multer from 'multer'
+import * as express from 'express'
+
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
 import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
 import { logger, isVideoDurationValid } from '../../helpers'
 
-function videosAddValidator (req, res, next) {
+function videosAddValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkBody('videofile', 'Should have a valid file').isVideoFile(req.files)
   req.checkBody('name', 'Should have a valid name').isVideoNameValid()
   req.checkBody('category', 'Should have a valid category').isVideoCategoryValid()
@@ -27,13 +31,13 @@ function videosAddValidator (req, res, next) {
         return res.status(400).send('Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')
       }
 
-      videoFile.duration = duration
+      videoFile['duration'] = duration
       next()
     })
   })
 }
 
-function videosUpdateValidator (req, res, next) {
+function videosUpdateValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
   req.checkBody('name', 'Should have a valid name').optional().isVideoNameValid()
   req.checkBody('category', 'Should have a valid category').optional().isVideoCategoryValid()
@@ -61,7 +65,7 @@ function videosUpdateValidator (req, res, next) {
   })
 }
 
-function videosGetValidator (req, res, next) {
+function videosGetValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosGet parameters', { parameters: req.params })
@@ -71,7 +75,7 @@ function videosGetValidator (req, res, next) {
   })
 }
 
-function videosRemoveValidator (req, res, next) {
+function videosRemoveValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
@@ -88,7 +92,7 @@ function videosRemoveValidator (req, res, next) {
   })
 }
 
-function videosSearchValidator (req, res, next) {
+function videosSearchValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   const searchableColumns = SEARCHABLE_COLUMNS.VIDEOS
   req.checkParams('value', 'Should have a valid search').notEmpty()
   req.checkQuery('field', 'Should have correct searchable column').optional().isIn(searchableColumns)
@@ -98,7 +102,7 @@ function videosSearchValidator (req, res, next) {
   checkErrors(req, res, next)
 }
 
-function videoAbuseReportValidator (req, res, next) {
+function videoAbuseReportValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
   req.checkBody('reason', 'Should have a valid reason').isVideoAbuseReasonValid()
 
@@ -109,7 +113,7 @@ function videoAbuseReportValidator (req, res, next) {
   })
 }
 
-function videoRateValidator (req, res, next) {
+function videoRateValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
   req.checkBody('rating', 'Should have a valid rate type').isVideoRatingTypeValid()
 
@@ -120,7 +124,7 @@ function videoRateValidator (req, res, next) {
   })
 }
 
-function videosBlacklistValidator (req, res, next) {
+function videosBlacklistValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
 
   logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
@@ -150,7 +154,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkVideoExists (id, res, callback) {
+function checkVideoExists (id: string, res: express.Response, callback: () => void) {
   db.Video.loadAndPopulateAuthorAndPodAndTags(id, function (err, video) {
     if (err) {
       logger.error('Error in video request validator.', { error: err })
@@ -164,7 +168,7 @@ function checkVideoExists (id, res, callback) {
   })
 }
 
-function checkUserCanDeleteVideo (userId, res, callback) {
+function checkUserCanDeleteVideo (userId: number, res: express.Response, callback: () => void) {
   // Retrieve the user who did the request
   db.User.loadById(userId, function (err, user) {
     if (err) {
@@ -190,7 +194,7 @@ function checkUserCanDeleteVideo (userId, res, callback) {
   })
 }
 
-function checkVideoIsBlacklistable (req, res, callback) {
+function checkVideoIsBlacklistable (req: express.Request, res: express.Response, callback: () => void) {
   if (res.locals.video.isOwned() === true) {
     return res.status(403).send('Cannot blacklist a local video')
   }

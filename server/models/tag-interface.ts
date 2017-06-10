@@ -1,7 +1,8 @@
 import * as Sequelize from 'sequelize'
 
 export namespace TagMethods {
-  export type FindOrCreateTags = (tags, transaction, callback) => void
+  export type FindOrCreateTagsCallback = (err: Error, tagInstances: TagInstance[]) => void
+  export type FindOrCreateTags = (tags: string[], transaction: Sequelize.Transaction, callback: FindOrCreateTagsCallback) => void
 }
 
 export interface TagClass {

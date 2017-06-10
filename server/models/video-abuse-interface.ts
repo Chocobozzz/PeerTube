@@ -1,9 +1,13 @@
 import * as Sequelize from 'sequelize'
 
-export namespace VideoAbuseMethods {
-  export type toFormatedJSON = () => void
+// Don't use barrel, import just what we need
+import { VideoAbuse as FormatedVideoAbuse } from '../../shared/models/video-abuse.model'
 
-  export type ListForApi = (start, count, sort, callback) => void
+export namespace VideoAbuseMethods {
+  export type toFormatedJSON = () => FormatedVideoAbuse
+
+  export type ListForApiCallback = (err: Error, videoAbuseInstances?: VideoAbuseInstance[], total?: number) => void
+  export type ListForApi = (start: number, count: number, sort: string, callback: ListForApiCallback) => void
 }
 
 export interface VideoAbuseClass {
@@ -15,7 +19,7 @@ export interface VideoAbuseAttributes {
   reason: string
 }
 
-export interface VideoAbuseInstance extends Sequelize.Instance<VideoAbuseAttributes> {
+export interface VideoAbuseInstance extends VideoAbuseClass, VideoAbuseAttributes, Sequelize.Instance<VideoAbuseAttributes> {
   id: number
   createdAt: Date
   updatedAt: Date

@@ -76,7 +76,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function ensureRegistrationEnabled (req, res, next) {
+function ensureRegistrationEnabled (req: express.Request, res: express.Response, next: express.NextFunction) {
   const registrationEnabled = CONFIG.SIGNUP.ENABLED
 
   if (registrationEnabled === true) {
@@ -86,7 +86,7 @@ function ensureRegistrationEnabled (req, res, next) {
   return res.status(400).send('User registration is not enabled.')
 }
 
-function createUser (req, res, next) {
+function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = db.User.build({
     username: req.body.username,
     password: req.body.password,
@@ -95,14 +95,14 @@ function createUser (req, res, next) {
     role: USER_ROLES.USER
   })
 
-  user.save().asCallback(function (err, createdUser) {
+  user.save().asCallback(function (err) {
     if (err) return next(err)
 
     return res.type('json').status(204).end()
   })
 }
 
-function getUserInformation (req, res, next) {
+function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
     if (err) return next(err)
 
@@ -110,9 +110,9 @@ function getUserInformation (req, res, next) {
   })
 }
 
-function getUserVideoRating (req, res, next) {
-  const videoId = req.params.videoId
-  const userId = res.locals.oauth.token.User.id
+function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const videoId = '' + req.params.videoId
+  const userId = +res.locals.oauth.token.User.id
 
   db.UserVideoRate.load(userId, videoId, null, function (err, ratingObj) {
     if (err) return next(err)
@@ -126,7 +126,7 @@ function getUserVideoRating (req, res, next) {
   })
 }
 
-function listUsers (req, res, next) {
+function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.User.listForApi(req.query.start, req.query.count, req.query.sort, function (err, usersList, usersTotal) {
     if (err) return next(err)
 
@@ -134,7 +134,7 @@ function listUsers (req, res, next) {
   })
 }
 
-function removeUser (req, res, next) {
+function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   waterfall([
     function loadUser (callback) {
       db.User.loadById(req.params.id, callback)
@@ -153,7 +153,7 @@ function removeUser (req, res, next) {
   })
 }
 
-function updateUser (req, res, next) {
+function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
     if (err) return next(err)
 
@@ -168,6 +168,6 @@ function updateUser (req, res, next) {
   })
 }
 
-function success (req, res, next) {
+function success (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.end()
 }

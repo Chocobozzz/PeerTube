@@ -74,12 +74,13 @@ function associate (models) {
   })
 }
 
-findOrCreateAuthor = function (name, podId, userId, transaction, callback) {
-  if (!callback) {
-    callback = transaction
-    transaction = null
-  }
-
+findOrCreateAuthor = function (
+  name: string,
+  podId: number,
+  userId: number,
+  transaction: Sequelize.Transaction,
+  callback: AuthorMethods.FindOrCreateAuthorCallback
+) {
   const author = {
     name,
     podId,
@@ -91,7 +92,7 @@ findOrCreateAuthor = function (name, podId, userId, transaction, callback) {
     defaults: author
   }
 
-  if (transaction) query.transaction = transaction
+  if (transaction !== null) query.transaction = transaction
 
   Author.findOrCreate(query).asCallback(function (err, result) {
     if (err) return callback(err)

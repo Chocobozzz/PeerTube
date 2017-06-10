@@ -9,105 +9,105 @@ import {
   VIDEO_RATE_TYPES
 } from '../../initializers'
 import { isUserUsernameValid } from './users'
-import { isArray } from './misc'
+import { isArray, exists } from './misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 const VIDEO_EVENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_EVENTS
 
-function isVideoAuthorValid (value) {
+function isVideoAuthorValid (value: string) {
   return isUserUsernameValid(value)
 }
 
-function isVideoDateValid (value) {
-  return validator.isDate(value)
+function isVideoDateValid (value: string) {
+  return exists(value) && validator.isISO8601(value)
 }
 
-function isVideoCategoryValid (value) {
+function isVideoCategoryValid (value: number) {
   return VIDEO_CATEGORIES[value] !== undefined
 }
 
-function isVideoLicenceValid (value) {
+function isVideoLicenceValid (value: number) {
   return VIDEO_LICENCES[value] !== undefined
 }
 
-function isVideoLanguageValid (value) {
+function isVideoLanguageValid (value: number) {
   return value === null || VIDEO_LANGUAGES[value] !== undefined
 }
 
-function isVideoNSFWValid (value) {
-  return validator.isBoolean(value)
+function isVideoNSFWValid (value: any) {
+  return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
 }
 
-function isVideoDescriptionValid (value) {
-  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION)
+function isVideoDescriptionValid (value: string) {
+  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION)
 }
 
-function isVideoDurationValid (value) {
-  return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
+function isVideoDurationValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
-function isVideoExtnameValid (value) {
+function isVideoExtnameValid (value: string) {
   return VIDEOS_CONSTRAINTS_FIELDS.EXTNAME.indexOf(value) !== -1
 }
 
-function isVideoInfoHashValid (value) {
-  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
+function isVideoInfoHashValid (value: string) {
+  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
-function isVideoNameValid (value) {
-  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
+function isVideoNameValid (value: string) {
+  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
 }
 
-function isVideoTagsValid (tags) {
+function isVideoTagsValid (tags: string[]) {
   return isArray(tags) &&
-         validator.isInt(tags.length, VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
+         validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
          tags.every(function (tag) {
-           return validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
+           return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
          })
 }
 
-function isVideoThumbnailValid (value) {
-  return validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL)
+function isVideoThumbnailValid (value: string) {
+  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL)
 }
 
-function isVideoThumbnailDataValid (value) {
-  return validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL_DATA)
+function isVideoThumbnailDataValid (value: string) {
+  return exists(value) && validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL_DATA)
 }
 
-function isVideoRemoteIdValid (value) {
-  return validator.isUUID(value, 4)
+function isVideoRemoteIdValid (value: string) {
+  return exists(value) && validator.isUUID(value, 4)
 }
 
-function isVideoAbuseReasonValid (value) {
-  return validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
+function isVideoAbuseReasonValid (value: string) {
+  return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
 }
 
-function isVideoAbuseReporterUsernameValid (value) {
+function isVideoAbuseReporterUsernameValid (value: string) {
   return isUserUsernameValid(value)
 }
 
-function isVideoViewsValid (value) {
-  return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
+function isVideoViewsValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
 
-function isVideoLikesValid (value) {
-  return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.LIKES)
+function isVideoLikesValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.LIKES)
 }
 
-function isVideoDislikesValid (value) {
-  return validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DISLIKES)
+function isVideoDislikesValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DISLIKES)
 }
 
-function isVideoEventCountValid (value) {
-  return validator.isInt(value + '', VIDEO_EVENTS_CONSTRAINTS_FIELDS.COUNT)
+function isVideoEventCountValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEO_EVENTS_CONSTRAINTS_FIELDS.COUNT)
 }
 
-function isVideoRatingTypeValid (value) {
+function isVideoRatingTypeValid (value: string) {
   return values(VIDEO_RATE_TYPES).indexOf(value) !== -1
 }
 
-function isVideoFile (value, files) {
+function isVideoFile (value: string, files: { [ fieldname: string ]: Express.Multer.File[] }) {
   // Should have files
   if (!files) return false
 
@@ -148,4 +148,34 @@ export {
   isVideoRatingTypeValid,
   isVideoDislikesValid,
   isVideoEventCountValid
+}
+
+declare global {
+  namespace ExpressValidator {
+    export interface Validator {
+      isVideoAuthorValid,
+      isVideoDateValid,
+      isVideoCategoryValid,
+      isVideoLicenceValid,
+      isVideoLanguageValid,
+      isVideoNSFWValid,
+      isVideoDescriptionValid,
+      isVideoDurationValid,
+      isVideoInfoHashValid,
+      isVideoNameValid,
+      isVideoTagsValid,
+      isVideoThumbnailValid,
+      isVideoThumbnailDataValid,
+      isVideoExtnameValid,
+      isVideoRemoteIdValid,
+      isVideoAbuseReasonValid,
+      isVideoAbuseReporterUsernameValid,
+      isVideoFile,
+      isVideoViewsValid,
+      isVideoLikesValid,
+      isVideoRatingTypeValid,
+      isVideoDislikesValid,
+      isVideoEventCountValid
+    }
+  }
 }

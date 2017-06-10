@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as Sequelize from 'sequelize'
 import * as fs from 'fs'
 import * as multer from 'multer'
 import * as path from 'path'
@@ -124,21 +125,21 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function listVideoCategories (req, res, next) {
+function listVideoCategories (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.json(VIDEO_CATEGORIES)
 }
 
-function listVideoLicences (req, res, next) {
+function listVideoLicences (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.json(VIDEO_LICENCES)
 }
 
-function listVideoLanguages (req, res, next) {
+function listVideoLanguages (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.json(VIDEO_LANGUAGES)
 }
 
 // Wrapper to video add that retry the function if there is a database error
 // We need this because we run the transaction in SERIALIZABLE isolation that can fail
-function addVideoRetryWrapper (req, res, next) {
+function addVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res, req.files.videofile[0] ],
     errorMessage: 'Cannot insert the video with many retries.'
@@ -152,7 +153,7 @@ function addVideoRetryWrapper (req, res, next) {
   })
 }
 
-function addVideo (req, res, videoFile, finalCallback) {
+function addVideo (req: express.Request, res: express.Response, videoFile: Express.Multer.File, finalCallback: (err: Error) => void) {
   const videoInfos = req.body
 
   waterfall([
@@ -190,7 +191,7 @@ function addVideo (req, res, videoFile, finalCallback) {
         language: videoInfos.language,
         nsfw: videoInfos.nsfw,
         description: videoInfos.description,
-        duration: videoFile.duration,
+        duration: videoFile['duration'], // duration was added by a previous middleware
         authorId: author.id
       }
 
@@ -254,7 +255,7 @@ function addVideo (req, res, videoFile, finalCallback) {
 
     commitTransaction
 
-  ], function andFinally (err, t) {
+  ], function andFinally (err: Error, t: Sequelize.Transaction) {
     if (err) {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot insert the video.', { error: err })
@@ -266,7 +267,7 @@ function addVideo (req, res, videoFile, finalCallback) {
   })
 }
 
-function updateVideoRetryWrapper (req, res, next) {
+function updateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
     errorMessage: 'Cannot update the video with many retries.'
@@ -280,7 +281,7 @@ function updateVideoRetryWrapper (req, res, next) {
   })
 }
 
-function updateVideo (req, res, finalCallback) {
+function updateVideo (req: express.Request, res: express.Response, finalCallback: (err: Error) => void) {
   const videoInstance = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
   const videoInfosToUpdate = req.body
@@ -341,7 +342,7 @@ function updateVideo (req, res, finalCallback) {
 
     commitTransaction
 
-  ], function andFinally (err, t) {
+  ], function andFinally (err: Error, t: Sequelize.Transaction) {
     if (err) {
       logger.debug('Cannot update the video.', { error: err })
 
@@ -361,7 +362,7 @@ function updateVideo (req, res, finalCallback) {
   })
 }
 
-function getVideo (req, res, next) {
+function getVideo (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoInstance = res.locals.video
 
   if (videoInstance.isOwned()) {
@@ -393,7 +394,7 @@ function getVideo (req, res, next) {
   res.json(videoInstance.toFormatedJSON())
 }
 
-function listVideos (req, res, next) {
+function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.Video.listForApi(req.query.start, req.query.count, req.query.sort, function (err, videosList, videosTotal) {
     if (err) return next(err)
 
@@ -401,7 +402,7 @@ function listVideos (req, res, next) {
   })
 }
 
-function removeVideo (req, res, next) {
+function removeVideo (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoInstance = res.locals.video
 
   videoInstance.destroy().asCallback(function (err) {
@@ -414,7 +415,7 @@ function removeVideo (req, res, next) {
   })
 }
 
-function searchVideos (req, res, next) {
+function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.Video.searchAndPopulateAuthorAndPodAndTags(
     req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort,
     function (err, videosList, videosTotal) {

@@ -7,7 +7,7 @@ const configRouter = express.Router()
 configRouter.get('/', getConfig)
 
 // Get the client credentials for the PeerTube front end
-function getConfig (req, res, next) {
+function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.json({
     signup: {
       enabled: CONFIG.SIGNUP.ENABLED

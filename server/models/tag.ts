@@ -52,15 +52,10 @@ function associate (models) {
   })
 }
 
-findOrCreateTags = function (tags, transaction, callback) {
-  if (!callback) {
-    callback = transaction
-    transaction = null
-  }
-
+findOrCreateTags = function (tags: string[], transaction: Sequelize.Transaction, callback: TagMethods.FindOrCreateTagsCallback) {
   const tagInstances = []
 
-  each(tags, function (tag, callbackEach) {
+  each<string, Error>(tags, function (tag, callbackEach) {
     const query: any = {
       where: {
         name: tag

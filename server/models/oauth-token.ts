@@ -8,7 +8,8 @@ import {
   OAuthTokenInstance,
   OAuthTokenAttributes,
 
-  OAuthTokenMethods
+  OAuthTokenMethods,
+  OAuthTokenInfo
 } from './oauth-token-interface'
 
 let OAuthToken: Sequelize.Model<OAuthTokenInstance, OAuthTokenAttributes>
@@ -90,7 +91,7 @@ function associate (models) {
   })
 }
 
-getByRefreshTokenAndPopulateClient = function (refreshToken) {
+getByRefreshTokenAndPopulateClient = function (refreshToken: string) {
   const query = {
     where: {
       refreshToken: refreshToken
@@ -99,9 +100,9 @@ getByRefreshTokenAndPopulateClient = function (refreshToken) {
   }
 
   return OAuthToken.findOne(query).then(function (token) {
-    if (!token) return token
+    if (!token) return null
 
-    const tokenInfos = {
+    const tokenInfos: OAuthTokenInfo = {
       refreshToken: token.refreshToken,
       refreshTokenExpiresAt: token.refreshTokenExpiresAt,
       client: {
@@ -118,7 +119,7 @@ getByRefreshTokenAndPopulateClient = function (refreshToken) {
   })
 }
 
-getByTokenAndPopulateUser = function (bearerToken) {
+getByTokenAndPopulateUser = function (bearerToken: string) {
   const query = {
     where: {
       accessToken: bearerToken
@@ -133,7 +134,7 @@ getByTokenAndPopulateUser = function (bearerToken) {
   })
 }
 
-getByRefreshTokenAndPopulateUser = function (refreshToken) {
+getByRefreshTokenAndPopulateUser = function (refreshToken: string) {
   const query = {
     where: {
       refreshToken: refreshToken

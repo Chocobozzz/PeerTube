@@ -1,6 +1,9 @@
+import 'express-validator'
+import * as express from 'express'
+
 import { REMOTE_SCHEME } from '../initializers'
 
-function setBodyHostsPort (req, res, next) {
+function setBodyHostsPort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.body.hosts) return next()
 
   for (let i = 0; i < req.body.hosts.length; i++) {
@@ -17,7 +20,7 @@ function setBodyHostsPort (req, res, next) {
   return next()
 }
 
-function setBodyHostPort (req, res, next) {
+function setBodyHostPort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.body.host) return next()
 
   const hostWithPort = getHostWithPort(req.body.host)
@@ -41,7 +44,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getHostWithPort (host) {
+function getHostWithPort (host: string) {
   const splitted = host.split(':')
 
   // The port was not specified

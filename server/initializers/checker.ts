@@ -23,7 +23,7 @@ function checkMissedConfig () {
     'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews',
     'admin.email', 'signup.enabled', 'transcoding.enabled', 'transcoding.threads'
   ]
-  const miss = []
+  const miss: string[] = []
 
   for (const key of required) {
     if (!config.has(key)) {
@@ -35,7 +35,7 @@ function checkMissedConfig () {
 }
 
 // Check the available codecs
-function checkFFmpeg (callback) {
+function checkFFmpeg (callback: (err: Error) => void) {
   const Ffmpeg = require('fluent-ffmpeg')
 
   Ffmpeg.getAvailableCodecs(function (err, codecs) {
@@ -57,7 +57,7 @@ function checkFFmpeg (callback) {
   })
 }
 
-function clientsExist (callback) {
+function clientsExist (callback: (err: Error, clientsExist?: boolean) => void) {
   db.OAuthClient.countTotal(function (err, totalClients) {
     if (err) return callback(err)
 
@@ -65,7 +65,7 @@ function clientsExist (callback) {
   })
 }
 
-function usersExist (callback) {
+function usersExist (callback: (err: Error, usersExist?: boolean) => void) {
   db.User.countTotal(function (err, totalUsers) {
     if (err) return callback(err)
 

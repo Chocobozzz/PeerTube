@@ -48,7 +48,7 @@ export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes) {
 
 // ---------------------------------------------------------------------------
 
-listWithLimit = function (limit, state, callback) {
+listWithLimit = function (limit: number, state: string, callback: JobMethods.ListWithLimitCallback) {
   const query = {
     order: [
       [ 'id', 'ASC' ]

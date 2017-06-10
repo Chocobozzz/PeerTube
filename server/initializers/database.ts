@@ -59,7 +59,7 @@ const sequelize = new Sequelize(dbname, username, password, {
   port: CONFIG.DATABASE.PORT,
   benchmark: isTestInstance(),
 
-  logging: function (message, benchmark) {
+  logging: function (message: string, benchmark: number) {
     let newMessage = message
     if (benchmark !== undefined) {
       newMessage += ' | ' + benchmark + 'ms'
@@ -71,7 +71,7 @@ const sequelize = new Sequelize(dbname, username, password, {
 
 database.sequelize = sequelize
 
-database.init = function (silent, callback) {
+database.init = function (silent: boolean, callback: (err: Error) => void) {
 
   const modelDirectory = join(__dirname, '..', 'models')
   fs.readdir(modelDirectory, function (err, files) {

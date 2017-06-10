@@ -117,7 +117,7 @@ export default function (sequelize, DataTypes) {
   return User
 }
 
-function beforeCreateOrUpdate (user, options) {
+function beforeCreateOrUpdate (user: UserInstance) {
   return new Promise(function (resolve, reject) {
     cryptPassword(user.password, function (err, hash) {
       if (err) return reject(err)
@@ -131,7 +131,7 @@ function beforeCreateOrUpdate (user, options) {
 
 // ------------------------------ METHODS ------------------------------
 
-isPasswordMatch = function (password, callback) {
+isPasswordMatch = function (password: string, callback: UserMethods.IsPasswordMatchCallback) {
   return comparePassword(password, this.password, callback)
 }
 
@@ -164,11 +164,11 @@ function associate (models) {
   })
 }
 
-countTotal = function (callback) {
+countTotal = function (callback: UserMethods.CountTotalCallback) {
   return this.count().asCallback(callback)
 }
 
-getByUsername = function (username) {
+getByUsername = function (username: string) {
   const query = {
     where: {
       username: username
@@ -178,11 +178,11 @@ getByUsername = function (username) {
   return User.findOne(query)
 }
 
-list = function (callback) {
+list = function (callback: UserMethods.ListCallback) {
   return User.find().asCallback(callback)
 }
 
-listForApi = function (start, count, sort, callback) {
+listForApi = function (start: number, count: number, sort: string, callback: UserMethods.ListForApiCallback) {
   const query = {
     offset: start,
     limit: count,
@@ -196,11 +196,11 @@ listForApi = function (start, count, sort, callback) {
   })
 }
 
-loadById = function (id, callback) {
+loadById = function (id: number, callback: UserMethods.LoadByIdCallback) {
   return User.findById(id).asCallback(callback)
 }
 
-loadByUsername = function (username, callback) {
+loadByUsername = function (username: string, callback: UserMethods.LoadByUsernameCallback) {
   const query = {
     where: {
       username: username
@@ -210,7 +210,7 @@ loadByUsername = function (username, callback) {
   return User.findOne(query).asCallback(callback)
 }
 
-loadByUsernameOrEmail = function (username, email, callback) {
+loadByUsernameOrEmail = function (username: string, email: string, callback: UserMethods.LoadByUsernameOrEmailCallback) {
   const query = {
     where: {
       $or: [ { username }, { email } ]

@@ -12,6 +12,7 @@ import {
   STATIC_MAX_AGE
 } from '../initializers'
 import { root } from '../helpers'
+import { VideoInstance } from '../models'
 
 const clientsRouter = express.Router()
 
@@ -25,7 +26,7 @@ const indexPath = join(distPath, 'index.html')
 // Do not use a template engine for a so little thing
 clientsRouter.use('/videos/watch/:id', generateWatchHtmlPage)
 
-clientsRouter.use('/videos/embed', function (req, res, next) {
+clientsRouter.use('/videos/embed', function (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.sendFile(embedPath)
 })
 
@@ -33,7 +34,7 @@ clientsRouter.use('/videos/embed', function (req, res, next) {
 clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
 
 // 404 for static files not found
-clientsRouter.use('/client/*', function (req, res, next) {
+clientsRouter.use('/client/*', function (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.sendStatus(404)
 })
 
@@ -45,7 +46,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addOpenGraphTags (htmlStringPage, video) {
+function addOpenGraphTags (htmlStringPage: string, video: VideoInstance) {
   let basePreviewUrlHttp
 
   if (video.isOwned()) {
@@ -88,8 +89,8 @@ function addOpenGraphTags (htmlStringPage, video) {
   return htmlStringPage.replace(opengraphComment, tagsString)
 }
 
-function generateWatchHtmlPage (req, res, next) {
-  const videoId = req.params.id
+function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const videoId = '' + req.params.id
 
   // Let Angular application handle errors
   if (!validator.isUUID(videoId, 4)) return res.sendFile(indexPath)
@@ -102,7 +103,7 @@ function generateWatchHtmlPage (req, res, next) {
     video: function (callback) {
       db.Video.loadAndPopulateAuthorAndPodAndTags(videoId, callback)
     }
-  }, function (err, result: any) {
+  }, function (err: Error, result: { file: Buffer, video: VideoInstance }) {
     if (err) return next(err)
 
     const html = result.file.toString()

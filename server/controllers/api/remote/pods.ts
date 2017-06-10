@@ -21,7 +21,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function removePods (req, res, next) {
+function removePods (req: express.Request, res: express.Response, next: express.NextFunction) {
   const host = req.body.signature.host
 
   waterfall([

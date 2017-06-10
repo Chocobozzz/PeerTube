@@ -1,12 +1,12 @@
 import * as validator from 'validator'
 
-import { isArray } from './misc'
+import { isArray, exists } from './misc'
 
-function isHostValid (host) {
-  return validator.isURL(host) && host.split('://').length === 1
+function isHostValid (host: string) {
+  return exists(host) && validator.isURL(host) && host.split('://').length === 1
 }
 
-function isEachUniqueHostValid (hosts) {
+function isEachUniqueHostValid (hosts: string[]) {
   return isArray(hosts) &&
     hosts.length !== 0 &&
     hosts.every(function (host) {
@@ -19,4 +19,13 @@ function isEachUniqueHostValid (hosts) {
 export {
   isEachUniqueHostValid,
   isHostValid
+}
+
+declare global {
+  namespace ExpressValidator {
+    export interface Validator {
+      isEachUniqueHostValid
+      isHostValid
+    }
+  }
 }

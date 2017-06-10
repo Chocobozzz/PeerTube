@@ -118,11 +118,11 @@ function associate (models) {
   })
 }
 
-countAll = function (callback) {
+countAll = function (callback: PodMethods.CountAllCallback) {
   return Pod.count().asCallback(callback)
 }
 
-incrementScores = function (ids, value, callback) {
+incrementScores = function (ids: number[], value: number, callback?: PodMethods.IncrementScoresCallback) {
   if (!callback) callback = function () { /* empty */ }
 
   const update = {
@@ -142,35 +142,25 @@ incrementScores = function (ids, value, callback) {
   return Pod.update(update, options).asCallback(callback)
 }
 
-list = function (callback) {
+list = function (callback: PodMethods.ListCallback) {
   return Pod.findAll().asCallback(callback)
 }
 
-listAllIds = function (transaction, callback) {
-  if (!callback) {
-    callback = transaction
-    transaction = null
-  }
-
+listAllIds = function (transaction: Sequelize.Transaction, callback: PodMethods.ListAllIdsCallback) {
   const query: any = {
     attributes: [ 'id' ]
   }
 
-  if (transaction) query.transaction = transaction
+  if (transaction !== null) query.transaction = transaction
 
-  return Pod.findAll(query).asCallback(function (err, pods) {
+  return Pod.findAll(query).asCallback(function (err: Error, pods) {
     if (err) return callback(err)
 
     return callback(null, map(pods, 'id'))
   })
 }
 
-listRandomPodIdsWithRequest = function (limit, tableWithPods, tableWithPodsJoins, callback) {
-  if (!callback) {
-    callback = tableWithPodsJoins
-    tableWithPodsJoins = ''
-  }
-
+listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, tableWithPodsJoins: string, callback: PodMethods.ListRandomPodIdsWithRequestCallback) {
   Pod.count().asCallback(function (err, count) {
     if (err) return callback(err)
 
@@ -204,7 +194,7 @@ listRandomPodIdsWithRequest = function (limit, tableWithPods, tableWithPodsJoins
   })
 }
 
-listBadPods = function (callback) {
+listBadPods = function (callback: PodMethods.ListBadPodsCallback) {
   const query = {
     where: {
       score: { $lte: 0 }
@@ -214,11 +204,11 @@ listBadPods = function (callback) {
   return Pod.findAll(query).asCallback(callback)
 }
 
-load = function (id, callback) {
+load = function (id: number, callback: PodMethods.LoadCallback) {
   return Pod.findById(id).asCallback(callback)
 }
 
-loadByHost = function (host, callback) {
+loadByHost = function (host: string, callback: PodMethods.LoadByHostCallback) {
   const query = {
     where: {
       host: host
@@ -228,11 +218,11 @@ loadByHost = function (host, callback) {
   return Pod.findOne(query).asCallback(callback)
 }
 
-removeAll = function (callback) {
+removeAll = function (callback: PodMethods.RemoveAllCallback) {
   return Pod.destroy().asCallback(callback)
 }
 
-updatePodsScore = function (goodPods, badPods) {
+updatePodsScore = function (goodPods: number[], badPods: number[]) {
   logger.info('Updating %d good pods and %d bad pods scores.', goodPods.length, badPods.length)
 
   if (goodPods.length !== 0) {

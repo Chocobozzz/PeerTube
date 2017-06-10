@@ -9,7 +9,7 @@ export interface VideoTagClass {
 export interface VideoTagAttributes {
 }
 
-export interface VideoTagInstance extends Sequelize.Instance<VideoTagAttributes> {
+export interface VideoTagInstance extends VideoTagClass, VideoTagAttributes, Sequelize.Instance<VideoTagAttributes> {
   id: number
   createdAt: Date
   updatedAt: Date

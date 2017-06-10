@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as Sequelize from 'sequelize'
 import { waterfall } from 'async'
 
 import { database as db } from '../../../initializers/database'
@@ -46,7 +47,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function listVideoAbuses (req, res, next) {
+function listVideoAbuses (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort, function (err, abusesList, abusesTotal) {
     if (err) return next(err)
 
@@ -54,7 +55,7 @@ function listVideoAbuses (req, res, next) {
   })
 }
 
-function reportVideoAbuseRetryWrapper (req, res, next) {
+function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
     errorMessage: 'Cannot report abuse to the video with many retries.'
@@ -67,7 +68,7 @@ function reportVideoAbuseRetryWrapper (req, res, next) {
   })
 }
 
-function reportVideoAbuse (req, res, finalCallback) {
+function reportVideoAbuse (req: express.Request, res: express.Response, finalCallback: (err: Error) => void) {
   const videoInstance = res.locals.video
   const reporterUsername = res.locals.oauth.token.User.username
 
@@ -105,7 +106,7 @@ function reportVideoAbuse (req, res, finalCallback) {
 
     commitTransaction
 
-  ], function andFinally (err, t) {
+  ], function andFinally (err: Error, t: Sequelize.Transaction) {
     if (err) {
       logger.debug('Cannot update the video.', { error: err })
       return rollbackTransaction(err, t, finalCallback)

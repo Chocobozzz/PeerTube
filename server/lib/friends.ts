@@ -1,5 +1,6 @@
 import { each, eachLimit, eachSeries, series, waterfall } from 'async'
 import * as request from 'request'
+import * as Sequelize from 'sequelize'
 
 import { database as db } from '../initializers/database'
 import {
@@ -19,9 +20,18 @@ import {
 } from '../helpers'
 import {
   RequestScheduler,
+  RequestSchedulerOptions,
+
   RequestVideoQaduScheduler,
-  RequestVideoEventScheduler
+  RequestVideoQaduSchedulerOptions,
+
+  RequestVideoEventScheduler,
+  RequestVideoEventSchedulerOptions
 } from './request'
+import { PodInstance, VideoInstance } from '../models'
+
+type QaduParam = { videoId: string, type: string }
+type EventParam = { videoId: string, type: string }
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
@@ -35,7 +45,7 @@ function activateSchedulers () {
   requestVideoEventScheduler.activate()
 }
 
-function addVideoToFriends (videoData, transaction, callback) {
+function addVideoToFriends (videoData: Object, transaction: Sequelize.Transaction, callback: (err: Error) => void) {
   const options = {
     type: ENDPOINT_ACTIONS.ADD,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
@@ -45,7 +55,7 @@ function addVideoToFriends (videoData, transaction, callback) {
   createRequest(options, callback)
 }
 
-function updateVideoToFriends (videoData, transaction, callback) {
+function updateVideoToFriends (videoData: Object, transaction: Sequelize.Transaction, callback: (err: Error) => void) {
   const options = {
     type: ENDPOINT_ACTIONS.UPDATE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
@@ -55,35 +65,37 @@ function updateVideoToFriends (videoData, transaction, callback) {
   createRequest(options, callback)
 }
 
-function removeVideoToFriends (videoParams) {
+function removeVideoToFriends (videoParams: Object) {
   const options = {
     type: ENDPOINT_ACTIONS.REMOVE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
-    data: videoParams
+    data: videoParams,
+    transaction: null
   }
   createRequest(options)
 }
 
-function reportAbuseVideoToFriend (reportData, video) {
+function reportAbuseVideoToFriend (reportData: Object, video: VideoInstance) {
   const options = {
     type: ENDPOINT_ACTIONS.REPORT_ABUSE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
     data: reportData,
-    toIds: [ video.Author.podId ]
+    toIds: [ video.Author.podId ],
+    transaction: null
   }
   createRequest(options)
 }
 
-function quickAndDirtyUpdateVideoToFriends (qaduParams, transaction?, callback?) {
+function quickAndDirtyUpdateVideoToFriends (qaduParam: QaduParam, transaction?: Sequelize.Transaction, callback?: (err: Error) => void) {
   const options = {
-    videoId: qaduParams.videoId,
-    type: qaduParams.type,
+    videoId: qaduParam.videoId,
+    type: qaduParam.type,
     transaction
   }
   return createVideoQaduRequest(options, callback)
 }
 
-function quickAndDirtyUpdatesVideoToFriends (qadusParams, transaction, finalCallback) {
+function quickAndDirtyUpdatesVideoToFriends (qadusParams: QaduParam[], transaction: Sequelize.Transaction, finalCallback: (err: Error) => void) {
   const tasks = []
 
   qadusParams.forEach(function (qaduParams) {
@@ -97,16 +109,16 @@ function quickAndDirtyUpdatesVideoToFriends (qadusParams, transaction, finalCall
   series(tasks, finalCallback)
 }
 
-function addEventToRemoteVideo (eventParams, transaction?, callback?) {
+function addEventToRemoteVideo (eventParam: EventParam, transaction?: Sequelize.Transaction, callback?: (err: Error) => void) {
   const options = {
-    videoId: eventParams.videoId,
-    type: eventParams.type,
+    videoId: eventParam.videoId,
+    type: eventParam.type,
     transaction
   }
   createVideoEventRequest(options, callback)
 }
 
-function addEventsToRemoteVideo (eventsParams, transaction, finalCallback) {
+function addEventsToRemoteVideo (eventsParams: EventParam[], transaction: Sequelize.Transaction, finalCallback: (err: Error) => void) {
   const tasks = []
 
   eventsParams.forEach(function (eventParams) {
@@ -120,7 +132,7 @@ function addEventsToRemoteVideo (eventsParams, transaction, finalCallback) {
   series(tasks, finalCallback)
 }
 
-function hasFriends (callback) {
+function hasFriends (callback: (err: Error, hasFriends?: boolean) => void) {
   db.Pod.countAll(function (err, count) {
     if (err) return callback(err)
 
@@ -129,7 +141,7 @@ function hasFriends (callback) {
   })
 }
 
-function makeFriends (hosts, callback) {
+function makeFriends (hosts: string[], callback: (err: Error) => void) {
   const podsScore = {}
 
   logger.info('Make friends!')
@@ -141,7 +153,7 @@ function makeFriends (hosts, callback) {
 
     eachSeries(hosts, function (host, callbackEach) {
       computeForeignPodsList(host, podsScore, callbackEach)
-    }, function (err) {
+    }, function (err: Error) {
       if (err) return callback(err)
 
       logger.debug('Pods scores computed.', { podsScore: podsScore })
@@ -153,7 +165,7 @@ function makeFriends (hosts, callback) {
   })
 }
 
-function quitFriends (callback) {
+function quitFriends (callback: (err: Error) => void) {
   // Stop pool requests
   requestScheduler.deactivate()
 
@@ -172,7 +184,7 @@ function quitFriends (callback) {
 
     function announceIQuitMyFriends (pods, callbackAsync) {
       const requestParams = {
-        method: 'POST',
+        method: 'POST' as 'POST',
         path: '/api/' + API_VERSION + '/remote/pods/remove',
         sign: true,
         toPod: null
@@ -199,7 +211,7 @@ function quitFriends (callback) {
         pod.destroy().asCallback(callbackEach)
       }, callbackAsync)
     }
-  ], function (err) {
+  ], function (err: Error) {
     // Don't forget to re activate the scheduler, even if there was an error
     requestScheduler.activate()
 
@@ -210,7 +222,7 @@ function quitFriends (callback) {
   })
 }
 
-function sendOwnedVideosToPod (podId) {
+function sendOwnedVideosToPod (podId: number) {
   db.Video.listOwnedAndPopulateAuthorAndTags(function (err, videosList) {
     if (err) {
       logger.error('Cannot get the list of videos we own.')
@@ -229,7 +241,8 @@ function sendOwnedVideosToPod (podId) {
           type: 'add',
           endpoint: REQUEST_ENDPOINTS.VIDEOS,
           data: remoteVideo,
-          toIds: [ podId ]
+          toIds: [ podId ],
+          transaction: null
         }
         createRequest(options)
       })
@@ -272,7 +285,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function computeForeignPodsList (host, podsScore, callback) {
+function computeForeignPodsList (host: string, podsScore: { [ host: string ]: number }, callback: (err: Error) => void) {
   getForeignPodsList(host, function (err, res) {
     if (err) return callback(err)
 
@@ -288,11 +301,11 @@ function computeForeignPodsList (host, podsScore, callback) {
       else podsScore[foreignPodHost] = 1
     })
 
-    return callback()
+    return callback(null)
   })
 }
 
-function computeWinningPods (hosts, podsScore) {
+function computeWinningPods (hosts: string[], podsScore: { [ host: string ]: number }) {
   // Build the list of pods to add
   // Only add a pod if it exists in more than a half base pods
   const podsList = []
@@ -308,7 +321,7 @@ function computeWinningPods (hosts, podsScore) {
   return podsList
 }
 
-function getForeignPodsList (host, callback) {
+function getForeignPodsList (host: string, callback: (err: Error, foreignPodsList?: any) => void) {
   const path = '/api/' + API_VERSION + '/pods'
 
   request.get(REMOTE_SCHEME.HTTP + '://' + host + path, function (err, response, body) {
@@ -323,16 +336,16 @@ function getForeignPodsList (host, callback) {
   })
 }
 
-function makeRequestsToWinningPods (cert, podsList, callback) {
+function makeRequestsToWinningPods (cert: string, podsList: PodInstance[], callback: (err: Error) => void) {
   // Stop pool requests
   requestScheduler.deactivate()
   // Flush pool requests
   requestScheduler.forceSend()
 
-  eachLimit(podsList, REQUESTS_IN_PARALLEL, function (pod: { host: string }, callbackEach) {
+  eachLimit(podsList, REQUESTS_IN_PARALLEL, function (pod: PodInstance, callbackEach) {
     const params = {
       url: REMOTE_SCHEME.HTTP + '://' + pod.host + '/api/' + API_VERSION + '/pods/',
-      method: 'POST',
+      method: 'POST' as 'POST',
       json: {
         host: CONFIG.WEBSERVER.HOST,
         email: CONFIG.ADMIN.EMAIL,
@@ -371,15 +384,22 @@ function makeRequestsToWinningPods (cert, podsList, callback) {
     requestScheduler.activate()
 
     logger.debug('makeRequestsToWinningPods finished.')
-    return callback()
+    return callback(null)
   })
 }
 
 // Wrapper that populate "toIds" argument with all our friends if it is not specified
-// { type, endpoint, data, toIds, transaction }
-function createRequest (options, callback?) {
+type CreateRequestOptions = {
+  type: string
+  endpoint: string
+  data: Object
+  toIds?: number[]
+  transaction: Sequelize.Transaction
+}
+function createRequest (options: CreateRequestOptions, callback?: (err: Error) => void) {
   if (!callback) callback = function () { /* empty */ }
-  if (options.toIds) return requestScheduler.createRequest(options, callback)
+
+  if (options.toIds !== undefined) return requestScheduler.createRequest(options as RequestSchedulerOptions, callback)
 
   // If the "toIds" pods is not specified, we send the request to all our friends
   db.Pod.listAllIds(options.transaction, function (err, podIds) {
@@ -393,18 +413,18 @@ function createRequest (options, callback?) {
   })
 }
 
-function createVideoQaduRequest (options, callback) {
+function createVideoQaduRequest (options: RequestVideoQaduSchedulerOptions, callback: (err: Error) => void) {
   if (!callback) callback = createEmptyCallback()
 
   requestVideoQaduScheduler.createRequest(options, callback)
 }
 
-function createVideoEventRequest (options, callback) {
+function createVideoEventRequest (options: RequestVideoEventSchedulerOptions, callback: (err: Error) => void) {
   if (!callback) callback = createEmptyCallback()
 
   requestVideoEventScheduler.createRequest(options, callback)
 }
 
-function isMe (host) {
+function isMe (host: string) {
   return host === CONFIG.WEBSERVER.HOST
 }

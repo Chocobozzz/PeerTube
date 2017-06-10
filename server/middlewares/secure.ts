@@ -1,10 +1,13 @@
+import 'express-validator'
+import * as express from 'express'
+
 import { database as db } from '../initializers'
 import {
   logger,
   checkSignature as peertubeCryptoCheckSignature
 } from '../helpers'
 
-function checkSignature (req, res, next) {
+function checkSignature (req: express.Request, res: express.Response, next: express.NextFunction) {
   const host = req.body.signature.host
   db.Pod.loadByHost(host, function (err, pod) {
     if (err) {

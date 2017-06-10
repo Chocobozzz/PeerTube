@@ -1,18 +1,39 @@
 import * as Sequelize from 'sequelize'
 
-export namespace PodMethods {
-  export type ToFormatedJSON = () => void
+// Don't use barrel, import just what we need
+import { Pod as FormatedPod } from '../../shared/models/pod.model'
 
+export namespace PodMethods {
+  export type ToFormatedJSON = () => FormatedPod
+
+  export type CountAllCallback = (err: Error, total: number) => void
   export type CountAll = (callback) => void
-  export type IncrementScores = (ids, value, callback) => void
-  export type List = (callback) => void
-  export type ListAllIds = (transaction, callback) => void
-  export type ListRandomPodIdsWithRequest = (limit, tableWithPods, tableWithPodsJoins, callback) => void
-  export type ListBadPods = (callback) => void
-  export type Load = (id, callback) => void
-  export type LoadByHost = (host, callback) => void
-  export type RemoveAll = (callback) => void
-  export type UpdatePodsScore = (goodPods, badPods) => void
+
+  export type IncrementScoresCallback = (err: Error) => void
+  export type IncrementScores = (ids: number[], value: number, callback?: IncrementScoresCallback) => void
+
+  export type ListCallback = (err: Error, podInstances?: PodInstance[]) => void
+  export type List = (callback: ListCallback) => void
+
+  export type ListAllIdsCallback = (err: Error, ids?: number[]) => void
+  export type ListAllIds = (transaction: Sequelize.Transaction, callback: ListAllIdsCallback) => void
+
+  export type ListRandomPodIdsWithRequestCallback = (err: Error, podInstanceIds?: number[]) => void
+  export type ListRandomPodIdsWithRequest = (limit: number, tableWithPods: string, tableWithPodsJoins: string, callback: ListRandomPodIdsWithRequestCallback) => void
+
+  export type ListBadPodsCallback = (err: Error, podInstances?: PodInstance[]) => void
+  export type ListBadPods = (callback: ListBadPodsCallback) => void
+
+  export type LoadCallback = (err: Error, podInstance: PodInstance) => void
+  export type Load = (id: number, callback: LoadCallback) => void
+
+  export type LoadByHostCallback = (err: Error, podInstance: PodInstance) => void
+  export type LoadByHost = (host: string, callback: LoadByHostCallback) => void
+
+  export type RemoveAllCallback = (err: Error) => void
+  export type RemoveAll = (callback: RemoveAllCallback) => void
+
+  export type UpdatePodsScore = (goodPods: number[], badPods: number[]) => void
 }
 
 export interface PodClass {

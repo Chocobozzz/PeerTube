@@ -14,7 +14,7 @@ import {
 } from '../initializers'
 import { logger } from './logger'
 
-function checkSignature (publicKey, data, hexSignature) {
+function checkSignature (publicKey: string, data: string, hexSignature: string) {
   const verify = crypto.createVerify(SIGNATURE_ALGORITHM)
 
   let dataString
@@ -35,10 +35,10 @@ function checkSignature (publicKey, data, hexSignature) {
   return isValid
 }
 
-function sign (data) {
+function sign (data: string|Object) {
   const sign = crypto.createSign(SIGNATURE_ALGORITHM)
 
-  let dataString
+  let dataString: string
   if (typeof data === 'string') {
     dataString = data
   } else {
@@ -60,7 +60,7 @@ function sign (data) {
   return signature
 }
 
-function comparePassword (plainPassword, hashPassword, callback) {
+function comparePassword (plainPassword: string, hashPassword: string, callback: (err: Error, match?: boolean) => void) {
   bcrypt.compare(plainPassword, hashPassword, function (err, isPasswordMatch) {
     if (err) return callback(err)
 
@@ -68,7 +68,7 @@ function comparePassword (plainPassword, hashPassword, callback) {
   })
 }
 
-function createCertsIfNotExist (callback) {
+function createCertsIfNotExist (callback: (err: Error) => void) {
   certsExist(function (err, exist) {
     if (err) return callback(err)
 
@@ -82,7 +82,7 @@ function createCertsIfNotExist (callback) {
   })
 }
 
-function cryptPassword (password, callback) {
+function cryptPassword (password: string, callback: (err: Error, hash?: string) => void) {
   bcrypt.genSalt(BCRYPT_SALT_SIZE, function (err, salt) {
     if (err) return callback(err)
 
@@ -92,12 +92,12 @@ function cryptPassword (password, callback) {
   })
 }
 
-function getMyPrivateCert (callback) {
+function getMyPrivateCert (callback: (err: Error, privateCert: string) => void) {
   const certPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
   fs.readFile(certPath, 'utf8', callback)
 }
 
-function getMyPublicCert (callback) {
+function getMyPublicCert (callback: (err: Error, publicCert: string) => void) {
   const certPath = join(CONFIG.STORAGE.CERT_DIR, PUBLIC_CERT_NAME)
   fs.readFile(certPath, 'utf8', callback)
 }
@@ -116,7 +116,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function certsExist (callback) {
+function certsExist (callback: (err: Error, certsExist: boolean) => void) {
   const certPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
   fs.access(certPath, function (err) {
     // If there is an error the certificates do not exist
@@ -125,14 +125,14 @@ function certsExist (callback) {
   })
 }
 
-function createCerts (callback) {
+function createCerts (callback: (err: Error) => void) {
   certsExist(function (err, exist) {
     if (err) return callback(err)
 
     if (exist === true) {
-      const string = 'Certs already exist.'
-      logger.warning(string)
-      return callback(new Error(string))
+      const errorMessage = 'Certs already exist.'
+      logger.warning(errorMessage)
+      return callback(new Error(errorMessage))
     }
 
     logger.info('Generating a RSA key...')

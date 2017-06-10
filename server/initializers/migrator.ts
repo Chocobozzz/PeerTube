@@ -8,7 +8,7 @@ import { LAST_MIGRATION_VERSION } from './constants'
 import { logger } from '../helpers'
 import { ApplicationInstance } from '../models'
 
-function migrate (finalCallback) {
+function migrate (finalCallback: (err: Error) => void) {
   waterfall([
 
     function checkApplicationTableExists (callback) {
@@ -56,7 +56,7 @@ function migrate (finalCallback) {
     },
 
     function doMigrations (actualVersion, migrationScripts, callback) {
-      eachSeries(migrationScripts, function (entity, callbackEach) {
+      eachSeries(migrationScripts, function (entity: any, callbackEach) {
         executeMigration(actualVersion, entity, callbackEach)
       }, function (err) {
         if (err) return callback(err)
@@ -76,7 +76,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getMigrationScripts (callback) {
+type GetMigrationScriptsCallback = (err: Error, filesToMigrate?: { version: string, script: string }[]) => void
+function getMigrationScripts (callback: GetMigrationScriptsCallback) {
   fs.readdir(path.join(__dirname, 'migrations'), function (err, files) {
     if (err) return callback(err)
 
@@ -95,7 +96,7 @@ function getMigrationScripts (callback) {
   })
 }
 
-function executeMigration (actualVersion, entity, callback) {
+function executeMigration (actualVersion: number, entity: { version: string, script: string }, callback: (err: Error) => void) {
   const versionScript = parseInt(entity.version, 10)
 
   // Do not execute old migration scripts

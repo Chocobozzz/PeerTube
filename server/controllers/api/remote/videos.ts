@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as Sequelize from 'sequelize'
 import { eachSeries, waterfall } from 'async'
 
 import { database as db } from '../../../initializers/database'
@@ -23,6 +24,7 @@ import {
   startSerializableTransaction
 } from '../../../helpers'
 import { quickAndDirtyUpdatesVideoToFriends } from '../../../lib'
+import { PodInstance, VideoInstance } from '../../../models'
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
@@ -64,7 +66,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function remoteVideos (req, res, next) {
+function remoteVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const requests = req.body.data
   const fromPod = res.locals.secure.pod
 
@@ -89,7 +91,7 @@ function remoteVideos (req, res, next) {
   return res.type('json').status(204).end()
 }
 
-function remoteVideosQadu (req, res, next) {
+function remoteVideosQadu (req: express.Request, res: express.Response, next: express.NextFunction) {
   const requests = req.body.data
   const fromPod = res.locals.secure.pod
 
@@ -104,7 +106,7 @@ function remoteVideosQadu (req, res, next) {
   return res.type('json').status(204).end()
 }
 
-function remoteVideosEvents (req, res, next) {
+function remoteVideosEvents (req: express.Request, res: express.Response, next: express.NextFunction) {
   const requests = req.body.data
   const fromPod = res.locals.secure.pod
 
@@ -119,7 +121,7 @@ function remoteVideosEvents (req, res, next) {
   return res.type('json').status(204).end()
 }
 
-function processVideosEventsRetryWrapper (eventData, fromPod, finalCallback) {
+function processVideosEventsRetryWrapper (eventData: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   const options = {
     arguments: [ eventData, fromPod ],
     errorMessage: 'Cannot process videos events with many retries.'
@@ -128,7 +130,7 @@ function processVideosEventsRetryWrapper (eventData, fromPod, finalCallback) {
   retryTransactionWrapper(processVideosEvents, options, finalCallback)
 }
 
-function processVideosEvents (eventData, fromPod, finalCallback) {
+function processVideosEvents (eventData: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   waterfall([
     startSerializableTransaction,
 
@@ -187,7 +189,7 @@ function processVideosEvents (eventData, fromPod, finalCallback) {
 
     commitTransaction
 
-  ], function (err, t) {
+  ], function (err: Error, t: Sequelize.Transaction) {
     if (err) {
       logger.debug('Cannot process a video event.', { error: err })
       return rollbackTransaction(err, t, finalCallback)
@@ -198,7 +200,7 @@ function processVideosEvents (eventData, fromPod, finalCallback) {
   })
 }
 
-function quickAndDirtyUpdateVideoRetryWrapper (videoData, fromPod, finalCallback) {
+function quickAndDirtyUpdateVideoRetryWrapper (videoData: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   const options = {
     arguments: [ videoData, fromPod ],
     errorMessage: 'Cannot update quick and dirty the remote video with many retries.'
@@ -207,7 +209,7 @@ function quickAndDirtyUpdateVideoRetryWrapper (videoData, fromPod, finalCallback
   retryTransactionWrapper(quickAndDirtyUpdateVideo, options, finalCallback)
 }
 
-function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
+function quickAndDirtyUpdateVideo (videoData: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   let videoName
 
   waterfall([
@@ -243,7 +245,7 @@ function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
 
     commitTransaction
 
-  ], function (err, t) {
+  ], function (err: Error, t: Sequelize.Transaction) {
     if (err) {
       logger.debug('Cannot quick and dirty update the remote video.', { error: err })
       return rollbackTransaction(err, t, finalCallback)
@@ -255,7 +257,7 @@ function quickAndDirtyUpdateVideo (videoData, fromPod, finalCallback) {
 }
 
 // Handle retries on fail
-function addRemoteVideoRetryWrapper (videoToCreateData, fromPod, finalCallback) {
+function addRemoteVideoRetryWrapper (videoToCreateData: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   const options = {
     arguments: [ videoToCreateData, fromPod ],
     errorMessage: 'Cannot insert the remote video with many retries.'
@@ -264,7 +266,7 @@ function addRemoteVideoRetryWrapper (videoToCreateData, fromPod, finalCallback) 
   retryTransactionWrapper(addRemoteVideo, options, finalCallback)
 }
 
-function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
+function addRemoteVideo (videoToCreateData: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   logger.debug('Adding remote video "%s".', videoToCreateData.remoteId)
 
   waterfall([
@@ -359,7 +361,7 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
 
     commitTransaction
 
-  ], function (err, t) {
+  ], function (err: Error, t: Sequelize.Transaction) {
     if (err) {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot insert the remote video.', { error: err })
@@ -372,7 +374,7 @@ function addRemoteVideo (videoToCreateData, fromPod, finalCallback) {
 }
 
 // Handle retries on fail
-function updateRemoteVideoRetryWrapper (videoAttributesToUpdate, fromPod, finalCallback) {
+function updateRemoteVideoRetryWrapper (videoAttributesToUpdate: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   const options = {
     arguments: [ videoAttributesToUpdate, fromPod ],
     errorMessage: 'Cannot update the remote video with many retries'
@@ -381,7 +383,7 @@ function updateRemoteVideoRetryWrapper (videoAttributesToUpdate, fromPod, finalC
   retryTransactionWrapper(updateRemoteVideo, options, finalCallback)
 }
 
-function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
+function updateRemoteVideo (videoAttributesToUpdate: any, fromPod: PodInstance, finalCallback: (err: Error) => void) {
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.remoteId)
 
   waterfall([
@@ -435,7 +437,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
 
     commitTransaction
 
-  ], function (err, t) {
+  ], function (err: Error, t: Sequelize.Transaction) {
     if (err) {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot update the remote video.', { error: err })
@@ -447,7 +449,7 @@ function updateRemoteVideo (videoAttributesToUpdate, fromPod, finalCallback) {
   })
 }
 
-function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
+function removeRemoteVideo (videoToRemoveData: any, fromPod: PodInstance, callback: (err: Error) => void) {
   // We need the instance because we have to remove some other stuffs (thumbnail etc)
   fetchRemoteVideo(fromPod.host, videoToRemoveData.remoteId, function (err, video) {
     // Do not return the error, continue the process
@@ -465,7 +467,7 @@ function removeRemoteVideo (videoToRemoveData, fromPod, callback) {
   })
 }
 
-function reportAbuseRemoteVideo (reportData, fromPod, callback) {
+function reportAbuseRemoteVideo (reportData: any, fromPod: PodInstance, callback: (err: Error) => void) {
   fetchOwnedVideo(reportData.videoRemoteId, function (err, video) {
     if (err || !video) {
       if (!err) err = new Error('video not found')
@@ -494,7 +496,7 @@ function reportAbuseRemoteVideo (reportData, fromPod, callback) {
   })
 }
 
-function fetchOwnedVideo (id, callback) {
+function fetchOwnedVideo (id: string, callback: (err: Error, video?: VideoInstance) => void) {
   db.Video.load(id, function (err, video) {
     if (err || !video) {
       if (!err) err = new Error('video not found')
@@ -507,7 +509,7 @@ function fetchOwnedVideo (id, callback) {
   })
 }
 
-function fetchRemoteVideo (podHost, remoteId, callback) {
+function fetchRemoteVideo (podHost: string, remoteId: string, callback: (err: Error, video?: VideoInstance) => void) {
   db.Video.loadByHostAndRemoteId(podHost, remoteId, function (err, video) {
     if (err || !video) {
       if (!err) err = new Error('video not found')

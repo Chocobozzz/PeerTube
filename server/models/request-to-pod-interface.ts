@@ -1,7 +1,8 @@
 import * as Sequelize from 'sequelize'
 
 export namespace RequestToPodMethods {
-  export type RemoveByRequestIdsAndPod = (requestsIds, podId, callback) => void
+  export type RemoveByRequestIdsAndPodCallback = (err: Error) => void
+  export type RemoveByRequestIdsAndPod = (requestsIds: number[], podId: number, callback?: RemoveByRequestIdsAndPodCallback) => void
 }
 
 export interface RequestToPodClass {
@@ -11,7 +12,7 @@ export interface RequestToPodClass {
 export interface RequestToPodAttributes {
 }
 
-export interface RequestToPodInstance extends Sequelize.Instance<RequestToPodAttributes> {
+export interface RequestToPodInstance extends RequestToPodClass, RequestToPodAttributes, Sequelize.Instance<RequestToPodAttributes> {
   id: number
   createdAt: Date
   updatedAt: Date

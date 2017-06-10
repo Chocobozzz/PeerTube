@@ -1,15 +1,16 @@
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 
+import { database as db } from '../initializers/database'
 import { REQUEST_ENDPOINTS } from '../initializers'
-
 import { addMethodsToModel } from './utils'
 import {
   RequestClass,
   RequestInstance,
   RequestAttributes,
 
-  RequestMethods
+  RequestMethods,
+  RequestsGrouped
 } from './request-interface'
 
 let Request: Sequelize.Model<RequestInstance, RequestAttributes>
@@ -59,7 +60,7 @@ function associate (models) {
   })
 }
 
-countTotalRequests = function (callback) {
+countTotalRequests = function (callback: RequestMethods.CountTotalRequestsCallback) {
   // We need to include Pod because there are no cascade delete when a pod is removed
   // So we could count requests that do not have existing pod anymore
   const query = {
@@ -69,10 +70,11 @@ countTotalRequests = function (callback) {
   return Request.count(query).asCallback(callback)
 }
 
-listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
-  const Pod = Request['sequelize'].models.Pod
+listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number, callback: RequestMethods.ListWithLimitAndRandomCallback) {
+  const Pod = db.Pod
+  const tableJoin = ''
 
-  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestToPods', function (err, podIds) {
+  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestToPods', '', function (err, podIds) {
     if (err) return callback(err)
 
     // We don't have friends that have requests
@@ -105,12 +107,12 @@ listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-removeAll = function (callback) {
+removeAll = function (callback: RequestMethods.RemoveAllCallback) {
   // Delete all requests
   Request.truncate({ cascade: true }).asCallback(callback)
 }
 
-removeWithEmptyTo = function (callback) {
+removeWithEmptyTo = function (callback?: RequestMethods.RemoveWithEmptyToCallback) {
   if (!callback) callback = function () { /* empty */ }
 
   const query = {
@@ -128,8 +130,8 @@ removeWithEmptyTo = function (callback) {
 
 // ---------------------------------------------------------------------------
 
-function groupAndTruncateRequests (requests, limitRequestsPerPod) {
-  const requestsGrouped = {}
+function groupAndTruncateRequests (requests: RequestInstance[], limitRequestsPerPod: number) {
+  const requestsGrouped: RequestsGrouped = {}
 
   requests.forEach(function (request) {
     request.Pods.forEach(function (pod) {

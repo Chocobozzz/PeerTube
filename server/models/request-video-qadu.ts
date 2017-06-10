@@ -12,8 +12,8 @@
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 
+import { database as db } from '../initializers/database'
 import { REQUEST_VIDEO_QADU_TYPES } from '../initializers'
-
 import { addMethodsToModel } from './utils'
 import {
   RequestVideoQaduClass,
@@ -83,15 +83,16 @@ function associate (models) {
   })
 }
 
-countTotalRequests = function (callback) {
+countTotalRequests = function (callback: RequestVideoQaduMethods.CountTotalRequestsCallback) {
   const query = {}
   return RequestVideoQadu.count(query).asCallback(callback)
 }
 
-listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
-  const Pod = RequestVideoQadu['sequelize'].models.Pod
+listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number, callback: RequestVideoQaduMethods.ListWithLimitAndRandomCallback) {
+  const Pod = db.Pod
+  const tableJoin = ''
 
-  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestVideoQadus', function (err, podIds) {
+  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestVideoQadus', tableJoin, function (err, podIds) {
     if (err) return callback(err)
 
     // We don't have friends that have requests
@@ -122,7 +123,7 @@ listWithLimitAndRandom = function (limitPods, limitRequestsPerPod, callback) {
   })
 }
 
-removeByRequestIdsAndPod = function (ids, podId, callback) {
+removeByRequestIdsAndPod = function (ids: number[], podId: number, callback: RequestVideoQaduMethods.RemoveByRequestIdsAndPodCallback) {
   const query = {
     where: {
       id: {
@@ -135,14 +136,14 @@ removeByRequestIdsAndPod = function (ids, podId, callback) {
   RequestVideoQadu.destroy(query).asCallback(callback)
 }
 
-removeAll = function (callback) {
+removeAll = function (callback: RequestVideoQaduMethods.RemoveAllCallback) {
   // Delete all requests
   RequestVideoQadu.truncate({ cascade: true }).asCallback(callback)
 }
 
 // ---------------------------------------------------------------------------
 
-function groupAndTruncateRequests (requests, limitRequestsPerPod) {
+function groupAndTruncateRequests (requests: RequestVideoQaduInstance[], limitRequestsPerPod: number) {
   const requestsGrouped = {}
 
   requests.forEach(function (request) {

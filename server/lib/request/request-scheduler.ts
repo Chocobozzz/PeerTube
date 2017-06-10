@@ -1,3 +1,5 @@
+import * as Sequelize from 'sequelize'
+
 import { database as db } from '../../initializers/database'
 import { BaseRequestScheduler } from './base-request-scheduler'
 import { logger } from '../../helpers'
@@ -5,6 +7,14 @@ import {
   REQUESTS_LIMIT_PODS,
   REQUESTS_LIMIT_PER_POD
 } from '../../initializers'
+
+export type RequestSchedulerOptions = {
+  type: string
+  endpoint: string
+  data: Object
+  toIds: number[]
+  transaction: Sequelize.Transaction
+}
 
 class RequestScheduler extends BaseRequestScheduler {
   constructor () {
@@ -25,7 +35,7 @@ class RequestScheduler extends BaseRequestScheduler {
     return db.RequestToPod
   }
 
-  buildRequestObjects (requests) {
+  buildRequestObjects (requests: { [ toPodId: number ]: any }) {
     const requestsToMakeGrouped = {}
 
     Object.keys(requests).forEach(toPodId => {
@@ -51,14 +61,7 @@ class RequestScheduler extends BaseRequestScheduler {
     return requestsToMakeGrouped
   }
 
-  // { type, endpoint, data, toIds, transaction }
-  createRequest (options, callback) {
-    const type = options.type
-    const endpoint = options.endpoint
-    const data = options.data
-    const toIds = options.toIds
-    const transaction = options.transaction
-
+  createRequest ({ type, endpoint, data, toIds, transaction }: RequestSchedulerOptions, callback: (err: Error) => void) {
     // TODO: check the setPods works
     const podIds = []
 
@@ -77,7 +80,7 @@ class RequestScheduler extends BaseRequestScheduler {
       }
     }
 
-    const dbRequestOptions = {
+    const dbRequestOptions: Sequelize.CreateOptions = {
       transaction
     }
 

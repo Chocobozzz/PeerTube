@@ -1,25 +1,26 @@
 import { values } from 'lodash'
 import * as validator from 'validator'
 
+import { exists } from './misc'
 import { CONSTRAINTS_FIELDS, USER_ROLES } from '../../initializers'
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 
-function isUserPasswordValid (value) {
+function isUserPasswordValid (value: string) {
   return validator.isLength(value, USERS_CONSTRAINTS_FIELDS.PASSWORD)
 }
 
-function isUserRoleValid (value) {
+function isUserRoleValid (value: string) {
   return values(USER_ROLES).indexOf(value) !== -1
 }
 
-function isUserUsernameValid (value) {
+function isUserUsernameValid (value: string) {
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
-  return validator.matches(value, new RegExp(`^[a-zA-Z0-9._]{${min},${max}}$`))
+  return exists(value) && validator.matches(value, new RegExp(`^[a-zA-Z0-9._]{${min},${max}}$`))
 }
 
-function isUserDisplayNSFWValid (value) {
-  return validator.isBoolean(value)
+function isUserDisplayNSFWValid (value: any) {
+  return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
 }
 
 // ---------------------------------------------------------------------------
@@ -29,4 +30,15 @@ export {
   isUserRoleValid,
   isUserUsernameValid,
   isUserDisplayNSFWValid
+}
+
+declare global {
+  namespace ExpressValidator {
+    export interface Validator {
+      isUserPasswordValid,
+      isUserRoleValid,
+      isUserUsernameValid,
+      isUserDisplayNSFWValid
+    }
+  }
 }

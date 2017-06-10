@@ -38,7 +38,7 @@ export default function (sequelize, DataTypes) {
 
 // ---------------------------------------------------------------------------
 
-removeByRequestIdsAndPod = function (requestsIds, podId, callback) {
+removeByRequestIdsAndPod = function (requestsIds: number[], podId: number, callback?: RequestToPodMethods.RemoveByRequestIdsAndPodCallback) {
   if (!callback) callback = function () { /* empty */ }
 
   const query = {

@@ -1,8 +1,11 @@
 import * as Sequelize from 'sequelize'
 
 export namespace ApplicationMethods {
-  export type LoadMigrationVersion = (callback: (err: Error, version: number) => void) => void
-  export type UpdateMigrationVersion = (newVersion: number, transaction: any, callback: any) => void
+  export type LoadMigrationVersionCallback = (err: Error, version: number) => void
+  export type LoadMigrationVersion = (callback: LoadMigrationVersionCallback) => void
+
+  export type UpdateMigrationVersionCallback = (err: Error, applicationInstance: ApplicationAttributes) => void
+  export type UpdateMigrationVersion = (newVersion: number, transaction: Sequelize.Transaction, callback: UpdateMigrationVersionCallback) => void
 }
 
 export interface ApplicationClass {

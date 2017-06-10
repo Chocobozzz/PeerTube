@@ -202,7 +202,7 @@ const REQUEST_ENDPOINTS = {
   VIDEOS: 'videos'
 }
 
-const REQUEST_ENDPOINT_ACTIONS = {}
+const REQUEST_ENDPOINT_ACTIONS: { [ id: string ]: any } = {}
 REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
   ADD: 'add',
   UPDATE: 'update',

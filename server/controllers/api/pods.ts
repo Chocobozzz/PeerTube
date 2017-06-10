@@ -21,6 +21,9 @@ import {
   setBodyHostPort,
   setBodyHostsPort
 } from '../../middlewares'
+import {
+  PodInstance
+} from '../../models'
 
 const podsRouter = express.Router()
 
@@ -51,10 +54,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addPods (req, res, next) {
+function addPods (req: express.Request, res: express.Response, next: express.NextFunction) {
   const informations = req.body
 
-  waterfall([
+  waterfall<string, Error>([
     function addPod (callback) {
       const pod = db.Pod.build(informations)
       pod.save().asCallback(function (err, podCreated) {
@@ -63,7 +66,7 @@ function addPods (req, res, next) {
       })
     },
 
-    function sendMyVideos (podCreated, callback) {
+    function sendMyVideos (podCreated: PodInstance, callback) {
       sendOwnedVideosToPod(podCreated.id)
 
       callback(null)
@@ -86,7 +89,7 @@ function addPods (req, res, next) {
   })
 }
 
-function listPods (req, res, next) {
+function listPods (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.Pod.list(function (err, podsList) {
     if (err) return next(err)
 
@@ -94,8 +97,8 @@ function listPods (req, res, next) {
   })
 }
 
-function makeFriendsController (req, res, next) {
-  const hosts = req.body.hosts
+function makeFriendsController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const hosts = req.body.hosts as string[]
 
   makeFriends(hosts, function (err) {
     if (err) {
@@ -109,7 +112,7 @@ function makeFriendsController (req, res, next) {
   res.type('json').status(204).end()
 }
 
-function quitFriendsController (req, res, next) {
+function quitFriendsController (req: express.Request, res: express.Response, next: express.NextFunction) {
   quitFriends(function (err) {
     if (err) return next(err)
 

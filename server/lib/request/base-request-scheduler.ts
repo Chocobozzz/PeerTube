@@ -2,6 +2,7 @@ import * as eachLimit from 'async/eachLimit'
 
 import { database as db } from '../../initializers/database'
 import { logger, makeSecureRequest } from '../../helpers'
+import { PodInstance } from '../../models'
 import {
   API_VERSION,
   REQUESTS_IN_PARALLEL,
@@ -9,11 +10,12 @@ import {
 } from '../../initializers'
 
 abstract class BaseRequestScheduler {
+  requestInterval: number
+  limitPods: number
+  limitPerPod: number
+
   protected lastRequestTimestamp: number
   protected timer: NodeJS.Timer
-  protected requestInterval: number
-  protected limitPods: number
-  protected limitPerPod: number
   protected description: string
 
   constructor () {
@@ -53,24 +55,24 @@ abstract class BaseRequestScheduler {
     return REQUESTS_INTERVAL - (Date.now() - this.lastRequestTimestamp)
   }
 
-  remainingRequestsCount (callback) {
+  remainingRequestsCount (callback: (err: Error, total: number) => void) {
     return this.getRequestModel().countTotalRequests(callback)
   }
 
-  flush (callback) {
+  flush (callback: (err: Error) => void) {
     this.getRequestModel().removeAll(callback)
   }
 
   // ---------------------------------------------------------------------------
 
   // Make a requests to friends of a certain type
-  protected makeRequest (toPod, requestEndpoint, requestsToMake, callback) {
+  protected makeRequest (toPod: PodInstance, requestEndpoint: string, requestsToMake: Object, callback) {
     if (!callback) callback = function () { /* empty */ }
 
     const params = {
       toPod: toPod,
       sign: true, // Prove our identity
-      method: 'POST',
+      method: 'POST' as 'POST',
       path: '/api/' + API_VERSION + '/remote/' + requestEndpoint,
       data: requestsToMake // Requests we need to make
     }

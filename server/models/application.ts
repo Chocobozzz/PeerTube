@@ -35,7 +35,7 @@ export default function defineApplication (sequelize: Sequelize.Sequelize, DataT
 
 // ---------------------------------------------------------------------------
 
-loadMigrationVersion = function (callback: (err: Error, version: number) => void) {
+loadMigrationVersion = function (callback: ApplicationMethods.LoadMigrationVersionCallback) {
   const query = {
     attributes: [ 'migrationVersion' ]
   }
@@ -47,15 +47,10 @@ loadMigrationVersion = function (callback: (err: Error, version: number) => void
   })
 }
 
-updateMigrationVersion = function (newVersion: number, transaction: any, callback: any) {
+updateMigrationVersion = function (newVersion: number, transaction: Sequelize.Transaction, callback: ApplicationMethods.UpdateMigrationVersionCallback) {
   const options: Sequelize.UpdateOptions = {
-    where: {}
-  }
-
-  if (!callback) {
-    transaction = callback
-  } else {
-    options.transaction = transaction
+    where: {},
+    transaction: transaction
   }
 
   return Application.update({ migrationVersion: newVersion }, options).asCallback(callback)

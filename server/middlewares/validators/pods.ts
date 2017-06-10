@@ -1,3 +1,6 @@
+import 'express-validator'
+import * as express from 'express'
+
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
 import { logger } from '../../helpers'
@@ -5,7 +8,7 @@ import { CONFIG } from '../../initializers'
 import { hasFriends } from '../../lib'
 import { isTestInstance } from '../../helpers'
 
-function makeFriendsValidator (req, res, next) {
+function makeFriendsValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   // Force https if the administrator wants to make friends
   if (isTestInstance() === false && CONFIG.WEBSERVER.SCHEME === 'http') {
     return res.status(400).send('Cannot make friends with a non HTTPS webserver.')
@@ -32,7 +35,7 @@ function makeFriendsValidator (req, res, next) {
   })
 }
 
-function podsAddValidator (req, res, next) {
+function podsAddValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkBody('host', 'Should have a host').isHostValid()
   req.checkBody('email', 'Should have an email').isEmail()
   req.checkBody('publicKey', 'Should have a public key').notEmpty()

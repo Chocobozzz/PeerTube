@@ -1,8 +1,11 @@
+import 'express-validator'
+import * as express from 'express'
+
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
 import { logger } from '../../helpers'
 
-function usersAddValidator (req, res, next) {
+function usersAddValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkBody('username', 'Should have a valid username').isUserUsernameValid()
   req.checkBody('password', 'Should have a valid password').isUserPasswordValid()
   req.checkBody('email', 'Should have a valid email').isEmail()
@@ -23,7 +26,7 @@ function usersAddValidator (req, res, next) {
   })
 }
 
-function usersRemoveValidator (req, res, next) {
+function usersRemoveValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isInt()
 
   logger.debug('Checking usersRemove parameters', { parameters: req.params })
@@ -44,7 +47,7 @@ function usersRemoveValidator (req, res, next) {
   })
 }
 
-function usersUpdateValidator (req, res, next) {
+function usersUpdateValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isInt()
   // Add old password verification
   req.checkBody('password', 'Should have a valid password').optional().isUserPasswordValid()
@@ -55,7 +58,7 @@ function usersUpdateValidator (req, res, next) {
   checkErrors(req, res, next)
 }
 
-function usersVideoRatingValidator (req, res, next) {
+function usersVideoRatingValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('videoId', 'Should have a valid video id').notEmpty().isUUID(4)
 
   logger.debug('Checking usersVideoRating parameters', { parameters: req.params })

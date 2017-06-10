@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as Sequelize from 'sequelize'
 import { waterfall } from 'async'
 
 import { database as db } from '../../../initializers/database'
@@ -39,7 +40,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function rateVideoRetryWrapper (req, res, next) {
+function rateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
     errorMessage: 'Cannot update the user video rate.'
@@ -52,7 +53,7 @@ function rateVideoRetryWrapper (req, res, next) {
   })
 }
 
-function rateVideo (req, res, finalCallback) {
+function rateVideo (req: express.Request, res: express.Response, finalCallback: (err: Error) => void) {
   const rateType = req.body.rating
   const videoInstance = res.locals.video
   const userInstance = res.locals.oauth.token.User
@@ -168,7 +169,7 @@ function rateVideo (req, res, finalCallback) {
 
     commitTransaction
 
-  ], function (err, t) {
+  ], function (err: Error, t: Sequelize.Transaction) {
     if (err) {
       // This is just a debug because we will retry the insert
       logger.debug('Cannot add the user video rate.', { error: err })

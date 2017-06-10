@@ -1,3 +1,5 @@
+import 'express-validator'
+import * as express from 'express'
 import * as OAuthServer from 'express-oauth-server'
 
 import { OAUTH_LIFETIME } from '../initializers'
@@ -9,7 +11,7 @@ const oAuthServer = new OAuthServer({
   model: require('../lib/oauth-model')
 })
 
-function authenticate (req, res, next) {
+function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   oAuthServer.authenticate()(req, res, function (err) {
     if (err) {
       logger.error('Cannot authenticate.', { error: err })
@@ -22,7 +24,7 @@ function authenticate (req, res, next) {
   })
 }
 
-function token (req, res, next) {
+function token (req: express.Request, res: express.Response, next: express.NextFunction) {
   return oAuthServer.token()(req, res, next)
 }
 

@@ -1,12 +1,26 @@
 import * as Sequelize from 'sequelize'
 
-import { PodAttributes } from './pod-interface'
+import { PodInstance, PodAttributes } from './pod-interface'
+
+export type RequestsGrouped = {
+  [ podId: number ]: {
+    request: RequestInstance,
+    pod: PodInstance
+  }[]
+}
 
 export namespace RequestMethods {
-  export type CountTotalRequests = (callback) => void
-  export type ListWithLimitAndRandom = (limitPods, limitRequestsPerPod, callback) => void
-  export type RemoveWithEmptyTo = (callback) => void
-  export type RemoveAll = (callback) => void
+  export type CountTotalRequestsCallback = (err: Error, total: number) => void
+  export type CountTotalRequests = (callback: CountTotalRequestsCallback) => void
+
+  export type ListWithLimitAndRandomCallback = (err: Error, requestsGrouped?: RequestsGrouped) => void
+  export type ListWithLimitAndRandom = (limitPods, limitRequestsPerPod, callback: ListWithLimitAndRandomCallback) => void
+
+  export type RemoveWithEmptyToCallback = (err: Error) => void
+  export type RemoveWithEmptyTo = (callback: RemoveWithEmptyToCallback) => void
+
+  export type RemoveAllCallback = (err: Error) => void
+  export type RemoveAll = (callback: RemoveAllCallback) => void
 }
 
 export interface RequestClass {
@@ -21,12 +35,13 @@ export interface RequestAttributes {
   endpoint: string
 }
 
-export interface RequestInstance extends Sequelize.Instance<RequestAttributes> {
+export interface RequestInstance extends RequestClass, RequestAttributes, Sequelize.Instance<RequestAttributes> {
   id: number
   createdAt: Date
   updatedAt: Date
 
   setPods: Sequelize.HasManySetAssociationsMixin<PodAttributes, number>
+  Pods: PodInstance[]
 }
 
 export interface RequestModel extends RequestClass, Sequelize.Model<RequestInstance, RequestAttributes> {}

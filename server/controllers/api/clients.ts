@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { CONFIG } from '../../initializers';
+import { CONFIG } from '../../initializers'
 import { logger } from '../../helpers'
 import { database as db } from '../../initializers/database'
 
@@ -9,7 +9,7 @@ const clientsRouter = express.Router()
 clientsRouter.get('/local', getLocalClient)
 
 // Get the client credentials for the PeerTube front end
-function getLocalClient (req, res, next) {
+function getLocalClient (req: express.Request, res: express.Response, next: express.NextFunction) {
   const serverHostname = CONFIG.WEBSERVER.HOSTNAME
   const serverPort = CONFIG.WEBSERVER.PORT
   let headerHostShouldBe = serverHostname

@@ -1,7 +1,8 @@
 import * as Sequelize from 'sequelize'
 
 export namespace JobMethods {
-  export type ListWithLimit = (limit, state, callback) => void
+  export type ListWithLimitCallback = (err: Error, jobInstances: JobInstance[]) => void
+  export type ListWithLimit = (limit: number, state: string, callback: ListWithLimitCallback) => void
 }
 
 export interface JobClass {

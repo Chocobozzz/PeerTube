@@ -66,15 +66,15 @@ function associate (models) {
   })
 }
 
-countTotal = function (callback) {
+countTotal = function (callback: BlacklistedVideoMethods.CountTotalCallback) {
   return BlacklistedVideo.count().asCallback(callback)
 }
 
-list = function (callback) {
+list = function (callback: BlacklistedVideoMethods.ListCallback) {
   return BlacklistedVideo.findAll().asCallback(callback)
 }
 
-listForApi = function (start, count, sort, callback) {
+listForApi = function (start: number, count: number, sort: string, callback: BlacklistedVideoMethods.ListForApiCallback) {
   const query = {
     offset: start,
     limit: count,
@@ -88,11 +88,11 @@ listForApi = function (start, count, sort, callback) {
   })
 }
 
-loadById = function (id, callback) {
+loadById = function (id: number, callback: BlacklistedVideoMethods.LoadByIdCallback) {
   return BlacklistedVideo.findById(id).asCallback(callback)
 }
 
-loadByVideoId = function (id, callback) {
+loadByVideoId = function (id: string, callback: BlacklistedVideoMethods.LoadByIdCallback) {
   const query = {
     where: {
       videoId: id

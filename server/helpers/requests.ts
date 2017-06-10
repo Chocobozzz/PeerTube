@@ -6,9 +6,15 @@ import {
   REMOTE_SCHEME,
   CONFIG
 } from '../initializers'
+import { PodInstance } from '../models'
 import { sign } from './peertube-crypto'
 
-function makeRetryRequest (params, callback) {
+type MakeRetryRequestParams = {
+  url: string,
+  method: 'GET'|'POST',
+  json: Object
+}
+function makeRetryRequest (params: MakeRetryRequestParams, callback: request.RequestCallback) {
   replay(
     request(params, callback),
     {
@@ -20,14 +26,21 @@ function makeRetryRequest (params, callback) {
   )
 }
 
-function makeSecureRequest (params, callback) {
+type MakeSecureRequestParams = {
+  method: 'GET'|'POST'
+  toPod: PodInstance
+  path: string
+  sign: boolean
+  data?: Object
+}
+function makeSecureRequest (params: MakeSecureRequestParams, callback: request.RequestCallback) {
   const requestParams = {
     url: REMOTE_SCHEME.HTTP + '://' + params.toPod.host + params.path,
     json: {}
   }
 
   if (params.method !== 'POST') {
-    return callback(new Error('Cannot make a secure request with a non POST method.'))
+    return callback(new Error('Cannot make a secure request with a non POST method.'), null, null)
   }
 
   // Add signature if it is specified in the params

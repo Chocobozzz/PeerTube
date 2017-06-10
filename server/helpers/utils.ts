@@ -1,23 +1,20 @@
+import * as express from 'express'
+
 import { pseudoRandomBytes } from 'crypto'
 import { join } from 'path'
 
 import { logger } from './logger'
 
-function badRequest (req, res, next) {
+function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.type('json').status(400).end()
 }
 
-function generateRandomString (size, callback) {
+function generateRandomString (size: number, callback: (err: Error, randomString?: string) => void) {
   pseudoRandomBytes(size, function (err, raw) {
     if (err) return callback(err)
 
     callback(null, raw.toString('hex'))
   })
-}
-
-function cleanForExit (webtorrentProcess) {
-  logger.info('Gracefully exiting.')
-  process.kill(-webtorrentProcess.pid)
 }
 
 function createEmptyCallback () {
@@ -27,10 +24,10 @@ function createEmptyCallback () {
 }
 
 function isTestInstance () {
-  return (process.env.NODE_ENV === 'test')
+  return process.env.NODE_ENV === 'test'
 }
 
-function getFormatedObjects (objects, objectsTotal) {
+function getFormatedObjects (objects: any[], objectsTotal: number) {
   const formatedObjects = []
 
   objects.forEach(function (object) {
@@ -53,7 +50,6 @@ function root () {
 export {
   badRequest,
   createEmptyCallback,
-  cleanForExit,
   generateRandomString,
   isTestInstance,
   getFormatedObjects,
