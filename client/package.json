@@ -14,7 +14,8 @@
   },
   "scripts": {
     "test": "standard && tslint -c ./tslint.json src/**/*.ts",
-    "webpack": "webpack"
+    "webpack": "webpack",
+    "webpack-dev-server": "webpack-dev-server"
   },
   "license": "GPLv3",
   "dependencies": {
@@ -57,8 +58,8 @@
     "json-loader": "^0.5.4",
     "ng-router-loader": "^2.0.0",
     "ng2-file-upload": "^1.1.4-2",
-    "ng2-smart-table": "1.0.3",
-    "ng2-tag-input": "1.0.5",
+    "ng2-smart-table": "1.2.1",
+    "ng2-tag-input": "1.3.3",
     "ngc-webpack": "2.0.0",
     "ngx-bootstrap": "1.6.6",
     "node-sass": "^4.1.1",
@@ -90,8 +91,10 @@
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.0.1",
     "codelyzer": "^3.0.0-beta.4",
+    "ng2-completer": "1.2.2",
     "standard": "^10.0.0",
     "webpack-bundle-analyzer": "^2.8.2",
+    "webpack-dev-server": "^2.4.5",
     "webpack-dll-bundles-plugin": "^1.0.0-beta.5"
   }
 }

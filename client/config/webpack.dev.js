@@ -22,7 +22,8 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
-  HMR: HMR
+  HMR: HMR,
+  API_URL: 'http://localhost:9000'
 })
 
 const DllBundlesPlugin = require('webpack-dll-bundles-plugin').DllBundlesPlugin
@@ -79,9 +80,7 @@ module.exports = function (env) {
       chunkFilename: '[id].chunk.js',
 
       library: 'ac_[name]',
-      libraryTarget: 'var',
-
-      publicPath: '/client/'
+      libraryTarget: 'var'
     },
 
     externals: {
@@ -125,6 +124,7 @@ module.exports = function (env) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
+        'API_URL': JSON.stringify(METADATA.API_URL),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
@@ -234,8 +234,7 @@ module.exports = function (env) {
       historyApiFallback: true,
       watchOptions: {
         ignored: /node_modules/
-      },
-      outputPath: helpers.root('dist')
+      }
     },
 
     /*

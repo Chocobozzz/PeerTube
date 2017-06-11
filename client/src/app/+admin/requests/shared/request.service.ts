@@ -8,7 +8,7 @@ import { AuthHttp, RestExtractor } from '../../../shared';
 
 @Injectable()
 export class RequestService {
-  private static BASE_REQUEST_URL: string = '/api/v1/requests/';
+  private static BASE_REQUEST_URL = API_URL + '/api/v1/requests/';
 
   constructor (
     private authHttp: AuthHttp,

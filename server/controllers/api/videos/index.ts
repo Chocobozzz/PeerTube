@@ -86,7 +86,6 @@ videosRouter.get('/',
 )
 videosRouter.put('/:id',
   authenticate,
-  reqFiles,
   videosUpdateValidator,
   updateVideoRetryWrapper
 )

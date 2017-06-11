@@ -5,7 +5,7 @@ import * as Sequelize from 'sequelize'
 import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first
 import { logger } from '../helpers/logger'
-import { isTestInstance } from '../helpers/utils'
+import { isTestInstance } from '../helpers/core-utils'
 import {
   ApplicationModel,
   AuthorModel,
@@ -80,9 +80,9 @@ database.init = function (silent: boolean, callback: (err: Error) => void) {
     files.filter(function (file) {
       // For all models but not utils.js
       if (
-        file === 'index.js' ||
-        file === 'utils.js' ||
-        file.endsWith('-interface.js') ||
+        file === 'index.js' || file === 'index.ts' ||
+        file === 'utils.js' || file === 'utils.ts' ||
+        file.endsWith('-interface.js') || file.endsWith('-interface.ts') ||
         file.endsWith('.js.map')
       ) return false
 

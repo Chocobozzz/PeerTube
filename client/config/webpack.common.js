@@ -168,6 +168,13 @@ module.exports = function (options) {
             helpers.root('src/index.html'),
             helpers.root('src/standalone/videos/embed.html')
           ]
+        },
+
+        /* File loader for supporting images, for example, in CSS files.
+         */
+        {
+          test: /\.(jpg|png|gif)$/,
+          use: 'file-loader'
         }
 
       ]
@@ -271,7 +278,7 @@ module.exports = function (options) {
        * See: https://github.com/numical/script-ext-html-webpack-plugin
        */
       new ScriptExtHtmlWebpackPlugin({
-        sync: [ /polyfill|vendor/, 'webtorrent.min.js' ],
+        sync: [ /polyfill|vendor/ ],
         defaultAttribute: 'async',
         preload: [/polyfill|vendor|main/],
         prefetch: [/chunk/]

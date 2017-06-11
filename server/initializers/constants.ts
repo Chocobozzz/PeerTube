@@ -2,7 +2,7 @@ import * as config from 'config'
 import { join } from 'path'
 
 // Do not use barrels, remain constants as independent as possible
-import { root, isTestInstance } from '../helpers/utils'
+import { root, isTestInstance } from '../helpers/core-utils'
 
 // ---------------------------------------------------------------------------
 

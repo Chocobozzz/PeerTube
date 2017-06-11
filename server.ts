@@ -1,4 +1,6 @@
-if ([ 'dev', 'test'].indexOf(process.env.NODE_ENV) !== -1) {
+import { isTestInstance } from './server/helpers/core-utils'
+
+if (isTestInstance()) {
   require('source-map-support').install()
 }
 
@@ -11,6 +13,7 @@ import * as http from 'http'
 import * as morgan from 'morgan'
 import * as path from 'path'
 import * as bittorrentTracker from 'bittorrent-tracker'
+import * as cors from 'cors'
 import { Server as WebSocketServer } from 'ws'
 
 const TrackerServer = bittorrentTracker.Server
@@ -55,6 +58,14 @@ import { apiRouter, clientsRouter, staticRouter } from './server/controllers'
 // ----------- Command line -----------
 
 // ----------- App -----------
+
+// Enable cors for develop
+if (isTestInstance()) {
+  app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+  }))
+}
 
 // For the logger
 app.use(morgan('combined', {

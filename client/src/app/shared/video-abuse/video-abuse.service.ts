@@ -11,7 +11,7 @@ import { VideoAbuse } from './video-abuse.model';
 
 @Injectable()
 export class VideoAbuseService {
-  private static BASE_VIDEO_ABUSE_URL = '/api/v1/videos/';
+  private static BASE_VIDEO_ABUSE_URL = API_URL + '/api/v1/videos/';
 
   constructor(
     private authHttp: AuthHttp,

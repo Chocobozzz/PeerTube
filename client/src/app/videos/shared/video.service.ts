@@ -20,7 +20,7 @@ import { Video } from './video.model';
 
 @Injectable()
 export class VideoService {
-  private static BASE_VIDEO_URL = '/api/v1/videos/';
+  private static BASE_VIDEO_URL = API_URL + '/api/v1/videos/';
 
   videoCategories: Array<{ id: number, label: string }> = [];
   videoLicences: Array<{ id: number, label: string }> = [];

@@ -1,5 +1,6 @@
 import { values } from 'lodash'
 import * as validator from 'validator'
+import 'multer'
 
 import {
   CONSTRAINTS_FIELDS,

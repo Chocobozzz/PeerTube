@@ -10,7 +10,7 @@ import { AuthHttp, RestExtractor, RestDataSource, ResultList } from '../../../sh
 
 @Injectable()
 export class FriendService {
-  private static BASE_FRIEND_URL: string = '/api/v1/pods/';
+  private static BASE_FRIEND_URL = API_URL + '/api/v1/pods/';
 
   constructor (
     private authHttp: AuthHttp,

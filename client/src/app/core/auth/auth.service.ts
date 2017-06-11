@@ -16,9 +16,9 @@ import { RestExtractor } from '../../shared/rest';
 
 @Injectable()
 export class AuthService {
-  private static BASE_CLIENT_URL = '/api/v1/clients/local';
-  private static BASE_TOKEN_URL = '/api/v1/users/token';
-  private static BASE_USER_INFORMATIONS_URL = '/api/v1/users/me';
+  private static BASE_CLIENT_URL = API_URL + '/api/v1/clients/local';
+  private static BASE_TOKEN_URL = API_URL + '/api/v1/users/token';
+  private static BASE_USER_INFORMATIONS_URL = API_URL + '/api/v1/users/me';
 
   loginChangedSource: Observable<AuthStatus>;
 

@@ -6,7 +6,7 @@ import { AuthHttp, RestExtractor, RestDataSource, User } from '../../../shared';
 
 @Injectable()
 export class UserService {
-  private static BASE_USERS_URL = '/api/v1/users/';
+  private static BASE_USERS_URL = API_URL + '/api/v1/users/';
 
   constructor(
     private authHttp: AuthHttp,

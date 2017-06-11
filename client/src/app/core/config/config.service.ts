@@ -5,7 +5,7 @@ import { RestExtractor } from '../../shared/rest';
 
 @Injectable()
 export class ConfigService {
-  private static BASE_CONFIG_URL = '/api/v1/config/';
+  private static BASE_CONFIG_URL = API_URL + '/api/v1/config/';
 
   private config: {
     signup: {

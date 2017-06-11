@@ -3,7 +3,7 @@
     [routerLink]="['/videos/watch', video.id]" [attr.title]="video.description"
     class="video-miniature-thumbnail"
   >
-    <img *ngIf="isVideoNSFWForThisUser() === false" [attr.src]="video.thumbnailPath" alt="video thumbnail" />
+    <img *ngIf="isVideoNSFWForThisUser() === false" [attr.src]="video.thumbnailUrl" alt="video thumbnail" />
     <div *ngIf="isVideoNSFWForThisUser()" class="thumbnail-nsfw">
       NSFW
     </div>

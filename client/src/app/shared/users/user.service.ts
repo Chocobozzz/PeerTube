@@ -9,7 +9,7 @@ import { RestExtractor } from '../rest';
 
 @Injectable()
 export class UserService {
-  static BASE_USERS_URL = '/api/v1/users/';
+  static BASE_USERS_URL = API_URL + '/api/v1/users/';
 
   constructor(
     private http: Http,

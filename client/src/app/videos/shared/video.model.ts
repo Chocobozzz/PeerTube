@@ -21,6 +21,7 @@ export class Video implements VideoServerModel {
   podHost: string;
   tags: string[];
   thumbnailPath: string;
+  thumbnailUrl: string;
   views: number;
   likes: number;
   dislikes: number;
@@ -80,6 +81,7 @@ export class Video implements VideoServerModel {
     this.podHost = hash.podHost;
     this.tags = hash.tags;
     this.thumbnailPath = hash.thumbnailPath;
+    this.thumbnailUrl = API_URL + hash.thumbnailPath;
     this.views = hash.views;
     this.likes = hash.likes;
     this.dislikes = hash.dislikes;

@@ -23,10 +23,6 @@ function createEmptyCallback () {
   }
 }
 
-function isTestInstance () {
-  return process.env.NODE_ENV === 'test'
-}
-
 function getFormatedObjects (objects: any[], objectsTotal: number) {
   const formatedObjects = []
 
@@ -40,18 +36,11 @@ function getFormatedObjects (objects: any[], objectsTotal: number) {
   }
 }
 
-function root () {
-  // We are in /dist/helpers/utils.js
-  return join(__dirname, '..', '..', '..')
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   badRequest,
   createEmptyCallback,
   generateRandomString,
-  isTestInstance,
-  getFormatedObjects,
-  root
+  getFormatedObjects
 }

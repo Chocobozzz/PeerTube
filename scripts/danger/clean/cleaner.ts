@@ -1,16 +1,16 @@
-const eachSeries = require('async/eachSeries')
-const rimraf = require('rimraf')
+import * as eachSeries from 'async/eachSeries'
+import * as rimraf from 'rimraf'
 
-const constants = require('../../../server/initializers/constants')
-const db = require('../../../server/initializers/database')
+import { CONFIG } from '../../../server/initializers/constants'
+import { database as db } from '../../../server/initializers/database'
 
 db.init(true, function () {
   db.sequelize.drop().asCallback(function (err) {
     if (err) throw err
 
-    console.info('Tables of %s deleted.', db.sequelize.config.database)
+    console.info('Tables of %s deleted.', CONFIG.DATABASE.DBNAME)
 
-    const STORAGE = constants.CONFIG.STORAGE
+    const STORAGE = CONFIG.STORAGE
     eachSeries(Object.keys(STORAGE), function (storage, callbackEach) {
       const storageDir = STORAGE[storage]
 

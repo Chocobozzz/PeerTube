@@ -94,7 +94,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
       queueLimit: 1,
-      url: '/api/v1/videos',
+      url: API_URL + '/api/v1/videos',
       removeAfterUpload: true
     });
 
