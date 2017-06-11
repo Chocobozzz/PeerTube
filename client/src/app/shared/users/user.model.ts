@@ -1,6 +1,9 @@
-export class User {
+import { User as UserServerModel } from '../../../../../shared';
+
+export class User implements UserServerModel {
   id: number;
   username: string;
+  email: string;
   role: string;
   displayNSFW: boolean;
   createdAt: Date;
@@ -8,12 +11,14 @@ export class User {
   constructor(hash: {
     id: number,
     username: string,
+    email: string,
     role: string,
     displayNSFW?: boolean,
     createdAt?: Date,
   }) {
     this.id = hash.id;
     this.username = hash.username;
+    this.email = hash.email;
     this.role = hash.role;
     this.displayNSFW = hash.displayNSFW;
 

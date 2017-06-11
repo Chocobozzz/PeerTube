@@ -1,17 +1,19 @@
+import { Video as VideoServerModel } from '../../../../../shared';
 import { User } from '../../shared';
 
-export class Video {
+export class Video implements VideoServerModel {
   author: string;
   by: string;
   createdAt: Date;
   categoryLabel: string;
-  category: string;
+  category: number;
   licenceLabel: string;
-  licence: string;
+  licence: number;
   languageLabel: string;
-  language: string;
+  language: number;
   description: string;
-  duration: string;
+  duration: number;
+  durationLabel: string;
   id: string;
   isLocal: boolean;
   magnetUri: string;
@@ -41,11 +43,11 @@ export class Video {
     author: string,
     createdAt: string,
     categoryLabel: string,
-    category: string,
+    category: number,
     licenceLabel: string,
-    licence: string,
+    licence: number,
     languageLabel: string;
-    language: string;
+    language: number;
     description: string,
     duration: number;
     id: string,
@@ -69,7 +71,8 @@ export class Video {
     this.languageLabel = hash.languageLabel;
     this.language = hash.language;
     this.description = hash.description;
-    this.duration = Video.createDurationString(hash.duration);
+    this.duration = hash.duration;
+    this.durationLabel = Video.createDurationString(hash.duration);
     this.id = hash.id;
     this.isLocal = hash.isLocal;
     this.magnetUri = hash.magnetUri;

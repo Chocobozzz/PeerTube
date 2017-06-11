@@ -8,7 +8,9 @@ import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
 import { logger, isVideoDurationValid } from '../../helpers'
 
 function videosAddValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkBody('videofile', 'Should have a valid file').isVideoFile(req.files)
+  // FIXME: Don't write an error message, it seems there is a bug with express-validator
+  // 'Should have a valid file'
+  req.checkBody('videofile').isVideoFile(req.files)
   req.checkBody('name', 'Should have a valid name').isVideoNameValid()
   req.checkBody('category', 'Should have a valid category').isVideoCategoryValid()
   req.checkBody('licence', 'Should have a valid licence').isVideoLicenceValid()

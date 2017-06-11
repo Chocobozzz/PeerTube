@@ -135,7 +135,7 @@ isPasswordMatch = function (password: string, callback: UserMethods.IsPasswordMa
   return comparePassword(password, this.password, callback)
 }
 
-toFormatedJSON = function () {
+toFormatedJSON = function (this: UserInstance) {
   return {
     id: this.id,
     username: this.username,

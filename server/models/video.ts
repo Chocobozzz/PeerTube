@@ -447,7 +447,7 @@ isOwned = function () {
   return this.remoteId === null
 }
 
-toFormatedJSON = function () {
+toFormatedJSON = function (this: VideoInstance) {
   let podHost
 
   if (this.Author.Pod) {
@@ -488,7 +488,7 @@ toFormatedJSON = function () {
     views: this.views,
     likes: this.likes,
     dislikes: this.dislikes,
-    tags: map(this.Tags, 'name'),
+    tags: map<VideoTagInstance, string>(this.Tags, 'name'),
     thumbnailPath: join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName()),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt

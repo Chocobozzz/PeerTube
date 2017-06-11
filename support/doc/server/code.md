@@ -1,11 +1,11 @@
 # Server code documentation
 
-The server is a web server developed with [NodeJS](https://nodejs.org)/[Express](http://expressjs.com).
+The server is a web server developed with [TypeScript](https://www.typescriptlang.org/)/[Express](http://expressjs.com).
 
 
 ## Technologies
 
-  * [NodeJS](https://nodejs.org) -> Language
+  * [TypeScript](https://www.typescriptlang.org/) -> Language
   * [PostgreSQL](https://www.postgresql.org/) -> Database
   * [Express](http://expressjs.com) -> Web server framework
   * [Sequelize](http://docs.sequelizejs.com/en/v3/) -> SQL ORM
@@ -15,11 +15,11 @@ The server is a web server developed with [NodeJS](https://nodejs.org)/[Express]
 
 ## Files
 
-The server main file is [server.js](https://github.com/Chocobozzz/PeerTube/blob/master/server.js).
+The server main file is [server.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server.ts).
 The server modules description are in the [package.json](https://github.com/Chocobozzz/PeerTube/blob/master/package.json) at the project root.
 All other server files are in the [server](https://github.com/Chocobozzz/PeerTube/tree/master/server) directory:
 
-    server.js -> app initilization, main routes configuration (static routes...)
+    server.ts -> app initilization, main routes configuration (static routes...)
     config    -> server YAML configurations (for tests, production...)
     scripts   -> Scripts files for npm run
     server
@@ -42,9 +42,9 @@ Uses [JavaScript Standard Style](http://standardjs.com/).
   * Install [the dependencies](https://github.com/Chocobozzz/PeerTube#dependencies)
   * Run `npm install` at the root directory to install all the dependencies
   * Run PostgreSQL and create the database `peertube_dev`.
-  * Run `npm run dev` to compile the client and automatically run the server. If the client files are already compiled you can simply run `NODE_ENV=test node server`
+  * Run `npm run dev` to compile the client and automatically run the server. If the client files are already compiled you can simply run `NODE_ENV=test node dist/server`
 
-The `NODE_ENV=test` is set to speed up communications between pods (see [constants.js](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.js)).
+The `NODE_ENV=test` is set to speed up communications between pods (see [constants.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.ts)).
 
 `npm run help` gives you all available commands.
 
@@ -68,5 +68,5 @@ If a user wants to watch the video, the tracker will indicate all other users th
 
 ## Newcomers
 
-The server entrypoint is [server.js](https://github.com/Chocobozzz/PeerTube/blob/master/server.js). You can begin to look at this file.
+The server entrypoint is [server.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server.ts). You can begin to look at this file.
 Then you can try to understand the [controllers](https://github.com/Chocobozzz/PeerTube/tree/master/server/controllers): they are the entrypoint of each API request.

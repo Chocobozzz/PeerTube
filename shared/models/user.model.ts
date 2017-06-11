@@ -3,6 +3,6 @@ export interface User {
   username: string
   email: string
   displayNSFW: boolean
-  role: string[]
+  role: string
   createdAt: Date
 }
