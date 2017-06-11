@@ -313,7 +313,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.setTag('og:image', this.video.thumbnailPath);
 
-    this.metaService.setTag('og:duration', this.video.duration);
+    this.metaService.setTag('og:duration', this.video.duration.toString());
 
     this.metaService.setTag('og:site_name', 'PeerTube');
 

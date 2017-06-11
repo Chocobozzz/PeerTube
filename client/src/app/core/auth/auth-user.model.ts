@@ -5,6 +5,7 @@ export class AuthUser extends User {
   private static KEYS = {
     ID: 'id',
     ROLE: 'role',
+    EMAIL: 'email',
     USERNAME: 'username',
     DISPLAY_NSFW: 'display_nsfw'
   };
@@ -18,6 +19,7 @@ export class AuthUser extends User {
         {
           id: parseInt(localStorage.getItem(this.KEYS.ID)),
           username: localStorage.getItem(this.KEYS.USERNAME),
+          email: localStorage.getItem(this.KEYS.EMAIL),
           role: localStorage.getItem(this.KEYS.ROLE),
           displayNSFW: localStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true'
         },
@@ -40,6 +42,7 @@ export class AuthUser extends User {
     id: number,
     username: string,
     role: string,
+    email: string,
     displayNSFW: boolean
   }, hashTokens: any) {
     super(userHash);

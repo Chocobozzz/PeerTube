@@ -218,6 +218,7 @@ export class AuthService {
     const id = obj.id;
     const username = obj.username;
     const role = obj.role;
+    const email = obj.email;
     const displayNSFW = obj.displayNSFW;
     const hashTokens = {
       access_token: obj.access_token,
@@ -225,7 +226,7 @@ export class AuthService {
       refresh_token: obj.refresh_token
     };
 
-    this.user = new AuthUser({ id, username, role, displayNSFW }, hashTokens);
+    this.user = new AuthUser({ id, username, role, displayNSFW, email }, hashTokens);
     this.user.save();
 
     this.setStatus(AuthStatus.LoggedIn);

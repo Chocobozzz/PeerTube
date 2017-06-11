@@ -183,9 +183,15 @@ The following commands will upgrade the source (according to your current branch
 
 ### Development
 
-In this mode, the server will run requests between pods more quickly, the videos duration are limited to a few seconds and the client files are automatically compiled when we modify them:
+In this mode, the server will run requests between pods more quickly, the videos duration are limited to a few seconds.
 
-    $ npm run dev
+To develop on the server side (server files are automatically compiled when we modify them and the server restarts automatically too):
+
+    $ npm run dev:server
+
+To develop on the client side (client files are automatically compiled when we modify them):
+
+    $ npm run dev:client
 
 **Username**: *root* <br/>
 **Password**: *test*
