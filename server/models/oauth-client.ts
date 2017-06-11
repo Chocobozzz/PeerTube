@@ -14,8 +14,8 @@ let countTotal: OAuthClientMethods.CountTotal
 let loadFirstClient: OAuthClientMethods.LoadFirstClient
 let getByIdAndSecret: OAuthClientMethods.GetByIdAndSecret
 
-export default function (sequelize, DataTypes) {
-  OAuthClient = sequelize.define('OAuthClient',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  OAuthClient = sequelize.define<OAuthClientInstance, OAuthClientAttributes>('OAuthClient',
     {
       clientId: {
         type: DataTypes.STRING,

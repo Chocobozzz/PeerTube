@@ -11,8 +11,8 @@ import {
 
 let VideoTag: Sequelize.Model<VideoTagInstance, VideoTagAttributes>
 
-export default function (sequelize, DataTypes) {
-  VideoTag = sequelize.define('VideoTag', {}, {
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  VideoTag = sequelize.define<VideoTagInstance, VideoTagAttributes>('VideoTag', {}, {
     indexes: [
       {
         fields: [ 'videoId' ]

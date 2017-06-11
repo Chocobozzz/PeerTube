@@ -19,8 +19,8 @@ let listWithLimitAndRandom: RequestMethods.ListWithLimitAndRandom
 let removeWithEmptyTo: RequestMethods.RemoveWithEmptyTo
 let removeAll: RequestMethods.RemoveAll
 
-export default function (sequelize, DataTypes) {
-  Request = sequelize.define('Request',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  Request = sequelize.define<RequestInstance, RequestAttributes>('Request',
     {
       request: {
         type: DataTypes.JSON,

@@ -24,8 +24,8 @@ let listWithLimitAndRandom: RequestVideoEventMethods.ListWithLimitAndRandom
 let removeByRequestIdsAndPod: RequestVideoEventMethods.RemoveByRequestIdsAndPod
 let removeAll: RequestVideoEventMethods.RemoveAll
 
-export default function (sequelize, DataTypes) {
-  RequestVideoEvent = sequelize.define('RequestVideoEvent',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  RequestVideoEvent = sequelize.define<RequestVideoEventInstance, RequestVideoEventAttributes>('RequestVideoEvent',
     {
       type: {
         type: DataTypes.ENUM(values(REQUEST_VIDEO_EVENT_TYPES)),

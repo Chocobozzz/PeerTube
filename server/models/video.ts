@@ -68,8 +68,8 @@ let loadAndPopulateAuthor: VideoMethods.LoadAndPopulateAuthor
 let loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
 let searchAndPopulateAuthorAndPodAndTags: VideoMethods.SearchAndPopulateAuthorAndPodAndTags
 
-export default function (sequelize, DataTypes) {
-  Video = sequelize.define('Video',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  Video = sequelize.define<VideoInstance, VideoAttributes>('Video',
     {
       id: {
         type: DataTypes.UUID,

@@ -19,8 +19,8 @@ import {
 let UserVideoRate: Sequelize.Model<UserVideoRateInstance, UserVideoRateAttributes>
 let load: UserVideoRateMethods.Load
 
-export default function (sequelize, DataTypes) {
-  UserVideoRate = sequelize.define('UserVideoRate',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  UserVideoRate = sequelize.define<UserVideoRateInstance, UserVideoRateAttributes>('UserVideoRate',
     {
       type: {
         type: DataTypes.ENUM(values(VIDEO_RATE_TYPES)),

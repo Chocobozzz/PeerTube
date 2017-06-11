@@ -32,8 +32,8 @@ let loadById: UserMethods.LoadById
 let loadByUsername: UserMethods.LoadByUsername
 let loadByUsernameOrEmail: UserMethods.LoadByUsernameOrEmail
 
-export default function (sequelize, DataTypes) {
-  User = sequelize.define('User',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  User = sequelize.define<UserInstance, UserAttributes>('User',
     {
       password: {
         type: DataTypes.STRING,

@@ -29,8 +29,8 @@ let listWithLimitAndRandom: RequestVideoQaduMethods.ListWithLimitAndRandom
 let removeByRequestIdsAndPod: RequestVideoQaduMethods.RemoveByRequestIdsAndPod
 let removeAll: RequestVideoQaduMethods.RemoveAll
 
-export default function (sequelize, DataTypes) {
-  RequestVideoQadu = sequelize.define('RequestVideoQadu',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  RequestVideoQadu = sequelize.define<RequestVideoQaduInstance, RequestVideoQaduAttributes>('RequestVideoQadu',
     {
       type: {
         type: DataTypes.ENUM(values(REQUEST_VIDEO_QADU_TYPES)),

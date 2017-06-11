@@ -15,7 +15,7 @@ import {
 let Job: Sequelize.Model<JobInstance, JobAttributes>
 let listWithLimit: JobMethods.ListWithLimit
 
-export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes) {
+export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Job = sequelize.define<JobInstance, JobAttributes>('Job',
     {
       state: {

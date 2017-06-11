@@ -17,8 +17,8 @@ let listForApi: BlacklistedVideoMethods.ListForApi
 let loadById: BlacklistedVideoMethods.LoadById
 let loadByVideoId: BlacklistedVideoMethods.LoadByVideoId
 
-export default function (sequelize, DataTypes) {
-  BlacklistedVideo = sequelize.define('BlacklistedVideo',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  BlacklistedVideo = sequelize.define<BlacklistedVideoInstance, BlacklistedVideoAttributes>('BlacklistedVideo',
     {},
     {
       indexes: [

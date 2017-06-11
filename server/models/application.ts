@@ -13,7 +13,7 @@ let Application: Sequelize.Model<ApplicationInstance, ApplicationAttributes>
 let loadMigrationVersion: ApplicationMethods.LoadMigrationVersion
 let updateMigrationVersion: ApplicationMethods.UpdateMigrationVersion
 
-export default function defineApplication (sequelize: Sequelize.Sequelize, DataTypes) {
+export default function defineApplication (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Application = sequelize.define<ApplicationInstance, ApplicationAttributes>('Application',
     {
       migrationVersion: {

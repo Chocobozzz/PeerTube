@@ -27,8 +27,8 @@ let loadByHost: PodMethods.LoadByHost
 let removeAll: PodMethods.RemoveAll
 let updatePodsScore: PodMethods.UpdatePodsScore
 
-export default function (sequelize, DataTypes) {
-  Pod = sequelize.define('Pod',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  Pod = sequelize.define<PodInstance, PodAttributes>('Pod',
     {
       host: {
         type: DataTypes.STRING,

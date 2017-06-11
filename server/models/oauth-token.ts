@@ -18,8 +18,8 @@ let getByTokenAndPopulateUser: OAuthTokenMethods.GetByTokenAndPopulateUser
 let getByRefreshTokenAndPopulateUser: OAuthTokenMethods.GetByRefreshTokenAndPopulateUser
 let removeByUserId: OAuthTokenMethods.RemoveByUserId
 
-export default function (sequelize, DataTypes) {
-  OAuthToken = sequelize.define('OAuthToken',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  OAuthToken = sequelize.define<OAuthTokenInstance, OAuthTokenAttributes>('OAuthToken',
     {
       accessToken: {
         type: DataTypes.STRING,

@@ -12,8 +12,8 @@ import {
 let RequestToPod: Sequelize.Model<RequestToPodInstance, RequestToPodAttributes>
 let removeByRequestIdsAndPod: RequestToPodMethods.RemoveByRequestIdsAndPod
 
-export default function (sequelize, DataTypes) {
-  RequestToPod = sequelize.define('RequestToPod', {}, {
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  RequestToPod = sequelize.define<RequestToPodInstance, RequestToPodAttributes>('RequestToPod', {}, {
     indexes: [
       {
         fields: [ 'requestId' ]

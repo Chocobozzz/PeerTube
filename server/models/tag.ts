@@ -13,8 +13,8 @@ import {
 let Tag: Sequelize.Model<TagInstance, TagAttributes>
 let findOrCreateTags: TagMethods.FindOrCreateTags
 
-export default function (sequelize, DataTypes) {
-  Tag = sequelize.define('Tag',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  Tag = sequelize.define<TagInstance, TagAttributes>('Tag',
     {
       name: {
         type: DataTypes.STRING,

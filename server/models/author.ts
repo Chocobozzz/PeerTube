@@ -14,7 +14,7 @@ import {
 let Author: Sequelize.Model<AuthorInstance, AuthorAttributes>
 let findOrCreateAuthor: AuthorMethods.FindOrCreateAuthor
 
-export default function defineAuthor (sequelize: Sequelize.Sequelize, DataTypes) {
+export default function defineAuthor (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Author = sequelize.define<AuthorInstance, AuthorAttributes>('Author',
     {
       name: {

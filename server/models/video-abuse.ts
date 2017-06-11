@@ -15,8 +15,8 @@ import {
 let VideoAbuse: Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes>
 let listForApi: VideoAbuseMethods.ListForApi
 
-export default function (sequelize, DataTypes) {
-  VideoAbuse = sequelize.define('VideoAbuse',
+export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
+  VideoAbuse = sequelize.define<VideoAbuseInstance, VideoAbuseAttributes>('VideoAbuse',
     {
       reporterUsername: {
         type: DataTypes.STRING,
