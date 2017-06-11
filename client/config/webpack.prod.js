@@ -14,7 +14,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
-const WebpackMd5Hash = require('webpack-md5-hash')
+const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
 
 /**
  * Webpack Constants
@@ -67,7 +67,7 @@ module.exports = function (env) {
       *
       * See: http://webpack.github.io/docs/configuration.html#output-sourcemapfilename
       */
-      sourceMapFilename: '[name].[chunkhash].bundle.map',
+      sourceMapFilename: '[file].map',
 
       /**
       * The filename of non-entry chunks as relative path
@@ -75,7 +75,7 @@ module.exports = function (env) {
       *
       * See: http://webpack.github.io/docs/configuration.html#output-chunkfilename
       */
-      chunkFilename: '[id].[chunkhash].chunk.js',
+      chunkFilename: '[name].[chunkhash].chunk.js',
 
       publicPath: '/client/'
     },
@@ -90,14 +90,6 @@ module.exports = function (env) {
      * See: http://webpack.github.io/docs/configuration.html#plugins
      */
     plugins: [
-
-      /**
-       * Plugin: WebpackMd5Hash
-       * Description: Plugin to replace a standard webpack chunkhash with md5.
-       *
-       * See: https://www.npmjs.com/package/webpack-md5-hash
-       */
-      new WebpackMd5Hash(),
 
       /**
        * Webpack plugin to optimize a JavaScript file for faster initial load
@@ -194,35 +186,7 @@ module.exports = function (env) {
         helpers.root('config/empty.js')
       ),
 
-      // AoT
-      // new NormalModuleReplacementPlugin(
-      //   /@angular(\\|\/)upgrade/,
-      //   helpers.root('config/empty.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /@angular(\\|\/)compiler/,
-      //   helpers.root('config/empty.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /@angular(\\|\/)platform-browser-dynamic/,
-      //   helpers.root('config/empty.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /dom(\\|\/)debug(\\|\/)ng_probe/,
-      //   helpers.root('config/empty.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /dom(\\|\/)debug(\\|\/)by/,
-      //   helpers.root('config/empty.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /src(\\|\/)debug(\\|\/)debug_node/,
-      //   helpers.root('config/empty.js')
-      // ),
-      // new NormalModuleReplacementPlugin(
-      //   /src(\\|\/)debug(\\|\/)debug_renderer/,
-      //   helpers.root('config/empty.js')
-      // ),
+      new HashedModuleIdsPlugin(),
 
       /**
       * Plugin: IgnorePlugin
@@ -252,6 +216,7 @@ module.exports = function (env) {
       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
       */
       new LoaderOptionsPlugin({
+        minimize: true,
         debug: false,
         options: {
 

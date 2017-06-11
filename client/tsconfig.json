@@ -16,13 +16,6 @@
     "lib": [
       "dom",
       "es6"
-    ],
-    "types": [
-      "node",
-      "source-map",
-      "uglify-js",
-      "videojs",
-      "webpack"
     ]
   },
   "exclude": [

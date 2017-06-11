@@ -11,13 +11,15 @@
     <!-- opengraph tags -->
     <!-- Do not remove it! -->
 
-    <link rel="icon" type="image/png" href="/client/assets/favicon.png" />
-
     <!-- TODO: bundle it with webpack when https://github.com/webpack/webpack/pull/1931 will be merged -->
     <script src="/client/assets/webtorrent/webtorrent.min.js"></script>
 
+    <link rel="icon" type="image/png" href="/client/assets/favicon.png" />
+
     <!-- base url -->
     <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+
+    <%= htmlWebpackPlugin.files.webpackManifest %>
   </head>
 
   <!-- 3. Display the application -->

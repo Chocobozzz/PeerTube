@@ -378,6 +378,8 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', function (done) {
+      this.timeout(5000)
+
       const data = {
         name: 'my super name',
         category: 5,

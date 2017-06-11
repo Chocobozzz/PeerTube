@@ -85,23 +85,37 @@ module.exports = function (options) {
       rules: [
 
         /*
-         * Typescript loader support for .ts and Angular 2 async routes via .async.ts
+         * Typescript loader support for .ts and Angular async routes via .async.ts
          *
          * See: https://github.com/s-panferov/awesome-typescript-loader
          */
         {
           test: /\.ts$/,
           use: [
-            '@angularclass/hmr-loader?pretty=' + !isProd + '&prod=' + isProd,
-            'awesome-typescript-loader?{configFileName: "tsconfig.webpack.json"}',
-            'angular2-template-loader',
+            {
+              loader: '@angularclass/hmr-loader',
+              options: {
+                pretty: !isProd,
+                prod: isProd
+              }
+            },
             {
               loader: 'ng-router-loader',
               options: {
-                loader: 'async-system',
+                loader: 'async-import',
                 genDir: 'compiled',
                 aot: AOT
               }
+            },
+            {
+              loader: 'awesome-typescript-loader',
+              options: {
+                configFileName: 'tsconfig.webpack.json',
+                useCache: !isProd
+              }
+            },
+            {
+              loader: 'angular2-template-loader'
             }
           ],
           exclude: [/\.(spec|e2e)\.ts$/]
@@ -114,7 +128,7 @@ module.exports = function (options) {
          */
         {
           test: /\.json$/,
-          loader: 'json-loader'
+          use: 'json-loader'
         },
 
         {
@@ -149,7 +163,7 @@ module.exports = function (options) {
          */
         {
           test: /\.html$/,
-          loader: 'raw-loader',
+          use: 'raw-loader',
           exclude: [
             helpers.root('src/index.html'),
             helpers.root('src/standalone/videos/embed.html')
@@ -213,11 +227,15 @@ module.exports = function (options) {
        * See: https://github.com/angular/angular/issues/11580
        */
       new ContextReplacementPlugin(
-        // The (\\|\/) piece accounts for path separators in *nix and Windows
-        /angular(\\|\/)core(\\|\/)src(\\|\/)linker/,
+        /**
+         * The (\\|\/) piece accounts for path separators in *nix and Windows
+         */
+        /angular(\\|\/)core(\\|\/)@angular/,
         helpers.root('src'), // location of your src
         {
-          // your Angular Async Route paths relative to this root directory
+          /**
+           * Your Angular Async Route paths relative to this root directory
+           */
         }
       ),
 
@@ -246,6 +264,20 @@ module.exports = function (options) {
       ]),
 
       /*
+       * Plugin: ScriptExtHtmlWebpackPlugin
+       * Description: Enhances html-webpack-plugin functionality
+       * with different deployment options for your scripts including:
+       *
+       * See: https://github.com/numical/script-ext-html-webpack-plugin
+       */
+      new ScriptExtHtmlWebpackPlugin({
+        sync: [ /polyfill|vendor/, 'webtorrent.min.js' ],
+        defaultAttribute: 'async',
+        preload: [/polyfill|vendor|main/],
+        prefetch: [/chunk/]
+      }),
+
+      /*
        * Plugin: HtmlWebpackPlugin
        * Description: Simplifies creation of HTML files to serve your webpack bundles.
        * This is especially useful for webpack bundles that include a hash in the filename
@@ -257,19 +289,8 @@ module.exports = function (options) {
         template: 'src/index.html',
         title: METADATA.title,
         chunksSortMode: 'dependency',
-        metadata: METADATA
-      }),
-
-      /*
-      * Plugin: ScriptExtHtmlWebpackPlugin
-      * Description: Enhances html-webpack-plugin functionality
-      * with different deployment options for your scripts including:
-      *
-      * See: https://github.com/numical/script-ext-html-webpack-plugin
-      */
-      new ScriptExtHtmlWebpackPlugin({
-        sync: [ 'webtorrent.min.js' ],
-        defaultAttribute: 'defer'
+        metadata: METADATA,
+        inject: 'body'
       }),
 
       new WebpackNotifierPlugin({ alwaysNotify: true }),

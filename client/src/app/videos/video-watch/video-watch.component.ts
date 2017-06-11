@@ -31,7 +31,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   error: boolean = false;
   loading: boolean = false;
   numPeers: number;
-  player: VideoJSPlayer;
+  player: videojs.Player;
   playerElement: Element;
   uploadSpeed: number;
   userRating: RateType = null;
