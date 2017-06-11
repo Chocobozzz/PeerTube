@@ -135,7 +135,13 @@ module.exports = function (options) {
           test: /\.(sass|scss)$/,
           use: [
             'css-to-string-loader',
-            'css-loader?sourceMap',
+            {
+              loader: 'css-loader',
+              options: {
+                sourceMap: true,
+                importLoaders: 1
+              }
+            },
             'resolve-url-loader',
             {
               loader: 'sass-loader',
@@ -174,7 +180,7 @@ module.exports = function (options) {
          */
         {
           test: /\.(jpg|png|gif)$/,
-          use: 'file-loader'
+          use: 'url-loader'
         }
 
       ]
@@ -256,10 +262,10 @@ module.exports = function (options) {
        */
       // Used by embed.html
       new CopyWebpackPlugin([
-        {
-          from: 'src/assets',
-          to: 'assets'
-        },
+        // {
+        //   from: 'src/assets',
+        //   to: 'assets'
+        // },
         {
           from: 'src/standalone',
           to: 'standalone'

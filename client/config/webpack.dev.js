@@ -121,6 +121,7 @@ module.exports = function (env) {
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'API_URL': JSON.stringify(METADATA.API_URL),
+        'process.version': JSON.stringify(process.version),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),

@@ -123,13 +123,14 @@ module.exports = function (env) {
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'API_URL': JSON.stringify(METADATA.API_URL),
+        'process.version': JSON.stringify(process.version),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR
         }
       }),
-/**
+      /**
       * Plugin: UglifyJsPlugin
       * Description: Minimize all JavaScript output of chunks.
       * Loaders are switched into minimizing mode.
@@ -269,7 +270,7 @@ module.exports = function (env) {
       global: true,
       crypto: 'empty',
       fs: 'empty',
-      process: false,
+      process: true,
       module: false,
       clearImmediate: false,
       setImmediate: false
