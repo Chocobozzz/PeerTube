@@ -83,10 +83,6 @@ module.exports = function (env) {
       libraryTarget: 'var'
     },
 
-    externals: {
-      webtorrent: 'WebTorrent'
-    },
-
     module: {
 
       // Too slow, life is short
@@ -246,6 +242,7 @@ module.exports = function (env) {
     node: {
       global: true,
       crypto: 'empty',
+      fs: 'empty',
       process: true,
       module: false,
       clearImmediate: false,

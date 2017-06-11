@@ -261,10 +261,6 @@ module.exports = function (options) {
           to: 'assets'
         },
         {
-          from: 'node_modules/webtorrent/webtorrent.min.js',
-          to: 'assets/webtorrent'
-        },
-        {
           from: 'src/standalone',
           to: 'standalone'
         }

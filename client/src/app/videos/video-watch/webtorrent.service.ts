@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
-declare const WebTorrent;
+import * as WebTorrent from 'webtorrent';
 
 @Injectable()
 export class WebTorrentService {

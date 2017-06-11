@@ -81,10 +81,6 @@ module.exports = function (env) {
       publicPath: '/client/'
     },
 
-    externals: {
-      webtorrent: 'WebTorrent'
-    },
-
     /**
      * Add additional plugins to the compiler.
      *
@@ -272,6 +268,7 @@ module.exports = function (env) {
     node: {
       global: true,
       crypto: 'empty',
+      fs: 'empty',
       process: false,
       module: false,
       clearImmediate: false,

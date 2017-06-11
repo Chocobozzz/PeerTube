@@ -21,15 +21,15 @@ import { WebTorrentService } from './webtorrent.service';
 })
 
 export class VideoWatchComponent implements OnInit, OnDestroy {
-  private static LOADTIME_TOO_LONG: number = 20000;
+  private static LOADTIME_TOO_LONG = 20000;
 
   @ViewChild('videoMagnetModal') videoMagnetModal: VideoMagnetComponent;
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent;
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent;
 
   downloadSpeed: number;
-  error: boolean = false;
-  loading: boolean = false;
+  error = false;
+  loading = false;
   numPeers: number;
   player: videojs.Player;
   playerElement: Element;
