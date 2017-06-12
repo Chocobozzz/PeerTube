@@ -356,7 +356,7 @@ function updateVideo (req: express.Request, res: express.Response, finalCallback
       return rollbackTransaction(err, t, finalCallback)
     }
 
-    logger.info('Video with name %s updated.', videoInfosToUpdate.name)
+    logger.info('Video with name %s updated.', videoInstance.name)
     return finalCallback(null)
   })
 }

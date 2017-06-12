@@ -272,26 +272,23 @@ function updateVideo (url, accessToken, id, attributes, specialStatus, end) {
   }
 
   const path = '/api/v1/videos/' + id
+  const body = {}
 
-  const req = request(url)
-              .put(path)
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + accessToken)
+  if (attributes.name) body.name = attributes.name
+  if (attributes.category) body.category = attributes.category
+  if (attributes.licence) body.licence = attributes.licence
+  if (attributes.language) body.language = attributes.language
+  if (attributes.nsfw) body.nsfw = attributes.nsfw
+  if (attributes.description) body.description = attributes.description
+  if (attributes.tags) body.tags = attributes.tags
 
-  if (attributes.name) req.field('name', attributes.name)
-  if (attributes.category) req.field('category', attributes.category)
-  if (attributes.licence) req.field('licence', attributes.licence)
-  if (attributes.language) req.field('language', attributes.language)
-  if (attributes.nsfw) req.field('nsfw', attributes.nsfw)
-  if (attributes.description) req.field('description', attributes.description)
-
-  if (attributes.tags) {
-    for (let i = 0; i < attributes.tags.length; i++) {
-      req.field('tags[' + i + ']', attributes.tags[i])
-    }
-  }
-
-  req.expect(specialStatus).end(end)
+  request(url)
+    .put(path)
+    .send(body)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(specialStatus)
+    .end(end)
 }
 
 function rateVideo (url, accessToken, id, rating, specialStatus, end) {
