@@ -1,10 +1,6 @@
-#!/usr/bin/env node
+import * as program from 'commander'
 
-'use strict'
-
-const program = require('commander')
-
-const db = require('../server/initializers/database')
+import { database as db } from '../server/initializers/database'
 
 program
   .option('-u, --user [user]', 'User')

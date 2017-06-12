@@ -70,7 +70,7 @@ export namespace VideoMethods {
   export type GetDurationFromFileCallback = (err: Error, duration?: number) => void
   export type GetDurationFromFile = (videoPath, callback) => void
 
-  export type ListCallback = () => void
+  export type ListCallback = (err: Error, videoInstances: VideoInstance[]) => void
   export type List = (callback: ListCallback) => void
 
   export type ListForApiCallback = (err: Error, videoInstances?: VideoInstance[], total?: number) => void

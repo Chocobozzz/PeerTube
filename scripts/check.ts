@@ -1,12 +1,9 @@
-#!/usr/bin/env node
+import * as series from 'async/series'
+import * as request from 'request'
+import * as WebSocket from 'ws'
 
-'use strict'
+import { CONFIG } from '../server/initializers/constants'
 
-const series = require('async/series')
-const request = require('request')
-const WebSocket = require('ws')
-
-const constants = require('../server/initializers/constants')
 const requestHeaders = {
   'Range': '',
   'Keep-Alive': '',
@@ -29,8 +26,8 @@ series([
 
 // ---------------------------------------------------------------------------
 
-function pingServer (callback) {
-  const pingUrl = constants.CONFIG.WEBSERVER.URL + '/api/v1/ping'
+function pingServer (callback: () => void) {
+  const pingUrl = CONFIG.WEBSERVER.URL + '/api/v1/ping'
   console.log('Checking server is up (%s)...', pingUrl)
 
   request(pingUrl, function (err, res, body) {
@@ -44,8 +41,8 @@ function pingServer (callback) {
   })
 }
 
-function checkCORSTorrent (callback) {
-  const torrentUrl = constants.CONFIG.WEBSERVER.URL + '/static/torrents/test.torrent'
+function checkCORSTorrent (callback: () => void) {
+  const torrentUrl = CONFIG.WEBSERVER.URL + '/static/torrents/test.torrent'
   console.log('Checking CORS headers for the torrent (%s)...', torrentUrl)
 
   request({
@@ -63,8 +60,8 @@ function checkCORSTorrent (callback) {
   })
 }
 
-function checkCORSWebSeed (callback) {
-  const webseedUrl = constants.CONFIG.WEBSERVER.URL + '/static/webseed/test.mp4'
+function checkCORSWebSeed (callback: () => void) {
+  const webseedUrl = CONFIG.WEBSERVER.URL + '/static/webseed/test.mp4'
   console.log('Checking CORS headers for the video (%s)...', webseedUrl)
 
   request({
@@ -82,9 +79,9 @@ function checkCORSWebSeed (callback) {
   })
 }
 
-function checkTracker (callback) {
-  const trackerUrl = constants.CONFIG.WEBSERVER.WS + '://' +
-                     constants.CONFIG.WEBSERVER.HOST +
+function checkTracker (callback: () => void) {
+  const trackerUrl = CONFIG.WEBSERVER.WS + '://' +
+                     CONFIG.WEBSERVER.HOST +
                      '/tracker/socket'
   console.log('Checking tracker websocket (%s)...', trackerUrl)
 
@@ -111,7 +108,7 @@ function checkTracker (callback) {
   }
 }
 
-function isThereValidCORSHeaders (res) {
+function isThereValidCORSHeaders (res: request.RequestResponse) {
   let fail = false
 
   // Check Access-Control-Allow-Origin
@@ -160,7 +157,7 @@ function isThereValidCORSHeaders (res) {
   return !fail
 }
 
-function findPatternNotInString (stringChain, patterns) {
+function findPatternNotInString (stringChain: string, patterns: string[]) {
   let res = null
   const stringChainLowerCase = stringChain.toLowerCase()
 
