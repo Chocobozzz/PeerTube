@@ -13,6 +13,7 @@ const pagination = middlewares.pagination
 const sort = middlewares.sort
 const validatorsPagination = middlewares.validators.pagination
 const validatorsSort = middlewares.validators.sort
+const validatorsBlacklists = middlewares.validators.blacklists
 
 const router = express.Router()
 
@@ -28,7 +29,9 @@ router.get('/',
 
 router.delete('/:id',
   oAuth.authenticate,
-  admin.ensureIsAdmin
+  admin.ensureIsAdmin,
+  validatorsBlacklists.blacklistsRemove,
+  removeVideoFromBlacklist
 )
 
 module.exports = router
@@ -38,6 +41,25 @@ function listBlacklist (req, res, next) {
     if (err) return next(err)
 
     res.json(formatBlacklist(blacklistList, blacklistTotal))
+  })
+}
+
+function removeVideoFromBlacklist (req, res, next) {
+  waterfall([
+    function loadBlacklist (callback) {
+      db.BlacklistedVideo.loadByVideoId(req.params.id, callback)
+    },
+
+    function deleteBlacklistEntry (entry, callback) {
+      entry.destroy().asCallback(callback)
+    }
+  ], function andFinally (err) {
+    if (err) {
+      logger.error('Errors when remove the video from the blacklist', { error: err })
+      return next(err)
+    }
+
+    return res.sendStatus(204)
   })
 }
 
