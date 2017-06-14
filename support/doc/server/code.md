@@ -40,9 +40,9 @@ Uses [JavaScript Standard Style](http://standardjs.com/).
 ## Developing
 
   * Install [the dependencies](https://github.com/Chocobozzz/PeerTube#dependencies)
-  * Run `npm install` at the root directory to install all the dependencies
+  * Run `yarn install` at the root directory to install all the dependencies
   * Run PostgreSQL and create the database `peertube_dev`.
-  * Run `npm run dev:server` to compile the client, run the server and watch server files modifications.
+  * Run `npm run dev:server` to run the server, watch server files modifications and restart it automatically. The server (API + client) listen on `localhost:9000`.
 
 The `NODE_ENV=test` is set to speed up communications between pods (see [constants.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.ts)).
 

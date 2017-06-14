@@ -189,9 +189,14 @@ To develop on the server side (server files are automatically compiled when we m
 
     $ npm run dev:server
 
+The server (with the client) will listen on `localhost:9000`.
+
+
 To develop on the client side (client files are automatically compiled when we modify them):
 
     $ npm run dev:client
+
+The API will listen on `localhost:9000` and the frontend on `localhost:3000` (with hot module replacement, you don't need to refresh the web browser).
 
 **Username**: *root* <br/>
 **Password**: *test*
