@@ -1,5 +1,7 @@
 import * as Sequelize from 'sequelize'
 
+import { PodInstance } from '../pod'
+
 // Don't use barrel, import just what we need
 import { VideoAbuse as FormatedVideoAbuse } from '../../../shared/models/video-abuse.model'
 
@@ -17,12 +19,15 @@ export interface VideoAbuseClass {
 export interface VideoAbuseAttributes {
   reporterUsername: string
   reason: string
+  videoId: string
 }
 
 export interface VideoAbuseInstance extends VideoAbuseClass, VideoAbuseAttributes, Sequelize.Instance<VideoAbuseAttributes> {
   id: number
   createdAt: Date
   updatedAt: Date
+
+  Pod: PodInstance
 }
 
 export interface VideoAbuseModel extends VideoAbuseClass, Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes> {}

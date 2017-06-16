@@ -4,7 +4,7 @@ import * as Sequelize from 'sequelize'
 import { Pod as FormatedPod } from '../../../shared/models/pod.model'
 
 export namespace PodMethods {
-  export type ToFormatedJSON = () => FormatedPod
+  export type ToFormatedJSON = (this: PodInstance) => FormatedPod
 
   export type CountAllCallback = (err: Error, total: number) => void
   export type CountAll = (callback) => void

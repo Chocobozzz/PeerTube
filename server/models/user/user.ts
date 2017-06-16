@@ -131,7 +131,7 @@ function beforeCreateOrUpdate (user: UserInstance) {
 
 // ------------------------------ METHODS ------------------------------
 
-isPasswordMatch = function (password: string, callback: UserMethods.IsPasswordMatchCallback) {
+isPasswordMatch = function (this: UserInstance, password: string, callback: UserMethods.IsPasswordMatchCallback) {
   return comparePassword(password, this.password, callback)
 }
 
@@ -146,7 +146,7 @@ toFormatedJSON = function (this: UserInstance) {
   }
 }
 
-isAdmin = function () {
+isAdmin = function (this: UserInstance) {
   return this.role === USER_ROLES.ADMIN
 }
 

@@ -6,10 +6,10 @@ import { User as FormatedUser } from '../../../shared/models/user.model'
 
 export namespace UserMethods {
   export type IsPasswordMatchCallback = (err: Error, same: boolean) => void
-  export type IsPasswordMatch = (password: string, callback: IsPasswordMatchCallback) => void
+  export type IsPasswordMatch = (this: UserInstance, password: string, callback: IsPasswordMatchCallback) => void
 
-  export type ToFormatedJSON = () => FormatedUser
-  export type IsAdmin = () => boolean
+  export type ToFormatedJSON = (this: UserInstance) => FormatedUser
+  export type IsAdmin = (this: UserInstance) => boolean
 
   export type CountTotalCallback = (err: Error, total: number) => void
   export type CountTotal = (callback: CountTotalCallback) => void

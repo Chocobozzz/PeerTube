@@ -49,7 +49,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ------------------------------ METHODS ------------------------------
 
-toFormatedJSON = function () {
+toFormatedJSON = function (this: BlacklistedVideoInstance) {
   return {
     id: this.id,
     videoId: this.videoId,

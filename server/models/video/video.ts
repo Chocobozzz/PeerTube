@@ -247,7 +247,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     loadByHostAndRemoteId,
     loadAndPopulateAuthor,
     loadAndPopulateAuthorAndPodAndTags,
-    searchAndPopulateAuthorAndPodAndTags
+    searchAndPopulateAuthorAndPodAndTags,
+    removeFromBlacklist
   ]
   const instanceMethods = [
     generateMagnetUri,
@@ -260,7 +261,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     toAddRemoteJSON,
     toUpdateRemoteJSON,
     transcodeVideofile,
-    removeFromBlacklist
   ]
   addMethodsToModel(Video, classMethods, instanceMethods)
 
@@ -389,7 +389,7 @@ function associate (models) {
   })
 }
 
-generateMagnetUri = function () {
+generateMagnetUri = function (this: VideoInstance) {
   let baseUrlHttp
   let baseUrlWs
 
@@ -416,18 +416,18 @@ generateMagnetUri = function () {
   return magnetUtil.encode(magnetHash)
 }
 
-getVideoFilename = function () {
+getVideoFilename = function (this: VideoInstance) {
   if (this.isOwned()) return this.id + this.extname
 
   return this.remoteId + this.extname
 }
 
-getThumbnailName = function () {
+getThumbnailName = function (this: VideoInstance) {
   // We always have a copy of the thumbnail
   return this.id + '.jpg'
 }
 
-getPreviewName = function () {
+getPreviewName = function (this: VideoInstance) {
   const extension = '.jpg'
 
   if (this.isOwned()) return this.id + extension
@@ -435,7 +435,7 @@ getPreviewName = function () {
   return this.remoteId + extension
 }
 
-getTorrentName = function () {
+getTorrentName = function (this: VideoInstance) {
   const extension = '.torrent'
 
   if (this.isOwned()) return this.id + extension
@@ -443,7 +443,7 @@ getTorrentName = function () {
   return this.remoteId + extension
 }
 
-isOwned = function () {
+isOwned = function (this: VideoInstance) {
   return this.remoteId === null
 }
 
@@ -497,7 +497,7 @@ toFormatedJSON = function (this: VideoInstance) {
   return json
 }
 
-toAddRemoteJSON = function (callback: VideoMethods.ToAddRemoteJSONCallback) {
+toAddRemoteJSON = function (this: VideoInstance, callback: VideoMethods.ToAddRemoteJSONCallback) {
   // Get thumbnail data to send to the other pod
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
   fs.readFile(thumbnailPath, (err, thumbnailData) => {
@@ -531,7 +531,7 @@ toAddRemoteJSON = function (callback: VideoMethods.ToAddRemoteJSONCallback) {
   })
 }
 
-toUpdateRemoteJSON = function () {
+toUpdateRemoteJSON = function (this: VideoInstance) {
   const json = {
     name: this.name,
     category: this.category,
@@ -555,7 +555,7 @@ toUpdateRemoteJSON = function () {
   return json
 }
 
-transcodeVideofile = function (finalCallback: VideoMethods.TranscodeVideofileCallback) {
+transcodeVideofile = function (this: VideoInstance, finalCallback: VideoMethods.TranscodeVideofileCallback) {
   const video = this
 
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR

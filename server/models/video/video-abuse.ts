@@ -66,7 +66,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ------------------------------ METHODS ------------------------------
 
-function toFormatedJSON () {
+function toFormatedJSON (this: VideoAbuseInstance) {
   let reporterPodHost
 
   if (this.Pod) {

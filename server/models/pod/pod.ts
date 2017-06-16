@@ -96,12 +96,12 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ------------------------------ METHODS ------------------------------
 
-toFormatedJSON = function () {
+toFormatedJSON = function (this: PodInstance) {
   const json = {
     id: this.id,
     host: this.host,
     email: this.email,
-    score: this.score,
+    score: this.score as number,
     createdAt: this.createdAt
   }
 

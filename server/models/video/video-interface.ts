@@ -48,21 +48,21 @@ export type FormatedUpdateRemoteVideo = {
 }
 
 export namespace VideoMethods {
-  export type GenerateMagnetUri = () => string
-  export type GetVideoFilename = () => string
-  export type GetThumbnailName = () => string
-  export type GetPreviewName = () => string
-  export type GetTorrentName = () => string
-  export type IsOwned = () => boolean
-  export type ToFormatedJSON = () => FormatedVideo
+  export type GenerateMagnetUri = (this: VideoInstance) => string
+  export type GetVideoFilename = (this: VideoInstance) => string
+  export type GetThumbnailName = (this: VideoInstance) => string
+  export type GetPreviewName = (this: VideoInstance) => string
+  export type GetTorrentName = (this: VideoInstance) => string
+  export type IsOwned = (this: VideoInstance) => boolean
+  export type ToFormatedJSON = (this: VideoInstance) => FormatedVideo
 
   export type ToAddRemoteJSONCallback = (err: Error, videoFormated?: FormatedAddRemoteVideo) => void
-  export type ToAddRemoteJSON = (callback: ToAddRemoteJSONCallback) => void
+  export type ToAddRemoteJSON = (this: VideoInstance, callback: ToAddRemoteJSONCallback) => void
 
-  export type ToUpdateRemoteJSON = () => FormatedUpdateRemoteVideo
+  export type ToUpdateRemoteJSON = (this: VideoInstance) => FormatedUpdateRemoteVideo
 
   export type TranscodeVideofileCallback = (err: Error) => void
-  export type TranscodeVideofile = (callback: TranscodeVideofileCallback) => void
+  export type TranscodeVideofile = (this: VideoInstance, callback: TranscodeVideofileCallback) => void
 
   export type GenerateThumbnailFromDataCallback = (err: Error, thumbnailName?: string) => void
   export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string, callback: GenerateThumbnailFromDataCallback) => void

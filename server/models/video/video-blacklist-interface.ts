@@ -4,7 +4,7 @@ import * as Sequelize from 'sequelize'
 import { BlacklistedVideo as FormatedBlacklistedVideo } from '../../../shared/models/video-blacklist.model'
 
 export namespace BlacklistedVideoMethods {
-  export type ToFormatedJSON = () => FormatedBlacklistedVideo
+  export type ToFormatedJSON = (this: BlacklistedVideoInstance) => FormatedBlacklistedVideo
 
   export type CountTotalCallback = (err: Error, total: number) => void
   export type CountTotal = (callback: CountTotalCallback) => void
@@ -32,6 +32,7 @@ export interface BlacklistedVideoClass {
 }
 
 export interface BlacklistedVideoAttributes {
+  videoId: string
 }
 
 export interface BlacklistedVideoInstance extends BlacklistedVideoClass, BlacklistedVideoAttributes, Sequelize.Instance<BlacklistedVideoAttributes> {
