@@ -1,10 +1,10 @@
-import { User as UserServerModel } from '../../../../../shared';
+import { User as UserServerModel, UserRole } from '../../../../../shared';
 
 export class User implements UserServerModel {
   id: number;
   username: string;
   email: string;
-  role: string;
+  role: UserRole;
   displayNSFW: boolean;
   createdAt: Date;
 
@@ -12,7 +12,7 @@ export class User implements UserServerModel {
     id: number,
     username: string,
     email: string,
-    role: string,
+    role: UserRole,
     displayNSFW?: boolean,
     createdAt?: Date,
   }) {

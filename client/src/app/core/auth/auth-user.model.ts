@@ -1,4 +1,5 @@
 // Do not use the barrel (dependency loop)
+import { UserRole } from '../../../../../shared/models/user.model'
 import { User } from '../../shared/users/user.model';
 
 export class AuthUser extends User {
@@ -20,7 +21,7 @@ export class AuthUser extends User {
           id: parseInt(localStorage.getItem(this.KEYS.ID)),
           username: localStorage.getItem(this.KEYS.USERNAME),
           email: localStorage.getItem(this.KEYS.EMAIL),
-          role: localStorage.getItem(this.KEYS.ROLE),
+          role: localStorage.getItem(this.KEYS.ROLE) as UserRole,
           displayNSFW: localStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true'
         },
         Tokens.load()
@@ -41,7 +42,7 @@ export class AuthUser extends User {
   constructor(userHash: {
     id: number,
     username: string,
-    role: string,
+    role: UserRole,
     email: string,
     displayNSFW: boolean
   }, hashTokens: any) {
