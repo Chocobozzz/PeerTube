@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
+import { each } from 'async'
 
 import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first
@@ -72,24 +73,13 @@ const sequelize = new Sequelize(dbname, username, password, {
 database.sequelize = sequelize
 
 database.init = function (silent: boolean, callback: (err: Error) => void) {
-
   const modelDirectory = join(__dirname, '..', 'models')
-  fs.readdir(modelDirectory, function (err, files) {
+
+  getModelFiles(modelDirectory, function (err, filePaths) {
     if (err) throw err
 
-    files.filter(function (file) {
-      // For all models but not utils.js
-      if (
-        file === 'index.js' || file === 'index.ts' ||
-        file === 'utils.js' || file === 'utils.ts' ||
-        file.endsWith('-interface.js') || file.endsWith('-interface.ts') ||
-        file.endsWith('.js.map')
-      ) return false
-
-      return true
-    })
-    .forEach(function (file) {
-      const model = sequelize.import(join(modelDirectory, file))
+    filePaths.forEach(function (filePath) {
+      const model = sequelize.import(filePath)
 
       database[model['name']] = model
     })
@@ -110,4 +100,52 @@ database.init = function (silent: boolean, callback: (err: Error) => void) {
 
 export {
   database
+}
+
+// ---------------------------------------------------------------------------
+
+function getModelFiles (modelDirectory: string, callback: (err: Error, filePaths: string[]) => void) {
+  fs.readdir(modelDirectory, function (err, files) {
+    if (err) throw err
+
+    const directories = files.filter(function (directory) {
+      // For all models but not utils.js
+      if (
+        directory === 'index.js' || directory === 'index.ts' ||
+        directory === 'utils.js' || directory === 'utils.ts'
+      ) return false
+
+      return true
+    })
+
+    let modelFilePaths: string[] = []
+
+    // For each directory we read it and append model in the modelFilePaths array
+    each(directories, function (directory: string, eachCallback: ErrorCallback<Error>) {
+      const modelDirectoryPath = join(modelDirectory, directory)
+
+      fs.readdir(modelDirectoryPath, function (err, files) {
+        if (err) return eachCallback(err)
+
+        const filteredFiles = files.filter(file => {
+          if (
+            file === 'index.js' || file === 'index.ts' ||
+            file === 'utils.js' || file === 'utils.ts' ||
+            file.endsWith('-interface.js') || file.endsWith('-interface.ts') ||
+            file.endsWith('.js.map')
+          ) return false
+
+          return true
+        }).map(file => {
+          return join(modelDirectoryPath, file)
+        })
+
+        modelFilePaths = modelFilePaths.concat(filteredFiles)
+
+        return eachCallback(null)
+      })
+    }, function(err: Error) {
+      return callback(err, modelFilePaths)
+    })
+  })
 }
