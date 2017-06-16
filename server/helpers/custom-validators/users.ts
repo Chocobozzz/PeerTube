@@ -3,6 +3,8 @@ import * as validator from 'validator'
 
 import { exists } from './misc'
 import { CONSTRAINTS_FIELDS, USER_ROLES } from '../../initializers'
+import { UserRole } from '../../../shared'
+
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 
 function isUserPasswordValid (value: string) {
@@ -10,7 +12,7 @@ function isUserPasswordValid (value: string) {
 }
 
 function isUserRoleValid (value: string) {
-  return values(USER_ROLES).indexOf(value) !== -1
+  return values(USER_ROLES).indexOf(value as UserRole) !== -1
 }
 
 function isUserUsernameValid (value: string) {

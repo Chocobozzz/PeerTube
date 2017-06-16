@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize'
 import * as Bluebird from 'bluebird'
 
 // Don't use barrel, import just what we need
-import { User as FormatedUser } from '../../../shared/models/user.model'
+import { UserRole, User as FormatedUser } from '../../../shared/models/user.model'
 
 export namespace UserMethods {
   export type IsPasswordMatchCallback = (err: Error, same: boolean) => void
@@ -51,7 +51,7 @@ export interface UserAttributes {
   username: string
   email: string
   displayNSFW?: boolean
-  role: string
+  role: UserRole
 }
 
 export interface UserInstance extends UserClass, UserAttributes, Sequelize.Instance<UserAttributes> {

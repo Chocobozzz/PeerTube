@@ -11,6 +11,7 @@ import {
 } from '../../initializers'
 import { isUserUsernameValid } from './users'
 import { isArray, exists } from './misc'
+import { VideoRateType } from '../../../shared'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
@@ -105,7 +106,7 @@ function isVideoEventCountValid (value: string) {
 }
 
 function isVideoRatingTypeValid (value: string) {
-  return values(VIDEO_RATE_TYPES).indexOf(value) !== -1
+  return values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
 }
 
 function isVideoFile (value: string, files: { [ fieldname: string ]: Express.Multer.File[] }) {

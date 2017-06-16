@@ -1,8 +1,10 @@
 import * as Sequelize from 'sequelize'
 
+import { VideoRateType } from '../../../shared/models/user-video-rate.model'
+
 export namespace UserVideoRateMethods {
   export type LoadCallback = (err: Error, userVideoRateInstance: UserVideoRateInstance) => void
-  export type Load = (userId, videoId, transaction, callback) => void
+  export type Load = (userId: number, videoId: string, transaction: Sequelize.Transaction, callback: LoadCallback) => void
 }
 
 export interface UserVideoRateClass {
@@ -10,7 +12,7 @@ export interface UserVideoRateClass {
 }
 
 export interface UserVideoRateAttributes {
-  type: string
+  type: VideoRateType
 }
 
 export interface UserVideoRateInstance extends UserVideoRateClass, UserVideoRateAttributes, Sequelize.Instance<UserVideoRateAttributes> {

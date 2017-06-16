@@ -8,6 +8,7 @@ import {
   getRequestVideoEventScheduler
 } from '../../lib'
 import { authenticate, ensureIsAdmin } from '../../middlewares'
+import { RequestSchedulerAttributes } from '../../../shared'
 
 const requestsRouter = express.Router()
 
@@ -44,7 +45,7 @@ function buildRequestSchedulerFunction (requestScheduler: AbstractRequestSchedul
     requestScheduler.remainingRequestsCount(function (err, count) {
       if (err) return callback(err)
 
-      const result = {
+      const result: RequestSchedulerAttributes = {
         totalRequests: count,
         requestsLimitPods: requestScheduler.limitPods,
         requestsLimitPerPod: requestScheduler.limitPerPod,

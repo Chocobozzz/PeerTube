@@ -9,9 +9,10 @@ import {
   REQUEST_VIDEO_QADU_ENDPOINT,
   REQUEST_VIDEO_QADU_TYPES
 } from '../../initializers'
+import { RequestVideoQaduType } from '../../../shared'
 
 export type RequestVideoQaduSchedulerOptions = {
-  type: string
+  type: RequestVideoQaduType
   videoId: string
   transaction?: Sequelize.Transaction
 }

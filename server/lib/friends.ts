@@ -28,10 +28,18 @@ import {
   RequestVideoEventScheduler,
   RequestVideoEventSchedulerOptions
 } from './request'
-import { PodInstance, VideoInstance } from '../models'
+import {
+  PodInstance,
+  VideoInstance
+} from '../models'
+import {
+  RequestEndpoint,
+  RequestVideoEventType,
+  RequestVideoQaduType
+} from '../../shared'
 
-type QaduParam = { videoId: string, type: string }
-type EventParam = { videoId: string, type: string }
+type QaduParam = { videoId: string, type: RequestVideoQaduType }
+type EventParam = { videoId: string, type: RequestVideoEventType }
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
@@ -391,7 +399,7 @@ function makeRequestsToWinningPods (cert: string, podsList: PodInstance[], callb
 // Wrapper that populate "toIds" argument with all our friends if it is not specified
 type CreateRequestOptions = {
   type: string
-  endpoint: string
+  endpoint: RequestEndpoint
   data: Object
   toIds?: number[]
   transaction: Sequelize.Transaction

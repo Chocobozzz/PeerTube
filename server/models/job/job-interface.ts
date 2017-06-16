@@ -1,8 +1,10 @@
 import * as Sequelize from 'sequelize'
 
+import { JobState } from '../../../shared/models/job.model'
+
 export namespace JobMethods {
   export type ListWithLimitCallback = (err: Error, jobInstances: JobInstance[]) => void
-  export type ListWithLimit = (limit: number, state: string, callback: ListWithLimitCallback) => void
+  export type ListWithLimit = (limit: number, state: JobState, callback: ListWithLimitCallback) => void
 }
 
 export interface JobClass {
@@ -10,7 +12,7 @@ export interface JobClass {
 }
 
 export interface JobAttributes {
-  state: string
+  state: JobState
   handlerName: string
   handlerInputData: object
 }

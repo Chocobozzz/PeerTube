@@ -3,10 +3,12 @@ import * as Sequelize from 'sequelize'
 import { VideoInstance } from '../video'
 import { PodInstance } from '../pod'
 
+import { RequestVideoEventType } from '../../../shared/models/request-scheduler.model'
+
 export type RequestsVideoEventGrouped = {
   [ podId: number ]: {
     id: number
-    type: string
+    type: RequestVideoEventType
     count: number
     video: VideoInstance
     pod: PodInstance
@@ -35,7 +37,7 @@ export interface RequestVideoEventClass {
 }
 
 export interface RequestVideoEventAttributes {
-  type: string
+  type: RequestVideoEventType
   count: number
 }
 

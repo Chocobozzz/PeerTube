@@ -11,6 +11,7 @@ import {
 
   JobMethods
 } from './job-interface'
+import { JobState } from '../../../shared/models/job.model'
 
 let Job: Sequelize.Model<JobInstance, JobAttributes>
 let listWithLimit: JobMethods.ListWithLimit
@@ -48,7 +49,7 @@ export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Se
 
 // ---------------------------------------------------------------------------
 
-listWithLimit = function (limit: number, state: string, callback: JobMethods.ListWithLimitCallback) {
+listWithLimit = function (limit: number, state: JobState, callback: JobMethods.ListWithLimitCallback) {
   const query = {
     order: [
       [ 'id', 'ASC' ]

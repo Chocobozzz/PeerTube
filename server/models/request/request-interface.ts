@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize'
 
 import { PodInstance, PodAttributes } from '../pod'
+import { RequestEndpoint } from '../../../shared/models/request-scheduler.model'
 
 export type RequestsGrouped = {
   [ podId: number ]: {
@@ -32,7 +33,7 @@ export interface RequestClass {
 
 export interface RequestAttributes {
   request: object
-  endpoint: string
+  endpoint: RequestEndpoint
 }
 
 export interface RequestInstance extends RequestClass, RequestAttributes, Sequelize.Instance<RequestAttributes> {

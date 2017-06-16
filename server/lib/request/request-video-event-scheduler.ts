@@ -7,9 +7,10 @@ import {
   REQUESTS_VIDEO_EVENT_LIMIT_PER_POD,
   REQUEST_VIDEO_EVENT_ENDPOINT
 } from '../../initializers'
+import { RequestVideoEventType } from '../../../shared'
 
 export type RequestVideoEventSchedulerOptions = {
-  type: string
+  type: RequestVideoEventType
   videoId: string
   count?: number
   transaction?: Sequelize.Transaction

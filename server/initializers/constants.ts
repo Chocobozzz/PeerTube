@@ -4,6 +4,15 @@ import { join } from 'path'
 // Do not use barrels, remain constants as independent as possible
 import { root, isTestInstance } from '../helpers/core-utils'
 
+import {
+  UserRole,
+  VideoRateType,
+  RequestEndpoint,
+  RequestVideoEventType,
+  RequestVideoQaduType,
+  JobState
+} from '../../shared/models'
+
 // ---------------------------------------------------------------------------
 
 const LAST_MIGRATION_VERSION = 50
@@ -105,7 +114,7 @@ const CONSTRAINTS_FIELDS = {
   }
 }
 
-const VIDEO_RATE_TYPES = {
+const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
   DISLIKE: 'dislike'
 }
@@ -198,7 +207,7 @@ const REQUESTS_VIDEO_EVENT_LIMIT_PER_POD = 50
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
 
-const REQUEST_ENDPOINTS = {
+const REQUEST_ENDPOINTS: { [ id: string ]: RequestEndpoint } = {
   VIDEOS: 'videos'
 }
 
@@ -213,13 +222,13 @@ REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
 const REQUEST_VIDEO_QADU_ENDPOINT = 'videos/qadu'
 const REQUEST_VIDEO_EVENT_ENDPOINT = 'videos/events'
 
-const REQUEST_VIDEO_QADU_TYPES = {
+const REQUEST_VIDEO_QADU_TYPES: { [ id: string ]: RequestVideoQaduType } = {
   LIKES: 'likes',
   DISLIKES: 'dislikes',
   VIEWS: 'views'
 }
 
-const REQUEST_VIDEO_EVENT_TYPES = {
+const REQUEST_VIDEO_EVENT_TYPES: { [ id: string ]: RequestVideoEventType } = {
   LIKES: 'likes',
   DISLIKES: 'dislikes',
   VIEWS: 'views'
@@ -230,7 +239,7 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
-const JOB_STATES = {
+const JOB_STATES: { [ id: string ]: JobState } = {
   PENDING: 'pending',
   PROCESSING: 'processing',
   ERROR: 'error',
@@ -271,7 +280,7 @@ const PREVIEWS_SIZE = '640x480'
 
 // ---------------------------------------------------------------------------
 
-const USER_ROLES = {
+const USER_ROLES: { [ id: string ]: UserRole } = {
   ADMIN: 'admin',
   USER: 'user'
 }

@@ -3,6 +3,8 @@ import * as Sequelize from 'sequelize'
 import { VideoInstance } from '../video'
 import { PodInstance } from '../pod'
 
+import { RequestVideoQaduType } from '../../../shared/models/request-scheduler.model'
+
 export type RequestsVideoQaduGrouped = {
   [ podId: number ]: {
     request: RequestVideoQaduInstance
@@ -33,7 +35,7 @@ export interface RequestVideoQaduClass {
 }
 
 export interface RequestVideoQaduAttributes {
-  type: string
+  type: RequestVideoQaduType
 }
 
 export interface RequestVideoQaduInstance extends RequestVideoQaduClass, RequestVideoQaduAttributes, Sequelize.Instance<RequestVideoQaduAttributes> {

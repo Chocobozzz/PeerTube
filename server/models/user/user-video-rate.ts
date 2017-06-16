@@ -67,7 +67,7 @@ function associate (models) {
   })
 }
 
-load = function (userId: number, videoId: number, transaction: Sequelize.Transaction, callback: UserVideoRateMethods.LoadCallback) {
+load = function (userId: number, videoId: string, transaction: Sequelize.Transaction, callback: UserVideoRateMethods.LoadCallback) {
   const options: Sequelize.FindOptions = {
     where: {
       userId,

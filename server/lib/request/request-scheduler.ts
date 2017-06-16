@@ -7,10 +7,11 @@ import {
   REQUESTS_LIMIT_PODS,
   REQUESTS_LIMIT_PER_POD
 } from '../../initializers'
+import { RequestEndpoint } from '../../../shared'
 
 export type RequestSchedulerOptions = {
   type: string
-  endpoint: string
+  endpoint: RequestEndpoint
   data: Object
   toIds: number[]
   transaction: Sequelize.Transaction
