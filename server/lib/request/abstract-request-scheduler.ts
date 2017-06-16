@@ -9,7 +9,7 @@ import {
   REQUESTS_INTERVAL
 } from '../../initializers'
 
-abstract class BaseRequestScheduler {
+abstract class AbstractRequestScheduler {
   requestInterval: number
   limitPods: number
   limitPerPod: number
@@ -152,5 +152,5 @@ abstract class BaseRequestScheduler {
 // ---------------------------------------------------------------------------
 
 export {
-  BaseRequestScheduler
+  AbstractRequestScheduler
 }

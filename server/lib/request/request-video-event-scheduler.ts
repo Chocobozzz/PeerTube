@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../initializers/database'
-import { BaseRequestScheduler } from './base-request-scheduler'
+import { AbstractRequestScheduler } from './abstract-request-scheduler'
 import {
   REQUESTS_VIDEO_EVENT_LIMIT_PODS,
   REQUESTS_VIDEO_EVENT_LIMIT_PER_POD,
@@ -15,7 +15,7 @@ export type RequestVideoEventSchedulerOptions = {
   transaction?: Sequelize.Transaction
 }
 
-class RequestVideoEventScheduler extends BaseRequestScheduler {
+class RequestVideoEventScheduler extends AbstractRequestScheduler {
   constructor () {
     super()
 

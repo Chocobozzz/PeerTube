@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../initializers/database'
-import { BaseRequestScheduler } from './base-request-scheduler'
+import { AbstractRequestScheduler } from './abstract-request-scheduler'
 import { logger } from '../../helpers'
 import {
   REQUESTS_VIDEO_QADU_LIMIT_PODS,
@@ -16,7 +16,7 @@ export type RequestVideoQaduSchedulerOptions = {
   transaction?: Sequelize.Transaction
 }
 
-class RequestVideoQaduScheduler extends BaseRequestScheduler {
+class RequestVideoQaduScheduler extends AbstractRequestScheduler {
   constructor () {
     super()
 

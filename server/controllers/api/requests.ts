@@ -2,7 +2,7 @@ import * as express from 'express'
 import { parallel } from 'async'
 
 import {
-  BaseRequestScheduler,
+  AbstractRequestScheduler,
   getRequestScheduler,
   getRequestVideoQaduScheduler,
   getRequestVideoEventScheduler
@@ -39,7 +39,7 @@ function getStatsRequests (req: express.Request, res: express.Response, next: ex
 
 // ---------------------------------------------------------------------------
 
-function buildRequestSchedulerFunction (requestScheduler: BaseRequestScheduler) {
+function buildRequestSchedulerFunction (requestScheduler: AbstractRequestScheduler) {
   return function (callback) {
     requestScheduler.remainingRequestsCount(function (err, count) {
       if (err) return callback(err)
