@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
-import { NotificationsService } from 'angular2-notifications';
-import { ServerDataSource } from 'ng2-smart-table';
+import { NotificationsService } from 'angular2-notifications'
+import { ServerDataSource } from 'ng2-smart-table'
 
-import { ConfirmService } from '../../../core';
-import { Utils } from '../../../shared';
-import { Friend, FriendService } from '../shared';
+import { ConfirmService } from '../../../core'
+import { Utils } from '../../../shared'
+import { Friend, FriendService } from '../shared'
 
 @Component({
   selector: 'my-friend-list',
@@ -13,7 +13,7 @@ import { Friend, FriendService } from '../shared';
   styleUrls: [ './friend-list.component.scss' ]
 })
 export class FriendListComponent {
-  friendsSource = null;
+  friendsSource = null
   tableSettings = {
     attr: {
       class: 'table-hover'
@@ -49,36 +49,36 @@ export class FriendListComponent {
         valuePrepareFunction: Utils.dateToHuman
       }
     }
-  };
+  }
 
-  constructor(
+  constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private friendService: FriendService
   ) {
-    this.friendsSource = this.friendService.getDataSource();
+    this.friendsSource = this.friendService.getDataSource()
   }
 
-  hasFriends() {
-    return this.friendsSource.count() !== 0;
+  hasFriends () {
+    return this.friendsSource.count() !== 0
   }
 
-  quitFriends() {
-    const confirmMessage = 'Do you really want to quit your friends? All their videos will be deleted.';
+  quitFriends () {
+    const confirmMessage = 'Do you really want to quit your friends? All their videos will be deleted.'
     this.confirmService.confirm(confirmMessage, 'Quit friends').subscribe(
       res => {
-        if (res === false) return;
+        if (res === false) return
 
         this.friendService.quitFriends().subscribe(
           status => {
-            this.notificationsService.success('Sucess', 'Friends left!');
+            this.notificationsService.success('Sucess', 'Friends left!')
 
-            this.friendsSource.refresh();
+            this.friendsSource.refresh()
           },
 
           err => this.notificationsService.error('Error', err.text)
-        );
+        )
       }
-    );
+    )
   }
 }

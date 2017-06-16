@@ -13,7 +13,7 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "test": "standard && tslint -c ./tslint.json src/**/*.ts",
+    "test": "standard && tslint --type-check --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server"
   },
@@ -78,7 +78,7 @@
     "tslib": "^1.5.0",
     "tslint": "~5.4.3",
     "tslint-loader": "^3.3.0",
-    "typescript": "~2.3.0",
+    "typescript": "~2.4.0",
     "url-loader": "^0.5.7",
     "video.js": "^5.19.2",
     "videojs-dock": "^2.0.2",
@@ -93,6 +93,7 @@
     "codelyzer": "^3.0.0-beta.4",
     "ng2-completer": "1.2.2",
     "standard": "^10.0.0",
+    "tslint-config-standard": "^6.0.1",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.4.5",
     "webpack-dll-bundles-plugin": "^1.0.0-beta.5"

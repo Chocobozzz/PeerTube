@@ -1,6 +1,6 @@
-import { SearchField } from './search-field.type';
+import { SearchField } from './search-field.type'
 
 export interface Search {
-  field: SearchField;
-  value: string;
+  field: SearchField
+  value: string
 }

@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { pseudoRandomBytes } from 'crypto'
-import { join } from 'path'
 
 import { logger } from './logger'
 

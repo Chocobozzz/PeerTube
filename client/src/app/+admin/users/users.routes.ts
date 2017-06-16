@@ -1,8 +1,8 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router'
 
-import { UsersComponent } from './users.component';
-import { UserAddComponent } from './user-add';
-import { UserListComponent } from './user-list';
+import { UsersComponent } from './users.component'
+import { UserAddComponent } from './user-add'
+import { UserListComponent } from './user-list'
 
 export const UsersRoutes: Routes = [
   {
@@ -34,4 +34,4 @@ export const UsersRoutes: Routes = [
       }
     ]
   }
-];
+]

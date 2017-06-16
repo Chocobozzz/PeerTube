@@ -13,9 +13,9 @@ function process (data: { id: string }, callback: (err: Error, videoInstance?: V
   })
 }
 
-function onError (err: Error, jobId: number, video: VideoInstance, callback: () => void) {
+function onError (err: Error, jobId: number, video: VideoInstance, callback: (err: Error) => void) {
   logger.error('Error when transcoding video file in job %d.', jobId, { error: err })
-  return callback()
+  return callback(null)
 }
 
 function onSuccess (data: any, jobId: number, video: VideoInstance, callback: (err: Error) => void) {

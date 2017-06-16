@@ -1,10 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core'
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService } from 'angular2-notifications'
 
-import { ConfirmService, ConfigService } from '../../core';
-import { SortField, Video, VideoService } from '../shared';
-import { User } from '../../shared';
+import { ConfirmService, ConfigService } from '../../core'
+import { SortField, Video, VideoService } from '../shared'
+import { User } from '../../shared'
 
 @Component({
   selector: 'my-video-miniature',
@@ -13,25 +13,26 @@ import { User } from '../../shared';
 })
 
 export class VideoMiniatureComponent {
-  @Input() currentSort: SortField;
-  @Input() user: User;
-  @Input() video: Video;
+  @Input() currentSort: SortField
+  @Input() user: User
+  @Input() video: Video
 
-  constructor(
+  constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private configService: ConfigService,
     private videoService: VideoService
   ) {}
 
-  getVideoName() {
-    if (this.isVideoNSFWForThisUser())
-      return 'NSFW';
+  getVideoName () {
+    if (this.isVideoNSFWForThisUser()) {
+      return 'NSFW'
+    }
 
-    return this.video.name;
+    return this.video.name
   }
 
-  isVideoNSFWForThisUser() {
-    return this.video.isVideoNSFWForUser(this.user);
+  isVideoNSFWForThisUser () {
+    return this.video.isVideoNSFWForUser(this.user)
   }
 }

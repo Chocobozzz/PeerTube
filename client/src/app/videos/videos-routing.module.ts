@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
-import { VideoAddComponent, VideoUpdateComponent } from './video-edit';
-import { VideoListComponent } from './video-list';
-import { VideosComponent } from './videos.component';
-import { VideoWatchComponent } from './video-watch';
+import { VideoAddComponent, VideoUpdateComponent } from './video-edit'
+import { VideoListComponent } from './video-list'
+import { VideosComponent } from './videos.component'
+import { VideoWatchComponent } from './video-watch'
 
 const videosRoutes: Routes = [
   {
@@ -48,7 +48,7 @@ const videosRoutes: Routes = [
       }
     ]
   }
-];
+]
 
 @NgModule({
   imports: [ RouterModule.forChild(videosRoutes) ],

@@ -1,42 +1,42 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core'
 
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal'
 
-import { Video } from '../shared';
+import { Video } from '../shared'
 
 @Component({
   selector: 'my-video-share',
   templateUrl: './video-share.component.html'
 })
 export class VideoShareComponent {
-  @Input() video: Video = null;
+  @Input() video: Video = null
 
-  @ViewChild('modal') modal: ModalDirective;
+  @ViewChild('modal') modal: ModalDirective
 
-  constructor() {
+  constructor () {
     // empty
   }
 
-  show() {
-    this.modal.show();
+  show () {
+    this.modal.show()
   }
 
-  hide() {
-    this.modal.hide();
+  hide () {
+    this.modal.hide()
   }
 
-  getVideoIframeCode() {
+  getVideoIframeCode () {
     return '<iframe width="560" height="315" ' +
            'src="' + window.location.origin + '/videos/embed/' + this.video.id + '" ' +
            'frameborder="0" allowfullscreen>' +
-           '</iframe>';
+           '</iframe>'
   }
 
-  getVideoUrl() {
-    return window.location.href;
+  getVideoUrl () {
+    return window.location.href
   }
 
-  notSecure() {
-    return window.location.protocol === 'http:';
+  notSecure () {
+    return window.location.protocol === 'http:'
   }
 }

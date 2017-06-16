@@ -1,27 +1,27 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core'
 
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal'
 
-import { Video } from '../shared';
+import { Video } from '../shared'
 
 @Component({
   selector: 'my-video-magnet',
   templateUrl: './video-magnet.component.html'
 })
 export class VideoMagnetComponent {
-  @Input() video: Video = null;
+  @Input() video: Video = null
 
-  @ViewChild('modal') modal: ModalDirective;
+  @ViewChild('modal') modal: ModalDirective
 
-  constructor() {
+  constructor () {
     // empty
   }
 
-  show() {
-    this.modal.show();
+  show () {
+    this.modal.show()
   }
 
-  hide() {
-    this.modal.hide();
+  hide () {
+    this.modal.hide()
   }
 }

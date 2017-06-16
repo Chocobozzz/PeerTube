@@ -1,3 +1,5 @@
+/* tslint: disable */
+
 import { platformBrowser } from '@angular/platform-browser';
 import { decorateModuleRef } from './app/environment';
 

@@ -1,9 +1,9 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewContainerRef } from '@angular/core'
+import { Router } from '@angular/router'
 
-import { AuthService, ConfigService } from './core';
-import { VideoService } from './videos';
-import { UserService } from './shared';
+import { AuthService, ConfigService } from './core'
+import { VideoService } from './videos'
+import { UserService } from './shared'
 
 @Component({
   selector: 'my-app',
@@ -22,11 +22,11 @@ export class AppComponent implements OnInit {
     preventDuplicates: false,
     preventLastDuplicates: 'visible',
     rtl: false
-  };
+  }
 
-  isMenuDisplayed = true;
+  isMenuDisplayed = true
 
-  constructor(
+  constructor (
     private router: Router,
     private authService: AuthService,
     private configService: ConfigService,
@@ -35,46 +35,46 @@ export class AppComponent implements OnInit {
     viewContainerRef: ViewContainerRef
   ) {}
 
-  ngOnInit() {
+  ngOnInit () {
     if (this.authService.isLoggedIn()) {
       // The service will automatically redirect to the login page if the token is not valid anymore
-      this.userService.checkTokenValidity();
+      this.userService.checkTokenValidity()
     }
 
-    this.configService.loadConfig();
-    this.videoService.loadVideoCategories();
-    this.videoService.loadVideoLicences();
-    this.videoService.loadVideoLanguages();
+    this.configService.loadConfig()
+    this.videoService.loadVideoCategories()
+    this.videoService.loadVideoLicences()
+    this.videoService.loadVideoLanguages()
 
     // Do not display menu on small screens
     if (window.innerWidth < 600) {
-      this.isMenuDisplayed = false;
+      this.isMenuDisplayed = false
     }
   }
 
-  isInAdmin() {
-    return this.router.url.indexOf('/admin/') !== -1;
+  isInAdmin () {
+    return this.router.url.indexOf('/admin/') !== -1
   }
 
-  toggleMenu() {
-    this.isMenuDisplayed = !this.isMenuDisplayed;
+  toggleMenu () {
+    this.isMenuDisplayed = !this.isMenuDisplayed
   }
 
-  getMainColClasses() {
+  getMainColClasses () {
     const colSizes = {
       md: 10,
       sm: 9,
       xs: 9
-    };
+    }
 
     // Take all width is the menu is not displayed
     if (this.isMenuDisplayed === false) {
-      Object.keys(colSizes).forEach(col => colSizes[col] = 12);
+      Object.keys(colSizes).forEach(col => colSizes[col] = 12)
     }
 
-    const classes = [ 'main-col' ];
-    Object.keys(colSizes).forEach(col => classes.push(`col-${col}-${colSizes[col]}`));
+    const classes = [ 'main-col' ]
+    Object.keys(colSizes).forEach(col => classes.push(`col-${col}-${colSizes[col]}`))
 
-    return classes;
+    return classes
   }
 }

@@ -1,52 +1,52 @@
-import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core'
+import { Response } from '@angular/http'
+import { Observable } from 'rxjs/Observable'
 
 export interface ResultList {
-  data: any[];
-  total: number;
+  data: any[]
+  total: number
 }
 
 @Injectable()
 export class RestExtractor {
 
-  constructor () { ; }
-
-  extractDataBool(res: Response) {
-    return true;
+  extractDataBool (res: Response) {
+    return true
   }
 
-  extractDataList(res: Response) {
-    const body = res.json();
+  extractDataList (res: Response) {
+    const body = res.json()
 
     const ret: ResultList = {
       data: body.data,
       total: body.total
-    };
+    }
 
-    return ret;
+    return ret
   }
 
-  extractDataGet(res: Response) {
-    return res.json();
+  extractDataGet (res: Response) {
+    return res.json()
   }
 
-  handleError(res: Response) {
-    let text = 'Server error: ';
-    text += res.text();
-    let json = '';
+  handleError (res: Response) {
+    let text = 'Server error: '
+    text += res.text()
+    let json = ''
 
     try {
-      json = res.json();
-    } catch (err) { ; }
+      json = res.json()
+    } catch (err) {
+      console.error('Cannot get JSON from response.')
+    }
 
     const error = {
       json,
       text
-    };
+    }
 
-    console.error(error);
+    console.error(error)
 
-    return Observable.throw(error);
+    return Observable.throw(error)
   }
 }

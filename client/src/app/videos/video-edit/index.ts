@@ -1,2 +1,2 @@
-export * from './video-add.component';
-export * from './video-update.component';
+export * from './video-add.component'
+export * from './video-update.component'

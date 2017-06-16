@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
-import { SignupComponent } from './signup.component';
+import { SignupComponent } from './signup.component'
 
 const signupRoutes: Routes = [
   {
@@ -13,7 +13,7 @@ const signupRoutes: Routes = [
       }
     }
   }
-];
+]
 
 @NgModule({
   imports: [ RouterModule.forChild(signupRoutes) ],

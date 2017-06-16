@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService } from 'angular2-notifications'
 
-import { ConfirmService } from '../../../core';
-import { User, Utils } from '../../../shared';
-import { UserService } from '../shared';
+import { ConfirmService } from '../../../core'
+import { User, Utils } from '../../../shared'
+import { UserService } from '../shared'
 
 @Component({
   selector: 'my-user-list',
@@ -12,7 +12,7 @@ import { UserService } from '../shared';
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent {
-  usersSource = null;
+  usersSource = null
   tableSettings = {
     mode: 'external',
     attr: {
@@ -52,37 +52,37 @@ export class UserListComponent {
         valuePrepareFunction: Utils.dateToHuman
       }
     }
-  };
+  }
 
-  constructor(
+  constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private userService: UserService
   ) {
-    this.usersSource = this.userService.getDataSource();
+    this.usersSource = this.userService.getDataSource()
   }
 
-  removeUser({ data }) {
-    const user: User = data;
+  removeUser ({ data }) {
+    const user: User = data
 
     if (user.username === 'root') {
-      this.notificationsService.error('Error', 'You cannot delete root.');
-      return;
+      this.notificationsService.error('Error', 'You cannot delete root.')
+      return
     }
 
     this.confirmService.confirm('Do you really want to delete this user?', 'Delete').subscribe(
       res => {
-        if (res === false) return;
+        if (res === false) return
 
         this.userService.removeUser(user).subscribe(
           () => {
-            this.notificationsService.success('Success', `User ${user.username} deleted.`);
-            this.usersSource.refresh();
+            this.notificationsService.success('Success', `User ${user.username} deleted.`)
+            this.usersSource.refresh()
           },
 
           err => this.notificationsService.error('Error', err.text)
-        );
+        )
       }
-    );
+    )
   }
 }

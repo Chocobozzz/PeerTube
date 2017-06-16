@@ -1,3 +1,5 @@
+/* tslint:disable */
+
 /**
  * Angular 2
  */

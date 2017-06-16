@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core'
 
 @Component({
   selector: 'my-loader',
@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
 })
 
 export class LoaderComponent {
-  @Input() loading: boolean;
+  @Input() loading: boolean
 }

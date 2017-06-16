@@ -1,2 +1,2 @@
-export * from './video-abuse.service';
-export * from './video-abuse.model';
+export * from './video-abuse.service'
+export * from './video-abuse.model'

@@ -1,1 +1,1 @@
-export * from './request-stats.component';
+export * from './request-stats.component'

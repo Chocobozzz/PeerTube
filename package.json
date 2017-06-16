@@ -41,7 +41,8 @@
     "postinstall": "cd client && yarn install",
     "tsc": "tsc",
     "nodemon": "nodemon",
-    "ts-node": "ts-node"
+    "ts-node": "ts-node",
+    "tslint": "tslint"
   },
   "dependencies": {
     "async": "^2.0.0",
@@ -76,7 +77,7 @@
     "scripty": "^1.5.0",
     "sequelize": "4.0.0-2",
     "ts-node": "^3.0.6",
-    "typescript": "~2.2.0",
+    "typescript": "^2.3.4",
     "validator": "^7.0.0",
     "winston": "^2.1.1",
     "ws": "^2.0.0"
@@ -94,7 +95,7 @@
     "@types/morgan": "^1.7.32",
     "@types/multer": "^0.0.34",
     "@types/node": "^7.0.18",
-    "@types/request": "^0.0.43",
+    "@types/request": "^0.0.44",
     "@types/sequelize": "^4.0.55",
     "@types/validator": "^6.2.0",
     "@types/winston": "^2.3.2",
@@ -107,7 +108,7 @@
     "standard": "^10.0.0",
     "supertest": "^3.0.0",
     "tslint": "^5.2.0",
-    "tslint-config-standard": "^5.0.2",
+    "tslint-config-standard": "^6.0.0",
     "webtorrent": "^0.98.0"
   },
   "standard": {

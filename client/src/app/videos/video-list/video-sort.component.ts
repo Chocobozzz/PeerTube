@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 
-import { SortField } from '../shared';
+import { SortField } from '../shared'
 
 @Component({
   selector: 'my-video-sort',
@@ -8,9 +8,9 @@ import { SortField } from '../shared';
 })
 
 export class VideoSortComponent {
-  @Output() sort = new EventEmitter<any>();
+  @Output() sort = new EventEmitter<any>()
 
-  @Input() currentSort: SortField;
+  @Input() currentSort: SortField
 
   sortChoices: { [ P in SortField ]: string } = {
     'name': 'Name - Asc',
@@ -23,17 +23,17 @@ export class VideoSortComponent {
     '-views': 'Views - Desc',
     'likes': 'Likes - Asc',
     '-likes': 'Likes - Desc'
-  };
-
-  get choiceKeys() {
-    return Object.keys(this.sortChoices);
   }
 
-  getStringChoice(choiceKey: SortField) {
-    return this.sortChoices[choiceKey];
+  get choiceKeys () {
+    return Object.keys(this.sortChoices)
   }
 
-  onSortChange() {
-    this.sort.emit(this.currentSort);
+  getStringChoice (choiceKey: SortField) {
+    return this.sortChoices[choiceKey]
+  }
+
+  onSortChange () {
+    this.sort.emit(this.currentSort)
   }
 }

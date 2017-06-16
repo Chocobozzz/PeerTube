@@ -1,36 +1,18 @@
 {
+  "extends": "tslint-config-standard",
   "rulesDirectory": ["./node_modules/codelyzer"],
   "rules": {
-    "class-name": true,
     "no-inferrable-types": true,
-    "curly": false,
     "eofline": true,
     "indent": ["spaces"],
     "max-line-length": [true, 140],
+    "no-floating-promises": false,
+    "no-unused-variable": false, // Bug, wait TypeScript 2.4
     "member-ordering": [true,
       "public-before-private",
       "static-before-instance",
       "variables-before-functions"
     ],
-    "no-arg": true,
-    "no-construct": true,
-    "no-duplicate-variable": true,
-    "no-empty": true,
-    "no-eval": true,
-    "no-trailing-whitespace": true,
-    "no-unused-expression": true,
-    "no-use-before-declare": true,
-    "one-line": [true,
-      "check-open-brace",
-      "check-catch",
-      "check-else",
-      "check-whitespace"
-    ],
-    "quotemark": [true, "single"],
-    "semicolon": true,
-    "trailing-comma": true,
-    "triple-equals": true,
-    "variable-name": false,
 
     "directive-selector": [true, "attribute", "my", "camelCase"],
     "component-selector": [true, "element", "my", "kebab-case"],
@@ -48,23 +30,6 @@
     "directive-class-suffix": true,
     "templates-use-public": true,
     "no-access-missing-member": true,
-    "invoke-injectable": true,
-
-    "typedef-whitespace": [ true,
-      {
-        "call-signature": "nospace",
-        "index-signature": "nospace",
-        "parameter": "nospace",
-        "property-declaration": "nospace",
-        "variable-declaration": "nospace"
-      }
-    ],
-    "whitespace": [ true,
-      "check-branch",
-      "check-decl",
-      "check-operator",
-      "check-separator",
-      "check-type"
-    ]
+    "invoke-injectable": true
   }
 }

@@ -1,29 +1,29 @@
-import { ApplicationRef, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { ApplicationRef, NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
 import {
   removeNgStyles,
   createNewHosts,
   createInputTransfer
-} from '@angularclass/hmr';
+} from '@angularclass/hmr'
 
-import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@nglibs/meta';
+import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@nglibs/meta'
 // TODO: remove, we need this to avoid error in ng2-smart-table
-import 'rxjs/add/operator/toPromise';
-import 'bootstrap-loader';
+import 'rxjs/add/operator/toPromise'
+import 'bootstrap-loader'
 
-import { ENV_PROVIDERS } from './environment';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { AppState, InternalStateType } from './app.service';
+import { ENV_PROVIDERS } from './environment'
+import { AppRoutingModule } from './app-routing.module'
+import { AppComponent } from './app.component'
+import { AppState, InternalStateType } from './app.service'
 
-import { AccountModule } from './account';
-import { CoreModule } from './core';
-import { LoginModule } from './login';
-import { SignupModule } from './signup';
-import { SharedModule } from './shared';
-import { VideosModule } from './videos';
+import { AccountModule } from './account'
+import { CoreModule } from './core'
+import { LoginModule } from './login'
+import { SignupModule } from './signup'
+import { SharedModule } from './shared'
+import { VideosModule } from './videos'
 
-export function metaFactory(): MetaLoader {
+export function metaFactory (): MetaLoader {
   return new MetaStaticLoader({
     pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
     pageTitleSeparator: ' - ',
@@ -32,19 +32,19 @@ export function metaFactory(): MetaLoader {
       title: 'PeerTube',
       description: 'PeerTube, a decentralized video streaming platform using P2P (BitTorrent) directly in the web browser'
     }
-  });
+  })
 }
 
 type StoreType = {
   state: InternalStateType,
   restoreInputValues: () => void,
   disposeOldHosts: () => void
-};
+}
 
 // Application wide providers
 const APP_PROVIDERS = [
   AppState
-];
+]
 
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -77,59 +77,59 @@ const APP_PROVIDERS = [
   ]
 })
 export class AppModule {
-  constructor(
+  constructor (
     public appRef: ApplicationRef,
     public appState: AppState
   ) {}
 
-  public hmrOnInit(store: StoreType) {
+  public hmrOnInit (store: StoreType) {
     if (!store || !store.state) {
-      return;
+      return
     }
-    console.log('HMR store', JSON.stringify(store, null, 2));
+    console.log('HMR store', JSON.stringify(store, null, 2))
     /**
      * Set state
      */
-    this.appState._state = store.state;
+    this.appState._state = store.state
     /**
      * Set input values
      */
     if ('restoreInputValues' in store) {
-      let restoreInputValues = store.restoreInputValues;
-      setTimeout(restoreInputValues);
+      let restoreInputValues = store.restoreInputValues
+      setTimeout(restoreInputValues)
     }
 
-    this.appRef.tick();
-    delete store.state;
-    delete store.restoreInputValues;
+    this.appRef.tick()
+    delete store.state
+    delete store.restoreInputValues
   }
 
-  public hmrOnDestroy(store: StoreType) {
-    const cmpLocation = this.appRef.components.map((cmp) => cmp.location.nativeElement);
+  public hmrOnDestroy (store: StoreType) {
+    const cmpLocation = this.appRef.components.map((cmp) => cmp.location.nativeElement)
     /**
      * Save state
      */
-    const state = this.appState._state;
-    store.state = state;
+    const state = this.appState._state
+    store.state = state
     /**
      * Recreate root elements
      */
-    store.disposeOldHosts = createNewHosts(cmpLocation);
+    store.disposeOldHosts = createNewHosts(cmpLocation)
     /**
      * Save input values
      */
-    store.restoreInputValues  = createInputTransfer();
+    store.restoreInputValues = createInputTransfer()
     /**
      * Remove styles
      */
-    removeNgStyles();
+    removeNgStyles()
   }
 
-  public hmrAfterDestroy(store: StoreType) {
+  public hmrAfterDestroy (store: StoreType) {
     /**
      * Display new elements
      */
-    store.disposeOldHosts();
-    delete store.disposeOldHosts;
+    store.disposeOldHosts ()
+    delete store.disposeOldHosts
   }
 }

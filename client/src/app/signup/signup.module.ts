@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule } from '@angular/core'
 
-import { SignupRoutingModule } from './signup-routing.module';
-import { SignupComponent } from './signup.component';
-import { SharedModule } from '../shared';
+import { SignupRoutingModule } from './signup-routing.module'
+import { SignupComponent } from './signup.component'
+import { SharedModule } from '../shared'
 
 @NgModule({
   imports: [

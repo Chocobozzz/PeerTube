@@ -1,1 +1,1 @@
-export * from './friend-add.component';
+export * from './friend-add.component'

@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
-import { AdminComponent } from './admin.component';
-import { FriendsRoutes } from './friends';
-import { RequestsRoutes } from './requests';
-import { UsersRoutes } from './users';
-import { VideoAbusesRoutes } from './video-abuses';
+import { AdminComponent } from './admin.component'
+import { FriendsRoutes } from './friends'
+import { RequestsRoutes } from './requests'
+import { UsersRoutes } from './users'
+import { VideoAbusesRoutes } from './video-abuses'
 
 const adminRoutes: Routes = [
   {
@@ -23,7 +23,7 @@ const adminRoutes: Routes = [
       ...VideoAbusesRoutes
     ]
   }
-];
+]
 
 @NgModule({
   imports: [ RouterModule.forChild(adminRoutes) ],

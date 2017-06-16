@@ -1,1 +1,1 @@
-export type RateType = 'like' | 'dislike';
+export type RateType = 'like' | 'dislike'

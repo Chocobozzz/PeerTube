@@ -1,12 +1,12 @@
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
 
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ModalDirective } from 'ngx-bootstrap/modal'
 
-import { ConfirmService } from './confirm.service';
+import { ConfirmService } from './confirm.service'
 
 export interface ConfigChangedEvent {
-  columns: { [id: string]: { isDisplayed: boolean }; };
-  config: { resultsPerPage: number };
+  columns: { [id: string]: { isDisplayed: boolean } }
+  config: { resultsPerPage: number }
 }
 
 @Component({
@@ -14,48 +14,48 @@ export interface ConfigChangedEvent {
   templateUrl: './confirm.component.html'
 })
 export class ConfirmComponent implements OnInit {
-  @ViewChild('confirmModal') confirmModal: ModalDirective;
+  @ViewChild('confirmModal') confirmModal: ModalDirective
 
-  title = '';
-  message = '';
+  title = ''
+  message = ''
 
   constructor (private confirmService: ConfirmService) {
     // Empty
   }
 
-  ngOnInit() {
+  ngOnInit () {
     this.confirmModal.config = {
       backdrop: 'static',
       keyboard: false
-    };
+    }
 
     this.confirmService.showConfirm.subscribe(
       ({ title, message }) => {
-        this.title = title;
-        this.message = message;
+        this.title = title
+        this.message = message
 
-        this.showModal();
+        this.showModal()
       }
-    );
+    )
   }
 
   @HostListener('keydown.enter')
-  confirm() {
-    this.confirmService.confirmResponse.next(true);
-    this.hideModal();
+  confirm () {
+    this.confirmService.confirmResponse.next(true)
+    this.hideModal()
   }
 
   @HostListener('keydown.esc')
-  abort() {
-    this.confirmService.confirmResponse.next(false);
-    this.hideModal();
+  abort () {
+    this.confirmService.confirmResponse.next(false)
+    this.hideModal()
   }
 
-  showModal() {
-    this.confirmModal.show();
+  showModal () {
+    this.confirmModal.show()
   }
 
-  hideModal() {
-    this.confirmModal.hide();
+  hideModal () {
+    this.confirmModal.hide()
   }
 }

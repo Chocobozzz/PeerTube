@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core'
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService } from 'angular2-notifications'
 
-import { RequestService, RequestStats } from '../shared';
+import { RequestService, RequestStats } from '../shared'
 
 @Component({
-	selector: 'my-request-stats',
-	templateUrl: './request-stats.component.html',
+  selector: 'my-request-stats',
+  templateUrl: './request-stats.component.html',
   styleUrls: [ './request-stats.component.scss' ]
 })
 export class RequestStatsComponent implements OnInit, OnDestroy {
@@ -14,70 +14,67 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
     requestScheduler: 'Basic request scheduler',
     requestVideoEventScheduler: 'Video events request scheduler',
     requestVideoQaduScheduler: 'Quick and dirty video updates request scheduler'
-  };
+  }
 
   stats: { [ id: string ]: RequestStats } = {
     requestScheduler: null,
     requestVideoEventScheduler: null,
     requestVideoQaduScheduler: null
-  };
+  }
 
   private intervals: { [ id: string ]: number } = {
     requestScheduler: null,
     requestVideoEventScheduler: null,
     requestVideoQaduScheduler: null
-  };
+  }
 
   private timeouts: { [ id: string ]: number } = {
     requestScheduler: null,
     requestVideoEventScheduler: null,
     requestVideoQaduScheduler: null
-  };
-
-
-  constructor(
-    private notificationsService: NotificationsService,
-    private requestService: RequestService
-  ) {  }
-
-  ngOnInit() {
-    this.getStats();
-    this.runIntervals();
   }
 
-  ngOnDestroy() {
+  constructor (
+    private notificationsService: NotificationsService,
+    private requestService: RequestService
+  ) { }
+
+  ngOnInit () {
+    this.getStats()
+    this.runIntervals()
+  }
+
+  ngOnDestroy () {
     Object.keys(this.stats).forEach(requestSchedulerName => {
       if (this.intervals[requestSchedulerName] !== null) {
-        window.clearInterval(this.intervals[requestSchedulerName]);
+        window.clearInterval(this.intervals[requestSchedulerName])
       }
 
       if (this.timeouts[requestSchedulerName] !== null) {
-        window.clearTimeout(this.timeouts[requestSchedulerName]);
+        window.clearTimeout(this.timeouts[requestSchedulerName])
       }
-    });
+    })
   }
 
-  getStats() {
+  getStats () {
     this.requestService.getStats().subscribe(
       stats => this.stats = stats,
 
       err => this.notificationsService.error('Error', err.text)
-    );
+    )
   }
 
-  private runIntervals() {
+  private runIntervals () {
     Object.keys(this.intervals).forEach(requestSchedulerName => {
       this.intervals[requestSchedulerName] = window.setInterval(() => {
-        const stats = this.stats[requestSchedulerName];
+        const stats = this.stats[requestSchedulerName]
 
-        stats.remainingMilliSeconds -= 1000;
+        stats.remainingMilliSeconds -= 1000
 
         if (stats.remainingMilliSeconds <= 0) {
-          this.timeouts[requestSchedulerName] = window.setTimeout(() => this.getStats(), stats.remainingMilliSeconds + 100);
+          this.timeouts[requestSchedulerName] = window.setTimeout(() => this.getStats(), stats.remainingMilliSeconds + 100)
         }
-      }, 1000);
-    });
+      }, 1000)
+    })
   }
-
-
 }

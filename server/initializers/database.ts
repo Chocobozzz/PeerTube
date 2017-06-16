@@ -144,7 +144,7 @@ function getModelFiles (modelDirectory: string, callback: (err: Error, filePaths
 
         return eachCallback(null)
       })
-    }, function(err: Error) {
+    }, function (err: Error) {
       return callback(err, modelFilePaths)
     })
   })

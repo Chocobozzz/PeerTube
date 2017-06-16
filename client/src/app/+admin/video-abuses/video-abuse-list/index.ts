@@ -1,1 +1,1 @@
-export * from './video-abuse-list.component';
+export * from './video-abuse-list.component'

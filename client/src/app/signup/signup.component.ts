@@ -1,72 +1,72 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core'
+import { FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { Router } from '@angular/router'
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService } from 'angular2-notifications'
 
-import { AuthService } from '../core';
+import { AuthService } from '../core'
 import {
   FormReactive,
   UserService,
   USER_USERNAME,
   USER_EMAIL,
   USER_PASSWORD
-} from '../shared';
+} from '../shared'
 
 @Component({
   selector: 'my-signup',
   templateUrl: './signup.component.html'
 })
 export class SignupComponent extends FormReactive implements OnInit {
-  error: string = null;
+  error: string = null
 
-  form: FormGroup;
+  form: FormGroup
   formErrors = {
     'username': '',
     'email': '',
     'password': ''
-  };
+  }
   validationMessages = {
     'username': USER_USERNAME.MESSAGES,
     'email': USER_EMAIL.MESSAGES,
-    'password': USER_PASSWORD.MESSAGES,
-  };
+    'password': USER_PASSWORD.MESSAGES
+  }
 
-  constructor(
+  constructor (
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService
   ) {
-    super();
+    super()
   }
 
-  buildForm() {
+  buildForm () {
     this.form = this.formBuilder.group({
       username: [ '', USER_USERNAME.VALIDATORS ],
       email:    [ '', USER_EMAIL.VALIDATORS ],
-      password: [ '', USER_PASSWORD.VALIDATORS ],
-    });
+      password: [ '', USER_PASSWORD.VALIDATORS ]
+    })
 
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
   }
 
-  ngOnInit() {
-    this.buildForm();
+  ngOnInit () {
+    this.buildForm()
   }
 
-  signup() {
-    this.error = null;
+  signup () {
+    this.error = null
 
-    const { username, password, email } = this.form.value;
+    const { username, password, email } = this.form.value
 
     this.userService.signup(username, password, email).subscribe(
       () => {
-        this.notificationsService.success('Success', `Registration for ${username} complete.`);
-        this.router.navigate([ '/videos/list' ]);
+        this.notificationsService.success('Success', `Registration for ${username} complete.`)
+        this.router.navigate([ '/videos/list' ])
       },
 
       err => this.error = err.text
-    );
+    )
   }
 }

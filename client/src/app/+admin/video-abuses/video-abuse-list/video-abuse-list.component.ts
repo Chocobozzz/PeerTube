@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService } from 'angular2-notifications'
 
-import { Utils, VideoAbuseService, VideoAbuse } from '../../../shared';
+import { Utils, VideoAbuseService, VideoAbuse } from '../../../shared'
 
 @Component({
-	selector: 'my-video-abuse-list',
-	templateUrl: './video-abuse-list.component.html'
+  selector: 'my-video-abuse-list',
+  templateUrl: './video-abuse-list.component.html'
 })
 export class VideoAbuseListComponent {
-  videoAbusesSource = null;
+  videoAbusesSource = null
   tableSettings = {
     mode: 'external',
     attr: {
@@ -54,18 +54,18 @@ export class VideoAbuseListComponent {
         valuePrepareFunction: Utils.dateToHuman
       }
     }
-  };
+  }
 
-  constructor(
+  constructor (
     private notificationsService: NotificationsService,
     private videoAbuseService: VideoAbuseService
   ) {
-    this.videoAbusesSource = this.videoAbuseService.getDataSource();
-   }
+    this.videoAbusesSource = this.videoAbuseService.getDataSource()
+  }
 
-  buildVideoLink(videoId: string) {
+  buildVideoLink (videoId: string) {
     // TODO: transform to routerLink
     // https://github.com/akveo/ng2-smart-table/issues/57
-    return `<a href="/videos/${videoId}" title="Go to the video">${videoId}</a>`;
+    return `<a href="/videos/${videoId}" title="Go to the video">${videoId}</a>`
   }
 }

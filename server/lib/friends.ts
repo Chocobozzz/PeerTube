@@ -103,7 +103,11 @@ function quickAndDirtyUpdateVideoToFriends (qaduParam: QaduParam, transaction?: 
   return createVideoQaduRequest(options, callback)
 }
 
-function quickAndDirtyUpdatesVideoToFriends (qadusParams: QaduParam[], transaction: Sequelize.Transaction, finalCallback: (err: Error) => void) {
+function quickAndDirtyUpdatesVideoToFriends (
+  qadusParams: QaduParam[],
+  transaction: Sequelize.Transaction,
+  finalCallback: (err: Error) => void
+) {
   const tasks = []
 
   qadusParams.forEach(function (qaduParams) {

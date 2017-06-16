@@ -1,5 +1,5 @@
 export interface RestPagination {
-  currentPage: number;
-  itemsPerPage: number;
-  totalItems: number;
-};
+  currentPage: number
+  itemsPerPage: number
+  totalItems: number
+}

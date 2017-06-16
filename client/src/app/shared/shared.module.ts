@@ -1,23 +1,23 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { HttpModule } from '@angular/http'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterModule } from '@angular/router'
 
-import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe';
-import { KeysPipe } from 'angular-pipes/src/object/keys.pipe';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload';
-import { Ng2SmartTableModule } from 'ng2-smart-table';
+import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe'
+import { KeysPipe } from 'angular-pipes/src/object/keys.pipe'
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
+import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
+import { PaginationModule } from 'ngx-bootstrap/pagination'
+import { ModalModule } from 'ngx-bootstrap/modal'
+import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload'
+import { Ng2SmartTableModule } from 'ng2-smart-table'
 
-import { AUTH_HTTP_PROVIDERS } from './auth';
-import { RestExtractor, RestService } from './rest';
-import { SearchComponent, SearchService } from './search';
-import { UserService } from './users';
-import { VideoAbuseService } from './video-abuse';
+import { AUTH_HTTP_PROVIDERS } from './auth'
+import { RestExtractor, RestService } from './rest'
+import { SearchComponent, SearchService } from './search'
+import { UserService } from './users'
+import { VideoAbuseService } from './video-abuse'
 
 @NgModule({
   imports: [

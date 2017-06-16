@@ -1,7 +1,7 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router'
 
-import { VideoAbusesComponent } from './video-abuses.component';
-import { VideoAbuseListComponent } from './video-abuse-list';
+import { VideoAbusesComponent } from './video-abuses.component'
+import { VideoAbuseListComponent } from './video-abuse-list'
 
 export const VideoAbusesRoutes: Routes = [
   {
@@ -25,4 +25,4 @@ export const VideoAbusesRoutes: Routes = [
       }
     ]
   }
-];
+]

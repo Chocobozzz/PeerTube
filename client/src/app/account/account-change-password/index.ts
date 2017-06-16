@@ -1,1 +1,1 @@
-export * from './account-change-password.component';
+export * from './account-change-password.component'

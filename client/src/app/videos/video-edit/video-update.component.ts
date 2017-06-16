@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, ElementRef, OnInit } from '@angular/core'
+import { FormBuilder, FormGroup } from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
 
-import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
-import { NotificationsService } from 'angular2-notifications';
+import { FileUploader } from 'ng2-file-upload/ng2-file-upload'
+import { NotificationsService } from 'angular2-notifications'
 
-import { AuthService } from '../../core';
+import { AuthService } from '../../core'
 import {
   FormReactive,
   VIDEO_NAME,
@@ -14,8 +14,8 @@ import {
   VIDEO_LANGUAGE,
   VIDEO_DESCRIPTION,
   VIDEO_TAGS
-} from '../../shared';
-import { Video, VideoService } from '../shared';
+} from '../../shared'
+import { Video, VideoService } from '../shared'
 
 @Component({
   selector: 'my-videos-update',
@@ -24,35 +24,35 @@ import { Video, VideoService } from '../shared';
 })
 
 export class VideoUpdateComponent extends FormReactive implements OnInit {
-  tags: string[] = [];
-  videoCategories = [];
-  videoLicences = [];
-  videoLanguages = [];
-  video: Video;
+  tags: string[] = []
+  videoCategories = []
+  videoLicences = []
+  videoLanguages = []
+  video: Video
 
-  tagValidators = VIDEO_TAGS.VALIDATORS;
-  tagValidatorsMessages = VIDEO_TAGS.MESSAGES;
+  tagValidators = VIDEO_TAGS.VALIDATORS
+  tagValidatorsMessages = VIDEO_TAGS.MESSAGES
 
-  error: string = null;
-  form: FormGroup;
+  error: string = null
+  form: FormGroup
   formErrors = {
     name: '',
     category: '',
     licence: '',
     language: '',
     description: ''
-  };
+  }
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
     description: VIDEO_DESCRIPTION.MESSAGES
-  };
+  }
 
-  fileError = '';
+  fileError = ''
 
-  constructor(
+  constructor (
     private authService: AuthService,
     private elementRef: ElementRef,
     private formBuilder: FormBuilder,
@@ -61,10 +61,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private videoService: VideoService
   ) {
-    super();
+    super()
   }
 
-  buildForm() {
+  buildForm () {
     this.form = this.formBuilder.group({
       name: [ '', VIDEO_NAME.VALIDATORS ],
       nsfw: [ false ],
@@ -73,60 +73,63 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
       tags: [ '' ]
-    });
+    })
 
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
   }
 
-  ngOnInit() {
-    this.buildForm();
+  ngOnInit () {
+    this.buildForm()
 
-    this.videoCategories = this.videoService.videoCategories;
-    this.videoLicences = this.videoService.videoLicences;
-    this.videoLanguages = this.videoService.videoLanguages;
+    this.videoCategories = this.videoService.videoCategories
+    this.videoLicences = this.videoService.videoLicences
+    this.videoLanguages = this.videoService.videoLanguages
 
-    const id = this.route.snapshot.params['id'];
+    const id = this.route.snapshot.params['id']
     this.videoService.getVideo(id)
                      .subscribe(
                        video => {
-                         this.video = video;
+                         this.video = video
 
-                         this.hydrateFormFromVideo();
+                         this.hydrateFormFromVideo()
                        },
 
-                       err => this.error = 'Cannot fetch video.'
-                     );
+                       err => {
+                         console.error(err)
+                         this.error = 'Cannot fetch video.'
+                       }
+                     )
   }
 
-  checkForm() {
-    this.forceCheck();
+  checkForm () {
+    this.forceCheck()
 
-    return this.form.valid;
+    return this.form.valid
   }
 
-  update() {
+  update () {
     if (this.checkForm() === false) {
-      return;
+      return
     }
 
-    this.video.patch(this.form.value);
+    this.video.patch(this.form.value)
 
     this.videoService.updateVideo(this.video)
                      .subscribe(
                        () => {
-                         this.notificationsService.success('Success', 'Video updated.');
-                         this.router.navigate([ '/videos/watch', this.video.id ]);
+                         this.notificationsService.success('Success', 'Video updated.')
+                         this.router.navigate([ '/videos/watch', this.video.id ])
                        },
 
                        err => {
-                         this.error = 'Cannot update the video.';
-                         console.error(err);
+                         this.error = 'Cannot update the video.'
+                         console.error(err)
                        }
-                      );
+                      )
 
   }
 
-  private hydrateFormFromVideo() {
-    this.form.patchValue(this.video.toJSON());
+  private hydrateFormFromVideo () {
+    this.form.patchValue(this.video.toJSON())
   }
 }

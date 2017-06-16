@@ -6,7 +6,6 @@ import * as Sequelize from 'sequelize'
 import { database as db } from './database'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { logger } from '../helpers'
-import { ApplicationInstance } from '../models'
 
 function migrate (finalCallback: (err: Error) => void) {
   waterfall([

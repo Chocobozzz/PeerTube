@@ -130,7 +130,7 @@ function isThereValidCORSHeaders (res: request.RequestResponse) {
     console.error(headerAllowMethodsKey + ' is not present.')
     fail = true
   } else {
-    const allowMethodsMissed = findPatternNotInString(headerAllowMethods, [ 'get' ])
+    const allowMethodsMissed = findPatternNotInString(headerAllowMethods as string, [ 'get' ])
     if (allowMethodsMissed !== null) {
       console.error(headerAllowMethodsKey + ' misses the ' + allowMethodsMissed + ' method.')
       fail = true
@@ -147,7 +147,7 @@ function isThereValidCORSHeaders (res: request.RequestResponse) {
     const headersThatShouldBePresent = [
       'Range'
     ]
-    const allowHeadersMissed = findPatternNotInString(headerAllowHeaders, headersThatShouldBePresent)
+    const allowHeadersMissed = findPatternNotInString(headerAllowHeaders as string, headersThatShouldBePresent)
     if (allowHeadersMissed !== null) {
       console.error(headerAllowHeadersKey + ' misses the ' + allowHeadersMissed + ' header.')
       fail = true

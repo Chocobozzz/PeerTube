@@ -1,1 +1,1 @@
-export * from './user-add.component';
+export * from './user-add.component'

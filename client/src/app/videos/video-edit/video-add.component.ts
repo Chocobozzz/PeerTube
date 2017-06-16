@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, ElementRef, OnInit } from '@angular/core'
+import { FormBuilder, FormGroup } from '@angular/forms'
+import { Router } from '@angular/router'
 
-import { FileUploader } from 'ng2-file-upload/ng2-file-upload';
-import { NotificationsService } from 'angular2-notifications';
+import { FileUploader } from 'ng2-file-upload/ng2-file-upload'
+import { NotificationsService } from 'angular2-notifications'
 
-import { AuthService } from '../../core';
+import { AuthService } from '../../core'
 import {
   FormReactive,
   VIDEO_NAME,
@@ -14,8 +14,8 @@ import {
   VIDEO_LANGUAGE,
   VIDEO_DESCRIPTION,
   VIDEO_TAGS
-} from '../../shared';
-import { VideoService } from '../shared';
+} from '../../shared'
+import { VideoService } from '../shared'
 
 @Component({
   selector: 'my-videos-add',
@@ -24,36 +24,36 @@ import { VideoService } from '../shared';
 })
 
 export class VideoAddComponent extends FormReactive implements OnInit {
-  tags: string[] = [];
-  uploader: FileUploader;
-  videoCategories = [];
-  videoLicences = [];
-  videoLanguages = [];
+  tags: string[] = []
+  uploader: FileUploader
+  videoCategories = []
+  videoLicences = []
+  videoLanguages = []
 
-  tagValidators = VIDEO_TAGS.VALIDATORS;
-  tagValidatorsMessages = VIDEO_TAGS.MESSAGES;
+  tagValidators = VIDEO_TAGS.VALIDATORS
+  tagValidatorsMessages = VIDEO_TAGS.MESSAGES
 
-  error: string = null;
-  form: FormGroup;
+  error: string = null
+  form: FormGroup
   formErrors = {
     name: '',
     category: '',
     licence: '',
     language: '',
     description: ''
-  };
+  }
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
     description: VIDEO_DESCRIPTION.MESSAGES
-  };
+  }
 
   // Special error messages
-  fileError = '';
+  fileError = ''
 
-  constructor(
+  constructor (
     private authService: AuthService,
     private elementRef: ElementRef,
     private formBuilder: FormBuilder,
@@ -61,18 +61,18 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private videoService: VideoService
   ) {
-    super();
+    super()
   }
 
-  get filename() {
+  get filename () {
     if (this.uploader.queue.length === 0) {
-      return null;
+      return null
     }
 
-    return this.uploader.queue[0].file.name;
+    return this.uploader.queue[0].file.name
   }
 
-  buildForm() {
+  buildForm () {
     this.form = this.formBuilder.group({
       name: [ '', VIDEO_NAME.VALIDATORS ],
       nsfw: [ false ],
@@ -81,115 +81,106 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
       tags: [ '']
-    });
+    })
 
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data));
+    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
   }
 
-  ngOnInit() {
-    this.videoCategories = this.videoService.videoCategories;
-    this.videoLicences = this.videoService.videoLicences;
-    this.videoLanguages = this.videoService.videoLanguages;
+  ngOnInit () {
+    this.videoCategories = this.videoService.videoCategories
+    this.videoLicences = this.videoService.videoLicences
+    this.videoLanguages = this.videoService.videoLanguages
 
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
       queueLimit: 1,
       url: API_URL + '/api/v1/videos',
       removeAfterUpload: true
-    });
+    })
 
     this.uploader.onBuildItemForm = (item, form) => {
-      const name = this.form.value['name'];
-      const nsfw = this.form.value['nsfw'];
-      const category = this.form.value['category'];
-      const licence = this.form.value['licence'];
-      const language = this.form.value['language'];
-      const description = this.form.value['description'];
-      const tags = this.form.value['tags'];
+      const name = this.form.value['name']
+      const nsfw = this.form.value['nsfw']
+      const category = this.form.value['category']
+      const licence = this.form.value['licence']
+      const language = this.form.value['language']
+      const description = this.form.value['description']
+      const tags = this.form.value['tags']
 
-      form.append('name', name);
-      form.append('category', category);
-      form.append('nsfw', nsfw);
-      form.append('licence', licence);
+      form.append('name', name)
+      form.append('category', category)
+      form.append('nsfw', nsfw)
+      form.append('licence', licence)
 
       // Language is optional
       if (language) {
-        form.append('language', language);
+        form.append('language', language)
       }
 
-      form.append('description', description);
+      form.append('description', description)
 
       for (let i = 0; i < tags.length; i++) {
-        form.append(`tags[${i}]`, tags[i]);
+        form.append(`tags[${i}]`, tags[i])
       }
-    };
+    }
 
-    this.buildForm();
+    this.buildForm()
   }
 
-  checkForm() {
-    this.forceCheck();
+  checkForm () {
+    this.forceCheck()
 
     if (this.filename === null) {
-      this.fileError = 'You did not add a file.';
+      this.fileError = 'You did not add a file.'
     }
 
-    return this.form.valid === true && this.fileError === '';
+    return this.form.valid === true && this.fileError === ''
   }
 
-  fileChanged() {
-    this.fileError = '';
+  fileChanged () {
+    this.fileError = ''
   }
 
-  removeFile() {
-    this.uploader.clearQueue();
+  removeFile () {
+    this.uploader.clearQueue()
   }
 
-  upload() {
+  upload () {
     if (this.checkForm() === false) {
-      return;
+      return
     }
 
-    const item = this.uploader.queue[0];
+    const item = this.uploader.queue[0]
     // TODO: wait for https://github.com/valor-software/ng2-file-upload/pull/242
-    item.alias = 'videofile';
-
-    // FIXME: remove
-    // Run detection change for progress bar
-    const interval = setInterval(() => { ; }, 250);
+    item.alias = 'videofile'
 
     item.onSuccess = () => {
-      clearInterval(interval);
-
-      console.log('Video uploaded.');
-      this.notificationsService.success('Success', 'Video uploaded.');
-
+      console.log('Video uploaded.')
+      this.notificationsService.success('Success', 'Video uploaded.')
 
       // Print all the videos once it's finished
-      this.router.navigate(['/videos/list']);
-    };
+      this.router.navigate(['/videos/list'])
+    }
 
     item.onError = (response: string, status: number) => {
-      clearInterval(interval);
-
       // We need to handle manually these cases beceause we use the FileUpload component
       if (status === 400) {
-        this.error = response;
+        this.error = response
       } else if (status === 401) {
-        this.error = 'Access token was expired, refreshing token...';
+        this.error = 'Access token was expired, refreshing token...'
         this.authService.refreshAccessToken().subscribe(
           () => {
             // Update the uploader request header
-            this.uploader.authToken = this.authService.getRequestHeaderValue();
-            this.error += ' access token refreshed. Please retry your request.';
+            this.uploader.authToken = this.authService.getRequestHeaderValue()
+            this.error += ' access token refreshed. Please retry your request.'
           }
-        );
+        )
       } else {
-        this.error = 'Unknow error';
-        console.error(this.error);
+        this.error = 'Unknow error'
+        console.error(this.error)
       }
-    };
+    }
 
-    this.uploader.uploadAll();
+    this.uploader.uploadAll()
   }
 }

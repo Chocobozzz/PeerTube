@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { RouterModule, Routes } from '@angular/router'
 
-import { AccountComponent } from './account.component';
+import { AccountComponent } from './account.component'
 
 const accountRoutes: Routes = [
   {
@@ -13,7 +13,7 @@ const accountRoutes: Routes = [
       }
     }
   }
-];
+]
 
 @NgModule({
   imports: [ RouterModule.forChild(accountRoutes) ],
