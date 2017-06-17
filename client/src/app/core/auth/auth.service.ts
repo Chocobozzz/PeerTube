@@ -11,6 +11,7 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
+import { ClientLocal } from '../../../../../shared'
 // Do not use the barrel (dependency loop)
 import { RestExtractor } from '../../shared/rest'
 
@@ -40,9 +41,9 @@ export class AuthService {
     // FIXME: save in local storage?
     this.http.get(AuthService.BASE_CLIENT_URL)
       .map(this.restExtractor.extractDataGet)
-      .catch((res) => this.restExtractor.handleError(res))
+      .catch(res => this.restExtractor.handleError(res))
       .subscribe(
-        result => {
+        (result: ClientLocal) => {
           this.clientId = result.client_id
           this.clientSecret = result.client_secret
           console.log('Client credentials loaded.')

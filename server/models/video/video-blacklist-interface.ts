@@ -39,6 +39,8 @@ export interface BlacklistedVideoInstance extends BlacklistedVideoClass, Blackli
   id: number
   createdAt: Date
   updatedAt: Date
+
+  toFormatedJSON: BlacklistedVideoMethods.ToFormatedJSON
 }
 
 export interface BlacklistedVideoModel extends BlacklistedVideoClass, Sequelize.Model<BlacklistedVideoInstance, BlacklistedVideoAttributes> {}

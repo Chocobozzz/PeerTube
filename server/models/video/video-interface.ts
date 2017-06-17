@@ -146,6 +146,17 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   id: string
   createdAt: Date
   updatedAt: Date
+
+  generateMagnetUri: VideoMethods.GenerateMagnetUri
+  getVideoFilename: VideoMethods.GetVideoFilename
+  getThumbnailName: VideoMethods.GetThumbnailName
+  getPreviewName: VideoMethods.GetPreviewName
+  getTorrentName: VideoMethods.GetTorrentName
+  isOwned: VideoMethods.IsOwned
+  toFormatedJSON: VideoMethods.ToFormatedJSON
+  toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
+  toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
+  transcodeVideofile: VideoMethods.TranscodeVideofile
 }
 
 export interface VideoModel extends VideoClass, Sequelize.Model<VideoInstance, VideoAttributes> {}

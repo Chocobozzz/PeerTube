@@ -2,16 +2,13 @@ import { Injectable } from '@angular/core'
 import { Http } from '@angular/http'
 
 import { RestExtractor } from '../../shared/rest'
+import { ServerConfig } from '../../../../../shared'
 
 @Injectable()
 export class ConfigService {
   private static BASE_CONFIG_URL = API_URL + '/api/v1/config/'
 
-  private config: {
-    signup: {
-      enabled: boolean
-    }
-  } = {
+  private config: ServerConfig = {
     signup: {
       enabled: false
     }

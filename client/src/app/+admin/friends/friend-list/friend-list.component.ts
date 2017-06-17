@@ -5,7 +5,7 @@ import { ServerDataSource } from 'ng2-smart-table'
 
 import { ConfirmService } from '../../../core'
 import { Utils } from '../../../shared'
-import { Friend, FriendService } from '../shared'
+import { FriendService } from '../shared'
 
 @Component({
   selector: 'my-friend-list',

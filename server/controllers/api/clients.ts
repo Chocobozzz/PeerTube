@@ -3,6 +3,7 @@ import * as express from 'express'
 import { CONFIG } from '../../initializers'
 import { logger } from '../../helpers'
 import { database as db } from '../../initializers/database'
+import { ClientLocal } from '../../../shared'
 
 const clientsRouter = express.Router()
 
@@ -27,10 +28,11 @@ function getLocalClient (req: express.Request, res: express.Response, next: expr
     if (err) return next(err)
     if (!client) return next(new Error('No client available.'))
 
-    res.json({
+    const json: ClientLocal = {
       client_id: client.clientId,
       client_secret: client.clientSecret
-    })
+    }
+    res.json(json)
   })
 }
 

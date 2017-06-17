@@ -17,6 +17,7 @@ import {
   setUsersSort,
   token
 } from '../../middlewares'
+import { UserVideoRate as FormatedUserVideoRate } from '../../../shared'
 
 const usersRouter = express.Router()
 
@@ -119,10 +120,11 @@ function getUserVideoRating (req: express.Request, res: express.Response, next: 
 
     const rating = ratingObj ? ratingObj.type : 'none'
 
-    res.json({
+    const json: FormatedUserVideoRate = {
       videoId,
       rating
-    })
+    }
+    res.json(json)
   })
 }
 

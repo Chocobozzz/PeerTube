@@ -6,7 +6,7 @@ import { PodInstance } from '../pod'
 import { VideoAbuse as FormatedVideoAbuse } from '../../../shared/models/video-abuse.model'
 
 export namespace VideoAbuseMethods {
-  export type toFormatedJSON = () => FormatedVideoAbuse
+  export type ToFormatedJSON = (this: VideoAbuseInstance) => FormatedVideoAbuse
 
   export type ListForApiCallback = (err: Error, videoAbuseInstances?: VideoAbuseInstance[], total?: number) => void
   export type ListForApi = (start: number, count: number, sort: string, callback: ListForApiCallback) => void
@@ -28,6 +28,8 @@ export interface VideoAbuseInstance extends VideoAbuseClass, VideoAbuseAttribute
   updatedAt: Date
 
   Pod: PodInstance
+
+  toFormatedJSON: VideoAbuseMethods.ToFormatedJSON
 }
 
 export interface VideoAbuseModel extends VideoAbuseClass, Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes> {}

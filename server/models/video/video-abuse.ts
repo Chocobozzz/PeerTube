@@ -13,6 +13,7 @@ import {
 } from './video-abuse-interface'
 
 let VideoAbuse: Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes>
+let toFormatedJSON: VideoAbuseMethods.ToFormatedJSON
 let listForApi: VideoAbuseMethods.ListForApi
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
@@ -66,7 +67,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ------------------------------ METHODS ------------------------------
 
-function toFormatedJSON (this: VideoAbuseInstance) {
+toFormatedJSON = function (this: VideoAbuseInstance) {
   let reporterPodHost
 
   if (this.Pod) {
@@ -108,7 +109,7 @@ function associate (models) {
   })
 }
 
-listForApi = function (start, count, sort, callback) {
+listForApi = function (start: number, count: number, sort: string, callback: VideoAbuseMethods.ListForApiCallback) {
   const query = {
     offset: start,
     limit: count,

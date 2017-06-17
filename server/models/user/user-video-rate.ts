@@ -1,6 +1,5 @@
 /*
   User rates per video.
-
 */
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'

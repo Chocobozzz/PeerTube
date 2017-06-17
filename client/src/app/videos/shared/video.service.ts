@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map'
 
 import { Search } from '../../shared'
 import { SortField } from './sort-field.type'
-import { RateType } from './rate-type.type'
 import { AuthService } from '../../core'
 import {
   AuthHttp,
@@ -17,6 +16,7 @@ import {
   UserService
 } from '../../shared'
 import { Video } from './video.model'
+import { VideoRateType } from '../../../../../shared'
 
 @Injectable()
 export class VideoService {
@@ -145,7 +145,7 @@ export class VideoService {
     return this.setVideoRate(id, 'dislike')
   }
 
-  getUserVideoRating (id: string) {
+  getUserVideoRating (id: string): Observable<VideoRateType> {
     const url = UserService.BASE_USERS_URL + '/me/videos/' + id + '/rating'
 
     return this.authHttp.get(url)
@@ -159,7 +159,7 @@ export class VideoService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  private setVideoRate (id: string, rateType: RateType) {
+  private setVideoRate (id: string, rateType: VideoRateType) {
     const url = VideoService.BASE_VIDEO_URL + id + '/rate'
     const body = {
       rating: rateType

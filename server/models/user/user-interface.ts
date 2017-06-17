@@ -58,6 +58,10 @@ export interface UserInstance extends UserClass, UserAttributes, Sequelize.Insta
   id: number
   createdAt: Date
   updatedAt: Date
+
+  isPasswordMatch: UserMethods.IsPasswordMatch
+  toFormatedJSON: UserMethods.ToFormatedJSON
+  isAdmin: UserMethods.IsAdmin
 }
 
 export interface UserModel extends UserClass, Sequelize.Model<UserInstance, UserAttributes> {}

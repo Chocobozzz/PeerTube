@@ -22,8 +22,12 @@ function createEmptyCallback () {
   }
 }
 
-function getFormatedObjects (objects: any[], objectsTotal: number) {
-  const formatedObjects = []
+interface FormatableToJSON {
+  toFormatedJSON()
+}
+
+function getFormatedObjects<U, T extends FormatableToJSON> (objects: T[], objectsTotal: number) {
+  const formatedObjects: U[] = []
 
   objects.forEach(function (object) {
     formatedObjects.push(object.toFormatedJSON())

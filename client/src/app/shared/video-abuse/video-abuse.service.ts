@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map'
 import { AuthService } from '../core'
 import { AuthHttp } from '../auth'
 import { RestDataSource, RestExtractor, ResultList } from '../rest'
-import { VideoAbuse } from './video-abuse.model'
+import { VideoAbuse } from '../../../../../shared'
 
 @Injectable()
 export class VideoAbuseService {

@@ -11,15 +11,15 @@ import { AuthService, ConfirmService } from '../../core'
 import { VideoMagnetComponent } from './video-magnet.component'
 import { VideoShareComponent } from './video-share.component'
 import { VideoReportComponent } from './video-report.component'
-import { RateType, Video, VideoService } from '../shared'
+import { Video, VideoService } from '../shared'
 import { WebTorrentService } from './webtorrent.service'
+import { UserVideoRateType, VideoRateType, UserVideoRate } from '../../../../../shared'
 
 @Component({
   selector: 'my-video-watch',
   templateUrl: './video-watch.component.html',
   styleUrls: [ './video-watch.component.scss' ]
 })
-
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOADTIME_TOO_LONG = 20000
 
@@ -34,7 +34,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   player: videojs.Player
   playerElement: Element
   uploadSpeed: number
-  userRating: RateType = null
+  userRating: UserVideoRateType = null
   video: Video = null
   videoNotFound = false
 
@@ -249,7 +249,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.videoService.getUserVideoRating(this.video.id)
                      .subscribe(
-                       ratingObject => {
+                       (ratingObject: UserVideoRate) => {
                          if (ratingObject) {
                            this.userRating = ratingObject.rating
                          }
@@ -282,7 +282,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     )
   }
 
-  private updateVideoRating (oldRating: RateType, newRating: RateType) {
+  private updateVideoRating (oldRating: UserVideoRateType, newRating: VideoRateType) {
     let likesToIncrement = 0
     let dislikesToIncrement = 0
 

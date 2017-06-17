@@ -3,8 +3,9 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 
-import { RequestStats } from './request-stats.model'
+import { RequestScheduler } from '../../../../../../shared'
 import { AuthHttp, RestExtractor } from '../../../shared'
+import { RequestSchedulerStatsAttributes } from './request-stats-attributes.model'
 
 @Injectable()
 export class RequestService {
@@ -15,18 +16,18 @@ export class RequestService {
     private restExtractor: RestExtractor
   ) {}
 
-  getStats (): Observable<{ [ id: string ]: RequestStats }> {
+  getStats (): Observable<RequestScheduler> {
     return this.authHttp.get(RequestService.BASE_REQUEST_URL + 'stats')
                         .map(this.restExtractor.extractDataGet)
                         .map(this.buildRequestObjects)
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  private buildRequestObjects (data: any) {
+  private buildRequestObjects (data: RequestScheduler) {
     const requestSchedulers = {}
 
     Object.keys(data).forEach(requestSchedulerName => {
-      requestSchedulers[requestSchedulerName] = new RequestStats(data[requestSchedulerName])
+      requestSchedulers[requestSchedulerName] = new RequestSchedulerStatsAttributes(data[requestSchedulerName])
     })
 
     return requestSchedulers

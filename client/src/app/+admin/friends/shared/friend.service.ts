@@ -5,7 +5,6 @@ import 'rxjs/add/operator/map'
 
 import { ServerDataSource } from 'ng2-smart-table'
 
-import { Friend } from './friend.model'
 import { AuthHttp, RestExtractor, RestDataSource, ResultList } from '../../../shared'
 
 @Injectable()

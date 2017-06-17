@@ -2,7 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
 
-import { RequestService, RequestStats } from '../shared'
+import { RequestService, RequestSchedulerStatsAttributes } from '../shared'
+import { RequestScheduler } from '../../../../../../shared'
 
 @Component({
   selector: 'my-request-stats',
@@ -16,11 +17,7 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
     requestVideoQaduScheduler: 'Quick and dirty video updates request scheduler'
   }
 
-  stats: { [ id: string ]: RequestStats } = {
-    requestScheduler: null,
-    requestVideoEventScheduler: null,
-    requestVideoQaduScheduler: null
-  }
+  stats: RequestScheduler
 
   private intervals: { [ id: string ]: number } = {
     requestScheduler: null,
@@ -67,7 +64,7 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
   private runIntervals () {
     Object.keys(this.intervals).forEach(requestSchedulerName => {
       this.intervals[requestSchedulerName] = window.setInterval(() => {
-        const stats = this.stats[requestSchedulerName]
+        const stats: RequestSchedulerStatsAttributes = this.stats[requestSchedulerName]
 
         stats.remainingMilliSeconds -= 1000
 
