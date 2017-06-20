@@ -187,7 +187,11 @@ describe('Test a single pod', function () {
   })
 
   it('Should have the views updated', function (done) {
-    videosUtils.getVideo(server.url, videoId, function (err, res) {
+    this.timeout(5000)
+
+    setTimeout(videosUtils.getVideo,
+	       2000,
+	       server.url, videoId, function (err, res) {
       if (err) throw err
 
       const video = res.body
