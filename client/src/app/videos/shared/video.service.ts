@@ -16,7 +16,7 @@ import {
   UserService
 } from '../../shared'
 import { Video } from './video.model'
-import { VideoRateType } from '../../../../../shared'
+import { UserVideoRate, VideoRateType } from '../../../../../shared'
 
 @Injectable()
 export class VideoService {
@@ -145,7 +145,7 @@ export class VideoService {
     return this.setVideoRate(id, 'dislike')
   }
 
-  getUserVideoRating (id: string): Observable<VideoRateType> {
+  getUserVideoRating (id: string): Observable<UserVideoRate> {
     const url = UserService.BASE_USERS_URL + '/me/videos/' + id + '/rating'
 
     return this.authHttp.get(url)

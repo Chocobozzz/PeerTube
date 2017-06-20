@@ -249,7 +249,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.videoService.getUserVideoRating(this.video.id)
                      .subscribe(
-                       (ratingObject: UserVideoRate) => {
+                       ratingObject => {
                          if (ratingObject) {
                            this.userRating = ratingObject.rating
                          }
