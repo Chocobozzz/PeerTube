@@ -22,7 +22,7 @@ describe('Test a single pod', function () {
   let videosListBase = null
 
   before(function (done) {
-    this.timeout(20000)
+    this.timeout(120000)
 
     series([
       function (next) {

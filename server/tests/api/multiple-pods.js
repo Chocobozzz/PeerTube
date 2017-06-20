@@ -22,7 +22,7 @@ describe('Test multiple pods', function () {
   const toRemove = []
 
   before(function (done) {
-    this.timeout(30000)
+    this.timeout(120000)
 
     series([
       // Run servers

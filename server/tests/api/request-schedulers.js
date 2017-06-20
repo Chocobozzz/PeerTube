@@ -37,7 +37,7 @@ describe('Test requests schedulers stats', function () {
   // ---------------------------------------------------------------
 
   before(function (done) {
-    this.timeout(20000)
+    this.timeout(120000)
     serversUtils.flushAndRunMultipleServers(2, function (serversRun, urlsRun) {
       servers = serversRun
 

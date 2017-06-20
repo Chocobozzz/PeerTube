@@ -13,7 +13,7 @@ describe('Test config', function () {
   let server = null
 
   before(function (done) {
-    this.timeout(20000)
+    this.timeout(120000)
 
     series([
       function (next) {

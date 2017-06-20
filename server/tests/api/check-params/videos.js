@@ -392,6 +392,8 @@ describe('Test videos API validator', function () {
       const attach = {
         'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
+      this.timeout(10000)
+
       requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, function () {
         attach.videofile = pathUtils.join(__dirname, '..', 'fixtures', 'video_short.mp4')
         requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, function () {

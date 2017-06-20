@@ -47,7 +47,7 @@ describe('Test basic friends', function () {
   // ---------------------------------------------------------------
 
   before(function (done) {
-    this.timeout(20000)
+    this.timeout(120000)
     serversUtils.flushAndRunMultipleServers(3, function (serversRun, urlsRun) {
       servers = serversRun
 
@@ -76,7 +76,7 @@ describe('Test basic friends', function () {
   })
 
   it('Should make friends', function (done) {
-    this.timeout(40000)
+    this.timeout(120000)
 
     series([
       // The second pod make friend with the third
@@ -143,10 +143,13 @@ describe('Test basic friends', function () {
 
   it('Should not be allowed to make friend again', function (done) {
     const server = servers[1]
+    this.timeout(10000)
     podsUtils.makeFriends(server.url, server.accessToken, 409, done)
   })
 
   it('Should quit friends of pod 2', function (done) {
+    this.timeout(10000)
+
     series([
       // Pod 1 quit friends
       function (next) {
@@ -183,7 +186,7 @@ describe('Test basic friends', function () {
   })
 
   it('Should allow pod 2 to make friend again', function (done) {
-    this.timeout(20000)
+    this.timeout(120000)
 
     const server = servers[1]
     podsUtils.makeFriends(server.url, server.accessToken, function () {
