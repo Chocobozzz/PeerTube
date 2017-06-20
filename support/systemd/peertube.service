@@ -6,7 +6,7 @@ Type=simple
 Environment=NODE_ENV=production
 User=myuser
 Group=myuser
-ExecStart=/usr/bin/node server
+ExecStart=/usr/bin/npm start
 WorkingDirectory=/path/to/peertube
 StandardOutput=syslog
 StandardError=syslog

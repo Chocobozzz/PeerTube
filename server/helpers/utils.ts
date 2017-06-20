@@ -23,7 +23,7 @@ function createEmptyCallback () {
 }
 
 interface FormatableToJSON {
-  toFormatedJSON()
+  toFormatedJSON ()
 }
 
 function getFormatedObjects<U, T extends FormatableToJSON> (objects: T[], objectsTotal: number) {
