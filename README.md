@@ -251,19 +251,19 @@ Here are some simple schemes:
 
 <p align="center">
 
-<img src="https://lutim.cpy.re/isWwz8tt" alt="Decentralized" />
+<img src="https://lutim.cpy.re/6Qut3ure.png" alt="Decentralized" />
 
-<img src="https://lutim.cpy.re/VLheltQk" alt="Watch a video" />
+<img src="https://lutim.cpy.re/NvRAcv6U.png" alt="Watch a video" />
 
-<img src="https://lutim.cpy.re/worHQwKv" alt="Watch a P2P video" />
+<img src="https://lutim.cpy.re/pqKm3Q5S.png" alt="Watch a P2P video" />
 
-<img src="https://lutim.cpy.re/MyeS4q1g" alt="Join a network" />
+<img src="https://lutim.cpy.re/wWVuczBz.png" alt="Join a network" />
 
-<img src="https://lutim.cpy.re/PqpTTzdP" alt="Many networks" />
+<img src="https://lutim.cpy.re/AMo3uP0D.png" alt="Many networks" />
 
 </p>
 
 ### Frontend
 
-There already is a frontend (Angular 2) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
+There already is a frontend (Angular) but the backend is a REST API so anybody can build a frontend (Web application, desktop application...).
 The backend uses BitTorrent protocol, so users could use their favorite BitTorrent client to download/play the video with its torrent URI.
