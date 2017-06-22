@@ -234,7 +234,7 @@ function quitFriends (callback: (err: Error) => void) {
   })
 }
 
-function removeFriend (podId, callback) {
+function removeFriend (podId: number, callback: (err: Error) => void) {
   // Stop pool requests
   requestScheduler.deactivate()
 
@@ -253,13 +253,13 @@ function removeFriend (podId, callback) {
 
     function announceIQuitThisFriend (pod, callbackAsync) {
       const requestParams = {
-        method: 'POST',
-        path: '/api/' + constants.API_VERSION + '/remote/pods/remove',
-        sign: true
+        method: 'POST' as 'POST',
+        path: '/api/' + API_VERSION + '/remote/pods/remove',
+        sign: true,
+        toPod: pod
       }
 
-      requestParams.toPod = pod
-      requests.makeSecureRequest(requestParams, function (err) {
+      makeSecureRequest(requestParams, function (err) {
         if (err) {
           logger.error('Some errors while quitting friend.', { err: err })
           // Continue anyway
@@ -272,7 +272,7 @@ function removeFriend (podId, callback) {
     function removePodFromDB (pod, callbackAsync) {
       pod.destroy().asCallback(callbackAsync)
     }
-  ], function (err) {
+  ], function (err: Error) {
     // Don't forget to re activate the scheduler, even if there was an error
     requestScheduler.activate()
 
@@ -337,6 +337,7 @@ export {
   hasFriends,
   makeFriends,
   quitFriends,
+  removeFriend,
   removeVideoToFriends,
   sendOwnedVideosToPod,
   getRequestScheduler,

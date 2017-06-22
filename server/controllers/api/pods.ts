@@ -11,7 +11,8 @@ import {
 import {
   sendOwnedVideosToPod,
   makeFriends,
-  quitFriends
+  quitFriends,
+  removeFriend
 } from '../../lib'
 import {
   podsAddValidator,
@@ -44,6 +45,11 @@ podsRouter.get('/quitfriends',
   authenticate,
   ensureIsAdmin,
   quitFriendsController
+)
+podsRouter.delete('/:id',
+  authenticate,
+  ensureIsAdmin,
+  removeFriendController
 )
 
 // ---------------------------------------------------------------------------
@@ -120,8 +126,8 @@ function quitFriendsController (req: express.Request, res: express.Response, nex
   })
 }
 
-function removeFriend (req, res, next) {
-  friends.removeFriend(req.params.id, function (err) {
+function removeFriendController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  removeFriend(req.params.id, function (err) {
     if (err) return next(err)
 
     res.type('json').status(204).end()

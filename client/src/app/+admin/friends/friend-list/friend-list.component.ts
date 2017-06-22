@@ -6,6 +6,7 @@ import { ServerDataSource } from 'ng2-smart-table'
 import { ConfirmService } from '../../../core'
 import { Utils } from '../../../shared'
 import { FriendService } from '../shared'
+import { Pod } from '../../../../../../shared'
 
 @Component({
   selector: 'my-friend-list',
@@ -87,7 +88,7 @@ export class FriendListComponent {
 
   removeFriend({ data }) {
     const confirmMessage = 'Do you really want to remove this friend ? All its videos will be deleted.';
-    const friend: Friend = data;
+    const friend: Pod = data;
 
     this.confirmService.confirm(confirmMessage, 'Remove').subscribe(
       res => {
