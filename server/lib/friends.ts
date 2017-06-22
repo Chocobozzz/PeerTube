@@ -247,14 +247,6 @@ function removeFriend (podId: number, callback: (err: Error) => void) {
   requestScheduler.deactivate()
 
   waterfall([
-    function flushRequests (callbackAsync) {
-      requestScheduler.flush(err => callbackAsync(err))
-    },
-
-    function flushVideoQaduRequests (callbackAsync) {
-      requestVideoQaduScheduler.flush(err => callbackAsync(err))
-    },
-
     function getPod (callbackAsync) {
       return db.Pod.load(podId, callbackAsync)
     },
