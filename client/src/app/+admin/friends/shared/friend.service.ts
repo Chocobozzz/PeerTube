@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map'
 import { ServerDataSource } from 'ng2-smart-table'
 
 import { AuthHttp, RestExtractor, RestDataSource, ResultList } from '../../../shared'
+import { Pod } from '../../../../../../shared'
 
 @Injectable()
 export class FriendService {
@@ -20,7 +21,7 @@ export class FriendService {
     return new RestDataSource(this.authHttp, FriendService.BASE_FRIEND_URL)
   }
 
-  makeFriends (notEmptyHosts) {
+  makeFriends (notEmptyHosts: String[]) {
     const body = {
       hosts: notEmptyHosts
     }
@@ -36,7 +37,7 @@ export class FriendService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  removeFriend(friend: Friend) {
+  removeFriend(friend: Pod) {
     return this.authHttp.delete(FriendService.BASE_FRIEND_URL + friend.id)
                         .map(this.restExtractor.extractDataBool)
                         .catch((res) => this.restExtractor.handleError(res));
