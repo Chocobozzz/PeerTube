@@ -269,7 +269,7 @@ function removeFriend (podId: number, callback: (err: Error) => void) {
 
       makeSecureRequest(requestParams, function (err) {
         if (err) {
-          logger.error('Some errors while quitting friend.', { err: err })
+          logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, { err: err })
           // Continue anyway
         }
 
