@@ -38,7 +38,7 @@
     "update-host": "ts-node ./scripts/update-host.ts",
     "test": "scripty",
     "help": "scripty",
-    "postinstall": "cd client && yarn install",
+    "postinstall": "cd client && yarn install --pure-lockfile",
     "tsc": "tsc",
     "nodemon": "nodemon",
     "ts-node": "ts-node",
