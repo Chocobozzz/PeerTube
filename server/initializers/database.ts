@@ -109,8 +109,9 @@ function getModelFiles (modelDirectory: string, callback: (err: Error, filePaths
     if (err) throw err
 
     const directories = files.filter(function (directory) {
-      // For all models but not utils.js
+      // Find directories
       if (
+        directory.endsWith('.js.map') ||
         directory === 'index.js' || directory === 'index.ts' ||
         directory === 'utils.js' || directory === 'utils.ts'
       ) return false
