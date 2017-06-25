@@ -1,5 +1,6 @@
 export * from './validators'
 export * from './admin'
+export * from './config'
 export * from './oauth'
 export * from './pagination'
 export * from './pods'

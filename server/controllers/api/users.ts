@@ -7,6 +7,7 @@ import { logger, getFormatedObjects } from '../../helpers'
 import {
   authenticate,
   ensureIsAdmin,
+  ensureUserRegistrationEnabled,
   usersAddValidator,
   usersUpdateValidator,
   usersRemoveValidator,
@@ -48,7 +49,7 @@ usersRouter.post('/',
 )
 
 usersRouter.post('/register',
-  ensureRegistrationEnabled,
+  ensureUserRegistrationEnabled,
   usersAddValidator,
   createUser
 )
@@ -76,16 +77,6 @@ export {
 }
 
 // ---------------------------------------------------------------------------
-
-function ensureRegistrationEnabled (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const registrationEnabled = CONFIG.SIGNUP.ENABLED
-
-  if (registrationEnabled === true) {
-    return next()
-  }
-
-  return res.status(400).send('User registration is not enabled.')
-}
 
 function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = db.User.build({
