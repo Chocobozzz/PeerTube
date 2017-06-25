@@ -170,7 +170,8 @@ describe('Test multiple pods', function () {
           videosUtils.uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes, next)
         },
         function (next) {
-          setTimeout(next, 22000)
+          // Transcoding, so wait more that 22 seconds
+          setTimeout(next, 42000)
         }],
         // All pods should have this video
         function (err) {
