@@ -95,7 +95,6 @@
   "devDependencies": {
     "add-asset-html-webpack-plugin": "^2.0.1",
     "codelyzer": "^3.0.0-beta.4",
-    "ng2-completer": "1.2.2",
     "standard": "^10.0.0",
     "tslint-config-standard": "^6.0.1",
     "webpack-bundle-analyzer": "^2.8.2",
