@@ -20,7 +20,8 @@ import {
   ensureIsAdmin,
   makeFriendsValidator,
   setBodyHostPort,
-  setBodyHostsPort
+  setBodyHostsPort,
+  podRemoveValidator
 } from '../../middlewares'
 import {
   PodInstance
@@ -49,6 +50,7 @@ podsRouter.get('/quitfriends',
 podsRouter.delete('/:id',
   authenticate,
   ensureIsAdmin,
+  podRemoveValidator,
   removeFriendController
 )
 
@@ -127,7 +129,7 @@ function quitFriendsController (req: express.Request, res: express.Response, nex
 }
 
 function removeFriendController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  removeFriend(req.params.id, function (err) {
+  removeFriend(res.locals.pod, function (err) {
     if (err) return next(err)
 
     res.type('json').status(204).end()

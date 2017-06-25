@@ -58,9 +58,33 @@ function podsAddValidator (req: express.Request, res: express.Response, next: ex
   })
 }
 
+function podRemoveValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isNumeric()
+
+  logger.debug('Checking podRemoveValidator parameters', { parameters: req.params })
+
+  checkErrors(req, res, function () {
+    db.Pod.load(req.params.id, function (err, pod) {
+      if (err) {
+	logger.error('Cannot load pod %d.', req.params.id, { error: err })
+	res.sendStatus(500)
+      }
+
+      if (!pod) {
+	logger.error('Cannot find pod %d.', req.params.id, { error: err })
+	return res.sendStatus(404)
+      }
+
+      res.locals.pod = pod
+      return next()
+    })
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   makeFriendsValidator,
-  podsAddValidator
+  podsAddValidator,
+  podRemoveValidator
 }
