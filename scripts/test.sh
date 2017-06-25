@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+npm run build:server
+
 cd client || exit -1
 npm test || exit -1
 
