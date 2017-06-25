@@ -1,5 +1,5 @@
-export * from './client-local.model'
 export * from './job.model'
+export * from './oauth-client-local.model'
 export * from './pod.model'
 export * from './request-scheduler.model'
 export * from './user-video-rate.model'

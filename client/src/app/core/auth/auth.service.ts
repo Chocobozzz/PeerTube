@@ -11,13 +11,13 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
-import { ClientLocal } from '../../../../../shared'
+import { OAuthClientLocal } from '../../../../../shared'
 // Do not use the barrel (dependency loop)
 import { RestExtractor } from '../../shared/rest'
 
 @Injectable()
 export class AuthService {
-  private static BASE_CLIENT_URL = API_URL + '/api/v1/clients/local'
+  private static BASE_CLIENT_URL = API_URL + '/api/v1/oauth-clients/local'
   private static BASE_TOKEN_URL = API_URL + '/api/v1/users/token'
   private static BASE_USER_INFORMATIONS_URL = API_URL + '/api/v1/users/me'
 
@@ -43,7 +43,7 @@ export class AuthService {
       .map(this.restExtractor.extractDataGet)
       .catch(res => this.restExtractor.handleError(res))
       .subscribe(
-        (result: ClientLocal) => {
+        (result: OAuthClientLocal) => {
           this.clientId = result.client_id
           this.clientSecret = result.client_secret
           console.log('Client credentials loaded.')

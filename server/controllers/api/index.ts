@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { badRequest } from '../../helpers'
 
-import { clientsRouter } from './clients'
+import { oauthClientsRouter } from './oauth-clients'
 import { configRouter } from './config'
 import { podsRouter } from './pods'
 import { remoteRouter } from './remote'
@@ -12,7 +12,7 @@ import { videosRouter } from './videos'
 
 const apiRouter = express.Router()
 
-apiRouter.use('/clients', clientsRouter)
+apiRouter.use('/oauth-clients', oauthClientsRouter)
 apiRouter.use('/config', configRouter)
 apiRouter.use('/pods', podsRouter)
 apiRouter.use('/remote', remoteRouter)

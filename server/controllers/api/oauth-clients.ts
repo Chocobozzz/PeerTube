@@ -3,11 +3,11 @@ import * as express from 'express'
 import { CONFIG } from '../../initializers'
 import { logger } from '../../helpers'
 import { database as db } from '../../initializers/database'
-import { ClientLocal } from '../../../shared'
+import { OAuthClientLocal } from '../../../shared'
 
-const clientsRouter = express.Router()
+const oauthClientsRouter = express.Router()
 
-clientsRouter.get('/local', getLocalClient)
+oauthClientsRouter.get('/local', getLocalClient)
 
 // Get the client credentials for the PeerTube front end
 function getLocalClient (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -28,7 +28,7 @@ function getLocalClient (req: express.Request, res: express.Response, next: expr
     if (err) return next(err)
     if (!client) return next(new Error('No client available.'))
 
-    const json: ClientLocal = {
+    const json: OAuthClientLocal = {
       client_id: client.clientId,
       client_secret: client.clientSecret
     }
@@ -39,5 +39,5 @@ function getLocalClient (req: express.Request, res: express.Response, next: expr
 // ---------------------------------------------------------------------------
 
 export {
-  clientsRouter
+  oauthClientsRouter
 }
