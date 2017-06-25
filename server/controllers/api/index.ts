@@ -6,7 +6,7 @@ import { clientsRouter } from './clients'
 import { configRouter } from './config'
 import { podsRouter } from './pods'
 import { remoteRouter } from './remote'
-import { requestsRouter } from './requests'
+import { requestSchedulerRouter } from './request-schedulers'
 import { usersRouter } from './users'
 import { videosRouter } from './videos'
 
@@ -16,7 +16,7 @@ apiRouter.use('/clients', clientsRouter)
 apiRouter.use('/config', configRouter)
 apiRouter.use('/pods', podsRouter)
 apiRouter.use('/remote', remoteRouter)
-apiRouter.use('/requests', requestsRouter)
+apiRouter.use('/request-schedulers', requestSchedulerRouter)
 apiRouter.use('/users', usersRouter)
 apiRouter.use('/videos', videosRouter)
 apiRouter.use('/ping', pong)

@@ -8,29 +8,29 @@ import {
   getRequestVideoEventScheduler
 } from '../../lib'
 import { authenticate, ensureIsAdmin } from '../../middlewares'
-import { RequestSchedulerAttributes } from '../../../shared'
+import { RequestSchedulerStatsAttributes } from '../../../shared'
 
-const requestsRouter = express.Router()
+const requestSchedulerRouter = express.Router()
 
-requestsRouter.get('/stats',
+requestSchedulerRouter.get('/stats',
   authenticate,
   ensureIsAdmin,
-  getStatsRequests
+  getRequestSchedulersStats
 )
 
 // ---------------------------------------------------------------------------
 
 export {
-  requestsRouter
+  requestSchedulerRouter
 }
 
 // ---------------------------------------------------------------------------
 
-function getStatsRequests (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getRequestSchedulersStats (req: express.Request, res: express.Response, next: express.NextFunction) {
   parallel({
-    requestScheduler: buildRequestSchedulerFunction(getRequestScheduler()),
-    requestVideoQaduScheduler: buildRequestSchedulerFunction(getRequestVideoQaduScheduler()),
-    requestVideoEventScheduler: buildRequestSchedulerFunction(getRequestVideoEventScheduler())
+    requestScheduler: buildRequestSchedulerStats(getRequestScheduler()),
+    requestVideoQaduScheduler: buildRequestSchedulerStats(getRequestVideoQaduScheduler()),
+    requestVideoEventScheduler: buildRequestSchedulerStats(getRequestVideoEventScheduler())
   }, function (err, result) {
     if (err) return next(err)
 
@@ -40,12 +40,12 @@ function getStatsRequests (req: express.Request, res: express.Response, next: ex
 
 // ---------------------------------------------------------------------------
 
-function buildRequestSchedulerFunction (requestScheduler: AbstractRequestScheduler) {
+function buildRequestSchedulerStats (requestScheduler: AbstractRequestScheduler) {
   return function (callback) {
     requestScheduler.remainingRequestsCount(function (err, count) {
       if (err) return callback(err)
 
-      const result: RequestSchedulerAttributes = {
+      const result: RequestSchedulerStatsAttributes = {
         totalRequests: count,
         requestsLimitPods: requestScheduler.limitPods,
         requestsLimitPerPod: requestScheduler.limitPerPod,

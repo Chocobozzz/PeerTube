@@ -4,7 +4,7 @@ export type RequestVideoQaduType = 'likes' | 'dislikes' | 'views'
 
 export type RequestVideoEventType = 'likes' | 'dislikes' | 'views'
 
-export type RequestSchedulerAttributes = {
+export type RequestSchedulerStatsAttributes = {
   totalRequests: number
   requestsLimitPods: number
   requestsLimitPerPod: number
@@ -12,8 +12,8 @@ export type RequestSchedulerAttributes = {
   milliSecondsInterval: number
 }
 
-export interface RequestScheduler {
-  requestScheduler: RequestSchedulerAttributes
-  requestVideoQaduScheduler: RequestSchedulerAttributes
-  requestVideoEventScheduler: RequestSchedulerAttributes
+export interface RequestSchedulerStats {
+  requestScheduler: RequestSchedulerStatsAttributes
+  requestVideoQaduScheduler: RequestSchedulerStatsAttributes
+  requestVideoEventScheduler: RequestSchedulerStatsAttributes
 }

@@ -13,7 +13,7 @@ const loginUtils = require('../utils/login')
 const podsUtils = require('../utils/pods')
 const serversUtils = require('../utils/servers')
 const videosUtils = require('../utils/videos')
-const requestStatsUtils = require('../utils/requests-stats')
+const requestSchedulersUtils = require('../utils/request-schedulers')
 
 program
   .option('-c, --create [weight]', 'Weight for creating videos')
@@ -344,7 +344,7 @@ function isThereAwaitingRequests (servers, callback) {
 
   // Check is each server has awaiting requestq
   each(servers, function (server, callbackEach) {
-    requestStatsUtils.getRequestsStats(server, server.accessToken, function (err, res) {
+    requestSchedulersUtils.getRequestsStats(server, server.accessToken, function (err, res) {
       if (err) throw err
 
       const stats = res.body

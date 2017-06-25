@@ -9,8 +9,8 @@ const loginUtils = require('../../utils/login')
 const usersUtils = require('../../utils/users')
 const serversUtils = require('../../utils/servers')
 
-describe('Test requests API validators', function () {
-  const path = '/api/v1/requests/stats'
+describe('Test request schedulers stats API validators', function () {
+  const path = '/api/v1/request-schedulers/stats'
   let server = null
   let userAccessToken = null
 

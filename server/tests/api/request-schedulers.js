@@ -12,9 +12,9 @@ const podsUtils = require('../utils/pods')
 const serversUtils = require('../utils/servers')
 const videosUtils = require('../utils/videos')
 
-describe('Test requests stats', function () {
+describe('Test requests schedulers stats', function () {
   const requestSchedulerNames = [ 'requestScheduler', 'requestVideoQaduScheduler', 'requestVideoEventScheduler' ]
-  const path = '/api/v1/requests/stats'
+  const path = '/api/v1/request-schedulers/stats'
   let servers = []
 
   function uploadVideo (server, callback) {

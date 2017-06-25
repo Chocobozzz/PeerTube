@@ -4,7 +4,7 @@
 require('./pods')
 require('./remotes')
 require('./users')
-require('./requests')
+require('./request-schedulers')
 require('./videos')
 require('./video-abuses')
 require('./video-blacklists')

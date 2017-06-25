@@ -2,22 +2,22 @@ import { Component, OnInit, OnDestroy } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
 
-import { RequestService, RequestSchedulerStatsAttributes } from '../shared'
-import { RequestScheduler } from '../../../../../../shared'
+import { RequestSchedulersService, RequestSchedulerStatsAttributes } from '../shared'
+import { RequestSchedulerStats } from '../../../../../../shared'
 
 @Component({
-  selector: 'my-request-stats',
-  templateUrl: './request-stats.component.html',
-  styleUrls: [ './request-stats.component.scss' ]
+  selector: 'my-request-schedulers-stats',
+  templateUrl: './request-schedulers-stats.component.html',
+  styleUrls: [ './request-schedulers-stats.component.scss' ]
 })
-export class RequestStatsComponent implements OnInit, OnDestroy {
+export class RequestSchedulersStatsComponent implements OnInit, OnDestroy {
   statsTitles = {
     requestScheduler: 'Basic request scheduler',
     requestVideoEventScheduler: 'Video events request scheduler',
     requestVideoQaduScheduler: 'Quick and dirty video updates request scheduler'
   }
 
-  stats: RequestScheduler
+  stats: RequestSchedulerStats
 
   private intervals: { [ id: string ]: number } = {
     requestScheduler: null,
@@ -33,7 +33,7 @@ export class RequestStatsComponent implements OnInit, OnDestroy {
 
   constructor (
     private notificationsService: NotificationsService,
-    private requestService: RequestService
+    private requestService: RequestSchedulersService
   ) { }
 
   ngOnInit () {

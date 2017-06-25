@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { AdminComponent } from './admin.component'
 import { FriendsRoutes } from './friends'
-import { RequestsRoutes } from './requests'
+import { RequestSchedulersRoutes } from './request-schedulers'
 import { UsersRoutes } from './users'
 import { VideoAbusesRoutes } from './video-abuses'
 
@@ -18,7 +18,7 @@ const adminRoutes: Routes = [
         pathMatch: 'full'
       },
       ...FriendsRoutes,
-      ...RequestsRoutes,
+      ...RequestSchedulersRoutes,
       ...UsersRoutes,
       ...VideoAbusesRoutes
     ]

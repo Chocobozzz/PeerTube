@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router'
 
-import { RequestsComponent } from './requests.component'
-import { RequestStatsComponent } from './request-stats'
+import { RequestSchedulersComponent } from './request-schedulers.component'
+import { RequestSchedulersStatsComponent } from './request-schedulers-stats'
 
-export const RequestsRoutes: Routes = [
+export const RequestSchedulersRoutes: Routes = [
   {
     path: 'requests',
-    component: RequestsComponent,
+    component: RequestSchedulersComponent,
     children: [
       {
         path: '',
@@ -15,7 +15,7 @@ export const RequestsRoutes: Routes = [
       },
       {
         path: 'stats',
-        component: RequestStatsComponent,
+        component: RequestSchedulersStatsComponent,
         data: {
           meta: {
             title: 'Request stats'
