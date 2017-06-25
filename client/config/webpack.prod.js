@@ -81,6 +81,21 @@ module.exports = function (env) {
       publicPath: '/client/'
     },
 
+    module: {
+      rules: [
+        {
+          test: /junk\/index\.js$/,
+          // exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: [ 'env' ]
+            }
+          }
+        }
+      ]
+    },
+
     /**
      * Add additional plugins to the compiler.
      *
@@ -130,6 +145,7 @@ module.exports = function (env) {
           'HMR': METADATA.HMR
         }
       }),
+
       /**
       * Plugin: UglifyJsPlugin
       * Description: Minimize all JavaScript output of chunks.
