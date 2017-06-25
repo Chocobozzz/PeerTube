@@ -19,7 +19,7 @@ export class RestDataSource extends ServerDataSource {
   }
 
   protected addSortRequestOptions (requestOptions: RequestOptionsArgs) {
-    const searchParams = requestOptions.search as URLSearchParams
+    const searchParams = requestOptions.params as URLSearchParams
 
     if (this.sortConf) {
       this.sortConf.forEach((fieldConf) => {
@@ -33,7 +33,7 @@ export class RestDataSource extends ServerDataSource {
   }
 
   protected addPagerRequestOptions (requestOptions: RequestOptionsArgs) {
-    const searchParams = requestOptions.search as URLSearchParams
+    const searchParams = requestOptions.params as URLSearchParams
 
     if (this.pagingConf && this.pagingConf['page'] && this.pagingConf['perPage']) {
       const perPage = this.pagingConf['perPage']

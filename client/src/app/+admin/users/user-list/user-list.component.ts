@@ -3,7 +3,7 @@ import { Component } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 
 import { ConfirmService } from '../../../core'
-import { User, Utils } from '../../../shared'
+import { RestDataSource, User, Utils } from '../../../shared'
 import { UserService } from '../shared'
 
 @Component({
@@ -12,7 +12,7 @@ import { UserService } from '../shared'
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent {
-  usersSource = null
+  usersSource: RestDataSource = null
   tableSettings = {
     mode: 'external',
     attr: {
