@@ -15,7 +15,8 @@
   "scripts": {
     "test": "standard && tslint --type-check --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
     "webpack": "webpack",
-    "webpack-dev-server": "webpack-dev-server"
+    "webpack-dev-server": "webpack-dev-server",
+    "postinstall": "npm rebuild node-sass"
   },
   "license": "GPLv3",
   "dependencies": {
