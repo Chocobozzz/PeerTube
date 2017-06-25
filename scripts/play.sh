@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-if [ ! -f server.js ]; then
+if [ ! -f "dist/server.js" ]; then
   echo "Missing server file (server.js)."
   exit -1
 fi
