@@ -234,7 +234,7 @@ function quitFriends (callback: (err: Error) => void) {
   })
 }
 
-function removeFriend (pod, callback: (err: Error) => void) {
+function removeFriend (pod: PodInstance, callback: (err: Error) => void) {
   // Stop pool requests
   requestScheduler.deactivate()
 
