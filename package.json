@@ -75,7 +75,7 @@
     "rimraf": "^2.5.4",
     "safe-buffer": "^5.0.1",
     "scripty": "^1.5.0",
-    "sequelize": "4.0.0-2",
+    "sequelize": "4.2.0",
     "ts-node": "^3.0.6",
     "typescript": "^2.3.4",
     "validator": "^7.0.0",
