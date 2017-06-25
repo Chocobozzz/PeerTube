@@ -1,3 +1,5 @@
+import { constant, waterfall } from 'async'
+
 import * as request from 'request'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
@@ -242,30 +244,28 @@ function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
 }
 
-function removeFriend (podId: number, callback: (err: Error) => void) {
+function removeFriend (pod, callback: (err: Error) => void) {
   // Stop pool requests
   requestScheduler.deactivate()
 
   waterfall([
-    function getPod (callbackAsync) {
-      return db.Pod.load(podId, callbackAsync)
-    },
+    constant(pod),
 
     function announceIQuitThisFriend (pod, callbackAsync) {
       const requestParams = {
-        method: 'POST' as 'POST',
-        path: '/api/' + API_VERSION + '/remote/pods/remove',
-        sign: true,
-        toPod: pod
+	method: 'POST' as 'POST',
+	path: '/api/' + API_VERSION + '/remote/pods/remove',
+	sign: true,
+	toPod: pod
       }
 
       makeSecureRequest(requestParams, function (err) {
-        if (err) {
+	if (err) {
           logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, { err: err })
           // Continue anyway
-        }
+	}
 
-        return callbackAsync(null, pod)
+	return callbackAsync(null, pod)
       })
     },
 
