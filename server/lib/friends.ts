@@ -244,7 +244,7 @@ function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
 }
 
-function removeFriend (pod, callback: (err: Error) => void) {
+function removeFriend (pod: PodInstance, callback: (err: Error) => void) {
   // Stop pool requests
   requestScheduler.deactivate()
 
