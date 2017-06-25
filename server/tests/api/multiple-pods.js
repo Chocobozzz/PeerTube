@@ -153,7 +153,7 @@ describe('Test multiple pods', function () {
     })
 
     it('Should upload the video on pod 2 and propagate on each pod', function (done) {
-      this.timeout(30000)
+      this.timeout(60000)
 
       series([
         function (next) {
