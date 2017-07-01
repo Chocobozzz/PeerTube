@@ -31,15 +31,15 @@ export class FriendService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  quitFriends() {
+  quitFriends () {
     return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'quitfriends')
                         .map(res => res.status)
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  removeFriend(friend: Pod) {
+  removeFriend (friend: Pod) {
     return this.authHttp.delete(FriendService.BASE_FRIEND_URL + friend.id)
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res));
+                        .catch((res) => this.restExtractor.handleError(res))
   }
 }
