@@ -243,19 +243,19 @@ function removeFriend (pod: PodInstance, callback: (err: Error) => void) {
 
     function announceIQuitThisFriend (pod, callbackAsync) {
       const requestParams = {
-	method: 'POST' as 'POST',
-	path: '/api/' + API_VERSION + '/remote/pods/remove',
-	sign: true,
-	toPod: pod
+        method: 'POST' as 'POST',
+        path: '/api/' + API_VERSION + '/remote/pods/remove',
+        sign: true,
+        toPod: pod
       }
 
       makeSecureRequest(requestParams, function (err) {
-	if (err) {
+        if (err) {
           logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, { err: err })
           // Continue anyway
-	}
+        }
 
-	return callbackAsync(null, pod)
+        return callbackAsync(null, pod)
       })
     },
 
