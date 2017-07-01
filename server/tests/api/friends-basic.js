@@ -142,8 +142,8 @@ describe('Test basic friends', function () {
   })
 
   it('Should not be allowed to make friend again', function (done) {
-    const server = servers[1]
     this.timeout(10000)
+    const server = servers[1]
     podsUtils.makeFriends(server.url, server.accessToken, 409, done)
   })
 

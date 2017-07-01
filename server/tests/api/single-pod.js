@@ -181,25 +181,21 @@ describe('Test a single pod', function () {
         if (err) throw err
         expect(test).to.equal(true)
 
-        done()
+	// Wait the async views increment
+        setTimeout(done, 500)
       })
     })
   })
 
   it('Should have the views updated', function (done) {
-    this.timeout(5000)
+    videosUtils.getVideo(server.url, videoId, function (err, res) {
+      if (err) throw err
 
-    setTimeout(videosUtils.getVideo,
-               2000,
-               server.url, videoId, function (err, res) {
-                 if (err) throw err
+      const video = res.body
+      expect(video.views).to.equal(1)
 
-                 const video = res.body
-                 expect(video.views).to.equal(1)
-
-                 done()
-               }
-              )
+      done()
+    })
   })
 
   it('Should search the video by name by default', function (done) {
