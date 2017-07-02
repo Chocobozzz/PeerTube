@@ -17,7 +17,7 @@ describe('Test video abuses', function () {
   let servers = []
 
   before(function (done) {
-    this.timeout(40000)
+    this.timeout(100000)
 
     series([
       // Run servers

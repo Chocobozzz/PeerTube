@@ -22,7 +22,7 @@ describe('Test multiple pods', function () {
   const toRemove = []
 
   before(function (done) {
-    this.timeout(30000)
+    this.timeout(120000)
 
     series([
       // Run servers
@@ -230,7 +230,7 @@ describe('Test multiple pods', function () {
     })
 
     it('Should upload two videos on pod 3 and propagate on each pod', function (done) {
-      this.timeout(30000)
+      this.timeout(45000)
 
       series([
         function (next) {
@@ -260,7 +260,7 @@ describe('Test multiple pods', function () {
           videosUtils.uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes, next)
         },
         function (next) {
-          setTimeout(next, 22000)
+          setTimeout(next, 33000)
         }],
         function (err) {
           if (err) throw err

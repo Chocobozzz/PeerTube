@@ -46,7 +46,7 @@ describe('Test advanced friends', function () {
   // ---------------------------------------------------------------
 
   before(function (done) {
-    this.timeout(30000)
+    this.timeout(120000)
     serversUtils.flushAndRunMultipleServers(6, function (serversRun, urlsRun) {
       servers = serversRun
 

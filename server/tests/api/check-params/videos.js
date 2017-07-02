@@ -378,7 +378,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should succeed with the correct parameters', function (done) {
-      this.timeout(5000)
+      this.timeout(10000)
 
       const data = {
         name: 'my super name',
@@ -392,6 +392,7 @@ describe('Test videos API validator', function () {
       const attach = {
         'videofile': pathUtils.join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
+
       requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, function () {
         attach.videofile = pathUtils.join(__dirname, '..', 'fixtures', 'video_short.mp4')
         requestsUtils.makePostUploadRequest(server.url, path, server.accessToken, data, attach, function () {

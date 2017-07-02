@@ -17,7 +17,7 @@ describe('Test video blacklists API validators', function () {
   // ---------------------------------------------------------------
 
   before(function (done) {
-    this.timeout(20000)
+    this.timeout(120000)
 
     series([
       function (next) {
