@@ -110,7 +110,7 @@ describe('Test pods API validators', function () {
           .expect(400, done)
       })
 
-      it('Should fail with a invalid token', function (done) {
+      it('Should fail with an invalid token', function (done) {
         request(server.url)
           .post(path + '/makefriends')
           .send(body)
@@ -130,7 +130,7 @@ describe('Test pods API validators', function () {
     })
 
     describe('When quitting friends', function () {
-      it('Should fail with a invalid token', function (done) {
+      it('Should fail with an invalid token', function (done) {
         request(server.url)
           .get(path + '/quitfriends')
           .query({ start: 'hello' })
@@ -150,7 +150,7 @@ describe('Test pods API validators', function () {
     })
 
     describe('When removing one friend', function () {
-      it('Should fail with a invalid token', function (done) {
+      it('Should fail with an invalid token', function (done) {
 	request(server.url)
           .delete(path + '/1')
           .set('Authorization', 'Bearer faketoken')
@@ -217,7 +217,7 @@ describe('Test pods API validators', function () {
       requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
     })
 
-    it('Should fail without an host', function (done) {
+    it('Should fail without a host', function (done) {
       const data = {
         email: 'testexample.com',
         publicKey: 'mysuperpublickey'
