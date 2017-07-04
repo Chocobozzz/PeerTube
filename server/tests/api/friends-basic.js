@@ -198,6 +198,78 @@ describe('Test basic friends', function () {
     })
   })
 
+  it('Should allow pod 1 to quit only pod 2', function (done) {
+    series([
+      // Pod 1 quits pod 2
+      function (next) {
+        const server = servers[0]
+
+        // Get pod 2 id so we can query it
+        podsUtils.getFriendsList(server.url, function (err, res) {
+          if (err) throw err
+
+          const result = res.body.data
+          let podId
+
+          for (let i = 0; i < result.length; i++) {
+            if (result[i].host === servers[1].host) {
+              podId = result[i].id
+              break
+            }
+          }
+
+          // Remove it from the friends list
+          podsUtils.quitOneFriend(server.url, server.accessToken, podId, next)
+        })
+      },
+
+      // Pod 1 should have only pod 3 in its friends list
+      function (next) {
+        podsUtils.getFriendsList(servers[0].url, function (err, res) {
+          if (err) throw err
+
+          const result = res.body.data
+          expect(result).to.be.an('array')
+          expect(result.length).to.equal(1)
+
+          const pod = result[0]
+          expect(pod.host).to.equal(servers[2].host)
+
+          next()
+        })
+      },
+
+      // Pod 2 should have only pod 3 in its friends list
+      function (next) {
+        podsUtils.getFriendsList(servers[1].url, function (err, res) {
+          if (err) throw err
+
+          const result = res.body.data
+          expect(result).to.be.an('array')
+          expect(result.length).to.equal(1)
+
+          const pod = result[0]
+          expect(pod.host).to.equal(servers[2].host)
+
+          next()
+        })
+      },
+
+      // Pod 3 should have both pods in its friends list
+      function (next) {
+        podsUtils.getFriendsList(servers[2].url, function (err, res) {
+          if (err) throw err
+
+          const result = res.body.data
+          expect(result).to.be.an('array')
+          expect(result.length).to.equal(2)
+
+          next()
+        })
+      }
+    ], done)
+  })
+
   after(function (done) {
     servers.forEach(function (server) {
       process.kill(-server.app.pid)
