@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize'
 
 import { addMethodsToModel } from '../utils'
 import {
-  OAuthClientClass,
   OAuthClientInstance,
   OAuthClientAttributes,
 
@@ -67,12 +66,12 @@ function associate (models) {
   })
 }
 
-countTotal = function (callback: OAuthClientMethods.CountTotalCallback) {
-  return OAuthClient.count().asCallback(callback)
+countTotal = function () {
+  return OAuthClient.count()
 }
 
-loadFirstClient = function (callback: OAuthClientMethods.LoadFirstClientCallback) {
-  return OAuthClient.findOne().asCallback(callback)
+loadFirstClient = function () {
+  return OAuthClient.findOne()
 }
 
 getByIdAndSecret = function (clientId: string, clientSecret: string) {

@@ -1,35 +1,29 @@
 import * as Sequelize from 'sequelize'
-import * as Bluebird from 'bluebird'
+import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
 import { UserRole, User as FormatedUser } from '../../../shared/models/user.model'
+import { ResultList } from '../../../shared/models/result-list.model'
 
 export namespace UserMethods {
-  export type IsPasswordMatchCallback = (err: Error, same: boolean) => void
-  export type IsPasswordMatch = (this: UserInstance, password: string, callback: IsPasswordMatchCallback) => void
+  export type IsPasswordMatch = (this: UserInstance, password: string) => Promise<boolean>
 
   export type ToFormatedJSON = (this: UserInstance) => FormatedUser
   export type IsAdmin = (this: UserInstance) => boolean
 
-  export type CountTotalCallback = (err: Error, total: number) => void
-  export type CountTotal = (callback: CountTotalCallback) => void
+  export type CountTotal = () => Promise<number>
 
-  export type GetByUsername = (username: string) => Bluebird<UserInstance>
+  export type GetByUsername = (username: string) => Promise<UserInstance>
 
-  export type ListCallback = (err: Error, userInstances: UserInstance[]) => void
-  export type List = (callback: ListCallback) => void
+  export type List = () => Promise<UserInstance[]>
 
-  export type ListForApiCallback = (err: Error, userInstances?: UserInstance[], total?: number) => void
-  export type ListForApi = (start: number, count: number, sort: string, callback: ListForApiCallback) => void
+  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<UserInstance> >
 
-  export type LoadByIdCallback = (err: Error, userInstance: UserInstance) => void
-  export type LoadById = (id: number, callback: LoadByIdCallback) => void
+  export type LoadById = (id: number) => Promise<UserInstance>
 
-  export type LoadByUsernameCallback = (err: Error, userInstance: UserInstance) => void
-  export type LoadByUsername = (username: string, callback: LoadByUsernameCallback) => void
+  export type LoadByUsername = (username: string) => Promise<UserInstance>
 
-  export type LoadByUsernameOrEmailCallback = (err: Error, userInstance: UserInstance) => void
-  export type LoadByUsernameOrEmail = (username: string, email: string, callback: LoadByUsernameOrEmailCallback) => void
+  export type LoadByUsernameOrEmail = (username: string, email: string) => Promise<UserInstance>
 }
 
 export interface UserClass {

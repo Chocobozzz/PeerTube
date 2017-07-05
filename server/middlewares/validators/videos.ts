@@ -1,5 +1,4 @@
 import 'express-validator'
-import * as multer from 'multer'
 import * as express from 'express'
 
 import { database as db } from '../../initializers/database'
@@ -24,18 +23,19 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
   checkErrors(req, res, function () {
     const videoFile = req.files.videofile[0]
 
-    db.Video.getDurationFromFile(videoFile.path, function (err, duration) {
-      if (err) {
-        return res.status(400).send('Cannot retrieve metadata of the file.')
-      }
+    db.Video.getDurationFromFile(videoFile.path)
+      .then(duration => {
+        if (!isVideoDurationValid('' + duration)) {
+          return res.status(400).send('Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')
+        }
 
-      if (!isVideoDurationValid(duration)) {
-        return res.status(400).send('Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')
-      }
-
-      videoFile['duration'] = duration
-      next()
-    })
+        videoFile['duration'] = duration
+        next()
+      })
+      .catch(err => {
+        logger.error('Error in getting duration from file.', { error: err })
+        res.status(400).send('Cannot retrieve metadata of the file.')
+      })
   })
 }
 
@@ -157,43 +157,42 @@ export {
 // ---------------------------------------------------------------------------
 
 function checkVideoExists (id: string, res: express.Response, callback: () => void) {
-  db.Video.loadAndPopulateAuthorAndPodAndTags(id, function (err, video) {
-    if (err) {
-      logger.error('Error in video request validator.', { error: err })
-      return res.sendStatus(500)
-    }
-
+  db.Video.loadAndPopulateAuthorAndPodAndTags(id).then(video => {
     if (!video) return res.status(404).send('Video not found')
 
     res.locals.video = video
     callback()
   })
+  .catch(err => {
+    logger.error('Error in video request validator.', { error: err })
+    return res.sendStatus(500)
+  })
 }
 
 function checkUserCanDeleteVideo (userId: number, res: express.Response, callback: () => void) {
   // Retrieve the user who did the request
-  db.User.loadById(userId, function (err, user) {
-    if (err) {
+  db.User.loadById(userId)
+    .then(user => {
+      // Check if the user can delete the video
+      // The user can delete it if s/he is an admin
+      // Or if s/he is the video's author
+      if (user.isAdmin() === false) {
+        if (res.locals.video.isOwned() === false) {
+          return res.status(403).send('Cannot remove video of another pod')
+        }
+
+        if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+          return res.status(403).send('Cannot remove video of another user')
+        }
+      }
+
+      // If we reach this comment, we can delete the video
+      callback()
+    })
+    .catch(err => {
       logger.error('Error in video request validator.', { error: err })
       return res.sendStatus(500)
-    }
-
-    // Check if the user can delete the video
-    // The user can delete it if s/he is an admin
-    // Or if s/he is the video's author
-    if (user.isAdmin() === false) {
-      if (res.locals.video.isOwned() === false) {
-        return res.status(403).send('Cannot remove video of another pod')
-      }
-
-      if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
-        return res.status(403).send('Cannot remove video of another user')
-      }
-    }
-
-    // If we reach this comment, we can delete the video
-    callback()
-  })
+    })
 }
 
 function checkVideoIsBlacklistable (req: express.Request, res: express.Response, callback: () => void) {

@@ -32,37 +32,35 @@ class JobScheduler {
 
     // Finish processing jobs from a previous start
     const state = JOB_STATES.PROCESSING
-    db.Job.listWithLimit(limit, state, (err, jobs) => {
-      this.enqueueJobs(err, jobsQueue, jobs)
+    db.Job.listWithLimit(limit, state)
+      .then(jobs => {
+        this.enqueueJobs(jobsQueue, jobs)
 
-      forever(
-        next => {
-          if (jobsQueue.length() !== 0) {
-            // Finish processing the queue first
-            return setTimeout(next, JOBS_FETCHING_INTERVAL)
-          }
-
-          const state = JOB_STATES.PENDING
-          db.Job.listWithLimit(limit, state, (err, jobs) => {
-            if (err) {
-              logger.error('Cannot list pending jobs.', { error: err })
-            } else {
-              jobs.forEach(job => {
-                jobsQueue.push(job)
-              })
+        forever(
+          next => {
+            if (jobsQueue.length() !== 0) {
+              // Finish processing the queue first
+              return setTimeout(next, JOBS_FETCHING_INTERVAL)
             }
 
-            // Optimization: we could use "drain" from queue object
-            return setTimeout(next, JOBS_FETCHING_INTERVAL)
-          })
-        },
+            const state = JOB_STATES.PENDING
+            db.Job.listWithLimit(limit, state)
+              .then(jobs => {
+                this.enqueueJobs(jobsQueue, jobs)
 
-        err => { logger.error('Error in job scheduler queue.', { error: err }) }
-      )
-    })
+                // Optimization: we could use "drain" from queue object
+                return setTimeout(next, JOBS_FETCHING_INTERVAL)
+              })
+              .catch(err => logger.error('Cannot list pending jobs.', { error: err }))
+          },
+
+          err => logger.error('Error in job scheduler queue.', { error: err })
+        )
+      })
+      .catch(err => logger.error('Cannot list pending jobs.', { error: err }))
   }
 
-  createJob (transaction: Sequelize.Transaction, handlerName: string, handlerInputData: object, callback: (err: Error) => void) {
+  createJob (transaction: Sequelize.Transaction, handlerName: string, handlerInputData: object) {
     const createQuery = {
       state: JOB_STATES.PENDING,
       handlerName,
@@ -70,67 +68,62 @@ class JobScheduler {
     }
     const options = { transaction }
 
-    db.Job.create(createQuery, options).asCallback(callback)
+    return db.Job.create(createQuery, options)
   }
 
-  private enqueueJobs (err: Error, jobsQueue: AsyncQueue<JobInstance>, jobs: JobInstance[]) {
-    if (err) {
-      logger.error('Cannot list pending jobs.', { error: err })
-    } else {
-      jobs.forEach(job => {
-        jobsQueue.push(job)
-      })
-    }
+  private enqueueJobs (jobsQueue: AsyncQueue<JobInstance>, jobs: JobInstance[]) {
+    jobs.forEach(job => jobsQueue.push(job))
   }
 
   private processJob (job: JobInstance, callback: (err: Error) => void) {
     const jobHandler = jobHandlers[job.handlerName]
+    if (jobHandler === undefined) {
+      logger.error('Unknown job handler for job %s.', job.handlerName)
+      return callback(null)
+    }
 
     logger.info('Processing job %d with handler %s.', job.id, job.handlerName)
 
     job.state = JOB_STATES.PROCESSING
-    job.save().asCallback(err => {
-      if (err) return this.cannotSaveJobError(err, callback)
-
-      if (jobHandler === undefined) {
-        logger.error('Unknown job handler for job %s.', job.handlerName)
-        return callback(null)
-      }
-
-      return jobHandler.process(job.handlerInputData, (err, result) => {
-        if (err) {
-          logger.error('Error in job handler %s.', job.handlerName, { error: err })
-          return this.onJobError(jobHandler, job, result, callback)
-        }
-
-        return this.onJobSuccess(jobHandler, job, result, callback)
+    return job.save()
+      .then(() => {
+        return jobHandler.process(job.handlerInputData)
       })
-    })
+      .then(
+        result => {
+          return this.onJobSuccess(jobHandler, job, result)
+        },
+
+        err => {
+          logger.error('Error in job handler %s.', job.handlerName, { error: err })
+          return this.onJobError(jobHandler, job, err)
+        }
+      )
+      .then(() => callback(null))
+      .catch(err => {
+        this.cannotSaveJobError(err)
+        return callback(err)
+      })
   }
 
-  private onJobError (jobHandler: JobHandler<any>, job: JobInstance, jobResult: any, callback: (err: Error) => void) {
+  private onJobError (jobHandler: JobHandler<any>, job: JobInstance, err: Error) {
     job.state = JOB_STATES.ERROR
 
-    job.save().asCallback(err => {
-      if (err) return this.cannotSaveJobError(err, callback)
-
-      return jobHandler.onError(err, job.id, jobResult, callback)
-    })
+    return job.save()
+      .then(() => jobHandler.onError(err, job.id))
+      .catch(err => this.cannotSaveJobError(err))
   }
 
-  private onJobSuccess (jobHandler: JobHandler<any>, job: JobInstance, jobResult: any, callback: (err: Error) => void) {
+  private onJobSuccess (jobHandler: JobHandler<any>, job: JobInstance, jobResult: any) {
     job.state = JOB_STATES.SUCCESS
 
-    job.save().asCallback(err => {
-      if (err) return this.cannotSaveJobError(err, callback)
-
-      return jobHandler.onSuccess(err, job.id, jobResult, callback)
-    })
+    return job.save()
+      .then(() => jobHandler.onSuccess(job.id, jobResult))
+      .catch(err => this.cannotSaveJobError(err))
   }
 
-  private cannotSaveJobError (err: Error, callback: (err: Error) => void) {
+  private cannotSaveJobError (err: Error) {
     logger.error('Cannot save new job state.', { error: err })
-    return callback(err)
   }
 }
 

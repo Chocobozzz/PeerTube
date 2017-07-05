@@ -1,8 +1,7 @@
-import { parallel } from 'async'
 import * as express from 'express'
-import * as fs from 'fs'
 import { join } from 'path'
 import * as validator from 'validator'
+import * as Promise from 'bluebird'
 
 import { database as db } from '../initializers/database'
 import {
@@ -11,7 +10,7 @@ import {
   STATIC_PATHS,
   STATIC_MAX_AGE
 } from '../initializers'
-import { root } from '../helpers'
+import { root, readFileBufferPromise } from '../helpers'
 import { VideoInstance } from '../models'
 
 const clientsRouter = express.Router()
@@ -95,19 +94,15 @@ function generateWatchHtmlPage (req: express.Request, res: express.Response, nex
   // Let Angular application handle errors
   if (!validator.isUUID(videoId, 4)) return res.sendFile(indexPath)
 
-  parallel({
-    file: function (callback) {
-      fs.readFile(indexPath, callback)
-    },
+  Promise.all([
+    readFileBufferPromise(indexPath),
+    db.Video.loadAndPopulateAuthorAndPodAndTags(videoId)
+  ])
+  .then(([ file, video ]) => {
+    file = file as Buffer
+    video = video as VideoInstance
 
-    video: function (callback) {
-      db.Video.loadAndPopulateAuthorAndPodAndTags(videoId, callback)
-    }
-  }, function (err: Error, result: { file: Buffer, video: VideoInstance }) {
-    if (err) return next(err)
-
-    const html = result.file.toString()
-    const video = result.video
+    const html = file.toString()
 
     // Let Angular application handle errors
     if (!video) return res.sendFile(indexPath)
@@ -115,4 +110,5 @@ function generateWatchHtmlPage (req: express.Request, res: express.Response, nex
     const htmlStringPageWithTags = addOpenGraphTags(html, video)
     res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
   })
+  .catch(err => next(err))
 }

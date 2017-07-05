@@ -3,29 +3,23 @@ import { logger } from '../../../helpers'
 import { addVideoToFriends } from '../../../lib'
 import { VideoInstance } from '../../../models'
 
-function process (data: { id: string }, callback: (err: Error, videoInstance?: VideoInstance) => void) {
-  db.Video.loadAndPopulateAuthorAndPodAndTags(data.id, function (err, video) {
-    if (err) return callback(err)
-
-    video.transcodeVideofile(function (err) {
-      return callback(err, video)
-    })
+function process (data: { id: string }) {
+  return db.Video.loadAndPopulateAuthorAndPodAndTags(data.id).then(video => {
+    return video.transcodeVideofile().then(() => video)
   })
 }
 
-function onError (err: Error, jobId: number, video: VideoInstance, callback: (err: Error) => void) {
+function onError (err: Error, jobId: number) {
   logger.error('Error when transcoding video file in job %d.', jobId, { error: err })
-  return callback(null)
+  return Promise.resolve()
 }
 
-function onSuccess (data: any, jobId: number, video: VideoInstance, callback: (err: Error) => void) {
+function onSuccess (jobId: number, video: VideoInstance) {
   logger.info('Job %d is a success.', jobId)
 
-  video.toAddRemoteJSON(function (err, remoteVideo) {
-    if (err) return callback(err)
-
+  video.toAddRemoteJSON().then(remoteVideo => {
     // Now we'll add the video's meta data to our friends
-    addVideoToFriends(remoteVideo, null, callback)
+    return addVideoToFriends(remoteVideo, null)
   })
 }
 

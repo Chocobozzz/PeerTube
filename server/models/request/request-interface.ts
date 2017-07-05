@@ -1,5 +1,7 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
+import { AbstractRequestClass } from './abstract-request-interface'
 import { PodInstance, PodAttributes } from '../pod'
 import { RequestEndpoint } from '../../../shared/models/request-scheduler.model'
 
@@ -11,20 +13,16 @@ export type RequestsGrouped = {
 }
 
 export namespace RequestMethods {
-  export type CountTotalRequestsCallback = (err: Error, total: number) => void
-  export type CountTotalRequests = (callback: CountTotalRequestsCallback) => void
+  export type CountTotalRequests = () => Promise<number>
 
-  export type ListWithLimitAndRandomCallback = (err: Error, requestsGrouped?: RequestsGrouped) => void
-  export type ListWithLimitAndRandom = (limitPods, limitRequestsPerPod, callback: ListWithLimitAndRandomCallback) => void
+  export type ListWithLimitAndRandom = (limitPods: number, limitRequestsPerPod: number) => Promise<RequestsGrouped>
 
-  export type RemoveWithEmptyToCallback = (err: Error) => void
-  export type RemoveWithEmptyTo = (callback: RemoveWithEmptyToCallback) => void
+  export type RemoveWithEmptyTo = () => Promise<number>
 
-  export type RemoveAllCallback = (err: Error) => void
-  export type RemoveAll = (callback: RemoveAllCallback) => void
+  export type RemoveAll = () => Promise<void>
 }
 
-export interface RequestClass {
+export interface RequestClass extends AbstractRequestClass<RequestsGrouped> {
   countTotalRequests: RequestMethods.CountTotalRequests
   listWithLimitAndRandom: RequestMethods.ListWithLimitAndRandom
   removeWithEmptyTo: RequestMethods.RemoveWithEmptyTo

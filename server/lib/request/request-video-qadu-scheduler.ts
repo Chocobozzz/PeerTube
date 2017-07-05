@@ -9,6 +9,7 @@ import {
   REQUEST_VIDEO_QADU_ENDPOINT,
   REQUEST_VIDEO_QADU_TYPES
 } from '../../initializers'
+import { RequestsVideoQaduGrouped } from '../../models'
 import { RequestVideoQaduType } from '../../../shared'
 
 export type RequestVideoQaduSchedulerOptions = {
@@ -17,7 +18,7 @@ export type RequestVideoQaduSchedulerOptions = {
   transaction?: Sequelize.Transaction
 }
 
-class RequestVideoQaduScheduler extends AbstractRequestScheduler {
+class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQaduGrouped> {
   constructor () {
     super()
 
@@ -36,7 +37,7 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler {
     return db.RequestVideoQadu
   }
 
-  buildRequestObjects (requests: { [ toPodId: number ]: any }[]) {
+  buildRequestObjects (requests: RequestsVideoQaduGrouped) {
     const requestsToMakeGrouped = {}
 
     Object.keys(requests).forEach(toPodId => {
@@ -105,20 +106,18 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler {
     return requestsToMakeGrouped
   }
 
-  createRequest ({ type, videoId, transaction }: RequestVideoQaduSchedulerOptions, callback: (err: Error) => void) {
+  createRequest ({ type, videoId, transaction }: RequestVideoQaduSchedulerOptions) {
     const dbRequestOptions: Sequelize.BulkCreateOptions = {}
     if (transaction) dbRequestOptions.transaction = transaction
 
     // Send the update to all our friends
-    db.Pod.listAllIds(transaction, function (err, podIds) {
-      if (err) return callback(err)
-
+    return db.Pod.listAllIds(transaction).then(podIds => {
       const queries = []
       podIds.forEach(podId => {
         queries.push({ type, videoId, podId })
       })
 
-      return db.RequestVideoQadu.bulkCreate(queries, dbRequestOptions).asCallback(callback)
+      return db.RequestVideoQadu.bulkCreate(queries, dbRequestOptions)
     })
   }
 }

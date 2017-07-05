@@ -1,11 +1,13 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 export namespace ApplicationMethods {
-  export type LoadMigrationVersionCallback = (err: Error, version: number) => void
-  export type LoadMigrationVersion = (callback: LoadMigrationVersionCallback) => void
+  export type LoadMigrationVersion = () => Promise<number>
 
-  export type UpdateMigrationVersionCallback = (err: Error, applicationInstance: ApplicationAttributes) => void
-  export type UpdateMigrationVersion = (newVersion: number, transaction: Sequelize.Transaction, callback: UpdateMigrationVersionCallback) => void
+  export type UpdateMigrationVersion = (
+    newVersion: number,
+    transaction: Sequelize.Transaction
+  ) => Promise<[ number, ApplicationInstance[] ]>
 }
 
 export interface ApplicationClass {

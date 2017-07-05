@@ -1,10 +1,15 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 import { PodInstance } from '../pod'
 
 export namespace AuthorMethods {
-  export type FindOrCreateAuthorCallback = (err: Error, authorInstance?: AuthorInstance) => void
-  export type FindOrCreateAuthor = (name: string, podId: number, userId: number, transaction: Sequelize.Transaction, callback: FindOrCreateAuthorCallback) => void
+  export type FindOrCreateAuthor = (
+    name: string,
+    podId: number,
+    userId: number,
+    transaction: Sequelize.Transaction
+  ) => Promise<AuthorInstance>
 }
 
 export interface AuthorClass {

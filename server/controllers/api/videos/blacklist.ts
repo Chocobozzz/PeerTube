@@ -32,12 +32,10 @@ function addVideoToBlacklist (req: express.Request, res: express.Response, next:
     videoId: videoInstance.id
   }
 
-  db.BlacklistedVideo.create(toCreate).asCallback(function (err) {
-    if (err) {
+  db.BlacklistedVideo.create(toCreate)
+    .then(() => res.type('json').status(204).end())
+    .catch(err => {
       logger.error('Errors when blacklisting video ', { error: err })
       return next(err)
-    }
-
-    return res.type('json').status(204).end()
-  })
+    })
 }

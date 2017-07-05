@@ -30,17 +30,10 @@ function getUser (username: string, password: string) {
   return db.User.getByUsername(username).then(function (user) {
     if (!user) return null
 
-    // We need to return a promise
-    return new Promise(function (resolve, reject) {
-      return user.isPasswordMatch(password, function (err, isPasswordMatch) {
-        if (err) return reject(err)
+    return user.isPasswordMatch(password).then(passwordMatch => {
+      if (passwordMatch === false) return null
 
-        if (isPasswordMatch === true) {
-          return resolve(user)
-        }
-
-        return resolve(null)
-      })
+      return user
     })
   })
 }
@@ -80,8 +73,6 @@ function saveToken (token: TokenInfo, client: OAuthClientInstance, user: UserIns
     tokenCreated.user = user
 
     return tokenCreated
-  }).catch(function (err) {
-    throw err
   })
 }
 

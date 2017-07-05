@@ -1,6 +1,8 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 import { PodInstance } from '../pod'
+import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
 import { VideoAbuse as FormatedVideoAbuse } from '../../../shared/models/video-abuse.model'
@@ -8,8 +10,7 @@ import { VideoAbuse as FormatedVideoAbuse } from '../../../shared/models/video-a
 export namespace VideoAbuseMethods {
   export type ToFormatedJSON = (this: VideoAbuseInstance) => FormatedVideoAbuse
 
-  export type ListForApiCallback = (err: Error, videoAbuseInstances?: VideoAbuseInstance[], total?: number) => void
-  export type ListForApi = (start: number, count: number, sort: string, callback: ListForApiCallback) => void
+  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoAbuseInstance> >
 }
 
 export interface VideoAbuseClass {

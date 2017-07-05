@@ -171,6 +171,23 @@ describe('Test advanced friends', function () {
       function (next) {
         setTimeout(next, 22000)
       },
+      // Check the pods 1, 2 expulsed pod 4
+      function (next) {
+        each([ 1, 2 ], function (i, callback) {
+          getFriendsList(i, function (err, res) {
+            if (err) throw err
+
+            // Pod 4 should not be our friend
+            const result = res.body.data
+            expect(result.length).to.equal(2)
+            for (const pod of result) {
+              expect(pod.host).not.equal(servers[3].host)
+            }
+
+            callback()
+          })
+        }, next)
+      },
       // Rerun server 4
       function (next) {
         serversUtils.runServer(4, function (server) {
@@ -187,7 +204,7 @@ describe('Test advanced friends', function () {
           next()
         })
       },
-      // Pod 6 ask pod 1, 2 and 3
+      // Pod 6 asks pod 1, 2 and 3
       function (next) {
         makeFriends(6, next)
       },

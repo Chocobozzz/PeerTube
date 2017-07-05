@@ -8,7 +8,6 @@ import { VIDEO_RATE_TYPES } from '../../initializers'
 
 import { addMethodsToModel } from '../utils'
 import {
-  UserVideoRateClass,
   UserVideoRateInstance,
   UserVideoRateAttributes,
 
@@ -66,7 +65,7 @@ function associate (models) {
   })
 }
 
-load = function (userId: number, videoId: string, transaction: Sequelize.Transaction, callback: UserVideoRateMethods.LoadCallback) {
+load = function (userId: number, videoId: string, transaction: Sequelize.Transaction) {
   const options: Sequelize.FindOptions = {
     where: {
       userId,
@@ -75,5 +74,5 @@ load = function (userId: number, videoId: string, transaction: Sequelize.Transac
   }
   if (transaction) options.transaction = transaction
 
-  return UserVideoRate.findOne(options).asCallback(callback)
+  return UserVideoRate.findOne(options)
 }

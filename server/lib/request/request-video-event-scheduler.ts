@@ -7,6 +7,7 @@ import {
   REQUESTS_VIDEO_EVENT_LIMIT_PER_POD,
   REQUEST_VIDEO_EVENT_ENDPOINT
 } from '../../initializers'
+import { RequestsVideoEventGrouped } from '../../models'
 import { RequestVideoEventType } from '../../../shared'
 
 export type RequestVideoEventSchedulerOptions = {
@@ -16,7 +17,7 @@ export type RequestVideoEventSchedulerOptions = {
   transaction?: Sequelize.Transaction
 }
 
-class RequestVideoEventScheduler extends AbstractRequestScheduler {
+class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoEventGrouped> {
   constructor () {
     super()
 
@@ -35,7 +36,7 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler {
     return db.RequestVideoEvent
   }
 
-  buildRequestObjects (eventsToProcess: { [ toPodId: number ]: any }[]) {
+  buildRequestObjects (eventRequests: RequestsVideoEventGrouped) {
     const requestsToMakeGrouped = {}
 
     /* Example:
@@ -50,8 +51,8 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler {
 
     // We group video events per video and per pod
     // We add the counts of the same event types
-    Object.keys(eventsToProcess).forEach(toPodId => {
-      eventsToProcess[toPodId].forEach(eventToProcess => {
+    Object.keys(eventRequests).forEach(toPodId => {
+      eventRequests[toPodId].forEach(eventToProcess => {
         if (!eventsPerVideoPerPod[toPodId]) eventsPerVideoPerPod[toPodId] = {}
 
         if (!requestsToMakeGrouped[toPodId]) {
@@ -97,7 +98,7 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler {
     return requestsToMakeGrouped
   }
 
-  createRequest ({ type, videoId, count, transaction }: RequestVideoEventSchedulerOptions, callback: (err: Error) => void) {
+  createRequest ({ type, videoId, count, transaction }: RequestVideoEventSchedulerOptions) {
     if (count === undefined) count = 1
 
     const dbRequestOptions: Sequelize.CreateOptions = {}
@@ -109,7 +110,7 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler {
       videoId
     }
 
-    return db.RequestVideoEvent.create(createQuery, dbRequestOptions).asCallback(callback)
+    return db.RequestVideoEvent.create(createQuery, dbRequestOptions)
   }
 }
 

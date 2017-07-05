@@ -1,16 +1,11 @@
 import * as express from 'express'
-import * as Sequelize from 'sequelize'
-import { waterfall } from 'async'
 
 import { database as db } from '../../../initializers/database'
 import * as friends from '../../../lib/friends'
 import {
   logger,
   getFormatedObjects,
-  retryTransactionWrapper,
-  startSerializableTransaction,
-  commitTransaction,
-  rollbackTransaction
+  retryTransactionWrapper
 } from '../../../helpers'
 import {
   authenticate,
@@ -21,6 +16,7 @@ import {
   setVideoAbusesSort,
   setPagination
 } from '../../../middlewares'
+import { VideoInstance } from '../../../models'
 
 const abuseVideoRouter = express.Router()
 
@@ -48,11 +44,9 @@ export {
 // ---------------------------------------------------------------------------
 
 function listVideoAbuses (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort, function (err, abusesList, abusesTotal) {
-    if (err) return next(err)
-
-    res.json(getFormatedObjects(abusesList, abusesTotal))
-  })
+  db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort)
+    .then(result => res.json(getFormatedObjects(result.data, result.total)))
+    .catch(err => next(err))
 }
 
 function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -61,14 +55,12 @@ function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Respon
     errorMessage: 'Cannot report abuse to the video with many retries.'
   }
 
-  retryTransactionWrapper(reportVideoAbuse, options, function (err) {
-    if (err) return next(err)
-
-    return res.type('json').status(204).end()
-  })
+  retryTransactionWrapper(reportVideoAbuse, options)
+    .then(() => res.type('json').status(204).end())
+    .catch(err => next(err))
 }
 
-function reportVideoAbuse (req: express.Request, res: express.Response, finalCallback: (err: Error) => void) {
+function reportVideoAbuse (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
   const reporterUsername = res.locals.oauth.token.User.username
 
@@ -79,40 +71,26 @@ function reportVideoAbuse (req: express.Request, res: express.Response, finalCal
     reporterPodId: null // This is our pod that reported this abuse
   }
 
-  waterfall([
+  return db.sequelize.transaction(t => {
+    return db.VideoAbuse.create(abuse, { transaction: t })
+      .then(abuse => {
+        // We send the information to the destination pod
+        if (videoInstance.isOwned() === false) {
+          const reportData = {
+            reporterUsername,
+            reportReason: abuse.reason,
+            videoRemoteId: videoInstance.remoteId
+          }
 
-    startSerializableTransaction,
-
-    function createAbuse (t, callback) {
-      db.VideoAbuse.create(abuse).asCallback(function (err, abuse) {
-        return callback(err, t, abuse)
-      })
-    },
-
-    function sendToFriendsIfNeeded (t, abuse, callback) {
-      // We send the information to the destination pod
-      if (videoInstance.isOwned() === false) {
-        const reportData = {
-          reporterUsername,
-          reportReason: abuse.reason,
-          videoRemoteId: videoInstance.remoteId
+          return friends.reportAbuseVideoToFriend(reportData, videoInstance, t).then(() => videoInstance)
         }
 
-        friends.reportAbuseVideoToFriend(reportData, videoInstance)
-      }
-
-      return callback(null, t)
-    },
-
-    commitTransaction
-
-  ], function andFinally (err: Error, t: Sequelize.Transaction) {
-    if (err) {
-      logger.debug('Cannot update the video.', { error: err })
-      return rollbackTransaction(err, t, finalCallback)
-    }
-
-    logger.info('Abuse report for video %s created.', videoInstance.name)
-    return finalCallback(null)
+        return videoInstance
+      })
+  })
+  .then((videoInstance: VideoInstance) => logger.info('Abuse report for video %s created.', videoInstance.name))
+  .catch(err => {
+    logger.debug('Cannot update the video.', { error: err })
+    throw err
   })
 }

@@ -1,5 +1,7 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
+import { AbstractRequestClass, AbstractRequestToPodClass } from './abstract-request-interface'
 import { VideoInstance } from '../video'
 import { PodInstance } from '../pod'
 
@@ -16,20 +18,16 @@ export type RequestsVideoEventGrouped = {
 }
 
 export namespace RequestVideoEventMethods {
-  export type CountTotalRequestsCallback = (err: Error, total: number) => void
-  export type CountTotalRequests = (callback: CountTotalRequestsCallback) => void
+  export type CountTotalRequests = () => Promise<number>
 
-  export type ListWithLimitAndRandomCallback = (err: Error, requestsGrouped?: RequestsVideoEventGrouped) => void
-  export type ListWithLimitAndRandom = (limitPods: number, limitRequestsPerPod: number, callback: ListWithLimitAndRandomCallback) => void
+  export type ListWithLimitAndRandom = (limitPods: number, limitRequestsPerPod: number) => Promise<RequestsVideoEventGrouped>
 
-  export type RemoveByRequestIdsAndPodCallback = () => void
-  export type RemoveByRequestIdsAndPod = (ids: number[], podId: number, callback: RemoveByRequestIdsAndPodCallback) => void
+  export type RemoveByRequestIdsAndPod = (ids: number[], podId: number) => Promise<number>
 
-  export type RemoveAllCallback = () => void
-  export type RemoveAll = (callback: RemoveAllCallback) => void
+  export type RemoveAll = () => Promise<void>
 }
 
-export interface RequestVideoEventClass {
+export interface RequestVideoEventClass extends AbstractRequestClass<RequestsVideoEventGrouped>, AbstractRequestToPodClass {
   countTotalRequests: RequestVideoEventMethods.CountTotalRequests
   listWithLimitAndRandom: RequestVideoEventMethods.ListWithLimitAndRandom
   removeByRequestIdsAndPod: RequestVideoEventMethods.RemoveByRequestIdsAndPod
@@ -41,10 +39,12 @@ export interface RequestVideoEventAttributes {
   count: number
 }
 
-export interface RequestVideoEventInstance extends RequestVideoEventClass, RequestVideoEventAttributes, Sequelize.Instance<RequestVideoEventAttributes> {
+export interface RequestVideoEventInstance
+  extends RequestVideoEventClass, RequestVideoEventAttributes, Sequelize.Instance<RequestVideoEventAttributes> {
   id: number
 
   Video: VideoInstance
 }
 
-export interface RequestVideoEventModel extends RequestVideoEventClass, Sequelize.Model<RequestVideoEventInstance, RequestVideoEventAttributes> {}
+export interface RequestVideoEventModel
+  extends RequestVideoEventClass, Sequelize.Model<RequestVideoEventInstance, RequestVideoEventAttributes> {}

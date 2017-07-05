@@ -10,7 +10,6 @@ import { REQUEST_VIDEO_EVENT_TYPES } from '../../initializers'
 import { isVideoEventCountValid } from '../../helpers'
 import { addMethodsToModel } from '../utils'
 import {
-  RequestVideoEventClass,
   RequestVideoEventInstance,
   RequestVideoEventAttributes,
 
@@ -77,23 +76,21 @@ function associate (models) {
   })
 }
 
-countTotalRequests = function (callback: RequestVideoEventMethods.CountTotalRequestsCallback) {
+countTotalRequests = function () {
   const query = {}
-  return RequestVideoEvent.count(query).asCallback(callback)
+  return RequestVideoEvent.count(query)
 }
 
-listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number, callback: RequestVideoEventMethods.ListWithLimitAndRandomCallback) {
+listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number) {
   const Pod = db.Pod
 
   // We make a join between videos and authors to find the podId of our video event requests
   const podJoins = 'INNER JOIN "Videos" ON "Videos"."authorId" = "Authors"."id" ' +
                    'INNER JOIN "RequestVideoEvents" ON "RequestVideoEvents"."videoId" = "Videos"."id"'
 
-  Pod.listRandomPodIdsWithRequest(limitPods, 'Authors', podJoins, function (err, podIds) {
-    if (err) return callback(err)
-
+  return Pod.listRandomPodIdsWithRequest(limitPods, 'Authors', podJoins).then(podIds => {
     // We don't have friends that have requests
-    if (podIds.length === 0) return callback(null, [])
+    if (podIds.length === 0) return []
 
     const query = {
       order: [
@@ -121,16 +118,14 @@ listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: numbe
       ]
     }
 
-    RequestVideoEvent.findAll(query).asCallback(function (err, requests) {
-      if (err) return callback(err)
-
+    return RequestVideoEvent.findAll(query).then(requests => {
       const requestsGrouped = groupAndTruncateRequests(requests, limitRequestsPerPod)
-      return callback(err, requestsGrouped)
+      return requestsGrouped
     })
   })
 }
 
-removeByRequestIdsAndPod = function (ids: number[], podId: number, callback: RequestVideoEventMethods.RemoveByRequestIdsAndPodCallback) {
+removeByRequestIdsAndPod = function (ids: number[], podId: number) {
   const query = {
     where: {
       id: {
@@ -152,12 +147,12 @@ removeByRequestIdsAndPod = function (ids: number[], podId: number, callback: Req
     ]
   }
 
-  RequestVideoEvent.destroy(query).asCallback(callback)
+  return RequestVideoEvent.destroy(query)
 }
 
-removeAll = function (callback: RequestVideoEventMethods.RemoveAllCallback) {
+removeAll = function () {
   // Delete all requests
-  RequestVideoEvent.truncate({ cascade: true }).asCallback(callback)
+  return RequestVideoEvent.truncate({ cascade: true })
 }
 
 // ---------------------------------------------------------------------------

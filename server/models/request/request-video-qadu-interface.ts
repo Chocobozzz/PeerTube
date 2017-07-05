@@ -1,5 +1,7 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
+import { AbstractRequestClass, AbstractRequestToPodClass } from './abstract-request-interface'
 import { VideoInstance } from '../video'
 import { PodInstance } from '../pod'
 
@@ -14,20 +16,16 @@ export type RequestsVideoQaduGrouped = {
 }
 
 export namespace RequestVideoQaduMethods {
-  export type CountTotalRequestsCallback = (err: Error, total: number) => void
-  export type CountTotalRequests = (callback: CountTotalRequestsCallback) => void
+  export type CountTotalRequests = () => Promise<number>
 
-  export type ListWithLimitAndRandomCallback = (err: Error, requestsGrouped?: RequestsVideoQaduGrouped) => void
-  export type ListWithLimitAndRandom = (limitPods: number, limitRequestsPerPod: number, callback: ListWithLimitAndRandomCallback) => void
+  export type ListWithLimitAndRandom = (limitPods: number, limitRequestsPerPod: number) => Promise<RequestsVideoQaduGrouped>
 
-  export type RemoveByRequestIdsAndPodCallback = () => void
-  export type RemoveByRequestIdsAndPod = (ids: number[], podId: number, callback: RemoveByRequestIdsAndPodCallback) => void
+  export type RemoveByRequestIdsAndPod = (ids: number[], podId: number) => Promise<number>
 
-  export type RemoveAllCallback = () => void
-  export type RemoveAll = (callback: RemoveAllCallback) => void
+  export type RemoveAll = () => Promise<void>
 }
 
-export interface RequestVideoQaduClass {
+export interface RequestVideoQaduClass extends AbstractRequestClass<RequestsVideoQaduGrouped>, AbstractRequestToPodClass {
   countTotalRequests: RequestVideoQaduMethods.CountTotalRequests
   listWithLimitAndRandom: RequestVideoQaduMethods.ListWithLimitAndRandom
   removeByRequestIdsAndPod: RequestVideoQaduMethods.RemoveByRequestIdsAndPod
@@ -38,11 +36,13 @@ export interface RequestVideoQaduAttributes {
   type: RequestVideoQaduType
 }
 
-export interface RequestVideoQaduInstance extends RequestVideoQaduClass, RequestVideoQaduAttributes, Sequelize.Instance<RequestVideoQaduAttributes> {
+export interface RequestVideoQaduInstance
+  extends RequestVideoQaduClass, RequestVideoQaduAttributes, Sequelize.Instance<RequestVideoQaduAttributes> {
   id: number
 
   Pod: PodInstance
   Video: VideoInstance
 }
 
-export interface RequestVideoQaduModel extends RequestVideoQaduClass, Sequelize.Model<RequestVideoQaduInstance, RequestVideoQaduAttributes> {}
+export interface RequestVideoQaduModel
+  extends RequestVideoQaduClass, Sequelize.Model<RequestVideoQaduInstance, RequestVideoQaduAttributes> {}

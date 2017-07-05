@@ -1,12 +1,8 @@
 import * as Sequelize from 'sequelize'
 
-import { addMethodsToModel } from '../utils'
 import {
-  VideoTagClass,
   VideoTagInstance,
-  VideoTagAttributes,
-
-  VideoTagMethods
+  VideoTagAttributes
 } from './video-tag-interface'
 
 let VideoTag: Sequelize.Model<VideoTagInstance, VideoTagAttributes>

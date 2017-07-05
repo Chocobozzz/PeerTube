@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { parallel } from 'async'
+import * as Promise from 'bluebird'
 
 import {
   AbstractRequestScheduler,
@@ -27,33 +27,27 @@ export {
 // ---------------------------------------------------------------------------
 
 function getRequestSchedulersStats (req: express.Request, res: express.Response, next: express.NextFunction) {
-  parallel({
+  Promise.props({
     requestScheduler: buildRequestSchedulerStats(getRequestScheduler()),
     requestVideoQaduScheduler: buildRequestSchedulerStats(getRequestVideoQaduScheduler()),
     requestVideoEventScheduler: buildRequestSchedulerStats(getRequestVideoEventScheduler())
-  }, function (err, result) {
-    if (err) return next(err)
-
-    return res.json(result)
   })
+  .then(result => res.json(result))
+  .catch(err => next(err))
 }
 
 // ---------------------------------------------------------------------------
 
-function buildRequestSchedulerStats (requestScheduler: AbstractRequestScheduler) {
-  return function (callback) {
-    requestScheduler.remainingRequestsCount(function (err, count) {
-      if (err) return callback(err)
+function buildRequestSchedulerStats (requestScheduler: AbstractRequestScheduler<any>) {
+  return requestScheduler.remainingRequestsCount().then(count => {
+    const result: RequestSchedulerStatsAttributes = {
+      totalRequests: count,
+      requestsLimitPods: requestScheduler.limitPods,
+      requestsLimitPerPod: requestScheduler.limitPerPod,
+      remainingMilliSeconds: requestScheduler.remainingMilliSeconds(),
+      milliSecondsInterval: requestScheduler.requestInterval
+    }
 
-      const result: RequestSchedulerStatsAttributes = {
-        totalRequests: count,
-        requestsLimitPods: requestScheduler.limitPods,
-        requestsLimitPerPod: requestScheduler.limitPerPod,
-        remainingMilliSeconds: requestScheduler.remainingMilliSeconds(),
-        milliSecondsInterval: requestScheduler.requestInterval
-      }
-
-      return callback(null, result)
-    })
-  }
+    return result
+  })
 }

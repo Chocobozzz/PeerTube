@@ -1,13 +1,12 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 export namespace OAuthClientMethods {
-  export type CountTotalCallback = (err: Error, total: number) => void
-  export type CountTotal = (callback: CountTotalCallback) => void
+  export type CountTotal = () => Promise<number>
 
-  export type LoadFirstClientCallback = (err: Error, client: OAuthClientInstance) => void
-  export type LoadFirstClient = (callback: LoadFirstClientCallback) => void
+  export type LoadFirstClient = () => Promise<OAuthClientInstance>
 
-  export type GetByIdAndSecret = (clientId, clientSecret) => void
+  export type GetByIdAndSecret = (clientId: string, clientSecret: string) => Promise<OAuthClientInstance>
 }
 
 export interface OAuthClientClass {

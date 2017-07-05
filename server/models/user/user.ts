@@ -13,7 +13,6 @@ import {
 
 import { addMethodsToModel } from '../utils'
 import {
-  UserClass,
   UserInstance,
   UserAttributes,
 
@@ -118,21 +117,16 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 }
 
 function beforeCreateOrUpdate (user: UserInstance) {
-  return new Promise(function (resolve, reject) {
-    cryptPassword(user.password, function (err, hash) {
-      if (err) return reject(err)
-
-      user.password = hash
-
-      return resolve()
-    })
+  return cryptPassword(user.password).then(hash => {
+    user.password = hash
+    return undefined
   })
 }
 
 // ------------------------------ METHODS ------------------------------
 
-isPasswordMatch = function (this: UserInstance, password: string, callback: UserMethods.IsPasswordMatchCallback) {
-  return comparePassword(password, this.password, callback)
+isPasswordMatch = function (this: UserInstance, password: string) {
+  return comparePassword(password, this.password)
 }
 
 toFormatedJSON = function (this: UserInstance) {
@@ -164,8 +158,8 @@ function associate (models) {
   })
 }
 
-countTotal = function (callback: UserMethods.CountTotalCallback) {
-  return this.count().asCallback(callback)
+countTotal = function () {
+  return this.count()
 }
 
 getByUsername = function (username: string) {
@@ -178,44 +172,45 @@ getByUsername = function (username: string) {
   return User.findOne(query)
 }
 
-list = function (callback: UserMethods.ListCallback) {
-  return User.find().asCallback(callback)
+list = function () {
+  return User.findAll()
 }
 
-listForApi = function (start: number, count: number, sort: string, callback: UserMethods.ListForApiCallback) {
+listForApi = function (start: number, count: number, sort: string) {
   const query = {
     offset: start,
     limit: count,
     order: [ getSort(sort) ]
   }
 
-  return User.findAndCountAll(query).asCallback(function (err, result) {
-    if (err) return callback(err)
-
-    return callback(null, result.rows, result.count)
+  return User.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
   })
 }
 
-loadById = function (id: number, callback: UserMethods.LoadByIdCallback) {
-  return User.findById(id).asCallback(callback)
+loadById = function (id: number) {
+  return User.findById(id)
 }
 
-loadByUsername = function (username: string, callback: UserMethods.LoadByUsernameCallback) {
+loadByUsername = function (username: string) {
   const query = {
     where: {
       username: username
     }
   }
 
-  return User.findOne(query).asCallback(callback)
+  return User.findOne(query)
 }
 
-loadByUsernameOrEmail = function (username: string, email: string, callback: UserMethods.LoadByUsernameOrEmailCallback) {
+loadByUsernameOrEmail = function (username: string, email: string) {
   const query = {
     where: {
       $or: [ { username }, { email } ]
     }
   }
 
-  return User.findOne(query).asCallback(callback)
+  return User.findOne(query)
 }

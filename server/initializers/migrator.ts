@@ -1,70 +1,54 @@
-import { waterfall, eachSeries } from 'async'
-import * as fs from 'fs'
 import * as path from 'path'
-import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 import { database as db } from './database'
 import { LAST_MIGRATION_VERSION } from './constants'
-import { logger } from '../helpers'
+import { logger, readdirPromise } from '../helpers'
 
-function migrate (finalCallback: (err: Error) => void) {
-  waterfall([
-
-    function checkApplicationTableExists (callback) {
-      db.sequelize.getQueryInterface().showAllTables().asCallback(function (err, tables) {
-        if (err) return callback(err)
-
-        // No tables, we don't need to migrate anything
-        // The installer will do that
-        if (tables.length === 0) return finalCallback(null)
-
-        return callback(null)
-      })
-    },
-
-    function loadMigrationVersion (callback) {
-      db.Application.loadMigrationVersion(callback)
-    },
-
-    function createMigrationRowIfNotExists (actualVersion, callback) {
+function migrate () {
+  const p = db.sequelize.getQueryInterface().showAllTables()
+    .then(tables => {
+      // No tables, we don't need to migrate anything
+      // The installer will do that
+      if (tables.length === 0) throw null
+    })
+    .then(() => {
+      return db.Application.loadMigrationVersion()
+    })
+    .then(actualVersion => {
       if (actualVersion === null) {
-        db.Application.create({
-          migrationVersion: 0
-        }, function (err) {
-          return callback(err, 0)
-        })
+        return db.Application.create({ migrationVersion: 0 }).then(() => 0)
       }
 
-      return callback(null, actualVersion)
-    },
+      return actualVersion
+    })
+    .then(actualVersion => {
+      // No need migrations, abort
+      if (actualVersion >= LAST_MIGRATION_VERSION) throw null
 
-    function abortMigrationIfNotNeeded (actualVersion, callback) {
-      // No need migrations
-      if (actualVersion >= LAST_MIGRATION_VERSION) return finalCallback(null)
-
-      return callback(null, actualVersion)
-    },
-
-    function getMigrations (actualVersion, callback) {
+      return actualVersion
+    })
+    .then(actualVersion => {
       // If there are a new migration scripts
       logger.info('Begin migrations.')
 
-      getMigrationScripts(function (err, migrationScripts) {
-        return callback(err, actualVersion, migrationScripts)
+      return getMigrationScripts().then(migrationScripts => ({ actualVersion, migrationScripts }))
+    })
+    .then(({ actualVersion, migrationScripts }) => {
+      return Promise.mapSeries(migrationScripts, entity => {
+        return executeMigration(actualVersion, entity)
       })
-    },
+    })
+    .then(() => {
+      logger.info('Migrations finished. New migration version schema: %s', LAST_MIGRATION_VERSION)
+    })
+    .catch(err => {
+      if (err === null) return undefined
 
-    function doMigrations (actualVersion, migrationScripts, callback) {
-      eachSeries(migrationScripts, function (entity: any, callbackEach) {
-        executeMigration(actualVersion, entity, callbackEach)
-      }, function (err) {
-        if (err) return callback(err)
+      throw err
+    })
 
-        logger.info('Migrations finished. New migration version schema: %s', LAST_MIGRATION_VERSION)
-        return callback(null)
-      })
-    }
-  ], finalCallback)
+  return p
 }
 
 // ---------------------------------------------------------------------------
@@ -75,12 +59,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-type GetMigrationScriptsCallback = (err: Error, filesToMigrate?: { version: string, script: string }[]) => void
-function getMigrationScripts (callback: GetMigrationScriptsCallback) {
-  fs.readdir(path.join(__dirname, 'migrations'), function (err, files) {
-    if (err) return callback(err)
-
-    const filesToMigrate = []
+function getMigrationScripts () {
+  return readdirPromise(path.join(__dirname, 'migrations')).then(files => {
+    const filesToMigrate: {
+      version: string,
+      script: string
+    }[] = []
 
     files.forEach(function (file) {
       // Filename is something like 'version-blabla.js'
@@ -91,15 +75,15 @@ function getMigrationScripts (callback: GetMigrationScriptsCallback) {
       })
     })
 
-    return callback(err, filesToMigrate)
+    return filesToMigrate
   })
 }
 
-function executeMigration (actualVersion: number, entity: { version: string, script: string }, callback: (err: Error) => void) {
+function executeMigration (actualVersion: number, entity: { version: string, script: string }) {
   const versionScript = parseInt(entity.version, 10)
 
   // Do not execute old migration scripts
-  if (versionScript <= actualVersion) return callback(null)
+  if (versionScript <= actualVersion) return undefined
 
   // Load the migration module and run it
   const migrationScriptName = entity.script
@@ -107,30 +91,17 @@ function executeMigration (actualVersion: number, entity: { version: string, scr
 
   const migrationScript = require(path.join(__dirname, 'migrations', migrationScriptName))
 
-  db.sequelize.transaction().asCallback(function (err, t) {
-    if (err) return callback(err)
-
+  return db.sequelize.transaction(t => {
     const options = {
       transaction: t,
       queryInterface: db.sequelize.getQueryInterface(),
-      sequelize: db.sequelize,
-      Sequelize: Sequelize
+      sequelize: db.sequelize
     }
-    migrationScript.up(options, function (err) {
-      if (err) {
-        t.rollback()
-        return callback(err)
-      }
 
-      // Update the new migration version
-      db.Application.updateMigrationVersion(versionScript, t, function (err) {
-        if (err) {
-          t.rollback()
-          return callback(err)
-        }
-
-        t.commit().asCallback(callback)
+    migrationScript.up(options)
+      .then(() => {
+        // Update the new migration version
+        db.Application.updateMigrationVersion(versionScript, t)
       })
-    })
   })
 }

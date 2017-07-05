@@ -1,7 +1,5 @@
 import * as crypto from 'crypto'
-import * as bcrypt from 'bcrypt'
 import * as fs from 'fs'
-import * as openssl from 'openssl-wrapper'
 import { join } from 'path'
 
 import {
@@ -12,6 +10,14 @@ import {
   BCRYPT_SALT_SIZE,
   PUBLIC_CERT_NAME
 } from '../initializers'
+import {
+  readFilePromise,
+  bcryptComparePromise,
+  bcryptGenSaltPromise,
+  bcryptHashPromise,
+  accessPromise,
+  opensslExecPromise
+} from './core-utils'
 import { logger } from './logger'
 
 function checkSignature (publicKey: string, data: string, hexSignature: string) {
@@ -60,46 +66,32 @@ function sign (data: string|Object) {
   return signature
 }
 
-function comparePassword (plainPassword: string, hashPassword: string, callback: (err: Error, match?: boolean) => void) {
-  bcrypt.compare(plainPassword, hashPassword, function (err, isPasswordMatch) {
-    if (err) return callback(err)
-
-    return callback(null, isPasswordMatch)
-  })
+function comparePassword (plainPassword: string, hashPassword: string) {
+  return bcryptComparePromise(plainPassword, hashPassword)
 }
 
-function createCertsIfNotExist (callback: (err: Error) => void) {
-  certsExist(function (err, exist) {
-    if (err) return callback(err)
-
+function createCertsIfNotExist () {
+  return certsExist().then(exist => {
     if (exist === true) {
-      return callback(null)
+      return undefined
     }
 
-    createCerts(function (err) {
-      return callback(err)
-    })
+    return createCerts()
   })
 }
 
-function cryptPassword (password: string, callback: (err: Error, hash?: string) => void) {
-  bcrypt.genSalt(BCRYPT_SALT_SIZE, function (err, salt) {
-    if (err) return callback(err)
-
-    bcrypt.hash(password, salt, function (err, hash) {
-      return callback(err, hash)
-    })
-  })
+function cryptPassword (password: string) {
+  return bcryptGenSaltPromise(BCRYPT_SALT_SIZE).then(salt => bcryptHashPromise(password, salt))
 }
 
-function getMyPrivateCert (callback: (err: Error, privateCert: string) => void) {
+function getMyPrivateCert () {
   const certPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
-  fs.readFile(certPath, 'utf8', callback)
+  return readFilePromise(certPath, 'utf8')
 }
 
-function getMyPublicCert (callback: (err: Error, publicCert: string) => void) {
+function getMyPublicCert () {
   const certPath = join(CONFIG.STORAGE.CERT_DIR, PUBLIC_CERT_NAME)
-  fs.readFile(certPath, 'utf8', callback)
+  return readFilePromise(certPath, 'utf8')
 }
 
 // ---------------------------------------------------------------------------
@@ -116,23 +108,21 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function certsExist (callback: (err: Error, certsExist: boolean) => void) {
+function certsExist () {
   const certPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
-  fs.access(certPath, function (err) {
-    // If there is an error the certificates do not exist
-    const exists = !err
-    return callback(null, exists)
-  })
+
+  // If there is an error the certificates do not exist
+  return accessPromise(certPath)
+    .then(() => true)
+    .catch(() => false)
 }
 
-function createCerts (callback: (err: Error) => void) {
-  certsExist(function (err, exist) {
-    if (err) return callback(err)
-
+function createCerts () {
+  return certsExist().then(exist => {
     if (exist === true) {
       const errorMessage = 'Certs already exist.'
       logger.warning(errorMessage)
-      return callback(new Error(errorMessage))
+      throw new Error(errorMessage)
     }
 
     logger.info('Generating a RSA key...')
@@ -142,30 +132,27 @@ function createCerts (callback: (err: Error) => void) {
       'out': privateCertPath,
       '2048': false
     }
-    openssl.exec('genrsa', genRsaOptions, function (err) {
-      if (err) {
-        logger.error('Cannot create private key on this pod.')
-        return callback(err)
-      }
+    return opensslExecPromise('genrsa', genRsaOptions)
+      .then(() => {
+        logger.info('RSA key generated.')
+        logger.info('Managing public key...')
 
-      logger.info('RSA key generated.')
-      logger.info('Managing public key...')
-
-      const publicCertPath = join(CONFIG.STORAGE.CERT_DIR, 'peertube.pub')
-      const rsaOptions = {
-        'in': privateCertPath,
-        'pubout': true,
-        'out': publicCertPath
-      }
-      openssl.exec('rsa', rsaOptions, function (err) {
-        if (err) {
-          logger.error('Cannot create public key on this pod.')
-          return callback(err)
+        const publicCertPath = join(CONFIG.STORAGE.CERT_DIR, 'peertube.pub')
+        const rsaOptions = {
+          'in': privateCertPath,
+          'pubout': true,
+          'out': publicCertPath
         }
-
-        logger.info('Public key managed.')
-        return callback(null)
+        return opensslExecPromise('rsa', rsaOptions)
+          .then(() => logger.info('Public key managed.'))
+          .catch(err => {
+            logger.error('Cannot create public key on this pod.')
+            throw err
+          })
       })
-    })
+      .catch(err => {
+        logger.error('Cannot create private key on this pod.')
+        throw err
+      })
   })
 }

@@ -11,13 +11,11 @@ if (program.user === undefined) {
   process.exit(-1)
 }
 
-db.init(true, function () {
-  db.User.loadByUsername(program.user, function (err, user) {
-    if (err) {
-      console.error(err)
-      return
-    }
-
+db.init(true)
+  .then(() => {
+    return db.User.loadByUsername(program.user)
+  })
+  .then(user => {
     if (!user) {
       console.error('User unknown.')
       return
@@ -40,15 +38,9 @@ db.init(true, function () {
     rl.on('line', function (password) {
       user.password = password
 
-      user.save().asCallback(function (err) {
-        if (err) {
-          console.error(err)
-        } else {
-          console.log('User password updated.')
-        }
-
-        process.exit(0)
-      })
+      user.save()
+        .then(() => console.log('User password updated.'))
+        .catch(err => console.error(err))
+        .finally(() => process.exit(0))
     })
   })
-})

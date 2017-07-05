@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize'
 
 import { addMethodsToModel, getSort } from '../utils'
 import {
-  BlacklistedVideoClass,
   BlacklistedVideoInstance,
   BlacklistedVideoAttributes,
 
@@ -66,38 +65,39 @@ function associate (models) {
   })
 }
 
-countTotal = function (callback: BlacklistedVideoMethods.CountTotalCallback) {
-  return BlacklistedVideo.count().asCallback(callback)
+countTotal = function () {
+  return BlacklistedVideo.count()
 }
 
-list = function (callback: BlacklistedVideoMethods.ListCallback) {
-  return BlacklistedVideo.findAll().asCallback(callback)
+list = function () {
+  return BlacklistedVideo.findAll()
 }
 
-listForApi = function (start: number, count: number, sort: string, callback: BlacklistedVideoMethods.ListForApiCallback) {
+listForApi = function (start: number, count: number, sort: string) {
   const query = {
     offset: start,
     limit: count,
     order: [ getSort(sort) ]
   }
 
-  return BlacklistedVideo.findAndCountAll(query).asCallback(function (err, result) {
-    if (err) return callback(err)
-
-    return callback(null, result.rows, result.count)
+  return BlacklistedVideo.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
   })
 }
 
-loadById = function (id: number, callback: BlacklistedVideoMethods.LoadByIdCallback) {
-  return BlacklistedVideo.findById(id).asCallback(callback)
+loadById = function (id: number) {
+  return BlacklistedVideo.findById(id)
 }
 
-loadByVideoId = function (id: string, callback: BlacklistedVideoMethods.LoadByIdCallback) {
+loadByVideoId = function (id: string) {
   const query = {
     where: {
       videoId: id
     }
   }
 
-  return BlacklistedVideo.find(query).asCallback(callback)
+  return BlacklistedVideo.findOne(query)
 }

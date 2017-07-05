@@ -29,7 +29,7 @@ import { logger } from './server/helpers/logger'
 import { API_VERSION, CONFIG } from './server/initializers/constants'
 // Initialize database and models
 import { database as db } from './server/initializers/database'
-db.init(false, onDatabaseInitDone)
+db.init(false).then(() => onDatabaseInitDone())
 
 // ----------- Checker -----------
 import { checkMissedConfig, checkFFmpeg, checkConfig } from './server/initializers/checker'
@@ -38,11 +38,7 @@ const missed = checkMissedConfig()
 if (missed.length !== 0) {
   throw new Error('Miss some configurations keys : ' + missed)
 }
-checkFFmpeg(function (err) {
-  if (err) {
-    throw err
-  }
-})
+checkFFmpeg()
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
@@ -138,12 +134,11 @@ app.use(function (err, req, res, next) {
 function onDatabaseInitDone () {
   const port = CONFIG.LISTEN.PORT
     // Run the migration scripts if needed
-  migrate(function (err) {
-    if (err) throw err
-
-    installApplication(function (err) {
-      if (err) throw err
-
+  migrate()
+    .then(() => {
+      return installApplication()
+    })
+    .then(() => {
       // ----------- Make the server listening -----------
       server.listen(port, function () {
         // Activate the communication with friends
@@ -156,5 +151,4 @@ function onDatabaseInitDone () {
         logger.info('Webserver: %s', CONFIG.WEBSERVER.URL)
       })
     })
-  })
 }

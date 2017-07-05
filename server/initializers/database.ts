@@ -1,12 +1,12 @@
-import * as fs from 'fs'
 import { join } from 'path'
+import { flattenDepth } from 'lodash'
 import * as Sequelize from 'sequelize'
-import { each } from 'async'
+import * as Promise from 'bluebird'
 
 import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first
 import { logger } from '../helpers/logger'
-import { isTestInstance } from '../helpers/core-utils'
+import { isTestInstance, readdirPromise } from '../helpers/core-utils'
 import {
   ApplicationModel,
   AuthorModel,
@@ -33,7 +33,7 @@ const password = CONFIG.DATABASE.PASSWORD
 
 const database: {
   sequelize?: Sequelize.Sequelize,
-  init?: (silent: any, callback: any) => void,
+  init?: (silent: boolean) => Promise<void>,
 
   Application?: ApplicationModel,
   Author?: AuthorModel,
@@ -72,19 +72,17 @@ const sequelize = new Sequelize(dbname, username, password, {
 
 database.sequelize = sequelize
 
-database.init = function (silent: boolean, callback: (err: Error) => void) {
+database.init = function (silent: boolean) {
   const modelDirectory = join(__dirname, '..', 'models')
 
-  getModelFiles(modelDirectory, function (err, filePaths) {
-    if (err) throw err
-
-    filePaths.forEach(function (filePath) {
+  return getModelFiles(modelDirectory).then(filePaths => {
+    filePaths.forEach(filePath => {
       const model = sequelize.import(filePath)
 
       database[model['name']] = model
     })
 
-    Object.keys(database).forEach(function (modelName) {
+    Object.keys(database).forEach(modelName => {
       if ('associate' in database[modelName]) {
         database[modelName].associate(database)
       }
@@ -92,7 +90,7 @@ database.init = function (silent: boolean, callback: (err: Error) => void) {
 
     if (!silent) logger.info('Database %s is ready.', dbname)
 
-    return callback(null)
+    return undefined
   })
 }
 
@@ -104,49 +102,50 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getModelFiles (modelDirectory: string, callback: (err: Error, filePaths: string[]) => void) {
-  fs.readdir(modelDirectory, function (err, files) {
-    if (err) throw err
+function getModelFiles (modelDirectory: string) {
+  return readdirPromise(modelDirectory)
+    .then(files => {
+      const directories: string[] = files.filter(function (directory) {
+        // Find directories
+        if (
+          directory.endsWith('.js.map') ||
+          directory === 'index.js' || directory === 'index.ts' ||
+          directory === 'utils.js' || directory === 'utils.ts'
+        ) return false
 
-    const directories = files.filter(function (directory) {
-      // Find directories
-      if (
-        directory.endsWith('.js.map') ||
-        directory === 'index.js' || directory === 'index.ts' ||
-        directory === 'utils.js' || directory === 'utils.ts'
-      ) return false
+        return true
+      })
 
-      return true
+      return directories
     })
+    .then(directories => {
+      const tasks = []
 
-    let modelFilePaths: string[] = []
+      // For each directory we read it and append model in the modelFilePaths array
+      directories.forEach(directory => {
+        const modelDirectoryPath = join(modelDirectory, directory)
 
-    // For each directory we read it and append model in the modelFilePaths array
-    each(directories, function (directory: string, eachCallback: ErrorCallback<Error>) {
-      const modelDirectoryPath = join(modelDirectory, directory)
+        const promise = readdirPromise(modelDirectoryPath).then(files => {
+          const filteredFiles = files.filter(file => {
+            if (
+              file === 'index.js' || file === 'index.ts' ||
+              file === 'utils.js' || file === 'utils.ts' ||
+              file.endsWith('-interface.js') || file.endsWith('-interface.ts') ||
+              file.endsWith('.js.map')
+            ) return false
 
-      fs.readdir(modelDirectoryPath, function (err, files) {
-        if (err) return eachCallback(err)
+            return true
+          }).map(file => join(modelDirectoryPath, file))
 
-        const filteredFiles = files.filter(file => {
-          if (
-            file === 'index.js' || file === 'index.ts' ||
-            file === 'utils.js' || file === 'utils.ts' ||
-            file.endsWith('-interface.js') || file.endsWith('-interface.ts') ||
-            file.endsWith('.js.map')
-          ) return false
-
-          return true
-        }).map(file => {
-          return join(modelDirectoryPath, file)
+          return filteredFiles
         })
 
-        modelFilePaths = modelFilePaths.concat(filteredFiles)
-
-        return eachCallback(null)
+        tasks.push(promise)
       })
-    }, function (err: Error) {
-      return callback(err, modelFilePaths)
+
+      return Promise.all(tasks)
     })
-  })
+    .then((filteredFiles: string[][]) => {
+      return flattenDepth<string>(filteredFiles, 1)
+    })
 }

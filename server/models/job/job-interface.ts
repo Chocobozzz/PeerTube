@@ -1,10 +1,10 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 import { JobState } from '../../../shared/models/job.model'
 
 export namespace JobMethods {
-  export type ListWithLimitCallback = (err: Error, jobInstances: JobInstance[]) => void
-  export type ListWithLimit = (limit: number, state: JobState, callback: ListWithLimitCallback) => void
+  export type ListWithLimit = (limit: number, state: JobState) => Promise<JobInstance[]>
 }
 
 export interface JobClass {

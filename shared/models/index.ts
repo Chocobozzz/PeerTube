@@ -1,6 +1,7 @@
 export * from './job.model'
 export * from './oauth-client-local.model'
 export * from './pod.model'
+export * from './result-list.model'
 export * from './request-scheduler.model'
 export * from './user-video-rate.model'
 export * from './user.model'

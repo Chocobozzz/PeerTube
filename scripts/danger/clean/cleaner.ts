@@ -1,25 +1,28 @@
-import * as eachSeries from 'async/eachSeries'
 import * as rimraf from 'rimraf'
+import * as Promise from 'bluebird'
 
 import { CONFIG } from '../../../server/initializers/constants'
 import { database as db } from '../../../server/initializers/database'
 
-db.init(true, function () {
-  db.sequelize.drop().asCallback(function (err) {
-    if (err) throw err
-
+db.init(true)
+  .then(() => {
+    return db.sequelize.drop()
+  })
+  .then(() => {
     console.info('Tables of %s deleted.', CONFIG.DATABASE.DBNAME)
 
     const STORAGE = CONFIG.STORAGE
-    eachSeries(Object.keys(STORAGE), function (storage, callbackEach) {
+    Promise.mapSeries(Object.keys(STORAGE), storage => {
       const storageDir = STORAGE[storage]
 
-      rimraf(storageDir, function (err) {
-        console.info('%s deleted.', storageDir)
-        return callbackEach(err)
+      return new Promise((res, rej) => {
+        rimraf(storageDir, function (err) {
+          if (err) return rej(err)
+
+          console.info('%s deleted.', storageDir)
+          return res()
+        })
       })
-    }, function () {
-      process.exit(0)
     })
+    .then(() => process.exit(0))
   })
-})

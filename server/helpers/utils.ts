@@ -1,25 +1,14 @@
 import * as express from 'express'
 
-import { pseudoRandomBytes } from 'crypto'
-
-import { logger } from './logger'
+import { pseudoRandomBytesPromise } from './core-utils'
+import { ResultList } from '../../shared'
 
 function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
   res.type('json').status(400).end()
 }
 
-function generateRandomString (size: number, callback: (err: Error, randomString?: string) => void) {
-  pseudoRandomBytes(size, function (err, raw) {
-    if (err) return callback(err)
-
-    callback(null, raw.toString('hex'))
-  })
-}
-
-function createEmptyCallback () {
-  return function (err) {
-    if (err) logger.error('Error in empty callback.', { error: err })
-  }
+function generateRandomString (size: number) {
+  return pseudoRandomBytesPromise(size).then(raw => raw.toString('hex'))
 }
 
 interface FormatableToJSON {
@@ -33,17 +22,18 @@ function getFormatedObjects<U, T extends FormatableToJSON> (objects: T[], object
     formatedObjects.push(object.toFormatedJSON())
   })
 
-  return {
+  const res: ResultList<U> = {
     total: objectsTotal,
     data: formatedObjects
   }
+
+  return res
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   badRequest,
-  createEmptyCallback,
   generateRandomString,
   getFormatedObjects
 }

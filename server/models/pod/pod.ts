@@ -1,4 +1,3 @@
-import { each, waterfall } from 'async'
 import { map } from 'lodash'
 import * as Sequelize from 'sequelize'
 
@@ -7,7 +6,6 @@ import { logger, isHostValid } from '../../helpers'
 
 import { addMethodsToModel } from '../utils'
 import {
-  PodClass,
   PodInstance,
   PodAttributes,
 
@@ -118,13 +116,11 @@ function associate (models) {
   })
 }
 
-countAll = function (callback: PodMethods.CountAllCallback) {
-  return Pod.count().asCallback(callback)
+countAll = function () {
+  return Pod.count()
 }
 
-incrementScores = function (ids: number[], value: number, callback?: PodMethods.IncrementScoresCallback) {
-  if (!callback) callback = function () { /* empty */ }
-
+incrementScores = function (ids: number[], value: number) {
   const update = {
     score: Sequelize.literal('score +' + value)
   }
@@ -139,33 +135,28 @@ incrementScores = function (ids: number[], value: number, callback?: PodMethods.
     validate: false
   }
 
-  return Pod.update(update, options).asCallback(callback)
+  return Pod.update(update, options)
 }
 
-list = function (callback: PodMethods.ListCallback) {
-  return Pod.findAll().asCallback(callback)
+list = function () {
+  return Pod.findAll()
 }
 
-listAllIds = function (transaction: Sequelize.Transaction, callback: PodMethods.ListAllIdsCallback) {
-  const query: any = {
-    attributes: [ 'id' ]
+listAllIds = function (transaction: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions = {
+    attributes: [ 'id' ],
+    transaction
   }
 
-  if (transaction !== null) query.transaction = transaction
-
-  return Pod.findAll(query).asCallback(function (err: Error, pods) {
-    if (err) return callback(err)
-
-    return callback(null, map(pods, 'id'))
+  return Pod.findAll(query).then(pods => {
+    return map(pods, 'id')
   })
 }
 
-listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, tableWithPodsJoins: string, callback: PodMethods.ListRandomPodIdsWithRequestCallback) {
-  Pod.count().asCallback(function (err, count) {
-    if (err) return callback(err)
-
+listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, tableWithPodsJoins: string) {
+  return Pod.count().then(count => {
     // Optimization...
-    if (count === 0) return callback(null, [])
+    if (count === 0) return []
 
     let start = Math.floor(Math.random() * count) - limit
     if (start < 0) start = 0
@@ -186,56 +177,55 @@ listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, ta
       }
     }
 
-    return Pod.findAll(query).asCallback(function (err, pods) {
-      if (err) return callback(err)
-
-      return callback(null, map(pods, 'id'))
+    return Pod.findAll(query).then(pods => {
+      return map(pods, 'id')
     })
   })
 }
 
-listBadPods = function (callback: PodMethods.ListBadPodsCallback) {
+listBadPods = function () {
   const query = {
     where: {
       score: { $lte: 0 }
     }
   }
 
-  return Pod.findAll(query).asCallback(callback)
+  return Pod.findAll(query)
 }
 
-load = function (id: number, callback: PodMethods.LoadCallback) {
-  return Pod.findById(id).asCallback(callback)
+load = function (id: number) {
+  return Pod.findById(id)
 }
 
-loadByHost = function (host: string, callback: PodMethods.LoadByHostCallback) {
+loadByHost = function (host: string) {
   const query = {
     where: {
       host: host
     }
   }
 
-  return Pod.findOne(query).asCallback(callback)
+  return Pod.findOne(query)
 }
 
-removeAll = function (callback: PodMethods.RemoveAllCallback) {
-  return Pod.destroy().asCallback(callback)
+removeAll = function () {
+  return Pod.destroy()
 }
 
 updatePodsScore = function (goodPods: number[], badPods: number[]) {
   logger.info('Updating %d good pods and %d bad pods scores.', goodPods.length, badPods.length)
 
   if (goodPods.length !== 0) {
-    incrementScores(goodPods, PODS_SCORE.BONUS, function (err) {
-      if (err) logger.error('Cannot increment scores of good pods.', { error: err })
+    incrementScores(goodPods, PODS_SCORE.BONUS).catch(err => {
+      logger.error('Cannot increment scores of good pods.', { error: err })
     })
   }
 
   if (badPods.length !== 0) {
-    incrementScores(badPods, PODS_SCORE.MALUS, function (err) {
-      if (err) logger.error('Cannot decrement scores of bad pods.', { error: err })
-      removeBadPods()
-    })
+    incrementScores(badPods, PODS_SCORE.MALUS)
+      .then(() => removeBadPods())
+      .catch(err => {
+        if (err) logger.error('Cannot decrement scores of bad pods.', { error: err })
+      })
   }
 }
 
@@ -243,32 +233,19 @@ updatePodsScore = function (goodPods: number[], badPods: number[]) {
 
 // Remove pods with a score of 0 (too many requests where they were unreachable)
 function removeBadPods () {
-  waterfall([
-    function findBadPods (callback) {
-      listBadPods(function (err, pods) {
-        if (err) {
-          logger.error('Cannot find bad pods.', { error: err })
-          return callback(err)
-        }
-
-        return callback(null, pods)
-      })
-    },
-
-    function removeTheseBadPods (pods, callback) {
-      each(pods, function (pod: any, callbackEach) {
-        pod.destroy().asCallback(callbackEach)
-      }, function (err) {
-        return callback(err, pods.length)
-      })
-    }
-  ], function (err, numberOfPodsRemoved) {
-    if (err) {
+  return listBadPods()
+    .then(pods => {
+      const podsRemovePromises = pods.map(pod => pod.destroy())
+      return Promise.all(podsRemovePromises).then(() => pods.length)
+    })
+    .then(numberOfPodsRemoved => {
+      if (numberOfPodsRemoved) {
+        logger.info('Removed %d pods.', numberOfPodsRemoved)
+      } else {
+        logger.info('No need to remove bad pods.')
+      }
+    })
+    .catch(err => {
       logger.error('Cannot remove bad pods.', { error: err })
-    } else if (numberOfPodsRemoved) {
-      logger.info('Removed %d pods.', numberOfPodsRemoved)
-    } else {
-      logger.info('No need to remove bad pods.')
-    }
-  })
+    })
 }

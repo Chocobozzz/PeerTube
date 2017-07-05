@@ -4,7 +4,6 @@ import { logger } from '../../helpers'
 
 import { addMethodsToModel } from '../utils'
 import {
-  OAuthTokenClass,
   OAuthTokenInstance,
   OAuthTokenAttributes,
 
@@ -149,12 +148,12 @@ getByRefreshTokenAndPopulateUser = function (refreshToken: string) {
   })
 }
 
-removeByUserId = function (userId, callback) {
+removeByUserId = function (userId: number) {
   const query = {
     where: {
       userId: userId
     }
   }
 
-  return OAuthToken.destroy(query).asCallback(callback)
+  return OAuthToken.destroy(query)
 }

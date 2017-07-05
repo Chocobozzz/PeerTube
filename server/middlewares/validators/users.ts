@@ -13,16 +13,16 @@ function usersAddValidator (req: express.Request, res: express.Response, next: e
   logger.debug('Checking usersAdd parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
-    db.User.loadByUsernameOrEmail(req.body.username, req.body.email, function (err, user) {
-      if (err) {
+    db.User.loadByUsernameOrEmail(req.body.username, req.body.email)
+      .then(user => {
+        if (user) return res.status(409).send('User already exists.')
+
+        next()
+      })
+      .catch(err => {
         logger.error('Error in usersAdd request validator.', { error: err })
         return res.sendStatus(500)
-      }
-
-      if (user) return res.status(409).send('User already exists.')
-
-      next()
-    })
+      })
   })
 }
 
@@ -32,18 +32,18 @@ function usersRemoveValidator (req: express.Request, res: express.Response, next
   logger.debug('Checking usersRemove parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    db.User.loadById(req.params.id, function (err, user) {
-      if (err) {
+    db.User.loadById(req.params.id)
+      .then(user => {
+        if (!user) return res.status(404).send('User not found')
+
+        if (user.username === 'root') return res.status(400).send('Cannot remove the root user')
+
+        next()
+      })
+      .catch(err => {
         logger.error('Error in usersRemove request validator.', { error: err })
         return res.sendStatus(500)
-      }
-
-      if (!user) return res.status(404).send('User not found')
-
-      if (user.username === 'root') return res.status(400).send('Cannot remove the root user')
-
-      next()
-    })
+      })
   })
 }
 
@@ -64,16 +64,16 @@ function usersVideoRatingValidator (req: express.Request, res: express.Response,
   logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    db.Video.load(req.params.videoId, function (err, video) {
-      if (err) {
+    db.Video.load(req.params.videoId)
+      .then(video => {
+        if (!video) return res.status(404).send('Video not found')
+
+        next()
+      })
+      .catch(err => {
         logger.error('Error in user request validator.', { error: err })
         return res.sendStatus(500)
-      }
-
-      if (!video) return res.status(404).send('Video not found')
-
-      next()
-    })
+      })
   })
 }
 

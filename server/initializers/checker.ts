@@ -2,6 +2,7 @@ import * as config from 'config'
 
 import { database as db } from './database'
 import { CONFIG } from './constants'
+import { promisify0 } from '../helpers/core-utils'
 
 // Some checks on configuration files
 function checkConfig () {
@@ -35,41 +36,36 @@ function checkMissedConfig () {
 }
 
 // Check the available codecs
-function checkFFmpeg (callback: (err: Error) => void) {
+function checkFFmpeg () {
   const Ffmpeg = require('fluent-ffmpeg')
+  const getAvailableCodecsPromise = promisify0(Ffmpeg.getAvailableCodecs)
 
-  Ffmpeg.getAvailableCodecs(function (err, codecs) {
-    if (err) return callback(err)
-    if (CONFIG.TRANSCODING.ENABLED === false) return callback(null)
+  getAvailableCodecsPromise()
+    .then(codecs => {
+      if (CONFIG.TRANSCODING.ENABLED === false) return undefined
 
-    const canEncode = [ 'libx264' ]
-    canEncode.forEach(function (codec) {
-      if (codecs[codec] === undefined) {
-        return callback(new Error('Unknown codec ' + codec + ' in FFmpeg.'))
-      }
+      const canEncode = [ 'libx264' ]
+      canEncode.forEach(function (codec) {
+        if (codecs[codec] === undefined) {
+          throw new Error('Unknown codec ' + codec + ' in FFmpeg.')
+        }
 
-      if (codecs[codec].canEncode !== true) {
-        return callback(new Error('Unavailable encode codec ' + codec + ' in FFmpeg'))
-      }
+        if (codecs[codec].canEncode !== true) {
+          throw new Error('Unavailable encode codec ' + codec + ' in FFmpeg')
+        }
+      })
     })
+}
 
-    return callback(null)
+function clientsExist () {
+  return db.OAuthClient.countTotal().then(totalClients => {
+    return totalClients !== 0
   })
 }
 
-function clientsExist (callback: (err: Error, clientsExist?: boolean) => void) {
-  db.OAuthClient.countTotal(function (err, totalClients) {
-    if (err) return callback(err)
-
-    return callback(null, totalClients !== 0)
-  })
-}
-
-function usersExist (callback: (err: Error, usersExist?: boolean) => void) {
-  db.User.countTotal(function (err, totalUsers) {
-    if (err) return callback(err)
-
-    return callback(null, totalUsers !== 0)
+function usersExist () {
+  return db.User.countTotal().then(totalUsers => {
+    return totalUsers !== 0
   })
 }
 

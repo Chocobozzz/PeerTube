@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize'
 
 import { addMethodsToModel } from '../utils'
 import {
-  ApplicationClass,
   ApplicationAttributes,
   ApplicationInstance,
 
@@ -35,23 +34,19 @@ export default function defineApplication (sequelize: Sequelize.Sequelize, DataT
 
 // ---------------------------------------------------------------------------
 
-loadMigrationVersion = function (callback: ApplicationMethods.LoadMigrationVersionCallback) {
+loadMigrationVersion = function () {
   const query = {
     attributes: [ 'migrationVersion' ]
   }
 
-  return Application.findOne(query).asCallback(function (err, data) {
-    const version = data ? data.migrationVersion : null
-
-    return callback(err, version)
-  })
+  return Application.findOne(query).then(data => data ? data.migrationVersion : null)
 }
 
-updateMigrationVersion = function (newVersion: number, transaction: Sequelize.Transaction, callback: ApplicationMethods.UpdateMigrationVersionCallback) {
+updateMigrationVersion = function (newVersion: number, transaction: Sequelize.Transaction) {
   const options: Sequelize.UpdateOptions = {
     where: {},
     transaction: transaction
   }
 
-  return Application.update({ migrationVersion: newVersion }, options).asCallback(callback)
+  return Application.update({ migrationVersion: newVersion }, options)
 }

@@ -19,19 +19,19 @@ function makeFriendsValidator (req: express.Request, res: express.Response, next
   logger.debug('Checking makeFriends parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
-    hasFriends(function (err, heHasFriends) {
-      if (err) {
+    hasFriends()
+      .then(heHasFriends => {
+        if (heHasFriends === true) {
+          // We need to quit our friends before make new ones
+          return res.sendStatus(409)
+        }
+
+        return next()
+      })
+      .catch(err => {
         logger.error('Cannot know if we have friends.', { error: err })
         res.sendStatus(500)
-      }
-
-      if (heHasFriends === true) {
-        // We need to quit our friends before make new ones
-        return res.sendStatus(409)
-      }
-
-      return next()
-    })
+      })
   })
 }
 
@@ -42,19 +42,19 @@ function podsAddValidator (req: express.Request, res: express.Response, next: ex
   logger.debug('Checking podsAdd parameters', { parameters: req.body })
 
   checkErrors(req, res, function () {
-    db.Pod.loadByHost(req.body.host, function (err, pod) {
-      if (err) {
+    db.Pod.loadByHost(req.body.host)
+      .then(pod => {
+        // Pod with this host already exists
+        if (pod) {
+          return res.sendStatus(409)
+        }
+
+        return next()
+      })
+      .catch(err => {
         logger.error('Cannot load pod by host.', { error: err })
         res.sendStatus(500)
-      }
-
-      // Pod with this host already exists
-      if (pod) {
-        return res.sendStatus(409)
-      }
-
-      return next()
-    })
+      })
   })
 }
 

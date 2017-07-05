@@ -1,5 +1,6 @@
 import * as replay from 'request-replay'
 import * as request from 'request'
+import * as Promise from 'bluebird'
 
 import {
   RETRY_REQUESTS,
@@ -14,16 +15,18 @@ type MakeRetryRequestParams = {
   method: 'GET'|'POST',
   json: Object
 }
-function makeRetryRequest (params: MakeRetryRequestParams, callback: request.RequestCallback) {
-  replay(
-    request(params, callback),
-    {
-      retries: RETRY_REQUESTS,
-      factor: 3,
-      maxTimeout: Infinity,
-      errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
-    }
-  )
+function makeRetryRequest (params: MakeRetryRequestParams) {
+  return new Promise<{ response: request.RequestResponse, body: any }>((res, rej) => {
+    replay(
+      request(params, (err, response, body) => err ? rej(err) : res({ response, body })),
+      {
+        retries: RETRY_REQUESTS,
+        factor: 3,
+        maxTimeout: Infinity,
+        errorCodes: [ 'EADDRINFO', 'ETIMEDOUT', 'ECONNRESET', 'ESOCKETTIMEDOUT', 'ENOTFOUND', 'ECONNREFUSED' ]
+      }
+    )
+  })
 }
 
 type MakeSecureRequestParams = {
@@ -33,41 +36,43 @@ type MakeSecureRequestParams = {
   sign: boolean
   data?: Object
 }
-function makeSecureRequest (params: MakeSecureRequestParams, callback: request.RequestCallback) {
-  const requestParams = {
-    url: REMOTE_SCHEME.HTTP + '://' + params.toPod.host + params.path,
-    json: {}
-  }
+function makeSecureRequest (params: MakeSecureRequestParams) {
+  return new Promise<{ response: request.RequestResponse, body: any }>((res, rej) => {
+    const requestParams = {
+      url: REMOTE_SCHEME.HTTP + '://' + params.toPod.host + params.path,
+      json: {}
+    }
 
-  if (params.method !== 'POST') {
-    return callback(new Error('Cannot make a secure request with a non POST method.'), null, null)
-  }
+    if (params.method !== 'POST') {
+      return rej(new Error('Cannot make a secure request with a non POST method.'))
+    }
 
-  // Add signature if it is specified in the params
-  if (params.sign === true) {
-    const host = CONFIG.WEBSERVER.HOST
+    // Add signature if it is specified in the params
+    if (params.sign === true) {
+      const host = CONFIG.WEBSERVER.HOST
 
-    let dataToSign
+      let dataToSign
+      if (params.data) {
+        dataToSign = params.data
+      } else {
+        // We do not have data to sign so we just take our host
+        // It is not ideal but the connection should be in HTTPS
+        dataToSign = host
+      }
+
+      requestParams.json['signature'] = {
+        host, // Which host we pretend to be
+        signature: sign(dataToSign)
+      }
+    }
+
+    // If there are data informations
     if (params.data) {
-      dataToSign = params.data
-    } else {
-      // We do not have data to sign so we just take our host
-      // It is not ideal but the connection should be in HTTPS
-      dataToSign = host
+      requestParams.json['data'] = params.data
     }
 
-    requestParams.json['signature'] = {
-      host, // Which host we pretend to be
-      signature: sign(dataToSign)
-    }
-  }
-
-  // If there are data informations
-  if (params.data) {
-    requestParams.json['data'] = params.data
-  }
-
-  request.post(requestParams, callback)
+    request.post(requestParams, (err, response, body) => err ? rej(err) : res({ response, body }))
+  })
 }
 
 // ---------------------------------------------------------------------------

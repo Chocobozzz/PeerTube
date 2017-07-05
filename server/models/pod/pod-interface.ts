@@ -1,4 +1,5 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
 import { Pod as FormatedPod } from '../../../shared/models/pod.model'
@@ -6,32 +7,23 @@ import { Pod as FormatedPod } from '../../../shared/models/pod.model'
 export namespace PodMethods {
   export type ToFormatedJSON = (this: PodInstance) => FormatedPod
 
-  export type CountAllCallback = (err: Error, total: number) => void
-  export type CountAll = (callback) => void
+  export type CountAll = () => Promise<number>
 
-  export type IncrementScoresCallback = (err: Error) => void
-  export type IncrementScores = (ids: number[], value: number, callback?: IncrementScoresCallback) => void
+  export type IncrementScores = (ids: number[], value: number) => Promise<[ number, PodInstance[] ]>
 
-  export type ListCallback = (err: Error, podInstances?: PodInstance[]) => void
-  export type List = (callback: ListCallback) => void
+  export type List = () => Promise<PodInstance[]>
 
-  export type ListAllIdsCallback = (err: Error, ids?: number[]) => void
-  export type ListAllIds = (transaction: Sequelize.Transaction, callback: ListAllIdsCallback) => void
+  export type ListAllIds = (transaction: Sequelize.Transaction) => Promise<number[]>
 
-  export type ListRandomPodIdsWithRequestCallback = (err: Error, podInstanceIds?: number[]) => void
-  export type ListRandomPodIdsWithRequest = (limit: number, tableWithPods: string, tableWithPodsJoins: string, callback: ListRandomPodIdsWithRequestCallback) => void
+  export type ListRandomPodIdsWithRequest = (limit: number, tableWithPods: string, tableWithPodsJoins: string) => Promise<number[]>
 
-  export type ListBadPodsCallback = (err: Error, podInstances?: PodInstance[]) => void
-  export type ListBadPods = (callback: ListBadPodsCallback) => void
+  export type ListBadPods = () => Promise<PodInstance[]>
 
-  export type LoadCallback = (err: Error, podInstance: PodInstance) => void
-  export type Load = (id: number, callback: LoadCallback) => void
+  export type Load = (id: number) => Promise<PodInstance>
 
-  export type LoadByHostCallback = (err: Error, podInstance: PodInstance) => void
-  export type LoadByHost = (host: string, callback: LoadByHostCallback) => void
+  export type LoadByHost = (host: string) => Promise<PodInstance>
 
-  export type RemoveAllCallback = (err: Error) => void
-  export type RemoveAll = (callback: RemoveAllCallback) => void
+  export type RemoveAll = () => Promise<number>
 
   export type UpdatePodsScore = (goodPods: number[], badPods: number[]) => void
 }

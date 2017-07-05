@@ -5,7 +5,6 @@ import { database as db } from '../../initializers/database'
 import { REQUEST_ENDPOINTS } from '../../initializers'
 import { addMethodsToModel } from '../utils'
 import {
-  RequestClass,
   RequestInstance,
   RequestAttributes,
 
@@ -60,25 +59,23 @@ function associate (models) {
   })
 }
 
-countTotalRequests = function (callback: RequestMethods.CountTotalRequestsCallback) {
+countTotalRequests = function () {
   // We need to include Pod because there are no cascade delete when a pod is removed
   // So we could count requests that do not have existing pod anymore
   const query = {
     include: [ Request['sequelize'].models.Pod ]
   }
 
-  return Request.count(query).asCallback(callback)
+  return Request.count(query)
 }
 
-listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number, callback: RequestMethods.ListWithLimitAndRandomCallback) {
+listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number) {
   const Pod = db.Pod
   const tableJoin = ''
 
-  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestToPods', '', function (err, podIds) {
-    if (err) return callback(err)
-
+  return Pod.listRandomPodIdsWithRequest(limitPods, 'RequestToPods', tableJoin).then(podIds => {
     // We don't have friends that have requests
-    if (podIds.length === 0) return callback(null, [])
+    if (podIds.length === 0) return []
 
     // The first x requests of these pods
     // It is very important to sort by id ASC to keep the requests order!
@@ -98,23 +95,20 @@ listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: numbe
       ]
     }
 
-    Request.findAll(query).asCallback(function (err, requests) {
-      if (err) return callback(err)
+    return Request.findAll(query).then(requests => {
 
       const requestsGrouped = groupAndTruncateRequests(requests, limitRequestsPerPod)
-      return callback(err, requestsGrouped)
+      return requestsGrouped
     })
   })
 }
 
-removeAll = function (callback: RequestMethods.RemoveAllCallback) {
+removeAll = function () {
   // Delete all requests
-  Request.truncate({ cascade: true }).asCallback(callback)
+  return Request.truncate({ cascade: true })
 }
 
-removeWithEmptyTo = function (callback?: RequestMethods.RemoveWithEmptyToCallback) {
-  if (!callback) callback = function () { /* empty */ }
-
+removeWithEmptyTo = function () {
   const query = {
     where: {
       id: {
@@ -125,7 +119,7 @@ removeWithEmptyTo = function (callback?: RequestMethods.RemoveWithEmptyToCallbac
     }
   }
 
-  Request.destroy(query).asCallback(callback)
+  return Request.destroy(query)
 }
 
 // ---------------------------------------------------------------------------

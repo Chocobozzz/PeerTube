@@ -1,37 +1,28 @@
-import { waterfall } from 'async'
+import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
-// utils = { transaction, queryInterface, sequelize, Sequelize }
-function up (utils, finalCallback) {
+function up (utils: {
+  transaction: Sequelize.Transaction,
+  queryInterface: Sequelize.QueryInterface,
+  sequelize: Sequelize.Sequelize
+}): Promise<void> {
   const q = utils.queryInterface
-  const Sequelize = utils.Sequelize
 
   const data = {
     type: Sequelize.STRING(400),
     allowNull: false,
     defaultValue: ''
   }
-
-  waterfall([
-
-    function addEmailColumn (callback) {
-      q.addColumn('Users', 'email', data, { transaction: utils.transaction }).asCallback(function (err) {
-        return callback(err)
-      })
-    },
-
-    function updateWithFakeEmails (callback) {
+  return q.addColumn('Users', 'email', data)
+    .then(() => {
       const query = 'UPDATE "Users" SET "email" = CONCAT("username", \'@example.com\')'
-      utils.sequelize.query(query, { transaction: utils.transaction }).asCallback(function (err) {
-        return callback(err)
-      })
-    },
-
-    function nullOnDefault (callback) {
+      return utils.sequelize.query(query, { transaction: utils.transaction })
+    })
+    .then(() => {
       data.defaultValue = null
 
-      q.changeColumn('Users', 'email', data, { transaction: utils.transaction }).asCallback(callback)
-    }
-  ], finalCallback)
+      return q.changeColumn('Users', 'email', data)
+    })
 }
 
 function down (options, callback) {

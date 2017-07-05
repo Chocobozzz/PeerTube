@@ -1,8 +1,7 @@
 import * as express from 'express'
-import { waterfall } from 'async'
 
 import { database as db } from '../../initializers/database'
-import { CONFIG, USER_ROLES } from '../../initializers'
+import { USER_ROLES } from '../../initializers'
 import { logger, getFormatedObjects } from '../../helpers'
 import {
   authenticate,
@@ -87,78 +86,61 @@ function createUser (req: express.Request, res: express.Response, next: express.
     role: USER_ROLES.USER
   })
 
-  user.save().asCallback(function (err) {
-    if (err) return next(err)
-
-    return res.type('json').status(204).end()
-  })
+  user.save()
+    .then(() => res.type('json').status(204).end())
+    .catch(err => next(err))
 }
 
 function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
-    if (err) return next(err)
-
-    return res.json(user.toFormatedJSON())
-  })
+  db.User.loadByUsername(res.locals.oauth.token.user.username)
+    .then(user => res.json(user.toFormatedJSON()))
+    .catch(err => next(err))
 }
 
 function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoId = '' + req.params.videoId
   const userId = +res.locals.oauth.token.User.id
 
-  db.UserVideoRate.load(userId, videoId, null, function (err, ratingObj) {
-    if (err) return next(err)
-
-    const rating = ratingObj ? ratingObj.type : 'none'
-
-    const json: FormatedUserVideoRate = {
-      videoId,
-      rating
-    }
-    res.json(json)
-  })
+  db.UserVideoRate.load(userId, videoId, null)
+    .then(ratingObj => {
+      const rating = ratingObj ? ratingObj.type : 'none'
+      const json: FormatedUserVideoRate = {
+        videoId,
+        rating
+      }
+      res.json(json)
+    })
+    .catch(err => next(err))
 }
 
 function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.User.listForApi(req.query.start, req.query.count, req.query.sort, function (err, usersList, usersTotal) {
-    if (err) return next(err)
-
-    res.json(getFormatedObjects(usersList, usersTotal))
-  })
+  db.User.listForApi(req.query.start, req.query.count, req.query.sort)
+    .then(resultList => {
+      res.json(getFormatedObjects(resultList.data, resultList.total))
+    })
+    .catch(err => next(err))
 }
 
 function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  waterfall([
-    function loadUser (callback) {
-      db.User.loadById(req.params.id, callback)
-    },
-
-    function deleteUser (user, callback) {
-      user.destroy().asCallback(callback)
-    }
-  ], function andFinally (err) {
-    if (err) {
+  db.User.loadById(req.params.id)
+    .then(user => user.destroy())
+    .then(() => res.sendStatus(204))
+    .catch(err => {
       logger.error('Errors when removed the user.', { error: err })
       return next(err)
-    }
-
-    return res.sendStatus(204)
-  })
+    })
 }
 
 function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.User.loadByUsername(res.locals.oauth.token.user.username, function (err, user) {
-    if (err) return next(err)
+  db.User.loadByUsername(res.locals.oauth.token.user.username)
+    .then(user => {
+      if (req.body.password) user.password = req.body.password
+      if (req.body.displayNSFW !== undefined) user.displayNSFW = req.body.displayNSFW
 
-    if (req.body.password) user.password = req.body.password
-    if (req.body.displayNSFW !== undefined) user.displayNSFW = req.body.displayNSFW
-
-    user.save().asCallback(function (err) {
-      if (err) return next(err)
-
-      return res.sendStatus(204)
+      return user.save()
     })
-  })
+    .then(() => res.sendStatus(204))
+    .catch(err => next(err))
 }
 
 function success (req: express.Request, res: express.Response, next: express.NextFunction) {

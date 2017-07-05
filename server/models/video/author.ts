@@ -4,7 +4,6 @@ import { isUserUsernameValid } from '../../helpers'
 
 import { addMethodsToModel } from '../utils'
 import {
-  AuthorClass,
   AuthorInstance,
   AuthorAttributes,
 
@@ -74,30 +73,18 @@ function associate (models) {
   })
 }
 
-findOrCreateAuthor = function (
-  name: string,
-  podId: number,
-  userId: number,
-  transaction: Sequelize.Transaction,
-  callback: AuthorMethods.FindOrCreateAuthorCallback
-) {
+findOrCreateAuthor = function (name: string, podId: number, userId: number, transaction: Sequelize.Transaction) {
   const author = {
     name,
     podId,
     userId
   }
 
-  const query: any = {
+  const query: Sequelize.FindOrInitializeOptions<AuthorAttributes> = {
     where: author,
-    defaults: author
+    defaults: author,
+    transaction
   }
 
-  if (transaction !== null) query.transaction = transaction
-
-  Author.findOrCreate(query).asCallback(function (err, result) {
-    if (err) return callback(err)
-
-    // [ instance, wasCreated ]
-    return callback(null, result[0])
-  })
+  return Author.findOrCreate(query).then(([ authorInstance ]) => authorInstance)
 }

@@ -1,37 +1,19 @@
 import { join } from 'path'
 import * as config from 'config'
-import { each, series } from 'async'
-import * as mkdirp from 'mkdirp'
 import * as passwordGenerator from 'password-generator'
+import * as Promise from 'bluebird'
 
 import { database as db } from './database'
 import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION } from './constants'
 import { clientsExist, usersExist } from './checker'
-import { logger, createCertsIfNotExist, root } from '../helpers'
+import { logger, createCertsIfNotExist, root, mkdirpPromise } from '../helpers'
 
-function installApplication (callback: (err: Error) => void) {
-  series([
-    function createDatabase (callbackAsync) {
-      db.sequelize.sync().asCallback(callbackAsync)
-      // db.sequelize.sync({ force: true }).asCallback(callbackAsync)
-    },
-
-    function createDirectories (callbackAsync) {
-      createDirectoriesIfNotExist(callbackAsync)
-    },
-
-    function createCertificates (callbackAsync) {
-      createCertsIfNotExist(callbackAsync)
-    },
-
-    function createOAuthClient (callbackAsync) {
-      createOAuthClientIfNotExist(callbackAsync)
-    },
-
-    function createOAuthUser (callbackAsync) {
-      createOAuthAdminIfNotExist(callbackAsync)
-    }
-  ], callback)
+function installApplication () {
+  return db.sequelize.sync()
+    .then(() => createDirectoriesIfNotExist())
+    .then(() => createCertsIfNotExist())
+    .then(() => createOAuthClientIfNotExist())
+    .then(() => createOAuthAdminIfNotExist())
 }
 
 // ---------------------------------------------------------------------------
@@ -42,21 +24,22 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function createDirectoriesIfNotExist (callback: (err: Error) => void) {
+function createDirectoriesIfNotExist () {
   const storages = config.get('storage')
 
-  each(Object.keys(storages), function (key, callbackEach) {
+  const tasks = []
+  Object.keys(storages).forEach(key => {
     const dir = storages[key]
-    mkdirp(join(root(), dir), callbackEach)
-  }, callback)
+    tasks.push(mkdirpPromise(join(root(), dir)))
+  })
+
+  return Promise.all(tasks)
 }
 
-function createOAuthClientIfNotExist (callback: (err: Error) => void) {
-  clientsExist(function (err, exist) {
-    if (err) return callback(err)
-
+function createOAuthClientIfNotExist () {
+  return clientsExist().then(exist => {
     // Nothing to do, clients already exist
-    if (exist === true) return callback(null)
+    if (exist === true) return undefined
 
     logger.info('Creating a default OAuth Client.')
 
@@ -69,23 +52,19 @@ function createOAuthClientIfNotExist (callback: (err: Error) => void) {
       redirectUris: null
     })
 
-    client.save().asCallback(function (err, createdClient) {
-      if (err) return callback(err)
-
+    return client.save().then(createdClient => {
       logger.info('Client id: ' + createdClient.clientId)
       logger.info('Client secret: ' + createdClient.clientSecret)
 
-      return callback(null)
+      return undefined
     })
   })
 }
 
-function createOAuthAdminIfNotExist (callback: (err: Error) => void) {
-  usersExist(function (err, exist) {
-    if (err) return callback(err)
-
+function createOAuthAdminIfNotExist () {
+  return usersExist().then(exist => {
     // Nothing to do, users already exist
-    if (exist === true) return callback(null)
+    if (exist === true) return undefined
 
     logger.info('Creating the administrator.')
 
@@ -116,14 +95,12 @@ function createOAuthAdminIfNotExist (callback: (err: Error) => void) {
       role
     }
 
-    db.User.create(userData, createOptions).asCallback(function (err, createdUser) {
-      if (err) return callback(err)
-
+    return db.User.create(userData, createOptions).then(createdUser => {
       logger.info('Username: ' + username)
       logger.info('User password: ' + password)
 
       logger.info('Creating Application table.')
-      db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION }).asCallback(callback)
+      return db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
     })
   })
 }

@@ -5,7 +5,6 @@ import { isVideoAbuseReporterUsernameValid, isVideoAbuseReasonValid } from '../.
 
 import { addMethodsToModel, getSort } from '../utils'
 import {
-  VideoAbuseClass,
   VideoAbuseInstance,
   VideoAbuseAttributes,
 
@@ -109,7 +108,7 @@ function associate (models) {
   })
 }
 
-listForApi = function (start: number, count: number, sort: string, callback: VideoAbuseMethods.ListForApiCallback) {
+listForApi = function (start: number, count: number, sort: string) {
   const query = {
     offset: start,
     limit: count,
@@ -122,11 +121,7 @@ listForApi = function (start: number, count: number, sort: string, callback: Vid
     ]
   }
 
-  return VideoAbuse.findAndCountAll(query).asCallback(function (err, result) {
-    if (err) return callback(err)
-
-    return callback(null, result.rows, result.count)
+  return VideoAbuse.findAndCountAll(query).then(({ rows, count }) => {
+    return { total: count, data: rows }
   })
 }
-
-

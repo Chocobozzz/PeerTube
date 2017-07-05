@@ -1,7 +1,12 @@
-// utils = { transaction, queryInterface, sequelize, Sequelize }
-function up (utils, finalCallback) {
+import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
+
+function up (utils: {
+  transaction: Sequelize.Transaction,
+  queryInterface: Sequelize.QueryInterface,
+  sequelize: Sequelize.Sequelize
+}): Promise<void> {
   const q = utils.queryInterface
-  const Sequelize = utils.Sequelize
 
   const data = {
     type: Sequelize.BOOLEAN,
@@ -9,7 +14,7 @@ function up (utils, finalCallback) {
     defaultValue: false
   }
 
-  q.addColumn('Users', 'displayNSFW', data, { transaction: utils.transaction }).asCallback(finalCallback)
+  return q.addColumn('Users', 'displayNSFW', data)
 }
 
 function down (options, callback) {

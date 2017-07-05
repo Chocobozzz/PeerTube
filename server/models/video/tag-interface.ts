@@ -1,8 +1,8 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 export namespace TagMethods {
-  export type FindOrCreateTagsCallback = (err: Error, tagInstances: TagInstance[]) => void
-  export type FindOrCreateTags = (tags: string[], transaction: Sequelize.Transaction, callback: FindOrCreateTagsCallback) => void
+  export type FindOrCreateTags = (tags: string[], transaction: Sequelize.Transaction) => Promise<TagInstance[]>
 }
 
 export interface TagClass {

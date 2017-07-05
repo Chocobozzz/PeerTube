@@ -3,10 +3,8 @@ import * as Sequelize from 'sequelize'
 import { database as db } from '../../initializers/database'
 import { AbstractRequestScheduler } from './abstract-request-scheduler'
 import { logger } from '../../helpers'
-import {
-  REQUESTS_LIMIT_PODS,
-  REQUESTS_LIMIT_PER_POD
-} from '../../initializers'
+import { REQUESTS_LIMIT_PODS, REQUESTS_LIMIT_PER_POD } from '../../initializers'
+import { RequestsGrouped } from '../../models'
 import { RequestEndpoint } from '../../../shared'
 
 export type RequestSchedulerOptions = {
@@ -17,7 +15,7 @@ export type RequestSchedulerOptions = {
   transaction: Sequelize.Transaction
 }
 
-class RequestScheduler extends AbstractRequestScheduler {
+class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
   constructor () {
     super()
 
@@ -36,11 +34,11 @@ class RequestScheduler extends AbstractRequestScheduler {
     return db.RequestToPod
   }
 
-  buildRequestObjects (requests: { [ toPodId: number ]: any }) {
+  buildRequestObjects (requestsGrouped: RequestsGrouped) {
     const requestsToMakeGrouped = {}
 
-    Object.keys(requests).forEach(toPodId => {
-      requests[toPodId].forEach(data => {
+    Object.keys(requestsGrouped).forEach(toPodId => {
+      requestsGrouped[toPodId].forEach(data => {
         const request = data.request
         const pod = data.pod
         const hashKey = toPodId + request.endpoint
@@ -62,12 +60,12 @@ class RequestScheduler extends AbstractRequestScheduler {
     return requestsToMakeGrouped
   }
 
-  createRequest ({ type, endpoint, data, toIds, transaction }: RequestSchedulerOptions, callback: (err: Error) => void) {
+  createRequest ({ type, endpoint, data, toIds, transaction }: RequestSchedulerOptions) {
     // TODO: check the setPods works
     const podIds = []
 
     // If there are no destination pods abort
-    if (toIds.length === 0) return callback(null)
+    if (toIds.length === 0) return undefined
 
     toIds.forEach(toPod => {
       podIds.push(toPod)
@@ -85,20 +83,18 @@ class RequestScheduler extends AbstractRequestScheduler {
       transaction
     }
 
-    return db.Request.create(createQuery, dbRequestOptions).asCallback((err, request) => {
-      if (err) return callback(err)
-
-      return request.setPods(podIds, dbRequestOptions).asCallback(callback)
-    })
+    return db.Request.create(createQuery, dbRequestOptions)
+      .then(request => {
+        return request.setPods(podIds, dbRequestOptions)
+      })
   }
 
   // ---------------------------------------------------------------------------
 
   afterRequestsHook () {
     // Flush requests with no pod
-    this.getRequestModel().removeWithEmptyTo(err => {
-      if (err) logger.error('Error when removing requests with no pods.', { error: err })
-    })
+    this.getRequestModel().removeWithEmptyTo()
+      .catch(err => logger.error('Error when removing requests with no pods.', { error: err }))
   }
 }
 

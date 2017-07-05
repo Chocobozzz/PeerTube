@@ -1,10 +1,12 @@
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 import { AuthorInstance } from './author-interface'
-import { VideoTagInstance } from './video-tag-interface'
+import { TagAttributes, TagInstance } from './tag-interface'
 
 // Don't use barrel, import just what we need
 import { Video as FormatedVideo } from '../../../shared/models/video.model'
+import { ResultList } from '../../../shared/models/result-list.model'
 
 export type FormatedAddRemoteVideo = {
   name: string
@@ -56,46 +58,32 @@ export namespace VideoMethods {
   export type IsOwned = (this: VideoInstance) => boolean
   export type ToFormatedJSON = (this: VideoInstance) => FormatedVideo
 
-  export type ToAddRemoteJSONCallback = (err: Error, videoFormated?: FormatedAddRemoteVideo) => void
-  export type ToAddRemoteJSON = (this: VideoInstance, callback: ToAddRemoteJSONCallback) => void
-
+  export type ToAddRemoteJSON = (this: VideoInstance) => Promise<FormatedAddRemoteVideo>
   export type ToUpdateRemoteJSON = (this: VideoInstance) => FormatedUpdateRemoteVideo
 
-  export type TranscodeVideofileCallback = (err: Error) => void
-  export type TranscodeVideofile = (this: VideoInstance, callback: TranscodeVideofileCallback) => void
+  export type TranscodeVideofile = (this: VideoInstance) => Promise<void>
 
-  export type GenerateThumbnailFromDataCallback = (err: Error, thumbnailName?: string) => void
-  export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string, callback: GenerateThumbnailFromDataCallback) => void
+  // Return thumbnail name
+  export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string) => Promise<string>
+  export type GetDurationFromFile = (videoPath: string) => Promise<number>
 
-  export type GetDurationFromFileCallback = (err: Error, duration?: number) => void
-  export type GetDurationFromFile = (videoPath, callback) => void
+  export type List = () => Promise<VideoInstance[]>
+  export type ListOwnedAndPopulateAuthorAndTags = () => Promise<VideoInstance[]>
+  export type ListOwnedByAuthor = (author: string) => Promise<VideoInstance[]>
 
-  export type ListCallback = (err: Error, videoInstances: VideoInstance[]) => void
-  export type List = (callback: ListCallback) => void
+  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoInstance> >
+  export type SearchAndPopulateAuthorAndPodAndTags = (
+    value: string,
+    field: string,
+    start: number,
+    count: number,
+    sort: string
+  ) => Promise< ResultList<VideoInstance> >
 
-  export type ListForApiCallback = (err: Error, videoInstances?: VideoInstance[], total?: number) => void
-  export type ListForApi = (start: number, count: number, sort: string, callback: ListForApiCallback) => void
-
-  export type LoadByHostAndRemoteIdCallback = (err: Error, videoInstance: VideoInstance) => void
-  export type LoadByHostAndRemoteId = (fromHost: string, remoteId: string, callback: LoadByHostAndRemoteIdCallback) => void
-
-  export type ListOwnedAndPopulateAuthorAndTagsCallback = (err: Error, videoInstances: VideoInstance[]) => void
-  export type ListOwnedAndPopulateAuthorAndTags = (callback: ListOwnedAndPopulateAuthorAndTagsCallback) => void
-
-  export type ListOwnedByAuthorCallback = (err: Error, videoInstances: VideoInstance[]) => void
-  export type ListOwnedByAuthor = (author: string, callback: ListOwnedByAuthorCallback) => void
-
-  export type LoadCallback = (err: Error, videoInstance: VideoInstance) => void
-  export type Load = (id: string, callback: LoadCallback) => void
-
-  export type LoadAndPopulateAuthorCallback = (err: Error, videoInstance: VideoInstance) => void
-  export type LoadAndPopulateAuthor = (id: string, callback: LoadAndPopulateAuthorCallback) => void
-
-  export type LoadAndPopulateAuthorAndPodAndTagsCallback = (err: Error, videoInstance: VideoInstance) => void
-  export type LoadAndPopulateAuthorAndPodAndTags = (id: string, callback: LoadAndPopulateAuthorAndPodAndTagsCallback) => void
-
-  export type SearchAndPopulateAuthorAndPodAndTagsCallback = (err: Error, videoInstances?: VideoInstance[], total?: number) => void
-  export type SearchAndPopulateAuthorAndPodAndTags = (value: string, field: string, start: number, count: number, sort: string, callback: SearchAndPopulateAuthorAndPodAndTagsCallback) => void
+  export type Load = (id: string) => Promise<VideoInstance>
+  export type LoadByHostAndRemoteId = (fromHost: string, remoteId: string) => Promise<VideoInstance>
+  export type LoadAndPopulateAuthor = (id: string) => Promise<VideoInstance>
+  export type LoadAndPopulateAuthorAndPodAndTags = (id: string) => Promise<VideoInstance>
 }
 
 export interface VideoClass {
@@ -139,7 +127,7 @@ export interface VideoAttributes {
   dislikes?: number
 
   Author?: AuthorInstance
-  Tags?: VideoTagInstance[]
+  Tags?: TagInstance[]
 }
 
 export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.Instance<VideoAttributes> {
@@ -157,6 +145,8 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
   toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
   transcodeVideofile: VideoMethods.TranscodeVideofile
+
+  setTags: Sequelize.HasManySetAssociationsMixin<TagAttributes, string>
 }
 
 export interface VideoModel extends VideoClass, Sequelize.Model<VideoInstance, VideoAttributes> {}

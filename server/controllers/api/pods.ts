@@ -1,5 +1,4 @@
 import * as express from 'express'
-import { waterfall } from 'async'
 
 import { database as db } from '../../initializers/database'
 import { CONFIG } from '../../initializers'
@@ -57,65 +56,39 @@ export {
 function addPods (req: express.Request, res: express.Response, next: express.NextFunction) {
   const informations = req.body
 
-  waterfall<string, Error>([
-    function addPod (callback) {
-      const pod = db.Pod.build(informations)
-      pod.save().asCallback(function (err, podCreated) {
-        // Be sure about the number of parameters for the callback
-        return callback(err, podCreated)
-      })
-    },
-
-    function sendMyVideos (podCreated: PodInstance, callback) {
-      sendOwnedVideosToPod(podCreated.id)
-
-      callback(null)
-    },
-
-    function fetchMyCertificate (callback) {
-      getMyPublicCert(function (err, cert) {
-        if (err) {
-          logger.error('Cannot read cert file.')
-          return callback(err)
-        }
-
-        return callback(null, cert)
-      })
-    }
-  ], function (err, cert) {
-    if (err) return next(err)
-
-    return res.json({ cert: cert, email: CONFIG.ADMIN.EMAIL })
-  })
+  const pod = db.Pod.build(informations)
+  pod.save()
+    .then(podCreated => {
+      return sendOwnedVideosToPod(podCreated.id)
+    })
+    .then(() => {
+      return getMyPublicCert()
+    })
+    .then(cert => {
+      return res.json({ cert: cert, email: CONFIG.ADMIN.EMAIL })
+    })
+    .catch(err => next(err))
 }
 
 function listPods (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.Pod.list(function (err, podsList) {
-    if (err) return next(err)
-
-    res.json(getFormatedObjects(podsList, podsList.length))
-  })
+  db.Pod.list()
+    .then(podsList => res.json(getFormatedObjects(podsList, podsList.length)))
+    .catch(err => next(err))
 }
 
 function makeFriendsController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const hosts = req.body.hosts as string[]
 
-  makeFriends(hosts, function (err) {
-    if (err) {
-      logger.error('Could not make friends.', { error: err })
-      return
-    }
+  makeFriends(hosts)
+    .then(() => logger.info('Made friends!'))
+    .catch(err => logger.error('Could not make friends.', { error: err }))
 
-    logger.info('Made friends!')
-  })
-
+  // Don't wait the process that could be long
   res.type('json').status(204).end()
 }
 
 function quitFriendsController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  quitFriends(function (err) {
-    if (err) return next(err)
-
-    res.type('json').status(204).end()
-  })
+  quitFriends()
+    .then(() => res.type('json').status(204).end())
+    .catch(err => next(err))
 }

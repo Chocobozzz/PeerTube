@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import * as Bluebird from 'bluebird'
+import * as Promise from 'bluebird'
 
 import { UserModel } from '../user'
 
@@ -15,12 +15,11 @@ export type OAuthTokenInfo = {
 }
 
 export namespace OAuthTokenMethods {
-  export type GetByRefreshTokenAndPopulateClient = (refreshToken: string) => Bluebird<OAuthTokenInfo>
-  export type GetByTokenAndPopulateUser = (bearerToken: string) => Bluebird<OAuthTokenInstance>
-  export type GetByRefreshTokenAndPopulateUser = (refreshToken: string) => Bluebird<OAuthTokenInstance>
+  export type GetByRefreshTokenAndPopulateClient = (refreshToken: string) => Promise<OAuthTokenInfo>
+  export type GetByTokenAndPopulateUser = (bearerToken: string) => Promise<OAuthTokenInstance>
+  export type GetByRefreshTokenAndPopulateUser = (refreshToken: string) => Promise<OAuthTokenInstance>
 
-  export type RemoveByUserIdCallback = (err: Error) => void
-  export type RemoveByUserId = (userId, callback) => void
+  export type RemoveByUserId = (userId) => Promise<number>
 }
 
 export interface OAuthTokenClass {

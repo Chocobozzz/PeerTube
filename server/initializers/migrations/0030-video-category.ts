@@ -1,9 +1,12 @@
-import { waterfall } from 'async'
+import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
-// utils = { transaction, queryInterface, sequelize, Sequelize }
-function up (utils, finalCallback) {
+function up (utils: {
+  transaction: Sequelize.Transaction,
+  queryInterface: Sequelize.QueryInterface,
+  sequelize: Sequelize.Sequelize
+}): Promise<void> {
   const q = utils.queryInterface
-  const Sequelize = utils.Sequelize
 
   const data = {
     type: Sequelize.INTEGER,
@@ -11,20 +14,12 @@ function up (utils, finalCallback) {
     defaultValue: 0
   }
 
-  waterfall([
-
-    function addCategoryColumn (callback) {
-      q.addColumn('Videos', 'category', data, { transaction: utils.transaction }).asCallback(function (err) {
-        return callback(err)
-      })
-    },
-
-    function nullOnDefault (callback) {
+  return q.addColumn('Videos', 'category', data)
+    .then(() => {
       data.defaultValue = null
 
-      q.changeColumn('Videos', 'category', data, { transaction: utils.transaction }).asCallback(callback)
-    }
-  ], finalCallback)
+      return q.changeColumn('Videos', 'category', data)
+    })
 }
 
 function down (options, callback) {

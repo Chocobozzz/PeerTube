@@ -24,16 +24,17 @@ function getLocalClient (req: express.Request, res: express.Response, next: expr
     return res.type('json').status(403).end()
   }
 
-  db.OAuthClient.loadFirstClient(function (err, client) {
-    if (err) return next(err)
-    if (!client) return next(new Error('No client available.'))
+  db.OAuthClient.loadFirstClient()
+    .then(client => {
+      if (!client) throw new Error('No client available.')
 
-    const json: OAuthClientLocal = {
-      client_id: client.clientId,
-      client_secret: client.clientSecret
-    }
-    res.json(json)
-  })
+      const json: OAuthClientLocal = {
+        client_id: client.clientId,
+        client_secret: client.clientSecret
+      }
+      res.json(json)
+    })
+    .catch(err => next(err))
 }
 
 // ---------------------------------------------------------------------------

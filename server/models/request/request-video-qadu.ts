@@ -16,7 +16,6 @@ import { database as db } from '../../initializers/database'
 import { REQUEST_VIDEO_QADU_TYPES } from '../../initializers'
 import { addMethodsToModel } from '../utils'
 import {
-  RequestVideoQaduClass,
   RequestVideoQaduInstance,
   RequestVideoQaduAttributes,
 
@@ -83,20 +82,18 @@ function associate (models) {
   })
 }
 
-countTotalRequests = function (callback: RequestVideoQaduMethods.CountTotalRequestsCallback) {
+countTotalRequests = function () {
   const query = {}
-  return RequestVideoQadu.count(query).asCallback(callback)
+  return RequestVideoQadu.count(query)
 }
 
-listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number, callback: RequestVideoQaduMethods.ListWithLimitAndRandomCallback) {
+listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: number) {
   const Pod = db.Pod
   const tableJoin = ''
 
-  Pod.listRandomPodIdsWithRequest(limitPods, 'RequestVideoQadus', tableJoin, function (err, podIds) {
-    if (err) return callback(err)
-
+  return Pod.listRandomPodIdsWithRequest(limitPods, 'RequestVideoQadus', tableJoin).then(podIds => {
     // We don't have friends that have requests
-    if (podIds.length === 0) return callback(null, [])
+    if (podIds.length === 0) return []
 
     const query = {
       include: [
@@ -114,16 +111,14 @@ listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: numbe
       ]
     }
 
-    RequestVideoQadu.findAll(query).asCallback(function (err, requests) {
-      if (err) return callback(err)
-
+    return RequestVideoQadu.findAll(query).then(requests => {
       const requestsGrouped = groupAndTruncateRequests(requests, limitRequestsPerPod)
-      return callback(err, requestsGrouped)
+      return requestsGrouped
     })
   })
 }
 
-removeByRequestIdsAndPod = function (ids: number[], podId: number, callback: RequestVideoQaduMethods.RemoveByRequestIdsAndPodCallback) {
+removeByRequestIdsAndPod = function (ids: number[], podId: number) {
   const query = {
     where: {
       id: {
@@ -133,12 +128,12 @@ removeByRequestIdsAndPod = function (ids: number[], podId: number, callback: Req
     }
   }
 
-  RequestVideoQadu.destroy(query).asCallback(callback)
+  return RequestVideoQadu.destroy(query)
 }
 
-removeAll = function (callback: RequestVideoQaduMethods.RemoveAllCallback) {
+removeAll = function () {
   // Delete all requests
-  RequestVideoQadu.truncate({ cascade: true }).asCallback(callback)
+  return RequestVideoQadu.truncate({ cascade: true })
 }
 
 // ---------------------------------------------------------------------------

@@ -1,9 +1,8 @@
-import { each } from 'async'
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 import { addMethodsToModel } from '../utils'
 import {
-  TagClass,
   TagInstance,
   TagAttributes,
 
@@ -52,10 +51,9 @@ function associate (models) {
   })
 }
 
-findOrCreateTags = function (tags: string[], transaction: Sequelize.Transaction, callback: TagMethods.FindOrCreateTagsCallback) {
-  const tagInstances = []
-
-  each<string, Error>(tags, function (tag, callbackEach) {
+findOrCreateTags = function (tags: string[], transaction: Sequelize.Transaction) {
+  const tasks: Promise<TagInstance>[] = []
+  tags.forEach(tag => {
     const query: any = {
       where: {
         name: tag
@@ -67,15 +65,9 @@ findOrCreateTags = function (tags: string[], transaction: Sequelize.Transaction,
 
     if (transaction) query.transaction = transaction
 
-    Tag.findOrCreate(query).asCallback(function (err, res) {
-      if (err) return callbackEach(err)
-
-      // res = [ tag, isCreated ]
-      const tag = res[0]
-      tagInstances.push(tag)
-      return callbackEach()
-    })
-  }, function (err) {
-    return callback(err, tagInstances)
+    const promise = Tag.findOrCreate(query).then(([ tagInstance ]) => tagInstance)
+    tasks.push(promise)
   })
+
+  return Promise.all(tasks)
 }

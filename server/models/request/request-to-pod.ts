@@ -2,7 +2,6 @@ import * as Sequelize from 'sequelize'
 
 import { addMethodsToModel } from '../utils'
 import {
-  RequestToPodClass,
   RequestToPodInstance,
   RequestToPodAttributes,
 
@@ -38,9 +37,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ---------------------------------------------------------------------------
 
-removeByRequestIdsAndPod = function (requestsIds: number[], podId: number, callback?: RequestToPodMethods.RemoveByRequestIdsAndPodCallback) {
-  if (!callback) callback = function () { /* empty */ }
-
+removeByRequestIdsAndPod = function (requestsIds: number[], podId: number) {
   const query = {
     where: {
       requestId: {
@@ -50,5 +47,5 @@ removeByRequestIdsAndPod = function (requestsIds: number[], podId: number, callb
     }
   }
 
-  RequestToPod.destroy(query).asCallback(callback)
+  return RequestToPod.destroy(query)
 }
