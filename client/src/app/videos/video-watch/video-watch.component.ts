@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 
 import videojs from 'video.js'
-import { MetaService } from '@nglibs/meta'
+import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
 
 import { AuthService, ConfirmService } from '../../core'

@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
+import { MetaGuard } from '@ngx-meta/core'
+
 import { AdminComponent } from './admin.component'
 import { FriendsRoutes } from './friends'
 import { RequestSchedulersRoutes } from './request-schedulers'
@@ -11,6 +13,7 @@ const adminRoutes: Routes = [
   {
     path: '',
     component: AdminComponent,
+    canActivateChild: [ MetaGuard ],
     children: [
       {
         path: '',

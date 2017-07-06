@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
 
-import { TagInputModule } from 'ng2-tag-input'
+import { TagInputModule } from 'ngx-chips'
 
 import { VideosRoutingModule } from './videos-routing.module'
 import { VideosComponent } from './videos.component'

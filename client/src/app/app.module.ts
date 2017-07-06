@@ -6,7 +6,7 @@ import {
   createInputTransfer
 } from '@angularclass/hmr'
 
-import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@nglibs/meta'
+import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
 // TODO: remove, we need this to avoid error in ng2-smart-table
 import 'rxjs/add/operator/toPromise'
 import 'bootstrap-loader'
