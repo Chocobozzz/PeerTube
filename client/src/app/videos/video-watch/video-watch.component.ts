@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 
-import * as videojs from 'video.js'
+import videojs from 'video.js'
 import { MetaService } from '@nglibs/meta'
 import { NotificationsService } from 'angular2-notifications'
 

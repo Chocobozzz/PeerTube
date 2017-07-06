@@ -260,12 +260,33 @@ module.exports = function (options) {
        *
        * See: https://www.npmjs.com/package/copy-webpack-plugin
        */
+
       // Used by embed.html
       new CopyWebpackPlugin([
-        // {
-        //   from: 'src/assets',
-        //   to: 'assets'
-        // },
+        {
+          from: 'src/assets',
+          to: 'assets'
+        },
+        {
+          from: 'node_modules/webtorrent/webtorrent.min.js',
+          to: 'assets/webtorrent'
+        },
+        {
+          from: 'node_modules/video.js/dist/video.min.js',
+          to: 'assets/video-js'
+        },
+        {
+          from: 'node_modules/video.js/dist/video-js.min.css',
+          to: 'assets/video-js'
+        },
+        {
+          from: 'node_modules/videojs-dock/dist/videojs-dock.min.js',
+          to: 'assets/video-js'
+        },
+        {
+          from: 'node_modules/videojs-dock/dist/videojs-dock.css',
+          to: 'assets/video-js'
+        },
         {
           from: 'src/standalone',
           to: 'standalone'
