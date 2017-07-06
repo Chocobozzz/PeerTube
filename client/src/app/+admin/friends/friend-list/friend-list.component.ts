@@ -97,7 +97,6 @@ export class FriendListComponent {
         this.friendService.removeFriend(friend).subscribe(
 	  status => {
 	    this.notificationsService.success('Success', 'Friend removed')
-
 	    this.friendsSource.refresh()
 	  },
 
