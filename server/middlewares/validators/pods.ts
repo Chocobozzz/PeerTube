@@ -64,20 +64,20 @@ function podRemoveValidator (req: express.Request, res: express.Response, next: 
   logger.debug('Checking podRemoveValidator parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    db.Pod.load(req.params.id, function (err, pod) {
-      if (err) {
-	logger.error('Cannot load pod %d.', req.params.id, { error: err })
-	res.sendStatus(500)
-      }
+    db.Pod.load(req.params.id)
+      .then(pod => {
+        if (!pod) {
+          logger.error('Cannot find pod %d.', req.params.id)
+          return res.sendStatus(404)
+        }
 
-      if (!pod) {
-	logger.error('Cannot find pod %d.', req.params.id, { error: err })
-	return res.sendStatus(404)
-      }
-
-      res.locals.pod = pod
-      return next()
-    })
+        res.locals.pod = pod
+        return next()
+      })
+      .catch(err => {
+        logger.error('Cannot load pod %d.', req.params.id, { error: err })
+        res.sendStatus(500)
+      })
   })
 }
 

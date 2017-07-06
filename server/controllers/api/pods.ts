@@ -103,9 +103,9 @@ function quitFriendsController (req: express.Request, res: express.Response, nex
 }
 
 function removeFriendController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  removeFriend(res.locals.pod, function (err) {
-    if (err) return next(err)
+  const pod = res.locals.pod as PodInstance
 
-    res.type('json').status(204).end()
-  })
+  removeFriend(pod)
+    .then(() => (res.type('json').status(204).end()))
+    .catch(err => next(err))
 }

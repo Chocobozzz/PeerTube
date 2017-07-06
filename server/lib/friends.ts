@@ -1,5 +1,3 @@
-import { constant, waterfall } from 'async'
-
 import * as request from 'request'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
@@ -244,43 +242,26 @@ function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
 }
 
-function removeFriend (pod: PodInstance, callback: (err: Error) => void) {
+function removeFriend (pod: PodInstance) {
   // Stop pool requests
   requestScheduler.deactivate()
 
-  waterfall([
-    constant(pod),
+  const requestParams = {
+    method: 'POST' as 'POST',
+    path: '/api/' + API_VERSION + '/remote/pods/remove',
+    sign: true,
+    toPod: pod
+  }
 
-    function announceIQuitThisFriend (pod, callbackAsync) {
-      const requestParams = {
-        method: 'POST' as 'POST',
-        path: '/api/' + API_VERSION + '/remote/pods/remove',
-        sign: true,
-        toPod: pod
-      }
-
-      makeSecureRequest(requestParams, function (err) {
-        if (err) {
-          logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, { err: err })
-          // Continue anyway
-        }
-
-        return callbackAsync(null, pod)
-      })
-    },
-
-    function removePodFromDB (pod, callbackAsync) {
-      pod.destroy().asCallback(callbackAsync)
-    }
-  ], function (err: Error) {
-    // Don't forget to re activate the scheduler, even if there was an error
-    requestScheduler.activate()
-
-    if (err) return callback(err)
-
-    logger.info('Removed friend.')
-    return callback(null)
-  })
+  return makeSecureRequest(requestParams)
+    .then(() => pod.destroy())
+    .then(() => {
+      logger.info('Removed friend.')
+    })
+    .catch(err => {
+      logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, { err: err })
+    })
+    .finally(() => requestScheduler.activate())
 }
 
 function getRequestScheduler () {
