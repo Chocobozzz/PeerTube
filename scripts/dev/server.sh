@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
-if [ ! -d "./client/dist" ]; then
-  echo "client/dist does not exist, compile client files..."
+if [ ! -f "./client/dist/index.html" ]; then
+  echo "client/dist/index.html does not exist, compile client files..."
   npm run build:client
 fi
 

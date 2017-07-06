@@ -730,38 +730,34 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
       `(SELECT "VideoTags"."videoId"
         FROM "Tags"
         INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
-        WHERE name LIKE ${escapedValue}
+        WHERE name ILIKE ${escapedValue}
        )`
     )
   } else if (field === 'host') {
     // FIXME: Include our pod? (not stored in the database)
     podInclude.where = {
       host: {
-        $like: '%' + value + '%'
+        $iLike: '%' + value + '%'
       }
     }
     podInclude.required = true
   } else if (field === 'author') {
     authorInclude.where = {
       name: {
-        $like: '%' + value + '%'
+        $iLike: '%' + value + '%'
       }
     }
 
     // authorInclude.or = true
   } else {
     query.where[field] = {
-      $like: '%' + value + '%'
+      $iLike: '%' + value + '%'
     }
   }
 
   query.include = [
     authorInclude, tagInclude
   ]
-
-  if (tagInclude.where) {
-    // query.include.push([ Video['sequelize'].models.Tag ])
-  }
 
   return Video.findAndCountAll(query).then(({ rows, count }) => {
     return {
