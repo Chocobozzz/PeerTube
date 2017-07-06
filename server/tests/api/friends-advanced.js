@@ -25,6 +25,27 @@ describe('Test advanced friends', function () {
     return podsUtils.quitFriends(server.url, server.accessToken, callback)
   }
 
+  function removeFriend (podNumber, podNumberToRemove, callback) {
+    const server = servers[podNumber - 1]
+    const serverToRemove = servers[podNumberToRemove - 1]
+
+    getFriendsList(podNumber, function (err, res) {
+      if (err) throw err
+
+      let friendsList = res.body.data
+      let podIdToRemove = -1
+
+      for (let i = 0; i < friendsList.length; i++) {
+        if (serverToRemove.host === friendsList[i].host) {
+          podIdToRemove = friendsList[i].id
+          break
+        }
+      }
+
+      return podsUtils.quitOneFriend(server.url, server.accessToken, podIdToRemove, callback)
+    })
+  }
+
   function getFriendsList (podNumber, end) {
     const server = servers[podNumber - 1]
     return podsUtils.getFriendsList(server.url, end)
@@ -286,6 +307,84 @@ describe('Test advanced friends', function () {
         })
       }, 11000)
     })
+  })
+
+  it('Should allow pod 6 to quit pod 1 & 2 and be friend with pod 3', function (done) {
+    this.timeout(30000)
+
+    series([
+      // Pod 3 should have 4 friends
+      function (next) {
+        getFriendsList(3, function (err, res) {
+          if (err) throw err
+
+          const friendsList = res.body.data
+          expect(friendsList).to.be.an('array')
+          expect(friendsList.length).to.equal(4)
+
+          next()
+	})
+      },
+      // Pod 1, 2, 6 should have 3 friends each
+      function (next) {
+	each([ 1, 2, 6 ], function (i, callback) {
+          getFriendsList(i, function (err, res) {
+            if (err) throw err
+
+            const friendsList = res.body.data
+            expect(friendsList).to.be.an('array')
+            expect(friendsList.length).to.equal(3)
+
+            callback()
+          })
+        }, next)
+      },
+      function (next) {
+        removeFriend(6, 1, next)
+      },
+      function (next) {
+        removeFriend(6, 2, next)
+      },
+      // Pod 6 should now have only 1 friend (and it should be Pod 3)
+      function (next) {
+        getFriendsList(6, function (err, res) {
+          if (err) throw err
+
+          const friendsList = res.body.data
+          expect(friendsList).to.be.an('array')
+          expect(friendsList.length).to.equal(1)
+          expect(friendsList[0].host).to.equal(servers[2].host)
+
+          next()
+	})
+      },
+      // Pod 1 & 2 should not know friend 6 anymore
+      function (next) {
+        each([ 1, 2 ], function (i, callback) {
+          getFriendsList(i, function (err, res) {
+            if (err) throw err
+
+            const friendsList = res.body.data
+            expect(friendsList).to.be.an('array')
+            expect(friendsList.length).to.equal(2)
+
+            callback()
+          })
+        }, next)
+      },
+      // Pod 3 should know every pod
+      function (next) {
+        getFriendsList(3, function (err, res) {
+          if (err) throw err
+
+          const friendsList = res.body.data
+          expect(friendsList).to.be.an('array')
+          expect(friendsList.length).to.equal(4)
+
+          next()
+        })
+      }
+    ], done)
   })
 
   after(function (done) {
