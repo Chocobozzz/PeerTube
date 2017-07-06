@@ -77,13 +77,18 @@
         &:hover {
           color: #000 !important;
         }
+
+        &:hover > .glyphicon {
+          opacity: 1 !important;
+        }
       }
 
       .option .glyphicon {
         font-size: 22px;
         color: inherit;
-        opacity: 0.6;
+        opacity: 0.15;
         margin-bottom: 10px;
+        transition: opacity 0.3s;
       }
 
       .video-small-block-text {
@@ -98,11 +103,14 @@
       border-style: solid;
     }
 
-    .video-small-block-author {
-      font-size: 15px;
-      font-weight: bold;
-      text-align: left;
-      padding-left: $video-watch-info-padding-left;
+    .video-small-block-author, .video-small-block-more {
+      a.option {
+        display: block;
+
+        .glyphicon {
+          display: block;
+        }
+      }
     }
 
     .video-small-block-share, .video-small-block-more {
@@ -136,13 +144,15 @@
       .glyphicon {
         font-size: 18px;
         margin: 0 10px 0 0;
+        opacity: 0.3;
       }
 
       .interactive {
         cursor: pointer;
-        transition: color 0.3s;
+        transition: opacity, color 0.3s;
 
         &.activated, &:hover {
+          opacity: 1;
           color: #000;
         }
       }
