@@ -74,7 +74,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const videojsOptions = {
       controls: true,
-      autoplay: false
+      autoplay: true
     }
 
     const self = this
@@ -127,11 +127,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.loading = false
 
       console.log('Added ' + this.video.magnetUri + '.')
-      torrent.files[0].renderTo(this.playerElement, { autoplay: true }, (err) => {
+      torrent.files[0].renderTo(this.playerElement, (err) => {
         if (err) {
           this.notificationsService.error('Error', 'Cannot append the file in the video element.')
           console.error(err)
         }
+
+        // Hack to "simulate" src link in video.js >= 6
+        // If no, we can't play the video after pausing it
+        // https://github.com/videojs/video.js/blob/master/src/js/player.js#L1633
+        (this.player as any).src = () => true
+
+        this.player.play()
       })
 
       this.runInProgress(torrent)

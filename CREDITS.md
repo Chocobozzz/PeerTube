@@ -13,6 +13,10 @@ Inspirations from:
  * [Aurélien Salomon](https://dribbble.com/shots/1338727-Youtube-Redesign)
  * [Wojciech Zieliński](https://dribbble.com/shots/3000315-youtube-concept)
 
+Video.js theme:
+
+ * [zanechua](https://github.com/zanechua/videojs-sublime-inspired-skin)
+
 # Fonts
 
  * [recharge by Typedermic Fonts](http://typodermicfonts.com)
