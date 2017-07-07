@@ -51,13 +51,13 @@ class JobScheduler {
                 // Optimization: we could use "drain" from queue object
                 return setTimeout(next, JOBS_FETCHING_INTERVAL)
               })
-              .catch(err => logger.error('Cannot list pending jobs.', { error: err }))
+              .catch(err => logger.error('Cannot list pending jobs.', err))
           },
 
-          err => logger.error('Error in job scheduler queue.', { error: err })
+          err => logger.error('Error in job scheduler queue.', err)
         )
       })
-      .catch(err => logger.error('Cannot list pending jobs.', { error: err }))
+      .catch(err => logger.error('Cannot list pending jobs.', err))
   }
 
   createJob (transaction: Sequelize.Transaction, handlerName: string, handlerInputData: object) {
@@ -95,7 +95,7 @@ class JobScheduler {
         },
 
         err => {
-          logger.error('Error in job handler %s.', job.handlerName, { error: err })
+          logger.error('Error in job handler %s.', job.handlerName, err)
           return this.onJobError(jobHandler, job, err)
         }
       )
@@ -123,7 +123,7 @@ class JobScheduler {
   }
 
   private cannotSaveJobError (err: Error) {
-    logger.error('Cannot save new job state.', { error: err })
+    logger.error('Cannot save new job state.', err)
   }
 }
 

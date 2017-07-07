@@ -84,7 +84,7 @@ abstract class AbstractRequestScheduler <T> {
         }
       })
       .catch(err => {
-        logger.error('Error sending secure request to %s pod.', toPod.host, { error: err })
+        logger.error('Error sending secure request to %s pod.', toPod.host, err)
 
         throw err
       })
@@ -124,7 +124,7 @@ abstract class AbstractRequestScheduler <T> {
             })
             .catch(err => {
               badPods.push(requestToMake.toPod.id)
-              logger.info('Cannot make request to %s.', toPod.host, { error: err })
+              logger.info('Cannot make request to %s.', toPod.host, err)
             })
         }, { concurrency: REQUESTS_IN_PARALLEL }).then(() => ({ goodPods, badPods }))
       })

@@ -10,7 +10,7 @@ function process (data: { id: string }) {
 }
 
 function onError (err: Error, jobId: number) {
-  logger.error('Error when transcoding video file in job %d.', jobId, { error: err })
+  logger.error('Error when transcoding video file in job %d.', jobId, err)
   return Promise.resolve()
 }
 

@@ -81,7 +81,7 @@ function makeFriendsController (req: express.Request, res: express.Response, nex
 
   makeFriends(hosts)
     .then(() => logger.info('Made friends!'))
-    .catch(err => logger.error('Could not make friends.', { error: err }))
+    .catch(err => logger.error('Could not make friends.', err))
 
   // Don't wait the process that could be long
   res.type('json').status(204).end()

@@ -17,7 +17,7 @@ function retryTransactionWrapper (functionToRetry: (... args) => Promise<any>, o
   )
   .catch(err => {
     // Do not throw the error, continue the process
-    logger.error(options.errorMessage, { error: err })
+    logger.error(options.errorMessage, err)
   })
 }
 

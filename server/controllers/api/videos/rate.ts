@@ -143,7 +143,7 @@ function rateVideo (req: express.Request, res: express.Response) {
   .then(() => logger.info('User video rate for video %s of user %s updated.', videoInstance.name, userInstance.username))
   .catch(err => {
     // This is just a debug because we will retry the insert
-    logger.debug('Cannot add the user video rate.', { error: err })
+    logger.debug('Cannot add the user video rate.', err)
     throw err
   })
 }

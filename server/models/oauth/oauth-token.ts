@@ -114,7 +114,7 @@ getByRefreshTokenAndPopulateClient = function (refreshToken: string) {
 
     return tokenInfos
   }).catch(function (err) {
-    logger.info('getRefreshToken error.', { error: err })
+    logger.info('getRefreshToken error.', err)
   })
 }
 

@@ -126,7 +126,7 @@ function removeUser (req: express.Request, res: express.Response, next: express.
     .then(user => user.destroy())
     .then(() => res.sendStatus(204))
     .catch(err => {
-      logger.error('Errors when removed the user.', { error: err })
+      logger.error('Errors when removed the user.', err)
       return next(err)
     })
 }

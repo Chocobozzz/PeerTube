@@ -33,7 +33,7 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
         next()
       })
       .catch(err => {
-        logger.error('Error in getting duration from file.', { error: err })
+        logger.error('Error in getting duration from file.', err)
         res.status(400).send('Cannot retrieve metadata of the file.')
       })
   })
@@ -164,7 +164,7 @@ function checkVideoExists (id: string, res: express.Response, callback: () => vo
     callback()
   })
   .catch(err => {
-    logger.error('Error in video request validator.', { error: err })
+    logger.error('Error in video request validator.', err)
     return res.sendStatus(500)
   })
 }
@@ -190,7 +190,7 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
       callback()
     })
     .catch(err => {
-      logger.error('Error in video request validator.', { error: err })
+      logger.error('Error in video request validator.', err)
       return res.sendStatus(500)
     })
 }

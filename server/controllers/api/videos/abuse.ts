@@ -90,7 +90,7 @@ function reportVideoAbuse (req: express.Request, res: express.Response) {
   })
   .then((videoInstance: VideoInstance) => logger.info('Abuse report for video %s created.', videoInstance.name))
   .catch(err => {
-    logger.debug('Cannot update the video.', { error: err })
+    logger.debug('Cannot update the video.', err)
     throw err
   })
 }

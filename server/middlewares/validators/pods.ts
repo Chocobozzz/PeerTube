@@ -29,7 +29,7 @@ function makeFriendsValidator (req: express.Request, res: express.Response, next
         return next()
       })
       .catch(err => {
-        logger.error('Cannot know if we have friends.', { error: err })
+        logger.error('Cannot know if we have friends.', err)
         res.sendStatus(500)
       })
   })
@@ -52,7 +52,7 @@ function podsAddValidator (req: express.Request, res: express.Response, next: ex
         return next()
       })
       .catch(err => {
-        logger.error('Cannot load pod by host.', { error: err })
+        logger.error('Cannot load pod by host.', err)
         res.sendStatus(500)
       })
   })

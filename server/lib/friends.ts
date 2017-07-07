@@ -180,7 +180,7 @@ function quitFriends () {
       }, { concurrency: REQUESTS_IN_PARALLEL })
       .then(() => pods)
       .catch(err => {
-        logger.error('Some errors while quitting friends.', { err: err })
+        logger.error('Some errors while quitting friends.', err)
         // Don't stop the process
       })
     })
@@ -215,7 +215,7 @@ function sendOwnedVideosToPod (podId: number) {
             return createRequest(options)
           })
           .catch(err => {
-            logger.error('Cannot convert video to remote.', { error: err })
+            logger.error('Cannot convert video to remote.', err)
             // Don't break the process
             return undefined
           })
@@ -344,7 +344,7 @@ function makeRequestsToWinningPods (cert: string, podsList: PodInstance[]) {
               sendOwnedVideosToPod(podCreated.id)
             })
             .catch(err => {
-              logger.error('Cannot add friend %s pod.', pod.host, { error: err })
+              logger.error('Cannot add friend %s pod.', pod.host, err)
             })
         } else {
           logger.error('Status not 200 for %s pod.', pod.host)

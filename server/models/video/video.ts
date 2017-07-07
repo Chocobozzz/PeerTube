@@ -553,7 +553,7 @@ transcodeVideofile = function (this: VideoInstance) {
           .catch(err => {
             // Autodesctruction...
             video.destroy().asCallback(function (err) {
-              if (err) logger.error('Cannot destruct video after transcoding failure.', { error: err })
+              if (err) logger.error('Cannot destruct video after transcoding failure.', err)
             })
 
             return rej(err)

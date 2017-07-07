@@ -63,7 +63,7 @@ const storage = multer.diskStorage({
         cb(null, filename + '.' + extension)
       })
       .catch(err => {
-        logger.error('Cannot generate random string for file name.', { error: err })
+        logger.error('Cannot generate random string for file name.', err)
         throw err
       })
   }
@@ -304,7 +304,7 @@ function updateVideo (req: express.Request, res: express.Response) {
     logger.info('Video with name %s updated.', videoInstance.name)
   })
   .catch(err => {
-    logger.debug('Cannot update the video.', { error: err })
+    logger.debug('Cannot update the video.', err)
 
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
@@ -333,7 +333,7 @@ function getVideo (req: express.Request, res: express.Response, next: express.Ne
         }
         return quickAndDirtyUpdateVideoToFriends(qaduParams)
       })
-      .catch(err => logger.error('Cannot add view to video %d.', videoInstance.id, { error: err }))
+      .catch(err => logger.error('Cannot add view to video %d.', videoInstance.id, err))
   } else {
     // Just send the event to our friends
     const eventParams = {
@@ -359,7 +359,7 @@ function removeVideo (req: express.Request, res: express.Response, next: express
   videoInstance.destroy()
     .then(() => res.type('json').status(204).end())
     .catch(err => {
-      logger.error('Errors when removed the video.', { error: err })
+      logger.error('Errors when removed the video.', err)
       return next(err)
     })
 }

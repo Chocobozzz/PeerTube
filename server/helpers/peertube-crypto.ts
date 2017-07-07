@@ -30,7 +30,7 @@ function checkSignature (publicKey: string, data: string, hexSignature: string) 
     try {
       dataString = JSON.stringify(data)
     } catch (err) {
-      logger.error('Cannot check signature.', { error: err })
+      logger.error('Cannot check signature.', err)
       return false
     }
   }
@@ -51,7 +51,7 @@ function sign (data: string|Object) {
     try {
       dataString = JSON.stringify(data)
     } catch (err) {
-      logger.error('Cannot sign data.', { error: err })
+      logger.error('Cannot sign data.', err)
       return Promise.resolve('')
     }
   }

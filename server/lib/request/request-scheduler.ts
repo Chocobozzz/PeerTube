@@ -87,7 +87,7 @@ class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
   afterRequestsHook () {
     // Flush requests with no pod
     this.getRequestModel().removeWithEmptyTo()
-      .catch(err => logger.error('Error when removing requests with no pods.', { error: err }))
+      .catch(err => logger.error('Error when removing requests with no pods.', err))
   }
 }
 

@@ -216,7 +216,7 @@ updatePodsScore = function (goodPods: number[], badPods: number[]) {
 
   if (goodPods.length !== 0) {
     incrementScores(goodPods, PODS_SCORE.BONUS).catch(err => {
-      logger.error('Cannot increment scores of good pods.', { error: err })
+      logger.error('Cannot increment scores of good pods.', err)
     })
   }
 
@@ -224,7 +224,7 @@ updatePodsScore = function (goodPods: number[], badPods: number[]) {
     incrementScores(badPods, PODS_SCORE.MALUS)
       .then(() => removeBadPods())
       .catch(err => {
-        if (err) logger.error('Cannot decrement scores of bad pods.', { error: err })
+        if (err) logger.error('Cannot decrement scores of bad pods.', err)
       })
   }
 }
@@ -246,6 +246,6 @@ function removeBadPods () {
       }
     })
     .catch(err => {
-      logger.error('Cannot remove bad pods.', { error: err })
+      logger.error('Cannot remove bad pods.', err)
     })
 }

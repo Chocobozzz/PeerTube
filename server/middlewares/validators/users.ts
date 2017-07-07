@@ -20,7 +20,7 @@ function usersAddValidator (req: express.Request, res: express.Response, next: e
         next()
       })
       .catch(err => {
-        logger.error('Error in usersAdd request validator.', { error: err })
+        logger.error('Error in usersAdd request validator.', err)
         return res.sendStatus(500)
       })
   })
@@ -41,7 +41,7 @@ function usersRemoveValidator (req: express.Request, res: express.Response, next
         next()
       })
       .catch(err => {
-        logger.error('Error in usersRemove request validator.', { error: err })
+        logger.error('Error in usersRemove request validator.', err)
         return res.sendStatus(500)
       })
   })
@@ -71,7 +71,7 @@ function usersVideoRatingValidator (req: express.Request, res: express.Response,
         next()
       })
       .catch(err => {
-        logger.error('Error in user request validator.', { error: err })
+        logger.error('Error in user request validator.', err)
         return res.sendStatus(500)
       })
   })

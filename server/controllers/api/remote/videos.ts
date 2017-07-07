@@ -76,7 +76,7 @@ function remoteVideos (req: express.Request, res: express.Response, next: expres
 
     return fun.call(this, data, fromPod)
   })
-  .catch(err => logger.error('Error managing remote videos.', { error: err }))
+  .catch(err => logger.error('Error managing remote videos.', err))
 
   // Don't block the other pod
   return res.type('json').status(204).end()
@@ -91,7 +91,7 @@ function remoteVideosQadu (req: express.Request, res: express.Response, next: ex
 
     return quickAndDirtyUpdateVideoRetryWrapper(videoData, fromPod)
   })
-  .catch(err => logger.error('Error managing remote videos.', { error: err }))
+  .catch(err => logger.error('Error managing remote videos.', err))
 
   return res.type('json').status(204).end()
 }
@@ -105,7 +105,7 @@ function remoteVideosEvents (req: express.Request, res: express.Response, next: 
 
     return processVideosEventsRetryWrapper(eventData, fromPod)
   })
-  .catch(err => logger.error('Error managing remote videos.', { error: err }))
+  .catch(err => logger.error('Error managing remote videos.', err))
 
   return res.type('json').status(204).end()
 }
@@ -167,7 +167,7 @@ function processVideosEvents (eventData: any, fromPod: PodInstance) {
   })
   .then(() => logger.info('Remote video event processed for video %s.', eventData.remoteId))
   .catch(err => {
-    logger.debug('Cannot process a video event.', { error: err })
+    logger.debug('Cannot process a video event.', err)
     throw err
   })
 }
@@ -207,7 +207,7 @@ function quickAndDirtyUpdateVideo (videoData: any, fromPod: PodInstance) {
       })
   })
   .then(() => logger.info('Remote video %s quick and dirty updated', videoName))
-  .catch(err => logger.debug('Cannot quick and dirty update the remote video.', { error: err }))
+  .catch(err => logger.debug('Cannot quick and dirty update the remote video.', err))
 }
 
 // Handle retries on fail
@@ -287,7 +287,7 @@ function addRemoteVideo (videoToCreateData: any, fromPod: PodInstance) {
   })
   .then(() => logger.info('Remote video %s inserted.', videoToCreateData.name))
   .catch(err => {
-    logger.debug('Cannot insert the remote video.', { error: err })
+    logger.debug('Cannot insert the remote video.', err)
     throw err
   })
 }
@@ -341,7 +341,7 @@ function updateRemoteVideo (videoAttributesToUpdate: any, fromPod: PodInstance) 
   .then(() => logger.info('Remote video %s updated', videoAttributesToUpdate.name))
   .catch(err => {
     // This is just a debug because we will retry the insert
-    logger.debug('Cannot update the remote video.', { error: err })
+    logger.debug('Cannot update the remote video.', err)
     throw err
   })
 }
@@ -354,7 +354,7 @@ function removeRemoteVideo (videoToRemoveData: any, fromPod: PodInstance) {
       return video.destroy()
     })
     .catch(err => {
-      logger.debug('Could not fetch remote video.', { host: fromPod.host, remoteId: videoToRemoveData.remoteId, error: err })
+      logger.debug('Could not fetch remote video.', { host: fromPod.host, remoteId: videoToRemoveData.remoteId, error: err.stack })
     })
 }
 
@@ -372,7 +372,7 @@ function reportAbuseRemoteVideo (reportData: any, fromPod: PodInstance) {
 
       return db.VideoAbuse.create(videoAbuseData)
     })
-    .catch(err => logger.error('Cannot create remote abuse video.', { error: err }))
+    .catch(err => logger.error('Cannot create remote abuse video.', err))
 }
 
 function fetchOwnedVideo (id: string) {
@@ -383,7 +383,7 @@ function fetchOwnedVideo (id: string) {
       return video
     })
     .catch(err => {
-      logger.error('Cannot load owned video from id.', { error: err, id })
+      logger.error('Cannot load owned video from id.', { error: err.stack, id })
       throw err
     })
 }
@@ -396,7 +396,7 @@ function fetchRemoteVideo (podHost: string, remoteId: string) {
       return video
     })
     .catch(err => {
-      logger.error('Cannot load video from host and remote id.', { error: err, podHost, remoteId })
+      logger.error('Cannot load video from host and remote id.', { error: err.stack, podHost, remoteId })
       throw err
     })
 }
