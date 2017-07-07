@@ -107,8 +107,7 @@ function quitOneFriend (url, accessToken, friendId, expectedStatus, end) {
     .end(function (err, res) {
       if (err) throw err
 
-      // Wait for the request between pods
-      setTimeout(end, 1000)
+      end()
     })
 }
 
