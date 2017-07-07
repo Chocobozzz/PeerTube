@@ -70,7 +70,6 @@ abstract class AbstractRequestScheduler <T> {
   protected makeRequest (toPod: PodInstance, requestEndpoint: string, requestsToMake: Object) {
     const params = {
       toPod: toPod,
-      sign: true, // Prove our identity
       method: 'POST' as 'POST',
       path: '/api/' + API_VERSION + '/remote/' + requestEndpoint,
       data: requestsToMake // Requests we need to make

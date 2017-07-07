@@ -41,7 +41,7 @@ function checkSignature (req: express.Request, res: express.Response, next: expr
       return res.sendStatus(403)
     })
     .catch(err => {
-      logger.error('Cannot get signed host in body.', { error: err })
+      logger.error('Cannot get signed host in body.', { error: err.stack, signature: req.body.signature.signature })
       return res.sendStatus(500)
     })
 }

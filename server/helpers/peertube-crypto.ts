@@ -1,5 +1,5 @@
 import * as crypto from 'crypto'
-import * as fs from 'fs'
+import * as Promise from 'bluebird'
 import { join } from 'path'
 
 import {
@@ -52,18 +52,15 @@ function sign (data: string|Object) {
       dataString = JSON.stringify(data)
     } catch (err) {
       logger.error('Cannot sign data.', { error: err })
-      return ''
+      return Promise.resolve('')
     }
   }
 
   sign.update(dataString, 'utf8')
 
-  // TODO: make async
-  const certPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
-  const myKey = fs.readFileSync(certPath)
-  const signature = sign.sign(myKey.toString(), SIGNATURE_ENCODING)
-
-  return signature
+  return getMyPrivateCert().then(myKey => {
+    return sign.sign(myKey, SIGNATURE_ENCODING)
+  })
 }
 
 function comparePassword (plainPassword: string, hashPassword: string) {

@@ -61,15 +61,8 @@ class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
   }
 
   createRequest ({ type, endpoint, data, toIds, transaction }: RequestSchedulerOptions) {
-    // TODO: check the setPods works
-    const podIds = []
-
     // If there are no destination pods abort
     if (toIds.length === 0) return undefined
-
-    toIds.forEach(toPod => {
-      podIds.push(toPod)
-    })
 
     const createQuery = {
       endpoint,
@@ -85,7 +78,7 @@ class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
 
     return db.Request.create(createQuery, dbRequestOptions)
       .then(request => {
-        return request.setPods(podIds, dbRequestOptions)
+        return request.setPods(toIds, dbRequestOptions)
       })
   }
 

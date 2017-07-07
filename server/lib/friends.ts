@@ -141,9 +141,7 @@ function makeFriends (hosts: string[]) {
   logger.info('Make friends!')
   return getMyPublicCert()
     .then(cert => {
-      return Promise.mapSeries(hosts, host => {
-        return computeForeignPodsList(host, podsScore)
-      }).then(() => cert)
+      return Promise.each(hosts, host => computeForeignPodsList(host, podsScore)).then(() => cert)
     })
     .then(cert => {
       logger.debug('Pods scores computed.', { podsScore: podsScore })
@@ -169,7 +167,6 @@ function quitFriends () {
       const requestParams = {
         method: 'POST' as 'POST',
         path: '/api/' + API_VERSION + '/remote/pods/remove',
-        sign: true,
         toPod: null
       }
 
@@ -178,6 +175,7 @@ function quitFriends () {
       // The other pod will exclude us automatically after a while
       return Promise.map(pods, pod => {
         requestParams.toPod = pod
+
         return makeSecureRequest(requestParams)
       }, { concurrency: REQUESTS_IN_PARALLEL })
       .then(() => pods)

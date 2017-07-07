@@ -287,6 +287,10 @@ const USER_ROLES: { [ id: string ]: UserRole } = {
 
 // ---------------------------------------------------------------------------
 
+const OPENGRAPH_COMMENT = '<!-- opengraph tags -->'
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
@@ -306,12 +310,13 @@ export {
   CONFIG,
   CONSTRAINTS_FIELDS,
   FRIEND_SCORE,
-  JOBS_FETCHING_INTERVAL,
   JOB_STATES,
   JOBS_CONCURRENCY,
   JOBS_FETCH_LIMIT_PER_CYCLE,
+  JOBS_FETCHING_INTERVAL,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
+  OPENGRAPH_COMMENT,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,
   PREVIEWS_SIZE,

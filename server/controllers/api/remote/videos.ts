@@ -64,8 +64,7 @@ function remoteVideos (req: express.Request, res: express.Response, next: expres
   const fromPod = res.locals.secure.pod
 
   // We need to process in the same order to keep consistency
-  // TODO: optimization
-  Promise.mapSeries(requests, (request: any) => {
+  Promise.each(requests, (request: any) => {
     const data = request.data
 
     // Get the function we need to call in order to process the request
@@ -79,7 +78,7 @@ function remoteVideos (req: express.Request, res: express.Response, next: expres
   })
   .catch(err => logger.error('Error managing remote videos.', { error: err }))
 
-  // We don't need to keep the other pod waiting
+  // Don't block the other pod
   return res.type('json').status(204).end()
 }
 
@@ -87,7 +86,7 @@ function remoteVideosQadu (req: express.Request, res: express.Response, next: ex
   const requests = req.body.data
   const fromPod = res.locals.secure.pod
 
-  Promise.mapSeries(requests, (request: any) => {
+  Promise.each(requests, (request: any) => {
     const videoData = request.data
 
     return quickAndDirtyUpdateVideoRetryWrapper(videoData, fromPod)
@@ -101,7 +100,7 @@ function remoteVideosEvents (req: express.Request, res: express.Response, next: 
   const requests = req.body.data
   const fromPod = res.locals.secure.pod
 
-  Promise.mapSeries(requests, (request: any) => {
+  Promise.each(requests, (request: any) => {
     const eventData = request.data
 
     return processVideosEventsRetryWrapper(eventData, fromPod)

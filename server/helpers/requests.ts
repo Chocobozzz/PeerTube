@@ -33,7 +33,6 @@ type MakeSecureRequestParams = {
   method: 'GET'|'POST'
   toPod: PodInstance
   path: string
-  sign: boolean
   data?: Object
 }
 function makeSecureRequest (params: MakeSecureRequestParams) {
@@ -47,31 +46,30 @@ function makeSecureRequest (params: MakeSecureRequestParams) {
       return rej(new Error('Cannot make a secure request with a non POST method.'))
     }
 
-    // Add signature if it is specified in the params
-    if (params.sign === true) {
-      const host = CONFIG.WEBSERVER.HOST
+    const host = CONFIG.WEBSERVER.HOST
 
-      let dataToSign
-      if (params.data) {
-        dataToSign = params.data
-      } else {
-        // We do not have data to sign so we just take our host
-        // It is not ideal but the connection should be in HTTPS
-        dataToSign = host
-      }
+    let dataToSign
+    if (params.data) {
+      dataToSign = params.data
+    } else {
+      // We do not have data to sign so we just take our host
+      // It is not ideal but the connection should be in HTTPS
+      dataToSign = host
+    }
 
+    sign(dataToSign).then(signature => {
       requestParams.json['signature'] = {
         host, // Which host we pretend to be
-        signature: sign(dataToSign)
+        signature
       }
-    }
 
-    // If there are data informations
-    if (params.data) {
-      requestParams.json['data'] = params.data
-    }
+      // If there are data informations
+      if (params.data) {
+        requestParams.json['data'] = params.data
+      }
 
-    request.post(requestParams, (err, response, body) => err ? rej(err) : res({ response, body }))
+      request.post(requestParams, (err, response, body) => err ? rej(err) : res({ response, body }))
+    })
   })
 }
 

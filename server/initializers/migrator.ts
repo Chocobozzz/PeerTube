@@ -35,9 +35,7 @@ function migrate () {
       return getMigrationScripts().then(migrationScripts => ({ actualVersion, migrationScripts }))
     })
     .then(({ actualVersion, migrationScripts }) => {
-      return Promise.mapSeries(migrationScripts, entity => {
-        return executeMigration(actualVersion, entity)
-      })
+      return Promise.each(migrationScripts, entity => executeMigration(actualVersion, entity))
     })
     .then(() => {
       logger.info('Migrations finished. New migration version schema: %s', LAST_MIGRATION_VERSION)

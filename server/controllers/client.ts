@@ -8,15 +8,14 @@ import {
   CONFIG,
   REMOTE_SCHEME,
   STATIC_PATHS,
-  STATIC_MAX_AGE
+  STATIC_MAX_AGE,
+  OPENGRAPH_COMMENT
 } from '../initializers'
 import { root, readFileBufferPromise } from '../helpers'
 import { VideoInstance } from '../models'
 
 const clientsRouter = express.Router()
 
-// TODO: move to constants
-const opengraphComment = '<!-- opengraph tags -->'
 const distPath = join(root(), 'client', 'dist')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const indexPath = join(distPath, 'index.html')
@@ -85,7 +84,7 @@ function addOpenGraphTags (htmlStringPage: string, video: VideoInstance) {
     tagsString += '<meta property="' + tagName + '" content="' + tagValue + '" />'
   })
 
-  return htmlStringPage.replace(opengraphComment, tagsString)
+  return htmlStringPage.replace(OPENGRAPH_COMMENT, tagsString)
 }
 
 function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
