@@ -33,16 +33,9 @@ describe('Test advanced friends', function () {
       if (err) throw err
 
       let friendsList = res.body.data
-      let podIdToRemove = -1
+      let podToRemove = friendsList.find((friend) => (friend.host === serverToRemove.host))
 
-      for (let i = 0; i < friendsList.length; i++) {
-        if (serverToRemove.host === friendsList[i].host) {
-          podIdToRemove = friendsList[i].id
-          break
-        }
-      }
-
-      return podsUtils.quitOneFriend(server.url, server.accessToken, podIdToRemove, callback)
+      return podsUtils.quitOneFriend(server.url, server.accessToken, podToRemove.id, callback)
     })
   }
 

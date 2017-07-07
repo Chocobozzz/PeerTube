@@ -209,17 +209,10 @@ describe('Test basic friends', function () {
           if (err) throw err
 
           const result = res.body.data
-          let podId
-
-          for (let i = 0; i < result.length; i++) {
-            if (result[i].host === servers[1].host) {
-              podId = result[i].id
-              break
-            }
-          }
+          let pod = result.find((friend) => (friend.host === servers[1].host))
 
           // Remove it from the friends list
-          podsUtils.quitOneFriend(server.url, server.accessToken, podId, next)
+          podsUtils.quitOneFriend(server.url, server.accessToken, pod.id, next)
         })
       },
 
