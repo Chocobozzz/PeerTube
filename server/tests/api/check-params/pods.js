@@ -166,6 +166,14 @@ describe('Test pods API validators', function () {
           .expect(403, done)
       })
 
+      it('Should fail with an undefined id', function (done) {
+        request(server.url)
+          .delete(path + '/' + undefined)
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
       it('Should fail with an invalid id', function (done) {
 	request(server.url)
           .delete(path + '/foobar')
