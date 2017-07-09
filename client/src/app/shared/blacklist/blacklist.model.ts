@@ -1,6 +1,6 @@
-import { BlacklistedVideo as BlacklistedVideoModel, RestBlacklistedVideo } from '../../../../../shared'
+import { RestBlacklistedVideoInstance } from '../../../../../shared'
 
-export class Blacklist implements BlacklistedVideoModel, RestBlacklistedVideo {
+export class Blacklist implements RestBlacklistedVideoInstance {
   id: number
   videoId: string
   name: string
@@ -12,6 +12,7 @@ export class Blacklist implements BlacklistedVideoModel, RestBlacklistedVideo {
   nsfw: boolean
   remoteId: string
   createdAt: Date
+  updatedAt: Date
 
   constructor(hash: {
     id: number,
@@ -25,6 +26,7 @@ export class Blacklist implements BlacklistedVideoModel, RestBlacklistedVideo {
     nsfw: boolean,
     remoteId: string,
     createdAt: Date,
+    updatedAt: Date
   }) {
     this.id = hash.id
     this.videoId = hash.videoId
@@ -39,6 +41,9 @@ export class Blacklist implements BlacklistedVideoModel, RestBlacklistedVideo {
 
     if (hash.createdAt) {
       this.createdAt = hash.createdAt
+    }
+    if (hash.updatedAt) {
+      this.updatedAt = hash.updatedAt
     }
   }
 }

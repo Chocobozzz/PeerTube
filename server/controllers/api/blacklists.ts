@@ -2,6 +2,8 @@ import * as express from 'express'
 
 import { database } from '../../initializers'
 import { logger, getFormatedObjects } from '../../helpers'
+import { RestBlacklistedVideoInstance, ResultList } from '../../../shared'
+import { VideoInstance, BlacklistedVideoInstance } from '../../models'
 
 import {
   authenticate,
@@ -42,9 +44,7 @@ export {
 
 function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
   database.BlacklistedVideo.listForApi(req.query.start, req.query.count, req.query.sort)
-    .then(resultList => {
-      res.json(formatBlacklist(resultList.data, resultList.total))
-    })
+    .then(resultList => res.json(formatBlacklistForRest(resultList)))
     .catch(err => next(err))
 }
 
@@ -58,24 +58,23 @@ function removeVideoFromBlacklist (req: express.Request, res: express.Response, 
     })
 }
 
-function formatBlacklist (objects, objectsTotal) {
-  const formatedObjects = []
-  var json = ''
+function formatBlacklistForRest (resultList) : ResultList<RestBlacklistedVideoInstance> {
+  let formatedList: RestBlacklistedVideoInstance[] = []
 
-  objects.forEach((object) => {
-    json = object.toFormatedJSON()
+  formatedList = resultList.data.map(object => {
+    let json = object.toFormatedJSON()
     if (json) {
-      formatedObjects.push(blacklistObjectToJSON(object, object.Video))
+      return formatBlacklistObject(object, object.Video)
     }
   })
 
   return {
-    total: objectsTotal,
-    data: formatedObjects
+    total: formatedList.length,
+    data: formatedList
   }
 }
 
-function blacklistObjectToJSON (blacklist, video) {
+function formatBlacklistObject (blacklist: BlacklistedVideoInstance, video: VideoInstance) : RestBlacklistedVideoInstance {
   return {
     id: blacklist.id,
     videoId: blacklist.videoId,

@@ -14,3 +14,7 @@ export interface RestBlacklistedVideo {
   nsfw: boolean
   remoteId: string
 }
+
+export interface RestBlacklistedVideoInstance extends BlacklistedVideo, RestBlacklistedVideo {
+  updatedAt: Date
+}
