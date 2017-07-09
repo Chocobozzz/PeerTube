@@ -1,1 +1,1 @@
-export * from './blacklist.service';
+export * from './blacklist.service'

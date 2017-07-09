@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 
-import { NotificationsService } from 'angular2-notifications';
+import { NotificationsService } from 'angular2-notifications'
 
-import { ConfirmService } from '../../../core';
-import { Blacklist, Utils } from '../../../shared';
-import { BlacklistService } from '../shared';
+import { ConfirmService } from '../../../core'
+import { Blacklist, Utils } from '../../../shared'
+import { BlacklistService } from '../shared'
 
 @Component({
   selector: 'my-blacklist-list',
@@ -12,7 +12,7 @@ import { BlacklistService } from '../shared';
   styleUrls: [ './blacklist-list.component.scss' ]
 })
 export class BlacklistListComponent {
-  blacklistSource = null;
+  blacklistSource = null
   tableSettings = {
     mode: 'external',
     attr: {
@@ -62,32 +62,32 @@ export class BlacklistListComponent {
 	valuePrepareFunction: Utils.dateToHuman
       }
     }
-  };
+  }
 
   constructor(
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private blacklistService: BlacklistService
   ) {
-    this.blacklistSource = this.blacklistService.getDataSource();
+    this.blacklistSource = this.blacklistService.getDataSource()
   }
 
   removeVideoFromBlacklist({ data }) {
-    const blacklistedVideo = data;
+    const blacklistedVideo: Blacklist = data
 
     this.confirmService.confirm('Do you really want to remove this video from the blacklist ? It will be available again in the video list', 'Remove').subscribe(
       res => {
-	if (res === false) return;
+	if (res === false) return
 
 	this.blacklistService.removeVideoFromBlacklist(blacklistedVideo).subscribe(
 	  () => {
-	    this.notificationsService.success('Success', `Video ${blacklistedVideo.name} removed from the blacklist.`);
-	    this.blacklistSource.refresh();
+	    this.notificationsService.success('Success', `Video ${blacklistedVideo.name} removed from the blacklist.`)
+	    this.blacklistSource.refresh()
 	  },
 
 	  err => this.notificationsService.error('Error', err.text)
-	);
+	)
       }
-    );
+    )
   }
 }

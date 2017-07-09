@@ -1,1 +1,1 @@
-export * from './blacklist.model';
+export * from './blacklist.model'

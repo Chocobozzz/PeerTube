@@ -1,7 +1,7 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router'
 
-import { BlacklistsComponent } from './blacklists.component';
-import { BlacklistListComponent } from './blacklist-list';
+import { BlacklistsComponent } from './blacklists.component'
+import { BlacklistListComponent } from './blacklist-list'
 
 export const BlacklistsRoutes: Routes = [
   {
@@ -24,4 +24,4 @@ export const BlacklistsRoutes: Routes = [
       }
     ]
   }
-];
+]
