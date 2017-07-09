@@ -81,7 +81,8 @@ listForApi = function (start: number, count: number, sort: SortType) {
   const query = {
     offset: start,
     limit: count,
-    order: [ getSortOnModel(sort.sortModel, sort.sortValue) ]
+    order: [ getSortOnModel(sort.sortModel, sort.sortValue) ],
+    include: [ { model: BlacklistedVideo['sequelize'].models.Video } ]
   }
 
   return BlacklistedVideo.findAndCountAll(query).then(({ rows, count }) => {
