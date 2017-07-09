@@ -23,7 +23,7 @@ function setVideosSort (req: express.Request, res: express.Response, next: expre
 }
 
 function setBlacklistsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  let newSort: SortType
+  let newSort: SortType = { sortModel: undefined, sortValue: undefined }
 
   if (!req.query.sort) req.query.sort = '-createdAt'
 
