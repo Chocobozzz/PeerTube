@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
+import { SortType } from '../../helpers'
 import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
@@ -13,7 +14,7 @@ export namespace BlacklistedVideoMethods {
 
   export type List = () => Promise<BlacklistedVideoInstance[]>
 
-  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<BlacklistedVideoInstance> >
+  export type ListForApi = (start: number, count: number, sort: SortType) => Promise< ResultList<BlacklistedVideoInstance> >
 
   export type LoadById = (id: number) => Promise<BlacklistedVideoInstance>
 

@@ -1,7 +1,8 @@
 import 'express-validator'
 import * as express from 'express'
 
-import database from '../initializers/database'
+import { SortType } from '../helpers'
+import { database } from '../initializers'
 
 function setUsersSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
@@ -21,8 +22,8 @@ function setVideosSort (req: express.Request, res: express.Response, next: expre
   return next()
 }
 
-function setBlacklistsSort (req, res, next) {
-  var newSort = {}
+function setBlacklistsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  let newSort: SortType
 
   if (!req.query.sort) req.query.sort = '-createdAt'
 

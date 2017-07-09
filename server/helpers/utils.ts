@@ -47,11 +47,14 @@ function isSignupAllowed () {
   })
 }
 
+type SortType = { sortModel: any, sortValue: string }
+
 // ---------------------------------------------------------------------------
 
 export {
   badRequest,
   generateRandomString,
   getFormattedObjects,
-  isSignupAllowed
+  isSignupAllowed,
+  SortType
 }
