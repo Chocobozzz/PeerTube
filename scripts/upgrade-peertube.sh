@@ -1,14 +1,21 @@
 #!/bin/bash
 
-nodeMinVersion="v6.0.0"
+verlte() {
+  [ "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
+}
+
+nodeMinVersion="6.0.0"
 npmMinVersion="3.0.0"
 
-if [[ $(node --version) < $nodeMinVersion ]]; then
+actualNodeVersion=$(node --version | tr -d "v")
+actualNpmVersion=$(npm --version)
+
+if verlte $actualNodeVersion $nodeMinVersion; then
   echo 'You need node >= 6'
   exit 0
 fi
 
-if [[ $(npm --version) < $npmMinVersion ]]; then
+if verlte $actualNpmVersion $npmMinVersion; then
   echo 'You need npm >= 3'
   exit 0
 fi
