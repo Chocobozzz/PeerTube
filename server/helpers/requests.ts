@@ -8,6 +8,7 @@ import {
   CONFIG
 } from '../initializers'
 import { PodInstance } from '../models'
+import { PodSignature } from '../../shared'
 import { sign } from './peertube-crypto'
 
 type MakeRetryRequestParams = {
@@ -37,9 +38,18 @@ type MakeSecureRequestParams = {
 }
 function makeSecureRequest (params: MakeSecureRequestParams) {
   return new Promise<{ response: request.RequestResponse, body: any }>((res, rej) => {
-    const requestParams = {
+    const requestParams: {
+      url: string,
+      json: {
+        signature: PodSignature,
+        data: any
+      }
+    } = {
       url: REMOTE_SCHEME.HTTP + '://' + params.toPod.host + params.path,
-      json: {}
+      json: {
+        signature: null,
+        data: null
+      }
     }
 
     if (params.method !== 'POST') {
@@ -58,14 +68,14 @@ function makeSecureRequest (params: MakeSecureRequestParams) {
     }
 
     sign(dataToSign).then(signature => {
-      requestParams.json['signature'] = {
+      requestParams.json.signature = {
         host, // Which host we pretend to be
         signature
       }
 
       // If there are data informations
       if (params.data) {
-        requestParams.json['data'] = params.data
+        requestParams.json.data = params.data
       }
 
       request.post(requestParams, (err, response, body) => err ? rej(err) : res({ response, body }))

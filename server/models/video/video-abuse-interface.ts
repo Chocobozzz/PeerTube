@@ -5,7 +5,7 @@ import { PodInstance } from '../pod'
 import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
-import { VideoAbuse as FormatedVideoAbuse } from '../../../shared/models/video-abuse.model'
+import { VideoAbuse as FormatedVideoAbuse } from '../../../shared/models/videos/video-abuse.model'
 
 export namespace VideoAbuseMethods {
   export type ToFormatedJSON = (this: VideoAbuseInstance) => FormatedVideoAbuse

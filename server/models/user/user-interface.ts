@@ -2,7 +2,8 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
-import { UserRole, User as FormatedUser } from '../../../shared/models/user.model'
+import { User as FormatedUser } from '../../../shared/models/users/user.model'
+import { UserRole } from '../../../shared/models/users/user-role.type'
 import { ResultList } from '../../../shared/models/result-list.model'
 
 export namespace UserMethods {

@@ -11,6 +11,7 @@ import {
   USER_EMAIL,
   USER_PASSWORD
 } from '../../../shared'
+import { UserCreate } from '../../../../../../shared'
 
 @Component({
   selector: 'my-user-add',
@@ -57,11 +58,11 @@ export class UserAddComponent extends FormReactive implements OnInit {
   addUser () {
     this.error = null
 
-    const { username, password, email } = this.form.value
+    const userCreate: UserCreate = this.form.value
 
-    this.userService.addUser(username, password, email).subscribe(
+    this.userService.addUser(userCreate).subscribe(
       () => {
-        this.notificationsService.success('Success', `User ${username} created.`)
+        this.notificationsService.success('Success', `User ${userCreate.username} created.`)
         this.router.navigate([ '/admin/users/list' ])
       },
 

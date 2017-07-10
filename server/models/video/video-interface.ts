@@ -5,7 +5,7 @@ import { AuthorInstance } from './author-interface'
 import { TagAttributes, TagInstance } from './tag-interface'
 
 // Don't use barrel, import just what we need
-import { Video as FormatedVideo } from '../../../shared/models/video.model'
+import { Video as FormatedVideo } from '../../../shared/models/videos/video.model'
 import { ResultList } from '../../../shared/models/result-list.model'
 
 export type FormatedAddRemoteVideo = {

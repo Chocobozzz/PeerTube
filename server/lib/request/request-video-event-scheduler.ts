@@ -1,14 +1,14 @@
 import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../initializers/database'
-import { AbstractRequestScheduler } from './abstract-request-scheduler'
+import { AbstractRequestScheduler, RequestsObjects } from './abstract-request-scheduler'
 import {
   REQUESTS_VIDEO_EVENT_LIMIT_PODS,
   REQUESTS_VIDEO_EVENT_LIMIT_PER_POD,
   REQUEST_VIDEO_EVENT_ENDPOINT
 } from '../../initializers'
 import { RequestsVideoEventGrouped } from '../../models'
-import { RequestVideoEventType } from '../../../shared'
+import { RequestVideoEventType, RemoteVideoEventRequest, RemoteVideoEventType } from '../../../shared'
 
 export type RequestVideoEventSchedulerOptions = {
   type: RequestVideoEventType
@@ -36,8 +36,8 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
     return db.RequestVideoEvent
   }
 
-  buildRequestObjects (eventRequests: RequestsVideoEventGrouped) {
-    const requestsToMakeGrouped = {}
+  buildRequestsObjects (eventRequests: RequestsVideoEventGrouped) {
+    const requestsToMakeGrouped: RequestsObjects<RemoteVideoEventRequest> = {}
 
     /* Example:
         {
@@ -47,7 +47,15 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
           }
         }
     */
-    const eventsPerVideoPerPod = {}
+    const eventsPerVideoPerPod: {
+      [ podId: string ]: {
+        [ videoRemoteId: string ]: {
+          views?: number
+          likes?: number
+          dislikes?: number
+        }
+      }
+    } = {}
 
     // We group video events per video and per pod
     // We add the counts of the same event types
@@ -87,8 +95,8 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
           requestsToMakeGrouped[toPodId].datas.push({
             data: {
               remoteId,
-              eventType,
-              count: eventsForVideo[eventType]
+              eventType: eventType as RemoteVideoEventType,
+              count: +eventsForVideo[eventType]
             }
           })
         })

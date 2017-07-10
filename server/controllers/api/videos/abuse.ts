@@ -17,6 +17,7 @@ import {
   setPagination
 } from '../../../middlewares'
 import { VideoInstance } from '../../../models'
+import { VideoAbuseCreate } from '../../../../shared'
 
 const abuseVideoRouter = express.Router()
 
@@ -63,10 +64,11 @@ function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Respon
 function reportVideoAbuse (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
   const reporterUsername = res.locals.oauth.token.User.username
+  const body: VideoAbuseCreate = req.body
 
   const abuse = {
     reporterUsername,
-    reason: req.body.reason,
+    reason: body.reason,
     videoId: videoInstance.id,
     reporterPodId: null // This is our pod that reported this abuse
   }

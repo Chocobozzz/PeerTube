@@ -3,6 +3,7 @@ import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 
 import { AuthHttp, RestExtractor, RestDataSource, User } from '../../../shared'
+import { UserCreate } from '../../../../../../shared'
 
 @Injectable()
 export class UserService {
@@ -13,14 +14,8 @@ export class UserService {
     private restExtractor: RestExtractor
   ) {}
 
-  addUser (username: string, password: string, email: string) {
-    const body = {
-      username,
-      email,
-      password
-    }
-
-    return this.authHttp.post(UserService.BASE_USERS_URL, body)
+  addUser (userCreate: UserCreate) {
+    return this.authHttp.post(UserService.BASE_USERS_URL, userCreate)
                         .map(this.restExtractor.extractDataBool)
                         .catch(this.restExtractor.handleError)
   }

@@ -11,6 +11,7 @@ import {
   UserService,
   USER_PASSWORD
 } from '../../shared'
+import { UserUpdate } from '../../../../../shared'
 
 @Component({
   selector: 'my-account-details',
@@ -50,7 +51,7 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
 
   updateDetails () {
     const displayNSFW = this.form.value['displayNSFW']
-    const details = {
+    const details: UserUpdate = {
       displayNSFW
     }
 

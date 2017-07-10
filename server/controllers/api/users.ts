@@ -17,7 +17,7 @@ import {
   setUsersSort,
   token
 } from '../../middlewares'
-import { UserVideoRate as FormatedUserVideoRate } from '../../../shared'
+import { UserVideoRate as FormatedUserVideoRate, UserCreate, UserUpdate } from '../../../shared'
 
 const usersRouter = express.Router()
 
@@ -78,10 +78,12 @@ export {
 // ---------------------------------------------------------------------------
 
 function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const body: UserCreate = req.body
+
   const user = db.User.build({
-    username: req.body.username,
-    password: req.body.password,
-    email: req.body.email,
+    username: body.username,
+    password: body.password,
+    email: body.email,
     displayNSFW: false,
     role: USER_ROLES.USER
   })
@@ -132,10 +134,12 @@ function removeUser (req: express.Request, res: express.Response, next: express.
 }
 
 function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const body: UserUpdate = req.body
+
   db.User.loadByUsername(res.locals.oauth.token.user.username)
     .then(user => {
-      if (req.body.password) user.password = req.body.password
-      if (req.body.displayNSFW !== undefined) user.displayNSFW = req.body.displayNSFW
+      if (body.password) user.password = body.password
+      if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
 
       return user.save()
     })

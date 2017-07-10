@@ -1,5 +1,5 @@
 // Do not use the barrel (dependency loop)
-import { UserRole } from '../../../../../shared/models/user.model'
+import { UserRole } from '../../../../../shared/models/users/user-role.type'
 import { User } from '../../shared/users/user.model'
 
 export type TokenOptions = {

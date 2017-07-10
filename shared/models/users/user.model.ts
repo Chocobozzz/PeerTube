@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'user'
+import { UserRole } from './user-role.type'
 
 export interface User {
   id: number

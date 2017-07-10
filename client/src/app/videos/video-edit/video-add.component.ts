@@ -16,6 +16,7 @@ import {
   VIDEO_TAGS
 } from '../../shared'
 import { VideoService } from '../shared'
+import { VideoCreate } from '../../../../../shared'
 
 @Component({
   selector: 'my-videos-add',
@@ -98,23 +99,25 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       removeAfterUpload: true
     })
 
-    this.uploader.onBuildItemForm = (item, form) => {
-      const name = this.form.value['name']
-      const nsfw = this.form.value['nsfw']
-      const category = this.form.value['category']
-      const licence = this.form.value['licence']
-      const language = this.form.value['language']
-      const description = this.form.value['description']
-      const tags = this.form.value['tags']
+    this.uploader.onBuildItemForm = (item, form: FormData) => {
+      const formValue: VideoCreate = this.form.value
+
+      const name = formValue.name
+      const nsfw = formValue.nsfw
+      const category = formValue.category
+      const licence = formValue.licence
+      const language = formValue.language
+      const description = formValue.description
+      const tags = formValue.tags
 
       form.append('name', name)
-      form.append('category', category)
-      form.append('nsfw', nsfw)
-      form.append('licence', licence)
+      form.append('category', '' + category)
+      form.append('nsfw', '' + nsfw)
+      form.append('licence', '' + licence)
 
       // Language is optional
       if (language) {
-        form.append('language', language)
+        form.append('language', '' + language)
       }
 
       form.append('description', description)

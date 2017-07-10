@@ -18,6 +18,17 @@ import {
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { quickAndDirtyUpdatesVideoToFriends } from '../../../lib'
 import { PodInstance, VideoInstance } from '../../../models'
+import {
+  RemoteVideoRequest,
+  RemoteVideoCreateData,
+  RemoteVideoUpdateData,
+  RemoteVideoRemoveData,
+  RemoteVideoReportAbuseData,
+  RemoteQaduVideoRequest,
+  RemoteQaduVideoData,
+  RemoteVideoEventRequest,
+  RemoteVideoEventData
+} from '../../../../shared'
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
@@ -60,11 +71,11 @@ export {
 // ---------------------------------------------------------------------------
 
 function remoteVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const requests = req.body.data
+  const requests: RemoteVideoRequest[] = req.body.data
   const fromPod = res.locals.secure.pod
 
   // We need to process in the same order to keep consistency
-  Promise.each(requests, (request: any) => {
+  Promise.each(requests, request => {
     const data = request.data
 
     // Get the function we need to call in order to process the request
@@ -83,10 +94,10 @@ function remoteVideos (req: express.Request, res: express.Response, next: expres
 }
 
 function remoteVideosQadu (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const requests = req.body.data
+  const requests: RemoteQaduVideoRequest[] = req.body.data
   const fromPod = res.locals.secure.pod
 
-  Promise.each(requests, (request: any) => {
+  Promise.each(requests, request => {
     const videoData = request.data
 
     return quickAndDirtyUpdateVideoRetryWrapper(videoData, fromPod)
@@ -97,10 +108,10 @@ function remoteVideosQadu (req: express.Request, res: express.Response, next: ex
 }
 
 function remoteVideosEvents (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const requests = req.body.data
+  const requests: RemoteVideoEventRequest[] = req.body.data
   const fromPod = res.locals.secure.pod
 
-  Promise.each(requests, (request: any) => {
+  Promise.each(requests, request => {
     const eventData = request.data
 
     return processVideosEventsRetryWrapper(eventData, fromPod)
@@ -110,7 +121,7 @@ function remoteVideosEvents (req: express.Request, res: express.Response, next: 
   return res.type('json').status(204).end()
 }
 
-function processVideosEventsRetryWrapper (eventData: any, fromPod: PodInstance) {
+function processVideosEventsRetryWrapper (eventData: RemoteVideoEventData, fromPod: PodInstance) {
   const options = {
     arguments: [ eventData, fromPod ],
     errorMessage: 'Cannot process videos events with many retries.'
@@ -119,7 +130,7 @@ function processVideosEventsRetryWrapper (eventData: any, fromPod: PodInstance) 
   return retryTransactionWrapper(processVideosEvents, options)
 }
 
-function processVideosEvents (eventData: any, fromPod: PodInstance) {
+function processVideosEvents (eventData: RemoteVideoEventData, fromPod: PodInstance) {
 
   return db.sequelize.transaction(t => {
     return fetchOwnedVideo(eventData.remoteId)
@@ -172,7 +183,7 @@ function processVideosEvents (eventData: any, fromPod: PodInstance) {
   })
 }
 
-function quickAndDirtyUpdateVideoRetryWrapper (videoData: any, fromPod: PodInstance) {
+function quickAndDirtyUpdateVideoRetryWrapper (videoData: RemoteQaduVideoData, fromPod: PodInstance) {
   const options = {
     arguments: [ videoData, fromPod ],
     errorMessage: 'Cannot update quick and dirty the remote video with many retries.'
@@ -181,7 +192,7 @@ function quickAndDirtyUpdateVideoRetryWrapper (videoData: any, fromPod: PodInsta
   return retryTransactionWrapper(quickAndDirtyUpdateVideo, options)
 }
 
-function quickAndDirtyUpdateVideo (videoData: any, fromPod: PodInstance) {
+function quickAndDirtyUpdateVideo (videoData: RemoteQaduVideoData, fromPod: PodInstance) {
   let videoName
 
   return db.sequelize.transaction(t => {
@@ -211,7 +222,7 @@ function quickAndDirtyUpdateVideo (videoData: any, fromPod: PodInstance) {
 }
 
 // Handle retries on fail
-function addRemoteVideoRetryWrapper (videoToCreateData: any, fromPod: PodInstance) {
+function addRemoteVideoRetryWrapper (videoToCreateData: RemoteVideoCreateData, fromPod: PodInstance) {
   const options = {
     arguments: [ videoToCreateData, fromPod ],
     errorMessage: 'Cannot insert the remote video with many retries.'
@@ -220,7 +231,7 @@ function addRemoteVideoRetryWrapper (videoToCreateData: any, fromPod: PodInstanc
   return retryTransactionWrapper(addRemoteVideo, options)
 }
 
-function addRemoteVideo (videoToCreateData: any, fromPod: PodInstance) {
+function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodInstance) {
   logger.debug('Adding remote video "%s".', videoToCreateData.remoteId)
 
   return db.sequelize.transaction(t => {
@@ -293,7 +304,7 @@ function addRemoteVideo (videoToCreateData: any, fromPod: PodInstance) {
 }
 
 // Handle retries on fail
-function updateRemoteVideoRetryWrapper (videoAttributesToUpdate: any, fromPod: PodInstance) {
+function updateRemoteVideoRetryWrapper (videoAttributesToUpdate: RemoteVideoUpdateData, fromPod: PodInstance) {
   const options = {
     arguments: [ videoAttributesToUpdate, fromPod ],
     errorMessage: 'Cannot update the remote video with many retries'
@@ -302,7 +313,7 @@ function updateRemoteVideoRetryWrapper (videoAttributesToUpdate: any, fromPod: P
   return retryTransactionWrapper(updateRemoteVideo, options)
 }
 
-function updateRemoteVideo (videoAttributesToUpdate: any, fromPod: PodInstance) {
+function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, fromPod: PodInstance) {
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.remoteId)
 
   return db.sequelize.transaction(t => {
@@ -346,7 +357,7 @@ function updateRemoteVideo (videoAttributesToUpdate: any, fromPod: PodInstance) 
   })
 }
 
-function removeRemoteVideo (videoToRemoveData: any, fromPod: PodInstance) {
+function removeRemoteVideo (videoToRemoveData: RemoteVideoRemoveData, fromPod: PodInstance) {
   // We need the instance because we have to remove some other stuffs (thumbnail etc)
   return fetchRemoteVideo(fromPod.host, videoToRemoveData.remoteId)
     .then(video => {
@@ -358,7 +369,7 @@ function removeRemoteVideo (videoToRemoveData: any, fromPod: PodInstance) {
     })
 }
 
-function reportAbuseRemoteVideo (reportData: any, fromPod: PodInstance) {
+function reportAbuseRemoteVideo (reportData: RemoteVideoReportAbuseData, fromPod: PodInstance) {
   return fetchOwnedVideo(reportData.videoRemoteId)
     .then(video => {
       logger.debug('Reporting remote abuse for video %s.', video.id)

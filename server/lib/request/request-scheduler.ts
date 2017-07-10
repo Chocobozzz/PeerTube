@@ -1,11 +1,11 @@
 import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../initializers/database'
-import { AbstractRequestScheduler } from './abstract-request-scheduler'
+import { AbstractRequestScheduler, RequestsObjects } from './abstract-request-scheduler'
 import { logger } from '../../helpers'
 import { REQUESTS_LIMIT_PODS, REQUESTS_LIMIT_PER_POD } from '../../initializers'
 import { RequestsGrouped } from '../../models'
-import { RequestEndpoint } from '../../../shared'
+import { RequestEndpoint, RemoteVideoRequest } from '../../../shared'
 
 export type RequestSchedulerOptions = {
   type: string
@@ -34,8 +34,8 @@ class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
     return db.RequestToPod
   }
 
-  buildRequestObjects (requestsGrouped: RequestsGrouped) {
-    const requestsToMakeGrouped = {}
+  buildRequestsObjects (requestsGrouped: RequestsGrouped) {
+    const requestsToMakeGrouped: RequestsObjects<RemoteVideoRequest> = {}
 
     Object.keys(requestsGrouped).forEach(toPodId => {
       requestsGrouped[toPodId].forEach(data => {

@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
-import { Pod as FormatedPod } from '../../../shared/models/pod.model'
+import { Pod as FormatedPod } from '../../../shared/models/pods/pod.model'
 
 export namespace PodMethods {
   export type ToFormatedJSON = (this: PodInstance) => FormatedPod

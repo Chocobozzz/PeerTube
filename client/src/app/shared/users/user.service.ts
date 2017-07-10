@@ -6,6 +6,7 @@ import 'rxjs/add/operator/map'
 import { AuthService } from '../../core'
 import { AuthHttp } from '../auth'
 import { RestExtractor } from '../rest'
+import { UserCreate, UserUpdate } from '../../../../../shared'
 
 @Injectable()
 export class UserService {
@@ -27,7 +28,7 @@ export class UserService {
 
   changePassword (newPassword: string) {
     const url = UserService.BASE_USERS_URL + this.authService.getUser().id
-    const body = {
+    const body: UserUpdate = {
       password: newPassword
     }
 
@@ -36,7 +37,7 @@ export class UserService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  updateDetails (details: { displayNSFW: boolean }) {
+  updateDetails (details: UserUpdate) {
     const url = UserService.BASE_USERS_URL + this.authService.getUser().id
 
     return this.authHttp.put(url, details)
@@ -44,14 +45,8 @@ export class UserService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  signup (username: string, password: string, email: string) {
-    const body = {
-      username,
-      email,
-      password
-    }
-
-    return this.http.post(UserService.BASE_USERS_URL + 'register', body)
+  signup (userCreate: UserCreate) {
+    return this.http.post(UserService.BASE_USERS_URL + 'register', userCreate)
                         .map(this.restExtractor.extractDataBool)
                         .catch(this.restExtractor.handleError)
   }

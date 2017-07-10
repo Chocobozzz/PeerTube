@@ -6,9 +6,12 @@ import {
   logger,
   checkSignature as peertubeCryptoCheckSignature
 } from '../helpers'
+import { PodSignature } from '../../shared'
 
 function checkSignature (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const host = req.body.signature.host
+  const signatureObject: PodSignature = req.body.signature
+  const host = signatureObject.host
+
   db.Pod.loadByHost(host)
     .then(pod => {
       if (pod === null) {
@@ -27,7 +30,7 @@ function checkSignature (req: express.Request, res: express.Response, next: expr
         signatureShouldBe = host
       }
 
-      const signatureOk = peertubeCryptoCheckSignature(pod.publicKey, signatureShouldBe, req.body.signature.signature)
+      const signatureOk = peertubeCryptoCheckSignature(pod.publicKey, signatureShouldBe, signatureObject.signature)
 
       if (signatureOk === true) {
         res.locals.secure = {
@@ -37,11 +40,11 @@ function checkSignature (req: express.Request, res: express.Response, next: expr
         return next()
       }
 
-      logger.error('Signature is not okay in body for %s.', req.body.signature.host)
+      logger.error('Signature is not okay in body for %s.', signatureObject.host)
       return res.sendStatus(403)
     })
     .catch(err => {
-      logger.error('Cannot get signed host in body.', { error: err.stack, signature: req.body.signature.signature })
+      logger.error('Cannot get signed host in body.', { error: err.stack, signature: signatureObject.signature })
       return res.sendStatus(500)
     })
 }

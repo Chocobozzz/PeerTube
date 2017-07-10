@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as Promise from 'bluebird'
 
 import { database as db } from '../../../initializers/database'
 import {
@@ -18,6 +19,7 @@ import {
   authenticate,
   videoRateValidator
 } from '../../../middlewares'
+import { UserVideoRateUpdate, VideoRateType } from '../../../../shared'
 
 const rateVideoRouter = express.Router()
 
@@ -47,7 +49,8 @@ function rateVideoRetryWrapper (req: express.Request, res: express.Response, nex
 }
 
 function rateVideo (req: express.Request, res: express.Response) {
-  const rateType = req.body.rating
+  const body: UserVideoRateUpdate = req.body
+  const rateType = body.rating
   const videoInstance = res.locals.video
   const userInstance = res.locals.oauth.token.User
 
@@ -62,24 +65,34 @@ function rateVideo (req: express.Request, res: express.Response) {
         if (rateType === VIDEO_RATE_TYPES.LIKE) likesToIncrement++
         else if (rateType === VIDEO_RATE_TYPES.DISLIKE) dislikesToIncrement++
 
+        let promise: Promise<any>
+
         // There was a previous rate, update it
         if (previousRate) {
           // We will remove the previous rate, so we will need to remove it from the video attribute
           if (previousRate.type === VIDEO_RATE_TYPES.LIKE) likesToIncrement--
           else if (previousRate.type === VIDEO_RATE_TYPES.DISLIKE) dislikesToIncrement--
 
-          previousRate.type = rateType
+          if (rateType === 'none') { // Destroy previous rate
+            promise = previousRate.destroy()
+          } else { // Update previous rate
+            previousRate.type = rateType as VideoRateType
 
-          return previousRate.save(options).then(() => ({ t, likesToIncrement, dislikesToIncrement }))
-        } else { // There was not a previous rate, insert a new one
+            promise = previousRate.save()
+          }
+        } else if (rateType !== 'none') { // There was not a previous rate, insert a new one if there is a rate
           const query = {
             userId: userInstance.id,
             videoId: videoInstance.id,
             type: rateType
           }
 
-          return db.UserVideoRate.create(query, options).then(() => ({ likesToIncrement, dislikesToIncrement }))
+          promise = db.UserVideoRate.create(query, options)
+        } else {
+          promise = Promise.resolve()
         }
+
+        return promise.then(() => ({ likesToIncrement, dislikesToIncrement }))
       })
       .then(({ likesToIncrement, dislikesToIncrement }) => {
         const options = { transaction: t }

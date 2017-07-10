@@ -16,7 +16,13 @@ import {
   UserService
 } from '../../shared'
 import { Video } from './video.model'
-import { UserVideoRate, VideoRateType } from '../../../../../shared'
+import {
+  UserVideoRate,
+  VideoRateType,
+  VideoUpdate,
+  VideoAbuseCreate,
+  UserVideoRateUpdate
+} from '../../../../../shared'
 
 @Injectable()
 export class VideoService {
@@ -35,42 +41,15 @@ export class VideoService {
   ) {}
 
   loadVideoCategories () {
-    return this.http.get(VideoService.BASE_VIDEO_URL + 'categories')
-                    .map(this.restExtractor.extractDataGet)
-                    .subscribe(data => {
-                      Object.keys(data).forEach(categoryKey => {
-                        this.videoCategories.push({
-                          id: parseInt(categoryKey, 10),
-                          label: data[categoryKey]
-                        })
-                      })
-                    })
+    return this.loadVideoAttributeEnum('categories', this.videoCategories)
   }
 
   loadVideoLicences () {
-    return this.http.get(VideoService.BASE_VIDEO_URL + 'licences')
-                    .map(this.restExtractor.extractDataGet)
-                    .subscribe(data => {
-                      Object.keys(data).forEach(licenceKey => {
-                        this.videoLicences.push({
-                          id: parseInt(licenceKey, 10),
-                          label: data[licenceKey]
-                        })
-                      })
-                    })
+    return this.loadVideoAttributeEnum('licences', this.videoLicences)
   }
 
   loadVideoLanguages () {
-    return this.http.get(VideoService.BASE_VIDEO_URL + 'languages')
-                    .map(this.restExtractor.extractDataGet)
-                    .subscribe(data => {
-                      Object.keys(data).forEach(languageKey => {
-                        this.videoLanguages.push({
-                          id: parseInt(languageKey, 10),
-                          label: data[languageKey]
-                        })
-                      })
-                    })
+    return this.loadVideoAttributeEnum('languages', this.videoLanguages)
   }
 
   getVideo (id: string): Observable<Video> {
@@ -83,13 +62,14 @@ export class VideoService {
   updateVideo (video: Video) {
     const language = video.language ? video.language : null
 
-    const body = {
+    const body: VideoUpdate = {
       name: video.name,
       category: video.category,
       licence: video.licence,
       language,
       description: video.description,
-      tags: video.tags
+      tags: video.tags,
+      nsfw: video.nsfw
     }
 
     const headers = new Headers({ 'Content-Type': 'application/json' })
@@ -128,7 +108,7 @@ export class VideoService {
 
   reportVideo (id: string, reason: string) {
     const url = VideoService.BASE_VIDEO_URL + id + '/abuse'
-    const body = {
+    const body: VideoAbuseCreate = {
       reason
     }
 
@@ -161,7 +141,7 @@ export class VideoService {
 
   private setVideoRate (id: string, rateType: VideoRateType) {
     const url = VideoService.BASE_VIDEO_URL + id + '/rate'
-    const body = {
+    const body: UserVideoRateUpdate = {
       rating: rateType
     }
 
@@ -179,5 +159,18 @@ export class VideoService {
     }
 
     return { videos, totalVideos }
+  }
+
+  private loadVideoAttributeEnum (attributeName: 'categories' | 'licences' | 'languages', hashToPopulate: { id: number, label: string }[]) {
+    return this.http.get(VideoService.BASE_VIDEO_URL + attributeName)
+                    .map(this.restExtractor.extractDataGet)
+                    .subscribe(data => {
+                      Object.keys(data).forEach(dataKey => {
+                        hashToPopulate.push({
+                          id: parseInt(dataKey, 10),
+                          label: data[dataKey]
+                        })
+                      })
+                    })
   }
 }

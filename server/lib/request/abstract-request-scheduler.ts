@@ -10,6 +10,15 @@ import {
   REQUESTS_INTERVAL
 } from '../../initializers'
 
+interface RequestsObjects<U> {
+  [ id: string ]: {
+    toPod: PodInstance
+    endpoint: string
+    ids: number[] // ids
+    datas: U[]
+  }
+}
+
 abstract class AbstractRequestScheduler <T> {
   requestInterval: number
   limitPods: number
@@ -27,7 +36,7 @@ abstract class AbstractRequestScheduler <T> {
 
   abstract getRequestModel (): AbstractRequestClass<T>
   abstract getRequestToPodModel (): AbstractRequestToPodClass
-  abstract buildRequestObjects (requestsGrouped: T): {}
+  abstract buildRequestsObjects (requestsGrouped: T): RequestsObjects<any>
 
   activate () {
     logger.info('Requests scheduler activated.')
@@ -67,7 +76,7 @@ abstract class AbstractRequestScheduler <T> {
   // ---------------------------------------------------------------------------
 
   // Make a requests to friends of a certain type
-  protected makeRequest (toPod: PodInstance, requestEndpoint: string, requestsToMake: Object) {
+  protected makeRequest (toPod: PodInstance, requestEndpoint: string, requestsToMake: any) {
     const params = {
       toPod: toPod,
       method: 'POST' as 'POST',
@@ -95,7 +104,7 @@ abstract class AbstractRequestScheduler <T> {
     return this.getRequestModel().listWithLimitAndRandom(this.limitPods, this.limitPerPod)
       .then((requestsGrouped: T) => {
         // We want to group requests by destinations pod and endpoint
-        const requestsToMake = this.buildRequestObjects(requestsGrouped)
+        const requestsToMake = this.buildRequestsObjects(requestsGrouped)
 
         // If there are no requests, abort
         if (isEmpty(requestsToMake) === true) {
@@ -105,8 +114,8 @@ abstract class AbstractRequestScheduler <T> {
 
         logger.info('Making "%s" to friends.', this.description)
 
-        const goodPods = []
-        const badPods = []
+        const goodPods: number[] = []
+        const badPods: number[] = []
 
         return Promise.map(Object.keys(requestsToMake), hashKey => {
           const requestToMake = requestsToMake[hashKey]
@@ -149,5 +158,6 @@ abstract class AbstractRequestScheduler <T> {
 // ---------------------------------------------------------------------------
 
 export {
-  AbstractRequestScheduler
+  AbstractRequestScheduler,
+  RequestsObjects
 }

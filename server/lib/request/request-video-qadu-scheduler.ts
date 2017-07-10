@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../initializers/database'
-import { AbstractRequestScheduler } from './abstract-request-scheduler'
+import { AbstractRequestScheduler, RequestsObjects } from './abstract-request-scheduler'
 import { logger } from '../../helpers'
 import {
   REQUESTS_VIDEO_QADU_LIMIT_PODS,
@@ -9,8 +9,27 @@ import {
   REQUEST_VIDEO_QADU_ENDPOINT,
   REQUEST_VIDEO_QADU_TYPES
 } from '../../initializers'
-import { RequestsVideoQaduGrouped } from '../../models'
-import { RequestVideoQaduType } from '../../../shared'
+import { RequestsVideoQaduGrouped, PodInstance } from '../../models'
+import { RemoteQaduVideoRequest, RequestVideoQaduType } from '../../../shared'
+
+// We create a custom interface because we need "videos" attribute for our computations
+interface RequestsObjectsCustom<U> extends RequestsObjects<U> {
+  [ id: string ]: {
+    toPod: PodInstance
+    endpoint: string
+    ids: number[] // ids
+    datas: U[]
+
+    videos: {
+      [ id: string ]: {
+        remoteId: string
+        likes?: number
+        dislikes?: number
+        views?: number
+      }
+    }
+  }
+}
 
 export type RequestVideoQaduSchedulerOptions = {
   type: RequestVideoQaduType
@@ -37,8 +56,8 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
     return db.RequestVideoQadu
   }
 
-  buildRequestObjects (requests: RequestsVideoQaduGrouped) {
-    const requestsToMakeGrouped = {}
+  buildRequestsObjects (requests: RequestsVideoQaduGrouped) {
+    const requestsToMakeGrouped: RequestsObjectsCustom<RemoteQaduVideoRequest> = {}
 
     Object.keys(requests).forEach(toPodId => {
       requests[toPodId].forEach(data => {
@@ -59,7 +78,7 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
 
         // Maybe another attribute was filled for this video
         let videoData = requestsToMakeGrouped[hashKey].videos[video.id]
-        if (!videoData) videoData = {}
+        if (!videoData) videoData = { remoteId: null }
 
         switch (request.type) {
           case REQUEST_VIDEO_QADU_TYPES.LIKES:

@@ -15,7 +15,7 @@ import { FriendService } from '../shared'
 })
 export class FriendAddComponent implements OnInit {
   form: FormGroup
-  hosts = [ ]
+  hosts: string[] = [ ]
   error: string = null
 
   constructor (

@@ -34,7 +34,11 @@ import {
 import {
   RequestEndpoint,
   RequestVideoEventType,
-  RequestVideoQaduType
+  RequestVideoQaduType,
+  RemoteVideoCreateData,
+  RemoteVideoUpdateData,
+  RemoteVideoRemoveData,
+  RemoteVideoReportAbuseData
 } from '../../shared'
 
 type QaduParam = { videoId: string, type: RequestVideoQaduType }
@@ -52,7 +56,7 @@ function activateSchedulers () {
   requestVideoEventScheduler.activate()
 }
 
-function addVideoToFriends (videoData: Object, transaction: Sequelize.Transaction) {
+function addVideoToFriends (videoData: RemoteVideoCreateData, transaction: Sequelize.Transaction) {
   const options = {
     type: ENDPOINT_ACTIONS.ADD,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
@@ -62,7 +66,7 @@ function addVideoToFriends (videoData: Object, transaction: Sequelize.Transactio
   return createRequest(options)
 }
 
-function updateVideoToFriends (videoData: Object, transaction: Sequelize.Transaction) {
+function updateVideoToFriends (videoData: RemoteVideoUpdateData, transaction: Sequelize.Transaction) {
   const options = {
     type: ENDPOINT_ACTIONS.UPDATE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
@@ -72,7 +76,7 @@ function updateVideoToFriends (videoData: Object, transaction: Sequelize.Transac
   return createRequest(options)
 }
 
-function removeVideoToFriends (videoParams: Object) {
+function removeVideoToFriends (videoParams: RemoteVideoRemoveData) {
   const options = {
     type: ENDPOINT_ACTIONS.REMOVE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
@@ -82,7 +86,7 @@ function removeVideoToFriends (videoParams: Object) {
   return createRequest(options)
 }
 
-function reportAbuseVideoToFriend (reportData: Object, video: VideoInstance, transaction: Sequelize.Transaction) {
+function reportAbuseVideoToFriend (reportData: RemoteVideoReportAbuseData, video: VideoInstance, transaction: Sequelize.Transaction) {
   const options = {
     type: ENDPOINT_ACTIONS.REPORT_ABUSE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,

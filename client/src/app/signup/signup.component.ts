@@ -12,6 +12,7 @@ import {
   USER_EMAIL,
   USER_PASSWORD
 } from '../shared'
+import { UserCreate } from '../../../../shared'
 
 @Component({
   selector: 'my-signup',
@@ -58,11 +59,11 @@ export class SignupComponent extends FormReactive implements OnInit {
   signup () {
     this.error = null
 
-    const { username, password, email } = this.form.value
+    const userCreate: UserCreate = this.form.value
 
-    this.userService.signup(username, password, email).subscribe(
+    this.userService.signup(userCreate).subscribe(
       () => {
-        this.notificationsService.success('Success', `Registration for ${username} complete.`)
+        this.notificationsService.success('Success', `Registration for ${userCreate.username} complete.`)
         this.router.navigate([ '/videos/list' ])
       },
 

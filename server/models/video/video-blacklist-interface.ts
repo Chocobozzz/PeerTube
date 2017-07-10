@@ -4,7 +4,7 @@ import * as Promise from 'bluebird'
 import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
-import { BlacklistedVideo as FormatedBlacklistedVideo } from '../../../shared/models/video-blacklist.model'
+import { BlacklistedVideo as FormatedBlacklistedVideo } from '../../../shared/models/videos/video-blacklist.model'
 
 export namespace BlacklistedVideoMethods {
   export type ToFormatedJSON = (this: BlacklistedVideoInstance) => FormatedBlacklistedVideo

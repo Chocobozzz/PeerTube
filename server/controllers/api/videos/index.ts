@@ -39,6 +39,7 @@ import {
   renamePromise
 } from '../../../helpers'
 import { TagInstance } from '../../../models'
+import { VideoCreate, VideoUpdate } from '../../../../shared'
 
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
@@ -155,7 +156,7 @@ function addVideoRetryWrapper (req: express.Request, res: express.Response, next
 }
 
 function addVideo (req: express.Request, res: express.Response, videoFile: Express.Multer.File) {
-  const videoInfos = req.body
+  const videoInfos: VideoCreate = req.body
 
   return db.sequelize.transaction(t => {
     const user = res.locals.oauth.token.User
@@ -257,7 +258,7 @@ function updateVideoRetryWrapper (req: express.Request, res: express.Response, n
 function updateVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
-  const videoInfosToUpdate = req.body
+  const videoInfosToUpdate: VideoUpdate = req.body
 
   return db.sequelize.transaction(t => {
     let tagsPromise: Promise<TagInstance[]>
