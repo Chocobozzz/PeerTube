@@ -38,7 +38,9 @@ import {
   RemoteVideoCreateData,
   RemoteVideoUpdateData,
   RemoteVideoRemoveData,
-  RemoteVideoReportAbuseData
+  RemoteVideoReportAbuseData,
+  ResultList,
+  Pod as FormatedPod
 } from '../../shared'
 
 type QaduParam = { videoId: string, type: RequestVideoQaduType }
@@ -268,8 +270,8 @@ export {
 
 function computeForeignPodsList (host: string, podsScore: { [ host: string ]: number }) {
   // TODO: type res
-  return getForeignPodsList(host).then((res: any) => {
-    const foreignPodsList = res.data
+  return getForeignPodsList(host).then(res => {
+    const foreignPodsList: { host: string }[] = res.data
 
     // Let's give 1 point to the pod we ask the friends list
     foreignPodsList.push({ host })
@@ -302,7 +304,7 @@ function computeWinningPods (hosts: string[], podsScore: { [ host: string ]: num
 }
 
 function getForeignPodsList (host: string) {
-  return new Promise((res, rej) => {
+  return new Promise< ResultList<FormatedPod> >((res, rej) => {
     const path = '/api/' + API_VERSION + '/pods'
 
     request.get(REMOTE_SCHEME.HTTP + '://' + host + path, function (err, response, body) {

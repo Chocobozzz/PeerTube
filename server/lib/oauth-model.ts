@@ -68,11 +68,10 @@ function saveToken (token: TokenInfo, client: OAuthClientInstance, user: UserIns
     userId: user.id
   }
 
-  return db.OAuthToken.create(tokenToCreate).then(function (tokenCreated: any) {
-    tokenCreated.client = client
-    tokenCreated.user = user
+  return db.OAuthToken.create(tokenToCreate).then(tokenCreated => {
+    const tokenToReturn = Object.assign(tokenCreated, { client, user })
 
-    return tokenCreated
+    return tokenToReturn
   })
 }
 

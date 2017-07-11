@@ -23,6 +23,7 @@ import {
 import {
   PodInstance
 } from '../../models'
+import { Pod as FormatedPod } from '../../../shared'
 
 const podsRouter = express.Router()
 
@@ -72,7 +73,7 @@ function addPods (req: express.Request, res: express.Response, next: express.Nex
 
 function listPods (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.Pod.list()
-    .then(podsList => res.json(getFormatedObjects(podsList, podsList.length)))
+    .then(podsList => res.json(getFormatedObjects<FormatedPod, PodInstance>(podsList, podsList.length)))
     .catch(err => next(err))
 }
 

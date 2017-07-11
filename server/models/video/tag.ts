@@ -54,7 +54,7 @@ function associate (models) {
 findOrCreateTags = function (tags: string[], transaction: Sequelize.Transaction) {
   const tasks: Promise<TagInstance>[] = []
   tags.forEach(tag => {
-    const query: any = {
+    const query: Sequelize.FindOrInitializeOptions<TagAttributes> = {
       where: {
         name: tag
       },

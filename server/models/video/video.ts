@@ -696,23 +696,23 @@ loadAndPopulateAuthorAndPodAndTags = function (id: string) {
 }
 
 searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, start: number, count: number, sort: string) {
-  const podInclude: any = {
+  const podInclude: Sequelize.IncludeOptions = {
     model: Video['sequelize'].models.Pod,
     required: false
   }
 
-  const authorInclude: any = {
+  const authorInclude: Sequelize.IncludeOptions = {
     model: Video['sequelize'].models.Author,
     include: [
       podInclude
     ]
   }
 
-  const tagInclude: any = {
+  const tagInclude: Sequelize.IncludeOptions = {
     model: Video['sequelize'].models.Tag
   }
 
-  const query: any = {
+  const query: Sequelize.FindOptions = {
     distinct: true,
     where: createBaseVideosWhere(),
     offset: start,
@@ -723,10 +723,10 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
   // Make an exact search with the magnet
   if (field === 'magnetUri') {
     const infoHash = magnetUtil.decode(value).infoHash
-    query.where.infoHash = infoHash
+    query.where['infoHash'] = infoHash
   } else if (field === 'tags') {
     const escapedValue = Video['sequelize'].escape('%' + value + '%')
-    query.where.id.$in = Video['sequelize'].literal(
+    query.where['id'].$in = Video['sequelize'].literal(
       `(SELECT "VideoTags"."videoId"
         FROM "Tags"
         INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
@@ -830,14 +830,14 @@ function createThumbnail (video: VideoInstance, videoPath: string) {
 }
 
 function generateImage (video: VideoInstance, videoPath: string, folder: string, imageName: string, size: string) {
-  const options: any = {
+  const options = {
     filename: imageName,
     count: 1,
     folder
   }
 
   if (size) {
-    options.size = size
+    options['size'] = size
   }
 
   return new Promise<string>((res, rej) => {
