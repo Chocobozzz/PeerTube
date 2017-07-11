@@ -96,7 +96,7 @@ function associate (models) {
       name: 'reporterPodId',
       allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'CASCADE'
   })
 
   VideoAbuse.belongsTo(models.Video, {
@@ -104,7 +104,7 @@ function associate (models) {
       name: 'videoId',
       allowNull: false
     },
-    onDelete: 'cascade'
+    onDelete: 'CASCADE'
   })
 }
 

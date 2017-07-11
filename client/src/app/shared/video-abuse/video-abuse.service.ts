@@ -22,7 +22,7 @@ export class VideoAbuseService {
     return new RestDataSource(this.authHttp, VideoAbuseService.BASE_VIDEO_ABUSE_URL + 'abuse')
   }
 
-  reportVideo (id: string, reason: string) {
+  reportVideo (id: number, reason: string) {
     const body = {
       reason
     }

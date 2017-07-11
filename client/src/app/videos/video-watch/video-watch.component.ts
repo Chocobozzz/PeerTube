@@ -58,8 +58,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      let id = routeParams['id']
-      this.videoService.getVideo(id).subscribe(
+      let uuid = routeParams['uuid']
+      this.videoService.getVideo(uuid).subscribe(
         video => this.onVideoFetched(video),
 
         error => {

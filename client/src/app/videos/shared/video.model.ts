@@ -14,7 +14,8 @@ export class Video implements VideoServerModel {
   description: string
   duration: number
   durationLabel: string
-  id: string
+  id: number
+  uuid: string
   isLocal: boolean
   magnetUri: string
   name: string
@@ -51,7 +52,8 @@ export class Video implements VideoServerModel {
     language: number
     description: string,
     duration: number
-    id: string,
+    id: number,
+    uuid: string,
     isLocal: boolean,
     magnetUri: string,
     name: string,
@@ -75,6 +77,7 @@ export class Video implements VideoServerModel {
     this.duration = hash.duration
     this.durationLabel = Video.createDurationString(hash.duration)
     this.id = hash.id
+    this.uuid = hash.uuid
     this.isLocal = hash.isLocal
     this.magnetUri = hash.magnetUri
     this.name = hash.name

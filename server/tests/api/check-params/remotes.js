@@ -44,7 +44,7 @@ describe('Test remote videos API validators', function () {
   describe('When adding a video', function () {
     it('Should check when adding a video')
 
-    it('Should not add an existing remoteId and host pair')
+    it('Should not add an existing uuid')
   })
 
   describe('When removing a video', function () {

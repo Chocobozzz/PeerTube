@@ -20,7 +20,7 @@ export interface VideoAbuseClass {
 export interface VideoAbuseAttributes {
   reporterUsername: string
   reason: string
-  videoId: string
+  videoId: number
 }
 
 export interface VideoAbuseInstance extends VideoAbuseClass, VideoAbuseAttributes, Sequelize.Instance<VideoAbuseAttributes> {

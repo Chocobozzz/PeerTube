@@ -1,7 +1,7 @@
 import { RemoteVideoRequest } from './remote-video-request.model'
 
 export interface RemoteVideoRemoveData {
-  remoteId: string
+  uuid: string
 }
 
 export interface RemoteVideoRemoveRequest extends RemoteVideoRequest {

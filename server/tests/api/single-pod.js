@@ -19,6 +19,7 @@ const videosUtils = require('../utils/videos')
 describe('Test a single pod', function () {
   let server = null
   let videoId = -1
+  let videoUUID = ''
   let videosListBase = null
 
   before(function (done) {
@@ -140,6 +141,7 @@ describe('Test a single pod', function () {
         expect(test).to.equal(true)
 
         videoId = video.id
+        videoUUID = video.uuid
 
         webtorrent.add(video.magnetUri, function (torrent) {
           expect(torrent.files).to.exist
@@ -181,9 +183,24 @@ describe('Test a single pod', function () {
         if (err) throw err
         expect(test).to.equal(true)
 
-	// Wait the async views increment
+        // Wait the async views increment
         setTimeout(done, 500)
       })
+    })
+  })
+
+  it('Should get the video by UUID', function (done) {
+    // Yes, this could be long
+    this.timeout(60000)
+
+    videosUtils.getVideo(server.url, videoUUID, function (err, res) {
+      if (err) throw err
+
+      const video = res.body
+      expect(video.name).to.equal('my super name')
+
+      // Wait the async views increment
+      setTimeout(done, 500)
     })
   })
 
@@ -192,7 +209,7 @@ describe('Test a single pod', function () {
       if (err) throw err
 
       const video = res.body
-      expect(video.views).to.equal(1)
+      expect(video.views).to.equal(2)
 
       done()
     })

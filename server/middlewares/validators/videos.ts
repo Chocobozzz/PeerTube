@@ -1,10 +1,13 @@
 import 'express-validator'
 import * as express from 'express'
+import * as Promise from 'bluebird'
+import * as validator from 'validator'
 
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
 import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
 import { logger, isVideoDurationValid } from '../../helpers'
+import { VideoInstance } from '../../models'
 
 function videosAddValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   // FIXME: Don't write an error message, it seems there is a bug with express-validator
@@ -40,7 +43,7 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
 }
 
 function videosUpdateValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkParams('id', 'Should have a valid id').notEmpty().isVideoIdOrUUIDValid()
   req.checkBody('name', 'Should have a valid name').optional().isVideoNameValid()
   req.checkBody('category', 'Should have a valid category').optional().isVideoCategoryValid()
   req.checkBody('licence', 'Should have a valid licence').optional().isVideoLicenceValid()
@@ -68,7 +71,7 @@ function videosUpdateValidator (req: express.Request, res: express.Response, nex
 }
 
 function videosGetValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkParams('id', 'Should have a valid id').notEmpty().isVideoIdOrUUIDValid()
 
   logger.debug('Checking videosGet parameters', { parameters: req.params })
 
@@ -78,7 +81,7 @@ function videosGetValidator (req: express.Request, res: express.Response, next: 
 }
 
 function videosRemoveValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkParams('id', 'Should have a valid id').notEmpty().isVideoIdOrUUIDValid()
 
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
@@ -105,7 +108,7 @@ function videosSearchValidator (req: express.Request, res: express.Response, nex
 }
 
 function videoAbuseReportValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkParams('id', 'Should have a valid id').notEmpty().isVideoIdOrUUIDValid()
   req.checkBody('reason', 'Should have a valid reason').isVideoAbuseReasonValid()
 
   logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
@@ -116,7 +119,7 @@ function videoAbuseReportValidator (req: express.Request, res: express.Response,
 }
 
 function videoRateValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkParams('id', 'Should have a valid id').notEmpty().isVideoIdOrUUIDValid()
   req.checkBody('rating', 'Should have a valid rate type').isVideoRatingTypeValid()
 
   logger.debug('Checking videoRate parameters', { parameters: req.body })
@@ -127,7 +130,7 @@ function videoRateValidator (req: express.Request, res: express.Response, next: 
 }
 
 function videosBlacklistValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkParams('id', 'Should have a valid id').notEmpty().isVideoIdOrUUIDValid()
 
   logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
 
@@ -157,7 +160,14 @@ export {
 // ---------------------------------------------------------------------------
 
 function checkVideoExists (id: string, res: express.Response, callback: () => void) {
-  db.Video.loadAndPopulateAuthorAndPodAndTags(id).then(video => {
+  let promise: Promise<VideoInstance>
+  if (validator.isInt(id)) {
+    promise = db.Video.loadAndPopulateAuthorAndPodAndTags(+id)
+  } else { // UUID
+    promise = db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(id)
+  }
+
+  promise.then(video => {
     if (!video) return res.status(404).send('Video not found')
 
     res.locals.video = video

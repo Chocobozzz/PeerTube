@@ -100,7 +100,7 @@ function getUserInformation (req: express.Request, res: express.Response, next: 
 }
 
 function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoId = '' + req.params.videoId
+  const videoId = +req.params.videoId
   const userId = +res.locals.oauth.token.User.id
 
   db.UserVideoRate.load(userId, videoId, null)

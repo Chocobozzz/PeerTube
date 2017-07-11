@@ -22,7 +22,7 @@ function up (utils: {
     })
 }
 
-function down (options, callback) {
+function down (options) {
   throw new Error('Not implemented.')
 }
 

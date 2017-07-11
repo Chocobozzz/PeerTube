@@ -1,7 +1,7 @@
 import { RemoteVideoRequest } from './remote-video-request.model'
 
 export interface RemoteVideoReportAbuseData {
-  videoRemoteId: string
+  videoUUID: string
   reporterUsername: string
   reportReason: string
 }

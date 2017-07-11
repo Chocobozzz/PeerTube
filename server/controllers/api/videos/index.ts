@@ -176,7 +176,7 @@ function addVideo (req: express.Request, res: express.Response, videoFile: Expre
       .then(({ author, tagInstances }) => {
         const videoData = {
           name: videoInfos.name,
-          remoteId: null,
+          remote: false,
           extname: path.extname(videoFile.filename),
           category: videoInfos.category,
           licence: videoInfos.licence,

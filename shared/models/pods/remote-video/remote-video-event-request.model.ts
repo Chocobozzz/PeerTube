@@ -1,7 +1,7 @@
 export type RemoteVideoEventType = 'views' | 'likes' | 'dislikes'
 
 export interface RemoteVideoEventData {
-  remoteId: string
+  uuid: string
   eventType: RemoteVideoEventType
   count: number
 }

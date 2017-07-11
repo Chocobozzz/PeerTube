@@ -62,21 +62,23 @@ let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let getDurationFromFile: VideoMethods.GetDurationFromFile
 let list: VideoMethods.List
 let listForApi: VideoMethods.ListForApi
-let loadByHostAndRemoteId: VideoMethods.LoadByHostAndRemoteId
+let loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
 let listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAndTags
 let listOwnedByAuthor: VideoMethods.ListOwnedByAuthor
 let load: VideoMethods.Load
+let loadByUUID: VideoMethods.LoadByUUID
 let loadAndPopulateAuthor: VideoMethods.LoadAndPopulateAuthor
 let loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
+let loadByUUIDAndPopulateAuthorAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAuthorAndPodAndTags
 let searchAndPopulateAuthorAndPodAndTags: VideoMethods.SearchAndPopulateAuthorAndPodAndTags
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Video = sequelize.define<VideoInstance, VideoAttributes>('Video',
     {
-      id: {
+      uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+        allowNull: false,
         validate: {
           isUUID: 4
         }
@@ -94,13 +96,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       extname: {
         type: DataTypes.ENUM(values(CONSTRAINTS_FIELDS.VIDEOS.EXTNAME)),
         allowNull: false
-      },
-      remoteId: {
-        type: DataTypes.UUID,
-        allowNull: true,
-        validate: {
-          isUUID: 4
-        }
       },
       category: {
         type: DataTypes.INTEGER,
@@ -199,15 +194,17 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
           min: 0,
           isInt: true
         }
+      },
+      remote: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
       }
     },
     {
       indexes: [
         {
           fields: [ 'authorId' ]
-        },
-        {
-          fields: [ 'remoteId' ]
         },
         {
           fields: [ 'name' ]
@@ -226,6 +223,9 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         },
         {
           fields: [ 'likes' ]
+        },
+        {
+          fields: [ 'uuid' ]
         }
       ],
       hooks: {
@@ -246,9 +246,11 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listOwnedAndPopulateAuthorAndTags,
     listOwnedByAuthor,
     load,
-    loadByHostAndRemoteId,
+    loadByUUID,
+    loadByHostAndUUID,
     loadAndPopulateAuthor,
     loadAndPopulateAuthorAndPodAndTags,
+    loadByUUIDAndPopulateAuthorAndPodAndTags,
     searchAndPopulateAuthorAndPodAndTags,
     removeFromBlacklist
   ]
@@ -289,8 +291,9 @@ function beforeCreate (video: VideoInstance, options: { transaction: Sequelize.T
     )
 
     if (CONFIG.TRANSCODING.ENABLED === true) {
+      // Put uuid because we don't have id auto incremented for now
       const dataInput = {
-        id: video.id
+        videoUUID: video.uuid
       }
 
       tasks.push(
@@ -313,7 +316,7 @@ function afterDestroy (video: VideoInstance) {
 
   if (video.isOwned()) {
     const removeVideoToFriendsParams = {
-      remoteId: video.id
+      uuid: video.uuid
     }
 
     tasks.push(
@@ -381,34 +384,27 @@ generateMagnetUri = function (this: VideoInstance) {
 }
 
 getVideoFilename = function (this: VideoInstance) {
-  if (this.isOwned()) return this.id + this.extname
-
-  return this.remoteId + this.extname
+  return this.uuid + this.extname
 }
 
 getThumbnailName = function (this: VideoInstance) {
   // We always have a copy of the thumbnail
-  return this.id + '.jpg'
+  const extension = '.jpg'
+  return this.uuid + extension
 }
 
 getPreviewName = function (this: VideoInstance) {
   const extension = '.jpg'
-
-  if (this.isOwned()) return this.id + extension
-
-  return this.remoteId + extension
+  return this.uuid + extension
 }
 
 getTorrentName = function (this: VideoInstance) {
   const extension = '.torrent'
-
-  if (this.isOwned()) return this.id + extension
-
-  return this.remoteId + extension
+  return this.uuid + extension
 }
 
 isOwned = function (this: VideoInstance) {
-  return this.remoteId === null
+  return this.remote === false
 }
 
 toFormatedJSON = function (this: VideoInstance) {
@@ -435,6 +431,7 @@ toFormatedJSON = function (this: VideoInstance) {
 
   const json = {
     id: this.id,
+    uuid: this.uuid,
     name: this.name,
     category: this.category,
     categoryLabel,
@@ -467,6 +464,7 @@ toAddRemoteJSON = function (this: VideoInstance) {
 
   return readFileBufferPromise(thumbnailPath).then(thumbnailData => {
     const remoteVideo = {
+      uuid: this.uuid,
       name: this.name,
       category: this.category,
       licence: this.licence,
@@ -474,7 +472,6 @@ toAddRemoteJSON = function (this: VideoInstance) {
       nsfw: this.nsfw,
       description: this.description,
       infoHash: this.infoHash,
-      remoteId: this.id,
       author: this.Author.name,
       duration: this.duration,
       thumbnailData: thumbnailData.toString('binary'),
@@ -493,6 +490,7 @@ toAddRemoteJSON = function (this: VideoInstance) {
 
 toUpdateRemoteJSON = function (this: VideoInstance) {
   const json = {
+    uuid: this.uuid,
     name: this.name,
     category: this.category,
     licence: this.licence,
@@ -500,7 +498,6 @@ toUpdateRemoteJSON = function (this: VideoInstance) {
     nsfw: this.nsfw,
     description: this.description,
     infoHash: this.infoHash,
-    remoteId: this.id,
     author: this.Author.name,
     duration: this.duration,
     tags: map<TagInstance, string>(this.Tags, 'name'),
@@ -615,10 +612,10 @@ listForApi = function (start: number, count: number, sort: string) {
   })
 }
 
-loadByHostAndRemoteId = function (fromHost: string, remoteId: string) {
+loadByHostAndUUID = function (fromHost: string, uuid: string) {
   const query = {
     where: {
-      remoteId: remoteId
+      uuid
     },
     include: [
       {
@@ -640,10 +637,9 @@ loadByHostAndRemoteId = function (fromHost: string, remoteId: string) {
 }
 
 listOwnedAndPopulateAuthorAndTags = function () {
-  // If remoteId is null this is *our* video
   const query = {
     where: {
-      remoteId: null
+      remote: false
     },
     include: [ Video['sequelize'].models.Author, Video['sequelize'].models.Tag ]
   }
@@ -654,7 +650,7 @@ listOwnedAndPopulateAuthorAndTags = function () {
 listOwnedByAuthor = function (author: string) {
   const query = {
     where: {
-      remoteId: null
+      remote: false
     },
     include: [
       {
@@ -669,11 +665,20 @@ listOwnedByAuthor = function (author: string) {
   return Video.findAll(query)
 }
 
-load = function (id: string) {
+load = function (id: number) {
   return Video.findById(id)
 }
 
-loadAndPopulateAuthor = function (id: string) {
+loadByUUID = function (uuid: string) {
+  const query = {
+    where: {
+      uuid
+    }
+  }
+  return Video.findOne(query)
+}
+
+loadAndPopulateAuthor = function (id: number) {
   const options = {
     include: [ Video['sequelize'].models.Author ]
   }
@@ -681,7 +686,7 @@ loadAndPopulateAuthor = function (id: string) {
   return Video.findById(id, options)
 }
 
-loadAndPopulateAuthorAndPodAndTags = function (id: string) {
+loadAndPopulateAuthorAndPodAndTags = function (id: number) {
   const options = {
     include: [
       {
@@ -693,6 +698,23 @@ loadAndPopulateAuthorAndPodAndTags = function (id: string) {
   }
 
   return Video.findById(id, options)
+}
+
+loadByUUIDAndPopulateAuthorAndPodAndTags = function (uuid: string) {
+  const options = {
+    where: {
+      uuid
+    },
+    include: [
+      {
+        model: Video['sequelize'].models.Author,
+        include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+      },
+      Video['sequelize'].models.Tag
+    ]
+  }
+
+  return Video.findOne(options)
 }
 
 searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, start: number, count: number, sort: string) {

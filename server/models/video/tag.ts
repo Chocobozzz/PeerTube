@@ -47,7 +47,7 @@ function associate (models) {
   Tag.belongsToMany(models.Video, {
     foreignKey: 'tagId',
     through: models.VideoTag,
-    onDelete: 'cascade'
+    onDelete: 'CASCADE'
   })
 }
 

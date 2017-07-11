@@ -17,7 +17,7 @@ export namespace BlacklistedVideoMethods {
 
   export type LoadById = (id: number) => Promise<BlacklistedVideoInstance>
 
-  export type LoadByVideoId = (id: string) => Promise<BlacklistedVideoInstance>
+  export type LoadByVideoId = (id: number) => Promise<BlacklistedVideoInstance>
 }
 
 export interface BlacklistedVideoClass {
@@ -30,7 +30,7 @@ export interface BlacklistedVideoClass {
 }
 
 export interface BlacklistedVideoAttributes {
-  videoId: string
+  videoId: number
 }
 
 export interface BlacklistedVideoInstance

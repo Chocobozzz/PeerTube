@@ -133,7 +133,7 @@ function processVideosEventsRetryWrapper (eventData: RemoteVideoEventData, fromP
 function processVideosEvents (eventData: RemoteVideoEventData, fromPod: PodInstance) {
 
   return db.sequelize.transaction(t => {
-    return fetchOwnedVideo(eventData.remoteId)
+    return fetchVideoByUUID(eventData.uuid)
       .then(videoInstance => {
         const options = { transaction: t }
 
@@ -176,7 +176,7 @@ function processVideosEvents (eventData: RemoteVideoEventData, fromPod: PodInsta
         return quickAndDirtyUpdatesVideoToFriends(qadusParams, t)
       })
   })
-  .then(() => logger.info('Remote video event processed for video %s.', eventData.remoteId))
+  .then(() => logger.info('Remote video event processed for video %s.', eventData.uuid))
   .catch(err => {
     logger.debug('Cannot process a video event.', err)
     throw err
@@ -196,7 +196,7 @@ function quickAndDirtyUpdateVideo (videoData: RemoteQaduVideoData, fromPod: PodI
   let videoName
 
   return db.sequelize.transaction(t => {
-    return fetchRemoteVideo(fromPod.host, videoData.remoteId)
+    return fetchVideoByHostAndUUID(fromPod.host, videoData.uuid)
       .then(videoInstance => {
         const options = { transaction: t }
 
@@ -232,12 +232,12 @@ function addRemoteVideoRetryWrapper (videoToCreateData: RemoteVideoCreateData, f
 }
 
 function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodInstance) {
-  logger.debug('Adding remote video "%s".', videoToCreateData.remoteId)
+  logger.debug('Adding remote video "%s".', videoToCreateData.uuid)
 
   return db.sequelize.transaction(t => {
-    return db.Video.loadByHostAndRemoteId(fromPod.host, videoToCreateData.remoteId)
+    return db.Video.loadByUUID(videoToCreateData.uuid)
       .then(video => {
-        if (video) throw new Error('RemoteId and host pair is not unique.')
+        if (video) throw new Error('UUID already exists.')
 
         return undefined
       })
@@ -257,7 +257,7 @@ function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodI
       .then(({ author, tagInstances }) => {
         const videoData = {
           name: videoToCreateData.name,
-          remoteId: videoToCreateData.remoteId,
+          uuid: videoToCreateData.uuid,
           extname: videoToCreateData.extname,
           infoHash: videoToCreateData.infoHash,
           category: videoToCreateData.category,
@@ -272,7 +272,8 @@ function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodI
           updatedAt: videoToCreateData.updatedAt,
           views: videoToCreateData.views,
           likes: videoToCreateData.likes,
-          dislikes: videoToCreateData.dislikes
+          dislikes: videoToCreateData.dislikes,
+          remote: true
         }
 
         const video = db.Video.build(videoData)
@@ -314,10 +315,10 @@ function updateRemoteVideoRetryWrapper (videoAttributesToUpdate: RemoteVideoUpda
 }
 
 function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, fromPod: PodInstance) {
-  logger.debug('Updating remote video "%s".', videoAttributesToUpdate.remoteId)
+  logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
 
   return db.sequelize.transaction(t => {
-    return fetchRemoteVideo(fromPod.host, videoAttributesToUpdate.remoteId)
+    return fetchVideoByHostAndUUID(fromPod.host, videoAttributesToUpdate.uuid)
       .then(videoInstance => {
         const tags = videoAttributesToUpdate.tags
 
@@ -359,18 +360,18 @@ function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, from
 
 function removeRemoteVideo (videoToRemoveData: RemoteVideoRemoveData, fromPod: PodInstance) {
   // We need the instance because we have to remove some other stuffs (thumbnail etc)
-  return fetchRemoteVideo(fromPod.host, videoToRemoveData.remoteId)
+  return fetchVideoByHostAndUUID(fromPod.host, videoToRemoveData.uuid)
     .then(video => {
-      logger.debug('Removing remote video %s.', video.remoteId)
+      logger.debug('Removing remote video %s.', video.uuid)
       return video.destroy()
     })
     .catch(err => {
-      logger.debug('Could not fetch remote video.', { host: fromPod.host, remoteId: videoToRemoveData.remoteId, error: err.stack })
+      logger.debug('Could not fetch remote video.', { host: fromPod.host, uuid: videoToRemoveData.uuid, error: err.stack })
     })
 }
 
 function reportAbuseRemoteVideo (reportData: RemoteVideoReportAbuseData, fromPod: PodInstance) {
-  return fetchOwnedVideo(reportData.videoRemoteId)
+  return fetchVideoByUUID(reportData.videoUUID)
     .then(video => {
       logger.debug('Reporting remote abuse for video %s.', video.id)
 
@@ -386,8 +387,8 @@ function reportAbuseRemoteVideo (reportData: RemoteVideoReportAbuseData, fromPod
     .catch(err => logger.error('Cannot create remote abuse video.', err))
 }
 
-function fetchOwnedVideo (id: string) {
-  return db.Video.load(id)
+function fetchVideoByUUID (id: string) {
+  return db.Video.loadByUUID(id)
     .then(video => {
       if (!video) throw new Error('Video not found')
 
@@ -399,15 +400,15 @@ function fetchOwnedVideo (id: string) {
     })
 }
 
-function fetchRemoteVideo (podHost: string, remoteId: string) {
-  return db.Video.loadByHostAndRemoteId(podHost, remoteId)
+function fetchVideoByHostAndUUID (podHost: string, uuid: string) {
+  return db.Video.loadByHostAndUUID(podHost, uuid)
     .then(video => {
       if (!video) throw new Error('Video not found')
 
       return video
     })
     .catch(err => {
-      logger.error('Cannot load video from host and remote id.', { error: err.stack, podHost, remoteId })
+      logger.error('Cannot load video from host and uuid.', { error: err.stack, podHost, uuid })
       throw err
     })
 }

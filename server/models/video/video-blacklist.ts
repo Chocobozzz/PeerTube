@@ -60,8 +60,11 @@ toFormatedJSON = function (this: BlacklistedVideoInstance) {
 
 function associate (models) {
   BlacklistedVideo.belongsTo(models.Video, {
-    foreignKey: 'videoId',
-    onDelete: 'cascade'
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'CASCADE'
   })
 }
 
@@ -92,7 +95,7 @@ loadById = function (id: number) {
   return BlacklistedVideo.findById(id)
 }
 
-loadByVideoId = function (id: string) {
+loadByVideoId = function (id: number) {
   const query = {
     where: {
       videoId: id

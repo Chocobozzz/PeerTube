@@ -9,7 +9,7 @@ import { isArray } from '../misc'
 import {
   isVideoAuthorValid,
   isVideoThumbnailDataValid,
-  isVideoRemoteIdValid,
+  isVideoUUIDValid,
   isVideoAbuseReasonValid,
   isVideoAbuseReporterUsernameValid,
   isVideoViewsValid,
@@ -50,11 +50,11 @@ function isEachRemoteRequestVideosValid (requests: any[]) {
       ) ||
       (
         isRequestTypeRemoveValid(request.type) &&
-        isVideoRemoteIdValid(video.remoteId)
+        isVideoUUIDValid(video.uuid)
       ) ||
       (
         isRequestTypeReportAbuseValid(request.type) &&
-        isVideoRemoteIdValid(request.data.videoRemoteId) &&
+        isVideoUUIDValid(request.data.videoUUID) &&
         isVideoAbuseReasonValid(request.data.reportReason) &&
         isVideoAbuseReporterUsernameValid(request.data.reporterUsername)
       )
@@ -69,7 +69,7 @@ function isEachRemoteRequestVideosQaduValid (requests: any[]) {
       if (!video) return false
 
       return (
-        isVideoRemoteIdValid(video.remoteId) &&
+        isVideoUUIDValid(video.uuid) &&
         (has(video, 'views') === false || isVideoViewsValid(video.views)) &&
         (has(video, 'likes') === false || isVideoLikesValid(video.likes)) &&
         (has(video, 'dislikes') === false || isVideoDislikesValid(video.dislikes))
@@ -85,7 +85,7 @@ function isEachRemoteRequestVideosEventsValid (requests: any[]) {
       if (!eventData) return false
 
       return (
-        isVideoRemoteIdValid(eventData.remoteId) &&
+        isVideoUUIDValid(eventData.uuid) &&
         values(REQUEST_VIDEO_EVENT_TYPES).indexOf(eventData.eventType) !== -1 &&
         isVideoEventCountValid(eventData.count)
       )
@@ -124,7 +124,7 @@ function isCommonVideoAttributesValid (video: any) {
          isVideoInfoHashValid(video.infoHash) &&
          isVideoNameValid(video.name) &&
          isVideoTagsValid(video.tags) &&
-         isVideoRemoteIdValid(video.remoteId) &&
+         isVideoUUIDValid(video.uuid) &&
          isVideoExtnameValid(video.extname) &&
          isVideoViewsValid(video.views) &&
          isVideoLikesValid(video.likes) &&

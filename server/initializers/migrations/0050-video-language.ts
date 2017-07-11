@@ -17,7 +17,7 @@ function up (utils: {
   return q.addColumn('Videos', 'language', data)
 }
 
-function down (options, callback) {
+function down (options) {
   throw new Error('Not implemented.')
 }
 

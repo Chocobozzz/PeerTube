@@ -17,6 +17,10 @@ const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 const VIDEO_EVENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_EVENTS
 
+function isVideoIdOrUUIDValid (value: string) {
+  return validator.isInt(value) || isVideoUUIDValid(value)
+}
+
 function isVideoAuthorValid (value: string) {
   return isUserUsernameValid(value)
 }
@@ -77,8 +81,8 @@ function isVideoThumbnailDataValid (value: string) {
   return exists(value) && validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL_DATA)
 }
 
-function isVideoRemoteIdValid (value: string) {
-  return exists(value) && validator.isUUID(value, 4)
+function isVideoUUIDValid (value: string) {
+  return exists(value) && validator.isUUID('' + value, 4)
 }
 
 function isVideoAbuseReasonValid (value: string) {
@@ -127,6 +131,7 @@ function isVideoFile (value: string, files: { [ fieldname: string ]: Express.Mul
 // ---------------------------------------------------------------------------
 
 export {
+  isVideoIdOrUUIDValid,
   isVideoAuthorValid,
   isVideoDateValid,
   isVideoCategoryValid,
@@ -141,7 +146,7 @@ export {
   isVideoThumbnailValid,
   isVideoThumbnailDataValid,
   isVideoExtnameValid,
-  isVideoRemoteIdValid,
+  isVideoUUIDValid,
   isVideoAbuseReasonValid,
   isVideoAbuseReporterUsernameValid,
   isVideoFile,
@@ -155,6 +160,7 @@ export {
 declare global {
   namespace ExpressValidator {
     export interface Validator {
+      isVideoIdOrUUIDValid,
       isVideoAuthorValid,
       isVideoDateValid,
       isVideoCategoryValid,
@@ -169,7 +175,7 @@ declare global {
       isVideoThumbnailValid,
       isVideoThumbnailDataValid,
       isVideoExtnameValid,
-      isVideoRemoteIdValid,
+      isVideoUUIDValid,
       isVideoAbuseReasonValid,
       isVideoAbuseReporterUsernameValid,
       isVideoFile,

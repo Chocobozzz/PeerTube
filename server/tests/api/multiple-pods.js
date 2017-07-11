@@ -20,6 +20,7 @@ const videosUtils = require('../utils/videos')
 describe('Test multiple pods', function () {
   let servers = []
   const toRemove = []
+  let videoUUID = ''
 
   before(function (done) {
     this.timeout(120000)
@@ -745,6 +746,36 @@ describe('Test multiple pods', function () {
           expect(videos[1].name).not.to.equal(toRemove[0].name)
           expect(videos[0].name).not.to.equal(toRemove[1].name)
           expect(videos[1].name).not.to.equal(toRemove[1].name)
+
+          videoUUID = videos[0].uuid
+
+          callback()
+        })
+      }, done)
+    })
+
+    it('Should get the same video by UUID on each pod', function (done) {
+      let baseVideo = null
+      each(servers, function (server, callback) {
+        videosUtils.getVideo(server.url, videoUUID, function (err, res) {
+          if (err) throw err
+
+          const video = res.body
+
+          if (baseVideo === null) {
+            baseVideo = video
+            return callback()
+          }
+
+          expect(baseVideo.name).to.equal(video.name)
+          expect(baseVideo.uuid).to.equal(video.uuid)
+          expect(baseVideo.category).to.equal(video.category)
+          expect(baseVideo.language).to.equal(video.language)
+          expect(baseVideo.licence).to.equal(video.licence)
+          expect(baseVideo.category).to.equal(video.category)
+          expect(baseVideo.nsfw).to.equal(video.nsfw)
+          expect(baseVideo.author).to.equal(video.author)
+          expect(baseVideo.tags).to.deep.equal(video.tags)
 
           callback()
         })

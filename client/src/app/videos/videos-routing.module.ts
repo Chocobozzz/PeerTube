@@ -33,7 +33,7 @@ const videosRoutes: Routes = [
         }
       },
       {
-        path: 'edit/:id',
+        path: 'edit/:uuid',
         component: VideoUpdateComponent,
         data: {
           meta: {
@@ -42,11 +42,11 @@ const videosRoutes: Routes = [
         }
       },
       {
-        path: ':id',
-        redirectTo: 'watch/:id'
+        path: ':uuid',
+        redirectTo: 'watch/:uuid'
       },
       {
-        path: 'watch/:id',
+        path: 'watch/:uuid',
         component: VideoWatchComponent
       }
     ]

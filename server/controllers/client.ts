@@ -78,7 +78,7 @@ function addOpenGraphTags (htmlStringPage: string, video: VideoInstance) {
   }
 
   let tagsString = ''
-  Object.keys(metaTags).forEach(function (tagName) {
+  Object.keys(metaTags).forEach(tagName => {
     const tagValue = metaTags[tagName]
 
     tagsString += '<meta property="' + tagName + '" content="' + tagValue + '" />'
@@ -89,13 +89,20 @@ function addOpenGraphTags (htmlStringPage: string, video: VideoInstance) {
 
 function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoId = '' + req.params.id
+  let videoPromise: Promise<VideoInstance>
 
   // Let Angular application handle errors
-  if (!validator.isUUID(videoId, 4)) return res.sendFile(indexPath)
+  if (validator.isUUID(videoId, 4)) {
+    videoPromise = db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(videoId)
+  } else if (validator.isInt(videoId)) {
+    videoPromise = db.Video.loadAndPopulateAuthorAndPodAndTags(+videoId)
+  } else {
+    return res.sendFile(indexPath)
+  }
 
   Promise.all([
     readFileBufferPromise(indexPath),
-    db.Video.loadAndPopulateAuthorAndPodAndTags(videoId)
+    videoPromise
   ])
   .then(([ file, video ]) => {
     file = file as Buffer

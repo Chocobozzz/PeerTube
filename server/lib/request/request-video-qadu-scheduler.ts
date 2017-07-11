@@ -21,8 +21,8 @@ interface RequestsObjectsCustom<U> extends RequestsObjects<U> {
     datas: U[]
 
     videos: {
-      [ id: string ]: {
-        remoteId: string
+      [ uuid: string ]: {
+        uuid: string
         likes?: number
         dislikes?: number
         views?: number
@@ -33,7 +33,7 @@ interface RequestsObjectsCustom<U> extends RequestsObjects<U> {
 
 export type RequestVideoQaduSchedulerOptions = {
   type: RequestVideoQaduType
-  videoId: string
+  videoId: number
   transaction?: Sequelize.Transaction
 }
 
@@ -78,7 +78,7 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
 
         // Maybe another attribute was filled for this video
         let videoData = requestsToMakeGrouped[hashKey].videos[video.id]
-        if (!videoData) videoData = { remoteId: null }
+        if (!videoData) videoData = { uuid: null }
 
         switch (request.type) {
           case REQUEST_VIDEO_QADU_TYPES.LIKES:
@@ -98,8 +98,8 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
             return
         }
 
-        // Do not forget the remoteId so the remote pod can identify the video
-        videoData.remoteId = video.id
+        // Do not forget the uuid so the remote pod can identify the video
+        videoData.uuid = video.uuid
         requestsToMakeGrouped[hashKey].ids.push(request.id)
 
         // Maybe there are multiple quick and dirty update for the same video
@@ -110,8 +110,8 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
 
     // Now we deduped similar quick and dirty updates, we can build our requests datas
     Object.keys(requestsToMakeGrouped).forEach(hashKey => {
-      Object.keys(requestsToMakeGrouped[hashKey].videos).forEach(videoId => {
-        const videoData = requestsToMakeGrouped[hashKey].videos[videoId]
+      Object.keys(requestsToMakeGrouped[hashKey].videos).forEach(videoUUID => {
+        const videoData = requestsToMakeGrouped[hashKey].videos[videoUUID]
 
         requestsToMakeGrouped[hashKey].datas.push({
           data: videoData

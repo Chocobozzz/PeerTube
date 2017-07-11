@@ -12,7 +12,7 @@ import { RequestVideoEventType, RemoteVideoEventRequest, RemoteVideoEventType } 
 
 export type RequestVideoEventSchedulerOptions = {
   type: RequestVideoEventType
-  videoId: string
+  videoId: number
   count?: number
   transaction?: Sequelize.Transaction
 }
@@ -49,7 +49,7 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
     */
     const eventsPerVideoPerPod: {
       [ podId: string ]: {
-        [ videoRemoteId: string ]: {
+        [ videoUUID: string ]: {
           views?: number
           likes?: number
           dislikes?: number
@@ -74,10 +74,10 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
         requestsToMakeGrouped[toPodId].ids.push(eventToProcess.id)
 
         const eventsPerVideo = eventsPerVideoPerPod[toPodId]
-        const remoteId = eventToProcess.video.remoteId
-        if (!eventsPerVideo[remoteId]) eventsPerVideo[remoteId] = {}
+        const uuid = eventToProcess.video.uuid
+        if (!eventsPerVideo[uuid]) eventsPerVideo[uuid] = {}
 
-        const events = eventsPerVideo[remoteId]
+        const events = eventsPerVideo[uuid]
         if (!events[eventToProcess.type]) events[eventToProcess.type] = 0
 
         events[eventToProcess.type] += eventToProcess.count
@@ -88,13 +88,13 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
     Object.keys(eventsPerVideoPerPod).forEach(toPodId => {
       const eventsForPod = eventsPerVideoPerPod[toPodId]
 
-      Object.keys(eventsForPod).forEach(remoteId => {
-        const eventsForVideo = eventsForPod[remoteId]
+      Object.keys(eventsForPod).forEach(uuid => {
+        const eventsForVideo = eventsForPod[uuid]
 
         Object.keys(eventsForVideo).forEach(eventType => {
           requestsToMakeGrouped[toPodId].datas.push({
             data: {
-              remoteId,
+              uuid,
               eventType: eventType as RemoteVideoEventType,
               count: +eventsForVideo[eventType]
             }

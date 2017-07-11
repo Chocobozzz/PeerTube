@@ -4,7 +4,7 @@ import * as Promise from 'bluebird'
 import { VideoRateType } from '../../../shared/models/videos/video-rate.type'
 
 export namespace UserVideoRateMethods {
-  export type Load = (userId: number, videoId: string, transaction: Sequelize.Transaction) => Promise<UserVideoRateInstance>
+  export type Load = (userId: number, videoId: number, transaction: Sequelize.Transaction) => Promise<UserVideoRateInstance>
 }
 
 export interface UserVideoRateClass {

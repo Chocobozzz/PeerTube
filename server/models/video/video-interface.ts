@@ -9,6 +9,7 @@ import { Video as FormatedVideo } from '../../../shared/models/videos/video.mode
 import { ResultList } from '../../../shared/models/result-list.model'
 
 export type FormatedAddRemoteVideo = {
+  uuid: string
   name: string
   category: number
   licence: number
@@ -16,7 +17,6 @@ export type FormatedAddRemoteVideo = {
   nsfw: boolean
   description: string
   infoHash: string
-  remoteId: string
   author: string
   duration: number
   thumbnailData: string
@@ -30,6 +30,7 @@ export type FormatedAddRemoteVideo = {
 }
 
 export type FormatedUpdateRemoteVideo = {
+  uuid: string
   name: string
   category: number
   licence: number
@@ -37,7 +38,6 @@ export type FormatedUpdateRemoteVideo = {
   nsfw: boolean
   description: string
   infoHash: string
-  remoteId: string
   author: string
   duration: number
   tags: string[]
@@ -80,10 +80,12 @@ export namespace VideoMethods {
     sort: string
   ) => Promise< ResultList<VideoInstance> >
 
-  export type Load = (id: string) => Promise<VideoInstance>
-  export type LoadByHostAndRemoteId = (fromHost: string, remoteId: string) => Promise<VideoInstance>
-  export type LoadAndPopulateAuthor = (id: string) => Promise<VideoInstance>
-  export type LoadAndPopulateAuthorAndPodAndTags = (id: string) => Promise<VideoInstance>
+  export type Load = (id: number) => Promise<VideoInstance>
+  export type LoadByUUID = (uuid: string) => Promise<VideoInstance>
+  export type LoadByHostAndUUID = (fromHost: string, uuid: string) => Promise<VideoInstance>
+  export type LoadAndPopulateAuthor = (id: number) => Promise<VideoInstance>
+  export type LoadAndPopulateAuthorAndPodAndTags = (id: number) => Promise<VideoInstance>
+  export type LoadByUUIDAndPopulateAuthorAndPodAndTags = (uuid: string) => Promise<VideoInstance>
 }
 
 export interface VideoClass {
@@ -102,19 +104,21 @@ export interface VideoClass {
   getDurationFromFile: VideoMethods.GetDurationFromFile
   list: VideoMethods.List
   listForApi: VideoMethods.ListForApi
-  loadByHostAndRemoteId: VideoMethods.LoadByHostAndRemoteId
+  loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
   listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAndTags
   listOwnedByAuthor: VideoMethods.ListOwnedByAuthor
   load: VideoMethods.Load
+  loadByUUID: VideoMethods.LoadByUUID
   loadAndPopulateAuthor: VideoMethods.LoadAndPopulateAuthor
   loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
+  loadByUUIDAndPopulateAuthorAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAuthorAndPodAndTags
   searchAndPopulateAuthorAndPodAndTags: VideoMethods.SearchAndPopulateAuthorAndPodAndTags
 }
 
 export interface VideoAttributes {
+  uuid?: string
   name: string
   extname: string
-  remoteId: string
   category: number
   licence: number
   language: number
@@ -125,13 +129,14 @@ export interface VideoAttributes {
   views?: number
   likes?: number
   dislikes?: number
+  remote: boolean
 
   Author?: AuthorInstance
   Tags?: TagInstance[]
 }
 
 export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.Instance<VideoAttributes> {
-  id: string
+  id: number
   createdAt: Date
   updatedAt: Date
 

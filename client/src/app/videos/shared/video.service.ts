@@ -52,8 +52,8 @@ export class VideoService {
     return this.loadVideoAttributeEnum('languages', this.videoLanguages)
   }
 
-  getVideo (id: string): Observable<Video> {
-    return this.http.get(VideoService.BASE_VIDEO_URL + id)
+  getVideo (uuid: string): Observable<Video> {
+    return this.http.get(VideoService.BASE_VIDEO_URL + uuid)
                     .map(this.restExtractor.extractDataGet)
                     .map(videoHash => new Video(videoHash))
                     .catch((res) => this.restExtractor.handleError(res))
@@ -89,7 +89,7 @@ export class VideoService {
                     .catch((res) => this.restExtractor.handleError(res))
   }
 
-  removeVideo (id: string) {
+  removeVideo (id: number) {
     return this.authHttp.delete(VideoService.BASE_VIDEO_URL + id)
                         .map(this.restExtractor.extractDataBool)
                         .catch((res) => this.restExtractor.handleError(res))
@@ -106,7 +106,7 @@ export class VideoService {
                     .catch((res) => this.restExtractor.handleError(res))
   }
 
-  reportVideo (id: string, reason: string) {
+  reportVideo (id: number, reason: string) {
     const url = VideoService.BASE_VIDEO_URL + id + '/abuse'
     const body: VideoAbuseCreate = {
       reason
@@ -117,15 +117,15 @@ export class VideoService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  setVideoLike (id: string) {
+  setVideoLike (id: number) {
     return this.setVideoRate(id, 'like')
   }
 
-  setVideoDislike (id: string) {
+  setVideoDislike (id: number) {
     return this.setVideoRate(id, 'dislike')
   }
 
-  getUserVideoRating (id: string): Observable<UserVideoRate> {
+  getUserVideoRating (id: number): Observable<UserVideoRate> {
     const url = UserService.BASE_USERS_URL + '/me/videos/' + id + '/rating'
 
     return this.authHttp.get(url)
@@ -133,13 +133,13 @@ export class VideoService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  blacklistVideo (id: string) {
+  blacklistVideo (id: number) {
     return this.authHttp.post(VideoService.BASE_VIDEO_URL + id + '/blacklist', {})
                         .map(this.restExtractor.extractDataBool)
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  private setVideoRate (id: string, rateType: VideoRateType) {
+  private setVideoRate (id: number, rateType: VideoRateType) {
     const url = VideoService.BASE_VIDEO_URL + id + '/rate'
     const body: UserVideoRateUpdate = {
       rating: rateType

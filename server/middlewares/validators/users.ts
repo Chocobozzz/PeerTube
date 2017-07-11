@@ -1,9 +1,12 @@
 import 'express-validator'
 import * as express from 'express'
+import * as Promise from 'bluebird'
+import * as validator from 'validator'
 
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
 import { logger } from '../../helpers'
+import { VideoInstance } from '../../models'
 
 function usersAddValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkBody('username', 'Should have a valid username').isUserUsernameValid()
@@ -59,12 +62,20 @@ function usersUpdateValidator (req: express.Request, res: express.Response, next
 }
 
 function usersVideoRatingValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('videoId', 'Should have a valid video id').notEmpty().isUUID(4)
+  req.checkParams('videoId', 'Should have a valid video id').notEmpty().isVideoIdOrUUIDValid()
 
   logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    db.Video.load(req.params.videoId)
+    let videoPromise: Promise<VideoInstance>
+
+    if (validator.isUUID(req.params.videoId)) {
+      videoPromise = db.Video.loadByUUID(req.params.videoId)
+    } else {
+      videoPromise = db.Video.load(req.params.videoId)
+    }
+
+    videoPromise
       .then(video => {
         if (!video) return res.status(404).send('Video not found')
 

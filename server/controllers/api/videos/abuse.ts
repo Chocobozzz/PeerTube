@@ -62,7 +62,7 @@ function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Respon
 }
 
 function reportVideoAbuse (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.video as VideoInstance
   const reporterUsername = res.locals.oauth.token.User.username
   const body: VideoAbuseCreate = req.body
 
@@ -81,7 +81,7 @@ function reportVideoAbuse (req: express.Request, res: express.Response) {
           const reportData = {
             reporterUsername,
             reportReason: abuse.reason,
-            videoRemoteId: videoInstance.remoteId
+            videoUUID: videoInstance.uuid
           }
 
           return friends.reportAbuseVideoToFriend(reportData, videoInstance, t).then(() => videoInstance)

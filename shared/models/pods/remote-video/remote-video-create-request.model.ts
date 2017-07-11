@@ -1,7 +1,7 @@
 import { RemoteVideoRequest } from './remote-video-request.model'
 
 export interface RemoteVideoCreateData {
-  remoteId: string
+  uuid: string
   author: string
   tags: string[]
   name: string

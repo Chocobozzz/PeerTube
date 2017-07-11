@@ -69,7 +69,7 @@ function rateVideo (req: express.Request, res: express.Response) {
 
         // There was a previous rate, update it
         if (previousRate) {
-          // We will remove the previous rate, so we will need to remove it from the video attribute
+          // We will remove the previous rate, so we will need to update the video count attribute
           if (previousRate.type === VIDEO_RATE_TYPES.LIKE) likesToIncrement--
           else if (previousRate.type === VIDEO_RATE_TYPES.DISLIKE) dislikesToIncrement--
 

@@ -85,8 +85,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.videoLicences = this.videoService.videoLicences
     this.videoLanguages = this.videoService.videoLanguages
 
-    const id = this.route.snapshot.params['id']
-    this.videoService.getVideo(id)
+    const uuid: string = this.route.snapshot.params['uuid']
+    this.videoService.getVideo(uuid)
                      .subscribe(
                        video => {
                          this.video = video
@@ -118,7 +118,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                      .subscribe(
                        () => {
                          this.notificationsService.success('Success', 'Video updated.')
-                         this.router.navigate([ '/videos/watch', this.video.id ])
+                         this.router.navigate([ '/videos/watch', this.video.uuid ])
                        },
 
                        err => {

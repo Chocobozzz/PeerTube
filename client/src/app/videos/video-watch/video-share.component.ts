@@ -27,7 +27,7 @@ export class VideoShareComponent {
 
   getVideoIframeCode () {
     return '<iframe width="560" height="315" ' +
-           'src="' + window.location.origin + '/videos/embed/' + this.video.id + '" ' +
+           'src="' + window.location.origin + '/videos/embed/' + this.video.uuid + '" ' +
            'frameborder="0" allowfullscreen>' +
            '</iframe>'
   }

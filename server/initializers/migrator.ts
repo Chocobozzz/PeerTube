@@ -96,10 +96,10 @@ function executeMigration (actualVersion: number, entity: { version: string, scr
       sequelize: db.sequelize
     }
 
-    migrationScript.up(options)
+    return migrationScript.up(options)
       .then(() => {
         // Update the new migration version
-        db.Application.updateMigrationVersion(versionScript, t)
+        return db.Application.updateMigrationVersion(versionScript, t)
       })
   })
 }

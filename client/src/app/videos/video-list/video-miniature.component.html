@@ -1,6 +1,6 @@
 <div class="video-miniature">
   <a
-    [routerLink]="['/videos/watch', video.id]" [attr.title]="video.description"
+    [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.description"
     class="video-miniature-thumbnail"
   >
     <img *ngIf="isVideoNSFWForThisUser() === false" [attr.src]="video.thumbnailUrl" alt="video thumbnail" />
@@ -16,7 +16,7 @@
 
   <div class="video-miniature-informations">
     <span class="video-miniature-name">
-      <a [routerLink]="['/videos/watch', video.id]" [attr.title]="getVideoName()" class="video-miniature-name">{{ getVideoName() }}</a>
+      <a [routerLink]="['/videos/watch', video.uuid]" [attr.title]="getVideoName()" class="video-miniature-name">{{ getVideoName() }}</a>
     </span>
 
     <div class="video-miniature-tags">

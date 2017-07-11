@@ -65,7 +65,7 @@
 
         <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
           <li *ngIf="canUserUpdateVideo()" role="menuitem">
-            <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.id ]">
+            <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.uuid ]">
               <span class="glyphicon glyphicon-pencil"></span> Update
             </a>
           </li>

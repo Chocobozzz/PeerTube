@@ -3,8 +3,8 @@ import { logger } from '../../../helpers'
 import { addVideoToFriends } from '../../../lib'
 import { VideoInstance } from '../../../models'
 
-function process (data: { id: string }) {
-  return db.Video.loadAndPopulateAuthorAndPodAndTags(data.id).then(video => {
+function process (data: { videoUUID: string }) {
+  return db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(data.videoUUID).then(video => {
     return video.transcodeVideofile().then(() => video)
   })
 }

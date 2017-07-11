@@ -1,6 +1,6 @@
 import { UserVideoRateType } from './user-video-rate.type'
 
 export interface UserVideoRate {
-  videoId: string
+  videoId: number
   rating: UserVideoRateType
 }

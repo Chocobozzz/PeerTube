@@ -1,5 +1,5 @@
 export interface RemoteQaduVideoData {
-  remoteId: string
+  uuid: string
   views?: number
   likes?: number
   dislikes?: number

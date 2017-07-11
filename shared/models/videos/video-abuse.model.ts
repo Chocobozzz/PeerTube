@@ -3,6 +3,6 @@ export interface VideoAbuse {
   reporterPodHost: string
   reason: string
   reporterUsername: string
-  videoId: string
+  videoId: number
   createdAt: Date
 }

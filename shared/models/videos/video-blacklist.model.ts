@@ -1,5 +1,5 @@
 export interface BlacklistedVideo {
   id: number
-  videoId: string
+  videoId: number
   createdAt: Date
 }

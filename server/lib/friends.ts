@@ -43,8 +43,8 @@ import {
   Pod as FormatedPod
 } from '../../shared'
 
-type QaduParam = { videoId: string, type: RequestVideoQaduType }
-type EventParam = { videoId: string, type: RequestVideoEventType }
+type QaduParam = { videoId: number, type: RequestVideoQaduType }
+type EventParam = { videoId: number, type: RequestVideoEventType }
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 

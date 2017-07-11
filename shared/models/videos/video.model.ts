@@ -1,5 +1,6 @@
 export interface Video {
-  id: string
+  id: number
+  uuid: string
   author: string
   createdAt: Date
   categoryLabel: string
