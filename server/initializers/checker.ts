@@ -45,7 +45,7 @@ function checkFFmpeg () {
       if (CONFIG.TRANSCODING.ENABLED === false) return undefined
 
       const canEncode = [ 'libx264' ]
-      canEncode.forEach(function (codec) {
+      canEncode.forEach(codec => {
         if (codecs[codec] === undefined) {
           throw new Error('Unknown codec ' + codec + ' in FFmpeg.')
         }

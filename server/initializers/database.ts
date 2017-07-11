@@ -60,7 +60,7 @@ const sequelize = new Sequelize(dbname, username, password, {
   port: CONFIG.DATABASE.PORT,
   benchmark: isTestInstance(),
 
-  logging: function (message: string, benchmark: number) {
+  logging: (message: string, benchmark: number) => {
     let newMessage = message
     if (benchmark !== undefined) {
       newMessage += ' | ' + benchmark + 'ms'
@@ -72,7 +72,7 @@ const sequelize = new Sequelize(dbname, username, password, {
 
 database.sequelize = sequelize
 
-database.init = function (silent: boolean) {
+database.init = (silent: boolean) => {
   const modelDirectory = join(__dirname, '..', 'models')
 
   return getModelFiles(modelDirectory).then(filePaths => {
@@ -105,7 +105,7 @@ export {
 function getModelFiles (modelDirectory: string) {
   return readdirPromise(modelDirectory)
     .then(files => {
-      const directories: string[] = files.filter(function (directory) {
+      const directories: string[] = files.filter(directory => {
         // Find directories
         if (
           directory.endsWith('.js.map') ||

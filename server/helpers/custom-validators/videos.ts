@@ -68,7 +68,7 @@ function isVideoNameValid (value: string) {
 function isVideoTagsValid (tags: string[]) {
   return isArray(tags) &&
          validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
-         tags.every(function (tag) {
+         tags.every(tag => {
            return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
          })
 }

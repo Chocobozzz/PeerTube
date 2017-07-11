@@ -24,7 +24,7 @@ const indexPath = join(distPath, 'index.html')
 // Do not use a template engine for a so little thing
 clientsRouter.use('/videos/watch/:id', generateWatchHtmlPage)
 
-clientsRouter.use('/videos/embed', function (req: express.Request, res: express.Response, next: express.NextFunction) {
+clientsRouter.use('/videos/embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.sendFile(embedPath)
 })
 
@@ -32,7 +32,7 @@ clientsRouter.use('/videos/embed', function (req: express.Request, res: express.
 clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
 
 // 404 for static files not found
-clientsRouter.use('/client/*', function (req: express.Request, res: express.Response, next: express.NextFunction) {
+clientsRouter.use('/client/*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.sendStatus(404)
 })
 

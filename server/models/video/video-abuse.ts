@@ -22,7 +22,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          reporterUsernameValid: function (value) {
+          reporterUsernameValid: value => {
             const res = isVideoAbuseReporterUsernameValid(value)
             if (res === false) throw new Error('Video abuse reporter username is not valid.')
           }
@@ -32,7 +32,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          reasonValid: function (value) {
+          reasonValid: value => {
             const res = isVideoAbuseReasonValid(value)
             if (res === false) throw new Error('Video abuse reason is not valid.')
           }

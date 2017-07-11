@@ -160,7 +160,7 @@ removeAll = function () {
 function groupAndTruncateRequests (events: RequestVideoEventInstance[], limitRequestsPerPod: number) {
   const eventsGrouped: RequestsVideoEventGrouped = {}
 
-  events.forEach(function (event) {
+  events.forEach(event => {
     const pod = event.Video.Author.Pod
 
     if (!eventsGrouped[pod.id]) eventsGrouped[pod.id] = []

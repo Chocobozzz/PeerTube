@@ -64,7 +64,7 @@ function getMigrationScripts () {
       script: string
     }[] = []
 
-    files.forEach(function (file) {
+    files.forEach(file => {
       // Filename is something like 'version-blabla.js'
       const version = file.split('-')[0]
       filesToMigrate.push({

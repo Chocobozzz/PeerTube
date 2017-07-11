@@ -98,24 +98,27 @@ getByRefreshTokenAndPopulateClient = function (refreshToken: string) {
     include: [ OAuthToken['sequelize'].models.OAuthClient ]
   }
 
-  return OAuthToken.findOne(query).then(function (token) {
-    if (!token) return null
+  return OAuthToken.findOne(query)
+    .then(token => {
+      if (!token) return null
 
-    const tokenInfos: OAuthTokenInfo = {
-      refreshToken: token.refreshToken,
-      refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-      client: {
-        id: token['client'].id
-      },
-      user: {
-        id: token['user']
+      const tokenInfos: OAuthTokenInfo = {
+        refreshToken: token.refreshToken,
+        refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+        client: {
+          id: token['client'].id
+        },
+        user: {
+          id: token['user']
+        }
       }
-    }
 
-    return tokenInfos
-  }).catch(function (err) {
-    logger.info('getRefreshToken error.', err)
-  })
+      return tokenInfos
+    })
+    .catch(err => {
+      logger.info('getRefreshToken error.', err)
+      throw err
+    })
 }
 
 getByTokenAndPopulateUser = function (bearerToken: string) {
@@ -126,7 +129,7 @@ getByTokenAndPopulateUser = function (bearerToken: string) {
     include: [ OAuthToken['sequelize'].models.User ]
   }
 
-  return OAuthToken.findOne(query).then(function (token) {
+  return OAuthToken.findOne(query).then(token => {
     if (token) token['user'] = token.User
 
     return token
@@ -141,7 +144,7 @@ getByRefreshTokenAndPopulateUser = function (refreshToken: string) {
     include: [ OAuthToken['sequelize'].models.User ]
   }
 
-  return OAuthToken.findOne(query).then(function (token) {
+  return OAuthToken.findOne(query).then(token => {
     token['user'] = token.User
 
     return token

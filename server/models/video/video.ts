@@ -87,7 +87,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          nameValid: function (value) {
+          nameValid: value => {
             const res = isVideoNameValid(value)
             if (res === false) throw new Error('Video name is not valid.')
           }
@@ -101,7 +101,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-          categoryValid: function (value) {
+          categoryValid: value => {
             const res = isVideoCategoryValid(value)
             if (res === false) throw new Error('Video category is not valid.')
           }
@@ -112,7 +112,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         allowNull: false,
         defaultValue: null,
         validate: {
-          licenceValid: function (value) {
+          licenceValid: value => {
             const res = isVideoLicenceValid(value)
             if (res === false) throw new Error('Video licence is not valid.')
           }
@@ -122,7 +122,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.INTEGER,
         allowNull: true,
         validate: {
-          languageValid: function (value) {
+          languageValid: value => {
             const res = isVideoLanguageValid(value)
             if (res === false) throw new Error('Video language is not valid.')
           }
@@ -132,7 +132,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.BOOLEAN,
         allowNull: false,
         validate: {
-          nsfwValid: function (value) {
+          nsfwValid: value => {
             const res = isVideoNSFWValid(value)
             if (res === false) throw new Error('Video nsfw attribute is not valid.')
           }
@@ -142,7 +142,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          descriptionValid: function (value) {
+          descriptionValid: value => {
             const res = isVideoDescriptionValid(value)
             if (res === false) throw new Error('Video description is not valid.')
           }
@@ -152,7 +152,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          infoHashValid: function (value) {
+          infoHashValid: value => {
             const res = isVideoInfoHashValid(value)
             if (res === false) throw new Error('Video info hash is not valid.')
           }
@@ -162,7 +162,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-          durationValid: function (value) {
+          durationValid: value => {
             const res = isVideoDurationValid(value)
             if (res === false) throw new Error('Video duration is not valid.')
           }
@@ -549,9 +549,7 @@ transcodeVideofile = function (this: VideoInstance) {
           })
           .catch(err => {
             // Autodesctruction...
-            video.destroy().asCallback(function (err) {
-              if (err) logger.error('Cannot destruct video after transcoding failure.', err)
-            })
+            video.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', err))
 
             return rej(err)
           })
@@ -574,7 +572,7 @@ generateThumbnailFromData = function (video: VideoInstance, thumbnailData: strin
 
 getDurationFromFile = function (videoPath: string) {
   return new Promise<number>((res, rej) => {
-    ffmpeg.ffprobe(videoPath, function (err, metadata) {
+    ffmpeg.ffprobe(videoPath, (err, metadata) => {
       if (err) return rej(err)
 
       return res(Math.floor(metadata.format.duration))
@@ -865,9 +863,7 @@ function generateImage (video: VideoInstance, videoPath: string, folder: string,
   return new Promise<string>((res, rej) => {
     ffmpeg(videoPath)
       .on('error', rej)
-      .on('end', function () {
-        return res(imageName)
-      })
+      .on('end', () => res(imageName))
       .thumbnail(options)
   })
 }

@@ -33,7 +33,7 @@ const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
 function isEachRemoteRequestVideosValid (requests: any[]) {
   return isArray(requests) &&
-    requests.every(function (request) {
+    requests.every(request => {
       const video = request.data
 
       if (!video) return false
@@ -63,7 +63,7 @@ function isEachRemoteRequestVideosValid (requests: any[]) {
 
 function isEachRemoteRequestVideosQaduValid (requests: any[]) {
   return isArray(requests) &&
-    requests.every(function (request) {
+    requests.every(request => {
       const video = request.data
 
       if (!video) return false
@@ -79,7 +79,7 @@ function isEachRemoteRequestVideosQaduValid (requests: any[]) {
 
 function isEachRemoteRequestVideosEventsValid (requests: any[]) {
   return isArray(requests) &&
-    requests.every(function (request) {
+    requests.every(request => {
       const eventData = request.data
 
       if (!eventData) return false

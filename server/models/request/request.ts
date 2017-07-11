@@ -127,8 +127,8 @@ removeWithEmptyTo = function () {
 function groupAndTruncateRequests (requests: RequestInstance[], limitRequestsPerPod: number) {
   const requestsGrouped: RequestsGrouped = {}
 
-  requests.forEach(function (request) {
-    request.Pods.forEach(function (pod) {
+  requests.forEach(request => {
+    request.Pods.forEach(pod => {
       if (!requestsGrouped[pod.id]) requestsGrouped[pod.id] = []
 
       if (requestsGrouped[pod.id].length < limitRequestsPerPod) {

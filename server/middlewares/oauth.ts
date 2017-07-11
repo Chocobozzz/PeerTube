@@ -12,7 +12,7 @@ const oAuthServer = new OAuthServer({
 })
 
 function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
-  oAuthServer.authenticate()(req, res, function (err) {
+  oAuthServer.authenticate()(req, res, err => {
     if (err) {
       logger.error('Cannot authenticate.', err)
       return res.sendStatus(500)

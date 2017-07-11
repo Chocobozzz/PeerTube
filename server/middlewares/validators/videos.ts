@@ -23,7 +23,7 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
 
   logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     const videoFile = req.files.videofile[0]
 
     db.Video.getDurationFromFile(videoFile.path)
@@ -54,8 +54,8 @@ function videosUpdateValidator (req: express.Request, res: express.Response, nex
 
   logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
-  checkErrors(req, res, function () {
-    checkVideoExists(req.params.id, res, function () {
+  checkErrors(req, res, () => {
+    checkVideoExists(req.params.id, res, () => {
       // We need to make additional checks
       if (res.locals.video.isOwned() === false) {
         return res.status(403).send('Cannot update video of another pod')
@@ -75,7 +75,7 @@ function videosGetValidator (req: express.Request, res: express.Response, next: 
 
   logger.debug('Checking videosGet parameters', { parameters: req.params })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     checkVideoExists(req.params.id, res, next)
   })
 }
@@ -85,12 +85,12 @@ function videosRemoveValidator (req: express.Request, res: express.Response, nex
 
   logger.debug('Checking videosRemove parameters', { parameters: req.params })
 
-  checkErrors(req, res, function () {
-    checkVideoExists(req.params.id, res, function () {
+  checkErrors(req, res, () => {
+    checkVideoExists(req.params.id, res, () => {
       // We need to make additional checks
 
       // Check if the user who did the request is able to delete the video
-      checkUserCanDeleteVideo(res.locals.oauth.token.User.id, res, function () {
+      checkUserCanDeleteVideo(res.locals.oauth.token.User.id, res, () => {
         next()
       })
     })
@@ -113,7 +113,7 @@ function videoAbuseReportValidator (req: express.Request, res: express.Response,
 
   logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     checkVideoExists(req.params.id, res, next)
   })
 }
@@ -124,7 +124,7 @@ function videoRateValidator (req: express.Request, res: express.Response, next: 
 
   logger.debug('Checking videoRate parameters', { parameters: req.body })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     checkVideoExists(req.params.id, res, next)
   })
 }
@@ -134,8 +134,8 @@ function videosBlacklistValidator (req: express.Request, res: express.Response, 
 
   logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
 
-  checkErrors(req, res, function () {
-    checkVideoExists(req.params.id, res, function () {
+  checkErrors(req, res, () => {
+    checkVideoExists(req.params.id, res, () => {
       checkVideoIsBlacklistable(req, res, next)
     })
   })

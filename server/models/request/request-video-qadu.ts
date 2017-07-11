@@ -141,7 +141,7 @@ removeAll = function () {
 function groupAndTruncateRequests (requests: RequestVideoQaduInstance[], limitRequestsPerPod: number) {
   const requestsGrouped = {}
 
-  requests.forEach(function (request) {
+  requests.forEach(request => {
     const pod = request.Pod
 
     if (!requestsGrouped[pod.id]) requestsGrouped[pod.id] = []

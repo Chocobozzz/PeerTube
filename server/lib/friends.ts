@@ -111,7 +111,7 @@ function quickAndDirtyUpdateVideoToFriends (qaduParam: QaduParam, transaction?: 
 function quickAndDirtyUpdatesVideoToFriends (qadusParams: QaduParam[], transaction: Sequelize.Transaction) {
   const tasks = []
 
-  qadusParams.forEach(function (qaduParams) {
+  qadusParams.forEach(qaduParams => {
     tasks.push(quickAndDirtyUpdateVideoToFriends(qaduParams, transaction))
   })
 
@@ -130,7 +130,7 @@ function addEventToRemoteVideo (eventParam: EventParam, transaction?: Sequelize.
 function addEventsToRemoteVideo (eventsParams: EventParam[], transaction: Sequelize.Transaction) {
   const tasks = []
 
-  eventsParams.forEach(function (eventParams) {
+  eventsParams.forEach(eventParams => {
     tasks.push(addEventToRemoteVideo(eventParams, transaction))
   })
 
@@ -307,7 +307,7 @@ function getForeignPodsList (host: string) {
   return new Promise< ResultList<FormatedPod> >((res, rej) => {
     const path = '/api/' + API_VERSION + '/pods'
 
-    request.get(REMOTE_SCHEME.HTTP + '://' + host + path, function (err, response, body) {
+    request.get(REMOTE_SCHEME.HTTP + '://' + host + path, (err, response, body) => {
       if (err) return rej(err)
 
       try {

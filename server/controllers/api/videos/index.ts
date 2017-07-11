@@ -49,11 +49,11 @@ const videosRouter = express.Router()
 
 // multer configuration
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, CONFIG.STORAGE.VIDEOS_DIR)
   },
 
-  filename: function (req, file, cb) {
+  filename: (req, file, cb) => {
     let extension = ''
     if (file.mimetype === 'video/webm') extension = 'webm'
     else if (file.mimetype === 'video/mp4') extension = 'mp4'
@@ -310,7 +310,7 @@ function updateVideo (req: express.Request, res: express.Response) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
     // So it will skip the SQL request, even if the last one was ROLLBACKed!
-    Object.keys(videoFieldsSave).forEach(function (key) {
+    Object.keys(videoFieldsSave).forEach(key => {
       const value = videoFieldsSave[key]
       videoInstance.set(key, value)
     })

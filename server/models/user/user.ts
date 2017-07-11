@@ -38,7 +38,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          passwordValid: function (value) {
+          passwordValid: value => {
             const res = isUserPasswordValid(value)
             if (res === false) throw new Error('Password not valid.')
           }
@@ -48,7 +48,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          usernameValid: function (value) {
+          usernameValid: value => {
             const res = isUserUsernameValid(value)
             if (res === false) throw new Error('Username not valid.')
           }
@@ -66,7 +66,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         allowNull: false,
         defaultValue: false,
         validate: {
-          nsfwValid: function (value) {
+          nsfwValid: value => {
             const res = isUserDisplayNSFWValid(value)
             if (res === false) throw new Error('Display NSFW is not valid.')
           }

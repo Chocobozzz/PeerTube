@@ -32,7 +32,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          isHost: function (value) {
+          isHost: value => {
             const res = isHostValid(value)
             if (res === false) throw new Error('Host not valid.')
           }

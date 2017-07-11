@@ -18,7 +18,7 @@ interface FormatableToJSON {
 function getFormatedObjects<U, T extends FormatableToJSON> (objects: T[], objectsTotal: number) {
   const formatedObjects: U[] = []
 
-  objects.forEach(function (object) {
+  objects.forEach(object => {
     formatedObjects.push(object.toFormatedJSON())
   })
 

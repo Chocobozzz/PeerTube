@@ -9,7 +9,7 @@ function isHostValid (host: string) {
 function isEachUniqueHostValid (hosts: string[]) {
   return isArray(hosts) &&
     hosts.length !== 0 &&
-    hosts.every(function (host) {
+    hosts.every(host => {
       return isHostValid(host) && hosts.indexOf(host) === hosts.lastIndexOf(host)
     })
 }

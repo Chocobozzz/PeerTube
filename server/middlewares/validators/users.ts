@@ -15,7 +15,7 @@ function usersAddValidator (req: express.Request, res: express.Response, next: e
 
   logger.debug('Checking usersAdd parameters', { parameters: req.body })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     db.User.loadByUsernameOrEmail(req.body.username, req.body.email)
       .then(user => {
         if (user) return res.status(409).send('User already exists.')
@@ -34,7 +34,7 @@ function usersRemoveValidator (req: express.Request, res: express.Response, next
 
   logger.debug('Checking usersRemove parameters', { parameters: req.params })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     db.User.loadById(req.params.id)
       .then(user => {
         if (!user) return res.status(404).send('User not found')
@@ -66,7 +66,7 @@ function usersVideoRatingValidator (req: express.Request, res: express.Response,
 
   logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     let videoPromise: Promise<VideoInstance>
 
     if (validator.isUUID(req.params.videoId)) {

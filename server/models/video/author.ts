@@ -20,7 +20,7 @@ export default function defineAuthor (sequelize: Sequelize.Sequelize, DataTypes:
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          usernameValid: function (value) {
+          usernameValid: value => {
             const res = isUserUsernameValid(value)
             if (res === false) throw new Error('Username is not valid.')
           }

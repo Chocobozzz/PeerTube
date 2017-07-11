@@ -18,7 +18,7 @@ function makeFriendsValidator (req: express.Request, res: express.Response, next
 
   logger.debug('Checking makeFriends parameters', { parameters: req.body })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     hasFriends()
       .then(heHasFriends => {
         if (heHasFriends === true) {
@@ -41,7 +41,7 @@ function podsAddValidator (req: express.Request, res: express.Response, next: ex
   req.checkBody('publicKey', 'Should have a public key').notEmpty()
   logger.debug('Checking podsAdd parameters', { parameters: req.body })
 
-  checkErrors(req, res, function () {
+  checkErrors(req, res, () => {
     db.Pod.loadByHost(req.body.host)
       .then(pod => {
         // Pod with this host already exists

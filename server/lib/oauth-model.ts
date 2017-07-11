@@ -27,7 +27,7 @@ function getRefreshToken (refreshToken: string) {
 function getUser (username: string, password: string) {
   logger.debug('Getting User (username: ' + username + ', password: ' + password + ').')
 
-  return db.User.getByUsername(username).then(function (user) {
+  return db.User.getByUsername(username).then(user => {
     if (!user) return null
 
     return user.isPasswordMatch(password).then(passwordMatch => {
@@ -39,7 +39,7 @@ function getUser (username: string, password: string) {
 }
 
 function revokeToken (token: TokenInfo) {
-  return db.OAuthToken.getByRefreshTokenAndPopulateUser(token.refreshToken).then(function (tokenDB) {
+  return db.OAuthToken.getByRefreshTokenAndPopulateUser(token.refreshToken).then(tokenDB => {
     if (tokenDB) tokenDB.destroy()
 
     /*
