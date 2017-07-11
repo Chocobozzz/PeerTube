@@ -86,9 +86,21 @@
   dependencies:
     tslib "^1.7.0"
 
+"@types/bittorrent-protocol@*":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@types/bittorrent-protocol/-/bittorrent-protocol-2.2.2.tgz#169e9633e1bd18e6b830d11cf42e611b1972cb83"
+  dependencies:
+    "@types/node" "*"
+
 "@types/core-js@^0.9.28":
   version "0.9.42"
   resolved "https://registry.yarnpkg.com/@types/core-js/-/core-js-0.9.42.tgz#dd6da92cd7d5ab5ca0b4477524537c3e633b6bce"
+
+"@types/magnet-uri@*":
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/@types/magnet-uri/-/magnet-uri-5.1.1.tgz#861aaf64c92a3137dd848fefc55cd352a8ea851a"
+  dependencies:
+    "@types/node" "*"
 
 "@types/node@*":
   version "8.0.8"
@@ -97,6 +109,26 @@
 "@types/node@^6.0.38":
   version "6.0.79"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.79.tgz#5efe7d4a6d8c453c7e9eaf55d931f4a22fac5169"
+
+"@types/parse-torrent-file@*":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/parse-torrent-file/-/parse-torrent-file-4.0.1.tgz#056a6c18f3fac0cd7c6c74540f00496a3225976b"
+  dependencies:
+    "@types/node" "*"
+
+"@types/parse-torrent@*":
+  version "5.8.1"
+  resolved "https://registry.yarnpkg.com/@types/parse-torrent/-/parse-torrent-5.8.1.tgz#012fe6f50d12ed23d86f10ea831a4f0e1b0aacb6"
+  dependencies:
+    "@types/magnet-uri" "*"
+    "@types/node" "*"
+    "@types/parse-torrent-file" "*"
+
+"@types/simple-peer@*":
+  version "6.1.1"
+  resolved "https://registry.yarnpkg.com/@types/simple-peer/-/simple-peer-6.1.1.tgz#5d0f65ea72a0125b1e92b3cb392be3cab14976ad"
+  dependencies:
+    "@types/node" "*"
 
 "@types/source-map@*":
   version "0.5.0"
@@ -127,6 +159,15 @@
     "@types/node" "*"
     "@types/tapable" "*"
     "@types/uglify-js" "*"
+
+"@types/webtorrent@^0.98.4":
+  version "0.98.4"
+  resolved "https://registry.yarnpkg.com/@types/webtorrent/-/webtorrent-0.98.4.tgz#cf8dbe22e3d5cf6915305f7f970b52bca01bf8b4"
+  dependencies:
+    "@types/bittorrent-protocol" "*"
+    "@types/node" "*"
+    "@types/parse-torrent" "*"
+    "@types/simple-peer" "*"
 
 abbrev@1:
   version "1.1.0"

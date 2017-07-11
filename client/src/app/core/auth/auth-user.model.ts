@@ -96,6 +96,7 @@ export class AuthUser extends User {
     localStorage.removeItem(this.KEYS.ID)
     localStorage.removeItem(this.KEYS.ROLE)
     localStorage.removeItem(this.KEYS.DISPLAY_NSFW)
+    localStorage.removeItem(this.KEYS.EMAIL)
     Tokens.flush()
   }
 
@@ -130,6 +131,7 @@ export class AuthUser extends User {
   save () {
     localStorage.setItem(AuthUser.KEYS.ID, this.id.toString())
     localStorage.setItem(AuthUser.KEYS.USERNAME, this.username)
+    localStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
     localStorage.setItem(AuthUser.KEYS.ROLE, this.role)
     localStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW))
     this.tokens.save()

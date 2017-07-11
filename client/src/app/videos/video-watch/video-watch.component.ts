@@ -32,7 +32,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   loading = false
   numPeers: number
   player: videojs.Player
-  playerElement: Element
+  playerElement: HTMLMediaElement
   uploadSpeed: number
   userRating: UserVideoRateType = null
   video: Video = null
@@ -41,7 +41,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private errorTimer: number
   private paramsSub: Subscription
   private errorsSub: Subscription
-  private warningsSub: Subscription
   private torrentInfosInterval: number
 
   constructor (
@@ -82,8 +81,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       self.player = this
     })
 
-    this.errorsSub = this.webTorrentService.errors.subscribe(err => this.notificationsService.error('Error', err.message))
-    this.warningsSub = this.webTorrentService.errors.subscribe(err => this.notificationsService.alert('Warning', err.message))
+    this.errorsSub = this.webTorrentService.errors.subscribe(err => {
+      const message = typeof err === 'string' ? err : err.message
+      this.notificationsService.error('Error', message)
+    })
   }
 
   ngOnDestroy () {
@@ -102,7 +103,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // Unsubscribe subscriptions
     this.paramsSub.unsubscribe()
     this.errorsSub.unsubscribe()
-    this.warningsSub.unsubscribe()
   }
 
   loadVideo () {
@@ -117,7 +117,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // So we create a timer to inform the user the load is abnormally long
     this.errorTimer = window.setTimeout(() => this.loadTooLong(), VideoWatchComponent.LOADTIME_TOO_LONG)
 
-    this.webTorrentService.add(this.video.magnetUri, (torrent) => {
+    this.webTorrentService.add(this.video.magnetUri, torrent => {
       // Clear the error timer
       window.clearTimeout(this.errorTimer)
       // Maybe the error was fired by the timer, so reset it

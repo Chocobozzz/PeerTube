@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Subscription } from 'rxjs/Subscription'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 import { NotificationsService } from 'angular2-notifications'
@@ -30,8 +31,8 @@ export class VideoListComponent implements OnInit, OnDestroy {
   videos: Video[] = []
 
   private search: Search
-  private subActivatedRoute: any
-  private subSearch: any
+  private subActivatedRoute: Subscription
+  private subSearch: Subscription
 
   constructor (
     private notificationsService: NotificationsService,
@@ -98,7 +99,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
     return !this.loading.getValue() && this.videos.length === 0
   }
 
-  onPageChanged (event: any) {
+  onPageChanged (event: { page: number }) {
     // Be sure the current page is set
     this.pagination.currentPage = event.page
 
@@ -113,21 +114,21 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
   private buildRouteParams () {
     // There is always a sort and a current page
-    const params: any = {
+    const params = {
       sort: this.sort,
       page: this.pagination.currentPage
     }
 
     // Maybe there is a search
     if (this.search.value) {
-      params.field = this.search.field
-      params.search = this.search.value
+      params['field'] = this.search.field
+      params['search'] = this.search.value
     }
 
     return params
   }
 
-  private loadRouteParams (routeParams) {
+  private loadRouteParams (routeParams: { [ key: string ]: any }) {
     if (routeParams['search'] !== undefined) {
       this.search = {
         value: routeParams['search'],

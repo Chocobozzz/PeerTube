@@ -5,21 +5,17 @@ import * as WebTorrent from 'webtorrent'
 
 @Injectable()
 export class WebTorrentService {
-  errors = new Subject<Error>()
-  warnings = new Subject<Error>()
+  errors = new Subject<string | Error>()
 
-  // TODO: use WebTorrent @type
-  // private client: WebTorrent.Client
-  private client: any
+  private client: WebTorrent.Instance
 
   constructor () {
     this.client = new WebTorrent({ dht: false })
 
-    this.client.on('error', (err) => this.errors.next(err))
-    this.client.on('warning', (err) => this.warnings.next(err))
+    this.client.on('error', err => this.errors.next(err))
   }
 
-  add (magnetUri: string, callback: Function) {
+  add (magnetUri: string, callback: (torrent: WebTorrent.Torrent) => any) {
     return this.client.add(magnetUri, callback)
   }
 

@@ -11,7 +11,7 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
-import { OAuthClientLocal } from '../../../../../shared'
+import { OAuthClientLocal, UserRole } from '../../../../../shared'
 // Do not use the barrel (dependency loop)
 import { RestExtractor } from '../../shared/rest'
 
@@ -181,7 +181,10 @@ export class AuthService {
 
   refreshUserInformations () {
     const obj = {
-      access_token: this.user.getAccessToken()
+      access_token: this.user.getAccessToken(),
+      refresh_token: null,
+      token_type: this.user.getTokenType(),
+      username: this.user.username
     }
 
     this.mergeUserInformations (obj)
@@ -195,7 +198,12 @@ export class AuthService {
         )
   }
 
-  private mergeUserInformations (obj: { access_token: string }) {
+  private mergeUserInformations (obj: {
+    access_token: string,
+    refresh_token: string,
+    token_type: string,
+    username: string
+  }) {
     // Do not call authHttp here to avoid circular dependencies headaches
 
     const headers = new Headers()
@@ -205,9 +213,10 @@ export class AuthService {
              .map(res => res.json())
              .map(res => {
                const newProperties = {
-                 id: res.id,
-                 role: res.role,
-                 displayNSFW: res.displayNSFW
+                 id: res.id as number,
+                 role: res.role as UserRole,
+                 displayNSFW: res.displayNSFW as boolean,
+                 email: res.email as string
                }
 
                return Object.assign(obj, newProperties)
@@ -215,7 +224,16 @@ export class AuthService {
     )
   }
 
-  private handleLogin (obj: any) {
+  private handleLogin (obj: {
+    access_token: string,
+    refresh_token: string,
+    token_type: string,
+    id: number,
+    username: string,
+    email: string,
+    role: UserRole,
+    displayNSFW: boolean
+  }) {
     const id = obj.id
     const username = obj.username
     const role = obj.role
@@ -233,7 +251,7 @@ export class AuthService {
     this.setStatus(AuthStatus.LoggedIn)
   }
 
-  private handleRefreshToken (obj: any) {
+  private handleRefreshToken (obj: { access_token: string, refresh_token: string }) {
     this.user.refreshTokens(obj.access_token, obj.refresh_token)
     this.user.save()
   }
