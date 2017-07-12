@@ -37,7 +37,6 @@ staticRouter.use(
 )
 
 // Video previews path for express
-const previewsPhysicalPath = CONFIG.STORAGE.PREVIEWS_DIR
 staticRouter.use(
   STATIC_PATHS.PREVIEWS + ':uuid.jpg',
   getPreview

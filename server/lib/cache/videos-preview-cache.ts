@@ -1,11 +1,10 @@
-import * as request from 'request'
 import * as asyncLRU from 'async-lru'
 import { join } from 'path'
 import { createWriteStream } from 'fs'
 import * as Promise from 'bluebird'
 
 import { database as db, CONFIG, CACHE } from '../../initializers'
-import { logger, writeFilePromise, unlinkPromise } from '../../helpers'
+import { logger, unlinkPromise } from '../../helpers'
 import { VideoInstance } from '../../models'
 import { fetchRemotePreview } from '../../lib'
 

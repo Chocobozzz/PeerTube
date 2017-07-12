@@ -1,12 +1,10 @@
-import { join } from 'path'
-import * as config from 'config'
 import * as passwordGenerator from 'password-generator'
 import * as Promise from 'bluebird'
 
 import { database as db } from './database'
 import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION, CACHE } from './constants'
 import { clientsExist, usersExist } from './checker'
-import { logger, createCertsIfNotExist, root, mkdirpPromise, rimrafPromise } from '../helpers'
+import { logger, createCertsIfNotExist, mkdirpPromise, rimrafPromise } from '../helpers'
 
 function installApplication () {
   return db.sequelize.sync()

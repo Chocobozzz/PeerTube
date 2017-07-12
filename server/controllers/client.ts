@@ -6,7 +6,6 @@ import * as Promise from 'bluebird'
 import { database as db } from '../initializers/database'
 import {
   CONFIG,
-  REMOTE_SCHEME,
   STATIC_PATHS,
   STATIC_MAX_AGE,
   OPENGRAPH_COMMENT
