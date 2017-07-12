@@ -13,8 +13,10 @@ storage:
   certs: 'test2/certs/'
   videos: 'test2/videos/'
   logs: 'test2/logs/'
+  previews: 'test2/previews/'
   thumbnails: 'test2/thumbnails/'
   torrents: 'test2/torrents/'
+  cache: 'test2/cache/'
 
 admin:
   email: 'admin2@example.com'

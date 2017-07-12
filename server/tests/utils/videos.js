@@ -195,7 +195,7 @@ function searchVideoWithSort (url, search, sort, end) {
     .end(end)
 }
 
-function testVideoImage (url, videoName, imagePath, callback) {
+function testVideoImage (url, imageName, imagePath, callback) {
   // Don't test images if the node env is not set
   // Because we need a special ffmpeg version for this test
   if (process.env.NODE_TEST_IMAGE) {
@@ -205,7 +205,7 @@ function testVideoImage (url, videoName, imagePath, callback) {
       .end(function (err, res) {
         if (err) return callback(err)
 
-        fs.readFile(pathUtils.join(__dirname, '..', 'api', 'fixtures', videoName + '.jpg'), function (err, data) {
+        fs.readFile(pathUtils.join(__dirname, '..', 'api', 'fixtures', imageName + '.jpg'), function (err, data) {
           if (err) return callback(err)
 
           callback(null, data.equals(res.body))

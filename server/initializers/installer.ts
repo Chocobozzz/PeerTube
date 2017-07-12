@@ -4,12 +4,13 @@ import * as passwordGenerator from 'password-generator'
 import * as Promise from 'bluebird'
 
 import { database as db } from './database'
-import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION } from './constants'
+import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION, CACHE } from './constants'
 import { clientsExist, usersExist } from './checker'
-import { logger, createCertsIfNotExist, root, mkdirpPromise } from '../helpers'
+import { logger, createCertsIfNotExist, root, mkdirpPromise, rimrafPromise } from '../helpers'
 
 function installApplication () {
   return db.sequelize.sync()
+    .then(() => removeCacheDirectories())
     .then(() => createDirectoriesIfNotExist())
     .then(() => createCertsIfNotExist())
     .then(() => createOAuthClientIfNotExist())
@@ -24,13 +25,34 @@ export {
 
 // ---------------------------------------------------------------------------
 
+function removeCacheDirectories () {
+  const cacheDirectories = CACHE.DIRECTORIES
+
+  const tasks = []
+
+  // Cache directories
+  Object.keys(cacheDirectories).forEach(key => {
+    const dir = cacheDirectories[key]
+    tasks.push(rimrafPromise(dir))
+  })
+
+  return Promise.all(tasks)
+}
+
 function createDirectoriesIfNotExist () {
-  const storages = config.get('storage')
+  const storages = CONFIG.STORAGE
+  const cacheDirectories = CACHE.DIRECTORIES
 
   const tasks = []
   Object.keys(storages).forEach(key => {
     const dir = storages[key]
-    tasks.push(mkdirpPromise(join(root(), dir)))
+    tasks.push(mkdirpPromise(dir))
+  })
+
+  // Cache directories
+  Object.keys(cacheDirectories).forEach(key => {
+    const dir = cacheDirectories[key]
+    tasks.push(mkdirpPromise(dir))
   })
 
   return Promise.all(tasks)

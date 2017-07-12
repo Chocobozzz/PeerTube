@@ -451,6 +451,7 @@ toFormatedJSON = function (this: VideoInstance) {
     dislikes: this.dislikes,
     tags: map<TagInstance, string>(this.Tags, 'name'),
     thumbnailPath: join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName()),
+    previewPath: join(STATIC_PATHS.PREVIEWS, this.getPreviewName()),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt
   }

@@ -17,6 +17,7 @@ export interface Video {
   podHost: string
   tags: string[]
   thumbnailPath: string
+  previewPath: string
   views: number
   likes: number
   dislikes: number

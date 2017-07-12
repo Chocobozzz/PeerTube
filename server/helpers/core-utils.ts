@@ -16,6 +16,7 @@ import {
 import * as mkdirp from 'mkdirp'
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
+import * as rimraf from 'rimraf'
 import * as openssl from 'openssl-wrapper'
 import * as Promise from 'bluebird'
 
@@ -83,6 +84,7 @@ const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
 const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
 const bcryptHashPromise = promisify2<any, string|number, string>(bcrypt.hash)
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
+const rimrafPromise = promisify1WithVoid<string>(rimraf)
 
 // ---------------------------------------------------------------------------
 
@@ -105,5 +107,6 @@ export {
   bcryptComparePromise,
   bcryptGenSaltPromise,
   bcryptHashPromise,
-  createTorrentPromise
+  createTorrentPromise,
+  rimrafPromise
 }

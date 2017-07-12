@@ -1,6 +1,7 @@
 import * as request from 'request'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
+import { join } from 'path'
 
 import { database as db } from '../initializers/database'
 import {
@@ -9,7 +10,8 @@ import {
   REQUESTS_IN_PARALLEL,
   REQUEST_ENDPOINTS,
   REQUEST_ENDPOINT_ACTIONS,
-  REMOTE_SCHEME
+  REMOTE_SCHEME,
+  STATIC_PATHS
 } from '../initializers'
 import {
   logger,
@@ -233,6 +235,13 @@ function sendOwnedVideosToPod (podId: number) {
     })
 }
 
+function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
+  const host = video.Author.Pod.host
+  const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
+
+  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
+}
+
 function getRequestScheduler () {
   return requestScheduler
 }
@@ -263,7 +272,8 @@ export {
   sendOwnedVideosToPod,
   getRequestScheduler,
   getRequestVideoQaduScheduler,
-  getRequestVideoEventScheduler
+  getRequestVideoEventScheduler,
+  fetchRemotePreview
 }
 
 // ---------------------------------------------------------------------------

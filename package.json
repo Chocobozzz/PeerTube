@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "async": "^2.0.0",
+    "async-lru": "^1.1.1",
     "bcrypt": "^1.0.2",
     "bittorrent-tracker": "^9.0.0",
     "bluebird": "^3.5.0",

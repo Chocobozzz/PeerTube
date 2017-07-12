@@ -22,6 +22,11 @@ storage:
   previews: 'previews/'
   thumbnails: 'thumbnails/'
   torrents: 'torrents/'
+  cache: 'cache/'
+
+cache:
+  previews:
+    size: 1 # Max number of previews you want to cache
 
 admin:
   email: 'admin@example.com'

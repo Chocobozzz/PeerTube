@@ -12,6 +12,7 @@
 /certs/
 /logs/
 /torrents/
+/cache/
 /config/production.yaml
 /ffmpeg/
 /*.sublime-project

@@ -35,6 +35,8 @@ export interface OAuthTokenAttributes {
   refreshToken: string
   refreshTokenExpiresAt: Date
 
+  userId?: number
+  oAuthClientId?: number
   User?: UserModel
 }
 

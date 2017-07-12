@@ -6,6 +6,7 @@ import {
   STATIC_MAX_AGE,
   STATIC_PATHS
 } from '../initializers'
+import { VideosPreviewCache } from '../lib'
 
 const staticRouter = express.Router()
 
@@ -38,12 +39,23 @@ staticRouter.use(
 // Video previews path for express
 const previewsPhysicalPath = CONFIG.STORAGE.PREVIEWS_DIR
 staticRouter.use(
-  STATIC_PATHS.PREVIEWS,
-  express.static(previewsPhysicalPath, { maxAge: STATIC_MAX_AGE })
+  STATIC_PATHS.PREVIEWS + ':uuid.jpg',
+  getPreview
 )
 
 // ---------------------------------------------------------------------------
 
 export {
   staticRouter
+}
+
+// ---------------------------------------------------------------------------
+
+function getPreview (req: express.Request, res: express.Response, next: express.NextFunction) {
+  VideosPreviewCache.Instance.getPreviewPath(req.params.uuid)
+    .then(path => {
+      if (!path) return res.sendStatus(404)
+
+      return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
+    })
 }

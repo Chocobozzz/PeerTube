@@ -106,10 +106,10 @@ getByRefreshTokenAndPopulateClient = function (refreshToken: string) {
         refreshToken: token.refreshToken,
         refreshTokenExpiresAt: token.refreshTokenExpiresAt,
         client: {
-          id: token['client'].id
+          id: token.oAuthClientId
         },
         user: {
-          id: token['user']
+          id: token.userId
         }
       }
 

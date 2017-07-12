@@ -61,7 +61,8 @@ const CONFIG = {
     VIDEOS_DIR: join(root(), config.get<string>('storage.videos')),
     THUMBNAILS_DIR: join(root(), config.get<string>('storage.thumbnails')),
     PREVIEWS_DIR: join(root(), config.get<string>('storage.previews')),
-    TORRENTS_DIR: join(root(), config.get<string>('storage.torrents'))
+    TORRENTS_DIR: join(root(), config.get<string>('storage.torrents')),
+    CACHE_DIR: join(root(), config.get<string>('storage.cache'))
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
@@ -80,6 +81,11 @@ const CONFIG = {
   TRANSCODING: {
     ENABLED: config.get<boolean>('transcoding.enabled'),
     THREADS: config.get<number>('transcoding.threads')
+  },
+  CACHE: {
+    PREVIEWS: {
+      SIZE: config.get<number>('cache.previews.size')
+    }
   }
 }
 CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
@@ -278,6 +284,13 @@ let STATIC_MAX_AGE = '30d'
 const THUMBNAILS_SIZE = '200x110'
 const PREVIEWS_SIZE = '640x480'
 
+// Subfolders of cache directory
+const CACHE = {
+  DIRECTORIES: {
+    PREVIEWS: join(CONFIG.STORAGE.CACHE_DIR, 'previews')
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 const USER_ROLES: { [ id: string ]: UserRole } = {
@@ -307,6 +320,7 @@ if (isTestInstance() === true) {
 export {
   API_VERSION,
   BCRYPT_SALT_SIZE,
+  CACHE,
   CONFIG,
   CONSTRAINTS_FIELDS,
   FRIEND_SCORE,

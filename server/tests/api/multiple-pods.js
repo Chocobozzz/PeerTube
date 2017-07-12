@@ -747,7 +747,7 @@ describe('Test multiple pods', function () {
           expect(videos[0].name).not.to.equal(toRemove[1].name)
           expect(videos[1].name).not.to.equal(toRemove[1].name)
 
-          videoUUID = videos[0].uuid
+          videoUUID = videos.find(video => video.name === 'my super name for pod 1').uuid
 
           callback()
         })
@@ -778,6 +778,23 @@ describe('Test multiple pods', function () {
           expect(baseVideo.tags).to.deep.equal(video.tags)
 
           callback()
+        })
+      }, done)
+    })
+
+    it('Should get the preview from each pod', function (done) {
+      each(servers, function (server, callback) {
+        videosUtils.getVideo(server.url, videoUUID, function (err, res) {
+          if (err) throw err
+
+          const video = res.body
+
+          videosUtils.testVideoImage(server.url, 'video_short1-preview.webm', video.previewPath, function (err, test) {
+            if (err) throw err
+            expect(test).to.equal(true)
+
+            callback()
+          })
         })
       }, done)
     })

@@ -1,3 +1,4 @@
+export * from './cache'
 export * from './jobs'
 export * from './request'
 export * from './friends'

@@ -47,7 +47,7 @@ if (errorMessage !== null) {
 
 // ----------- PeerTube modules -----------
 import { migrate, installApplication } from './server/initializers'
-import { JobScheduler, activateSchedulers } from './server/lib'
+import { JobScheduler, activateSchedulers, VideosPreviewCache } from './server/lib'
 import * as customValidators from './server/helpers/custom-validators'
 import { apiRouter, clientsRouter, staticRouter } from './server/controllers'
 
@@ -146,6 +146,8 @@ function onDatabaseInitDone () {
 
         // Activate job scheduler
         JobScheduler.Instance.activate()
+
+        VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
 
         logger.info('Server listening on port %d', port)
         logger.info('Webserver: %s', CONFIG.WEBSERVER.URL)
