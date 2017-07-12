@@ -88,10 +88,9 @@
 
   loadVideoInfos(videoId, function (videoInfos) {
     var magnetUri = videoInfos.magnetUri
-    // FIXME: use poster?
-    // var videoContainer = document.getElementById('video-container')
-    // var thumbnailUrl = 'http://' + videoInfos.podUrl + videoInfos.thumbnailPath
-    // videoContainer.poster = thumbnailUrl
+    var videoContainer = document.getElementById('video-container')
+    var previewUrl = window.location.protocol + '//' + videoInfos.podHost + videoInfos.previewPath
+    videoContainer.poster = previewUrl
 
     videojs('video-container', { controls: true, autoplay: false }, function () {
       var player = this
