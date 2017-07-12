@@ -321,7 +321,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.metaService.setTag('og:description', this.video.description)
     this.metaService.setTag('description', this.video.description)
 
-    this.metaService.setTag('og:image', this.video.thumbnailPath)
+    this.metaService.setTag('og:image', this.video.previewPath)
 
     this.metaService.setTag('og:duration', this.video.duration.toString())
 
