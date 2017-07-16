@@ -243,9 +243,6 @@ function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
 }
 
 function removeFriend (pod: PodInstance) {
-  // Stop pool requests
-  requestScheduler.deactivate()
-
   const requestParams = {
     method: 'POST' as 'POST',
     path: '/api/' + API_VERSION + '/remote/pods/remove',
@@ -261,7 +258,6 @@ function removeFriend (pod: PodInstance) {
     .catch(err => {
       logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, { err: err })
     })
-    .finally(() => requestScheduler.activate())
 }
 
 function getRequestScheduler () {
