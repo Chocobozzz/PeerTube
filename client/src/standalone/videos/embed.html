@@ -71,7 +71,7 @@
     xhttp.send()
   }
 
-  function loadVideoTorrent (magnetUri) {
+  function loadVideoTorrent (magnetUri, player) {
     console.log('Loading video ' + videoId)
     var client = new window.WebTorrent()
 
@@ -79,7 +79,19 @@
     client.add(magnetUri, function (torrent) {
       var file = torrent.files[0]
 
-      file.renderTo('video', { autoplay: true })
+      file.renderTo('video', function (err) {
+        if (err) {
+          console.error(err)
+          return
+        }
+
+        // Hack to "simulate" src link in video.js >= 6
+        // If no, we can't play the video after pausing it
+        // https://github.com/videojs/video.js/blob/master/src/js/player.js#L1633
+        player.src = function () { return true }
+
+        player.play()
+      })
     })
   }
 
@@ -127,13 +139,11 @@
       })
 
       document.querySelector('.vjs-big-play-button').addEventListener('click', function () {
-        loadVideoTorrent(magnetUri)
-
-        player.play()
+        loadVideoTorrent(magnetUri, player)
       }, false)
     })
   })
 
   </script>
   </body>
-</html>
+</html
