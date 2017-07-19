@@ -101,7 +101,7 @@
   loadVideoInfos(videoId, function (videoInfos) {
     var magnetUri = videoInfos.magnetUri
     var videoContainer = document.getElementById('video-container')
-    var previewUrl = window.location.protocol + '//' + videoInfos.podHost + videoInfos.previewPath
+    var previewUrl = window.location.origin + videoInfos.previewPath
     videoContainer.poster = previewUrl
 
     videojs('video-container', { controls: true, autoplay: false }, function () {
