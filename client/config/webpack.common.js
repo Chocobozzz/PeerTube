@@ -8,7 +8,6 @@ const AssetsPlugin = require('assets-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin')
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
@@ -251,47 +250,6 @@ module.exports = function (options) {
            */
         }
       ),
-
-      /*
-       * Plugin: CopyWebpackPlugin
-       * Description: Copy files and directories in webpack.
-       *
-       * Copies project static assets.
-       *
-       * See: https://www.npmjs.com/package/copy-webpack-plugin
-       */
-
-      // Used by embed.html
-      new CopyWebpackPlugin([
-        {
-          from: 'src/assets',
-          to: 'assets'
-        },
-        {
-          from: 'node_modules/webtorrent/webtorrent.min.js',
-          to: 'assets/webtorrent'
-        },
-        {
-          from: 'node_modules/video.js/dist/video.min.js',
-          to: 'assets/video-js'
-        },
-        {
-          from: 'node_modules/video.js/dist/video-js.min.css',
-          to: 'assets/video-js'
-        },
-        {
-          from: 'node_modules/videojs-dock/dist/videojs-dock.min.js',
-          to: 'assets/video-js'
-        },
-        {
-          from: 'node_modules/videojs-dock/dist/videojs-dock.css',
-          to: 'assets/video-js'
-        },
-        {
-          from: 'src/standalone',
-          to: 'standalone'
-        }
-      ]),
 
       /*
        * Plugin: ScriptExtHtmlWebpackPlugin

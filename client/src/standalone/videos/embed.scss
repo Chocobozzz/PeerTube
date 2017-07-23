@@ -1,0 +1,41 @@
+@import '~video.js/dist/video-js.css';
+@import '~videojs-dock/dist/videojs-dock.css';
+@import '../../sass/video-js-custom.scss';
+
+video {
+  width: 99%;
+}
+
+/* fill the entire space */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.video-js {
+  width: 100%;
+  height: 100%;
+}
+
+.vjs-poster {
+  background-size: 100% auto;
+}
+
+.vjs-peertube-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1.3em;
+  line-height: 2.20;
+  transition: all .4s;
+  position: relative;
+  right: 6px;
+}
+
+.vjs-peertube-link:hover {
+  text-shadow: 0 0 1em #fff;
+}
+
+// Fix volume panel because we added a new component (PeerTube link)
+.vjs-volume-panel {
+  margin-right: 90px !important;
+}
