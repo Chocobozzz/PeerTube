@@ -24,7 +24,7 @@ process.title = 'peertube'
 const app = express()
 
 // ----------- Database -----------
-// Do not use barels because we don't want to load all modules here (we need to initialize database first)
+// Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
 import { API_VERSION, CONFIG } from './server/initializers/constants'
 // Initialize database and models
@@ -55,7 +55,7 @@ import { apiRouter, clientsRouter, staticRouter } from './server/controllers'
 
 // ----------- App -----------
 
-// Enable cors for develop
+// Enable CORS for develop
 if (isTestInstance()) {
   app.use(cors({
     origin: 'http://localhost:3000',

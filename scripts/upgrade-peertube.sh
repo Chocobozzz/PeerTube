@@ -35,4 +35,4 @@ git pull origin $(git rev-parse --abbrev-ref HEAD) || exit -1
 yarn install --pure-lockfile
 npm run build
 
-echo "\n\nUpgrade finished! You can restart PeerTube that may run the migration scripts."
+echo -e "\n\nUpgrade finished! You can restart PeerTube that may run the migration scripts."
