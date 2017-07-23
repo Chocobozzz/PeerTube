@@ -81,10 +81,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       self.player = this
     })
 
-    this.errorsSub = this.webTorrentService.errors.subscribe(err => {
-      const message = typeof err === 'string' ? err : err.message
-      this.notificationsService.error('Error', message)
-    })
+    this.errorsSub = this.webTorrentService.errors.subscribe(err => this.handleError(err))
   }
 
   ngOnDestroy () {
@@ -117,7 +114,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // So we create a timer to inform the user the load is abnormally long
     this.errorTimer = window.setTimeout(() => this.loadTooLong(), VideoWatchComponent.LOADTIME_TOO_LONG)
 
-    this.webTorrentService.add(this.video.magnetUri, torrent => {
+    const torrent = this.webTorrentService.add(this.video.magnetUri, torrent => {
       // Clear the error timer
       window.clearTimeout(this.errorTimer)
       // Maybe the error was fired by the timer, so reset it
@@ -143,6 +140,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.runInProgress(torrent)
     })
+
+    torrent.on('error', err => this.handleError(err))
+    torrent.on('warning', err => this.handleError(err))
   }
 
   setLike () {
@@ -248,6 +248,19 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoBlacklistable () {
     return this.video.isBlackistableBy(this.authService.getUser())
+  }
+
+  private handleError (err: any) {
+    const errorMessage: string = typeof err === 'string' ? err : err.message
+    let message = ''
+
+    if (errorMessage.indexOf('http error') !== -1) {
+      message = 'Cannot fetch video from server, maybe down.'
+    } else {
+      message = errorMessage
+    }
+
+    this.notificationsService.error('Error', message)
   }
 
   private checkUserRating () {
