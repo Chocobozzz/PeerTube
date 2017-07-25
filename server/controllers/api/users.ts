@@ -6,7 +6,7 @@ import { logger, getFormatedObjects } from '../../helpers'
 import {
   authenticate,
   ensureIsAdmin,
-  ensureUserRegistrationEnabled,
+  ensureUserRegistrationAllowed,
   usersAddValidator,
   usersUpdateValidator,
   usersRemoveValidator,
@@ -48,7 +48,7 @@ usersRouter.post('/',
 )
 
 usersRouter.post('/register',
-  ensureUserRegistrationEnabled,
+  ensureUserRegistrationAllowed,
   usersAddValidator,
   createUser
 )

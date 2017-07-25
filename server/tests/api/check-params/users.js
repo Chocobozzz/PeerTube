@@ -513,7 +513,13 @@ describe('Test users API validators', function () {
         password: 'my super password 4'
       }
 
-      requestsUtils.makePostBodyRequest(serverWithRegistrationDisabled.url, registrationPath, serverWithRegistrationDisabled.accessToken, data, done, 400)
+      requestsUtils.makePostBodyRequest(serverWithRegistrationDisabled.url, registrationPath, serverWithRegistrationDisabled.accessToken, data, done, 403)
+    })
+  })
+
+  describe('When registering multiple users on a server with users limit', function () {
+    it('Should fail when after 3 registrations', function (done) {
+      usersUtils.registerUser(server.url, 'user42', 'super password', 403, done)
     })
   })
 

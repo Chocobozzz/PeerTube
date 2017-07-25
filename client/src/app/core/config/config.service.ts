@@ -10,7 +10,7 @@ export class ConfigService {
 
   private config: ServerConfig = {
     signup: {
-      enabled: false
+      allowed: false
     }
   }
 

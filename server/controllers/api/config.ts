@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { CONFIG } from '../../initializers'
+import { isSignupAllowed } from '../../helpers'
 import { ServerConfig } from '../../../shared'
 
 const configRouter = express.Router()
@@ -9,12 +9,15 @@ configRouter.get('/', getConfig)
 
 // Get the client credentials for the PeerTube front end
 function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const json: ServerConfig = {
-    signup: {
-      enabled: CONFIG.SIGNUP.ENABLED
+
+  isSignupAllowed().then(allowed => {
+    const json: ServerConfig = {
+      signup: {
+        allowed
+      }
     }
-  }
-  res.json(json)
+    res.json(json)
+  })
 }
 
 // ---------------------------------------------------------------------------

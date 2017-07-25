@@ -1,6 +1,8 @@
 import * as express from 'express'
+import * as Promise from 'bluebird'
 
 import { pseudoRandomBytesPromise } from './core-utils'
+import { CONFIG, database as db } from '../initializers'
 import { ResultList } from '../../shared'
 
 function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -30,10 +32,26 @@ function getFormatedObjects<U, T extends FormatableToJSON> (objects: T[], object
   return res
 }
 
+function isSignupAllowed () {
+  if (CONFIG.SIGNUP.ENABLED === false) {
+    return Promise.resolve(false)
+  }
+
+  // No limit and signup is enabled
+  if (CONFIG.SIGNUP.LIMIT === -1) {
+    return Promise.resolve(true)
+  }
+
+  return db.User.countTotal().then(totalUsers => {
+    return totalUsers < CONFIG.SIGNUP.LIMIT
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   badRequest,
   generateRandomString,
-  getFormatedObjects
+  getFormatedObjects,
+  isSignupAllowed
 }

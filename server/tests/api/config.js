@@ -8,6 +8,7 @@ const series = require('async/series')
 
 const serversUtils = require('../utils/servers')
 const configUtils = require('../utils/config')
+const usersUtils = require('../utils/users')
 
 describe('Test config', function () {
   let server = null
@@ -28,15 +29,48 @@ describe('Test config', function () {
     ], done)
   })
 
-  it('Should have a correct config', function (done) {
+  it('Should have a correct config on a server with registration enabled', function (done) {
     configUtils.getConfig(server.url, function (err, res) {
       if (err) throw err
 
       const data = res.body
 
-      expect(data.signup.enabled).to.be.truthy
+      expect(data.signup.allowed).to.be.truthy
 
       done()
+    })
+  })
+
+  it('Should have a correct config on a server with registration enabled and a users limit', function (done) {
+    series([
+      function (next) {
+        usersUtils.registerUser(server.url, 'user1', 'super password', done)
+      },
+
+      function (next) {
+        usersUtils.registerUser(server.url, 'user2', 'super password', done)
+      },
+
+      function (next) {
+        usersUtils.registerUser(server.url, 'user3', 'super password', done)
+      },
+
+      function (next) {
+        usersUtils.registerUser(server.url, 'user4', 'super password', done)
+      }
+
+    ], function (err) {
+      if (err) throw err
+
+      configUtils.getConfig(server.url, function (err, res) {
+        if (err) throw err
+
+        const data = res.body
+
+        expect(data.signup.allowed).to.be.truthy
+
+        done()
+      })
     })
   })
 

@@ -5,7 +5,7 @@ import * as validator from 'validator'
 
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
-import { logger } from '../../helpers'
+import { isSignupAllowed, logger } from '../../helpers'
 import { VideoInstance } from '../../models'
 
 function usersAddValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -88,11 +88,22 @@ function usersVideoRatingValidator (req: express.Request, res: express.Response,
   })
 }
 
+function ensureUserRegistrationAllowed (req: express.Request, res: express.Response, next: express.NextFunction) {
+  isSignupAllowed().then(allowed => {
+    if (allowed === false) {
+      return res.status(403).send('User registration is not enabled or user limit is reached.')
+    }
+
+    return next()
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   usersAddValidator,
   usersRemoveValidator,
   usersUpdateValidator,
-  usersVideoRatingValidator
+  usersVideoRatingValidator,
+  ensureUserRegistrationAllowed
 }

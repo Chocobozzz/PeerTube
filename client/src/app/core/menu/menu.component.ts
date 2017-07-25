@@ -36,8 +36,8 @@ export class MenuComponent implements OnInit {
     )
   }
 
-  isRegistrationEnabled () {
-    return this.configService.getConfig().signup.enabled
+  isRegistrationAllowed () {
+    return this.configService.getConfig().signup.allowed
   }
 
   isUserAdmin () {

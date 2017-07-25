@@ -76,7 +76,8 @@ const CONFIG = {
     EMAIL: config.get<string>('admin.email')
   },
   SIGNUP: {
-    ENABLED: config.get<boolean>('signup.enabled')
+    ENABLED: config.get<boolean>('signup.enabled'),
+    LIMIT: config.get<number>('signup.limit')
   },
   TRANSCODING: {
     ENABLED: config.get<boolean>('transcoding.enabled'),

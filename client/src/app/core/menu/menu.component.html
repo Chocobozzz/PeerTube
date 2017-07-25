@@ -14,7 +14,7 @@
       </a>
     </div>
 
-    <a *ngIf="!isLoggedIn && isRegistrationEnabled()" routerLink="/signup" routerLinkActive="active">
+    <a *ngIf="!isLoggedIn && isRegistrationAllowed()" routerLink="/signup" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-user"></span>
       Signup
     </a>

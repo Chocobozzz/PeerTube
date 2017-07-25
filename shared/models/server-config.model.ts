@@ -1,5 +1,5 @@
 export interface ServerConfig {
   signup: {
-    enabled: boolean
+    allowed: boolean
   }
 }
