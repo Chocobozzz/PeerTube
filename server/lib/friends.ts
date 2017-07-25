@@ -256,7 +256,7 @@ function removeFriend (pod: PodInstance) {
       logger.info('Removed friend.')
     })
     .catch(err => {
-      logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, { err: err })
+      logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, err)
     })
 }
 

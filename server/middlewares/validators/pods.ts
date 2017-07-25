@@ -75,7 +75,7 @@ function podRemoveValidator (req: express.Request, res: express.Response, next: 
         return next()
       })
       .catch(err => {
-        logger.error('Cannot load pod %d.', req.params.id, { error: err })
+        logger.error('Cannot load pod %d.', req.params.id, err)
         res.sendStatus(500)
       })
   })
