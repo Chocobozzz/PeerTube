@@ -246,7 +246,6 @@ function removeFriend (pod: PodInstance) {
   const requestParams = {
     method: 'POST' as 'POST',
     path: '/api/' + API_VERSION + '/remote/pods/remove',
-    sign: true,
     toPod: pod
   }
 
