@@ -10,7 +10,8 @@ import {
 import {
   sendOwnedVideosToPod,
   makeFriends,
-  quitFriends
+  quitFriends,
+  removeFriend
 } from '../../lib'
 import {
   podsAddValidator,
@@ -18,7 +19,8 @@ import {
   ensureIsAdmin,
   makeFriendsValidator,
   setBodyHostPort,
-  setBodyHostsPort
+  setBodyHostsPort,
+  podRemoveValidator
 } from '../../middlewares'
 import {
   PodInstance
@@ -44,6 +46,12 @@ podsRouter.get('/quitfriends',
   authenticate,
   ensureIsAdmin,
   quitFriendsController
+)
+podsRouter.delete('/:id',
+  authenticate,
+  ensureIsAdmin,
+  podRemoveValidator,
+  removeFriendController
 )
 
 // ---------------------------------------------------------------------------
@@ -91,5 +99,13 @@ function makeFriendsController (req: express.Request, res: express.Response, nex
 function quitFriendsController (req: express.Request, res: express.Response, next: express.NextFunction) {
   quitFriends()
     .then(() => res.type('json').status(204).end())
+    .catch(err => next(err))
+}
+
+function removeFriendController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const pod = res.locals.pod as PodInstance
+
+  removeFriend(pod)
+    .then(() => (res.type('json').status(204).end()))
     .catch(err => next(err))
 }

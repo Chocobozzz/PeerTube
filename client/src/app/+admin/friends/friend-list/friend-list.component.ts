@@ -6,6 +6,7 @@ import { ServerDataSource } from 'ng2-smart-table'
 import { ConfirmService } from '../../../core'
 import { Utils } from '../../../shared'
 import { FriendService } from '../shared'
+import { Pod } from '../../../../../../shared'
 
 @Component({
   selector: 'my-friend-list',
@@ -15,6 +16,7 @@ import { FriendService } from '../shared'
 export class FriendListComponent {
   friendsSource = null
   tableSettings = {
+    mode: 'external',
     attr: {
       class: 'table-hover'
     },
@@ -23,7 +25,10 @@ export class FriendListComponent {
       position: 'right',
       add: false,
       edit: false,
-      delete: false
+      delete: true
+    },
+    delete: {
+      deleteButtonContent: Utils.getRowDeleteButton()
     },
     columns: {
       id: {
@@ -71,13 +76,32 @@ export class FriendListComponent {
 
         this.friendService.quitFriends().subscribe(
           status => {
-            this.notificationsService.success('Sucess', 'Friends left!')
-
+            this.notificationsService.success('Success', 'Friends left!')
             this.friendsSource.refresh()
           },
 
           err => this.notificationsService.error('Error', err.text)
         )
+      }
+    )
+  }
+
+  removeFriend ({ data }) {
+    const confirmMessage = 'Do you really want to remove this friend ? All its videos will be deleted.'
+    const friend: Pod = data
+
+    this.confirmService.confirm(confirmMessage, 'Remove').subscribe(
+      res => {
+        if (res === false) return
+
+        this.friendService.removeFriend(friend).subscribe(
+	  status => {
+	    this.notificationsService.success('Success', 'Friend removed')
+	    this.friendsSource.refresh()
+	  },
+
+	  err => this.notificationsService.error('Error', err.text)
+	)
       }
     )
   }

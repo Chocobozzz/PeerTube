@@ -17,7 +17,7 @@ describe('Test pods API validators', function () {
   // ---------------------------------------------------------------
 
   before(function (done) {
-    this.timeout(20000)
+    this.timeout(45000)
 
     series([
       function (next) {
@@ -110,7 +110,7 @@ describe('Test pods API validators', function () {
           .expect(400, done)
       })
 
-      it('Should fail with a invalid token', function (done) {
+      it('Should fail with an invalid token', function (done) {
         request(server.url)
           .post(path + '/makefriends')
           .send(body)
@@ -130,7 +130,7 @@ describe('Test pods API validators', function () {
     })
 
     describe('When quitting friends', function () {
-      it('Should fail with a invalid token', function (done) {
+      it('Should fail with an invalid token', function (done) {
         request(server.url)
           .get(path + '/quitfriends')
           .query({ start: 'hello' })
@@ -147,6 +147,50 @@ describe('Test pods API validators', function () {
           .set('Accept', 'application/json')
           .expect(403, done)
       })
+    })
+
+    describe('When removing one friend', function () {
+      it('Should fail with an invalid token', function (done) {
+	request(server.url)
+          .delete(path + '/1')
+          .set('Authorization', 'Bearer faketoken')
+          .set('Accept', 'application/json')
+          .expect(401, done)
+      })
+
+      it('Should fail if the user is not an administrator', function (done) {
+	request(server.url)
+          .delete(path + '/1')
+          .set('Authorization', 'Bearer ' + userAccessToken)
+          .set('Accept', 'application/json')
+          .expect(403, done)
+      })
+
+      it('Should fail with an undefined id', function (done) {
+        request(server.url)
+          .delete(path + '/' + undefined)
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail with an invalid id', function (done) {
+	request(server.url)
+          .delete(path + '/foobar')
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .set('Accept', 'application/json')
+          .expect(400, done)
+      })
+
+      it('Should fail if the pod is not a friend', function (done) {
+	request(server.url)
+          .delete(path + '/-1')
+          .set('Authorization', 'Bearer ' + server.accessToken)
+          .set('Accept', 'application/json')
+          .expect(404, done)
+      })
+
+      it('Should succeed with the correct parameters')
     })
   })
 
@@ -181,7 +225,7 @@ describe('Test pods API validators', function () {
       requestsUtils.makePostBodyRequest(server.url, path, null, data, done)
     })
 
-    it('Should fail without an host', function (done) {
+    it('Should fail without a host', function (done) {
       const data = {
         email: 'testexample.com',
         publicKey: 'mysuperpublickey'

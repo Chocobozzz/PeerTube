@@ -242,6 +242,23 @@ function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
 }
 
+function removeFriend (pod: PodInstance) {
+  const requestParams = {
+    method: 'POST' as 'POST',
+    path: '/api/' + API_VERSION + '/remote/pods/remove',
+    toPod: pod
+  }
+
+  return makeSecureRequest(requestParams)
+    .then(() => pod.destroy())
+    .then(() => {
+      logger.info('Removed friend.')
+    })
+    .catch(err => {
+      logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, err)
+    })
+}
+
 function getRequestScheduler () {
   return requestScheduler
 }
@@ -268,6 +285,7 @@ export {
   hasFriends,
   makeFriends,
   quitFriends,
+  removeFriend,
   removeVideoToFriends,
   sendOwnedVideosToPod,
   getRequestScheduler,

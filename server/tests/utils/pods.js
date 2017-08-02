@@ -5,7 +5,8 @@ const request = require('supertest')
 const podsUtils = {
   getFriendsList,
   makeFriends,
-  quitFriends
+  quitFriends,
+  quitOneFriend
 }
 
 // ---------------------- Export functions --------------------
@@ -87,6 +88,26 @@ function quitFriends (url, accessToken, expectedStatus, end) {
 
       // Wait for the request between pods
       setTimeout(end, 1000)
+    })
+}
+
+function quitOneFriend (url, accessToken, friendId, expectedStatus, end) {
+  if (!end) {
+    end = expectedStatus
+    expectedStatus = 204
+  }
+
+  const path = '/api/v1/pods/' + friendId
+
+  request(url)
+    .delete(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
+    .end(function (err, res) {
+      if (err) throw err
+
+      end()
     })
 }
 
