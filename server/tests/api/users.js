@@ -209,7 +209,7 @@ describe('Test users', function () {
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
-      expect(user.displayNSFW).to.be.falsy
+      expect(user.displayNSFW).to.be.false
       expect(user.id).to.exist
 
       done()
@@ -238,12 +238,12 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
-      expect(user.displayNSFW).to.be.falsy
+      expect(user.displayNSFW).to.be.false
 
       const rootUser = users[1]
       expect(rootUser.username).to.equal('root')
       expect(rootUser.email).to.equal('admin1@example.com')
-      expect(rootUser.displayNSFW).to.be.falsy
+      expect(rootUser.displayNSFW).to.be.false
 
       userId = user.id
 
@@ -265,7 +265,7 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('root')
       expect(user.email).to.equal('admin1@example.com')
-      expect(user.displayNSFW).to.be.falsy
+      expect(user.displayNSFW).to.be.false
 
       done()
     })
@@ -285,7 +285,7 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
-      expect(user.displayNSFW).to.be.falsy
+      expect(user.displayNSFW).to.be.false
 
       done()
     })
@@ -305,7 +305,7 @@ describe('Test users', function () {
       const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
-      expect(user.displayNSFW).to.be.falsy
+      expect(user.displayNSFW).to.be.false
 
       done()
     })
@@ -324,11 +324,11 @@ describe('Test users', function () {
 
       expect(users[0].username).to.equal('root')
       expect(users[0].email).to.equal('admin1@example.com')
-      expect(users[0].displayNSFW).to.be.falsy
+      expect(users[0].displayNSFW).to.be.false
 
       expect(users[1].username).to.equal('user_1')
       expect(users[1].email).to.equal('user_1@example.com')
-      expect(users[1].displayNSFW).to.be.falsy
+      expect(users[1].displayNSFW).to.be.false
 
       done()
     })
@@ -354,7 +354,7 @@ describe('Test users', function () {
 
         expect(user.username).to.equal('user_1')
         expect(user.email).to.equal('user_1@example.com')
-        expect(user.displayNSFW).to.be.truthy
+        expect(user.displayNSFW).to.be.ok
         expect(user.id).to.exist
 
         done()

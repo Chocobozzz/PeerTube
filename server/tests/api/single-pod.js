@@ -126,7 +126,7 @@ describe('Test a single pod', function () {
       expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.language).to.equal(3)
       expect(video.languageLabel).to.equal('Mandarin')
-      expect(video.nsfw).to.be.truthy
+      expect(video.nsfw).to.be.ok
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
@@ -169,7 +169,7 @@ describe('Test a single pod', function () {
       expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.language).to.equal(3)
       expect(video.languageLabel).to.equal('Mandarin')
-      expect(video.nsfw).to.be.truthy
+      expect(video.nsfw).to.be.ok
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.magnetUri).to.exist
@@ -231,7 +231,7 @@ describe('Test a single pod', function () {
       expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.language).to.equal(3)
       expect(video.languageLabel).to.equal('Mandarin')
-      expect(video.nsfw).to.be.truthy
+      expect(video.nsfw).to.be.ok
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -293,7 +293,7 @@ describe('Test a single pod', function () {
       expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
       expect(video.language).to.equal(3)
       expect(video.languageLabel).to.equal('Mandarin')
-      expect(video.nsfw).to.be.truthy
+      expect(video.nsfw).to.be.ok
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -641,7 +641,7 @@ describe('Test a single pod', function () {
       expect(video.licenceLabel).to.equal('Attribution - Share Alike')
       expect(video.language).to.equal(5)
       expect(video.languageLabel).to.equal('Arabic')
-      expect(video.nsfw).to.be.truthy
+      expect(video.nsfw).to.be.ok
       expect(video.description).to.equal('my super description updated')
       expect(video.podHost).to.equal('localhost:9001')
       expect(video.author).to.equal('root')
@@ -685,7 +685,7 @@ describe('Test a single pod', function () {
         expect(video.licenceLabel).to.equal('Attribution - Share Alike')
         expect(video.language).to.equal(5)
         expect(video.languageLabel).to.equal('Arabic')
-        expect(video.nsfw).to.be.truthy
+        expect(video.nsfw).to.be.ok
         expect(video.description).to.equal('my super description updated')
         expect(video.podHost).to.equal('localhost:9001')
         expect(video.author).to.equal('root')
@@ -719,7 +719,7 @@ describe('Test a single pod', function () {
         expect(video.licenceLabel).to.equal('Attribution - Share Alike')
         expect(video.language).to.equal(5)
         expect(video.languageLabel).to.equal('Arabic')
-        expect(video.nsfw).to.be.truthy
+        expect(video.nsfw).to.be.ok
         expect(video.description).to.equal('hello everybody')
         expect(video.podHost).to.equal('localhost:9001')
         expect(video.author).to.equal('root')

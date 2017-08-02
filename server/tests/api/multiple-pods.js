@@ -118,7 +118,7 @@ describe('Test multiple pods', function () {
               expect(video.licenceLabel).to.equal('Attribution - Non Commercial')
               expect(video.language).to.equal(9)
               expect(video.languageLabel).to.equal('Japanese')
-              expect(video.nsfw).to.be.truthy
+              expect(video.nsfw).to.be.ok
               expect(video.description).to.equal('my super description for pod 1')
               expect(video.podHost).to.equal('localhost:9001')
               expect(video.magnetUri).to.exist
@@ -195,7 +195,7 @@ describe('Test multiple pods', function () {
               expect(video.licenceLabel).to.equal('Attribution - No Derivatives')
               expect(video.language).to.equal(11)
               expect(video.languageLabel).to.equal('German')
-              expect(video.nsfw).to.be.falsy
+              expect(video.nsfw).to.be.true
               expect(video.description).to.equal('my super description for pod 2')
               expect(video.podHost).to.equal('localhost:9002')
               expect(video.magnetUri).to.exist
@@ -294,7 +294,7 @@ describe('Test multiple pods', function () {
               expect(video1.licenceLabel).to.equal('Attribution - Non Commercial - Share Alike')
               expect(video1.language).to.equal(11)
               expect(video1.languageLabel).to.equal('German')
-              expect(video1.nsfw).to.be.truthy
+              expect(video1.nsfw).to.be.ok
               expect(video1.description).to.equal('my super description for pod 3')
               expect(video1.podHost).to.equal('localhost:9003')
               expect(video1.magnetUri).to.exist
@@ -311,7 +311,7 @@ describe('Test multiple pods', function () {
               expect(video2.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
               expect(video2.language).to.equal(12)
               expect(video2.languageLabel).to.equal('Korean')
-              expect(video2.nsfw).to.be.falsy
+              expect(video2.nsfw).to.be.false
               expect(video2.description).to.equal('my super description for pod 3-2')
               expect(video2.podHost).to.equal('localhost:9003')
               expect(video2.magnetUri).to.exist
@@ -695,7 +695,7 @@ describe('Test multiple pods', function () {
           expect(videoUpdated.licenceLabel).to.equal('Public Domain Dedication')
           expect(videoUpdated.language).to.equal(13)
           expect(videoUpdated.languageLabel).to.equal('French')
-          expect(videoUpdated.nsfw).to.be.truthy
+          expect(videoUpdated.nsfw).to.be.ok
           expect(videoUpdated.description).to.equal('my super description updated')
           expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
           expect(miscsUtils.dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true

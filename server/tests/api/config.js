@@ -44,19 +44,15 @@ describe('Test config', function () {
   it('Should have a correct config on a server with registration enabled and a users limit', function (done) {
     series([
       function (next) {
-        usersUtils.registerUser(server.url, 'user1', 'super password', done)
+        usersUtils.registerUser(server.url, 'user1', 'super password', next)
       },
 
       function (next) {
-        usersUtils.registerUser(server.url, 'user2', 'super password', done)
+        usersUtils.registerUser(server.url, 'user2', 'super password', next)
       },
 
       function (next) {
-        usersUtils.registerUser(server.url, 'user3', 'super password', done)
-      },
-
-      function (next) {
-        usersUtils.registerUser(server.url, 'user4', 'super password', done)
+        usersUtils.registerUser(server.url, 'user3', 'super password', next)
       }
 
     ], function (err) {
@@ -67,7 +63,7 @@ describe('Test config', function () {
 
         const data = res.body
 
-        expect(data.signup.allowed).to.be.truthy
+        expect(data.signup.allowed).to.be.false
 
         done()
       })
