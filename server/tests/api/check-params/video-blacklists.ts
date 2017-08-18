@@ -125,6 +125,32 @@ describe('Test video blacklists API validators', function () {
     })
   })
 
+  describe('When listing videos in blacklist', function () {
+    const basePath = '/api/v1/blacklists/'
+
+    it('Should fail with a non authenticated user', async function () {
+      const path = basePath
+
+      await request(server.url)
+              .get(path)
+              .query({ sort: 'createdAt' })
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + 'fake token')
+              .expect(401)
+    })
+
+    it('Should fail with a non admin user', async function () {
+      const path = basePath
+
+      await request(server.url)
+              .get(path)
+              .query({ sort: 'createdAt' })
+              .set('Authorization', 'Bearer ' + userAccessToken)
+              .set('Accept', 'application/json')
+              .expect(403)
+    })
+  })
+
   after(async function () {
     killallServers([ server ])
 
