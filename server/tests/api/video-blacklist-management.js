@@ -133,10 +133,69 @@ describe('Test video blacklists management', function () {
   })
 
   describe('When removing a blacklisted video', function () {
-    // it('Should not have the blacklisted video in videos search on pod 1')
-    it('Should remove the video from the blacklist on pod 1')
-    it('Should have the blacklisted video in videos serach on pod 1')
+    it('Should not have any video in videos search on pod 1', function (done) {
+      videosUtils.getVideosList(servers[0].url, function (err, res) {
+        if (err) throw err
 
+        expect(res.body.total).to.equal(0)
+        expect(res.body.data).to.be.an('array')
+        expect(res.body.data.length).to.equal(0)
+
+        done()
+      })
+    })
+
+    it('Should remove a video from the blacklist on pod 1', function (done) {
+      series([
+        // Get one video in the blacklist
+	function (next) {
+          videoBlacklistsUtils.getSortedBlacklistedVideosList(servers[0].url, servers[0].accessToken, '-name', function (err, res) {
+	    if (err) throw err
+
+	    servers[0].videoToRemove = res.body.data[0]
+	    servers[0].blacklist = res.body.data.splice(1)
+
+	    next()
+	  })
+	},
+        // Remove it
+	function (next) {
+	  videoBlacklistsUtils.removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, servers[0].videoToRemove.videoId, next)
+	}
+      ], done)
+    })
+
+    it('Should have the ex-blacklisted video in videos serach on pod 1', function (done) {
+      videosUtils.getVideosList(servers[0].url, function (err, res) {
+        if (err) throw err
+
+        expect(res.body.total).to.equal(1)
+
+        const videos = res.body.data
+        expect(videos).to.be.an('array')
+        expect(videos.length).to.equal(1)
+
+        expect(videos[0].name).to.equal(servers[0].videoToRemove.name)
+        expect(videos[0].id).to.equal(servers[0].videoToRemove.videoId)
+
+        done()
+      })
+    })
+
+    it('Should not have the ex-blacklisted video in videos blacklist list on pod 1', function (done) {
+      videoBlacklistsUtils.getSortedBlacklistedVideosList(servers[0].url, servers[0].accessToken, '-name', function (err, res) {
+        if (err) throw err
+
+        expect(res.body.total).to.equal(1)
+
+        const videos = res.body.data
+        expect(videos).to.be.an('array')
+        expect(videos.length).to.equal(1)
+        expect(videos).to.deep.equal(servers[0].blacklist)
+
+        done()
+      })
+    })
   })
 
   after(function (done) {
