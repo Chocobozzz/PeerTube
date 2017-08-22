@@ -33,6 +33,9 @@ export class BlacklistListComponent {
       perPage: 10
     },
     columns: {
+      id: {
+	title: 'ID'
+      },
       name: {
 	title: 'Name'
       },
@@ -54,8 +57,8 @@ export class BlacklistListComponent {
       nsfw: {
 	title: 'NSFW'
       },
-      remoteId: {
-	title: 'Remote ID'
+      uuid: {
+	title: 'UUID'
       },
       createdAt: {
 	title: 'Created Date',

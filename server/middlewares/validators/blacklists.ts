@@ -6,12 +6,12 @@ import { checkErrors } from './utils'
 import { logger } from '../../helpers'
 
 function blacklistsRemoveValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkParams('id', 'Should have a valid id').notEmpty().isUUID(4)
+  req.checkParams('id', 'Should have a valid id').notEmpty().isNumeric()
 
   logger.debug('Checking blacklistsRemove parameters.', { parameters: req.params })
 
   checkErrors(req, res, function () {
-    db.BlacklistedVideo.loadByVideoId(req.params.id)
+    db.BlacklistedVideo.loadById(req.params.id)
       .then(entry => {
         if (!entry) return res.status(404).send('Blacklisted video not found')
 

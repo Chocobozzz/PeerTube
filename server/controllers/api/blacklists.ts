@@ -49,7 +49,7 @@ function listBlacklist (req: express.Request, res: express.Response, next: expre
 }
 
 function removeVideoFromBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
-  database.BlacklistedVideo.loadByVideoId(req.params.id)
+  database.BlacklistedVideo.loadById(req.params.id)
     .then(entry => entry.destroy())
     .then(() => res.sendStatus(204))
     .catch(err => {
@@ -62,7 +62,7 @@ function formatBlacklistForRest (resultList) : ResultList<RestBlacklistedVideoIn
   let formatedList: RestBlacklistedVideoInstance[] = []
 
   formatedList = resultList.data.map(object => {
-    let json = object.toFormatedJSON()
+    let json = object.toFormattedJSON()
     if (json) {
       return formatBlacklistObject(object, object.Video)
     }
@@ -78,14 +78,14 @@ function formatBlacklistObject (blacklist: BlacklistedVideoInstance, video: Vide
   return {
     id: blacklist.id,
     videoId: blacklist.videoId,
-    remoteId: video.remoteId,
     name: video.name,
-    nsfw: video.nsfw,
+    uuid: video.uuid,
     description: video.description,
     duration: video.duration,
     views: video.views,
     likes: video.likes,
     dislikes: video.dislikes,
+    nsfw: video.nsfw,
     createdAt: blacklist.createdAt,
     updatedAt: blacklist.updatedAt
   }

@@ -15,6 +15,6 @@ export class BlacklistService {
   }
 
   removeVideoFromBlacklist(entry: Blacklist) {
-    return this.authHttp.delete(BlacklistService.BASE_BLACKLISTS_URL + entry.videoId)
+    return this.authHttp.delete(BlacklistService.BASE_BLACKLISTS_URL + entry.id)
   }
 }
