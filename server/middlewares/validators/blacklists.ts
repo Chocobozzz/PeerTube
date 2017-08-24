@@ -15,6 +15,8 @@ function blacklistsRemoveValidator (req: express.Request, res: express.Response,
       .then(entry => {
         if (!entry) return res.status(404).send('Blacklisted video not found')
 
+        res.locals.blacklistEntryToRemove = entry
+
         next()
       })
       .catch(err => {

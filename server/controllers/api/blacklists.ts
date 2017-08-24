@@ -6,6 +6,9 @@ import { RestBlacklistedVideoInstance, ResultList } from '../../../shared'
 import { VideoInstance, BlacklistedVideoInstance } from '../../models'
 
 import {
+  removeVideoFromBlacklist
+} from '../../lib'
+import {
   authenticate,
   ensureIsAdmin,
   paginationValidator,
@@ -31,7 +34,7 @@ blacklistsRouter.delete('/:id',
   authenticate,
   ensureIsAdmin,
   blacklistsRemoveValidator,
-  removeVideoFromBlacklist
+  removeVideoFromBlacklistController
 )
 
 // ---------------------------------------------------------------------------
@@ -48,14 +51,12 @@ function listBlacklist (req: express.Request, res: express.Response, next: expre
     .catch(err => next(err))
 }
 
-function removeVideoFromBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
-  database.BlacklistedVideo.loadById(req.params.id)
-    .then(entry => entry.destroy())
+function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const entry = res.locals.blacklistEntryToRemove as BlacklistedVideoInstance
+
+  removeVideoFromBlacklist(entry)
     .then(() => res.sendStatus(204))
-    .catch(err => {
-      logger.error('Errors when remove the video from the blacklist', { error: err })
-      return next(err)
-    })
+    .catch(err => next(err))
 }
 
 function formatBlacklistForRest (resultList) : ResultList<RestBlacklistedVideoInstance> {
