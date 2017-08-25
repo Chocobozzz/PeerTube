@@ -42,7 +42,7 @@ import {
   RemoteVideoRemoveData,
   RemoteVideoReportAbuseData,
   ResultList,
-  Pod as FormatedPod
+  Pod as FormattedPod
 } from '../../shared'
 
 type QaduParam = { videoId: number, type: RequestVideoQaduType }
@@ -332,7 +332,7 @@ function computeWinningPods (hosts: string[], podsScore: { [ host: string ]: num
 }
 
 function getForeignPodsList (host: string) {
-  return new Promise< ResultList<FormatedPod> >((res, rej) => {
+  return new Promise< ResultList<FormattedPod> >((res, rej) => {
     const path = '/api/' + API_VERSION + '/pods'
 
     request.get(REMOTE_SCHEME.HTTP + '://' + host + path, (err, response, body) => {

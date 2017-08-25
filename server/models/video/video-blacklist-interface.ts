@@ -4,10 +4,10 @@ import * as Promise from 'bluebird'
 import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
-import { BlacklistedVideo as FormatedBlacklistedVideo } from '../../../shared/models/videos/video-blacklist.model'
+import { BlacklistedVideo as FormattedBlacklistedVideo } from '../../../shared/models/videos/video-blacklist.model'
 
 export namespace BlacklistedVideoMethods {
-  export type ToFormatedJSON = (this: BlacklistedVideoInstance) => FormatedBlacklistedVideo
+  export type ToFormattedJSON = (this: BlacklistedVideoInstance) => FormattedBlacklistedVideo
 
   export type CountTotal = () => Promise<number>
 
@@ -21,7 +21,7 @@ export namespace BlacklistedVideoMethods {
 }
 
 export interface BlacklistedVideoClass {
-  toFormatedJSON: BlacklistedVideoMethods.ToFormatedJSON
+  toFormattedJSON: BlacklistedVideoMethods.ToFormattedJSON
   countTotal: BlacklistedVideoMethods.CountTotal
   list: BlacklistedVideoMethods.List
   listForApi: BlacklistedVideoMethods.ListForApi
@@ -39,7 +39,7 @@ export interface BlacklistedVideoInstance
   createdAt: Date
   updatedAt: Date
 
-  toFormatedJSON: BlacklistedVideoMethods.ToFormatedJSON
+  toFormattedJSON: BlacklistedVideoMethods.ToFormattedJSON
 }
 
 export interface BlacklistedVideoModel

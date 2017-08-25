@@ -12,7 +12,7 @@ import {
 } from './video-abuse-interface'
 
 let VideoAbuse: Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes>
-let toFormatedJSON: VideoAbuseMethods.ToFormatedJSON
+let toFormattedJSON: VideoAbuseMethods.ToFormattedJSON
 let listForApi: VideoAbuseMethods.ListForApi
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
@@ -57,7 +57,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listForApi
   ]
   const instanceMethods = [
-    toFormatedJSON
+    toFormattedJSON
   ]
   addMethodsToModel(VideoAbuse, classMethods, instanceMethods)
 
@@ -66,7 +66,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ------------------------------ METHODS ------------------------------
 
-toFormatedJSON = function (this: VideoAbuseInstance) {
+toFormattedJSON = function (this: VideoAbuseInstance) {
   let reporterPodHost
 
   if (this.Pod) {

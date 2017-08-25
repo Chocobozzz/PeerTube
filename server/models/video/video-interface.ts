@@ -6,17 +6,17 @@ import { TagAttributes, TagInstance } from './tag-interface'
 import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 
 // Don't use barrel, import just what we need
-import { Video as FormatedVideo } from '../../../shared/models/videos/video.model'
+import { Video as FormattedVideo } from '../../../shared/models/videos/video.model'
 import { ResultList } from '../../../shared/models/result-list.model'
 
-export type FormatedRemoteVideoFile = {
+export type FormattedRemoteVideoFile = {
   infoHash: string
   resolution: number
   extname: string
   size: number
 }
 
-export type FormatedAddRemoteVideo = {
+export type FormattedAddRemoteVideo = {
   uuid: string
   name: string
   category: number
@@ -33,10 +33,10 @@ export type FormatedAddRemoteVideo = {
   views: number
   likes: number
   dislikes: number
-  files: FormatedRemoteVideoFile[]
+  files: FormattedRemoteVideoFile[]
 }
 
-export type FormatedUpdateRemoteVideo = {
+export type FormattedUpdateRemoteVideo = {
   uuid: string
   name: string
   category: number
@@ -52,14 +52,14 @@ export type FormatedUpdateRemoteVideo = {
   views: number
   likes: number
   dislikes: number
-  files: FormatedRemoteVideoFile[]
+  files: FormattedRemoteVideoFile[]
 }
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string
   export type GetPreviewName = (this: VideoInstance) => string
   export type IsOwned = (this: VideoInstance) => boolean
-  export type ToFormatedJSON = (this: VideoInstance) => FormatedVideo
+  export type ToFormattedJSON = (this: VideoInstance) => FormattedVideo
 
   export type GenerateMagnetUri = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type GetTorrentFileName = (this: VideoInstance, videoFile: VideoFileInstance) => string
@@ -69,8 +69,8 @@ export namespace VideoMethods {
   export type GetVideoFilePath = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type CreateTorrentAndSetInfoHash = (this: VideoInstance, videoFile: VideoFileInstance) => Promise<void>
 
-  export type ToAddRemoteJSON = (this: VideoInstance) => Promise<FormatedAddRemoteVideo>
-  export type ToUpdateRemoteJSON = (this: VideoInstance) => FormatedUpdateRemoteVideo
+  export type ToAddRemoteJSON = (this: VideoInstance) => Promise<FormattedAddRemoteVideo>
+  export type ToUpdateRemoteJSON = (this: VideoInstance) => FormattedUpdateRemoteVideo
 
   export type TranscodeVideofile = (this: VideoInstance, inputVideoFile: VideoFileInstance) => Promise<void>
 
@@ -159,7 +159,7 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   removeThumbnail: VideoMethods.RemoveThumbnail
   removeTorrent: VideoMethods.RemoveTorrent
   toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
-  toFormatedJSON: VideoMethods.ToFormatedJSON
+  toFormattedJSON: VideoMethods.ToFormattedJSON
   toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
   transcodeVideofile: VideoMethods.TranscodeVideofile
 

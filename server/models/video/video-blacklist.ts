@@ -9,7 +9,7 @@ import {
 } from './video-blacklist-interface'
 
 let BlacklistedVideo: Sequelize.Model<BlacklistedVideoInstance, BlacklistedVideoAttributes>
-let toFormatedJSON: BlacklistedVideoMethods.ToFormatedJSON
+let toFormattedJSON: BlacklistedVideoMethods.ToFormattedJSON
 let countTotal: BlacklistedVideoMethods.CountTotal
 let list: BlacklistedVideoMethods.List
 let listForApi: BlacklistedVideoMethods.ListForApi
@@ -39,7 +39,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     loadByVideoId
   ]
   const instanceMethods = [
-    toFormatedJSON
+    toFormattedJSON
   ]
   addMethodsToModel(BlacklistedVideo, classMethods, instanceMethods)
 
@@ -48,7 +48,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ------------------------------ METHODS ------------------------------
 
-toFormatedJSON = function (this: BlacklistedVideoInstance) {
+toFormattedJSON = function (this: BlacklistedVideoInstance) {
   return {
     id: this.id,
     videoId: this.videoId,

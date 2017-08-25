@@ -13,7 +13,7 @@ import {
 } from './pod-interface'
 
 let Pod: Sequelize.Model<PodInstance, PodAttributes>
-let toFormatedJSON: PodMethods.ToFormatedJSON
+let toFormattedJSON: PodMethods.ToFormattedJSON
 let countAll: PodMethods.CountAll
 let incrementScores: PodMethods.IncrementScores
 let list: PodMethods.List
@@ -86,7 +86,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     updatePodsScore,
     removeAll
   ]
-  const instanceMethods = [ toFormatedJSON ]
+  const instanceMethods = [ toFormattedJSON ]
   addMethodsToModel(Pod, classMethods, instanceMethods)
 
   return Pod
@@ -94,7 +94,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
 // ------------------------------ METHODS ------------------------------
 
-toFormatedJSON = function (this: PodInstance) {
+toFormattedJSON = function (this: PodInstance) {
   const json = {
     id: this.id,
     host: this.host,

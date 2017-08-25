@@ -21,7 +21,7 @@ import {
 
 let User: Sequelize.Model<UserInstance, UserAttributes>
 let isPasswordMatch: UserMethods.IsPasswordMatch
-let toFormatedJSON: UserMethods.ToFormatedJSON
+let toFormattedJSON: UserMethods.ToFormattedJSON
 let isAdmin: UserMethods.IsAdmin
 let countTotal: UserMethods.CountTotal
 let getByUsername: UserMethods.GetByUsername
@@ -108,7 +108,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
   ]
   const instanceMethods = [
     isPasswordMatch,
-    toFormatedJSON,
+    toFormattedJSON,
     isAdmin
   ]
   addMethodsToModel(User, classMethods, instanceMethods)
@@ -129,7 +129,7 @@ isPasswordMatch = function (this: UserInstance, password: string) {
   return comparePassword(password, this.password)
 }
 
-toFormatedJSON = function (this: UserInstance) {
+toFormattedJSON = function (this: UserInstance) {
   return {
     id: this.id,
     username: this.username,

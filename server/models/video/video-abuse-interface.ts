@@ -5,10 +5,10 @@ import { PodInstance } from '../pod'
 import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
-import { VideoAbuse as FormatedVideoAbuse } from '../../../shared/models/videos/video-abuse.model'
+import { VideoAbuse as FormattedVideoAbuse } from '../../../shared/models/videos/video-abuse.model'
 
 export namespace VideoAbuseMethods {
-  export type ToFormatedJSON = (this: VideoAbuseInstance) => FormatedVideoAbuse
+  export type ToFormattedJSON = (this: VideoAbuseInstance) => FormattedVideoAbuse
 
   export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoAbuseInstance> >
 }
@@ -30,7 +30,7 @@ export interface VideoAbuseInstance extends VideoAbuseClass, VideoAbuseAttribute
 
   Pod: PodInstance
 
-  toFormatedJSON: VideoAbuseMethods.ToFormatedJSON
+  toFormattedJSON: VideoAbuseMethods.ToFormattedJSON
 }
 
 export interface VideoAbuseModel extends VideoAbuseClass, Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes> {}

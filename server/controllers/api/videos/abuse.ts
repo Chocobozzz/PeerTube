@@ -4,7 +4,7 @@ import { database as db } from '../../../initializers/database'
 import * as friends from '../../../lib/friends'
 import {
   logger,
-  getFormatedObjects,
+  getFormattedObjects,
   retryTransactionWrapper
 } from '../../../helpers'
 import {
@@ -46,7 +46,7 @@ export {
 
 function listVideoAbuses (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort)
-    .then(result => res.json(getFormatedObjects(result.data, result.total)))
+    .then(result => res.json(getFormattedObjects(result.data, result.total)))
     .catch(err => next(err))
 }
 

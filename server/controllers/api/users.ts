@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { database as db } from '../../initializers/database'
 import { USER_ROLES } from '../../initializers'
-import { logger, getFormatedObjects } from '../../helpers'
+import { logger, getFormattedObjects } from '../../helpers'
 import {
   authenticate,
   ensureIsAdmin,
@@ -17,7 +17,7 @@ import {
   setUsersSort,
   token
 } from '../../middlewares'
-import { UserVideoRate as FormatedUserVideoRate, UserCreate, UserUpdate } from '../../../shared'
+import { UserVideoRate as FormattedUserVideoRate, UserCreate, UserUpdate } from '../../../shared'
 
 const usersRouter = express.Router()
 
@@ -95,7 +95,7 @@ function createUser (req: express.Request, res: express.Response, next: express.
 
 function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.User.loadByUsername(res.locals.oauth.token.user.username)
-    .then(user => res.json(user.toFormatedJSON()))
+    .then(user => res.json(user.toFormattedJSON()))
     .catch(err => next(err))
 }
 
@@ -106,7 +106,7 @@ function getUserVideoRating (req: express.Request, res: express.Response, next: 
   db.UserVideoRate.load(userId, videoId, null)
     .then(ratingObj => {
       const rating = ratingObj ? ratingObj.type : 'none'
-      const json: FormatedUserVideoRate = {
+      const json: FormattedUserVideoRate = {
         videoId,
         rating
       }
@@ -118,7 +118,7 @@ function getUserVideoRating (req: express.Request, res: express.Response, next: 
 function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.User.listForApi(req.query.start, req.query.count, req.query.sort)
     .then(resultList => {
-      res.json(getFormatedObjects(resultList.data, resultList.total))
+      res.json(getFormattedObjects(resultList.data, resultList.total))
     })
     .catch(err => next(err))
 }

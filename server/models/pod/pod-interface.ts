@@ -2,10 +2,10 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
-import { Pod as FormatedPod } from '../../../shared/models/pods/pod.model'
+import { Pod as FormattedPod } from '../../../shared/models/pods/pod.model'
 
 export namespace PodMethods {
-  export type ToFormatedJSON = (this: PodInstance) => FormatedPod
+  export type ToFormattedJSON = (this: PodInstance) => FormattedPod
 
   export type CountAll = () => Promise<number>
 
@@ -53,7 +53,7 @@ export interface PodInstance extends PodClass, PodAttributes, Sequelize.Instance
   createdAt: Date
   updatedAt: Date
 
-  toFormatedJSON: PodMethods.ToFormatedJSON,
+  toFormattedJSON: PodMethods.ToFormattedJSON,
 }
 
 export interface PodModel extends PodClass, Sequelize.Model<PodInstance, PodAttributes> {}

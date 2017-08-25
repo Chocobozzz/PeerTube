@@ -36,7 +36,7 @@ import {
   logger,
   retryTransactionWrapper,
   generateRandomString,
-  getFormatedObjects,
+  getFormattedObjects,
   renamePromise
 } from '../../../helpers'
 import { TagInstance } from '../../../models'
@@ -386,12 +386,12 @@ function getVideo (req: express.Request, res: express.Response, next: express.Ne
   }
 
   // Do not wait the view system
-  res.json(videoInstance.toFormatedJSON())
+  res.json(videoInstance.toFormattedJSON())
 }
 
 function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.Video.listForApi(req.query.start, req.query.count, req.query.sort)
-    .then(result => res.json(getFormatedObjects(result.data, result.total)))
+    .then(result => res.json(getFormattedObjects(result.data, result.total)))
     .catch(err => next(err))
 }
 
@@ -408,6 +408,6 @@ function removeVideo (req: express.Request, res: express.Response, next: express
 
 function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   db.Video.searchAndPopulateAuthorAndPodAndTags(req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort)
-    .then(result => res.json(getFormatedObjects(result.data, result.total)))
+    .then(result => res.json(getFormattedObjects(result.data, result.total)))
     .catch(err => next(err))
 }

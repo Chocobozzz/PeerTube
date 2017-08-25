@@ -14,19 +14,19 @@ function generateRandomString (size: number) {
 }
 
 interface FormatableToJSON {
-  toFormatedJSON ()
+  toFormattedJSON ()
 }
 
-function getFormatedObjects<U, T extends FormatableToJSON> (objects: T[], objectsTotal: number) {
-  const formatedObjects: U[] = []
+function getFormattedObjects<U, T extends FormatableToJSON> (objects: T[], objectsTotal: number) {
+  const formattedObjects: U[] = []
 
   objects.forEach(object => {
-    formatedObjects.push(object.toFormatedJSON())
+    formattedObjects.push(object.toFormattedJSON())
   })
 
   const res: ResultList<U> = {
     total: objectsTotal,
-    data: formatedObjects
+    data: formattedObjects
   }
 
   return res
@@ -52,6 +52,6 @@ function isSignupAllowed () {
 export {
   badRequest,
   generateRandomString,
-  getFormatedObjects,
+  getFormattedObjects,
   isSignupAllowed
 }

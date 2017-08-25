@@ -1,11 +1,11 @@
-import { RequestSchedulerStatsAttributes as FormatedRequestSchedulerStatsAttributes } from '../../../../../../shared'
+import { RequestSchedulerStatsAttributes as FormattedRequestSchedulerStatsAttributes } from '../../../../../../shared'
 
 export interface Request {
   request: any
   to: any
 }
 
-export class RequestSchedulerStatsAttributes implements FormatedRequestSchedulerStatsAttributes {
+export class RequestSchedulerStatsAttributes implements FormattedRequestSchedulerStatsAttributes {
   requestsLimitPods: number
   requestsLimitPerPod: number
   milliSecondsInterval: number

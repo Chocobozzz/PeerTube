@@ -52,7 +52,7 @@ let getThumbnailName: VideoMethods.GetThumbnailName
 let getPreviewName: VideoMethods.GetPreviewName
 let getTorrentFileName: VideoMethods.GetTorrentFileName
 let isOwned: VideoMethods.IsOwned
-let toFormatedJSON: VideoMethods.ToFormatedJSON
+let toFormattedJSON: VideoMethods.ToFormattedJSON
 let toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
 let toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
 let transcodeVideofile: VideoMethods.TranscodeVideofile
@@ -257,7 +257,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     removeThumbnail,
     removeTorrent,
     toAddRemoteJSON,
-    toFormatedJSON,
+    toFormattedJSON,
     toUpdateRemoteJSON,
     transcodeVideofile
   ]
@@ -414,7 +414,7 @@ generateMagnetUri = function (this: VideoInstance, videoFile: VideoFileInstance)
   return magnetUtil.encode(magnetHash)
 }
 
-toFormatedJSON = function (this: VideoInstance) {
+toFormattedJSON = function (this: VideoInstance) {
   let podHost
 
   if (this.Author.Pod) {

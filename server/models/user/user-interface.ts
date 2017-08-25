@@ -2,14 +2,14 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
-import { User as FormatedUser } from '../../../shared/models/users/user.model'
+import { User as FormattedUser } from '../../../shared/models/users/user.model'
 import { UserRole } from '../../../shared/models/users/user-role.type'
 import { ResultList } from '../../../shared/models/result-list.model'
 
 export namespace UserMethods {
   export type IsPasswordMatch = (this: UserInstance, password: string) => Promise<boolean>
 
-  export type ToFormatedJSON = (this: UserInstance) => FormatedUser
+  export type ToFormattedJSON = (this: UserInstance) => FormattedUser
   export type IsAdmin = (this: UserInstance) => boolean
 
   export type CountTotal = () => Promise<number>
@@ -29,7 +29,7 @@ export namespace UserMethods {
 
 export interface UserClass {
   isPasswordMatch: UserMethods.IsPasswordMatch,
-  toFormatedJSON: UserMethods.ToFormatedJSON,
+  toFormattedJSON: UserMethods.ToFormattedJSON,
   isAdmin: UserMethods.IsAdmin,
 
   countTotal: UserMethods.CountTotal,
@@ -55,7 +55,7 @@ export interface UserInstance extends UserClass, UserAttributes, Sequelize.Insta
   updatedAt: Date
 
   isPasswordMatch: UserMethods.IsPasswordMatch
-  toFormatedJSON: UserMethods.ToFormatedJSON
+  toFormattedJSON: UserMethods.ToFormattedJSON
   isAdmin: UserMethods.IsAdmin
 }
 
