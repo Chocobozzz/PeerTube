@@ -198,7 +198,7 @@ loadById = function (id: number) {
 loadByUsername = function (username: string) {
   const query = {
     where: {
-      username: username
+      username
     }
   }
 
@@ -212,5 +212,6 @@ loadByUsernameOrEmail = function (username: string, email: string) {
     }
   }
 
-  return User.findOne(query)
+  // FIXME: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18387
+  return (User as any).findOne(query)
 }

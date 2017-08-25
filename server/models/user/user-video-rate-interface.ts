@@ -13,6 +13,8 @@ export interface UserVideoRateClass {
 
 export interface UserVideoRateAttributes {
   type: VideoRateType
+  userId: number
+  videoId: number
 }
 
 export interface UserVideoRateInstance extends UserVideoRateClass, UserVideoRateAttributes, Sequelize.Instance<UserVideoRateAttributes> {

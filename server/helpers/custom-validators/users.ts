@@ -34,13 +34,11 @@ export {
   isUserDisplayNSFWValid
 }
 
-declare global {
-  namespace ExpressValidator {
-    export interface Validator {
-      isUserPasswordValid,
-      isUserRoleValid,
-      isUserUsernameValid,
-      isUserDisplayNSFWValid
-    }
+declare module 'express-validator' {
+  export interface Validator {
+    isUserPasswordValid,
+    isUserRoleValid,
+    isUserUsernameValid,
+    isUserDisplayNSFWValid
   }
 }

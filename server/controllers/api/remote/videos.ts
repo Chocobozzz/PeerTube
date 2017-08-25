@@ -17,7 +17,7 @@ import {
 } from '../../../middlewares'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { quickAndDirtyUpdatesVideoToFriends } from '../../../lib'
-import { PodInstance, VideoInstance } from '../../../models'
+import { PodInstance } from '../../../models'
 import {
   RemoteVideoRequest,
   RemoteVideoCreateData,

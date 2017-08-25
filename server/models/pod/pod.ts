@@ -143,7 +143,7 @@ list = function () {
 }
 
 listAllIds = function (transaction: Sequelize.Transaction) {
-  const query: Sequelize.FindOptions = {
+  const query = {
     attributes: [ 'id' ],
     transaction
   }
@@ -170,9 +170,7 @@ listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, ta
       limit: limit,
       where: {
         id: {
-          $in: [
-            Sequelize.literal(`SELECT DISTINCT "${tableWithPods}"."podId" FROM "${tableWithPods}" ${tableWithPodsJoins}`)
-          ]
+          $in: Sequelize.literal(`(SELECT DISTINCT "${tableWithPods}"."podId" FROM "${tableWithPods}" ${tableWithPodsJoins})`)
         }
       }
     }

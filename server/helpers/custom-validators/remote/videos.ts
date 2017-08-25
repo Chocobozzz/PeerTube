@@ -101,13 +101,11 @@ export {
   isEachRemoteRequestVideosEventsValid
 }
 
-declare global {
-  namespace ExpressValidator {
-    export interface Validator {
-      isEachRemoteRequestVideosValid,
-      isEachRemoteRequestVideosQaduValid,
-      isEachRemoteRequestVideosEventsValid
-    }
+declare module 'express-validator' {
+  export interface Validator {
+    isEachRemoteRequestVideosValid,
+    isEachRemoteRequestVideosQaduValid,
+    isEachRemoteRequestVideosEventsValid
   }
 }
 

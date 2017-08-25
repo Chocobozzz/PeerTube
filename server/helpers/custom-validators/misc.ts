@@ -13,11 +13,9 @@ export {
   isArray
 }
 
-declare global {
-  namespace ExpressValidator {
-    export interface Validator {
-      exists,
-      isArray
-    }
+declare module 'express-validator' {
+  export interface Validator {
+    exists,
+    isArray
   }
 }

@@ -61,8 +61,7 @@ const storage = multer.diskStorage({
     else if (file.mimetype === 'video/ogg') extension = 'ogv'
     generateRandomString(16)
       .then(randomString => {
-        const filename = randomString
-        cb(null, filename + '.' + extension)
+        cb(null, randomString + '.' + extension)
       })
       .catch(err => {
         logger.error('Cannot generate random string for file name.', err)
@@ -128,15 +127,15 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function listVideoCategories (req: express.Request, res: express.Response, next: express.NextFunction) {
+function listVideoCategories (req: express.Request, res: express.Response) {
   res.json(VIDEO_CATEGORIES)
 }
 
-function listVideoLicences (req: express.Request, res: express.Response, next: express.NextFunction) {
+function listVideoLicences (req: express.Request, res: express.Response) {
   res.json(VIDEO_LICENCES)
 }
 
-function listVideoLanguages (req: express.Request, res: express.Response, next: express.NextFunction) {
+function listVideoLanguages (req: express.Request, res: express.Response) {
   res.json(VIDEO_LANGUAGES)
 }
 
@@ -144,7 +143,7 @@ function listVideoLanguages (req: express.Request, res: express.Response, next: 
 // We need this because we run the transaction in SERIALIZABLE isolation that can fail
 function addVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
-    arguments: [ req, res, req.files.videofile[0] ],
+    arguments: [ req, res, req.files['videofile'][0] ],
     errorMessage: 'Cannot insert the video with many retries.'
   }
 
@@ -157,7 +156,7 @@ function addVideoRetryWrapper (req: express.Request, res: express.Response, next
 }
 
 function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
-  const videoInfos: VideoCreate = req.body
+  const videoInfo: VideoCreate = req.body
 
   return db.sequelize.transaction(t => {
     const user = res.locals.oauth.token.User
@@ -169,21 +168,21 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
 
     return db.Author.findOrCreateAuthor(name, podId, userId, t)
       .then(author => {
-        const tags = videoInfos.tags
+        const tags = videoInfo.tags
         if (!tags) return { author, tagInstances: undefined }
 
         return db.Tag.findOrCreateTags(tags, t).then(tagInstances => ({ author, tagInstances }))
       })
       .then(({ author, tagInstances }) => {
         const videoData = {
-          name: videoInfos.name,
+          name: videoInfo.name,
           remote: false,
           extname: extname(videoPhysicalFile.filename),
-          category: videoInfos.category,
-          licence: videoInfos.licence,
-          language: videoInfos.language,
-          nsfw: videoInfos.nsfw,
-          description: videoInfos.description,
+          category: videoInfo.category,
+          licence: videoInfo.licence,
+          language: videoInfo.language,
+          nsfw: videoInfo.nsfw,
+          description: videoInfo.description,
           duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
           authorId: author.id
         }
@@ -240,7 +239,7 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
 
         return video.save(options)
           .then(videoCreated => {
-            // Do not forget to add Author informations to the created video
+            // Do not forget to add Author information to the created video
             videoCreated.Author = author
 
             return { tagInstances, video: videoCreated, videoFile }
@@ -265,7 +264,7 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           })
       })
       .then(video => {
-        // Let transcoding job send the video to friends because the videofile extension might change
+        // Let transcoding job send the video to friends because the video file extension might change
         if (CONFIG.TRANSCODING.ENABLED === true) return undefined
 
         return video.toAddRemoteJSON()
@@ -275,7 +274,7 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           })
       })
   })
-  .then(() => logger.info('Video with name %s created.', videoInfos.name))
+  .then(() => logger.info('Video with name %s created.', videoInfo.name))
   .catch((err: Error) => {
     logger.debug('Cannot insert the video.', err)
     throw err
@@ -299,14 +298,14 @@ function updateVideoRetryWrapper (req: express.Request, res: express.Response, n
 function updateVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
-  const videoInfosToUpdate: VideoUpdate = req.body
+  const videoInfoToUpdate: VideoUpdate = req.body
 
   return db.sequelize.transaction(t => {
     let tagsPromise: Promise<TagInstance[]>
-    if (!videoInfosToUpdate.tags) {
+    if (!videoInfoToUpdate.tags) {
       tagsPromise = Promise.resolve(null)
     } else {
-      tagsPromise = db.Tag.findOrCreateTags(videoInfosToUpdate.tags, t)
+      tagsPromise = db.Tag.findOrCreateTags(videoInfoToUpdate.tags, t)
     }
 
     return tagsPromise
@@ -315,12 +314,12 @@ function updateVideo (req: express.Request, res: express.Response) {
           transaction: t
         }
 
-        if (videoInfosToUpdate.name !== undefined) videoInstance.set('name', videoInfosToUpdate.name)
-        if (videoInfosToUpdate.category !== undefined) videoInstance.set('category', videoInfosToUpdate.category)
-        if (videoInfosToUpdate.licence !== undefined) videoInstance.set('licence', videoInfosToUpdate.licence)
-        if (videoInfosToUpdate.language !== undefined) videoInstance.set('language', videoInfosToUpdate.language)
-        if (videoInfosToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfosToUpdate.nsfw)
-        if (videoInfosToUpdate.description !== undefined) videoInstance.set('description', videoInfosToUpdate.description)
+        if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
+        if (videoInfoToUpdate.category !== undefined) videoInstance.set('category', videoInfoToUpdate.category)
+        if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
+        if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
+        if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
+        if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
 
         return videoInstance.save(options).then(() => tagInstances)
       })
@@ -360,7 +359,7 @@ function updateVideo (req: express.Request, res: express.Response) {
   })
 }
 
-function getVideo (req: express.Request, res: express.Response, next: express.NextFunction) {
+function getVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
   if (videoInstance.isOwned()) {

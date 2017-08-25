@@ -121,6 +121,7 @@ export interface VideoClass {
 }
 
 export interface VideoAttributes {
+  id?: number
   uuid?: string
   name: string
   category: number
@@ -140,7 +141,6 @@ export interface VideoAttributes {
 }
 
 export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.Instance<VideoAttributes> {
-  id: number
   createdAt: Date
   updatedAt: Date
 

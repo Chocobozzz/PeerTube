@@ -643,7 +643,7 @@ list = function () {
 }
 
 listForApi = function (start: number, count: number, sort: string) {
-  // Exclude Blakclisted videos from the list
+  // Exclude blacklisted videos from the list
   const query = {
     distinct: true,
     offset: start,
@@ -807,7 +807,7 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
     model: Video['sequelize'].models.VideoFile
   }
 
-  const query: Sequelize.FindOptions = {
+  const query: Sequelize.FindOptions<VideoAttributes> = {
     distinct: true,
     where: createBaseVideosWhere(),
     offset: start,

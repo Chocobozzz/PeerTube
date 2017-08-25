@@ -66,7 +66,7 @@ function associate (models) {
 }
 
 load = function (userId: number, videoId: number, transaction: Sequelize.Transaction) {
-  const options: Sequelize.FindOptions = {
+  const options: Sequelize.FindOptions<UserVideoRateAttributes> = {
     where: {
       userId,
       videoId

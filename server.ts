@@ -160,7 +160,7 @@ function onDatabaseInitDone () {
         VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
 
         logger.info('Server listening on port %d', port)
-        logger.info('Webserver: %s', CONFIG.WEBSERVER.URL)
+        logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
       })
     })
 }

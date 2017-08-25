@@ -35,7 +35,7 @@ describe('Test config', function () {
 
       const data = res.body
 
-      expect(data.signup.allowed).to.be.truthy
+      expect(data.signup.allowed).to.be.true
 
       done()
     })

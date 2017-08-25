@@ -24,7 +24,7 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
   logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
   checkErrors(req, res, () => {
-    const videoFile = req.files.videofile[0]
+    const videoFile = req.files['videofile'][0]
 
     db.Video.getDurationFromFile(videoFile.path)
       .then(duration => {

@@ -168,35 +168,33 @@ export {
   isVideoFileResolutionValid
 }
 
-declare global {
-  namespace ExpressValidator {
-    export interface Validator {
-      isVideoIdOrUUIDValid,
-      isVideoAuthorValid,
-      isVideoDateValid,
-      isVideoCategoryValid,
-      isVideoLicenceValid,
-      isVideoLanguageValid,
-      isVideoNSFWValid,
-      isVideoDescriptionValid,
-      isVideoDurationValid,
-      isVideoInfoHashValid,
-      isVideoNameValid,
-      isVideoTagsValid,
-      isVideoThumbnailValid,
-      isVideoThumbnailDataValid,
-      isVideoExtnameValid,
-      isVideoUUIDValid,
-      isVideoAbuseReasonValid,
-      isVideoAbuseReporterUsernameValid,
-      isVideoFile,
-      isVideoViewsValid,
-      isVideoLikesValid,
-      isVideoRatingTypeValid,
-      isVideoDislikesValid,
-      isVideoEventCountValid,
-      isVideoFileSizeValid,
-      isVideoFileResolutionValid
-    }
+declare module 'express-validator' {
+  export interface Validator {
+    isVideoIdOrUUIDValid,
+    isVideoAuthorValid,
+    isVideoDateValid,
+    isVideoCategoryValid,
+    isVideoLicenceValid,
+    isVideoLanguageValid,
+    isVideoNSFWValid,
+    isVideoDescriptionValid,
+    isVideoDurationValid,
+    isVideoInfoHashValid,
+    isVideoNameValid,
+    isVideoTagsValid,
+    isVideoThumbnailValid,
+    isVideoThumbnailDataValid,
+    isVideoExtnameValid,
+    isVideoUUIDValid,
+    isVideoAbuseReasonValid,
+    isVideoAbuseReporterUsernameValid,
+    isVideoFile,
+    isVideoViewsValid,
+    isVideoLikesValid,
+    isVideoRatingTypeValid,
+    isVideoDislikesValid,
+    isVideoEventCountValid,
+    isVideoFileSizeValid,
+    isVideoFileResolutionValid
   }
 }
