@@ -2,13 +2,12 @@ import * as safeBuffer from 'safe-buffer'
 const Buffer = safeBuffer.Buffer
 import * as ffmpeg from 'fluent-ffmpeg'
 import * as magnetUtil from 'magnet-uri'
-import { map, values } from 'lodash'
+import { map } from 'lodash'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
-import { database as db } from '../../initializers/database'
 import { TagInstance } from './tag-interface'
 import {
   logger,
@@ -18,7 +17,6 @@ import {
   isVideoLanguageValid,
   isVideoNSFWValid,
   isVideoDescriptionValid,
-  isVideoInfoHashValid,
   isVideoDurationValid,
   readFileBufferPromise,
   unlinkPromise,
@@ -27,16 +25,17 @@ import {
   createTorrentPromise
 } from '../../helpers'
 import {
-  CONSTRAINTS_FIELDS,
   CONFIG,
   REMOTE_SCHEME,
   STATIC_PATHS,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  THUMBNAILS_SIZE
+  THUMBNAILS_SIZE,
+  VIDEO_FILE_RESOLUTIONS
 } from '../../initializers'
-import { JobScheduler, removeVideoToFriends } from '../../lib'
+import { removeVideoToFriends } from '../../lib'
+import { VideoFileInstance } from './video-file-interface'
 
 import { addMethodsToModel, getSort } from '../utils'
 import {
@@ -51,12 +50,16 @@ let generateMagnetUri: VideoMethods.GenerateMagnetUri
 let getVideoFilename: VideoMethods.GetVideoFilename
 let getThumbnailName: VideoMethods.GetThumbnailName
 let getPreviewName: VideoMethods.GetPreviewName
-let getTorrentName: VideoMethods.GetTorrentName
+let getTorrentFileName: VideoMethods.GetTorrentFileName
 let isOwned: VideoMethods.IsOwned
 let toFormatedJSON: VideoMethods.ToFormatedJSON
 let toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
 let toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
 let transcodeVideofile: VideoMethods.TranscodeVideofile
+let createPreview: VideoMethods.CreatePreview
+let createThumbnail: VideoMethods.CreateThumbnail
+let getVideoFilePath: VideoMethods.GetVideoFilePath
+let createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
 
 let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let getDurationFromFile: VideoMethods.GetDurationFromFile
@@ -71,6 +74,10 @@ let loadAndPopulateAuthor: VideoMethods.LoadAndPopulateAuthor
 let loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
 let loadByUUIDAndPopulateAuthorAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAuthorAndPodAndTags
 let searchAndPopulateAuthorAndPodAndTags: VideoMethods.SearchAndPopulateAuthorAndPodAndTags
+let removeThumbnail: VideoMethods.RemoveThumbnail
+let removePreview: VideoMethods.RemovePreview
+let removeFile: VideoMethods.RemoveFile
+let removeTorrent: VideoMethods.RemoveTorrent
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Video = sequelize.define<VideoInstance, VideoAttributes>('Video',
@@ -92,10 +99,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
             if (res === false) throw new Error('Video name is not valid.')
           }
         }
-      },
-      extname: {
-        type: DataTypes.ENUM(values(CONSTRAINTS_FIELDS.VIDEOS.EXTNAME)),
-        allowNull: false
       },
       category: {
         type: DataTypes.INTEGER,
@@ -145,16 +148,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
           descriptionValid: value => {
             const res = isVideoDescriptionValid(value)
             if (res === false) throw new Error('Video description is not valid.')
-          }
-        }
-      },
-      infoHash: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          infoHashValid: value => {
-            const res = isVideoInfoHashValid(value)
-            if (res === false) throw new Error('Video info hash is not valid.')
           }
         }
       },
@@ -216,9 +209,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
           fields: [ 'duration' ]
         },
         {
-          fields: [ 'infoHash' ]
-        },
-        {
           fields: [ 'views' ]
         },
         {
@@ -229,8 +219,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         }
       ],
       hooks: {
-        beforeValidate,
-        beforeCreate,
         afterDestroy
       }
     }
@@ -246,88 +234,36 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listOwnedAndPopulateAuthorAndTags,
     listOwnedByAuthor,
     load,
-    loadByUUID,
-    loadByHostAndUUID,
     loadAndPopulateAuthor,
     loadAndPopulateAuthorAndPodAndTags,
+    loadByHostAndUUID,
+    loadByUUID,
     loadByUUIDAndPopulateAuthorAndPodAndTags,
-    searchAndPopulateAuthorAndPodAndTags,
-    removeFromBlacklist
+    searchAndPopulateAuthorAndPodAndTags
   ]
   const instanceMethods = [
+    createPreview,
+    createThumbnail,
+    createTorrentAndSetInfoHash,
     generateMagnetUri,
-    getVideoFilename,
-    getThumbnailName,
     getPreviewName,
-    getTorrentName,
+    getThumbnailName,
+    getTorrentFileName,
+    getVideoFilename,
+    getVideoFilePath,
     isOwned,
-    toFormatedJSON,
+    removeFile,
+    removePreview,
+    removeThumbnail,
+    removeTorrent,
     toAddRemoteJSON,
+    toFormatedJSON,
     toUpdateRemoteJSON,
     transcodeVideofile
   ]
   addMethodsToModel(Video, classMethods, instanceMethods)
 
   return Video
-}
-
-function beforeValidate (video: VideoInstance) {
-  // Put a fake infoHash if it does not exists yet
-  if (video.isOwned() && !video.infoHash) {
-    // 40 hexa length
-    video.infoHash = '0123456789abcdef0123456789abcdef01234567'
-  }
-}
-
-function beforeCreate (video: VideoInstance, options: { transaction: Sequelize.Transaction }) {
-  if (video.isOwned()) {
-    const videoPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
-    const tasks = []
-
-    tasks.push(
-      createTorrentFromVideo(video, videoPath),
-      createThumbnail(video, videoPath),
-      createPreview(video, videoPath)
-    )
-
-    if (CONFIG.TRANSCODING.ENABLED === true) {
-      // Put uuid because we don't have id auto incremented for now
-      const dataInput = {
-        videoUUID: video.uuid
-      }
-
-      tasks.push(
-        JobScheduler.Instance.createJob(options.transaction, 'videoTranscoder', dataInput)
-      )
-    }
-
-    return Promise.all(tasks)
-  }
-
-  return Promise.resolve()
-}
-
-function afterDestroy (video: VideoInstance) {
-  const tasks = []
-
-  tasks.push(
-    removeThumbnail(video)
-  )
-
-  if (video.isOwned()) {
-    const removeVideoToFriendsParams = {
-      uuid: video.uuid
-    }
-
-    tasks.push(
-      removeFile(video),
-      removeTorrent(video),
-      removePreview(video),
-      removeVideoToFriends(removeVideoToFriendsParams)
-    )
-  }
-
-  return Promise.all(tasks)
 }
 
 // ------------------------------ METHODS ------------------------------
@@ -354,37 +290,46 @@ function associate (models) {
     },
     onDelete: 'cascade'
   })
+
+  Video.hasMany(models.VideoFile, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
 }
 
-generateMagnetUri = function (this: VideoInstance) {
-  let baseUrlHttp
-  let baseUrlWs
+function afterDestroy (video: VideoInstance) {
+  const tasks = []
 
-  if (this.isOwned()) {
-    baseUrlHttp = CONFIG.WEBSERVER.URL
-    baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
-  } else {
-    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + this.Author.Pod.host
-    baseUrlWs = REMOTE_SCHEME.WS + '://' + this.Author.Pod.host
+  tasks.push(
+    video.removeThumbnail()
+  )
+
+  if (video.isOwned()) {
+    const removeVideoToFriendsParams = {
+      uuid: video.uuid
+    }
+
+    tasks.push(
+      video.removePreview(),
+      removeVideoToFriends(removeVideoToFriendsParams)
+    )
+
+    // TODO: check files is populated
+    video.VideoFiles.forEach(file => {
+      video.removeFile(file),
+      video.removeTorrent(file)
+    })
   }
 
-  const xs = baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentName()
-  const announce = [ baseUrlWs + '/tracker/socket' ]
-  const urlList = [ baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename() ]
-
-  const magnetHash = {
-    xs,
-    announce,
-    urlList,
-    infoHash: this.infoHash,
-    name: this.name
-  }
-
-  return magnetUtil.encode(magnetHash)
+  return Promise.all(tasks)
 }
 
-getVideoFilename = function (this: VideoInstance) {
-  return this.uuid + this.extname
+getVideoFilename = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  // return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + videoFile.extname
+  return this.uuid + videoFile.extname
 }
 
 getThumbnailName = function (this: VideoInstance) {
@@ -398,13 +343,75 @@ getPreviewName = function (this: VideoInstance) {
   return this.uuid + extension
 }
 
-getTorrentName = function (this: VideoInstance) {
+getTorrentFileName = function (this: VideoInstance, videoFile: VideoFileInstance) {
   const extension = '.torrent'
+  // return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + extension
   return this.uuid + extension
 }
 
 isOwned = function (this: VideoInstance) {
   return this.remote === false
+}
+
+createPreview = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  return generateImage(this, this.getVideoFilePath(videoFile), CONFIG.STORAGE.PREVIEWS_DIR, this.getPreviewName(), null)
+}
+
+createThumbnail = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  return generateImage(this, this.getVideoFilePath(videoFile), CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName(), THUMBNAILS_SIZE)
+}
+
+getVideoFilePath = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  return join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
+}
+
+createTorrentAndSetInfoHash = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  const options = {
+    announceList: [
+      [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
+    ],
+    urlList: [
+      CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+    ]
+  }
+
+  return createTorrentPromise(this.getVideoFilePath(videoFile), options)
+    .then(torrent => {
+      const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
+      return writeFilePromise(filePath, torrent).then(() => torrent)
+    })
+    .then(torrent => {
+      const parsedTorrent = parseTorrent(torrent)
+
+      videoFile.infoHash = parsedTorrent.infoHash
+    })
+}
+
+generateMagnetUri = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  let baseUrlHttp
+  let baseUrlWs
+
+  if (this.isOwned()) {
+    baseUrlHttp = CONFIG.WEBSERVER.URL
+    baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
+  } else {
+    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + this.Author.Pod.host
+    baseUrlWs = REMOTE_SCHEME.WS + '://' + this.Author.Pod.host
+  }
+
+  const xs = baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
+  const announce = [ baseUrlWs + '/tracker/socket' ]
+  const urlList = [ baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile) ]
+
+  const magnetHash = {
+    xs,
+    announce,
+    urlList,
+    infoHash: videoFile.infoHash,
+    name: this.name
+  }
+
+  return magnetUtil.encode(magnetHash)
 }
 
 toFormatedJSON = function (this: VideoInstance) {
@@ -443,7 +450,6 @@ toFormatedJSON = function (this: VideoInstance) {
     description: this.description,
     podHost,
     isLocal: this.isOwned(),
-    magnetUri: this.generateMagnetUri(),
     author: this.Author.name,
     duration: this.duration,
     views: this.views,
@@ -453,8 +459,23 @@ toFormatedJSON = function (this: VideoInstance) {
     thumbnailPath: join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName()),
     previewPath: join(STATIC_PATHS.PREVIEWS, this.getPreviewName()),
     createdAt: this.createdAt,
-    updatedAt: this.updatedAt
+    updatedAt: this.updatedAt,
+    files: []
   }
+
+  this.VideoFiles.forEach(videoFile => {
+    let resolutionLabel = VIDEO_FILE_RESOLUTIONS[videoFile.resolution]
+    if (!resolutionLabel) resolutionLabel = 'Unknown'
+
+    const videoFileJson = {
+      resolution: videoFile.resolution,
+      resolutionLabel,
+      magnetUri: this.generateMagnetUri(videoFile),
+      size: videoFile.size
+    }
+
+    json.files.push(videoFileJson)
+  })
 
   return json
 }
@@ -472,18 +493,26 @@ toAddRemoteJSON = function (this: VideoInstance) {
       language: this.language,
       nsfw: this.nsfw,
       description: this.description,
-      infoHash: this.infoHash,
       author: this.Author.name,
       duration: this.duration,
       thumbnailData: thumbnailData.toString('binary'),
       tags: map<TagInstance, string>(this.Tags, 'name'),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      extname: this.extname,
       views: this.views,
       likes: this.likes,
-      dislikes: this.dislikes
+      dislikes: this.dislikes,
+      files: []
     }
+
+    this.VideoFiles.forEach(videoFile => {
+      remoteVideo.files.push({
+        infoHash: videoFile.infoHash,
+        resolution: videoFile.resolution,
+        extname: videoFile.extname,
+        size: videoFile.size
+      })
+    })
 
     return remoteVideo
   })
@@ -498,28 +527,34 @@ toUpdateRemoteJSON = function (this: VideoInstance) {
     language: this.language,
     nsfw: this.nsfw,
     description: this.description,
-    infoHash: this.infoHash,
     author: this.Author.name,
     duration: this.duration,
     tags: map<TagInstance, string>(this.Tags, 'name'),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
-    extname: this.extname,
     views: this.views,
     likes: this.likes,
-    dislikes: this.dislikes
+    dislikes: this.dislikes,
+    files: []
   }
+
+  this.VideoFiles.forEach(videoFile => {
+    json.files.push({
+      infoHash: videoFile.infoHash,
+      resolution: videoFile.resolution,
+      extname: videoFile.extname,
+      size: videoFile.size
+    })
+  })
 
   return json
 }
 
-transcodeVideofile = function (this: VideoInstance) {
-  const video = this
-
+transcodeVideofile = function (this: VideoInstance, inputVideoFile: VideoFileInstance) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const newExtname = '.mp4'
-  const videoInputPath = join(videosDirectory, video.getVideoFilename())
-  const videoOutputPath = join(videosDirectory, video.id + '-transcoded' + newExtname)
+  const videoInputPath = join(videosDirectory, this.getVideoFilename(inputVideoFile))
+  const videoOutputPath = join(videosDirectory, this.id + '-transcoded' + newExtname)
 
   return new Promise<void>((res, rej) => {
     ffmpeg(videoInputPath)
@@ -533,30 +568,48 @@ transcodeVideofile = function (this: VideoInstance) {
         return unlinkPromise(videoInputPath)
           .then(() => {
             // Important to do this before getVideoFilename() to take in account the new file extension
-            video.set('extname', newExtname)
+            inputVideoFile.set('extname', newExtname)
 
-            const newVideoPath = join(videosDirectory, video.getVideoFilename())
-            return renamePromise(videoOutputPath, newVideoPath)
+            return renamePromise(videoOutputPath, this.getVideoFilePath(inputVideoFile))
           })
           .then(() => {
-            const newVideoPath = join(videosDirectory, video.getVideoFilename())
-            return createTorrentFromVideo(video, newVideoPath)
+            return this.createTorrentAndSetInfoHash(inputVideoFile)
           })
           .then(() => {
-            return video.save()
+            return inputVideoFile.save()
           })
           .then(() => {
             return res()
           })
           .catch(err => {
-            // Autodesctruction...
-            video.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', err))
+            // Autodestruction...
+            this.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', err))
 
             return rej(err)
           })
       })
       .run()
   })
+}
+
+removeThumbnail = function (this: VideoInstance) {
+  const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName())
+  return unlinkPromise(thumbnailPath)
+}
+
+removePreview = function (this: VideoInstance) {
+  // Same name than video thumbnail
+  return unlinkPromise(CONFIG.STORAGE.PREVIEWS_DIR + this.getPreviewName())
+}
+
+removeFile = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
+  return unlinkPromise(filePath)
+}
+
+removeTorrent = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  const torrenPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
+  return unlinkPromise(torrenPath)
 }
 
 // ------------------------------ STATICS ------------------------------
@@ -582,7 +635,11 @@ getDurationFromFile = function (videoPath: string) {
 }
 
 list = function () {
-  return Video.findAll()
+  const query = {
+    include: [ Video['sequelize'].models.VideoFile ]
+  }
+
+  return Video.findAll(query)
 }
 
 listForApi = function (start: number, count: number, sort: string) {
@@ -597,8 +654,8 @@ listForApi = function (start: number, count: number, sort: string) {
         model: Video['sequelize'].models.Author,
         include: [ { model: Video['sequelize'].models.Pod, required: false } ]
       },
-
-      Video['sequelize'].models.Tag
+      Video['sequelize'].models.Tag,
+      Video['sequelize'].models.VideoFile
     ],
     where: createBaseVideosWhere()
   }
@@ -617,6 +674,9 @@ loadByHostAndUUID = function (fromHost: string, uuid: string) {
       uuid
     },
     include: [
+      {
+        model: Video['sequelize'].models.VideoFile
+      },
       {
         model: Video['sequelize'].models.Author,
         include: [
@@ -640,7 +700,11 @@ listOwnedAndPopulateAuthorAndTags = function () {
     where: {
       remote: false
     },
-    include: [ Video['sequelize'].models.Author, Video['sequelize'].models.Tag ]
+    include: [
+      Video['sequelize'].models.VideoFile,
+      Video['sequelize'].models.Author,
+      Video['sequelize'].models.Tag
+    ]
   }
 
   return Video.findAll(query)
@@ -652,6 +716,9 @@ listOwnedByAuthor = function (author: string) {
       remote: false
     },
     include: [
+      {
+        model: Video['sequelize'].models.VideoFile
+      },
       {
         model: Video['sequelize'].models.Author,
         where: {
@@ -672,14 +739,15 @@ loadByUUID = function (uuid: string) {
   const query = {
     where: {
       uuid
-    }
+    },
+    include: [ Video['sequelize'].models.VideoFile ]
   }
   return Video.findOne(query)
 }
 
 loadAndPopulateAuthor = function (id: number) {
   const options = {
-    include: [ Video['sequelize'].models.Author ]
+    include: [ Video['sequelize'].models.VideoFile, Video['sequelize'].models.Author ]
   }
 
   return Video.findById(id, options)
@@ -692,7 +760,8 @@ loadAndPopulateAuthorAndPodAndTags = function (id: number) {
         model: Video['sequelize'].models.Author,
         include: [ { model: Video['sequelize'].models.Pod, required: false } ]
       },
-      Video['sequelize'].models.Tag
+      Video['sequelize'].models.Tag,
+      Video['sequelize'].models.VideoFile
     ]
   }
 
@@ -709,7 +778,8 @@ loadByUUIDAndPopulateAuthorAndPodAndTags = function (uuid: string) {
         model: Video['sequelize'].models.Author,
         include: [ { model: Video['sequelize'].models.Pod, required: false } ]
       },
-      Video['sequelize'].models.Tag
+      Video['sequelize'].models.Tag,
+      Video['sequelize'].models.VideoFile
     ]
   }
 
@@ -733,6 +803,10 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
     model: Video['sequelize'].models.Tag
   }
 
+  const videoFileInclude: Sequelize.IncludeOptions = {
+    model: Video['sequelize'].models.VideoFile
+  }
+
   const query: Sequelize.FindOptions = {
     distinct: true,
     where: createBaseVideosWhere(),
@@ -743,8 +817,9 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
 
   // Make an exact search with the magnet
   if (field === 'magnetUri') {
-    const infoHash = magnetUtil.decode(value).infoHash
-    query.where['infoHash'] = infoHash
+    videoFileInclude.where = {
+      infoHash: magnetUtil.decode(value).infoHash
+    }
   } else if (field === 'tags') {
     const escapedValue = Video['sequelize'].escape('%' + value + '%')
     query.where['id'].$in = Video['sequelize'].literal(
@@ -777,7 +852,7 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
   }
 
   query.include = [
-    authorInclude, tagInclude
+    authorInclude, tagInclude, videoFileInclude
   ]
 
   return Video.findAndCountAll(query).then(({ rows, count }) => {
@@ -800,56 +875,6 @@ function createBaseVideosWhere () {
   }
 }
 
-function removeThumbnail (video: VideoInstance) {
-  const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName())
-  return unlinkPromise(thumbnailPath)
-}
-
-function removeFile (video: VideoInstance) {
-  const filePath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename())
-  return unlinkPromise(filePath)
-}
-
-function removeTorrent (video: VideoInstance) {
-  const torrenPath = join(CONFIG.STORAGE.TORRENTS_DIR, video.getTorrentName())
-  return unlinkPromise(torrenPath)
-}
-
-function removePreview (video: VideoInstance) {
-  // Same name than video thumnail
-  return unlinkPromise(CONFIG.STORAGE.PREVIEWS_DIR + video.getPreviewName())
-}
-
-function createTorrentFromVideo (video: VideoInstance, videoPath: string) {
-  const options = {
-    announceList: [
-      [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
-    ],
-    urlList: [
-      CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + video.getVideoFilename()
-    ]
-  }
-
-  return createTorrentPromise(videoPath, options)
-    .then(torrent => {
-      const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, video.getTorrentName())
-      return writeFilePromise(filePath, torrent).then(() => torrent)
-    })
-    .then(torrent => {
-      const parsedTorrent = parseTorrent(torrent)
-      video.set('infoHash', parsedTorrent.infoHash)
-      return video.validate()
-    })
-}
-
-function createPreview (video: VideoInstance, videoPath: string) {
-  return generateImage(video, videoPath, CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName(), null)
-}
-
-function createThumbnail (video: VideoInstance, videoPath: string) {
-  return generateImage(video, videoPath, CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName(), THUMBNAILS_SIZE)
-}
-
 function generateImage (video: VideoInstance, videoPath: string, folder: string, imageName: string, size: string) {
   const options = {
     filename: imageName,
@@ -866,18 +891,5 @@ function generateImage (video: VideoInstance, videoPath: string, folder: string,
       .on('error', rej)
       .on('end', () => res(imageName))
       .thumbnail(options)
-  })
-}
-
-function removeFromBlacklist (video: VideoInstance) {
-  // Find the blacklisted video
-  return db.BlacklistedVideo.loadByVideoId(video.id).then(video => {
-    // Not found the video, skip
-    if (!video) {
-      return null
-    }
-
-    // If we found the video, remove it from the blacklist
-    return video.destroy()
   })
 }

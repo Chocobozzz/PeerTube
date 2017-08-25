@@ -258,8 +258,6 @@ function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodI
         const videoData = {
           name: videoToCreateData.name,
           uuid: videoToCreateData.uuid,
-          extname: videoToCreateData.extname,
-          infoHash: videoToCreateData.infoHash,
           category: videoToCreateData.category,
           licence: videoToCreateData.licence,
           language: videoToCreateData.language,
@@ -288,6 +286,26 @@ function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodI
         }
 
         return video.save(options).then(videoCreated => ({ tagInstances, videoCreated }))
+      })
+      .then(({ tagInstances, videoCreated }) => {
+        const tasks = []
+        const options = {
+          transaction: t
+        }
+
+        videoToCreateData.files.forEach(fileData => {
+          const videoFileInstance = db.VideoFile.build({
+            extname: fileData.extname,
+            infoHash: fileData.infoHash,
+            resolution: fileData.resolution,
+            size: fileData.size,
+            videoId: videoCreated.id
+          })
+
+          tasks.push(videoFileInstance.save(options))
+        })
+
+        return Promise.all(tasks).then(() => ({ tagInstances, videoCreated }))
       })
       .then(({ tagInstances, videoCreated }) => {
         const options = {
@@ -343,6 +361,26 @@ function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, from
         videoInstance.set('dislikes', videoAttributesToUpdate.dislikes)
 
         return videoInstance.save(options).then(() => ({ videoInstance, tagInstances }))
+      })
+      .then(({ tagInstances, videoInstance }) => {
+        const tasks = []
+        const options = {
+          transaction: t
+        }
+
+        videoAttributesToUpdate.files.forEach(fileData => {
+          const videoFileInstance = db.VideoFile.build({
+            extname: fileData.extname,
+            infoHash: fileData.infoHash,
+            resolution: fileData.resolution,
+            size: fileData.size,
+            videoId: videoInstance.id
+          })
+
+          tasks.push(videoFileInstance.save(options))
+        })
+
+        return Promise.all(tasks).then(() => ({ tagInstances, videoInstance }))
       })
       .then(({ videoInstance, tagInstances }) => {
         const options = { transaction: t }

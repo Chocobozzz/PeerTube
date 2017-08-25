@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as Promise from 'bluebird'
 import * as multer from 'multer'
-import * as path from 'path'
+import { extname, join } from 'path'
 
 import { database as db } from '../../../initializers/database'
 import {
@@ -16,7 +16,8 @@ import {
   addEventToRemoteVideo,
   quickAndDirtyUpdateVideoToFriends,
   addVideoToFriends,
-  updateVideoToFriends
+  updateVideoToFriends,
+  JobScheduler
 } from '../../../lib'
 import {
   authenticate,
@@ -155,7 +156,7 @@ function addVideoRetryWrapper (req: express.Request, res: express.Response, next
     .catch(err => next(err))
 }
 
-function addVideo (req: express.Request, res: express.Response, videoFile: Express.Multer.File) {
+function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
   const videoInfos: VideoCreate = req.body
 
   return db.sequelize.transaction(t => {
@@ -177,13 +178,13 @@ function addVideo (req: express.Request, res: express.Response, videoFile: Expre
         const videoData = {
           name: videoInfos.name,
           remote: false,
-          extname: path.extname(videoFile.filename),
+          extname: extname(videoPhysicalFile.filename),
           category: videoInfos.category,
           licence: videoInfos.licence,
           language: videoInfos.language,
           nsfw: videoInfos.nsfw,
           description: videoInfos.description,
-          duration: videoFile['duration'], // duration was added by a previous middleware
+          duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
           authorId: author.id
         }
 
@@ -191,18 +192,50 @@ function addVideo (req: express.Request, res: express.Response, videoFile: Expre
         return { author, tagInstances, video }
       })
       .then(({ author, tagInstances, video }) => {
+        const videoFileData = {
+          extname: extname(videoPhysicalFile.filename),
+          resolution: 0, // TODO: improve readability,
+          size: videoPhysicalFile.size
+        }
+
+        const videoFile = db.VideoFile.build(videoFileData)
+        return { author, tagInstances, video, videoFile }
+      })
+      .then(({ author, tagInstances, video, videoFile }) => {
         const videoDir = CONFIG.STORAGE.VIDEOS_DIR
-        const source = path.join(videoDir, videoFile.filename)
-        const destination = path.join(videoDir, video.getVideoFilename())
+        const source = join(videoDir, videoPhysicalFile.filename)
+        const destination = join(videoDir, video.getVideoFilename(videoFile))
 
         return renamePromise(source, destination)
           .then(() => {
             // This is important in case if there is another attempt in the retry process
-            videoFile.filename = video.getVideoFilename()
-            return { author, tagInstances, video }
+            videoPhysicalFile.filename = video.getVideoFilename(videoFile)
+            return { author, tagInstances, video, videoFile }
           })
       })
-      .then(({ author, tagInstances, video }) => {
+      .then(({ author, tagInstances, video, videoFile }) => {
+        const tasks = []
+
+        tasks.push(
+          video.createTorrentAndSetInfoHash(videoFile),
+          video.createThumbnail(videoFile),
+          video.createPreview(videoFile)
+        )
+
+        if (CONFIG.TRANSCODING.ENABLED === true) {
+          // Put uuid because we don't have id auto incremented for now
+          const dataInput = {
+            videoUUID: video.uuid
+          }
+
+          tasks.push(
+            JobScheduler.Instance.createJob(t, 'videoTranscoder', dataInput)
+          )
+        }
+
+        return Promise.all(tasks).then(() => ({ author, tagInstances, video, videoFile }))
+      })
+      .then(({ author, tagInstances, video, videoFile }) => {
         const options = { transaction: t }
 
         return video.save(options)
@@ -210,8 +243,16 @@ function addVideo (req: express.Request, res: express.Response, videoFile: Expre
             // Do not forget to add Author informations to the created video
             videoCreated.Author = author
 
-            return { tagInstances, video: videoCreated }
+            return { tagInstances, video: videoCreated, videoFile }
           })
+      })
+      .then(({ tagInstances, video, videoFile }) => {
+        const options = { transaction: t }
+        videoFile.videoId = video.id
+
+        return videoFile.save(options)
+          .then(() => video.VideoFiles = [ videoFile ])
+          .then(() => ({ tagInstances, video }))
       })
       .then(({ tagInstances, video }) => {
         if (!tagInstances) return video
@@ -236,7 +277,7 @@ function addVideo (req: express.Request, res: express.Response, videoFile: Expre
   })
   .then(() => logger.info('Video with name %s created.', videoInfos.name))
   .catch((err: Error) => {
-    logger.debug('Cannot insert the video.', { error: err.stack })
+    logger.debug('Cannot insert the video.', err)
     throw err
   })
 }

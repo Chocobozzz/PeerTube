@@ -23,6 +23,7 @@ import {
   UserVideoRateModel,
   VideoAbuseModel,
   BlacklistedVideoModel,
+  VideoFileModel,
   VideoTagModel,
   VideoModel
 } from '../models'
@@ -49,6 +50,7 @@ const database: {
   UserVideoRate?: UserVideoRateModel,
   User?: UserModel,
   VideoAbuse?: VideoAbuseModel,
+  VideoFile?: VideoFileModel,
   BlacklistedVideo?: BlacklistedVideoModel,
   VideoTag?: VideoTagModel,
   Video?: VideoModel

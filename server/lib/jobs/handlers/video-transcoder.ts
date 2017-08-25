@@ -5,7 +5,9 @@ import { VideoInstance } from '../../../models'
 
 function process (data: { videoUUID: string }) {
   return db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(data.videoUUID).then(video => {
-    return video.transcodeVideofile().then(() => video)
+    // TODO: handle multiple resolutions
+    const videoFile = video.VideoFiles[0]
+    return video.transcodeVideofile(videoFile).then(() => video)
   })
 }
 

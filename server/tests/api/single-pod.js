@@ -129,12 +129,20 @@ describe('Test a single pod', function () {
       expect(video.nsfw).to.be.ok
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
-      expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
       expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
+
+      expect(video.files).to.have.lengthOf(1)
+
+      const file = video.files[0]
+      const magnetUri = file.magnetUri
+      expect(file.magnetUri).to.exist
+      expect(file.resolution).to.equal(0)
+      expect(file.resolutionLabel).to.equal('original')
+      expect(file.size).to.equal(218910)
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -143,7 +151,7 @@ describe('Test a single pod', function () {
         videoId = video.id
         videoUUID = video.uuid
 
-        webtorrent.add(video.magnetUri, function (torrent) {
+        webtorrent.add(magnetUri, function (torrent) {
           expect(torrent.files).to.exist
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -172,12 +180,20 @@ describe('Test a single pod', function () {
       expect(video.nsfw).to.be.ok
       expect(video.description).to.equal('my super description')
       expect(video.podHost).to.equal('localhost:9001')
-      expect(video.magnetUri).to.exist
       expect(video.author).to.equal('root')
       expect(video.isLocal).to.be.true
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
       expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
+
+      expect(video.files).to.have.lengthOf(1)
+
+      const file = video.files[0]
+      const magnetUri = file.magnetUri
+      expect(file.magnetUri).to.exist
+      expect(file.resolution).to.equal(0)
+      expect(file.resolutionLabel).to.equal('original')
+      expect(file.size).to.equal(218910)
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -240,6 +256,15 @@ describe('Test a single pod', function () {
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
       expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
+      expect(video.files).to.have.lengthOf(1)
+
+      const file = video.files[0]
+      const magnetUri = file.magnetUri
+      expect(file.magnetUri).to.exist
+      expect(file.resolution).to.equal(0)
+      expect(file.resolutionLabel).to.equal('original')
+      expect(file.size).to.equal(218910)
+
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
         expect(test).to.equal(true)
@@ -301,6 +326,15 @@ describe('Test a single pod', function () {
       expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
       expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
+
+      expect(video.files).to.have.lengthOf(1)
+
+      const file = video.files[0]
+      const magnetUri = file.magnetUri
+      expect(file.magnetUri).to.exist
+      expect(file.resolution).to.equal(0)
+      expect(file.resolutionLabel).to.equal('original')
+      expect(file.size).to.equal(218910)
 
       videosUtils.testVideoImage(server.url, 'video_short.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
@@ -564,7 +598,7 @@ describe('Test a single pod', function () {
 
   it('Should search the right magnetUri video', function (done) {
     const video = videosListBase[0]
-    videosUtils.searchVideoWithPagination(server.url, encodeURIComponent(video.magnetUri), 'magnetUri', 0, 15, function (err, res) {
+    videosUtils.searchVideoWithPagination(server.url, encodeURIComponent(video.files[0].magnetUri), 'magnetUri', 0, 15, function (err, res) {
       if (err) throw err
 
       const videos = res.body.data
@@ -650,11 +684,20 @@ describe('Test a single pod', function () {
       expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
       expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
+      expect(video.files).to.have.lengthOf(1)
+
+      const file = video.files[0]
+      const magnetUri = file.magnetUri
+      expect(file.magnetUri).to.exist
+      expect(file.resolution).to.equal(0)
+      expect(file.resolutionLabel).to.equal('original')
+      expect(file.size).to.equal(292677)
+
       videosUtils.testVideoImage(server.url, 'video_short3.webm', video.thumbnailPath, function (err, test) {
         if (err) throw err
         expect(test).to.equal(true)
 
-        webtorrent.add(video.magnetUri, function (torrent) {
+        webtorrent.add(magnetUri, function (torrent) {
           expect(torrent.files).to.exist
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -694,6 +737,15 @@ describe('Test a single pod', function () {
         expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
         expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
 
+        expect(video.files).to.have.lengthOf(1)
+
+        const file = video.files[0]
+        const magnetUri = file.magnetUri
+        expect(file.magnetUri).to.exist
+        expect(file.resolution).to.equal(0)
+        expect(file.resolutionLabel).to.equal('original')
+        expect(file.size).to.equal(292677)
+
         done()
       })
     })
@@ -727,6 +779,15 @@ describe('Test a single pod', function () {
         expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
         expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
         expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
+
+        expect(video.files).to.have.lengthOf(1)
+
+        const file = video.files[0]
+        const magnetUri = file.magnetUri
+        expect(file.magnetUri).to.exist
+        expect(file.resolution).to.equal(0)
+        expect(file.resolutionLabel).to.equal('original')
+        expect(file.size).to.equal(292677)
 
         done()
       })

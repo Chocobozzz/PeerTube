@@ -23,10 +23,11 @@ import {
   isVideoNSFWValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
-  isVideoInfoHashValid,
+  isVideoFileInfoHashValid,
   isVideoNameValid,
   isVideoTagsValid,
-  isVideoExtnameValid
+  isVideoFileExtnameValid,
+  isVideoFileResolutionValid
 } from '../videos'
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
@@ -121,14 +122,22 @@ function isCommonVideoAttributesValid (video: any) {
          isVideoNSFWValid(video.nsfw) &&
          isVideoDescriptionValid(video.description) &&
          isVideoDurationValid(video.duration) &&
-         isVideoInfoHashValid(video.infoHash) &&
          isVideoNameValid(video.name) &&
          isVideoTagsValid(video.tags) &&
          isVideoUUIDValid(video.uuid) &&
-         isVideoExtnameValid(video.extname) &&
          isVideoViewsValid(video.views) &&
          isVideoLikesValid(video.likes) &&
-         isVideoDislikesValid(video.dislikes)
+         isVideoDislikesValid(video.dislikes) &&
+         isArray(video.files) &&
+         video.files.every(videoFile => {
+           if (!videoFile) return false
+
+           return (
+             isVideoFileInfoHashValid(videoFile.infoHash) &&
+             isVideoFileExtnameValid(videoFile.extname) &&
+             isVideoFileResolutionValid(videoFile.resolution)
+           )
+         })
 }
 
 function isRequestTypeAddValid (value: string) {

@@ -56,9 +56,10 @@ describe('Test video transcoding', function () {
           if (err) throw err
 
           const video = res.body.data[0]
-          expect(video.magnetUri).to.match(/\.webm/)
+          const magnetUri = video.files[0].magnetUri
+          expect(magnetUri).to.match(/\.webm/)
 
-          webtorrent.add(video.magnetUri, function (torrent) {
+          webtorrent.add(magnetUri, function (torrent) {
             expect(torrent.files).to.exist
             expect(torrent.files.length).to.equal(1)
             expect(torrent.files[0].path).match(/\.webm$/)
@@ -86,9 +87,10 @@ describe('Test video transcoding', function () {
           if (err) throw err
 
           const video = res.body.data[0]
-          expect(video.magnetUri).to.match(/\.mp4/)
+          const magnetUri = video.files[0].magnetUri
+          expect(magnetUri).to.match(/\.mp4/)
 
-          webtorrent.add(video.magnetUri, function (torrent) {
+          webtorrent.add(magnetUri, function (torrent) {
             expect(torrent.files).to.exist
             expect(torrent.files.length).to.equal(1)
             expect(torrent.files[0].path).match(/\.mp4$/)

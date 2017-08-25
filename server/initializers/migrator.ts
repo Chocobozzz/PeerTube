@@ -64,14 +64,16 @@ function getMigrationScripts () {
       script: string
     }[] = []
 
-    files.forEach(file => {
-      // Filename is something like 'version-blabla.js'
-      const version = file.split('-')[0]
-      filesToMigrate.push({
-        version,
-        script: file
+    files
+      .filter(file => file.endsWith('.js.map') === false)
+      .forEach(file => {
+        // Filename is something like 'version-blabla.js'
+        const version = file.split('-')[0]
+        filesToMigrate.push({
+          version,
+          script: file
+        })
       })
-    })
 
     return filesToMigrate
   })
@@ -93,7 +95,8 @@ function executeMigration (actualVersion: number, entity: { version: string, scr
     const options = {
       transaction: t,
       queryInterface: db.sequelize.getQueryInterface(),
-      sequelize: db.sequelize
+      sequelize: db.sequelize,
+      db
     }
 
     return migrationScript.up(options)

@@ -15,7 +15,7 @@ import {
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 55
+const LAST_MIGRATION_VERSION = 65
 
 // ---------------------------------------------------------------------------
 
@@ -114,7 +114,8 @@ const CONSTRAINTS_FIELDS = {
     THUMBNAIL_DATA: { min: 0, max: 20000 }, // Bytes
     VIEWS: { min: 0 },
     LIKES: { min: 0 },
-    DISLIKES: { min: 0 }
+    DISLIKES: { min: 0 },
+    FILE_SIZE: { min: 10, max: 1024 * 1024 * 1024 * 3 /* 3Go */ }
   },
   VIDEO_EVENTS: {
     COUNT: { min: 0 }
@@ -174,6 +175,14 @@ const VIDEO_LANGUAGES = {
   12: 'Korean',
   13: 'French',
   14: 'Italien'
+}
+
+const VIDEO_FILE_RESOLUTIONS = {
+  0: 'original',
+  1: '360p',
+  2: '480p',
+  3: '720p',
+  4: '1080p'
 }
 
 // ---------------------------------------------------------------------------
@@ -362,6 +371,7 @@ export {
   THUMBNAILS_SIZE,
   USER_ROLES,
   VIDEO_CATEGORIES,
+  VIDEO_FILE_RESOLUTIONS,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES

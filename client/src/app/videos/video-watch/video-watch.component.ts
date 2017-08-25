@@ -90,8 +90,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     window.clearInterval(this.torrentInfosInterval)
     window.clearTimeout(this.errorTimer)
 
-    if (this.video !== null && this.webTorrentService.has(this.video.magnetUri)) {
-      this.webTorrentService.remove(this.video.magnetUri)
+    if (this.video !== null && this.webTorrentService.has(this.video.getDefaultMagnetUri())) {
+      this.webTorrentService.remove(this.video.getDefaultMagnetUri())
     }
 
     // Remove player
@@ -108,13 +108,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     // We are loading the video
     this.loading = true
 
-    console.log('Adding ' + this.video.magnetUri + '.')
+    console.log('Adding ' + this.video.getDefaultMagnetUri() + '.')
 
     // The callback might never return if there are network issues
     // So we create a timer to inform the user the load is abnormally long
     this.errorTimer = window.setTimeout(() => this.loadTooLong(), VideoWatchComponent.LOADTIME_TOO_LONG)
 
-    const torrent = this.webTorrentService.add(this.video.magnetUri, torrent => {
+    const torrent = this.webTorrentService.add(this.video.getDefaultMagnetUri(), torrent => {
       // Clear the error timer
       window.clearTimeout(this.errorTimer)
       // Maybe the error was fired by the timer, so reset it
@@ -123,7 +123,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       // We are not loading the video anymore
       this.loading = false
 
-      console.log('Added ' + this.video.magnetUri + '.')
+      console.log('Added ' + this.video.getDefaultMagnetUri() + '.')
       torrent.files[0].renderTo(this.playerElement, (err) => {
         if (err) {
           this.notificationsService.error('Error', 'Cannot append the file in the video element.')

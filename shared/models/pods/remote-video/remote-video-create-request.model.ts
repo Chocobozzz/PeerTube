@@ -5,8 +5,6 @@ export interface RemoteVideoCreateData {
   author: string
   tags: string[]
   name: string
-  extname: string
-  infoHash: string
   category: number
   licence: number
   language: number
@@ -19,6 +17,12 @@ export interface RemoteVideoCreateData {
   likes: number
   dislikes: number
   thumbnailData: string
+  files: {
+    infoHash: string
+    extname: string
+    resolution: number
+    size: number
+  }[]
 }
 
 export interface RemoteVideoCreateRequest extends RemoteVideoRequest {

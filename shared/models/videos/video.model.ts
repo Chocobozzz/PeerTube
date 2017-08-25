@@ -1,3 +1,10 @@
+export interface VideoFile {
+  magnetUri: string
+  resolution: number
+  resolutionLabel: string
+  size: number // Bytes
+}
+
 export interface Video {
   id: number
   uuid: string
@@ -12,7 +19,6 @@ export interface Video {
   description: string
   duration: number
   isLocal: boolean
-  magnetUri: string
   name: string
   podHost: string
   tags: string[]
@@ -22,4 +28,5 @@ export interface Video {
   likes: number
   dislikes: number
   nsfw: boolean
+  files: VideoFile[]
 }

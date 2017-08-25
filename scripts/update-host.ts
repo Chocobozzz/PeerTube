@@ -1,4 +1,5 @@
 import { readFileSync, writeFileSync } from 'fs'
+import { join } from 'path'
 import * as parseTorrent from 'parse-torrent'
 
 import { CONFIG, STATIC_PATHS } from '../server/initializers/constants'
@@ -19,17 +20,10 @@ db.init(true)
     return db.Video.list()
   })
   .then(videos => {
-    videos.forEach(function (video) {
-      const torrentName = video.id + '.torrent'
-      const torrentPath = CONFIG.STORAGE.TORRENTS_DIR + torrentName
-      const filename = video.id + video.extname
-
-      const parsed = parseTorrent(readFileSync(torrentPath))
-      parsed.announce = [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOST + '/tracker/socket' ]
-      parsed.urlList = [ CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + filename ]
-
-      const buf = parseTorrent.toTorrentFile(parsed)
-      writeFileSync(torrentPath, buf)
+    videos.forEach(video => {
+      video.VideoFiles.forEach(file => {
+        video.createTorrentAndSetInfoHash(file)
+      })
     })
 
     process.exit(0)

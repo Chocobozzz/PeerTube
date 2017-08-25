@@ -121,12 +121,20 @@ describe('Test multiple pods', function () {
               expect(video.nsfw).to.be.ok
               expect(video.description).to.equal('my super description for pod 1')
               expect(video.podHost).to.equal('localhost:9001')
-              expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(10)
               expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
               expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
               expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
               expect(video.author).to.equal('root')
+
+              expect(video.files).to.have.lengthOf(1)
+
+              const file = video.files[0]
+              const magnetUri = file.magnetUri
+              expect(file.magnetUri).to.exist
+              expect(file.resolution).to.equal(0)
+              expect(file.resolutionLabel).to.equal('original')
+              expect(file.size).to.equal(572456)
 
               if (server.url !== 'http://localhost:9001') {
                 expect(video.isLocal).to.be.false
@@ -136,9 +144,9 @@ describe('Test multiple pods', function () {
 
               // All pods should have the same magnet Uri
               if (baseMagnet === null) {
-                baseMagnet = video.magnetUri
+                baseMagnet = magnetUri
               } else {
-                expect(video.magnetUri).to.equal.magnetUri
+                expect(baseMagnet).to.equal(magnetUri)
               }
 
               videosUtils.testVideoImage(server.url, 'video_short1.webm', video.thumbnailPath, function (err, test) {
@@ -198,12 +206,20 @@ describe('Test multiple pods', function () {
               expect(video.nsfw).to.be.true
               expect(video.description).to.equal('my super description for pod 2')
               expect(video.podHost).to.equal('localhost:9002')
-              expect(video.magnetUri).to.exist
               expect(video.duration).to.equal(5)
               expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
               expect(miscsUtils.dateIsValid(video.createdAt)).to.be.true
               expect(miscsUtils.dateIsValid(video.updatedAt)).to.be.true
               expect(video.author).to.equal('root')
+
+              expect(video.files).to.have.lengthOf(1)
+
+              const file = video.files[0]
+              const magnetUri = file.magnetUri
+              expect(file.magnetUri).to.exist
+              expect(file.resolution).to.equal(0)
+              expect(file.resolutionLabel).to.equal('original')
+              expect(file.size).to.equal(942961)
 
               if (server.url !== 'http://localhost:9002') {
                 expect(video.isLocal).to.be.false
@@ -213,9 +229,9 @@ describe('Test multiple pods', function () {
 
               // All pods should have the same magnet Uri
               if (baseMagnet === null) {
-                baseMagnet = video.magnetUri
+                baseMagnet = magnetUri
               } else {
-                expect(video.magnetUri).to.equal.magnetUri
+                expect(baseMagnet).to.equal(magnetUri)
               }
 
               videosUtils.testVideoImage(server.url, 'video_short2.webm', video.thumbnailPath, function (err, test) {
@@ -297,12 +313,20 @@ describe('Test multiple pods', function () {
               expect(video1.nsfw).to.be.ok
               expect(video1.description).to.equal('my super description for pod 3')
               expect(video1.podHost).to.equal('localhost:9003')
-              expect(video1.magnetUri).to.exist
               expect(video1.duration).to.equal(5)
               expect(video1.tags).to.deep.equal([ 'tag1p3' ])
               expect(video1.author).to.equal('root')
               expect(miscsUtils.dateIsValid(video1.createdAt)).to.be.true
               expect(miscsUtils.dateIsValid(video1.updatedAt)).to.be.true
+
+              expect(video1.files).to.have.lengthOf(1)
+
+              const file1 = video1.files[0]
+              const magnetUri1 = file1.magnetUri
+              expect(file1.magnetUri).to.exist
+              expect(file1.resolution).to.equal(0)
+              expect(file1.resolutionLabel).to.equal('original')
+              expect(file1.size).to.equal(292677)
 
               expect(video2.name).to.equal('my super name for pod 3-2')
               expect(video2.category).to.equal(7)
@@ -314,12 +338,20 @@ describe('Test multiple pods', function () {
               expect(video2.nsfw).to.be.false
               expect(video2.description).to.equal('my super description for pod 3-2')
               expect(video2.podHost).to.equal('localhost:9003')
-              expect(video2.magnetUri).to.exist
               expect(video2.duration).to.equal(5)
               expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
               expect(video2.author).to.equal('root')
               expect(miscsUtils.dateIsValid(video2.createdAt)).to.be.true
               expect(miscsUtils.dateIsValid(video2.updatedAt)).to.be.true
+
+              expect(video2.files).to.have.lengthOf(1)
+
+              const file2 = video2.files[0]
+              const magnetUri2 = file2.magnetUri
+              expect(file2.magnetUri).to.exist
+              expect(file2.resolution).to.equal(0)
+              expect(file2.resolutionLabel).to.equal('original')
+              expect(file2.size).to.equal(218910)
 
               if (server.url !== 'http://localhost:9003') {
                 expect(video1.isLocal).to.be.false
@@ -331,9 +363,9 @@ describe('Test multiple pods', function () {
 
               // All pods should have the same magnet Uri
               if (baseMagnet === null) {
-                baseMagnet = video2.magnetUri
+                baseMagnet = magnetUri2
               } else {
-                expect(video2.magnetUri).to.equal.magnetUri
+                expect(baseMagnet).to.equal(magnetUri2)
               }
 
               videosUtils.testVideoImage(server.url, 'video_short3.webm', video1.thumbnailPath, function (err, test) {
@@ -366,7 +398,7 @@ describe('Test multiple pods', function () {
         toRemove.push(res.body.data[2])
         toRemove.push(res.body.data[3])
 
-        webtorrent.add(video.magnetUri, function (torrent) {
+        webtorrent.add(video.files[0].magnetUri, function (torrent) {
           expect(torrent.files).to.exist
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -385,7 +417,7 @@ describe('Test multiple pods', function () {
 
         const video = res.body.data[1]
 
-        webtorrent.add(video.magnetUri, function (torrent) {
+        webtorrent.add(video.files[0].magnetUri, function (torrent) {
           expect(torrent.files).to.exist
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -404,7 +436,7 @@ describe('Test multiple pods', function () {
 
         const video = res.body.data[2]
 
-        webtorrent.add(video.magnetUri, function (torrent) {
+        webtorrent.add(video.files[0].magnetUri, function (torrent) {
           expect(torrent.files).to.exist
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -423,7 +455,7 @@ describe('Test multiple pods', function () {
 
         const video = res.body.data[3]
 
-        webtorrent.add(video.magnetUri, function (torrent) {
+        webtorrent.add(video.files[0].magnetUri, function (torrent) {
           expect(torrent.files).to.exist
           expect(torrent.files.length).to.equal(1)
           expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -700,11 +732,18 @@ describe('Test multiple pods', function () {
           expect(videoUpdated.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
           expect(miscsUtils.dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true
 
+          const file = videoUpdated.files[0]
+          const magnetUri = file.magnetUri
+          expect(file.magnetUri).to.exist
+          expect(file.resolution).to.equal(0)
+          expect(file.resolutionLabel).to.equal('original')
+          expect(file.size).to.equal(292677)
+
           videosUtils.testVideoImage(server.url, 'video_short3.webm', videoUpdated.thumbnailPath, function (err, test) {
             if (err) throw err
             expect(test).to.equal(true)
 
-            webtorrent.add(videoUpdated.magnetUri, function (torrent) {
+            webtorrent.add(videoUpdated.files[0].magnetUri, function (torrent) {
               expect(torrent.files).to.exist
               expect(torrent.files.length).to.equal(1)
               expect(torrent.files[0].path).to.exist.and.to.not.equal('')

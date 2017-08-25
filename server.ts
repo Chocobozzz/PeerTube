@@ -26,7 +26,7 @@ const app = express()
 // ----------- Database -----------
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG } from './server/initializers/constants'
+import { API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
 // Initialize database and models
 import { database as db } from './server/initializers/database'
 db.init(false).then(() => onDatabaseInitDone())
@@ -57,10 +57,20 @@ import { apiRouter, clientsRouter, staticRouter } from './server/controllers'
 
 // Enable CORS for develop
 if (isTestInstance()) {
-  app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
-  }))
+  app.use((req, res, next) => {
+    // These routes have already cors
+    if (
+      req.path.indexOf(STATIC_PATHS.TORRENTS) === -1 &&
+      req.path.indexOf(STATIC_PATHS.WEBSEED) === -1
+    ) {
+      return (cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+      }))(req, res, next)
+    }
+
+    return next()
+  })
 }
 
 // For the logger

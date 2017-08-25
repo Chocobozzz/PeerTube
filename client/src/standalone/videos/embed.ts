@@ -57,7 +57,11 @@ loadVideoInfos(videoId, (err, videoInfos) => {
     return
   }
 
-  const magnetUri = videoInfos.magnetUri
+  let magnetUri = ''
+  if (videoInfos.files !== undefined && videoInfos.files.length !== 0) {
+    magnetUri = videoInfos.files[0].magnetUri
+  }
+
   const videoContainer = document.getElementById('video-container') as HTMLVideoElement
   const previewUrl = window.location.origin + videoInfos.previewPath
   videoContainer.poster = previewUrl

@@ -7,7 +7,8 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  VIDEO_RATE_TYPES
+  VIDEO_RATE_TYPES,
+  VIDEO_FILE_RESOLUTIONS
 } from '../../initializers'
 import { isUserUsernameValid } from './users'
 import { isArray, exists } from './misc'
@@ -51,14 +52,6 @@ function isVideoDescriptionValid (value: string) {
 
 function isVideoDurationValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
-}
-
-function isVideoExtnameValid (value: string) {
-  return VIDEOS_CONSTRAINTS_FIELDS.EXTNAME.indexOf(value) !== -1
-}
-
-function isVideoInfoHashValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
 function isVideoNameValid (value: string) {
@@ -128,6 +121,22 @@ function isVideoFile (value: string, files: { [ fieldname: string ]: Express.Mul
   return new RegExp('^video/(webm|mp4|ogg)$', 'i').test(file.mimetype)
 }
 
+function isVideoFileSizeValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
+}
+
+function isVideoFileResolutionValid (value: string) {
+  return VIDEO_FILE_RESOLUTIONS[value] !== undefined
+}
+
+function isVideoFileExtnameValid (value: string) {
+  return VIDEOS_CONSTRAINTS_FIELDS.EXTNAME.indexOf(value) !== -1
+}
+
+function isVideoFileInfoHashValid (value: string) {
+  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -140,12 +149,12 @@ export {
   isVideoNSFWValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
-  isVideoInfoHashValid,
+  isVideoFileInfoHashValid,
   isVideoNameValid,
   isVideoTagsValid,
   isVideoThumbnailValid,
   isVideoThumbnailDataValid,
-  isVideoExtnameValid,
+  isVideoFileExtnameValid,
   isVideoUUIDValid,
   isVideoAbuseReasonValid,
   isVideoAbuseReporterUsernameValid,
@@ -154,7 +163,9 @@ export {
   isVideoLikesValid,
   isVideoRatingTypeValid,
   isVideoDislikesValid,
-  isVideoEventCountValid
+  isVideoEventCountValid,
+  isVideoFileSizeValid,
+  isVideoFileResolutionValid
 }
 
 declare global {
@@ -183,7 +194,9 @@ declare global {
       isVideoLikesValid,
       isVideoRatingTypeValid,
       isVideoDislikesValid,
-      isVideoEventCountValid
+      isVideoEventCountValid,
+      isVideoFileSizeValid,
+      isVideoFileResolutionValid
     }
   }
 }

@@ -10,7 +10,7 @@
       </div>
 
       <div class="modal-body">
-        <input #magnetUriInput (click)="magnetUriInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="video.magnetUri" />
+        <input #magnetUriInput (click)="magnetUriInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="video.getDefaultMagnetUri()" />
       </div>
     </div>
   </div>

@@ -30,6 +30,7 @@
     "danger:clean:modules": "scripty",
     "reset-password": "ts-node ./scripts/reset-password.ts",
     "play": "scripty",
+    "dev": "scripty",
     "dev:server": "scripty",
     "dev:client": "scripty",
     "start": "node dist/server",

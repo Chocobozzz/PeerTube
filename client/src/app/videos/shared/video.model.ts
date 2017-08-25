@@ -1,4 +1,4 @@
-import { Video as VideoServerModel } from '../../../../../shared'
+import { Video as VideoServerModel, VideoFile } from '../../../../../shared'
 import { User } from '../../shared'
 
 export class Video implements VideoServerModel {
@@ -17,7 +17,6 @@ export class Video implements VideoServerModel {
   id: number
   uuid: string
   isLocal: boolean
-  magnetUri: string
   name: string
   podHost: string
   tags: string[]
@@ -29,6 +28,7 @@ export class Video implements VideoServerModel {
   likes: number
   dislikes: number
   nsfw: boolean
+  files: VideoFile[]
 
   private static createByString (author: string, podHost: string) {
     return author + '@' + podHost
@@ -57,7 +57,6 @@ export class Video implements VideoServerModel {
     id: number,
     uuid: string,
     isLocal: boolean,
-    magnetUri: string,
     name: string,
     podHost: string,
     tags: string[],
@@ -66,7 +65,8 @@ export class Video implements VideoServerModel {
     views: number,
     likes: number,
     dislikes: number,
-    nsfw: boolean
+    nsfw: boolean,
+    files: VideoFile[]
   }) {
     this.author = hash.author
     this.createdAt = new Date(hash.createdAt)
@@ -82,7 +82,6 @@ export class Video implements VideoServerModel {
     this.id = hash.id
     this.uuid = hash.uuid
     this.isLocal = hash.isLocal
-    this.magnetUri = hash.magnetUri
     this.name = hash.name
     this.podHost = hash.podHost
     this.tags = hash.tags
@@ -94,6 +93,7 @@ export class Video implements VideoServerModel {
     this.likes = hash.likes
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
+    this.files = hash.files
 
     this.by = Video.createByString(hash.author, hash.podHost)
   }
@@ -115,6 +115,13 @@ export class Video implements VideoServerModel {
     return (this.nsfw && (!user || user.displayNSFW === false))
   }
 
+  getDefaultMagnetUri () {
+    if (this.files === undefined || this.files.length === 0) return ''
+
+    // TODO: choose the original file
+    return this.files[0].magnetUri
+  }
+
   patch (values: Object) {
     Object.keys(values).forEach((key) => {
       this[key] = values[key]
@@ -132,7 +139,6 @@ export class Video implements VideoServerModel {
       duration: this.duration,
       id: this.id,
       isLocal: this.isLocal,
-      magnetUri: this.magnetUri,
       name: this.name,
       podHost: this.podHost,
       tags: this.tags,
@@ -140,7 +146,8 @@ export class Video implements VideoServerModel {
       views: this.views,
       likes: this.likes,
       dislikes: this.dislikes,
-      nsfw: this.nsfw
+      nsfw: this.nsfw,
+      files: this.files
     }
   }
 }
