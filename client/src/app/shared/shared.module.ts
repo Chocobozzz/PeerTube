@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'
 import { HttpModule } from '@angular/http'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe'
 import { KeysPipe } from 'angular-pipes/src/object/keys.pipe'
@@ -26,6 +27,7 @@ import { VideoAbuseService } from './video-abuse'
     ReactiveFormsModule,
     HttpModule,
     RouterModule,
+    BrowserAnimationsModule,
 
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
