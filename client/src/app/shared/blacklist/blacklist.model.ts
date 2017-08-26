@@ -14,7 +14,7 @@ export class Blacklist implements RestBlacklistedVideoInstance {
   createdAt: Date
   updatedAt: Date
 
-  constructor(hash: {
+  constructor (hash: {
     id: number,
     videoId: number,
     name: string,

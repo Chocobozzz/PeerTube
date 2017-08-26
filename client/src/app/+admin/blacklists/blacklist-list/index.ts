@@ -1,1 +1,1 @@
-export * from './blacklist-list.component';
+export * from './blacklist-list.component'

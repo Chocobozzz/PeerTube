@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { database } from '../../initializers'
-import { logger, getFormatedObjects } from '../../helpers'
 import { RestBlacklistedVideoInstance, ResultList } from '../../../shared'
 import { VideoInstance, BlacklistedVideoInstance } from '../../models'
 
@@ -59,7 +58,7 @@ function removeVideoFromBlacklistController (req: express.Request, res: express.
     .catch(err => next(err))
 }
 
-function formatBlacklistForRest (resultList) : ResultList<RestBlacklistedVideoInstance> {
+function formatBlacklistForRest (resultList): ResultList<RestBlacklistedVideoInstance> {
   let formatedList: RestBlacklistedVideoInstance[] = []
 
   formatedList = resultList.data.map(object => {
@@ -75,7 +74,7 @@ function formatBlacklistForRest (resultList) : ResultList<RestBlacklistedVideoIn
   }
 }
 
-function formatBlacklistObject (blacklist: BlacklistedVideoInstance, video: VideoInstance) : RestBlacklistedVideoInstance {
+function formatBlacklistObject (blacklist: BlacklistedVideoInstance, video: VideoInstance): RestBlacklistedVideoInstance {
   return {
     id: blacklist.id,
     videoId: blacklist.videoId,

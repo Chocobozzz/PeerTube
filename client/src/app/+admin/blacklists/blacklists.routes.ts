@@ -10,17 +10,17 @@ export const BlacklistsRoutes: Routes = [
     children: [
       {
         path: '',
-	redirectTo: 'list',
-	pathMatch: 'full'
+        redirectTo: 'list',
+        pathMatch: 'full'
       },
       {
-	path: 'list',
-	component: BlacklistListComponent,
-	data: {
-	  meta: {
-	    title: 'Blacklisted videos'
-	  }
-	}
+        path: 'list',
+        component: BlacklistListComponent,
+        data: {
+          meta: {
+            title: 'Blacklisted videos'
+          }
+        }
       }
     ]
   }

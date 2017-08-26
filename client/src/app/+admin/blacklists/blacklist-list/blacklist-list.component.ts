@@ -34,40 +34,40 @@ export class BlacklistListComponent {
     },
     columns: {
       id: {
-	title: 'ID'
+        title: 'ID'
       },
       name: {
-	title: 'Name'
+        title: 'Name'
       },
       description: {
-	title: 'Description'
+        title: 'Description'
       },
       duration: {
-	title: 'Duration'
+        title: 'Duration'
       },
       views: {
-	title: 'Views'
+        title: 'Views'
       },
       likes: {
-	title: 'Likes'
+        title: 'Likes'
       },
       dislikes: {
-	title: 'Dislikes'
+        title: 'Dislikes'
       },
       nsfw: {
-	title: 'NSFW'
+        title: 'NSFW'
       },
       uuid: {
-	title: 'UUID'
+        title: 'UUID'
       },
       createdAt: {
-	title: 'Created Date',
-	valuePrepareFunction: Utils.dateToHuman
+        title: 'Created Date',
+        valuePrepareFunction: Utils.dateToHuman
       }
     }
   }
 
-  constructor(
+  constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private blacklistService: BlacklistService
@@ -75,22 +75,24 @@ export class BlacklistListComponent {
     this.blacklistSource = this.blacklistService.getDataSource()
   }
 
-  removeVideoFromBlacklist({ data }) {
+  removeVideoFromBlacklist ({ data }) {
     const blacklistedVideo: Blacklist = data
 
-    this.confirmService.confirm('Do you really want to remove this video from the blacklist ? It will be available again in the video list', 'Remove').subscribe(
-      res => {
-	if (res === false) return
+    this.confirmService
+      .confirm('Do you really want to remove this video from the blacklist ? It will be available again in the video list', 'Remove')
+      .subscribe(
+        res => {
+          if (res === false) return
 
-	this.blacklistService.removeVideoFromBlacklist(blacklistedVideo).subscribe(
-	  () => {
-	    this.notificationsService.success('Success', `Video ${blacklistedVideo.name} removed from the blacklist.`)
-	    this.blacklistSource.refresh()
-	  },
+          this.blacklistService.removeVideoFromBlacklist(blacklistedVideo).subscribe(
+            () => {
+              this.notificationsService.success('Success', `Video ${blacklistedVideo.name} removed from the blacklist.`)
+              this.blacklistSource.refresh()
+            },
 
-	  err => this.notificationsService.error('Error', err.text)
-	)
-      }
-    )
+            err => this.notificationsService.error('Error', err.text)
+          )
+        }
+      )
   }
 }
