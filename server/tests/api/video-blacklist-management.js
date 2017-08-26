@@ -87,6 +87,27 @@ describe('Test video blacklists management', function () {
       })
     })
 
+    it('Should get the correct sort when sorting by descending id', function (done) {
+      videoBlacklistsUtils.getSortedBlacklistedVideosList(servers[0].url, servers[0].accessToken, '-id', function (err, res) {
+        if (err) throw err
+
+        expect(res.body.total).to.equal(2)
+
+        const videos = res.body.data
+        expect(videos).to.be.an('array')
+        exepct(videos.length).to.equal(2)
+
+        const result = res.body.data.slice(0).sort((a, b) => {
+          if (a.id > b.id) return -1
+          if (a.id < b.id) return 1
+          return 0
+        })
+
+        expect(videos).to.deep.equal(result)
+
+        done()
+    })
+
     it('Should get the correct sort when sorting by descending video name', function (done) {
       videoBlacklistsUtils.getSortedBlacklistedVideosList(servers[0].url, servers[0].accessToken, '-name', function (err, res) {
         if (err) throw err
