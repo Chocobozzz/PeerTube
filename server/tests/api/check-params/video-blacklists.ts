@@ -149,6 +149,39 @@ describe('Test video blacklists API validators', function () {
               .set('Accept', 'application/json')
               .expect(403)
     })
+
+    it('Should fail with a bad start pagination', async function () {
+      const path = basePath
+
+      await request(server.url)
+              .get(path)
+              .query({ start: 'foobar' })
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + server.accessToken)
+              .expect(400)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      const path = basePath
+
+      await request(server.url)
+              .get(path)
+              .query({ count: 'foobar' })
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + server.accessToken)
+              .expect(400)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      const path = basePath
+
+      await request(server.url)
+              .get(path)
+              .query({ sort: 'foobar' })
+              .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + server.accessToken)
+              .expect(400)
+    })
   })
 
   after(async function () {
