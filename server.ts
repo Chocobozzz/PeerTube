@@ -23,27 +23,28 @@ process.title = 'peertube'
 // Create our main app
 const app = express()
 
-// ----------- Database -----------
-// Do not use barrels because we don't want to load all modules here (we need to initialize database first)
-import { logger } from './server/helpers/logger'
-import { API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
-// Initialize database and models
-import { database as db } from './server/initializers/database'
-db.init(false).then(() => onDatabaseInitDone())
-
-// ----------- Checker -----------
+// ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkConfig } from './server/initializers/checker'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
-  throw new Error('Miss some configurations keys : ' + missed)
+  throw new Error('Your configuration files miss keys: ' + missed)
 }
-checkFFmpeg()
+
+import { API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
+checkFFmpeg(CONFIG)
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
   throw new Error(errorMessage)
 }
+
+// ----------- Database -----------
+// Do not use barrels because we don't want to load all modules here (we need to initialize database first)
+import { logger } from './server/helpers/logger'
+// Initialize database and models
+import { database as db } from './server/initializers/database'
+db.init(false).then(() => onDatabaseInitDone())
 
 // ----------- PeerTube modules -----------
 import { migrate, installApplication } from './server/initializers'

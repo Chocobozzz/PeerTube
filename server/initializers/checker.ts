@@ -1,8 +1,8 @@
 import * as config from 'config'
 
-import { database as db } from './database'
-import { CONFIG } from './constants'
 import { promisify0 } from '../helpers/core-utils'
+import { OAuthClientModel } from '../models/oauth/oauth-client-interface'
+import { UserModel } from '../models/user/user-interface'
 
 // Some checks on configuration files
 function checkConfig () {
@@ -21,8 +21,8 @@ function checkMissedConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
-    'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews',
-    'admin.email', 'signup.enabled', 'transcoding.enabled', 'transcoding.threads'
+    'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews', 'storage.torrents', 'storage.cache',
+    'cache.previews.size', 'admin.email', 'signup.enabled', 'signup.limit', 'transcoding.enabled', 'transcoding.threads'
   ]
   const miss: string[] = []
 
@@ -36,7 +36,8 @@ function checkMissedConfig () {
 }
 
 // Check the available codecs
-function checkFFmpeg () {
+// We get CONFIG by param to not import it in this file (import orders)
+function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
   const Ffmpeg = require('fluent-ffmpeg')
   const getAvailableCodecsPromise = promisify0(Ffmpeg.getAvailableCodecs)
 
@@ -57,14 +58,16 @@ function checkFFmpeg () {
     })
 }
 
-function clientsExist () {
-  return db.OAuthClient.countTotal().then(totalClients => {
+// We get db by param to not import it in this file (import orders)
+function clientsExist (OAuthClient: OAuthClientModel) {
+  return OAuthClient.countTotal().then(totalClients => {
     return totalClients !== 0
   })
 }
 
-function usersExist () {
-  return db.User.countTotal().then(totalUsers => {
+// We get db by param to not import it in this file (import orders)
+function usersExist (User: UserModel) {
+  return User.countTotal().then(totalUsers => {
     return totalUsers !== 0
   })
 }

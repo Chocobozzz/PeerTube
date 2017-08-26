@@ -57,7 +57,7 @@ function createDirectoriesIfNotExist () {
 }
 
 function createOAuthClientIfNotExist () {
-  return clientsExist().then(exist => {
+  return clientsExist(db.OAuthClient).then(exist => {
     // Nothing to do, clients already exist
     if (exist === true) return undefined
 
@@ -82,7 +82,7 @@ function createOAuthClientIfNotExist () {
 }
 
 function createOAuthAdminIfNotExist () {
-  return usersExist().then(exist => {
+  return usersExist(db.User).then(exist => {
     // Nothing to do, users already exist
     if (exist === true) return undefined
 
