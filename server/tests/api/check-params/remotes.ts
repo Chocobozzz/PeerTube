@@ -14,7 +14,7 @@ describe('Test remote videos API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(20000)
+    this.timeout(60000)
 
     await flushTests()
 
