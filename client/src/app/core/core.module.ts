@@ -2,6 +2,7 @@ import { NgModule, Optional, SkipSelf } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpModule } from '@angular/http'
 import { RouterModule } from '@angular/router'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { SimpleNotificationsModule } from 'angular2-notifications'
 import { ModalModule } from 'ngx-bootstrap/modal'
@@ -17,6 +18,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
     CommonModule,
     HttpModule,
     RouterModule,
+    BrowserAnimationsModule,
 
     ModalModule,
     SimpleNotificationsModule.forRoot()
