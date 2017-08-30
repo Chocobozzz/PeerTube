@@ -187,7 +187,7 @@ describe('Test video blacklists management', function () {
       ], done)
     })
 
-    it('Should have the ex-blacklisted video in videos serach on pod 1', function (done) {
+    it('Should have the ex-blacklisted video in videos search on pod 1', function (done) {
       videosUtils.getVideosList(servers[0].url, function (err, res) {
         if (err) throw err
 
