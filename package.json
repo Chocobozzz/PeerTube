@@ -78,8 +78,8 @@
     "safe-buffer": "^5.0.1",
     "scripty": "^1.5.0",
     "sequelize": "^4.7.5",
-    "typescript": "^2.5.2",
     "ts-node": "^3.3.0",
+    "typescript": "^2.5.2",
     "validator": "^8.1.0",
     "winston": "^2.1.1",
     "ws": "^3.1.0"
