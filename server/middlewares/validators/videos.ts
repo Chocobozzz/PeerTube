@@ -24,10 +24,23 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
   logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
   checkErrors(req, res, () => {
-    const videoFile = req.files['videofile'][0]
+    const videoFile: Express.Multer.File = req.files['videofile'][0]
+    const user = res.locals.oauth.token.User
 
-    db.Video.getDurationFromFile(videoFile.path)
+    user.isAbleToUploadVideo(videoFile)
+      .then(isAble => {
+        if (isAble === false) {
+          res.status(403).send('The user video quota is exceeded with this video.')
+
+          return undefined
+        }
+
+        return db.Video.getDurationFromFile(videoFile.path)
+      })
       .then(duration => {
+        // Previous test failed, abort
+        if (duration === undefined) return
+
         if (!isVideoDurationValid('' + duration)) {
           return res.status(400).send('Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')
         }

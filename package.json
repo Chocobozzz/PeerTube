@@ -79,7 +79,7 @@
     "scripty": "^1.5.0",
     "sequelize": "^4.7.5",
     "ts-node": "^3.0.6",
-    "typescript": "^2.4.1",
+    "typescript": "^2.5.2",
     "validator": "^8.1.0",
     "winston": "^2.1.1",
     "ws": "^3.1.0"
@@ -109,7 +109,7 @@
     "source-map-support": "^0.4.15",
     "standard": "^10.0.0",
     "supertest": "^3.0.0",
-    "tslint": "^5.2.0",
+    "tslint": "^5.7.0",
     "tslint-config-standard": "^6.0.0",
     "webtorrent": "^0.98.0"
   },

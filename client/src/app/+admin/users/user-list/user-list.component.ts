@@ -30,7 +30,7 @@ export class UserListComponent {
     },
     pager: {
       display: true,
-      perPage: 10
+      perPage: 1
     },
     columns: {
       id: {
@@ -42,6 +42,9 @@ export class UserListComponent {
       },
       email: {
         title: 'Email'
+      },
+      videoQuota: {
+        title: 'Video quota'
       },
       role: {
         title: 'Role',

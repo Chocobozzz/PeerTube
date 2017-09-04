@@ -9,6 +9,7 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 import { TagInstance } from './tag-interface'
+import { UserInstance } from '../user/user-interface'
 import {
   logger,
   isVideoNameValid,
@@ -582,7 +583,7 @@ transcodeVideofile = function (this: VideoInstance, inputVideoFile: VideoFileIns
             return res()
           })
           .catch(err => {
-            // Autodestruction...
+            // Auto destruction...
             this.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', err))
 
             return rej(err)
@@ -608,8 +609,8 @@ removeFile = function (this: VideoInstance, videoFile: VideoFileInstance) {
 }
 
 removeTorrent = function (this: VideoInstance, videoFile: VideoFileInstance) {
-  const torrenPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
-  return unlinkPromise(torrenPath)
+  const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
+  return unlinkPromise(torrentPath)
 }
 
 // ------------------------------ STATICS ------------------------------

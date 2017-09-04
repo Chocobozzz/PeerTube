@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { database as db } from '../../initializers/database'
-import { USER_ROLES } from '../../initializers'
+import { USER_ROLES, CONFIG } from '../../initializers'
 import { logger, getFormattedObjects } from '../../helpers'
 import {
   authenticate,
@@ -80,12 +80,18 @@ export {
 function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserCreate = req.body
 
+  // On registration, we set the user video quota
+  if (body.videoQuota === undefined) {
+    body.videoQuota = CONFIG.USER.VIDEO_QUOTA
+  }
+
   const user = db.User.build({
     username: body.username,
     password: body.password,
     email: body.email,
     displayNSFW: false,
-    role: USER_ROLES.USER
+    role: USER_ROLES.USER,
+    videoQuota: body.videoQuota
   })
 
   user.save()
@@ -140,6 +146,7 @@ function updateUser (req: express.Request, res: express.Response, next: express.
     .then(user => {
       if (body.password) user.password = body.password
       if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
+      if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota
 
       return user.save()
     })

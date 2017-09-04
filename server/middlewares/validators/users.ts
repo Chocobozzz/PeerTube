@@ -12,6 +12,7 @@ function usersAddValidator (req: express.Request, res: express.Response, next: e
   req.checkBody('username', 'Should have a valid username').isUserUsernameValid()
   req.checkBody('password', 'Should have a valid password').isUserPasswordValid()
   req.checkBody('email', 'Should have a valid email').isEmail()
+  req.checkBody('videoQuota', 'Should have a valid user quota').isUserVideoQuotaValid()
 
   logger.debug('Checking usersAdd parameters', { parameters: req.body })
 
@@ -55,6 +56,7 @@ function usersUpdateValidator (req: express.Request, res: express.Response, next
   // Add old password verification
   req.checkBody('password', 'Should have a valid password').optional().isUserPasswordValid()
   req.checkBody('displayNSFW', 'Should have a valid display Not Safe For Work attribute').optional().isUserDisplayNSFWValid()
+  req.checkBody('videoQuota', 'Should have a valid user quota').optional().isUserVideoQuotaValid()
 
   logger.debug('Checking usersUpdate parameters', { parameters: req.body })
 

@@ -15,7 +15,7 @@ import {
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 65
+const LAST_MIGRATION_VERSION = 70
 
 // ---------------------------------------------------------------------------
 
@@ -77,7 +77,10 @@ const CONFIG = {
   },
   SIGNUP: {
     ENABLED: config.get<boolean>('signup.enabled'),
-    LIMIT: config.get<number>('signup.limit')
+    LIMIT: config.get<number>('signup.limit'),
+  },
+  USER: {
+    VIDEO_QUOTA: config.get<number>('user.video_quota')
   },
   TRANSCODING: {
     ENABLED: config.get<boolean>('transcoding.enabled'),
@@ -97,7 +100,8 @@ CONFIG.WEBSERVER.HOST = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 const CONSTRAINTS_FIELDS = {
   USERS: {
     USERNAME: { min: 3, max: 20 }, // Length
-    PASSWORD: { min: 6, max: 255 } // Length
+    PASSWORD: { min: 6, max: 255 }, // Length
+    VIDEO_QUOTA: { min: -1 }
   },
   VIDEO_ABUSES: {
     REASON: { min: 2, max: 300 } // Length

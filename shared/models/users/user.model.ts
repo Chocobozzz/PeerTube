@@ -6,5 +6,6 @@ export interface User {
   email: string
   displayNSFW: boolean
   role: UserRole
+  videoQuota: number
   createdAt: Date
 }

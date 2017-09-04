@@ -3,14 +3,31 @@ import { Http, RequestOptionsArgs, URLSearchParams, Response } from '@angular/ht
 import { ServerDataSource } from 'ng2-smart-table'
 
 export class RestDataSource extends ServerDataSource {
-  constructor (http: Http, endpoint: string) {
+  private updateResponse: (input: any[]) => any[]
+
+  constructor (http: Http, endpoint: string, updateResponse?: (input: any[]) => any[]) {
     const options = {
       endPoint: endpoint,
       sortFieldKey: 'sort',
       dataKey: 'data'
     }
-
     super(http, options)
+
+    if (updateResponse) {
+      this.updateResponse = updateResponse
+    }
+  }
+
+  protected extractDataFromResponse (res: Response) {
+    const json = res.json()
+    if (!json) return []
+    let data = json.data
+
+    if (this.updateResponse !== undefined) {
+      data = this.updateResponse(data)
+    }
+
+    return data
   }
 
   protected extractTotalFromResponse (res: Response) {

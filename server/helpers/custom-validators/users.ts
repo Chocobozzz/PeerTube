@@ -15,6 +15,10 @@ function isUserRoleValid (value: string) {
   return values(USER_ROLES).indexOf(value as UserRole) !== -1
 }
 
+function isUserVideoQuotaValid (value: string) {
+  return exists(value) && validator.isInt(value + '', USERS_CONSTRAINTS_FIELDS.VIDEO_QUOTA)
+}
+
 function isUserUsernameValid (value: string) {
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
@@ -30,6 +34,7 @@ function isUserDisplayNSFWValid (value: any) {
 export {
   isUserPasswordValid,
   isUserRoleValid,
+  isUserVideoQuotaValid,
   isUserUsernameValid,
   isUserDisplayNSFWValid
 }
@@ -39,6 +44,7 @@ declare module 'express-validator' {
     isUserPasswordValid,
     isUserRoleValid,
     isUserUsernameValid,
-    isUserDisplayNSFWValid
+    isUserDisplayNSFWValid,
+    isUserVideoQuotaValid
   }
 }

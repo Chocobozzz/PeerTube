@@ -9,7 +9,8 @@ import {
   FormReactive,
   USER_USERNAME,
   USER_EMAIL,
-  USER_PASSWORD
+  USER_PASSWORD,
+  USER_VIDEO_QUOTA
 } from '../../../shared'
 import { UserCreate } from '../../../../../../shared'
 
@@ -24,12 +25,14 @@ export class UserAddComponent extends FormReactive implements OnInit {
   formErrors = {
     'username': '',
     'email': '',
-    'password': ''
+    'password': '',
+    'videoQuota': ''
   }
   validationMessages = {
     'username': USER_USERNAME.MESSAGES,
     'email': USER_EMAIL.MESSAGES,
-    'password': USER_PASSWORD.MESSAGES
+    'password': USER_PASSWORD.MESSAGES,
+    'videoQuota': USER_VIDEO_QUOTA.MESSAGES
   }
 
   constructor (
@@ -45,7 +48,8 @@ export class UserAddComponent extends FormReactive implements OnInit {
     this.form = this.formBuilder.group({
       username: [ '', USER_USERNAME.VALIDATORS ],
       email:    [ '', USER_EMAIL.VALIDATORS ],
-      password: [ '', USER_PASSWORD.VALIDATORS ]
+      password: [ '', USER_PASSWORD.VALIDATORS ],
+      videoQuota: [ '-1', USER_VIDEO_QUOTA.VALIDATORS ]
     })
 
     this.form.valueChanges.subscribe(data => this.onValueChanged(data))
@@ -59,6 +63,9 @@ export class UserAddComponent extends FormReactive implements OnInit {
     this.error = null
 
     const userCreate: UserCreate = this.form.value
+
+    // A select in HTML is always mapped as a string, we convert it to number
+    userCreate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
 
     this.userService.addUser(userCreate).subscribe(
       () => {

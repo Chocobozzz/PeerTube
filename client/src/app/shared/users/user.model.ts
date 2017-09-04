@@ -6,6 +6,7 @@ export class User implements UserServerModel {
   email: string
   role: UserRole
   displayNSFW: boolean
+  videoQuota: number
   createdAt: Date
 
   constructor (hash: {
@@ -13,6 +14,7 @@ export class User implements UserServerModel {
     username: string,
     email: string,
     role: UserRole,
+    videoQuota?: number,
     displayNSFW?: boolean,
     createdAt?: Date
   }) {
@@ -20,9 +22,16 @@ export class User implements UserServerModel {
     this.username = hash.username
     this.email = hash.email
     this.role = hash.role
-    this.displayNSFW = hash.displayNSFW
 
-    if (hash.createdAt) {
+    if (hash.videoQuota !== undefined) {
+      this.videoQuota = hash.videoQuota
+    }
+
+    if (hash.displayNSFW !== undefined) {
+      this.displayNSFW = hash.displayNSFW
+    }
+
+    if (hash.createdAt !== undefined) {
       this.createdAt = hash.createdAt
     }
   }

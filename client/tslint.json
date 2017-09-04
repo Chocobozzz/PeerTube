@@ -4,7 +4,6 @@
   "rules": {
     "no-inferrable-types": true,
     "eofline": true,
-    "indent": ["spaces"],
     "max-line-length": [true, 140],
     "no-floating-promises": false,
     "no-unused-variable": false, // Bug, wait TypeScript 2.4

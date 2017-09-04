@@ -36,6 +36,11 @@ signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
 
+user:
+  # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
+  # -1 == unlimited
+  video_quota: -1
+
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # Uses a lot of CPU!
 transcoding:

@@ -1,5 +1,6 @@
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
+import * as Promise from 'bluebird'
 
 import { getSort } from '../utils'
 import { USER_ROLES } from '../../initializers'
@@ -8,7 +9,8 @@ import {
   comparePassword,
   isUserPasswordValid,
   isUserUsernameValid,
-  isUserDisplayNSFWValid
+  isUserDisplayNSFWValid,
+  isUserVideoQuotaValid
 } from '../../helpers'
 
 import { addMethodsToModel } from '../utils'
@@ -30,6 +32,7 @@ let listForApi: UserMethods.ListForApi
 let loadById: UserMethods.LoadById
 let loadByUsername: UserMethods.LoadByUsername
 let loadByUsernameOrEmail: UserMethods.LoadByUsernameOrEmail
+let isAbleToUploadVideo: UserMethods.IsAbleToUploadVideo
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   User = sequelize.define<UserInstance, UserAttributes>('User',
@@ -75,6 +78,16 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       role: {
         type: DataTypes.ENUM(values(USER_ROLES)),
         allowNull: false
+      },
+      videoQuota: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+        validate: {
+          videoQuotaValid: value => {
+            const res = isUserVideoQuotaValid(value)
+            if (res === false) throw new Error('Video quota is not valid.')
+          }
+        }
       }
     },
     {
@@ -109,7 +122,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
   const instanceMethods = [
     isPasswordMatch,
     toFormattedJSON,
-    isAdmin
+    isAdmin,
+    isAbleToUploadVideo
   ]
   addMethodsToModel(User, classMethods, instanceMethods)
 
@@ -136,12 +150,21 @@ toFormattedJSON = function (this: UserInstance) {
     email: this.email,
     displayNSFW: this.displayNSFW,
     role: this.role,
+    videoQuota: this.videoQuota,
     createdAt: this.createdAt
   }
 }
 
 isAdmin = function (this: UserInstance) {
   return this.role === USER_ROLES.ADMIN
+}
+
+isAbleToUploadVideo = function (this: UserInstance, videoFile: Express.Multer.File) {
+  if (this.videoQuota === -1) return Promise.resolve(true)
+
+  return getOriginalVideoFileTotalFromUser(this).then(totalBytes => {
+    return (videoFile.size + totalBytes) < this.videoQuota
+  })
 }
 
 // ------------------------------ STATICS ------------------------------
@@ -214,4 +237,37 @@ loadByUsernameOrEmail = function (username: string, email: string) {
 
   // FIXME: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18387
   return (User as any).findOne(query)
+}
+
+// ---------------------------------------------------------------------------
+
+function getOriginalVideoFileTotalFromUser (user: UserInstance) {
+  const query = {
+    attributes: [
+      Sequelize.fn('COUNT', Sequelize.col('VideoFile.size'), 'totalVideoBytes')
+    ],
+    where: {
+      id: user.id
+    },
+    include: [
+      {
+        model: User['sequelize'].models.Author,
+        include: [
+          {
+            model: User['sequelize'].models.Video,
+            include: [
+              {
+                model: User['sequelize'].models.VideoFile
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+
+  // FIXME: cast to any because of bad typing...
+  return User.findAll(query).then((res: any) => {
+    return res.totalVideoBytes
+  })
 }

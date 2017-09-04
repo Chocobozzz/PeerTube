@@ -11,6 +11,7 @@ export namespace UserMethods {
 
   export type ToFormattedJSON = (this: UserInstance) => FormattedUser
   export type IsAdmin = (this: UserInstance) => boolean
+  export type IsAbleToUploadVideo = (this: UserInstance, videoFile: Express.Multer.File) => Promise<boolean>
 
   export type CountTotal = () => Promise<number>
 
@@ -31,6 +32,7 @@ export interface UserClass {
   isPasswordMatch: UserMethods.IsPasswordMatch,
   toFormattedJSON: UserMethods.ToFormattedJSON,
   isAdmin: UserMethods.IsAdmin,
+  isAbleToUploadVideo: UserMethods.IsAbleToUploadVideo,
 
   countTotal: UserMethods.CountTotal,
   getByUsername: UserMethods.GetByUsername,
@@ -42,11 +44,13 @@ export interface UserClass {
 }
 
 export interface UserAttributes {
+  id?: number
   password: string
   username: string
   email: string
   displayNSFW?: boolean
   role: UserRole
+  videoQuota: number
 }
 
 export interface UserInstance extends UserClass, UserAttributes, Sequelize.Instance<UserAttributes> {

@@ -38,12 +38,12 @@ function removeCacheDirectories () {
 }
 
 function createDirectoriesIfNotExist () {
-  const storages = CONFIG.STORAGE
+  const storage = CONFIG.STORAGE
   const cacheDirectories = CACHE.DIRECTORIES
 
   const tasks = []
-  Object.keys(storages).forEach(key => {
-    const dir = storages[key]
+  Object.keys(storage).forEach(key => {
+    const dir = storage[key]
     tasks.push(mkdirpPromise(dir))
   })
 
@@ -112,7 +112,8 @@ function createOAuthAdminIfNotExist () {
       username,
       email,
       password,
-      role
+      role,
+      videoQuota: -1
     }
 
     return db.User.create(userData, createOptions).then(createdUser => {

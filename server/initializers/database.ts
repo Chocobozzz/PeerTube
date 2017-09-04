@@ -1,5 +1,6 @@
 import { join } from 'path'
 import { flattenDepth } from 'lodash'
+require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 

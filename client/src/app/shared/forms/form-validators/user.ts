@@ -22,3 +22,10 @@ export const USER_PASSWORD = {
     'minlength': 'Password must be at least 6 characters long.'
   }
 }
+export const USER_VIDEO_QUOTA = {
+  VALIDATORS: [ Validators.required, Validators.min(-1) ],
+  MESSAGES: {
+    'required': 'Video quota is required.',
+    'min': 'Quota must be greater than -1.'
+  }
+}
