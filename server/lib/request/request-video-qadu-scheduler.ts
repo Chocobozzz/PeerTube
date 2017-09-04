@@ -81,21 +81,21 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
         if (!videoData) videoData = { uuid: null }
 
         switch (request.type) {
-          case REQUEST_VIDEO_QADU_TYPES.LIKES:
-            videoData.likes = video.likes
-            break
+        case REQUEST_VIDEO_QADU_TYPES.LIKES:
+          videoData.likes = video.likes
+          break
 
-          case REQUEST_VIDEO_QADU_TYPES.DISLIKES:
-            videoData.dislikes = video.dislikes
-            break
+        case REQUEST_VIDEO_QADU_TYPES.DISLIKES:
+          videoData.dislikes = video.dislikes
+          break
 
-          case REQUEST_VIDEO_QADU_TYPES.VIEWS:
-            videoData.views = video.views
-            break
+        case REQUEST_VIDEO_QADU_TYPES.VIEWS:
+          videoData.views = video.views
+          break
 
-          default:
-            logger.error('Unknown request video QADU type %s.', request.type)
-            return
+        default:
+          logger.error('Unknown request video QADU type %s.', request.type)
+          return
         }
 
         // Do not forget the uuid so the remote pod can identify the video
@@ -103,12 +103,12 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
         requestsToMakeGrouped[hashKey].ids.push(request.id)
 
         // Maybe there are multiple quick and dirty update for the same video
-        // We use this hashmap to dedupe them
+        // We use this hash map to dedupe them
         requestsToMakeGrouped[hashKey].videos[video.id] = videoData
       })
     })
 
-    // Now we deduped similar quick and dirty updates, we can build our requests datas
+    // Now we deduped similar quick and dirty updates, we can build our requests data
     Object.keys(requestsToMakeGrouped).forEach(hashKey => {
       Object.keys(requestsToMakeGrouped[hashKey].videos).forEach(videoUUID => {
         const videoData = requestsToMakeGrouped[hashKey].videos[videoUUID]
@@ -118,7 +118,7 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
         })
       })
 
-      // We don't need it anymore, it was just to build our datas array
+      // We don't need it anymore, it was just to build our data array
       delete requestsToMakeGrouped[hashKey].videos
     })
 

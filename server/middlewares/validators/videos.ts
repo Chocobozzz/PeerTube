@@ -39,7 +39,7 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
       })
       .then(duration => {
         // Previous test failed, abort
-        if (duration === undefined) return
+        if (duration === undefined) return undefined
 
         if (!isVideoDurationValid('' + duration)) {
           return res.status(400).send('Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')

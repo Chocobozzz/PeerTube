@@ -141,23 +141,23 @@ function processVideosEvents (eventData: RemoteVideoEventData, fromPod: PodInsta
         let qaduType
 
         switch (eventData.eventType) {
-          case REQUEST_VIDEO_EVENT_TYPES.VIEWS:
-            columnToUpdate = 'views'
-            qaduType = REQUEST_VIDEO_QADU_TYPES.VIEWS
-            break
+        case REQUEST_VIDEO_EVENT_TYPES.VIEWS:
+          columnToUpdate = 'views'
+          qaduType = REQUEST_VIDEO_QADU_TYPES.VIEWS
+          break
 
-          case REQUEST_VIDEO_EVENT_TYPES.LIKES:
-            columnToUpdate = 'likes'
-            qaduType = REQUEST_VIDEO_QADU_TYPES.LIKES
-            break
+        case REQUEST_VIDEO_EVENT_TYPES.LIKES:
+          columnToUpdate = 'likes'
+          qaduType = REQUEST_VIDEO_QADU_TYPES.LIKES
+          break
 
-          case REQUEST_VIDEO_EVENT_TYPES.DISLIKES:
-            columnToUpdate = 'dislikes'
-            qaduType = REQUEST_VIDEO_QADU_TYPES.DISLIKES
-            break
+        case REQUEST_VIDEO_EVENT_TYPES.DISLIKES:
+          columnToUpdate = 'dislikes'
+          qaduType = REQUEST_VIDEO_QADU_TYPES.DISLIKES
+          break
 
-          default:
-            throw new Error('Unknown video event type.')
+        default:
+          throw new Error('Unknown video event type.')
         }
 
         const query = {}

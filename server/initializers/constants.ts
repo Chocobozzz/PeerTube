@@ -77,7 +77,7 @@ const CONFIG = {
   },
   SIGNUP: {
     ENABLED: config.get<boolean>('signup.enabled'),
-    LIMIT: config.get<number>('signup.limit'),
+    LIMIT: config.get<number>('signup.limit')
   },
   USER: {
     VIDEO_QUOTA: config.get<number>('user.video_quota')
@@ -298,7 +298,7 @@ let STATIC_MAX_AGE = '30d'
 const THUMBNAILS_SIZE = '200x110'
 const PREVIEWS_SIZE = '640x480'
 
-// Subfolders of cache directory
+// Sub folders of cache directory
 const CACHE = {
   DIRECTORIES: {
     PREVIEWS: join(CONFIG.STORAGE.CACHE_DIR, 'previews')
