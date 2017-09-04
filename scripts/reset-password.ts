@@ -6,14 +6,14 @@ program
   .option('-u, --user [user]', 'User')
   .parse(process.argv)
 
-if (program.user === undefined) {
+if (program['user'] === undefined) {
   console.error('All parameters are mandatory.')
   process.exit(-1)
 }
 
 db.init(true)
   .then(() => {
-    return db.User.loadByUsername(program.user)
+    return db.User.loadByUsername(program['user'])
   })
   .then(user => {
     if (!user) {

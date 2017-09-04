@@ -10,6 +10,12 @@
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/bcrypt/-/bcrypt-1.0.0.tgz#2c523da191db7d41c06d17de235335c985effe9b"
 
+"@types/bittorrent-protocol@*":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@types/bittorrent-protocol/-/bittorrent-protocol-2.2.2.tgz#169e9633e1bd18e6b830d11cf42e611b1972cb83"
+  dependencies:
+    "@types/node" "*"
+
 "@types/bluebird@*", "@types/bluebird@^3.4.0":
   version "3.5.8"
   resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.8.tgz#242a83379f06c90f96acf6d1aeab3af6faebdb98"
@@ -20,6 +26,10 @@
   dependencies:
     "@types/express" "*"
     "@types/node" "*"
+
+"@types/chai@^4.0.4":
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.0.4.tgz#fe86315d9a66827feeb16f73bc954688ec950e18"
 
 "@types/commander@^2.9.1":
   version "2.9.2"
@@ -58,7 +68,7 @@
   version "4.14.74"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.74.tgz#ac3bd8db988e7f7038e5d22bd76a7ba13f876168"
 
-"@types/magnet-uri@^5.1.1":
+"@types/magnet-uri@*", "@types/magnet-uri@^5.1.1":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@types/magnet-uri/-/magnet-uri-5.1.1.tgz#861aaf64c92a3137dd848fefc55cd352a8ea851a"
   dependencies:
@@ -73,6 +83,10 @@
   resolved "https://registry.yarnpkg.com/@types/mkdirp/-/mkdirp-0.5.1.tgz#ea887cd024f691c1ca67cce20b7606b053e43b0f"
   dependencies:
     "@types/node" "*"
+
+"@types/mocha@^2.2.42":
+  version "2.2.42"
+  resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.42.tgz#ab769f51d37646b6fe8d4a086a98c285b1fab3f5"
 
 "@types/morgan@^1.7.32":
   version "1.7.32"
@@ -93,6 +107,20 @@
 "@types/node@^6.0.48":
   version "6.0.88"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.88.tgz#f618f11a944f6a18d92b5c472028728a3e3d4b66"
+
+"@types/parse-torrent-file@*":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@types/parse-torrent-file/-/parse-torrent-file-4.0.1.tgz#056a6c18f3fac0cd7c6c74540f00496a3225976b"
+  dependencies:
+    "@types/node" "*"
+
+"@types/parse-torrent@*":
+  version "5.8.1"
+  resolved "https://registry.yarnpkg.com/@types/parse-torrent/-/parse-torrent-5.8.1.tgz#012fe6f50d12ed23d86f10ea831a4f0e1b0aacb6"
+  dependencies:
+    "@types/magnet-uri" "*"
+    "@types/node" "*"
+    "@types/parse-torrent-file" "*"
 
 "@types/request@^2.0.3":
   version "2.0.3"
@@ -116,9 +144,36 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
+"@types/simple-peer@*":
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/@types/simple-peer/-/simple-peer-6.1.2.tgz#236b57651572b91088536ea438176eb71fd51f6e"
+  dependencies:
+    "@types/node" "*"
+
+"@types/superagent@*":
+  version "3.5.5"
+  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.5.5.tgz#f4378cec9105dce5f74979c8e4a1ff3fe18a5aca"
+  dependencies:
+    "@types/node" "*"
+
+"@types/supertest@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@types/supertest/-/supertest-2.0.3.tgz#edcae925c427dec6a7abe2697ee4b06fb29664c1"
+  dependencies:
+    "@types/superagent" "*"
+
 "@types/validator@*", "@types/validator@^6.2.0":
   version "6.2.2"
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-6.2.2.tgz#f10c4433e5d107c95cf895e53ae4d25a53c3fa32"
+
+"@types/webtorrent@^0.98.4":
+  version "0.98.4"
+  resolved "https://registry.yarnpkg.com/@types/webtorrent/-/webtorrent-0.98.4.tgz#cf8dbe22e3d5cf6915305f7f970b52bca01bf8b4"
+  dependencies:
+    "@types/bittorrent-protocol" "*"
+    "@types/node" "*"
+    "@types/parse-torrent" "*"
+    "@types/simple-peer" "*"
 
 "@types/winston@^2.3.2":
   version "2.3.5"
@@ -3715,7 +3770,7 @@ tryit@^1.0.1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tryit/-/tryit-1.0.3.tgz#393be730a9446fd1ead6da59a014308f36c289cb"
 
-ts-node@^3.0.6:
+ts-node@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-3.3.0.tgz#c13c6a3024e30be1180dd53038fc209289d4bf69"
   dependencies:
