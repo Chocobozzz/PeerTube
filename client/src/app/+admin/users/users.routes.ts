@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router'
 
 import { UsersComponent } from './users.component'
-import { UserAddComponent } from './user-add'
+import { UserAddComponent, UserUpdateComponent } from './user-edit'
 import { UserListComponent } from './user-list'
 
 export const UsersRoutes: Routes = [
@@ -29,6 +29,15 @@ export const UsersRoutes: Routes = [
         data: {
           meta: {
             title: 'Add a user'
+          }
+        }
+      },
+      {
+        path: ':id/update',
+        component: UserUpdateComponent,
+        data: {
+          meta: {
+            title: 'Update a user'
           }
         }
       }

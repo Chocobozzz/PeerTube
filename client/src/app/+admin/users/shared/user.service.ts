@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map'
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe'
 
 import { AuthHttp, RestExtractor, RestDataSource, User } from '../../../shared'
-import { UserCreate } from '../../../../../../shared'
+import { UserCreate, UserUpdate } from '../../../../../../shared'
 
 @Injectable()
 export class UserService {
@@ -20,6 +20,18 @@ export class UserService {
   addUser (userCreate: UserCreate) {
     return this.authHttp.post(UserService.BASE_USERS_URL, userCreate)
                         .map(this.restExtractor.extractDataBool)
+                        .catch(this.restExtractor.handleError)
+  }
+
+  updateUser (userId: number, userUpdate: UserUpdate) {
+    return this.authHttp.put(UserService.BASE_USERS_URL + userId, userUpdate)
+               .map(this.restExtractor.extractDataBool)
+               .catch(this.restExtractor.handleError)
+  }
+
+  getUser (userId: number) {
+    return this.authHttp.get(UserService.BASE_USERS_URL + userId)
+                        .map(this.restExtractor.extractDataGet)
                         .catch(this.restExtractor.handleError)
   }
 

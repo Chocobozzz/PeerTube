@@ -6,20 +6,20 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { UserService } from '../shared'
 import {
-  FormReactive,
   USER_USERNAME,
   USER_EMAIL,
   USER_PASSWORD,
   USER_VIDEO_QUOTA
 } from '../../../shared'
 import { UserCreate } from '../../../../../../shared'
+import { UserEdit } from './user-edit'
 
 @Component({
   selector: 'my-user-add',
-  templateUrl: './user-add.component.html'
+  templateUrl: './user-edit.component.html'
 })
-export class UserAddComponent extends FormReactive implements OnInit {
-  error: string = null
+export class UserAddComponent extends UserEdit implements OnInit {
+  error: string
 
   form: FormGroup
   formErrors = {
@@ -59,8 +59,8 @@ export class UserAddComponent extends FormReactive implements OnInit {
     this.buildForm()
   }
 
-  addUser () {
-    this.error = null
+  formValidated () {
+    this.error = undefined
 
     const userCreate: UserCreate = this.form.value
 
@@ -75,5 +75,13 @@ export class UserAddComponent extends FormReactive implements OnInit {
 
       err => this.error = err.text
     )
+  }
+
+  isCreation () {
+    return true
+  }
+
+  getFormButtonTitle () {
+    return 'Add user'
   }
 }

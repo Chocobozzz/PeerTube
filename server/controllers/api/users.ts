@@ -9,15 +9,22 @@ import {
   ensureUserRegistrationAllowed,
   usersAddValidator,
   usersUpdateValidator,
+  usersUpdateMeValidator,
   usersRemoveValidator,
   usersVideoRatingValidator,
+  usersGetValidator,
   paginationValidator,
   setPagination,
   usersSortValidator,
   setUsersSort,
   token
 } from '../../middlewares'
-import { UserVideoRate as FormattedUserVideoRate, UserCreate, UserUpdate } from '../../../shared'
+import {
+  UserVideoRate as FormattedUserVideoRate,
+  UserCreate,
+  UserUpdate,
+  UserUpdateMe
+} from '../../../shared'
 
 const usersRouter = express.Router()
 
@@ -40,6 +47,11 @@ usersRouter.get('/',
   listUsers
 )
 
+usersRouter.get('/:id',
+  usersGetValidator,
+  getUser
+)
+
 usersRouter.post('/',
   authenticate,
   ensureIsAdmin,
@@ -53,8 +65,15 @@ usersRouter.post('/register',
   createUser
 )
 
+usersRouter.put('/me',
+  authenticate,
+  usersUpdateMeValidator,
+  updateMe
+)
+
 usersRouter.put('/:id',
   authenticate,
+  ensureIsAdmin,
   usersUpdateValidator,
   updateUser
 )
@@ -105,6 +124,10 @@ function getUserInformation (req: express.Request, res: express.Response, next: 
     .catch(err => next(err))
 }
 
+function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  return res.json(res.locals.user.toFormattedJSON())
+}
+
 function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoId = +req.params.videoId
   const userId = +res.locals.oauth.token.User.id
@@ -139,17 +162,30 @@ function removeUser (req: express.Request, res: express.Response, next: express.
     })
 }
 
-function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const body: UserUpdate = req.body
+function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const body: UserUpdateMe = req.body
 
+  // FIXME: user is not already a Sequelize instance?
   db.User.loadByUsername(res.locals.oauth.token.user.username)
     .then(user => {
-      if (body.password) user.password = body.password
+      if (body.password !== undefined) user.password = body.password
+      if (body.email !== undefined) user.email = body.email
       if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
-      if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota
 
       return user.save()
     })
+    .then(() => res.sendStatus(204))
+    .catch(err => next(err))
+}
+
+function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const body: UserUpdate = req.body
+  const user = res.locals.user
+
+  if (body.email !== undefined) user.email = body.email
+  if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota
+
+  return user.save()
     .then(() => res.sendStatus(204))
     .catch(err => next(err))
 }

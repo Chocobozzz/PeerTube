@@ -26,7 +26,6 @@ export class AccountChangePasswordComponent extends FormReactive implements OnIn
 
   constructor (
     private formBuilder: FormBuilder,
-    private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService
   ) {

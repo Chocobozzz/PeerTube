@@ -9,4 +9,8 @@ export class Utils {
   static getRowDeleteButton () {
     return '<span class="glyphicon glyphicon-remove glyphicon-black"></span>'
   }
+
+  static getRowEditButton () {
+    return '<span class="glyphicon glyphicon-pencil glyphicon-black"></span>'
+  }
 }

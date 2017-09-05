@@ -5,6 +5,7 @@ import { NotificationsService } from 'angular2-notifications'
 import { ConfirmService } from '../../../core'
 import { RestDataSource, User, Utils } from '../../../shared'
 import { UserService } from '../shared'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'my-user-list',
@@ -22,15 +23,18 @@ export class UserListComponent {
     actions: {
       position: 'right',
       add: false,
-      edit: false,
+      edit: true,
       delete: true
     },
     delete: {
       deleteButtonContent: Utils.getRowDeleteButton()
     },
+    edit: {
+      editButtonContent: Utils.getRowEditButton()
+    },
     pager: {
       display: true,
-      perPage: 1
+      perPage: 10
     },
     columns: {
       id: {
@@ -58,6 +62,7 @@ export class UserListComponent {
   }
 
   constructor (
+    private router: Router,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private userService: UserService
@@ -65,8 +70,12 @@ export class UserListComponent {
     this.usersSource = this.userService.getDataSource()
   }
 
-  removeUser ({ data }) {
-    const user: User = data
+  editUser ({ data }: { data: User }) {
+    this.router.navigate([ '/admin', 'users', data.id, 'update' ])
+  }
+
+  removeUser ({ data }: { data: User }) {
+    const user = data
 
     if (user.username === 'root') {
       this.notificationsService.error('Error', 'You cannot delete root.')

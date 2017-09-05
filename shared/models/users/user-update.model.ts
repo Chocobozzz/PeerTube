@@ -1,5 +1,4 @@
 export interface UserUpdate {
-  displayNSFW?: boolean
-  password?: string
+  email?: string
   videoQuota?: number
 }

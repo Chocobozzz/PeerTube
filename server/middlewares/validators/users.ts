@@ -53,14 +53,33 @@ function usersRemoveValidator (req: express.Request, res: express.Response, next
 
 function usersUpdateValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   req.checkParams('id', 'Should have a valid id').notEmpty().isInt()
-  // Add old password verification
-  req.checkBody('password', 'Should have a valid password').optional().isUserPasswordValid()
-  req.checkBody('displayNSFW', 'Should have a valid display Not Safe For Work attribute').optional().isUserDisplayNSFWValid()
+  req.checkBody('email', 'Should have a valid email attribute').optional().isEmail()
   req.checkBody('videoQuota', 'Should have a valid user quota').optional().isUserVideoQuotaValid()
 
   logger.debug('Checking usersUpdate parameters', { parameters: req.body })
 
+  checkErrors(req, res, () => {
+    checkUserExists(req.params.id, res, next)
+  })
+}
+
+function usersUpdateMeValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
+  // Add old password verification
+  req.checkBody('password', 'Should have a valid password').optional().isUserPasswordValid()
+  req.checkBody('email', 'Should have a valid email attribute').optional().isEmail()
+  req.checkBody('displayNSFW', 'Should have a valid display Not Safe For Work attribute').optional().isUserDisplayNSFWValid()
+
+  logger.debug('Checking usersUpdate parameters', { parameters: req.body })
+
   checkErrors(req, res, next)
+}
+
+function usersGetValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
+  req.checkParams('id', 'Should have a valid id').notEmpty().isInt()
+
+  checkErrors(req, res, () => {
+    checkUserExists(req.params.id, res, next)
+  })
 }
 
 function usersVideoRatingValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -106,6 +125,24 @@ export {
   usersAddValidator,
   usersRemoveValidator,
   usersUpdateValidator,
+  usersUpdateMeValidator,
   usersVideoRatingValidator,
-  ensureUserRegistrationAllowed
+  ensureUserRegistrationAllowed,
+  usersGetValidator
+}
+
+// ---------------------------------------------------------------------------
+
+function checkUserExists (id: number, res: express.Response, callback: () => void) {
+  db.User.loadById(id)
+    .then(user => {
+      if (!user) return res.status(404).send('User not found')
+
+      res.locals.user = user
+      callback()
+    })
+    .catch(err => {
+      logger.error('Error in user request validator.', err)
+      return res.sendStatus(500)
+    })
 }

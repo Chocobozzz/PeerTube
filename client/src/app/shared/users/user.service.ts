@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map'
 import { AuthService } from '../../core'
 import { AuthHttp } from '../auth'
 import { RestExtractor } from '../rest'
-import { UserCreate, UserUpdate } from '../../../../../shared'
+import { UserCreate, UserUpdateMe } from '../../../../../shared'
 
 @Injectable()
 export class UserService {
@@ -22,13 +22,13 @@ export class UserService {
   checkTokenValidity () {
     const url = UserService.BASE_USERS_URL + 'me'
 
-    // AuthHttp will redirect us to the login page if the oken is not valid anymore
+    // AuthHttp will redirect us to the login page if the token is not valid anymore
     this.authHttp.get(url).subscribe()
   }
 
   changePassword (newPassword: string) {
-    const url = UserService.BASE_USERS_URL + this.authService.getUser().id
-    const body: UserUpdate = {
+    const url = UserService.BASE_USERS_URL + 'me'
+    const body: UserUpdateMe = {
       password: newPassword
     }
 
@@ -37,8 +37,8 @@ export class UserService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  updateDetails (details: UserUpdate) {
-    const url = UserService.BASE_USERS_URL + this.authService.getUser().id
+  updateMyDetails (details: UserUpdateMe) {
+    const url = UserService.BASE_USERS_URL + 'me'
 
     return this.authHttp.put(url, details)
                         .map(this.restExtractor.extractDataBool)

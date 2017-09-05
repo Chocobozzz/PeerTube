@@ -5,7 +5,7 @@
 
     <ng2-smart-table
       [settings]="tableSettings" [source]="usersSource"
-      (delete)="removeUser($event)"
+      (delete)="removeUser($event)" (edit)="editUser($event)"
     ></ng2-smart-table>
 
     <a class="add-user btn btn-success pull-right" [routerLink]="['/admin/users/add']">

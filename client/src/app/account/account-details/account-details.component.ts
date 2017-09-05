@@ -11,7 +11,7 @@ import {
   UserService,
   USER_PASSWORD
 } from '../../shared'
-import { UserUpdate } from '../../../../../shared'
+import { UserUpdateMe } from '../../../../../shared'
 
 @Component({
   selector: 'my-account-details',
@@ -30,7 +30,6 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
   constructor (
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService
   ) {
@@ -51,14 +50,14 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
 
   updateDetails () {
     const displayNSFW = this.form.value['displayNSFW']
-    const details: UserUpdate = {
+    const details: UserUpdateMe = {
       displayNSFW
     }
 
     this.error = null
-    this.userService.updateDetails(details).subscribe(
+    this.userService.updateMyDetails(details).subscribe(
       () => {
-        this.notificationsService.success('Success', 'Informations updated.')
+        this.notificationsService.success('Success', 'Information updated.')
 
         this.authService.refreshUserInformations()
       },
