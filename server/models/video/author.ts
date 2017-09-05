@@ -71,6 +71,14 @@ function associate (models) {
     },
     onDelete: 'cascade'
   })
+
+  Author.hasMany(models.Video, {
+    foreignKey: {
+      name: 'authorId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
 }
 
 findOrCreateAuthor = function (name: string, podId: number, userId: number, transaction: Sequelize.Transaction) {

@@ -19,14 +19,16 @@ import {
   makePutBodyRequest,
   createUser,
   loginAndGetAccessToken,
-  getUserInformation,
+  getMyUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
   updateUser,
+  updateMyUser,
   registerUser,
   removeUser
 } from '../utils'
 import { killallServers } from '../utils/servers'
+import { getUserInformation } from '../utils/users'
 
 describe('Test users', function () {
   let server: ServerInfo
@@ -166,7 +168,7 @@ describe('Test users', function () {
   it('Should be able to upload a video again')
 
   it('Should be able to create a new user', async function () {
-    await createUser(server.url, accessToken, 'user_1', 'super password')
+    await createUser(server.url, accessToken, 'user_1', 'super password', 2 * 1024 * 1024)
   })
 
   it('Should be able to login with this user', async function () {
@@ -179,12 +181,13 @@ describe('Test users', function () {
   })
 
   it('Should be able to get the user information', async function () {
-    const res = await getUserInformation(server.url, accessTokenUser)
+    const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
     expect(user.username).to.equal('user_1')
     expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.false
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.id).to.be.a('number')
   })
 
@@ -282,22 +285,49 @@ describe('Test users', function () {
     expect(users[1].displayNSFW).to.be.false
   })
 
-  it('Should update the user password', async function () {
-    await updateUser(server.url, userId, accessTokenUser, 'new password', null)
+  it('Should update my password', async function () {
+    await updateMyUser(server.url, accessTokenUser, 'new password')
     server.user.password = 'new password'
 
     await login(server.url, server.client, server.user, 200)
   })
 
   it('Should be able to change the NSFW display attribute', async function () {
-    await updateUser(server.url, userId, accessTokenUser, null, true)
+    await updateMyUser(server.url, accessTokenUser, undefined, true)
 
-    const res = await getUserInformation(server.url, accessTokenUser)
+    const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
     expect(user.username).to.equal('user_1')
     expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.ok
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.id).to.be.a('number')
+  })
+
+  it('Should be able to change the email display attribute', async function () {
+    await updateMyUser(server.url, accessTokenUser, undefined, undefined, 'updated@example.com')
+
+    const res = await getMyUserInformation(server.url, accessTokenUser)
+    const user = res.body
+
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('updated@example.com')
+    expect(user.displayNSFW).to.be.ok
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.id).to.be.a('number')
+  })
+
+  it('Should be able to update another user', async function () {
+    await updateUser(server.url, userId, server.accessToken, 'updated2@example.com', 42 )
+
+    const res = await getUserInformation(server.url, server.accessToken, userId)
+    const user = res.body
+
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('updated2@example.com')
+    expect(user.displayNSFW).to.be.ok
+    expect(user.videoQuota).to.equal(42)
     expect(user.id).to.be.a('number')
   })
 
@@ -329,7 +359,14 @@ describe('Test users', function () {
       password: 'my super password'
     }
 
-    await loginAndGetAccessToken(server)
+    accessToken = await loginAndGetAccessToken(server)
+  })
+
+  it('Should have the correct video quota', async function () {
+    const res = await getMyUserInformation(server.url, accessToken)
+    const user = res.body
+
+    expect(user.videoQuota).to.equal(5 * 1024 * 1024)
   })
 
   after(async function () {

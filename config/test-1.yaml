@@ -21,5 +21,8 @@ storage:
 admin:
   email: 'admin1@example.com'
 
+user:
+  video_quota: 1024 * 1024 * 5
+
 signup:
   limit: 4

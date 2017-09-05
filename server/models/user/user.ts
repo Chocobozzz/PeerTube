@@ -244,7 +244,7 @@ loadByUsernameOrEmail = function (username: string, email: string) {
 function getOriginalVideoFileTotalFromUser (user: UserInstance) {
   const query = {
     attributes: [
-      Sequelize.fn('COUNT', Sequelize.col('VideoFile.size'), 'totalVideoBytes')
+      Sequelize.fn('COUNT', Sequelize.col('User.Author.Video.VideoFile.size'), 'totalVideoBytes')
     ],
     where: {
       id: user.id
@@ -252,12 +252,15 @@ function getOriginalVideoFileTotalFromUser (user: UserInstance) {
     include: [
       {
         model: User['sequelize'].models.Author,
+        required: true,
         include: [
           {
             model: User['sequelize'].models.Video,
+            required: true,
             include: [
               {
-                model: User['sequelize'].models.VideoFile
+                model: User['sequelize'].models.VideoFile,
+                required: true
               }
             ]
           }

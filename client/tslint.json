@@ -28,7 +28,7 @@
     "component-class-suffix": true,
     "directive-class-suffix": true,
     "templates-use-public": true,
-    "no-access-missing-member": true,
+    "no-access-missing-member": false,
     "invoke-injectable": true
   }
 }

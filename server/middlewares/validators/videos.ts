@@ -49,8 +49,8 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
         next()
       })
       .catch(err => {
-        logger.error('Error in getting duration from file.', err)
-        res.status(400).send('Cannot retrieve metadata of the file.')
+        logger.error('Error in video add validator', err)
+        res.sendStatus(500)
       })
   })
 }
