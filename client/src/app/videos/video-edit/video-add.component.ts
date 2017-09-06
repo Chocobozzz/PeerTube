@@ -178,6 +178,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
             this.error += ' access token refreshed. Please retry your request.'
           }
         )
+      } else if (status === 403) {
+        this.error = 'Your video quota is reached, you can\'t upload this video.'
       } else {
         this.error = 'Unknow error'
         console.error(this.error)
