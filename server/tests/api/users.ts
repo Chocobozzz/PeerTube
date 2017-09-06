@@ -319,9 +319,9 @@ describe('Test users', function () {
   })
 
   it('Should be able to update another user', async function () {
-    await updateUser(server.url, userId, server.accessToken, 'updated2@example.com', 42 )
+    await updateUser(server.url, userId, accessToken, 'updated2@example.com', 42)
 
-    const res = await getUserInformation(server.url, server.accessToken, userId)
+    const res = await getUserInformation(server.url, accessToken, userId)
     const user = res.body
 
     expect(user.username).to.equal('user_1')

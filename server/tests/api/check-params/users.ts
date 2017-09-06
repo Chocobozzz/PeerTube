@@ -43,7 +43,8 @@ describe('Test users API validators', function () {
 
     const username = 'user1'
     const password = 'my super password'
-    await createUser(server.url, server.accessToken, username, password)
+    const videoQuota = 42000000
+    await createUser(server.url, server.accessToken, username, password, videoQuota)
 
     const videoAttributes = {}
     await uploadVideo(server.url, server.accessToken, videoAttributes)
@@ -90,7 +91,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'ji',
         email: 'test@example.com',
-        password: 'my_super_password'
+        password: 'my_super_password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -100,7 +102,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'my_super_username_which_is_very_long',
         email: 'test@example.com',
-        password: 'my_super_password'
+        password: 'my_super_password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -110,7 +113,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'my username',
         email: 'test@example.com',
-        password: 'my_super_password'
+        password: 'my_super_password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -119,7 +123,8 @@ describe('Test users API validators', function () {
     it('Should fail with a missing email', async function () {
       const fields = {
         username: 'ji',
-        password: 'my_super_password'
+        password: 'my_super_password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -129,7 +134,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'my_super_username_which_is_very_long',
         email: 'test_example.com',
-        password: 'my_super_password'
+        password: 'my_super_password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -139,7 +145,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'my_username',
         email: 'test@example.com',
-        password: 'bla'
+        password: 'bla',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -151,7 +158,8 @@ describe('Test users API validators', function () {
         email: 'test@example.com',
         password: 'my super long password which is very very very very very very very very very very very very very very' +
                   'very very very very very very very very very very very very very very very veryv very very very very' +
-                  'very very very very very very very very very very very very very very very very very very very very long'
+                  'very very very very very very very very very very very very very very very very very very very very long',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -161,7 +169,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'my_username',
         email: 'test@example.com',
-        password: 'my super password'
+        password: 'my super password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: 'super token', fields, statusCodeExpected: 401 })
@@ -171,7 +180,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'user1',
         email: 'test@example.com',
-        password: 'my super password'
+        password: 'my super password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 409 })
@@ -181,17 +191,40 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'my_username',
         email: 'user1@example.com',
-        password: 'my super password'
+        password: 'my super password',
+        videoQuota: 42000000
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 409 })
+    })
+
+    it('Should fail without a videoQuota', async function () {
+      const fields = {
+        username: 'my_username',
+        email: 'user1@example.com',
+        password: 'my super password'
+      }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an invalid videoQuota', async function () {
+      const fields = {
+        username: 'my_username',
+        email: 'user1@example.com',
+        password: 'my super password',
+        videoQuota: -5
+      }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should succeed with the correct params', async function () {
       const fields = {
         username: 'user2',
         email: 'test@example.com',
-        password: 'my super password'
+        password: 'my super password',
+        videoQuota: -1
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 204 })
@@ -208,18 +241,20 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'user3',
         email: 'test@example.com',
-        password: 'my super password'
+        password: 'my super password',
+        videoQuota: 42000000
       }
       await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, statusCodeExpected: 403 })
     })
   })
 
-  describe('When updating a user', function () {
-    before(async function () {
-      const res = await getUsersList(server.url)
+  describe('When updating my account', function () {
+    it('Should fail with an invalid email attribute', async function () {
+      const fields = {
+        email: 'blabla'
+      }
 
-      userId = res.body.data[1].id
-      rootId = res.body.data[2].id
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: server.accessToken, fields })
     })
 
     it('Should fail with a too small password', async function () {
@@ -227,7 +262,7 @@ describe('Test users API validators', function () {
         password: 'bla'
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + userId, token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
     it('Should fail with a too long password', async function () {
@@ -237,7 +272,7 @@ describe('Test users API validators', function () {
                   'very very very very very very very very very very very very very very very very very very very very long'
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + userId, token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
     it('Should fail with an invalid display NSFW attribute', async function () {
@@ -245,7 +280,7 @@ describe('Test users API validators', function () {
         displayNSFW: -1
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + userId, token: userAccessToken, fields })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
     it('Should fail with an non authenticated user', async function () {
@@ -253,16 +288,60 @@ describe('Test users API validators', function () {
         password: 'my super password'
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + userId, token: 'super token', fields, statusCodeExpected: 401 })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: 'super token', fields, statusCodeExpected: 401 })
     })
 
     it('Should succeed with the correct params', async function () {
       const fields = {
         password: 'my super password',
-        displayNSFW: true
+        displayNSFW: true,
+        email: 'super_email@example.com'
       }
 
-      await makePutBodyRequest({ url: server.url, path: path + userId, token: userAccessToken, fields, statusCodeExpected: 204 })
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })
+    })
+  })
+
+  describe('When updating a user', function () {
+
+    before(async function () {
+      const res = await getUsersList(server.url)
+
+      userId = res.body.data[1].id
+      rootId = res.body.data[2].id
+    })
+
+    it('Should fail with an invalid email attribute', async function () {
+      const fields = {
+        email: 'blabla'
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an invalid videoQuota attribute', async function () {
+      const fields = {
+        videoQuota: -90
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an non authenticated user', async function () {
+      const fields = {
+        videoQuota: 42
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: 'super token', fields, statusCodeExpected: 401 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      const fields = {
+        email: 'email@example.com',
+        videoQuota: 42
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields, statusCodeExpected: 204 })
     })
   })
 
@@ -488,6 +567,38 @@ describe('Test users API validators', function () {
   describe('When registering multiple users on a server with users limit', function () {
     it('Should fail when after 3 registrations', async function () {
       await registerUser(server.url, 'user42', 'super password', 403)
+    })
+  })
+
+  describe('When having a video quota', function () {
+    it('Should fail with a user having too many video', async function () {
+      const fields = {
+        videoQuota: 42
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + rootId, token: server.accessToken, fields, statusCodeExpected: 204 })
+
+      const videoAttributes = {}
+      await uploadVideo(server.url, server.accessToken, videoAttributes, 403)
+    })
+
+    it('Should fail with a registered user having too many video', async function () {
+      this.timeout(10000)
+
+      server.user = {
+        username: 'user3',
+        email: 'test3@example.com',
+        password: 'my super password'
+      }
+      userAccessToken = await loginAndGetAccessToken(server)
+
+      const videoAttributes = { fixture: 'video_short2.webm' }
+      await uploadVideo(server.url, userAccessToken, videoAttributes)
+      await uploadVideo(server.url, userAccessToken, videoAttributes)
+      await uploadVideo(server.url, userAccessToken, videoAttributes)
+      await uploadVideo(server.url, userAccessToken, videoAttributes)
+      await uploadVideo(server.url, userAccessToken, videoAttributes)
+      await uploadVideo(server.url, userAccessToken, videoAttributes, 403)
     })
   })
 

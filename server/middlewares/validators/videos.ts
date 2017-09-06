@@ -36,6 +36,12 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
         }
 
         return db.Video.getDurationFromFile(videoFile.path)
+          .catch(err => {
+            logger.error('Invalid input file in videosAddValidator.', err)
+            res.status(400).send('Invalid input file.')
+
+            return undefined
+          })
       })
       .then(duration => {
         // Previous test failed, abort
@@ -51,7 +57,10 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
       .catch(err => {
         logger.error('Error in video add validator', err)
         res.sendStatus(500)
+
+        return undefined
       })
+
   })
 }
 

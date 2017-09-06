@@ -8,6 +8,7 @@ import {
   ensureIsAdmin,
   ensureUserRegistrationAllowed,
   usersAddValidator,
+  usersRegisterValidator,
   usersUpdateValidator,
   usersUpdateMeValidator,
   usersRemoveValidator,
@@ -25,6 +26,7 @@ import {
   UserUpdate,
   UserUpdateMe
 } from '../../../shared'
+import { UserInstance } from '../../models'
 
 const usersRouter = express.Router()
 
@@ -61,8 +63,8 @@ usersRouter.post('/',
 
 usersRouter.post('/register',
   ensureUserRegistrationAllowed,
-  usersAddValidator,
-  createUser
+  usersRegisterValidator,
+  registerUser
 )
 
 usersRouter.put('/me',
@@ -99,11 +101,6 @@ export {
 function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserCreate = req.body
 
-  // On registration, we set the user video quota
-  if (body.videoQuota === undefined) {
-    body.videoQuota = CONFIG.USER.VIDEO_QUOTA
-  }
-
   const user = db.User.build({
     username: body.username,
     password: body.password,
@@ -111,6 +108,23 @@ function createUser (req: express.Request, res: express.Response, next: express.
     displayNSFW: false,
     role: USER_ROLES.USER,
     videoQuota: body.videoQuota
+  })
+
+  user.save()
+    .then(() => res.type('json').status(204).end())
+    .catch(err => next(err))
+}
+
+function registerUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const body: UserCreate = req.body
+
+  const user = db.User.build({
+    username: body.username,
+    password: body.password,
+    email: body.email,
+    displayNSFW: false,
+    role: USER_ROLES.USER,
+    videoQuota: CONFIG.USER.VIDEO_QUOTA
   })
 
   user.save()
@@ -180,7 +194,7 @@ function updateMe (req: express.Request, res: express.Response, next: express.Ne
 
 function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdate = req.body
-  const user = res.locals.user
+  const user: UserInstance = res.locals.user
 
   if (body.email !== undefined) user.email = body.email
   if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota

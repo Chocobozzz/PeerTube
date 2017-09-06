@@ -242,25 +242,26 @@ loadByUsernameOrEmail = function (username: string, email: string) {
 // ---------------------------------------------------------------------------
 
 function getOriginalVideoFileTotalFromUser (user: UserInstance) {
+  // attributes = [] because we don't want other fields than the sum
   const query = {
-    attributes: [
-      Sequelize.fn('COUNT', Sequelize.col('User.Author.Video.VideoFile.size'), 'totalVideoBytes')
-    ],
     where: {
-      id: user.id
+      resolution: 0 // Original, TODO: improve readability
     },
     include: [
       {
-        model: User['sequelize'].models.Author,
-        required: true,
+        attributes: [],
+        model: User['sequelize'].models.Video,
         include: [
           {
-            model: User['sequelize'].models.Video,
-            required: true,
+            attributes: [],
+            model: User['sequelize'].models.Author,
             include: [
               {
-                model: User['sequelize'].models.VideoFile,
-                required: true
+                attributes: [],
+                model: User['sequelize'].models.User,
+                where: {
+                  id: user.id
+                }
               }
             ]
           }
@@ -269,8 +270,5 @@ function getOriginalVideoFileTotalFromUser (user: UserInstance) {
     ]
   }
 
-  // FIXME: cast to any because of bad typing...
-  return User.findAll(query).then((res: any) => {
-    return res.totalVideoBytes
-  })
+  return User['sequelize'].models.VideoFile.sum('size', query)
 }

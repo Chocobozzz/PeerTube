@@ -118,7 +118,7 @@ function updateUser (url: string, userId: number, accessToken: string, email: st
   const path = '/api/v1/users/' + userId
 
   const toSend = {}
-  if (email !== undefined && email !== null) toSend['password'] = email
+  if (email !== undefined && email !== null) toSend['email'] = email
   if (videoQuota !== undefined && videoQuota !== null) toSend['videoQuota'] = videoQuota
 
   return request(url)

@@ -22,7 +22,7 @@ admin:
   email: 'admin1@example.com'
 
 user:
-  video_quota: 1024 * 1024 * 5
+  video_quota: 5242880 # 5MB
 
 signup:
   limit: 4
