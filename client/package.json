@@ -101,6 +101,7 @@
     "purifycss-webpack": "^0.7.0",
     "standard": "^10.0.0",
     "tslint-config-standard": "^6.0.1",
+    "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.4.5",
     "webpack-dll-bundles-plugin": "^1.0.0-beta.5"

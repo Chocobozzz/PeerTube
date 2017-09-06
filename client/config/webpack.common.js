@@ -16,13 +16,14 @@ const ngcWebpack = require('ngc-webpack')
 
 const WebpackNotifierPlugin = require('webpack-notifier')
 
-/*
- * Webpack Constants
- */
+const HMR = helpers.hasProcessFlag('hot')
+const AOT = process.env.BUILD_AOT || helpers.hasNpmFlag('aot')
 const METADATA = {
   title: 'PeerTube',
   baseUrl: '/',
-  isDevServer: helpers.isWebpackDevServer()
+  isDevServer: helpers.isWebpackDevServer(),
+  HMR: HMR,
+  AOT: AOT
 }
 
 /*
@@ -91,13 +92,6 @@ module.exports = function (options) {
         {
           test: /\.ts$/,
           use: [
-            {
-              loader: '@angularclass/hmr-loader',
-              options: {
-                pretty: !isProd,
-                prod: isProd
-              }
-            },
             {
               loader: 'ng-router-loader',
               options: {
@@ -242,7 +236,7 @@ module.exports = function (options) {
         /**
          * The (\\|\/) piece accounts for path separators in *nix and Windows
          */
-        /angular(\\|\/)core(\\|\/)@angular/,
+        /(.+)?angular(\\|\/)core(.+)?/,
         helpers.root('src'), // location of your src
         {
           /**
@@ -276,7 +270,10 @@ module.exports = function (options) {
       new HtmlWebpackPlugin({
         template: 'src/index.html',
         title: METADATA.title,
-        chunksSortMode: 'dependency',
+        chunksSortMode: function (a, b) {
+          const entryPoints = [ 'inline', 'polyfills', 'sw-register', 'styles', 'vendor', 'main' ]
+          return entryPoints.indexOf(a.names[0]) - entryPoints.indexOf(b.names[0])
+        },
         metadata: METADATA,
         inject: 'body'
       }),

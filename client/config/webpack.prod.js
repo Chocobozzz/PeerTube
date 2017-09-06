@@ -14,22 +14,24 @@ const DefinePlugin = require('webpack/lib/DefinePlugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
-
+const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 /**
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production'
 const HOST = process.env.HOST || 'localhost'
 const PORT = process.env.PORT || 8080
-const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
+const AOT = process.env.BUILD_AOT || helpers.hasNpmFlag('aot')
+const METADATA = {
   host: HOST,
   port: PORT,
   ENV: ENV,
   HMR: false,
+  AOT: AOT,
   API_URL: ''
-})
+}
 
 module.exports = function (env) {
   return [
@@ -106,6 +108,7 @@ module.exports = function (env) {
        * See: http://webpack.github.io/docs/configuration.html#plugins
        */
       plugins: [
+        new ModuleConcatenationPlugin(),
 
         /**
          * Webpack plugin to optimize a JavaScript file for faster initial load
@@ -142,12 +145,11 @@ module.exports = function (env) {
           'ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
           'API_URL': JSON.stringify(METADATA.API_URL),
+          'AOT': METADATA.AOT,
           'process.version': JSON.stringify(process.version),
-          'process.env': {
-            'ENV': JSON.stringify(METADATA.ENV),
-            'NODE_ENV': JSON.stringify(METADATA.ENV),
-            'HMR': METADATA.HMR
-          }
+          'process.env.ENV': JSON.stringify(METADATA.ENV),
+          'process.env.NODE_ENV': JSON.stringify(METADATA.ENV),
+          'process.env.HMR': METADATA.HMR
         }),
 
         /**
@@ -159,44 +161,28 @@ module.exports = function (env) {
         */
         // NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
         new UglifyJsPlugin({
-          // beautify: true, //debug
-          // mangle: false, //debug
-          // dead_code: false, //debug
-          // unused: false, //debug
-          // deadCode: false, //debug
-          // compress: {
-          //   screw_ie8: true,
-          //   keep_fnames: true,
-          //   drop_debugger: false,
-          //   dead_code: false,
-          //   unused: false
-          // }, // debug
-          // comments: true, //debug
-
-          beautify: false, // prod
-          output: {
-            comments: false
-          }, // prod
-          mangle: {
-            screw_ie8: true
-          }, // prod
-          compress: {
-            screw_ie8: true,
-            warnings: false,
-            conditionals: true,
-            unused: true,
-            comparisons: true,
-            sequences: true,
-            dead_code: true,
-            evaluate: true,
-            if_return: true,
-            join_vars: true,
-            negate_iife: false // we need this for lazy v8
-          }
+          parallel: true,
+          uglifyOptions: {
+            ie8: false,
+            ecma: 6,
+            warnings: true,
+            mangle: true,
+            output: {
+              comments: false,
+              beautify: false
+            }
+          },
+          warnings: true
         }),
 
+        /**
+         * Plugin: NormalModuleReplacementPlugin
+         * Description: Replace resources that matches resourceRegExp with newResource
+         *
+         * See: http://webpack.github.io/docs/list-of-plugins.html#normalmodulereplacementplugin
+         */
         new NormalModuleReplacementPlugin(
-          /angular2-hmr/,
+          /(angular2|@angularclass)((\\|\/)|-)hmr/,
           helpers.root('config/empty.js')
         ),
 
@@ -208,26 +194,14 @@ module.exports = function (env) {
         new HashedModuleIdsPlugin(),
 
         /**
-        * Plugin: IgnorePlugin
-        * Description: Don’t generate modules for requests matching the provided RegExp.
-        *
-        * See: http://webpack.github.io/docs/list-of-plugins.html#ignoreplugin
+        * AoT
         */
-
-        // new IgnorePlugin(/angular2-hmr/),
-
-        /**
-        * Plugin: CompressionPlugin
-        * Description: Prepares compressed versions of assets to serve
-        * them with Content-Encoding
-        *
-        * See: https://github.com/webpack/compression-webpack-plugin
-        */
-        //  install compression-webpack-plugin
-        // new CompressionPlugin({
-        //   regExp: /\.css$|\.html$|\.js$|\.map$/,
-        //   threshold: 2 * 1024
-        // })
+        (AOT ? (
+          new NormalModuleReplacementPlugin(
+            /@angular(\\|\/)compiler/,
+            helpers.root('config/empty.js')
+          )
+        ) : (new LoaderOptionsPlugin({}))),
 
         /**
         * Plugin LoaderOptionsPlugin (experimental)
