@@ -92,7 +92,7 @@ videosRouter.put('/:id',
   videosUpdateValidator,
   updateVideoRetryWrapper
 )
-videosRouter.post('/',
+videosRouter.post('/upload',
   authenticate,
   reqFiles,
   videosAddValidator,

@@ -38,7 +38,7 @@ describe('Test update host scripts', function () {
   })
 
   it('Should update torrent hosts', async function () {
-    this.timeout(20000)
+    this.timeout(30000)
 
     killallServers([ server ])
     server = await runServer(1)

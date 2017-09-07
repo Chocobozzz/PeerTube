@@ -163,7 +163,7 @@ async function testVideoImage (url: string, imageName: string, imagePath: string
 }
 
 function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = 204) {
-  const path = '/api/v1/videos'
+  const path = '/api/v1/videos/upload'
 
   // Default attributes
   let attributes = {

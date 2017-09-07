@@ -96,7 +96,7 @@ describe('Test videos API validator', function () {
     it('Should fail with nothing', async function () {
       const fields = {}
       const attaches = {}
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without name', async function () {
@@ -111,7 +111,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a long name', async function () {
@@ -127,7 +127,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without a category', async function () {
@@ -142,7 +142,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad category', async function () {
@@ -158,7 +158,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without a licence', async function () {
@@ -173,7 +173,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad licence', async function () {
@@ -189,7 +189,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad language', async function () {
@@ -205,7 +205,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without nsfw attribute', async function () {
@@ -220,7 +220,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad nsfw attribue', async function () {
@@ -236,7 +236,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without description', async function () {
@@ -251,7 +251,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a long description', async function () {
@@ -269,7 +269,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with too many tags', async function () {
@@ -285,7 +285,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a tag length too low', async function () {
@@ -301,7 +301,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a tag length too big', async function () {
@@ -317,7 +317,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without an input file', async function () {
@@ -331,7 +331,7 @@ describe('Test videos API validator', function () {
         tags: [ 'tag1', 'tag2' ]
       }
       const attaches = {}
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without an incorrect input file', async function () {
@@ -347,7 +347,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a too big duration', async function () {
@@ -363,7 +363,7 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_too_long.webm')
       }
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -382,13 +382,34 @@ describe('Test videos API validator', function () {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
       }
 
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches, statusCodeExpected: 204 })
+      await makePostUploadRequest({
+        url: server.url,
+        path: path + '/upload',
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: 204
+      })
 
       attaches.videofile = join(__dirname, '..', 'fixtures', 'video_short.mp4')
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches, statusCodeExpected: 204 })
+      await makePostUploadRequest({
+        url: server.url,
+        path: path + '/upload',
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: 204
+      })
 
       attaches.videofile = join(__dirname, '..', 'fixtures', 'video_short.ogv')
-      await makePostUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches, statusCodeExpected: 204 })
+      await makePostUploadRequest({
+        url: server.url,
+        path: path + '/upload',
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: 204
+      })
     })
   })
 

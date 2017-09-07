@@ -95,7 +95,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.uploader = new FileUploader({
       authToken: this.authService.getRequestHeaderValue(),
       queueLimit: 1,
-      url: API_URL + '/api/v1/videos',
+      url: API_URL + '/api/v1/videos/upload',
       removeAfterUpload: true
     })
 
@@ -166,7 +166,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     }
 
     item.onError = (response: string, status: number) => {
-      // We need to handle manually these cases beceause we use the FileUpload component
+      // We need to handle manually these cases because we use the FileUpload component
       if (status === 400) {
         this.error = response
       } else if (status === 401) {
@@ -181,7 +181,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       } else if (status === 403) {
         this.error = 'Your video quota is reached, you can\'t upload this video.'
       } else {
-        this.error = 'Unknow error'
+        this.error = 'Unknown error'
         console.error(this.error)
       }
     }
