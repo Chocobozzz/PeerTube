@@ -35,14 +35,14 @@ podsRouter.post('/',
   podsAddValidator,
   addPods
 )
-podsRouter.post('/makefriends',
+podsRouter.post('/make-friends',
   authenticate,
   ensureIsAdmin,
   makeFriendsValidator,
   setBodyHostsPort,
   makeFriendsController
 )
-podsRouter.get('/quitfriends',
+podsRouter.get('/quit-friends',
   authenticate,
   ensureIsAdmin,
   quitFriendsController

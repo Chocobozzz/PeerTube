@@ -37,7 +37,7 @@ async function makeFriends (url: string, accessToken: string, expectedStatus = 2
       'localhost:9003'
     ]
   }
-  const path = '/api/v1/pods/makefriends'
+  const path = '/api/v1/pods/make-friends'
 
   // The first pod make friend with the third
   const res = await request(url)
@@ -54,7 +54,7 @@ async function makeFriends (url: string, accessToken: string, expectedStatus = 2
 }
 
 async function quitFriends (url: string, accessToken: string, expectedStatus = 204) {
-  const path = '/api/v1/pods/quitfriends'
+  const path = '/api/v1/pods/quit-friends'
 
   // The first pod make friend with the third
   const res = await request(url)

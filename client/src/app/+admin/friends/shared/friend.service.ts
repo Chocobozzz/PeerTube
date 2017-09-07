@@ -26,13 +26,13 @@ export class FriendService {
       hosts: notEmptyHosts
     }
 
-    return this.authHttp.post(FriendService.BASE_FRIEND_URL + 'makefriends', body)
+    return this.authHttp.post(FriendService.BASE_FRIEND_URL + 'make-friends', body)
                         .map(this.restExtractor.extractDataBool)
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
   quitFriends () {
-    return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'quitfriends')
+    return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'quit-friends')
                         .map(res => res.status)
                         .catch((res) => this.restExtractor.handleError(res))
   }
