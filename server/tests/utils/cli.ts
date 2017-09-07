@@ -7,7 +7,7 @@ function getEnvCli (server?: ServerInfo) {
 }
 
 async function execCLI (command: string) {
-  return new Promise((res, rej) => {
+  return new Promise<string>((res, rej) => {
     exec(command, (err, stdout, stderr) => {
       if (err) return rej(err)
 

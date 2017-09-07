@@ -185,9 +185,12 @@ function uploadVideo (url: string, accessToken: string, videoAttributesArg: Vide
               .field('name', attributes.name)
               .field('category', attributes.category.toString())
               .field('licence', attributes.licence.toString())
-              .field('language', attributes.language.toString())
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('description', attributes.description)
+
+  if (attributes.language !== undefined) {
+    req.field('language', attributes.language.toString())
+  }
 
   for (let i = 0; i < attributes.tags.length; i++) {
     req.field('tags[' + i + ']', attributes.tags[i])

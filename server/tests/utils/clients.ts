@@ -1,7 +1,7 @@
 import * as request from 'supertest'
 
 function getClient (url: string) {
-  const path = '/api/v1/clients/local'
+  const path = '/api/v1/oauth-clients/local'
 
   return request(url)
           .get(path)
