@@ -5,6 +5,7 @@ interface ServerInfo {
   app: ChildProcess,
   url: string
   host: string
+  serverNumber: number
 
   client: {
     id: string,
@@ -65,9 +66,10 @@ function flushTests () {
   })
 }
 
-function runServer (serverNumber: number) {
+function runServer (serverNumber: number, configOverride?: Object) {
   const server: ServerInfo = {
     app: null,
+    serverNumber: serverNumber,
     url: `http://localhost:${9000 + serverNumber}`,
     host: `localhost:${9000 + serverNumber}`,
     client: {
@@ -98,6 +100,11 @@ function runServer (serverNumber: number) {
   const env = Object.create(process.env)
   env['NODE_ENV'] = 'test'
   env['NODE_APP_INSTANCE'] = serverNumber.toString()
+
+  if (configOverride !== undefined) {
+    env['NODE_CONFIG'] = JSON.stringify(configOverride)
+  }
+
   const options = {
     silent: true,
     env: env,

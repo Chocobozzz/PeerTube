@@ -8,26 +8,25 @@ import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first
 import { logger } from '../helpers/logger'
 import { isTestInstance, readdirPromise } from '../helpers/core-utils'
-import {
-  ApplicationModel,
-  AuthorModel,
-  JobModel,
-  OAuthClientModel,
-  OAuthTokenModel,
-  PodModel,
-  RequestModel,
-  RequestToPodModel,
-  RequestVideoEventModel,
-  RequestVideoQaduModel,
-  TagModel,
-  UserModel,
-  UserVideoRateModel,
-  VideoAbuseModel,
-  BlacklistedVideoModel,
-  VideoFileModel,
-  VideoTagModel,
-  VideoModel
-} from '../models'
+
+import { VideoModel } from './../models/video/video-interface'
+import { VideoTagModel } from './../models/video/video-tag-interface'
+import { BlacklistedVideoModel } from './../models/video/video-blacklist-interface'
+import { VideoFileModel } from './../models/video/video-file-interface'
+import { VideoAbuseModel } from './../models/video/video-abuse-interface'
+import { UserModel } from './../models/user/user-interface'
+import { UserVideoRateModel } from './../models/user/user-video-rate-interface'
+import { TagModel } from './../models/video/tag-interface'
+import { RequestModel } from './../models/request/request-interface'
+import { RequestVideoQaduModel } from './../models/request/request-video-qadu-interface'
+import { RequestVideoEventModel } from './../models/request/request-video-event-interface'
+import { RequestToPodModel } from './../models/request/request-to-pod-interface'
+import { PodModel } from './../models/pod/pod-interface'
+import { OAuthTokenModel } from './../models/oauth/oauth-token-interface'
+import { OAuthClientModel } from './../models/oauth/oauth-client-interface'
+import { JobModel } from './../models/job/job-interface'
+import { AuthorModel } from './../models/video/author-interface'
+import { ApplicationModel } from './../models/application/application-interface'
 
 const dbname = CONFIG.DATABASE.DBNAME
 const username = CONFIG.DATABASE.USERNAME

@@ -18,7 +18,7 @@ db.init(true)
   .then(user => {
     if (!user) {
       console.error('User unknown.')
-      return
+      process.exit(-1)
     }
 
     const readline = require('readline')

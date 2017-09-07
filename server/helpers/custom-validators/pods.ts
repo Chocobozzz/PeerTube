@@ -1,4 +1,5 @@
 import * as validator from 'validator'
+import 'express-validator'
 
 import { isArray, exists } from './misc'
 import { isTestInstance } from '../core-utils'

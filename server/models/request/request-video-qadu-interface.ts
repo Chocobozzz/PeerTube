@@ -2,8 +2,8 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 import { AbstractRequestClass, AbstractRequestToPodClass } from './abstract-request-interface'
-import { VideoInstance } from '../video'
-import { PodInstance } from '../pod'
+import { VideoInstance } from '../video/video-interface'
+import { PodInstance } from '../pod/pod-interface'
 
 import { RequestVideoQaduType } from '../../../shared/models/request-scheduler.model'
 

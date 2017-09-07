@@ -16,7 +16,7 @@ db.init(true)
       const storageDir = STORAGE[storage]
 
       return new Promise((res, rej) => {
-        rimraf(storageDir, function (err) {
+        rimraf(storageDir, err => {
           if (err) return rej(err)
 
           console.info('%s deleted.', storageDir)

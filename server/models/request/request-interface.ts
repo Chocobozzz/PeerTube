@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 import { AbstractRequestClass } from './abstract-request-interface'
-import { PodInstance, PodAttributes } from '../pod'
+import { PodInstance, PodAttributes } from '../pod/pod-interface'
 import { RequestEndpoint } from '../../../shared/models/request-scheduler.model'
 
 export type RequestsGrouped = {

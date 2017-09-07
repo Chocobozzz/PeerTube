@@ -1,3 +1,4 @@
+export * from './cli'
 export * from './clients'
 export * from './config'
 export * from './login'

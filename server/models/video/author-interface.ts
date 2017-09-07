@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
-import { PodInstance } from '../pod'
+import { PodInstance } from '../pod/pod-interface'
 
 export namespace AuthorMethods {
   export type FindOrCreateAuthor = (

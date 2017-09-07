@@ -1,8 +1,5 @@
-import { readFileSync, writeFileSync } from 'fs'
-import { join } from 'path'
-import * as parseTorrent from 'parse-torrent'
+import * as Promise from 'bluebird'
 
-import { CONFIG, STATIC_PATHS } from '../server/initializers/constants'
 import { database as db } from '../server/initializers/database'
 import { hasFriends } from '../server/lib/friends'
 
@@ -20,11 +17,18 @@ db.init(true)
     return db.Video.list()
   })
   .then(videos => {
+    const tasks: Promise<any>[] = []
+
     videos.forEach(video => {
+      console.log('Updating video ' + video.uuid)
+
       video.VideoFiles.forEach(file => {
-        video.createTorrentAndSetInfoHash(file)
+        tasks.push(video.createTorrentAndSetInfoHash(file))
       })
     })
 
+    return Promise.all(tasks)
+  })
+  .then(() => {
     process.exit(0)
   })

@@ -1,3 +1,4 @@
+import 'express-validator'
 import { has, values } from 'lodash'
 
 import {

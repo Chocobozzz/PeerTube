@@ -25,8 +25,15 @@ function isTestInstance () {
 }
 
 function root () {
-  // We are in /dist/helpers/utils.js
-  return join(__dirname, '..', '..', '..')
+  // We are in /helpers/utils.js
+  const paths = [ __dirname, '..', '..' ]
+
+  // We are under /dist directory
+  if (process.mainModule.filename.endsWith('.ts') === false) {
+    paths.push('..')
+  }
+
+  return join.apply(null, paths)
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {

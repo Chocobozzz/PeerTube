@@ -1,8 +1,11 @@
+import { readFile } from 'fs'
 import * as request from 'supertest'
 import { join, isAbsolute } from 'path'
+import * as parseTorrent from 'parse-torrent'
 
 import { makeGetRequest } from './requests'
 import { readFilePromise } from './miscs'
+import { ServerInfo } from './servers'
 
 type VideoAttributes = {
   name?: string
@@ -232,6 +235,17 @@ function rateVideo (url: string, accessToken: string, id: number, rating: string
           .expect(specialStatus)
 }
 
+function parseTorrentVideo (server: ServerInfo, videoUUID: string) {
+  return new Promise<any>((res, rej) => {
+    const torrentPath = join(__dirname, '..', '..', '..', 'test' + server.serverNumber, 'torrents', videoUUID + '.torrent')
+    readFile(torrentPath, (err, data) => {
+      if (err) return rej(err)
+
+      return res(parseTorrent(data))
+    })
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -250,5 +264,6 @@ export {
   testVideoImage,
   uploadVideo,
   updateVideo,
-  rateVideo
+  rateVideo,
+  parseTorrentVideo
 }

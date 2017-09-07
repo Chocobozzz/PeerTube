@@ -1,5 +1,6 @@
 import { values } from 'lodash'
 import * as validator from 'validator'
+import 'express-validator'
 import 'multer'
 
 import {

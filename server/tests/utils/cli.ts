@@ -1,0 +1,24 @@
+import { exec } from 'child_process'
+
+import { ServerInfo } from './servers'
+
+function getEnvCli (server?: ServerInfo) {
+  return `NODE_ENV=test NODE_APP_INSTANCE=${server.serverNumber}`
+}
+
+async function execCLI (command: string) {
+  return new Promise((res, rej) => {
+    exec(command, (err, stdout, stderr) => {
+      if (err) return rej(err)
+
+      return res(stdout)
+    })
+  })
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  execCLI,
+  getEnvCli
+}

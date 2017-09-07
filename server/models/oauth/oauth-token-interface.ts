@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
-import { UserModel } from '../user'
+import { UserModel } from '../user/user-interface'
 
 export type OAuthTokenInfo = {
   refreshToken: string

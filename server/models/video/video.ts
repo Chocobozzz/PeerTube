@@ -378,6 +378,8 @@ createTorrentAndSetInfoHash = function (this: VideoInstance, videoFile: VideoFil
   return createTorrentPromise(this.getVideoFilePath(videoFile), options)
     .then(torrent => {
       const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
+      logger.info('Creating torrent %s.', filePath)
+
       return writeFilePromise(filePath, torrent).then(() => torrent)
     })
     .then(torrent => {
