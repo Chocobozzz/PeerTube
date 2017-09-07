@@ -25,7 +25,7 @@ function getRefreshToken (refreshToken: string) {
 }
 
 function getUser (username: string, password: string) {
-  logger.debug('Getting User (username: ' + username + ', password: ' + password + ').')
+  logger.debug('Getting User (username: ' + username + ', password: ******).')
 
   return db.User.getByUsername(username).then(user => {
     if (!user) return null
