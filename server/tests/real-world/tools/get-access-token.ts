@@ -1,5 +1,4 @@
 import * as program from 'commander'
-import * as Promise from 'bluebird'
 
 import {
   getClient,
