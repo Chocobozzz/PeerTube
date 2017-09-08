@@ -15,7 +15,6 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin')
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
-const ModuleConcatenationPlugin = require('webpack/lib/optimize/ModuleConcatenationPlugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 /**
  * Webpack Constants
@@ -108,7 +107,6 @@ module.exports = function (env) {
        * See: http://webpack.github.io/docs/configuration.html#plugins
        */
       plugins: [
-        new ModuleConcatenationPlugin(),
 
         /**
          * Webpack plugin to optimize a JavaScript file for faster initial load
