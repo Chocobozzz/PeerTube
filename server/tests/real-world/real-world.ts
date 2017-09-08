@@ -1,0 +1,327 @@
+import * as program from 'commander'
+import { isEqual, differenceWith } from 'lodash'
+
+// /!\ Before imports /!\
+process.env.NODE_ENV = 'test'
+
+import { REQUESTS_INTERVAL } from '../../initializers/constants'
+import { Video, VideoRateType } from '../../../shared'
+import {
+  ServerInfo as DefaultServerInfo,
+  flushAndRunMultipleServers,
+  setAccessTokensToServers,
+  makeFriends,
+  wait,
+  killallServers,
+  flushTests,
+  uploadVideo,
+  getVideosList,
+  updateVideo,
+  removeVideo,
+  getVideo,
+  getAllVideosListBy,
+  getRequestsStats
+} from '../utils'
+
+interface ServerInfo extends DefaultServerInfo {
+  requestsNumber: number
+}
+
+program
+  .option('-c, --create [weight]', 'Weight for creating videos')
+  .option('-r, --remove [weight]', 'Weight for removing videos')
+  .option('-u, --update [weight]', 'Weight for updating videos')
+  .option('-v, --view [weight]', 'Weight for viewing videos')
+  .option('-l, --like [weight]', 'Weight for liking videos')
+  .option('-s, --dislike [weight]', 'Weight for disliking videos')
+  .option('-p, --pods [n]', 'Number of pods to run (3 or 6)', /^3|6$/, 3)
+  .option('-i, --interval-action [interval]', 'Interval in ms for an action')
+  .option('-I, --interval-integrity [interval]', 'Interval in ms for an integrity check')
+  .option('-f, --flush', 'Flush datas on exit')
+  .option('-d, --difference', 'Display difference if integrity is not okay')
+  .parse(process.argv)
+
+const createWeight = program['create'] !== undefined ? parseInt(program['create'], 10) : 5
+const removeWeight = program['remove'] !== undefined ? parseInt(program['remove'], 10) : 4
+const updateWeight = program['update'] !== undefined ? parseInt(program['update'], 10) : 4
+const viewWeight = program['view'] !== undefined ? parseInt(program['view'], 10) : 4
+const likeWeight = program['like'] !== undefined ? parseInt(program['like'], 10) : 4
+const dislikeWeight = program['dislike'] !== undefined ? parseInt(program['dislike'], 10) : 4
+const flushAtExit = program['flush'] || false
+const actionInterval = program['intervalAction'] !== undefined ? parseInt(program['intervalAction'], 10) : 500
+const integrityInterval = program['intervalIntegrity'] !== undefined ? parseInt(program['intervalIntegrity'], 10) : 60000
+const displayDiffOnFail = program['difference'] || false
+
+const numberOfPods = 6
+
+console.log(
+  'Create weight: %d, update weight: %d, remove weight: %d, view weight: %d, like weight: %d, dislike weight: %d.',
+  createWeight, updateWeight, removeWeight, viewWeight, likeWeight, dislikeWeight
+)
+
+if (flushAtExit) {
+  console.log('Program will flush data on exit.')
+} else {
+  console.log('Program will not flush data on exit.')
+}
+if (displayDiffOnFail) {
+  console.log('Program will display diff on failure.')
+} else {
+  console.log('Program will not display diff on failure')
+}
+console.log('Interval in ms for each action: %d.', actionInterval)
+console.log('Interval in ms for each integrity check: %d.', integrityInterval)
+
+console.log('Run servers...')
+
+start()
+
+// ----------------------------------------------------------------------------
+
+async function start () {
+  const servers = await runServers(numberOfPods)
+
+  process.on('exit', async () => await exitServers(servers, flushAtExit))
+  process.on('SIGINT', goodbye)
+  process.on('SIGTERM', goodbye)
+
+  console.log('Servers runned')
+  initializeRequestsPerServer(servers)
+
+  let checking = false
+
+  setInterval(async () => {
+    if (checking === true) return
+
+    const rand = getRandomInt(0, createWeight + updateWeight + removeWeight + viewWeight + likeWeight + dislikeWeight)
+
+    const numServer = getRandomNumServer(servers)
+    servers[numServer].requestsNumber++
+
+    if (rand < createWeight) {
+      await upload(servers, numServer)
+    } else if (rand < createWeight + updateWeight) {
+      await update(servers, numServer)
+    } else if (rand < createWeight + updateWeight + removeWeight) {
+      await remove(servers, numServer)
+    } else if (rand < createWeight + updateWeight + removeWeight + viewWeight) {
+      await view(servers, numServer)
+    } else if (rand < createWeight + updateWeight + removeWeight + viewWeight + likeWeight) {
+      await like(servers, numServer)
+    } else {
+      await dislike(servers, numServer)
+    }
+  }, actionInterval)
+
+  // The function will check the consistency between servers (should have the same videos with same attributes...)
+  setInterval(function () {
+    if (checking === true) return
+
+    console.log('Checking integrity...')
+    checking = true
+
+    const waitingInterval = setInterval(async () => {
+      const awaitingRequests = await isThereAwaitingRequests(servers)
+      if (awaitingRequests === true) {
+        console.log('A server has awaiting requests, waiting...')
+        return
+      }
+
+      await checkIntegrity(servers)
+
+      initializeRequestsPerServer(servers)
+      checking = false
+      clearInterval(waitingInterval)
+    }, REQUESTS_INTERVAL)
+  }, integrityInterval)
+}
+
+function initializeRequestsPerServer (servers: ServerInfo[]) {
+  servers.forEach(server => server.requestsNumber = 0)
+}
+
+function getRandomInt (min, max) {
+  return Math.floor(Math.random() * (max - min)) + min
+}
+
+function getRandomNumServer (servers) {
+  return getRandomInt(0, servers.length)
+}
+
+async function runServers (numberOfPods: number) {
+  let servers = null
+
+  // Run servers
+  servers = await flushAndRunMultipleServers(numberOfPods)
+
+  // Get the access tokens
+  await setAccessTokensToServers(servers)
+
+  await makeFriends(servers[1].url, servers[1].accessToken)
+  await makeFriends(servers[0].url, servers[0].accessToken)
+  await wait(1000)
+
+  await makeFriends(servers[3].url, servers[3].accessToken)
+  await makeFriends(servers[5].url, servers[5].accessToken)
+  await makeFriends(servers[4].url, servers[4].accessToken)
+
+  await wait(1000)
+
+  return servers
+}
+
+async function exitServers (servers: ServerInfo[], flushAtExit: boolean) {
+  killallServers(servers)
+
+  if (flushAtExit) await flushTests()
+}
+
+function upload (servers: ServerInfo[], numServer: number) {
+  console.log('Uploading video to server ' + numServer)
+
+  const videoAttributes = {
+    name: Date.now() + ' name',
+    category: 4,
+    nsfw: false,
+    licence: 2,
+    language: 1,
+    description: Date.now() + ' description',
+    tags: [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ],
+    fixture: 'video_short1.webm'
+  }
+  return uploadVideo(servers[numServer].url, servers[numServer].accessToken, videoAttributes)
+}
+
+async function update (servers: ServerInfo[], numServer: number) {
+  const res = await getVideosList(servers[numServer].url)
+
+  const videos = res.body.data.filter(video => video.isLocal === true)
+  if (videos.length === 0) return undefined
+
+  const toUpdate = videos[getRandomInt(0, videos.length)].id
+  const attributes = {
+    name: Date.now() + ' name',
+    description: Date.now() + ' description',
+    tags: [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ]
+  }
+
+  console.log('Updating video of server ' + numServer)
+
+  return updateVideo(servers[numServer].url, servers[numServer].accessToken, toUpdate, attributes)
+}
+
+async function remove (servers: ServerInfo[], numServer: number) {
+  const res = await getVideosList(servers[numServer].url)
+  const videos = res.body.data
+  if (videos.length === 0) return undefined
+
+  const toRemove = videos[getRandomInt(0, videos.length)].id
+
+  console.log('Removing video from server ' + numServer)
+  return removeVideo(servers[numServer].url, servers[numServer].accessToken, toRemove)
+}
+
+async function view (servers: ServerInfo[], numServer: number) {
+  const res = await getVideosList(servers[numServer].url)
+
+  const videos = res.body.data
+  if (videos.length === 0) return undefined
+
+  const toView = videos[getRandomInt(0, videos.length)].id
+
+  console.log('Viewing video from server ' + numServer)
+  return getVideo(servers[numServer].url, toView)
+}
+
+function like (servers: ServerInfo[], numServer: number) {
+  return rate(servers, numServer, 'like')
+}
+
+function dislike (servers: ServerInfo[], numServer: number) {
+  return rate(servers, numServer, 'dislike')
+}
+
+async function rate (servers: ServerInfo[], numServer: number, rating: VideoRateType) {
+  const res = await getVideosList(servers[numServer].url)
+
+  const videos = res.body.data
+  if (videos.length === 0) return undefined
+
+  const toRate = videos[getRandomInt(0, videos.length)].id
+
+  console.log('Rating (%s) video from server %d', rating, numServer)
+  return getVideo(servers[numServer].url, toRate)
+}
+
+async function checkIntegrity (servers: ServerInfo[]) {
+  const videos: Video[][] = []
+  const tasks: Promise<any>[] = []
+
+  // Fetch all videos and remove some fields that can differ between pods
+  for (const server of servers) {
+    const p = getAllVideosListBy(server.url).then(res => {
+      const serverVideos = res.body.data
+      for (const serverVideo of serverVideos) {
+        delete serverVideo.id
+        delete serverVideo.isLocal
+        delete serverVideo.thumbnailPath
+        delete serverVideo.updatedAt
+        delete serverVideo.views
+      }
+
+      videos.push(serverVideos)
+    })
+
+    tasks.push(p)
+  }
+
+  await Promise.all(tasks)
+
+  let i = 0
+  for (const video of videos) {
+    if (!isEqual(video, videos[0])) {
+      console.error('Integrity not ok with server %d!', i + 1)
+
+      if (displayDiffOnFail) {
+        console.log(differenceWith(videos[0], video, isEqual))
+        console.log(differenceWith(video, videos[0], isEqual))
+      }
+
+      process.exit(-1)
+    }
+
+    i++
+  }
+
+  console.log('Integrity ok.')
+}
+
+function goodbye () {
+  return process.exit(-1)
+}
+
+async function isThereAwaitingRequests (servers: ServerInfo[]) {
+  const tasks: Promise<any>[] = []
+  let awaitingRequests = false
+
+  // Check if each server has awaiting request
+  for (const server of servers) {
+    const p = getRequestsStats(server).then(res => {
+      const stats = res.body
+
+      if (
+        stats.requestScheduler.totalRequests !== 0 ||
+        stats.requestVideoEventScheduler.totalRequests !== 0 ||
+        stats.requestVideoQaduScheduler.totalRequests !== 0
+      ) {
+        awaitingRequests = true
+      }
+    })
+
+    tasks.push(p)
+  }
+
+  await Promise.all(tasks)
+
+  return awaitingRequests
+}

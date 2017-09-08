@@ -12,7 +12,9 @@ import {
   makeFriends,
   wait,
   setAccessTokensToServers,
-  flushAndRunMultipleServers
+  flushAndRunMultipleServers,
+  getRequestsStats,
+  killallServers
 } from '../utils'
 
 describe('Test requests schedulers stats', function () {
@@ -26,14 +28,6 @@ describe('Test requests schedulers stats', function () {
     }
 
     return uploadVideo(server.url, server.accessToken, videoAttributes)
-  }
-
-  function getRequestsStats (server: ServerInfo) {
-    return request(server.url)
-            .get(path)
-            .set('Accept', 'application/json')
-            .set('Authorization', 'Bearer ' + server.accessToken)
-            .expect(200)
   }
 
   // ---------------------------------------------------------------
@@ -80,7 +74,7 @@ describe('Test requests schedulers stats', function () {
   })
 
   after(async function () {
-    process.kill(-servers[0].app.pid)
+    killallServers(servers)
 
     if (this['ok']) {
       await flushTests()
