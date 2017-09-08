@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import * as request from 'supertest'
 import 'mocha'
 import * as chai from 'chai'
 const expect = chai.expect
@@ -19,7 +18,6 @@ import {
 
 describe('Test requests schedulers stats', function () {
   const requestSchedulerNames = [ 'requestScheduler', 'requestVideoQaduScheduler', 'requestVideoEventScheduler' ]
-  const path = '/api/v1/request-schedulers/stats'
   let servers: ServerInfo[] = []
 
   function uploadVideoWrapper (server: ServerInfo) {
@@ -74,7 +72,8 @@ describe('Test requests schedulers stats', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    // Server 1 has already been killed
+    killallServers([ servers[0] ])
 
     if (this['ok']) {
       await flushTests()
