@@ -3,6 +3,8 @@
 import 'mocha'
 import * as chai from 'chai'
 const expect = chai.expect
+import * as lodash from 'lodash'
+const orderBy = lodash.orderBy
 
 import {
   ServerInfo,
@@ -74,11 +76,7 @@ describe('Test video blacklists management', function () {
       expect(videos).to.be.an('array')
       expect(videos.length).to.equal(2)
 
-      const result = res.body.data.slice(0).sort((a, b) => {
-        if (a.id > b.id) return -1
-        if (a.id < b.id) return 1
-        return 0
-      })
+      const result = orderBy(res.body.data, [ 'id' ], [ 'desc' ])
 
       expect(videos).to.deep.equal(result)
     })
@@ -91,11 +89,7 @@ describe('Test video blacklists management', function () {
       expect(videos).to.be.an('array')
       expect(videos.length).to.equal(2)
 
-      const result = res.body.data.slice(0).sort((a, b) => {
-        if (a.name > b.name) return -1
-        if (a.name < b.name) return 1
-        return 0
-      })
+      const result = orderBy(res.body.data, [ 'name' ], [ 'desc' ])
 
       expect(videos).to.deep.equal(result)
     })
@@ -108,11 +102,7 @@ describe('Test video blacklists management', function () {
       expect(videos).to.be.an('array')
       expect(videos.length).to.equal(2)
 
-      const result = res.body.data.slice(0).sort((a, b) => {
-        if (a.createdAt < b.createdAt) return -1
-        if (a.createdAt > b.createdAt) return 1
-        return 0
-      })
+      const result = orderBy(res.body.data, [ 'createdAt' ])
 
       expect(videos).to.deep.equal(result)
     })
