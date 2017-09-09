@@ -38,12 +38,7 @@ export class Blacklist implements RestBlacklistedVideoInstance {
     this.likes = hash.likes
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
-
-    if (hash.createdAt) {
-      this.createdAt = hash.createdAt
-    }
-    if (hash.updatedAt) {
-      this.updatedAt = hash.updatedAt
-    }
+    this.createdAt = hash.createdAt
+    this.updatedAt = hash.updatedAt
   }
 }
