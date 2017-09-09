@@ -9,7 +9,7 @@ import { BlacklistService } from '../shared'
 @Component({
   selector: 'my-blacklist-list',
   templateUrl: './blacklist-list.component.html',
-  styleUrls: [ './blacklist-list.component.scss' ]
+  styleUrls: []
 })
 export class BlacklistListComponent {
   blacklistSource = null
