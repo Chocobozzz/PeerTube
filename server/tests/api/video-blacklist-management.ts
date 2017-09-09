@@ -112,7 +112,7 @@ describe('Test video blacklists management', function () {
     let videoToRemove
     let blacklist = []
     
-    it('Should not have any video in videos search on pod 1', async function () {
+    it('Should not have any video in videos list on pod 1', async function () {
       const res = await getVideosList(servers[0].url)
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')
@@ -129,7 +129,7 @@ describe('Test video blacklists management', function () {
       await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, videoToRemove.videoId)
     })
 
-    it('Should have the ex-blacklisted video in videos search on pod 1', async function () {
+    it('Should have the ex-blacklisted video in videos list on pod 1', async function () {
       const res = await getVideosList(servers[0].url)
       expect(res.body.total).to.equal(1)
 
