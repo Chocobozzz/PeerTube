@@ -20,7 +20,7 @@ apiRouter.use('/remote', remoteRouter)
 apiRouter.use('/request-schedulers', requestSchedulerRouter)
 apiRouter.use('/users', usersRouter)
 apiRouter.use('/videos', videosRouter)
-apiRouter.use('/blacklists', blacklistsRouter)
+apiRouter.use('/blacklist', blacklistsRouter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 

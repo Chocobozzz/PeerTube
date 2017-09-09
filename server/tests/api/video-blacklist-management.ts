@@ -33,7 +33,7 @@ describe('Test video blacklists management', function () {
       await addVideoToBlacklist(server.url, server.accessToken, video.id)
     }
   }
-  
+
   before(async function () {
     this.timeout(120000)
 
@@ -52,7 +52,7 @@ describe('Test video blacklists management', function () {
 
     // Wait videos propagation
     await wait(22000)
-    
+
     // Blacklist the two videos on pod 1
     await blacklistVideosOnPod(servers[0])
   })
@@ -111,7 +111,7 @@ describe('Test video blacklists management', function () {
   describe('When removing a blacklisted video', function () {
     let videoToRemove
     let blacklist = []
-    
+
     it('Should not have any video in videos list on pod 1', async function () {
       const res = await getVideosList(servers[0].url)
       expect(res.body.total).to.equal(0)

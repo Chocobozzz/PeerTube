@@ -81,7 +81,7 @@ describe('Test video blacklists API validators', function () {
   })
 
   describe('When removing a video in blacklist', function () {
-    const basePath = '/api/v1/blacklists/'
+    const basePath = '/api/v1/blacklist/'
 
     it('Should fail with a non authenticated user', async function () {
       const path = basePath + server.video.id
@@ -126,7 +126,7 @@ describe('Test video blacklists API validators', function () {
   })
 
   describe('When listing videos in blacklist', function () {
-    const basePath = '/api/v1/blacklists/'
+    const basePath = '/api/v1/blacklist/'
 
     it('Should fail with a non authenticated user', async function () {
       const path = basePath

@@ -11,7 +11,7 @@ function addVideoToBlacklist (url: string, token: string, videoId: number, speci
 }
 
 function removeVideoFromBlacklist (url: string, token: string, videoId: number, specialStatus = 204) {
-  const path = '/api/v1/blacklists/' + videoId
+  const path = '/api/v1/blacklist/' + videoId
 
   return request(url)
           .delete(path)
@@ -21,7 +21,7 @@ function removeVideoFromBlacklist (url: string, token: string, videoId: number, 
 }
 
 function getBlacklistedVideosList (url: string, token: string, specialStatus = 200) {
-  const path = '/api/v1/blacklists/'
+  const path = '/api/v1/blacklist/'
 
   return request(url)
           .get(path)
@@ -33,7 +33,7 @@ function getBlacklistedVideosList (url: string, token: string, specialStatus = 2
 }
 
 function getSortedBlacklistedVideosList (url: string, token: string, sort: string, specialStatus = 200) {
-  const path = '/api/v1/blacklists/'
+  const path = '/api/v1/blacklist/'
 
   return request(url)
           .get(path)

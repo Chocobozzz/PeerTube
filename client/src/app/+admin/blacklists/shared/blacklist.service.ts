@@ -4,7 +4,7 @@ import { AuthHttp, RestDataSource, Blacklist } from '../../../shared'
 
 @Injectable()
 export class BlacklistService {
-  private static BASE_BLACKLISTS_URL = '/api/v1/blacklists/'
+  private static BASE_BLACKLISTS_URL = '/api/v1/blacklist/'
 
   constructor (
     private authHttp: AuthHttp

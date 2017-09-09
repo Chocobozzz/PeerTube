@@ -5,7 +5,7 @@ import { BlacklistListComponent } from './blacklist-list'
 
 export const BlacklistsRoutes: Routes = [
   {
-    path: 'blacklists',
+    path: 'blacklist',
     component: BlacklistsComponent,
     children: [
       {
