@@ -7,6 +7,7 @@ import { RequestSchedulersComponent, RequestSchedulersStatsComponent, RequestSch
 import { UsersComponent, UserAddComponent, UserUpdateComponent, UserListComponent, UserService } from './users'
 import { VideoAbusesComponent, VideoAbuseListComponent } from './video-abuses'
 import { SharedModule } from '../shared'
+import { AdminGuard } from './admin-guard.service'
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { SharedModule } from '../shared'
   providers: [
     FriendService,
     RequestSchedulersService,
-    UserService
+    UserService,
+    AdminGuard
   ]
 })
 export class AdminModule { }
