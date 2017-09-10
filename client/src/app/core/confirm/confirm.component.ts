@@ -46,7 +46,7 @@ export class ConfirmComponent implements OnInit {
   }
 
   @HostListener('keydown.esc')
-  abort () {
+  cancel () {
     this.confirmService.confirmResponse.next(false)
     this.hideModal()
   }
