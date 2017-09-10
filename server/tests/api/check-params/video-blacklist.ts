@@ -16,7 +16,7 @@ import {
   getUserAccessToken
 } from '../../utils'
 
-describe('Test video blacklists API validators', function () {
+describe('Test video blacklist API validators', function () {
   let server: ServerInfo
   let userAccessToken = ''
 

@@ -9,7 +9,7 @@ import { remoteRouter } from './remote'
 import { requestSchedulerRouter } from './request-schedulers'
 import { usersRouter } from './users'
 import { videosRouter } from './videos'
-import { blacklistsRouter } from './blacklists'
+import { blacklistRouter } from './blacklist'
 
 const apiRouter = express.Router()
 
@@ -20,7 +20,7 @@ apiRouter.use('/remote', remoteRouter)
 apiRouter.use('/request-schedulers', requestSchedulerRouter)
 apiRouter.use('/users', usersRouter)
 apiRouter.use('/videos', videosRouter)
-apiRouter.use('/blacklist', blacklistsRouter)
+apiRouter.use('/blacklist', blacklistRouter)
 apiRouter.use('/ping', pong)
 apiRouter.use('/*', badRequest)
 

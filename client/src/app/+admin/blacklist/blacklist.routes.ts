@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router'
 
-import { BlacklistsComponent } from './blacklists.component'
+import { BlacklistComponent } from './blacklist.component'
 import { BlacklistListComponent } from './blacklist-list'
 
-export const BlacklistsRoutes: Routes = [
+export const BlacklistRoutes: Routes = [
   {
     path: 'blacklist',
-    component: BlacklistsComponent,
+    component: BlacklistComponent,
     children: [
       {
         path: '',

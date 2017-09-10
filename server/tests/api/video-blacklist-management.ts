@@ -22,7 +22,7 @@ import {
   getSortedBlacklistedVideosList
 } from '../utils'
 
-describe('Test video blacklists management', function () {
+describe('Test video blacklist management', function () {
   let servers: ServerInfo[] = []
 
   async function blacklistVideosOnPod (server: ServerInfo) {

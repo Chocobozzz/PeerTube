@@ -4,5 +4,5 @@ import { Component } from '@angular/core'
   template: '<router-outlet></router-outlet>'
 })
 
-export class BlacklistsComponent {
+export class BlacklistComponent {
 }

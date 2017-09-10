@@ -11,35 +11,35 @@ import {
   authenticate,
   ensureIsAdmin,
   paginationValidator,
-  blacklistsSortValidator,
-  setBlacklistsSort,
+  blacklistSortValidator,
+  setBlacklistSort,
   setPagination,
-  blacklistsRemoveValidator
+  blacklistRemoveValidator
 } from '../../middlewares'
 
-const blacklistsRouter = express.Router()
+const blacklistRouter = express.Router()
 
-blacklistsRouter.get('/',
+blacklistRouter.get('/',
   authenticate,
   ensureIsAdmin,
   paginationValidator,
-  blacklistsSortValidator,
-  setBlacklistsSort,
+  blacklistSortValidator,
+  setBlacklistSort,
   setPagination,
   listBlacklist
 )
 
-blacklistsRouter.delete('/:id',
+blacklistRouter.delete('/:id',
   authenticate,
   ensureIsAdmin,
-  blacklistsRemoveValidator,
+  blacklistRemoveValidator,
   removeVideoFromBlacklistController
 )
 
 // ---------------------------------------------------------------------------
 
 export {
-  blacklistsRouter
+  blacklistRouter
 }
 
 // ---------------------------------------------------------------------------
