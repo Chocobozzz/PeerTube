@@ -5,6 +5,7 @@ export class Video implements VideoServerModel {
   author: string
   by: string
   createdAt: Date
+  updatedAt: Date
   categoryLabel: string
   category: number
   licenceLabel: string

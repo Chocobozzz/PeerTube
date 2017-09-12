@@ -1,11 +1,10 @@
 import * as program from 'commander'
-import { isEqual, differenceWith } from 'lodash'
 
 // /!\ Before imports /!\
 process.env.NODE_ENV = 'test'
 
 import { REQUESTS_INTERVAL } from '../../initializers/constants'
-import { Video, VideoRateType } from '../../../shared'
+import { Video, VideoRateType, VideoFile } from '../../../shared'
 import {
   ServerInfo as DefaultServerInfo,
   flushAndRunMultipleServers,
@@ -121,12 +120,14 @@ async function start () {
     checking = true
 
     const waitingInterval = setInterval(async () => {
-      const awaitingRequests = await isThereAwaitingRequests(servers)
-      if (awaitingRequests === true) {
-        console.log('A server has awaiting requests, waiting...')
+      const pendingRequests = await isTherePendingRequests(servers)
+      if (pendingRequests === true) {
+        console.log('A server has pending requests, waiting...')
         return
       }
 
+      // Even if there are no pending request, wait some potential processes
+      await wait(2000)
       await checkIntegrity(servers)
 
       initializeRequestsPerServer(servers)
@@ -212,7 +213,7 @@ async function update (servers: ServerInfo[], numServer: number) {
 
 async function remove (servers: ServerInfo[], numServer: number) {
   const res = await getVideosList(servers[numServer].url)
-  const videos = res.body.data
+  const videos = res.body.data.filter(video => video.isLocal === true)
   if (videos.length === 0) return undefined
 
   const toRemove = videos[getRandomInt(0, videos.length)].id
@@ -259,19 +260,7 @@ async function checkIntegrity (servers: ServerInfo[]) {
 
   // Fetch all videos and remove some fields that can differ between pods
   for (const server of servers) {
-    const p = getAllVideosListBy(server.url).then(res => {
-      const serverVideos = res.body.data
-      for (const serverVideo of serverVideos) {
-        delete serverVideo.id
-        delete serverVideo.isLocal
-        delete serverVideo.thumbnailPath
-        delete serverVideo.updatedAt
-        delete serverVideo.views
-      }
-
-      videos.push(serverVideos)
-    })
-
+    const p = getAllVideosListBy(server.url).then(res => videos.push(res.body.data))
     tasks.push(p)
   }
 
@@ -279,12 +268,12 @@ async function checkIntegrity (servers: ServerInfo[]) {
 
   let i = 0
   for (const video of videos) {
-    if (!isEqual(video, videos[0])) {
+    const differences = areDifferences(video, videos[0])
+    if (differences !== undefined) {
       console.error('Integrity not ok with server %d!', i + 1)
 
       if (displayDiffOnFail) {
-        console.log(differenceWith(videos[0], video, isEqual))
-        console.log(differenceWith(video, videos[0], isEqual))
+        console.log(differences)
       }
 
       process.exit(-1)
@@ -296,15 +285,74 @@ async function checkIntegrity (servers: ServerInfo[]) {
   console.log('Integrity ok.')
 }
 
+function areDifferences (videos1: Video[], videos2: Video[]) {
+  // Remove some keys we don't want to compare
+  videos1.concat(videos2).forEach(video => {
+    delete video.id
+    delete video.isLocal
+    delete video.thumbnailPath
+    delete video.updatedAt
+    delete video.views
+  })
+
+  if (videos1.length !== videos2.length) {
+    return `Videos length are different (${videos1.length}/${videos2.length}).`
+  }
+
+  for (const video1 of videos1) {
+    const video2 = videos2.find(video => video.uuid === video1.uuid)
+
+    if (!video2) return 'Video ' + video1.uuid + ' is missing.'
+
+    for (const videoKey of Object.keys(video1)) {
+      const attribute1 = video1[videoKey]
+      const attribute2 = video2[videoKey]
+
+      if (videoKey === 'tags') {
+        if (attribute1.length !== attribute2.length) {
+          return 'Tags are different.'
+        }
+
+        attribute1.forEach(tag1 => {
+          if (attribute2.indexOf(tag1) === -1) {
+            return 'Tag ' + tag1 + ' is missing.'
+          }
+        })
+      } else if (videoKey === 'files') {
+        if (attribute1.length !== attribute2.length) {
+          return 'Video files are different.'
+        }
+
+        attribute1.forEach((videoFile1: VideoFile) => {
+          const videoFile2: VideoFile = attribute2.find(videoFile => videoFile.magnetUri === videoFile1.magnetUri)
+          if (!videoFile2) {
+            return `Video ${video1.uuid} has missing video file ${videoFile1.magnetUri}.`
+          }
+
+          if (videoFile1.size !== videoFile2.size || videoFile1.resolutionLabel !== videoFile2.resolutionLabel) {
+            return `Video ${video1.uuid} has different video file ${videoFile1.magnetUri}.`
+          }
+        })
+      } else {
+        if (attribute1 !== attribute2) {
+          return `Video ${video1.uuid} has different value for attribute ${videoKey}.`
+        }
+      }
+    }
+  }
+
+  return undefined
+}
+
 function goodbye () {
   return process.exit(-1)
 }
 
-async function isThereAwaitingRequests (servers: ServerInfo[]) {
+async function isTherePendingRequests (servers: ServerInfo[]) {
   const tasks: Promise<any>[] = []
-  let awaitingRequests = false
+  let pendingRequests = false
 
-  // Check if each server has awaiting request
+  // Check if each server has pending request
   for (const server of servers) {
     const p = getRequestsStats(server).then(res => {
       const stats = res.body
@@ -314,7 +362,7 @@ async function isThereAwaitingRequests (servers: ServerInfo[]) {
         stats.requestVideoEventScheduler.totalRequests !== 0 ||
         stats.requestVideoQaduScheduler.totalRequests !== 0
       ) {
-        awaitingRequests = true
+        pendingRequests = true
       }
     })
 
@@ -323,5 +371,5 @@ async function isThereAwaitingRequests (servers: ServerInfo[]) {
 
   await Promise.all(tasks)
 
-  return awaitingRequests
+  return pendingRequests
 }

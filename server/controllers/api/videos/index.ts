@@ -157,6 +157,7 @@ function addVideoRetryWrapper (req: express.Request, res: express.Response, next
 
 function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
   const videoInfo: VideoCreate = req.body
+  let videoUUID = ''
 
   return db.sequelize.transaction(t => {
     const user = res.locals.oauth.token.User
@@ -241,6 +242,7 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           .then(videoCreated => {
             // Do not forget to add Author information to the created video
             videoCreated.Author = author
+            videoUUID = videoCreated.uuid
 
             return { tagInstances, video: videoCreated, videoFile }
           })
@@ -274,7 +276,7 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           })
       })
   })
-  .then(() => logger.info('Video with name %s created.', videoInfo.name))
+  .then(() => logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoUUID))
   .catch((err: Error) => {
     logger.debug('Cannot insert the video.', err)
     throw err
@@ -342,7 +344,7 @@ function updateVideo (req: express.Request, res: express.Response) {
       })
   })
   .then(() => {
-    logger.info('Video with name %s updated.', videoInstance.name)
+    logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)
   })
   .catch(err => {
     logger.debug('Cannot update the video.', err)
@@ -398,7 +400,10 @@ function removeVideo (req: express.Request, res: express.Response, next: express
   const videoInstance = res.locals.video
 
   videoInstance.destroy()
-    .then(() => res.type('json').status(204).end())
+    .then(() => {
+      logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
+      res.type('json').status(204).end()
+    })
     .catch(err => {
       logger.error('Errors when removed the video.', err)
       return next(err)

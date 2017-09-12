@@ -17,7 +17,7 @@ import {
 } from '../../../middlewares'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { quickAndDirtyUpdatesVideoToFriends } from '../../../lib'
-import { PodInstance } from '../../../models'
+import { PodInstance, VideoFileInstance } from '../../../models'
 import {
   RemoteVideoRequest,
   RemoteVideoCreateData,
@@ -81,7 +81,7 @@ function remoteVideos (req: express.Request, res: express.Response, next: expres
     // Get the function we need to call in order to process the request
     const fun = functionsHash[request.type]
     if (fun === undefined) {
-      logger.error('Unkown remote request type %s.', request.type)
+      logger.error('Unknown remote request type %s.', request.type)
       return
     }
 
@@ -176,7 +176,7 @@ function processVideosEvents (eventData: RemoteVideoEventData, fromPod: PodInsta
         return quickAndDirtyUpdatesVideoToFriends(qadusParams, t)
       })
   })
-  .then(() => logger.info('Remote video event processed for video %s.', eventData.uuid))
+  .then(() => logger.info('Remote video event processed for video with uuid %s.', eventData.uuid))
   .catch(err => {
     logger.debug('Cannot process a video event.', err)
     throw err
@@ -193,14 +193,14 @@ function quickAndDirtyUpdateVideoRetryWrapper (videoData: RemoteQaduVideoData, f
 }
 
 function quickAndDirtyUpdateVideo (videoData: RemoteQaduVideoData, fromPod: PodInstance) {
-  let videoName
+  let videoUUID = ''
 
   return db.sequelize.transaction(t => {
     return fetchVideoByHostAndUUID(fromPod.host, videoData.uuid)
       .then(videoInstance => {
         const options = { transaction: t }
 
-        videoName = videoInstance.name
+        videoUUID = videoInstance.uuid
 
         if (videoData.views) {
           videoInstance.set('views', videoData.views)
@@ -217,7 +217,7 @@ function quickAndDirtyUpdateVideo (videoData: RemoteQaduVideoData, fromPod: PodI
         return videoInstance.save(options)
       })
   })
-  .then(() => logger.info('Remote video %s quick and dirty updated', videoName))
+  .then(() => logger.info('Remote video with uuid %s quick and dirty updated', videoUUID))
   .catch(err => logger.debug('Cannot quick and dirty update the remote video.', err))
 }
 
@@ -315,7 +315,7 @@ function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodI
         return videoCreated.setTags(tagInstances, options)
       })
   })
-  .then(() => logger.info('Remote video %s inserted.', videoToCreateData.name))
+  .then(() => logger.info('Remote video with uuid %s inserted.', videoToCreateData.uuid))
   .catch(err => {
     logger.debug('Cannot insert the remote video.', err)
     throw err
@@ -361,7 +361,17 @@ function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, from
         return videoInstance.save(options).then(() => ({ videoInstance, tagInstances }))
       })
       .then(({ tagInstances, videoInstance }) => {
-        const tasks = []
+        const tasks: Promise<void>[] = []
+
+        // Remove old video files
+        videoInstance.VideoFiles.forEach(videoFile => {
+          tasks.push(videoFile.destroy())
+        })
+
+        return Promise.all(tasks).then(() => ({ tagInstances, videoInstance }))
+      })
+      .then(({ tagInstances, videoInstance }) => {
+        const tasks: Promise<VideoFileInstance>[] = []
         const options = {
           transaction: t
         }
@@ -386,7 +396,7 @@ function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, from
         return videoInstance.setTags(tagInstances, options)
       })
   })
-  .then(() => logger.info('Remote video %s updated', videoAttributesToUpdate.name))
+  .then(() => logger.info('Remote video with uuid %s updated', videoAttributesToUpdate.uuid))
   .catch(err => {
     // This is just a debug because we will retry the insert
     logger.debug('Cannot update the remote video.', err)
@@ -398,7 +408,7 @@ function removeRemoteVideo (videoToRemoveData: RemoteVideoRemoveData, fromPod: P
   // We need the instance because we have to remove some other stuffs (thumbnail etc)
   return fetchVideoByHostAndUUID(fromPod.host, videoToRemoveData.uuid)
     .then(video => {
-      logger.debug('Removing remote video %s.', video.uuid)
+      logger.debug('Removing remote video with uuid %s.', video.uuid)
       return video.destroy()
     })
     .catch(err => {

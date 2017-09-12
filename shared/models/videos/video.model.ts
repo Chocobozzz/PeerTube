@@ -10,6 +10,7 @@ export interface Video {
   uuid: string
   author: string
   createdAt: Date
+  updatedAt: Date
   categoryLabel: string
   category: number
   licenceLabel: string

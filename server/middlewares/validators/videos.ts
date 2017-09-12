@@ -109,8 +109,6 @@ function videosRemoveValidator (req: express.Request, res: express.Response, nex
 
   checkErrors(req, res, () => {
     checkVideoExists(req.params.id, res, () => {
-      // We need to make additional checks
-
       // Check if the user who did the request is able to delete the video
       checkUserCanDeleteVideo(res.locals.oauth.token.User.id, res, () => {
         next()
@@ -205,17 +203,15 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
   // Retrieve the user who did the request
   db.User.loadById(userId)
     .then(user => {
+      if (res.locals.video.isOwned() === false) {
+        return res.status(403).send('Cannot remove video of another pod, blacklist it')
+      }
+
       // Check if the user can delete the video
       // The user can delete it if s/he is an admin
       // Or if s/he is the video's author
-      if (user.isAdmin() === false) {
-        if (res.locals.video.isOwned() === false) {
-          return res.status(403).send('Cannot remove video of another pod')
-        }
-
-        if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
-          return res.status(403).send('Cannot remove video of another user')
-        }
+      if (user.isAdmin() === false && res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+        return res.status(403).send('Cannot remove video of another user')
       }
 
       // If we reach this comment, we can delete the video
