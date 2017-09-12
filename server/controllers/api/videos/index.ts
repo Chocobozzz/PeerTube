@@ -45,6 +45,7 @@ import { VideoCreate, VideoUpdate } from '../../../../shared'
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { rateVideoRouter } from './rate'
+import { VideoInstance } from '../../../models/video/video-interface'
 
 const videosRouter = express.Router()
 
@@ -106,7 +107,7 @@ videosRouter.get('/:id',
 videosRouter.delete('/:id',
   authenticate,
   videosRemoveValidator,
-  removeVideo
+  removeVideoRetryWrapper
 )
 
 videosRouter.get('/search/:value',
@@ -291,7 +292,6 @@ function updateVideoRetryWrapper (req: express.Request, res: express.Response, n
 
   retryTransactionWrapper(updateVideo, options)
     .then(() => {
-      // TODO : include Location of the new video -> 201
       return res.type('json').status(204).end()
     })
     .catch(err => next(err))
@@ -396,18 +396,32 @@ function listVideos (req: express.Request, res: express.Response, next: express.
     .catch(err => next(err))
 }
 
-function removeVideo (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoInstance = res.locals.video
+function removeVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const options = {
+    arguments: [ req, res ],
+    errorMessage: 'Cannot remove the video with many retries.'
+  }
 
-  videoInstance.destroy()
+  retryTransactionWrapper(removeVideo, options)
     .then(() => {
-      logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
-      res.type('json').status(204).end()
+      return res.type('json').status(204).end()
     })
-    .catch(err => {
-      logger.error('Errors when removed the video.', err)
-      return next(err)
-    })
+    .catch(err => next(err))
+}
+
+function removeVideo (req: express.Request, res: express.Response) {
+  const videoInstance: VideoInstance = res.locals.video
+
+  return db.sequelize.transaction(t => {
+    return videoInstance.destroy({ transaction: t })
+  })
+  .then(() => {
+    logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
+  })
+  .catch(err => {
+    logger.error('Errors when removed the video.', err)
+    throw err
+  })
 }
 
 function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {

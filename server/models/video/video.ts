@@ -300,7 +300,7 @@ function associate (models) {
   })
 }
 
-function afterDestroy (video: VideoInstance) {
+function afterDestroy (video: VideoInstance, options: { transaction: Sequelize.Transaction }) {
   const tasks = []
 
   tasks.push(
@@ -314,10 +314,10 @@ function afterDestroy (video: VideoInstance) {
 
     tasks.push(
       video.removePreview(),
-      removeVideoToFriends(removeVideoToFriendsParams)
+      removeVideoToFriends(removeVideoToFriendsParams, options.transaction)
     )
 
-    // TODO: check files is populated
+    // Remove physical files and torrents
     video.VideoFiles.forEach(file => {
       video.removeFile(file),
       video.removeTorrent(file)

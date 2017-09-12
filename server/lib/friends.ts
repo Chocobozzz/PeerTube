@@ -80,12 +80,12 @@ function updateVideoToFriends (videoData: RemoteVideoUpdateData, transaction: Se
   return createRequest(options)
 }
 
-function removeVideoToFriends (videoParams: RemoteVideoRemoveData) {
+function removeVideoToFriends (videoParams: RemoteVideoRemoveData, transaction: Sequelize.Transaction) {
   const options = {
     type: ENDPOINT_ACTIONS.REMOVE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
     data: videoParams,
-    transaction: null
+    transaction
   }
   return createRequest(options)
 }
