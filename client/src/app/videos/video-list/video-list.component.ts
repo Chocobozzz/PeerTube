@@ -13,7 +13,6 @@ import {
 } from '../shared'
 import { AuthService, AuthUser } from '../../core'
 import { Search, SearchField, SearchService } from '../../shared'
-import {  } from '../../shared'
 
 @Component({
   selector: 'my-videos-list',

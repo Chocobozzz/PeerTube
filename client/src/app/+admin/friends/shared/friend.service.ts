@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 
-import { RestExtractor,  } from '../../../shared'
+import { RestExtractor } from '../../../shared'
 import { Pod, ResultList } from '../../../../../../shared'
 
 @Injectable()

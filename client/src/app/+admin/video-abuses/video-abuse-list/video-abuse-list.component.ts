@@ -13,7 +13,7 @@ import { VideoAbuse } from '../../../../../../shared'
 export class VideoAbuseListComponent extends RestTable implements OnInit {
   videoAbuses: VideoAbuse[] = []
   totalRecords = 0
-  rowsPerPage = 1
+  rowsPerPage = 10
   sort: SortMeta = { field: 'id', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
