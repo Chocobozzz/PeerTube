@@ -2,6 +2,7 @@ import * as Sequelize from 'sequelize'
 
 import { SortType } from '../../helpers'
 import { addMethodsToModel, getSortOnModel } from '../utils'
+import { VideoInstance } from './video-interface'
 import {
   BlacklistedVideoInstance,
   BlacklistedVideoAttributes,
@@ -50,10 +51,23 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 // ------------------------------ METHODS ------------------------------
 
 toFormattedJSON = function (this: BlacklistedVideoInstance) {
+  let video: VideoInstance
+
+  video = this.Video
+
   return {
     id: this.id,
     videoId: this.videoId,
-    createdAt: this.createdAt
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+    name: video.name,
+    uuid: video.uuid,
+    description: video.description,
+    duration: video.duration,
+    views: video.views,
+    likes: video.likes,
+    dislikes: video.dislikes,
+    nsfw: video.nsfw
   }
 }
 

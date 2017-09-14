@@ -1,6 +1,6 @@
-import { RestBlacklistedVideoInstance } from '../../../../../shared'
+import { BlacklistedVideo } from '../../../../../shared'
 
-export class Blacklist implements RestBlacklistedVideoInstance {
+export class Blacklist implements BlacklistedVideo {
   id: number
   videoId: number
   name: string

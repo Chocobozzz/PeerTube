@@ -2,9 +2,7 @@ export interface BlacklistedVideo {
   id: number
   videoId: number
   createdAt: Date
-}
-
-export interface RestBlacklistedVideo {
+  updatedAt: Date
   name: string
   uuid: string
   description: string
@@ -13,8 +11,4 @@ export interface RestBlacklistedVideo {
   likes: number
   dislikes: number
   nsfw: boolean
-}
-
-export interface RestBlacklistedVideoInstance extends BlacklistedVideo, RestBlacklistedVideo {
-  updatedAt: Date
 }

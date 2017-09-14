@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { database } from '../../initializers'
-import { RestBlacklistedVideoInstance, ResultList } from '../../../shared'
+import { BlacklistedVideo, ResultList } from '../../../shared'
 import { VideoInstance, BlacklistedVideoInstance } from '../../models'
 
 import {
@@ -58,8 +58,8 @@ function removeVideoFromBlacklistController (req: express.Request, res: express.
     .catch(err => next(err))
 }
 
-function formatBlacklistForRest (resultList): ResultList<RestBlacklistedVideoInstance> {
-  let formatedList: RestBlacklistedVideoInstance[] = []
+function formatBlacklistForRest (resultList): ResultList<BlacklistedVideo> {
+  let formatedList: BlacklistedVideo[] = []
 
   formatedList = resultList.data.map(object => {
     let json = object.toFormattedJSON()
@@ -74,10 +74,12 @@ function formatBlacklistForRest (resultList): ResultList<RestBlacklistedVideoIns
   }
 }
 
-function formatBlacklistObject (blacklist: BlacklistedVideoInstance, video: VideoInstance): RestBlacklistedVideoInstance {
+function formatBlacklistObject (blacklist: BlacklistedVideoInstance, video: VideoInstance): BlacklistedVideo {
   return {
     id: blacklist.id,
     videoId: blacklist.videoId,
+    createdAt: blacklist.createdAt,
+    updatedAt: blacklist.updatedAt,
     name: video.name,
     uuid: video.uuid,
     description: video.description,
@@ -85,8 +87,6 @@ function formatBlacklistObject (blacklist: BlacklistedVideoInstance, video: Vide
     views: video.views,
     likes: video.likes,
     dislikes: video.dislikes,
-    nsfw: video.nsfw,
-    createdAt: blacklist.createdAt,
-    updatedAt: blacklist.updatedAt
+    nsfw: video.nsfw
   }
 }
