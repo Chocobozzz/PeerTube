@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { SortMeta } from 'primeng/primeng'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 
 import { NotificationsService } from 'angular2-notifications'
 

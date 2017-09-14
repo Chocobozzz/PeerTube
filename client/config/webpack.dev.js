@@ -91,28 +91,6 @@ module.exports = function (env) {
         libraryTarget: 'var'
       },
 
-      module: {
-
-        // Too slow, life is short
-        // rules: [
-        //   {
-        //     test: /\.ts$/,
-        //     use: [
-        //       {
-        //         loader: 'tslint-loader',
-        //         options: {
-        //           configFile: 'tslint.json'
-        //         }
-        //       }
-        //     ],
-        //     exclude: [
-        //       /\.(spec|e2e)\.ts$/,
-        //       /node_modules\//
-        //     ]
-        //   }
-        // ]
-      },
-
       plugins: [
 
         /**

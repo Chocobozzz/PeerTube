@@ -4,7 +4,7 @@ import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
 
-import { SortMeta } from 'primeng/primeng'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 
 import { AuthService } from '../core'
 import { RestExtractor, RestPagination, RestService } from '../rest'

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 
-import { SortMeta } from 'primeng/primeng'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe'
 
 import { RestExtractor, User, RestPagination, RestService } from '../../../shared'

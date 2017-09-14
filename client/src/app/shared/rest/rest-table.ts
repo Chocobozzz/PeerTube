@@ -1,4 +1,5 @@
-import { LazyLoadEvent, SortMeta } from 'primeng/primeng'
+import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 
 import { RestPagination } from './rest-pagination'
 
