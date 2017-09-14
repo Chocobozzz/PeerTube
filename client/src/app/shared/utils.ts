@@ -2,15 +2,7 @@ import { DatePipe } from '@angular/common'
 
 export class Utils {
 
-  static dateToHuman (date: String) {
+  static dateToHuman (date: Date) {
     return new DatePipe('en').transform(date, 'medium')
-  }
-
-  static getRowDeleteButton () {
-    return '<span class="glyphicon glyphicon-remove glyphicon-black"></span>'
-  }
-
-  static getRowEditButton () {
-    return '<span class="glyphicon glyphicon-pencil glyphicon-black"></span>'
   }
 }

@@ -1,42 +1,53 @@
 import { Injectable } from '@angular/core'
-import { Http } from '@angular/http'
-import { Observable } from 'rxjs/Observable'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
+import { Observable } from 'rxjs/Observable'
+
+import { SortMeta } from 'primeng/primeng'
 
 import { AuthService } from '../core'
-import { AuthHttp } from '../auth'
-import { RestDataSource, RestExtractor, ResultList } from '../rest'
-import { VideoAbuse } from '../../../../../shared'
+import { RestExtractor, RestPagination, RestService } from '../rest'
+import { Utils } from '../utils'
+import { ResultList, VideoAbuse } from '../../../../../shared'
 
 @Injectable()
 export class VideoAbuseService {
   private static BASE_VIDEO_ABUSE_URL = API_URL + '/api/v1/videos/'
 
   constructor (
-    private authHttp: AuthHttp,
+    private authHttp: HttpClient,
+    private restService: RestService,
     private restExtractor: RestExtractor
   ) {}
 
-  getDataSource () {
-    return new RestDataSource(this.authHttp, VideoAbuseService.BASE_VIDEO_ABUSE_URL + 'abuse')
+  getVideoAbuses (pagination: RestPagination, sort: SortMeta): Observable<ResultList<VideoAbuse>> {
+    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + 'abuse'
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp.get<ResultList<VideoAbuse>>(url, { params })
+                        .map(res => this.restExtractor.convertResultListDateToHuman(res))
+                        .map(res => this.restExtractor.applyToResultListData(res, this.formatVideoAbuse.bind(this)))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
   reportVideo (id: number, reason: string) {
+    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + id + '/abuse'
     const body = {
       reason
     }
-    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + id + '/abuse'
 
     return this.authHttp.post(url, body)
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
-  private extractVideoAbuses (result: ResultList) {
-    const videoAbuses: VideoAbuse[] = result.data
-    const totalVideoAbuses = result.total
-
-    return { videoAbuses, totalVideoAbuses }
+  private formatVideoAbuse (videoAbuse: VideoAbuse) {
+    return Object.assign(videoAbuse, {
+      createdAt: Utils.dateToHuman(videoAbuse.createdAt)
+    })
   }
+
 }

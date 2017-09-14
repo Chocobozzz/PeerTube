@@ -3,10 +3,29 @@
 
     <h3>Users list</h3>
 
-    <ng2-smart-table
-      [settings]="tableSettings" [source]="usersSource"
-      (delete)="removeUser($event)" (edit)="editUser($event)"
-    ></ng2-smart-table>
+    <p-dataTable
+        [value]="users" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+        sortField="id" (onLazyLoad)="loadLazy($event)"
+    >
+      <p-column field="id" header="ID" [sortable]="true"></p-column>
+      <p-column field="username" header="Username" [sortable]="true"></p-column>
+      <p-column field="email" header="Email"></p-column>
+      <p-column field="videoQuota" header="Video quota"></p-column>
+      <p-column field="role" header="Role"></p-column>
+      <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
+      <p-column header="Edit" styleClass="action-cell">
+        <ng-template pTemplate="body" let-user="rowData">
+          <a [routerLink]="getRouterUserEditLink(user)" title="Edit this user">
+            <span class="glyphicon glyphicon-pencil glyphicon-black"></span>
+          </a>
+        </ng-template>
+      </p-column>
+      <p-column header="Delete" styleClass="action-cell">
+        <ng-template pTemplate="body" let-user="rowData">
+          <span (click)="removeUser(user)" class="glyphicon glyphicon-remove glyphicon-black" title="Remove this user"></span>
+        </ng-template>
+      </p-column>
+    </p-dataTable>
 
     <a class="add-user btn btn-success pull-right" [routerLink]="['/admin/users/add']">
       <span class="glyphicon glyphicon-plus"></span>

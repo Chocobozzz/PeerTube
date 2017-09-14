@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
-import { Http } from '@angular/http'
+import { HttpClient } from '@angular/common/http'
 
-import { RestExtractor } from '../../shared/rest'
 import { ServerConfig } from '../../../../../shared'
 
 @Injectable()
@@ -14,17 +13,11 @@ export class ConfigService {
     }
   }
 
-  constructor (
-    private http: Http,
-    private restExtractor: RestExtractor
-  ) {}
+  constructor (private http: HttpClient) {}
 
   loadConfig () {
-    this.http.get(ConfigService.BASE_CONFIG_URL)
-             .map(this.restExtractor.extractDataGet)
-             .subscribe(data => {
-               this.config = data
-             })
+    this.http.get<ServerConfig>(ConfigService.BASE_CONFIG_URL)
+             .subscribe(data => this.config = data)
   }
 
   getConfig () {

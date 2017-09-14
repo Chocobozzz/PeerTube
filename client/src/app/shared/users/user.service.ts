@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core'
-import { Http } from '@angular/http'
+import { HttpClient } from '@angular/common/http'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 
-import { AuthService } from '../../core'
-import { AuthHttp } from '../auth'
 import { RestExtractor } from '../rest'
 import { UserCreate, UserUpdateMe } from '../../../../../shared'
 
@@ -13,9 +11,7 @@ export class UserService {
   static BASE_USERS_URL = API_URL + '/api/v1/users/'
 
   constructor (
-    private http: Http,
-    private authHttp: AuthHttp,
-    private authService: AuthService,
+    private authHttp: HttpClient,
     private restExtractor: RestExtractor
   ) {}
 
@@ -34,7 +30,7 @@ export class UserService {
 
     return this.authHttp.put(url, body)
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
   updateMyDetails (details: UserUpdateMe) {
@@ -42,12 +38,12 @@ export class UserService {
 
     return this.authHttp.put(url, details)
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
   signup (userCreate: UserCreate) {
-    return this.http.post(UserService.BASE_USERS_URL + 'register', userCreate)
+    return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                         .map(this.restExtractor.extractDataBool)
-                        .catch(this.restExtractor.handleError)
+                        .catch(res => this.restExtractor.handleError(res))
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core'
-import { Headers, Http, Response, URLSearchParams } from '@angular/http'
 import { Router } from '@angular/router'
 import { Observable } from 'rxjs/Observable'
 import { Subject } from 'rxjs/Subject'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/observable/throw'
@@ -11,15 +11,35 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
-import { OAuthClientLocal, UserRole } from '../../../../../shared'
+import { OAuthClientLocal, UserRole, UserRefreshToken } from '../../../../../shared'
 // Do not use the barrel (dependency loop)
 import { RestExtractor } from '../../shared/rest'
+import { UserLogin } from '../../../../../shared/models/users/user-login.model'
+import { User } from '../../shared/users/user.model'
+
+interface UserLoginWithUsername extends UserLogin {
+  access_token: string
+  refresh_token: string
+  token_type: string
+  username: string
+}
+
+interface UserLoginWithUserInformation extends UserLogin {
+  access_token: string
+  refresh_token: string
+  token_type: string
+  username: string
+  id: number
+  role: UserRole
+  displayNSFW: boolean
+  email: string
+}
 
 @Injectable()
 export class AuthService {
   private static BASE_CLIENT_URL = API_URL + '/api/v1/oauth-clients/local'
   private static BASE_TOKEN_URL = API_URL + '/api/v1/users/token'
-  private static BASE_USER_INFORMATIONS_URL = API_URL + '/api/v1/users/me'
+  private static BASE_USER_INFORMATION_URL = API_URL + '/api/v1/users/me'
 
   loginChangedSource: Observable<AuthStatus>
 
@@ -29,7 +49,7 @@ export class AuthService {
   private user: AuthUser = null
 
   constructor (
-    private http: Http,
+    private http: HttpClient,
     private notificationsService: NotificationsService,
     private restExtractor: RestExtractor,
     private router: Router
@@ -37,30 +57,31 @@ export class AuthService {
     this.loginChanged = new Subject<AuthStatus>()
     this.loginChangedSource = this.loginChanged.asObservable()
 
-    // Fetch the client_id/client_secret
-    // FIXME: save in local storage?
-    this.http.get(AuthService.BASE_CLIENT_URL)
-      .map(this.restExtractor.extractDataGet)
-      .catch(res => this.restExtractor.handleError(res))
-      .subscribe(
-        (result: OAuthClientLocal) => {
-          this.clientId = result.client_id
-          this.clientSecret = result.client_secret
-          console.log('Client credentials loaded.')
-        },
-
-        error => {
-          let errorMessage = `Cannot retrieve OAuth Client credentials: ${error.text}. \n`
-          errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
-
-          // We put a bigger timeout
-          // This is an important message
-          this.notificationsService.error('Error', errorMessage, { timeOut: 7000 })
-        }
-      )
-
     // Return null if there is nothing to load
     this.user = AuthUser.load()
+  }
+
+  loadClientCredentials () {
+    // Fetch the client_id/client_secret
+    // FIXME: save in local storage?
+    this.http.get<OAuthClientLocal>(AuthService.BASE_CLIENT_URL)
+             .catch(res => this.restExtractor.handleError(res))
+             .subscribe(
+               res => {
+                 this.clientId = res.client_id
+                 this.clientSecret = res.client_secret
+                 console.log('Client credentials loaded.')
+               },
+
+               error => {
+                 let errorMessage = `Cannot retrieve OAuth Client credentials: ${error.text}. \n`
+                 errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
+
+                 // We put a bigger timeout
+                 // This is an important message
+                 this.notificationsService.error('Error', errorMessage, { timeOut: 7000 })
+               }
+             )
   }
 
   getRefreshToken () {
@@ -70,7 +91,11 @@ export class AuthService {
   }
 
   getRequestHeaderValue () {
-    return `${this.getTokenType()} ${this.getAccessToken()}`
+    const accessToken = this.getAccessToken()
+
+    if (accessToken === null) return null
+
+    return `${this.getTokenType()} ${accessToken}`
   }
 
   getAccessToken () {
@@ -96,39 +121,26 @@ export class AuthService {
   }
 
   isLoggedIn () {
-    if (this.getAccessToken()) {
-      return true
-    } else {
-      return false
-    }
+    return !!this.getAccessToken()
   }
 
   login (username: string, password: string) {
-    let body = new URLSearchParams()
-    body.set('client_id', this.clientId)
-    body.set('client_secret', this.clientSecret)
-    body.set('response_type', 'code')
-    body.set('grant_type', 'password')
-    body.set('scope', 'upload')
-    body.set('username', username)
-    body.set('password', password)
+    // Form url encoded
+    const body = new HttpParams().set('client_id', this.clientId)
+                                 .set('client_secret', this.clientSecret)
+                                 .set('response_type', 'code')
+                                 .set('grant_type', 'password')
+                                 .set('scope', 'upload')
+                                 .set('username', username)
+                                 .set('password', password)
 
-    let headers = new Headers()
-    headers.append('Content-Type', 'application/x-www-form-urlencoded')
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 
-    let options = {
-      headers: headers
-    }
-
-    return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
-                    .map(this.restExtractor.extractDataGet)
-                    .map(res => {
-                      res.username = username
-                      return res
-                    })
-                    .flatMap(res => this.mergeUserInformations(res))
+    return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, body, { headers })
+                    .map(res => Object.assign(res, { username }))
+                    .flatMap(res => this.mergeUserInformation(res))
                     .map(res => this.handleLogin(res))
-                    .catch((res) => this.restExtractor.handleError(res))
+                    .catch(res => this.restExtractor.handleError(res))
   }
 
   logout () {
@@ -145,33 +157,26 @@ export class AuthService {
 
     const refreshToken = this.getRefreshToken()
 
-    let body = new URLSearchParams()
-    body.set('refresh_token', refreshToken)
-    body.set('client_id', this.clientId)
-    body.set('client_secret', this.clientSecret)
-    body.set('response_type', 'code')
-    body.set('grant_type', 'refresh_token')
+    // Form url encoded
+    const body = new HttpParams().set('refresh_token', refreshToken)
+                                 .set('client_id', this.clientId)
+                                 .set('client_secret', this.clientSecret)
+                                 .set('response_type', 'code')
+                                 .set('grant_type', 'refresh_token')
 
-    let headers = new Headers()
-    headers.append('Content-Type', 'application/x-www-form-urlencoded')
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 
-    let options = {
-      headers: headers
-    }
-
-    return this.http.post(AuthService.BASE_TOKEN_URL, body.toString(), options)
-                    .map(this.restExtractor.extractDataGet)
+    return this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
                     .map(res => this.handleRefreshToken(res))
-                    .catch((res: Response) => {
+                    .catch(res => {
                       // The refresh token is invalid?
-                      if (res.status === 400 && res.json() && res.json().error === 'invalid_grant') {
+                      if (res.status === 400 && res.error === 'invalid_grant') {
                         console.error('Cannot refresh token -> logout...')
                         this.logout()
                         this.router.navigate(['/login'])
 
                         return Observable.throw({
-                          json: () => '',
-                          text: () => 'You need to reconnect.'
+                          error: 'You need to reconnect.'
                         })
                       }
 
@@ -179,7 +184,7 @@ export class AuthService {
                     })
   }
 
-  refreshUserInformations () {
+  refreshUserInformation () {
     const obj = {
       access_token: this.user.getAccessToken(),
       refresh_token: null,
@@ -187,7 +192,7 @@ export class AuthService {
       username: this.user.username
     }
 
-    this.mergeUserInformations (obj)
+    this.mergeUserInformation(obj)
         .subscribe(
           res => {
             this.user.displayNSFW = res.displayNSFW
@@ -198,42 +203,25 @@ export class AuthService {
         )
   }
 
-  private mergeUserInformations (obj: {
-    access_token: string,
-    refresh_token: string,
-    token_type: string,
-    username: string
-  }) {
-    // Do not call authHttp here to avoid circular dependencies headaches
+  private mergeUserInformation (obj: UserLoginWithUsername): Observable<UserLoginWithUserInformation> {
+    // User is not loaded yet, set manually auth header
+    const headers = new HttpHeaders().set('Authorization', `${obj.token_type} ${obj.access_token}`)
 
-    const headers = new Headers()
-    headers.set('Authorization', `Bearer ${obj.access_token}`)
+    return this.http.get<User>(AuthService.BASE_USER_INFORMATION_URL, { headers })
+                    .map(res => {
+                      const newProperties = {
+                        id: res.id as number,
+                        role: res.role as UserRole,
+                        displayNSFW: res.displayNSFW as boolean,
+                        email: res.email as string
+                      }
 
-    return this.http.get(AuthService.BASE_USER_INFORMATIONS_URL, { headers })
-             .map(res => res.json())
-             .map(res => {
-               const newProperties = {
-                 id: res.id as number,
-                 role: res.role as UserRole,
-                 displayNSFW: res.displayNSFW as boolean,
-                 email: res.email as string
-               }
-
-               return Object.assign(obj, newProperties)
-             }
+                      return Object.assign(obj, newProperties)
+                    }
     )
   }
 
-  private handleLogin (obj: {
-    access_token: string,
-    refresh_token: string,
-    token_type: string,
-    id: number,
-    username: string,
-    email: string,
-    role: UserRole,
-    displayNSFW: boolean
-  }) {
+  private handleLogin (obj: UserLoginWithUserInformation) {
     const id = obj.id
     const username = obj.username
     const role = obj.role
@@ -251,7 +239,7 @@ export class AuthService {
     this.setStatus(AuthStatus.LoggedIn)
   }
 
-  private handleRefreshToken (obj: { access_token: string, refresh_token: string }) {
+  private handleRefreshToken (obj: UserRefreshToken) {
     this.user.refreshTokens(obj.access_token, obj.refresh_token)
     this.user.save()
   }
@@ -259,5 +247,4 @@ export class AuthService {
   private setStatus (status: AuthStatus) {
     this.loginChanged.next(status)
   }
-
 }

@@ -190,6 +190,7 @@ function quitFriends () {
       .catch(err => {
         logger.error('Some errors while quitting friends.', err)
         // Don't stop the process
+        return pods
       })
     })
     .then(pods => {

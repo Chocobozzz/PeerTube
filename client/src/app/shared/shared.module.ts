@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core'
+import { HttpClientModule } from '@angular/common/http'
 import { CommonModule } from '@angular/common'
-import { HttpModule } from '@angular/http'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 
@@ -11,9 +11,9 @@ import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
 import { PaginationModule } from 'ngx-bootstrap/pagination'
 import { ModalModule } from 'ngx-bootstrap/modal'
 import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload'
-import { Ng2SmartTableModule } from 'ng2-smart-table'
+import { DataTableModule, SharedModule as PrimeSharedModule } from 'primeng/primeng'
 
-import { AUTH_HTTP_PROVIDERS } from './auth'
+import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { RestExtractor, RestService } from './rest'
 import { SearchComponent, SearchService } from './search'
 import { UserService } from './users'
@@ -24,8 +24,8 @@ import { VideoAbuseService } from './video-abuse'
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
     RouterModule,
+    HttpClientModule,
 
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
@@ -33,7 +33,9 @@ import { VideoAbuseService } from './video-abuse'
     ProgressbarModule.forRoot(),
 
     FileUploadModule,
-    Ng2SmartTableModule
+
+    DataTableModule,
+    PrimeSharedModule
   ],
 
   declarations: [
@@ -46,15 +48,16 @@ import { VideoAbuseService } from './video-abuse'
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
     RouterModule,
+    HttpClientModule,
 
     BsDropdownModule,
     FileUploadModule,
     ModalModule,
     PaginationModule,
     ProgressbarModule,
-    Ng2SmartTableModule,
+    DataTableModule,
+    PrimeSharedModule,
     BytesPipe,
     KeysPipe,
 
@@ -62,7 +65,7 @@ import { VideoAbuseService } from './video-abuse'
   ],
 
   providers: [
-    AUTH_HTTP_PROVIDERS,
+    AUTH_INTERCEPTOR_PROVIDER,
     RestExtractor,
     RestService,
     SearchService,

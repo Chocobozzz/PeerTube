@@ -93,8 +93,9 @@ export class FriendAddComponent implements OnInit {
 
         this.friendService.makeFriends(notEmptyHosts).subscribe(
           status => {
-            this.notificationsService.success('Sucess', 'Make friends request sent!')
-            this.router.navigate([ '/admin/friends/list' ])
+            this.notificationsService.success('Success', 'Make friends request sent!')
+            // Wait requests between pods
+            setTimeout(() => this.router.navigate([ '/admin/friends/list' ]), 1000)
           },
 
           err => this.notificationsService.error('Error', err.text)

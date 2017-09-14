@@ -36,6 +36,8 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit () {
+    this.authService.loadClientCredentials()
+
     if (this.authService.isLoggedIn()) {
       // The service will automatically redirect to the login page if the token is not valid anymore
       this.userService.checkTokenValidity()

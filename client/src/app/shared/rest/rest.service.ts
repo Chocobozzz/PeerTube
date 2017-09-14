@@ -1,27 +1,34 @@
 import { Injectable } from '@angular/core'
-import { URLSearchParams } from '@angular/http'
+import { HttpParams } from '@angular/common/http'
+import { SortMeta } from 'primeng/primeng'
 
 import { RestPagination } from './rest-pagination'
 
 @Injectable()
 export class RestService {
 
-  buildRestGetParams (pagination?: RestPagination, sort?: string) {
-    const params = new URLSearchParams()
+  addRestGetParams (params: HttpParams, pagination?: RestPagination, sort?: SortMeta | string) {
+    let newParams = params
 
-    if (pagination) {
-      const start: number = (pagination.currentPage - 1) * pagination.itemsPerPage
-      const count: number = pagination.itemsPerPage
-
-      params.set('start', start.toString())
-      params.set('count', count.toString())
+    if (pagination !== undefined) {
+      newParams = newParams.set('start', pagination.start.toString())
+                           .set('count', pagination.count.toString())
     }
 
-    if (sort) {
-      params.set('sort', sort)
+    if (sort !== undefined) {
+      let sortString = ''
+
+      if (typeof sort === 'string') {
+        sortString = sort
+      } else {
+        const sortPrefix = sort.order === 1 ? '' : '-'
+        sortString = sortPrefix + sort.field
+      }
+
+      newParams = newParams.set('sort', sortString)
     }
 
-    return params
+    return newParams
   }
 
 }

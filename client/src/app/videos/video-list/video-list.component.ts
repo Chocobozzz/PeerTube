@@ -8,11 +8,12 @@ import { NotificationsService } from 'angular2-notifications'
 import {
   SortField,
   Video,
-  VideoService
+  VideoService,
+  VideoPagination
 } from '../shared'
 import { AuthService, AuthUser } from '../../core'
-import { RestPagination, Search, SearchField } from '../../shared'
-import { SearchService } from '../../shared'
+import { Search, SearchField, SearchService } from '../../shared'
+import {  } from '../../shared'
 
 @Component({
   selector: 'my-videos-list',
@@ -21,7 +22,7 @@ import { SearchService } from '../../shared'
 })
 export class VideoListComponent implements OnInit, OnDestroy {
   loading: BehaviorSubject<boolean> = new BehaviorSubject(false)
-  pagination: RestPagination = {
+  pagination: VideoPagination = {
     currentPage: 1,
     itemsPerPage: 25,
     totalItems: null
@@ -152,6 +153,6 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
   private navigateToNewParams () {
     const routeParams = this.buildRouteParams()
-    this.router.navigate(['/videos/list', routeParams])
+    this.router.navigate([ '/videos/list', routeParams ])
   }
 }

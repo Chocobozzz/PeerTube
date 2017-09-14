@@ -46,7 +46,7 @@ export class Video implements VideoServerModel {
 
   constructor (hash: {
     author: string,
-    createdAt: string,
+    createdAt: Date | string,
     categoryLabel: string,
     category: number,
     licenceLabel: string,
@@ -70,7 +70,7 @@ export class Video implements VideoServerModel {
     files: VideoFile[]
   }) {
     this.author = hash.author
-    this.createdAt = new Date(hash.createdAt)
+    this.createdAt = new Date(hash.createdAt.toString())
     this.categoryLabel = hash.categoryLabel
     this.category = hash.category
     this.licenceLabel = hash.licenceLabel

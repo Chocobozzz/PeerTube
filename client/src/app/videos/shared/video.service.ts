@@ -1,27 +1,26 @@
 import { Injectable } from '@angular/core'
-import { Http, Headers, RequestOptions } from '@angular/http'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
+import { HttpClient, HttpParams } from '@angular/common/http'
 
 import { Search } from '../../shared'
 import { SortField } from './sort-field.type'
-import { AuthService } from '../../core'
 import {
-  AuthHttp,
   RestExtractor,
-  RestPagination,
   RestService,
-  ResultList,
   UserService
 } from '../../shared'
 import { Video } from './video.model'
+import { VideoPagination } from './video-pagination.model'
 import {
-  UserVideoRate,
-  VideoRateType,
-  VideoUpdate,
-  VideoAbuseCreate,
-  UserVideoRateUpdate
+UserVideoRate,
+VideoRateType,
+VideoUpdate,
+VideoAbuseCreate,
+UserVideoRateUpdate,
+Video as VideoServerModel,
+ResultList
 } from '../../../../../shared'
 
 @Injectable()
@@ -33,9 +32,7 @@ export class VideoService {
   videoLanguages: Array<{ id: number, label: string }> = []
 
   constructor (
-    private authService: AuthService,
-    private authHttp: AuthHttp,
-    private http: Http,
+    private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService
   ) {}
@@ -52,11 +49,10 @@ export class VideoService {
     return this.loadVideoAttributeEnum('languages', this.videoLanguages)
   }
 
-  getVideo (uuid: string): Observable<Video> {
-    return this.http.get(VideoService.BASE_VIDEO_URL + uuid)
-                    .map(this.restExtractor.extractDataGet)
-                    .map(videoHash => new Video(videoHash))
-                    .catch((res) => this.restExtractor.handleError(res))
+  getVideo (uuid: string) {
+    return this.authHttp.get<VideoServerModel>(VideoService.BASE_VIDEO_URL + uuid)
+                        .map(videoHash => new Video(videoHash))
+                        .catch((res) => this.restExtractor.handleError(res))
   }
 
   updateVideo (video: Video) {
@@ -72,38 +68,41 @@ export class VideoService {
       nsfw: video.nsfw
     }
 
-    const headers = new Headers({ 'Content-Type': 'application/json' })
-    const options = new RequestOptions({ headers: headers })
-
-    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, body, options)
+    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, body)
                         .map(this.restExtractor.extractDataBool)
                         .catch(this.restExtractor.handleError)
   }
 
-  getVideos (pagination: RestPagination, sort: SortField) {
-    const params = this.restService.buildRestGetParams(pagination, sort)
+  getVideos (videoPagination: VideoPagination, sort: SortField) {
+    const pagination = this.videoPaginationToRestPagination(videoPagination)
 
-    return this.http.get(VideoService.BASE_VIDEO_URL, { search: params })
-                    .map(res => res.json())
-                    .map(this.extractVideos)
-                    .catch((res) => this.restExtractor.handleError(res))
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp.get(VideoService.BASE_VIDEO_URL, { params })
+                        .map(this.extractVideos)
+                        .catch((res) => this.restExtractor.handleError(res))
+  }
+
+  searchVideos (search: Search, videoPagination: VideoPagination, sort: SortField) {
+    const url = VideoService.BASE_VIDEO_URL + 'search/' + encodeURIComponent(search.value)
+
+    const pagination = this.videoPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search.field) params.set('field', search.field)
+
+    return this.authHttp.get<ResultList<VideoServerModel>>(url, { params })
+                        .map(this.extractVideos)
+                        .catch((res) => this.restExtractor.handleError(res))
   }
 
   removeVideo (id: number) {
     return this.authHttp.delete(VideoService.BASE_VIDEO_URL + id)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res))
-  }
-
-  searchVideos (search: Search, pagination: RestPagination, sort: SortField) {
-    const params = this.restService.buildRestGetParams(pagination, sort)
-
-    if (search.field) params.set('field', search.field)
-
-    return this.http.get(VideoService.BASE_VIDEO_URL + 'search/' + encodeURIComponent(search.value), { search: params })
-                    .map(this.restExtractor.extractDataList)
-                    .map(this.extractVideos)
-                    .catch((res) => this.restExtractor.handleError(res))
+               .map(this.restExtractor.extractDataBool)
+               .catch((res) => this.restExtractor.handleError(res))
   }
 
   reportVideo (id: number, reason: string) {
@@ -114,7 +113,7 @@ export class VideoService {
 
     return this.authHttp.post(url, body)
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
   setVideoLike (id: number) {
@@ -129,14 +128,20 @@ export class VideoService {
     const url = UserService.BASE_USERS_URL + '/me/videos/' + id + '/rating'
 
     return this.authHttp.get(url)
-                        .map(this.restExtractor.extractDataGet)
-                        .catch((res) => this.restExtractor.handleError(res))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
   blacklistVideo (id: number) {
     return this.authHttp.post(VideoService.BASE_VIDEO_URL + id + '/blacklist', {})
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res))
+                        .catch(res => this.restExtractor.handleError(res))
+  }
+
+  private videoPaginationToRestPagination (videoPagination: VideoPagination) {
+    const start: number = (videoPagination.currentPage - 1) * videoPagination.itemsPerPage
+    const count: number = videoPagination.itemsPerPage
+
+    return { start, count }
   }
 
   private setVideoRate (id: number, rateType: VideoRateType) {
@@ -147,13 +152,14 @@ export class VideoService {
 
     return this.authHttp.put(url, body)
                         .map(this.restExtractor.extractDataBool)
-                        .catch((res) => this.restExtractor.handleError(res))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
-  private extractVideos (result: ResultList) {
+  private extractVideos (result: ResultList<VideoServerModel>) {
     const videosJson = result.data
     const totalVideos = result.total
     const videos = []
+
     for (const videoJson of videosJson) {
       videos.push(new Video(videoJson))
     }
@@ -162,15 +168,14 @@ export class VideoService {
   }
 
   private loadVideoAttributeEnum (attributeName: 'categories' | 'licences' | 'languages', hashToPopulate: { id: number, label: string }[]) {
-    return this.http.get(VideoService.BASE_VIDEO_URL + attributeName)
-                    .map(this.restExtractor.extractDataGet)
-                    .subscribe(data => {
-                      Object.keys(data).forEach(dataKey => {
-                        hashToPopulate.push({
-                          id: parseInt(dataKey, 10),
-                          label: data[dataKey]
+    return this.authHttp.get(VideoService.BASE_VIDEO_URL + attributeName)
+                        .subscribe(data => {
+                          Object.keys(data).forEach(dataKey => {
+                            hashToPopulate.push({
+                              id: parseInt(dataKey, 10),
+                              label: data[dataKey]
+                            })
+                          })
                         })
-                      })
-                    })
   }
 }

@@ -1,82 +1,37 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
+import { SortMeta } from 'primeng/primeng'
 
 import { NotificationsService } from 'angular2-notifications'
 
 import { ConfirmService } from '../../../core'
-import { RestDataSource, User, Utils } from '../../../shared'
+import { RestTable, RestPagination, User } from '../../../shared'
 import { UserService } from '../shared'
-import { Router } from '@angular/router'
 
 @Component({
   selector: 'my-user-list',
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ]
 })
-export class UserListComponent {
-  usersSource: RestDataSource = null
-  tableSettings = {
-    mode: 'external',
-    attr: {
-      class: 'table-hover'
-    },
-    hideSubHeader: true,
-    actions: {
-      position: 'right',
-      add: false,
-      edit: true,
-      delete: true
-    },
-    delete: {
-      deleteButtonContent: Utils.getRowDeleteButton()
-    },
-    edit: {
-      editButtonContent: Utils.getRowEditButton()
-    },
-    pager: {
-      display: true,
-      perPage: 10
-    },
-    columns: {
-      id: {
-        title: 'ID',
-        sortDirection: 'asc'
-      },
-      username: {
-        title: 'Username'
-      },
-      email: {
-        title: 'Email'
-      },
-      videoQuota: {
-        title: 'Video quota'
-      },
-      role: {
-        title: 'Role',
-        sort: false
-      },
-      createdAt: {
-        title: 'Created Date',
-        valuePrepareFunction: Utils.dateToHuman
-      }
-    }
-  }
+export class UserListComponent extends RestTable implements OnInit {
+  users: User[] = []
+  totalRecords = 0
+  rowsPerPage = 10
+  sort: SortMeta = { field: 'id', order: 1 }
+  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
-    private router: Router,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private userService: UserService
   ) {
-    this.usersSource = this.userService.getDataSource()
+    super()
   }
 
-  editUser ({ data }: { data: User }) {
-    this.router.navigate([ '/admin', 'users', data.id, 'update' ])
+  ngOnInit () {
+    this.loadData()
   }
 
-  removeUser ({ data }: { data: User }) {
-    const user = data
-
+  removeUser (user: User) {
     if (user.username === 'root') {
       this.notificationsService.error('Error', 'You cannot delete root.')
       return
@@ -89,12 +44,28 @@ export class UserListComponent {
         this.userService.removeUser(user).subscribe(
           () => {
             this.notificationsService.success('Success', `User ${user.username} deleted.`)
-            this.usersSource.refresh()
+            this.loadData()
           },
 
-          err => this.notificationsService.error('Error', err.text)
+          err => this.notificationsService.error('Error', err)
         )
       }
     )
+  }
+
+  getRouterUserEditLink (user: User) {
+    return [ '/admin', 'users', user.id, 'update' ]
+  }
+
+  protected loadData () {
+    this.userService.getUsers(this.pagination, this.sort)
+                    .subscribe(
+                      resultList => {
+                        this.users = resultList.data
+                        this.totalRecords = resultList.total
+                      },
+
+                      err => this.notificationsService.error('Error', err)
+                    )
   }
 }

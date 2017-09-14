@@ -1,4 +1,6 @@
-@import '../../node_modules/video.js/dist/video-js.css';
+@import '~primeng/resources/themes/bootstrap/theme.css';
+@import '~primeng/resources/primeng.css';
+@import '~video.js/dist/video-js.css';
 @import './video-js-custom.scss';
 
 [hidden] {
@@ -45,23 +47,13 @@ input.readonly {
   }
 }
 
-/* some fixes for ng2-smart-table */
-ng2-smart-table {
-  thead tr {
-    border-top: 1px solid rgb(233, 235, 236)
-  }
+/* ngprime data table customizations */
+p-datatable {
+  .action-cell {
+    text-align: center;
 
-  td, th {
-    padding: 8px !important;
-    color: #333333 !important;
-    font-size: 14px !important;
-  }
-
-  .ng2-smart-pagination-nav .page-link {
-    font-size: 11px !important;
-  }
-
-  .glyphicon {
-    font-family: 'Glyphicons Halflings' !important;
+    .glyphicon {
+      cursor: pointer;
+    }
   }
 }

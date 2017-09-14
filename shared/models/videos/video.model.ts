@@ -9,8 +9,8 @@ export interface Video {
   id: number
   uuid: string
   author: string
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Date | string
+  updatedAt: Date | string
   categoryLabel: string
   category: number
   licenceLabel: string
