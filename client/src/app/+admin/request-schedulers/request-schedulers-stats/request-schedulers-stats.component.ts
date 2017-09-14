@@ -57,7 +57,7 @@ export class RequestSchedulersStatsComponent implements OnInit, OnDestroy {
     this.requestService.getStats().subscribe(
       stats => this.stats = stats,
 
-      err => this.notificationsService.error('Error', err.text)
+      err => this.notificationsService.error('Error', err)
     )
   }
 

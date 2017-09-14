@@ -67,7 +67,7 @@ export class SignupComponent extends FormReactive implements OnInit {
         this.router.navigate([ '/videos/list' ])
       },
 
-      err => this.error = err.text
+      err => this.error = err
     )
   }
 }

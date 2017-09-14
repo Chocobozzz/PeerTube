@@ -98,7 +98,7 @@ export class FriendAddComponent implements OnInit {
             setTimeout(() => this.router.navigate([ '/admin/friends/list' ]), 1000)
           },
 
-          err => this.notificationsService.error('Error', err.text)
+          err => this.notificationsService.error('Error', err)
         )
       }
     )

@@ -63,7 +63,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
                               this.hide()
                             },
 
-                            err => this.notificationsService.error('Error', err.text)
+                            err => this.notificationsService.error('Error', err)
                            )
   }
 }
