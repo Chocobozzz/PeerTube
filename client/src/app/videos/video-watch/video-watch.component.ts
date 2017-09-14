@@ -158,7 +158,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                         this.userRating = 'like'
                       },
 
-                      err => this.notificationsService.error('Error', err)
+                      err => this.notificationsService.error('Error', err.message)
                      )
   }
 
@@ -175,7 +175,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                         this.userRating = 'dislike'
                       },
 
-                      err => this.notificationsService.error('Error', err)
+                      err => this.notificationsService.error('Error', err.message)
                      )
   }
 
@@ -275,7 +275,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                          }
                        },
 
-                       err => this.notificationsService.error('Error', err)
+                       err => this.notificationsService.error('Error', err.message)
                       )
   }
 

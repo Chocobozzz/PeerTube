@@ -2,7 +2,6 @@ import { Component, ElementRef, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
-import { FileUploader } from 'ng2-file-upload/ng2-file-upload'
 import { NotificationsService } from 'angular2-notifications'
 
 import { AuthService } from '../../core'

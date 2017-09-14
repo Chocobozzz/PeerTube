@@ -31,8 +31,7 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private configService: ConfigService,
     private userService: UserService,
-    private videoService: VideoService,
-    viewContainerRef: ViewContainerRef
+    private videoService: VideoService
   ) {}
 
   ngOnInit () {

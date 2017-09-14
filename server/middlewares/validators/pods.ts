@@ -11,7 +11,11 @@ import { isTestInstance } from '../../helpers'
 function makeFriendsValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   // Force https if the administrator wants to make friends
   if (isTestInstance() === false && CONFIG.WEBSERVER.SCHEME === 'http') {
-    return res.status(400).send('Cannot make friends with a non HTTPS web server.')
+    return res.status(400)
+              .json({
+                error: 'Cannot make friends with a non HTTPS web server.'
+              })
+              .end()
   }
 
   req.checkBody('hosts', 'Should have an array of unique hosts').isEachUniqueHostValid()

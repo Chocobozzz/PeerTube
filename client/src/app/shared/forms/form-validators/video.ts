@@ -44,3 +44,10 @@ export const VIDEO_TAGS = {
     'maxlength': 'A tag should be less than 10 characters long.'
   }
 }
+
+export const VIDEO_FILE = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    'required': 'Video file is required.'
+  }
+}

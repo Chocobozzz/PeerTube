@@ -45,9 +45,13 @@ function usersRemoveValidator (req: express.Request, res: express.Response, next
         return res.sendStatus(500)
       }
 
-      if (user.username === 'root') return res.status(400).send('Cannot remove the root user')
+      if (user.username === 'root') {
+        return res.status(400)
+                  .send({ error: 'Cannot remove the root user' })
+                  .end()
+      }
 
-      next()
+      return next()
     })
   })
 }
@@ -99,9 +103,13 @@ function usersVideoRatingValidator (req: express.Request, res: express.Response,
 
     videoPromise
       .then(video => {
-        if (!video) return res.status(404).send('Video not found')
+        if (!video) {
+          return res.status(404)
+                    .json({ error: 'Video not found' })
+                    .end()
+        }
 
-        next()
+        return next()
       })
       .catch(err => {
         logger.error('Error in user request validator.', err)
@@ -113,7 +121,9 @@ function usersVideoRatingValidator (req: express.Request, res: express.Response,
 function ensureUserRegistrationAllowed (req: express.Request, res: express.Response, next: express.NextFunction) {
   isSignupAllowed().then(allowed => {
     if (allowed === false) {
-      return res.status(403).send('User registration is not enabled or user limit is reached.')
+      return res.status(403)
+                .send({ error: 'User registration is not enabled or user limit is reached.' })
+                .end()
     }
 
     return next()
@@ -138,10 +148,14 @@ export {
 function checkUserExists (id: number, res: express.Response, callback: (err: Error, user: UserInstance) => void) {
   db.User.loadById(id)
     .then(user => {
-      if (!user) return res.status(404).send('User not found')
+      if (!user) {
+        return res.status(404)
+                  .send({ error: 'User not found' })
+                  .end()
+      }
 
       res.locals.user = user
-      callback(null, user)
+      return callback(null, user)
     })
     .catch(err => {
       logger.error('Error in user request validator.', err)
@@ -152,9 +166,13 @@ function checkUserExists (id: number, res: express.Response, callback: (err: Err
 function checkUserDoesNotAlreadyExist (username: string, email: string, res: express.Response, callback: () => void) {
   db.User.loadByUsernameOrEmail(username, email)
       .then(user => {
-        if (user) return res.status(409).send('User already exists.')
+        if (user) {
+          return res.status(409)
+                    .send({ error: 'User already exists.' })
+                    .end()
+        }
 
-        callback()
+        return callback()
       })
       .catch(err => {
         logger.error('Error in usersAdd request validator.', err)

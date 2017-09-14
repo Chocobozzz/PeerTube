@@ -30,7 +30,9 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
     user.isAbleToUploadVideo(videoFile)
       .then(isAble => {
         if (isAble === false) {
-          res.status(403).send('The user video quota is exceeded with this video.')
+          res.status(403)
+             .json({ error: 'The user video quota is exceeded with this video.' })
+             .end()
 
           return undefined
         }
@@ -38,17 +40,23 @@ function videosAddValidator (req: express.Request, res: express.Response, next: 
         return db.Video.getDurationFromFile(videoFile.path)
           .catch(err => {
             logger.error('Invalid input file in videosAddValidator.', err)
-            res.status(400).send('Invalid input file.')
+            res.status(400)
+               .json({ error: 'Invalid input file.' })
+               .end()
 
             return undefined
           })
       })
       .then(duration => {
         // Previous test failed, abort
-        if (duration === undefined) return undefined
+        if (duration === undefined) return
 
         if (!isVideoDurationValid('' + duration)) {
-          return res.status(400).send('Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).')
+          return res.status(400)
+                    .json({
+                      error: 'Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).'
+                    })
+                    .end()
         }
 
         videoFile['duration'] = duration
@@ -80,11 +88,15 @@ function videosUpdateValidator (req: express.Request, res: express.Response, nex
     checkVideoExists(req.params.id, res, () => {
       // We need to make additional checks
       if (res.locals.video.isOwned() === false) {
-        return res.status(403).send('Cannot update video of another pod')
+        return res.status(403)
+                  .json({ error: 'Cannot update video of another pod' })
+                  .end()
       }
 
       if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
-        return res.status(403).send('Cannot update video of another user')
+        return res.status(403)
+                  .json({ error: 'Cannot update video of another user' })
+                  .end()
       }
 
       next()
@@ -188,7 +200,11 @@ function checkVideoExists (id: string, res: express.Response, callback: () => vo
   }
 
   promise.then(video => {
-    if (!video) return res.status(404).send('Video not found')
+    if (!video) {
+      return res.status(404)
+                .json({ error: 'Video not found' })
+                .end()
+    }
 
     res.locals.video = video
     callback()
@@ -204,14 +220,18 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
   db.User.loadById(userId)
     .then(user => {
       if (res.locals.video.isOwned() === false) {
-        return res.status(403).send('Cannot remove video of another pod, blacklist it')
+        return res.status(403)
+                  .json({ error: 'Cannot remove video of another pod, blacklist it' })
+                  .end()
       }
 
       // Check if the user can delete the video
       // The user can delete it if s/he is an admin
       // Or if s/he is the video's author
       if (user.isAdmin() === false && res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
-        return res.status(403).send('Cannot remove video of another user')
+        return res.status(403)
+                  .json({ error: 'Cannot remove video of another user' })
+                  .end()
       }
 
       // If we reach this comment, we can delete the video
@@ -225,7 +245,9 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
 
 function checkVideoIsBlacklistable (req: express.Request, res: express.Response, callback: () => void) {
   if (res.locals.video.isOwned() === true) {
-    return res.status(403).send('Cannot blacklist a local video')
+    return res.status(403)
+              .json({ error: 'Cannot blacklist a local video' })
+              .end()
   }
 
   callback()

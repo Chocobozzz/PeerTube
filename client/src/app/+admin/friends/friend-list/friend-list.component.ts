@@ -40,7 +40,7 @@ export class FriendListComponent implements OnInit {
             this.loadData()
           },
 
-          err => this.notificationsService.error('Error', err)
+          err => this.notificationsService.error('Error', err.message)
         )
       }
     )
@@ -59,7 +59,7 @@ export class FriendListComponent implements OnInit {
             this.loadData()
           },
 
-          err => this.notificationsService.error('Error', err)
+          err => this.notificationsService.error('Error', err.message)
         )
       }
     )
@@ -72,7 +72,7 @@ export class FriendListComponent implements OnInit {
                           this.friends = resultList.data
                         },
 
-                        err => this.notificationsService.error('Error', err)
+                        err => this.notificationsService.error('Error', err.message)
                       )
   }
 }

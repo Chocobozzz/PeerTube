@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-import { HttpClient, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 
 import { Search } from '../../shared'
 import { SortField } from './sort-field.type'
@@ -14,13 +14,14 @@ import {
 import { Video } from './video.model'
 import { VideoPagination } from './video-pagination.model'
 import {
-UserVideoRate,
-VideoRateType,
-VideoUpdate,
-VideoAbuseCreate,
-UserVideoRateUpdate,
-Video as VideoServerModel,
-ResultList
+  VideoCreate,
+  UserVideoRate,
+  VideoRateType,
+  VideoUpdate,
+  VideoAbuseCreate,
+  UserVideoRateUpdate,
+  Video as VideoServerModel,
+  ResultList
 } from '../../../../../shared'
 
 @Injectable()
@@ -70,6 +71,14 @@ export class VideoService {
 
     return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, body)
                         .map(this.restExtractor.extractDataBool)
+                        .catch(this.restExtractor.handleError)
+  }
+
+  // uploadVideo (video: VideoCreate) {
+  uploadVideo (video: any) {
+    const req = new HttpRequest('POST', `${VideoService.BASE_VIDEO_URL}/upload`, video, { reportProgress: true })
+
+    return this.authHttp.request(req)
                         .catch(this.restExtractor.handleError)
   }
 

@@ -47,7 +47,7 @@ export class UserListComponent extends RestTable implements OnInit {
             this.loadData()
           },
 
-          err => this.notificationsService.error('Error', err)
+          err => this.notificationsService.error('Error', err.message)
         )
       }
     )
@@ -65,7 +65,7 @@ export class UserListComponent extends RestTable implements OnInit {
                         this.totalRecords = resultList.total
                       },
 
-                      err => this.notificationsService.error('Error', err)
+                      err => this.notificationsService.error('Error', err.message)
                     )
   }
 }

@@ -4436,10 +4436,6 @@ ng-router-loader@^2.0.0:
     loader-utils "^0.2.16"
     recast "^0.11.20"
 
-ng2-file-upload@^1.1.4-2:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/ng2-file-upload/-/ng2-file-upload-1.2.1.tgz#5563c5dfd6f43fbfbe815c206e343464a0a6a197"
-
 ng2-material-dropdown@0.7.10:
   version "0.7.10"
   resolved "https://registry.yarnpkg.com/ng2-material-dropdown/-/ng2-material-dropdown-0.7.10.tgz#093471f2a9cadd726cbcb120b0ad7818a54fa5ed"

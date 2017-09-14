@@ -1,11 +1,9 @@
-import { Component, ElementRef, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 
-import { FileUploader } from 'ng2-file-upload/ng2-file-upload'
 import { NotificationsService } from 'angular2-notifications'
 
-import { AuthService } from '../../core'
 import {
   FormReactive,
   VIDEO_NAME,
@@ -17,6 +15,8 @@ import {
 } from '../../shared'
 import { VideoService } from '../shared'
 import { VideoCreate } from '../../../../../shared'
+import { HttpEventType, HttpResponse } from '@angular/common/http'
+import { VIDEO_FILE } from '../../shared/forms/form-validators/video'
 
 @Component({
   selector: 'my-videos-add',
@@ -25,8 +25,10 @@ import { VideoCreate } from '../../../../../shared'
 })
 
 export class VideoAddComponent extends FormReactive implements OnInit {
+  @ViewChild('videofileInput') videofileInput
+
+  progressPercent = 0
   tags: string[] = []
-  uploader: FileUploader
   videoCategories = []
   videoLicences = []
   videoLanguages = []
@@ -34,29 +36,26 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   tagValidators = VIDEO_TAGS.VALIDATORS
   tagValidatorsMessages = VIDEO_TAGS.MESSAGES
 
-  error: string = null
+  error: string
   form: FormGroup
   formErrors = {
     name: '',
     category: '',
     licence: '',
     language: '',
-    description: ''
+    description: '',
+    videofile: ''
   }
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
-    description: VIDEO_DESCRIPTION.MESSAGES
+    description: VIDEO_DESCRIPTION.MESSAGES,
+    videofile: VIDEO_FILE.MESSAGES
   }
 
-  // Special error messages
-  fileError = ''
-
   constructor (
-    private authService: AuthService,
-    private elementRef: ElementRef,
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -66,11 +65,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   get filename () {
-    if (this.uploader.queue.length === 0) {
-      return null
-    }
-
-    return this.uploader.queue[0].file.name
+    return this.form.value['videofile']
   }
 
   buildForm () {
@@ -81,7 +76,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
-      tags: [ '']
+      videofile: [ '', VIDEO_FILE.VALIDATORS ],
+      tags: [ '' ]
     })
 
     this.form.valueChanges.subscribe(data => this.onValueChanged(data))
@@ -92,60 +88,24 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.videoLicences = this.videoService.videoLicences
     this.videoLanguages = this.videoService.videoLanguages
 
-    this.uploader = new FileUploader({
-      authToken: this.authService.getRequestHeaderValue(),
-      queueLimit: 1,
-      url: API_URL + '/api/v1/videos/upload',
-      removeAfterUpload: true
-    })
-
-    this.uploader.onBuildItemForm = (item, form: FormData) => {
-      const formValue: VideoCreate = this.form.value
-
-      const name = formValue.name
-      const nsfw = formValue.nsfw
-      const category = formValue.category
-      const licence = formValue.licence
-      const language = formValue.language
-      const description = formValue.description
-      const tags = formValue.tags
-
-      form.append('name', name)
-      form.append('category', '' + category)
-      form.append('nsfw', '' + nsfw)
-      form.append('licence', '' + licence)
-
-      // Language is optional
-      if (language) {
-        form.append('language', '' + language)
-      }
-
-      form.append('description', description)
-
-      for (let i = 0; i < tags.length; i++) {
-        form.append(`tags[${i}]`, tags[i])
-      }
-    }
-
     this.buildForm()
+  }
+
+  // The goal is to keep reactive form validation (required field)
+  // https://stackoverflow.com/a/44238894
+  fileChange ($event) {
+    this.form.controls['videofile'].setValue($event.target.files[0].name)
+  }
+
+  removeFile () {
+    this.videofileInput.nativeElement.value = ''
+    this.form.controls['videofile'].setValue('')
   }
 
   checkForm () {
     this.forceCheck()
 
-    if (this.filename === null) {
-      this.fileError = 'You did not add a file.'
-    }
-
-    return this.form.valid === true && this.fileError === ''
-  }
-
-  fileChanged () {
-    this.fileError = ''
-  }
-
-  removeFile () {
-    this.uploader.clearQueue()
+    return this.form.valid
   }
 
   upload () {
@@ -153,39 +113,49 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       return
     }
 
-    const item = this.uploader.queue[0]
-    // TODO: wait for https://github.com/valor-software/ng2-file-upload/pull/242
-    item.alias = 'videofile'
+    const formValue: VideoCreate = this.form.value
 
-    item.onSuccess = () => {
-      console.log('Video uploaded.')
-      this.notificationsService.success('Success', 'Video uploaded.')
+    const name = formValue.name
+    const nsfw = formValue.nsfw
+    const category = formValue.category
+    const licence = formValue.licence
+    const language = formValue.language
+    const description = formValue.description
+    const tags = formValue.tags
+    const videofile = this.videofileInput.nativeElement.files[0]
 
-      // Print all the videos once it's finished
-      this.router.navigate(['/videos/list'])
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('category', '' + category)
+    formData.append('nsfw', '' + nsfw)
+    formData.append('licence', '' + licence)
+    formData.append('videofile', videofile)
+
+    // Language is optional
+    if (language) {
+      formData.append('language', '' + language)
     }
 
-    item.onError = (response: string, status: number) => {
-      // We need to handle manually these cases because we use the FileUpload component
-      if (status === 400) {
-        this.error = response
-      } else if (status === 401) {
-        this.error = 'Access token was expired, refreshing token...'
-        this.authService.refreshAccessToken().subscribe(
-          () => {
-            // Update the uploader request header
-            this.uploader.authToken = this.authService.getRequestHeaderValue()
-            this.error += ' access token refreshed. Please retry your request.'
-          }
-        )
-      } else if (status === 403) {
-        this.error = 'Your video quota is reached, you can\'t upload this video.'
-      } else {
-        this.error = 'Unknown error'
-        console.error(this.error)
-      }
+    formData.append('description', description)
+
+    for (let i = 0; i < tags.length; i++) {
+      formData.append(`tags[${i}]`, tags[i])
     }
 
-    this.uploader.uploadAll()
+    this.videoService.uploadVideo(formData).subscribe(
+      event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          this.progressPercent = Math.round(100 * event.loaded / event.total)
+        } else if (event instanceof HttpResponse) {
+          console.log('Video uploaded.')
+          this.notificationsService.success('Success', 'Video uploaded.')
+
+          // Display all the videos once it's finished
+          this.router.navigate([ '/videos/list '])
+        }
+      },
+
+      err => this.error = err.message
+    )
   }
 }

@@ -10,7 +10,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
 import { PaginationModule } from 'ngx-bootstrap/pagination'
 import { ModalModule } from 'ngx-bootstrap/modal'
-import { FileUploadModule } from 'ng2-file-upload/ng2-file-upload'
 import { DataTableModule, SharedModule as PrimeSharedModule } from 'primeng/primeng'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
@@ -32,8 +31,6 @@ import { VideoAbuseService } from './video-abuse'
     PaginationModule.forRoot(),
     ProgressbarModule.forRoot(),
 
-    FileUploadModule,
-
     DataTableModule,
     PrimeSharedModule
   ],
@@ -52,7 +49,6 @@ import { VideoAbuseService } from './video-abuse'
     HttpClientModule,
 
     BsDropdownModule,
-    FileUploadModule,
     ModalModule,
     PaginationModule,
     ProgressbarModule,

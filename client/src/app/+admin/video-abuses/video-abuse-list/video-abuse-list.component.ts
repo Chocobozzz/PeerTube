@@ -40,7 +40,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
                    this.totalRecords = resultList.total
                  },
 
-                 err => this.notificationsService.error('Error', err)
+                 err => this.notificationsService.error('Error', err.message)
                )
   }
 }

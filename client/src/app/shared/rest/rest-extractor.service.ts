@@ -40,19 +40,29 @@ export class RestExtractor {
   handleError (err: HttpErrorResponse) {
     let errorMessage
 
+    console.log(err)
+
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       errorMessage = err.error.message
       console.error('An error occurred:', errorMessage)
     } else if (err.status !== undefined) {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      errorMessage = err.error
+      const body = err.error
+      errorMessage = body.error
       console.error(`Backend returned code ${err.status}, body was: ${errorMessage}`)
     } else {
       errorMessage = err
     }
 
-    return Observable.throw(errorMessage)
+    const errorObj = {
+      message: errorMessage,
+      status: undefined
+    }
+
+    if (err.status) {
+      errorObj.status = err.status
+    }
+
+    return Observable.throw(errorObj)
   }
 }

@@ -61,7 +61,6 @@
     "intl": "^1.2.4",
     "json-loader": "^0.5.4",
     "ng-router-loader": "^2.0.0",
-    "ng2-file-upload": "^1.1.4-2",
     "ngc-webpack": "3.2.2",
     "ngx-bootstrap": "1.9.1",
     "ngx-chips": "1.5.3",
