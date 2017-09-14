@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core'
 
 @Component({
   selector: 'my-loader',
-  styleUrls: [ './loader.component.scss' ],
+  styleUrls: [ ],
   templateUrl: './loader.component.html'
 })
 

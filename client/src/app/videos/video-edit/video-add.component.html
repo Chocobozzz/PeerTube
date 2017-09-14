@@ -102,7 +102,12 @@
       </div>
 
       <div class="progress">
-        <progressbar [value]="progressPercent" max="100"></progressbar>
+        <progressbar [value]="progressPercent" max="100">
+          <ng-template [ngIf]="progressPercent === 100">
+            <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+            Server is processing the video
+          </ng-template>
+        </progressbar>
       </div>
 
       <div class="form-group">

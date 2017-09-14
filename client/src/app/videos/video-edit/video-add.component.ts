@@ -151,11 +151,15 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           this.notificationsService.success('Success', 'Video uploaded.')
 
           // Display all the videos once it's finished
-          this.router.navigate([ '/videos/list '])
+          this.router.navigate([ '/videos/list' ])
         }
       },
 
-      err => this.error = err.message
+      err => {
+        // Reset progress
+        this.progressPercent = 0
+        this.error = err.message
+      }
     )
   }
 }

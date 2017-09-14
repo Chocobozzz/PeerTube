@@ -314,7 +314,7 @@ const USER_ROLES: { [ id: string ]: UserRole } = {
 
 // ---------------------------------------------------------------------------
 
-const OPENGRAPH_COMMENT = '<!-- opengraph tags -->'
+const OPENGRAPH_COMMENT = '<!-- open graph tags -->'
 
 // ---------------------------------------------------------------------------
 
