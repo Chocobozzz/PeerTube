@@ -39,13 +39,3 @@ export {
   isUserUsernameValid,
   isUserDisplayNSFWValid
 }
-
-declare module 'express-validator' {
-  export interface Validator {
-    isUserPasswordValid,
-    isUserRoleValid,
-    isUserUsernameValid,
-    isUserDisplayNSFWValid,
-    isUserVideoQuotaValid
-  }
-}

@@ -62,7 +62,7 @@
     "json-loader": "^0.5.4",
     "ng-router-loader": "^2.0.0",
     "ngc-webpack": "3.2.2",
-    "ngx-bootstrap": "1.9.1",
+    "ngx-bootstrap": "1.9.3",
     "ngx-chips": "1.5.3",
     "node-sass": "^4.1.1",
     "normalize.css": "^7.0.0",

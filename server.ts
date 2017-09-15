@@ -7,16 +7,14 @@ if (isTestInstance()) {
 // ----------- Node modules -----------
 import * as bodyParser from 'body-parser'
 import * as express from 'express'
-// FIXME: cannot import express-validator
-const expressValidator = require('express-validator')
 import * as http from 'http'
 import * as morgan from 'morgan'
 import * as path from 'path'
-import * as bittorrentTracker from 'bittorrent-tracker'
+import * as bitTorrentTracker from 'bittorrent-tracker'
 import * as cors from 'cors'
 import { Server as WebSocketServer } from 'ws'
 
-const TrackerServer = bittorrentTracker.Server
+const TrackerServer = bitTorrentTracker.Server
 
 process.title = 'peertube'
 
@@ -49,7 +47,6 @@ db.init(false).then(() => onDatabaseInitDone())
 // ----------- PeerTube modules -----------
 import { migrate, installApplication } from './server/initializers'
 import { JobScheduler, activateSchedulers, VideosPreviewCache } from './server/lib'
-import * as customValidators from './server/helpers/custom-validators'
 import { apiRouter, clientsRouter, staticRouter } from './server/controllers'
 
 // ----------- Command line -----------
@@ -81,10 +78,6 @@ app.use(morgan('combined', {
 // For body requests
 app.use(bodyParser.json({ limit: '500kb' }))
 app.use(bodyParser.urlencoded({ extended: false }))
-// Validate some params for the API
-app.use(expressValidator({
-  customValidators: customValidators
-}))
 
 // ----------- Views, routes and static files -----------
 

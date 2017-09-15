@@ -1,15 +1,14 @@
-import 'express-validator'
+import { validationResult } from 'express-validator/check'
 import * as express from 'express'
-import { inspect } from 'util'
 
 import { logger } from '../../helpers'
 
 function checkErrors (req: express.Request, res: express.Response, next: express.NextFunction, statusCode = 400) {
-  const errors = req.validationErrors()
+  const errors = validationResult(req)
 
-  if (errors) {
-    logger.warn('Incorrect request parameters', { path: req.originalUrl, err: errors })
-    return res.status(statusCode).send('There have been validation errors: ' + inspect(errors))
+  if (!errors.isEmpty()) {
+    logger.warn('Incorrect request parameters', { path: req.originalUrl, err: errors.mapped() })
+    return res.status(statusCode).json({ errors: errors.mapped() })
   }
 
   return next()

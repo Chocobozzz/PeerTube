@@ -1,4 +1,4 @@
-import 'express-validator'
+import { query } from 'express-validator/check'
 import * as express from 'express'
 
 import { checkErrors } from './utils'
@@ -10,17 +10,9 @@ const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
 const SORTABLE_VIDEO_ABUSES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_ABUSES)
 const SORTABLE_VIDEOS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS)
 
-function usersSortValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  checkSort(req, res, next, SORTABLE_USERS_COLUMNS)
-}
-
-function videoAbusesSortValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  checkSort(req, res, next, SORTABLE_VIDEO_ABUSES_COLUMNS)
-}
-
-function videosSortValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  checkSort(req, res, next, SORTABLE_VIDEOS_COLUMNS)
-}
+const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
+const videoAbusesSortValidator = checkSort(SORTABLE_VIDEO_ABUSES_COLUMNS)
+const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
 
 // ---------------------------------------------------------------------------
 
@@ -32,12 +24,16 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkSort (req: express.Request, res: express.Response, next: express.NextFunction, sortableColumns: string[]) {
-  req.checkQuery('sort', 'Should have correct sortable column').optional().isIn(sortableColumns)
+function checkSort (sortableColumns: string[]) {
+  return [
+    query('sort').optional().isIn(sortableColumns).withMessage('Should have correct sortable column'),
 
-  logger.debug('Checking sort parameters', { parameters: req.query })
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      logger.debug('Checking sort parameters', { parameters: req.query })
 
-  checkErrors(req, res, next)
+      checkErrors(req, res, next)
+    }
+  ]
 }
 
 function createSortableColumns (sortableColumns: string[]) {

@@ -102,14 +102,6 @@ export {
   isEachRemoteRequestVideosEventsValid
 }
 
-declare module 'express-validator' {
-  export interface Validator {
-    isEachRemoteRequestVideosValid,
-    isEachRemoteRequestVideosQaduValid,
-    isEachRemoteRequestVideosEventsValid
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 function isCommonVideoAttributesValid (video: any) {

@@ -1,32 +1,43 @@
-import 'express-validator'
+import { body } from 'express-validator/check'
 import * as express from 'express'
 
-import { logger } from '../../../helpers'
+import {
+  logger,
+  isEachRemoteRequestVideosValid,
+  isEachRemoteRequestVideosQaduValid,
+  isEachRemoteRequestVideosEventsValid
+} from '../../../helpers'
 import { checkErrors } from '../utils'
 
-function remoteVideosValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkBody('data').isEachRemoteRequestVideosValid()
+const remoteVideosValidator = [
+  body('data').custom(isEachRemoteRequestVideosValid),
 
-  logger.debug('Checking remoteVideos parameters', { parameters: req.body })
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking remoteVideos parameters', { parameters: req.body })
 
-  checkErrors(req, res, next)
-}
+    checkErrors(req, res, next)
+  }
+]
 
-function remoteQaduVideosValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkBody('data').isEachRemoteRequestVideosQaduValid()
+const remoteQaduVideosValidator = [
+  body('data').custom(isEachRemoteRequestVideosQaduValid),
 
-  logger.debug('Checking remoteQaduVideos parameters', { parameters: req.body })
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking remoteQaduVideos parameters', { parameters: req.body })
 
-  checkErrors(req, res, next)
-}
+    checkErrors(req, res, next)
+  }
+]
 
-function remoteEventsVideosValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkBody('data').isEachRemoteRequestVideosEventsValid()
+const remoteEventsVideosValidator = [
+  body('data').custom(isEachRemoteRequestVideosEventsValid),
 
-  logger.debug('Checking remoteEventsVideos parameters', { parameters: req.body })
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking remoteEventsVideos parameters', { parameters: req.body })
 
-  checkErrors(req, res, next)
-}
+    checkErrors(req, res, next)
+  }
+]
 
 // ---------------------------------------------------------------------------
 

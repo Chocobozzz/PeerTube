@@ -107,12 +107,13 @@ function isVideoRatingTypeValid (value: string) {
   return values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
 }
 
-function isVideoFile (value: string, files: { [ fieldname: string ]: Express.Multer.File[] }) {
+function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
   // Should have files
   if (!files) return false
+  if (isArray(files)) return false
 
   // Should have videofile file
-  const videofile = files.videofile
+  const videofile = files['videofile']
   if (!videofile || videofile.length === 0) return false
 
   // The file should exist
@@ -167,35 +168,4 @@ export {
   isVideoEventCountValid,
   isVideoFileSizeValid,
   isVideoFileResolutionValid
-}
-
-declare module 'express-validator' {
-  export interface Validator {
-    isVideoIdOrUUIDValid,
-    isVideoAuthorValid,
-    isVideoDateValid,
-    isVideoCategoryValid,
-    isVideoLicenceValid,
-    isVideoLanguageValid,
-    isVideoNSFWValid,
-    isVideoDescriptionValid,
-    isVideoDurationValid,
-    isVideoInfoHashValid,
-    isVideoNameValid,
-    isVideoTagsValid,
-    isVideoThumbnailValid,
-    isVideoThumbnailDataValid,
-    isVideoExtnameValid,
-    isVideoUUIDValid,
-    isVideoAbuseReasonValid,
-    isVideoAbuseReporterUsernameValid,
-    isVideoFile,
-    isVideoViewsValid,
-    isVideoLikesValid,
-    isVideoRatingTypeValid,
-    isVideoDislikesValid,
-    isVideoEventCountValid,
-    isVideoFileSizeValid,
-    isVideoFileResolutionValid
-  }
 }

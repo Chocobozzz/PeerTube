@@ -1,17 +1,19 @@
-import 'express-validator'
+import { body } from 'express-validator/check'
 import * as express from 'express'
 
-import { logger } from '../../../helpers'
+import { logger, isHostValid } from '../../../helpers'
 import { checkErrors } from '../utils'
 
-function signatureValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  req.checkBody('signature.host', 'Should have a signature host').isURL()
-  req.checkBody('signature.signature', 'Should have a signature').notEmpty()
+const signatureValidator = [
+  body('signature.host').custom(isHostValid).withMessage('Should have a signature host'),
+  body('signature.signature').not().isEmpty().withMessage('Should have a signature'),
 
-  logger.debug('Checking signature parameters', { parameters: { signature: req.body.signature } })
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking signature parameters', { parameters: { signature: req.body.signature } })
 
-  checkErrors(req, res, next)
-}
+    checkErrors(req, res, next)
+  }
+]
 
 // ---------------------------------------------------------------------------
 

@@ -14,10 +14,3 @@ export {
   exists,
   isArray
 }
-
-declare module 'express-validator' {
-  export interface Validator {
-    exists,
-    isArray
-  }
-}

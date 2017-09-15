@@ -32,10 +32,3 @@ export {
   isEachUniqueHostValid,
   isHostValid
 }
-
-declare module 'express-validator' {
-  export interface Validator {
-    isEachUniqueHostValid
-    isHostValid
-  }
-}
