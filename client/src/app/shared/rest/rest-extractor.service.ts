@@ -54,11 +54,13 @@ export class RestExtractor {
 
     const errorObj = {
       message: errorMessage,
-      status: undefined
+      status: undefined,
+      body: undefined
     }
 
     if (err.status) {
       errorObj.status = err.status
+      errorObj.body = err.error
     }
 
     return Observable.throw(errorObj)
