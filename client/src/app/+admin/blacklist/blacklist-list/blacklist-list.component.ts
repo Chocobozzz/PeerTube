@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 
 import { NotificationsService } from 'angular2-notifications'
 
 import { ConfirmService } from '../../../core'
+import { RestTable, RestPagination } from '../../../shared'
 import { BlacklistService } from '../shared'
 import { BlacklistedVideo } from '../../../../../../shared'
 
@@ -11,14 +13,20 @@ import { BlacklistedVideo } from '../../../../../../shared'
   templateUrl: './blacklist-list.component.html',
   styleUrls: []
 })
-export class BlacklistListComponent implements OnInit {
+export class BlacklistListComponent extends RestTable implements OnInit {
   blacklist: BlacklistedVideo[] = []
+  totalRecords = 0
+  rowsPerPage = 10
+  sort: SortMeta = { field: 'id', order: 1 }
+  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private blacklistService: BlacklistService
-  ) {}
+  ) {
+    super()
+  }
 
   ngOnInit () {
     this.loadData()
@@ -43,14 +51,15 @@ export class BlacklistListComponent implements OnInit {
     )
   }
 
-  private loadData () {
-    this.blacklistService.getBlacklist()
-                         .subscribe(
-	                   resultList => {
-                             this.blacklist = resultList.data
-                           },
+  protected loadData () {
+    this.blacklistService.getBlacklist(this.pagination, this.sort)
+      .subscribe(
+        resultList => {
+          this.blacklist = resultList.data
+          this.totalRecords = resultList.total
+        },
 
-                           err => this.notificationsService.error('Error', err.message)
-                         )
+        err => this.notificationsService.error('Error', err.message)
+      )
   }
 }
