@@ -14,10 +14,7 @@ const SORTABLE_BLACKLISTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.BLACK
 const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
 const videoAbusesSortValidator = checkSort(SORTABLE_VIDEO_ABUSES_COLUMNS)
 const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
-
-function blacklistSortValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
-  checkSort(req, res, next, SORTABLE_BLACKLISTS_COLUMNS)
-}
+const blacklistSortValidator = checkSort(SORTABLE_BLACKLISTS_COLUMNS)
 
 // ---------------------------------------------------------------------------
 
