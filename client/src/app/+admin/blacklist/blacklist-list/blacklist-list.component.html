@@ -1,11 +1,23 @@
 <div class="row">
   <div class="content-padding">
-
     <h3>Blacklisted videos</h3>
 
-    <ng2-smart-table
-       [settings]="tableSettings" [source]="blacklistSource"
-       (delete)="removeVideoFromBlacklist($event)"
-    ></ng2-smart-table>
+    <p-dataTable [value]="blacklist">
+      <p-column field="id" header="ID"></p-column>
+      <p-column field="name" header="Name"></p-column>
+      <p-column field="description" header="Description"></p-column>
+      <p-column field="duration" header="Duration"></p-column>
+      <p-column field="views" header="Views"></p-column>
+      <p-column field="likes" header="Likes"></p-column>
+      <p-column field="dislikes" header="Dislikes"></p-column>
+      <p-column field="nsfw" header="NSFW"></p-column>
+      <p-column field="uuid" header="UUID"></p-column>
+      <p-column field="createdAt" header="Created date"></p-column>
+      <p-column header="Delete" styleClass="action-cell">
+        <ng-template pTemplate="body" let-entry="rowData">
+	  <span (click)="removeVideoFromBlacklist(entry)" class="glyphicon glyphicon-remove glyphicon-black" title="Remove this video"></span>
+	</ng-template>
+      </p-column>
+    </p-dataTable>
   </div>
 </div>

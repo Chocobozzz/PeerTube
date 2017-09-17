@@ -1,98 +1,56 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
 
 import { ConfirmService } from '../../../core'
-import { Blacklist, Utils } from '../../../shared'
 import { BlacklistService } from '../shared'
+import { BlacklistedVideo } from '../../../../../../shared'
 
 @Component({
   selector: 'my-blacklist-list',
   templateUrl: './blacklist-list.component.html',
   styleUrls: []
 })
-export class BlacklistListComponent {
-  blacklistSource = null
-  tableSettings = {
-    mode: 'external',
-    attr: {
-      class: 'table-hover'
-    },
-    hideSubHeader: true,
-    actions: {
-      position: 'right',
-      add: false,
-      edit: false,
-      delete: true
-    },
-    delete: {
-      deleteButtonContent: Utils.getRowDeleteButton()
-    },
-    pager: {
-      display: true,
-      perPage: 10
-    },
-    columns: {
-      id: {
-        title: 'ID'
-      },
-      name: {
-        title: 'Name'
-      },
-      description: {
-        title: 'Description'
-      },
-      duration: {
-        title: 'Duration'
-      },
-      views: {
-        title: 'Views'
-      },
-      likes: {
-        title: 'Likes'
-      },
-      dislikes: {
-        title: 'Dislikes'
-      },
-      nsfw: {
-        title: 'NSFW'
-      },
-      uuid: {
-        title: 'UUID'
-      },
-      createdAt: {
-        title: 'Created Date',
-        valuePrepareFunction: Utils.dateToHuman
-      }
-    }
-  }
+export class BlacklistListComponent implements OnInit {
+  blacklist: BlacklistedVideo[] = []
 
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private blacklistService: BlacklistService
-  ) {
-    this.blacklistSource = this.blacklistService.getDataSource()
+  ) {}
+
+  ngOnInit () {
+    this.loadData()
   }
 
-  removeVideoFromBlacklist ({ data }) {
-    const blacklistedVideo: Blacklist = data
+  removeVideoFromBlacklist (entry: BlacklistedVideo) {
+    const confirmMessage = 'Do you really want to remove this video from the blacklist ? It will be available again in the video list.'
 
-    this.confirmService
-      .confirm('Do you really want to remove this video from the blacklist ? It will be available again in the video list', 'Remove')
-      .subscribe(
-        res => {
-          if (res === false) return
+    this.confirmService.confirm(confirmMessage, 'Remove').subscribe(
+      res => {
+        if (res === false) return
 
-          this.blacklistService.removeVideoFromBlacklist(blacklistedVideo).subscribe(
-            () => {
-              this.notificationsService.success('Success', `Video ${blacklistedVideo.name} removed from the blacklist.`)
-              this.blacklistSource.refresh()
-            },
+        this.blacklistService.removeVideoFromBlacklist(entry).subscribe(
+          status => {
+            this.notificationsService.success('Success', `Video ${entry.name} removed from the blacklist.`)
+            this.loadData()
+          },
 
-            err => this.notificationsService.error('Error', err.text)
-          )
-        }
-      )
+          err => this.notificationsService.error('Error', err.message)
+        )
+      }
+    )
+  }
+
+  private loadData () {
+    this.blacklistService.getBlacklist()
+                         .subscribe(
+	                   resultList => {
+                             this.blacklist = resultList.data
+                           },
+
+                           err => this.notificationsService.error('Error', err.message)
+                         )
   }
 }

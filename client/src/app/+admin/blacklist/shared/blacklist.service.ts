@@ -1,20 +1,29 @@
 import { Injectable } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import 'rxjs/add/operator/catch'
+import 'rxjs/add/operator/map'
 
-import { AuthHttp, RestDataSource, Blacklist } from '../../../shared'
+import { RestExtractor } from '../../../shared'
+import { BlacklistedVideo, ResultList } from '../../../../../../shared'
 
 @Injectable()
 export class BlacklistService {
   private static BASE_BLACKLISTS_URL = '/api/v1/blacklist/'
 
   constructor (
-    private authHttp: AuthHttp
+    private authHttp: HttpClient,
+    private restExtractor: RestExtractor
   ) {}
 
-  getDataSource () {
-    return new RestDataSource(this.authHttp, BlacklistService.BASE_BLACKLISTS_URL)
+  getBlacklist () {
+    return this.authHttp.get<ResultList<BlacklistedVideo>>(BlacklistService.BASE_BLACKLISTS_URL)
+                        .map(res => this.restExtractor.convertResultListDateToHuman(res))
+                        .catch(res => this.restExtractor.handleError(res))
   }
 
-  removeVideoFromBlacklist (entry: Blacklist) {
+  removeVideoFromBlacklist (entry: BlacklistedVideo) {
     return this.authHttp.delete(BlacklistService.BASE_BLACKLISTS_URL + entry.id)
+                        .map(this.restExtractor.extractDataBool)
+                        .catch(res => this.restExtractor.handleError(res))
   }
 }
