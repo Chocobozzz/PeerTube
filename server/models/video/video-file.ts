@@ -30,7 +30,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         }
       },
       size: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.BIGINT,
         allowNull: false,
         validate: {
           sizeValid: value => {
