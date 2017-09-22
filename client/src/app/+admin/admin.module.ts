@@ -6,6 +6,7 @@ import { FriendsComponent, FriendAddComponent, FriendListComponent, FriendServic
 import { RequestSchedulersComponent, RequestSchedulersStatsComponent, RequestSchedulersService } from './request-schedulers'
 import { UsersComponent, UserAddComponent, UserUpdateComponent, UserListComponent, UserService } from './users'
 import { VideoAbusesComponent, VideoAbuseListComponent } from './video-abuses'
+import { BlacklistComponent, BlacklistListComponent, BlacklistService } from './blacklist'
 import { SharedModule } from '../shared'
 import { AdminGuard } from './admin-guard.service'
 
@@ -30,6 +31,9 @@ import { AdminGuard } from './admin-guard.service'
     UserUpdateComponent,
     UserListComponent,
 
+    BlacklistComponent,
+    BlacklistListComponent,
+
     VideoAbusesComponent,
     VideoAbuseListComponent
   ],
@@ -42,7 +46,8 @@ import { AdminGuard } from './admin-guard.service'
     FriendService,
     RequestSchedulersService,
     UserService,
-    AdminGuard
+    AdminGuard,
+    BlacklistService
   ]
 })
 export class AdminModule { }

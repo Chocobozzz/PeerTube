@@ -1,7 +1,9 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
+import { SortType } from '../../helpers'
 import { ResultList } from '../../../shared'
+import { VideoInstance } from './video-interface'
 
 // Don't use barrel, import just what we need
 import { BlacklistedVideo as FormattedBlacklistedVideo } from '../../../shared/models/videos/video-blacklist.model'
@@ -13,7 +15,7 @@ export namespace BlacklistedVideoMethods {
 
   export type List = () => Promise<BlacklistedVideoInstance[]>
 
-  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<BlacklistedVideoInstance> >
+  export type ListForApi = (start: number, count: number, sort: SortType) => Promise< ResultList<BlacklistedVideoInstance> >
 
   export type LoadById = (id: number) => Promise<BlacklistedVideoInstance>
 
@@ -31,6 +33,8 @@ export interface BlacklistedVideoClass {
 
 export interface BlacklistedVideoAttributes {
   videoId: number
+
+  Video?: VideoInstance
 }
 
 export interface BlacklistedVideoInstance

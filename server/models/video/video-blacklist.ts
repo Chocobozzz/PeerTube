@@ -1,6 +1,8 @@
 import * as Sequelize from 'sequelize'
 
-import { addMethodsToModel, getSort } from '../utils'
+import { SortType } from '../../helpers'
+import { addMethodsToModel, getSortOnModel } from '../utils'
+import { VideoInstance } from './video-interface'
 import {
   BlacklistedVideoInstance,
   BlacklistedVideoAttributes,
@@ -49,10 +51,23 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 // ------------------------------ METHODS ------------------------------
 
 toFormattedJSON = function (this: BlacklistedVideoInstance) {
+  let video: VideoInstance
+
+  video = this.Video
+
   return {
     id: this.id,
     videoId: this.videoId,
-    createdAt: this.createdAt
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt,
+    name: video.name,
+    uuid: video.uuid,
+    description: video.description,
+    duration: video.duration,
+    views: video.views,
+    likes: video.likes,
+    dislikes: video.dislikes,
+    nsfw: video.nsfw
   }
 }
 
@@ -76,11 +91,12 @@ list = function () {
   return BlacklistedVideo.findAll()
 }
 
-listForApi = function (start: number, count: number, sort: string) {
+listForApi = function (start: number, count: number, sort: SortType) {
   const query = {
     offset: start,
     limit: count,
-    order: [ getSort(sort) ]
+    order: [ getSortOnModel(sort.sortModel, sort.sortValue) ],
+    include: [ { model: BlacklistedVideo['sequelize'].models.Video } ]
   }
 
   return BlacklistedVideo.findAndCountAll(query).then(({ rows, count }) => {

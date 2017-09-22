@@ -9,17 +9,20 @@ import { SORTABLE_COLUMNS } from '../../initializers'
 const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
 const SORTABLE_VIDEO_ABUSES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_ABUSES)
 const SORTABLE_VIDEOS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS)
+const SORTABLE_BLACKLISTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.BLACKLISTS)
 
 const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
 const videoAbusesSortValidator = checkSort(SORTABLE_VIDEO_ABUSES_COLUMNS)
 const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
+const blacklistSortValidator = checkSort(SORTABLE_BLACKLISTS_COLUMNS)
 
 // ---------------------------------------------------------------------------
 
 export {
   usersSortValidator,
   videoAbusesSortValidator,
-  videosSortValidator
+  videosSortValidator,
+  blacklistSortValidator
 }
 
 // ---------------------------------------------------------------------------

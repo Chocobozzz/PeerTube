@@ -20,7 +20,7 @@ describe('Test video transcoding', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
