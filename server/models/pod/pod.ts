@@ -219,7 +219,7 @@ updatePodsScore = function (goodPods: number[], badPods: number[]) {
   }
 
   if (badPods.length !== 0) {
-    incrementScores(badPods, PODS_SCORE.MALUS)
+    incrementScores(badPods, PODS_SCORE.PENALTY)
       .then(() => removeBadPods())
       .catch(err => {
         if (err) logger.error('Cannot decrement scores of bad pods.', err)

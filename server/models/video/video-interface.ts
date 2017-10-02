@@ -7,53 +7,9 @@ import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 
 // Don't use barrel, import just what we need
 import { Video as FormattedVideo } from '../../../shared/models/videos/video.model'
+import { RemoteVideoUpdateData } from '../../../shared/models/pods/remote-video/remote-video-update-request.model'
+import { RemoteVideoCreateData } from '../../../shared/models/pods/remote-video/remote-video-create-request.model'
 import { ResultList } from '../../../shared/models/result-list.model'
-
-export type FormattedRemoteVideoFile = {
-  infoHash: string
-  resolution: number
-  extname: string
-  size: number
-}
-
-export type FormattedAddRemoteVideo = {
-  uuid: string
-  name: string
-  category: number
-  licence: number
-  language: number
-  nsfw: boolean
-  description: string
-  author: string
-  duration: number
-  thumbnailData: string
-  tags: string[]
-  createdAt: Date
-  updatedAt: Date
-  views: number
-  likes: number
-  dislikes: number
-  files: FormattedRemoteVideoFile[]
-}
-
-export type FormattedUpdateRemoteVideo = {
-  uuid: string
-  name: string
-  category: number
-  licence: number
-  language: number
-  nsfw: boolean
-  description: string
-  author: string
-  duration: number
-  tags: string[]
-  createdAt: Date
-  updatedAt: Date
-  views: number
-  likes: number
-  dislikes: number
-  files: FormattedRemoteVideoFile[]
-}
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string
@@ -61,6 +17,7 @@ export namespace VideoMethods {
   export type IsOwned = (this: VideoInstance) => boolean
   export type ToFormattedJSON = (this: VideoInstance) => FormattedVideo
 
+  export type GetOriginalFile = (this: VideoInstance) => VideoFileInstance
   export type GenerateMagnetUri = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type GetTorrentFileName = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type GetVideoFilename = (this: VideoInstance, videoFile: VideoFileInstance) => string
@@ -69,10 +26,12 @@ export namespace VideoMethods {
   export type GetVideoFilePath = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type CreateTorrentAndSetInfoHash = (this: VideoInstance, videoFile: VideoFileInstance) => Promise<void>
 
-  export type ToAddRemoteJSON = (this: VideoInstance) => Promise<FormattedAddRemoteVideo>
-  export type ToUpdateRemoteJSON = (this: VideoInstance) => FormattedUpdateRemoteVideo
+  export type ToAddRemoteJSON = (this: VideoInstance) => Promise<RemoteVideoCreateData>
+  export type ToUpdateRemoteJSON = (this: VideoInstance) => RemoteVideoUpdateData
 
-  export type TranscodeVideofile = (this: VideoInstance, inputVideoFile: VideoFileInstance) => Promise<void>
+  export type OptimizeOriginalVideofile = (this: VideoInstance) => Promise<void>
+  export type TranscodeOriginalVideofile = (this: VideoInstance, resolution: number) => Promise<void>
+  export type GetOriginalFileHeight = (this: VideoInstance) => Promise<number>
 
   // Return thumbnail name
   export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string) => Promise<string>
@@ -147,6 +106,7 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   createPreview: VideoMethods.CreatePreview
   createThumbnail: VideoMethods.CreateThumbnail
   createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
+  getOriginalFile: VideoMethods.GetOriginalFile
   generateMagnetUri: VideoMethods.GenerateMagnetUri
   getPreviewName: VideoMethods.GetPreviewName
   getThumbnailName: VideoMethods.GetThumbnailName
@@ -161,9 +121,12 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
   toFormattedJSON: VideoMethods.ToFormattedJSON
   toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
-  transcodeVideofile: VideoMethods.TranscodeVideofile
+  optimizeOriginalVideofile: VideoMethods.OptimizeOriginalVideofile
+  transcodeOriginalVideofile: VideoMethods.TranscodeOriginalVideofile
+  getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
 
   setTags: Sequelize.HasManySetAssociationsMixin<TagAttributes, string>
+  addVideoFile: Sequelize.HasManyAddAssociationMixin<VideoFileAttributes, string>
   setVideoFiles: Sequelize.HasManySetAssociationsMixin<VideoFileAttributes, string>
 }
 

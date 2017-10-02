@@ -10,7 +10,8 @@ import {
   RequestEndpoint,
   RequestVideoEventType,
   RequestVideoQaduType,
-  JobState
+  JobState,
+  VideoResolution
 } from '../../shared/models'
 
 // ---------------------------------------------------------------------------
@@ -85,7 +86,14 @@ const CONFIG = {
   },
   TRANSCODING: {
     ENABLED: config.get<boolean>('transcoding.enabled'),
-    THREADS: config.get<number>('transcoding.threads')
+    THREADS: config.get<number>('transcoding.threads'),
+    RESOLUTIONS: {
+      '240' : config.get<boolean>('transcoding.resolutions.240p'),
+      '360': config.get<boolean>('transcoding.resolutions.360p'),
+      '480': config.get<boolean>('transcoding.resolutions.480p'),
+      '720': config.get<boolean>('transcoding.resolutions.720p'),
+      '1080': config.get<boolean>('transcoding.resolutions.1080p')
+    }
   },
   CACHE: {
     PREVIEWS: {
@@ -144,7 +152,7 @@ const VIDEO_CATEGORIES = {
   9: 'Comedy',
   10: 'Entertainment',
   11: 'News',
-  12: 'Howto',
+  12: 'How To',
   13: 'Education',
   14: 'Activism',
   15: 'Science & Technology',
@@ -179,15 +187,17 @@ const VIDEO_LANGUAGES = {
   11: 'German',
   12: 'Korean',
   13: 'French',
-  14: 'Italien'
+  14: 'Italian'
 }
 
-const VIDEO_FILE_RESOLUTIONS = {
+// TODO: use VideoResolution when https://github.com/Microsoft/TypeScript/issues/13042 is fixed
+const VIDEO_FILE_RESOLUTIONS: { [ id: number ]: string } = {
   0: 'original',
-  1: '360p',
-  2: '480p',
-  3: '720p',
-  4: '1080p'
+  240: '240p',
+  360: '360p',
+  480: '480p',
+  720: '720p',
+  1080: '1080p'
 }
 
 // ---------------------------------------------------------------------------
@@ -202,7 +212,7 @@ const FRIEND_SCORE = {
 
 // Number of points we add/remove from a friend after a successful/bad request
 const PODS_SCORE = {
-  MALUS: -10,
+  PENALTY: -10,
   BONUS: 10
 }
 

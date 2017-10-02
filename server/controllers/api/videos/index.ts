@@ -39,13 +39,12 @@ import {
   getFormattedObjects,
   renamePromise
 } from '../../../helpers'
-import { TagInstance } from '../../../models'
-import { VideoCreate, VideoUpdate } from '../../../../shared'
+import { TagInstance, VideoInstance } from '../../../models'
+import { VideoCreate, VideoUpdate, VideoResolution } from '../../../../shared'
 
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { rateVideoRouter } from './rate'
-import { VideoInstance } from '../../../models/video/video-interface'
 
 const videosRouter = express.Router()
 
@@ -195,7 +194,7 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
       .then(({ author, tagInstances, video }) => {
         const videoFileData = {
           extname: extname(videoPhysicalFile.filename),
-          resolution: 0, // TODO: improve readability,
+          resolution: VideoResolution.ORIGINAL,
           size: videoPhysicalFile.size
         }
 
@@ -230,7 +229,7 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           }
 
           tasks.push(
-            JobScheduler.Instance.createJob(t, 'videoTranscoder', dataInput)
+            JobScheduler.Instance.createJob(t, 'videoFileOptimizer', dataInput)
           )
         }
 

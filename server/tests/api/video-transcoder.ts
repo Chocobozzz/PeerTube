@@ -42,6 +42,8 @@ describe('Test video transcoding', function () {
 
     const res = await getVideosList(servers[0].url)
     const video = res.body.data[0]
+    expect(video.files).to.have.lengthOf(1)
+
     const magnetUri = video.files[0].magnetUri
     expect(magnetUri).to.match(/\.webm/)
 
@@ -66,6 +68,8 @@ describe('Test video transcoding', function () {
     const res = await getVideosList(servers[1].url)
 
     const video = res.body.data[0]
+    expect(video.files).to.have.lengthOf(5)
+
     const magnetUri = video.files[0].magnetUri
     expect(magnetUri).to.match(/\.mp4/)
 

@@ -22,7 +22,8 @@ import {
   unlinkPromise,
   renamePromise,
   writeFilePromise,
-  createTorrentPromise
+  createTorrentPromise,
+  statPromise
 } from '../../helpers'
 import {
   CONFIG,
@@ -35,7 +36,8 @@ import {
   VIDEO_FILE_RESOLUTIONS
 } from '../../initializers'
 import { removeVideoToFriends } from '../../lib'
-import { VideoFileInstance } from './video-file-interface'
+import { VideoResolution } from '../../../shared'
+import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 
 import { addMethodsToModel, getSort } from '../utils'
 import {
@@ -46,6 +48,7 @@ import {
 } from './video-interface'
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
+let getOriginalFile: VideoMethods.GetOriginalFile
 let generateMagnetUri: VideoMethods.GenerateMagnetUri
 let getVideoFilename: VideoMethods.GetVideoFilename
 let getThumbnailName: VideoMethods.GetThumbnailName
@@ -55,11 +58,13 @@ let isOwned: VideoMethods.IsOwned
 let toFormattedJSON: VideoMethods.ToFormattedJSON
 let toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
 let toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
-let transcodeVideofile: VideoMethods.TranscodeVideofile
+let optimizeOriginalVideofile: VideoMethods.OptimizeOriginalVideofile
+let transcodeOriginalVideofile: VideoMethods.TranscodeOriginalVideofile
 let createPreview: VideoMethods.CreatePreview
 let createThumbnail: VideoMethods.CreateThumbnail
 let getVideoFilePath: VideoMethods.GetVideoFilePath
 let createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
+let getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
 
 let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let getDurationFromFile: VideoMethods.GetDurationFromFile
@@ -251,6 +256,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     getTorrentFileName,
     getVideoFilename,
     getVideoFilePath,
+    getOriginalFile,
     isOwned,
     removeFile,
     removePreview,
@@ -259,7 +265,9 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     toAddRemoteJSON,
     toFormattedJSON,
     toUpdateRemoteJSON,
-    transcodeVideofile
+    optimizeOriginalVideofile,
+    transcodeOriginalVideofile,
+    getOriginalFileHeight
   ]
   addMethodsToModel(Video, classMethods, instanceMethods)
 
@@ -327,9 +335,14 @@ function afterDestroy (video: VideoInstance, options: { transaction: Sequelize.T
   return Promise.all(tasks)
 }
 
+getOriginalFile = function (this: VideoInstance) {
+  if (Array.isArray(this.VideoFiles) === false) return undefined
+
+  return this.VideoFiles.find(file => file.resolution === VideoResolution.ORIGINAL)
+}
+
 getVideoFilename = function (this: VideoInstance, videoFile: VideoFileInstance) {
-  // return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + videoFile.extname
-  return this.uuid + videoFile.extname
+  return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + videoFile.extname
 }
 
 getThumbnailName = function (this: VideoInstance) {
@@ -345,8 +358,7 @@ getPreviewName = function (this: VideoInstance) {
 
 getTorrentFileName = function (this: VideoInstance, videoFile: VideoFileInstance) {
   const extension = '.torrent'
-  // return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + extension
-  return this.uuid + extension
+  return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + extension
 }
 
 isOwned = function (this: VideoInstance) {
@@ -552,9 +564,10 @@ toUpdateRemoteJSON = function (this: VideoInstance) {
   return json
 }
 
-transcodeVideofile = function (this: VideoInstance, inputVideoFile: VideoFileInstance) {
+optimizeOriginalVideofile = function (this: VideoInstance) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const newExtname = '.mp4'
+  const inputVideoFile = this.getOriginalFile()
   const videoInputPath = join(videosDirectory, this.getVideoFilename(inputVideoFile))
   const videoOutputPath = join(videosDirectory, this.id + '-transcoded' + newExtname)
 
@@ -575,6 +588,12 @@ transcodeVideofile = function (this: VideoInstance, inputVideoFile: VideoFileIns
             return renamePromise(videoOutputPath, this.getVideoFilePath(inputVideoFile))
           })
           .then(() => {
+            return statPromise(this.getVideoFilePath(inputVideoFile))
+          })
+          .then(stats => {
+            return inputVideoFile.set('size', stats.size)
+          })
+          .then(() => {
             return this.createTorrentAndSetInfoHash(inputVideoFile)
           })
           .then(() => {
@@ -591,6 +610,74 @@ transcodeVideofile = function (this: VideoInstance, inputVideoFile: VideoFileIns
           })
       })
       .run()
+  })
+}
+
+transcodeOriginalVideofile = function (this: VideoInstance, resolution: VideoResolution) {
+  const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
+  const extname = '.mp4'
+
+  // We are sure it's x264 in mp4 because optimizeOriginalVideofile was already executed
+  const videoInputPath = join(videosDirectory, this.getVideoFilename(this.getOriginalFile()))
+
+  const newVideoFile = (Video['sequelize'].models.VideoFile as VideoFileModel).build({
+    resolution,
+    extname,
+    size: 0,
+    videoId: this.id
+  })
+  const videoOutputPath = join(videosDirectory, this.getVideoFilename(newVideoFile))
+  const resolutionWidthSizes = {
+    1: '240x?',
+    2: '360x?',
+    3: '480x?',
+    4: '720x?',
+    5: '1080x?'
+  }
+
+  return new Promise<void>((res, rej) => {
+    ffmpeg(videoInputPath)
+      .output(videoOutputPath)
+      .videoCodec('libx264')
+      .size(resolutionWidthSizes[resolution])
+      .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
+      .outputOption('-movflags faststart')
+      .on('error', rej)
+      .on('end', () => {
+        return statPromise(videoOutputPath)
+          .then(stats => {
+            newVideoFile.set('size', stats.size)
+
+            return undefined
+          })
+          .then(() => {
+            return this.createTorrentAndSetInfoHash(newVideoFile)
+          })
+          .then(() => {
+            return newVideoFile.save()
+          })
+          .then(() => {
+            return this.VideoFiles.push(newVideoFile)
+          })
+          .then(() => {
+            return res()
+          })
+          .catch(rej)
+      })
+      .run()
+  })
+}
+
+getOriginalFileHeight = function (this: VideoInstance) {
+  const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
+
+  return new Promise<number>((res, rej) => {
+    ffmpeg.ffprobe(originalFilePath, (err, metadata) => {
+      if (err) return rej(err)
+
+      const videoStream = metadata.streams.find(s => s.codec_type === 'video')
+      return res(videoStream.height)
+    })
   })
 }
 

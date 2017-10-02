@@ -12,6 +12,7 @@ import {
   isUserDisplayNSFWValid,
   isUserVideoQuotaValid
 } from '../../helpers'
+import { VideoResolution } from '../../../shared'
 
 import { addMethodsToModel } from '../utils'
 import {
@@ -245,7 +246,7 @@ function getOriginalVideoFileTotalFromUser (user: UserInstance) {
   // attributes = [] because we don't want other fields than the sum
   const query = {
     where: {
-      resolution: 0 // Original, TODO: improve readability
+      resolution: VideoResolution.ORIGINAL
     },
     include: [
       {

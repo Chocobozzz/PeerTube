@@ -11,7 +11,9 @@ import {
   rename,
   unlink,
   writeFile,
-  access
+  access,
+  stat,
+  Stats
 } from 'fs'
 import * as mkdirp from 'mkdirp'
 import * as bcrypt from 'bcrypt'
@@ -92,6 +94,7 @@ const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
 const bcryptHashPromise = promisify2<any, string|number, string>(bcrypt.hash)
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 const rimrafPromise = promisify1WithVoid<string>(rimraf)
+const statPromise = promisify1<string, Stats>(stat)
 
 // ---------------------------------------------------------------------------
 
@@ -115,5 +118,6 @@ export {
   bcryptGenSaltPromise,
   bcryptHashPromise,
   createTorrentPromise,
-  rimrafPromise
+  rimrafPromise,
+  statPromise
 }

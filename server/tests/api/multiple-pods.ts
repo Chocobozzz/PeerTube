@@ -129,7 +129,7 @@ describe('Test multiple pods', function () {
     })
 
     it('Should upload the video on pod 2 and propagate on each pod', async function () {
-      this.timeout(60000)
+      this.timeout(120000)
 
       const videoAttributes = {
         name: 'my super name for pod 2',
@@ -143,12 +143,12 @@ describe('Test multiple pods', function () {
       }
       await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
-      // Transcoding, so wait more that 22 seconds
-      await wait(42000)
+      // Transcoding, so wait more than 22000
+      await wait(60000)
 
       // All pods should have this video
       for (const server of servers) {
-        let baseMagnet = null
+        let baseMagnet = {}
 
         const res = await getVideosList(server.url)
 
@@ -172,27 +172,50 @@ describe('Test multiple pods', function () {
         expect(dateIsValid(video.updatedAt)).to.be.true
         expect(video.author).to.equal('root')
 
-        expect(video.files).to.have.lengthOf(1)
+        expect(video.files).to.have.lengthOf(5)
 
-        const file = video.files[0]
-        const magnetUri = file.magnetUri
-        expect(file.magnetUri).to.have.lengthOf.above(2)
-        expect(file.resolution).to.equal(0)
-        expect(file.resolutionLabel).to.equal('original')
-        expect(file.size).to.equal(942961)
+        // Check common attributes
+        for (const file of video.files) {
+          expect(file.magnetUri).to.have.lengthOf.above(2)
 
-        if (server.url !== 'http://localhost:9002') {
-          expect(video.isLocal).to.be.false
-        } else {
-          expect(video.isLocal).to.be.true
+          if (server.url !== 'http://localhost:9002') {
+            expect(video.isLocal).to.be.false
+          } else {
+            expect(video.isLocal).to.be.true
+          }
+
+          // All pods should have the same magnet Uri
+          if (baseMagnet[file.resolution] === undefined) {
+            baseMagnet[file.resolution] = file.magnet
+          } else {
+            expect(baseMagnet[file.resolution]).to.equal(file.magnet)
+          }
         }
 
-        // All pods should have the same magnet Uri
-        if (baseMagnet === null) {
-          baseMagnet = magnetUri
-        } else {
-          expect(baseMagnet).to.equal(magnetUri)
-        }
+        const originalFile = video.files.find(f => f.resolution === 0)
+        expect(originalFile).not.to.be.undefined
+        expect(originalFile.resolutionLabel).to.equal('original')
+        expect(originalFile.size).to.equal(711327)
+
+        const file240p = video.files.find(f => f.resolution === 1)
+        expect(file240p).not.to.be.undefined
+        expect(file240p.resolutionLabel).to.equal('240p')
+        expect(file240p.size).to.equal(139953)
+
+        const file360p = video.files.find(f => f.resolution === 2)
+        expect(file360p).not.to.be.undefined
+        expect(file360p.resolutionLabel).to.equal('360p')
+        expect(file360p.size).to.equal(169926)
+
+        const file480p = video.files.find(f => f.resolution === 3)
+        expect(file480p).not.to.be.undefined
+        expect(file480p.resolutionLabel).to.equal('480p')
+        expect(file480p.size).to.equal(206758)
+
+        const file720p = video.files.find(f => f.resolution === 4)
+        expect(file720p).not.to.be.undefined
+        expect(file720p.resolutionLabel).to.equal('720p')
+        expect(file720p.size).to.equal(314913)
 
         const test = await testVideoImage(server.url, 'video_short2.webm', video.thumbnailPath)
         expect(test).to.equal(true)

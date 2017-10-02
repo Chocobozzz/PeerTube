@@ -1,4 +1,5 @@
-import * as videoTranscoder from './video-transcoder'
+import * as videoFileOptimizer from './video-file-optimizer'
+import * as videoFileTranscoder from './video-file-transcoder'
 
 export interface JobHandler<T> {
   process (data: object): T
@@ -7,7 +8,8 @@ export interface JobHandler<T> {
 }
 
 const jobHandlers: { [ handlerName: string ]: JobHandler<any> } = {
-  videoTranscoder
+  videoFileOptimizer,
+  videoFileTranscoder
 }
 
 export {

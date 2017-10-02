@@ -2,8 +2,6 @@ export interface RemoteVideoUpdateData {
   uuid: string
   tags: string[]
   name: string
-  extname: string
-  infoHash: string
   category: number
   licence: number
   language: number
