@@ -10,13 +10,12 @@ import {
   RequestEndpoint,
   RequestVideoEventType,
   RequestVideoQaduType,
-  JobState,
-  VideoResolution
+  JobState
 } from '../../shared/models'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 70
+const LAST_MIGRATION_VERSION = 75
 
 // ---------------------------------------------------------------------------
 

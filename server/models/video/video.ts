@@ -627,19 +627,13 @@ transcodeOriginalVideofile = function (this: VideoInstance, resolution: VideoRes
     videoId: this.id
   })
   const videoOutputPath = join(videosDirectory, this.getVideoFilename(newVideoFile))
-  const resolutionWidthSizes = {
-    1: '240x?',
-    2: '360x?',
-    3: '480x?',
-    4: '720x?',
-    5: '1080x?'
-  }
+  const resolutionOption = `${resolution}x?` // '720x?' for example
 
   return new Promise<void>((res, rej) => {
     ffmpeg(videoInputPath)
       .output(videoOutputPath)
       .videoCodec('libx264')
-      .size(resolutionWidthSizes[resolution])
+      .size(resolutionOption)
       .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
       .outputOption('-movflags faststart')
       .on('error', rej)

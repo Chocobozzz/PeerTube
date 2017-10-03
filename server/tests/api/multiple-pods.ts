@@ -197,22 +197,22 @@ describe('Test multiple pods', function () {
         expect(originalFile.resolutionLabel).to.equal('original')
         expect(originalFile.size).to.equal(711327)
 
-        const file240p = video.files.find(f => f.resolution === 1)
+        const file240p = video.files.find(f => f.resolution === 240)
         expect(file240p).not.to.be.undefined
         expect(file240p.resolutionLabel).to.equal('240p')
         expect(file240p.size).to.equal(139953)
 
-        const file360p = video.files.find(f => f.resolution === 2)
+        const file360p = video.files.find(f => f.resolution === 360)
         expect(file360p).not.to.be.undefined
         expect(file360p.resolutionLabel).to.equal('360p')
         expect(file360p.size).to.equal(169926)
 
-        const file480p = video.files.find(f => f.resolution === 3)
+        const file480p = video.files.find(f => f.resolution === 480)
         expect(file480p).not.to.be.undefined
         expect(file480p.resolutionLabel).to.equal('480p')
         expect(file480p.size).to.equal(206758)
 
-        const file720p = video.files.find(f => f.resolution === 4)
+        const file720p = video.files.find(f => f.resolution === 720)
         expect(file720p).not.to.be.undefined
         expect(file720p.resolutionLabel).to.equal('720p')
         expect(file720p.size).to.equal(314913)
