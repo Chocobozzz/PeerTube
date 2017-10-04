@@ -170,7 +170,7 @@ export class AuthService {
                     .map(res => this.handleRefreshToken(res))
                     .catch(res => {
                       // The refresh token is invalid?
-                      if (res.status === 400 && res.error === 'invalid_grant') {
+                      if (res.status === 400 && res.error.error === 'invalid_grant') {
                         console.error('Cannot refresh token -> logout...')
                         this.logout()
                         this.router.navigate(['/login'])
