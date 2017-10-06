@@ -477,19 +477,26 @@ toFormattedJSON = function (this: VideoInstance) {
     files: []
   }
 
-  this.VideoFiles.forEach(videoFile => {
-    let resolutionLabel = VIDEO_FILE_RESOLUTIONS[videoFile.resolution]
-    if (!resolutionLabel) resolutionLabel = 'Unknown'
+  // Format and sort video files
+  json.files = this.VideoFiles
+                   .map(videoFile => {
+                     let resolutionLabel = VIDEO_FILE_RESOLUTIONS[videoFile.resolution]
+                     if (!resolutionLabel) resolutionLabel = 'Unknown'
 
-    const videoFileJson = {
-      resolution: videoFile.resolution,
-      resolutionLabel,
-      magnetUri: this.generateMagnetUri(videoFile),
-      size: videoFile.size
-    }
+                     const videoFileJson = {
+                       resolution: videoFile.resolution,
+                       resolutionLabel,
+                       magnetUri: this.generateMagnetUri(videoFile),
+                       size: videoFile.size
+                     }
 
-    json.files.push(videoFileJson)
-  })
+                     return videoFileJson
+                   })
+                   .sort((a, b) => {
+                     if (a.resolution < b.resolution) return 1
+                     if (a.resolution === b.resolution) return 0
+                     return -1
+                   })
 
   return json
 }

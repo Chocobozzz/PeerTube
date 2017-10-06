@@ -195,27 +195,27 @@ describe('Test multiple pods', function () {
         const originalFile = video.files.find(f => f.resolution === 0)
         expect(originalFile).not.to.be.undefined
         expect(originalFile.resolutionLabel).to.equal('original')
-        expect(originalFile.size).to.equal(711327)
+        expect(originalFile.size).to.be.above(700000).and.below(720000)
 
         const file240p = video.files.find(f => f.resolution === 240)
         expect(file240p).not.to.be.undefined
         expect(file240p.resolutionLabel).to.equal('240p')
-        expect(file240p.size).to.equal(139953)
+        expect(file240p.size).to.be.above(130000).and.below(150000)
 
         const file360p = video.files.find(f => f.resolution === 360)
         expect(file360p).not.to.be.undefined
         expect(file360p.resolutionLabel).to.equal('360p')
-        expect(file360p.size).to.equal(169926)
+        expect(file360p.size).to.be.above(160000).and.below(180000)
 
         const file480p = video.files.find(f => f.resolution === 480)
         expect(file480p).not.to.be.undefined
         expect(file480p.resolutionLabel).to.equal('480p')
-        expect(file480p.size).to.equal(206758)
+        expect(file480p.size).to.be.above(200000).and.below(220000)
 
         const file720p = video.files.find(f => f.resolution === 720)
         expect(file720p).not.to.be.undefined
         expect(file720p.resolutionLabel).to.equal('720p')
-        expect(file720p.size).to.equal(314913)
+        expect(file720p.size).to.be.above(310000).and.below(320000)
 
         const test = await testVideoImage(server.url, 'video_short2.webm', video.thumbnailPath)
         expect(test).to.equal(true)

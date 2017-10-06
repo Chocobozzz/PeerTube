@@ -29,7 +29,11 @@ html, body {
   line-height: 2.20;
   transition: all .4s;
   position: relative;
-  right: 6px;
+  right: 8px;
+}
+
+.vjs-resolution-button-label {
+  left: -7px;
 }
 
 .vjs-peertube-link:hover {
@@ -38,5 +42,5 @@ html, body {
 
 // Fix volume panel because we added a new component (PeerTube link)
 .vjs-volume-panel {
-  margin-right: 90px !important;
+  margin-right: 130px !important;
 }

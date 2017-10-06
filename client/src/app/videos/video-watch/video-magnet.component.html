@@ -10,7 +10,10 @@
       </div>
 
       <div class="modal-body">
-        <input #magnetUriInput (click)="magnetUriInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="video.getDefaultMagnetUri()" />
+        <div *ngFor="let file of video.files">
+          <label>{{ file.resolutionLabel }}</label>
+          <input #magnetUriInput (click)="magnetUriInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="file.magnetUri" />
+        </div>
       </div>
     </div>
   </div>

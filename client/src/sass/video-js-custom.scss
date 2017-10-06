@@ -1,3 +1,33 @@
+// Thanks: https://github.com/kmoskwiak/videojs-resolution-switcher/pull/92/files
+.vjs-resolution-button-label {
+  font-size: 1em;
+  line-height: 3em;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  box-sizing: inherit;
+}
+
+.vjs-resolution-button {
+  outline: 0 !important;
+
+  .vjs-menu {
+    .vjs-menu-content {
+      width: 4em;
+      left: 50%; /* Center the menu, in it's parent */
+      margin-left: -2em; /* half of width, to center */
+    }
+
+    li {
+      text-transform: none;
+      font-size: 1em;
+    }
+  }
+}
+
 // Thanks: https://github.com/zanechua/videojs-sublime-inspired-skin
 
 // Video JS Sublime Skin
@@ -210,7 +240,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     width: 6em;
     position: absolute;
     right: 0;
-    margin-right: 30px;
+    margin-right: 65px;
 }
 
 .vjs-sublime-skin .vjs-volume-menu-button .vjs-menu-content,

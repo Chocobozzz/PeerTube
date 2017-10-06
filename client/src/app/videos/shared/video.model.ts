@@ -1,5 +1,6 @@
 import { Video as VideoServerModel, VideoFile } from '../../../../../shared'
 import { User } from '../../shared'
+import { VideoResolution } from '../../../../../shared/models/videos/video-resolution.enum'
 
 export class Video implements VideoServerModel {
   author: string
@@ -116,11 +117,19 @@ export class Video implements VideoServerModel {
     return (this.nsfw && (!user || user.displayNSFW === false))
   }
 
-  getDefaultMagnetUri () {
+  getAppropriateMagnetUri (actualDownloadSpeed = 0) {
     if (this.files === undefined || this.files.length === 0) return ''
+    if (this.files.length === 1) return this.files[0].magnetUri
 
-    // TODO: choose the original file
-    return this.files[0].magnetUri
+    // Find first video that is good for our download speed (remember they are sorted)
+    let betterResolutionFile = this.files.find(f => actualDownloadSpeed > (f.size / this.duration))
+
+    // If the download speed is too bad, return the lowest resolution we have
+    if (betterResolutionFile === undefined) {
+      betterResolutionFile = this.files.find(f => f.resolution === VideoResolution.H_240P)
+    }
+
+    return betterResolutionFile.magnetUri
   }
 
   patch (values: Object) {

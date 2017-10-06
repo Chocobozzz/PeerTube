@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 
 import videojs from 'video.js'
+import '../../../assets/player/peertube-videojs-plugin'
+
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
 
@@ -13,7 +15,7 @@ import { VideoShareComponent } from './video-share.component'
 import { VideoReportComponent } from './video-report.component'
 import { Video, VideoService } from '../shared'
 import { WebTorrentService } from './webtorrent.service'
-import { UserVideoRateType, VideoRateType, UserVideoRate } from '../../../../../shared'
+import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 
 @Component({
   selector: 'my-video-watch',
@@ -21,8 +23,6 @@ import { UserVideoRateType, VideoRateType, UserVideoRate } from '../../../../../
   styleUrls: [ './video-watch.component.scss' ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
-  private static LOADTIME_TOO_LONG = 20000
-
   @ViewChild('videoMagnetModal') videoMagnetModal: VideoMagnetComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
@@ -38,20 +38,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   video: Video = null
   videoNotFound = false
 
-  private errorTimer: number
   private paramsSub: Subscription
-  private errorsSub: Subscription
-  private torrentInfosInterval: number
 
   constructor (
     private elementRef: ElementRef,
-    private ngZone: NgZone,
     private route: ActivatedRoute,
     private router: Router,
     private videoService: VideoService,
     private confirmService: ConfirmService,
     private metaService: MetaService,
-    private webTorrentService: WebTorrentService,
     private authService: AuthService,
     private notificationsService: NotificationsService
   ) {}
@@ -68,81 +63,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         }
       )
     })
-
-    this.playerElement = this.elementRef.nativeElement.querySelector('#video-container')
-
-    const videojsOptions = {
-      controls: true,
-      autoplay: true
-    }
-
-    const self = this
-    videojs(this.playerElement, videojsOptions, function () {
-      self.player = this
-    })
-
-    this.errorsSub = this.webTorrentService.errors.subscribe(err => this.handleError(err))
   }
 
   ngOnDestroy () {
     // Remove WebTorrent stuff
     console.log('Removing video from webtorrent.')
-    window.clearInterval(this.torrentInfosInterval)
-    window.clearTimeout(this.errorTimer)
-
-    if (this.video !== null && this.webTorrentService.has(this.video.getDefaultMagnetUri())) {
-      this.webTorrentService.remove(this.video.getDefaultMagnetUri())
-    }
 
     // Remove player
     videojs(this.playerElement).dispose()
 
     // Unsubscribe subscriptions
     this.paramsSub.unsubscribe()
-    this.errorsSub.unsubscribe()
-  }
-
-  loadVideo () {
-    // Reset the error
-    this.error = false
-    // We are loading the video
-    this.loading = true
-
-    console.log('Adding ' + this.video.getDefaultMagnetUri() + '.')
-
-    // The callback might never return if there are network issues
-    // So we create a timer to inform the user the load is abnormally long
-    this.errorTimer = window.setTimeout(() => this.loadTooLong(), VideoWatchComponent.LOADTIME_TOO_LONG)
-
-    const torrent = this.webTorrentService.add(this.video.getDefaultMagnetUri(), torrent => {
-      // Clear the error timer
-      window.clearTimeout(this.errorTimer)
-      // Maybe the error was fired by the timer, so reset it
-      this.error = false
-
-      // We are not loading the video anymore
-      this.loading = false
-
-      console.log('Added ' + this.video.getDefaultMagnetUri() + '.')
-      torrent.files[0].renderTo(this.playerElement, (err) => {
-        if (err) {
-          this.notificationsService.error('Error', 'Cannot append the file in the video element.')
-          console.error(err)
-        }
-
-        // Hack to "simulate" src link in video.js >= 6
-        // If no, we can't play the video after pausing it
-        // https://github.com/videojs/video.js/blob/master/src/js/player.js#L1633
-        (this.player as any).src = () => true
-
-        this.player.play()
-      })
-
-      this.runInProgress(torrent)
-    })
-
-    torrent.on('error', err => this.handleError(err))
-    torrent.on('warning', err => this.handleError(err))
   }
 
   setLike () {
@@ -295,8 +226,36 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           return this.router.navigate([ '/videos/list' ])
         }
 
+        this.playerElement = this.elementRef.nativeElement.querySelector('#video-container')
+
+        const videojsOptions = {
+          controls: true,
+          autoplay: true,
+          plugins: {
+            peertube: {
+              videoFiles: this.video.files,
+              playerElement: this.playerElement,
+              autoplay: true,
+              peerTubeLink: false
+            }
+          }
+        }
+
+        const self = this
+        videojs(this.playerElement, videojsOptions, function () {
+          self.player = this
+          this.on('customError', (event, data) => {
+            self.handleError(data.err)
+          })
+
+          this.on('torrentInfo', (event, data) => {
+            self.downloadSpeed = data.downloadSpeed
+            self.numPeers = data.numPeers
+            self.uploadSpeed = data.uploadSpeed
+          })
+        })
+
         this.setOpenGraphTags()
-        this.loadVideo()
         this.checkUserRating()
       }
     )
@@ -318,11 +277,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video.dislikes += dislikesToIncrement
   }
 
-  private loadTooLong () {
-    this.error = true
-    console.error('The video load seems to be abnormally long.')
-  }
-
   private setOpenGraphTags () {
     this.metaService.setTitle(this.video.name)
 
@@ -342,16 +296,5 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.setTag('og:url', window.location.href)
     this.metaService.setTag('url', window.location.href)
-  }
-
-  private runInProgress (torrent: any) {
-    // Refresh each second
-    this.torrentInfosInterval = window.setInterval(() => {
-      this.ngZone.run(() => {
-        this.downloadSpeed = torrent.downloadSpeed
-        this.numPeers = torrent.numPeers
-        this.uploadSpeed = torrent.uploadSpeed
-      })
-    }, 1000)
   }
 }

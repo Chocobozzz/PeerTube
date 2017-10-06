@@ -8,7 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const PurifyCSSPlugin = require('purifycss-webpack')
 
 module.exports = function (options) {
-  const isProd = options.env === 'production'
+  const isProd = options && options.env === 'production'
 
   const configuration = {
     entry: {

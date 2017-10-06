@@ -10,8 +10,7 @@ import {
   VideoWatchComponent,
   VideoMagnetComponent,
   VideoReportComponent,
-  VideoShareComponent,
-  WebTorrentService
+  VideoShareComponent
 } from './video-watch'
 import { VideoService } from './shared'
 import { SharedModule } from '../shared'
@@ -47,8 +46,7 @@ import { SharedModule } from '../shared'
   ],
 
   providers: [
-    VideoService,
-    WebTorrentService
+    VideoService
   ]
 })
 export class VideosModule { }

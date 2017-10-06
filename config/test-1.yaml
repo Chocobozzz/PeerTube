@@ -26,3 +26,6 @@ user:
 
 signup:
   limit: 4
+
+transcoding:
+  enabled: false

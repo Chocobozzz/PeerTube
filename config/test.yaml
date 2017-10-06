@@ -10,3 +10,7 @@ database:
 
 signup:
   enabled: true
+
+transcoding:
+  enabled: true
+  threads: 4
