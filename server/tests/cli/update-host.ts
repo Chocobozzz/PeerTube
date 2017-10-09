@@ -55,13 +55,13 @@ describe('Test update host scripts', function () {
     expect(videos).to.have.lengthOf(2)
 
     for (const video of videos) {
-      expect(video.files).to.have.lengthOf(5)
+      expect(video.files).to.have.lengthOf(4)
 
       for (const file of video.files) {
         expect(file.magnetUri).to.contain('localhost%3A9002%2Ftracker%2Fsocket')
         expect(file.magnetUri).to.contain('localhost%3A9002%2Fstatic%2Fwebseed%2F')
 
-        const torrent = await parseTorrentVideo(server, video.uuid, file.resolutionLabel)
+        const torrent = await parseTorrentVideo(server, video.uuid, file.resolution)
         expect(torrent.announce[0]).to.equal('ws://localhost:9002/tracker/socket')
         expect(torrent.urlList[0]).to.contain('http://localhost:9002/static/webseed')
       }

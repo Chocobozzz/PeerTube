@@ -196,14 +196,14 @@ function uploadVideo (url: string, accessToken: string, videoAttributesArg: Vide
     req.field('tags[' + i + ']', attributes.tags[i])
   }
 
-  let filepath = ''
+  let filePath = ''
   if (isAbsolute(attributes.fixture)) {
-    filepath = attributes.fixture
+    filePath = attributes.fixture
   } else {
-    filepath = join(__dirname, '..', 'api', 'fixtures', attributes.fixture)
+    filePath = join(__dirname, '..', 'api', 'fixtures', attributes.fixture)
   }
 
-  return req.attach('videofile', filepath)
+  return req.attach('videofile', filePath)
             .expect(specialStatus)
 }
 
@@ -238,9 +238,9 @@ function rateVideo (url: string, accessToken: string, id: number, rating: string
           .expect(specialStatus)
 }
 
-function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolutionLabel: string) {
+function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
   return new Promise<any>((res, rej) => {
-    const torrentName = videoUUID + '-' + resolutionLabel + '.torrent'
+    const torrentName = videoUUID + '-' + resolution + '.torrent'
     const torrentPath = join(__dirname, '..', '..', '..', 'test' + server.serverNumber, 'torrents', torrentName)
     readFile(torrentPath, (err, data) => {
       if (err) return rej(err)

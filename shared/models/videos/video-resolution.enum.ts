@@ -1,5 +1,4 @@
 export enum VideoResolution {
-  ORIGINAL = 0,
   H_240P = 240,
   H_360P = 360,
   H_480P = 480,

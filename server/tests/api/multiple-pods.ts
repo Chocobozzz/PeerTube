@@ -106,8 +106,8 @@ describe('Test multiple pods', function () {
         const file = video.files[0]
         const magnetUri = file.magnetUri
         expect(file.magnetUri).to.have.lengthOf.above(2)
-        expect(file.resolution).to.equal(0)
-        expect(file.resolutionLabel).to.equal('original')
+        expect(file.resolution).to.equal(720)
+        expect(file.resolutionLabel).to.equal('720p')
         expect(file.size).to.equal(572456)
 
         if (server.url !== 'http://localhost:9001') {
@@ -172,7 +172,7 @@ describe('Test multiple pods', function () {
         expect(dateIsValid(video.updatedAt)).to.be.true
         expect(video.author).to.equal('root')
 
-        expect(video.files).to.have.lengthOf(5)
+        expect(video.files).to.have.lengthOf(4)
 
         // Check common attributes
         for (const file of video.files) {
@@ -192,11 +192,6 @@ describe('Test multiple pods', function () {
           }
         }
 
-        const originalFile = video.files.find(f => f.resolution === 0)
-        expect(originalFile).not.to.be.undefined
-        expect(originalFile.resolutionLabel).to.equal('original')
-        expect(originalFile.size).to.be.above(700000).and.below(720000)
-
         const file240p = video.files.find(f => f.resolution === 240)
         expect(file240p).not.to.be.undefined
         expect(file240p.resolutionLabel).to.equal('240p')
@@ -215,7 +210,7 @@ describe('Test multiple pods', function () {
         const file720p = video.files.find(f => f.resolution === 720)
         expect(file720p).not.to.be.undefined
         expect(file720p.resolutionLabel).to.equal('720p')
-        expect(file720p.size).to.be.above(310000).and.below(320000)
+        expect(file720p.size).to.be.above(700000).and.below(7200000)
 
         const test = await testVideoImage(server.url, 'video_short2.webm', video.thumbnailPath)
         expect(test).to.equal(true)
@@ -291,8 +286,8 @@ describe('Test multiple pods', function () {
 
         const file1 = video1.files[0]
         expect(file1.magnetUri).to.have.lengthOf.above(2)
-        expect(file1.resolution).to.equal(0)
-        expect(file1.resolutionLabel).to.equal('original')
+        expect(file1.resolution).to.equal(720)
+        expect(file1.resolutionLabel).to.equal('720p')
         expect(file1.size).to.equal(292677)
 
         expect(video2.name).to.equal('my super name for pod 3-2')
@@ -316,8 +311,8 @@ describe('Test multiple pods', function () {
         const file2 = video2.files[0]
         const magnetUri2 = file2.magnetUri
         expect(file2.magnetUri).to.have.lengthOf.above(2)
-        expect(file2.resolution).to.equal(0)
-        expect(file2.resolutionLabel).to.equal('original')
+        expect(file2.resolution).to.equal(720)
+        expect(file2.resolutionLabel).to.equal('720p')
         expect(file2.size).to.equal(218910)
 
         if (server.url !== 'http://localhost:9003') {
@@ -398,6 +393,22 @@ describe('Test multiple pods', function () {
       const video = res.body.data[3]
 
       const torrent = await webtorrentAdd(video.files[0].magnetUri)
+      expect(torrent.files).to.be.an('array')
+      expect(torrent.files.length).to.equal(1)
+      expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+    })
+
+    it('Should add the file 2 in 360p by asking pod 1', async function () {
+      // Yes, this could be long
+      this.timeout(200000)
+
+      const res = await getVideosList(servers[0].url)
+
+      const video = res.body.data.find(v => v.name === 'my super name for pod 2')
+      const file = video.files.find(f => f.resolution === 360)
+      expect(file).not.to.be.undefined
+
+      const torrent = await webtorrentAdd(file.magnetUri)
       expect(torrent.files).to.be.an('array')
       expect(torrent.files.length).to.equal(1)
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -562,8 +573,8 @@ describe('Test multiple pods', function () {
 
         const file = videoUpdated.files[0]
         expect(file.magnetUri).to.have.lengthOf.above(2)
-        expect(file.resolution).to.equal(0)
-        expect(file.resolutionLabel).to.equal('original')
+        expect(file.resolution).to.equal(720)
+        expect(file.resolutionLabel).to.equal('720p')
         expect(file.size).to.equal(292677)
 
         const test = await testVideoImage(server.url, 'video_short3.webm', videoUpdated.thumbnailPath)

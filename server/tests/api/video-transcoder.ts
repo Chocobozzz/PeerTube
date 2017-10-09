@@ -68,7 +68,7 @@ describe('Test video transcoding', function () {
     const res = await getVideosList(servers[1].url)
 
     const video = res.body.data[0]
-    expect(video.files).to.have.lengthOf(5)
+    expect(video.files).to.have.lengthOf(4)
 
     const magnetUri = video.files[0].magnetUri
     expect(magnetUri).to.match(/\.mp4/)

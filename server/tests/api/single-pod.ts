@@ -127,8 +127,8 @@ describe('Test a single pod', function () {
     const file = video.files[0]
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(0)
-    expect(file.resolutionLabel).to.equal('original')
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(218910)
 
     const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
@@ -170,8 +170,8 @@ describe('Test a single pod', function () {
 
     const file = video.files[0]
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(0)
-    expect(file.resolutionLabel).to.equal('original')
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(218910)
 
     const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
@@ -229,8 +229,8 @@ describe('Test a single pod', function () {
 
     const file = video.files[0]
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(0)
-    expect(file.resolutionLabel).to.equal('original')
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(218910)
 
     const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
@@ -291,8 +291,8 @@ describe('Test a single pod', function () {
 
     const file = video.files[0]
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(0)
-    expect(file.resolutionLabel).to.equal('original')
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(218910)
 
     const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
@@ -569,8 +569,8 @@ describe('Test a single pod', function () {
     const file = video.files[0]
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(0)
-    expect(file.resolutionLabel).to.equal('original')
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(292677)
 
     const test = await testVideoImage(server.url, 'video_short3.webm', video.thumbnailPath)
@@ -612,8 +612,8 @@ describe('Test a single pod', function () {
 
     const file = video.files[0]
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(0)
-    expect(file.resolutionLabel).to.equal('original')
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(292677)
   })
 
@@ -647,8 +647,8 @@ describe('Test a single pod', function () {
 
     const file = video.files[0]
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(0)
-    expect(file.resolutionLabel).to.equal('original')
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(292677)
   })
 

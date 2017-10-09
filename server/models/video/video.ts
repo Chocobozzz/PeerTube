@@ -1,12 +1,12 @@
 import * as safeBuffer from 'safe-buffer'
 const Buffer = safeBuffer.Buffer
-import * as ffmpeg from 'fluent-ffmpeg'
 import * as magnetUtil from 'magnet-uri'
 import { map } from 'lodash'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
+import { maxBy } from 'lodash'
 
 import { TagInstance } from './tag-interface'
 import {
@@ -23,7 +23,10 @@ import {
   renamePromise,
   writeFilePromise,
   createTorrentPromise,
-  statPromise
+  statPromise,
+  generateImageFromVideoFile,
+  transcode,
+  getVideoFileHeight
 } from '../../helpers'
 import {
   CONFIG,
@@ -32,8 +35,7 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  THUMBNAILS_SIZE,
-  VIDEO_FILE_RESOLUTIONS
+  THUMBNAILS_SIZE
 } from '../../initializers'
 import { removeVideoToFriends } from '../../lib'
 import { VideoResolution } from '../../../shared'
@@ -67,7 +69,6 @@ let createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
 let getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
 
 let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
-let getDurationFromFile: VideoMethods.GetDurationFromFile
 let list: VideoMethods.List
 let listForApi: VideoMethods.ListForApi
 let loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
@@ -233,7 +234,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     associate,
 
     generateThumbnailFromData,
-    getDurationFromFile,
     list,
     listForApi,
     listOwnedAndPopulateAuthorAndTags,
@@ -338,11 +338,12 @@ function afterDestroy (video: VideoInstance, options: { transaction: Sequelize.T
 getOriginalFile = function (this: VideoInstance) {
   if (Array.isArray(this.VideoFiles) === false) return undefined
 
-  return this.VideoFiles.find(file => file.resolution === VideoResolution.ORIGINAL)
+  // The original file is the file that have the higher resolution
+  return maxBy(this.VideoFiles, file => file.resolution)
 }
 
 getVideoFilename = function (this: VideoInstance, videoFile: VideoFileInstance) {
-  return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + videoFile.extname
+  return this.uuid + '-' + videoFile.resolution + videoFile.extname
 }
 
 getThumbnailName = function (this: VideoInstance) {
@@ -358,7 +359,7 @@ getPreviewName = function (this: VideoInstance) {
 
 getTorrentFileName = function (this: VideoInstance, videoFile: VideoFileInstance) {
   const extension = '.torrent'
-  return this.uuid + '-' + VIDEO_FILE_RESOLUTIONS[videoFile.resolution] + extension
+  return this.uuid + '-' + videoFile.resolution + extension
 }
 
 isOwned = function (this: VideoInstance) {
@@ -366,11 +367,20 @@ isOwned = function (this: VideoInstance) {
 }
 
 createPreview = function (this: VideoInstance, videoFile: VideoFileInstance) {
-  return generateImage(this, this.getVideoFilePath(videoFile), CONFIG.STORAGE.PREVIEWS_DIR, this.getPreviewName(), null)
+  return generateImageFromVideoFile(
+    this.getVideoFilePath(videoFile),
+    CONFIG.STORAGE.PREVIEWS_DIR,
+    this.getPreviewName()
+  )
 }
 
 createThumbnail = function (this: VideoInstance, videoFile: VideoFileInstance) {
-  return generateImage(this, this.getVideoFilePath(videoFile), CONFIG.STORAGE.THUMBNAILS_DIR, this.getThumbnailName(), THUMBNAILS_SIZE)
+  return generateImageFromVideoFile(
+    this.getVideoFilePath(videoFile),
+    CONFIG.STORAGE.THUMBNAILS_DIR,
+    this.getThumbnailName(),
+    THUMBNAILS_SIZE
+  )
 }
 
 getVideoFilePath = function (this: VideoInstance, videoFile: VideoFileInstance) {
@@ -480,8 +490,7 @@ toFormattedJSON = function (this: VideoInstance) {
   // Format and sort video files
   json.files = this.VideoFiles
                    .map(videoFile => {
-                     let resolutionLabel = VIDEO_FILE_RESOLUTIONS[videoFile.resolution]
-                     if (!resolutionLabel) resolutionLabel = 'Unknown'
+                     let resolutionLabel = videoFile.resolution + 'p'
 
                      const videoFileJson = {
                        resolution: videoFile.resolution,
@@ -578,46 +587,42 @@ optimizeOriginalVideofile = function (this: VideoInstance) {
   const videoInputPath = join(videosDirectory, this.getVideoFilename(inputVideoFile))
   const videoOutputPath = join(videosDirectory, this.id + '-transcoded' + newExtname)
 
-  return new Promise<void>((res, rej) => {
-    ffmpeg(videoInputPath)
-      .output(videoOutputPath)
-      .videoCodec('libx264')
-      .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
-      .outputOption('-movflags faststart')
-      .on('error', rej)
-      .on('end', () => {
+  const transcodeOptions = {
+    inputPath: videoInputPath,
+    outputPath: videoOutputPath
+  }
 
-        return unlinkPromise(videoInputPath)
-          .then(() => {
-            // Important to do this before getVideoFilename() to take in account the new file extension
-            inputVideoFile.set('extname', newExtname)
+  return transcode(transcodeOptions)
+    .then(() => {
+      return unlinkPromise(videoInputPath)
+    })
+    .then(() => {
+      // Important to do this before getVideoFilename() to take in account the new file extension
+      inputVideoFile.set('extname', newExtname)
 
-            return renamePromise(videoOutputPath, this.getVideoFilePath(inputVideoFile))
-          })
-          .then(() => {
-            return statPromise(this.getVideoFilePath(inputVideoFile))
-          })
-          .then(stats => {
-            return inputVideoFile.set('size', stats.size)
-          })
-          .then(() => {
-            return this.createTorrentAndSetInfoHash(inputVideoFile)
-          })
-          .then(() => {
-            return inputVideoFile.save()
-          })
-          .then(() => {
-            return res()
-          })
-          .catch(err => {
-            // Auto destruction...
-            this.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', err))
+      return renamePromise(videoOutputPath, this.getVideoFilePath(inputVideoFile))
+    })
+    .then(() => {
+      return statPromise(this.getVideoFilePath(inputVideoFile))
+    })
+    .then(stats => {
+      return inputVideoFile.set('size', stats.size)
+    })
+    .then(() => {
+      return this.createTorrentAndSetInfoHash(inputVideoFile)
+    })
+    .then(() => {
+      return inputVideoFile.save()
+    })
+    .then(() => {
+      return undefined
+    })
+    .catch(err => {
+      // Auto destruction...
+      this.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', err))
 
-            return rej(err)
-          })
-      })
-      .run()
-  })
+      throw err
+    })
 }
 
 transcodeOriginalVideofile = function (this: VideoInstance, resolution: VideoResolution) {
@@ -634,52 +639,37 @@ transcodeOriginalVideofile = function (this: VideoInstance, resolution: VideoRes
     videoId: this.id
   })
   const videoOutputPath = join(videosDirectory, this.getVideoFilename(newVideoFile))
-  const resolutionOption = `${resolution}x?` // '720x?' for example
 
-  return new Promise<void>((res, rej) => {
-    ffmpeg(videoInputPath)
-      .output(videoOutputPath)
-      .videoCodec('libx264')
-      .size(resolutionOption)
-      .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
-      .outputOption('-movflags faststart')
-      .on('error', rej)
-      .on('end', () => {
-        return statPromise(videoOutputPath)
-          .then(stats => {
-            newVideoFile.set('size', stats.size)
+  const transcodeOptions = {
+    inputPath: videoInputPath,
+    outputPath: videoOutputPath,
+    resolution
+  }
+  return transcode(transcodeOptions)
+    .then(() => {
+      return statPromise(videoOutputPath)
+    })
+    .then(stats => {
+      newVideoFile.set('size', stats.size)
 
-            return undefined
-          })
-          .then(() => {
-            return this.createTorrentAndSetInfoHash(newVideoFile)
-          })
-          .then(() => {
-            return newVideoFile.save()
-          })
-          .then(() => {
-            return this.VideoFiles.push(newVideoFile)
-          })
-          .then(() => {
-            return res()
-          })
-          .catch(rej)
-      })
-      .run()
-  })
+      return undefined
+    })
+    .then(() => {
+      return this.createTorrentAndSetInfoHash(newVideoFile)
+    })
+    .then(() => {
+      return newVideoFile.save()
+    })
+    .then(() => {
+      return this.VideoFiles.push(newVideoFile)
+    })
+    .then(() => undefined)
 }
 
 getOriginalFileHeight = function (this: VideoInstance) {
   const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
 
-  return new Promise<number>((res, rej) => {
-    ffmpeg.ffprobe(originalFilePath, (err, metadata) => {
-      if (err) return rej(err)
-
-      const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-      return res(videoStream.height)
-    })
-  })
+  return getVideoFileHeight(originalFilePath)
 }
 
 removeThumbnail = function (this: VideoInstance) {
@@ -711,16 +701,6 @@ generateThumbnailFromData = function (video: VideoInstance, thumbnailData: strin
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
   return writeFilePromise(thumbnailPath, Buffer.from(thumbnailData, 'binary')).then(() => {
     return thumbnailName
-  })
-}
-
-getDurationFromFile = function (videoPath: string) {
-  return new Promise<number>((res, rej) => {
-    ffmpeg.ffprobe(videoPath, (err, metadata) => {
-      if (err) return rej(err)
-
-      return res(Math.floor(metadata.format.duration))
-    })
   })
 }
 
@@ -963,23 +943,4 @@ function createBaseVideosWhere () {
       )
     }
   }
-}
-
-function generateImage (video: VideoInstance, videoPath: string, folder: string, imageName: string, size: string) {
-  const options = {
-    filename: imageName,
-    count: 1,
-    folder
-  }
-
-  if (size) {
-    options['size'] = size
-  }
-
-  return new Promise<string>((res, rej) => {
-    ffmpeg(videoPath)
-      .on('error', rej)
-      .on('end', () => res(imageName))
-      .thumbnail(options)
-  })
 }

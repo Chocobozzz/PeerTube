@@ -12,7 +12,6 @@ import {
   isUserDisplayNSFWValid,
   isUserVideoQuotaValid
 } from '../../helpers'
-import { VideoResolution } from '../../../shared'
 
 import { addMethodsToModel } from '../utils'
 import {
@@ -243,33 +242,21 @@ loadByUsernameOrEmail = function (username: string, email: string) {
 // ---------------------------------------------------------------------------
 
 function getOriginalVideoFileTotalFromUser (user: UserInstance) {
-  // attributes = [] because we don't want other fields than the sum
-  const query = {
-    where: {
-      resolution: VideoResolution.ORIGINAL
-    },
-    include: [
-      {
-        attributes: [],
-        model: User['sequelize'].models.Video,
-        include: [
-          {
-            attributes: [],
-            model: User['sequelize'].models.Author,
-            include: [
-              {
-                attributes: [],
-                model: User['sequelize'].models.User,
-                where: {
-                  id: user.id
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+  // Don't use sequelize because we need to use a subquery
+  const query = 'SELECT SUM("size") AS "total" FROM ' +
+                '(SELECT MAX("VideoFiles"."size") AS "size" FROM "VideoFiles" ' +
+                'INNER JOIN "Videos" ON "VideoFiles"."videoId" = "Videos"."id" ' +
+                'INNER JOIN "Authors" ON "Videos"."authorId" = "Authors"."id" ' +
+                'INNER JOIN "Users" ON "Authors"."userId" = "Users"."id" ' +
+                'WHERE "Users"."id" = $userId GROUP BY "Videos"."id") t'
 
-  return User['sequelize'].models.VideoFile.sum('size', query)
+  const options = {
+    bind: { userId: user.id },
+    type: Sequelize.QueryTypes.SELECT
+  }
+  return User['sequelize'].query(query, options).then(([ { total } ]) => {
+    if (total === null) return 0
+
+    return parseInt(total, 10)
+  })
 }

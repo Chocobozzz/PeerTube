@@ -35,7 +35,6 @@ export namespace VideoMethods {
 
   // Return thumbnail name
   export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string) => Promise<string>
-  export type GetDurationFromFile = (videoPath: string) => Promise<number>
 
   export type List = () => Promise<VideoInstance[]>
   export type ListOwnedAndPopulateAuthorAndTags = () => Promise<VideoInstance[]>
@@ -65,7 +64,6 @@ export namespace VideoMethods {
 
 export interface VideoClass {
   generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
-  getDurationFromFile: VideoMethods.GetDurationFromFile
   list: VideoMethods.List
   listForApi: VideoMethods.ListForApi
   listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAndTags

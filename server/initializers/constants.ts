@@ -189,16 +189,6 @@ const VIDEO_LANGUAGES = {
   14: 'Italian'
 }
 
-// TODO: use VideoResolution when https://github.com/Microsoft/TypeScript/issues/13042 is fixed
-const VIDEO_FILE_RESOLUTIONS: { [ id: number ]: string } = {
-  0: 'original',
-  240: '240p',
-  360: '360p',
-  480: '480p',
-  720: '720p',
-  1080: '1080p'
-}
-
 // ---------------------------------------------------------------------------
 
 // Score a pod has when we create it as a friend
@@ -385,7 +375,6 @@ export {
   THUMBNAILS_SIZE,
   USER_ROLES,
   VIDEO_CATEGORIES,
-  VIDEO_FILE_RESOLUTIONS,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES

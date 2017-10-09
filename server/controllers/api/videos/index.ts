@@ -37,10 +37,11 @@ import {
   retryTransactionWrapper,
   generateRandomString,
   getFormattedObjects,
-  renamePromise
+  renamePromise,
+  getVideoFileHeight
 } from '../../../helpers'
 import { TagInstance, VideoInstance } from '../../../models'
-import { VideoCreate, VideoUpdate, VideoResolution } from '../../../../shared'
+import { VideoCreate, VideoUpdate } from '../../../../shared'
 
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
@@ -192,9 +193,14 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
         return { author, tagInstances, video }
       })
       .then(({ author, tagInstances, video }) => {
+        const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
+        return getVideoFileHeight(videoFilePath)
+          .then(height => ({ author, tagInstances, video, videoFileHeight: height }))
+      })
+      .then(({ author, tagInstances, video, videoFileHeight }) => {
         const videoFileData = {
           extname: extname(videoPhysicalFile.filename),
-          resolution: VideoResolution.ORIGINAL,
+          resolution: videoFileHeight,
           size: videoPhysicalFile.size
         }
 

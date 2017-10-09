@@ -61,7 +61,7 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   ]
 
   for (const resolution of resolutions) {
-    if (configResolutions[resolution.toString()] === true && videoFileHeight >= resolution) {
+    if (configResolutions[resolution.toString()] === true && videoFileHeight > resolution) {
       resolutionsEnabled.push(resolution)
     }
   }

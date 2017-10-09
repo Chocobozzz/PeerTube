@@ -8,8 +8,7 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  VIDEO_RATE_TYPES,
-  VIDEO_FILE_RESOLUTIONS
+  VIDEO_RATE_TYPES
 } from '../../initializers'
 import { isUserUsernameValid } from './users'
 import { isArray, exists } from './misc'
@@ -128,7 +127,7 @@ function isVideoFileSizeValid (value: string) {
 }
 
 function isVideoFileResolutionValid (value: string) {
-  return VIDEO_FILE_RESOLUTIONS[value] !== undefined
+  return exists(value) && validator.isInt(value + '')
 }
 
 function isVideoFileExtnameValid (value: string) {

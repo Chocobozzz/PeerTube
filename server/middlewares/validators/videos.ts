@@ -19,7 +19,8 @@ import {
   isVideoNSFWValid,
   isVideoIdOrUUIDValid,
   isVideoAbuseReasonValid,
-  isVideoRatingTypeValid
+  isVideoRatingTypeValid,
+  getDurationFromVideoFile
 } from '../../helpers'
 import { VideoInstance } from '../../models'
 
@@ -50,7 +51,7 @@ const videosAddValidator = [
             return undefined
           }
 
-          return db.Video.getDurationFromFile(videoFile.path)
+          return getDurationFromVideoFile(videoFile.path)
             .catch(err => {
               logger.error('Invalid input file in videosAddValidator.', err)
               res.status(400)
