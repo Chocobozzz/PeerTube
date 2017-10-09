@@ -12,7 +12,7 @@ import { BlacklistedVideo, ResultList } from '../../../../../../shared'
 
 @Injectable()
 export class BlacklistService {
-  private static BASE_BLACKLISTS_URL = '/api/v1/blacklist/'
+  private static BASE_BLACKLISTS_URL = API_URL + '/api/v1/blacklist/'
 
   constructor (
     private authHttp: HttpClient,
