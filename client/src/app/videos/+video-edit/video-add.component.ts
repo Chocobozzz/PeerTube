@@ -14,7 +14,7 @@ import {
   VIDEO_TAGS,
   VIDEO_FILE
 } from '../../shared'
-import { ServerService}  from '../../core'
+import { ServerService } from '../../core'
 import { VideoService } from '../shared'
 import { VideoCreate } from '../../../../../shared'
 import { HttpEventType, HttpResponse } from '@angular/common/http'
