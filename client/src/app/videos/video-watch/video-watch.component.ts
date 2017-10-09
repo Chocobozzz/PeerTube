@@ -66,11 +66,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
-    // Remove WebTorrent stuff
-    console.log('Removing video from webtorrent.')
-
-    // Remove player
-    videojs(this.playerElement).dispose()
+    // Remove player if it exists
+    if (this.videoNotFound === false) {
+      videojs(this.playerElement).dispose()
+    }
 
     // Unsubscribe subscriptions
     this.paramsSub.unsubscribe()
