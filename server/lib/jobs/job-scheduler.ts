@@ -1,4 +1,4 @@
-import { forever, queue } from 'async'
+import { AsyncQueue, forever, queue } from 'async'
 import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../initializers/database'
