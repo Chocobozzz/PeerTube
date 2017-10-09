@@ -17,6 +17,8 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const OptimizeJsPlugin = require('optimize-js-plugin')
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
 /**
  * Webpack Constants
  */
@@ -120,15 +122,10 @@ module.exports = function (env) {
           sourceMap: false
         }),
 
-        /**
-         * Plugin: DedupePlugin
-         * Description: Prevents the inclusion of duplicate code into your bundle
-         * and instead applies a copy of the function at runtime.
-         *
-         * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-         * See: https://github.com/webpack/docs/wiki/optimization#deduplication
-         */
-        // new DedupePlugin(),
+        new ExtractTextPlugin({
+          filename: '[name].[contenthash].css',
+          allChunks: true
+        }),
 
         /**
          * Plugin: DefinePlugin
@@ -158,7 +155,6 @@ module.exports = function (env) {
         *
         * See: https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
         */
-        // NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
         new UglifyJsPlugin({
           parallel: true,
           uglifyOptions: {

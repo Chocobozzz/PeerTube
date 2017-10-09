@@ -11,6 +11,7 @@ const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
+const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const ngcWebpack = require('ngc-webpack')
 
 const WebpackNotifierPlugin = require('webpack-notifier')
@@ -216,7 +217,9 @@ module.exports = function (options) {
       new CommonsChunkPlugin({
         name: 'vendor',
         chunks: ['main'],
-        minChunks: module => /node_modules\//.test(module.resource)
+        minChunks: module => {
+          return /node_modules\//.test(module.resource)
+        }
       }),
 
       // Specify the correct order the scripts will be injected in
@@ -245,20 +248,6 @@ module.exports = function (options) {
       ),
 
       /*
-       * Plugin: ScriptExtHtmlWebpackPlugin
-       * Description: Enhances html-webpack-plugin functionality
-       * with different deployment options for your scripts including:
-       *
-       * See: https://github.com/numical/script-ext-html-webpack-plugin
-       */
-      new ScriptExtHtmlWebpackPlugin({
-        sync: [ /polyfill|vendor/ ],
-        defaultAttribute: 'async',
-        preload: [/polyfill|vendor|main/],
-        prefetch: [/chunk/]
-      }),
-
-      /*
        * Plugin: HtmlWebpackPlugin
        * Description: Simplifies creation of HTML files to serve your webpack bundles.
        * This is especially useful for webpack bundles that include a hash in the filename
@@ -275,6 +264,20 @@ module.exports = function (options) {
         },
         metadata: METADATA,
         inject: 'body'
+      }),
+
+      /*
+       * Plugin: ScriptExtHtmlWebpackPlugin
+       * Description: Enhances html-webpack-plugin functionality
+       * with different deployment options for your scripts including:
+       *
+       * See: https://github.com/numical/script-ext-html-webpack-plugin
+       */
+      new ScriptExtHtmlWebpackPlugin({
+        sync: [ /polyfill|vendor/ ],
+        defaultAttribute: 'async',
+        preload: [/polyfill|vendor|main/],
+        prefetch: [/chunk/]
       }),
 
       new WebpackNotifierPlugin({ alwaysNotify: true }),
@@ -296,7 +299,9 @@ module.exports = function (options) {
       new ngcWebpack.NgcWebpackPlugin({
         disabled: !AOT,
         tsConfig: helpers.root('tsconfig.webpack.json')
-      })
+      }),
+
+      new InlineManifestWebpackPlugin(),
     ],
 
     /*

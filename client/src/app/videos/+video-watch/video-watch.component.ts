@@ -1,4 +1,4 @@
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'

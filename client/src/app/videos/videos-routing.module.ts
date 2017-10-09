@@ -3,10 +3,8 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { MetaGuard } from '@ngx-meta/core'
 
-import { VideoAddComponent, VideoUpdateComponent } from './video-edit'
 import { VideoListComponent } from './video-list'
 import { VideosComponent } from './videos.component'
-import { VideoWatchComponent } from './video-watch'
 
 const videosRoutes: Routes = [
   {
@@ -25,7 +23,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'add',
-        component: VideoAddComponent,
+        loadChildren: 'app/videos/+video-edit#VideoAddModule',
         data: {
           meta: {
             title: 'Add a video'
@@ -34,7 +32,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'edit/:uuid',
-        component: VideoUpdateComponent,
+        loadChildren: 'app/videos/+video-edit#VideoUpdateModule',
         data: {
           meta: {
             title: 'Edit a video'
@@ -47,7 +45,10 @@ const videosRoutes: Routes = [
       },
       {
         path: 'watch/:uuid',
-        component: VideoWatchComponent
+        loadChildren: 'app/videos/+video-watch#VideoWatchModule',
+        data: {
+          preload: 3000
+        }
       }
     ]
   }

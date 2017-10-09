@@ -1,4 +1,0 @@
-export * from './video-magnet.component'
-export * from './video-share.component'
-export * from './video-report.component'
-export * from './video-watch.component'
