@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewContainerRef } from '@angular/core'
 import { Router } from '@angular/router'
 
-import { AuthService, ConfigService } from './core'
+import { AuthService, ServerService } from './core'
 import { UserService } from './shared'
 
 @Component({
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   constructor (
     private router: Router,
     private authService: AuthService,
-    private configService: ConfigService,
+    private serverService: ServerService,
     private userService: UserService
   ) {}
 
@@ -40,7 +40,11 @@ export class AppComponent implements OnInit {
       this.userService.checkTokenValidity()
     }
 
-    this.configService.loadConfig()
+    // Load custom data from server
+    this.serverService.loadConfig()
+    this.serverService.loadVideoCategories()
+    this.serverService.loadVideoLanguages()
+    this.serverService.loadVideoLicences()
 
     // Do not display menu on small screens
     if (window.innerWidth < 600) {

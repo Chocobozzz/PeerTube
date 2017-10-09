@@ -11,12 +11,13 @@ import {
   VIDEO_LICENCE,
   VIDEO_LANGUAGE,
   VIDEO_DESCRIPTION,
-  VIDEO_TAGS
+  VIDEO_TAGS,
+  VIDEO_FILE
 } from '../../shared'
+import { ServerService}  from '../../core'
 import { VideoService } from '../shared'
 import { VideoCreate } from '../../../../../shared'
 import { HttpEventType, HttpResponse } from '@angular/common/http'
-import { VIDEO_FILE } from '../../shared/forms/form-validators/video'
 
 @Component({
   selector: 'my-videos-add',
@@ -59,6 +60,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,
+    private serverService: ServerService,
     private videoService: VideoService
   ) {
     super()
@@ -84,9 +86,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.videoCategories = this.videoService.videoCategories
-    this.videoLicences = this.videoService.videoLicences
-    this.videoLanguages = this.videoService.videoLanguages
+    this.videoCategories = this.serverService.getVideoCategories()
+    this.videoLicences = this.serverService.getVideoLicences()
+    this.videoLanguages = this.serverService.getVideoLanguages()
 
     this.buildForm()
   }

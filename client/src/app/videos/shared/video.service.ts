@@ -14,7 +14,6 @@ import {
 import { Video } from './video.model'
 import { VideoPagination } from './video-pagination.model'
 import {
-  VideoCreate,
   UserVideoRate,
   VideoRateType,
   VideoUpdate,
@@ -28,27 +27,11 @@ import {
 export class VideoService {
   private static BASE_VIDEO_URL = API_URL + '/api/v1/videos/'
 
-  videoCategories: Array<{ id: number, label: string }> = []
-  videoLicences: Array<{ id: number, label: string }> = []
-  videoLanguages: Array<{ id: number, label: string }> = []
-
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService
   ) {}
-
-  loadVideoCategories () {
-    return this.loadVideoAttributeEnum('categories', this.videoCategories)
-  }
-
-  loadVideoLicences () {
-    return this.loadVideoAttributeEnum('licences', this.videoLicences)
-  }
-
-  loadVideoLanguages () {
-    return this.loadVideoAttributeEnum('languages', this.videoLanguages)
-  }
 
   getVideo (uuid: string) {
     return this.authHttp.get<VideoServerModel>(VideoService.BASE_VIDEO_URL + uuid)
@@ -74,8 +57,7 @@ export class VideoService {
                         .catch(this.restExtractor.handleError)
   }
 
-  // uploadVideo (video: VideoCreate) {
-  uploadVideo (video: any) {
+  uploadVideo (video: FormData) {
     const req = new HttpRequest('POST', `${VideoService.BASE_VIDEO_URL}/upload`, video, { reportProgress: true })
 
     return this.authHttp.request(req)
@@ -174,17 +156,5 @@ export class VideoService {
     }
 
     return { videos, totalVideos }
-  }
-
-  private loadVideoAttributeEnum (attributeName: 'categories' | 'licences' | 'languages', hashToPopulate: { id: number, label: string }[]) {
-    return this.authHttp.get(VideoService.BASE_VIDEO_URL + attributeName)
-                        .subscribe(data => {
-                          Object.keys(data).forEach(dataKey => {
-                            hashToPopulate.push({
-                              id: parseInt(dataKey, 10),
-                              label: data[dataKey]
-                            })
-                          })
-                        })
   }
 }

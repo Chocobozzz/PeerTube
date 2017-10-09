@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 
 import { AuthService, AuthStatus } from '../auth'
-import { ConfigService } from '../config'
+import { ServerService } from '../server'
 
 @Component({
   selector: 'my-menu',
@@ -14,7 +14,7 @@ export class MenuComponent implements OnInit {
 
   constructor (
     private authService: AuthService,
-    private configService: ConfigService,
+    private serverService: ServerService,
     private router: Router
   ) {}
 
@@ -37,7 +37,7 @@ export class MenuComponent implements OnInit {
   }
 
   isRegistrationAllowed () {
-    return this.configService.getConfig().signup.allowed
+    return this.serverService.getConfig().signup.allowed
   }
 
   isUserAdmin () {

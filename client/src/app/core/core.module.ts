@@ -8,7 +8,7 @@ import { SimpleNotificationsModule } from 'angular2-notifications'
 import { ModalModule } from 'ngx-bootstrap/modal'
 
 import { AuthService } from './auth'
-import { ConfigService } from './config'
+import { ServerService } from './server'
 import { ConfirmComponent, ConfirmService } from './confirm'
 import { MenuComponent, MenuAdminComponent } from './menu'
 import { throwIfAlreadyLoaded } from './module-import-guard'
@@ -41,7 +41,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
   providers: [
     AuthService,
     ConfirmService,
-    ConfigService
+    ServerService
   ]
 })
 export class CoreModule {

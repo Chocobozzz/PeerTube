@@ -1,10 +1,10 @@
-import { Component, ElementRef, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 
 import { NotificationsService } from 'angular2-notifications'
 
-import { AuthService } from '../../core'
+import { ServerService } from '../../core'
 import {
   FormReactive,
   VIDEO_NAME,
@@ -52,12 +52,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   fileError = ''
 
   constructor (
-    private authService: AuthService,
-    private elementRef: ElementRef,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
+    private serverService: ServerService,
     private videoService: VideoService
   ) {
     super()
@@ -80,9 +79,9 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm()
 
-    this.videoCategories = this.videoService.videoCategories
-    this.videoLicences = this.videoService.videoLicences
-    this.videoLanguages = this.videoService.videoLanguages
+    this.videoCategories = this.serverService.getVideoCategories()
+    this.videoLicences = this.serverService.getVideoLicences()
+    this.videoLanguages = this.serverService.getVideoLanguages()
 
     const uuid: string = this.route.snapshot.params['uuid']
     this.videoService.getVideo(uuid)
