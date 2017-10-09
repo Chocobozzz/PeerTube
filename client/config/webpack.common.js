@@ -301,7 +301,7 @@ module.exports = function (options) {
         tsConfig: helpers.root('tsconfig.webpack.json')
       }),
 
-      new InlineManifestWebpackPlugin(),
+      new InlineManifestWebpackPlugin()
     ],
 
     /*

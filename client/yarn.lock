@@ -80,11 +80,11 @@
   version "2.1.3"
   resolved "https://registry.yarnpkg.com/@angularclass/hmr/-/hmr-2.1.3.tgz#34e658ed3da37f23b0a200e2da5a89be92bb209f"
 
-"@ngx-meta/core@^0.4.0-rc.2":
-  version "0.4.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@ngx-meta/core/-/core-0.4.0-rc.2.tgz#1bd793103a1a5d463ba773db9f56d3eb8575c2c8"
+"@ngx-meta/core@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@ngx-meta/core/-/core-4.0.1.tgz#b035febeeb92876920480f70719fcf953dc0245f"
   dependencies:
-    tslib "^1.7.0"
+    tslib "~1.7.1"
 
 "@types/bittorrent-protocol@*":
   version "2.2.2"
@@ -106,9 +106,9 @@
   version "8.0.25"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.25.tgz#66ecaf4df93f5281b48427ee96fbcdfc4f0cdce1"
 
-"@types/node@^6.0.38":
-  version "6.0.89"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-6.0.89.tgz#154be0e6a823760cd6083aa8c48f952e2e63e0b0"
+"@types/node@^8.0.33":
+  version "8.0.33"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.33.tgz#1126e94374014e54478092830704f6ea89df04cd"
 
 "@types/parse-torrent-file@*":
   version "4.0.1"
@@ -130,13 +130,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/source-map@*":
+"@types/source-map@*", "@types/source-map@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@types/source-map/-/source-map-0.5.1.tgz#7e74db5d06ab373a712356eebfaea2fad0ea2367"
-
-"@types/source-map@^0.1.26":
-  version "0.1.29"
-  resolved "https://registry.yarnpkg.com/@types/source-map/-/source-map-0.1.29.tgz#d7048a60180b09f8aa6d53bda311c6b51cbd7018"
 
 "@types/tapable@*":
   version "0.2.4"
@@ -148,9 +144,9 @@
   dependencies:
     "@types/source-map" "*"
 
-"@types/video.js@5.16.0":
-  version "5.16.0"
-  resolved "https://registry.yarnpkg.com/@types/video.js/-/video.js-5.16.0.tgz#b35085050b41b81b9425faa3616f925239685f88"
+"@types/video.js@6.2.0":
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/@types/video.js/-/video.js-6.2.0.tgz#1e7994e67b8ee37065762479f12ed812b54e6fa2"
 
 "@types/webpack@^3.0.0":
   version "3.0.13"
@@ -6720,7 +6716,7 @@ tsickle@^0.21.0:
     source-map "^0.5.6"
     source-map-support "^0.4.2"
 
-tslib@^1.0.0, tslib@^1.5.0, tslib@^1.7.0, tslib@^1.7.1:
+tslib@^1.0.0, tslib@^1.5.0, tslib@^1.7.1, tslib@~1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.7.1.tgz#bc8004164691923a79fe8378bbeb3da2017538ec"
 

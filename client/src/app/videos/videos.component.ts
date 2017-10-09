@@ -6,7 +6,7 @@ import { VideoService } from './shared'
   template: '<router-outlet></router-outlet>'
 })
 export class VideosComponent implements OnInit {
-  constructor(private videoService: VideoService) {}
+  constructor (private videoService: VideoService) {}
 
   ngOnInit () {
     this.videoService.loadVideoCategories()
