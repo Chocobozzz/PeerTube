@@ -4,16 +4,15 @@ import { SortMeta } from 'primeng/components/common/sortmeta'
 import { NotificationsService } from 'angular2-notifications'
 
 import { ConfirmService } from '../../../core'
-import { RestTable, RestPagination } from '../../../shared'
-import { BlacklistService } from '../shared'
+import { VideoBlacklistService, RestTable, RestPagination } from '../../../shared'
 import { BlacklistedVideo } from '../../../../../../shared'
 
 @Component({
-  selector: 'my-blacklist-list',
-  templateUrl: './blacklist-list.component.html',
+  selector: 'my-video-blacklist-list',
+  templateUrl: './video-blacklist-list.component.html',
   styleUrls: []
 })
-export class BlacklistListComponent extends RestTable implements OnInit {
+export class VideoBlacklistListComponent extends RestTable implements OnInit {
   blacklist: BlacklistedVideo[] = []
   totalRecords = 0
   rowsPerPage = 10
@@ -23,7 +22,7 @@ export class BlacklistListComponent extends RestTable implements OnInit {
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private blacklistService: BlacklistService
+    private videoBlacklistService: VideoBlacklistService
   ) {
     super()
   }
@@ -39,7 +38,7 @@ export class BlacklistListComponent extends RestTable implements OnInit {
       res => {
         if (res === false) return
 
-        this.blacklistService.removeVideoFromBlacklist(entry).subscribe(
+        this.videoBlacklistService.removeVideoFromBlacklist(entry.videoId).subscribe(
           status => {
             this.notificationsService.success('Success', `Video ${entry.name} removed from the blacklist.`)
             this.loadData()
@@ -52,7 +51,7 @@ export class BlacklistListComponent extends RestTable implements OnInit {
   }
 
   protected loadData () {
-    this.blacklistService.getBlacklist(this.pagination, this.sort)
+    this.videoBlacklistService.listBlacklist(this.pagination, this.sort)
       .subscribe(
         resultList => {
           this.blacklist = resultList.data

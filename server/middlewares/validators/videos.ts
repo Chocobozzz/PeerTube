@@ -1,7 +1,5 @@
 import { body, param, query } from 'express-validator/check'
 import * as express from 'express'
-import * as Promise from 'bluebird'
-import * as validator from 'validator'
 
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
@@ -20,9 +18,9 @@ import {
   isVideoIdOrUUIDValid,
   isVideoAbuseReasonValid,
   isVideoRatingTypeValid,
-  getDurationFromVideoFile
+  getDurationFromVideoFile,
+  checkVideoExists
 } from '../../helpers'
-import { VideoInstance } from '../../models'
 
 const videosAddValidator = [
   body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage('Should have a valid file'),
@@ -186,20 +184,6 @@ const videoRateValidator = [
   }
 ]
 
-const videosBlacklistValidator = [
-  param('id').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
-
-    checkErrors(req, res, () => {
-      checkVideoExists(req.params.id, res, () => {
-        checkVideoIsBlacklistable(req, res, next)
-      })
-    })
-  }
-]
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -211,36 +195,10 @@ export {
 
   videoAbuseReportValidator,
 
-  videoRateValidator,
-
-  videosBlacklistValidator
+  videoRateValidator
 }
 
 // ---------------------------------------------------------------------------
-
-function checkVideoExists (id: string, res: express.Response, callback: () => void) {
-  let promise: Promise<VideoInstance>
-  if (validator.isInt(id)) {
-    promise = db.Video.loadAndPopulateAuthorAndPodAndTags(+id)
-  } else { // UUID
-    promise = db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(id)
-  }
-
-  promise.then(video => {
-    if (!video) {
-      return res.status(404)
-                .json({ error: 'Video not found' })
-                .end()
-    }
-
-    res.locals.video = video
-    callback()
-  })
-  .catch(err => {
-    logger.error('Error in video request validator.', err)
-    return res.sendStatus(500)
-  })
-}
 
 function checkUserCanDeleteVideo (userId: number, res: express.Response, callback: () => void) {
   // Retrieve the user who did the request
@@ -268,14 +226,4 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
       logger.error('Error in video request validator.', err)
       return res.sendStatus(500)
     })
-}
-
-function checkVideoIsBlacklistable (req: express.Request, res: express.Response, callback: () => void) {
-  if (res.locals.video.isOwned() === true) {
-    return res.status(403)
-              .json({ error: 'Cannot blacklist a local video' })
-              .end()
-  }
-
-  callback()
 }

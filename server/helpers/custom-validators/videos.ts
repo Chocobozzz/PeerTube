@@ -1,5 +1,7 @@
 import { values } from 'lodash'
 import * as validator from 'validator'
+import * as Promise from 'bluebird'
+import * as express from 'express'
 import 'express-validator'
 import 'multer'
 
@@ -8,10 +10,13 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  VIDEO_RATE_TYPES
+  VIDEO_RATE_TYPES,
+  database as db
 } from '../../initializers'
 import { isUserUsernameValid } from './users'
 import { isArray, exists } from './misc'
+import { VideoInstance } from '../../models'
+import { logger } from '../../helpers'
 import { VideoRateType } from '../../../shared'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
@@ -138,6 +143,30 @@ function isVideoFileInfoHashValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
+function checkVideoExists (id: string, res: express.Response, callback: () => void) {
+  let promise: Promise<VideoInstance>
+  if (validator.isInt(id)) {
+    promise = db.Video.loadAndPopulateAuthorAndPodAndTags(+id)
+  } else { // UUID
+    promise = db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(id)
+  }
+
+  promise.then(video => {
+    if (!video) {
+      return res.status(404)
+                .json({ error: 'Video not found' })
+                .end()
+    }
+
+    res.locals.video = video
+    callback()
+  })
+  .catch(err => {
+    logger.error('Error in video request validator.', err)
+    return res.sendStatus(500)
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -166,5 +195,6 @@ export {
   isVideoDislikesValid,
   isVideoEventCountValid,
   isVideoFileSizeValid,
-  isVideoFileResolutionValid
+  isVideoFileResolutionValid,
+  checkVideoExists
 }

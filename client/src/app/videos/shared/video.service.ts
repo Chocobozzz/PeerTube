@@ -122,12 +122,6 @@ export class VideoService {
                         .catch(res => this.restExtractor.handleError(res))
   }
 
-  blacklistVideo (id: number) {
-    return this.authHttp.post(VideoService.BASE_VIDEO_URL + id + '/blacklist', {})
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
-  }
-
   private videoPaginationToRestPagination (videoPagination: VideoPagination) {
     const start: number = (videoPagination.currentPage - 1) * videoPagination.itemsPerPage
     const count: number = videoPagination.itemsPerPage

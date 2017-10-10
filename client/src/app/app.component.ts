@@ -11,7 +11,7 @@ import { UserService } from './shared'
 })
 export class AppComponent implements OnInit {
   notificationOptions = {
-    timeOut: 3000,
+    timeOut: 5000,
     lastOnBottom: true,
     clickToClose: true,
     maxLength: 0,

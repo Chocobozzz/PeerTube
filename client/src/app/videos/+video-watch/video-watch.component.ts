@@ -14,7 +14,7 @@ import { VideoMagnetComponent } from './video-magnet.component'
 import { VideoShareComponent } from './video-share.component'
 import { VideoReportComponent } from './video-report.component'
 import { Video, VideoService } from '../shared'
-import { WebTorrentService } from './webtorrent.service'
+import { VideoBlacklistService } from '../../shared'
 import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 
 @Component({
@@ -45,6 +45,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private videoService: VideoService,
+    private videoBlacklistService: VideoBlacklistService,
     private confirmService: ConfirmService,
     private metaService: MetaService,
     private authService: AuthService,
@@ -137,15 +138,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       res => {
         if (res === false) return
 
-        this.videoService.blacklistVideo(this.video.id)
-                         .subscribe(
-                           status => {
-                             this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
-                             this.router.navigate(['/videos/list'])
-                           },
+        this.videoBlacklistService.blacklistVideo(this.video.id)
+                                  .subscribe(
+                                    status => {
+                                      this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
+                                      this.router.navigate(['/videos/list'])
+                                    },
 
-                           error => this.notificationsService.error('Error', error.text)
-                         )
+                                    error => this.notificationsService.error('Error', error.text)
+                                  )
       }
     )
   }

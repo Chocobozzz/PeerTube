@@ -18,6 +18,7 @@ import { RestExtractor, RestService } from './rest'
 import { SearchComponent, SearchService } from './search'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
+import { VideoBlacklistService } from './video-blacklist'
 
 @NgModule({
   imports: [
@@ -67,6 +68,7 @@ import { VideoAbuseService } from './video-abuse'
     RestService,
     SearchService,
     VideoAbuseService,
+    VideoBlacklistService,
     UserService
   ]
 })
