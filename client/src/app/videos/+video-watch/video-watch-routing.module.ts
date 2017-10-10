@@ -9,7 +9,7 @@ const videoWatchRoutes: Routes = [
   {
     path: '',
     component: VideoWatchComponent,
-    canActivateChild: [ MetaGuard ]
+    canActivate: [ MetaGuard ]
   }
 ]
 

@@ -22,11 +22,11 @@ const videosRoutes: Routes = [
         }
       },
       {
-        path: 'add',
+        path: 'upload',
         loadChildren: 'app/videos/+video-edit#VideoAddModule',
         data: {
           meta: {
-            title: 'Add a video'
+            title: 'Upload a video'
           }
         }
       },

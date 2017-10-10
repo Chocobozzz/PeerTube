@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { SimpleNotificationsModule } from 'angular2-notifications'
 import { ModalModule } from 'ngx-bootstrap/modal'
 
-import { AuthService } from './auth'
+import { AuthService, LoginGuard } from './auth'
 import { ServerService } from './server'
 import { ConfirmComponent, ConfirmService } from './confirm'
 import { MenuComponent, MenuAdminComponent } from './menu'
@@ -41,7 +41,8 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
   providers: [
     AuthService,
     ConfirmService,
-    ServerService
+    ServerService,
+    LoginGuard
   ]
 })
 export class CoreModule {

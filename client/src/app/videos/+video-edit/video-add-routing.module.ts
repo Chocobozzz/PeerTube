@@ -3,13 +3,14 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { MetaGuard } from '@ngx-meta/core'
 
+import { LoginGuard } from '../../core'
 import { VideoAddComponent } from './video-add.component'
 
 const videoAddRoutes: Routes = [
   {
     path: '',
     component: VideoAddComponent,
-    canActivateChild: [ MetaGuard ]
+    canActivate: [ MetaGuard, LoginGuard ]
   }
 ]
 

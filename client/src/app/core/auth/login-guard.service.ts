@@ -7,10 +7,10 @@ import {
   Router
 } from '@angular/router'
 
-import { AuthService } from '../core'
+import { AuthService } from './auth.service'
 
 @Injectable()
-export class AdminGuard implements CanActivate, CanActivateChild {
+export class LoginGuard implements CanActivate, CanActivateChild {
 
   constructor (
     private router: Router,
@@ -18,7 +18,7 @@ export class AdminGuard implements CanActivate, CanActivateChild {
   ) {}
 
   canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (this.auth.isAdmin() === true) return true
+    if (this.auth.isLoggedIn() === true) return true
 
     this.router.navigate([ '/login' ])
     return false
