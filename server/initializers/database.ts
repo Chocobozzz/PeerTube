@@ -64,7 +64,7 @@ const sequelize = new Sequelize(dbname, username, password, {
 
   logging: (message: string, benchmark: number) => {
     let newMessage = message
-    if (benchmark !== undefined) {
+    if (isTestInstance() === true && benchmark !== undefined) {
       newMessage += ' | ' + benchmark + 'ms'
     }
 
