@@ -52,13 +52,13 @@ export class VideoService {
       nsfw: video.nsfw
     }
 
-    return this.authHttp.put(`${VideoService.BASE_VIDEO_URL}/${video.id}`, body)
+    return this.authHttp.put(VideoService.BASE_VIDEO_URL + video.id, body)
                         .map(this.restExtractor.extractDataBool)
                         .catch(this.restExtractor.handleError)
   }
 
   uploadVideo (video: FormData) {
-    const req = new HttpRequest('POST', `${VideoService.BASE_VIDEO_URL}/upload`, video, { reportProgress: true })
+    const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'upload', video, { reportProgress: true })
 
     return this.authHttp.request(req)
                         .catch(this.restExtractor.handleError)
@@ -116,7 +116,7 @@ export class VideoService {
   }
 
   getUserVideoRating (id: number): Observable<UserVideoRate> {
-    const url = UserService.BASE_USERS_URL + '/me/videos/' + id + '/rating'
+    const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 
     return this.authHttp.get(url)
                         .catch(res => this.restExtractor.handleError(res))
