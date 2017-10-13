@@ -23,7 +23,10 @@ import {
 } from '../../helpers'
 
 const videosAddValidator = [
-  body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage('Should have a valid file'),
+  body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage(
+    'This file is not supported. Are you sure it is of the following type : '
+    + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
+  ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('category').custom(isVideoCategoryValid).withMessage('Should have a valid category'),
   body('licence').custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
