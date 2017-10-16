@@ -7,11 +7,11 @@
 
     <form (ngSubmit)="makeFriends()" [formGroup]="form">
       <div class="form-group"  *ngFor="let host of hosts; let id = index; trackBy:customTrackBy">
-        <label for="username">Host</label>
+        <label [for]="'host-' + id">Host (so without "http://")</label>
 
         <div class="input-group">
           <input
-            type="text" class="form-control" placeholder="domain.tld"
+            type="text" class="form-control" placeholder="example.com"
             [id]="'host-' + id" [formControlName]="'host-' + id"
           />
           <span class="input-group-btn">
