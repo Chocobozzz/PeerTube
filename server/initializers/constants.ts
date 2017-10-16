@@ -295,8 +295,14 @@ const STATIC_PATHS = {
 let STATIC_MAX_AGE = '30d'
 
 // Videos thumbnail size
-const THUMBNAILS_SIZE = '200x110'
-const PREVIEWS_SIZE = '640x480'
+const THUMBNAILS_SIZE = {
+  width: 200,
+  height: 110
+}
+const PREVIEWS_SIZE = {
+  width: 640,
+  height: 480
+}
 
 // Sub folders of cache directory
 const CACHE = {
@@ -314,7 +320,7 @@ const USER_ROLES: { [ id: string ]: UserRole } = {
 
 // ---------------------------------------------------------------------------
 
-const OPENGRAPH_COMMENT = '<!-- open graph tags -->'
+const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 
 // ---------------------------------------------------------------------------
 
@@ -344,7 +350,7 @@ export {
   JOBS_FETCHING_INTERVAL,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
-  OPENGRAPH_COMMENT,
+  OPENGRAPH_AND_OEMBED_COMMENT,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,
   PREVIEWS_SIZE,

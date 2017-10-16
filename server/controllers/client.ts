@@ -8,7 +8,7 @@ import {
   CONFIG,
   STATIC_PATHS,
   STATIC_MAX_AGE,
-  OPENGRAPH_COMMENT
+  OPENGRAPH_AND_OEMBED_COMMENT
 } from '../initializers'
 import { root, readFileBufferPromise } from '../helpers'
 import { VideoInstance } from '../models'
@@ -19,7 +19,7 @@ const distPath = join(root(), 'client', 'dist')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const indexPath = join(distPath, 'index.html')
 
-// Special route that add OpenGraph tags
+// Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
 clientsRouter.use('/videos/watch/:id', generateWatchHtmlPage)
 
@@ -43,11 +43,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addOpenGraphTags (htmlStringPage: string, video: VideoInstance) {
+function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance) {
   const previewUrl = CONFIG.WEBSERVER.URL + STATIC_PATHS.PREVIEWS + video.getPreviewName()
-  const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.id
+  const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
 
-  const metaTags = {
+  const openGraphMetaTags = {
     'og:type': 'video',
     'og:title': video.name,
     'og:image': previewUrl,
@@ -65,14 +65,26 @@ function addOpenGraphTags (htmlStringPage: string, video: VideoInstance) {
     'twitter:image': previewUrl
   }
 
-  let tagsString = ''
-  Object.keys(metaTags).forEach(tagName => {
-    const tagValue = metaTags[tagName]
+  const oembedLinkTags = [
+    {
+      type: 'application/json+oembed',
+      href: CONFIG.WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoUrl),
+      title: video.name
+    }
+  ]
 
-    tagsString += '<meta property="' + tagName + '" content="' + tagValue + '" />'
+  let tagsString = ''
+  Object.keys(openGraphMetaTags).forEach(tagName => {
+    const tagValue = openGraphMetaTags[tagName]
+
+    tagsString += `<meta property="${tagName}" content="${tagValue}" />`
   })
 
-  return htmlStringPage.replace(OPENGRAPH_COMMENT, tagsString)
+  for (const oembedLinkTag of oembedLinkTags) {
+    tagsString += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${oembedLinkTag.title}" />`
+  }
+
+  return htmlStringPage.replace(OPENGRAPH_AND_OEMBED_COMMENT, tagsString)
 }
 
 function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -101,7 +113,7 @@ function generateWatchHtmlPage (req: express.Request, res: express.Response, nex
     // Let Angular application handle errors
     if (!video) return res.sendFile(indexPath)
 
-    const htmlStringPageWithTags = addOpenGraphTags(html, video)
+    const htmlStringPageWithTags = addOpenGraphAndOEmbedTags(html, video)
     res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
   })
   .catch(err => next(err))

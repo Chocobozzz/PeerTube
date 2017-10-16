@@ -54,7 +54,9 @@ let getOriginalFile: VideoMethods.GetOriginalFile
 let generateMagnetUri: VideoMethods.GenerateMagnetUri
 let getVideoFilename: VideoMethods.GetVideoFilename
 let getThumbnailName: VideoMethods.GetThumbnailName
+let getThumbnailPath: VideoMethods.GetThumbnailPath
 let getPreviewName: VideoMethods.GetPreviewName
+let getPreviewPath: VideoMethods.GetPreviewPath
 let getTorrentFileName: VideoMethods.GetTorrentFileName
 let isOwned: VideoMethods.IsOwned
 let toFormattedJSON: VideoMethods.ToFormattedJSON
@@ -67,6 +69,7 @@ let createThumbnail: VideoMethods.CreateThumbnail
 let getVideoFilePath: VideoMethods.GetVideoFilePath
 let createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
 let getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
+let getEmbedPath: VideoMethods.GetEmbedPath
 
 let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let list: VideoMethods.List
@@ -252,7 +255,9 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     createTorrentAndSetInfoHash,
     generateMagnetUri,
     getPreviewName,
+    getPreviewPath,
     getThumbnailName,
+    getThumbnailPath,
     getTorrentFileName,
     getVideoFilename,
     getVideoFilePath,
@@ -267,7 +272,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     toUpdateRemoteJSON,
     optimizeOriginalVideofile,
     transcodeOriginalVideofile,
-    getOriginalFileHeight
+    getOriginalFileHeight,
+    getEmbedPath
   ]
   addMethodsToModel(Video, classMethods, instanceMethods)
 
@@ -375,11 +381,13 @@ createPreview = function (this: VideoInstance, videoFile: VideoFileInstance) {
 }
 
 createThumbnail = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  const imageSize = THUMBNAILS_SIZE.width + 'x' + THUMBNAILS_SIZE.height
+
   return generateImageFromVideoFile(
     this.getVideoFilePath(videoFile),
     CONFIG.STORAGE.THUMBNAILS_DIR,
     this.getThumbnailName(),
-    THUMBNAILS_SIZE
+    imageSize
   )
 }
 
@@ -438,6 +446,18 @@ generateMagnetUri = function (this: VideoInstance, videoFile: VideoFileInstance)
   return magnetUtil.encode(magnetHash)
 }
 
+getEmbedPath = function (this: VideoInstance) {
+  return '/videos/embed/' + this.uuid
+}
+
+getThumbnailPath = function (this: VideoInstance) {
+  return join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName())
+}
+
+getPreviewPath = function (this: VideoInstance) {
+  return join(STATIC_PATHS.PREVIEWS, this.getPreviewName())
+}
+
 toFormattedJSON = function (this: VideoInstance) {
   let podHost
 
@@ -480,8 +500,9 @@ toFormattedJSON = function (this: VideoInstance) {
     likes: this.likes,
     dislikes: this.dislikes,
     tags: map<TagInstance, string>(this.Tags, 'name'),
-    thumbnailPath: join(STATIC_PATHS.THUMBNAILS, this.getThumbnailName()),
-    previewPath: join(STATIC_PATHS.PREVIEWS, this.getPreviewName()),
+    thumbnailPath: this.getThumbnailPath(),
+    previewPath: this.getPreviewPath(),
+    embedPath: this.getEmbedPath(),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     files: []

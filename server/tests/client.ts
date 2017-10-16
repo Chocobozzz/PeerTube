@@ -39,7 +39,7 @@ describe('Test a client controllers', function () {
     server.video = videos[0]
   })
 
-  it('It should have valid Open Graph tags on the watch page with video id', async function () {
+  it('Should have valid Open Graph tags on the watch page with video id', async function () {
     const res = await request(server.url)
                         .get('/videos/watch/' + server.video.id)
                         .expect(200)
@@ -48,13 +48,26 @@ describe('Test a client controllers', function () {
     expect(res.text).to.contain('<meta property="og:description" content="my super description for pod 1" />')
   })
 
-  it('It should have valid Open Graph tags on the watch page with video uuid', async function () {
+  it('Should have valid Open Graph tags on the watch page with video uuid', async function () {
     const res = await request(server.url)
                         .get('/videos/watch/' + server.video.uuid)
                         .expect(200)
 
     expect(res.text).to.contain('<meta property="og:title" content="my super name for pod 1" />')
     expect(res.text).to.contain('<meta property="og:description" content="my super description for pod 1" />')
+  })
+
+  it('Should have valid oEmbed discovery tags', async function () {
+    const path = '/videos/watch/' + server.video.uuid
+    const res = await request(server.url)
+      .get(path)
+      .expect(200)
+
+    const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:9001/services/oembed?' +
+      `url=http%3A%2F%2Flocalhost%3A9001%2Fvideos%2Fwatch%2F${server.video.uuid}" ` +
+      `title="${server.video.name}" />`
+
+    expect(res.text).to.contain(expectedLink)
   })
 
   after(async function () {

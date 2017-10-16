@@ -25,6 +25,7 @@ export interface Video {
   tags: string[]
   thumbnailPath: string
   previewPath: string
+  embedPath: string
   views: number
   likes: number
   dislikes: number

@@ -26,7 +26,7 @@ if ! which yarn > /dev/null; then
 fi
 
 if pgrep peertube > /dev/null; then
-  echo 'PeerTube is running!'
+  echo 'PeerTube is running, please shut it off before upgrading'
   exit 0
 fi
 

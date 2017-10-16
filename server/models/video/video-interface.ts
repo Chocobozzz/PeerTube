@@ -32,6 +32,9 @@ export namespace VideoMethods {
   export type OptimizeOriginalVideofile = (this: VideoInstance) => Promise<void>
   export type TranscodeOriginalVideofile = (this: VideoInstance, resolution: number) => Promise<void>
   export type GetOriginalFileHeight = (this: VideoInstance) => Promise<number>
+  export type GetEmbedPath = (this: VideoInstance) => string
+  export type GetThumbnailPath = (this: VideoInstance) => string
+  export type GetPreviewPath = (this: VideoInstance) => string
 
   // Return thumbnail name
   export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string) => Promise<string>
@@ -107,7 +110,9 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   getOriginalFile: VideoMethods.GetOriginalFile
   generateMagnetUri: VideoMethods.GenerateMagnetUri
   getPreviewName: VideoMethods.GetPreviewName
+  getPreviewPath: VideoMethods.GetPreviewPath
   getThumbnailName: VideoMethods.GetThumbnailName
+  getThumbnailPath: VideoMethods.GetThumbnailPath
   getTorrentFileName: VideoMethods.GetTorrentFileName
   getVideoFilename: VideoMethods.GetVideoFilename
   getVideoFilePath: VideoMethods.GetVideoFilePath
@@ -122,6 +127,7 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   optimizeOriginalVideofile: VideoMethods.OptimizeOriginalVideofile
   transcodeOriginalVideofile: VideoMethods.TranscodeOriginalVideofile
   getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
+  getEmbedPath: VideoMethods.GetEmbedPath
 
   setTags: Sequelize.HasManySetAssociationsMixin<TagAttributes, string>
   addVideoFile: Sequelize.HasManyAddAssociationMixin<VideoFileAttributes, string>
