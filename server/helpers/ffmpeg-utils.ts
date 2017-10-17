@@ -25,7 +25,7 @@ function getDurationFromVideoFile (path: string) {
   })
 }
 
-function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size?: string) {
+function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: string) {
   const options = {
     filename: imageName,
     count: 1,

@@ -48,6 +48,7 @@ import {
 
   VideoMethods
 } from './video-interface'
+import { PREVIEWS_SIZE } from '../../initializers/constants'
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
@@ -373,10 +374,13 @@ isOwned = function (this: VideoInstance) {
 }
 
 createPreview = function (this: VideoInstance, videoFile: VideoFileInstance) {
+  const imageSize = PREVIEWS_SIZE.width + 'x' + PREVIEWS_SIZE.height
+
   return generateImageFromVideoFile(
     this.getVideoFilePath(videoFile),
     CONFIG.STORAGE.PREVIEWS_DIR,
-    this.getPreviewName()
+    this.getPreviewName(),
+    imageSize
   )
 }
 

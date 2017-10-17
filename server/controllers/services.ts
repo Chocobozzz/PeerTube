@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { CONFIG, THUMBNAILS_SIZE } from '../initializers'
+import { CONFIG, PREVIEWS_SIZE, EMBED_SIZE } from '../initializers'
 import { oembedValidator } from '../middlewares'
 import { VideoInstance } from '../models'
 
@@ -23,17 +23,17 @@ function generateOEmbed (req: express.Request, res: express.Response, next: expr
   const maxWidth = parseInt(req.query.maxwidth, 10)
 
   const embedUrl = webserverUrl + video.getEmbedPath()
-  let thumbnailUrl = webserverUrl + video.getThumbnailPath()
-  let embedWidth = 560
-  let embedHeight = 315
+  let thumbnailUrl = webserverUrl + video.getPreviewPath()
+  let embedWidth = EMBED_SIZE.width
+  let embedHeight = EMBED_SIZE.height
 
   if (maxHeight < embedHeight) embedHeight = maxHeight
   if (maxWidth < embedWidth) embedWidth = maxWidth
 
   // Our thumbnail is too big for the consumer
   if (
-    (maxHeight !== undefined && maxHeight < THUMBNAILS_SIZE.height) ||
-    (maxWidth !== undefined && maxWidth < THUMBNAILS_SIZE.width)
+    (maxHeight !== undefined && maxHeight < PREVIEWS_SIZE.height) ||
+    (maxWidth !== undefined && maxWidth < PREVIEWS_SIZE.width)
   ) {
     thumbnailUrl = undefined
   }
@@ -54,8 +54,8 @@ function generateOEmbed (req: express.Request, res: express.Response, next: expr
 
   if (thumbnailUrl !== undefined) {
     json.thumbnail_url = thumbnailUrl
-    json.thumbnail_width = THUMBNAILS_SIZE.width
-    json.thumbnail_height = THUMBNAILS_SIZE.height
+    json.thumbnail_width = PREVIEWS_SIZE.width
+    json.thumbnail_height = PREVIEWS_SIZE.height
   }
 
   return res.json(json)

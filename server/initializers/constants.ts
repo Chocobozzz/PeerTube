@@ -300,8 +300,13 @@ const THUMBNAILS_SIZE = {
   height: 110
 }
 const PREVIEWS_SIZE = {
-  width: 640,
-  height: 480
+  width: 560,
+  height: 315
+}
+
+const EMBED_SIZE = {
+  width: 560,
+  height: 315
 }
 
 // Sub folders of cache directory
@@ -343,6 +348,7 @@ export {
   CACHE,
   CONFIG,
   CONSTRAINTS_FIELDS,
+  EMBED_SIZE,
   FRIEND_SCORE,
   JOB_STATES,
   JOBS_CONCURRENCY,
