@@ -10,7 +10,7 @@ import {
   STATIC_MAX_AGE,
   OPENGRAPH_AND_OEMBED_COMMENT
 } from '../initializers'
-import { root, readFileBufferPromise } from '../helpers'
+import { root, readFileBufferPromise, escapeHTML } from '../helpers'
 import { VideoInstance } from '../models'
 
 const clientsRouter = express.Router()
@@ -47,21 +47,24 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
   const previewUrl = CONFIG.WEBSERVER.URL + STATIC_PATHS.PREVIEWS + video.getPreviewName()
   const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
 
+  const videoName = escapeHTML(video.name)
+  const videoDescription = escapeHTML(video.description)
+
   const openGraphMetaTags = {
     'og:type': 'video',
-    'og:title': video.name,
+    'og:title': videoName,
     'og:image': previewUrl,
     'og:url': videoUrl,
-    'og:description': video.description,
+    'og:description': videoDescription,
 
-    'name': video.name,
-    'description': video.description,
+    'name': videoName,
+    'description': videoDescription,
     'image': previewUrl,
 
     'twitter:card': 'summary_large_image',
     'twitter:site': '@Chocobozzz',
-    'twitter:title': video.name,
-    'twitter:description': video.description,
+    'twitter:title': videoName,
+    'twitter:description': videoDescription,
     'twitter:image': previewUrl
   }
 
@@ -69,7 +72,7 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
     {
       type: 'application/json+oembed',
       href: CONFIG.WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoUrl),
-      title: video.name
+      title: videoName
     }
   ]
 

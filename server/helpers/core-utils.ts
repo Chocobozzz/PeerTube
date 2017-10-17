@@ -38,6 +38,22 @@ function root () {
   return join.apply(null, paths)
 }
 
+// Thanks: https://stackoverflow.com/a/12034334
+function escapeHTML (stringParam) {
+  const entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  }
+
+  return String(stringParam).replace(/[&<>"'`=\/]/g, s => entityMap[s])
+}
+
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -101,6 +117,7 @@ const statPromise = promisify1<string, Stats>(stat)
 export {
   isTestInstance,
   root,
+  escapeHTML,
 
   promisify0,
   promisify1,
