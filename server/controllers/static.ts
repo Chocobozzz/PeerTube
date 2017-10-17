@@ -18,7 +18,7 @@ const torrentsPhysicalPath = CONFIG.STORAGE.TORRENTS_DIR
 staticRouter.use(
   STATIC_PATHS.TORRENTS,
   cors(),
-  express.static(torrentsPhysicalPath, { maxAge: STATIC_MAX_AGE })
+  express.static(torrentsPhysicalPath, { maxAge: 0 }) // Don't cache because we could regenerate the torrent file
 )
 
 // Videos path for webseeding
