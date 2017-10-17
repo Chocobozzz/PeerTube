@@ -3,9 +3,9 @@ listen:
 
 # Correspond to your reverse proxy "listen" configuration
 webserver:
-  https: false
+  https: true
   hostname: 'example.com'
-  port: 80
+  port: 443
 
 # Your database name will be "peertube"+database.suffix
 database:
@@ -27,7 +27,7 @@ storage:
 
 cache:
   previews:
-    size: 1 # Max number of previews you want to cache
+    size: 100 # Max number of previews you want to cache
 
 admin:
   email: 'admin@example.com'
