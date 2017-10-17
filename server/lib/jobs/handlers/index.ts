@@ -2,7 +2,7 @@ import * as videoFileOptimizer from './video-file-optimizer'
 import * as videoFileTranscoder from './video-file-transcoder'
 
 export interface JobHandler<T> {
-  process (data: object): T
+  process (data: object, jobId: number): T
   onError (err: Error, jobId: number)
   onSuccess (jobId: number, jobResult: T)
 }

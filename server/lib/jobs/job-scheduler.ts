@@ -87,7 +87,7 @@ class JobScheduler {
     job.state = JOB_STATES.PROCESSING
     return job.save()
       .then(() => {
-        return jobHandler.process(job.handlerInputData)
+        return jobHandler.process(job.handlerInputData, job.id)
       })
       .then(
         result => {

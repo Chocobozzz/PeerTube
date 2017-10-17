@@ -6,8 +6,14 @@ import { VideoInstance } from '../../../models'
 import { addVideoToFriends } from '../../friends'
 import { JobScheduler } from '../job-scheduler'
 
-function process (data: { videoUUID: string }) {
+function process (data: { videoUUID: string }, jobId: number) {
   return db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(data.videoUUID).then(video => {
+    // No video, maybe deleted?
+    if (!video) {
+      logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
+      return undefined
+    }
+
     return video.optimizeOriginalVideofile().then(() => video)
   })
 }
@@ -18,6 +24,8 @@ function onError (err: Error, jobId: number) {
 }
 
 function onSuccess (jobId: number, video: VideoInstance) {
+  if (video === undefined) return undefined
+
   logger.info('Job %d is a success.', jobId)
 
   video.toAddRemoteJSON()

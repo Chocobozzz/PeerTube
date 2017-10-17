@@ -195,17 +195,17 @@ describe('Test multiple pods', function () {
         const file240p = video.files.find(f => f.resolution === 240)
         expect(file240p).not.to.be.undefined
         expect(file240p.resolutionLabel).to.equal('240p')
-        expect(file240p.size).to.be.above(130000).and.below(150000)
+        expect(file240p.size).to.be.above(180000).and.below(200000)
 
         const file360p = video.files.find(f => f.resolution === 360)
         expect(file360p).not.to.be.undefined
         expect(file360p.resolutionLabel).to.equal('360p')
-        expect(file360p.size).to.be.above(160000).and.below(180000)
+        expect(file360p.size).to.be.above(270000).and.below(290000)
 
         const file480p = video.files.find(f => f.resolution === 480)
         expect(file480p).not.to.be.undefined
         expect(file480p.resolutionLabel).to.equal('480p')
-        expect(file480p.size).to.be.above(200000).and.below(220000)
+        expect(file480p.size).to.be.above(380000).and.below(400000)
 
         const file720p = video.files.find(f => f.resolution === 720)
         expect(file720p).not.to.be.undefined
