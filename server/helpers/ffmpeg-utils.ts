@@ -57,9 +57,10 @@ function transcode (options: TranscodeOptions) {
                     .videoCodec('libx264')
                     .outputOption('-threads ' + CONFIG.TRANSCODING.THREADS)
                     .outputOption('-movflags faststart')
+                    // .outputOption('-crf 18')
 
     if (options.resolution !== undefined) {
-      const size = `${options.resolution}x?` // '720x?' for example
+      const size = `?x${options.resolution}` // '?x720' for example
       command = command.size(size)
     }
 
