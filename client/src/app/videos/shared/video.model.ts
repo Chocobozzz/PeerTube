@@ -73,6 +73,12 @@ export class Video implements VideoServerModel {
     nsfw: boolean,
     files: VideoFile[]
   }) {
+    let absoluteAPIUrl = API_URL
+    if (!absoluteAPIUrl) {
+      // The API is on the same domain
+      absoluteAPIUrl = window.location.origin
+    }
+
     this.author = hash.author
     this.createdAt = new Date(hash.createdAt.toString())
     this.categoryLabel = hash.categoryLabel
@@ -91,11 +97,11 @@ export class Video implements VideoServerModel {
     this.podHost = hash.podHost
     this.tags = hash.tags
     this.thumbnailPath = hash.thumbnailPath
-    this.thumbnailUrl = API_URL + hash.thumbnailPath
+    this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
     this.previewPath = hash.previewPath
-    this.previewUrl = API_URL + hash.previewPath
+    this.previewUrl = absoluteAPIUrl + hash.previewPath
     this.embedPath = hash.embedPath
-    this.embedUrl = API_URL + hash.embedPath
+    this.embedUrl = absoluteAPIUrl + hash.embedPath
     this.views = hash.views
     this.likes = hash.likes
     this.dislikes = hash.dislikes
