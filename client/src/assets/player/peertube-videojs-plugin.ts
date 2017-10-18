@@ -216,7 +216,12 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
     if (options.autoplay === true) {
       player.updateVideoFile()
     } else {
-      player.one('play', () => player.updateVideoFile())
+      player.one('play', () => {
+        // Pause, we wait the video to load before
+        player.pause()
+
+        player.updateVideoFile(undefined, () => player.play())
+      })
     }
 
     setInterval(() => {
