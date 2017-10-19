@@ -7,7 +7,7 @@ server {
 
 server {
   listen 443 ssl spdy; # or http2
-  # listen [::]:443;
+  # listen [::]:443 ssl spdy;
   server_name domain.tld;
 
   # For example with Let's Encrypt
