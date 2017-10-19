@@ -46,15 +46,18 @@ export class RestExtractor {
       console.error('An error occurred:', errorMessage)
     } else if (err.status !== undefined) {
       // A server-side error occurred.
-      // TODO: remove when angular/angular#19477 (comment) is fixed
-      let body = JSON.parse(err.error)
-      if (body) {
-        if (body.errors) {
-          const errors = body.errors
-          const error = errors[Object.keys(errors)[0]]
-          errorMessage = error.msg // Take the message of the first error
-        } else if (body.error) {
-          errorMessage = body.error
+      if (err.error) {
+        if (err.error.errors) {
+          const errors = err.error.errors
+          const errorsArray: string[] = []
+
+          Object.keys(errors).forEach(key => {
+            errorsArray.push(errors[key].msg)
+          })
+
+          errorMessage = errorsArray.join('. ')
+        } else if (err.error.error) {
+          errorMessage = err.error.error
         }
       }
       errorMessage = errorMessage ? errorMessage : 'Unknown error.'
