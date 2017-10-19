@@ -36,7 +36,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   uploadSpeed: number
   userRating: UserVideoRateType = null
   video: Video = null
-  videoNotFound = false
+  videoPlayerLoaded = false
 
   private paramsSub: Subscription
 
@@ -58,17 +58,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.videoService.getVideo(uuid).subscribe(
         video => this.onVideoFetched(video),
 
-        error => {
-          console.error(error)
-          this.videoNotFound = true
-        }
+        error => console.error(error)
       )
     })
   }
 
   ngOnDestroy () {
     // Remove player if it exists
-    if (this.videoNotFound === false) {
+    if (this.videoPlayerLoaded === true) {
       videojs(this.playerElement).dispose()
     }
 
@@ -223,6 +220,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     observable.subscribe(
       res => {
         if (res === false) {
+
           return this.router.navigate([ '/videos/list' ])
         }
 
@@ -240,6 +238,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             }
           }
         }
+
+        this.videoPlayerLoaded = true
 
         const self = this
         videojs(this.playerElement, videojsOptions, function () {
