@@ -334,12 +334,15 @@ function afterDestroy (video: VideoInstance, options: { transaction: Sequelize.T
 
     // Remove physical files and torrents
     video.VideoFiles.forEach(file => {
-      video.removeFile(file),
-      video.removeTorrent(file)
+      tasks.push(video.removeFile(file))
+      tasks.push(video.removeTorrent(file))
     })
   }
 
   return Promise.all(tasks)
+    .catch(err => {
+      logger.error('Some errors when removing files of video %d in after destroy hook.', video.uuid, err)
+    })
 }
 
 getOriginalFile = function (this: VideoInstance) {
