@@ -37,6 +37,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   userRating: UserVideoRateType = null
   video: Video = null
   videoPlayerLoaded = false
+  videoNotFound = false
 
   private paramsSub: Subscription
 
@@ -58,7 +59,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.videoService.getVideo(uuid).subscribe(
         video => this.onVideoFetched(video),
 
-        error => console.error(error)
+        error => {
+          this.videoNotFound = true
+          console.error(error)
+        }
       )
     })
   }
