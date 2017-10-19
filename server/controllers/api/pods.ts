@@ -83,6 +83,6 @@ function removeFriendController (req: express.Request, res: express.Response, ne
   const pod = res.locals.pod as PodInstance
 
   removeFriend(pod)
-    .then(() => (res.type('json').status(204).end()))
+    .then(() => res.type('json').status(204).end())
     .catch(err => next(err))
 }

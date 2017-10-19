@@ -251,13 +251,10 @@ function removeFriend (pod: PodInstance) {
   }
 
   return makeSecureRequest(requestParams)
+    .catch(err => logger.warn('Cannot notify friends %s we are quitting him.', pod.host, err))
     .then(() => pod.destroy())
-    .then(() => {
-      logger.info('Removed friend.')
-    })
-    .catch(err => {
-      logger.error('Some errors while quitting friend %s (id: %d).', pod.host, pod.id, err)
-    })
+    .then(() => logger.info('Removed friend %s.', pod.host))
+    .catch(err => logger.error('Cannot destroy friend %s.', pod.host, err))
 }
 
 function getRequestScheduler () {
