@@ -11,12 +11,14 @@ import {
   USER_PASSWORD,
   USER_VIDEO_QUOTA
 } from '../../../shared'
+import { ServerService } from '../../../core'
 import { UserCreate } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 
 @Component({
   selector: 'my-user-add',
-  templateUrl: './user-edit.component.html'
+  templateUrl: './user-edit.component.html',
+  styleUrls: [ './user-edit.component.scss' ]
 })
 export class UserAddComponent extends UserEdit implements OnInit {
   error: string
@@ -36,6 +38,7 @@ export class UserAddComponent extends UserEdit implements OnInit {
   }
 
   constructor (
+    protected serverService: ServerService,
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,

@@ -11,6 +11,9 @@ export class ServerService {
   private config: ServerConfig = {
     signup: {
       allowed: false
+    },
+    transcoding: {
+      enabledResolutions: []
     }
   }
   private videoCategories: Array<{ id: number, label: string }> = []

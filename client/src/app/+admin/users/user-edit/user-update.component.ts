@@ -7,13 +7,15 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { UserService } from '../shared'
 import { USER_EMAIL, USER_VIDEO_QUOTA } from '../../../shared'
+import { ServerService } from '../../../core'
 import { UserUpdate } from '../../../../../../shared/models/users/user-update.model'
 import { User } from '../../../shared/users/user.model'
 import { UserEdit } from './user-edit'
 
 @Component({
   selector: 'my-user-update',
-  templateUrl: './user-edit.component.html'
+  templateUrl: './user-edit.component.html',
+  styleUrls: [ './user-edit.component.scss' ]
 })
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   error: string
@@ -33,10 +35,11 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   private paramsSub: Subscription
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected serverService: ServerService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
+    private formBuilder: FormBuilder,
     private userService: UserService
   ) {
     super()

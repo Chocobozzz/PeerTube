@@ -47,6 +47,11 @@
             {{ videoQuotaOption.label }}
           </option>
         </select>
+
+        <div class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
+          Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
+          In maximum, this user could use ~ {{ computeQuotaWithTranscoding() | bytes }}.
+        </div>
       </div>
 
       <input type="submit" value="{{ getFormButtonTitle() }}" class="btn btn-default" [disabled]="!form.valid">
