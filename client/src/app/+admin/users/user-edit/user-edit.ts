@@ -3,6 +3,7 @@ import { FormReactive } from '../../../shared'
 export abstract class UserEdit extends FormReactive {
   videoQuotaOptions = [
     { value: -1, label: 'Unlimited' },
+    { value: 0, label: '0'},
     { value: 100 * 1024 * 1024, label: '100MB' },
     { value: 5 * 1024 * 1024, label: '500MB' },
     { value: 1024 * 1024 * 1024, label: '1GB' },
