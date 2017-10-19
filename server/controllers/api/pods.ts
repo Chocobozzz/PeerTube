@@ -1,39 +1,33 @@
 import * as express from 'express'
 
 import { database as db } from '../../initializers/database'
-import { CONFIG } from '../../initializers'
+import { logger, getFormattedObjects } from '../../helpers'
 import {
-  logger,
-  getMyPublicCert,
-  getFormattedObjects
-} from '../../helpers'
-import {
-  sendOwnedVideosToPod,
   makeFriends,
   quitFriends,
   removeFriend
 } from '../../lib'
 import {
-  podsAddValidator,
   authenticate,
   ensureIsAdmin,
   makeFriendsValidator,
-  setBodyHostPort,
   setBodyHostsPort,
-  podRemoveValidator
+  podRemoveValidator,
+  paginationValidator,
+  setPagination,
+  setPodsSort,
+  podsSortValidator
 } from '../../middlewares'
-import {
-  PodInstance
-} from '../../models'
-import { Pod as FormattedPod } from '../../../shared'
+import { PodInstance } from '../../models'
 
 const podsRouter = express.Router()
 
-podsRouter.get('/', listPods)
-podsRouter.post('/',
-  setBodyHostPort, // We need to modify the host before running the validator!
-  podsAddValidator,
-  addPods
+podsRouter.get('/',
+  paginationValidator,
+  podsSortValidator,
+  setPodsSort,
+  setPagination,
+  listPods
 )
 podsRouter.post('/make-friends',
   authenticate,
@@ -62,26 +56,9 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addPods (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const informations = req.body
-
-  const pod = db.Pod.build(informations)
-  pod.save()
-    .then(podCreated => {
-      return sendOwnedVideosToPod(podCreated.id)
-    })
-    .then(() => {
-      return getMyPublicCert()
-    })
-    .then(cert => {
-      return res.json({ cert: cert, email: CONFIG.ADMIN.EMAIL })
-    })
-    .catch(err => next(err))
-}
-
 function listPods (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.Pod.list()
-    .then(podsList => res.json(getFormattedObjects<FormattedPod, PodInstance>(podsList, podsList.length)))
+  db.Pod.listForApi(req.query.start, req.query.count, req.query.sort)
+    .then(resultList => res.json(getFormattedObjects(resultList.data, resultList.total)))
     .catch(err => next(err))
 }
 

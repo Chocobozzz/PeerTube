@@ -12,6 +12,19 @@ function getFriendsList (url: string) {
           .expect('Content-Type', /json/)
 }
 
+function getPodsListPaginationAndSort (url: string, start: number, count: number, sort: string) {
+  const path = '/api/v1/pods/'
+
+  return request(url)
+    .get(path)
+    .query({ start })
+    .query({ count })
+    .query({ sort })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+}
+
 async function makeFriends (url: string, accessToken: string, expectedStatus = 204) {
   // Which pod makes friends with which pod
   const friendsMatrix = {
@@ -85,5 +98,6 @@ export {
   getFriendsList,
   makeFriends,
   quitFriends,
-  quitOneFriend
+  quitOneFriend,
+  getPodsListPaginationAndSort
 }

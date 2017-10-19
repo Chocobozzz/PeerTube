@@ -3,6 +3,7 @@ import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
 import { Pod as FormattedPod } from '../../../shared/models/pods/pod.model'
+import { ResultList } from '../../../shared/models/result-list.model'
 
 export namespace PodMethods {
   export type ToFormattedJSON = (this: PodInstance) => FormattedPod
@@ -12,6 +13,8 @@ export namespace PodMethods {
   export type IncrementScores = (ids: number[], value: number) => Promise<[ number, PodInstance[] ]>
 
   export type List = () => Promise<PodInstance[]>
+
+  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<PodInstance> >
 
   export type ListAllIds = (transaction: Sequelize.Transaction) => Promise<number[]>
 
@@ -32,6 +35,7 @@ export interface PodClass {
   countAll: PodMethods.CountAll
   incrementScores: PodMethods.IncrementScores
   list: PodMethods.List
+  listForApi: PodMethods.ListForApi
   listAllIds: PodMethods.ListAllIds
   listRandomPodIdsWithRequest: PodMethods.ListRandomPodIdsWithRequest
   listBadPods: PodMethods.ListBadPods

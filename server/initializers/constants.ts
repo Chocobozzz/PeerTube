@@ -32,6 +32,7 @@ const SEARCHABLE_COLUMNS = {
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
+  PODS: [ 'id', 'host', 'score', 'createdAt' ],
   USERS: [ 'id', 'username', 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],

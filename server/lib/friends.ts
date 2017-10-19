@@ -334,9 +334,9 @@ function computeWinningPods (hosts: string[], podsScore: { [ host: string ]: num
 
 function getForeignPodsList (host: string) {
   return new Promise< ResultList<FormattedPod> >((res, rej) => {
-    const path = '/api/' + API_VERSION + '/pods'
+    const path = '/api/' + API_VERSION + '/remote/pods/list'
 
-    request.get(REMOTE_SCHEME.HTTP + '://' + host + path, (err, response, body) => {
+    request.post(REMOTE_SCHEME.HTTP + '://' + host + path, (err, response, body) => {
       if (err) return rej(err)
 
       try {
@@ -357,7 +357,7 @@ function makeRequestsToWinningPods (cert: string, podsList: PodInstance[]) {
 
   return Promise.map(podsList, pod => {
     const params = {
-      url: REMOTE_SCHEME.HTTP + '://' + pod.host + '/api/' + API_VERSION + '/pods/',
+      url: REMOTE_SCHEME.HTTP + '://' + pod.host + '/api/' + API_VERSION + '/remote/pods/add',
       method: 'POST' as 'POST',
       json: {
         host: CONFIG.WEBSERVER.HOST,

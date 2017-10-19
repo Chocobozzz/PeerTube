@@ -15,7 +15,6 @@ import {
 } from '../../utils'
 
 describe('Test pods API validators', function () {
-  const path = '/api/v1/pods/'
   let server: ServerInfo
 
   // ---------------------------------------------------------------
@@ -30,6 +29,7 @@ describe('Test pods API validators', function () {
   })
 
   describe('When managing friends', function () {
+    const path = '/api/v1/pods/'
     let userAccessToken = null
 
     before(async function () {
@@ -110,6 +110,32 @@ describe('Test pods API validators', function () {
       })
     })
 
+    describe('When listing friends', function () {
+      it('Should fail with a bad start pagination', async function () {
+        await request(server.url)
+          .get(path)
+          .query({ start: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400)
+      })
+
+      it('Should fail with a bad count pagination', async function () {
+        await request(server.url)
+          .get(path)
+          .query({ count: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400)
+      })
+
+      it('Should fail with an incorrect sort', async function () {
+        await request(server.url)
+          .get(path)
+          .query({ sort: 'hello' })
+          .set('Accept', 'application/json')
+          .expect(400)
+      })
+    })
+
     describe('When quitting friends', function () {
       it('Should fail with an invalid token', async function () {
         await request(server.url)
@@ -175,7 +201,9 @@ describe('Test pods API validators', function () {
     })
   })
 
-  describe('When adding a pod', function () {
+  describe('When adding a pod from remote', function () {
+    const path = '/api/v1/remote/pods/add'
+
     it('Should fail with nothing', async function () {
       const fields = {}
       await makePostBodyRequest({ url: server.url, path, fields })

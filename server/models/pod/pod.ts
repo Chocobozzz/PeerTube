@@ -4,7 +4,7 @@ import * as Sequelize from 'sequelize'
 import { FRIEND_SCORE, PODS_SCORE } from '../../initializers'
 import { logger, isHostValid } from '../../helpers'
 
-import { addMethodsToModel } from '../utils'
+import { addMethodsToModel, getSort } from '../utils'
 import {
   PodInstance,
   PodAttributes,
@@ -17,6 +17,7 @@ let toFormattedJSON: PodMethods.ToFormattedJSON
 let countAll: PodMethods.CountAll
 let incrementScores: PodMethods.IncrementScores
 let list: PodMethods.List
+let listForApi: PodMethods.ListForApi
 let listAllIds: PodMethods.ListAllIds
 let listRandomPodIdsWithRequest: PodMethods.ListRandomPodIdsWithRequest
 let listBadPods: PodMethods.ListBadPods
@@ -78,6 +79,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     countAll,
     incrementScores,
     list,
+    listForApi,
     listAllIds,
     listRandomPodIdsWithRequest,
     listBadPods,
@@ -140,6 +142,21 @@ incrementScores = function (ids: number[], value: number) {
 
 list = function () {
   return Pod.findAll()
+}
+
+listForApi = function (start: number, count: number, sort: string) {
+  const query = {
+    offset: start,
+    limit: count,
+    order: [ getSort(sort) ]
+  }
+
+  return Pod.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
+  })
 }
 
 listAllIds = function (transaction: Sequelize.Transaction) {

@@ -1,24 +1,32 @@
 import { Component, OnInit } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
+import { SortMeta } from 'primeng/primeng'
 
 import { ConfirmService } from '../../../core'
-import { FriendService } from '../shared'
+import { RestTable, RestPagination } from '../../../shared'
 import { Pod } from '../../../../../../shared'
+import { FriendService } from '../shared'
 
 @Component({
   selector: 'my-friend-list',
   templateUrl: './friend-list.component.html',
   styleUrls: ['./friend-list.component.scss']
 })
-export class FriendListComponent implements OnInit {
+export class FriendListComponent extends RestTable implements OnInit {
   friends: Pod[] = []
+  totalRecords = 0
+  rowsPerPage = 10
+  sort: SortMeta = { field: 'id', order: 1 }
+  pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
     private friendService: FriendService
-  ) {}
+  ) {
+    super()
+  }
 
   ngOnInit () {
     this.loadData()
@@ -65,11 +73,12 @@ export class FriendListComponent implements OnInit {
     )
   }
 
-  private loadData () {
-    this.friendService.getFriends()
+  protected loadData () {
+    this.friendService.getFriends(this.pagination, this.sort)
                       .subscribe(
                         resultList => {
                           this.friends = resultList.data
+                          this.totalRecords = resultList.total
                         },
 
                         err => this.notificationsService.error('Error', err.message)

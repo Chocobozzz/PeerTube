@@ -59,7 +59,7 @@ Decentralized video streaming platform using P2P (BitTorrent) directly in the we
 Want to see in action?
 
    * [Demo server](http://peertube.cpy.re)
-   * [Video](https://vimeo.com/164881662 "Yes Vimeo, please don't judge me") to see how the "decentralization feature" looks like
+   * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504) to see how the "decentralization feature" looks like
    * Experimental demo servers that share videos (they are in the same network): [peertube2](http://peertube2.cpy.re), [peertube3](http://peertube3.cpy.re). Since I do experiments with them, sometimes they might not work correctly.
 
 ## Why

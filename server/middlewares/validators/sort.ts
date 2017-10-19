@@ -6,11 +6,13 @@ import { logger } from '../../helpers'
 import { SORTABLE_COLUMNS } from '../../initializers'
 
 // Initialize constants here for better performances
+const SORTABLE_PODS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.PODS)
 const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
 const SORTABLE_VIDEO_ABUSES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_ABUSES)
 const SORTABLE_VIDEOS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS)
 const SORTABLE_BLACKLISTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.BLACKLISTS)
 
+const podsSortValidator = checkSort(SORTABLE_PODS_COLUMNS)
 const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
 const videoAbusesSortValidator = checkSort(SORTABLE_VIDEO_ABUSES_COLUMNS)
 const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
@@ -19,6 +21,7 @@ const blacklistSortValidator = checkSort(SORTABLE_BLACKLISTS_COLUMNS)
 // ---------------------------------------------------------------------------
 
 export {
+  podsSortValidator,
   usersSortValidator,
   videoAbusesSortValidator,
   videosSortValidator,

@@ -15,7 +15,8 @@ import {
   makeFriends,
   getFriendsList,
   dateIsValid,
-  quitOneFriend
+  quitOneFriend,
+  getPodsListPaginationAndSort
 } from '../utils'
 
 describe('Test basic friends', function () {
@@ -118,6 +119,22 @@ describe('Test basic friends', function () {
 
     const server = servers[1]
     await makeFriends(server.url, server.accessToken, 409)
+  })
+
+  it('Should list friends correctly', async function () {
+    const start = 1
+    const count = 1
+    const sort = '-host'
+
+    const res = await getPodsListPaginationAndSort(servers[0].url, start, count, sort)
+    expect(res.body.total).to.equal(2)
+    expect(res.body.data).to.have.lengthOf(1)
+
+    const pod = res.body.data[0]
+    expect(pod.host).to.equal('localhost:9002')
+    expect(pod.email).to.equal('admin2@example.com')
+    expect(pod.score).to.equal(20)
+    expect(dateIsValid(pod.createdAt)).to.be.true
   })
 
   it('Should quit friends of pod 2', async function () {
