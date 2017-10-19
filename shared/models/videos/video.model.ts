@@ -3,6 +3,8 @@ export interface VideoFile {
   resolution: number
   resolutionLabel: string
   size: number // Bytes
+  torrentUrl: string
+  fileUrl: string
 }
 
 export interface Video {

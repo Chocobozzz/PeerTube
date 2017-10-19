@@ -52,7 +52,6 @@ import { PREVIEWS_SIZE } from '../../initializers/constants'
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
-let generateMagnetUri: VideoMethods.GenerateMagnetUri
 let getVideoFilename: VideoMethods.GetVideoFilename
 let getThumbnailName: VideoMethods.GetThumbnailName
 let getThumbnailPath: VideoMethods.GetThumbnailPath
@@ -254,7 +253,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     createPreview,
     createThumbnail,
     createTorrentAndSetInfoHash,
-    generateMagnetUri,
     getPreviewName,
     getPreviewPath,
     getThumbnailName,
@@ -426,33 +424,6 @@ createTorrentAndSetInfoHash = function (this: VideoInstance, videoFile: VideoFil
     })
 }
 
-generateMagnetUri = function (this: VideoInstance, videoFile: VideoFileInstance) {
-  let baseUrlHttp
-  let baseUrlWs
-
-  if (this.isOwned()) {
-    baseUrlHttp = CONFIG.WEBSERVER.URL
-    baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
-  } else {
-    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + this.Author.Pod.host
-    baseUrlWs = REMOTE_SCHEME.WS + '://' + this.Author.Pod.host
-  }
-
-  const xs = baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
-  const announce = [ baseUrlWs + '/tracker/socket' ]
-  const urlList = [ baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile) ]
-
-  const magnetHash = {
-    xs,
-    announce,
-    urlList,
-    infoHash: videoFile.infoHash,
-    name: this.name
-  }
-
-  return magnetUtil.encode(magnetHash)
-}
-
 getEmbedPath = function (this: VideoInstance) {
   return '/videos/embed/' + this.uuid
 }
@@ -516,6 +487,7 @@ toFormattedJSON = function (this: VideoInstance) {
   }
 
   // Format and sort video files
+  const { baseUrlHttp, baseUrlWs } = getBaseUrls(this)
   json.files = this.VideoFiles
                    .map(videoFile => {
                      let resolutionLabel = videoFile.resolution + 'p'
@@ -523,8 +495,10 @@ toFormattedJSON = function (this: VideoInstance) {
                      const videoFileJson = {
                        resolution: videoFile.resolution,
                        resolutionLabel,
-                       magnetUri: this.generateMagnetUri(videoFile),
-                       size: videoFile.size
+                       magnetUri: generateMagnetUri(this, videoFile, baseUrlHttp, baseUrlWs),
+                       size: videoFile.size,
+                       torrentUrl: getTorrentUrl(this, videoFile, baseUrlHttp),
+                       fileUrl: getVideoFileUrl(this, videoFile, baseUrlHttp)
                      }
 
                      return videoFileJson
@@ -971,4 +945,43 @@ function createBaseVideosWhere () {
       )
     }
   }
+}
+
+function getBaseUrls (video: VideoInstance) {
+  let baseUrlHttp
+  let baseUrlWs
+
+  if (video.isOwned()) {
+    baseUrlHttp = CONFIG.WEBSERVER.URL
+    baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
+  } else {
+    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + video.Author.Pod.host
+    baseUrlWs = REMOTE_SCHEME.WS + '://' + video.Author.Pod.host
+  }
+
+  return { baseUrlHttp, baseUrlWs }
+}
+
+function getTorrentUrl (video: VideoInstance, videoFile: VideoFileInstance, baseUrlHttp: string) {
+  return baseUrlHttp + STATIC_PATHS.TORRENTS + video.getTorrentFileName(videoFile)
+}
+
+function getVideoFileUrl (video: VideoInstance, videoFile: VideoFileInstance, baseUrlHttp: string) {
+  return baseUrlHttp + STATIC_PATHS.WEBSEED + video.getVideoFilename(videoFile)
+}
+
+function generateMagnetUri (video: VideoInstance, videoFile: VideoFileInstance, baseUrlHttp: string, baseUrlWs: string) {
+  const xs = getTorrentUrl(video, videoFile, baseUrlHttp)
+  const announce = [ baseUrlWs + '/tracker/socket', baseUrlHttp + '/tracker/announce' ]
+  const urlList = [ getVideoFileUrl(video, videoFile, baseUrlHttp) ]
+
+  const magnetHash = {
+    xs,
+    announce,
+    urlList,
+    infoHash: videoFile.infoHash,
+    name: video.name
+  }
+
+  return magnetUtil.encode(magnetHash)
 }

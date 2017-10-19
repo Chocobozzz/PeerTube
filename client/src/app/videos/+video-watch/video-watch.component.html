@@ -71,8 +71,8 @@
           </li>
 
           <li role="menuitem">
-            <a class="dropdown-item" title="Get magnet URI" href="#" (click)="showMagnetUriModal($event)">
-              <span class="glyphicon glyphicon-magnet"></span> Magnet
+            <a class="dropdown-item" title="Download the video" href="#" (click)="showDownloadModal($event)">
+              <span class="glyphicon glyphicon-download-alt"></span> Download
             </a>
           </li>
 
@@ -179,6 +179,6 @@
 
 <ng-template [ngIf]="video !== null">
   <my-video-share #videoShareModal [video]="video"></my-video-share>
-  <my-video-magnet #videoMagnetModal [video]="video"></my-video-magnet>
+  <my-video-download #videoDownloadModal [video]="video"></my-video-download>
   <my-video-report #videoReportModal [video]="video"></my-video-report>
 </ng-template>

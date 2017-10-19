@@ -7,7 +7,7 @@ import { SharedModule } from '../../shared'
 import { VideoWatchComponent } from './video-watch.component'
 import { VideoReportComponent } from './video-report.component'
 import { VideoShareComponent } from './video-share.component'
-import { VideoMagnetComponent } from './video-magnet.component'
+import { VideoDownloadComponent } from './video-download.component'
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { VideoMagnetComponent } from './video-magnet.component'
   declarations: [
     VideoWatchComponent,
 
-    VideoMagnetComponent,
+    VideoDownloadComponent,
     VideoShareComponent,
     VideoReportComponent
   ],

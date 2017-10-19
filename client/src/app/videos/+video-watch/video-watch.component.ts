@@ -10,7 +10,7 @@ import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
 
 import { AuthService, ConfirmService } from '../../core'
-import { VideoMagnetComponent } from './video-magnet.component'
+import { VideoDownloadComponent } from './video-download.component'
 import { VideoShareComponent } from './video-share.component'
 import { VideoReportComponent } from './video-report.component'
 import { Video, VideoService } from '../shared'
@@ -23,7 +23,7 @@ import { UserVideoRateType, VideoRateType } from '../../../../../shared'
   styleUrls: [ './video-watch.component.scss' ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
-  @ViewChild('videoMagnetModal') videoMagnetModal: VideoMagnetComponent
+  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
 
@@ -160,9 +160,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoShareModal.show()
   }
 
-  showMagnetUriModal (event: Event) {
+  showDownloadModal (event: Event) {
     event.preventDefault()
-    this.videoMagnetModal.show()
+    this.videoDownloadModal.show()
   }
 
   isUserLoggedIn () {

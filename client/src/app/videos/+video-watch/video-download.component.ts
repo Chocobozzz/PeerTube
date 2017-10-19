@@ -5,10 +5,11 @@ import { ModalDirective } from 'ngx-bootstrap/modal'
 import { Video } from '../shared'
 
 @Component({
-  selector: 'my-video-magnet',
-  templateUrl: './video-magnet.component.html'
+  selector: 'my-video-download',
+  templateUrl: './video-download.component.html',
+  styles: [ '.resolution-block { margin-top: 20px; }' ]
 })
-export class VideoMagnetComponent {
+export class VideoDownloadComponent {
   @Input() video: Video = null
 
   @ViewChild('modal') modal: ModalDirective

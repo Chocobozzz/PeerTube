@@ -106,6 +106,8 @@ describe('Test multiple pods', function () {
         const file = video.files[0]
         const magnetUri = file.magnetUri
         expect(file.magnetUri).to.have.lengthOf.above(2)
+        expect(file.torrentUrl).to.equal(`http://${video.podHost}/static/torrents/${video.uuid}-${file.resolution}.torrent`)
+        expect(file.fileUrl).to.equal(`http://${video.podHost}/static/webseed/${video.uuid}-${file.resolution}.webm`)
         expect(file.resolution).to.equal(720)
         expect(file.resolutionLabel).to.equal('720p')
         expect(file.size).to.equal(572456)

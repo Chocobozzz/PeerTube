@@ -1,0 +1,30 @@
+<div bsModal #modal="bs-modal" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content modal-lg">
+
+      <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Download</h4>
+      </div>
+
+      <div class="modal-body">
+        <div *ngFor="let file of video.files" class="resolution-block">
+          <label>{{ file.resolutionLabel }}</label>
+          <a class="btn btn-default " target="_blank" [href]="file.torrentUrl">
+            <span class="glyphicon glyphicon-download"></span>
+            Torrent file
+          </a>
+          <a class="btn btn-default" target="_blank" [href]="file.fileUrl">
+            <span class="glyphicon glyphicon-download"></span>
+            Download
+          </a>
+
+          <!-- Don't display magnet URI for now, this is not compatible with most torrent clients -->
+          <!--<input #magnetUriInput (click)="magnetUriInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="file.magnetUri" />-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

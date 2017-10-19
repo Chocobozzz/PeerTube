@@ -79,26 +79,6 @@ app.use(morgan('combined', {
 app.use(bodyParser.json({ limit: '500kb' }))
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// ----------- Views, routes and static files -----------
-
-// API
-const apiRoute = '/api/' + API_VERSION
-app.use(apiRoute, apiRouter)
-
-// Services (oembed...)
-app.use('/services', servicesRouter)
-
-// Client files
-app.use('/', clientsRouter)
-
-// Static files
-app.use('/', staticRouter)
-
-// Always serve index client page (the client is a single page application, let it handle routing)
-app.use('/*', function (req, res, next) {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'))
-})
-
 // ----------- Tracker -----------
 
 const trackerServer = new TrackerServer({
@@ -120,6 +100,30 @@ const server = http.createServer(app)
 const wss = new WebSocketServer({ server: server, path: '/tracker/socket' })
 wss.on('connection', function (ws) {
   trackerServer.onWebSocketConnection(ws)
+})
+
+const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
+app.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))
+app.get('/tracker/scrape', (req, res) => onHttpRequest(req, res, { action: 'scrape' }))
+
+// ----------- Views, routes and static files -----------
+
+// API
+const apiRoute = '/api/' + API_VERSION
+app.use(apiRoute, apiRouter)
+
+// Services (oembed...)
+app.use('/services', servicesRouter)
+
+// Client files
+app.use('/', clientsRouter)
+
+// Static files
+app.use('/', staticRouter)
+
+// Always serve index client page (the client is a single page application, let it handle routing)
+app.use('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'))
 })
 
 // ----------- Errors -----------

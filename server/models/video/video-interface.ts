@@ -18,7 +18,6 @@ export namespace VideoMethods {
   export type ToFormattedJSON = (this: VideoInstance) => FormattedVideo
 
   export type GetOriginalFile = (this: VideoInstance) => VideoFileInstance
-  export type GenerateMagnetUri = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type GetTorrentFileName = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type GetVideoFilename = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type CreatePreview = (this: VideoInstance, videoFile: VideoFileInstance) => Promise<string>
@@ -108,7 +107,6 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   createThumbnail: VideoMethods.CreateThumbnail
   createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
   getOriginalFile: VideoMethods.GetOriginalFile
-  generateMagnetUri: VideoMethods.GenerateMagnetUri
   getPreviewName: VideoMethods.GetPreviewName
   getPreviewPath: VideoMethods.GetPreviewPath
   getThumbnailName: VideoMethods.GetThumbnailName
