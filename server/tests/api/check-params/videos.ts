@@ -14,12 +14,16 @@ import {
   makePutBodyRequest,
   setAccessTokensToServers,
   killallServers,
-  makePostUploadRequest
+  makePostUploadRequest,
+  getMyUserInformation,
+  createUser,
+  getUserAccessToken
 } from '../../utils'
 
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
   let server: ServerInfo
+  let channelId: number
 
   // ---------------------------------------------------------------
 
@@ -31,6 +35,9 @@ describe('Test videos API validator', function () {
     server = await runServer(1)
 
     await setAccessTokensToServers([ server ])
+
+    const res = await getMyUserInformation(server.url, server.accessToken)
+    channelId = res.body.videoChannels[0].id
   })
 
   describe('When listing a video', function () {
@@ -106,7 +113,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -122,7 +130,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -137,7 +146,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -153,7 +163,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -168,7 +179,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -184,7 +196,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -200,7 +213,8 @@ describe('Test videos API validator', function () {
         language: 563,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -215,7 +229,8 @@ describe('Test videos API validator', function () {
         licence: 4,
         language: 6,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -223,7 +238,7 @@ describe('Test videos API validator', function () {
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
-    it('Should fail with a bad nsfw attribue', async function () {
+    it('Should fail with a bad nsfw attribute', async function () {
       const fields = {
         name: 'my super name',
         category: 5,
@@ -231,7 +246,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: 2,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -246,7 +262,8 @@ describe('Test videos API validator', function () {
         licence: 1,
         language: 6,
         nsfw: false,
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -264,7 +281,68 @@ describe('Test videos API validator', function () {
         description: 'my super description which is very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very very very very very very very' +
                      'very very very very very very very very very very very very very very very long',
+        tags: [ 'tag1', 'tag2' ],
+        channelId
+      }
+      const attaches = {
+        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
+      }
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail without a channel', async function () {
+      const fields = {
+        name: 'my super name',
+        category: 5,
+        licence: 1,
+        language: 6,
+        nsfw: false,
+        description: 'my super description',
         tags: [ 'tag1', 'tag2' ]
+      }
+      const attaches = {
+        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
+      }
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with a bad channel', async function () {
+      const fields = {
+        name: 'my super name',
+        category: 5,
+        licence: 1,
+        language: 6,
+        nsfw: false,
+        description: 'my super description',
+        tags: [ 'tag1', 'tag2' ],
+        channelId: 545454
+      }
+      const attaches = {
+        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
+      }
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with another user channel', async function () {
+      const user = {
+        username: 'fake',
+        password: 'fake_password'
+      }
+      await createUser(server.url, server.accessToken, user.username, user.password)
+
+      const accessTokenUser = await getUserAccessToken(server, user)
+      const res = await getMyUserInformation(server.url, accessTokenUser)
+      const channelId = res.body.videoChannels[0].id
+
+      const fields = {
+        name: 'my super name',
+        category: 5,
+        licence: 1,
+        language: 6,
+        nsfw: false,
+        description: 'my super description',
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -280,7 +358,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
+        tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -296,7 +375,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 't' ]
+        tags: [ 'tag1', 't' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -312,7 +392,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'my_super_tag_too_long', 'tag1' ]
+        tags: [ 'my_super_tag_too_long', 'tag1' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
@@ -328,7 +409,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {}
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -342,7 +424,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
@@ -358,7 +441,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_too_long.webm')
@@ -376,7 +460,8 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
+        tags: [ 'tag1', 'tag2' ],
+        channelId
       }
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')

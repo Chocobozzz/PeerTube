@@ -13,7 +13,8 @@ import {
   setAccessTokensToServers,
   flushAndRunMultipleServers,
   killallServers,
-  webtorrentAdd
+  webtorrentAdd,
+  getVideo
 } from '../utils'
 
 describe('Test video transcoding', function () {
@@ -42,9 +43,12 @@ describe('Test video transcoding', function () {
 
     const res = await getVideosList(servers[0].url)
     const video = res.body.data[0]
-    expect(video.files).to.have.lengthOf(1)
 
-    const magnetUri = video.files[0].magnetUri
+    const res2 = await getVideo(servers[0].url, video.id)
+    const videoDetails = res2.body
+    expect(videoDetails.files).to.have.lengthOf(1)
+
+    const magnetUri = videoDetails.files[0].magnetUri
     expect(magnetUri).to.match(/\.webm/)
 
     const torrent = await webtorrentAdd(magnetUri)
@@ -68,9 +72,12 @@ describe('Test video transcoding', function () {
     const res = await getVideosList(servers[1].url)
 
     const video = res.body.data[0]
-    expect(video.files).to.have.lengthOf(4)
+    const res2 = await getVideo(servers[1].url, video.id)
+    const videoDetails = res2.body
 
-    const magnetUri = video.files[0].magnetUri
+    expect(videoDetails.files).to.have.lengthOf(4)
+
+    const magnetUri = videoDetails.files[0].magnetUri
     expect(magnetUri).to.match(/\.mp4/)
 
     const torrent = await webtorrentAdd(magnetUri)

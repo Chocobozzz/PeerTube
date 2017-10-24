@@ -72,7 +72,7 @@ describe('Test advanced friends', function () {
     await setAccessTokensToServers(servers)
   })
 
-  it('Should make friends with two pod each in a different group', async function () {
+  it('Should not make friends with two different groups', async function () {
     this.timeout(20000)
 
     // Pod 3 makes friend with the first one
@@ -81,7 +81,7 @@ describe('Test advanced friends', function () {
     // Pod 4 makes friend with the second one
     await makeFriendsWrapper(4)
 
-    // Now if the fifth wants to make friends with the third et the first
+    // Now if the fifth wants to make friends with the third and the first
     await makeFriendsWrapper(5)
 
     await wait(11000)
@@ -104,8 +104,8 @@ describe('Test advanced friends', function () {
     }
   })
 
-  it('Should make friends with the pods 1, 2, 3', async function () {
-    this.timeout(150000)
+  it('Should remove bad pod and new pod should not become friend with it', async function () {
+    this.timeout(200000)
 
     // Pods 1, 2, 3 and 4 become friends
     await makeFriendsWrapper(2)
@@ -119,10 +119,23 @@ describe('Test advanced friends', function () {
       expect(res.body.data.length).to.equal(3)
     }
 
+    // Wait initial video channel requests
+    await wait(11000)
+
     // Kill pod 4
     servers[3].app.kill()
 
     // Remove pod 4 from pod 1 and 2
+    await uploadVideoWrapper(1)
+    await uploadVideoWrapper(2)
+
+    await wait(11000)
+
+    await uploadVideoWrapper(1)
+    await uploadVideoWrapper(2)
+
+    await wait(11000)
+
     await uploadVideoWrapper(1)
     await uploadVideoWrapper(2)
 
@@ -147,31 +160,39 @@ describe('Test advanced friends', function () {
       }
     }
 
-      // Rerun server 4
+    // Rerun server 4
     const newServer = await runServer(4)
     servers[3].app = newServer.app
     servers[3].app
 
-    const res1 = await getFriendsListWrapper(4)
-
     // Pod 4 didn't know pod 1 and 2 removed it
+    const res1 = await getFriendsListWrapper(4)
     expect(res1.body.data.length).to.equal(3)
+
+    // Pod 3 didn't upload video, it's still friend with pod 3
+    const res2 = await getFriendsListWrapper(3)
+    expect(res2.body.data.length).to.equal(3)
 
     // Pod 6 asks pod 1, 2 and 3
     await makeFriendsWrapper(6)
 
     await wait(11000)
 
-    const res2 = await getFriendsListWrapper(6)
+    const res3 = await getFriendsListWrapper(6)
 
     // Pod 4 should not be our friend
-    const friends = res2.body.data
+    const friends = res3.body.data
     expect(friends.length).to.equal(3)
     for (const pod of friends) {
       expect(pod.host).not.equal(servers[3].host)
     }
   })
 
+  // Pod 1 is friend with : 2 3 6
+  // Pod 2 is friend with : 1 3 6
+  // Pod 3 is friend with : 1 2 4 6
+  // Pod 4 is friend with : 1 2 3
+  // Pod 6 is friend with : 1 2 3
   it('Should pod 1 quit friends', async function () {
     this.timeout(25000)
 
@@ -180,21 +201,26 @@ describe('Test advanced friends', function () {
 
     await wait(15000)
 
+    // Pod 1 remove friends
     await quitFriendsWrapper(1)
 
-    // Remove pod 1 from pod 2
     const res1 = await getVideosWrapper(1)
     const videos1 = res1.body.data
     expect(videos1).to.be.an('array')
-    expect(videos1.length).to.equal(2)
+    expect(videos1.length).to.equal(4)
 
     const res2 = await getVideosWrapper(2)
     const videos2 = res2.body.data
     expect(videos2).to.be.an('array')
-    expect(videos2.length).to.equal(3)
+    expect(videos2.length).to.equal(5)
   })
 
-  it('Should make friends between pod 1 and 2 and exchange their videos', async function () {
+  // Pod 1 is friend with nothing
+  // Pod 2 is friend with : 3 6
+  // Pod 3 is friend with : 2 4 6
+  // Pod 4 is friend with : 2 3
+  // Pod 6 is friend with : 2 3
+  it('Should make friends between pod 1, 2, 3 and 6 and exchange their videos', async function () {
     this.timeout(20000)
 
     await makeFriendsWrapper(1)
@@ -204,10 +230,15 @@ describe('Test advanced friends', function () {
     const res = await getVideosWrapper(1)
     const videos = res.body.data
     expect(videos).to.be.an('array')
-    expect(videos.length).to.equal(5)
+    expect(videos.length).to.equal(9)
   })
 
-  it('Should allow pod 6 to quit pod 1 & 2 and be friend with pod 3', async function () {
+  // Pod 1 is friend with : 2 3 6
+  // Pod 2 is friend with : 1 3 6
+  // Pod 3 is friend with : 1 2 4 6
+  // Pod 4 is friend with : 2 3
+  // Pod 6 is friend with : 1 2 3
+  it('Should allow pod 6 to quit pod 1, 2 and 3 and be friend with pod 3', async function () {
     this.timeout(30000)
 
     // Pod 3 should have 4 friends

@@ -72,7 +72,7 @@ describe('Test users', function () {
   })
 
   it('Should not login with an invalid password', async function () {
-    const user = { username: server.user.username, password: 'mewthree' }
+    const user = { username: server.user.username, password: 'mew_three' }
     const res = await login(server.url, server.client, user, 400)
 
     expect(res.body.error).to.equal('invalid_grant')

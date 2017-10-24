@@ -68,7 +68,7 @@ describe('Test requests schedulers stats', function () {
     const res = await getRequestsStats(server)
     const requestSchedulers = res.body
     const requestScheduler = requestSchedulers.requestScheduler
-    expect(requestScheduler.totalRequests).to.equal(1)
+    expect(requestScheduler.totalRequests).to.equal(3)
   })
 
   after(async function () {

@@ -87,7 +87,7 @@ describe('Test basic friends', function () {
     const pod1 = friends[0]
     expect(pod1.host).to.equal(servers[2].host)
     expect(pod1.email).to.equal('admin3@example.com')
-    expect(pod1.score).to.equal(20)
+    expect(pod1.score).to.be.at.least(20)
     expect(dateIsValid(pod1.createdAt)).to.be.true
 
     // Same here, the third pod should have the second pod as a friend
@@ -99,7 +99,7 @@ describe('Test basic friends', function () {
     const pod2 = result[0]
     expect(pod2.host).to.equal(servers[1].host)
     expect(pod2.email).to.equal('admin2@example.com')
-    expect(pod2.score).to.equal(20)
+    expect(pod2.score).to.be.at.least(20)
     expect(dateIsValid(pod2.createdAt)).to.be.true
 
     // Finally the first pod make friend with the second pod
@@ -133,7 +133,7 @@ describe('Test basic friends', function () {
     const pod = res.body.data[0]
     expect(pod.host).to.equal('localhost:9002')
     expect(pod.email).to.equal('admin2@example.com')
-    expect(pod.score).to.equal(20)
+    expect(pod.score).to.be.at.least(20)
     expect(dateIsValid(pod.createdAt)).to.be.true
   })
 

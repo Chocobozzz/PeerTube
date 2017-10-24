@@ -32,7 +32,7 @@ async function loginAndGetAccessToken (server: Server) {
   return res.body.access_token as string
 }
 
-async function getUserAccessToken (server, user) {
+async function getUserAccessToken (server: Server, user: User) {
   const res = await login(server.url, server.client, user, 200)
 
   return res.body.access_token as string

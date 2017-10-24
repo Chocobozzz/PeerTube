@@ -6,6 +6,7 @@ import * as parseTorrent from 'parse-torrent'
 import { makeGetRequest } from './requests'
 import { readFilePromise } from './miscs'
 import { ServerInfo } from './servers'
+import { getMyUserInformation } from './users'
 
 type VideoAttributes = {
   name?: string
@@ -15,6 +16,7 @@ type VideoAttributes = {
   nsfw?: boolean
   description?: string
   tags?: string[]
+  channelId?: number
   fixture?: string
 }
 
@@ -162,8 +164,14 @@ async function testVideoImage (url: string, imageName: string, imagePath: string
   }
 }
 
-function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = 204) {
+async function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = 204) {
   const path = '/api/v1/videos/upload'
+  let defaultChannelId = '1'
+
+  try {
+    const res = await getMyUserInformation(url, accessToken)
+    defaultChannelId = res.body.videoChannels[0].id
+  } catch (e) { /* empty */ }
 
   // Default attributes
   let attributes = {
@@ -171,6 +179,7 @@ function uploadVideo (url: string, accessToken: string, videoAttributesArg: Vide
     category: 5,
     licence: 4,
     language: 3,
+    channelId: defaultChannelId,
     nsfw: true,
     description: 'my super description',
     tags: [ 'tag' ],
@@ -187,6 +196,7 @@ function uploadVideo (url: string, accessToken: string, videoAttributesArg: Vide
               .field('licence', attributes.licence.toString())
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('description', attributes.description)
+              .field('channelId', attributes.channelId)
 
   if (attributes.language !== undefined) {
     req.field('language', attributes.language.toString())

@@ -19,8 +19,12 @@ import {
   updateVideo,
   uploadVideo,
   wait,
-  webtorrentAdd
+  webtorrentAdd,
+  addVideoChannel,
+  getVideoChannelsList,
+  getUserAccessToken
 } from '../utils'
+import { createUser } from '../utils/users'
 
 const expect = chai.expect
 
@@ -28,6 +32,7 @@ describe('Test multiple pods', function () {
   let servers: ServerInfo[] = []
   const toRemove = []
   let videoUUID = ''
+  let videoChannelId: number
 
   before(async function () {
     this.timeout(120000)
@@ -36,6 +41,14 @@ describe('Test multiple pods', function () {
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
+
+    const videoChannel = {
+      name: 'my channel',
+      description: 'super channel'
+    }
+    await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
+    const channelRes = await getVideoChannelsList(servers[0].url, 0, 1)
+    videoChannelId = channelRes.body.data[0].id
 
     // The second pod make friend with the third
     await makeFriends(servers[1].url, servers[1].accessToken)
@@ -69,6 +82,7 @@ describe('Test multiple pods', function () {
         nsfw: true,
         description: 'my super description for pod 1',
         tags: [ 'tag1p1', 'tag2p1' ],
+        channelId: videoChannelId,
         fixture: 'video_short1.webm'
       }
       await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
@@ -101,21 +115,30 @@ describe('Test multiple pods', function () {
         expect(dateIsValid(video.updatedAt)).to.be.true
         expect(video.author).to.equal('root')
 
-        expect(video.files).to.have.lengthOf(1)
+        const res2 = await getVideo(server.url, video.uuid)
+        const videoDetails = res2.body
 
-        const file = video.files[0]
+        expect(videoDetails.channel.name).to.equal('my channel')
+        expect(videoDetails.channel.description).to.equal('super channel')
+        expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
+        expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
+        expect(videoDetails.files).to.have.lengthOf(1)
+
+        const file = videoDetails.files[0]
         const magnetUri = file.magnetUri
         expect(file.magnetUri).to.have.lengthOf.above(2)
-        expect(file.torrentUrl).to.equal(`http://${video.podHost}/static/torrents/${video.uuid}-${file.resolution}.torrent`)
-        expect(file.fileUrl).to.equal(`http://${video.podHost}/static/webseed/${video.uuid}-${file.resolution}.webm`)
+        expect(file.torrentUrl).to.equal(`http://${videoDetails.podHost}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
+        expect(file.fileUrl).to.equal(`http://${videoDetails.podHost}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
         expect(file.resolution).to.equal(720)
         expect(file.resolutionLabel).to.equal('720p')
         expect(file.size).to.equal(572456)
 
         if (server.url !== 'http://localhost:9001') {
           expect(video.isLocal).to.be.false
+          expect(videoDetails.channel.isLocal).to.be.false
         } else {
           expect(video.isLocal).to.be.true
+          expect(videoDetails.channel.isLocal).to.be.true
         }
 
         // All pods should have the same magnet Uri
@@ -133,6 +156,13 @@ describe('Test multiple pods', function () {
     it('Should upload the video on pod 2 and propagate on each pod', async function () {
       this.timeout(120000)
 
+      const user = {
+        username: 'user1',
+        password: 'super_password'
+      }
+      await createUser(servers[1].url, servers[1].accessToken, user.username, user.password)
+      const userAccessToken = await getUserAccessToken(servers[1], user)
+
       const videoAttributes = {
         name: 'my super name for pod 2',
         category: 4,
@@ -143,7 +173,7 @@ describe('Test multiple pods', function () {
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
         fixture: 'video_short2.webm'
       }
-      await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+      await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
 
       // Transcoding, so wait more than 22000
       await wait(60000)
@@ -172,19 +202,26 @@ describe('Test multiple pods', function () {
         expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
-        expect(video.author).to.equal('root')
+        expect(video.author).to.equal('user1')
 
-        expect(video.files).to.have.lengthOf(4)
+        if (server.url !== 'http://localhost:9002') {
+          expect(video.isLocal).to.be.false
+        } else {
+          expect(video.isLocal).to.be.true
+        }
+
+        const res2 = await getVideo(server.url, video.uuid)
+        const videoDetails = res2.body
+
+        expect(videoDetails.channel.name).to.equal('Default user1 channel')
+        expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
+        expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
+
+        expect(videoDetails.files).to.have.lengthOf(4)
 
         // Check common attributes
-        for (const file of video.files) {
+        for (const file of videoDetails.files) {
           expect(file.magnetUri).to.have.lengthOf.above(2)
-
-          if (server.url !== 'http://localhost:9002') {
-            expect(video.isLocal).to.be.false
-          } else {
-            expect(video.isLocal).to.be.true
-          }
 
           // All pods should have the same magnet Uri
           if (baseMagnet[file.resolution] === undefined) {
@@ -194,27 +231,27 @@ describe('Test multiple pods', function () {
           }
         }
 
-        const file240p = video.files.find(f => f.resolution === 240)
+        const file240p = videoDetails.files.find(f => f.resolution === 240)
         expect(file240p).not.to.be.undefined
         expect(file240p.resolutionLabel).to.equal('240p')
         expect(file240p.size).to.be.above(180000).and.below(200000)
 
-        const file360p = video.files.find(f => f.resolution === 360)
+        const file360p = videoDetails.files.find(f => f.resolution === 360)
         expect(file360p).not.to.be.undefined
         expect(file360p.resolutionLabel).to.equal('360p')
         expect(file360p.size).to.be.above(270000).and.below(290000)
 
-        const file480p = video.files.find(f => f.resolution === 480)
+        const file480p = videoDetails.files.find(f => f.resolution === 480)
         expect(file480p).not.to.be.undefined
         expect(file480p.resolutionLabel).to.equal('480p')
         expect(file480p.size).to.be.above(380000).and.below(400000)
 
-        const file720p = video.files.find(f => f.resolution === 720)
+        const file720p = videoDetails.files.find(f => f.resolution === 720)
         expect(file720p).not.to.be.undefined
         expect(file720p.resolutionLabel).to.equal('720p')
         expect(file720p.size).to.be.above(700000).and.below(7200000)
 
-        const test = await testVideoImage(server.url, 'video_short2.webm', video.thumbnailPath)
+        const test = await testVideoImage(server.url, 'video_short2.webm', videoDetails.thumbnailPath)
         expect(test).to.equal(true)
       }
     })
@@ -284,9 +321,11 @@ describe('Test multiple pods', function () {
         expect(dateIsValid(video1.createdAt)).to.be.true
         expect(dateIsValid(video1.updatedAt)).to.be.true
 
-        expect(video1.files).to.have.lengthOf(1)
+        const res2 = await getVideo(server.url, video1.id)
+        const video1Details = res2.body
+        expect(video1Details.files).to.have.lengthOf(1)
 
-        const file1 = video1.files[0]
+        const file1 = video1Details.files[0]
         expect(file1.magnetUri).to.have.lengthOf.above(2)
         expect(file1.resolution).to.equal(720)
         expect(file1.resolutionLabel).to.equal('720p')
@@ -308,9 +347,12 @@ describe('Test multiple pods', function () {
         expect(dateIsValid(video2.createdAt)).to.be.true
         expect(dateIsValid(video2.updatedAt)).to.be.true
 
-        expect(video2.files).to.have.lengthOf(1)
+        const res3 = await getVideo(server.url, video2.id)
+        const video2Details = res3.body
 
-        const file2 = video2.files[0]
+        expect(video2Details.files).to.have.lengthOf(1)
+
+        const file2 = video2Details.files[0]
         const magnetUri2 = file2.magnetUri
         expect(file2.magnetUri).to.have.lengthOf.above(2)
         expect(file2.resolution).to.equal(720)
@@ -352,7 +394,10 @@ describe('Test multiple pods', function () {
       toRemove.push(res.body.data[2])
       toRemove.push(res.body.data[3])
 
-      const torrent = await webtorrentAdd(video.files[0].magnetUri)
+      const res2 = await getVideo(servers[2].url, video.id)
+      const videoDetails = res2.body
+
+      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri)
       expect(torrent.files).to.be.an('array')
       expect(torrent.files.length).to.equal(1)
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -365,8 +410,10 @@ describe('Test multiple pods', function () {
       const res = await getVideosList(servers[0].url)
 
       const video = res.body.data[1]
+      const res2 = await getVideo(servers[0].url, video.id)
+      const videoDetails = res2.body
 
-      const torrent = await webtorrentAdd(video.files[0].magnetUri)
+      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri)
       expect(torrent.files).to.be.an('array')
       expect(torrent.files.length).to.equal(1)
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -379,8 +426,10 @@ describe('Test multiple pods', function () {
       const res = await getVideosList(servers[1].url)
 
       const video = res.body.data[2]
+      const res2 = await getVideo(servers[1].url, video.id)
+      const videoDetails = res2.body
 
-      const torrent = await webtorrentAdd(video.files[0].magnetUri)
+      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri)
       expect(torrent.files).to.be.an('array')
       expect(torrent.files.length).to.equal(1)
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -393,8 +442,10 @@ describe('Test multiple pods', function () {
       const res = await getVideosList(servers[0].url)
 
       const video = res.body.data[3]
+      const res2 = await getVideo(servers[0].url, video.id)
+      const videoDetails = res2.body
 
-      const torrent = await webtorrentAdd(video.files[0].magnetUri)
+      const torrent = await webtorrentAdd(videoDetails.files[0].magnetUri)
       expect(torrent.files).to.be.an('array')
       expect(torrent.files.length).to.equal(1)
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
@@ -407,7 +458,10 @@ describe('Test multiple pods', function () {
       const res = await getVideosList(servers[0].url)
 
       const video = res.body.data.find(v => v.name === 'my super name for pod 2')
-      const file = video.files.find(f => f.resolution === 360)
+      const res2 = await getVideo(servers[0].url, video.id)
+      const videoDetails = res2.body
+
+      const file = videoDetails.files.find(f => f.resolution === 360)
       expect(file).not.to.be.undefined
 
       const torrent = await webtorrentAdd(file.magnetUri)
@@ -425,14 +479,14 @@ describe('Test multiple pods', function () {
 
     before(async function () {
       const res1 = await getVideosList(servers[0].url)
-      remoteVideosPod1 = res1.body.data.filter(video => video.isLocal === false).map(video => video.id)
+      remoteVideosPod1 = res1.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
 
       const res2 = await getVideosList(servers[1].url)
-      remoteVideosPod2 = res2.body.data.filter(video => video.isLocal === false).map(video => video.id)
+      remoteVideosPod2 = res2.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
 
       const res3 = await getVideosList(servers[2].url)
-      localVideosPod3 = res3.body.data.filter(video => video.isLocal === true).map(video => video.id)
-      remoteVideosPod3 = res3.body.data.filter(video => video.isLocal === false).map(video => video.id)
+      localVideosPod3 = res3.body.data.filter(video => video.isLocal === true).map(video => video.uuid)
+      remoteVideosPod3 = res3.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
     })
 
     it('Should view multiple videos on owned servers', async function () {
@@ -452,8 +506,11 @@ describe('Test multiple pods', function () {
         const res = await getVideosList(server.url)
 
         const videos = res.body.data
-        expect(videos.find(video => video.views === 3)).to.be.an('object')
-        expect(videos.find(video => video.views === 1)).to.be.an('object')
+        const video0 = videos.find(v => v.uuid === localVideosPod3[0])
+        const video1 = videos.find(v => v.uuid === localVideosPod3[1])
+
+        expect(video0.views).to.equal(4)
+        expect(video1.views).to.equal(2)
       }
     })
 
@@ -573,7 +630,10 @@ describe('Test multiple pods', function () {
         expect(videoUpdated.tags).to.deep.equal([ 'tag_up_1', 'tag_up_2' ])
         expect(dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true
 
-        const file = videoUpdated.files[0]
+        const res2 = await getVideo(server.url, videoUpdated.uuid)
+        const videoUpdatedDetails = res2.body
+
+        const file = videoUpdatedDetails .files[0]
         expect(file.magnetUri).to.have.lengthOf.above(2)
         expect(file.resolution).to.equal(720)
         expect(file.resolutionLabel).to.equal('720p')
@@ -584,7 +644,7 @@ describe('Test multiple pods', function () {
 
         // Avoid "duplicate torrent" errors
         const refreshWebTorrent = true
-        const torrent = await webtorrentAdd(videoUpdated.files[0].magnetUri, refreshWebTorrent)
+        const torrent = await webtorrentAdd(videoUpdatedDetails .files[0].magnetUri, refreshWebTorrent)
         expect(torrent.files).to.be.an('array')
         expect(torrent.files.length).to.equal(1)
         expect(torrent.files[0].path).to.exist.and.to.not.equal('')

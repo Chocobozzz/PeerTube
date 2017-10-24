@@ -122,22 +122,25 @@ describe('Test a single pod', function () {
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
 
-    expect(video.files).to.have.lengthOf(1)
+    const res2 = await getVideo(server.url, res.body.data[0].id)
+    const videoDetails = res2.body
 
-    const file = video.files[0]
+    expect(videoDetails.files).to.have.lengthOf(1)
+
+    const file = videoDetails.files[0]
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`${server.url}/static/torrents/${video.uuid}-${file.resolution}.torrent`)
-    expect(file.fileUrl).to.equal(`${server.url}/static/webseed/${video.uuid}-${file.resolution}.webm`)
+    expect(file.torrentUrl).to.equal(`${server.url}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
+    expect(file.fileUrl).to.equal(`${server.url}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
     expect(file.resolution).to.equal(720)
     expect(file.resolutionLabel).to.equal('720p')
     expect(file.size).to.equal(218910)
 
-    const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
+    const test = await testVideoImage(server.url, 'video_short.webm', videoDetails.thumbnailPath)
     expect(test).to.equal(true)
 
-    videoId = video.id
-    videoUUID = video.uuid
+    videoId = videoDetails.id
+    videoUUID = videoDetails.uuid
 
     const torrent = await webtorrentAdd(magnetUri)
     expect(torrent.files).to.be.an('array')
@@ -167,6 +170,10 @@ describe('Test a single pod', function () {
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
+    expect(video.channel.name).to.equal('Default root channel')
+    expect(video.channel.isLocal).to.be.true
+    expect(dateIsValid(video.channel.createdAt)).to.be.true
+    expect(dateIsValid(video.channel.updatedAt)).to.be.true
 
     expect(video.files).to.have.lengthOf(1)
 
@@ -200,7 +207,7 @@ describe('Test a single pod', function () {
     const res = await getVideo(server.url, videoId)
 
     const video = res.body
-    expect(video.views).to.equal(2)
+    expect(video.views).to.equal(3)
   })
 
   it('Should search the video by name by default', async function () {
@@ -226,14 +233,6 @@ describe('Test a single pod', function () {
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
-
-    expect(video.files).to.have.lengthOf(1)
-
-    const file = video.files[0]
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(218910)
 
     const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
     expect(test).to.equal(true)
@@ -288,14 +287,6 @@ describe('Test a single pod', function () {
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
-
-    expect(video.files).to.have.lengthOf(1)
-
-    const file = video.files[0]
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(218910)
 
     const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
     expect(test).to.equal(true)
@@ -493,10 +484,13 @@ describe('Test a single pod', function () {
 
   it('Should search the right magnetUri video', async function () {
     const video = videosListBase[0]
-    const res = await searchVideoWithPagination(server.url, encodeURIComponent(video.files[0].magnetUri), 'magnetUri', 0, 15)
+    const res = await getVideo(server.url, video.id)
+    const videoDetails = res.body
 
-    const videos = res.body.data
-    expect(res.body.total).to.equal(1)
+    const res2 = await searchVideoWithPagination(server.url, encodeURIComponent(videoDetails.files[0].magnetUri), 'magnetUri', 0, 15)
+
+    const videos = res2.body.data
+    expect(res2.body.total).to.equal(1)
     expect(videos.length).to.equal(1)
     expect(videos[0].name).to.equal(video.name)
   })
@@ -566,6 +560,11 @@ describe('Test a single pod', function () {
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
 
+    expect(video.channel.name).to.equal('Default root channel')
+    expect(video.channel.isLocal).to.be.true
+    expect(dateIsValid(video.channel.createdAt)).to.be.true
+    expect(dateIsValid(video.channel.updatedAt)).to.be.true
+
     expect(video.files).to.have.lengthOf(1)
 
     const file = video.files[0]
@@ -610,6 +609,11 @@ describe('Test a single pod', function () {
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
 
+    expect(video.channel.name).to.equal('Default root channel')
+    expect(video.channel.isLocal).to.be.true
+    expect(dateIsValid(video.channel.createdAt)).to.be.true
+    expect(dateIsValid(video.channel.updatedAt)).to.be.true
+
     expect(video.files).to.have.lengthOf(1)
 
     const file = video.files[0]
@@ -644,6 +648,11 @@ describe('Test a single pod', function () {
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
+
+    expect(video.channel.name).to.equal('Default root channel')
+    expect(video.channel.isLocal).to.be.true
+    expect(dateIsValid(video.channel.createdAt)).to.be.true
+    expect(dateIsValid(video.channel.updatedAt)).to.be.true
 
     expect(video.files).to.have.lengthOf(1)
 

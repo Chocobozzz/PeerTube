@@ -1,5 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
+import 'mocha'
+
 import {
   ServerInfo,
   flushTests,
