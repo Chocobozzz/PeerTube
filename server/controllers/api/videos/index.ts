@@ -46,6 +46,7 @@ import { VideoCreate, VideoUpdate } from '../../../../shared'
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { rateVideoRouter } from './rate'
+import { videoChannelRouter } from './channel'
 
 const videosRouter = express.Router()
 
@@ -76,6 +77,7 @@ const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCo
 videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
+videosRouter.use('/', videoChannelRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
@@ -161,21 +163,13 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
   let videoUUID = ''
 
   return db.sequelize.transaction(t => {
-    const user = res.locals.oauth.token.User
+    let p: Promise<TagInstance[]>
 
-    const name = user.username
-    // null because it is OUR pod
-    const podId = null
-    const userId = user.id
+    if (!videoInfo.tags) p = Promise.resolve(undefined)
+    else p = db.Tag.findOrCreateTags(videoInfo.tags, t)
 
-    return db.Author.findOrCreateAuthor(name, podId, userId, t)
-      .then(author => {
-        const tags = videoInfo.tags
-        if (!tags) return { author, tagInstances: undefined }
-
-        return db.Tag.findOrCreateTags(tags, t).then(tagInstances => ({ author, tagInstances }))
-      })
-      .then(({ author, tagInstances }) => {
+    return p
+      .then(tagInstances => {
         const videoData = {
           name: videoInfo.name,
           remote: false,
@@ -186,18 +180,18 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           nsfw: videoInfo.nsfw,
           description: videoInfo.description,
           duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
-          authorId: author.id
+          channelId: res.locals.videoChannel.id
         }
 
         const video = db.Video.build(videoData)
-        return { author, tagInstances, video }
+        return { tagInstances, video }
       })
-      .then(({ author, tagInstances, video }) => {
+      .then(({ tagInstances, video }) => {
         const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
         return getVideoFileHeight(videoFilePath)
-          .then(height => ({ author, tagInstances, video, videoFileHeight: height }))
+          .then(height => ({ tagInstances, video, videoFileHeight: height }))
       })
-      .then(({ author, tagInstances, video, videoFileHeight }) => {
+      .then(({ tagInstances, video, videoFileHeight }) => {
         const videoFileData = {
           extname: extname(videoPhysicalFile.filename),
           resolution: videoFileHeight,
@@ -205,9 +199,9 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
         }
 
         const videoFile = db.VideoFile.build(videoFileData)
-        return { author, tagInstances, video, videoFile }
+        return { tagInstances, video, videoFile }
       })
-      .then(({ author, tagInstances, video, videoFile }) => {
+      .then(({ tagInstances, video, videoFile }) => {
         const videoDir = CONFIG.STORAGE.VIDEOS_DIR
         const source = join(videoDir, videoPhysicalFile.filename)
         const destination = join(videoDir, video.getVideoFilename(videoFile))
@@ -216,10 +210,10 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           .then(() => {
             // This is important in case if there is another attempt in the retry process
             videoPhysicalFile.filename = video.getVideoFilename(videoFile)
-            return { author, tagInstances, video, videoFile }
+            return { tagInstances, video, videoFile }
           })
       })
-      .then(({ author, tagInstances, video, videoFile }) => {
+      .then(({ tagInstances, video, videoFile }) => {
         const tasks = []
 
         tasks.push(
@@ -239,15 +233,15 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
           )
         }
 
-        return Promise.all(tasks).then(() => ({ author, tagInstances, video, videoFile }))
+        return Promise.all(tasks).then(() => ({ tagInstances, video, videoFile }))
       })
-      .then(({ author, tagInstances, video, videoFile }) => {
+      .then(({ tagInstances, video, videoFile }) => {
         const options = { transaction: t }
 
         return video.save(options)
           .then(videoCreated => {
-            // Do not forget to add Author information to the created video
-            videoCreated.Author = author
+            // Do not forget to add video channel information to the created video
+            videoCreated.VideoChannel = res.locals.videoChannel
             videoUUID = videoCreated.uuid
 
             return { tagInstances, video: videoCreated, videoFile }
@@ -392,7 +386,7 @@ function getVideo (req: express.Request, res: express.Response) {
   }
 
   // Do not wait the view system
-  res.json(videoInstance.toFormattedJSON())
+  res.json(videoInstance.toFormattedDetailsJSON())
 }
 
 function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {

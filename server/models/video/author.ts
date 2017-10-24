@@ -1,6 +1,7 @@
 import * as Sequelize from 'sequelize'
 
 import { isUserUsernameValid } from '../../helpers'
+import { removeVideoAuthorToFriends } from '../../lib'
 
 import { addMethodsToModel } from '../utils'
 import {
@@ -11,11 +12,24 @@ import {
 } from './author-interface'
 
 let Author: Sequelize.Model<AuthorInstance, AuthorAttributes>
-let findOrCreateAuthor: AuthorMethods.FindOrCreateAuthor
+let loadAuthorByPodAndUUID: AuthorMethods.LoadAuthorByPodAndUUID
+let load: AuthorMethods.Load
+let loadByUUID: AuthorMethods.LoadByUUID
+let listOwned: AuthorMethods.ListOwned
+let isOwned: AuthorMethods.IsOwned
+let toAddRemoteJSON: AuthorMethods.ToAddRemoteJSON
 
 export default function defineAuthor (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Author = sequelize.define<AuthorInstance, AuthorAttributes>('Author',
     {
+      uuid: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        allowNull: false,
+        validate: {
+          isUUID: 4
+        }
+      },
       name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -43,12 +57,23 @@ export default function defineAuthor (sequelize: Sequelize.Sequelize, DataTypes:
           fields: [ 'name', 'podId' ],
           unique: true
         }
-      ]
+      ],
+      hooks: { afterDestroy }
     }
   )
 
-  const classMethods = [ associate, findOrCreateAuthor ]
-  addMethodsToModel(Author, classMethods)
+  const classMethods = [
+    associate,
+    loadAuthorByPodAndUUID,
+    load,
+    loadByUUID,
+    listOwned
+  ]
+  const instanceMethods = [
+    isOwned,
+    toAddRemoteJSON
+  ]
+  addMethodsToModel(Author, classMethods, instanceMethods)
 
   return Author
 }
@@ -72,27 +97,75 @@ function associate (models) {
     onDelete: 'cascade'
   })
 
-  Author.hasMany(models.Video, {
+  Author.hasMany(models.VideoChannel, {
     foreignKey: {
       name: 'authorId',
       allowNull: false
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
 }
 
-findOrCreateAuthor = function (name: string, podId: number, userId: number, transaction: Sequelize.Transaction) {
-  const author = {
-    name,
-    podId,
-    userId
+function afterDestroy (author: AuthorInstance, options: { transaction: Sequelize.Transaction }) {
+  if (author.isOwned()) {
+    const removeVideoAuthorToFriendsParams = {
+      uuid: author.uuid
+    }
+
+    return removeVideoAuthorToFriends(removeVideoAuthorToFriendsParams, options.transaction)
   }
 
-  const query: Sequelize.FindOrInitializeOptions<AuthorAttributes> = {
-    where: author,
-    defaults: author,
+  return undefined
+}
+
+toAddRemoteJSON = function (this: AuthorInstance) {
+  const json = {
+    uuid: this.uuid,
+    name: this.name
+  }
+
+  return json
+}
+
+isOwned = function (this: AuthorInstance) {
+  return this.podId === null
+}
+
+// ------------------------------ STATICS ------------------------------
+
+listOwned = function () {
+  const query: Sequelize.FindOptions<AuthorAttributes> = {
+    where: {
+      podId: null
+    }
+  }
+
+  return Author.findAll(query)
+}
+
+load = function (id: number) {
+  return Author.findById(id)
+}
+
+loadByUUID = function (uuid: string) {
+  const query: Sequelize.FindOptions<AuthorAttributes> = {
+    where: {
+      uuid
+    }
+  }
+
+  return Author.findOne(query)
+}
+
+loadAuthorByPodAndUUID = function (uuid: string, podId: number, transaction: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<AuthorAttributes> = {
+    where: {
+      podId,
+      uuid
+    },
     transaction
   }
 
-  return Author.findOrCreate(query).then(([ authorInstance ]) => authorInstance)
+  return Author.find(query)
 }

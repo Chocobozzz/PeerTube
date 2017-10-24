@@ -5,6 +5,7 @@ import * as Promise from 'bluebird'
 import { User as FormattedUser } from '../../../shared/models/users/user.model'
 import { UserRole } from '../../../shared/models/users/user-role.type'
 import { ResultList } from '../../../shared/models/result-list.model'
+import { AuthorInstance } from '../video/author-interface'
 
 export namespace UserMethods {
   export type IsPasswordMatch = (this: UserInstance, password: string) => Promise<boolean>
@@ -17,13 +18,12 @@ export namespace UserMethods {
 
   export type GetByUsername = (username: string) => Promise<UserInstance>
 
-  export type List = () => Promise<UserInstance[]>
-
   export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<UserInstance> >
 
   export type LoadById = (id: number) => Promise<UserInstance>
 
   export type LoadByUsername = (username: string) => Promise<UserInstance>
+  export type LoadByUsernameAndPopulateChannels = (username: string) => Promise<UserInstance>
 
   export type LoadByUsernameOrEmail = (username: string, email: string) => Promise<UserInstance>
 }
@@ -36,10 +36,10 @@ export interface UserClass {
 
   countTotal: UserMethods.CountTotal,
   getByUsername: UserMethods.GetByUsername,
-  list: UserMethods.List,
   listForApi: UserMethods.ListForApi,
   loadById: UserMethods.LoadById,
   loadByUsername: UserMethods.LoadByUsername,
+  loadByUsernameAndPopulateChannels: UserMethods.LoadByUsernameAndPopulateChannels,
   loadByUsernameOrEmail: UserMethods.LoadByUsernameOrEmail
 }
 
@@ -51,6 +51,8 @@ export interface UserAttributes {
   displayNSFW?: boolean
   role: UserRole
   videoQuota: number
+
+  Author?: AuthorInstance
 }
 
 export interface UserInstance extends UserClass, UserAttributes, Sequelize.Instance<UserAttributes> {

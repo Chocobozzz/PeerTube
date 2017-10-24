@@ -3,6 +3,7 @@ export interface VideoCreate {
   licence: number
   language: number
   description: string
+  channelId: number
   nsfw: boolean
   name: string
   tags: string[]

@@ -14,6 +14,7 @@ import { VideoTagModel } from './../models/video/video-tag-interface'
 import { BlacklistedVideoModel } from './../models/video/video-blacklist-interface'
 import { VideoFileModel } from './../models/video/video-file-interface'
 import { VideoAbuseModel } from './../models/video/video-abuse-interface'
+import { VideoChannelModel } from './../models/video/video-channel-interface'
 import { UserModel } from './../models/user/user-interface'
 import { UserVideoRateModel } from './../models/user/user-video-rate-interface'
 import { TagModel } from './../models/video/tag-interface'
@@ -50,6 +51,7 @@ const database: {
   UserVideoRate?: UserVideoRateModel,
   User?: UserModel,
   VideoAbuse?: VideoAbuseModel,
+  VideoChannel?: VideoChannelModel,
   VideoFile?: VideoFileModel,
   BlacklistedVideo?: BlacklistedVideoModel,
   VideoTag?: VideoTagModel,

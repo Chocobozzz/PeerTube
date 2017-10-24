@@ -5,6 +5,7 @@ import { database as db } from './database'
 import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION, CACHE } from './constants'
 import { clientsExist, usersExist } from './checker'
 import { logger, createCertsIfNotExist, mkdirpPromise, rimrafPromise } from '../helpers'
+import { createUserAuthorAndChannel } from '../lib'
 
 function installApplication () {
   return db.sequelize.sync()
@@ -91,7 +92,7 @@ function createOAuthAdminIfNotExist () {
     const username = 'root'
     const role = USER_ROLES.ADMIN
     const email = CONFIG.ADMIN.EMAIL
-    const createOptions: { validate?: boolean } = {}
+    let validatePassword = true
     let password = ''
 
     // Do not generate a random password for tests
@@ -103,7 +104,7 @@ function createOAuthAdminIfNotExist () {
       }
 
       // Our password is weak so do not validate it
-      createOptions.validate = false
+      validatePassword = false
     } else {
       password = passwordGenerator(8, true)
     }
@@ -115,13 +116,15 @@ function createOAuthAdminIfNotExist () {
       role,
       videoQuota: -1
     }
+    const user = db.User.build(userData)
 
-    return db.User.create(userData, createOptions).then(createdUser => {
-      logger.info('Username: ' + username)
-      logger.info('User password: ' + password)
+    return createUserAuthorAndChannel(user, validatePassword)
+      .then(({ user }) => {
+        logger.info('Username: ' + username)
+        logger.info('User password: ' + password)
 
-      logger.info('Creating Application table.')
-      return db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
-    })
+        logger.info('Creating Application table.')
+        return db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
+      })
   })
 }

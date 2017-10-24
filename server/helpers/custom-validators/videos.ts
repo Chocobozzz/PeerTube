@@ -23,18 +23,6 @@ const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 const VIDEO_EVENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_EVENTS
 
-function isVideoIdOrUUIDValid (value: string) {
-  return validator.isInt(value) || isVideoUUIDValid(value)
-}
-
-function isVideoAuthorValid (value: string) {
-  return isUserUsernameValid(value)
-}
-
-function isVideoDateValid (value: string) {
-  return exists(value) && validator.isISO8601(value)
-}
-
 function isVideoCategoryValid (value: number) {
   return VIDEO_CATEGORIES[value] !== undefined
 }
@@ -77,10 +65,6 @@ function isVideoThumbnailValid (value: string) {
 
 function isVideoThumbnailDataValid (value: string) {
   return exists(value) && validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL_DATA)
-}
-
-function isVideoUUIDValid (value: string) {
-  return exists(value) && validator.isUUID('' + value, 4)
 }
 
 function isVideoAbuseReasonValid (value: string) {
@@ -170,9 +154,6 @@ function checkVideoExists (id: string, res: express.Response, callback: () => vo
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoIdOrUUIDValid,
-  isVideoAuthorValid,
-  isVideoDateValid,
   isVideoCategoryValid,
   isVideoLicenceValid,
   isVideoLanguageValid,
@@ -185,7 +166,6 @@ export {
   isVideoThumbnailValid,
   isVideoThumbnailDataValid,
   isVideoFileExtnameValid,
-  isVideoUUIDValid,
   isVideoAbuseReasonValid,
   isVideoAbuseReporterUsernameValid,
   isVideoFile,

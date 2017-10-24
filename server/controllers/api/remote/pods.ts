@@ -7,7 +7,7 @@ import {
   setBodyHostPort,
   remotePodsAddValidator
 } from '../../../middlewares'
-import { sendOwnedVideosToPod } from '../../../lib'
+import { sendOwnedDataToPod } from '../../../lib'
 import { getMyPublicCert, getFormattedObjects } from '../../../helpers'
 import { CONFIG } from '../../../initializers'
 import { PodInstance } from '../../../models'
@@ -43,7 +43,7 @@ function addPods (req: express.Request, res: express.Response, next: express.Nex
   const pod = db.Pod.build(information)
   pod.save()
      .then(podCreated => {
-       return sendOwnedVideosToPod(podCreated.id)
+       return sendOwnedDataToPod(podCreated.id)
      })
      .then(() => {
        return getMyPublicCert()

@@ -15,11 +15,12 @@ import {
   isVideoLanguageValid,
   isVideoTagsValid,
   isVideoNSFWValid,
-  isVideoIdOrUUIDValid,
+  isIdOrUUIDValid,
   isVideoAbuseReasonValid,
   isVideoRatingTypeValid,
   getDurationFromVideoFile,
-  checkVideoExists
+  checkVideoExists,
+  isIdValid
 } from '../../helpers'
 
 const videosAddValidator = [
@@ -33,6 +34,7 @@ const videosAddValidator = [
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw').custom(isVideoNSFWValid).withMessage('Should have a valid NSFW attribute'),
   body('description').custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -42,7 +44,20 @@ const videosAddValidator = [
       const videoFile: Express.Multer.File = req.files['videofile'][0]
       const user = res.locals.oauth.token.User
 
-      user.isAbleToUploadVideo(videoFile)
+      return db.VideoChannel.loadByIdAndAuthor(req.body.channelId, user.Author.id)
+        .then(videoChannel => {
+          if (!videoChannel) {
+            res.status(400)
+              .json({ error: 'Unknown video video channel for this author.' })
+              .end()
+
+            return undefined
+          }
+
+          res.locals.videoChannel = videoChannel
+
+          return user.isAbleToUploadVideo(videoFile)
+        })
         .then(isAble => {
           if (isAble === false) {
             res.status(403)
@@ -88,7 +103,7 @@ const videosAddValidator = [
 ]
 
 const videosUpdateValidator = [
-  param('id').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('name').optional().custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
   body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
@@ -109,7 +124,7 @@ const videosUpdateValidator = [
                     .end()
         }
 
-        if (res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+        if (res.locals.video.VideoChannel.Author.userId !== res.locals.oauth.token.User.id) {
           return res.status(403)
                     .json({ error: 'Cannot update video of another user' })
                     .end()
@@ -122,7 +137,7 @@ const videosUpdateValidator = [
 ]
 
 const videosGetValidator = [
-  param('id').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosGet parameters', { parameters: req.params })
@@ -134,7 +149,7 @@ const videosGetValidator = [
 ]
 
 const videosRemoveValidator = [
-  param('id').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosRemove parameters', { parameters: req.params })
@@ -162,7 +177,7 @@ const videosSearchValidator = [
 ]
 
 const videoAbuseReportValidator = [
-  param('id').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('reason').custom(isVideoAbuseReasonValid).withMessage('Should have a valid reason'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -175,7 +190,7 @@ const videoAbuseReportValidator = [
 ]
 
 const videoRateValidator = [
-  param('id').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('rating').custom(isVideoRatingTypeValid).withMessage('Should have a valid rate type'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

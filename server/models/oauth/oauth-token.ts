@@ -126,7 +126,17 @@ getByTokenAndPopulateUser = function (bearerToken: string) {
     where: {
       accessToken: bearerToken
     },
-    include: [ OAuthToken['sequelize'].models.User ]
+    include: [
+      {
+        model: OAuthToken['sequelize'].models.User,
+        include: [
+          {
+            model: OAuthToken['sequelize'].models.Author,
+            required: true
+          }
+        ]
+      }
+    ]
   }
 
   return OAuthToken.findOne(query).then(token => {
@@ -141,7 +151,17 @@ getByRefreshTokenAndPopulateUser = function (refreshToken: string) {
     where: {
       refreshToken: refreshToken
     },
-    include: [ OAuthToken['sequelize'].models.User ]
+    include: [
+      {
+        model: OAuthToken['sequelize'].models.User,
+        include: [
+          {
+            model: OAuthToken['sequelize'].models.Author,
+            required: true
+          }
+        ]
+      }
+    ]
   }
 
   return OAuthToken.findOne(query).then(token => {

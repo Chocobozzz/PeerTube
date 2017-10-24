@@ -1,3 +1,5 @@
+import { VideoChannel } from './video-channel.model'
+
 export interface VideoFile {
   magnetUri: string
   resolution: number
@@ -32,5 +34,9 @@ export interface Video {
   likes: number
   dislikes: number
   nsfw: boolean
+}
+
+export interface VideoDetails extends Video {
+  channel: VideoChannel
   files: VideoFile[]
 }

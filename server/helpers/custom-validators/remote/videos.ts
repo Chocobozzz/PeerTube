@@ -6,18 +6,15 @@ import {
   REQUEST_ENDPOINT_ACTIONS,
   REQUEST_VIDEO_EVENT_TYPES
 } from '../../../initializers'
-import { isArray } from '../misc'
+import { isArray, isDateValid, isUUIDValid } from '../misc'
 import {
-  isVideoAuthorValid,
   isVideoThumbnailDataValid,
-  isVideoUUIDValid,
   isVideoAbuseReasonValid,
   isVideoAbuseReporterUsernameValid,
   isVideoViewsValid,
   isVideoLikesValid,
   isVideoDislikesValid,
   isVideoEventCountValid,
-  isVideoDateValid,
   isVideoCategoryValid,
   isVideoLicenceValid,
   isVideoLanguageValid,
@@ -30,8 +27,21 @@ import {
   isVideoFileExtnameValid,
   isVideoFileResolutionValid
 } from '../videos'
+import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
+import { isVideoAuthorNameValid } from '../video-authors'
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
+
+const checkers: { [ id: string ]: (obj: any) => boolean } = {}
+checkers[ENDPOINT_ACTIONS.ADD_VIDEO] = checkAddVideo
+checkers[ENDPOINT_ACTIONS.UPDATE_VIDEO] = checkUpdateVideo
+checkers[ENDPOINT_ACTIONS.REMOVE_VIDEO] = checkRemoveVideo
+checkers[ENDPOINT_ACTIONS.REPORT_ABUSE] = checkReportVideo
+checkers[ENDPOINT_ACTIONS.ADD_CHANNEL] = checkAddVideoChannel
+checkers[ENDPOINT_ACTIONS.UPDATE_CHANNEL] = checkUpdateVideoChannel
+checkers[ENDPOINT_ACTIONS.REMOVE_CHANNEL] = checkRemoveVideoChannel
+checkers[ENDPOINT_ACTIONS.ADD_AUTHOR] = checkAddAuthor
+checkers[ENDPOINT_ACTIONS.REMOVE_AUTHOR] = checkRemoveAuthor
 
 function isEachRemoteRequestVideosValid (requests: any[]) {
   return isArray(requests) &&
@@ -40,26 +50,11 @@ function isEachRemoteRequestVideosValid (requests: any[]) {
 
       if (!video) return false
 
-      return (
-        isRequestTypeAddValid(request.type) &&
-        isCommonVideoAttributesValid(video) &&
-        isVideoAuthorValid(video.author) &&
-        isVideoThumbnailDataValid(video.thumbnailData)
-      ) ||
-      (
-        isRequestTypeUpdateValid(request.type) &&
-        isCommonVideoAttributesValid(video)
-      ) ||
-      (
-        isRequestTypeRemoveValid(request.type) &&
-        isVideoUUIDValid(video.uuid)
-      ) ||
-      (
-        isRequestTypeReportAbuseValid(request.type) &&
-        isVideoUUIDValid(request.data.videoUUID) &&
-        isVideoAbuseReasonValid(request.data.reportReason) &&
-        isVideoAbuseReporterUsernameValid(request.data.reporterUsername)
-      )
+      const checker = checkers[request.type]
+      // We don't know the request type
+      if (checker === undefined) return false
+
+      return checker(video)
     })
 }
 
@@ -71,7 +66,7 @@ function isEachRemoteRequestVideosQaduValid (requests: any[]) {
       if (!video) return false
 
       return (
-        isVideoUUIDValid(video.uuid) &&
+        isUUIDValid(video.uuid) &&
         (has(video, 'views') === false || isVideoViewsValid(video.views)) &&
         (has(video, 'likes') === false || isVideoLikesValid(video.likes)) &&
         (has(video, 'dislikes') === false || isVideoDislikesValid(video.dislikes))
@@ -87,7 +82,7 @@ function isEachRemoteRequestVideosEventsValid (requests: any[]) {
       if (!eventData) return false
 
       return (
-        isVideoUUIDValid(eventData.uuid) &&
+        isUUIDValid(eventData.uuid) &&
         values(REQUEST_VIDEO_EVENT_TYPES).indexOf(eventData.eventType) !== -1 &&
         isVideoEventCountValid(eventData.count)
       )
@@ -105,8 +100,8 @@ export {
 // ---------------------------------------------------------------------------
 
 function isCommonVideoAttributesValid (video: any) {
-  return isVideoDateValid(video.createdAt) &&
-         isVideoDateValid(video.updatedAt) &&
+  return isDateValid(video.createdAt) &&
+         isDateValid(video.updatedAt) &&
          isVideoCategoryValid(video.category) &&
          isVideoLicenceValid(video.licence) &&
          isVideoLanguageValid(video.language) &&
@@ -115,7 +110,7 @@ function isCommonVideoAttributesValid (video: any) {
          isVideoDurationValid(video.duration) &&
          isVideoNameValid(video.name) &&
          isVideoTagsValid(video.tags) &&
-         isVideoUUIDValid(video.uuid) &&
+         isUUIDValid(video.uuid) &&
          isVideoViewsValid(video.views) &&
          isVideoLikesValid(video.likes) &&
          isVideoDislikesValid(video.dislikes) &&
@@ -131,18 +126,53 @@ function isCommonVideoAttributesValid (video: any) {
          })
 }
 
-function isRequestTypeAddValid (value: string) {
-  return value === ENDPOINT_ACTIONS.ADD
+function checkAddVideo (video: any) {
+  return isCommonVideoAttributesValid(video) &&
+         isUUIDValid(video.channelUUID) &&
+         isVideoThumbnailDataValid(video.thumbnailData)
 }
 
-function isRequestTypeUpdateValid (value: string) {
-  return value === ENDPOINT_ACTIONS.UPDATE
+function checkUpdateVideo (video: any) {
+  return isCommonVideoAttributesValid(video)
 }
 
-function isRequestTypeRemoveValid (value: string) {
-  return value === ENDPOINT_ACTIONS.REMOVE
+function checkRemoveVideo (video: any) {
+  return isUUIDValid(video.uuid)
 }
 
-function isRequestTypeReportAbuseValid (value: string) {
-  return value === ENDPOINT_ACTIONS.REPORT_ABUSE
+function checkReportVideo (abuse: any) {
+  return isUUIDValid(abuse.videoUUID) &&
+         isVideoAbuseReasonValid(abuse.reportReason) &&
+         isVideoAbuseReporterUsernameValid(abuse.reporterUsername)
+}
+
+function checkAddVideoChannel (videoChannel: any) {
+  return isUUIDValid(videoChannel.uuid) &&
+         isVideoChannelNameValid(videoChannel.name) &&
+         isVideoChannelDescriptionValid(videoChannel.description) &&
+         isDateValid(videoChannel.createdAt) &&
+         isDateValid(videoChannel.updatedAt) &&
+         isUUIDValid(videoChannel.ownerUUID)
+}
+
+function checkUpdateVideoChannel (videoChannel: any) {
+  return isUUIDValid(videoChannel.uuid) &&
+         isVideoChannelNameValid(videoChannel.name) &&
+         isVideoChannelDescriptionValid(videoChannel.description) &&
+         isDateValid(videoChannel.createdAt) &&
+         isDateValid(videoChannel.updatedAt) &&
+         isUUIDValid(videoChannel.ownerUUID)
+}
+
+function checkRemoveVideoChannel (videoChannel: any) {
+  return isUUIDValid(videoChannel.uuid)
+}
+
+function checkAddAuthor (author: any) {
+  return isUUIDValid(author.uuid) &&
+         isVideoAuthorNameValid(author.name)
+}
+
+function checkRemoveAuthor (author: any) {
+  return isUUIDValid(author.uuid)
 }

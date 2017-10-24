@@ -1,4 +1,9 @@
 export interface RemoteVideoRequest {
-  type: 'add' | 'update' | 'remove' | 'report-abuse'
+  type: RemoteVideoRequestType
   data: any
 }
+
+export type RemoteVideoRequestType = 'add-video' | 'update-video' | 'remove-video' |
+                                     'add-channel' | 'update-channel' | 'remove-channel' |
+                                     'report-abuse' |
+                                     'add-author' | 'remove-author'

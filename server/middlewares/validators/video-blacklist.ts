@@ -3,10 +3,10 @@ import * as express from 'express'
 
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
-import { logger, isVideoIdOrUUIDValid, checkVideoExists } from '../../helpers'
+import { logger, isIdOrUUIDValid, checkVideoExists } from '../../helpers'
 
 const videosBlacklistRemoveValidator = [
-  param('videoId').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking blacklistRemove parameters.', { parameters: req.params })
@@ -20,7 +20,7 @@ const videosBlacklistRemoveValidator = [
 ]
 
 const videosBlacklistAddValidator = [
-  param('videoId').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosBlacklist parameters', { parameters: req.params })

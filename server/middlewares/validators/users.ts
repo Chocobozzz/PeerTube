@@ -13,7 +13,7 @@ import {
   isUserPasswordValid,
   isUserVideoQuotaValid,
   isUserDisplayNSFWValid,
-  isVideoIdOrUUIDValid
+  isIdOrUUIDValid
 } from '../../helpers'
 import { UserInstance, VideoInstance } from '../../models'
 
@@ -109,7 +109,7 @@ const usersGetValidator = [
 ]
 
 const usersVideoRatingValidator = [
-  param('videoId').custom(isVideoIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
+  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })

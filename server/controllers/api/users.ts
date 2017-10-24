@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { database as db } from '../../initializers/database'
 import { USER_ROLES, CONFIG } from '../../initializers'
-import { logger, getFormattedObjects } from '../../helpers'
+import { logger, getFormattedObjects, retryTransactionWrapper } from '../../helpers'
 import {
   authenticate,
   ensureIsAdmin,
@@ -26,6 +26,7 @@ import {
   UserUpdate,
   UserUpdateMe
 } from '../../../shared'
+import { createUserAuthorAndChannel } from '../../lib'
 import { UserInstance } from '../../models'
 
 const usersRouter = express.Router()
@@ -58,7 +59,7 @@ usersRouter.post('/',
   authenticate,
   ensureIsAdmin,
   usersAddValidator,
-  createUser
+  createUserRetryWrapper
 )
 
 usersRouter.post('/register',
@@ -98,9 +99,22 @@ export {
 
 // ---------------------------------------------------------------------------
 
+function createUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const options = {
+    arguments: [ req, res ],
+    errorMessage: 'Cannot insert the user with many retries.'
+  }
+
+  retryTransactionWrapper(createUser, options)
+    .then(() => {
+      // TODO : include Location of the new user -> 201
+      res.type('json').status(204).end()
+    })
+    .catch(err => next(err))
+}
+
 function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserCreate = req.body
-
   const user = db.User.build({
     username: body.username,
     password: body.password,
@@ -110,9 +124,12 @@ function createUser (req: express.Request, res: express.Response, next: express.
     videoQuota: body.videoQuota
   })
 
-  user.save()
-    .then(() => res.type('json').status(204).end())
-    .catch(err => next(err))
+  return createUserAuthorAndChannel(user)
+    .then(() => logger.info('User %s with its channel and author created.', body.username))
+    .catch((err: Error) => {
+      logger.debug('Cannot insert the user.', err)
+      throw err
+    })
 }
 
 function registerUser (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -127,13 +144,13 @@ function registerUser (req: express.Request, res: express.Response, next: expres
     videoQuota: CONFIG.USER.VIDEO_QUOTA
   })
 
-  user.save()
+  return createUserAuthorAndChannel(user)
     .then(() => res.type('json').status(204).end())
     .catch(err => next(err))
 }
 
 function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.User.loadByUsername(res.locals.oauth.token.user.username)
+  db.User.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
     .then(user => res.json(user.toFormattedJSON()))
     .catch(err => next(err))
 }

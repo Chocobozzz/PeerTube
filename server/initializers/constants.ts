@@ -10,6 +10,7 @@ import {
   RequestEndpoint,
   RequestVideoEventType,
   RequestVideoQaduType,
+  RemoteVideoRequestType,
   JobState
 } from '../../shared/models'
 
@@ -35,6 +36,7 @@ const SORTABLE_COLUMNS = {
   PODS: [ 'id', 'host', 'score', 'createdAt' ],
   USERS: [ 'id', 'username', 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
+  VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ]
 }
@@ -114,6 +116,10 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_ABUSES: {
     REASON: { min: 2, max: 300 } // Length
+  },
+  VIDEO_CHANNELS: {
+    NAME: { min: 3, max: 50 }, // Length
+    DESCRIPTION: { min: 3, max: 250 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 50 }, // Length
@@ -232,11 +238,20 @@ const REQUEST_ENDPOINTS: { [ id: string ]: RequestEndpoint } = {
   VIDEOS: 'videos'
 }
 
-const REQUEST_ENDPOINT_ACTIONS: { [ id: string ]: any } = {}
+const REQUEST_ENDPOINT_ACTIONS: {
+  [ id: string ]: {
+    [ id: string ]: RemoteVideoRequestType
+  }
+} = {}
 REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
-  ADD: 'add',
-  UPDATE: 'update',
-  REMOVE: 'remove',
+  ADD_VIDEO: 'add-video',
+  UPDATE_VIDEO: 'update-video',
+  REMOVE_VIDEO: 'remove-video',
+  ADD_CHANNEL: 'add-channel',
+  UPDATE_CHANNEL: 'update-channel',
+  REMOVE_CHANNEL: 'remove-channel',
+  ADD_AUTHOR: 'add-author',
+  REMOVE_AUTHOR: 'remove-author',
   REPORT_ABUSE: 'report-abuse'
 }
 

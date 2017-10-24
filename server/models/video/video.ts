@@ -60,6 +60,7 @@ let getPreviewPath: VideoMethods.GetPreviewPath
 let getTorrentFileName: VideoMethods.GetTorrentFileName
 let isOwned: VideoMethods.IsOwned
 let toFormattedJSON: VideoMethods.ToFormattedJSON
+let toFormattedDetailsJSON: VideoMethods.ToFormattedDetailsJSON
 let toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
 let toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
 let optimizeOriginalVideofile: VideoMethods.OptimizeOriginalVideofile
@@ -206,9 +207,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     {
       indexes: [
         {
-          fields: [ 'authorId' ]
-        },
-        {
           fields: [ 'name' ]
         },
         {
@@ -225,6 +223,9 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         },
         {
           fields: [ 'uuid' ]
+        },
+        {
+          fields: [ 'channelId' ]
         }
       ],
       hooks: {
@@ -268,6 +269,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     removeTorrent,
     toAddRemoteJSON,
     toFormattedJSON,
+    toFormattedDetailsJSON,
     toUpdateRemoteJSON,
     optimizeOriginalVideofile,
     transcodeOriginalVideofile,
@@ -282,9 +284,9 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 // ------------------------------ METHODS ------------------------------
 
 function associate (models) {
-  Video.belongsTo(models.Author, {
+  Video.belongsTo(models.VideoChannel, {
     foreignKey: {
-      name: 'authorId',
+      name: 'channelId',
       allowNull: false
     },
     onDelete: 'cascade'
@@ -439,8 +441,8 @@ getPreviewPath = function (this: VideoInstance) {
 toFormattedJSON = function (this: VideoInstance) {
   let podHost
 
-  if (this.Author.Pod) {
-    podHost = this.Author.Pod.host
+  if (this.VideoChannel.Author.Pod) {
+    podHost = this.VideoChannel.Author.Pod.host
   } else {
     // It means it's our video
     podHost = CONFIG.WEBSERVER.HOST
@@ -472,7 +474,59 @@ toFormattedJSON = function (this: VideoInstance) {
     description: this.description,
     podHost,
     isLocal: this.isOwned(),
-    author: this.Author.name,
+    author: this.VideoChannel.Author.name,
+    duration: this.duration,
+    views: this.views,
+    likes: this.likes,
+    dislikes: this.dislikes,
+    tags: map<TagInstance, string>(this.Tags, 'name'),
+    thumbnailPath: this.getThumbnailPath(),
+    previewPath: this.getPreviewPath(),
+    embedPath: this.getEmbedPath(),
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
+  }
+
+  return json
+}
+
+toFormattedDetailsJSON = function (this: VideoInstance) {
+  let podHost
+
+  if (this.VideoChannel.Author.Pod) {
+    podHost = this.VideoChannel.Author.Pod.host
+  } else {
+    // It means it's our video
+    podHost = CONFIG.WEBSERVER.HOST
+  }
+
+  // Maybe our pod is not up to date and there are new categories since our version
+  let categoryLabel = VIDEO_CATEGORIES[this.category]
+  if (!categoryLabel) categoryLabel = 'Misc'
+
+  // Maybe our pod is not up to date and there are new licences since our version
+  let licenceLabel = VIDEO_LICENCES[this.licence]
+  if (!licenceLabel) licenceLabel = 'Unknown'
+
+  // Language is an optional attribute
+  let languageLabel = VIDEO_LANGUAGES[this.language]
+  if (!languageLabel) languageLabel = 'Unknown'
+
+  const json = {
+    id: this.id,
+    uuid: this.uuid,
+    name: this.name,
+    category: this.category,
+    categoryLabel,
+    licence: this.licence,
+    licenceLabel,
+    language: this.language,
+    languageLabel,
+    nsfw: this.nsfw,
+    description: this.description,
+    podHost,
+    isLocal: this.isOwned(),
+    author: this.VideoChannel.Author.name,
     duration: this.duration,
     views: this.views,
     likes: this.likes,
@@ -483,6 +537,7 @@ toFormattedJSON = function (this: VideoInstance) {
     embedPath: this.getEmbedPath(),
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
+    channel: this.VideoChannel.toFormattedJSON(),
     files: []
   }
 
@@ -525,7 +580,7 @@ toAddRemoteJSON = function (this: VideoInstance) {
       language: this.language,
       nsfw: this.nsfw,
       description: this.description,
-      author: this.Author.name,
+      channelUUID: this.VideoChannel.uuid,
       duration: this.duration,
       thumbnailData: thumbnailData.toString('binary'),
       tags: map<TagInstance, string>(this.Tags, 'name'),
@@ -559,7 +614,6 @@ toUpdateRemoteJSON = function (this: VideoInstance) {
     language: this.language,
     nsfw: this.nsfw,
     description: this.description,
-    author: this.Author.name,
     duration: this.duration,
     tags: map<TagInstance, string>(this.Tags, 'name'),
     createdAt: this.createdAt,
@@ -723,8 +777,18 @@ listForApi = function (start: number, count: number, sort: string) {
     order: [ getSort(sort), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ],
     include: [
       {
-        model: Video['sequelize'].models.Author,
-        include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+        model: Video['sequelize'].models.VideoChannel,
+        include: [
+          {
+            model: Video['sequelize'].models.Author,
+            include: [
+              {
+                model: Video['sequelize'].models.Pod,
+                required: false
+              }
+            ]
+          }
+        ]
       },
       Video['sequelize'].models.Tag,
       Video['sequelize'].models.VideoFile
@@ -740,8 +804,8 @@ listForApi = function (start: number, count: number, sort: string) {
   })
 }
 
-loadByHostAndUUID = function (fromHost: string, uuid: string) {
-  const query = {
+loadByHostAndUUID = function (fromHost: string, uuid: string, t?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<VideoAttributes> = {
     where: {
       uuid
     },
@@ -750,19 +814,26 @@ loadByHostAndUUID = function (fromHost: string, uuid: string) {
         model: Video['sequelize'].models.VideoFile
       },
       {
-        model: Video['sequelize'].models.Author,
+        model: Video['sequelize'].models.VideoChannel,
         include: [
           {
-            model: Video['sequelize'].models.Pod,
-            required: true,
-            where: {
-              host: fromHost
-            }
+            model: Video['sequelize'].models.Author,
+            include: [
+              {
+                model: Video['sequelize'].models.Pod,
+                required: true,
+                where: {
+                  host: fromHost
+                }
+              }
+            ]
           }
         ]
       }
     ]
   }
+
+  if (t !== undefined) query.transaction = t
 
   return Video.findOne(query)
 }
@@ -774,7 +845,10 @@ listOwnedAndPopulateAuthorAndTags = function () {
     },
     include: [
       Video['sequelize'].models.VideoFile,
-      Video['sequelize'].models.Author,
+      {
+        model: Video['sequelize'].models.VideoChannel,
+        include: [ Video['sequelize'].models.Author ]
+      },
       Video['sequelize'].models.Tag
     ]
   }
@@ -792,10 +866,15 @@ listOwnedByAuthor = function (author: string) {
         model: Video['sequelize'].models.VideoFile
       },
       {
-        model: Video['sequelize'].models.Author,
-        where: {
-          name: author
-        }
+        model: Video['sequelize'].models.VideoChannel,
+        include: [
+          {
+            model: Video['sequelize'].models.Author,
+            where: {
+              name: author
+            }
+          }
+        ]
       }
     ]
   }
@@ -807,19 +886,28 @@ load = function (id: number) {
   return Video.findById(id)
 }
 
-loadByUUID = function (uuid: string) {
-  const query = {
+loadByUUID = function (uuid: string, t?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<VideoAttributes> = {
     where: {
       uuid
     },
     include: [ Video['sequelize'].models.VideoFile ]
   }
+
+  if (t !== undefined) query.transaction = t
+
   return Video.findOne(query)
 }
 
 loadAndPopulateAuthor = function (id: number) {
   const options = {
-    include: [ Video['sequelize'].models.VideoFile, Video['sequelize'].models.Author ]
+    include: [
+      Video['sequelize'].models.VideoFile,
+      {
+        model: Video['sequelize'].models.VideoChannel,
+        include: [ Video['sequelize'].models.Author ]
+      }
+    ]
   }
 
   return Video.findById(id, options)
@@ -829,8 +917,13 @@ loadAndPopulateAuthorAndPodAndTags = function (id: number) {
   const options = {
     include: [
       {
-        model: Video['sequelize'].models.Author,
-        include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+        model: Video['sequelize'].models.VideoChannel,
+        include: [
+          {
+            model: Video['sequelize'].models.Author,
+            include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+          }
+        ]
       },
       Video['sequelize'].models.Tag,
       Video['sequelize'].models.VideoFile
@@ -847,8 +940,13 @@ loadByUUIDAndPopulateAuthorAndPodAndTags = function (uuid: string) {
     },
     include: [
       {
-        model: Video['sequelize'].models.Author,
-        include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+        model: Video['sequelize'].models.VideoChannel,
+        include: [
+          {
+            model: Video['sequelize'].models.Author,
+            include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+          }
+        ]
       },
       Video['sequelize'].models.Tag,
       Video['sequelize'].models.VideoFile
@@ -866,9 +964,13 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
 
   const authorInclude: Sequelize.IncludeOptions = {
     model: Video['sequelize'].models.Author,
-    include: [
-      podInclude
-    ]
+    include: [ podInclude ]
+  }
+
+  const videoChannelInclude: Sequelize.IncludeOptions = {
+    model: Video['sequelize'].models.VideoChannel,
+    include: [ authorInclude ],
+    required: true
   }
 
   const tagInclude: Sequelize.IncludeOptions = {
@@ -915,8 +1017,6 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
         $iLike: '%' + value + '%'
       }
     }
-
-    // authorInclude.or = true
   } else {
     query.where[field] = {
       $iLike: '%' + value + '%'
@@ -924,7 +1024,7 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
   }
 
   query.include = [
-    authorInclude, tagInclude, videoFileInclude
+    videoChannelInclude, tagInclude, videoFileInclude
   ]
 
   return Video.findAndCountAll(query).then(({ rows, count }) => {
@@ -955,8 +1055,8 @@ function getBaseUrls (video: VideoInstance) {
     baseUrlHttp = CONFIG.WEBSERVER.URL
     baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
   } else {
-    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + video.Author.Pod.host
-    baseUrlWs = REMOTE_SCHEME.WS + '://' + video.Author.Pod.host
+    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + video.VideoChannel.Author.Pod.host
+    baseUrlWs = REMOTE_SCHEME.WS + '://' + video.VideoChannel.Author.Pod.host
   }
 
   return { baseUrlHttp, baseUrlWs }

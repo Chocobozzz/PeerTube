@@ -1,3 +1,5 @@
+import { RemoteVideoRequest } from './remote-video-request.model'
+
 export interface RemoteVideoUpdateData {
   uuid: string
   tags: string[]
@@ -21,7 +23,7 @@ export interface RemoteVideoUpdateData {
   }[]
 }
 
-export interface RemoteVideoUpdateRequest {
-  type: 'update'
+export interface RemoteVideoUpdateRequest extends RemoteVideoRequest {
+  type: 'update-video'
   data: RemoteVideoUpdateData
 }

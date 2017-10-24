@@ -85,7 +85,8 @@ listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: numbe
   const Pod = db.Pod
 
   // We make a join between videos and authors to find the podId of our video event requests
-  const podJoins = 'INNER JOIN "Videos" ON "Videos"."authorId" = "Authors"."id" ' +
+  const podJoins = 'INNER JOIN "VideoChannels" ON "VideoChannels"."authorId" = "Authors"."id" ' +
+                   'INNER JOIN "Videos" ON "Videos"."channelId" = "VideoChannels"."id" ' +
                    'INNER JOIN "RequestVideoEvents" ON "RequestVideoEvents"."videoId" = "Videos"."id"'
 
   return Pod.listRandomPodIdsWithRequest(limitPods, 'Authors', podJoins).then(podIds => {
@@ -161,7 +162,7 @@ function groupAndTruncateRequests (events: RequestVideoEventInstance[], limitReq
   const eventsGrouped: RequestsVideoEventGrouped = {}
 
   events.forEach(event => {
-    const pod = event.Video.Author.Pod
+    const pod = event.Video.VideoChannel.Author.Pod
 
     if (!eventsGrouped[pod.id]) eventsGrouped[pod.id] = []
 

@@ -42,7 +42,13 @@ import {
   RemoteVideoRemoveData,
   RemoteVideoReportAbuseData,
   ResultList,
-  Pod as FormattedPod
+  RemoteVideoRequestType,
+  Pod as FormattedPod,
+  RemoteVideoChannelCreateData,
+  RemoteVideoChannelUpdateData,
+  RemoteVideoChannelRemoveData,
+  RemoteVideoAuthorCreateData,
+  RemoteVideoAuthorRemoveData
 } from '../../shared'
 
 type QaduParam = { videoId: number, type: RequestVideoQaduType }
@@ -62,7 +68,7 @@ function activateSchedulers () {
 
 function addVideoToFriends (videoData: RemoteVideoCreateData, transaction: Sequelize.Transaction) {
   const options = {
-    type: ENDPOINT_ACTIONS.ADD,
+    type: ENDPOINT_ACTIONS.ADD_VIDEO,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
     data: videoData,
     transaction
@@ -72,7 +78,7 @@ function addVideoToFriends (videoData: RemoteVideoCreateData, transaction: Seque
 
 function updateVideoToFriends (videoData: RemoteVideoUpdateData, transaction: Sequelize.Transaction) {
   const options = {
-    type: ENDPOINT_ACTIONS.UPDATE,
+    type: ENDPOINT_ACTIONS.UPDATE_VIDEO,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
     data: videoData,
     transaction
@@ -82,9 +88,59 @@ function updateVideoToFriends (videoData: RemoteVideoUpdateData, transaction: Se
 
 function removeVideoToFriends (videoParams: RemoteVideoRemoveData, transaction: Sequelize.Transaction) {
   const options = {
-    type: ENDPOINT_ACTIONS.REMOVE,
+    type: ENDPOINT_ACTIONS.REMOVE_VIDEO,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
     data: videoParams,
+    transaction
+  }
+  return createRequest(options)
+}
+
+function addVideoAuthorToFriends (authorData: RemoteVideoAuthorCreateData, transaction: Sequelize.Transaction) {
+  const options = {
+    type: ENDPOINT_ACTIONS.ADD_AUTHOR,
+    endpoint: REQUEST_ENDPOINTS.VIDEOS,
+    data: authorData,
+    transaction
+  }
+  return createRequest(options)
+}
+
+function removeVideoAuthorToFriends (authorData: RemoteVideoAuthorRemoveData, transaction: Sequelize.Transaction) {
+  const options = {
+    type: ENDPOINT_ACTIONS.REMOVE_AUTHOR,
+    endpoint: REQUEST_ENDPOINTS.VIDEOS,
+    data: authorData,
+    transaction
+  }
+  return createRequest(options)
+}
+
+function addVideoChannelToFriends (videoChannelData: RemoteVideoChannelCreateData, transaction: Sequelize.Transaction) {
+  const options = {
+    type: ENDPOINT_ACTIONS.ADD_CHANNEL,
+    endpoint: REQUEST_ENDPOINTS.VIDEOS,
+    data: videoChannelData,
+    transaction
+  }
+  return createRequest(options)
+}
+
+function updateVideoChannelToFriends (videoChannelData: RemoteVideoChannelUpdateData, transaction: Sequelize.Transaction) {
+  const options = {
+    type: ENDPOINT_ACTIONS.UPDATE_CHANNEL,
+    endpoint: REQUEST_ENDPOINTS.VIDEOS,
+    data: videoChannelData,
+    transaction
+  }
+  return createRequest(options)
+}
+
+function removeVideoChannelToFriends (videoChannelParams: RemoteVideoChannelRemoveData, transaction: Sequelize.Transaction) {
+  const options = {
+    type: ENDPOINT_ACTIONS.REMOVE_CHANNEL,
+    endpoint: REQUEST_ENDPOINTS.VIDEOS,
+    data: videoChannelParams,
     transaction
   }
   return createRequest(options)
@@ -95,7 +151,7 @@ function reportAbuseVideoToFriend (reportData: RemoteVideoReportAbuseData, video
     type: ENDPOINT_ACTIONS.REPORT_ABUSE,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
     data: reportData,
-    toIds: [ video.Author.podId ],
+    toIds: [ video.VideoChannel.Author.podId ],
     transaction
   }
   return createRequest(options)
@@ -207,15 +263,66 @@ function quitFriends () {
     .finally(() => requestScheduler.activate())
 }
 
+function sendOwnedDataToPod (podId: number) {
+  // First send authors
+  return sendOwnedAuthorsToPod(podId)
+    .then(() => sendOwnedChannelsToPod(podId))
+    .then(() => sendOwnedVideosToPod(podId))
+}
+
+function sendOwnedChannelsToPod (podId: number) {
+  return db.VideoChannel.listOwned()
+    .then(videoChannels => {
+      const tasks = []
+      videoChannels.forEach(videoChannel => {
+        const remoteVideoChannel = videoChannel.toAddRemoteJSON()
+        const options = {
+          type: 'add-channel' as 'add-channel',
+          endpoint: REQUEST_ENDPOINTS.VIDEOS,
+          data: remoteVideoChannel,
+          toIds: [ podId ],
+          transaction: null
+        }
+
+        const p = createRequest(options)
+        tasks.push(p)
+      })
+
+      return Promise.all(tasks)
+    })
+}
+
+function sendOwnedAuthorsToPod (podId: number) {
+  return db.Author.listOwned()
+    .then(authors => {
+      const tasks = []
+      authors.forEach(author => {
+        const remoteAuthor = author.toAddRemoteJSON()
+        const options = {
+          type: 'add-author' as 'add-author',
+          endpoint: REQUEST_ENDPOINTS.VIDEOS,
+          data: remoteAuthor,
+          toIds: [ podId ],
+          transaction: null
+        }
+
+        const p = createRequest(options)
+        tasks.push(p)
+      })
+
+      return Promise.all(tasks)
+    })
+}
+
 function sendOwnedVideosToPod (podId: number) {
-  db.Video.listOwnedAndPopulateAuthorAndTags()
+  return db.Video.listOwnedAndPopulateAuthorAndTags()
     .then(videosList => {
       const tasks = []
       videosList.forEach(video => {
         const promise = video.toAddRemoteJSON()
           .then(remoteVideo => {
             const options = {
-              type: 'add',
+              type: 'add-video' as 'add-video',
               endpoint: REQUEST_ENDPOINTS.VIDEOS,
               data: remoteVideo,
               toIds: [ podId ],
@@ -236,8 +343,8 @@ function sendOwnedVideosToPod (podId: number) {
     })
 }
 
-function fetchRemotePreview (pod: PodInstance, video: VideoInstance) {
-  const host = video.Author.Pod.host
+function fetchRemotePreview (video: VideoInstance) {
+  const host = video.VideoChannel.Author.Pod.host
   const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
@@ -274,7 +381,9 @@ function getRequestVideoEventScheduler () {
 export {
   activateSchedulers,
   addVideoToFriends,
+  removeVideoAuthorToFriends,
   updateVideoToFriends,
+  addVideoAuthorToFriends,
   reportAbuseVideoToFriend,
   quickAndDirtyUpdateVideoToFriends,
   quickAndDirtyUpdatesVideoToFriends,
@@ -285,11 +394,14 @@ export {
   quitFriends,
   removeFriend,
   removeVideoToFriends,
-  sendOwnedVideosToPod,
+  sendOwnedDataToPod,
   getRequestScheduler,
   getRequestVideoQaduScheduler,
   getRequestVideoEventScheduler,
-  fetchRemotePreview
+  fetchRemotePreview,
+  addVideoChannelToFriends,
+  updateVideoChannelToFriends,
+  removeVideoChannelToFriends
 }
 
 // ---------------------------------------------------------------------------
@@ -373,7 +485,7 @@ function makeRequestsToWinningPods (cert: string, podsList: PodInstance[]) {
             .then(podCreated => {
 
               // Add our videos to the request scheduler
-              sendOwnedVideosToPod(podCreated.id)
+              sendOwnedDataToPod(podCreated.id)
             })
             .catch(err => {
               logger.error('Cannot add friend %s pod.', pod.host, err)
@@ -397,7 +509,7 @@ function makeRequestsToWinningPods (cert: string, podsList: PodInstance[]) {
 
 // Wrapper that populate "toIds" argument with all our friends if it is not specified
 type CreateRequestOptions = {
-  type: string
+  type: RemoteVideoRequestType
   endpoint: RequestEndpoint
   data: Object
   toIds?: number[]

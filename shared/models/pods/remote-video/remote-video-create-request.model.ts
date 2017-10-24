@@ -2,7 +2,7 @@ import { RemoteVideoRequest } from './remote-video-request.model'
 
 export interface RemoteVideoCreateData {
   uuid: string
-  author: string
+  channelUUID: string
   tags: string[]
   name: string
   category: number
@@ -26,6 +26,6 @@ export interface RemoteVideoCreateData {
 }
 
 export interface RemoteVideoCreateRequest extends RemoteVideoRequest {
-  type: 'add'
+  type: 'add-video'
   data: RemoteVideoCreateData
 }

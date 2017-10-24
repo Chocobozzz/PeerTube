@@ -5,6 +5,6 @@ export interface RemoteVideoRemoveData {
 }
 
 export interface RemoteVideoRemoveRequest extends RemoteVideoRequest {
-  type: 'remove'
+  type: 'remove-video'
   data: RemoteVideoRemoveData
 }

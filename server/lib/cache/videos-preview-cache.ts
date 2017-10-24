@@ -55,7 +55,7 @@ class VideosPreviewCache {
   }
 
   private saveRemotePreviewAndReturnPath (video: VideoInstance) {
-    const req = fetchRemotePreview(video.Author.Pod, video)
+    const req = fetchRemotePreview(video)
 
     return new Promise<string>((res, rej) => {
       const path = join(CACHE.DIRECTORIES.PREVIEWS, video.getPreviewName())

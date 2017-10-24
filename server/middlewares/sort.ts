@@ -22,6 +22,12 @@ function setVideoAbusesSort (req: express.Request, res: express.Response, next: 
   return next()
 }
 
+function setVideoChannelsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.query.sort) req.query.sort = '-createdAt'
+
+  return next()
+}
+
 function setVideosSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
@@ -55,6 +61,7 @@ export {
   setPodsSort,
   setUsersSort,
   setVideoAbusesSort,
+  setVideoChannelsSort,
   setVideosSort,
   setBlacklistSort
 }

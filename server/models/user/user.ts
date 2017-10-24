@@ -27,10 +27,10 @@ let toFormattedJSON: UserMethods.ToFormattedJSON
 let isAdmin: UserMethods.IsAdmin
 let countTotal: UserMethods.CountTotal
 let getByUsername: UserMethods.GetByUsername
-let list: UserMethods.List
 let listForApi: UserMethods.ListForApi
 let loadById: UserMethods.LoadById
 let loadByUsername: UserMethods.LoadByUsername
+let loadByUsernameAndPopulateChannels: UserMethods.LoadByUsernameAndPopulateChannels
 let loadByUsernameOrEmail: UserMethods.LoadByUsernameOrEmail
 let isAbleToUploadVideo: UserMethods.IsAbleToUploadVideo
 
@@ -113,10 +113,10 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
     countTotal,
     getByUsername,
-    list,
     listForApi,
     loadById,
     loadByUsername,
+    loadByUsernameAndPopulateChannels,
     loadByUsernameOrEmail
   ]
   const instanceMethods = [
@@ -144,15 +144,34 @@ isPasswordMatch = function (this: UserInstance, password: string) {
 }
 
 toFormattedJSON = function (this: UserInstance) {
-  return {
+  const json = {
     id: this.id,
     username: this.username,
     email: this.email,
     displayNSFW: this.displayNSFW,
     role: this.role,
     videoQuota: this.videoQuota,
-    createdAt: this.createdAt
+    createdAt: this.createdAt,
+    author: {
+      id: this.Author.id,
+      uuid: this.Author.uuid
+    }
   }
+
+  if (Array.isArray(this.Author.VideoChannels) === true) {
+    const videoChannels = this.Author.VideoChannels
+      .map(c => c.toFormattedJSON())
+      .sort((v1, v2) => {
+        if (v1.createdAt < v2.createdAt) return -1
+        if (v1.createdAt === v2.createdAt) return 0
+
+        return 1
+      })
+
+    json['videoChannels'] = videoChannels
+  }
+
+  return json
 }
 
 isAdmin = function (this: UserInstance) {
@@ -189,21 +208,19 @@ getByUsername = function (username: string) {
   const query = {
     where: {
       username: username
-    }
+    },
+    include: [ { model: User['sequelize'].models.Author, required: true } ]
   }
 
   return User.findOne(query)
-}
-
-list = function () {
-  return User.findAll()
 }
 
 listForApi = function (start: number, count: number, sort: string) {
   const query = {
     offset: start,
     limit: count,
-    order: [ getSort(sort) ]
+    order: [ getSort(sort) ],
+    include: [ { model: User['sequelize'].models.Author, required: true } ]
   }
 
   return User.findAndCountAll(query).then(({ rows, count }) => {
@@ -215,14 +232,36 @@ listForApi = function (start: number, count: number, sort: string) {
 }
 
 loadById = function (id: number) {
-  return User.findById(id)
+  const options = {
+    include: [ { model: User['sequelize'].models.Author, required: true } ]
+  }
+
+  return User.findById(id, options)
 }
 
 loadByUsername = function (username: string) {
   const query = {
     where: {
       username
-    }
+    },
+    include: [ { model: User['sequelize'].models.Author, required: true } ]
+  }
+
+  return User.findOne(query)
+}
+
+loadByUsernameAndPopulateChannels = function (username: string) {
+  const query = {
+    where: {
+      username
+    },
+    include: [
+      {
+        model: User['sequelize'].models.Author,
+        required: true,
+        include: [ User['sequelize'].models.VideoChannel ]
+      }
+    ]
   }
 
   return User.findOne(query)
@@ -230,6 +269,7 @@ loadByUsername = function (username: string) {
 
 loadByUsernameOrEmail = function (username: string, email: string) {
   const query = {
+    include: [ { model: User['sequelize'].models.Author, required: true } ],
     where: {
       $or: [ { username }, { email } ]
     }
@@ -242,11 +282,12 @@ loadByUsernameOrEmail = function (username: string, email: string) {
 // ---------------------------------------------------------------------------
 
 function getOriginalVideoFileTotalFromUser (user: UserInstance) {
-  // Don't use sequelize because we need to use a subquery
+  // Don't use sequelize because we need to use a sub query
   const query = 'SELECT SUM("size") AS "total" FROM ' +
                 '(SELECT MAX("VideoFiles"."size") AS "size" FROM "VideoFiles" ' +
                 'INNER JOIN "Videos" ON "VideoFiles"."videoId" = "Videos"."id" ' +
-                'INNER JOIN "Authors" ON "Videos"."authorId" = "Authors"."id" ' +
+                'INNER JOIN "VideoChannels" ON "VideoChannels"."id" = "Videos"."channelId" ' +
+                'INNER JOIN "Authors" ON "VideoChannels"."authorId" = "Authors"."id" ' +
                 'INNER JOIN "Users" ON "Authors"."userId" = "Users"."id" ' +
                 'WHERE "Users"."id" = $userId GROUP BY "Videos"."id") t'
 

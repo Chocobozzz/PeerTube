@@ -6,16 +6,21 @@ import { TagAttributes, TagInstance } from './tag-interface'
 import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 
 // Don't use barrel, import just what we need
-import { Video as FormattedVideo } from '../../../shared/models/videos/video.model'
+import {
+  Video as FormattedVideo,
+  VideoDetails as FormattedDetailsVideo
+} from '../../../shared/models/videos/video.model'
 import { RemoteVideoUpdateData } from '../../../shared/models/pods/remote-video/remote-video-update-request.model'
 import { RemoteVideoCreateData } from '../../../shared/models/pods/remote-video/remote-video-create-request.model'
 import { ResultList } from '../../../shared/models/result-list.model'
+import { VideoChannelInstance } from './video-channel-interface'
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string
   export type GetPreviewName = (this: VideoInstance) => string
   export type IsOwned = (this: VideoInstance) => boolean
   export type ToFormattedJSON = (this: VideoInstance) => FormattedVideo
+  export type ToFormattedDetailsJSON = (this: VideoInstance) => FormattedDetailsVideo
 
   export type GetOriginalFile = (this: VideoInstance) => VideoFileInstance
   export type GetTorrentFileName = (this: VideoInstance, videoFile: VideoFileInstance) => string
@@ -52,8 +57,8 @@ export namespace VideoMethods {
   ) => Promise< ResultList<VideoInstance> >
 
   export type Load = (id: number) => Promise<VideoInstance>
-  export type LoadByUUID = (uuid: string) => Promise<VideoInstance>
-  export type LoadByHostAndUUID = (fromHost: string, uuid: string) => Promise<VideoInstance>
+  export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
+  export type LoadByHostAndUUID = (fromHost: string, uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
   export type LoadAndPopulateAuthor = (id: number) => Promise<VideoInstance>
   export type LoadAndPopulateAuthorAndPodAndTags = (id: number) => Promise<VideoInstance>
   export type LoadByUUIDAndPopulateAuthorAndPodAndTags = (uuid: string) => Promise<VideoInstance>
@@ -94,7 +99,9 @@ export interface VideoAttributes {
   dislikes?: number
   remote: boolean
 
-  Author?: AuthorInstance
+  channelId?: number
+
+  VideoChannel?: VideoChannelInstance
   Tags?: TagInstance[]
   VideoFiles?: VideoFileInstance[]
 }
@@ -121,6 +128,7 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   removeTorrent: VideoMethods.RemoveTorrent
   toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
   toFormattedJSON: VideoMethods.ToFormattedJSON
+  toFormattedDetailsJSON: VideoMethods.ToFormattedDetailsJSON
   toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
   optimizeOriginalVideofile: VideoMethods.OptimizeOriginalVideofile
   transcodeOriginalVideofile: VideoMethods.TranscodeOriginalVideofile

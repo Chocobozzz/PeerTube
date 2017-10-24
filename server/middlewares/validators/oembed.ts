@@ -4,9 +4,12 @@ import { join } from 'path'
 
 import { checkErrors } from './utils'
 import { CONFIG } from '../../initializers'
-import { logger } from '../../helpers'
-import { checkVideoExists, isVideoIdOrUUIDValid } from '../../helpers/custom-validators/videos'
-import { isTestInstance } from '../../helpers/core-utils'
+import {
+  logger,
+  isTestInstance,
+  checkVideoExists,
+  isIdOrUUIDValid
+} from '../../helpers'
 
 const urlShouldStartWith = CONFIG.WEBSERVER.SCHEME + '://' + join(CONFIG.WEBSERVER.HOST, 'videos', 'watch') + '/'
 const videoWatchRegex = new RegExp('([^/]+)$')
@@ -45,7 +48,7 @@ const oembedValidator = [
       }
 
       const videoId = matches[1]
-      if (isVideoIdOrUUIDValid(videoId) === false) {
+      if (isIdOrUUIDValid(videoId) === false) {
         return res.status(400)
                   .json({ error: 'Invalid video id.' })
                   .end()

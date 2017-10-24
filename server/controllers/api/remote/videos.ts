@@ -1,5 +1,6 @@
 import * as express from 'express'
 import * as Promise from 'bluebird'
+import * as Sequelize from 'sequelize'
 
 import { database as db } from '../../../initializers/database'
 import {
@@ -27,17 +28,28 @@ import {
   RemoteQaduVideoRequest,
   RemoteQaduVideoData,
   RemoteVideoEventRequest,
-  RemoteVideoEventData
+  RemoteVideoEventData,
+  RemoteVideoChannelCreateData,
+  RemoteVideoChannelUpdateData,
+  RemoteVideoChannelRemoveData,
+  RemoteVideoAuthorRemoveData,
+  RemoteVideoAuthorCreateData
 } from '../../../../shared'
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
 // Functions to call when processing a remote request
+// FIXME: use RemoteVideoRequestType as id type
 const functionsHash: { [ id: string ]: (...args) => Promise<any> } = {}
-functionsHash[ENDPOINT_ACTIONS.ADD] = addRemoteVideoRetryWrapper
-functionsHash[ENDPOINT_ACTIONS.UPDATE] = updateRemoteVideoRetryWrapper
-functionsHash[ENDPOINT_ACTIONS.REMOVE] = removeRemoteVideo
-functionsHash[ENDPOINT_ACTIONS.REPORT_ABUSE] = reportAbuseRemoteVideo
+functionsHash[ENDPOINT_ACTIONS.ADD_VIDEO] = addRemoteVideoRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.UPDATE_VIDEO] = updateRemoteVideoRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.REMOVE_VIDEO] = removeRemoteVideoRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.ADD_CHANNEL] = addRemoteVideoChannelRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.UPDATE_CHANNEL] = updateRemoteVideoChannelRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.REMOVE_CHANNEL] = removeRemoteVideoChannelRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.REPORT_ABUSE] = reportAbuseRemoteVideoRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.ADD_AUTHOR] = addRemoteVideoAuthorRetryWrapper
+functionsHash[ENDPOINT_ACTIONS.REMOVE_AUTHOR] = removeRemoteVideoAuthorRetryWrapper
 
 const remoteVideosRouter = express.Router()
 
@@ -133,7 +145,7 @@ function processVideosEventsRetryWrapper (eventData: RemoteVideoEventData, fromP
 function processVideosEvents (eventData: RemoteVideoEventData, fromPod: PodInstance) {
 
   return db.sequelize.transaction(t => {
-    return fetchVideoByUUID(eventData.uuid)
+    return fetchVideoByUUID(eventData.uuid, t)
       .then(videoInstance => {
         const options = { transaction: t }
 
@@ -196,7 +208,7 @@ function quickAndDirtyUpdateVideo (videoData: RemoteQaduVideoData, fromPod: PodI
   let videoUUID = ''
 
   return db.sequelize.transaction(t => {
-    return fetchVideoByHostAndUUID(fromPod.host, videoData.uuid)
+    return fetchVideoByHostAndUUID(fromPod.host, videoData.uuid, t)
       .then(videoInstance => {
         const options = { transaction: t }
 
@@ -239,22 +251,16 @@ function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodI
       .then(video => {
         if (video) throw new Error('UUID already exists.')
 
-        return undefined
+        return db.VideoChannel.loadByHostAndUUID(fromPod.host, videoToCreateData.channelUUID, t)
       })
-      .then(() => {
-        const name = videoToCreateData.author
-        const podId = fromPod.id
-        // This author is from another pod so we do not associate a user
-        const userId = null
+      .then(videoChannel => {
+        if (!videoChannel) throw new Error('Video channel ' + videoToCreateData.channelUUID + ' not found.')
 
-        return db.Author.findOrCreateAuthor(name, podId, userId, t)
-      })
-      .then(author => {
         const tags = videoToCreateData.tags
 
-        return db.Tag.findOrCreateTags(tags, t).then(tagInstances => ({ author, tagInstances }))
+        return db.Tag.findOrCreateTags(tags, t).then(tagInstances => ({ videoChannel, tagInstances }))
       })
-      .then(({ author, tagInstances }) => {
+      .then(({ videoChannel, tagInstances }) => {
         const videoData = {
           name: videoToCreateData.name,
           uuid: videoToCreateData.uuid,
@@ -263,7 +269,7 @@ function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod: PodI
           language: videoToCreateData.language,
           nsfw: videoToCreateData.nsfw,
           description: videoToCreateData.description,
-          authorId: author.id,
+          channelId: videoChannel.id,
           duration: videoToCreateData.duration,
           createdAt: videoToCreateData.createdAt,
           // FIXME: updatedAt does not seems to be considered by Sequelize
@@ -336,7 +342,7 @@ function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, from
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
 
   return db.sequelize.transaction(t => {
-    return fetchVideoByHostAndUUID(fromPod.host, videoAttributesToUpdate.uuid)
+    return fetchVideoByHostAndUUID(fromPod.host, videoAttributesToUpdate.uuid, t)
       .then(videoInstance => {
         const tags = videoAttributesToUpdate.tags
 
@@ -365,7 +371,7 @@ function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, from
 
         // Remove old video files
         videoInstance.VideoFiles.forEach(videoFile => {
-          tasks.push(videoFile.destroy())
+          tasks.push(videoFile.destroy({ transaction: t }))
         })
 
         return Promise.all(tasks).then(() => ({ tagInstances, videoInstance }))
@@ -404,37 +410,231 @@ function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, from
   })
 }
 
+function removeRemoteVideoRetryWrapper (videoToRemoveData: RemoteVideoRemoveData, fromPod: PodInstance) {
+  const options = {
+    arguments: [ videoToRemoveData, fromPod ],
+    errorMessage: 'Cannot remove the remote video channel with many retries.'
+  }
+
+  return retryTransactionWrapper(removeRemoteVideo, options)
+}
+
 function removeRemoteVideo (videoToRemoveData: RemoteVideoRemoveData, fromPod: PodInstance) {
-  // We need the instance because we have to remove some other stuffs (thumbnail etc)
-  return fetchVideoByHostAndUUID(fromPod.host, videoToRemoveData.uuid)
-    .then(video => {
-      logger.debug('Removing remote video with uuid %s.', video.uuid)
-      return video.destroy()
-    })
+  logger.debug('Removing remote video "%s".', videoToRemoveData.uuid)
+
+  return db.sequelize.transaction(t => {
+    // We need the instance because we have to remove some other stuffs (thumbnail etc)
+    return fetchVideoByHostAndUUID(fromPod.host, videoToRemoveData.uuid, t)
+      .then(video => video.destroy({ transaction: t }))
+  })
+  .then(() => logger.info('Remote video with uuid %s removed.', videoToRemoveData.uuid))
+  .catch(err => {
+    logger.debug('Cannot remove the remote video.', err)
+    throw err
+  })
+}
+
+function addRemoteVideoAuthorRetryWrapper (authorToCreateData: RemoteVideoAuthorCreateData, fromPod: PodInstance) {
+  const options = {
+    arguments: [ authorToCreateData, fromPod ],
+    errorMessage: 'Cannot insert the remote video author with many retries.'
+  }
+
+  return retryTransactionWrapper(addRemoteVideoAuthor, options)
+}
+
+function addRemoteVideoAuthor (authorToCreateData: RemoteVideoAuthorCreateData, fromPod: PodInstance) {
+  logger.debug('Adding remote video author "%s".', authorToCreateData.uuid)
+
+  return db.sequelize.transaction(t => {
+    return db.Author.loadAuthorByPodAndUUID(authorToCreateData.uuid, fromPod.id, t)
+      .then(author => {
+        if (author) throw new Error('UUID already exists.')
+
+        return undefined
+      })
+      .then(() => {
+        const videoAuthorData = {
+          name: authorToCreateData.name,
+          uuid: authorToCreateData.uuid,
+          userId: null, // Not on our pod
+          podId: fromPod.id
+        }
+
+        const author = db.Author.build(videoAuthorData)
+        return author.save({ transaction: t })
+      })
+  })
+    .then(() => logger.info('Remote video author with uuid %s inserted.', authorToCreateData.uuid))
     .catch(err => {
-      logger.debug('Could not fetch remote video.', { host: fromPod.host, uuid: videoToRemoveData.uuid, error: err.stack })
+      logger.debug('Cannot insert the remote video author.', err)
+      throw err
     })
+}
+
+function removeRemoteVideoAuthorRetryWrapper (authorAttributesToRemove: RemoteVideoAuthorRemoveData, fromPod: PodInstance) {
+  const options = {
+    arguments: [ authorAttributesToRemove, fromPod ],
+    errorMessage: 'Cannot remove the remote video author with many retries.'
+  }
+
+  return retryTransactionWrapper(removeRemoteVideoAuthor, options)
+}
+
+function removeRemoteVideoAuthor (authorAttributesToRemove: RemoteVideoAuthorRemoveData, fromPod: PodInstance) {
+  logger.debug('Removing remote video author "%s".', authorAttributesToRemove.uuid)
+
+  return db.sequelize.transaction(t => {
+    return db.Author.loadAuthorByPodAndUUID(authorAttributesToRemove.uuid, fromPod.id, t)
+      .then(videoAuthor => videoAuthor.destroy({ transaction: t }))
+  })
+  .then(() => logger.info('Remote video author with uuid %s removed.', authorAttributesToRemove.uuid))
+  .catch(err => {
+    logger.debug('Cannot remove the remote video author.', err)
+    throw err
+  })
+}
+
+function addRemoteVideoChannelRetryWrapper (videoChannelToCreateData: RemoteVideoChannelCreateData, fromPod: PodInstance) {
+  const options = {
+    arguments: [ videoChannelToCreateData, fromPod ],
+    errorMessage: 'Cannot insert the remote video channel with many retries.'
+  }
+
+  return retryTransactionWrapper(addRemoteVideoChannel, options)
+}
+
+function addRemoteVideoChannel (videoChannelToCreateData: RemoteVideoChannelCreateData, fromPod: PodInstance) {
+  logger.debug('Adding remote video channel "%s".', videoChannelToCreateData.uuid)
+
+  return db.sequelize.transaction(t => {
+    return db.VideoChannel.loadByUUID(videoChannelToCreateData.uuid)
+      .then(videoChannel => {
+        if (videoChannel) throw new Error('UUID already exists.')
+
+        return undefined
+      })
+      .then(() => {
+        const authorUUID = videoChannelToCreateData.ownerUUID
+        const podId = fromPod.id
+
+        return db.Author.loadAuthorByPodAndUUID(authorUUID, podId, t)
+      })
+      .then(author => {
+        if (!author) throw new Error('Unknown author UUID.')
+
+        const videoChannelData = {
+          name: videoChannelToCreateData.name,
+          description: videoChannelToCreateData.description,
+          uuid: videoChannelToCreateData.uuid,
+          createdAt: videoChannelToCreateData.createdAt,
+          updatedAt: videoChannelToCreateData.updatedAt,
+          remote: true,
+          authorId: author.id
+        }
+
+        const videoChannel = db.VideoChannel.build(videoChannelData)
+        return videoChannel.save({ transaction: t })
+      })
+  })
+  .then(() => logger.info('Remote video channel with uuid %s inserted.', videoChannelToCreateData.uuid))
+  .catch(err => {
+    logger.debug('Cannot insert the remote video channel.', err)
+    throw err
+  })
+}
+
+function updateRemoteVideoChannelRetryWrapper (videoChannelAttributesToUpdate: RemoteVideoChannelUpdateData, fromPod: PodInstance) {
+  const options = {
+    arguments: [ videoChannelAttributesToUpdate, fromPod ],
+    errorMessage: 'Cannot update the remote video channel with many retries.'
+  }
+
+  return retryTransactionWrapper(updateRemoteVideoChannel, options)
+}
+
+function updateRemoteVideoChannel (videoChannelAttributesToUpdate: RemoteVideoChannelUpdateData, fromPod: PodInstance) {
+  logger.debug('Updating remote video channel "%s".', videoChannelAttributesToUpdate.uuid)
+
+  return db.sequelize.transaction(t => {
+    return fetchVideoChannelByHostAndUUID(fromPod.host, videoChannelAttributesToUpdate.uuid, t)
+      .then(videoChannelInstance => {
+        const options = { transaction: t }
+
+        videoChannelInstance.set('name', videoChannelAttributesToUpdate.name)
+        videoChannelInstance.set('description', videoChannelAttributesToUpdate.description)
+        videoChannelInstance.set('createdAt', videoChannelAttributesToUpdate.createdAt)
+        videoChannelInstance.set('updatedAt', videoChannelAttributesToUpdate.updatedAt)
+
+        return videoChannelInstance.save(options)
+      })
+  })
+  .then(() => logger.info('Remote video channel with uuid %s updated', videoChannelAttributesToUpdate.uuid))
+  .catch(err => {
+    // This is just a debug because we will retry the insert
+    logger.debug('Cannot update the remote video channel.', err)
+    throw err
+  })
+}
+
+function removeRemoteVideoChannelRetryWrapper (videoChannelAttributesToRemove: RemoteVideoChannelRemoveData, fromPod: PodInstance) {
+  const options = {
+    arguments: [ videoChannelAttributesToRemove, fromPod ],
+    errorMessage: 'Cannot remove the remote video channel with many retries.'
+  }
+
+  return retryTransactionWrapper(removeRemoteVideoChannel, options)
+}
+
+function removeRemoteVideoChannel (videoChannelAttributesToRemove: RemoteVideoChannelRemoveData, fromPod: PodInstance) {
+  logger.debug('Removing remote video channel "%s".', videoChannelAttributesToRemove.uuid)
+
+  return db.sequelize.transaction(t => {
+    return fetchVideoChannelByHostAndUUID(fromPod.host, videoChannelAttributesToRemove.uuid, t)
+      .then(videoChannel => videoChannel.destroy({ transaction: t }))
+  })
+  .then(() => logger.info('Remote video channel with uuid %s removed.', videoChannelAttributesToRemove.uuid))
+  .catch(err => {
+    logger.debug('Cannot remove the remote video channel.', err)
+    throw err
+  })
+}
+
+function reportAbuseRemoteVideoRetryWrapper (reportData: RemoteVideoReportAbuseData, fromPod: PodInstance) {
+  const options = {
+    arguments: [ reportData, fromPod ],
+    errorMessage: 'Cannot create remote abuse video with many retries.'
+  }
+
+  return retryTransactionWrapper(reportAbuseRemoteVideo, options)
 }
 
 function reportAbuseRemoteVideo (reportData: RemoteVideoReportAbuseData, fromPod: PodInstance) {
-  return fetchVideoByUUID(reportData.videoUUID)
-    .then(video => {
-      logger.debug('Reporting remote abuse for video %s.', video.id)
+  logger.debug('Reporting remote abuse for video %s.', reportData.videoUUID)
 
-      const videoAbuseData = {
-        reporterUsername: reportData.reporterUsername,
-        reason: reportData.reportReason,
-        reporterPodId: fromPod.id,
-        videoId: video.id
-      }
+  return db.sequelize.transaction(t => {
+    return fetchVideoByUUID(reportData.videoUUID, t)
+      .then(video => {
+        const videoAbuseData = {
+          reporterUsername: reportData.reporterUsername,
+          reason: reportData.reportReason,
+          reporterPodId: fromPod.id,
+          videoId: video.id
+        }
 
-      return db.VideoAbuse.create(videoAbuseData)
-    })
-    .catch(err => logger.error('Cannot create remote abuse video.', err))
+        return db.VideoAbuse.create(videoAbuseData)
+      })
+  })
+  .then(() => logger.info('Remote abuse for video uuid %s created', reportData.videoUUID))
+  .catch(err => {
+    // This is just a debug because we will retry the insert
+    logger.debug('Cannot create remote abuse video', err)
+    throw err
+  })
 }
 
-function fetchVideoByUUID (id: string) {
-  return db.Video.loadByUUID(id)
+function fetchVideoByUUID (id: string, t: Sequelize.Transaction) {
+  return db.Video.loadByUUID(id, t)
     .then(video => {
       if (!video) throw new Error('Video not found')
 
@@ -446,8 +646,8 @@ function fetchVideoByUUID (id: string) {
     })
 }
 
-function fetchVideoByHostAndUUID (podHost: string, uuid: string) {
-  return db.Video.loadByHostAndUUID(podHost, uuid)
+function fetchVideoByHostAndUUID (podHost: string, uuid: string, t: Sequelize.Transaction) {
+  return db.Video.loadByHostAndUUID(podHost, uuid, t)
     .then(video => {
       if (!video) throw new Error('Video not found')
 
@@ -455,6 +655,19 @@ function fetchVideoByHostAndUUID (podHost: string, uuid: string) {
     })
     .catch(err => {
       logger.error('Cannot load video from host and uuid.', { error: err.stack, podHost, uuid })
+      throw err
+    })
+}
+
+function fetchVideoChannelByHostAndUUID (podHost: string, uuid: string, t: Sequelize.Transaction) {
+  return db.VideoChannel.loadByHostAndUUID(podHost, uuid, t)
+    .then(videoChannel => {
+      if (!videoChannel) throw new Error('Video channel not found')
+
+      return videoChannel
+    })
+    .catch(err => {
+      logger.error('Cannot load video channel from host and uuid.', { error: err.stack, podHost, uuid })
       throw err
     })
 }
