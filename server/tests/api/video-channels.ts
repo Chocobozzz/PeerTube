@@ -1,7 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import { keyBy } from 'lodash'
-import { join } from 'path'
 import 'mocha'
 import * as chai from 'chai'
 const expect = chai.expect

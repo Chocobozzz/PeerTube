@@ -79,7 +79,7 @@ const videosAddValidator = [
         })
         .then(duration => {
           // Previous test failed, abort
-          if (duration === undefined) return
+          if (duration === undefined) return undefined
 
           if (!isVideoDurationValid('' + duration)) {
             return res.status(400)

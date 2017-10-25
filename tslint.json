@@ -1,6 +1,7 @@
 {
   "extends": "tslint-config-standard",
   "rules": {
+    "await-promise": [true, "Bluebird"],
     "no-inferrable-types": true,
     "eofline": true,
     "indent": ["spaces"],

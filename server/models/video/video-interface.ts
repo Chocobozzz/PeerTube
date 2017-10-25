@@ -1,7 +1,6 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
-import { AuthorInstance } from './author-interface'
 import { TagAttributes, TagInstance } from './tag-interface'
 import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 

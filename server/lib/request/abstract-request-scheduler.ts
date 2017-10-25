@@ -146,7 +146,7 @@ abstract class AbstractRequestScheduler <T> {
     this.afterRequestsHook()
 
     // All the requests were made, we update the pods score
-    await db.Pod.updatePodsScore(goodPods, badPods)
+    db.Pod.updatePodsScore(goodPods, badPods)
   }
 
   protected afterRequestHook () {

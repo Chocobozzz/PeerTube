@@ -95,7 +95,7 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
 
         default:
           logger.error('Unknown request video QADU type %s.', request.type)
-          return
+          return undefined
         }
 
         // Do not forget the uuid so the remote pod can identify the video

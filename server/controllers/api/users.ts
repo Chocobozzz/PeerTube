@@ -196,7 +196,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
 
   await user.save()
 
-  return await res.sendStatus(204)
+  return res.sendStatus(204)
 }
 
 async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {

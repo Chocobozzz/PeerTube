@@ -41,7 +41,7 @@ import {
   getVideoFileHeight,
   resetSequelizeInstance
 } from '../../../helpers'
-import { TagInstance, VideoInstance } from '../../../models'
+import { VideoInstance } from '../../../models'
 import { VideoCreate, VideoUpdate } from '../../../../shared'
 
 import { abuseVideoRouter } from './abuse'

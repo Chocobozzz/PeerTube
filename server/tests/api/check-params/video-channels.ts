@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
 import * as request from 'supertest'
-import { join } from 'path'
 import 'mocha'
 import * as chai from 'chai'
 const expect = chai.expect

@@ -58,7 +58,7 @@ async function sign (data: string|Object) {
   sign.update(dataString, 'utf8')
 
   const myKey = await getMyPrivateCert()
-  return await sign.sign(myKey, SIGNATURE_ENCODING)
+  return sign.sign(myKey, SIGNATURE_ENCODING)
 }
 
 function comparePassword (plainPassword: string, hashPassword: string) {
@@ -68,7 +68,7 @@ function comparePassword (plainPassword: string, hashPassword: string) {
 async function createCertsIfNotExist () {
   const exist = await certsExist()
   if (exist === true) {
-    return undefined
+    return
   }
 
   return await createCerts()

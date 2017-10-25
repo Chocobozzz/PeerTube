@@ -96,7 +96,7 @@ database.init = async (silent: boolean) => {
 
   if (!silent) logger.info('Database %s is ready.', dbname)
 
-  return undefined
+  return
 }
 
 // ---------------------------------------------------------------------------
