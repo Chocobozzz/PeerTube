@@ -26,6 +26,18 @@
       </div>
 
       <div class="form-group">
+        <label for="category">Channel</label>
+        <select class="form-control" id="channelId" formControlName="channelId">
+          <option></option>
+          <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
+        </select>
+
+        <div *ngIf="formErrors.channelId" class="alert alert-danger">
+          {{ formErrors.channelId }}
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="category">Category</label>
         <select class="form-control" id="category" formControlName="category">
           <option></option>

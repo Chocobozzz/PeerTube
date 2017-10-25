@@ -15,13 +15,6 @@ export class UserService {
     private restExtractor: RestExtractor
   ) {}
 
-  checkTokenValidity () {
-    const url = UserService.BASE_USERS_URL + 'me'
-
-    // AuthHttp will redirect us to the login page if the token is not valid anymore
-    this.authHttp.get(url).subscribe()
-  }
-
   changePassword (newPassword: string) {
     const url = UserService.BASE_USERS_URL + 'me'
     const body: UserUpdateMe = {

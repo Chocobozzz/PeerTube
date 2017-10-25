@@ -37,7 +37,7 @@ export class AppComponent implements OnInit {
 
     if (this.authService.isLoggedIn()) {
       // The service will automatically redirect to the login page if the token is not valid anymore
-      this.userService.checkTokenValidity()
+      this.authService.refreshUserInformation()
     }
 
     // Load custom data from server

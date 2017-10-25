@@ -11,11 +11,17 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
-import { OAuthClientLocal, UserRole, UserRefreshToken } from '../../../../../shared'
+import {
+  OAuthClientLocal,
+  UserRole,
+  UserRefreshToken,
+  VideoChannel,
+  User as UserServerModel
+} from '../../../../../shared'
 // Do not use the barrel (dependency loop)
 import { RestExtractor } from '../../shared/rest'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
-import { User } from '../../shared/users/user.model'
+import { User, UserConstructorHash } from '../../shared/users/user.model'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -33,6 +39,12 @@ interface UserLoginWithUserInformation extends UserLogin {
   role: UserRole
   displayNSFW: boolean
   email: string
+  videoQuota: number
+  author: {
+    id: number
+    uuid: string
+  }
+  videoChannels: VideoChannel[]
 }
 
 @Injectable()
@@ -197,6 +209,8 @@ export class AuthService {
           res => {
             this.user.displayNSFW = res.displayNSFW
             this.user.role = res.role
+            this.user.videoChannels = res.videoChannels
+            this.user.author = res.author
 
             this.user.save()
           }
@@ -207,13 +221,16 @@ export class AuthService {
     // User is not loaded yet, set manually auth header
     const headers = new HttpHeaders().set('Authorization', `${obj.token_type} ${obj.access_token}`)
 
-    return this.http.get<User>(AuthService.BASE_USER_INFORMATION_URL, { headers })
+    return this.http.get<UserServerModel>(AuthService.BASE_USER_INFORMATION_URL, { headers })
                     .map(res => {
                       const newProperties = {
-                        id: res.id as number,
-                        role: res.role as UserRole,
-                        displayNSFW: res.displayNSFW as boolean,
-                        email: res.email as string
+                        id: res.id,
+                        role: res.role,
+                        displayNSFW: res.displayNSFW,
+                        email: res.email,
+                        videoQuota: res.videoQuota,
+                        author: res.author,
+                        videoChannels: res.videoChannels
                       }
 
                       return Object.assign(obj, newProperties)
@@ -222,18 +239,23 @@ export class AuthService {
   }
 
   private handleLogin (obj: UserLoginWithUserInformation) {
-    const id = obj.id
-    const username = obj.username
-    const role = obj.role
-    const email = obj.email
-    const displayNSFW = obj.displayNSFW
+    const hashUser: UserConstructorHash = {
+      id: obj.id,
+      username: obj.username,
+      role: obj.role,
+      email: obj.email,
+      displayNSFW: obj.displayNSFW,
+      videoQuota: obj.videoQuota,
+      videoChannels: obj.videoChannels,
+      author: obj.author
+    }
     const hashTokens = {
       accessToken: obj.access_token,
       tokenType: obj.token_type,
       refreshToken: obj.refresh_token
     }
 
-    this.user = new AuthUser({ id, username, role, displayNSFW, email }, hashTokens)
+    this.user = new AuthUser(hashUser, hashTokens)
     this.user.save()
 
     this.setStatus(AuthStatus.LoggedIn)

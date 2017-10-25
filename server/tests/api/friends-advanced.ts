@@ -221,11 +221,11 @@ describe('Test advanced friends', function () {
   // Pod 4 is friend with : 2 3
   // Pod 6 is friend with : 2 3
   it('Should make friends between pod 1, 2, 3 and 6 and exchange their videos', async function () {
-    this.timeout(20000)
+    this.timeout(30000)
 
     await makeFriendsWrapper(1)
 
-    await wait(11000)
+    await wait(22000)
 
     const res = await getVideosWrapper(1)
     const videos = res.body.data

@@ -12,9 +12,10 @@ import {
   VIDEO_LANGUAGE,
   VIDEO_DESCRIPTION,
   VIDEO_TAGS,
+  VIDEO_CHANNEL,
   VIDEO_FILE
 } from '../../shared'
-import { ServerService } from '../../core'
+import { AuthService, ServerService } from '../../core'
 import { VideoService } from '../shared'
 import { VideoCreate } from '../../../../../shared'
 import { HttpEventType, HttpResponse } from '@angular/common/http'
@@ -33,6 +34,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   videoCategories = []
   videoLicences = []
   videoLanguages = []
+  userVideoChannels = []
 
   tagValidators = VIDEO_TAGS.VALIDATORS
   tagValidatorsMessages = VIDEO_TAGS.MESSAGES
@@ -44,6 +46,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     category: '',
     licence: '',
     language: '',
+    channelId: '',
     description: '',
     videofile: ''
   }
@@ -52,6 +55,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
+    channelId: VIDEO_CHANNEL.MESSAGES,
     description: VIDEO_DESCRIPTION.MESSAGES,
     videofile: VIDEO_FILE.MESSAGES
   }
@@ -60,6 +64,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,
+    private authService: AuthService,
     private serverService: ServerService,
     private videoService: VideoService
   ) {
@@ -77,6 +82,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       category: [ '', VIDEO_CATEGORY.VALIDATORS ],
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
+      channelId: [ this.userVideoChannels[0].id, VIDEO_CHANNEL.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
       videofile: [ '', VIDEO_FILE.VALIDATORS ],
       tags: [ '' ]
@@ -89,6 +95,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.videoCategories = this.serverService.getVideoCategories()
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
+
+    const user = this.authService.getUser()
+    this.userVideoChannels = user.videoChannels.map(v => ({ id: v.id, label: v.name }))
 
     this.buildForm()
   }
@@ -122,6 +131,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     const category = formValue.category
     const licence = formValue.licence
     const language = formValue.language
+    const channelId = formValue.channelId
     const description = formValue.description
     const tags = formValue.tags
     const videofile = this.videofileInput.nativeElement.files[0]
@@ -131,6 +141,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     formData.append('category', '' + category)
     formData.append('nsfw', '' + nsfw)
     formData.append('licence', '' + licence)
+    formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
 
     // Language is optional

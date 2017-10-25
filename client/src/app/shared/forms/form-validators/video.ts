@@ -28,6 +28,13 @@ export const VIDEO_LANGUAGE = {
   MESSAGES: {}
 }
 
+export const VIDEO_CHANNEL = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    'required': 'Video channel is required.'
+  }
+}
+
 export const VIDEO_DESCRIPTION = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(250) ],
   MESSAGES: {

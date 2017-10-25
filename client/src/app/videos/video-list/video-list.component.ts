@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs/Subscription'
 import { BehaviorSubject } from 'rxjs/BehaviorSubject'
@@ -11,7 +11,6 @@ import {
   VideoService,
   VideoPagination
 } from '../shared'
-import { AuthService, AuthUser } from '../../core'
 import { Search, SearchField, SearchService } from '../../shared'
 
 @Component({
@@ -27,7 +26,6 @@ export class VideoListComponent implements OnInit, OnDestroy {
     totalItems: null
   }
   sort: SortField
-  user: AuthUser = null
   videos: Video[] = []
 
   private search: Search
@@ -36,8 +34,6 @@ export class VideoListComponent implements OnInit, OnDestroy {
 
   constructor (
     private notificationsService: NotificationsService,
-    private authService: AuthService,
-    private changeDetector: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
     private videoService: VideoService,
@@ -45,10 +41,6 @@ export class VideoListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit () {
-    if (this.authService.isLoggedIn()) {
-      this.user = AuthUser.load()
-    }
-
     // Subscribe to route changes
     this.subActivatedRoute = this.route.params.subscribe(routeParams => {
       this.loadRouteParams(routeParams)

@@ -1,6 +1,6 @@
 // Do not use the barrel (dependency loop)
 import { UserRole } from '../../../../../shared/models/users/user-role.type'
-import { User } from '../../shared/users/user.model'
+import { User, UserConstructorHash } from '../../shared/users/user.model'
 
 export type TokenOptions = {
   accessToken: string
@@ -100,13 +100,7 @@ export class AuthUser extends User {
     Tokens.flush()
   }
 
-  constructor (userHash: {
-    id: number,
-    username: string,
-    role: UserRole,
-    email: string,
-    displayNSFW: boolean
-  }, hashTokens: TokenOptions) {
+  constructor (userHash: UserConstructorHash, hashTokens: TokenOptions) {
     super(userHash)
     this.tokens = new Tokens(hashTokens)
   }
