@@ -1,5 +1,4 @@
 import * as express from 'express'
-import * as Promise from 'bluebird'
 import * as multer from 'multer'
 import { extname, join } from 'path'
 
@@ -30,7 +29,8 @@ import {
   videosSearchValidator,
   videosAddValidator,
   videosGetValidator,
-  videosRemoveValidator
+  videosRemoveValidator,
+  asyncMiddleware
 } from '../../../middlewares'
 import {
   logger,
@@ -38,7 +38,8 @@ import {
   generateRandomString,
   getFormattedObjects,
   renamePromise,
-  getVideoFileHeight
+  getVideoFileHeight,
+  resetSequelizeInstance
 } from '../../../helpers'
 import { TagInstance, VideoInstance } from '../../../models'
 import { VideoCreate, VideoUpdate } from '../../../../shared'
@@ -88,18 +89,18 @@ videosRouter.get('/',
   videosSortValidator,
   setVideosSort,
   setPagination,
-  listVideos
+  asyncMiddleware(listVideos)
 )
 videosRouter.put('/:id',
   authenticate,
   videosUpdateValidator,
-  updateVideoRetryWrapper
+  asyncMiddleware(updateVideoRetryWrapper)
 )
 videosRouter.post('/upload',
   authenticate,
   reqFiles,
   videosAddValidator,
-  addVideoRetryWrapper
+  asyncMiddleware(addVideoRetryWrapper)
 )
 videosRouter.get('/:id',
   videosGetValidator,
@@ -109,7 +110,7 @@ videosRouter.get('/:id',
 videosRouter.delete('/:id',
   authenticate,
   videosRemoveValidator,
-  removeVideoRetryWrapper
+  asyncMiddleware(removeVideoRetryWrapper)
 )
 
 videosRouter.get('/search/:value',
@@ -119,7 +120,7 @@ videosRouter.get('/search/:value',
   setVideosSort,
   setPagination,
   setVideosSearch,
-  searchVideos
+  asyncMiddleware(searchVideos)
 )
 
 // ---------------------------------------------------------------------------
@@ -144,220 +145,157 @@ function listVideoLanguages (req: express.Request, res: express.Response) {
 
 // Wrapper to video add that retry the function if there is a database error
 // We need this because we run the transaction in SERIALIZABLE isolation that can fail
-function addVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function addVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res, req.files['videofile'][0] ],
     errorMessage: 'Cannot insert the video with many retries.'
   }
 
-  retryTransactionWrapper(addVideo, options)
-    .then(() => {
-      // TODO : include Location of the new video -> 201
-      res.type('json').status(204).end()
-    })
-    .catch(err => next(err))
+  await retryTransactionWrapper(addVideo, options)
+
+  // TODO : include Location of the new video -> 201
+  res.type('json').status(204).end()
 }
 
-function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
+async function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
   const videoInfo: VideoCreate = req.body
   let videoUUID = ''
 
-  return db.sequelize.transaction(t => {
-    let p: Promise<TagInstance[]>
+  await db.sequelize.transaction(async t => {
+    const sequelizeOptions = { transaction: t }
 
-    if (!videoInfo.tags) p = Promise.resolve(undefined)
-    else p = db.Tag.findOrCreateTags(videoInfo.tags, t)
+    const videoData = {
+      name: videoInfo.name,
+      remote: false,
+      extname: extname(videoPhysicalFile.filename),
+      category: videoInfo.category,
+      licence: videoInfo.licence,
+      language: videoInfo.language,
+      nsfw: videoInfo.nsfw,
+      description: videoInfo.description,
+      duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
+      channelId: res.locals.videoChannel.id
+    }
+    const video = db.Video.build(videoData)
 
-    return p
-      .then(tagInstances => {
-        const videoData = {
-          name: videoInfo.name,
-          remote: false,
-          extname: extname(videoPhysicalFile.filename),
-          category: videoInfo.category,
-          licence: videoInfo.licence,
-          language: videoInfo.language,
-          nsfw: videoInfo.nsfw,
-          description: videoInfo.description,
-          duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
-          channelId: res.locals.videoChannel.id
-        }
+    const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
+    const videoFileHeight = await getVideoFileHeight(videoFilePath)
 
-        const video = db.Video.build(videoData)
-        return { tagInstances, video }
-      })
-      .then(({ tagInstances, video }) => {
-        const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
-        return getVideoFileHeight(videoFilePath)
-          .then(height => ({ tagInstances, video, videoFileHeight: height }))
-      })
-      .then(({ tagInstances, video, videoFileHeight }) => {
-        const videoFileData = {
-          extname: extname(videoPhysicalFile.filename),
-          resolution: videoFileHeight,
-          size: videoPhysicalFile.size
-        }
+    const videoFileData = {
+      extname: extname(videoPhysicalFile.filename),
+      resolution: videoFileHeight,
+      size: videoPhysicalFile.size
+    }
+    const videoFile = db.VideoFile.build(videoFileData)
+    const videoDir = CONFIG.STORAGE.VIDEOS_DIR
+    const source = join(videoDir, videoPhysicalFile.filename)
+    const destination = join(videoDir, video.getVideoFilename(videoFile))
 
-        const videoFile = db.VideoFile.build(videoFileData)
-        return { tagInstances, video, videoFile }
-      })
-      .then(({ tagInstances, video, videoFile }) => {
-        const videoDir = CONFIG.STORAGE.VIDEOS_DIR
-        const source = join(videoDir, videoPhysicalFile.filename)
-        const destination = join(videoDir, video.getVideoFilename(videoFile))
+    await renamePromise(source, destination)
+    // This is important in case if there is another attempt in the retry process
+    videoPhysicalFile.filename = video.getVideoFilename(videoFile)
 
-        return renamePromise(source, destination)
-          .then(() => {
-            // This is important in case if there is another attempt in the retry process
-            videoPhysicalFile.filename = video.getVideoFilename(videoFile)
-            return { tagInstances, video, videoFile }
-          })
-      })
-      .then(({ tagInstances, video, videoFile }) => {
-        const tasks = []
+    const tasks = []
 
-        tasks.push(
-          video.createTorrentAndSetInfoHash(videoFile),
-          video.createThumbnail(videoFile),
-          video.createPreview(videoFile)
-        )
+    tasks.push(
+      video.createTorrentAndSetInfoHash(videoFile),
+      video.createThumbnail(videoFile),
+      video.createPreview(videoFile)
+    )
 
-        if (CONFIG.TRANSCODING.ENABLED === true) {
-          // Put uuid because we don't have id auto incremented for now
-          const dataInput = {
-            videoUUID: video.uuid
-          }
+    if (CONFIG.TRANSCODING.ENABLED === true) {
+      // Put uuid because we don't have id auto incremented for now
+      const dataInput = {
+        videoUUID: video.uuid
+      }
 
-          tasks.push(
-            JobScheduler.Instance.createJob(t, 'videoFileOptimizer', dataInput)
-          )
-        }
+      tasks.push(
+        JobScheduler.Instance.createJob(t, 'videoFileOptimizer', dataInput)
+      )
+    }
+    await Promise.all(tasks)
 
-        return Promise.all(tasks).then(() => ({ tagInstances, video, videoFile }))
-      })
-      .then(({ tagInstances, video, videoFile }) => {
-        const options = { transaction: t }
+    const videoCreated = await video.save(sequelizeOptions)
+    // Do not forget to add video channel information to the created video
+    videoCreated.VideoChannel = res.locals.videoChannel
+    videoUUID = videoCreated.uuid
 
-        return video.save(options)
-          .then(videoCreated => {
-            // Do not forget to add video channel information to the created video
-            videoCreated.VideoChannel = res.locals.videoChannel
-            videoUUID = videoCreated.uuid
+    videoFile.videoId = video.id
 
-            return { tagInstances, video: videoCreated, videoFile }
-          })
-      })
-      .then(({ tagInstances, video, videoFile }) => {
-        const options = { transaction: t }
-        videoFile.videoId = video.id
+    await videoFile.save(sequelizeOptions)
+    video.VideoFiles = [videoFile]
 
-        return videoFile.save(options)
-          .then(() => video.VideoFiles = [ videoFile ])
-          .then(() => ({ tagInstances, video }))
-      })
-      .then(({ tagInstances, video }) => {
-        if (!tagInstances) return video
+    if (videoInfo.tags) {
+      const tagInstances = await db.Tag.findOrCreateTags(videoInfo.tags, t)
 
-        const options = { transaction: t }
-        return video.setTags(tagInstances, options)
-          .then(() => {
-            video.Tags = tagInstances
-            return video
-          })
-      })
-      .then(video => {
-        // Let transcoding job send the video to friends because the video file extension might change
-        if (CONFIG.TRANSCODING.ENABLED === true) return undefined
+      await video.setTags(tagInstances, sequelizeOptions)
+      video.Tags = tagInstances
+    }
 
-        return video.toAddRemoteJSON()
-          .then(remoteVideo => {
-            // Now we'll add the video's meta data to our friends
-            return addVideoToFriends(remoteVideo, t)
-          })
-      })
+    // Let transcoding job send the video to friends because the video file extension might change
+    if (CONFIG.TRANSCODING.ENABLED === true) return undefined
+
+    const remoteVideo = await video.toAddRemoteJSON()
+    // Now we'll add the video's meta data to our friends
+    return addVideoToFriends(remoteVideo, t)
   })
-  .then(() => logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoUUID))
-  .catch((err: Error) => {
-    logger.debug('Cannot insert the video.', err)
-    throw err
-  })
+
+  logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoUUID)
 }
 
-function updateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
     errorMessage: 'Cannot update the video with many retries.'
   }
 
-  retryTransactionWrapper(updateVideo, options)
-    .then(() => {
-      return res.type('json').status(204).end()
-    })
-    .catch(err => next(err))
+  await retryTransactionWrapper(updateVideo, options)
+
+  return res.type('json').status(204).end()
 }
 
-function updateVideo (req: express.Request, res: express.Response) {
+async function updateVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
   const videoInfoToUpdate: VideoUpdate = req.body
 
-  return db.sequelize.transaction(t => {
-    let tagsPromise: Promise<TagInstance[]>
-    if (!videoInfoToUpdate.tags) {
-      tagsPromise = Promise.resolve(null)
-    } else {
-      tagsPromise = db.Tag.findOrCreateTags(videoInfoToUpdate.tags, t)
-    }
+  try {
+    await db.sequelize.transaction(async t => {
+      const sequelizeOptions = {
+        transaction: t
+      }
 
-    return tagsPromise
-      .then(tagInstances => {
-        const options = {
-          transaction: t
-        }
+      if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
+      if (videoInfoToUpdate.category !== undefined) videoInstance.set('category', videoInfoToUpdate.category)
+      if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
+      if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
+      if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
+      if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
 
-        if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
-        if (videoInfoToUpdate.category !== undefined) videoInstance.set('category', videoInfoToUpdate.category)
-        if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
-        if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
-        if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
-        if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
+      await videoInstance.save(sequelizeOptions)
 
-        return videoInstance.save(options).then(() => tagInstances)
-      })
-      .then(tagInstances => {
-        if (!tagInstances) return
+      if (videoInfoToUpdate.tags) {
+        const tagInstances = await db.Tag.findOrCreateTags(videoInfoToUpdate.tags, t)
 
-        const options = { transaction: t }
-        return videoInstance.setTags(tagInstances, options)
-          .then(() => {
-            videoInstance.Tags = tagInstances
+        await videoInstance.setTags(tagInstances, sequelizeOptions)
+        videoInstance.Tags = tagInstances
+      }
 
-            return
-          })
-      })
-      .then(() => {
-        const json = videoInstance.toUpdateRemoteJSON()
+      const json = videoInstance.toUpdateRemoteJSON()
 
-        // Now we'll update the video's meta data to our friends
-        return updateVideoToFriends(json, t)
-      })
-  })
-  .then(() => {
+      // Now we'll update the video's meta data to our friends
+      return updateVideoToFriends(json, t)
+    })
+
     logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)
-  })
-  .catch(err => {
-    logger.debug('Cannot update the video.', err)
-
+  } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
     // So it will skip the SQL request, even if the last one was ROLLBACKed!
-    Object.keys(videoFieldsSave).forEach(key => {
-      const value = videoFieldsSave[key]
-      videoInstance.set(key, value)
-    })
+    resetSequelizeInstance(videoInstance, videoFieldsSave)
 
     throw err
-  })
+  }
 }
 
 function getVideo (req: express.Request, res: express.Response) {
@@ -365,17 +303,17 @@ function getVideo (req: express.Request, res: express.Response) {
 
   if (videoInstance.isOwned()) {
     // The increment is done directly in the database, not using the instance value
+    // FIXME: make a real view system
+    // For example, only add a view when a user watch a video during 30s etc
     videoInstance.increment('views')
       .then(() => {
-        // FIXME: make a real view system
-        // For example, only add a view when a user watch a video during 30s etc
         const qaduParams = {
           videoId: videoInstance.id,
           type: REQUEST_VIDEO_QADU_TYPES.VIEWS
         }
         return quickAndDirtyUpdateVideoToFriends(qaduParams)
       })
-      .catch(err => logger.error('Cannot add view to video %d.', videoInstance.id, err))
+      .catch(err => logger.error('Cannot add view to video %s.', videoInstance.uuid, err))
   } else {
     // Just send the event to our friends
     const eventParams = {
@@ -383,48 +321,48 @@ function getVideo (req: express.Request, res: express.Response) {
       type: REQUEST_VIDEO_EVENT_TYPES.VIEWS
     }
     addEventToRemoteVideo(eventParams)
+      .catch(err => logger.error('Cannot add event to remote video %s.', videoInstance.uuid, err))
   }
 
   // Do not wait the view system
-  res.json(videoInstance.toFormattedDetailsJSON())
+  return res.json(videoInstance.toFormattedDetailsJSON())
 }
 
-function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.Video.listForApi(req.query.start, req.query.count, req.query.sort)
-    .then(result => res.json(getFormattedObjects(result.data, result.total)))
-    .catch(err => next(err))
+async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await db.Video.listForApi(req.query.start, req.query.count, req.query.sort)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-function removeVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function removeVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
     errorMessage: 'Cannot remove the video with many retries.'
   }
 
-  retryTransactionWrapper(removeVideo, options)
-    .then(() => {
-      return res.type('json').status(204).end()
-    })
-    .catch(err => next(err))
+  await retryTransactionWrapper(removeVideo, options)
+
+  return res.type('json').status(204).end()
 }
 
-function removeVideo (req: express.Request, res: express.Response) {
+async function removeVideo (req: express.Request, res: express.Response) {
   const videoInstance: VideoInstance = res.locals.video
 
-  return db.sequelize.transaction(t => {
-    return videoInstance.destroy({ transaction: t })
+  await db.sequelize.transaction(async t => {
+    await videoInstance.destroy({ transaction: t })
   })
-  .then(() => {
-    logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
-  })
-  .catch(err => {
-    logger.error('Errors when removed the video.', err)
-    throw err
-  })
+
+  logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
 }
 
-function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.Video.searchAndPopulateAuthorAndPodAndTags(req.params.value, req.query.field, req.query.start, req.query.count, req.query.sort)
-    .then(result => res.json(getFormattedObjects(result.data, result.total)))
-    .catch(err => next(err))
+async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await db.Video.searchAndPopulateAuthorAndPodAndTags(
+    req.params.value,
+    req.query.field,
+    req.query.start,
+    req.query.count,
+    req.query.sort
+  )
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

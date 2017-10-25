@@ -1,5 +1,5 @@
 import * as express from 'express'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 
 import {
   AbstractRequestScheduler,
@@ -7,7 +7,7 @@ import {
   getRequestVideoQaduScheduler,
   getRequestVideoEventScheduler
 } from '../../lib'
-import { authenticate, ensureIsAdmin } from '../../middlewares'
+import { authenticate, ensureIsAdmin, asyncMiddleware } from '../../middlewares'
 import { RequestSchedulerStatsAttributes } from '../../../shared'
 
 const requestSchedulerRouter = express.Router()
@@ -15,7 +15,7 @@ const requestSchedulerRouter = express.Router()
 requestSchedulerRouter.get('/stats',
   authenticate,
   ensureIsAdmin,
-  getRequestSchedulersStats
+  asyncMiddleware(getRequestSchedulersStats)
 )
 
 // ---------------------------------------------------------------------------
@@ -26,28 +26,28 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getRequestSchedulersStats (req: express.Request, res: express.Response, next: express.NextFunction) {
-  Promise.props({
+async function getRequestSchedulersStats (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const result = await Bluebird.props({
     requestScheduler: buildRequestSchedulerStats(getRequestScheduler()),
     requestVideoQaduScheduler: buildRequestSchedulerStats(getRequestVideoQaduScheduler()),
     requestVideoEventScheduler: buildRequestSchedulerStats(getRequestVideoEventScheduler())
   })
-  .then(result => res.json(result))
-  .catch(err => next(err))
+
+  return res.json(result)
 }
 
 // ---------------------------------------------------------------------------
 
-function buildRequestSchedulerStats (requestScheduler: AbstractRequestScheduler<any>) {
-  return requestScheduler.remainingRequestsCount().then(count => {
-    const result: RequestSchedulerStatsAttributes = {
-      totalRequests: count,
-      requestsLimitPods: requestScheduler.limitPods,
-      requestsLimitPerPod: requestScheduler.limitPerPod,
-      remainingMilliSeconds: requestScheduler.remainingMilliSeconds(),
-      milliSecondsInterval: requestScheduler.requestInterval
-    }
+async function buildRequestSchedulerStats (requestScheduler: AbstractRequestScheduler<any>) {
+  const count = await requestScheduler.remainingRequestsCount()
 
-    return result
-  })
+  const result: RequestSchedulerStatsAttributes = {
+    totalRequests: count,
+    requestsLimitPods: requestScheduler.limitPods,
+    requestsLimitPerPod: requestScheduler.limitPerPod,
+    remainingMilliSeconds: requestScheduler.remainingMilliSeconds(),
+    milliSecondsInterval: requestScheduler.requestInterval
+  }
+
+  return result
 }

@@ -2,12 +2,11 @@ import * as Sequelize from 'sequelize'
 
 import { addVideoChannelToFriends } from './friends'
 import { database as db } from '../initializers'
+import { logger } from '../helpers'
 import { AuthorInstance } from '../models'
 import { VideoChannelCreate } from '../../shared/models'
 
-function createVideoChannel (videoChannelInfo: VideoChannelCreate, author: AuthorInstance, t: Sequelize.Transaction) {
-  let videoChannelUUID = ''
-
+async function createVideoChannel (videoChannelInfo: VideoChannelCreate, author: AuthorInstance, t: Sequelize.Transaction) {
   const videoChannelData = {
     name: videoChannelInfo.name,
     description: videoChannelInfo.description,
@@ -18,25 +17,34 @@ function createVideoChannel (videoChannelInfo: VideoChannelCreate, author: Autho
   const videoChannel = db.VideoChannel.build(videoChannelData)
   const options = { transaction: t }
 
-  return videoChannel.save(options)
-    .then(videoChannelCreated => {
-      // Do not forget to add Author information to the created video channel
-      videoChannelCreated.Author = author
-      videoChannelUUID = videoChannelCreated.uuid
+  const videoChannelCreated = await videoChannel.save(options)
 
-      return videoChannelCreated
-    })
-    .then(videoChannel => {
-      const remoteVideoChannel = videoChannel.toAddRemoteJSON()
+  // Do not forget to add Author information to the created video channel
+  videoChannelCreated.Author = author
 
-      // Now we'll add the video channel's meta data to our friends
-      return addVideoChannelToFriends(remoteVideoChannel, t)
-    })
-    .then(() => videoChannelUUID) // Return video channel UUID
+  const remoteVideoChannel = videoChannelCreated.toAddRemoteJSON()
+
+  // Now we'll add the video channel's meta data to our friends
+  await addVideoChannelToFriends(remoteVideoChannel, t)
+
+  return videoChannelCreated
+}
+
+async function fetchVideoChannelByHostAndUUID (podHost: string, uuid: string, t: Sequelize.Transaction) {
+  try {
+    const videoChannel = await db.VideoChannel.loadByHostAndUUID(podHost, uuid, t)
+    if (!videoChannel) throw new Error('Video channel not found')
+
+    return videoChannel
+  } catch (err) {
+    logger.error('Cannot load video channel from host and uuid.', { error: err.stack, podHost, uuid })
+    throw err
+  }
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  createVideoChannel
+  createVideoChannel,
+  fetchVideoChannelByHostAndUUID
 }

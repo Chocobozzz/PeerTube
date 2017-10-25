@@ -10,7 +10,8 @@ import {
   paginationValidator,
   blacklistSortValidator,
   setBlacklistSort,
-  setPagination
+  setPagination,
+  asyncMiddleware
 } from '../../../middlewares'
 import { BlacklistedVideoInstance } from '../../../models'
 import { BlacklistedVideo } from '../../../../shared'
@@ -21,7 +22,7 @@ blacklistRouter.post('/:videoId/blacklist',
   authenticate,
   ensureIsAdmin,
   videosBlacklistAddValidator,
-  addVideoToBlacklist
+  asyncMiddleware(addVideoToBlacklist)
 )
 
 blacklistRouter.get('/blacklist',
@@ -31,14 +32,14 @@ blacklistRouter.get('/blacklist',
   blacklistSortValidator,
   setBlacklistSort,
   setPagination,
-  listBlacklist
+  asyncMiddleware(listBlacklist)
 )
 
 blacklistRouter.delete('/:videoId/blacklist',
   authenticate,
   ensureIsAdmin,
   videosBlacklistRemoveValidator,
-  removeVideoFromBlacklistController
+  asyncMiddleware(removeVideoFromBlacklistController)
 )
 
 // ---------------------------------------------------------------------------
@@ -49,37 +50,34 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addVideoToBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function addVideoToBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoInstance = res.locals.video
 
   const toCreate = {
     videoId: videoInstance.id
   }
 
-  db.BlacklistedVideo.create(toCreate)
-    .then(() => res.type('json').status(204).end())
-    .catch(err => {
-      logger.error('Errors when blacklisting video ', err)
-      return next(err)
-    })
+  await db.BlacklistedVideo.create(toCreate)
+  return res.type('json').status(204).end()
 }
 
-function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.BlacklistedVideo.listForApi(req.query.start, req.query.count, req.query.sort)
-    .then(resultList => res.json(getFormattedObjects<BlacklistedVideo, BlacklistedVideoInstance>(resultList.data, resultList.total)))
-    .catch(err => next(err))
+async function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await db.BlacklistedVideo.listForApi(req.query.start, req.query.count, req.query.sort)
+
+  return res.json(getFormattedObjects<BlacklistedVideo, BlacklistedVideoInstance>(resultList.data, resultList.total))
 }
 
-function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const blacklistedVideo = res.locals.blacklistedVideo as BlacklistedVideoInstance
 
-  blacklistedVideo.destroy()
-    .then(() => {
-      logger.info('Video %s removed from blacklist.', res.locals.video.uuid)
-      res.sendStatus(204)
-    })
-    .catch(err => {
-      logger.error('Some error while removing video %s from blacklist.', res.locals.video.uuid, err)
-      next(err)
-    })
+  try {
+    await blacklistedVideo.destroy()
+
+    logger.info('Video %s removed from blacklist.', res.locals.video.uuid)
+
+    return res.sendStatus(204)
+  } catch (err) {
+    logger.error('Some error while removing video %s from blacklist.', res.locals.video.uuid, err)
+    throw err
+  }
 }

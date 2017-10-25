@@ -18,7 +18,8 @@ import {
   setPagination,
   usersSortValidator,
   setUsersSort,
-  token
+  token,
+  asyncMiddleware
 } from '../../middlewares'
 import {
   UserVideoRate as FormattedUserVideoRate,
@@ -33,13 +34,13 @@ const usersRouter = express.Router()
 
 usersRouter.get('/me',
   authenticate,
-  getUserInformation
+  asyncMiddleware(getUserInformation)
 )
 
 usersRouter.get('/me/videos/:videoId/rating',
   authenticate,
   usersVideoRatingValidator,
-  getUserVideoRating
+  asyncMiddleware(getUserVideoRating)
 )
 
 usersRouter.get('/',
@@ -47,7 +48,7 @@ usersRouter.get('/',
   usersSortValidator,
   setUsersSort,
   setPagination,
-  listUsers
+  asyncMiddleware(listUsers)
 )
 
 usersRouter.get('/:id',
@@ -65,27 +66,27 @@ usersRouter.post('/',
 usersRouter.post('/register',
   ensureUserRegistrationAllowed,
   usersRegisterValidator,
-  registerUser
+  asyncMiddleware(registerUser)
 )
 
 usersRouter.put('/me',
   authenticate,
   usersUpdateMeValidator,
-  updateMe
+  asyncMiddleware(updateMe)
 )
 
 usersRouter.put('/:id',
   authenticate,
   ensureIsAdmin,
   usersUpdateValidator,
-  updateUser
+  asyncMiddleware(updateUser)
 )
 
 usersRouter.delete('/:id',
   authenticate,
   ensureIsAdmin,
   usersRemoveValidator,
-  removeUser
+  asyncMiddleware(removeUser)
 )
 
 usersRouter.post('/token', token, success)
@@ -99,21 +100,19 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function createUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function createUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
     errorMessage: 'Cannot insert the user with many retries.'
   }
 
-  retryTransactionWrapper(createUser, options)
-    .then(() => {
-      // TODO : include Location of the new user -> 201
-      res.type('json').status(204).end()
-    })
-    .catch(err => next(err))
+  await retryTransactionWrapper(createUser, options)
+
+  // TODO : include Location of the new user -> 201
+  return res.type('json').status(204).end()
 }
 
-function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserCreate = req.body
   const user = db.User.build({
     username: body.username,
@@ -124,15 +123,12 @@ function createUser (req: express.Request, res: express.Response, next: express.
     videoQuota: body.videoQuota
   })
 
-  return createUserAuthorAndChannel(user)
-    .then(() => logger.info('User %s with its channel and author created.', body.username))
-    .catch((err: Error) => {
-      logger.debug('Cannot insert the user.', err)
-      throw err
-    })
+  await createUserAuthorAndChannel(user)
+
+  logger.info('User %s with its channel and author created.', body.username)
 }
 
-function registerUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function registerUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserCreate = req.body
 
   const user = db.User.build({
@@ -144,22 +140,21 @@ function registerUser (req: express.Request, res: express.Response, next: expres
     videoQuota: CONFIG.USER.VIDEO_QUOTA
   })
 
-  return createUserAuthorAndChannel(user)
-    .then(() => res.type('json').status(204).end())
-    .catch(err => next(err))
+  await createUserAuthorAndChannel(user)
+  return res.type('json').status(204).end()
 }
 
-function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.User.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
-    .then(user => res.json(user.toFormattedJSON()))
-    .catch(err => next(err))
+async function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = await db.User.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
+
+  return res.json(user.toFormattedJSON())
 }
 
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.json(res.locals.user.toFormattedJSON())
 }
 
-function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoId = +req.params.videoId
   const userId = +res.locals.oauth.token.User.id
 
@@ -175,50 +170,45 @@ function getUserVideoRating (req: express.Request, res: express.Response, next: 
     .catch(err => next(err))
 }
 
-function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.User.listForApi(req.query.start, req.query.count, req.query.sort)
-    .then(resultList => {
-      res.json(getFormattedObjects(resultList.data, resultList.total))
-    })
-    .catch(err => next(err))
+async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await db.User.listForApi(req.query.start, req.query.count, req.query.sort)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.User.loadById(req.params.id)
-    .then(user => user.destroy())
-    .then(() => res.sendStatus(204))
-    .catch(err => {
-      logger.error('Errors when removed the user.', err)
-      return next(err)
-    })
+async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = await db.User.loadById(req.params.id)
+
+  await user.destroy()
+
+  return res.sendStatus(204)
 }
 
-function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdateMe = req.body
 
   // FIXME: user is not already a Sequelize instance?
-  db.User.loadByUsername(res.locals.oauth.token.user.username)
-    .then(user => {
-      if (body.password !== undefined) user.password = body.password
-      if (body.email !== undefined) user.email = body.email
-      if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
+  const user = res.locals.oauth.token.user
 
-      return user.save()
-    })
-    .then(() => res.sendStatus(204))
-    .catch(err => next(err))
+  if (body.password !== undefined) user.password = body.password
+  if (body.email !== undefined) user.email = body.email
+  if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
+
+  await user.save()
+
+  return await res.sendStatus(204)
 }
 
-function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdate = req.body
   const user: UserInstance = res.locals.user
 
   if (body.email !== undefined) user.email = body.email
   if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota
 
-  return user.save()
-    .then(() => res.sendStatus(204))
-    .catch(err => next(err))
+  await user.save()
+
+  return res.sendStatus(204)
 }
 
 function success (req: express.Request, res: express.Response, next: express.NextFunction) {

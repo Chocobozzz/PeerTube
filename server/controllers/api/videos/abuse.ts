@@ -14,7 +14,8 @@ import {
   videoAbuseReportValidator,
   videoAbusesSortValidator,
   setVideoAbusesSort,
-  setPagination
+  setPagination,
+  asyncMiddleware
 } from '../../../middlewares'
 import { VideoInstance } from '../../../models'
 import { VideoAbuseCreate } from '../../../../shared'
@@ -28,12 +29,12 @@ abuseVideoRouter.get('/abuse',
   videoAbusesSortValidator,
   setVideoAbusesSort,
   setPagination,
-  listVideoAbuses
+  asyncMiddleware(listVideoAbuses)
 )
 abuseVideoRouter.post('/:id/abuse',
   authenticate,
   videoAbuseReportValidator,
-  reportVideoAbuseRetryWrapper
+  asyncMiddleware(reportVideoAbuseRetryWrapper)
 )
 
 // ---------------------------------------------------------------------------
@@ -44,55 +45,48 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function listVideoAbuses (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort)
-    .then(result => res.json(getFormattedObjects(result.data, result.total)))
-    .catch(err => next(err))
+async function listVideoAbuses (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function reportVideoAbuseRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
     errorMessage: 'Cannot report abuse to the video with many retries.'
   }
 
-  retryTransactionWrapper(reportVideoAbuse, options)
-    .then(() => res.type('json').status(204).end())
-    .catch(err => next(err))
+  await retryTransactionWrapper(reportVideoAbuse, options)
+
+  return res.type('json').status(204).end()
 }
 
-function reportVideoAbuse (req: express.Request, res: express.Response) {
+async function reportVideoAbuse (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video as VideoInstance
   const reporterUsername = res.locals.oauth.token.User.username
   const body: VideoAbuseCreate = req.body
 
-  const abuse = {
+  const abuseToCreate = {
     reporterUsername,
     reason: body.reason,
     videoId: videoInstance.id,
     reporterPodId: null // This is our pod that reported this abuse
   }
 
-  return db.sequelize.transaction(t => {
-    return db.VideoAbuse.create(abuse, { transaction: t })
-      .then(abuse => {
-        // We send the information to the destination pod
-        if (videoInstance.isOwned() === false) {
-          const reportData = {
-            reporterUsername,
-            reportReason: abuse.reason,
-            videoUUID: videoInstance.uuid
-          }
+  await db.sequelize.transaction(async t => {
+    const abuse = await db.VideoAbuse.create(abuseToCreate, { transaction: t })
+    // We send the information to the destination pod
+    if (videoInstance.isOwned() === false) {
+      const reportData = {
+        reporterUsername,
+        reportReason: abuse.reason,
+        videoUUID: videoInstance.uuid
+      }
 
-          return friends.reportAbuseVideoToFriend(reportData, videoInstance, t).then(() => videoInstance)
-        }
+      await friends.reportAbuseVideoToFriend(reportData, videoInstance, t)
+    }
+  })
 
-        return videoInstance
-      })
-  })
-  .then((videoInstance: VideoInstance) => logger.info('Abuse report for video %s created.', videoInstance.name))
-  .catch(err => {
-    logger.debug('Cannot update the video.', err)
-    throw err
-  })
+  logger.info('Abuse report for video %s created.', videoInstance.name)
 }

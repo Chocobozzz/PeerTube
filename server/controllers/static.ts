@@ -7,6 +7,7 @@ import {
   STATIC_PATHS
 } from '../initializers'
 import { VideosPreviewCache } from '../lib'
+import { asyncMiddleware } from '../middlewares'
 
 const staticRouter = express.Router()
 
@@ -39,7 +40,7 @@ staticRouter.use(
 // Video previews path for express
 staticRouter.use(
   STATIC_PATHS.PREVIEWS + ':uuid.jpg',
-  getPreview
+  asyncMiddleware(getPreview)
 )
 
 // ---------------------------------------------------------------------------
@@ -50,11 +51,9 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getPreview (req: express.Request, res: express.Response, next: express.NextFunction) {
-  VideosPreviewCache.Instance.getPreviewPath(req.params.uuid)
-    .then(path => {
-      if (!path) return res.sendStatus(404)
+async function getPreview (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const path = await VideosPreviewCache.Instance.getPreviewPath(req.params.uuid)
+  if (!path) return res.sendStatus(404)
 
-      return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
-    })
+  return res.sendFile(path, { maxAge: STATIC_MAX_AGE })
 }

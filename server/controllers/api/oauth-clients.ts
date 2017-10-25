@@ -2,15 +2,18 @@ import * as express from 'express'
 
 import { CONFIG } from '../../initializers'
 import { logger } from '../../helpers'
+import { asyncMiddleware } from '../../middlewares'
 import { database as db } from '../../initializers/database'
 import { OAuthClientLocal } from '../../../shared'
 
 const oauthClientsRouter = express.Router()
 
-oauthClientsRouter.get('/local', getLocalClient)
+oauthClientsRouter.get('/local',
+  asyncMiddleware(getLocalClient)
+)
 
 // Get the client credentials for the PeerTube front end
-function getLocalClient (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getLocalClient (req: express.Request, res: express.Response, next: express.NextFunction) {
   const serverHostname = CONFIG.WEBSERVER.HOSTNAME
   const serverPort = CONFIG.WEBSERVER.PORT
   let headerHostShouldBe = serverHostname
@@ -24,17 +27,14 @@ function getLocalClient (req: express.Request, res: express.Response, next: expr
     return res.type('json').status(403).end()
   }
 
-  db.OAuthClient.loadFirstClient()
-    .then(client => {
-      if (!client) throw new Error('No client available.')
+  const client = await db.OAuthClient.loadFirstClient()
+  if (!client) throw new Error('No client available.')
 
-      const json: OAuthClientLocal = {
-        client_id: client.clientId,
-        client_secret: client.clientSecret
-      }
-      res.json(json)
-    })
-    .catch(err => next(err))
+  const json: OAuthClientLocal = {
+    client_id: client.clientId,
+    client_secret: client.clientSecret
+  }
+  return res.json(json)
 }
 
 // ---------------------------------------------------------------------------

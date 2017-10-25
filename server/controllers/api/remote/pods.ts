@@ -5,7 +5,8 @@ import {
   checkSignature,
   signatureValidator,
   setBodyHostPort,
-  remotePodsAddValidator
+  remotePodsAddValidator,
+  asyncMiddleware
 } from '../../../middlewares'
 import { sendOwnedDataToPod } from '../../../lib'
 import { getMyPublicCert, getFormattedObjects } from '../../../helpers'
@@ -18,15 +19,17 @@ const remotePodsRouter = express.Router()
 remotePodsRouter.post('/remove',
   signatureValidator,
   checkSignature,
-  removePods
+  asyncMiddleware(removePods)
 )
 
-remotePodsRouter.post('/list', remotePodsList)
+remotePodsRouter.post('/list',
+  asyncMiddleware(remotePodsList)
+)
 
 remotePodsRouter.post('/add',
   setBodyHostPort, // We need to modify the host before running the validator!
   remotePodsAddValidator,
-  addPods
+  asyncMiddleware(addPods)
 )
 
 // ---------------------------------------------------------------------------
@@ -37,35 +40,30 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addPods (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function addPods (req: express.Request, res: express.Response, next: express.NextFunction) {
   const information = req.body
 
   const pod = db.Pod.build(information)
-  pod.save()
-     .then(podCreated => {
-       return sendOwnedDataToPod(podCreated.id)
-     })
-     .then(() => {
-       return getMyPublicCert()
-     })
-     .then(cert => {
-       return res.json({ cert: cert, email: CONFIG.ADMIN.EMAIL })
-     })
-     .catch(err => next(err))
+  const podCreated = await pod.save()
+
+  await sendOwnedDataToPod(podCreated.id)
+
+  const cert = await getMyPublicCert()
+  return res.json({ cert, email: CONFIG.ADMIN.EMAIL })
 }
 
-function remotePodsList (req: express.Request, res: express.Response, next: express.NextFunction) {
-  db.Pod.list()
-    .then(podsList => res.json(getFormattedObjects<FormattedPod, PodInstance>(podsList, podsList.length)))
-    .catch(err => next(err))
+async function remotePodsList (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const pods = await db.Pod.list()
+
+  return res.json(getFormattedObjects<FormattedPod, PodInstance>(pods, pods.length))
 }
 
-function removePods (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function removePods (req: express.Request, res: express.Response, next: express.NextFunction) {
   const signature: PodSignature = req.body.signature
   const host = signature.host
 
-  db.Pod.loadByHost(host)
-    .then(pod => pod.destroy())
-    .then(() => res.type('json').status(204).end())
-    .catch(err => next(err))
+  const pod = await db.Pod.loadByHost(host)
+  await pod.destroy()
+
+  return res.type('json').status(204).end()
 }

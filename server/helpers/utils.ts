@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 import { pseudoRandomBytesPromise } from './core-utils'
@@ -69,6 +70,13 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   return resolutionsEnabled
 }
 
+function resetSequelizeInstance (instance: Sequelize.Instance<any>, savedFields: object) {
+  Object.keys(savedFields).forEach(key => {
+    const value = savedFields[key]
+    instance.set(key, value)
+  })
+}
+
 type SortType = { sortModel: any, sortValue: string }
 
 // ---------------------------------------------------------------------------
@@ -79,5 +87,6 @@ export {
   getFormattedObjects,
   isSignupAllowed,
   computeResolutionsToTranscode,
+  resetSequelizeInstance,
   SortType
 }

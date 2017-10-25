@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { join } from 'path'
 import * as validator from 'validator'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 
 import { database as db } from '../initializers/database'
 import {
@@ -11,6 +11,7 @@ import {
   OPENGRAPH_AND_OEMBED_COMMENT
 } from '../initializers'
 import { root, readFileBufferPromise, escapeHTML } from '../helpers'
+import { asyncMiddleware } from '../middlewares'
 import { VideoInstance } from '../models'
 
 const clientsRouter = express.Router()
@@ -21,7 +22,9 @@ const indexPath = join(distPath, 'index.html')
 
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
-clientsRouter.use('/videos/watch/:id', generateWatchHtmlPage)
+clientsRouter.use('/videos/watch/:id',
+  asyncMiddleware(generateWatchHtmlPage)
+)
 
 clientsRouter.use('/videos/embed', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.sendFile(embedPath)
@@ -90,9 +93,9 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
   return htmlStringPage.replace(OPENGRAPH_AND_OEMBED_COMMENT, tagsString)
 }
 
-function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoId = '' + req.params.id
-  let videoPromise: Promise<VideoInstance>
+  let videoPromise: Bluebird<VideoInstance>
 
   // Let Angular application handle errors
   if (validator.isUUID(videoId, 4)) {
@@ -103,21 +106,19 @@ function generateWatchHtmlPage (req: express.Request, res: express.Response, nex
     return res.sendFile(indexPath)
   }
 
-  Promise.all([
+  let [ file, video ] = await Promise.all([
     readFileBufferPromise(indexPath),
     videoPromise
   ])
-  .then(([ file, video ]) => {
-    file = file as Buffer
-    video = video as VideoInstance
 
-    const html = file.toString()
+  file = file as Buffer
+  video = video as VideoInstance
 
-    // Let Angular application handle errors
-    if (!video) return res.sendFile(indexPath)
+  const html = file.toString()
 
-    const htmlStringPageWithTags = addOpenGraphAndOEmbedTags(html, video)
-    res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
-  })
-  .catch(err => next(err))
+  // Let Angular application handle errors
+  if (!video) return res.sendFile(indexPath)
+
+  const htmlStringPageWithTags = addOpenGraphAndOEmbedTags(html, video)
+  res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
 }

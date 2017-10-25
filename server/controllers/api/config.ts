@@ -2,30 +2,32 @@ import * as express from 'express'
 
 import { isSignupAllowed } from '../../helpers'
 import { CONFIG } from '../../initializers'
+import { asyncMiddleware } from '../../middlewares'
 import { ServerConfig } from '../../../shared'
 
 const configRouter = express.Router()
 
-configRouter.get('/', getConfig)
+configRouter.get('/',
+  asyncMiddleware(getConfig)
+)
 
-function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const allowed = await isSignupAllowed()
 
-  isSignupAllowed().then(allowed => {
-    const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-                                     .filter(key => CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
-                                     .map(r => parseInt(r, 10))
+  const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
+   .filter(key => CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
+   .map(r => parseInt(r, 10))
 
-    const json: ServerConfig = {
-      signup: {
-        allowed
-      },
-      transcoding: {
-        enabledResolutions
-      }
+  const json: ServerConfig = {
+    signup: {
+      allowed
+    },
+    transcoding: {
+      enabledResolutions
     }
+  }
 
-    res.json(json)
-  })
+  return res.json(json)
 }
 
 // ---------------------------------------------------------------------------

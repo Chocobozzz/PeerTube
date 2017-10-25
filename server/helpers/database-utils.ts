@@ -1,6 +1,5 @@
 // TODO: import from ES6 when retry typing file will include errorFilter function
 import * as retry from 'async/retry'
-import * as Promise from 'bluebird'
 
 import { logger } from './logger'
 
