@@ -13,7 +13,7 @@ import { AuthService, ConfirmService } from '../../core'
 import { VideoDownloadComponent } from './video-download.component'
 import { VideoShareComponent } from './video-share.component'
 import { VideoReportComponent } from './video-report.component'
-import { Video, VideoService } from '../shared'
+import { VideoDetails, VideoService } from '../shared'
 import { VideoBlacklistService } from '../../shared'
 import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 
@@ -35,7 +35,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playerElement: HTMLMediaElement
   uploadSpeed: number
   userRating: UserVideoRateType = null
-  video: Video = null
+  video: VideoDetails = null
   videoPlayerLoaded = false
   videoNotFound = false
 
@@ -211,7 +211,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                       )
   }
 
-  private onVideoFetched (video: Video) {
+  private onVideoFetched (video: VideoDetails) {
     this.video = video
 
     let observable

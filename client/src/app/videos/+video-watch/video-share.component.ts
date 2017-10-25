@@ -2,14 +2,14 @@ import { Component, Input, ViewChild } from '@angular/core'
 
 import { ModalDirective } from 'ngx-bootstrap/modal'
 
-import { Video } from '../shared'
+import { VideoDetails } from '../shared'
 
 @Component({
   selector: 'my-video-share',
   templateUrl: './video-share.component.html'
 })
 export class VideoShareComponent {
-  @Input() video: Video = null
+  @Input() video: VideoDetails = null
 
   @ViewChild('modal') modal: ModalDirective
 

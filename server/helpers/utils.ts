@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
 
 import { pseudoRandomBytesPromise } from './core-utils'
 import { CONFIG, database as db } from '../initializers'

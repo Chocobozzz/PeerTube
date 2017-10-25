@@ -12,6 +12,8 @@ import {
   UserService
 } from '../../shared'
 import { Video } from './video.model'
+import { VideoDetails } from './video-details.model'
+import { VideoEdit } from './video-edit.model'
 import { VideoPagination } from './video-pagination.model'
 import {
   UserVideoRate,
@@ -20,6 +22,7 @@ import {
   VideoAbuseCreate,
   UserVideoRateUpdate,
   Video as VideoServerModel,
+  VideoDetails as VideoDetailsServerModel,
   ResultList
 } from '../../../../../shared'
 
@@ -34,12 +37,12 @@ export class VideoService {
   ) {}
 
   getVideo (uuid: string) {
-    return this.authHttp.get<VideoServerModel>(VideoService.BASE_VIDEO_URL + uuid)
-                        .map(videoHash => new Video(videoHash))
+    return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
+                        .map(videoHash => new VideoDetails(videoHash))
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
-  updateVideo (video: Video) {
+  updateVideo (video: VideoEdit) {
     const language = video.language ? video.language : null
 
     const body: VideoUpdate = {

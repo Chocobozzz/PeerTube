@@ -14,7 +14,7 @@ import {
   VIDEO_DESCRIPTION,
   VIDEO_TAGS
 } from '../../shared'
-import { Video, VideoService } from '../shared'
+import { VideoEdit, VideoService } from '../shared'
 
 @Component({
   selector: 'my-videos-update',
@@ -27,7 +27,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   videoCategories = []
   videoLicences = []
   videoLanguages = []
-  video: Video
+  video: VideoEdit
 
   tagValidators = VIDEO_TAGS.VALIDATORS
   tagValidatorsMessages = VIDEO_TAGS.MESSAGES

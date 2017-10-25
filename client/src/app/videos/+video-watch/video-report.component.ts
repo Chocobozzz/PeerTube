@@ -5,14 +5,14 @@ import { ModalDirective } from 'ngx-bootstrap/modal'
 import { NotificationsService } from 'angular2-notifications'
 
 import { FormReactive, VideoAbuseService, VIDEO_ABUSE_REASON } from '../../shared'
-import { Video, VideoService } from '../shared'
+import { VideoDetails, VideoService } from '../shared'
 
 @Component({
   selector: 'my-video-report',
   templateUrl: './video-report.component.html'
 })
 export class VideoReportComponent extends FormReactive implements OnInit {
-  @Input() video: Video = null
+  @Input() video: VideoDetails = null
 
   @ViewChild('modal') modal: ModalDirective
 

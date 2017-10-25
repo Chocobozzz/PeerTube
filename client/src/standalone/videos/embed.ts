@@ -3,9 +3,9 @@ import './embed.scss'
 import videojs from 'video.js'
 import '../../assets/player/peertube-videojs-plugin'
 import 'videojs-dock/dist/videojs-dock.es.js'
-import { Video } from '../../../../shared'
+import { VideoDetails } from '../../../../shared'
 
-function loadVideoInfo (videoId: string, callback: (err: Error, res?: Video) => void) {
+function loadVideoInfo (videoId: string, callback: (err: Error, res?: VideoDetails) => void) {
   const xhttp = new XMLHttpRequest()
   xhttp.onreadystatechange = function () {
     if (this.readyState === 4 && this.status === 200) {

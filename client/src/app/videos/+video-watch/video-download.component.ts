@@ -2,7 +2,7 @@ import { Component, Input, ViewChild } from '@angular/core'
 
 import { ModalDirective } from 'ngx-bootstrap/modal'
 
-import { Video } from '../shared'
+import { VideoDetails } from '../shared'
 
 @Component({
   selector: 'my-video-download',
@@ -10,7 +10,7 @@ import { Video } from '../shared'
   styles: [ '.resolution-block { margin-top: 20px; }' ]
 })
 export class VideoDownloadComponent {
-  @Input() video: Video = null
+  @Input() video: VideoDetails = null
 
   @ViewChild('modal') modal: ModalDirective
 
