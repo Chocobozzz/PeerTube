@@ -160,7 +160,7 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
     player.torrent.on('error', err => handleError(err))
     player.torrent.on('warning', err => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
-      if (err.message.indexOf('Unsupported tracker protocol: http://') !== -1) return
+      if (err.message.indexOf('Unsupported tracker protocol: http') !== -1) return
 
       return handleError(err)
     })
