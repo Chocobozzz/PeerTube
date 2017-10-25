@@ -37,39 +37,37 @@ function checkMissedConfig () {
 
 // Check the available codecs
 // We get CONFIG by param to not import it in this file (import orders)
-function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
+async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
   const Ffmpeg = require('fluent-ffmpeg')
   const getAvailableCodecsPromise = promisify0(Ffmpeg.getAvailableCodecs)
 
-  getAvailableCodecsPromise()
-    .then(codecs => {
-      if (CONFIG.TRANSCODING.ENABLED === false) return undefined
+  const codecs = await getAvailableCodecsPromise()
+  if (CONFIG.TRANSCODING.ENABLED === false) return undefined
 
-      const canEncode = [ 'libx264' ]
-      canEncode.forEach(codec => {
-        if (codecs[codec] === undefined) {
-          throw new Error('Unknown codec ' + codec + ' in FFmpeg.')
-        }
+  const canEncode = [ 'libx264' ]
+  for (const codec of canEncode) {
+    if (codecs[codec] === undefined) {
+      throw new Error('Unknown codec ' + codec + ' in FFmpeg.')
+    }
 
-        if (codecs[codec].canEncode !== true) {
-          throw new Error('Unavailable encode codec ' + codec + ' in FFmpeg')
-        }
-      })
-    })
+    if (codecs[codec].canEncode !== true) {
+      throw new Error('Unavailable encode codec ' + codec + ' in FFmpeg')
+    }
+  }
 }
 
 // We get db by param to not import it in this file (import orders)
-function clientsExist (OAuthClient: OAuthClientModel) {
-  return OAuthClient.countTotal().then(totalClients => {
-    return totalClients !== 0
-  })
+async function clientsExist (OAuthClient: OAuthClientModel) {
+  const totalClients = await OAuthClient.countTotal()
+
+  return totalClients !== 0
 }
 
 // We get db by param to not import it in this file (import orders)
-function usersExist (User: UserModel) {
-  return User.countTotal().then(totalUsers => {
-    return totalUsers !== 0
-  })
+async function usersExist (User: UserModel) {
+  const totalUsers = await User.countTotal()
+
+  return totalUsers !== 0
 }
 
 // ---------------------------------------------------------------------------

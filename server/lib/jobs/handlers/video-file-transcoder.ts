@@ -4,16 +4,17 @@ import { logger } from '../../../helpers'
 import { VideoInstance } from '../../../models'
 import { VideoResolution } from '../../../../shared'
 
-function process (data: { videoUUID: string, resolution: VideoResolution }, jobId: number) {
-  return db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(data.videoUUID).then(video => {
-    // No video, maybe deleted?
-    if (!video) {
-      logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
-      return undefined
-    }
+async function process (data: { videoUUID: string, resolution: VideoResolution }, jobId: number) {
+  const video = await db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(data.videoUUID)
+  // No video, maybe deleted?
+  if (!video) {
+    logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
+    return undefined
+  }
 
-    return video.transcodeOriginalVideofile(data.resolution).then(() => video)
-  })
+  await video.transcodeOriginalVideofile(data.resolution)
+
+  return video
 }
 
 function onError (err: Error, jobId: number) {

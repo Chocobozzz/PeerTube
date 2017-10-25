@@ -1,52 +1,35 @@
 import * as path from 'path'
-import * as Promise from 'bluebird'
 
 import { database as db } from './database'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { logger, readdirPromise } from '../helpers'
 
-function migrate () {
-  const p = db.sequelize.getQueryInterface().showAllTables()
-    .then(tables => {
-      // No tables, we don't need to migrate anything
-      // The installer will do that
-      if (tables.length === 0) throw null
-    })
-    .then(() => {
-      return db.Application.loadMigrationVersion()
-    })
-    .then(actualVersion => {
-      if (actualVersion === null) {
-        return db.Application.create({ migrationVersion: 0 }).then(() => 0)
-      }
+async function migrate () {
+  const tables = await db.sequelize.getQueryInterface().showAllTables()
 
-      return actualVersion
-    })
-    .then(actualVersion => {
-      // No need migrations, abort
-      if (actualVersion >= LAST_MIGRATION_VERSION) throw null
+  // No tables, we don't need to migrate anything
+  // The installer will do that
+  if (tables.length === 0) return
 
-      return actualVersion
-    })
-    .then(actualVersion => {
-      // If there are a new migration scripts
-      logger.info('Begin migrations.')
+  let actualVersion = await db.Application.loadMigrationVersion()
+  if (actualVersion === null) {
+    await db.Application.create({ migrationVersion: 0 })
+    actualVersion = 0
+  }
 
-      return getMigrationScripts().then(migrationScripts => ({ actualVersion, migrationScripts }))
-    })
-    .then(({ actualVersion, migrationScripts }) => {
-      return Promise.each(migrationScripts, entity => executeMigration(actualVersion, entity))
-    })
-    .then(() => {
-      logger.info('Migrations finished. New migration version schema: %s', LAST_MIGRATION_VERSION)
-    })
-    .catch(err => {
-      if (err === null) return undefined
+  // No need migrations, abort
+  if (actualVersion >= LAST_MIGRATION_VERSION) return
 
-      throw err
-    })
+  // If there are a new migration scripts
+  logger.info('Begin migrations.')
 
-  return p
+  const migrationScripts = await getMigrationScripts()
+
+  for (const migrationScript of migrationScripts) {
+    await executeMigration(actualVersion, migrationScript)
+  }
+
+  logger.info('Migrations finished. New migration version schema: %s', LAST_MIGRATION_VERSION)
 }
 
 // ---------------------------------------------------------------------------
@@ -57,29 +40,28 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getMigrationScripts () {
-  return readdirPromise(path.join(__dirname, 'migrations')).then(files => {
-    const filesToMigrate: {
-      version: string,
-      script: string
-    }[] = []
+async function getMigrationScripts () {
+  const files = await readdirPromise(path.join(__dirname, 'migrations'))
+  const filesToMigrate: {
+    version: string,
+    script: string
+  }[] = []
 
-    files
-      .filter(file => file.endsWith('.js.map') === false)
-      .forEach(file => {
-        // Filename is something like 'version-blabla.js'
-        const version = file.split('-')[0]
-        filesToMigrate.push({
-          version,
-          script: file
-        })
+  files
+    .filter(file => file.endsWith('.js.map') === false)
+    .forEach(file => {
+      // Filename is something like 'version-blabla.js'
+      const version = file.split('-')[0]
+      filesToMigrate.push({
+        version,
+        script: file
       })
+    })
 
-    return filesToMigrate
-  })
+  return filesToMigrate
 }
 
-function executeMigration (actualVersion: number, entity: { version: string, script: string }) {
+async function executeMigration (actualVersion: number, entity: { version: string, script: string }) {
   const versionScript = parseInt(entity.version, 10)
 
   // Do not execute old migration scripts
@@ -91,7 +73,7 @@ function executeMigration (actualVersion: number, entity: { version: string, scr
 
   const migrationScript = require(path.join(__dirname, 'migrations', migrationScriptName))
 
-  return db.sequelize.transaction(t => {
+  await db.sequelize.transaction(async t => {
     const options = {
       transaction: t,
       queryInterface: db.sequelize.getQueryInterface(),
@@ -99,10 +81,9 @@ function executeMigration (actualVersion: number, entity: { version: string, scr
       db
     }
 
-    return migrationScript.up(options)
-      .then(() => {
-        // Update the new migration version
-        return db.Application.updateMigrationVersion(versionScript, t)
-      })
+    await migrationScript.up(options)
+
+    // Update the new migration version
+    await db.Application.updateMigrationVersion(versionScript, t)
   })
 }

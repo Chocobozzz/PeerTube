@@ -59,8 +59,8 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
   buildRequestsObjects (requests: RequestsVideoQaduGrouped) {
     const requestsToMakeGrouped: RequestsObjectsCustom<RemoteQaduVideoRequest> = {}
 
-    Object.keys(requests).forEach(toPodId => {
-      requests[toPodId].forEach(data => {
+    for (const toPodId of Object.keys(requests)) {
+      for (const data of requests[toPodId]) {
         const request = data.request
         const video = data.video
         const pod = data.pod
@@ -105,39 +105,39 @@ class RequestVideoQaduScheduler extends AbstractRequestScheduler<RequestsVideoQa
         // Maybe there are multiple quick and dirty update for the same video
         // We use this hash map to dedupe them
         requestsToMakeGrouped[hashKey].videos[video.id] = videoData
-      })
-    })
+      }
+    }
 
     // Now we deduped similar quick and dirty updates, we can build our requests data
-    Object.keys(requestsToMakeGrouped).forEach(hashKey => {
-      Object.keys(requestsToMakeGrouped[hashKey].videos).forEach(videoUUID => {
+    for (const hashKey of Object.keys(requestsToMakeGrouped)) {
+      for (const videoUUID of Object.keys(requestsToMakeGrouped[hashKey].videos)) {
         const videoData = requestsToMakeGrouped[hashKey].videos[videoUUID]
 
         requestsToMakeGrouped[hashKey].datas.push({
           data: videoData
         })
-      })
+      }
 
       // We don't need it anymore, it was just to build our data array
       delete requestsToMakeGrouped[hashKey].videos
-    })
+    }
 
     return requestsToMakeGrouped
   }
 
-  createRequest ({ type, videoId, transaction }: RequestVideoQaduSchedulerOptions) {
+  async createRequest ({ type, videoId, transaction }: RequestVideoQaduSchedulerOptions) {
     const dbRequestOptions: Sequelize.BulkCreateOptions = {}
     if (transaction) dbRequestOptions.transaction = transaction
 
     // Send the update to all our friends
-    return db.Pod.listAllIds(transaction).then(podIds => {
-      const queries = []
-      podIds.forEach(podId => {
-        queries.push({ type, videoId, podId })
-      })
+    const podIds = await db.Pod.listAllIds(transaction)
+    const queries = []
+    for (const podId of podIds) {
+      queries.push({ type, videoId, podId })
+    }
 
-      return db.RequestVideoQadu.bulkCreate(queries, dbRequestOptions)
-    })
+    await db.RequestVideoQadu.bulkCreate(queries, dbRequestOptions)
+    return undefined
   }
 }
 

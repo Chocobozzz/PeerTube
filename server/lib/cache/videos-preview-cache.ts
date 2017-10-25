@@ -1,7 +1,6 @@
 import * as asyncLRU from 'async-lru'
 import { join } from 'path'
 import { createWriteStream } from 'fs'
-import * as Promise from 'bluebird'
 
 import { database as db, CONFIG, CACHE } from '../../initializers'
 import { logger, unlinkPromise } from '../../helpers'
@@ -43,15 +42,15 @@ class VideosPreviewCache {
     })
   }
 
-  private loadPreviews (key: string) {
-    return db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(key)
-      .then(video => {
-        if (!video) return undefined
+  private async loadPreviews (key: string) {
+    const video = await db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(key)
+    if (!video) return undefined
 
-        if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName())
+    if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName())
 
-        return this.saveRemotePreviewAndReturnPath(video)
-      })
+    const res = await this.saveRemotePreviewAndReturnPath(video)
+
+    return res
   }
 
   private saveRemotePreviewAndReturnPath (video: VideoInstance) {

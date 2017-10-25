@@ -247,20 +247,21 @@ updatePodsScore = function (goodPods: number[], badPods: number[]) {
 // ---------------------------------------------------------------------------
 
 // Remove pods with a score of 0 (too many requests where they were unreachable)
-function removeBadPods () {
-  return listBadPods()
-    .then(pods => {
-      const podsRemovePromises = pods.map(pod => pod.destroy())
-      return Promise.all(podsRemovePromises).then(() => pods.length)
-    })
-    .then(numberOfPodsRemoved => {
-      if (numberOfPodsRemoved) {
-        logger.info('Removed %d pods.', numberOfPodsRemoved)
-      } else {
-        logger.info('No need to remove bad pods.')
-      }
-    })
-    .catch(err => {
-      logger.error('Cannot remove bad pods.', err)
-    })
+async function removeBadPods () {
+  try {
+    const pods = await listBadPods()
+
+    const podsRemovePromises = pods.map(pod => pod.destroy())
+    await Promise.all(podsRemovePromises)
+
+    const numberOfPodsRemoved = pods.length
+
+    if (numberOfPodsRemoved) {
+      logger.info('Removed %d pods.', numberOfPodsRemoved)
+    } else {
+      logger.info('No need to remove bad pods.')
+    }
+  } catch (err) {
+    logger.error('Cannot remove bad pods.', err)
+  }
 }

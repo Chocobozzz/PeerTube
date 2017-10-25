@@ -59,8 +59,8 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
 
     // We group video events per video and per pod
     // We add the counts of the same event types
-    Object.keys(eventRequests).forEach(toPodId => {
-      eventRequests[toPodId].forEach(eventToProcess => {
+    for (const toPodId of Object.keys(eventRequests)) {
+      for (const eventToProcess of eventRequests[toPodId]) {
         if (!eventsPerVideoPerPod[toPodId]) eventsPerVideoPerPod[toPodId] = {}
 
         if (!requestsToMakeGrouped[toPodId]) {
@@ -81,17 +81,17 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
         if (!events[eventToProcess.type]) events[eventToProcess.type] = 0
 
         events[eventToProcess.type] += eventToProcess.count
-      })
-    })
+      }
+    }
 
     // Now we build our requests array per pod
-    Object.keys(eventsPerVideoPerPod).forEach(toPodId => {
+    for (const toPodId of Object.keys(eventsPerVideoPerPod)) {
       const eventsForPod = eventsPerVideoPerPod[toPodId]
 
-      Object.keys(eventsForPod).forEach(uuid => {
+      for (const uuid of Object.keys(eventsForPod)) {
         const eventsForVideo = eventsForPod[uuid]
 
-        Object.keys(eventsForVideo).forEach(eventType => {
+        for (const eventType of Object.keys(eventsForVideo)) {
           requestsToMakeGrouped[toPodId].datas.push({
             data: {
               uuid,
@@ -99,9 +99,9 @@ class RequestVideoEventScheduler extends AbstractRequestScheduler<RequestsVideoE
               count: +eventsForVideo[eventType]
             }
           })
-        })
-      })
-    })
+        }
+      }
+    }
 
     return requestsToMakeGrouped
   }

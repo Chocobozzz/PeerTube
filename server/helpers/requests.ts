@@ -73,7 +73,7 @@ function makeSecureRequest (params: MakeSecureRequestParams) {
         signature
       }
 
-      // If there are data informations
+      // If there are data information
       if (params.data) {
         requestParams.json.data = params.data
       }

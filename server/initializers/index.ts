@@ -1,4 +1,4 @@
-// Constants first, databse in second!
+// Constants first, database in second!
 export * from './constants'
 export * from './database'
 export * from './checker'

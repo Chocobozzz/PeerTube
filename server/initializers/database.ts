@@ -2,7 +2,7 @@ import { join } from 'path'
 import { flattenDepth } from 'lodash'
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 
 import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first
@@ -77,26 +77,26 @@ const sequelize = new Sequelize(dbname, username, password, {
 
 database.sequelize = sequelize
 
-database.init = (silent: boolean) => {
+database.init = async (silent: boolean) => {
   const modelDirectory = join(__dirname, '..', 'models')
 
-  return getModelFiles(modelDirectory).then(filePaths => {
-    filePaths.forEach(filePath => {
-      const model = sequelize.import(filePath)
+  const filePaths = await getModelFiles(modelDirectory)
 
-      database[model['name']] = model
-    })
+  for (const filePath of filePaths) {
+    const model = sequelize.import(filePath)
 
-    Object.keys(database).forEach(modelName => {
-      if ('associate' in database[modelName]) {
-        database[modelName].associate(database)
-      }
-    })
+    database[model['name']] = model
+  }
 
-    if (!silent) logger.info('Database %s is ready.', dbname)
+  for (const modelName of Object.keys(database)) {
+    if ('associate' in database[modelName]) {
+      database[modelName].associate(database)
+    }
+  }
 
-    return undefined
-  })
+  if (!silent) logger.info('Database %s is ready.', dbname)
+
+  return undefined
 }
 
 // ---------------------------------------------------------------------------
@@ -107,31 +107,29 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function getModelFiles (modelDirectory: string) {
-  return readdirPromise(modelDirectory)
-    .then(files => {
-      const directories: string[] = files.filter(directory => {
-        // Find directories
-        if (
-          directory.endsWith('.js.map') ||
-          directory === 'index.js' || directory === 'index.ts' ||
-          directory === 'utils.js' || directory === 'utils.ts'
-        ) return false
+async function getModelFiles (modelDirectory: string) {
+  const files = await readdirPromise(modelDirectory)
+  const directories = files.filter(directory => {
+    // Find directories
+    if (
+      directory.endsWith('.js.map') ||
+      directory === 'index.js' || directory === 'index.ts' ||
+      directory === 'utils.js' || directory === 'utils.ts'
+    ) return false
 
-        return true
-      })
+    return true
+  })
 
-      return directories
-    })
-    .then(directories => {
-      const tasks = []
+  const tasks: Bluebird<any>[] = []
 
-      // For each directory we read it and append model in the modelFilePaths array
-      directories.forEach(directory => {
-        const modelDirectoryPath = join(modelDirectory, directory)
+  // For each directory we read it and append model in the modelFilePaths array
+  for (const directory of directories) {
+    const modelDirectoryPath = join(modelDirectory, directory)
 
-        const promise = readdirPromise(modelDirectoryPath).then(files => {
-          const filteredFiles = files.filter(file => {
+    const promise = readdirPromise(modelDirectoryPath)
+      .then(files => {
+        const filteredFiles = files
+          .filter(file => {
             if (
               file === 'index.js' || file === 'index.ts' ||
               file === 'utils.js' || file === 'utils.ts' ||
@@ -140,17 +138,15 @@ function getModelFiles (modelDirectory: string) {
             ) return false
 
             return true
-          }).map(file => join(modelDirectoryPath, file))
+          })
+          .map(file => join(modelDirectoryPath, file))
 
-          return filteredFiles
-        })
-
-        tasks.push(promise)
+        return filteredFiles
       })
 
-      return Promise.all(tasks)
-    })
-    .then((filteredFiles: string[][]) => {
-      return flattenDepth<string>(filteredFiles, 1)
-    })
+    tasks.push(promise)
+  }
+
+  const filteredFilesArray: string[][] = await Promise.all(tasks)
+  return flattenDepth<string>(filteredFilesArray, 1)
 }

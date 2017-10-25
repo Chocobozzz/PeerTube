@@ -1,5 +1,4 @@
 import * as crypto from 'crypto'
-import * as Promise from 'bluebird'
 import { join } from 'path'
 
 import {
@@ -41,7 +40,7 @@ function checkSignature (publicKey: string, data: string, hexSignature: string) 
   return isValid
 }
 
-function sign (data: string|Object) {
+async function sign (data: string|Object) {
   const sign = crypto.createSign(SIGNATURE_ALGORITHM)
 
   let dataString: string
@@ -52,33 +51,33 @@ function sign (data: string|Object) {
       dataString = JSON.stringify(data)
     } catch (err) {
       logger.error('Cannot sign data.', err)
-      return Promise.resolve('')
+      return ''
     }
   }
 
   sign.update(dataString, 'utf8')
 
-  return getMyPrivateCert().then(myKey => {
-    return sign.sign(myKey, SIGNATURE_ENCODING)
-  })
+  const myKey = await getMyPrivateCert()
+  return await sign.sign(myKey, SIGNATURE_ENCODING)
 }
 
 function comparePassword (plainPassword: string, hashPassword: string) {
   return bcryptComparePromise(plainPassword, hashPassword)
 }
 
-function createCertsIfNotExist () {
-  return certsExist().then(exist => {
-    if (exist === true) {
-      return undefined
-    }
+async function createCertsIfNotExist () {
+  const exist = await certsExist()
+  if (exist === true) {
+    return undefined
+  }
 
-    return createCerts()
-  })
+  return await createCerts()
 }
 
-function cryptPassword (password: string) {
-  return bcryptGenSaltPromise(BCRYPT_SALT_SIZE).then(salt => bcryptHashPromise(password, salt))
+async function cryptPassword (password: string) {
+  const salt = await bcryptGenSaltPromise(BCRYPT_SALT_SIZE)
+
+  return await bcryptHashPromise(password, salt)
 }
 
 function getMyPrivateCert () {
@@ -105,51 +104,45 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function certsExist () {
+async function certsExist () {
   const certPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
 
   // If there is an error the certificates do not exist
-  return accessPromise(certPath)
-    .then(() => true)
-    .catch(() => false)
+  try {
+    await accessPromise(certPath)
+
+    return true
+  } catch {
+    return false
+  }
 }
 
-function createCerts () {
-  return certsExist().then(exist => {
-    if (exist === true) {
-      const errorMessage = 'Certs already exist.'
-      logger.warning(errorMessage)
-      throw new Error(errorMessage)
-    }
+async function createCerts () {
+  const exist = await certsExist()
+  if (exist === true) {
+    const errorMessage = 'Certs already exist.'
+    logger.warning(errorMessage)
+    throw new Error(errorMessage)
+  }
 
-    logger.info('Generating a RSA key...')
+  logger.info('Generating a RSA key...')
 
-    const privateCertPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
-    const genRsaOptions = {
-      'out': privateCertPath,
-      '2048': false
-    }
-    return opensslExecPromise('genrsa', genRsaOptions)
-      .then(() => {
-        logger.info('RSA key generated.')
-        logger.info('Managing public key...')
+  const privateCertPath = join(CONFIG.STORAGE.CERT_DIR, PRIVATE_CERT_NAME)
+  const genRsaOptions = {
+    'out': privateCertPath,
+    '2048': false
+  }
 
-        const publicCertPath = join(CONFIG.STORAGE.CERT_DIR, 'peertube.pub')
-        const rsaOptions = {
-          'in': privateCertPath,
-          'pubout': true,
-          'out': publicCertPath
-        }
-        return opensslExecPromise('rsa', rsaOptions)
-          .then(() => logger.info('Public key managed.'))
-          .catch(err => {
-            logger.error('Cannot create public key on this pod.')
-            throw err
-          })
-      })
-      .catch(err => {
-        logger.error('Cannot create private key on this pod.')
-        throw err
-      })
-  })
+  await opensslExecPromise('genrsa', genRsaOptions)
+  logger.info('RSA key generated.')
+  logger.info('Managing public key...')
+
+  const publicCertPath = join(CONFIG.STORAGE.CERT_DIR, 'peertube.pub')
+  const rsaOptions = {
+    'in': privateCertPath,
+    'pubout': true,
+    'out': publicCertPath
+  }
+
+  await opensslExecPromise('rsa', rsaOptions)
 }

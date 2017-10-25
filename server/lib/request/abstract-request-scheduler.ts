@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 
 import { database as db } from '../../initializers/database'
 import { logger, makeSecureRequest } from '../../helpers'
@@ -76,7 +76,7 @@ abstract class AbstractRequestScheduler <T> {
   // ---------------------------------------------------------------------------
 
   // Make a requests to friends of a certain type
-  protected makeRequest (toPod: PodInstance, requestEndpoint: string, requestsToMake: any) {
+  protected async makeRequest (toPod: PodInstance, requestEndpoint: string, requestsToMake: any) {
     const params = {
       toPod: toPod,
       method: 'POST' as 'POST',
@@ -86,72 +86,75 @@ abstract class AbstractRequestScheduler <T> {
 
     // Make multiple retry requests to all of pods
     // The function fire some useful callbacks
-    return makeSecureRequest(params)
-      .then(({ response, body }) => {
-        if (response.statusCode !== 200 && response.statusCode !== 201 && response.statusCode !== 204) {
-          throw new Error('Status code not 20x : ' + response.statusCode)
-        }
-      })
-      .catch(err => {
-        logger.error('Error sending secure request to %s pod.', toPod.host, err)
+    try {
+      const { response } = await makeSecureRequest(params)
+      if (response.statusCode !== 200 && response.statusCode !== 201 && response.statusCode !== 204) {
+        throw new Error('Status code not 20x : ' + response.statusCode)
+      }
+    } catch (err) {
+      logger.error('Error sending secure request to %s pod.', toPod.host, err)
 
-        throw err
-      })
+      throw err
+    }
   }
 
     // Make all the requests of the scheduler
-  protected makeRequests () {
-    return this.getRequestModel().listWithLimitAndRandom(this.limitPods, this.limitPerPod)
-      .then((requestsGrouped: T) => {
-        // We want to group requests by destinations pod and endpoint
-        const requestsToMake = this.buildRequestsObjects(requestsGrouped)
+  protected async makeRequests () {
+    let requestsGrouped: T
 
-        // If there are no requests, abort
-        if (isEmpty(requestsToMake) === true) {
-          logger.info('No "%s" to make.', this.description)
-          return { goodPods: [], badPods: [] }
-        }
+    try {
+      requestsGrouped = await this.getRequestModel().listWithLimitAndRandom(this.limitPods, this.limitPerPod)
+    } catch (err) {
+      logger.error('Cannot get the list of "%s".', this.description, { error: err.stack })
+      throw err
+    }
 
-        logger.info('Making "%s" to friends.', this.description)
+    // We want to group requests by destinations pod and endpoint
+    const requestsToMake = this.buildRequestsObjects(requestsGrouped)
 
-        const goodPods: number[] = []
-        const badPods: number[] = []
+    // If there are no requests, abort
+    if (isEmpty(requestsToMake) === true) {
+      logger.info('No "%s" to make.', this.description)
+      return { goodPods: [], badPods: [] }
+    }
 
-        return Promise.map(Object.keys(requestsToMake), hashKey => {
-          const requestToMake = requestsToMake[hashKey]
-          const toPod: PodInstance = requestToMake.toPod
+    logger.info('Making "%s" to friends.', this.description)
 
-          return this.makeRequest(toPod, requestToMake.endpoint, requestToMake.datas)
-            .then(() => {
-              logger.debug('Removing requests for pod %s.', requestToMake.toPod.id, { requestsIds: requestToMake.ids })
-              goodPods.push(requestToMake.toPod.id)
+    const goodPods: number[] = []
+    const badPods: number[] = []
 
-              this.afterRequestHook()
+    await Bluebird.map(Object.keys(requestsToMake), async hashKey => {
+      const requestToMake = requestsToMake[hashKey]
+      const toPod: PodInstance = requestToMake.toPod
 
-              // Remove the pod id of these request ids
-              return this.getRequestToPodModel().removeByRequestIdsAndPod(requestToMake.ids, requestToMake.toPod.id)
-            })
-            .catch(err => {
-              badPods.push(requestToMake.toPod.id)
-              logger.info('Cannot make request to %s.', toPod.host, err)
-            })
-        }, { concurrency: REQUESTS_IN_PARALLEL }).then(() => ({ goodPods, badPods }))
-      })
-      .then(({ goodPods, badPods }) => {
-        this.afterRequestsHook()
+      try {
+        await this.makeRequest(toPod, requestToMake.endpoint, requestToMake.datas)
+        logger.debug('Removing requests for pod %s.', requestToMake.toPod.id, { requestsIds: requestToMake.ids })
+        goodPods.push(requestToMake.toPod.id)
 
-        // All the requests were made, we update the pods score
-        return db.Pod.updatePodsScore(goodPods, badPods)
-      })
-      .catch(err => logger.error('Cannot get the list of "%s".', this.description, { error: err.stack }))
+        this.afterRequestHook()
+
+        // Remove the pod id of these request ids
+        await this.getRequestToPodModel()
+          .removeByRequestIdsAndPod(requestToMake.ids, requestToMake.toPod.id)
+      } catch (err) {
+        badPods.push(requestToMake.toPod.id)
+        logger.info('Cannot make request to %s.', toPod.host, err)
+      }
+    }, { concurrency: REQUESTS_IN_PARALLEL })
+
+    this.afterRequestsHook()
+
+    // All the requests were made, we update the pods score
+    await db.Pod.updatePodsScore(goodPods, badPods)
   }
 
   protected afterRequestHook () {
-   // Nothing to do, let children reimplement it
+   // Nothing to do, let children re-implement it
   }
 
   protected afterRequestsHook () {
-   // Nothing to do, let children reimplement it
+   // Nothing to do, let children re-implement it
   }
 }
 

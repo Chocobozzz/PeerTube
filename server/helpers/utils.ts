@@ -8,11 +8,13 @@ import { ResultList } from '../../shared'
 import { VideoResolution } from '../../shared/models/videos/video-resolution.enum'
 
 function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
-  res.type('json').status(400).end()
+  return res.type('json').status(400).end()
 }
 
-function generateRandomString (size: number) {
-  return pseudoRandomBytesPromise(size).then(raw => raw.toString('hex'))
+async function generateRandomString (size: number) {
+  const raw = await pseudoRandomBytesPromise(size)
+
+  return raw.toString('hex')
 }
 
 interface FormattableToJSON {
@@ -34,19 +36,19 @@ function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], obje
   return res
 }
 
-function isSignupAllowed () {
+async function isSignupAllowed () {
   if (CONFIG.SIGNUP.ENABLED === false) {
-    return Promise.resolve(false)
+    return false
   }
 
   // No limit and signup is enabled
   if (CONFIG.SIGNUP.LIMIT === -1) {
-    return Promise.resolve(true)
+    return true
   }
 
-  return db.User.countTotal().then(totalUsers => {
-    return totalUsers < CONFIG.SIGNUP.LIMIT
-  })
+  const totalUsers = await db.User.countTotal()
+
+  return totalUsers < CONFIG.SIGNUP.LIMIT
 }
 
 function computeResolutionsToTranscode (videoFileHeight: number) {

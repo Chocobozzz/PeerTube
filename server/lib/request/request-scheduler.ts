@@ -37,8 +37,8 @@ class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
   buildRequestsObjects (requestsGrouped: RequestsGrouped) {
     const requestsToMakeGrouped: RequestsObjects<RemoteVideoRequest> = {}
 
-    Object.keys(requestsGrouped).forEach(toPodId => {
-      requestsGrouped[toPodId].forEach(data => {
+    for (const toPodId of Object.keys(requestsGrouped)) {
+      for (const data of requestsGrouped[toPodId]) {
         const request = data.request
         const pod = data.pod
         const hashKey = toPodId + request.endpoint
@@ -54,13 +54,13 @@ class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
 
         requestsToMakeGrouped[hashKey].ids.push(request.id)
         requestsToMakeGrouped[hashKey].datas.push(request.request)
-      })
-    })
+      }
+    }
 
     return requestsToMakeGrouped
   }
 
-  createRequest ({ type, endpoint, data, toIds, transaction }: RequestSchedulerOptions) {
+  async createRequest ({ type, endpoint, data, toIds, transaction }: RequestSchedulerOptions) {
     // If there are no destination pods abort
     if (toIds.length === 0) return undefined
 
@@ -76,10 +76,8 @@ class RequestScheduler extends AbstractRequestScheduler<RequestsGrouped> {
       transaction
     }
 
-    return db.Request.create(createQuery, dbRequestOptions)
-      .then(request => {
-        return request.setPods(toIds, dbRequestOptions)
-      })
+    const request = await db.Request.create(createQuery, dbRequestOptions)
+    await request.setPods(toIds, dbRequestOptions)
   }
 
   // ---------------------------------------------------------------------------

@@ -24,39 +24,36 @@ function getRefreshToken (refreshToken: string) {
   return db.OAuthToken.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 
-function getUser (username: string, password: string) {
+async function getUser (username: string, password: string) {
   logger.debug('Getting User (username: ' + username + ', password: ******).')
 
-  return db.User.getByUsername(username).then(user => {
-    if (!user) return null
+  const user = await db.User.getByUsername(username)
+  if (!user) return null
 
-    return user.isPasswordMatch(password).then(passwordMatch => {
-      if (passwordMatch === false) return null
+  const passwordMatch = await user.isPasswordMatch(password)
+  if (passwordMatch === false) return null
 
-      return user
-    })
-  })
+  return user
 }
 
-function revokeToken (token: TokenInfo) {
-  return db.OAuthToken.getByRefreshTokenAndPopulateUser(token.refreshToken).then(tokenDB => {
-    if (tokenDB) tokenDB.destroy()
+async function revokeToken (tokenInfo: TokenInfo) {
+  const token = await db.OAuthToken.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
+  if (token) token.destroy()
 
-    /*
-      * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js
-      * "As per the discussion we need set older date
-      * revokeToken will expected return a boolean in future version
-      * https://github.com/oauthjs/node-oauth2-server/pull/274
-      * https://github.com/oauthjs/node-oauth2-server/issues/290"
-    */
-    const expiredToken = tokenDB
-    expiredToken.refreshTokenExpiresAt = new Date('2015-05-28T06:59:53.000Z')
+  /*
+    * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js
+    * "As per the discussion we need set older date
+    * revokeToken will expected return a boolean in future version
+    * https://github.com/oauthjs/node-oauth2-server/pull/274
+    * https://github.com/oauthjs/node-oauth2-server/issues/290"
+  */
+  const expiredToken = token
+  expiredToken.refreshTokenExpiresAt = new Date('2015-05-28T06:59:53.000Z')
 
-    return expiredToken
-  })
+  return expiredToken
 }
 
-function saveToken (token: TokenInfo, client: OAuthClientInstance, user: UserInstance) {
+async function saveToken (token: TokenInfo, client: OAuthClientInstance, user: UserInstance) {
   logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
 
   const tokenToCreate = {
@@ -68,11 +65,10 @@ function saveToken (token: TokenInfo, client: OAuthClientInstance, user: UserIns
     userId: user.id
   }
 
-  return db.OAuthToken.create(tokenToCreate).then(tokenCreated => {
-    const tokenToReturn = Object.assign(tokenCreated, { client, user })
+  const tokenCreated = await db.OAuthToken.create(tokenToCreate)
+  const tokenToReturn = Object.assign(tokenCreated, { client, user })
 
-    return tokenToReturn
-  })
+  return tokenToReturn
 }
 
 // ---------------------------------------------------------------------------
