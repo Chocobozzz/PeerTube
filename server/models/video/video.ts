@@ -317,7 +317,7 @@ function associate (models) {
   })
 }
 
-function afterDestroy (video: VideoInstance, options: { transaction: Sequelize.Transaction }) {
+function afterDestroy (video: VideoInstance) {
   const tasks = []
 
   tasks.push(
@@ -331,7 +331,7 @@ function afterDestroy (video: VideoInstance, options: { transaction: Sequelize.T
 
     tasks.push(
       video.removePreview(),
-      removeVideoToFriends(removeVideoToFriendsParams, options.transaction)
+      removeVideoToFriends(removeVideoToFriendsParams)
     )
 
     // Remove physical files and torrents

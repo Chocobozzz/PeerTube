@@ -107,13 +107,13 @@ function associate (models) {
   })
 }
 
-function afterDestroy (author: AuthorInstance, options: { transaction: Sequelize.Transaction }) {
+function afterDestroy (author: AuthorInstance) {
   if (author.isOwned()) {
     const removeVideoAuthorToFriendsParams = {
       uuid: author.uuid
     }
 
-    return removeVideoAuthorToFriends(removeVideoAuthorToFriendsParams, options.transaction)
+    return removeVideoAuthorToFriends(removeVideoAuthorToFriendsParams)
   }
 
   return undefined

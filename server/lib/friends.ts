@@ -86,7 +86,7 @@ function updateVideoToFriends (videoData: RemoteVideoUpdateData, transaction: Se
   return createRequest(options)
 }
 
-function removeVideoToFriends (videoParams: RemoteVideoRemoveData, transaction: Sequelize.Transaction) {
+function removeVideoToFriends (videoParams: RemoteVideoRemoveData, transaction?: Sequelize.Transaction) {
   const options = {
     type: ENDPOINT_ACTIONS.REMOVE_VIDEO,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
@@ -106,7 +106,7 @@ function addVideoAuthorToFriends (authorData: RemoteVideoAuthorCreateData, trans
   return createRequest(options)
 }
 
-function removeVideoAuthorToFriends (authorData: RemoteVideoAuthorRemoveData, transaction: Sequelize.Transaction) {
+function removeVideoAuthorToFriends (authorData: RemoteVideoAuthorRemoveData, transaction?: Sequelize.Transaction) {
   const options = {
     type: ENDPOINT_ACTIONS.REMOVE_AUTHOR,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,
@@ -136,7 +136,7 @@ function updateVideoChannelToFriends (videoChannelData: RemoteVideoChannelUpdate
   return createRequest(options)
 }
 
-function removeVideoChannelToFriends (videoChannelParams: RemoteVideoChannelRemoveData, transaction: Sequelize.Transaction) {
+function removeVideoChannelToFriends (videoChannelParams: RemoteVideoChannelRemoveData, transaction?: Sequelize.Transaction) {
   const options = {
     type: ENDPOINT_ACTIONS.REMOVE_CHANNEL,
     endpoint: REQUEST_ENDPOINTS.VIDEOS,

@@ -178,13 +178,13 @@ function associate (models) {
   })
 }
 
-function afterDestroy (videoChannel: VideoChannelInstance, options: { transaction: Sequelize.Transaction }) {
+function afterDestroy (videoChannel: VideoChannelInstance) {
   if (videoChannel.isOwned()) {
     const removeVideoChannelToFriendsParams = {
       uuid: videoChannel.uuid
     }
 
-    return removeVideoChannelToFriends(removeVideoChannelToFriendsParams, options.transaction)
+    return removeVideoChannelToFriends(removeVideoChannelToFriendsParams)
   }
 
   return undefined
