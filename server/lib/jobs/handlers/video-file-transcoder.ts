@@ -22,15 +22,22 @@ function onError (err: Error, jobId: number) {
   return Promise.resolve()
 }
 
-function onSuccess (jobId: number, video: VideoInstance) {
+async function onSuccess (jobId: number, video: VideoInstance) {
   if (video === undefined) return undefined
 
   logger.info('Job %d is a success.', jobId)
 
-  const remoteVideo = video.toUpdateRemoteJSON()
+  // Maybe the video changed in database, refresh it
+  const videoDatabase = await db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(video.uuid)
+  // Video does not exist anymore
+  if (!videoDatabase) return undefined
+
+  const remoteVideo = videoDatabase.toUpdateRemoteJSON()
 
   // Now we'll add the video's meta data to our friends
-  return updateVideoToFriends(remoteVideo, null)
+  await updateVideoToFriends(remoteVideo, null)
+
+  return
 }
 
 // ---------------------------------------------------------------------------

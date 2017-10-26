@@ -29,17 +29,22 @@ async function onSuccess (jobId: number, video: VideoInstance) {
 
   logger.info('Job %d is a success.', jobId)
 
-  const remoteVideo = await video.toAddRemoteJSON()
+  // Maybe the video changed in database, refresh it
+  const videoDatabase = await db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(video.uuid)
+  // Video does not exist anymore
+  if (!videoDatabase) return undefined
+
+  const remoteVideo = await videoDatabase.toAddRemoteJSON()
 
   // Now we'll add the video's meta data to our friends
   await addVideoToFriends(remoteVideo, null)
 
-  const originalFileHeight = await video.getOriginalFileHeight()
+  const originalFileHeight = await videoDatabase.getOriginalFileHeight()
   // Create transcoding jobs if there are enabled resolutions
 
   const resolutionsEnabled = computeResolutionsToTranscode(originalFileHeight)
   logger.info(
-    'Resolutions computed for video %s and origin file height of %d.', video.uuid, originalFileHeight,
+    'Resolutions computed for video %s and origin file height of %d.', videoDatabase.uuid, originalFileHeight,
     { resolutions: resolutionsEnabled }
   )
 
@@ -50,7 +55,7 @@ async function onSuccess (jobId: number, video: VideoInstance) {
 
         for (const resolution of resolutionsEnabled) {
           const dataInput = {
-            videoUUID: video.uuid,
+            videoUUID: videoDatabase.uuid,
             resolution
           }
 
@@ -61,7 +66,7 @@ async function onSuccess (jobId: number, video: VideoInstance) {
         await Promise.all(tasks)
       })
 
-      logger.info('Transcoding jobs created for uuid %s.', video.uuid, { resolutionsEnabled })
+      logger.info('Transcoding jobs created for uuid %s.', videoDatabase.uuid, { resolutionsEnabled })
     } catch (err) {
       logger.warn('Cannot transcode the video.', err)
     }
