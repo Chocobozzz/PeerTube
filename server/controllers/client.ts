@@ -8,7 +8,8 @@ import {
   CONFIG,
   STATIC_PATHS,
   STATIC_MAX_AGE,
-  OPENGRAPH_AND_OEMBED_COMMENT
+  OPENGRAPH_AND_OEMBED_COMMENT,
+  EMBED_SIZE
 } from '../initializers'
 import { root, readFileBufferPromise, escapeHTML } from '../helpers'
 import { asyncMiddleware } from '../middlewares'
@@ -52,6 +53,7 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
 
   const videoName = escapeHTML(video.name)
   const videoDescription = escapeHTML(video.description)
+  const embedUrl = CONFIG.WEBSERVER.URL + video.getEmbedPath()
 
   const openGraphMetaTags = {
     'og:type': 'video',
@@ -59,6 +61,12 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
     'og:image': previewUrl,
     'og:url': videoUrl,
     'og:description': videoDescription,
+
+    'og:video:url': embedUrl,
+    'og:video:secure_url': embedUrl,
+    'og:video:type': 'text/html',
+    'og:video:width': EMBED_SIZE.width,
+    'og:video:height': EMBED_SIZE.height,
 
     'name': videoName,
     'description': videoDescription,
@@ -68,7 +76,10 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
     'twitter:site': '@Chocobozzz',
     'twitter:title': videoName,
     'twitter:description': videoDescription,
-    'twitter:image': previewUrl
+    'twitter:image': previewUrl,
+    'twitter:player': embedUrl,
+    'twitter:player:width': EMBED_SIZE.width,
+    'twitter:player:height': EMBED_SIZE.height
   }
 
   const oembedLinkTags = [

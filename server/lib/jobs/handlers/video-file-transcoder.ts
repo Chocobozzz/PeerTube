@@ -37,7 +37,7 @@ async function onSuccess (jobId: number, video: VideoInstance) {
   // Now we'll add the video's meta data to our friends
   await updateVideoToFriends(remoteVideo, null)
 
-  return
+  return undefined
 }
 
 // ---------------------------------------------------------------------------
