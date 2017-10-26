@@ -102,15 +102,20 @@ listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: numbe
           model: RequestVideoEvent['sequelize'].models.Video,
           include: [
             {
-              model: RequestVideoEvent['sequelize'].models.Author,
+              model: RequestVideoEvent['sequelize'].models.VideoChannel,
               include: [
                 {
-                  model: RequestVideoEvent['sequelize'].models.Pod,
-                  where: {
-                    id: {
-                      $in: podIds
+                  model: RequestVideoEvent['sequelize'].models.Author,
+                  include: [
+                    {
+                      model: RequestVideoEvent['sequelize'].models.Pod,
+                      where: {
+                        id: {
+                          $in: podIds
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
               ]
             }
@@ -138,10 +143,15 @@ removeByRequestIdsAndPod = function (ids: number[], podId: number) {
         model: RequestVideoEvent['sequelize'].models.Video,
         include: [
           {
-            model: RequestVideoEvent['sequelize'].models.Author,
-            where: {
-              podId
-            }
+            model: RequestVideoEvent['sequelize'].models.VideoChannel,
+            include: [
+              {
+                model: RequestVideoEvent['sequelize'].models.Author,
+                where: {
+                  podId
+                }
+              }
+            ]
           }
         ]
       }
