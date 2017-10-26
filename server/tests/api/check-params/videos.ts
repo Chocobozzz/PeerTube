@@ -124,7 +124,9 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a long name', async function () {
       const fields = {
-        name: 'My very very very very very very very very very very very very very very very very long name',
+        name: 'My very very very very very very very very very very very very very very very very very  ' +
+              'very very very very very very very very very very very very very very very very long long' +
+              'very very very very very very very very very very very very very very very very long name',
         category: 5,
         licence: 1,
         language: 6,
@@ -358,7 +360,7 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ],
+        tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ],
         channelId
       }
       const attaches = {
@@ -392,7 +394,7 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'my_super_tag_too_long', 'tag1' ],
+        tags: [ 'my_super_tag_too_long_long_long_long_long_long', 'tag1' ],
         channelId
       }
       const attaches = {
@@ -543,7 +545,9 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a long name', async function () {
       const fields = {
-        name: 'My very very very very very very very very very very very very very very very very long name',
+        name: 'My very very very very very very very very very very very very very very very very very  ' +
+        'very very very very very very very very very very very very very very very very long long' +
+        'very very very very very very very very very very very very very very very very long name',
         category: 5,
         licence: 2,
         language: 6,
@@ -629,7 +633,7 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'tag1', 'tag2', 'tag3', 'tag4' ]
+        tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ]
       }
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
@@ -655,7 +659,7 @@ describe('Test videos API validator', function () {
         language: 6,
         nsfw: false,
         description: 'my super description',
-        tags: [ 'my_super_tag_too_long', 'tag1' ]
+        tags: [ 'my_super_tag_too_long_long_long_long', 'tag1' ]
       }
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
