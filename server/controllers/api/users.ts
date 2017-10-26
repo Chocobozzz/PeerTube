@@ -158,16 +158,14 @@ async function getUserVideoRating (req: express.Request, res: express.Response, 
   const videoId = +req.params.videoId
   const userId = +res.locals.oauth.token.User.id
 
-  db.UserVideoRate.load(userId, videoId, null)
-    .then(ratingObj => {
-      const rating = ratingObj ? ratingObj.type : 'none'
-      const json: FormattedUserVideoRate = {
-        videoId,
-        rating
-      }
-      res.json(json)
-    })
-    .catch(err => next(err))
+  const ratingObj = await db.UserVideoRate.load(userId, videoId, null)
+  const rating = ratingObj ? ratingObj.type : 'none'
+
+  const json: FormattedUserVideoRate = {
+    videoId,
+    rating
+  }
+  res.json(json)
 }
 
 async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
