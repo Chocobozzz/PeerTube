@@ -87,7 +87,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.videoService.getVideo(uuid)
                      .subscribe(
                        video => {
-                         this.video = video
+                         this.video = new VideoEdit(video)
 
                          this.hydrateFormFromVideo()
                        },

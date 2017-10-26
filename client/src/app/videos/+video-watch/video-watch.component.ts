@@ -13,7 +13,7 @@ import { AuthService, ConfirmService } from '../../core'
 import { VideoDownloadComponent } from './video-download.component'
 import { VideoShareComponent } from './video-share.component'
 import { VideoReportComponent } from './video-report.component'
-import { VideoDetails, VideoService } from '../shared'
+import { VideoDetails, VideoService, MarkdownService } from '../shared'
 import { VideoBlacklistService } from '../../shared'
 import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 
@@ -38,6 +38,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   video: VideoDetails = null
   videoPlayerLoaded = false
   videoNotFound = false
+  videoHTMLDescription = ''
 
   private paramsSub: Subscription
 
@@ -50,7 +51,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private metaService: MetaService,
     private authService: AuthService,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private markdownService: MarkdownService
   ) {}
 
   ngOnInit () {
@@ -258,6 +260,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             self.uploadSpeed = data.uploadSpeed
           })
         })
+
+        this.videoHTMLDescription = this.markdownService.markdownToHTML(this.video.description)
 
         this.setOpenGraphTags()
         this.checkUserRating()

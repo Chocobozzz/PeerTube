@@ -1,4 +1,5 @@
 export * from './sort-field.type'
+export * from './markdown.service'
 export * from './video.model'
 export * from './video-details.model'
 export * from './video-edit.model'

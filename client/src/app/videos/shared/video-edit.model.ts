@@ -1,3 +1,5 @@
+import { VideoDetails } from './video-details.model'
+
 export class VideoEdit {
   category: number
   licence: number
@@ -9,6 +11,19 @@ export class VideoEdit {
   channel: number
   uuid?: string
   id?: number
+
+  constructor (videoDetails: VideoDetails) {
+    this.id = videoDetails.id
+    this.uuid = videoDetails.uuid
+    this.category = videoDetails.category
+    this.licence = videoDetails.licence
+    this.language = videoDetails.language
+    this.description = videoDetails.description
+    this.name = videoDetails.name
+    this.tags = videoDetails.tags
+    this.nsfw = videoDetails.nsfw
+    this.channel = videoDetails.channel.id
+  }
 
   patch (values: Object) {
     Object.keys(values).forEach((key) => {

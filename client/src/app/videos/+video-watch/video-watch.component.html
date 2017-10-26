@@ -128,9 +128,7 @@
         Published on {{ video.createdAt | date:'short' }}
       </div>
 
-      <div class="video-details-description">
-        {{ video.description }}
-      </div>
+      <div class="video-details-description" [innerHTML]="videoHTMLDescription"></div>
     </div>
 
     <div class="video-details-attributes col-xs-4 col-md-3">

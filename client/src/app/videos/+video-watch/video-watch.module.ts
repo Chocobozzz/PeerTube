@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core'
 
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
-import { VideoService } from '../shared'
+import { VideoService, MarkdownService } from '../shared'
 import { SharedModule } from '../../shared'
 
 import { VideoWatchComponent } from './video-watch.component'
@@ -28,6 +28,7 @@ import { VideoDownloadComponent } from './video-download.component'
   ],
 
   providers: [
+    MarkdownService,
     VideoService
   ]
 })

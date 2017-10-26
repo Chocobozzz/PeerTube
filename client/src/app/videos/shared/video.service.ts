@@ -36,7 +36,7 @@ export class VideoService {
     private restService: RestService
   ) {}
 
-  getVideo (uuid: string) {
+  getVideo (uuid: string): Observable<VideoDetails> {
     return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
                         .map(videoHash => new VideoDetails(videoHash))
                         .catch((res) => this.restExtractor.handleError(res))
