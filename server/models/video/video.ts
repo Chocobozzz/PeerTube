@@ -80,6 +80,7 @@ let listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAn
 let listOwnedByAuthor: VideoMethods.ListOwnedByAuthor
 let load: VideoMethods.Load
 let loadByUUID: VideoMethods.LoadByUUID
+let loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
 let loadAndPopulateAuthor: VideoMethods.LoadAndPopulateAuthor
 let loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
 let loadByUUIDAndPopulateAuthorAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAuthorAndPodAndTags
@@ -247,6 +248,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     loadAndPopulateAuthorAndPodAndTags,
     loadByHostAndUUID,
     loadByUUID,
+    loadLocalVideoByUUID,
     loadByUUIDAndPopulateAuthorAndPodAndTags,
     searchAndPopulateAuthorAndPodAndTags
   ]
@@ -890,6 +892,20 @@ loadByUUID = function (uuid: string, t?: Sequelize.Transaction) {
   const query: Sequelize.FindOptions<VideoAttributes> = {
     where: {
       uuid
+    },
+    include: [ Video['sequelize'].models.VideoFile ]
+  }
+
+  if (t !== undefined) query.transaction = t
+
+  return Video.findOne(query)
+}
+
+loadLocalVideoByUUID = function (uuid: string, t?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<VideoAttributes> = {
+    where: {
+      uuid,
+      remote: false
     },
     include: [ Video['sequelize'].models.VideoFile ]
   }

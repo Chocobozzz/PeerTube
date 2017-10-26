@@ -16,7 +16,7 @@ import {
   remoteQaduVideosValidator,
   remoteEventsVideosValidator
 } from '../../../middlewares'
-import { logger, retryTransactionWrapper } from '../../../helpers'
+import { logger, retryTransactionWrapper, resetSequelizeInstance } from '../../../helpers'
 import { quickAndDirtyUpdatesVideoToFriends, fetchVideoChannelByHostAndUUID } from '../../../lib'
 import { PodInstance, VideoFileInstance } from '../../../models'
 import {
@@ -35,6 +35,7 @@ import {
   RemoteVideoAuthorRemoveData,
   RemoteVideoAuthorCreateData
 } from '../../../../shared'
+import { VideoInstance } from '../../../models/video/video-interface'
 
 const ENDPOINT_ACTIONS = REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS]
 
@@ -145,7 +146,7 @@ async function processVideosEventsRetryWrapper (eventData: RemoteVideoEventData,
 async function processVideosEvents (eventData: RemoteVideoEventData, fromPod: PodInstance) {
   await db.sequelize.transaction(async t => {
     const sequelizeOptions = { transaction: t }
-    const videoInstance = await fetchVideoByUUID(eventData.uuid, t)
+    const videoInstance = await fetchLocalVideoByUUID(eventData.uuid, t)
 
     let columnToUpdate
     let qaduType
@@ -306,6 +307,8 @@ async function updateRemoteVideoRetryWrapper (videoAttributesToUpdate: RemoteVid
 
 async function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData, fromPod: PodInstance) {
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
+  let videoInstance: VideoInstance
+  let videoFieldsSave: object
 
   try {
     await db.sequelize.transaction(async t => {
@@ -314,6 +317,7 @@ async function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData
       }
 
       const videoInstance = await fetchVideoByHostAndUUID(fromPod.host, videoAttributesToUpdate.uuid, t)
+      videoFieldsSave = videoInstance.toJSON()
       const tags = videoAttributesToUpdate.tags
 
       const tagInstances = await db.Tag.findOrCreateTags(tags, t)
@@ -360,6 +364,10 @@ async function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData
 
     logger.info('Remote video with uuid %s updated', videoAttributesToUpdate.uuid)
   } catch (err) {
+    if (videoInstance !== undefined && videoFieldsSave !== undefined) {
+      resetSequelizeInstance(videoInstance, videoFieldsSave)
+    }
+
     // This is just a debug because we will retry the insert
     logger.debug('Cannot update the remote video.', err)
     throw err
@@ -538,7 +546,7 @@ async function reportAbuseRemoteVideo (reportData: RemoteVideoReportAbuseData, f
   logger.debug('Reporting remote abuse for video %s.', reportData.videoUUID)
 
   await db.sequelize.transaction(async t => {
-    const videoInstance = await fetchVideoByUUID(reportData.videoUUID, t)
+    const videoInstance = await fetchLocalVideoByUUID(reportData.videoUUID, t)
     const videoAbuseData = {
       reporterUsername: reportData.reporterUsername,
       reason: reportData.reportReason,
@@ -553,9 +561,9 @@ async function reportAbuseRemoteVideo (reportData: RemoteVideoReportAbuseData, f
   logger.info('Remote abuse for video uuid %s created', reportData.videoUUID)
 }
 
-async function fetchVideoByUUID (id: string, t: Sequelize.Transaction) {
+async function fetchLocalVideoByUUID (id: string, t: Sequelize.Transaction) {
   try {
-    const video = await db.Video.loadByUUID(id, t)
+    const video = await db.Video.loadLocalVideoByUUID(id, t)
 
     if (!video) throw new Error('Video ' + id + ' not found')
 

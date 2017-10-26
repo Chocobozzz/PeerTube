@@ -57,6 +57,7 @@ export namespace VideoMethods {
 
   export type Load = (id: number) => Promise<VideoInstance>
   export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
+  export type LoadLocalVideoByUUID = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
   export type LoadByHostAndUUID = (fromHost: string, uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
   export type LoadAndPopulateAuthor = (id: number) => Promise<VideoInstance>
   export type LoadAndPopulateAuthorAndPodAndTags = (id: number) => Promise<VideoInstance>
@@ -79,6 +80,7 @@ export interface VideoClass {
   loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
   loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
   loadByUUID: VideoMethods.LoadByUUID
+  loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
   loadByUUIDAndPopulateAuthorAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAuthorAndPodAndTags
   searchAndPopulateAuthorAndPodAndTags: VideoMethods.SearchAndPopulateAuthorAndPodAndTags
 }
