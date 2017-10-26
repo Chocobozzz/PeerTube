@@ -509,8 +509,8 @@ describe('Test multiple pods', function () {
         const video0 = videos.find(v => v.uuid === localVideosPod3[0])
         const video1 = videos.find(v => v.uuid === localVideosPod3[1])
 
-        expect(video0.views).to.equal(4)
-        expect(video1.views).to.equal(2)
+        expect(video0.views).to.equal(7)
+        expect(video1.views).to.equal(5)
       }
     })
 
