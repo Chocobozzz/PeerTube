@@ -343,7 +343,7 @@ function afterDestroy (video: VideoInstance, options: { transaction: Sequelize.T
 
   return Promise.all(tasks)
     .catch(err => {
-      logger.error('Some errors when removing files of video %d in after destroy hook.', video.uuid, err)
+      logger.error('Some errors when removing files of video %s in after destroy hook.', video.uuid, err)
     })
 }
 
