@@ -88,8 +88,10 @@ abstract class AbstractRequestScheduler <T> {
     // The function fire some useful callbacks
     try {
       const { response } = await makeSecureRequest(params)
-      if (response.statusCode !== 200 && response.statusCode !== 201 && response.statusCode !== 204) {
-        throw new Error('Status code not 20x : ' + response.statusCode)
+
+      // 400 because if the other pod is not up to date, it may not understand our request
+      if ([ 200, 201, 204, 400 ].indexOf(response.statusCode) === -1) {
+        throw new Error('Status code not 20x or 400 : ' + response.statusCode)
       }
     } catch (err) {
       logger.error('Error sending secure request to %s pod.', toPod.host, err)

@@ -3,39 +3,52 @@ import * as express from 'express'
 
 import {
   logger,
-  isEachRemoteRequestVideosValid,
-  isEachRemoteRequestVideosQaduValid,
-  isEachRemoteRequestVideosEventsValid
+  isArray,
+  removeBadRequestVideos,
+  removeBadRequestVideosQadu,
+  removeBadRequestVideosEvents
 } from '../../../helpers'
 import { checkErrors } from '../utils'
 
 const remoteVideosValidator = [
-  body('data').custom(isEachRemoteRequestVideosValid),
+  body('data').custom(isArray),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking remoteVideos parameters', { parameters: req.body })
 
-    checkErrors(req, res, next)
+    checkErrors(req, res, () => {
+      removeBadRequestVideos(req.body.data)
+
+      return next()
+    })
   }
 ]
 
 const remoteQaduVideosValidator = [
-  body('data').custom(isEachRemoteRequestVideosQaduValid),
+  body('data').custom(isArray),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking remoteQaduVideos parameters', { parameters: req.body })
 
-    checkErrors(req, res, next)
+    checkErrors(req, res, () => {
+      removeBadRequestVideosQadu(req.body.data)
+
+      return next()
+    })
   }
 ]
 
 const remoteEventsVideosValidator = [
-  body('data').custom(isEachRemoteRequestVideosEventsValid),
+  body('data').custom(isArray),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking remoteEventsVideos parameters', { parameters: req.body })
 
-    checkErrors(req, res, next)
+    checkErrors(req, res, () => {
+      removeBadRequestVideosEvents(req.body.data)
+
+      return next()
+    })
   }
 ]
 

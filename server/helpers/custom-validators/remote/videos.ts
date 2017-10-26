@@ -15,9 +15,9 @@ import {
   isVideoLikesValid,
   isVideoDislikesValid,
   isVideoEventCountValid,
-  isVideoCategoryValid,
-  isVideoLicenceValid,
-  isVideoLanguageValid,
+  isRemoteVideoCategoryValid,
+  isRemoteVideoLicenceValid,
+  isRemoteVideoLanguageValid,
   isVideoNSFWValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
@@ -43,58 +43,64 @@ checkers[ENDPOINT_ACTIONS.REMOVE_CHANNEL] = checkRemoveVideoChannel
 checkers[ENDPOINT_ACTIONS.ADD_AUTHOR] = checkAddAuthor
 checkers[ENDPOINT_ACTIONS.REMOVE_AUTHOR] = checkRemoveAuthor
 
-function isEachRemoteRequestVideosValid (requests: any[]) {
-  return isArray(requests) &&
-    requests.every(request => {
-      const video = request.data
+function removeBadRequestVideos (requests: any[]) {
+  for (let i = requests.length - 1; i >= 0 ; i--) {
+    const request = requests[i]
+    const video = request.data
 
-      if (!video) return false
-
-      const checker = checkers[request.type]
-      // We don't know the request type
-      if (checker === undefined) return false
-
-      return checker(video)
-    })
+    if (
+      !video ||
+      checkers[request.type] === undefined ||
+      checkers[request.type](video) === false
+    ) {
+      requests.splice(i, 1)
+    }
+  }
 }
 
-function isEachRemoteRequestVideosQaduValid (requests: any[]) {
-  return isArray(requests) &&
-    requests.every(request => {
-      const video = request.data
+function removeBadRequestVideosQadu (requests: any[]) {
+  for (let i = requests.length - 1; i >= 0 ; i--) {
+    const request = requests[i]
+    const video = request.data
 
-      if (!video) return false
-
-      return (
+    if (
+      !video ||
+      (
         isUUIDValid(video.uuid) &&
         (has(video, 'views') === false || isVideoViewsValid(video.views)) &&
         (has(video, 'likes') === false || isVideoLikesValid(video.likes)) &&
         (has(video, 'dislikes') === false || isVideoDislikesValid(video.dislikes))
-      )
-    })
+      ) === false
+    ) {
+      requests.splice(i, 1)
+    }
+  }
 }
 
-function isEachRemoteRequestVideosEventsValid (requests: any[]) {
-  return isArray(requests) &&
-    requests.every(request => {
-      const eventData = request.data
+function removeBadRequestVideosEvents (requests: any[]) {
+  for (let i = requests.length - 1; i >= 0 ; i--) {
+    const request = requests[i]
+    const eventData = request.data
 
-      if (!eventData) return false
-
-      return (
+    if (
+      !eventData ||
+      (
         isUUIDValid(eventData.uuid) &&
         values(REQUEST_VIDEO_EVENT_TYPES).indexOf(eventData.eventType) !== -1 &&
         isVideoEventCountValid(eventData.count)
-      )
-    })
+      ) === false
+    ) {
+      requests.splice(i, 1)
+    }
+  }
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isEachRemoteRequestVideosValid,
-  isEachRemoteRequestVideosQaduValid,
-  isEachRemoteRequestVideosEventsValid
+  removeBadRequestVideos,
+  removeBadRequestVideosQadu,
+  removeBadRequestVideosEvents
 }
 
 // ---------------------------------------------------------------------------
@@ -102,9 +108,9 @@ export {
 function isCommonVideoAttributesValid (video: any) {
   return isDateValid(video.createdAt) &&
          isDateValid(video.updatedAt) &&
-         isVideoCategoryValid(video.category) &&
-         isVideoLicenceValid(video.licence) &&
-         isVideoLanguageValid(video.language) &&
+         isRemoteVideoCategoryValid(video.category) &&
+         isRemoteVideoLicenceValid(video.licence) &&
+         isRemoteVideoLanguageValid(video.language) &&
          isVideoNSFWValid(video.nsfw) &&
          isVideoDescriptionValid(video.description) &&
          isVideoDurationValid(video.duration) &&

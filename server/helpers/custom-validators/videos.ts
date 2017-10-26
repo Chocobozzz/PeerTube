@@ -27,12 +27,27 @@ function isVideoCategoryValid (value: number) {
   return VIDEO_CATEGORIES[value] !== undefined
 }
 
+// Maybe we don't know the remote category, but that doesn't matter
+function isRemoteVideoCategoryValid (value: string) {
+  return validator.isInt('' + value)
+}
+
 function isVideoLicenceValid (value: number) {
   return VIDEO_LICENCES[value] !== undefined
 }
 
+// Maybe we don't know the remote licence, but that doesn't matter
+function isRemoteVideoLicenceValid (value: string) {
+  return validator.isInt('' + value)
+}
+
 function isVideoLanguageValid (value: number) {
   return value === null || VIDEO_LANGUAGES[value] !== undefined
+}
+
+// Maybe we don't know the remote language, but that doesn't matter
+function isRemoteVideoLanguageValid (value: string) {
+  return validator.isInt('' + value)
 }
 
 function isVideoNSFWValid (value: any) {
@@ -176,5 +191,8 @@ export {
   isVideoEventCountValid,
   isVideoFileSizeValid,
   isVideoFileResolutionValid,
-  checkVideoExists
+  checkVideoExists,
+  isRemoteVideoCategoryValid,
+  isRemoteVideoLicenceValid,
+  isRemoteVideoLanguageValid
 }
