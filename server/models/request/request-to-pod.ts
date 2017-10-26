@@ -41,7 +41,7 @@ removeByRequestIdsAndPod = function (requestsIds: number[], podId: number) {
   const query = {
     where: {
       requestId: {
-        $in: requestsIds
+        [Sequelize.Op.in]: requestsIds
       },
       podId: podId
     }

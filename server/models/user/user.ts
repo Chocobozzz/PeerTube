@@ -271,7 +271,7 @@ loadByUsernameOrEmail = function (username: string, email: string) {
   const query = {
     include: [ { model: User['sequelize'].models.Author, required: true } ],
     where: {
-      $or: [ { username }, { email } ]
+      [Sequelize.Op.or]: [ { username }, { email } ]
     }
   }
 

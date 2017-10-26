@@ -131,4 +131,3 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.form.patchValue(this.video.toJSON())
   }
 }
-

@@ -1012,7 +1012,7 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
     }
   } else if (field === 'tags') {
     const escapedValue = Video['sequelize'].escape('%' + value + '%')
-    query.where['id'].$in = Video['sequelize'].literal(
+    query.where['id'][Sequelize.Op.in] = Video['sequelize'].literal(
       `(SELECT "VideoTags"."videoId"
         FROM "Tags"
         INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
@@ -1023,19 +1023,19 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
     // FIXME: Include our pod? (not stored in the database)
     podInclude.where = {
       host: {
-        $iLike: '%' + value + '%'
+        [Sequelize.Op.iLike]: '%' + value + '%'
       }
     }
     podInclude.required = true
   } else if (field === 'author') {
     authorInclude.where = {
       name: {
-        $iLike: '%' + value + '%'
+        [Sequelize.Op.iLike]: '%' + value + '%'
       }
     }
   } else {
     query.where[field] = {
-      $iLike: '%' + value + '%'
+      [Sequelize.Op.iLike]: '%' + value + '%'
     }
   }
 
@@ -1056,7 +1056,7 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
 function createBaseVideosWhere () {
   return {
     id: {
-      $notIn: Video['sequelize'].literal(
+      [Sequelize.Op.notIn]: Video['sequelize'].literal(
         '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
       )
     }

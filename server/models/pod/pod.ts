@@ -130,7 +130,7 @@ incrementScores = function (ids: number[], value: number) {
   const options = {
     where: {
       id: {
-        $in: ids
+        [Sequelize.Op.in]: ids
       }
     },
     // In this case score is a literal and not an integer so we do not validate it
@@ -178,6 +178,7 @@ listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, ta
     let start = Math.floor(Math.random() * count) - limit
     if (start < 0) start = 0
 
+    const subQuery = `(SELECT DISTINCT "${tableWithPods}"."podId" FROM "${tableWithPods}" ${tableWithPodsJoins})`
     const query = {
       attributes: [ 'id' ],
       order: [
@@ -187,7 +188,7 @@ listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, ta
       limit: limit,
       where: {
         id: {
-          $in: Sequelize.literal(`(SELECT DISTINCT "${tableWithPods}"."podId" FROM "${tableWithPods}" ${tableWithPodsJoins})`)
+          [Sequelize.Op.in]: Sequelize.literal(subQuery)
         }
       }
     }
@@ -201,7 +202,9 @@ listRandomPodIdsWithRequest = function (limit: number, tableWithPods: string, ta
 listBadPods = function () {
   const query = {
     where: {
-      score: { $lte: 0 }
+      score: {
+        [Sequelize.Op.lte]: 0
+      }
     }
   }
 

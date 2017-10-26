@@ -64,6 +64,7 @@ const sequelize = new Sequelize(dbname, username, password, {
   port: CONFIG.DATABASE.PORT,
   benchmark: isTestInstance(),
   isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
+  operatorsAliases: false,
 
   logging: (message: string, benchmark: number) => {
     let newMessage = message

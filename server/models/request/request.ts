@@ -88,7 +88,7 @@ listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: numbe
           model: Request['sequelize'].models.Pod,
           where: {
             id: {
-              $in: podIds
+              [Sequelize.Op.in]: podIds
             }
           }
         }
@@ -112,7 +112,7 @@ removeWithEmptyTo = function () {
   const query = {
     where: {
       id: {
-        $notIn: [
+        [Sequelize.Op.notIn]: [
           Sequelize.literal('SELECT "requestId" FROM "RequestToPods"')
         ]
       }

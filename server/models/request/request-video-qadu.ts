@@ -101,7 +101,7 @@ listWithLimitAndRandom = function (limitPods: number, limitRequestsPerPod: numbe
           model: RequestVideoQadu['sequelize'].models.Pod,
           where: {
             id: {
-              $in: podIds
+              [Sequelize.Op.in]: podIds
             }
           }
         },
@@ -122,7 +122,7 @@ removeByRequestIdsAndPod = function (ids: number[], podId: number) {
   const query = {
     where: {
       id: {
-        $in: ids
+        [Sequelize.Op.in]: ids
       },
       podId
     }
