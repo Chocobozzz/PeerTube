@@ -39,10 +39,10 @@
     </a>
   </div>
 
-  <div *ngIf="isUserAdmin()" class="panel-block">
+  <div *ngIf="userHasAdminAccess" class="panel-block">
     <div class="block-title">Other</div>
 
-    <a routerLink="/admin" routerLinkActive="active">
+    <a [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cog"></span>
       Administration
     </a>

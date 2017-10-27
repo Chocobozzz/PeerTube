@@ -12,7 +12,7 @@ import {
   VideoService,
   VideoPagination
 } from '../shared'
-import { Search, SearchField, SearchService, User} from '../../shared'
+import { Search, SearchField, SearchService, User } from '../../shared'
 
 @Component({
   selector: 'my-videos-list',

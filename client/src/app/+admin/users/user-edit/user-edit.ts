@@ -1,6 +1,6 @@
 import { ServerService } from '../../../core'
 import { FormReactive } from '../../../shared'
-import { VideoResolution } from '../../../../../../shared/models/videos/video-resolution.enum'
+import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
 
 export abstract class UserEdit extends FormReactive {
   videoQuotaOptions = [
@@ -13,6 +13,8 @@ export abstract class UserEdit extends FormReactive {
     { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
     { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
   ]
+
+  roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key, label: USER_ROLE_LABELS[key] }))
 
   protected abstract serverService: ServerService
   abstract isCreation (): boolean

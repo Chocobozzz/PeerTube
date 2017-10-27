@@ -8,15 +8,14 @@ import { FriendsRoutes } from './friends'
 import { RequestSchedulersRoutes } from './request-schedulers'
 import { UsersRoutes } from './users'
 import { VideoAbusesRoutes } from './video-abuses'
-import { AdminGuard } from './admin-guard.service'
 import { VideoBlacklistRoutes } from './video-blacklist'
 
 const adminRoutes: Routes = [
   {
     path: '',
     component: AdminComponent,
-    canActivate: [ MetaGuard, AdminGuard ],
-    canActivateChild: [ MetaGuard, AdminGuard ],
+    canActivate: [ MetaGuard ],
+    canActivateChild: [ MetaGuard ],
     children: [
       {
         path: '',

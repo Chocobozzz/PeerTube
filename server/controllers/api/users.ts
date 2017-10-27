@@ -1,11 +1,10 @@
 import * as express from 'express'
 
-import { database as db } from '../../initializers/database'
-import { USER_ROLES, CONFIG } from '../../initializers'
+import { database as db, CONFIG } from '../../initializers'
 import { logger, getFormattedObjects, retryTransactionWrapper } from '../../helpers'
 import {
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight,
   ensureUserRegistrationAllowed,
   usersAddValidator,
   usersRegisterValidator,
@@ -25,7 +24,9 @@ import {
   UserVideoRate as FormattedUserVideoRate,
   UserCreate,
   UserUpdate,
-  UserUpdateMe
+  UserUpdateMe,
+  UserRole,
+  UserRight
 } from '../../../shared'
 import { createUserAuthorAndChannel } from '../../lib'
 import { UserInstance } from '../../models'
@@ -58,7 +59,7 @@ usersRouter.get('/:id',
 
 usersRouter.post('/',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
   usersAddValidator,
   createUserRetryWrapper
 )
@@ -77,14 +78,14 @@ usersRouter.put('/me',
 
 usersRouter.put('/:id',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
   usersUpdateValidator,
   asyncMiddleware(updateUser)
 )
 
 usersRouter.delete('/:id',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
   usersRemoveValidator,
   asyncMiddleware(removeUser)
 )
@@ -119,7 +120,7 @@ async function createUser (req: express.Request, res: express.Response, next: ex
     password: body.password,
     email: body.email,
     displayNSFW: false,
-    role: USER_ROLES.USER,
+    role: body.role,
     videoQuota: body.videoQuota
   })
 
@@ -136,7 +137,7 @@ async function registerUser (req: express.Request, res: express.Response, next: 
     password: body.password,
     email: body.email,
     displayNSFW: false,
-    role: USER_ROLES.USER,
+    role: UserRole.USER,
     videoQuota: CONFIG.USER.VIDEO_QUOTA
   })
 
@@ -203,6 +204,7 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
 
   if (body.email !== undefined) user.email = body.email
   if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota
+  if (body.role !== undefined) user.role = body.role
 
   await user.save()
 

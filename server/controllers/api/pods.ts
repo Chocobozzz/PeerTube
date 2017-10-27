@@ -9,7 +9,7 @@ import {
 } from '../../lib'
 import {
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight,
   makeFriendsValidator,
   setBodyHostsPort,
   podRemoveValidator,
@@ -20,6 +20,7 @@ import {
   asyncMiddleware
 } from '../../middlewares'
 import { PodInstance } from '../../models'
+import { UserRight } from '../../../shared'
 
 const podsRouter = express.Router()
 
@@ -32,19 +33,19 @@ podsRouter.get('/',
 )
 podsRouter.post('/make-friends',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_PODS),
   makeFriendsValidator,
   setBodyHostsPort,
   asyncMiddleware(makeFriendsController)
 )
 podsRouter.get('/quit-friends',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_PODS),
   asyncMiddleware(quitFriendsController)
 )
 podsRouter.delete('/:id',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_PODS),
   podRemoveValidator,
   asyncMiddleware(removeFriendController)
 )

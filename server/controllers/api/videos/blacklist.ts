@@ -4,7 +4,7 @@ import { database as db } from '../../../initializers'
 import { logger, getFormattedObjects } from '../../../helpers'
 import {
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight,
   videosBlacklistAddValidator,
   videosBlacklistRemoveValidator,
   paginationValidator,
@@ -14,20 +14,20 @@ import {
   asyncMiddleware
 } from '../../../middlewares'
 import { BlacklistedVideoInstance } from '../../../models'
-import { BlacklistedVideo } from '../../../../shared'
+import { BlacklistedVideo, UserRight } from '../../../../shared'
 
 const blacklistRouter = express.Router()
 
 blacklistRouter.post('/:videoId/blacklist',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   videosBlacklistAddValidator,
   asyncMiddleware(addVideoToBlacklist)
 )
 
 blacklistRouter.get('/blacklist',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   paginationValidator,
   blacklistSortValidator,
   setBlacklistSort,
@@ -37,7 +37,7 @@ blacklistRouter.get('/blacklist',
 
 blacklistRouter.delete('/:videoId/blacklist',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   videosBlacklistRemoveValidator,
   asyncMiddleware(removeVideoFromBlacklistController)
 )

@@ -1,17 +1,17 @@
-import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 import { getSort } from '../utils'
-import { USER_ROLES } from '../../initializers'
 import {
   cryptPassword,
   comparePassword,
   isUserPasswordValid,
   isUserUsernameValid,
   isUserDisplayNSFWValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid,
+  isUserRoleValid
 } from '../../helpers'
+import { UserRight, USER_ROLE_LABELS, hasUserRight } from '../../../shared'
 
 import { addMethodsToModel } from '../utils'
 import {
@@ -23,8 +23,8 @@ import {
 
 let User: Sequelize.Model<UserInstance, UserAttributes>
 let isPasswordMatch: UserMethods.IsPasswordMatch
+let hasRight: UserMethods.HasRight
 let toFormattedJSON: UserMethods.ToFormattedJSON
-let isAdmin: UserMethods.IsAdmin
 let countTotal: UserMethods.CountTotal
 let getByUsername: UserMethods.GetByUsername
 let listForApi: UserMethods.ListForApi
@@ -76,8 +76,14 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         }
       },
       role: {
-        type: DataTypes.ENUM(values(USER_ROLES)),
-        allowNull: false
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          roleValid: value => {
+            const res = isUserRoleValid(value)
+            if (res === false) throw new Error('Role is not valid.')
+          }
+        }
       },
       videoQuota: {
         type: DataTypes.BIGINT,
@@ -120,9 +126,9 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     loadByUsernameOrEmail
   ]
   const instanceMethods = [
+    hasRight,
     isPasswordMatch,
     toFormattedJSON,
-    isAdmin,
     isAbleToUploadVideo
   ]
   addMethodsToModel(User, classMethods, instanceMethods)
@@ -139,6 +145,10 @@ function beforeCreateOrUpdate (user: UserInstance) {
 
 // ------------------------------ METHODS ------------------------------
 
+hasRight = function (this: UserInstance, right: UserRight) {
+  return hasUserRight(this.role, right)
+}
+
 isPasswordMatch = function (this: UserInstance, password: string) {
   return comparePassword(password, this.password)
 }
@@ -150,6 +160,7 @@ toFormattedJSON = function (this: UserInstance) {
     email: this.email,
     displayNSFW: this.displayNSFW,
     role: this.role,
+    roleLabel: USER_ROLE_LABELS[this.role],
     videoQuota: this.videoQuota,
     createdAt: this.createdAt,
     author: {
@@ -172,10 +183,6 @@ toFormattedJSON = function (this: UserInstance) {
   }
 
   return json
-}
-
-isAdmin = function (this: UserInstance) {
-  return this.role === USER_ROLES.ADMIN
 }
 
 isAbleToUploadVideo = function (this: UserInstance, videoFile: Express.Multer.File) {

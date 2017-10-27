@@ -2,10 +2,11 @@ import * as passwordGenerator from 'password-generator'
 import * as Bluebird from 'bluebird'
 
 import { database as db } from './database'
-import { USER_ROLES, CONFIG, LAST_MIGRATION_VERSION, CACHE } from './constants'
+import { CONFIG, LAST_MIGRATION_VERSION, CACHE } from './constants'
 import { clientsExist, usersExist } from './checker'
 import { logger, createCertsIfNotExist, mkdirpPromise, rimrafPromise } from '../helpers'
 import { createUserAuthorAndChannel } from '../lib'
+import { UserRole } from '../../shared'
 
 async function installApplication () {
   await db.sequelize.sync()
@@ -88,7 +89,7 @@ async function createOAuthAdminIfNotExist () {
   logger.info('Creating the administrator.')
 
   const username = 'root'
-  const role = USER_ROLES.ADMIN
+  const role = UserRole.ADMINISTRATOR
   const email = CONFIG.ADMIN.EMAIL
   let validatePassword = true
   let password = ''

@@ -9,10 +9,11 @@ import {
   USER_USERNAME,
   USER_EMAIL,
   USER_PASSWORD,
-  USER_VIDEO_QUOTA
+  USER_VIDEO_QUOTA,
+  USER_ROLE
 } from '../../../shared'
 import { ServerService } from '../../../core'
-import { UserCreate } from '../../../../../../shared'
+import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 
 @Component({
@@ -28,12 +29,14 @@ export class UserAddComponent extends UserEdit implements OnInit {
     'username': '',
     'email': '',
     'password': '',
+    'role': '',
     'videoQuota': ''
   }
   validationMessages = {
     'username': USER_USERNAME.MESSAGES,
     'email': USER_EMAIL.MESSAGES,
     'password': USER_PASSWORD.MESSAGES,
+    'role': USER_ROLE.MESSAGES,
     'videoQuota': USER_VIDEO_QUOTA.MESSAGES
   }
 
@@ -52,6 +55,7 @@ export class UserAddComponent extends UserEdit implements OnInit {
       username: [ '', USER_USERNAME.VALIDATORS ],
       email:    [ '', USER_EMAIL.VALIDATORS ],
       password: [ '', USER_PASSWORD.VALIDATORS ],
+      role: [ UserRole.USER, USER_ROLE.VALIDATORS ],
       videoQuota: [ '-1', USER_VIDEO_QUOTA.VALIDATORS ]
     })
 

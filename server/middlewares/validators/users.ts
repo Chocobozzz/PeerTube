@@ -13,7 +13,8 @@ import {
   isUserPasswordValid,
   isUserVideoQuotaValid,
   isUserDisplayNSFWValid,
-  isIdOrUUIDValid
+  isIdOrUUIDValid,
+  isUserRoleValid
 } from '../../helpers'
 import { UserInstance, VideoInstance } from '../../models'
 
@@ -22,6 +23,7 @@ const usersAddValidator = [
   body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersAdd parameters', { parameters: req.body })
@@ -75,6 +77,7 @@ const usersUpdateValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
+  body('role').optional().custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdate parameters', { parameters: req.body })

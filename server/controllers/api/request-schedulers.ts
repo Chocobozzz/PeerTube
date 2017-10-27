@@ -7,14 +7,14 @@ import {
   getRequestVideoQaduScheduler,
   getRequestVideoEventScheduler
 } from '../../lib'
-import { authenticate, ensureIsAdmin, asyncMiddleware } from '../../middlewares'
-import { RequestSchedulerStatsAttributes } from '../../../shared'
+import { authenticate, ensureUserHasRight, asyncMiddleware } from '../../middlewares'
+import { RequestSchedulerStatsAttributes, UserRight } from '../../../shared'
 
 const requestSchedulerRouter = express.Router()
 
 requestSchedulerRouter.get('/stats',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_REQUEST_SCHEDULERS),
   asyncMiddleware(getRequestSchedulersStats)
 )
 

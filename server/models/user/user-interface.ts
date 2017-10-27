@@ -3,15 +3,16 @@ import * as Promise from 'bluebird'
 
 // Don't use barrel, import just what we need
 import { User as FormattedUser } from '../../../shared/models/users/user.model'
-import { UserRole } from '../../../shared/models/users/user-role.type'
 import { ResultList } from '../../../shared/models/result-list.model'
 import { AuthorInstance } from '../video/author-interface'
+import { UserRight } from '../../../shared/models/users/user-right.enum'
+import { UserRole } from '../../../shared/models/users/user-role'
 
 export namespace UserMethods {
+  export type HasRight = (this: UserInstance, right: UserRight) => boolean
   export type IsPasswordMatch = (this: UserInstance, password: string) => Promise<boolean>
 
   export type ToFormattedJSON = (this: UserInstance) => FormattedUser
-  export type IsAdmin = (this: UserInstance) => boolean
   export type IsAbleToUploadVideo = (this: UserInstance, videoFile: Express.Multer.File) => Promise<boolean>
 
   export type CountTotal = () => Promise<number>
@@ -31,7 +32,7 @@ export namespace UserMethods {
 export interface UserClass {
   isPasswordMatch: UserMethods.IsPasswordMatch,
   toFormattedJSON: UserMethods.ToFormattedJSON,
-  isAdmin: UserMethods.IsAdmin,
+  hasRight: UserMethods.HasRight,
   isAbleToUploadVideo: UserMethods.IsAbleToUploadVideo,
 
   countTotal: UserMethods.CountTotal,
@@ -62,7 +63,7 @@ export interface UserInstance extends UserClass, UserAttributes, Sequelize.Insta
 
   isPasswordMatch: UserMethods.IsPasswordMatch
   toFormattedJSON: UserMethods.ToFormattedJSON
-  isAdmin: UserMethods.IsAdmin
+  hasRight: UserMethods.HasRight
 }
 
 export interface UserModel extends UserClass, Sequelize.Model<UserInstance, UserAttributes> {}

@@ -1,19 +1,14 @@
-import { values } from 'lodash'
 import * as validator from 'validator'
 import 'express-validator'
 
 import { exists } from './misc'
-import { CONSTRAINTS_FIELDS, USER_ROLES } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserRole } from '../../../shared'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 
 function isUserPasswordValid (value: string) {
   return validator.isLength(value, USERS_CONSTRAINTS_FIELDS.PASSWORD)
-}
-
-function isUserRoleValid (value: string) {
-  return values(USER_ROLES).indexOf(value as UserRole) !== -1
 }
 
 function isUserVideoQuotaValid (value: string) {
@@ -28,6 +23,10 @@ function isUserUsernameValid (value: string) {
 
 function isUserDisplayNSFWValid (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
+}
+
+function isUserRoleValid (value: any) {
+  return exists(value) && validator.isInt('' + value) && UserRole[value] !== undefined
 }
 
 // ---------------------------------------------------------------------------

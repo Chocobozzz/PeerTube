@@ -41,6 +41,19 @@
       </div>
 
       <div class="form-group">
+        <label for="role">Role</label>
+        <select class="form-control" id="role" formControlName="role">
+          <option *ngFor="let role of roles" [value]="role.value">
+            {{ role.label }}
+          </option>
+        </select>
+
+        <div *ngIf="formErrors.role" class="alert alert-danger">
+          {{ formErrors.role }}
+        </div>
+      </div>
+
+      <div class="form-group">
         <label for="videoQuota">Video quota</label>
         <select class="form-control" id="videoQuota" formControlName="videoQuota">
           <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">

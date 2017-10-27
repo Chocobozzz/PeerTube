@@ -8,7 +8,6 @@ import { UsersComponent, UserAddComponent, UserUpdateComponent, UserListComponen
 import { VideoAbusesComponent, VideoAbuseListComponent } from './video-abuses'
 import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
 import { SharedModule } from '../shared'
-import { AdminGuard } from './admin-guard.service'
 
 @NgModule({
   imports: [
@@ -45,8 +44,7 @@ import { AdminGuard } from './admin-guard.service'
   providers: [
     FriendService,
     RequestSchedulersService,
-    UserService,
-    AdminGuard
+    UserService
   ]
 })
 export class AdminModule { }

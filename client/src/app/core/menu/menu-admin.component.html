@@ -1,26 +1,26 @@
 <menu>
   <div class="panel-block">
-    <a routerLink="/admin/users/list" routerLinkActive="active">
+    <a *ngIf="hasUsersRight()" routerLink="/admin/users" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-user"></span>
       List users
     </a>
 
-    <a routerLink="/admin/friends/list" routerLinkActive="active">
+    <a *ngIf="hasFriendsRight()" routerLink="/admin/friends" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cloud"></span>
       List friends
     </a>
 
-    <a routerLink="/admin/requests/stats" routerLinkActive="active">
+    <a *ngIf="hasRequestsStatRight()" routerLink="/admin/requests/stats" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-stats"></span>
       Request stats
     </a>
 
-    <a routerLink="/admin/video-abuses/list" routerLinkActive="active">
+    <a *ngIf="hasVideoAbusesRight()" routerLink="/admin/video-abuses" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-alert"></span>
       Video abuses
     </a>
 
-    <a routerLink="/admin/video-blacklist/list" routerLinkActive="active">
+    <a *ngIf="hasVideoBlacklistRight()" routerLink="/admin/video-blacklist" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-eye-close"></span>
       Video blacklist
     </a>

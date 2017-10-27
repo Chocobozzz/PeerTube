@@ -22,6 +22,7 @@ import {
   checkVideoExists,
   isIdValid
 } from '../../helpers'
+import { UserRight } from '../../../shared'
 
 const videosAddValidator = [
   body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage(
@@ -231,7 +232,7 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
       // Check if the user can delete the video
       // The user can delete it if s/he is an admin
       // Or if s/he is the video's author
-      if (user.isAdmin() === false && res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
+      if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
         return res.status(403)
                   .json({ error: 'Cannot remove video of another user' })
                   .end()

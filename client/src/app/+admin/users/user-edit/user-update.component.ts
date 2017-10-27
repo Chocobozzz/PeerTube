@@ -6,11 +6,15 @@ import { Subscription } from 'rxjs/Subscription'
 import { NotificationsService } from 'angular2-notifications'
 
 import { UserService } from '../shared'
-import { USER_EMAIL, USER_VIDEO_QUOTA } from '../../../shared'
+import {
+  USER_EMAIL,
+  USER_VIDEO_QUOTA,
+  USER_ROLE,
+  User
+} from '../../../shared'
 import { ServerService } from '../../../core'
-import { UserUpdate } from '../../../../../../shared/models/users/user-update.model'
-import { User } from '../../../shared/users/user.model'
 import { UserEdit } from './user-edit'
+import { UserUpdate, UserRole } from '../../../../../../shared'
 
 @Component({
   selector: 'my-user-update',
@@ -25,10 +29,12 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   form: FormGroup
   formErrors = {
     'email': '',
+    'role': '',
     'videoQuota': ''
   }
   validationMessages = {
     'email': USER_EMAIL.MESSAGES,
+    'role': USER_ROLE.MESSAGES,
     'videoQuota': USER_VIDEO_QUOTA.MESSAGES
   }
 
@@ -48,6 +54,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   buildForm () {
     this.form = this.formBuilder.group({
       email:    [ '', USER_EMAIL.VALIDATORS ],
+      role: [ '', USER_ROLE.VALIDATORS ],
       videoQuota: [ '-1', USER_VIDEO_QUOTA.VALIDATORS ]
     })
 
@@ -103,6 +110,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.form.patchValue({
       email: userJson.email,
+      role: userJson.role,
       videoQuota: userJson.videoQuota
     })
   }

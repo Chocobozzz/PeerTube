@@ -1,9 +1,11 @@
 import { Video } from './video.model'
+import { AuthUser } from '../../core'
 import {
   VideoDetails as VideoDetailsServerModel,
   VideoFile,
   VideoChannel,
-  VideoResolution
+  VideoResolution,
+  UserRight
 } from '../../../../../shared'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
@@ -61,15 +63,15 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     return betterResolutionFile.magnetUri
   }
 
-  isRemovableBy (user) {
-    return user && this.isLocal === true && (this.author === user.username || user.isAdmin() === true)
+  isRemovableBy (user: AuthUser) {
+    return user && this.isLocal === true && (this.author === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
   }
 
-  isBlackistableBy (user) {
-    return user && user.isAdmin() === true && this.isLocal === false
+  isBlackistableBy (user: AuthUser) {
+    return user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true && this.isLocal === false
   }
 
-  isUpdatableBy (user) {
+  isUpdatableBy (user: AuthUser) {
     return user && this.isLocal === true && user.username === this.author
   }
 }

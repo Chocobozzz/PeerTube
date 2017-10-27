@@ -1,5 +1,5 @@
-import { UserRole } from './user-role.type'
 import { VideoChannel } from '../videos/video-channel.model'
+import { UserRole } from './user-role'
 
 export interface User {
   id: number

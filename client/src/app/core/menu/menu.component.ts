@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 
 import { AuthService, AuthStatus } from '../auth'
 import { ServerService } from '../server'
+import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 
 @Component({
   selector: 'my-menu',
@@ -11,6 +12,15 @@ import { ServerService } from '../server'
 })
 export class MenuComponent implements OnInit {
   isLoggedIn: boolean
+  userHasAdminAccess = false
+
+  private routesPerRight = {
+    [UserRight.MANAGE_USERS]: '/admin/users',
+    [UserRight.MANAGE_PODS]: '/admin/friends',
+    [UserRight.MANAGE_REQUEST_SCHEDULERS]: '/admin/requests/stats',
+    [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/video-abuses',
+    [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/video-blacklist'
+  }
 
   constructor (
     private authService: AuthService,
@@ -20,14 +30,17 @@ export class MenuComponent implements OnInit {
 
   ngOnInit () {
     this.isLoggedIn = this.authService.isLoggedIn()
+    this.computeIsUserHasAdminAccess()
 
     this.authService.loginChangedSource.subscribe(
       status => {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true
+          this.computeIsUserHasAdminAccess()
           console.log('Logged in.')
         } else if (status === AuthStatus.LoggedOut) {
           this.isLoggedIn = false
+          this.computeIsUserHasAdminAccess()
           console.log('Logged out.')
         } else {
           console.error('Unknown auth status: ' + status)
@@ -40,13 +53,42 @@ export class MenuComponent implements OnInit {
     return this.serverService.getConfig().signup.allowed
   }
 
-  isUserAdmin () {
-    return this.authService.isAdmin()
+  getFirstAdminRightAvailable () {
+    const user = this.authService.getUser()
+    if (!user) return undefined
+
+    const adminRights = [
+      UserRight.MANAGE_USERS,
+      UserRight.MANAGE_PODS,
+      UserRight.MANAGE_REQUEST_SCHEDULERS,
+      UserRight.MANAGE_VIDEO_ABUSES,
+      UserRight.MANAGE_VIDEO_BLACKLIST
+    ]
+
+    for (const adminRight of adminRights) {
+      if (user.hasRight(adminRight)) {
+        return adminRight
+      }
+    }
+
+    return undefined
+  }
+
+  getFirstAdminRouteAvailable () {
+    const right = this.getFirstAdminRightAvailable()
+
+    return this.routesPerRight[right]
   }
 
   logout () {
     this.authService.logout()
     // Redirect to home page
     this.router.navigate(['/videos/list'])
+  }
+
+  private computeIsUserHasAdminAccess () {
+    const right = this.getFirstAdminRightAvailable()
+
+    this.userHasAdminAccess = right !== undefined
   }
 }

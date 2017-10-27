@@ -1,6 +1,7 @@
 // Do not use the barrel (dependency loop)
-import { UserRole } from '../../../../../shared/models/users/user-role.type'
+import { hasUserRight, UserRole } from '../../../../../shared/models/users/user-role'
 import { User, UserConstructorHash } from '../../shared/users/user.model'
+import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 
 export type TokenOptions = {
   accessToken: string
@@ -81,7 +82,7 @@ export class AuthUser extends User {
           id: parseInt(localStorage.getItem(this.KEYS.ID), 10),
           username: localStorage.getItem(this.KEYS.USERNAME),
           email: localStorage.getItem(this.KEYS.EMAIL),
-          role: localStorage.getItem(this.KEYS.ROLE) as UserRole,
+          role: parseInt(localStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
           displayNSFW: localStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true'
         },
         Tokens.load()
@@ -122,11 +123,15 @@ export class AuthUser extends User {
     this.tokens.refreshToken = refreshToken
   }
 
+  hasRight(right: UserRight) {
+    return hasUserRight(this.role, right)
+  }
+
   save () {
     localStorage.setItem(AuthUser.KEYS.ID, this.id.toString())
     localStorage.setItem(AuthUser.KEYS.USERNAME, this.username)
     localStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
-    localStorage.setItem(AuthUser.KEYS.ROLE, this.role)
+    localStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
     localStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW))
     this.tokens.save()
   }

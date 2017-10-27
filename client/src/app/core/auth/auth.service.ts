@@ -21,7 +21,7 @@ import {
 // Do not use the barrel (dependency loop)
 import { RestExtractor } from '../../shared/rest'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
-import { User, UserConstructorHash } from '../../shared/users/user.model'
+import { UserConstructorHash } from '../../shared/users/user.model'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -124,12 +124,6 @@ export class AuthService {
 
   getUser () {
     return this.user
-  }
-
-  isAdmin () {
-    if (this.user === null) return false
-
-    return this.user.isAdmin()
   }
 
   isLoggedIn () {

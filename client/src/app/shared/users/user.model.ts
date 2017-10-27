@@ -1,7 +1,9 @@
 import {
   User as UserServerModel,
   UserRole,
-  VideoChannel
+  VideoChannel,
+  UserRight,
+  hasUserRight
 } from '../../../../../shared'
 
 export type UserConstructorHash = {
@@ -56,7 +58,7 @@ export class User implements UserServerModel {
     }
   }
 
-  isAdmin () {
-    return this.role === 'admin'
+  hasRight (right: UserRight) {
+    return hasUserRight(this.role, right)
   }
 }

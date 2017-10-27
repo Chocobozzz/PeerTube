@@ -29,3 +29,9 @@ export const USER_VIDEO_QUOTA = {
     'min': 'Quota must be greater than -1.'
   }
 }
+export const USER_ROLE = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    'required': 'User role is required.',
+  }
+}

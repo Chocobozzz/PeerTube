@@ -9,7 +9,7 @@ import {
 } from '../../../helpers'
 import {
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight,
   paginationValidator,
   videoAbuseReportValidator,
   videoAbusesSortValidator,
@@ -18,13 +18,13 @@ import {
   asyncMiddleware
 } from '../../../middlewares'
 import { VideoInstance } from '../../../models'
-import { VideoAbuseCreate } from '../../../../shared'
+import { VideoAbuseCreate, UserRight } from '../../../../shared'
 
 const abuseVideoRouter = express.Router()
 
 abuseVideoRouter.get('/abuse',
   authenticate,
-  ensureIsAdmin,
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_ABUSES),
   paginationValidator,
   videoAbusesSortValidator,
   setVideoAbusesSort,

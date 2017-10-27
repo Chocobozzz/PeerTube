@@ -7,10 +7,10 @@ import {
   Router
 } from '@angular/router'
 
-import { AuthService } from './auth.service'
+import { AuthService } from '../auth'
 
 @Injectable()
-export class LoginGuard implements CanActivate, CanActivateChild {
+export class UserRightGuard implements CanActivate, CanActivateChild {
 
   constructor (
     private router: Router,
@@ -18,7 +18,12 @@ export class LoginGuard implements CanActivate, CanActivateChild {
   ) {}
 
   canActivate (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if (this.auth.isLoggedIn() === true) return true
+    const user = this.auth.getUser()
+    if (user) {
+      const neededUserRight = route.data.userRight
+
+      if (user.hasRight(neededUserRight)) return true
+    }
 
     this.router.navigate([ '/login' ])
     return false

@@ -5,7 +5,6 @@ import { join } from 'path'
 import { root, isTestInstance } from '../helpers/core-utils'
 
 import {
-  UserRole,
   VideoRateType,
   RequestEndpoint,
   RequestVideoEventType,
@@ -16,7 +15,7 @@ import {
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 80
+const LAST_MIGRATION_VERSION = 85
 
 // ---------------------------------------------------------------------------
 
@@ -283,7 +282,6 @@ const JOB_STATES: { [ id: string ]: JobState } = {
 }
 // How many maximum jobs we fetch from the database per cycle
 const JOBS_FETCH_LIMIT_PER_CYCLE = 10
-const JOBS_CONCURRENCY = 1
 // 1 minutes
 let JOBS_FETCHING_INTERVAL = 60000
 
@@ -334,13 +332,6 @@ const CACHE = {
 
 // ---------------------------------------------------------------------------
 
-const USER_ROLES: { [ id: string ]: UserRole } = {
-  ADMIN: 'admin',
-  USER: 'user'
-}
-
-// ---------------------------------------------------------------------------
-
 const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 
 // ---------------------------------------------------------------------------
@@ -367,7 +358,6 @@ export {
   EMBED_SIZE,
   FRIEND_SCORE,
   JOB_STATES,
-  JOBS_CONCURRENCY,
   JOBS_FETCH_LIMIT_PER_CYCLE,
   JOBS_FETCHING_INTERVAL,
   LAST_MIGRATION_VERSION,
@@ -401,7 +391,6 @@ export {
   STATIC_MAX_AGE,
   STATIC_PATHS,
   THUMBNAILS_SIZE,
-  USER_ROLES,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
