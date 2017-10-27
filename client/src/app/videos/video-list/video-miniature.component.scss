@@ -9,24 +9,16 @@
   .video-miniature-thumbnail {
     display: inline-block;
     position: relative;
+    border-radius: 3px;
+    overflow: hidden;
 
     &:hover {
       text-decoration: none !important;
     }
 
-    .thumbnail-nsfw {
-      background-color: #000;
-      color: #fff;
-      text-align: center;
-      font-size: 30px;
-      line-height: 110px;
-
-      width: 200px;
-      height: 110px;
-    }
-
-    img, .thumbnail-nsfw {
-      border-radius: 3px;
+    img.blur-filter {
+      filter: blur(5px);
+      transform : scale(1.03);
     }
 
     .video-miniature-thumbnail-overlay {
@@ -51,7 +43,7 @@
     }
   }
 
-  .video-miniature-informations {
+  .video-miniature-information {
     width: 200px;
 
     .video-miniature-name {
@@ -66,6 +58,11 @@
 
       &:hover {
         text-decoration: none;
+      }
+
+      &.blur-filter {
+        filter: blur(3px);
+        padding-left: 4px;
       }
 
       .video-miniature-tags {

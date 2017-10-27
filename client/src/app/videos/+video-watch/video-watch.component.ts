@@ -218,7 +218,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     let observable
     if (this.video.isVideoNSFWForUser(this.authService.getUser())) {
-      observable = this.confirmService.confirm('This video is not safe for work. Are you sure you want to watch it?', 'NSFW')
+      observable = this.confirmService.confirm(
+        'This video contains mature or explicit content. Are you sure you want to watch it?',
+        'Mature or explicit content'
+      )
     } else {
       observable = Observable.of(true)
     }

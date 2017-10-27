@@ -3,10 +3,7 @@
     [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.description"
     class="video-miniature-thumbnail"
   >
-    <img *ngIf="isVideoNSFWForThisUser() === false" [attr.src]="video.thumbnailUrl" alt="video thumbnail" />
-    <div *ngIf="isVideoNSFWForThisUser()" class="thumbnail-nsfw">
-      NSFW
-    </div>
+    <img [attr.src]="video.thumbnailUrl" alt="video thumbnail" [ngClass]="{ 'blur-filter': isVideoNSFWForThisUser() }" />
 
     <div class="video-miniature-thumbnail-overlay">
       <span class="video-miniature-thumbnail-overlay-views">{{ video.views }} views</span>
@@ -14,9 +11,14 @@
     </div>
   </a>
 
-  <div class="video-miniature-informations">
+  <div class="video-miniature-information">
     <span class="video-miniature-name">
-      <a [routerLink]="['/videos/watch', video.uuid]" [attr.title]="getVideoName()" class="video-miniature-name">{{ getVideoName() }}</a>
+      <a
+        class="video-miniature-name"
+        [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoNSFWForThisUser() }"
+      >
+          {{ video.name }}
+      </a>
     </span>
 
     <div class="video-miniature-tags">

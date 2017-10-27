@@ -13,14 +13,6 @@ export class VideoMiniatureComponent {
   @Input() user: User
   @Input() video: Video
 
-  getVideoName () {
-    if (this.isVideoNSFWForThisUser()) {
-      return 'NSFW'
-    }
-
-    return this.video.name
-  }
-
   isVideoNSFWForThisUser () {
     return this.video.isVideoNSFWForUser(this.user)
   }

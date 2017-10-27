@@ -5,13 +5,14 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 import { NotificationsService } from 'angular2-notifications'
 
+import { AuthService } from '../../core'
 import {
   SortField,
   Video,
   VideoService,
   VideoPagination
 } from '../shared'
-import { Search, SearchField, SearchService } from '../../shared'
+import { Search, SearchField, SearchService, User} from '../../shared'
 
 @Component({
   selector: 'my-videos-list',
@@ -26,6 +27,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
     totalItems: null
   }
   sort: SortField
+  user: User
   videos: Video[] = []
 
   private search: Search
@@ -33,6 +35,7 @@ export class VideoListComponent implements OnInit, OnDestroy {
   private subSearch: Subscription
 
   constructor (
+    private authService: AuthService,
     private notificationsService: NotificationsService,
     private router: Router,
     private route: ActivatedRoute,
@@ -41,6 +44,8 @@ export class VideoListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit () {
+    this.user = this.authService.getUser()
+
     // Subscribe to route changes
     this.subActivatedRoute = this.route.params.subscribe(routeParams => {
       this.loadRouteParams(routeParams)
