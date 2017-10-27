@@ -1,10 +1,21 @@
 import * as request from 'supertest'
 
-function createUser (url: string, accessToken: string, username: string, password: string, videoQuota = 1000000, specialStatus = 204) {
+import { UserRole } from '../../../shared'
+
+function createUser (
+  url: string,
+  accessToken: string,
+  username: string,
+  password: string,
+  videoQuota = 1000000,
+  role: UserRole = UserRole.USER,
+  specialStatus = 204
+) {
   const path = '/api/v1/users'
   const body = {
     username,
     password,
+    role,
     email: username + '@example.com',
     videoQuota
   }
@@ -114,12 +125,13 @@ function updateMyUser (url: string, accessToken: string, newPassword: string, di
     .expect(204)
 }
 
-function updateUser (url: string, userId: number, accessToken: string, email: string, videoQuota: number) {
+function updateUser (url: string, userId: number, accessToken: string, email: string, videoQuota: number, role: UserRole) {
   const path = '/api/v1/users/' + userId
 
   const toSend = {}
   if (email !== undefined && email !== null) toSend['email'] = email
   if (videoQuota !== undefined && videoQuota !== null) toSend['videoQuota'] = videoQuota
+  if (role !== undefined && role !== null) toSend['role'] = role
 
   return request(url)
           .put(path)

@@ -25,10 +25,12 @@ import {
   updateUser,
   updateMyUser,
   registerUser,
-  removeUser
+  removeUser,
+  killallServers,
+  getUserInformation,
+  getBlacklistedVideosList
 } from '../utils'
-import { killallServers } from '../utils/servers'
-import { getUserInformation } from '../utils/users'
+import { UserRole } from '../../../shared'
 
 describe('Test users', function () {
   let server: ServerInfo
@@ -188,6 +190,7 @@ describe('Test users', function () {
     expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.false
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.roleLabel).to.equal('User')
     expect(user.id).to.be.a('number')
   })
 
@@ -234,6 +237,7 @@ describe('Test users', function () {
     const user = users[0]
     expect(user.username).to.equal('root')
     expect(user.email).to.equal('admin1@example.com')
+    expect(user.roleLabel).to.equal('Administrator')
     expect(user.displayNSFW).to.be.false
   })
 
@@ -319,7 +323,7 @@ describe('Test users', function () {
   })
 
   it('Should be able to update another user', async function () {
-    await updateUser(server.url, userId, accessToken, 'updated2@example.com', 42)
+    await updateUser(server.url, userId, accessToken, 'updated2@example.com', 42, UserRole.MODERATOR)
 
     const res = await getUserInformation(server.url, accessToken, userId)
     const user = res.body
@@ -328,7 +332,16 @@ describe('Test users', function () {
     expect(user.email).to.equal('updated2@example.com')
     expect(user.displayNSFW).to.be.ok
     expect(user.videoQuota).to.equal(42)
+    expect(user.roleLabel).to.equal('Moderator')
     expect(user.id).to.be.a('number')
+  })
+
+  it('Should not be able to delete a user by a moderator', async function () {
+    await removeUser(server.url, 2, accessTokenUser, 403)
+  })
+
+  it('Should be able to list video blacklist by a moderator', async function () {
+    await getBlacklistedVideosList(server.url, accessTokenUser)
   })
 
   it('Should be able to remove this user', async function () {

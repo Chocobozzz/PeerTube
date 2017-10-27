@@ -123,7 +123,7 @@ export class AuthUser extends User {
     this.tokens.refreshToken = refreshToken
   }
 
-  hasRight(right: UserRight) {
+  hasRight (right: UserRight) {
     return hasUserRight(this.role, right)
   }
 

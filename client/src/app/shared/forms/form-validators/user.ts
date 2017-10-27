@@ -32,6 +32,6 @@ export const USER_VIDEO_QUOTA = {
 export const USER_ROLE = {
   VALIDATORS: [ Validators.required ],
   MESSAGES: {
-    'required': 'User role is required.',
+    'required': 'User role is required.'
   }
 }

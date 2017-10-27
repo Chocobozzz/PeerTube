@@ -19,6 +19,7 @@ import {
   makePostBodyRequest,
   getUserAccessToken
 } from '../../utils'
+import { UserRole } from '../../../../shared'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -92,6 +93,7 @@ describe('Test users API validators', function () {
         username: 'ji',
         email: 'test@example.com',
         password: 'my_super_password',
+        role: UserRole.USER,
         videoQuota: 42000000
       }
 
@@ -103,7 +105,8 @@ describe('Test users API validators', function () {
         username: 'my_super_username_which_is_very_long',
         email: 'test@example.com',
         password: 'my_super_password',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -114,7 +117,8 @@ describe('Test users API validators', function () {
         username: 'my username',
         email: 'test@example.com',
         password: 'my_super_password',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -124,7 +128,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'ji',
         password: 'my_super_password',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -135,7 +140,8 @@ describe('Test users API validators', function () {
         username: 'my_super_username_which_is_very_long',
         email: 'test_example.com',
         password: 'my_super_password',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -146,7 +152,8 @@ describe('Test users API validators', function () {
         username: 'my_username',
         email: 'test@example.com',
         password: 'bla',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -159,7 +166,8 @@ describe('Test users API validators', function () {
         password: 'my super long password which is very very very very very very very very very very very very very very' +
                   'very very very very very very very very very very very very very very very veryv very very very very' +
                   'very very very very very very very very very very very very very very very very very very very very long',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -170,7 +178,8 @@ describe('Test users API validators', function () {
         username: 'my_username',
         email: 'test@example.com',
         password: 'my super password',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: 'super token', fields, statusCodeExpected: 401 })
@@ -181,7 +190,8 @@ describe('Test users API validators', function () {
         username: 'user1',
         email: 'test@example.com',
         password: 'my super password',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 409 })
@@ -192,7 +202,8 @@ describe('Test users API validators', function () {
         username: 'my_username',
         email: 'user1@example.com',
         password: 'my super password',
-        videoQuota: 42000000
+        videoQuota: 42000000,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 409 })
@@ -202,7 +213,8 @@ describe('Test users API validators', function () {
       const fields = {
         username: 'my_username',
         email: 'user1@example.com',
-        password: 'my super password'
+        password: 'my super password',
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -213,7 +225,31 @@ describe('Test users API validators', function () {
         username: 'my_username',
         email: 'user1@example.com',
         password: 'my super password',
-        videoQuota: -5
+        videoQuota: -5,
+        role: UserRole.USER
+      }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail without a user role', async function () {
+      const fields = {
+        username: 'my_username',
+        email: 'user1@example.com',
+        password: 'my super password',
+        videoQuota: 0
+      }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an invalid user role', async function () {
+      const fields = {
+        username: 'my_username',
+        email: 'user1@example.com',
+        password: 'my super password',
+        videoQuota: 0,
+        role: 88989
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
@@ -224,7 +260,8 @@ describe('Test users API validators', function () {
         username: 'user2',
         email: 'test@example.com',
         password: 'my super password',
-        videoQuota: -1
+        videoQuota: -1,
+        role: UserRole.USER
       }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 204 })
@@ -327,6 +364,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
     })
 
+    it('Should fail with an invalid user role attribute', async function () {
+      const fields = {
+        role: 54878
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields })
+    })
+
     it('Should fail with an non authenticated user', async function () {
       const fields = {
         videoQuota: 42
@@ -338,7 +383,8 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct params', async function () {
       const fields = {
         email: 'email@example.com',
-        videoQuota: 42
+        videoQuota: 42,
+        role: UserRole.MODERATOR
       }
 
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields, statusCodeExpected: 204 })
