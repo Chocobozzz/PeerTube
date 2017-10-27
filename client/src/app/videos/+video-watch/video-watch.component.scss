@@ -33,8 +33,9 @@
   .video-name-views {
     font-weight: bold;
     font-size: 18px;
-    height: $video-watch-title-height;
-    line-height: $video-watch-title-height;
+    min-height: $video-watch-title-height;
+    display: flex;
+    align-items: center;
 
     .video-name {
       padding-left: $video-watch-info-padding-left;
@@ -175,20 +176,25 @@
       font-weight: bold;
       font-size: 12px;
 
-      .video-details-attribute-label {
-        color: $video-watch-info-color;
-        display: inline-block;
-        width: 60px;
-        margin-right: 5px;
+      .video-details-attribute {
+        display: flex;
+
+        .video-details-attribute-label {
+          color: $video-watch-info-color;
+          flex-basis: 60px;
+          flex-grow: 0;
+          flex-shrink: 0;
+          margin-right: 5px;
+        }
       }
     }
 
     .video-details-tags {
-      display: inline-block;
+      display: flex;
+      flex-wrap: wrap;
 
       a {
-        display: inline-block;
-        margin-right: 3px;
+        margin: 0 3px 3px 0;
         font-size: 11px;
       }
     }
