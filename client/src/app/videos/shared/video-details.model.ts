@@ -38,12 +38,14 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   likes: number
   dislikes: number
   nsfw: boolean
+  descriptionPath: string
   files: VideoFile[]
   channel: VideoChannel
 
   constructor (hash: VideoDetailsServerModel) {
     super(hash)
 
+    this.descriptionPath = hash.descriptionPath
     this.files = hash.files
     this.channel = hash.channel
   }

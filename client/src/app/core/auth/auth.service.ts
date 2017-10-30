@@ -3,6 +3,8 @@ import { Router } from '@angular/router'
 import { Observable } from 'rxjs/Observable'
 import { Subject } from 'rxjs/Subject'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { ReplaySubject } from 'rxjs/ReplaySubject'
+import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/observable/throw'
@@ -54,6 +56,7 @@ export class AuthService {
   private static BASE_USER_INFORMATION_URL = API_URL + '/api/v1/users/me'
 
   loginChangedSource: Observable<AuthStatus>
+  userInformationLoaded = new ReplaySubject<boolean>(1)
 
   private clientId: string
   private clientSecret: string
@@ -199,16 +202,17 @@ export class AuthService {
     }
 
     this.mergeUserInformation(obj)
-        .subscribe(
-          res => {
-            this.user.displayNSFW = res.displayNSFW
-            this.user.role = res.role
-            this.user.videoChannels = res.videoChannels
-            this.user.author = res.author
+      .do(() => this.userInformationLoaded.next(true))
+      .subscribe(
+        res => {
+          this.user.displayNSFW = res.displayNSFW
+          this.user.role = res.role
+          this.user.videoChannels = res.videoChannels
+          this.user.author = res.author
 
-            this.user.save()
-          }
-        )
+          this.user.save()
+        }
+      )
   }
 
   private mergeUserInformation (obj: UserLoginWithUsername): Observable<UserLoginWithUserInformation> {

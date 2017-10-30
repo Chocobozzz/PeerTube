@@ -170,6 +170,18 @@
         font-weight: bold;
         margin-bottom: 30px;
       }
+
+      .video-details-description-more {
+        cursor: pointer;
+        margin-top: 15px;
+        font-weight: bold;
+        color: #acaeb7;
+
+        .glyphicon {
+          position: relative;
+          top: 2px;
+        }
+      }
     }
 
     .video-details-attributes {

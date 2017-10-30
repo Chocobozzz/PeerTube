@@ -38,6 +38,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   video: VideoDetails = null
   videoPlayerLoaded = false
   videoNotFound = false
+
+  completeDescriptionShown = false
+  completeVideoDescription: string
+  shortVideoDescription: string
   videoHTMLDescription = ''
 
   private paramsSub: Subscription
@@ -154,6 +158,36 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     )
   }
 
+  showMoreDescription () {
+    this.completeDescriptionShown = true
+
+    if (this.completeVideoDescription === undefined) {
+      return this.loadCompleteDescription()
+    }
+
+    this.updateVideoDescription(this.completeVideoDescription)
+  }
+
+  showLessDescription () {
+    this.completeDescriptionShown = false
+
+    this.updateVideoDescription(this.shortVideoDescription)
+  }
+
+  loadCompleteDescription () {
+    this.videoService.loadCompleteDescription(this.video.descriptionPath)
+      .subscribe(
+        description => {
+          this.shortVideoDescription = this.video.description
+          this.completeVideoDescription = description
+
+          this.updateVideoDescription(this.completeVideoDescription)
+        },
+
+        error => this.notificationsService.error('Error', error.text)
+      )
+  }
+
   showReportModal (event: Event) {
     event.preventDefault()
     this.videoReportModal.show()
@@ -182,6 +216,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoBlacklistable () {
     return this.video.isBlackistableBy(this.authService.getUser())
+  }
+
+  private updateVideoDescription (description: string) {
+    this.video.description = description
+    this.setVideoDescriptionHTML()
+  }
+
+  private setVideoDescriptionHTML () {
+    this.videoHTMLDescription = this.markdownService.markdownToHTML(this.video.description)
   }
 
   private handleError (err: any) {
@@ -264,7 +307,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           })
         })
 
-        this.videoHTMLDescription = this.markdownService.markdownToHTML(this.video.description)
+        this.setVideoDescriptionHTML()
 
         this.setOpenGraphTags()
         this.checkUserRating()

@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core'
 
-import { TagInputModule } from 'ngx-chips'
-
 import { VideoUpdateRoutingModule } from './video-update-routing.module'
 import { VideoUpdateComponent } from './video-update.component'
-import { VideoService } from '../shared'
+import { VideoEditModule } from './video-edit.module'
 import { SharedModule } from '../../shared'
 
 @NgModule({
   imports: [
-    TagInputModule,
-
     VideoUpdateRoutingModule,
+    VideoEditModule,
     SharedModule
   ],
 
@@ -23,8 +20,6 @@ import { SharedModule } from '../../shared'
     VideoUpdateComponent
   ],
 
-  providers: [
-    VideoService
-  ]
+  providers: [ ]
 })
 export class VideoUpdateModule { }

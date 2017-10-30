@@ -99,15 +99,11 @@ export class VideoService {
                .catch((res) => this.restExtractor.handleError(res))
   }
 
-  reportVideo (id: number, reason: string) {
-    const url = VideoService.BASE_VIDEO_URL + id + '/abuse'
-    const body: VideoAbuseCreate = {
-      reason
-    }
-
-    return this.authHttp.post(url, body)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
+  loadCompleteDescription (descriptionPath: string) {
+    return this.authHttp
+      .get(API_URL + descriptionPath)
+      .map(res => res['description'])
+      .catch((res) => this.restExtractor.handleError(res))
   }
 
   setVideoLike (id: number) {

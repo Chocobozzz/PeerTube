@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/forkJoin'
 
 import { NotificationsService } from 'angular2-notifications'
 
@@ -84,19 +86,26 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.videoLanguages = this.serverService.getVideoLanguages()
 
     const uuid: string = this.route.snapshot.params['uuid']
+
     this.videoService.getVideo(uuid)
-                     .subscribe(
-                       video => {
-                         this.video = new VideoEdit(video)
+      .switchMap(video => {
+        return this.videoService
+          .loadCompleteDescription(video.descriptionPath)
+          .do(description => video.description = description)
+          .map(() => video)
+      })
+      .subscribe(
+        video => {
+          this.video = new VideoEdit(video)
 
-                         this.hydrateFormFromVideo()
-                       },
+          this.hydrateFormFromVideo()
+        },
 
-                       err => {
-                         console.error(err)
-                         this.error = 'Cannot fetch video.'
-                       }
-                     )
+        err => {
+          console.error(err)
+          this.error = 'Cannot fetch video.'
+        }
+      )
   }
 
   checkForm () {

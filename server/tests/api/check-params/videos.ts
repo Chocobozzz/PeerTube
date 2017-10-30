@@ -280,9 +280,7 @@ describe('Test videos API validator', function () {
         licence: 1,
         language: 6,
         nsfw: false,
-        description: 'my super description which is very very very very very very very very very very very very very very' +
-                     'very very very very very very very very very very very very very very very very very very very very very' +
-                     'very very very very very very very very very very very very very very very long',
+        description: 'my super description which is very very very very very very very very very very very very very very long'.repeat(35),
         tags: [ 'tag1', 'tag2' ],
         channelId
       }
@@ -617,9 +615,7 @@ describe('Test videos API validator', function () {
         licence: 2,
         language: 6,
         nsfw: false,
-        description: 'my super description which is very very very very very very very very very very very very very very' +
-                     'very very very very very very very very very very very very very very very very very very very very very' +
-                     'very very very very very very very very very very very very very very very long',
+        description: 'my super description which is very very very very very very very very very very very very very long'.repeat(35),
         tags: [ 'tag1', 'tag2' ]
       }
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })

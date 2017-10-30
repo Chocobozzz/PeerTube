@@ -21,7 +21,7 @@
     "no-attribute-parameter-decorator": true,
     "no-input-rename": true,
     "no-output-rename": true,
-    "no-forward-ref": true,
+    "no-forward-ref": false,
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "pipe-naming": [true, "camelCase", "my"],

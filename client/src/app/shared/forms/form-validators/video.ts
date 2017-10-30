@@ -36,11 +36,11 @@ export const VIDEO_CHANNEL = {
 }
 
 export const VIDEO_DESCRIPTION = {
-  VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(250) ],
+  VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(3000) ],
   MESSAGES: {
     'required': 'Video description is required.',
     'minlength': 'Video description must be at least 3 characters long.',
-    'maxlength': 'Video description cannot be more than 250 characters long.'
+    'maxlength': 'Video description cannot be more than 3000 characters long.'
   }
 }
 

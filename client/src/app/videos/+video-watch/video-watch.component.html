@@ -129,6 +129,16 @@
       </div>
 
       <div class="video-details-description" [innerHTML]="videoHTMLDescription"></div>
+
+      <div *ngIf="completeDescriptionShown === false && video.description.length === 250" (click)="showMoreDescription()" class="video-details-description-more">
+        Show more
+        <span class="glyphicon glyphicon-menu-down"></span>
+      </div>
+
+      <div *ngIf="completeDescriptionShown === true" (click)="showLessDescription()" class="video-details-description-more">
+        Show less
+        <span class="glyphicon glyphicon-menu-up"></span>
+      </div>
     </div>
 
     <div class="video-details-attributes col-xs-4 col-md-3">

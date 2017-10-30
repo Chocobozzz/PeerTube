@@ -81,7 +81,7 @@ styles:
   dropdowns: true
   button-groups: true
   input-groups: true
-  navs: false
+  navs: true
   navbar: false
   breadcrumbs: false
   pagination: true

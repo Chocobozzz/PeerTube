@@ -138,7 +138,7 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
   getEmbedPath: VideoMethods.GetEmbedPath
   getDescriptionPath: VideoMethods.GetDescriptionPath
-  getTruncatedDescription : VideoMethods.GetTruncatedDescription
+  getTruncatedDescription: VideoMethods.GetTruncatedDescription
 
   setTags: Sequelize.HasManySetAssociationsMixin<TagAttributes, string>
   addVideoFile: Sequelize.HasManyAddAssociationMixin<VideoFileAttributes, string>

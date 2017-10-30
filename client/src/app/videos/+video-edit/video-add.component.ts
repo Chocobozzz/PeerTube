@@ -82,7 +82,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       category: [ '', VIDEO_CATEGORY.VALIDATORS ],
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
-      channelId: [ this.userVideoChannels[0].id, VIDEO_CHANNEL.VALIDATORS ],
+      channelId: [ '', VIDEO_CHANNEL.VALIDATORS ],
       description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
       videofile: [ '', VIDEO_FILE.VALIDATORS ],
       tags: [ '' ]
@@ -96,10 +96,22 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
 
-    const user = this.authService.getUser()
-    this.userVideoChannels = user.videoChannels.map(v => ({ id: v.id, label: v.name }))
-
     this.buildForm()
+
+    this.authService.userInformationLoaded
+      .subscribe(
+        () => {
+          const user = this.authService.getUser()
+          if (!user) return
+
+          const videoChannels = user.videoChannels
+          if (Array.isArray(videoChannels) === false) return
+
+          this.userVideoChannels = videoChannels.map(v => ({ id: v.id, label: v.name }))
+
+          this.form.patchValue({ channelId: this.userVideoChannels[0].id })
+        }
+      )
   }
 
   // The goal is to keep reactive form validation (required field)
