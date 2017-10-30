@@ -14,7 +14,8 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   wait,
-  getVideoDescription
+  getVideoDescription,
+  updateVideo
 } from '../utils'
 
 const expect = chai.expect
@@ -22,6 +23,7 @@ const expect = chai.expect
 describe('Test video description', function () {
   let servers: ServerInfo[] = []
   let videoUUID = ''
+  let videoId: number
   let longDescription = 'my super description for pod 1'.repeat(50)
 
   before(async function () {
@@ -49,6 +51,7 @@ describe('Test video description', function () {
 
     const res = await getVideosList(servers[0].url)
 
+    videoId = res.body.data[0].id
     videoUUID = res.body.data[0].uuid
   })
 
@@ -72,6 +75,29 @@ describe('Test video description', function () {
 
       const res2 = await getVideoDescription(server.url, video.descriptionPath)
       expect(res2.body.description).to.equal(longDescription)
+    }
+  })
+
+  it('Should update with a short description', async function () {
+    this.timeout(15000)
+
+    const attributes = {
+      description: 'short description'
+    }
+    await updateVideo(servers[0].url, servers[0].accessToken, videoId, attributes)
+
+    await wait(11000)
+  })
+
+  it('Should have a small description on each pod', async function () {
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const video = res.body
+
+      expect(video.description).to.equal('short description')
+
+      const res2 = await getVideoDescription(server.url, video.descriptionPath)
+      expect(res2.body.description).to.equal('short description')
     }
   })
 
