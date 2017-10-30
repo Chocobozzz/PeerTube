@@ -16,7 +16,8 @@ import {
   quickAndDirtyUpdateVideoToFriends,
   addVideoToFriends,
   updateVideoToFriends,
-  JobScheduler
+  JobScheduler,
+  fetchRemoteDescription
 } from '../../../lib'
 import {
   authenticate,
@@ -101,6 +102,11 @@ videosRouter.post('/upload',
   reqFiles,
   videosAddValidator,
   asyncMiddleware(addVideoRetryWrapper)
+)
+
+videosRouter.get('/:id/description',
+  videosGetValidator,
+  asyncMiddleware(getVideoDescription)
 )
 videosRouter.get('/:id',
   videosGetValidator,
@@ -326,6 +332,19 @@ function getVideo (req: express.Request, res: express.Response) {
 
   // Do not wait the view system
   return res.json(videoInstance.toFormattedDetailsJSON())
+}
+
+async function getVideoDescription (req: express.Request, res: express.Response) {
+  const videoInstance = res.locals.video
+  let description = ''
+
+  if (videoInstance.isOwned()) {
+    description = videoInstance.description
+  } else {
+    description = await fetchRemoteDescription(videoInstance)
+  }
+
+  return res.json({ description })
 }
 
 async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {

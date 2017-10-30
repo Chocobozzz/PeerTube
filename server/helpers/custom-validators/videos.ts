@@ -54,6 +54,10 @@ function isVideoNSFWValid (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
 }
 
+function isVideoTruncatedDescriptionValid (value: string) {
+  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)
+}
+
 function isVideoDescriptionValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION)
 }
@@ -173,6 +177,7 @@ export {
   isVideoLicenceValid,
   isVideoLanguageValid,
   isVideoNSFWValid,
+  isVideoTruncatedDescriptionValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoFileInfoHashValid,

@@ -8,7 +8,7 @@ export interface RemoteVideoUpdateData {
   licence: number
   language: number
   nsfw: boolean
-  description: string
+  truncatedDescription: string
   duration: number
   createdAt: Date
   updatedAt: Date

@@ -37,6 +37,7 @@ export interface Video {
 }
 
 export interface VideoDetails extends Video {
+  descriptionPath: string,
   channel: VideoChannel
   files: VideoFile[]
 }

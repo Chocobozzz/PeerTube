@@ -61,6 +61,14 @@ function getVideo (url: string, id: number | string) {
           .expect('Content-Type', /json/)
 }
 
+function getVideoDescription (url: string, descriptionPath: string) {
+  return request(url)
+    .get(descriptionPath)
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+}
+
 function getVideosList (url: string) {
   const path = '/api/v1/videos'
 
@@ -263,6 +271,7 @@ function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: n
 // ---------------------------------------------------------------------------
 
 export {
+  getVideoDescription,
   getVideoCategories,
   getVideoLicences,
   getVideoLanguages,

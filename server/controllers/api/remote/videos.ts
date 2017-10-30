@@ -258,7 +258,7 @@ async function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod
       licence: videoToCreateData.licence,
       language: videoToCreateData.language,
       nsfw: videoToCreateData.nsfw,
-      description: videoToCreateData.description,
+      description: videoToCreateData.truncatedDescription,
       channelId: videoChannel.id,
       duration: videoToCreateData.duration,
       createdAt: videoToCreateData.createdAt,
@@ -327,7 +327,7 @@ async function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData
       videoInstance.set('licence', videoAttributesToUpdate.licence)
       videoInstance.set('language', videoAttributesToUpdate.language)
       videoInstance.set('nsfw', videoAttributesToUpdate.nsfw)
-      videoInstance.set('description', videoAttributesToUpdate.description)
+      videoInstance.set('description', videoAttributesToUpdate.truncatedDescription)
       videoInstance.set('duration', videoAttributesToUpdate.duration)
       videoInstance.set('createdAt', videoAttributesToUpdate.createdAt)
       videoInstance.set('updatedAt', videoAttributesToUpdate.updatedAt)

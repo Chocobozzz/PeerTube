@@ -6,7 +6,7 @@ import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
-import { maxBy } from 'lodash'
+import { maxBy, truncate } from 'lodash'
 
 import { TagInstance } from './tag-interface'
 import {
@@ -35,7 +35,10 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  THUMBNAILS_SIZE
+  THUMBNAILS_SIZE,
+  PREVIEWS_SIZE,
+  CONSTRAINTS_FIELDS,
+  API_VERSION
 } from '../../initializers'
 import { removeVideoToFriends } from '../../lib'
 import { VideoResolution } from '../../../shared'
@@ -48,7 +51,6 @@ import {
 
   VideoMethods
 } from './video-interface'
-import { PREVIEWS_SIZE } from '../../initializers/constants'
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
@@ -71,6 +73,8 @@ let getVideoFilePath: VideoMethods.GetVideoFilePath
 let createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
 let getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
 let getEmbedPath: VideoMethods.GetEmbedPath
+let getDescriptionPath: VideoMethods.GetDescriptionPath
+let getTruncatedDescription: VideoMethods.GetTruncatedDescription
 
 let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let list: VideoMethods.List
@@ -153,7 +157,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         }
       },
       description: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max),
         allowNull: false,
         validate: {
           descriptionValid: value => {
@@ -276,7 +280,9 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     optimizeOriginalVideofile,
     transcodeOriginalVideofile,
     getOriginalFileHeight,
-    getEmbedPath
+    getEmbedPath,
+    getTruncatedDescription,
+    getDescriptionPath
   ]
   addMethodsToModel(Video, classMethods, instanceMethods)
 
@@ -473,7 +479,7 @@ toFormattedJSON = function (this: VideoInstance) {
     language: this.language,
     languageLabel,
     nsfw: this.nsfw,
-    description: this.description,
+    description: this.getTruncatedDescription(),
     podHost,
     isLocal: this.isOwned(),
     author: this.VideoChannel.Author.name,
@@ -493,59 +499,17 @@ toFormattedJSON = function (this: VideoInstance) {
 }
 
 toFormattedDetailsJSON = function (this: VideoInstance) {
-  let podHost
+  const formattedJson = this.toFormattedJSON()
 
-  if (this.VideoChannel.Author.Pod) {
-    podHost = this.VideoChannel.Author.Pod.host
-  } else {
-    // It means it's our video
-    podHost = CONFIG.WEBSERVER.HOST
-  }
-
-  // Maybe our pod is not up to date and there are new categories since our version
-  let categoryLabel = VIDEO_CATEGORIES[this.category]
-  if (!categoryLabel) categoryLabel = 'Misc'
-
-  // Maybe our pod is not up to date and there are new licences since our version
-  let licenceLabel = VIDEO_LICENCES[this.licence]
-  if (!licenceLabel) licenceLabel = 'Unknown'
-
-  // Language is an optional attribute
-  let languageLabel = VIDEO_LANGUAGES[this.language]
-  if (!languageLabel) languageLabel = 'Unknown'
-
-  const json = {
-    id: this.id,
-    uuid: this.uuid,
-    name: this.name,
-    category: this.category,
-    categoryLabel,
-    licence: this.licence,
-    licenceLabel,
-    language: this.language,
-    languageLabel,
-    nsfw: this.nsfw,
-    description: this.description,
-    podHost,
-    isLocal: this.isOwned(),
-    author: this.VideoChannel.Author.name,
-    duration: this.duration,
-    views: this.views,
-    likes: this.likes,
-    dislikes: this.dislikes,
-    tags: map<TagInstance, string>(this.Tags, 'name'),
-    thumbnailPath: this.getThumbnailPath(),
-    previewPath: this.getPreviewPath(),
-    embedPath: this.getEmbedPath(),
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
+  const detailsJson = {
+    descriptionPath: this.getDescriptionPath(),
     channel: this.VideoChannel.toFormattedJSON(),
     files: []
   }
 
   // Format and sort video files
   const { baseUrlHttp, baseUrlWs } = getBaseUrls(this)
-  json.files = this.VideoFiles
+  detailsJson.files = this.VideoFiles
                    .map(videoFile => {
                      let resolutionLabel = videoFile.resolution + 'p'
 
@@ -566,7 +530,7 @@ toFormattedDetailsJSON = function (this: VideoInstance) {
                      return -1
                    })
 
-  return json
+  return Object.assign(formattedJson, detailsJson)
 }
 
 toAddRemoteJSON = function (this: VideoInstance) {
@@ -581,7 +545,7 @@ toAddRemoteJSON = function (this: VideoInstance) {
       licence: this.licence,
       language: this.language,
       nsfw: this.nsfw,
-      description: this.description,
+      truncatedDescription: this.getTruncatedDescription(),
       channelUUID: this.VideoChannel.uuid,
       duration: this.duration,
       thumbnailData: thumbnailData.toString('binary'),
@@ -615,7 +579,7 @@ toUpdateRemoteJSON = function (this: VideoInstance) {
     licence: this.licence,
     language: this.language,
     nsfw: this.nsfw,
-    description: this.description,
+    truncatedDescription: this.getTruncatedDescription(),
     duration: this.duration,
     tags: map<TagInstance, string>(this.Tags, 'name'),
     createdAt: this.createdAt,
@@ -636,6 +600,14 @@ toUpdateRemoteJSON = function (this: VideoInstance) {
   })
 
   return json
+}
+
+getTruncatedDescription = function (this: VideoInstance) {
+  const options = {
+    length: CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max
+  }
+
+  return truncate(this.description, options)
 }
 
 optimizeOriginalVideofile = function (this: VideoInstance) {
@@ -728,6 +700,10 @@ getOriginalFileHeight = function (this: VideoInstance) {
   const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
 
   return getVideoFileHeight(originalFilePath)
+}
+
+getDescriptionPath = function (this: VideoInstance) {
+  return `/api/${API_VERSION}/videos/${this.uuid}/description`
 }
 
 removeThumbnail = function (this: VideoInstance) {

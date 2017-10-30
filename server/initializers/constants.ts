@@ -15,7 +15,7 @@ import {
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 85
+const LAST_MIGRATION_VERSION = 90
 
 // ---------------------------------------------------------------------------
 
@@ -122,7 +122,8 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 250 }, // Length
+    TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
+    DESCRIPTION: { min: 3, max: 3000 }, // Length
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 1, max: 7200 }, // Number

@@ -19,7 +19,7 @@ import {
   isRemoteVideoLicenceValid,
   isRemoteVideoLanguageValid,
   isVideoNSFWValid,
-  isVideoDescriptionValid,
+  isVideoTruncatedDescriptionValid,
   isVideoDurationValid,
   isVideoFileInfoHashValid,
   isVideoNameValid,
@@ -112,7 +112,7 @@ function isCommonVideoAttributesValid (video: any) {
          isRemoteVideoLicenceValid(video.licence) &&
          isRemoteVideoLanguageValid(video.language) &&
          isVideoNSFWValid(video.nsfw) &&
-         isVideoDescriptionValid(video.description) &&
+         isVideoTruncatedDescriptionValid(video.truncatedDescription) &&
          isVideoDurationValid(video.duration) &&
          isVideoNameValid(video.name) &&
          isVideoTagsValid(video.tags) &&

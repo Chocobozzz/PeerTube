@@ -38,6 +38,8 @@ export namespace VideoMethods {
   export type GetEmbedPath = (this: VideoInstance) => string
   export type GetThumbnailPath = (this: VideoInstance) => string
   export type GetPreviewPath = (this: VideoInstance) => string
+  export type GetDescriptionPath = (this: VideoInstance) => string
+  export type GetTruncatedDescription = (this: VideoInstance) => string
 
   // Return thumbnail name
   export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string) => Promise<string>
@@ -135,6 +137,8 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   transcodeOriginalVideofile: VideoMethods.TranscodeOriginalVideofile
   getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
   getEmbedPath: VideoMethods.GetEmbedPath
+  getDescriptionPath: VideoMethods.GetDescriptionPath
+  getTruncatedDescription : VideoMethods.GetTruncatedDescription
 
   setTags: Sequelize.HasManySetAssociationsMixin<TagAttributes, string>
   addVideoFile: Sequelize.HasManyAddAssociationMixin<VideoFileAttributes, string>

@@ -349,6 +349,24 @@ function fetchRemotePreview (video: VideoInstance) {
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
 }
 
+function fetchRemoteDescription (video: VideoInstance) {
+  const host = video.VideoChannel.Author.Pod.host
+  const path = video.getDescriptionPath()
+
+  const requestOptions = {
+    url: REMOTE_SCHEME.HTTP + '://' + host + path,
+    json: true
+  }
+
+  return new Promise<string>((res, rej) => {
+    request.get(requestOptions, (err, response, body) => {
+      if (err) return rej(err)
+
+      return res(body.description ? body.description : '')
+    })
+  })
+}
+
 async function removeFriend (pod: PodInstance) {
   const requestParams = {
     method: 'POST' as 'POST',
@@ -407,6 +425,7 @@ export {
   getRequestVideoEventScheduler,
   fetchRemotePreview,
   addVideoChannelToFriends,
+  fetchRemoteDescription,
   updateVideoChannelToFriends,
   removeVideoChannelToFriends
 }

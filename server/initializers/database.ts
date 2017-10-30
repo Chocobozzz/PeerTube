@@ -84,9 +84,14 @@ database.init = async (silent: boolean) => {
   const filePaths = await getModelFiles(modelDirectory)
 
   for (const filePath of filePaths) {
-    const model = sequelize.import(filePath)
+    try {
+      const model = sequelize.import(filePath)
 
-    database[model['name']] = model
+      database[model['name']] = model
+    } catch (err) {
+      logger.error('Cannot import database model %s.', filePath, err)
+      process.exit(0)
+    }
   }
 
   for (const modelName of Object.keys(database)) {
