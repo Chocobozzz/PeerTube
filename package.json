@@ -45,7 +45,8 @@
     "nodemon": "nodemon",
     "ts-node": "ts-node",
     "tslint": "tslint",
-    "travis": "scripty"
+    "travis": "scripty",
+    "release": "scripty"
   },
   "dependencies": {
     "async": "^2.0.0",

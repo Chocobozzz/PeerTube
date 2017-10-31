@@ -160,14 +160,13 @@ module.exports = function (env) {
           uglifyOptions: {
             ie8: false,
             ecma: 6,
-            warnings: true,
+            warnings: false,
             mangle: true,
             output: {
               comments: false,
               beautify: false
             }
-          },
-          warningsFilter: () => false
+          }
         }),
 
         /**
