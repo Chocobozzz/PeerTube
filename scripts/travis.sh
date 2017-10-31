@@ -5,14 +5,14 @@ if [ $# -eq 0 ]; then
     exit -1
 fi
 
-if [ "$1" = "build_then_client" ]; then
+if [ "$1" = "client" ]; then
     npm run build
     mocha --exit --require ts-node/register --bail server/tests/client.ts
-elif [ "$1" = "client" ]; then
-    mocha --exit --require ts-node/register --bail server/tests/client.ts
 elif [ "$1" = "api" ]; then
+    npm run build:server
     mocha --exit --require ts-node/register --bail server/tests/api/index.ts
 elif [ "$1" = "cli" ]; then
+    npm run build:server
     mocha --exit --require ts-node/register --bail server/tests/cli/index.ts
 elif [ "$1" = "lint" ]; then
     cd client || exit -1
