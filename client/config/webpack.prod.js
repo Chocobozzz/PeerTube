@@ -167,7 +167,7 @@ module.exports = function (env) {
               beautify: false
             }
           },
-          warnings: true
+          warningsFilter: () => false
         }),
 
         /**

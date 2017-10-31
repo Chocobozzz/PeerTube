@@ -13,7 +13,7 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "test": "standard && tslint --type-check --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
+    "lint": "standard && tslint --type-check --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
     "webpack": "webpack",
     "webpack-dev-server": "webpack-dev-server",
     "postinstall": "npm rebuild node-sass"

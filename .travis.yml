@@ -22,7 +22,6 @@ services:
   - postgresql
 
 before_script:
-  - npm run build
   - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"
   - tar xf ffmpeg-release-3.0.2-64bit-static.tar.xz
   - mkdir -p $HOME/bin
@@ -36,6 +35,16 @@ before_script:
   - psql -c 'create database peertube_test5;' -U postgres
   - psql -c 'create database peertube_test6;' -U postgres
   - psql -c "create user peertube with password 'peertube';" -U postgres
+
+matrix:
+  include:
+  - env: TEST_SUITE=build_then_client
+  - env: TEST_SUITE=api
+  - env: TEST_SUITE=cli
+  - env: TEST_SUITE=lint
+
+script:
+  - npm run travis -- "$TEST_SUITE"
 
 after_failure:
   - cat test1/logs/all-logs.log

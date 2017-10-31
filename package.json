@@ -44,7 +44,8 @@
     "tsc": "tsc",
     "nodemon": "nodemon",
     "ts-node": "ts-node",
-    "tslint": "tslint"
+    "tslint": "tslint",
+    "travis": "scripty"
   },
   "dependencies": {
     "async": "^2.0.0",
