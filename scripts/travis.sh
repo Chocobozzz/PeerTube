@@ -14,6 +14,12 @@ elif [ "$1" = "api" ]; then
 elif [ "$1" = "cli" ]; then
     npm run build:server
     mocha --exit --require ts-node/register --bail server/tests/cli/index.ts
+elif [ "$1" = "api-fast" ]; then
+    npm run build:server
+    mocha --exit --require ts-node/register --bail server/tests/api/index-fast.ts
+elif [ "$1" = "api-slow" ]; then
+    npm run build:server
+    mocha --exit --require ts-node/register --bail server/tests/api/index-slow.ts
 elif [ "$1" = "lint" ]; then
     cd client || exit -1
     npm run lint || exit -1

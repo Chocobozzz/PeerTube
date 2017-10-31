@@ -39,7 +39,8 @@ before_script:
 matrix:
   include:
   - env: TEST_SUITE=client
-  - env: TEST_SUITE=api
+  - env: TEST_SUITE=api-fast
+  - env: TEST_SUITE=api-slow
   - env: TEST_SUITE=cli
   - env: TEST_SUITE=lint
 
