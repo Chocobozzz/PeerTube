@@ -1,1 +1,1 @@
-export type SearchField = 'name' | 'author' | 'host' | 'magnetUri' | 'tags'
+export type SearchField = 'name' | 'author' | 'host' | 'tags'

@@ -19,7 +19,6 @@ import {
   UserVideoRate,
   VideoRateType,
   VideoUpdate,
-  VideoAbuseCreate,
   UserVideoRateUpdate,
   Video as VideoServerModel,
   VideoDetails as VideoDetailsServerModel,
@@ -51,6 +50,7 @@ export class VideoService {
       licence: video.licence,
       language,
       description: video.description,
+      privacy: video.privacy,
       tags: video.tags,
       nsfw: video.nsfw
     }
@@ -63,22 +63,35 @@ export class VideoService {
   uploadVideo (video: FormData) {
     const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'upload', video, { reportProgress: true })
 
-    return this.authHttp.request(req)
-                        .catch(this.restExtractor.handleError)
+    return this.authHttp
+      .request(req)
+      .catch(this.restExtractor.handleError)
   }
 
-  getVideos (videoPagination: VideoPagination, sort: SortField) {
+  getMyVideos (videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
     const pagination = this.videoPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get(VideoService.BASE_VIDEO_URL, { params })
-                        .map(this.extractVideos)
-                        .catch((res) => this.restExtractor.handleError(res))
+    return this.authHttp.get(UserService.BASE_USERS_URL + '/me/videos', { params })
+      .map(this.extractVideos)
+      .catch((res) => this.restExtractor.handleError(res))
   }
 
-  searchVideos (search: Search, videoPagination: VideoPagination, sort: SortField) {
+  getVideos (videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
+    const pagination = this.videoPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp
+      .get(VideoService.BASE_VIDEO_URL, { params })
+      .map(this.extractVideos)
+      .catch((res) => this.restExtractor.handleError(res))
+  }
+
+  searchVideos (search: Search, videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
     const url = VideoService.BASE_VIDEO_URL + 'search/' + encodeURIComponent(search.value)
 
     const pagination = this.videoPaginationToRestPagination(videoPagination)
@@ -88,15 +101,17 @@ export class VideoService {
 
     if (search.field) params.set('field', search.field)
 
-    return this.authHttp.get<ResultList<VideoServerModel>>(url, { params })
-                        .map(this.extractVideos)
-                        .catch((res) => this.restExtractor.handleError(res))
+    return this.authHttp
+      .get<ResultList<VideoServerModel>>(url, { params })
+      .map(this.extractVideos)
+      .catch((res) => this.restExtractor.handleError(res))
   }
 
   removeVideo (id: number) {
-    return this.authHttp.delete(VideoService.BASE_VIDEO_URL + id)
-               .map(this.restExtractor.extractDataBool)
-               .catch((res) => this.restExtractor.handleError(res))
+    return this.authHttp
+      .delete(VideoService.BASE_VIDEO_URL + id)
+      .map(this.restExtractor.extractDataBool)
+      .catch((res) => this.restExtractor.handleError(res))
   }
 
   loadCompleteDescription (descriptionPath: string) {
@@ -117,8 +132,9 @@ export class VideoService {
   getUserVideoRating (id: number): Observable<UserVideoRate> {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 
-    return this.authHttp.get(url)
-                        .catch(res => this.restExtractor.handleError(res))
+    return this.authHttp
+      .get(url)
+      .catch(res => this.restExtractor.handleError(res))
   }
 
   private videoPaginationToRestPagination (videoPagination: VideoPagination) {
@@ -134,9 +150,10 @@ export class VideoService {
       rating: rateType
     }
 
-    return this.authHttp.put(url, body)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
+    return this.authHttp
+      .put(url, body)
+      .map(this.restExtractor.extractDataBool)
+      .catch(res => this.restExtractor.handleError(res))
   }
 
   private extractVideos (result: ResultList<VideoServerModel>) {

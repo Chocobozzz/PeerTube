@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 
-import { SortField } from '../shared'
+import { SortField } from '../../shared'
 
 @Component({
   selector: 'my-video-sort',

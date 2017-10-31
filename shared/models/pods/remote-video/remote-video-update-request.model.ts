@@ -15,6 +15,7 @@ export interface RemoteVideoUpdateData {
   views: number
   likes: number
   dislikes: number
+  privacy: number
   files: {
     infoHash: string
     extname: string

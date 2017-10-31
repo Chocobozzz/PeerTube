@@ -9,6 +9,13 @@ export const VIDEO_NAME = {
   }
 }
 
+export const VIDEO_PRIVACY = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    'required': 'Video privacy is required.'
+  }
+}
+
 export const VIDEO_CATEGORY = {
   VALIDATORS: [ Validators.required ],
   MESSAGES: {

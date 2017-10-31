@@ -16,10 +16,9 @@ export class SearchComponent implements OnInit {
     name: 'Name',
     author: 'Author',
     host: 'Pod Host',
-    magnetUri: 'Magnet URI',
     tags: 'Tags'
   }
-  searchCriterias: Search = {
+  searchCriteria: Search = {
     field: 'name',
     value: ''
   }
@@ -30,13 +29,13 @@ export class SearchComponent implements OnInit {
     // Subscribe if the search changed
     // Usually changed by videos list component
     this.searchService.updateSearch.subscribe(
-      newSearchCriterias => {
+      newSearchCriteria => {
         // Put a field by default
-        if (!newSearchCriterias.field) {
-          newSearchCriterias.field = 'name'
+        if (!newSearchCriteria.field) {
+          newSearchCriteria.field = 'name'
         }
 
-        this.searchCriterias = newSearchCriterias
+        this.searchCriteria = newSearchCriteria
       }
     )
   }
@@ -49,9 +48,9 @@ export class SearchComponent implements OnInit {
     $event.preventDefault()
     $event.stopPropagation()
 
-    this.searchCriterias.field = choice
+    this.searchCriteria.field = choice
 
-    if (this.searchCriterias.value) {
+    if (this.searchCriteria.value) {
       this.doSearch()
     }
   }
@@ -61,7 +60,7 @@ export class SearchComponent implements OnInit {
       this.router.navigate([ '/videos/list' ])
     }
 
-    this.searchService.searchUpdated.next(this.searchCriterias)
+    this.searchService.searchUpdated.next(this.searchCriteria)
   }
 
   getStringChoice (choiceKey: SearchField) {

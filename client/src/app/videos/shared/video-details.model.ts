@@ -5,7 +5,8 @@ import {
   VideoFile,
   VideoChannel,
   VideoResolution,
-  UserRight
+  UserRight,
+  VideoPrivacy
 } from '../../../../../shared'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
@@ -41,10 +42,14 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   descriptionPath: string
   files: VideoFile[]
   channel: VideoChannel
+  privacy: VideoPrivacy
+  privacyLabel: string
 
   constructor (hash: VideoDetailsServerModel) {
     super(hash)
 
+    this.privacy = hash.privacy
+    this.privacyLabel = hash.privacyLabel
     this.descriptionPath = hash.descriptionPath
     this.files = hash.files
     this.channel = hash.channel

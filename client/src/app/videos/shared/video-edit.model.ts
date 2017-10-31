@@ -1,4 +1,5 @@
 import { VideoDetails } from './video-details.model'
+import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
 
 export class VideoEdit {
   category: number
@@ -9,6 +10,7 @@ export class VideoEdit {
   tags: string[]
   nsfw: boolean
   channel: number
+  privacy: VideoPrivacy
   uuid?: string
   id?: number
 
@@ -23,6 +25,7 @@ export class VideoEdit {
     this.tags = videoDetails.tags
     this.nsfw = videoDetails.nsfw
     this.channel = videoDetails.channel.id
+    this.privacy = videoDetails.privacy
   }
 
   patch (values: Object) {
@@ -40,7 +43,8 @@ export class VideoEdit {
       name: this.name,
       tags: this.tags,
       nsfw: this.nsfw,
-      channel: this.channel
+      channel: this.channel,
+      privacy: this.privacy
     }
   }
 }

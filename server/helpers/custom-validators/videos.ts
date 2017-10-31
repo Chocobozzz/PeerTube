@@ -11,6 +11,7 @@ import {
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
   VIDEO_RATE_TYPES,
+  VIDEO_PRIVACIES,
   database as db
 } from '../../initializers'
 import { isUserUsernameValid } from './users'
@@ -34,6 +35,15 @@ function isRemoteVideoCategoryValid (value: string) {
 
 function isVideoLicenceValid (value: number) {
   return VIDEO_LICENCES[value] !== undefined
+}
+
+function isVideoPrivacyValid (value: string) {
+  return VIDEO_PRIVACIES[value] !== undefined
+}
+
+// Maybe we don't know the remote privacy setting, but that doesn't matter
+function isRemoteVideoPrivacyValid (value: string) {
+  return validator.isInt('' + value)
 }
 
 // Maybe we don't know the remote licence, but that doesn't matter
@@ -195,6 +205,8 @@ export {
   isVideoDislikesValid,
   isVideoEventCountValid,
   isVideoFileSizeValid,
+  isVideoPrivacyValid,
+  isRemoteVideoPrivacyValid,
   isVideoFileResolutionValid,
   checkVideoExists,
   isRemoteVideoCategoryValid,

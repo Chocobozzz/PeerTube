@@ -23,6 +23,11 @@
       <span class="hidden-xs glyphicon glyphicon-user"></span>
       My account
     </a>
+
+    <a *ngIf="isLoggedIn" routerLink="/videos/mine" routerLinkActive="active">
+      <span class="hidden-xs glyphicon glyphicon-folder-open"></span>
+      My videos
+    </a>
   </div>
 
   <div class="panel-block">

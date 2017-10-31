@@ -12,10 +12,11 @@ import {
   RemoteVideoRequestType,
   JobState
 } from '../../shared/models'
+import { VideoPrivacy } from '../../shared/models/videos/video-privacy.enum'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 90
+const LAST_MIGRATION_VERSION = 95
 
 // ---------------------------------------------------------------------------
 
@@ -194,6 +195,12 @@ const VIDEO_LANGUAGES = {
   12: 'Korean',
   13: 'French',
   14: 'Italian'
+}
+
+const VIDEO_PRIVACIES = {
+  [VideoPrivacy.PUBLIC]: 'Public',
+  [VideoPrivacy.UNLISTED]: 'Unlisted',
+  [VideoPrivacy.PRIVATE]: 'Private'
 }
 
 // ---------------------------------------------------------------------------
@@ -394,6 +401,7 @@ export {
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
+  VIDEO_PRIVACIES,
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES
 }

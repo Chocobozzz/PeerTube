@@ -1,51 +1,33 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs/Subscription'
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 import { NotificationsService } from 'angular2-notifications'
 
-import { AuthService } from '../../core'
-import {
-  SortField,
-  Video,
-  VideoService,
-  VideoPagination
-} from '../shared'
-import { Search, SearchField, SearchService, User } from '../../shared'
+import { VideoService } from '../shared'
+import { Search, SearchField, SearchService } from '../../shared'
+import { AbstractVideoList } from './shared'
 
 @Component({
   selector: 'my-videos-list',
-  styleUrls: [ './video-list.component.scss' ],
-  templateUrl: './video-list.component.html'
+  styleUrls: [ './shared/abstract-video-list.scss' ],
+  templateUrl: './shared/abstract-video-list.html'
 })
-export class VideoListComponent implements OnInit, OnDestroy {
-  loading: BehaviorSubject<boolean> = new BehaviorSubject(false)
-  pagination: VideoPagination = {
-    currentPage: 1,
-    itemsPerPage: 25,
-    totalItems: null
-  }
-  sort: SortField
-  user: User
-  videos: Video[] = []
-
+export class VideoListComponent extends AbstractVideoList implements OnInit, OnDestroy {
   private search: Search
-  private subActivatedRoute: Subscription
   private subSearch: Subscription
 
   constructor (
-    private authService: AuthService,
-    private notificationsService: NotificationsService,
-    private router: Router,
-    private route: ActivatedRoute,
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected notificationsService: NotificationsService,
     private videoService: VideoService,
     private searchService: SearchService
-  ) {}
+  ) {
+    super()
+  }
 
   ngOnInit () {
-    this.user = this.authService.getUser()
-
     // Subscribe to route changes
     this.subActivatedRoute = this.route.params.subscribe(routeParams => {
       this.loadRouteParams(routeParams)
@@ -66,14 +48,12 @@ export class VideoListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
-    this.subActivatedRoute.unsubscribe()
+    super.ngOnDestroy()
+
     this.subSearch.unsubscribe()
   }
 
-  getVideos () {
-    this.loading.next(true)
-    this.videos = []
-
+  getVideosObservable () {
     let observable = null
     if (this.search.value) {
       observable = this.videoService.searchVideos(this.search, this.pagination, this.sort)
@@ -81,40 +61,11 @@ export class VideoListComponent implements OnInit, OnDestroy {
       observable = this.videoService.getVideos(this.pagination, this.sort)
     }
 
-    observable.subscribe(
-      ({ videos, totalVideos }) => {
-        this.videos = videos
-        this.pagination.totalItems = totalVideos
-
-        this.loading.next(false)
-      },
-      error => this.notificationsService.error('Error', error.text)
-    )
+    return observable
   }
 
-  isThereNoVideo () {
-    return !this.loading.getValue() && this.videos.length === 0
-  }
-
-  onPageChanged (event: { page: number }) {
-    // Be sure the current page is set
-    this.pagination.currentPage = event.page
-
-    this.navigateToNewParams()
-  }
-
-  onSort (sort: SortField) {
-    this.sort = sort
-
-    this.navigateToNewParams()
-  }
-
-  private buildRouteParams () {
-    // There is always a sort and a current page
-    const params = {
-      sort: this.sort,
-      page: this.pagination.currentPage
-    }
+  protected buildRouteParams () {
+    const params = super.buildRouteParams()
 
     // Maybe there is a search
     if (this.search.value) {
@@ -125,7 +76,9 @@ export class VideoListComponent implements OnInit, OnDestroy {
     return params
   }
 
-  private loadRouteParams (routeParams: { [ key: string ]: any }) {
+  protected loadRouteParams (routeParams: { [ key: string ]: any }) {
+    super.loadRouteParams(routeParams)
+
     if (routeParams['search'] !== undefined) {
       this.search = {
         value: routeParams['search'],
@@ -137,18 +90,5 @@ export class VideoListComponent implements OnInit, OnDestroy {
         field: 'name'
       }
     }
-
-    this.sort = routeParams['sort'] as SortField || '-createdAt'
-
-    if (routeParams['page'] !== undefined) {
-      this.pagination.currentPage = parseInt(routeParams['page'], 10)
-    } else {
-      this.pagination.currentPage = 1
-    }
-  }
-
-  private navigateToNewParams () {
-    const routeParams = this.buildRouteParams()
-    this.router.navigate([ '/videos/list', routeParams ])
   }
 }

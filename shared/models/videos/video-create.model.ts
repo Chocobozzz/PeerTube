@@ -1,3 +1,5 @@
+import { VideoPrivacy } from './video-privacy.enum'
+
 export interface VideoCreate {
   category: number
   licence: number
@@ -7,4 +9,5 @@ export interface VideoCreate {
   nsfw: boolean
   name: string
   tags: string[]
+  privacy: VideoPrivacy
 }

@@ -13,7 +13,8 @@ import {
   VIDEO_DESCRIPTION,
   VIDEO_TAGS,
   VIDEO_CHANNEL,
-  VIDEO_FILE
+  VIDEO_FILE,
+  VIDEO_PRIVACY
 } from '../../shared'
 import { AuthService, ServerService } from '../../core'
 import { VideoService } from '../shared'
@@ -34,6 +35,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   videoCategories = []
   videoLicences = []
   videoLanguages = []
+  videoPrivacies = []
   userVideoChannels = []
 
   tagValidators = VIDEO_TAGS.VALIDATORS
@@ -43,6 +45,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   form: FormGroup
   formErrors = {
     name: '',
+    privacy: '',
     category: '',
     licence: '',
     language: '',
@@ -52,6 +55,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
+    privacy: VIDEO_PRIVACY.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
@@ -79,6 +83,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.form = this.formBuilder.group({
       name: [ '', VIDEO_NAME.VALIDATORS ],
       nsfw: [ false ],
+      privacy: [ '', VIDEO_PRIVACY.VALIDATORS ],
       category: [ '', VIDEO_CATEGORY.VALIDATORS ],
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
       language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
@@ -95,6 +100,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.videoCategories = this.serverService.getVideoCategories()
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
+    this.videoPrivacies = this.serverService.getVideoPrivacies()
 
     this.buildForm()
 
@@ -139,6 +145,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     const formValue: VideoCreate = this.form.value
 
     const name = formValue.name
+    const privacy = formValue.privacy
     const nsfw = formValue.nsfw
     const category = formValue.category
     const licence = formValue.licence
@@ -150,6 +157,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
     const formData = new FormData()
     formData.append('name', name)
+    formData.append('privacy', privacy.toString())
     formData.append('category', '' + category)
     formData.append('nsfw', '' + nsfw)
     formData.append('licence', '' + licence)

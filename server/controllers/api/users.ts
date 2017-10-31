@@ -30,12 +30,23 @@ import {
 } from '../../../shared'
 import { createUserAuthorAndChannel } from '../../lib'
 import { UserInstance } from '../../models'
+import { videosSortValidator } from '../../middlewares/validators/sort'
+import { setVideosSort } from '../../middlewares/sort'
 
 const usersRouter = express.Router()
 
 usersRouter.get('/me',
   authenticate,
   asyncMiddleware(getUserInformation)
+)
+
+usersRouter.get('/me/videos',
+  authenticate,
+  paginationValidator,
+  videosSortValidator,
+  setVideosSort,
+  setPagination,
+  asyncMiddleware(getUserVideos)
 )
 
 usersRouter.get('/me/videos/:videoId/rating',
@@ -101,6 +112,13 @@ export {
 
 // ---------------------------------------------------------------------------
 
+async function getUserVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = res.locals.oauth.token.User
+  const resultList = await db.Video.listUserVideosForApi(user.id ,req.query.start, req.query.count, req.query.sort)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
 async function createUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
     arguments: [ req, res ],
@@ -146,13 +164,14 @@ async function registerUser (req: express.Request, res: express.Response, next: 
 }
 
 async function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
+  // We did not load channels in res.locals.user
   const user = await db.User.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
 
   return res.json(user.toFormattedJSON())
 }
 
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  return res.json(res.locals.user.toFormattedJSON())
+  return res.json(res.locals.oauth.token.User.toFormattedJSON())
 }
 
 async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {

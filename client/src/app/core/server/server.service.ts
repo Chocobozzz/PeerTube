@@ -19,6 +19,7 @@ export class ServerService {
   private videoCategories: Array<{ id: number, label: string }> = []
   private videoLicences: Array<{ id: number, label: string }> = []
   private videoLanguages: Array<{ id: number, label: string }> = []
+  private videoPrivacies: Array<{ id: number, label: string }> = []
 
   constructor (private http: HttpClient) {}
 
@@ -39,6 +40,10 @@ export class ServerService {
     return this.loadVideoAttributeEnum('languages', this.videoLanguages)
   }
 
+  loadVideoPrivacies () {
+    return this.loadVideoAttributeEnum('privacies', this.videoPrivacies)
+  }
+
   getConfig () {
     return this.config
   }
@@ -55,7 +60,14 @@ export class ServerService {
     return this.videoLanguages
   }
 
-  private loadVideoAttributeEnum (attributeName: 'categories' | 'licences' | 'languages', hashToPopulate: { id: number, label: string }[]) {
+  getVideoPrivacies () {
+    return this.videoPrivacies
+  }
+
+  private loadVideoAttributeEnum (
+    attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
+    hashToPopulate: { id: number, label: string }[]
+  ) {
     return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
                .subscribe(data => {
                  Object.keys(data)

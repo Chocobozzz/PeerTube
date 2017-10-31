@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { MetaGuard } from '@ngx-meta/core'
 
-import { VideoListComponent } from './video-list'
+import { VideoListComponent, MyVideosComponent } from './video-list'
 import { VideosComponent } from './videos.component'
 
 const videosRoutes: Routes = [
@@ -12,6 +12,15 @@ const videosRoutes: Routes = [
     component: VideosComponent,
     canActivateChild: [ MetaGuard ],
     children: [
+      {
+        path: 'mine',
+        component: MyVideosComponent,
+        data: {
+          meta: {
+            title: 'My videos'
+          }
+        }
+      },
       {
         path: 'list',
         component: VideoListComponent,

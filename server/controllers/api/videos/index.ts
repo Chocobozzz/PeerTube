@@ -9,7 +9,8 @@ import {
   REQUEST_VIDEO_EVENT_TYPES,
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
-  VIDEO_LANGUAGES
+  VIDEO_LANGUAGES,
+  VIDEO_PRIVACIES
 } from '../../../initializers'
 import {
   addEventToRemoteVideo,
@@ -43,7 +44,7 @@ import {
   resetSequelizeInstance
 } from '../../../helpers'
 import { VideoInstance } from '../../../models'
-import { VideoCreate, VideoUpdate } from '../../../../shared'
+import { VideoCreate, VideoUpdate, VideoPrivacy } from '../../../../shared'
 
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
@@ -84,6 +85,7 @@ videosRouter.use('/', videoChannelRouter)
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)
 videosRouter.get('/languages', listVideoLanguages)
+videosRouter.get('/privacies', listVideoPrivacies)
 
 videosRouter.get('/',
   paginationValidator,
@@ -149,6 +151,10 @@ function listVideoLanguages (req: express.Request, res: express.Response) {
   res.json(VIDEO_LANGUAGES)
 }
 
+function listVideoPrivacies (req: express.Request, res: express.Response) {
+  res.json(VIDEO_PRIVACIES)
+}
+
 // Wrapper to video add that retry the function if there is a database error
 // We need this because we run the transaction in SERIALIZABLE isolation that can fail
 async function addVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -179,6 +185,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
       language: videoInfo.language,
       nsfw: videoInfo.nsfw,
       description: videoInfo.description,
+      privacy: videoInfo.privacy,
       duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
       channelId: res.locals.videoChannel.id
     }
@@ -240,6 +247,8 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
 
     // Let transcoding job send the video to friends because the video file extension might change
     if (CONFIG.TRANSCODING.ENABLED === true) return undefined
+    // Don't send video to remote pods, it is private
+    if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
     const remoteVideo = await video.toAddRemoteJSON()
     // Now we'll add the video's meta data to our friends
@@ -264,6 +273,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
   const videoInfoToUpdate: VideoUpdate = req.body
+  const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
 
   try {
     await db.sequelize.transaction(async t => {
@@ -276,6 +286,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
+      if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', videoInfoToUpdate.privacy)
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
 
       await videoInstance.save(sequelizeOptions)
@@ -287,10 +298,17 @@ async function updateVideo (req: express.Request, res: express.Response) {
         videoInstance.Tags = tagInstances
       }
 
-      const json = videoInstance.toUpdateRemoteJSON()
-
       // Now we'll update the video's meta data to our friends
-      return updateVideoToFriends(json, t)
+      if (wasPrivateVideo === false) {
+        const json = videoInstance.toUpdateRemoteJSON()
+        return updateVideoToFriends(json, t)
+      }
+
+      // Video is not private anymore, send a create action to remote pods
+      if (wasPrivateVideo === true && videoInstance.privacy !== VideoPrivacy.PRIVATE) {
+        const remoteVideo = await videoInstance.toAddRemoteJSON()
+        return addVideoToFriends(remoteVideo, t)
+      }
     })
 
     logger.info('Video with name %s and uuid %s updated.', videoInstance.name, videoInstance.uuid)

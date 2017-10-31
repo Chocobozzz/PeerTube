@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/forkJoin'
 
 import { NotificationsService } from 'angular2-notifications'
@@ -14,9 +13,11 @@ import {
   VIDEO_LICENCE,
   VIDEO_LANGUAGE,
   VIDEO_DESCRIPTION,
-  VIDEO_TAGS
+  VIDEO_TAGS,
+  VIDEO_PRIVACY
 } from '../../shared'
 import { VideoEdit, VideoService } from '../shared'
+import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
 
 @Component({
   selector: 'my-videos-update',
@@ -29,6 +30,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   videoCategories = []
   videoLicences = []
   videoLanguages = []
+  videoPrivacies = []
   video: VideoEdit
 
   tagValidators = VIDEO_TAGS.VALIDATORS
@@ -38,6 +40,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   form: FormGroup
   formErrors = {
     name: '',
+    privacy: '',
     category: '',
     licence: '',
     language: '',
@@ -45,6 +48,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
   validationMessages = {
     name: VIDEO_NAME.MESSAGES,
+    privacy: VIDEO_PRIVACY.MESSAGES,
     category: VIDEO_CATEGORY.MESSAGES,
     licence: VIDEO_LICENCE.MESSAGES,
     language: VIDEO_LANGUAGE.MESSAGES,
@@ -67,6 +71,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   buildForm () {
     this.form = this.formBuilder.group({
       name: [ '', VIDEO_NAME.VALIDATORS ],
+      privacy: [ '', VIDEO_PRIVACY.VALIDATORS ],
       nsfw: [ false ],
       category: [ '', VIDEO_CATEGORY.VALIDATORS ],
       licence: [ '', VIDEO_LICENCE.VALIDATORS ],
@@ -84,6 +89,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.videoCategories = this.serverService.getVideoCategories()
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
+    this.videoPrivacies = this.serverService.getVideoPrivacies()
 
     const uuid: string = this.route.snapshot.params['uuid']
 
@@ -97,6 +103,16 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
       .subscribe(
         video => {
           this.video = new VideoEdit(video)
+
+          // We cannot set private a video that was not private anymore
+          if (video.privacy !== VideoPrivacy.PRIVATE) {
+            const newVideoPrivacies = []
+            for (const p of this.videoPrivacies) {
+              if (p.id !== VideoPrivacy.PRIVATE) newVideoPrivacies.push(p)
+            }
+
+            this.videoPrivacies = newVideoPrivacies
+          }
 
           this.hydrateFormFromVideo()
         },

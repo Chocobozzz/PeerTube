@@ -18,6 +18,7 @@ import {
   isVideoNSFWValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
+  isVideoPrivacyValid,
   readFileBufferPromise,
   unlinkPromise,
   renamePromise,
@@ -38,10 +39,11 @@ import {
   THUMBNAILS_SIZE,
   PREVIEWS_SIZE,
   CONSTRAINTS_FIELDS,
-  API_VERSION
+  API_VERSION,
+  VIDEO_PRIVACIES
 } from '../../initializers'
 import { removeVideoToFriends } from '../../lib'
-import { VideoResolution } from '../../../shared'
+import { VideoResolution, VideoPrivacy } from '../../../shared'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 
 import { addMethodsToModel, getSort } from '../utils'
@@ -79,6 +81,7 @@ let getTruncatedDescription: VideoMethods.GetTruncatedDescription
 let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let list: VideoMethods.List
 let listForApi: VideoMethods.ListForApi
+let listUserVideosForApi: VideoMethods.ListUserVideosForApi
 let loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
 let listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAndTags
 let listOwnedByAuthor: VideoMethods.ListOwnedByAuthor
@@ -143,6 +146,16 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
           languageValid: value => {
             const res = isVideoLanguageValid(value)
             if (res === false) throw new Error('Video language is not valid.')
+          }
+        }
+      },
+      privacy: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          privacyValid: value => {
+            const res = isVideoPrivacyValid(value)
+            if (res === false) throw new Error('Video privacy is not valid.')
           }
         }
       },
@@ -245,6 +258,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     generateThumbnailFromData,
     list,
     listForApi,
+    listUserVideosForApi,
     listOwnedAndPopulateAuthorAndTags,
     listOwnedByAuthor,
     load,
@@ -501,7 +515,13 @@ toFormattedJSON = function (this: VideoInstance) {
 toFormattedDetailsJSON = function (this: VideoInstance) {
   const formattedJson = this.toFormattedJSON()
 
+  // Maybe our pod is not up to date and there are new privacy settings since our version
+  let privacyLabel = VIDEO_PRIVACIES[this.privacy]
+  if (!privacyLabel) privacyLabel = 'Unknown'
+
   const detailsJson = {
+    privacyLabel,
+    privacy: this.privacy,
     descriptionPath: this.getDescriptionPath(),
     channel: this.VideoChannel.toFormattedJSON(),
     files: []
@@ -555,6 +575,7 @@ toAddRemoteJSON = function (this: VideoInstance) {
       views: this.views,
       likes: this.likes,
       dislikes: this.dislikes,
+      privacy: this.privacy,
       files: []
     }
 
@@ -587,6 +608,7 @@ toUpdateRemoteJSON = function (this: VideoInstance) {
     views: this.views,
     likes: this.likes,
     dislikes: this.dislikes,
+    privacy: this.privacy,
     files: []
   }
 
@@ -746,8 +768,39 @@ list = function () {
   return Video.findAll(query)
 }
 
+listUserVideosForApi = function (userId: number, start: number, count: number, sort: string) {
+  const query = {
+    distinct: true,
+    offset: start,
+    limit: count,
+    order: [ getSort(sort), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ],
+    include: [
+      {
+        model: Video['sequelize'].models.VideoChannel,
+        required: true,
+        include: [
+          {
+            model: Video['sequelize'].models.Author,
+            where: {
+              userId
+            },
+            required: true
+          }
+        ]
+      },
+      Video['sequelize'].models.Tag
+    ]
+  }
+
+  return Video.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
+  })
+}
+
 listForApi = function (start: number, count: number, sort: string) {
-  // Exclude blacklisted videos from the list
   const query = {
     distinct: true,
     offset: start,
@@ -768,8 +821,7 @@ listForApi = function (start: number, count: number, sort: string) {
           }
         ]
       },
-      Video['sequelize'].models.Tag,
-      Video['sequelize'].models.VideoFile
+      Video['sequelize'].models.Tag
     ],
     where: createBaseVideosWhere()
   }
@@ -969,10 +1021,6 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
     model: Video['sequelize'].models.Tag
   }
 
-  const videoFileInclude: Sequelize.IncludeOptions = {
-    model: Video['sequelize'].models.VideoFile
-  }
-
   const query: Sequelize.FindOptions<VideoAttributes> = {
     distinct: true,
     where: createBaseVideosWhere(),
@@ -981,12 +1029,7 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
     order: [ getSort(sort), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ]
   }
 
-  // Make an exact search with the magnet
-  if (field === 'magnetUri') {
-    videoFileInclude.where = {
-      infoHash: magnetUtil.decode(value).infoHash
-    }
-  } else if (field === 'tags') {
+  if (field === 'tags') {
     const escapedValue = Video['sequelize'].escape('%' + value + '%')
     query.where['id'][Sequelize.Op.in] = Video['sequelize'].literal(
       `(SELECT "VideoTags"."videoId"
@@ -1016,7 +1059,7 @@ searchAndPopulateAuthorAndPodAndTags = function (value: string, field: string, s
   }
 
   query.include = [
-    videoChannelInclude, tagInclude, videoFileInclude
+    videoChannelInclude, tagInclude
   ]
 
   return Video.findAndCountAll(query).then(({ rows, count }) => {
@@ -1035,7 +1078,8 @@ function createBaseVideosWhere () {
       [Sequelize.Op.notIn]: Video['sequelize'].literal(
         '(SELECT "BlacklistedVideos"."videoId" FROM "BlacklistedVideos")'
       )
-    }
+    },
+    privacy: VideoPrivacy.PUBLIC
   }
 }
 

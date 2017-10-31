@@ -20,9 +20,10 @@ import {
   isVideoRatingTypeValid,
   getDurationFromVideoFile,
   checkVideoExists,
-  isIdValid
+  isIdValid,
+  isVideoPrivacyValid
 } from '../../helpers'
-import { UserRight } from '../../../shared'
+import { UserRight, VideoPrivacy } from '../../../shared'
 
 const videosAddValidator = [
   body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage(
@@ -36,6 +37,7 @@ const videosAddValidator = [
   body('nsfw').custom(isVideoNSFWValid).withMessage('Should have a valid NSFW attribute'),
   body('description').custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -110,6 +112,7 @@ const videosUpdateValidator = [
   body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw').optional().custom(isVideoNSFWValid).withMessage('Should have a valid NSFW attribute'),
+  body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
 
@@ -118,17 +121,25 @@ const videosUpdateValidator = [
 
     checkErrors(req, res, () => {
       checkVideoExists(req.params.id, res, () => {
+        const video = res.locals.video
+
         // We need to make additional checks
-        if (res.locals.video.isOwned() === false) {
+        if (video.isOwned() === false) {
           return res.status(403)
                     .json({ error: 'Cannot update video of another pod' })
                     .end()
         }
 
-        if (res.locals.video.VideoChannel.Author.userId !== res.locals.oauth.token.User.id) {
+        if (video.VideoChannel.Author.userId !== res.locals.oauth.token.User.id) {
           return res.status(403)
                     .json({ error: 'Cannot update video of another user' })
                     .end()
+        }
+
+        if (video.privacy !== VideoPrivacy.PRIVATE && req.body.privacy === VideoPrivacy.PRIVATE) {
+          return res.status(409)
+            .json({ error: 'Cannot set "private" a video that was not private anymore.' })
+            .end()
         }
 
         next()

@@ -267,7 +267,8 @@ async function addRemoteVideo (videoToCreateData: RemoteVideoCreateData, fromPod
       views: videoToCreateData.views,
       likes: videoToCreateData.likes,
       dislikes: videoToCreateData.dislikes,
-      remote: true
+      remote: true,
+      privacy: videoToCreateData.privacy
     }
 
     const video = db.Video.build(videoData)
@@ -334,6 +335,7 @@ async function updateRemoteVideo (videoAttributesToUpdate: RemoteVideoUpdateData
       videoInstance.set('views', videoAttributesToUpdate.views)
       videoInstance.set('likes', videoAttributesToUpdate.likes)
       videoInstance.set('dislikes', videoAttributesToUpdate.dislikes)
+      videoInstance.set('privacy', videoAttributesToUpdate.privacy)
 
       await videoInstance.save(sequelizeOptions)
 

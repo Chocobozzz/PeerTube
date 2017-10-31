@@ -18,6 +18,18 @@
     </div>
 
     <div class="form-group">
+      <label for="privacy">Privacy</label>
+      <select class="form-control" id="privacy" formControlName="privacy">
+        <option></option>
+        <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
+      </select>
+
+      <div *ngIf="formErrors.privacy" class="alert alert-danger">
+        {{ formErrors.privacy }}
+      </div>
+    </div>
+
+    <div class="form-group">
       <input
         type="checkbox" id="nsfw"
         formControlName="nsfw"

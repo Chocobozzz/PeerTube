@@ -1,4 +1,5 @@
 import { VideoChannel } from './video-channel.model'
+import { VideoPrivacy } from './video-privacy.enum'
 
 export interface VideoFile {
   magnetUri: string
@@ -37,7 +38,9 @@ export interface Video {
 }
 
 export interface VideoDetails extends Video {
-  descriptionPath: string,
+  privacy: VideoPrivacy
+  privacyLabel: string
+  descriptionPath: string
   channel: VideoChannel
   files: VideoFile[]
 }

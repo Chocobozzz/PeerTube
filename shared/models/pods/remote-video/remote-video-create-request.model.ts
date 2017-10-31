@@ -16,6 +16,7 @@ export interface RemoteVideoCreateData {
   views: number
   likes: number
   dislikes: number
+  privacy: number
   thumbnailData: string
   files: {
     infoHash: string

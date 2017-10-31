@@ -49,6 +49,7 @@ export namespace VideoMethods {
   export type ListOwnedByAuthor = (author: string) => Promise<VideoInstance[]>
 
   export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoInstance> >
+  export type ListUserVideosForApi = (userId: number, start: number, count: number, sort: string) => Promise< ResultList<VideoInstance> >
   export type SearchAndPopulateAuthorAndPodAndTags = (
     value: string,
     field: string,
@@ -75,6 +76,7 @@ export interface VideoClass {
   generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
   list: VideoMethods.List
   listForApi: VideoMethods.ListForApi
+  listUserVideosForApi: VideoMethods.ListUserVideosForApi
   listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAndTags
   listOwnedByAuthor: VideoMethods.ListOwnedByAuthor
   load: VideoMethods.Load
@@ -97,6 +99,7 @@ export interface VideoAttributes {
   nsfw: boolean
   description: string
   duration: number
+  privacy: number
   views?: number
   likes?: number
   dislikes?: number

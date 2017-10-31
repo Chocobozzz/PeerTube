@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 
 import { AuthService, ServerService } from './core'
@@ -28,8 +28,7 @@ export class AppComponent implements OnInit {
   constructor (
     private router: Router,
     private authService: AuthService,
-    private serverService: ServerService,
-    private userService: UserService
+    private serverService: ServerService
   ) {}
 
   ngOnInit () {
@@ -45,6 +44,7 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoCategories()
     this.serverService.loadVideoLanguages()
     this.serverService.loadVideoLicences()
+    this.serverService.loadVideoPrivacies()
 
     // Do not display menu on small screens
     if (window.innerWidth < 600) {
