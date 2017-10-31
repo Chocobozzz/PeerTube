@@ -4,7 +4,7 @@ import * as retry from 'async/retry'
 import { logger } from './logger'
 
 type RetryTransactionWrapperOptions = { errorMessage: string, arguments?: any[] }
-function retryTransactionWrapper (functionToRetry: (... args) => Promise<any>, options: RetryTransactionWrapperOptions) {
+function retryTransactionWrapper (functionToRetry: (...args) => Promise<any>, options: RetryTransactionWrapperOptions) {
   const args = options.arguments ? options.arguments : []
 
   return transactionRetryer(callback => {

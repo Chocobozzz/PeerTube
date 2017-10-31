@@ -122,9 +122,6 @@ async function generateWatchHtmlPage (req: express.Request, res: express.Respons
     videoPromise
   ])
 
-  file = file as Buffer
-  video = video as VideoInstance
-
   const html = file.toString()
 
   // Let Angular application handle errors

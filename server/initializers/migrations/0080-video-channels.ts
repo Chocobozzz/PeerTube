@@ -34,7 +34,7 @@ async function up (utils: {
   // Create one author per user that does not already exist
   const users = await utils.db.User.findAll()
   for (const user of users) {
-    const author = await utils.db.Author.find({ where: { userId: user.id }})
+    const author = await utils.db.Author.find({ where: { userId: user.id } })
     if (!author) {
       await utils.db.Author.create({
         name: user.username,
@@ -72,7 +72,7 @@ async function up (utils: {
   const rawVideos = await utils.sequelize.query(query, options)
 
   for (const rawVideo of rawVideos) {
-    const videoChannel = await utils.db.VideoChannel.findOne({ where: { authorId: rawVideo.authorId }})
+    const videoChannel = await utils.db.VideoChannel.findOne({ where: { authorId: rawVideo.authorId } })
 
     const video = await utils.db.Video.findById(rawVideo.id)
     video.channelId = videoChannel.id

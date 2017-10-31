@@ -106,7 +106,7 @@ describe('Test video abuses API validators', function () {
     it('Should fail with a wrong video', async function () {
       const wrongPath = '/api/v1/videos/blabla/abuse'
       const fields = {}
-      await makePostBodyRequest({ url: server.url, path: wrongPath, token: server.accessToken, fields})
+      await makePostBodyRequest({ url: server.url, path: wrongPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a non authenticated user', async function () {

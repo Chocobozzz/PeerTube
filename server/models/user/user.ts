@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
-import { getSort } from '../utils'
+import { getSort, addMethodsToModel } from '../utils'
 import {
   cryptPassword,
   comparePassword,
@@ -13,7 +13,6 @@ import {
 } from '../../helpers'
 import { UserRight, USER_ROLE_LABELS, hasUserRight } from '../../../shared'
 
-import { addMethodsToModel } from '../utils'
 import {
   UserInstance,
   UserAttributes,

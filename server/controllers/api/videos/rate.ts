@@ -19,7 +19,7 @@ import {
   videoRateValidator,
   asyncMiddleware
 } from '../../../middlewares'
-import { UserVideoRateUpdate, VideoRateType } from '../../../../shared'
+import { UserVideoRateUpdate } from '../../../../shared'
 
 const rateVideoRouter = express.Router()
 
@@ -73,7 +73,7 @@ async function rateVideo (req: express.Request, res: express.Response) {
       if (rateType === 'none') { // Destroy previous rate
         await previousRate.destroy()
       } else { // Update previous rate
-        previousRate.type = rateType as VideoRateType
+        previousRate.type = rateType
 
         await previousRate.save()
       }

@@ -1,7 +1,6 @@
 import * as program from 'commander'
 import * as Promise from 'bluebird'
-import { isAbsolute } from 'path'
-import { join } from 'path'
+import { isAbsolute, join } from 'path'
 
 import { readdirPromise } from '../../../helpers/core-utils'
 import { execCLI } from '../../utils'

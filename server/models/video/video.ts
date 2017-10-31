@@ -1,12 +1,11 @@
 import * as safeBuffer from 'safe-buffer'
 const Buffer = safeBuffer.Buffer
 import * as magnetUtil from 'magnet-uri'
-import { map } from 'lodash'
+import { map, maxBy, truncate } from 'lodash'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
-import { maxBy, truncate } from 'lodash'
 
 import { TagInstance } from './tag-interface'
 import {

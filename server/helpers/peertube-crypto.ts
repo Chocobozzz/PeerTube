@@ -40,7 +40,7 @@ function checkSignature (publicKey: string, data: string, hexSignature: string) 
   return isValid
 }
 
-async function sign (data: string|Object) {
+async function sign (data: string | Object) {
   const sign = crypto.createSign(SIGNATURE_ALGORITHM)
 
   let dataString: string
@@ -71,13 +71,13 @@ async function createCertsIfNotExist () {
     return
   }
 
-  return await createCerts()
+  return createCerts()
 }
 
 async function cryptPassword (password: string) {
   const salt = await bcryptGenSaltPromise(BCRYPT_SALT_SIZE)
 
-  return await bcryptHashPromise(password, salt)
+  return bcryptHashPromise(password, salt)
 }
 
 function getMyPrivateCert () {

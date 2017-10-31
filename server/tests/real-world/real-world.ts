@@ -80,11 +80,15 @@ start()
 async function start () {
   const servers = await runServers(numberOfPods)
 
-  process.on('exit', async () => await exitServers(servers, flushAtExit))
+  process.on('exit', async () => {
+    await exitServers(servers, flushAtExit)
+
+    return
+  })
   process.on('SIGINT', goodbye)
   process.on('SIGTERM', goodbye)
 
-  console.log('Servers runned')
+  console.log('Servers ran')
   initializeRequestsPerServer(servers)
 
   let checking = false
@@ -150,10 +154,8 @@ function getRandomNumServer (servers) {
 }
 
 async function runServers (numberOfPods: number) {
-  let servers = null
-
-  // Run servers
-  servers = await flushAndRunMultipleServers(numberOfPods)
+  const servers: ServerInfo[] = (await flushAndRunMultipleServers(numberOfPods))
+    .map(s => Object.assign({ requestsNumber: 0 }, s))
 
   // Get the access tokens
   await setAccessTokensToServers(servers)

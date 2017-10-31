@@ -25,12 +25,12 @@ describe('Test advanced friends', function () {
 
   async function makeFriendsWrapper (podNumber: number) {
     const server = servers[podNumber - 1]
-    return await makeFriends(server.url, server.accessToken)
+    return makeFriends(server.url, server.accessToken)
   }
 
   async function quitFriendsWrapper (podNumber: number) {
     const server = servers[podNumber - 1]
-    return await quitFriends(server.url, server.accessToken)
+    return quitFriends(server.url, server.accessToken)
   }
 
   async function removeFriendWrapper (podNumber: number, podNumberToRemove: number) {
@@ -42,12 +42,12 @@ describe('Test advanced friends', function () {
     let friendsList = res.body.data
     let podToRemove = friendsList.find(friend => (friend.host === serverToRemove.host))
 
-    return await quitOneFriend(server.url, server.accessToken, podToRemove.id)
+    return quitOneFriend(server.url, server.accessToken, podToRemove.id)
   }
 
   async function getFriendsListWrapper (podNumber: number) {
     const server = servers[podNumber - 1]
-    return await getFriendsList(server.url)
+    return getFriendsList(server.url)
   }
 
   async function uploadVideoWrapper (podNumber: number) {
@@ -56,11 +56,11 @@ describe('Test advanced friends', function () {
     }
     const server = servers[podNumber - 1]
 
-    return await uploadVideo(server.url, server.accessToken, videoAttributes)
+    return uploadVideo(server.url, server.accessToken, videoAttributes)
   }
 
   async function getVideosWrapper (podNumber: number) {
-    return await getVideosList(servers[podNumber - 1].url)
+    return getVideosList(servers[podNumber - 1].url)
   }
 
   // ---------------------------------------------------------------

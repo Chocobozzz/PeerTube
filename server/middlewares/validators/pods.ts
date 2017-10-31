@@ -3,10 +3,9 @@ import * as express from 'express'
 
 import { database as db } from '../../initializers/database'
 import { checkErrors } from './utils'
-import { logger, isEachUniqueHostValid } from '../../helpers'
+import { logger, isEachUniqueHostValid, isTestInstance } from '../../helpers'
 import { CONFIG } from '../../initializers'
 import { hasFriends } from '../../lib'
-import { isTestInstance } from '../../helpers'
 
 const makeFriendsValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),

@@ -33,7 +33,7 @@ interface ServerInfo {
   }
 }
 
-async function flushAndRunMultipleServers (totalServers) {
+function flushAndRunMultipleServers (totalServers) {
   let apps = []
   let i = 0
 

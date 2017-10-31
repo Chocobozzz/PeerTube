@@ -13,7 +13,7 @@ import { sign } from './peertube-crypto'
 
 type MakeRetryRequestParams = {
   url: string,
-  method: 'GET'|'POST',
+  method: 'GET' | 'POST',
   json: Object
 }
 function makeRetryRequest (params: MakeRetryRequestParams) {
@@ -31,7 +31,7 @@ function makeRetryRequest (params: MakeRetryRequestParams) {
 }
 
 type MakeSecureRequestParams = {
-  method: 'GET'|'POST'
+  method: 'GET' | 'POST'
   toPod: PodInstance
   path: string
   data?: Object
