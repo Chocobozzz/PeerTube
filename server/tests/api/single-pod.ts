@@ -22,6 +22,7 @@ import {
   getVideoCategories,
   getVideoLicences,
   getVideoLanguages,
+  getVideoPrivacies,
   testVideoImage,
   webtorrentAdd,
   getVideo,
@@ -74,6 +75,15 @@ describe('Test a single pod', function () {
     expect(Object.keys(languages)).to.have.length.above(5)
 
     expect(languages[3]).to.equal('Mandarin')
+  })
+
+  it('Should list video privacies', async function () {
+    const res = await getVideoPrivacies(server.url)
+
+    const privacies = res.body
+    expect(Object.keys(privacies)).to.have.length.at.least(3)
+
+    expect(privacies[3]).to.equal('Private')
   })
 
   it('Should not have videos', async function () {
@@ -481,19 +491,6 @@ describe('Test a single pod', function () {
   //     done()
   //   })
   // })
-
-  it('Should search the right magnetUri video', async function () {
-    const video = videosListBase[0]
-    const res = await getVideo(server.url, video.id)
-    const videoDetails = res.body
-
-    const res2 = await searchVideoWithPagination(server.url, encodeURIComponent(videoDetails.files[0].magnetUri), 'magnetUri', 0, 15)
-
-    const videos = res2.body.data
-    expect(res2.body.total).to.equal(1)
-    expect(videos.length).to.equal(1)
-    expect(videos[0].name).to.equal(video.name)
-  })
 
   it('Should list and sort by name in descending order', async function () {
     const res = await getVideosListSort(server.url, '-name')

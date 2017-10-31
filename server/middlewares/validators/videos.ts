@@ -24,6 +24,7 @@ import {
   isVideoPrivacyValid
 } from '../../helpers'
 import { UserRight, VideoPrivacy } from '../../../shared'
+import { authenticate } from '../oauth'
 
 const videosAddValidator = [
   body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage(
@@ -112,7 +113,7 @@ const videosUpdateValidator = [
   body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw').optional().custom(isVideoNSFWValid).withMessage('Should have a valid NSFW attribute'),
-  body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
+  body('privacy').optional().custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
 
@@ -155,7 +156,22 @@ const videosGetValidator = [
     logger.debug('Checking videosGet parameters', { parameters: req.params })
 
     checkErrors(req, res, () => {
-      checkVideoExists(req.params.id, res, next)
+      checkVideoExists(req.params.id, res, () => {
+        const video = res.locals.video
+
+        // Video is not private, anyone can access it
+        if (video.privacy !== VideoPrivacy.PRIVATE) return next()
+
+        authenticate(req, res, () => {
+          if (video.VideoChannel.Author.userId !== res.locals.oauth.token.User.id) {
+            return res.status(403)
+              .json({ error: 'Cannot get this private video of another user' })
+              .end()
+          }
+
+          next()
+        })
+      })
     })
   }
 ]
@@ -232,28 +248,23 @@ export {
 
 function checkUserCanDeleteVideo (userId: number, res: express.Response, callback: () => void) {
   // Retrieve the user who did the request
-  db.User.loadById(userId)
-    .then(user => {
-      if (res.locals.video.isOwned() === false) {
-        return res.status(403)
-                  .json({ error: 'Cannot remove video of another pod, blacklist it' })
-                  .end()
-      }
+  if (res.locals.video.isOwned() === false) {
+    return res.status(403)
+              .json({ error: 'Cannot remove video of another pod, blacklist it' })
+              .end()
+  }
 
-      // Check if the user can delete the video
-      // The user can delete it if s/he is an admin
-      // Or if s/he is the video's author
-      if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && res.locals.video.Author.userId !== res.locals.oauth.token.User.id) {
-        return res.status(403)
-                  .json({ error: 'Cannot remove video of another user' })
-                  .end()
-      }
+  // Check if the user can delete the video
+  // The user can delete it if s/he is an admin
+  // Or if s/he is the video's author
+  const author = res.locals.video.VideoChannel.Author
+  const user = res.locals.oauth.token.User
+  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && author.userId !== user.id) {
+    return res.status(403)
+              .json({ error: 'Cannot remove video of another user' })
+              .end()
+  }
 
-      // If we reach this comment, we can delete the video
-      callback()
-    })
-    .catch(err => {
-      logger.error('Error in video request validator.', err)
-      return res.sendStatus(500)
-    })
+  // If we reach this comment, we can delete the video
+  callback()
 }

@@ -7,6 +7,7 @@ import { makeGetRequest } from './requests'
 import { readFilePromise } from './miscs'
 import { ServerInfo } from './servers'
 import { getMyUserInformation } from './users'
+import { VideoPrivacy } from '../../../shared'
 
 type VideoAttributes = {
   name?: string
@@ -17,6 +18,7 @@ type VideoAttributes = {
   description?: string
   tags?: string[]
   channelId?: number
+  privacy?: VideoPrivacy
   fixture?: string
 }
 
@@ -38,6 +40,12 @@ function getVideoLanguages (url: string) {
   return makeGetRequest(url, path)
 }
 
+function getVideoPrivacies (url: string) {
+  const path = '/api/v1/videos/privacies'
+
+  return makeGetRequest(url, path)
+}
+
 function getAllVideosListBy (url: string) {
   const path = '/api/v1/videos'
 
@@ -51,14 +59,23 @@ function getAllVideosListBy (url: string) {
           .expect('Content-Type', /json/)
 }
 
-function getVideo (url: string, id: number | string) {
+function getVideo (url: string, id: number | string, expectedStatus = 200) {
   const path = '/api/v1/videos/' + id
 
   return request(url)
           .get(path)
           .set('Accept', 'application/json')
-          .expect(200)
-          .expect('Content-Type', /json/)
+          .expect(expectedStatus)
+}
+
+function getVideoWithToken (url: string, token: string, id: number | string, expectedStatus = 200) {
+  const path = '/api/v1/videos/' + id
+
+  return request(url)
+    .get(path)
+    .set('Authorization', 'Bearer ' + token)
+    .set('Accept', 'application/json')
+    .expect(expectedStatus)
 }
 
 function getVideoDescription (url: string, descriptionPath: string) {
@@ -78,6 +95,22 @@ function getVideosList (url: string) {
           .set('Accept', 'application/json')
           .expect(200)
           .expect('Content-Type', /json/)
+}
+
+function getMyVideos (url: string, accessToken: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/users/me/videos'
+
+  const req = request(url)
+    .get(path)
+    .query({ start: start })
+    .query({ count: count })
+
+  if (sort) req.query({ sort })
+
+  return req.set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(200)
+    .expect('Content-Type', /json/)
 }
 
 function getVideosListPagination (url: string, start: number, count: number, sort?: string) {
@@ -191,6 +224,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     nsfw: true,
     description: 'my super description',
     tags: [ 'tag' ],
+    privacy: VideoPrivacy.PUBLIC,
     fixture: 'video_short.webm'
   }
   attributes = Object.assign(attributes, videoAttributesArg)
@@ -204,6 +238,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .field('licence', attributes.licence.toString())
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('description', attributes.description)
+              .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
 
   if (attributes.language !== undefined) {
@@ -236,6 +271,7 @@ function updateVideo (url: string, accessToken: string, id: number, attributes: 
   if (attributes.nsfw) body['nsfw'] = attributes.nsfw
   if (attributes.description) body['description'] = attributes.description
   if (attributes.tags) body['tags'] = attributes.tags
+  if (attributes.privacy) body['privacy'] = attributes.privacy
 
   return request(url)
           .put(path)
@@ -274,9 +310,12 @@ export {
   getVideoDescription,
   getVideoCategories,
   getVideoLicences,
+  getVideoPrivacies,
   getVideoLanguages,
   getAllVideosListBy,
+  getMyVideos,
   getVideo,
+  getVideoWithToken,
   getVideosList,
   getVideosListPagination,
   getVideosListSort,

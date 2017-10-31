@@ -19,11 +19,45 @@ import {
   createUser,
   getUserAccessToken
 } from '../../utils'
+import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
   let server: ServerInfo
   let channelId: number
+
+  function getCompleteVideoUploadAttributes () {
+    return {
+      name: 'my super name',
+      category: 5,
+      licence: 1,
+      language: 6,
+      nsfw: false,
+      description: 'my super description',
+      tags: [ 'tag1', 'tag2' ],
+      privacy: VideoPrivacy.PUBLIC,
+      channelId
+    }
+  }
+
+  function getCompleteVideoUpdateAttributes () {
+    return {
+      name: 'my super name',
+      category: 5,
+      licence: 2,
+      language: 6,
+      nsfw: false,
+      description: 'my super description',
+      privacy: VideoPrivacy.PUBLIC,
+      tags: [ 'tag1', 'tag2' ]
+    }
+  }
+
+  function getVideoUploadAttaches () {
+    return {
+      'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
+    }
+  }
 
   // ---------------------------------------------------------------
 
@@ -99,6 +133,37 @@ describe('Test videos API validator', function () {
     })
   })
 
+  describe('When listing my videos', function () {
+    const path = '/api/v1/users/me/videos'
+
+    it('Should fail with a bad start pagination', async function () {
+      await request(server.url)
+        .get(path)
+        .set('Authorization', 'Bearer ' + server.accessToken)
+        .query({ start: 'hello' })
+        .set('Accept', 'application/json')
+        .expect(400)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await request(server.url)
+        .get(path)
+        .set('Authorization', 'Bearer ' + server.accessToken)
+        .query({ count: 'hello' })
+        .set('Accept', 'application/json')
+        .expect(400)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await request(server.url)
+        .get(path)
+        .set('Authorization', 'Bearer ' + server.accessToken)
+        .query({ sort: 'hello' })
+        .set('Accept', 'application/json')
+        .expect(400)
+    })
+  })
+
   describe('When adding a video', function () {
     it('Should fail with nothing', async function () {
       const fields = {}
@@ -107,219 +172,108 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail without name', async function () {
-      const fields = {
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      delete fields.name
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a long name', async function () {
-      const fields = {
-        name: 'My very very very very very very very very very very very very very very very very very  ' +
-              'very very very very very very very very very very very very very very very very long long' +
-              'very very very very very very very very very very very very very very very very long name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.name = 'My very very very very very very very very very very very very very very very very very  ' +
+                    'very very very very very very very very very very very very very very very very long long' +
+                    'very very very very very very very very very very very very very very very very long name'
+
+      const attaches = getVideoUploadAttaches
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without a category', async function () {
-      const fields = {
-        name: 'my super name',
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      delete fields.category
+
+      const attaches = getVideoUploadAttaches
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad category', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 125,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.category = 125
+
+      const attaches = getVideoUploadAttaches
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without a licence', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      delete fields.licence
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad licence', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 125,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.licence = 125
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad language', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 4,
-        language: 563,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.language = 563
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without nsfw attribute', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 4,
-        language: 6,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      delete fields.nsfw
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad nsfw attribute', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 4,
-        language: 6,
-        nsfw: 2,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.nsfw = 2 as any
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without description', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      delete fields.description
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description which is very very very very very very very very very very very very very very long'.repeat(35),
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.description = 'my super description which is very very very very very very very very very very very very long'.repeat(35)
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without a channel', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      delete fields.channelId
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad channel', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId: 545454
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.channelId = 545454
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
@@ -332,101 +286,47 @@ describe('Test videos API validator', function () {
 
       const accessTokenUser = await getUserAccessToken(server, user)
       const res = await getMyUserInformation(server.url, accessTokenUser)
-      const channelId = res.body.videoChannels[0].id
+      const customChannelId = res.body.videoChannels[0].id
 
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.channelId = customChannelId
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with too many tags', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.tags = [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ]
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a tag length too low', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 't' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.tags = [ 'tag1', 't' ]
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a tag length too big', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'my_super_tag_too_long_long_long_long_long_long', 'tag1' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      fields.tags = [ 'my_super_tag_too_long_long_long_long_long_long', 'tag1' ]
+
+      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without an input file', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
+      const fields = getCompleteVideoUploadAttributes()
       const attaches = {}
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without an incorrect input file', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
+      const fields = getCompleteVideoUploadAttributes()
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
       }
@@ -434,16 +334,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a too big duration', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
+      const fields = getCompleteVideoUploadAttributes()
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_too_long.webm')
       }
@@ -453,19 +344,8 @@ describe('Test videos API validator', function () {
     it('Should succeed with the correct parameters', async function () {
       this.timeout(10000)
 
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 1,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ],
-        channelId
-      }
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
-      }
+      const fields = getCompleteVideoUploadAttributes()
+      const attaches = getVideoUploadAttaches()
 
       await makePostUploadRequest({
         url: server.url,
@@ -512,26 +392,13 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail without a valid uuid', async function () {
-      const fields = {
-        category: 5,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
       await makePutBodyRequest({ url: server.url, path: path + 'blabla', token: server.accessToken, fields })
     })
 
     it('Should fail with an unknown id', async function () {
-      const fields = {
-        category: 5,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+
       await makePutBodyRequest({
         url: server.url,
         path: path + '4da6fde3-88f7-4d16-b119-108df5630b06',
@@ -542,127 +409,77 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long name', async function () {
-      const fields = {
-        name: 'My very very very very very very very very very very very very very very very very very  ' +
-        'very very very very very very very very very very very very very very very very long long' +
-        'very very very very very very very very very very very very very very very very long name',
-        category: 5,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.name = 'My very very very very very very very very very very very very very very very very long'.repeat(3)
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad category', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 128,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.category = 128
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad licence', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 128,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.licence = 128
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad language', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 3,
-        language: 896,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.language = 896
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a bad nsfw attribute', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 5,
-        language: 6,
-        nsfw: -4,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.nsfw = (-4 as any)
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a long description', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description which is very very very very very very very very very very very very very long'.repeat(35),
-        tags: [ 'tag1', 'tag2' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.description = 'my super description which is very very very very very very very very very very very very very long'.repeat(35)
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with too many tags', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.tags = [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ]
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too low', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'tag1', 't' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.tags = [ 'tag1', 't' ]
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a tag length too big', async function () {
-      const fields = {
-        name: 'my super name',
-        category: 5,
-        licence: 2,
-        language: 6,
-        nsfw: false,
-        description: 'my super description',
-        tags: [ 'my_super_tag_too_long_long_long_long', 'tag1' ]
-      }
+      const fields = getCompleteVideoUpdateAttributes()
+      fields.tags = [ 'my_super_tag_too_long_long_long_long', 'tag1' ]
+
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
     it('Should fail with a video of another user')
 
     it('Should fail with a video of another pod')
+
+    it('Should succeed with the correct parameters', async function () {
+      const fields = getCompleteVideoUpdateAttributes()
+
+      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields, statusCodeExpected: 204 })
+    })
   })
 
   describe('When getting a video', function () {

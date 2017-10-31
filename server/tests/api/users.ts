@@ -31,6 +31,7 @@ import {
   getBlacklistedVideosList
 } from '../utils'
 import { UserRole } from '../../../shared'
+import { getMyVideos } from '../utils/videos'
 
 describe('Test users', function () {
   let server: ServerInfo
@@ -197,8 +198,20 @@ describe('Test users', function () {
   it('Should be able to upload a video with this user', async function () {
     this.timeout(5000)
 
-    const videoAttributes = {}
+    const videoAttributes = {
+      name: 'super user video'
+    }
     await uploadVideo(server.url, accessTokenUser, videoAttributes)
+  })
+
+  it('Should be able to list my videos', async function () {
+    const res = await getMyVideos(server.url, accessTokenUser, 0, 5)
+    expect(res.body.total).to.equal(1)
+
+    const videos = res.body.data
+    expect(videos).to.have.lengthOf(1)
+
+    expect(videos[0].name).to.equal('super user video')
   })
 
   it('Should list all the users', async function () {

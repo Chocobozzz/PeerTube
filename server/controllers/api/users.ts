@@ -171,7 +171,7 @@ async function getUserInformation (req: express.Request, res: express.Response, 
 }
 
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  return res.json(res.locals.oauth.token.User.toFormattedJSON())
+  return res.json(res.locals.user.toFormattedJSON())
 }
 
 async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
