@@ -127,7 +127,7 @@ export class AppModule {
     /**
      * Display new elements
      */
-    store.disposeOldHosts ()
+    store.disposeOldHosts()
     delete store.disposeOldHosts
   }
 }

@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
 
-import { Search } from '../../shared'
 import { SortField } from './sort-field.type'
 import {
   RestExtractor,
   RestService,
-  UserService
+  UserService,
+  Search
 } from '../../shared'
 import { Video } from './video.model'
 import { VideoDetails } from './video-details.model'
