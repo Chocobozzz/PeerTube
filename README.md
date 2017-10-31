@@ -100,14 +100,23 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
   - [X] Friends list
   - [X] Manage users (create/remove)
 - [X] OpenGraph tags
+- [X] OEmbed
 - [X] Update video
-- [X] Videos view count
+- [X] Videos view counter
 - [X] Videos likes/dislikes
-- [ ] Videos comments?
+- [X] Transcoding to different definitions
+- [X] Download file/torrent
+- [X] User video bytes quota
+- [X] User channels
+- [X] NSFW warnings/settings
+- [X] Video description in markdown
+- [X] User roles (administrator, moderator)
 - [X] User registration
-- [ ] User playlists
-- [ ] User subscriptions (by tags, author...)
+- [X] Video privacy settings (public, unlisted or private)
 - [X] Signaling a video to the admin origin pod
+- [ ] Videos comments
+- [ ] User playlist
+- [ ] User subscriptions (by tags, author...)
 
 
 ## Installation
@@ -239,13 +248,13 @@ See [ARCHITECTURE.md](https://github.com/Chocobozzz/PeerTube/blob/master/ARCHITE
     * Each server of a network has a list of all other servers of this network
     * When a new installed server wants to join a network, it just has to get the servers list through a server that is already in the network and tell "Hi I'm new in the network, communicate with me and share me your servers list please". Then the server will "make friend" with each server of this list
     * Each server has its own users who query it (search videos, where the torrent URI of this specific video is...)
-    * If a user upload a video, the server seeds it and sends the video informations (name, short description, torrent URI...) to each server of the network
+    * If a user upload a video, the server seeds it and sends the video information (name, short description, torrent URI...) to each server of the network
     * Each server has a RSA key to encrypt and sign communications with other servers
   * A server is a tracker responsible for all the videos uploaded in it
-  * Even if nobody watches a video, it is seeded by the server (throught [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the video was uploaded
-  * A network can live and evolve by expelling bad pod (with too many downtimes for example)
+  * Even if nobody watches a video, it is seeded by the server (through [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the video was uploaded
+  * A network can live and evolve by expelling bad pod (with too many downtime for example)
 
-See the ARCHITECTURE.md for more informations. Do not hesitate to give your opinion :)
+See the ARCHITECTURE.md for more information. Do not hesitate to give your opinion :)
 
 Here are some simple schemes:
 
