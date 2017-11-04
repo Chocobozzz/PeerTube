@@ -112,6 +112,18 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
+    it('Should fail with a not lowercase username', async function () {
+      const fields = {
+        username: 'Toto',
+        email: 'test@example.com',
+        password: 'my_super_password',
+        videoQuota: 42000000,
+        role: UserRole.USER
+      }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
     it('Should fail with an incorrect username', async function () {
       const fields = {
         username: 'my username',

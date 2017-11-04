@@ -19,7 +19,7 @@ import {
 import { UserInstance, VideoInstance } from '../../models'
 
 const usersAddValidator = [
-  body('username').custom(isUserUsernameValid).withMessage('Should have a valid username'),
+  body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
   body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
@@ -196,7 +196,7 @@ function checkUserDoesNotAlreadyExist (username: string, email: string, res: exp
       .then(user => {
         if (user) {
           return res.status(409)
-                    .send({ error: 'User already exists.' })
+                    .send({ error: 'User with this username of email already exists.' })
                     .end()
         }
 

@@ -1,11 +1,17 @@
 import { Validators } from '@angular/forms'
 
 export const USER_USERNAME = {
-  VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(20) ],
+  VALIDATORS: [
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(20),
+    Validators.pattern(/^[a-z0-9._]+$/)
+  ],
   MESSAGES: {
     'required': 'Username is required.',
     'minlength': 'Username must be at least 3 characters long.',
-    'maxlength': 'Username cannot be more than 20 characters long.'
+    'maxlength': 'Username cannot be more than 20 characters long.',
+    'pattern': 'Username should be only lowercase alphanumeric characters.'
   }
 }
 export const USER_EMAIL = {
