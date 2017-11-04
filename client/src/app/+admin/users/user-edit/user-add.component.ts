@@ -80,7 +80,7 @@ export class UserAddComponent extends UserEdit implements OnInit {
         this.router.navigate([ '/admin/users/list' ])
       },
 
-      err => this.error = err
+      err => this.error = err.message
     )
   }
 

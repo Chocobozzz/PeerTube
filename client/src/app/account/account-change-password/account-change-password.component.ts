@@ -59,7 +59,7 @@ export class AccountChangePasswordComponent extends FormReactive implements OnIn
     this.userService.changePassword(newPassword).subscribe(
       () => this.notificationsService.success('Success', 'Password updated.'),
 
-      err => this.error = err
+      err => this.error = err.message
     )
   }
 }

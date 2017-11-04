@@ -62,7 +62,7 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
         this.authService.refreshUserInformation()
       },
 
-      err => this.error = err
+      err => this.error = err.message
     )
   }
 }

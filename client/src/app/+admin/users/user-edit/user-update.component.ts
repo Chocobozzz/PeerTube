@@ -69,7 +69,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       this.userService.getUser(userId).subscribe(
         user => this.onUserFetched(user),
 
-        err => this.error = err
+        err => this.error = err.message
       )
     })
   }
@@ -92,7 +92,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
         this.router.navigate([ '/admin/users/list' ])
       },
 
-      err => this.error = err
+      err => this.error = err.message
     )
   }
 
