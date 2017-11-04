@@ -136,10 +136,13 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 }
 
 function beforeCreateOrUpdate (user: UserInstance) {
-  return cryptPassword(user.password).then(hash => {
-    user.password = hash
-    return undefined
-  })
+  if (user.changed('password')) {
+    return cryptPassword(user.password)
+      .then(hash => {
+        user.password = hash
+        return undefined
+      })
+  }
 }
 
 // ------------------------------ METHODS ------------------------------
