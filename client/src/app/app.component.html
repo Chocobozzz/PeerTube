@@ -28,10 +28,10 @@
     </div>
 
     <!-- Used for the fixed menu -->
-    <div class="col-md-2 col-sm-3 col-xs-3">
+    <div class="fake-menu col-md-2 col-sm-3 col-xs-3">
     </div>
 
-    <div [ngClass]="getMainColClasses()">
+    <div class="main-col" [ngClass]="getMainColClasses()">
 
       <div class="main-row">
         <router-outlet></router-outlet>

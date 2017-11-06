@@ -25,7 +25,6 @@ input.readonly {
 }
 
 .main-col {
-
   .content-padding {
     padding: 15px 30px;
 
@@ -44,6 +43,23 @@ input.readonly {
     @media screen and (min-width: 1800px) {
       padding: 15px 60px;
     }
+  }
+}
+
+// On small screen, menu is absolute and displayed over the page
+@media screen and (max-width: 500px) {
+  .title-menu-left {
+    width: 120px;
+    position: absolute !important;
+    z-index: 10000;
+  }
+
+  .main-col {
+    width: 100% !important;
+  }
+
+  .fake-menu {
+    display: none;
   }
 }
 

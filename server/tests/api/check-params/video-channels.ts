@@ -12,7 +12,6 @@ import {
   makePutBodyRequest,
   setAccessTokensToServers,
   killallServers,
-  getMyUserInformation,
   makePostBodyRequest,
   getVideoChannelsList,
   createUser,
@@ -22,7 +21,6 @@ import {
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/channels'
   let server: ServerInfo
-  let channelId: number
   let accessTokenUser: string
 
   // ---------------------------------------------------------------
@@ -35,9 +33,6 @@ describe('Test videos API validator', function () {
     server = await runServer(1)
 
     await setAccessTokensToServers([ server ])
-
-    const res = await getMyUserInformation(server.url, server.accessToken)
-    channelId = res.body.videoChannels[0].id
 
     const user = {
       username: 'fake',

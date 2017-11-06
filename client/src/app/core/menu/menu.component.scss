@@ -6,6 +6,7 @@ menu {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  z-index: 1000;
 
   @media screen and (max-width: 550px) {
     font-size: 90%;

@@ -57,6 +57,7 @@ export class AppComponent implements OnInit {
   }
 
   toggleMenu () {
+    window.scrollTo(0, 0)
     this.isMenuDisplayed = !this.isMenuDisplayed
   }
 
@@ -72,7 +73,7 @@ export class AppComponent implements OnInit {
       Object.keys(colSizes).forEach(col => colSizes[col] = 12)
     }
 
-    const classes = [ 'main-col' ]
+    const classes = []
     Object.keys(colSizes).forEach(col => classes.push(`col-${col}-${colSizes[col]}`))
 
     return classes
