@@ -1,39 +1,41 @@
 import { AsyncQueue, forever, queue } from 'async'
 import * as Sequelize from 'sequelize'
 
-import { database as db } from '../../initializers/database'
 import {
+  database as db,
   JOBS_FETCHING_INTERVAL,
   JOBS_FETCH_LIMIT_PER_CYCLE,
   JOB_STATES
 } from '../../initializers'
 import { logger } from '../../helpers'
 import { JobInstance } from '../../models'
-import { JobHandler, jobHandlers } from './handlers'
+import { JobCategory } from '../../../shared'
 
+export interface JobHandler<T> {
+  process (data: object, jobId: number): T
+  onError (err: Error, jobId: number)
+  onSuccess (jobId: number, jobResult: T)
+}
 type JobQueueCallback = (err: Error) => void
 
-class JobScheduler {
+class JobScheduler<T> {
 
-  private static instance: JobScheduler
-
-  private constructor () { }
-
-  static get Instance () {
-    return this.instance || (this.instance = new this())
-  }
+  constructor (
+    private jobCategory: JobCategory,
+    private jobHandlers: { [ id: string ]: JobHandler<T> }
+  ) {}
 
   async activate () {
-    const limit = JOBS_FETCH_LIMIT_PER_CYCLE
+    const limit = JOBS_FETCH_LIMIT_PER_CYCLE[this.jobCategory]
 
-    logger.info('Jobs scheduler activated.')
+    logger.info('Jobs scheduler %s activated.', this.jobCategory)
 
     const jobsQueue = queue<JobInstance, JobQueueCallback>(this.processJob.bind(this))
 
     // Finish processing jobs from a previous start
     const state = JOB_STATES.PROCESSING
     try {
-      const jobs = await db.Job.listWithLimit(limit, state)
+      const jobs = await db.Job.listWithLimitByCategory(limit, state, this.jobCategory)
 
       this.enqueueJobs(jobsQueue, jobs)
     } catch (err) {
@@ -49,7 +51,7 @@ class JobScheduler {
 
         const state = JOB_STATES.PENDING
         try {
-          const jobs = await db.Job.listWithLimit(limit, state)
+          const jobs = await db.Job.listWithLimitByCategory(limit, state, this.jobCategory)
 
           this.enqueueJobs(jobsQueue, jobs)
         } catch (err) {
@@ -64,9 +66,10 @@ class JobScheduler {
     )
   }
 
-  createJob (transaction: Sequelize.Transaction, handlerName: string, handlerInputData: object) {
+  createJob (transaction: Sequelize.Transaction, category: JobCategory, handlerName: string, handlerInputData: object) {
     const createQuery = {
       state: JOB_STATES.PENDING,
+      category,
       handlerName,
       handlerInputData
     }
@@ -80,7 +83,7 @@ class JobScheduler {
   }
 
   private async processJob (job: JobInstance, callback: (err: Error) => void) {
-    const jobHandler = jobHandlers[job.handlerName]
+    const jobHandler = this.jobHandlers[job.handlerName]
     if (jobHandler === undefined) {
       logger.error('Unknown job handler for job %s.', job.handlerName)
       return callback(null)

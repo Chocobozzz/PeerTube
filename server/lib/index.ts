@@ -1,3 +1,4 @@
+export * from './activitypub'
 export * from './cache'
 export * from './jobs'
 export * from './request'

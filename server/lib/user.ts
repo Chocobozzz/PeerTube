@@ -1,9 +1,9 @@
 import { database as db } from '../initializers'
 import { UserInstance } from '../models'
-import { addVideoAuthorToFriends } from './friends'
+import { addVideoAccountToFriends } from './friends'
 import { createVideoChannel } from './video-channel'
 
-async function createUserAuthorAndChannel (user: UserInstance, validateUser = true) {
+async function createUserAccountAndChannel (user: UserInstance, validateUser = true) {
   const res = await db.sequelize.transaction(async t => {
     const userOptions = {
       transaction: t,
@@ -11,25 +11,25 @@ async function createUserAuthorAndChannel (user: UserInstance, validateUser = tr
     }
 
     const userCreated = await user.save(userOptions)
-    const authorInstance = db.Author.build({
+    const accountInstance = db.Account.build({
       name: userCreated.username,
       podId: null, // It is our pod
       userId: userCreated.id
     })
 
-    const authorCreated = await authorInstance.save({ transaction: t })
+    const accountCreated = await accountInstance.save({ transaction: t })
 
-    const remoteVideoAuthor = authorCreated.toAddRemoteJSON()
+    const remoteVideoAccount = accountCreated.toAddRemoteJSON()
 
     // Now we'll add the video channel's meta data to our friends
-    const author = await addVideoAuthorToFriends(remoteVideoAuthor, t)
+    const account = await addVideoAccountToFriends(remoteVideoAccount, t)
 
     const videoChannelInfo = {
       name: `Default ${userCreated.username} channel`
     }
-    const videoChannel = await createVideoChannel(videoChannelInfo, authorCreated, t)
+    const videoChannel = await createVideoChannel(videoChannelInfo, accountCreated, t)
 
-    return { author, videoChannel }
+    return { account, videoChannel }
   })
 
   return res
@@ -38,5 +38,5 @@ async function createUserAuthorAndChannel (user: UserInstance, validateUser = tr
 // ---------------------------------------------------------------------------
 
 export {
-  createUserAuthorAndChannel
+  createUserAccountAndChannel
 }

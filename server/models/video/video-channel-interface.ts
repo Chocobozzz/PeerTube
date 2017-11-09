@@ -1,42 +1,42 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
-import { ResultList, RemoteVideoChannelCreateData, RemoteVideoChannelUpdateData } from '../../../shared'
+import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
 import { VideoChannel as FormattedVideoChannel } from '../../../shared/models/videos/video-channel.model'
-import { AuthorInstance } from './author-interface'
 import { VideoInstance } from './video-interface'
+import { AccountInstance } from '../account/account-interface'
+import { VideoChannelObject } from '../../../shared/models/activitypub/objects/video-channel-object'
 
 export namespace VideoChannelMethods {
   export type ToFormattedJSON = (this: VideoChannelInstance) => FormattedVideoChannel
-  export type ToAddRemoteJSON = (this: VideoChannelInstance) => RemoteVideoChannelCreateData
-  export type ToUpdateRemoteJSON = (this: VideoChannelInstance) => RemoteVideoChannelUpdateData
+  export type ToActivityPubObject = (this: VideoChannelInstance) => VideoChannelObject
   export type IsOwned = (this: VideoChannelInstance) => boolean
 
-  export type CountByAuthor = (authorId: number) => Promise<number>
+  export type CountByAccount = (accountId: number) => Promise<number>
   export type ListOwned = () => Promise<VideoChannelInstance[]>
   export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoChannelInstance> >
-  export type LoadByIdAndAuthor = (id: number, authorId: number) => Promise<VideoChannelInstance>
-  export type ListByAuthor = (authorId: number) => Promise< ResultList<VideoChannelInstance> >
-  export type LoadAndPopulateAuthor = (id: number) => Promise<VideoChannelInstance>
-  export type LoadByUUIDAndPopulateAuthor = (uuid: string) => Promise<VideoChannelInstance>
+  export type LoadByIdAndAccount = (id: number, accountId: number) => Promise<VideoChannelInstance>
+  export type ListByAccount = (accountId: number) => Promise< ResultList<VideoChannelInstance> >
+  export type LoadAndPopulateAccount = (id: number) => Promise<VideoChannelInstance>
+  export type LoadByUUIDAndPopulateAccount = (uuid: string) => Promise<VideoChannelInstance>
   export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoChannelInstance>
   export type LoadByHostAndUUID = (uuid: string, podHost: string, t?: Sequelize.Transaction) => Promise<VideoChannelInstance>
-  export type LoadAndPopulateAuthorAndVideos = (id: number) => Promise<VideoChannelInstance>
+  export type LoadAndPopulateAccountAndVideos = (id: number) => Promise<VideoChannelInstance>
 }
 
 export interface VideoChannelClass {
-  countByAuthor: VideoChannelMethods.CountByAuthor
+  countByAccount: VideoChannelMethods.CountByAccount
   listForApi: VideoChannelMethods.ListForApi
-  listByAuthor: VideoChannelMethods.ListByAuthor
+  listByAccount: VideoChannelMethods.ListByAccount
   listOwned: VideoChannelMethods.ListOwned
-  loadByIdAndAuthor: VideoChannelMethods.LoadByIdAndAuthor
+  loadByIdAndAccount: VideoChannelMethods.LoadByIdAndAccount
   loadByUUID: VideoChannelMethods.LoadByUUID
   loadByHostAndUUID: VideoChannelMethods.LoadByHostAndUUID
-  loadAndPopulateAuthor: VideoChannelMethods.LoadAndPopulateAuthor
-  loadByUUIDAndPopulateAuthor: VideoChannelMethods.LoadByUUIDAndPopulateAuthor
-  loadAndPopulateAuthorAndVideos: VideoChannelMethods.LoadAndPopulateAuthorAndVideos
+  loadAndPopulateAccount: VideoChannelMethods.LoadAndPopulateAccount
+  loadByUUIDAndPopulateAccount: VideoChannelMethods.LoadByUUIDAndPopulateAccount
+  loadAndPopulateAccountAndVideos: VideoChannelMethods.LoadAndPopulateAccountAndVideos
 }
 
 export interface VideoChannelAttributes {
@@ -45,8 +45,9 @@ export interface VideoChannelAttributes {
   name: string
   description: string
   remote: boolean
+  url: string
 
-  Author?: AuthorInstance
+  Account?: AccountInstance
   Videos?: VideoInstance[]
 }
 
@@ -57,8 +58,7 @@ export interface VideoChannelInstance extends VideoChannelClass, VideoChannelAtt
 
   isOwned: VideoChannelMethods.IsOwned
   toFormattedJSON: VideoChannelMethods.ToFormattedJSON
-  toAddRemoteJSON: VideoChannelMethods.ToAddRemoteJSON
-  toUpdateRemoteJSON: VideoChannelMethods.ToUpdateRemoteJSON
+  toActivityPubObject: VideoChannelMethods.ToActivityPubObject
 }
 
 export interface VideoChannelModel extends VideoChannelClass, Sequelize.Model<VideoChannelInstance, VideoChannelAttributes> {}

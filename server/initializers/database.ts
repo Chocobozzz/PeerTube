@@ -15,8 +15,9 @@ import { BlacklistedVideoModel } from './../models/video/video-blacklist-interfa
 import { VideoFileModel } from './../models/video/video-file-interface'
 import { VideoAbuseModel } from './../models/video/video-abuse-interface'
 import { VideoChannelModel } from './../models/video/video-channel-interface'
-import { UserModel } from './../models/user/user-interface'
-import { UserVideoRateModel } from './../models/user/user-video-rate-interface'
+import { UserModel } from '../models/account/user-interface'
+import { AccountVideoRateModel } from '../models/account/account-video-rate-interface'
+import { AccountFollowModel } from '../models/account/account-follow-interface'
 import { TagModel } from './../models/video/tag-interface'
 import { RequestModel } from './../models/request/request-interface'
 import { RequestVideoQaduModel } from './../models/request/request-video-qadu-interface'
@@ -26,7 +27,7 @@ import { PodModel } from './../models/pod/pod-interface'
 import { OAuthTokenModel } from './../models/oauth/oauth-token-interface'
 import { OAuthClientModel } from './../models/oauth/oauth-client-interface'
 import { JobModel } from './../models/job/job-interface'
-import { AuthorModel } from './../models/video/author-interface'
+import { AccountModel } from './../models/account/account-interface'
 import { ApplicationModel } from './../models/application/application-interface'
 
 const dbname = CONFIG.DATABASE.DBNAME
@@ -38,7 +39,7 @@ const database: {
   init?: (silent: boolean) => Promise<void>,
 
   Application?: ApplicationModel,
-  Author?: AuthorModel,
+  Account?: AccountModel,
   Job?: JobModel,
   OAuthClient?: OAuthClientModel,
   OAuthToken?: OAuthTokenModel,
@@ -48,7 +49,8 @@ const database: {
   RequestVideoQadu?: RequestVideoQaduModel,
   Request?: RequestModel,
   Tag?: TagModel,
-  UserVideoRate?: UserVideoRateModel,
+  AccountVideoRate?: AccountVideoRateModel,
+  AccountFollow?: AccountFollowModel,
   User?: UserModel,
   VideoAbuse?: VideoAbuseModel,
   VideoChannel?: VideoChannelModel,
@@ -126,7 +128,7 @@ async function getModelFiles (modelDirectory: string) {
     return true
   })
 
-  const tasks: Bluebird<any>[] = []
+  const tasks: Promise<any>[] = []
 
   // For each directory we read it and append model in the modelFilePaths array
   for (const directory of directories) {

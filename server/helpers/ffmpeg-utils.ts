@@ -1,4 +1,3 @@
-import * as Promise from 'bluebird'
 import * as ffmpeg from 'fluent-ffmpeg'
 
 import { CONFIG } from '../initializers'

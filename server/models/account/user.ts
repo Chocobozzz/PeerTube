@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
 
 import { getSort, addMethodsToModel } from '../utils'
 import {
@@ -166,13 +165,13 @@ toFormattedJSON = function (this: UserInstance) {
     videoQuota: this.videoQuota,
     createdAt: this.createdAt,
     author: {
-      id: this.Author.id,
-      uuid: this.Author.uuid
+      id: this.Account.id,
+      uuid: this.Account.uuid
     }
   }
 
-  if (Array.isArray(this.Author.VideoChannels) === true) {
-    const videoChannels = this.Author.VideoChannels
+  if (Array.isArray(this.Account.VideoChannels) === true) {
+    const videoChannels = this.Account.VideoChannels
       .map(c => c.toFormattedJSON())
       .sort((v1, v2) => {
         if (v1.createdAt < v2.createdAt) return -1
@@ -198,7 +197,7 @@ isAbleToUploadVideo = function (this: UserInstance, videoFile: Express.Multer.Fi
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  User.hasOne(models.Author, {
+  User.hasOne(models.Account, {
     foreignKey: 'userId',
     onDelete: 'cascade'
   })
@@ -218,7 +217,7 @@ getByUsername = function (username: string) {
     where: {
       username: username
     },
-    include: [ { model: User['sequelize'].models.Author, required: true } ]
+    include: [ { model: User['sequelize'].models.Account, required: true } ]
   }
 
   return User.findOne(query)
@@ -229,7 +228,7 @@ listForApi = function (start: number, count: number, sort: string) {
     offset: start,
     limit: count,
     order: [ getSort(sort) ],
-    include: [ { model: User['sequelize'].models.Author, required: true } ]
+    include: [ { model: User['sequelize'].models.Account, required: true } ]
   }
 
   return User.findAndCountAll(query).then(({ rows, count }) => {
@@ -242,7 +241,7 @@ listForApi = function (start: number, count: number, sort: string) {
 
 loadById = function (id: number) {
   const options = {
-    include: [ { model: User['sequelize'].models.Author, required: true } ]
+    include: [ { model: User['sequelize'].models.Account, required: true } ]
   }
 
   return User.findById(id, options)
@@ -253,7 +252,7 @@ loadByUsername = function (username: string) {
     where: {
       username
     },
-    include: [ { model: User['sequelize'].models.Author, required: true } ]
+    include: [ { model: User['sequelize'].models.Account, required: true } ]
   }
 
   return User.findOne(query)
@@ -266,7 +265,7 @@ loadByUsernameAndPopulateChannels = function (username: string) {
     },
     include: [
       {
-        model: User['sequelize'].models.Author,
+        model: User['sequelize'].models.Account,
         required: true,
         include: [ User['sequelize'].models.VideoChannel ]
       }
@@ -278,7 +277,7 @@ loadByUsernameAndPopulateChannels = function (username: string) {
 
 loadByUsernameOrEmail = function (username: string, email: string) {
   const query = {
-    include: [ { model: User['sequelize'].models.Author, required: true } ],
+    include: [ { model: User['sequelize'].models.Account, required: true } ],
     where: {
       [Sequelize.Op.or]: [ { username }, { email } ]
     }
@@ -296,8 +295,8 @@ function getOriginalVideoFileTotalFromUser (user: UserInstance) {
                 '(SELECT MAX("VideoFiles"."size") AS "size" FROM "VideoFiles" ' +
                 'INNER JOIN "Videos" ON "VideoFiles"."videoId" = "Videos"."id" ' +
                 'INNER JOIN "VideoChannels" ON "VideoChannels"."id" = "Videos"."channelId" ' +
-                'INNER JOIN "Authors" ON "VideoChannels"."authorId" = "Authors"."id" ' +
-                'INNER JOIN "Users" ON "Authors"."userId" = "Users"."id" ' +
+                'INNER JOIN "Accounts" ON "VideoChannels"."authorId" = "Accounts"."id" ' +
+                'INNER JOIN "Users" ON "Accounts"."userId" = "Users"."id" ' +
                 'WHERE "Users"."id" = $userId GROUP BY "Videos"."id") t'
 
   const options = {

@@ -1,4 +1,4 @@
-export * from './remote'
+export * from './activitypub'
 export * from './misc'
 export * from './pods'
 export * from './pods'

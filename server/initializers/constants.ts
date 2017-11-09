@@ -10,7 +10,8 @@ import {
   RequestVideoEventType,
   RequestVideoQaduType,
   RemoteVideoRequestType,
-  JobState
+  JobState,
+  JobCategory
 } from '../../shared/models'
 import { VideoPrivacy } from '../../shared/models/videos/video-privacy.enum'
 
@@ -60,7 +61,6 @@ const CONFIG = {
     PASSWORD: config.get<string>('database.password')
   },
   STORAGE: {
-    CERT_DIR: join(root(), config.get<string>('storage.certs')),
     LOG_DIR: join(root(), config.get<string>('storage.logs')),
     VIDEOS_DIR: join(root(), config.get<string>('storage.videos')),
     THUMBNAILS_DIR: join(root(), config.get<string>('storage.thumbnails')),
@@ -211,6 +211,10 @@ const FRIEND_SCORE = {
   MAX: 1000
 }
 
+const ACTIVITY_PUB = {
+  COLLECTION_ITEMS_PER_PAGE: 10
+}
+
 // ---------------------------------------------------------------------------
 
 // Number of points we add/remove from a friend after a successful/bad request
@@ -288,17 +292,23 @@ const JOB_STATES: { [ id: string ]: JobState } = {
   ERROR: 'error',
   SUCCESS: 'success'
 }
+const JOB_CATEGORIES: { [ id: string ]: JobCategory } = {
+  TRANSCODING: 'transcoding',
+  HTTP_REQUEST: 'http-request'
+}
 // How many maximum jobs we fetch from the database per cycle
-const JOBS_FETCH_LIMIT_PER_CYCLE = 10
+const JOBS_FETCH_LIMIT_PER_CYCLE = {
+  transcoding: 10,
+  httpRequest: 20
+}
 // 1 minutes
 let JOBS_FETCHING_INTERVAL = 60000
 
 // ---------------------------------------------------------------------------
 
-const PRIVATE_CERT_NAME = 'peertube.key.pem'
-const PUBLIC_CERT_NAME = 'peertube.pub'
-const SIGNATURE_ALGORITHM = 'RSA-SHA256'
-const SIGNATURE_ENCODING = 'hex'
+// const SIGNATURE_ALGORITHM = 'RSA-SHA256'
+// const SIGNATURE_ENCODING = 'hex'
+const PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
@@ -368,14 +378,13 @@ export {
   JOB_STATES,
   JOBS_FETCH_LIMIT_PER_CYCLE,
   JOBS_FETCHING_INTERVAL,
+  JOB_CATEGORIES,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   OPENGRAPH_AND_OEMBED_COMMENT,
   PAGINATION_COUNT_DEFAULT,
   PODS_SCORE,
   PREVIEWS_SIZE,
-  PRIVATE_CERT_NAME,
-  PUBLIC_CERT_NAME,
   REMOTE_SCHEME,
   REQUEST_ENDPOINT_ACTIONS,
   REQUEST_ENDPOINTS,
@@ -393,11 +402,11 @@ export {
   REQUESTS_VIDEO_QADU_LIMIT_PODS,
   RETRY_REQUESTS,
   SEARCHABLE_COLUMNS,
-  SIGNATURE_ALGORITHM,
-  SIGNATURE_ENCODING,
+  PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,
   STATIC_MAX_AGE,
   STATIC_PATHS,
+  ACTIVITY_PUB,
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,

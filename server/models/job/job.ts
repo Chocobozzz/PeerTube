@@ -1,7 +1,7 @@
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 
-import { JOB_STATES } from '../../initializers'
+import { JOB_STATES, JOB_CATEGORIES } from '../../initializers'
 
 import { addMethodsToModel } from '../utils'
 import {
@@ -13,13 +13,17 @@ import {
 import { JobState } from '../../../shared/models/job.model'
 
 let Job: Sequelize.Model<JobInstance, JobAttributes>
-let listWithLimit: JobMethods.ListWithLimit
+let listWithLimitByCategory: JobMethods.ListWithLimitByCategory
 
 export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Job = sequelize.define<JobInstance, JobAttributes>('Job',
     {
       state: {
         type: DataTypes.ENUM(values(JOB_STATES)),
+        allowNull: false
+      },
+      category: {
+        type: DataTypes.ENUM(values(JOB_CATEGORIES)),
         allowNull: false
       },
       handlerName: {
@@ -40,7 +44,7 @@ export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Se
     }
   )
 
-  const classMethods = [ listWithLimit ]
+  const classMethods = [ listWithLimitByCategory ]
   addMethodsToModel(Job, classMethods)
 
   return Job
@@ -48,7 +52,7 @@ export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Se
 
 // ---------------------------------------------------------------------------
 
-listWithLimit = function (limit: number, state: JobState) {
+listWithLimitByCategory = function (limit: number, state: JobState) {
   const query = {
     order: [
       [ 'id', 'ASC' ]
