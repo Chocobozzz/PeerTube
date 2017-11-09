@@ -13,7 +13,7 @@ export interface VideoFile {
 export interface Video {
   id: number
   uuid: string
-  author: string
+  account: string
   createdAt: Date | string
   updatedAt: Date | string
   categoryLabel: string

@@ -1,5 +1,5 @@
 /*
-  User rates per video.
+  Account rates per video.
 */
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
@@ -8,17 +8,17 @@ import { VIDEO_RATE_TYPES } from '../../initializers'
 
 import { addMethodsToModel } from '../utils'
 import {
-  UserVideoRateInstance,
-  UserVideoRateAttributes,
+  AccountVideoRateInstance,
+  AccountVideoRateAttributes,
 
-  UserVideoRateMethods
-} from './user-video-rate-interface'
+  AccountVideoRateMethods
+} from './account-video-rate-interface'
 
-let UserVideoRate: Sequelize.Model<UserVideoRateInstance, UserVideoRateAttributes>
-let load: UserVideoRateMethods.Load
+let AccountVideoRate: Sequelize.Model<AccountVideoRateInstance, AccountVideoRateAttributes>
+let load: AccountVideoRateMethods.Load
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  UserVideoRate = sequelize.define<UserVideoRateInstance, UserVideoRateAttributes>('UserVideoRate',
+  AccountVideoRate = sequelize.define<AccountVideoRateInstance, AccountVideoRateAttributes>('AccountVideoRate',
     {
       type: {
         type: DataTypes.ENUM(values(VIDEO_RATE_TYPES)),
@@ -28,7 +28,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     {
       indexes: [
         {
-          fields: [ 'videoId', 'userId', 'type' ],
+          fields: [ 'videoId', 'accountId', 'type' ],
           unique: true
         }
       ]
@@ -40,15 +40,15 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
     load
   ]
-  addMethodsToModel(UserVideoRate, classMethods)
+  addMethodsToModel(AccountVideoRate, classMethods)
 
-  return UserVideoRate
+  return AccountVideoRate
 }
 
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  UserVideoRate.belongsTo(models.Video, {
+  AccountVideoRate.belongsTo(models.Video, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
@@ -56,23 +56,23 @@ function associate (models) {
     onDelete: 'CASCADE'
   })
 
-  UserVideoRate.belongsTo(models.User, {
+  AccountVideoRate.belongsTo(models.Account, {
     foreignKey: {
-      name: 'userId',
+      name: 'accountId',
       allowNull: false
     },
     onDelete: 'CASCADE'
   })
 }
 
-load = function (userId: number, videoId: number, transaction: Sequelize.Transaction) {
-  const options: Sequelize.FindOptions<UserVideoRateAttributes> = {
+load = function (accountId: number, videoId: number, transaction: Sequelize.Transaction) {
+  const options: Sequelize.FindOptions<AccountVideoRateAttributes> = {
     where: {
-      userId,
+      accountId,
       videoId
     }
   }
   if (transaction) options.transaction = transaction
 
-  return UserVideoRate.findOne(options)
+  return AccountVideoRate.findOne(options)
 }

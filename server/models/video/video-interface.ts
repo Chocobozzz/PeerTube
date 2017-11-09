@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 
 import { TagAttributes, TagInstance } from './tag-interface'
 import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
@@ -13,6 +13,7 @@ import { RemoteVideoUpdateData } from '../../../shared/models/pods/remote-video/
 import { RemoteVideoCreateData } from '../../../shared/models/pods/remote-video/remote-video-create-request.model'
 import { ResultList } from '../../../shared/models/result-list.model'
 import { VideoChannelInstance } from './video-channel-interface'
+import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string
@@ -29,8 +30,7 @@ export namespace VideoMethods {
   export type GetVideoFilePath = (this: VideoInstance, videoFile: VideoFileInstance) => string
   export type CreateTorrentAndSetInfoHash = (this: VideoInstance, videoFile: VideoFileInstance) => Promise<void>
 
-  export type ToAddRemoteJSON = (this: VideoInstance) => Promise<RemoteVideoCreateData>
-  export type ToUpdateRemoteJSON = (this: VideoInstance) => RemoteVideoUpdateData
+  export type ToActivityPubObject = (this: VideoInstance) => VideoTorrentObject
 
   export type OptimizeOriginalVideofile = (this: VideoInstance) => Promise<void>
   export type TranscodeOriginalVideofile = (this: VideoInstance, resolution: number) => Promise<void>
@@ -40,31 +40,35 @@ export namespace VideoMethods {
   export type GetPreviewPath = (this: VideoInstance) => string
   export type GetDescriptionPath = (this: VideoInstance) => string
   export type GetTruncatedDescription = (this: VideoInstance) => string
+  export type GetCategoryLabel = (this: VideoInstance) => string
+  export type GetLicenceLabel = (this: VideoInstance) => string
+  export type GetLanguageLabel = (this: VideoInstance) => string
 
   // Return thumbnail name
   export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string) => Promise<string>
 
-  export type List = () => Promise<VideoInstance[]>
-  export type ListOwnedAndPopulateAuthorAndTags = () => Promise<VideoInstance[]>
-  export type ListOwnedByAuthor = (author: string) => Promise<VideoInstance[]>
+  export type List = () => Bluebird<VideoInstance[]>
+  export type ListOwnedAndPopulateAccountAndTags = () => Bluebird<VideoInstance[]>
+  export type ListOwnedByAccount = (account: string) => Bluebird<VideoInstance[]>
 
-  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoInstance> >
-  export type ListUserVideosForApi = (userId: number, start: number, count: number, sort: string) => Promise< ResultList<VideoInstance> >
-  export type SearchAndPopulateAuthorAndPodAndTags = (
+  export type ListForApi = (start: number, count: number, sort: string) => Bluebird< ResultList<VideoInstance> >
+  export type ListUserVideosForApi = (userId: number, start: number, count: number, sort: string) => Bluebird< ResultList<VideoInstance> >
+  export type SearchAndPopulateAccountAndPodAndTags = (
     value: string,
     field: string,
     start: number,
     count: number,
     sort: string
-  ) => Promise< ResultList<VideoInstance> >
+  ) => Bluebird< ResultList<VideoInstance> >
 
-  export type Load = (id: number) => Promise<VideoInstance>
-  export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
-  export type LoadLocalVideoByUUID = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
-  export type LoadByHostAndUUID = (fromHost: string, uuid: string, t?: Sequelize.Transaction) => Promise<VideoInstance>
-  export type LoadAndPopulateAuthor = (id: number) => Promise<VideoInstance>
-  export type LoadAndPopulateAuthorAndPodAndTags = (id: number) => Promise<VideoInstance>
-  export type LoadByUUIDAndPopulateAuthorAndPodAndTags = (uuid: string) => Promise<VideoInstance>
+  export type Load = (id: number) => Bluebird<VideoInstance>
+  export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
+  export type LoadByUrl = (url: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
+  export type LoadLocalVideoByUUID = (uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
+  export type LoadByHostAndUUID = (fromHost: string, uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
+  export type LoadAndPopulateAccount = (id: number) => Bluebird<VideoInstance>
+  export type LoadAndPopulateAccountAndPodAndTags = (id: number) => Bluebird<VideoInstance>
+  export type LoadByUUIDAndPopulateAccountAndPodAndTags = (uuid: string) => Bluebird<VideoInstance>
 
   export type RemoveThumbnail = (this: VideoInstance) => Promise<void>
   export type RemovePreview = (this: VideoInstance) => Promise<void>
@@ -77,16 +81,17 @@ export interface VideoClass {
   list: VideoMethods.List
   listForApi: VideoMethods.ListForApi
   listUserVideosForApi: VideoMethods.ListUserVideosForApi
-  listOwnedAndPopulateAuthorAndTags: VideoMethods.ListOwnedAndPopulateAuthorAndTags
-  listOwnedByAuthor: VideoMethods.ListOwnedByAuthor
+  listOwnedAndPopulateAccountAndTags: VideoMethods.ListOwnedAndPopulateAccountAndTags
+  listOwnedByAccount: VideoMethods.ListOwnedByAccount
   load: VideoMethods.Load
-  loadAndPopulateAuthor: VideoMethods.LoadAndPopulateAuthor
-  loadAndPopulateAuthorAndPodAndTags: VideoMethods.LoadAndPopulateAuthorAndPodAndTags
+  loadAndPopulateAccount: VideoMethods.LoadAndPopulateAccount
+  loadAndPopulateAccountAndPodAndTags: VideoMethods.LoadAndPopulateAccountAndPodAndTags
   loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
   loadByUUID: VideoMethods.LoadByUUID
+  loadByUrl: VideoMethods.LoadByUrl
   loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
-  loadByUUIDAndPopulateAuthorAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAuthorAndPodAndTags
-  searchAndPopulateAuthorAndPodAndTags: VideoMethods.SearchAndPopulateAuthorAndPodAndTags
+  loadByUUIDAndPopulateAccountAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndPodAndTags
+  searchAndPopulateAccountAndPodAndTags: VideoMethods.SearchAndPopulateAccountAndPodAndTags
 }
 
 export interface VideoAttributes {
@@ -104,7 +109,9 @@ export interface VideoAttributes {
   likes?: number
   dislikes?: number
   remote: boolean
+  url: string
 
+  parentId?: number
   channelId?: number
 
   VideoChannel?: VideoChannelInstance
@@ -132,16 +139,18 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
   removePreview: VideoMethods.RemovePreview
   removeThumbnail: VideoMethods.RemoveThumbnail
   removeTorrent: VideoMethods.RemoveTorrent
-  toAddRemoteJSON: VideoMethods.ToAddRemoteJSON
+  toActivityPubObject: VideoMethods.ToActivityPubObject
   toFormattedJSON: VideoMethods.ToFormattedJSON
   toFormattedDetailsJSON: VideoMethods.ToFormattedDetailsJSON
-  toUpdateRemoteJSON: VideoMethods.ToUpdateRemoteJSON
   optimizeOriginalVideofile: VideoMethods.OptimizeOriginalVideofile
   transcodeOriginalVideofile: VideoMethods.TranscodeOriginalVideofile
   getOriginalFileHeight: VideoMethods.GetOriginalFileHeight
   getEmbedPath: VideoMethods.GetEmbedPath
   getDescriptionPath: VideoMethods.GetDescriptionPath
   getTruncatedDescription: VideoMethods.GetTruncatedDescription
+  getCategoryLabel: VideoMethods.GetCategoryLabel
+  getLicenceLabel: VideoMethods.GetLicenceLabel
+  getLanguageLabel: VideoMethods.GetLanguageLabel
 
   setTags: Sequelize.HasManySetAssociationsMixin<TagAttributes, string>
   addVideoFile: Sequelize.HasManyAddAssociationMixin<VideoFileAttributes, string>
@@ -149,3 +158,4 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
 }
 
 export interface VideoModel extends VideoClass, Sequelize.Model<VideoInstance, VideoAttributes> {}
+

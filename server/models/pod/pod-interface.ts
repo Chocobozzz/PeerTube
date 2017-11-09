@@ -48,9 +48,7 @@ export interface PodClass {
 export interface PodAttributes {
   id?: number
   host?: string
-  publicKey?: string
   score?: number | Sequelize.literal // Sequelize literal for 'score +' + value
-  email?: string
 }
 
 export interface PodInstance extends PodClass, PodAttributes, Sequelize.Instance<PodAttributes> {

@@ -1,10 +1,10 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 
 // Don't use barrel, import just what we need
+import { AccountInstance } from './account-interface'
 import { User as FormattedUser } from '../../../shared/models/users/user.model'
 import { ResultList } from '../../../shared/models/result-list.model'
-import { AuthorInstance } from '../video/author-interface'
 import { UserRight } from '../../../shared/models/users/user-right.enum'
 import { UserRole } from '../../../shared/models/users/user-role'
 
@@ -15,18 +15,18 @@ export namespace UserMethods {
   export type ToFormattedJSON = (this: UserInstance) => FormattedUser
   export type IsAbleToUploadVideo = (this: UserInstance, videoFile: Express.Multer.File) => Promise<boolean>
 
-  export type CountTotal = () => Promise<number>
+  export type CountTotal = () => Bluebird<number>
 
-  export type GetByUsername = (username: string) => Promise<UserInstance>
+  export type GetByUsername = (username: string) => Bluebird<UserInstance>
 
-  export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<UserInstance> >
+  export type ListForApi = (start: number, count: number, sort: string) => Bluebird< ResultList<UserInstance> >
 
-  export type LoadById = (id: number) => Promise<UserInstance>
+  export type LoadById = (id: number) => Bluebird<UserInstance>
 
-  export type LoadByUsername = (username: string) => Promise<UserInstance>
-  export type LoadByUsernameAndPopulateChannels = (username: string) => Promise<UserInstance>
+  export type LoadByUsername = (username: string) => Bluebird<UserInstance>
+  export type LoadByUsernameAndPopulateChannels = (username: string) => Bluebird<UserInstance>
 
-  export type LoadByUsernameOrEmail = (username: string, email: string) => Promise<UserInstance>
+  export type LoadByUsernameOrEmail = (username: string, email: string) => Bluebird<UserInstance>
 }
 
 export interface UserClass {
@@ -53,7 +53,7 @@ export interface UserAttributes {
   role: UserRole
   videoQuota: number
 
-  Author?: AuthorInstance
+  Account?: AccountInstance
 }
 
 export interface UserInstance extends UserClass, UserAttributes, Sequelize.Instance<UserAttributes> {

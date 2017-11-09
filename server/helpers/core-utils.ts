@@ -19,8 +19,10 @@ import * as mkdirp from 'mkdirp'
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
 import * as rimraf from 'rimraf'
-import * as openssl from 'openssl-wrapper'
-import * as Promise from 'bluebird'
+import * as pem from 'pem'
+import * as jsonld from 'jsonld'
+import * as jsig from 'jsonld-signatures'
+jsig.use('jsonld', jsonld)
 
 function isTestInstance () {
   return process.env.NODE_ENV === 'test'
@@ -52,6 +54,12 @@ function escapeHTML (stringParam) {
   }
 
   return String(stringParam).replace(/[&<>"'`=\/]/g, s => entityMap[s])
+}
+
+function pageToStartAndCount (page: number, itemsPerPage: number) {
+  const start = (page - 1) * itemsPerPage
+
+  return { start, count: itemsPerPage }
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
@@ -104,13 +112,16 @@ const readdirPromise = promisify1<string, string[]>(readdir)
 const mkdirpPromise = promisify1<string, string>(mkdirp)
 const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
 const accessPromise = promisify1WithVoid<string | Buffer>(access)
-const opensslExecPromise = promisify2WithVoid<string, any>(openssl.exec)
+const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
+const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
 const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
 const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
 const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 const rimrafPromise = promisify1WithVoid<string>(rimraf)
 const statPromise = promisify1<string, Stats>(stat)
+const jsonldSignPromise = promisify2<object, { privateKeyPem: string, creator: string }, object>(jsig.sign)
+const jsonldVerifyPromise = promisify2<object, object, object>(jsig.verify)
 
 // ---------------------------------------------------------------------------
 
@@ -118,9 +129,11 @@ export {
   isTestInstance,
   root,
   escapeHTML,
+  pageToStartAndCount,
 
   promisify0,
   promisify1,
+
   readdirPromise,
   readFilePromise,
   readFileBufferPromise,
@@ -130,11 +143,14 @@ export {
   mkdirpPromise,
   pseudoRandomBytesPromise,
   accessPromise,
-  opensslExecPromise,
+  createPrivateKey,
+  getPublicKey,
   bcryptComparePromise,
   bcryptGenSaltPromise,
   bcryptHashPromise,
   createTorrentPromise,
   rimrafPromise,
-  statPromise
+  statPromise,
+  jsonldSignPromise,
+  jsonldVerifyPromise
 }

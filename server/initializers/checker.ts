@@ -2,7 +2,7 @@ import * as config from 'config'
 
 import { promisify0 } from '../helpers/core-utils'
 import { OAuthClientModel } from '../models/oauth/oauth-client-interface'
-import { UserModel } from '../models/user/user-interface'
+import { UserModel } from '../models/account/user-interface'
 
 // Some checks on configuration files
 function checkConfig () {

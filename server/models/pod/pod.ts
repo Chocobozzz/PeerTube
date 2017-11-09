@@ -39,10 +39,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
           }
         }
       },
-      publicKey: {
-        type: DataTypes.STRING(5000),
-        allowNull: false
-      },
       score: {
         type: DataTypes.INTEGER,
         defaultValue: FRIEND_SCORE.BASE,
@@ -50,13 +46,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         validate: {
           isInt: true,
           max: FRIEND_SCORE.MAX
-        }
-      },
-      email: {
-        type: DataTypes.STRING(400),
-        allowNull: false,
-        validate: {
-          isEmail: true
         }
       }
     },
@@ -100,7 +89,6 @@ toFormattedJSON = function (this: PodInstance) {
   const json = {
     id: this.id,
     host: this.host,
-    email: this.email,
     score: this.score as number,
     createdAt: this.createdAt
   }

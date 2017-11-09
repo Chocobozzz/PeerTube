@@ -13,19 +13,18 @@ import {
 
 let VideoChannel: Sequelize.Model<VideoChannelInstance, VideoChannelAttributes>
 let toFormattedJSON: VideoChannelMethods.ToFormattedJSON
-let toAddRemoteJSON: VideoChannelMethods.ToAddRemoteJSON
-let toUpdateRemoteJSON: VideoChannelMethods.ToUpdateRemoteJSON
+let toActivityPubObject: VideoChannelMethods.ToActivityPubObject
 let isOwned: VideoChannelMethods.IsOwned
-let countByAuthor: VideoChannelMethods.CountByAuthor
+let countByAccount: VideoChannelMethods.CountByAccount
 let listOwned: VideoChannelMethods.ListOwned
 let listForApi: VideoChannelMethods.ListForApi
-let listByAuthor: VideoChannelMethods.ListByAuthor
-let loadByIdAndAuthor: VideoChannelMethods.LoadByIdAndAuthor
+let listByAccount: VideoChannelMethods.ListByAccount
+let loadByIdAndAccount: VideoChannelMethods.LoadByIdAndAccount
 let loadByUUID: VideoChannelMethods.LoadByUUID
-let loadAndPopulateAuthor: VideoChannelMethods.LoadAndPopulateAuthor
-let loadByUUIDAndPopulateAuthor: VideoChannelMethods.LoadByUUIDAndPopulateAuthor
+let loadAndPopulateAccount: VideoChannelMethods.LoadAndPopulateAccount
+let loadByUUIDAndPopulateAccount: VideoChannelMethods.LoadByUUIDAndPopulateAccount
 let loadByHostAndUUID: VideoChannelMethods.LoadByHostAndUUID
-let loadAndPopulateAuthorAndVideos: VideoChannelMethods.LoadAndPopulateAuthorAndVideos
+let loadAndPopulateAccountAndVideos: VideoChannelMethods.LoadAndPopulateAccountAndVideos
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   VideoChannel = sequelize.define<VideoChannelInstance, VideoChannelAttributes>('VideoChannel',
@@ -62,12 +61,19 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+      },
+      url: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isUrl: true
+        }
       }
     },
     {
       indexes: [
         {
-          fields: [ 'authorId' ]
+          fields: [ 'accountId' ]
         }
       ],
       hooks: {
@@ -80,21 +86,20 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     associate,
 
     listForApi,
-    listByAuthor,
+    listByAccount,
     listOwned,
-    loadByIdAndAuthor,
-    loadAndPopulateAuthor,
-    loadByUUIDAndPopulateAuthor,
+    loadByIdAndAccount,
+    loadAndPopulateAccount,
+    loadByUUIDAndPopulateAccount,
     loadByUUID,
     loadByHostAndUUID,
-    loadAndPopulateAuthorAndVideos,
-    countByAuthor
+    loadAndPopulateAccountAndVideos,
+    countByAccount
   ]
   const instanceMethods = [
     isOwned,
     toFormattedJSON,
-    toAddRemoteJSON,
-    toUpdateRemoteJSON
+    toActivityPubObject,
   ]
   addMethodsToModel(VideoChannel, classMethods, instanceMethods)
 
@@ -118,10 +123,10 @@ toFormattedJSON = function (this: VideoChannelInstance) {
     updatedAt: this.updatedAt
   }
 
-  if (this.Author !== undefined) {
+  if (this.Account !== undefined) {
     json['owner'] = {
-      name: this.Author.name,
-      uuid: this.Author.uuid
+      name: this.Account.name,
+      uuid: this.Account.uuid
     }
   }
 
@@ -132,27 +137,14 @@ toFormattedJSON = function (this: VideoChannelInstance) {
   return json
 }
 
-toAddRemoteJSON = function (this: VideoChannelInstance) {
+toActivityPubObject = function (this: VideoChannelInstance) {
   const json = {
     uuid: this.uuid,
     name: this.name,
     description: this.description,
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
-    ownerUUID: this.Author.uuid
-  }
-
-  return json
-}
-
-toUpdateRemoteJSON = function (this: VideoChannelInstance) {
-  const json = {
-    uuid: this.uuid,
-    name: this.name,
-    description: this.description,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
-    ownerUUID: this.Author.uuid
+    ownerUUID: this.Account.uuid
   }
 
   return json
@@ -161,9 +153,9 @@ toUpdateRemoteJSON = function (this: VideoChannelInstance) {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  VideoChannel.belongsTo(models.Author, {
+  VideoChannel.belongsTo(models.Account, {
     foreignKey: {
-      name: 'authorId',
+      name: 'accountId',
       allowNull: false
     },
     onDelete: 'CASCADE'
@@ -190,10 +182,10 @@ function afterDestroy (videoChannel: VideoChannelInstance) {
   return undefined
 }
 
-countByAuthor = function (authorId: number) {
+countByAccount = function (accountId: number) {
   const query = {
     where: {
-      authorId
+      accountId
     }
   }
 
@@ -205,7 +197,7 @@ listOwned = function () {
     where: {
       remote: false
     },
-    include: [ VideoChannel['sequelize'].models.Author ]
+    include: [ VideoChannel['sequelize'].models.Account ]
   }
 
   return VideoChannel.findAll(query)
@@ -218,7 +210,7 @@ listForApi = function (start: number, count: number, sort: string) {
     order: [ getSort(sort) ],
     include: [
       {
-        model: VideoChannel['sequelize'].models.Author,
+        model: VideoChannel['sequelize'].models.Account,
         required: true,
         include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
       }
@@ -230,14 +222,14 @@ listForApi = function (start: number, count: number, sort: string) {
   })
 }
 
-listByAuthor = function (authorId: number) {
+listByAccount = function (accountId: number) {
   const query = {
     order: [ getSort('createdAt') ],
     include: [
       {
-        model: VideoChannel['sequelize'].models.Author,
+        model: VideoChannel['sequelize'].models.Account,
         where: {
-          id: authorId
+          id: accountId
         },
         required: true,
         include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
@@ -269,7 +261,7 @@ loadByHostAndUUID = function (fromHost: string, uuid: string, t?: Sequelize.Tran
     },
     include: [
       {
-        model: VideoChannel['sequelize'].models.Author,
+        model: VideoChannel['sequelize'].models.Account,
         include: [
           {
             model: VideoChannel['sequelize'].models.Pod,
@@ -288,15 +280,15 @@ loadByHostAndUUID = function (fromHost: string, uuid: string, t?: Sequelize.Tran
   return VideoChannel.findOne(query)
 }
 
-loadByIdAndAuthor = function (id: number, authorId: number) {
+loadByIdAndAccount = function (id: number, accountId: number) {
   const options = {
     where: {
       id,
-      authorId
+      accountId
     },
     include: [
       {
-        model: VideoChannel['sequelize'].models.Author,
+        model: VideoChannel['sequelize'].models.Account,
         include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
       }
     ]
@@ -305,11 +297,11 @@ loadByIdAndAuthor = function (id: number, authorId: number) {
   return VideoChannel.findOne(options)
 }
 
-loadAndPopulateAuthor = function (id: number) {
+loadAndPopulateAccount = function (id: number) {
   const options = {
     include: [
       {
-        model: VideoChannel['sequelize'].models.Author,
+        model: VideoChannel['sequelize'].models.Account,
         include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
       }
     ]
@@ -318,14 +310,14 @@ loadAndPopulateAuthor = function (id: number) {
   return VideoChannel.findById(id, options)
 }
 
-loadByUUIDAndPopulateAuthor = function (uuid: string) {
+loadByUUIDAndPopulateAccount = function (uuid: string) {
   const options = {
     where: {
       uuid
     },
     include: [
       {
-        model: VideoChannel['sequelize'].models.Author,
+        model: VideoChannel['sequelize'].models.Account,
         include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
       }
     ]
@@ -334,11 +326,11 @@ loadByUUIDAndPopulateAuthor = function (uuid: string) {
   return VideoChannel.findOne(options)
 }
 
-loadAndPopulateAuthorAndVideos = function (id: number) {
+loadAndPopulateAccountAndVideos = function (id: number) {
   const options = {
     include: [
       {
-        model: VideoChannel['sequelize'].models.Author,
+        model: VideoChannel['sequelize'].models.Account,
         include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
       },
       VideoChannel['sequelize'].models.Video

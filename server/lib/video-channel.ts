@@ -3,15 +3,15 @@ import * as Sequelize from 'sequelize'
 import { addVideoChannelToFriends } from './friends'
 import { database as db } from '../initializers'
 import { logger } from '../helpers'
-import { AuthorInstance } from '../models'
+import { AccountInstance } from '../models'
 import { VideoChannelCreate } from '../../shared/models'
 
-async function createVideoChannel (videoChannelInfo: VideoChannelCreate, author: AuthorInstance, t: Sequelize.Transaction) {
+async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountInstance, t: Sequelize.Transaction) {
   const videoChannelData = {
     name: videoChannelInfo.name,
     description: videoChannelInfo.description,
     remote: false,
-    authorId: author.id
+    authorId: account.id
   }
 
   const videoChannel = db.VideoChannel.build(videoChannelData)
@@ -19,8 +19,8 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, author:
 
   const videoChannelCreated = await videoChannel.save(options)
 
-  // Do not forget to add Author information to the created video channel
-  videoChannelCreated.Author = author
+  // Do not forget to add Account information to the created video channel
+  videoChannelCreated.Account = account
 
   const remoteVideoChannel = videoChannelCreated.toAddRemoteJSON()
 
