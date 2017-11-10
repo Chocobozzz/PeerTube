@@ -7,7 +7,7 @@ import { addVideoToFriends } from '../../friends'
 import { JobScheduler } from '../job-scheduler'
 
 async function process (data: { videoUUID: string }, jobId: number) {
-  const video = await db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(data.videoUUID)
+  const video = await db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(data.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
@@ -30,7 +30,7 @@ async function onSuccess (jobId: number, video: VideoInstance) {
   logger.info('Job %d is a success.', jobId)
 
   // Maybe the video changed in database, refresh it
-  const videoDatabase = await db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(video.uuid)
+  const videoDatabase = await db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(video.uuid)
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 

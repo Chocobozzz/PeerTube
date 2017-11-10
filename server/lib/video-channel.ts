@@ -11,7 +11,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
     name: videoChannelInfo.name,
     description: videoChannelInfo.description,
     remote: false,
-    authorId: account.id
+    accountId: account.id
   }
 
   const videoChannel = db.VideoChannel.build(videoChannelData)

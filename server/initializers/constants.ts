@@ -29,7 +29,7 @@ const PAGINATION_COUNT_DEFAULT = 15
 
 // Sortable columns per schema
 const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'host', 'author', 'tags' ]
+  VIDEOS: [ 'name', 'magnetUri', 'host', 'account', 'tags' ]
 }
 
 // Sortable columns per schema

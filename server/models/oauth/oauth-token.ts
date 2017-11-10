@@ -131,7 +131,7 @@ getByTokenAndPopulateUser = function (bearerToken: string) {
         model: OAuthToken['sequelize'].models.User,
         include: [
           {
-            model: OAuthToken['sequelize'].models.Author,
+            model: OAuthToken['sequelize'].models.Account,
             required: true
           }
         ]
@@ -156,7 +156,7 @@ getByRefreshTokenAndPopulateUser = function (refreshToken: string) {
         model: OAuthToken['sequelize'].models.User,
         include: [
           {
-            model: OAuthToken['sequelize'].models.Author,
+            model: OAuthToken['sequelize'].models.Account,
             required: true
           }
         ]

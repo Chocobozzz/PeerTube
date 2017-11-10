@@ -48,11 +48,11 @@ const videosAddValidator = [
       const videoFile: Express.Multer.File = req.files['videofile'][0]
       const user = res.locals.oauth.token.User
 
-      return db.VideoChannel.loadByIdAndAuthor(req.body.channelId, user.Author.id)
+      return db.VideoChannel.loadByIdAndAccount(req.body.channelId, user.Account.id)
         .then(videoChannel => {
           if (!videoChannel) {
             res.status(400)
-              .json({ error: 'Unknown video video channel for this author.' })
+              .json({ error: 'Unknown video video channel for this account.' })
               .end()
 
             return undefined
@@ -131,7 +131,7 @@ const videosUpdateValidator = [
                     .end()
         }
 
-        if (video.VideoChannel.Author.userId !== res.locals.oauth.token.User.id) {
+        if (video.VideoChannel.Account.userId !== res.locals.oauth.token.User.id) {
           return res.status(403)
                     .json({ error: 'Cannot update video of another user' })
                     .end()
@@ -163,7 +163,7 @@ const videosGetValidator = [
         if (video.privacy !== VideoPrivacy.PRIVATE) return next()
 
         authenticate(req, res, () => {
-          if (video.VideoChannel.Author.userId !== res.locals.oauth.token.User.id) {
+          if (video.VideoChannel.Account.userId !== res.locals.oauth.token.User.id) {
             return res.status(403)
               .json({ error: 'Cannot get this private video of another user' })
               .end()
@@ -256,10 +256,10 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
 
   // Check if the user can delete the video
   // The user can delete it if s/he is an admin
-  // Or if s/he is the video's author
-  const author = res.locals.video.VideoChannel.Author
+  // Or if s/he is the video's account
+  const account = res.locals.video.VideoChannel.Account
   const user = res.locals.oauth.token.User
-  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && author.userId !== user.id) {
+  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && account.userId !== user.id) {
     return res.status(403)
               .json({ error: 'Cannot remove video of another user' })
               .end()

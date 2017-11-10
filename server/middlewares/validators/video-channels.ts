@@ -9,19 +9,19 @@ import {
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   checkVideoChannelExists,
-  checkVideoAuthorExists
+  checkVideoAccountExists
 } from '../../helpers'
 import { UserInstance } from '../../models'
 import { UserRight } from '../../../shared'
 
-const listVideoAuthorChannelsValidator = [
-  param('authorId').custom(isIdOrUUIDValid).withMessage('Should have a valid author id'),
+const listVideoAccountChannelsValidator = [
+  param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking listVideoAuthorChannelsValidator parameters', { parameters: req.body })
+    logger.debug('Checking listVideoAccountChannelsValidator parameters', { parameters: req.body })
 
     checkErrors(req, res, () => {
-      checkVideoAuthorExists(req.params.authorId, res, next)
+      checkVideoAccountExists(req.params.accountId, res, next)
     })
   }
 ]
@@ -54,7 +54,7 @@ const videoChannelsUpdateValidator = [
             .end()
         }
 
-        if (res.locals.videoChannel.Author.userId !== res.locals.oauth.token.User.id) {
+        if (res.locals.videoChannel.Account.userId !== res.locals.oauth.token.User.id) {
           return res.status(403)
             .json({ error: 'Cannot update video channel of another user' })
             .end()
@@ -98,7 +98,7 @@ const videoChannelGetValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  listVideoAuthorChannelsValidator,
+  listVideoAccountChannelsValidator,
   videoChannelsAddValidator,
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
@@ -119,8 +119,8 @@ function checkUserCanDeleteVideoChannel (res: express.Response, callback: () => 
 
   // Check if the user can delete the video channel
   // The user can delete it if s/he is an admin
-  // Or if s/he is the video channel's author
-  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_CHANNEL) === false && res.locals.videoChannel.Author.userId !== user.id) {
+  // Or if s/he is the video channel's account
+  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_CHANNEL) === false && res.locals.videoChannel.Account.userId !== user.id) {
     return res.status(403)
               .json({ error: 'Cannot remove video channel of another user' })
               .end()
@@ -131,7 +131,7 @@ function checkUserCanDeleteVideoChannel (res: express.Response, callback: () => 
 }
 
 function checkVideoChannelIsNotTheLastOne (res: express.Response, callback: () => void) {
-  db.VideoChannel.countByAuthor(res.locals.oauth.token.User.Author.id)
+  db.VideoChannel.countByAccount(res.locals.oauth.token.User.Account.id)
     .then(count => {
       if (count <= 1) {
         return res.status(409)

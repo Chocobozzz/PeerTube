@@ -43,7 +43,7 @@ class VideosPreviewCache {
   }
 
   private async loadPreviews (key: string) {
-    const video = await db.Video.loadByUUIDAndPopulateAuthorAndPodAndTags(key)
+    const video = await db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(key)
     if (!video) return undefined
 
     if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName())

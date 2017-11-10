@@ -5,7 +5,7 @@ import { database as db } from './database'
 import { CONFIG, LAST_MIGRATION_VERSION, CACHE } from './constants'
 import { clientsExist, usersExist } from './checker'
 import { logger, createCertsIfNotExist, mkdirpPromise, rimrafPromise } from '../helpers'
-import { createUserAuthorAndChannel } from '../lib'
+import { createUserAccountAndChannel } from '../lib'
 import { UserRole } from '../../shared'
 
 async function installApplication () {
@@ -117,7 +117,7 @@ async function createOAuthAdminIfNotExist () {
   }
   const user = db.User.build(userData)
 
-  await createUserAuthorAndChannel(user, validatePassword)
+  await createUserAccountAndChannel(user, validatePassword)
   logger.info('Username: ' + username)
   logger.info('User password: ' + password)
 

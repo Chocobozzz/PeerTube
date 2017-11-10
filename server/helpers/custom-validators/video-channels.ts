@@ -26,9 +26,9 @@ function isVideoChannelUUIDValid (value: string) {
 function checkVideoChannelExists (id: string, res: express.Response, callback: () => void) {
   let promise: Promise<VideoChannelInstance>
   if (validator.isInt(id)) {
-    promise = db.VideoChannel.loadAndPopulateAuthor(+id)
+    promise = db.VideoChannel.loadAndPopulateAccount(+id)
   } else { // UUID
-    promise = db.VideoChannel.loadByUUIDAndPopulateAuthor(id)
+    promise = db.VideoChannel.loadByUUIDAndPopulateAccount(id)
   }
 
   promise.then(videoChannel => {
