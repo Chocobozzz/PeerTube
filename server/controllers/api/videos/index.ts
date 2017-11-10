@@ -10,7 +10,8 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  VIDEO_PRIVACIES
+  VIDEO_PRIVACIES,
+  VIDEO_MIMETYPE_EXT
 } from '../../../initializers'
 import {
   addEventToRemoteVideo,
@@ -50,6 +51,7 @@ import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { rateVideoRouter } from './rate'
 import { videoChannelRouter } from './channel'
+import { getActivityPubUrl } from '../../../helpers/activitypub'
 
 const videosRouter = express.Router()
 
@@ -59,19 +61,18 @@ const storage = multer.diskStorage({
     cb(null, CONFIG.STORAGE.VIDEOS_DIR)
   },
 
-  filename: (req, file, cb) => {
-    let extension = ''
-    if (file.mimetype === 'video/webm') extension = 'webm'
-    else if (file.mimetype === 'video/mp4') extension = 'mp4'
-    else if (file.mimetype === 'video/ogg') extension = 'ogv'
-    generateRandomString(16)
-      .then(randomString => {
-        cb(null, randomString + '.' + extension)
-      })
-      .catch(err => {
-        logger.error('Cannot generate random string for file name.', err)
-        throw err
-      })
+  filename: async (req, file, cb) => {
+    const extension = VIDEO_MIMETYPE_EXT[file.mimetype]
+    let randomString = ''
+
+    try {
+      randomString = await generateRandomString(16)
+    } catch (err) {
+      logger.error('Cannot generate random string for file name.', err)
+      randomString = 'fake-random-string'
+    }
+
+    cb(null, randomString + '.' + extension)
   }
 })
 
@@ -190,6 +191,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
       channelId: res.locals.videoChannel.id
     }
     const video = db.Video.build(videoData)
+    video.url = getActivityPubUrl('video', video.uuid)
 
     const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
     const videoFileHeight = await getVideoFileHeight(videoFilePath)

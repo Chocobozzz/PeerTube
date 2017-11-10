@@ -12,6 +12,16 @@ function isActivityPubUrlValid (url: string) {
   return exists(url) && validator.isURL(url, isURLOptions)
 }
 
+function isBaseActivityValid (activity: any, type: string) {
+  return Array.isArray(activity['@context']) &&
+    activity.type === type &&
+    validator.isURL(activity.id) &&
+    validator.isURL(activity.actor) &&
+    Array.isArray(activity.to) &&
+    activity.to.every(t => validator.isURL(t))
+}
+
 export {
-  isActivityPubUrlValid
+  isActivityPubUrlValid,
+  isBaseActivityValid
 }

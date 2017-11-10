@@ -1,26 +1,15 @@
 import * as express from 'express'
-
-import {
-  processCreateActivity,
-  processUpdateActivity,
-  processFlagActivity
-} from '../../lib'
-import {
-  Activity,
-  ActivityType,
-  RootActivity,
-  ActivityPubCollection,
-  ActivityPubOrderedCollection
-} from '../../../shared'
-import {
-  signatureValidator,
-  checkSignature,
-  asyncMiddleware
-} from '../../middlewares'
+import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, ActivityType, RootActivity } from '../../../shared'
 import { logger } from '../../helpers'
+import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
+import { processCreateActivity, processFlagActivity, processUpdateActivity } from '../../lib'
+import { processAddActivity } from '../../lib/activitypub/process-add'
+import { asyncMiddleware, checkSignature, signatureValidator } from '../../middlewares'
+import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
 
 const processActivity: { [ P in ActivityType ]: (activity: Activity) => Promise<any> } = {
   Create: processCreateActivity,
+  Add: processAddActivity,
   Update: processUpdateActivity,
   Flag: processFlagActivity
 }
@@ -30,7 +19,7 @@ const inboxRouter = express.Router()
 inboxRouter.post('/',
   signatureValidator,
   asyncMiddleware(checkSignature),
-  // inboxValidator,
+  activityPubValidator,
   asyncMiddleware(inboxController)
 )
 
@@ -53,6 +42,9 @@ async function inboxController (req: express.Request, res: express.Response, nex
   } else {
     activities = [ rootActivity as Activity ]
   }
+
+  // Only keep activities we are able to process
+  activities = activities.filter(a => isActivityValid(a))
 
   await processActivities(activities)
 

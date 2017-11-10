@@ -73,19 +73,26 @@ function isVideoDescriptionValid (value: string) {
 }
 
 function isVideoDurationValid (value: string) {
-  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
+  // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
+  return exists(value) &&
+    typeof value === 'string' &&
+    value.startsWith('PT') &&
+    value.endsWith('S') &&
+    validator.isInt(value.replace(/[^0-9]+/, ''), VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
 function isVideoNameValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
 }
 
+function isVideoTagValid (tag: string) {
+  return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
+}
+
 function isVideoTagsValid (tags: string[]) {
   return isArray(tags) &&
          validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
-         tags.every(tag => {
-           return exists(tag) && validator.isLength(tag, VIDEOS_CONSTRAINTS_FIELDS.TAG)
-         })
+         tags.every(tag => isVideoTagValid(tag))
 }
 
 function isVideoThumbnailValid (value: string) {
@@ -209,6 +216,7 @@ export {
   isRemoteVideoPrivacyValid,
   isVideoFileResolutionValid,
   checkVideoExists,
+  isVideoTagValid,
   isRemoteVideoCategoryValid,
   isRemoteVideoLicenceValid,
   isRemoteVideoLanguageValid

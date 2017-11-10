@@ -1,4 +1,5 @@
 export * from './account'
+export * from './activity'
 export * from './signature'
 export * from './misc'
 export * from './videos'

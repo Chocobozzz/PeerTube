@@ -203,6 +203,12 @@ const VIDEO_PRIVACIES = {
   [VideoPrivacy.PRIVATE]: 'Private'
 }
 
+const VIDEO_MIMETYPE_EXT = {
+  'video/webm': 'webm',
+  'video/ogg': 'ogv',
+  'video/mp4': 'mp4'
+}
+
 // ---------------------------------------------------------------------------
 
 // Score a pod has when we create it as a friend
@@ -212,7 +218,14 @@ const FRIEND_SCORE = {
 }
 
 const ACTIVITY_PUB = {
-  COLLECTION_ITEMS_PER_PAGE: 10
+  COLLECTION_ITEMS_PER_PAGE: 10,
+  VIDEO_URL_MIME_TYPES: [
+    'video/mp4',
+    'video/webm',
+    'video/ogg',
+    'application/x-bittorrent',
+    'application/x-bittorrent;x-scheme-handler/magnet'
+  ]
 }
 
 // ---------------------------------------------------------------------------
@@ -245,42 +258,6 @@ const REQUESTS_VIDEO_EVENT_LIMIT_PER_POD = 50
 // Number of requests to retry for replay requests module
 const RETRY_REQUESTS = 5
 
-const REQUEST_ENDPOINTS: { [ id: string ]: RequestEndpoint } = {
-  VIDEOS: 'videos'
-}
-
-const REQUEST_ENDPOINT_ACTIONS: {
-  [ id: string ]: {
-    [ id: string ]: RemoteVideoRequestType
-  }
-} = {}
-REQUEST_ENDPOINT_ACTIONS[REQUEST_ENDPOINTS.VIDEOS] = {
-  ADD_VIDEO: 'add-video',
-  UPDATE_VIDEO: 'update-video',
-  REMOVE_VIDEO: 'remove-video',
-  ADD_CHANNEL: 'add-channel',
-  UPDATE_CHANNEL: 'update-channel',
-  REMOVE_CHANNEL: 'remove-channel',
-  ADD_AUTHOR: 'add-author',
-  REMOVE_AUTHOR: 'remove-author',
-  REPORT_ABUSE: 'report-abuse'
-}
-
-const REQUEST_VIDEO_QADU_ENDPOINT = 'videos/qadu'
-const REQUEST_VIDEO_EVENT_ENDPOINT = 'videos/events'
-
-const REQUEST_VIDEO_QADU_TYPES: { [ id: string ]: RequestVideoQaduType } = {
-  LIKES: 'likes',
-  DISLIKES: 'dislikes',
-  VIEWS: 'views'
-}
-
-const REQUEST_VIDEO_EVENT_TYPES: { [ id: string ]: RequestVideoEventType } = {
-  LIKES: 'likes',
-  DISLIKES: 'dislikes',
-  VIEWS: 'views'
-}
-
 const REMOTE_SCHEME = {
   HTTP: 'https',
   WS: 'wss'
@@ -306,8 +283,6 @@ let JOBS_FETCHING_INTERVAL = 60000
 
 // ---------------------------------------------------------------------------
 
-// const SIGNATURE_ALGORITHM = 'RSA-SHA256'
-// const SIGNATURE_ENCODING = 'hex'
 const PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
@@ -412,5 +387,6 @@ export {
   VIDEO_LANGUAGES,
   VIDEO_PRIVACIES,
   VIDEO_LICENCES,
-  VIDEO_RATE_TYPES
+  VIDEO_RATE_TYPES,
+  VIDEO_MIMETYPE_EXT
 }

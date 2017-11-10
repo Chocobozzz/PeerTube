@@ -25,6 +25,8 @@ let loadAndPopulateAccount: VideoChannelMethods.LoadAndPopulateAccount
 let loadByUUIDAndPopulateAccount: VideoChannelMethods.LoadByUUIDAndPopulateAccount
 let loadByHostAndUUID: VideoChannelMethods.LoadByHostAndUUID
 let loadAndPopulateAccountAndVideos: VideoChannelMethods.LoadAndPopulateAccountAndVideos
+let loadByUrl: VideoChannelMethods.LoadByUrl
+let loadByUUIDOrUrl: VideoChannelMethods.LoadByUUIDOrUrl
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   VideoChannel = sequelize.define<VideoChannelInstance, VideoChannelAttributes>('VideoChannel',
@@ -94,12 +96,14 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     loadByUUID,
     loadByHostAndUUID,
     loadAndPopulateAccountAndVideos,
-    countByAccount
+    countByAccount,
+    loadByUrl,
+    loadByUUIDOrUrl
   ]
   const instanceMethods = [
     isOwned,
     toFormattedJSON,
-    toActivityPubObject,
+    toActivityPubObject
   ]
   addMethodsToModel(VideoChannel, classMethods, instanceMethods)
 
@@ -247,6 +251,33 @@ loadByUUID = function (uuid: string, t?: Sequelize.Transaction) {
     where: {
       uuid
     }
+  }
+
+  if (t !== undefined) query.transaction = t
+
+  return VideoChannel.findOne(query)
+}
+
+loadByUrl = function (url: string, t?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<VideoChannelAttributes> = {
+    where: {
+      url
+    }
+  }
+
+  if (t !== undefined) query.transaction = t
+
+  return VideoChannel.findOne(query)
+}
+
+loadByUUIDOrUrl = function (uuid: string, url: string, t?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<VideoChannelAttributes> = {
+    where: {
+      [Sequelize.Op.or]: [
+        { uuid },
+        { url }
+      ]
+    },
   }
 
   if (t !== undefined) query.transaction = t
