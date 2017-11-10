@@ -4,7 +4,7 @@ import {
 } from './objects'
 import { ActivityPubSignature } from './activitypub-signature'
 
-export type Activity = ActivityCreate | ActivityUpdate | ActivityFlag
+export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate | ActivityFlag
 
 // Flag -> report abuse
 export type ActivityType = 'Create' | 'Add' | 'Update' | 'Flag'

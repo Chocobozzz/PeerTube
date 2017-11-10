@@ -5,7 +5,7 @@ import {
 } from '../../../shared'
 
 function processFlagActivity (activity: ActivityCreate) {
-  // empty
+  return Promise.resolve(undefined)
 }
 
 // ---------------------------------------------------------------------------

@@ -13,8 +13,8 @@ export namespace AccountMethods {
   export type LoadAccountByPodAndUUID = (uuid: string, podId: number, transaction: Sequelize.Transaction) => Bluebird<AccountInstance>
   export type LoadLocalAccountByName = (name: string) => Bluebird<AccountInstance>
   export type ListOwned = () => Bluebird<AccountInstance[]>
-  export type ListFollowerUrlsForApi = (name: string, start: number, count: number) => Promise< ResultList<string> >
-  export type ListFollowingUrlsForApi = (name: string, start: number, count: number) => Promise< ResultList<string> >
+  export type ListFollowerUrlsForApi = (name: string, start: number, count?: number) => Promise< ResultList<string> >
+  export type ListFollowingUrlsForApi = (name: string, start: number, count?: number) => Promise< ResultList<string> >
 
   export type ToActivityPubObject = (this: AccountInstance) => ActivityPubActor
   export type IsOwned = (this: AccountInstance) => boolean

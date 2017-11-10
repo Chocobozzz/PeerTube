@@ -1,7 +1,6 @@
 import * as Sequelize from 'sequelize'
 
 import { isVideoChannelNameValid, isVideoChannelDescriptionValid } from '../../helpers'
-import { removeVideoChannelToFriends } from '../../lib'
 
 import { addMethodsToModel, getSort } from '../utils'
 import {
@@ -143,12 +142,13 @@ toFormattedJSON = function (this: VideoChannelInstance) {
 
 toActivityPubObject = function (this: VideoChannelInstance) {
   const json = {
+    type: 'VideoChannel' as 'VideoChannel',
+    id: this.url,
     uuid: this.uuid,
+    content: this.description,
     name: this.name,
-    description: this.description,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
-    ownerUUID: this.Account.uuid
+    published: this.createdAt,
+    updated: this.updatedAt
   }
 
   return json
@@ -180,7 +180,7 @@ function afterDestroy (videoChannel: VideoChannelInstance) {
       uuid: videoChannel.uuid
     }
 
-    return removeVideoChannelToFriends(removeVideoChannelToFriendsParams)
+    // FIXME: send remove event to followers
   }
 
   return undefined
@@ -277,7 +277,7 @@ loadByUUIDOrUrl = function (uuid: string, url: string, t?: Sequelize.Transaction
         { uuid },
         { url }
       ]
-    },
+    }
   }
 
   if (t !== undefined) query.transaction = t

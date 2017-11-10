@@ -1,28 +1,22 @@
 import { AsyncQueue, forever, queue } from 'async'
 import * as Sequelize from 'sequelize'
-
-import {
-  database as db,
-  JOBS_FETCHING_INTERVAL,
-  JOBS_FETCH_LIMIT_PER_CYCLE,
-  JOB_STATES
-} from '../../initializers'
-import { logger } from '../../helpers'
-import { JobInstance } from '../../models'
 import { JobCategory } from '../../../shared'
+import { logger } from '../../helpers'
+import { database as db, JOB_STATES, JOBS_FETCH_LIMIT_PER_CYCLE, JOBS_FETCHING_INTERVAL } from '../../initializers'
+import { JobInstance } from '../../models'
 
-export interface JobHandler<T> {
-  process (data: object, jobId: number): T
+export interface JobHandler<P, T> {
+  process (data: object, jobId: number): Promise<T>
   onError (err: Error, jobId: number)
-  onSuccess (jobId: number, jobResult: T)
+  onSuccess (jobId: number, jobResult: T, jobScheduler: JobScheduler<P, T>)
 }
 type JobQueueCallback = (err: Error) => void
 
-class JobScheduler<T> {
+class JobScheduler<P, T> {
 
   constructor (
     private jobCategory: JobCategory,
-    private jobHandlers: { [ id: string ]: JobHandler<T> }
+    private jobHandlers: { [ id: string ]: JobHandler<P, T> }
   ) {}
 
   async activate () {
@@ -66,13 +60,14 @@ class JobScheduler<T> {
     )
   }
 
-  createJob (transaction: Sequelize.Transaction, category: JobCategory, handlerName: string, handlerInputData: object) {
+  createJob (transaction: Sequelize.Transaction, handlerName: string, handlerInputData: P) {
     const createQuery = {
       state: JOB_STATES.PENDING,
-      category,
+      category: this.jobCategory,
       handlerName,
       handlerInputData
     }
+
     const options = { transaction }
 
     return db.Job.create(createQuery, options)
@@ -95,7 +90,7 @@ class JobScheduler<T> {
     await job.save()
 
     try {
-      const result = await jobHandler.process(job.handlerInputData, job.id)
+      const result: T = await jobHandler.process(job.handlerInputData, job.id)
       await this.onJobSuccess(jobHandler, job, result)
     } catch (err) {
       logger.error('Error in job handler %s.', job.handlerName, err)
@@ -111,7 +106,7 @@ class JobScheduler<T> {
     callback(null)
   }
 
-  private async onJobError (jobHandler: JobHandler<any>, job: JobInstance, err: Error) {
+  private async onJobError (jobHandler: JobHandler<P, T>, job: JobInstance, err: Error) {
     job.state = JOB_STATES.ERROR
 
     try {
@@ -122,12 +117,12 @@ class JobScheduler<T> {
     }
   }
 
-  private async onJobSuccess (jobHandler: JobHandler<any>, job: JobInstance, jobResult: any) {
+  private async onJobSuccess (jobHandler: JobHandler<P, T>, job: JobInstance, jobResult: T) {
     job.state = JOB_STATES.SUCCESS
 
     try {
       await job.save()
-      jobHandler.onSuccess(job.id, jobResult)
+      jobHandler.onSuccess(job.id, jobResult, this)
     } catch (err) {
       this.cannotSaveJobError(err)
     }

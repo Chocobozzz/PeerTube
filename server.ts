@@ -46,7 +46,7 @@ db.init(false).then(() => onDatabaseInitDone())
 
 // ----------- PeerTube modules -----------
 import { migrate, installApplication } from './server/initializers'
-import { JobScheduler, activateSchedulers, VideosPreviewCache } from './server/lib'
+import { httpRequestJobScheduler, transcodingJobScheduler, VideosPreviewCache } from './server/lib'
 import { apiRouter, clientsRouter, staticRouter, servicesRouter } from './server/controllers'
 
 // ----------- Command line -----------
@@ -146,19 +146,13 @@ function onDatabaseInitDone () {
   const port = CONFIG.LISTEN.PORT
     // Run the migration scripts if needed
   migrate()
-    .then(() => {
-      return installApplication()
-    })
+    .then(() => installApplication())
     .then(() => {
       // ----------- Make the server listening -----------
-      server.listen(port, function () {
-        // Activate the communication with friends
-        activateSchedulers()
-
-        // Activate job scheduler
-        JobScheduler.Instance.activate()
-
+      server.listen(port, () => {
         VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
+        httpRequestJobScheduler.activate()
+        transcodingJobScheduler.activate()
 
         logger.info('Server listening on port %d', port)
         logger.info('Web server: %s', CONFIG.WEBSERVER.URL)

@@ -1,37 +1,29 @@
 import * as express from 'express'
-
-import { database as db, CONFIG } from '../../initializers'
-import { logger, getFormattedObjects, retryTransactionWrapper } from '../../helpers'
+import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
+import { getFormattedObjects, logger, retryTransactionWrapper } from '../../helpers'
+import { CONFIG, database as db } from '../../initializers'
+import { createUserAccountAndChannel } from '../../lib'
 import {
+  asyncMiddleware,
   authenticate,
   ensureUserHasRight,
   ensureUserRegistrationAllowed,
-  usersAddValidator,
-  usersRegisterValidator,
-  usersUpdateValidator,
-  usersUpdateMeValidator,
-  usersRemoveValidator,
-  usersVideoRatingValidator,
-  usersGetValidator,
   paginationValidator,
   setPagination,
-  usersSortValidator,
   setUsersSort,
   token,
-  asyncMiddleware
+  usersAddValidator,
+  usersGetValidator,
+  usersRegisterValidator,
+  usersRemoveValidator,
+  usersSortValidator,
+  usersUpdateMeValidator,
+  usersUpdateValidator,
+  usersVideoRatingValidator
 } from '../../middlewares'
-import {
-  UserVideoRate as FormattedUserVideoRate,
-  UserCreate,
-  UserUpdate,
-  UserUpdateMe,
-  UserRole,
-  UserRight
-} from '../../../shared'
-import { createUserAccountAndChannel } from '../../lib'
-import { UserInstance } from '../../models'
-import { videosSortValidator } from '../../middlewares/validators/sort'
 import { setVideosSort } from '../../middlewares/sort'
+import { videosSortValidator } from '../../middlewares/validators/sort'
+import { UserInstance } from '../../models'
 
 const usersRouter = express.Router()
 
@@ -176,9 +168,9 @@ function getUser (req: express.Request, res: express.Response, next: express.Nex
 
 async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoId = +req.params.videoId
-  const userId = +res.locals.oauth.token.User.id
+  const accountId = +res.locals.oauth.token.User.Account.id
 
-  const ratingObj = await db.UserVideoRate.load(userId, videoId, null)
+  const ratingObj = await db.AccountVideoRate.load(accountId, videoId, null)
   const rating = ratingObj ? ratingObj.type : 'none'
 
   const json: FormattedUserVideoRate = {

@@ -1,6 +1,9 @@
+import * as Sequelize from 'sequelize'
+import { getActivityPubUrl } from '../helpers/activitypub'
+import { createPrivateAndPublicKeys } from '../helpers/peertube-crypto'
 import { database as db } from '../initializers'
+import { CONFIG } from '../initializers/constants'
 import { UserInstance } from '../models'
-import { addVideoAccountToFriends } from './friends'
 import { createVideoChannel } from './video-channel'
 
 async function createUserAccountAndChannel (user: UserInstance, validateUser = true) {
@@ -11,32 +14,46 @@ async function createUserAccountAndChannel (user: UserInstance, validateUser = t
     }
 
     const userCreated = await user.save(userOptions)
-    const accountInstance = db.Account.build({
-      name: userCreated.username,
-      podId: null, // It is our pod
-      userId: userCreated.id
-    })
-
-    const accountCreated = await accountInstance.save({ transaction: t })
-
-    const remoteVideoAccount = accountCreated.toAddRemoteJSON()
-
-    // Now we'll add the video channel's meta data to our friends
-    const account = await addVideoAccountToFriends(remoteVideoAccount, t)
+    const accountCreated = await createLocalAccount(user.username, user.id, null, t)
 
     const videoChannelInfo = {
       name: `Default ${userCreated.username} channel`
     }
     const videoChannel = await createVideoChannel(videoChannelInfo, accountCreated, t)
 
-    return { account, videoChannel }
+    return { account: accountCreated, videoChannel }
   })
 
   return res
 }
 
+async function createLocalAccount (name: string, userId: number, applicationId: number, t: Sequelize.Transaction) {
+  const { publicKey, privateKey } = await createPrivateAndPublicKeys()
+  const url = getActivityPubUrl('account', name)
+
+  const accountInstance = db.Account.build({
+    name,
+    url,
+    publicKey,
+    privateKey,
+    followersCount: 0,
+    followingCount: 0,
+    inboxUrl: url + '/inbox',
+    outboxUrl: url + '/outbox',
+    sharedInboxUrl: CONFIG.WEBSERVER.URL + '/inbox',
+    followersUrl: url + '/followers',
+    followingUrl: url + '/following',
+    userId,
+    applicationId,
+    podId: null // It is our pod
+  })
+
+  return accountInstance.save({ transaction: t })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  createUserAccountAndChannel
+  createUserAccountAndChannel,
+  createLocalAccount
 }

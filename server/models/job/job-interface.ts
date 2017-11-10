@@ -14,7 +14,7 @@ export interface JobClass {
 export interface JobAttributes {
   state: JobState
   handlerName: string
-  handlerInputData: object
+  handlerInputData: any
 }
 
 export interface JobInstance extends JobClass, JobAttributes, Sequelize.Instance<JobAttributes> {

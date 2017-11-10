@@ -1,20 +1,21 @@
 import * as passwordGenerator from 'password-generator'
-import * as Bluebird from 'bluebird'
+import { UserRole } from '../../shared'
+import { logger, mkdirpPromise, rimrafPromise } from '../helpers'
+import { createPrivateAndPublicKeys } from '../helpers/peertube-crypto'
+import { createUserAccountAndChannel } from '../lib'
+import { clientsExist, usersExist } from './checker'
+import { CACHE, CONFIG, LAST_MIGRATION_VERSION } from './constants'
 
 import { database as db } from './database'
-import { CONFIG, LAST_MIGRATION_VERSION, CACHE } from './constants'
-import { clientsExist, usersExist } from './checker'
-import { logger, createCertsIfNotExist, mkdirpPromise, rimrafPromise } from '../helpers'
-import { createUserAccountAndChannel } from '../lib'
-import { UserRole } from '../../shared'
+import { createLocalAccount } from '../lib/user'
 
 async function installApplication () {
   await db.sequelize.sync()
   await removeCacheDirectories()
   await createDirectoriesIfNotExist()
-  await createCertsIfNotExist()
   await createOAuthClientIfNotExist()
   await createOAuthAdminIfNotExist()
+  await createApplicationIfNotExist()
 }
 
 // ---------------------------------------------------------------------------
@@ -28,7 +29,7 @@ export {
 function removeCacheDirectories () {
   const cacheDirectories = CACHE.DIRECTORIES
 
-  const tasks: Bluebird<any>[] = []
+  const tasks: Promise<any>[] = []
 
   // Cache directories
   for (const key of Object.keys(cacheDirectories)) {
@@ -120,7 +121,12 @@ async function createOAuthAdminIfNotExist () {
   await createUserAccountAndChannel(user, validatePassword)
   logger.info('Username: ' + username)
   logger.info('User password: ' + password)
+}
 
+async function createApplicationIfNotExist () {
   logger.info('Creating Application table.')
-  await db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
+  const applicationInstance = await db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
+
+  logger.info('Creating application account.')
+  return createLocalAccount('peertube', null, applicationInstance.id, undefined)
 }

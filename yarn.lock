@@ -3473,12 +3473,6 @@ repeat-string@^1.5.2:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/repeat-string/-/repeat-string-1.6.1.tgz#8dcae470e1c88abc2d600fff4a776286da75e637"
 
-request-replay@^1.0.2:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/request-replay/-/request-replay-1.0.4.tgz#b6e5953a7eb39fc8a48e8111c277d35355adfe06"
-  dependencies:
-    retry "^0.10.0"
-
 request@2.81.0:
   version "2.81.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.81.0.tgz#c6928946a0e06c5f8d6f8a9333469ffda46298a0"
@@ -3563,10 +3557,6 @@ retry-as-promised@^2.3.1:
   dependencies:
     bluebird "^3.4.6"
     debug "^2.6.9"
-
-retry@^0.10.0:
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
 
 rimraf@2, rimraf@^2.2.8, rimraf@^2.4.2, rimraf@^2.5.1, rimraf@^2.5.4, rimraf@^2.6.1:
   version "2.6.2"

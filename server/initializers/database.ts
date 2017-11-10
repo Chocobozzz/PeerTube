@@ -2,7 +2,6 @@ import { join } from 'path'
 import { flattenDepth } from 'lodash'
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 import * as Sequelize from 'sequelize'
-import * as Bluebird from 'bluebird'
 
 import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first
@@ -19,10 +18,6 @@ import { UserModel } from '../models/account/user-interface'
 import { AccountVideoRateModel } from '../models/account/account-video-rate-interface'
 import { AccountFollowModel } from '../models/account/account-follow-interface'
 import { TagModel } from './../models/video/tag-interface'
-import { RequestModel } from './../models/request/request-interface'
-import { RequestVideoQaduModel } from './../models/request/request-video-qadu-interface'
-import { RequestVideoEventModel } from './../models/request/request-video-event-interface'
-import { RequestToPodModel } from './../models/request/request-to-pod-interface'
 import { PodModel } from './../models/pod/pod-interface'
 import { OAuthTokenModel } from './../models/oauth/oauth-token-interface'
 import { OAuthClientModel } from './../models/oauth/oauth-client-interface'

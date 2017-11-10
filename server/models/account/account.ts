@@ -268,14 +268,15 @@ function afterDestroy (account: AccountInstance) {
       uuid: account.uuid
     }
 
-    return removeVideoAccountToFriends(removeVideoAccountToFriendsParams)
+    // FIXME: remove account in followers
+    // return removeVideoAccountToFriends(removeVideoAccountToFriendsParams)
   }
 
   return undefined
 }
 
 toActivityPubObject = function (this: AccountInstance) {
-  const type = this.podId ? 'Application' : 'Person'
+  const type = this.podId ? 'Application' as 'Application' : 'Person' as 'Person'
 
   const json = {
     type,
@@ -346,11 +347,11 @@ listOwned = function () {
   return Account.findAll(query)
 }
 
-listFollowerUrlsForApi = function (name: string, start: number, count: number) {
+listFollowerUrlsForApi = function (name: string, start: number, count?: number) {
   return createListFollowForApiQuery('followers', name, start, count)
 }
 
-listFollowingUrlsForApi = function (name: string, start: number, count: number) {
+listFollowingUrlsForApi = function (name: string, start: number, count?: number) {
   return createListFollowForApiQuery('following', name, start, count)
 }
 
@@ -405,7 +406,7 @@ loadAccountByPodAndUUID = function (uuid: string, podId: number, transaction: Se
 
 // ------------------------------ UTILS ------------------------------
 
-async function createListFollowForApiQuery (type: 'followers' | 'following', name: string, start: number, count: number) {
+async function createListFollowForApiQuery (type: 'followers' | 'following', name: string, start: number, count?: number) {
   let firstJoin: string
   let secondJoin: string
 
@@ -421,11 +422,13 @@ async function createListFollowForApiQuery (type: 'followers' | 'following', nam
   const tasks: Promise<any>[] = []
 
   for (const selection of selections) {
-    const query = 'SELECT ' + selection + ' FROM "Account" ' +
+    let query = 'SELECT ' + selection + ' FROM "Account" ' +
       'INNER JOIN "AccountFollower" ON "AccountFollower"."' + firstJoin + '" = "Account"."id" ' +
       'INNER JOIN "Account" AS "Followers" ON "Followers"."id" = "AccountFollower"."' + secondJoin + '" ' +
       'WHERE "Account"."name" = \'$name\' ' +
-      'LIMIT ' + start + ', ' + count
+      'LIMIT ' + start
+
+    if (count !== undefined) query += ', ' + count
 
     const options = {
       bind: { name },

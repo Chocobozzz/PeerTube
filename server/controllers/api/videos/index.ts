@@ -1,57 +1,41 @@
 import * as express from 'express'
 import * as multer from 'multer'
 import { extname, join } from 'path'
-
+import { VideoCreate, VideoPrivacy, VideoUpdate } from '../../../../shared'
+import {
+  fetchRemoteVideoDescription,
+  generateRandomString,
+  getFormattedObjects,
+  getVideoFileHeight,
+  logger,
+  renamePromise,
+  resetSequelizeInstance,
+  retryTransactionWrapper
+} from '../../../helpers'
+import { getActivityPubUrl } from '../../../helpers/activitypub'
+import { CONFIG, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT, VIDEO_PRIVACIES } from '../../../initializers'
 import { database as db } from '../../../initializers/database'
+import { sendAddVideo, sendUpdateVideoChannel } from '../../../lib/activitypub/send-request'
+import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler/transcoding-job-scheduler'
 import {
-  CONFIG,
-  REQUEST_VIDEO_QADU_TYPES,
-  REQUEST_VIDEO_EVENT_TYPES,
-  VIDEO_CATEGORIES,
-  VIDEO_LICENCES,
-  VIDEO_LANGUAGES,
-  VIDEO_PRIVACIES,
-  VIDEO_MIMETYPE_EXT
-} from '../../../initializers'
-import {
-  addEventToRemoteVideo,
-  quickAndDirtyUpdateVideoToFriends,
-  addVideoToFriends,
-  updateVideoToFriends,
-  JobScheduler,
-  fetchRemoteDescription
-} from '../../../lib'
-import {
+  asyncMiddleware,
   authenticate,
   paginationValidator,
-  videosSortValidator,
-  setVideosSort,
   setPagination,
   setVideosSearch,
-  videosUpdateValidator,
-  videosSearchValidator,
+  setVideosSort,
   videosAddValidator,
   videosGetValidator,
   videosRemoveValidator,
-  asyncMiddleware
+  videosSearchValidator,
+  videosSortValidator,
+  videosUpdateValidator
 } from '../../../middlewares'
-import {
-  logger,
-  retryTransactionWrapper,
-  generateRandomString,
-  getFormattedObjects,
-  renamePromise,
-  getVideoFileHeight,
-  resetSequelizeInstance
-} from '../../../helpers'
 import { VideoInstance } from '../../../models'
-import { VideoCreate, VideoUpdate, VideoPrivacy } from '../../../../shared'
-
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
-import { rateVideoRouter } from './rate'
 import { videoChannelRouter } from './channel'
-import { getActivityPubUrl } from '../../../helpers/activitypub'
+import { rateVideoRouter } from './rate'
 
 const videosRouter = express.Router()
 
@@ -225,7 +209,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
       }
 
       tasks.push(
-        JobScheduler.Instance.createJob(t, 'videoFileOptimizer', dataInput)
+        transcodingJobScheduler.createJob(t, 'videoFileOptimizer', dataInput)
       )
     }
     await Promise.all(tasks)
@@ -252,9 +236,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     // Don't send video to remote pods, it is private
     if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
-    const remoteVideo = await video.toAddRemoteJSON()
-    // Now we'll add the video's meta data to our friends
-    return addVideoToFriends(remoteVideo, t)
+    await sendAddVideo(video, t)
   })
 
   logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoUUID)
@@ -302,14 +284,12 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       // Now we'll update the video's meta data to our friends
       if (wasPrivateVideo === false) {
-        const json = videoInstance.toUpdateRemoteJSON()
-        return updateVideoToFriends(json, t)
+        await sendUpdateVideoChannel(videoInstance, t)
       }
 
       // Video is not private anymore, send a create action to remote pods
       if (wasPrivateVideo === true && videoInstance.privacy !== VideoPrivacy.PRIVATE) {
-        const remoteVideo = await videoInstance.toAddRemoteJSON()
-        return addVideoToFriends(remoteVideo, t)
+        await sendAddVideo(videoInstance, t)
       }
     })
 
@@ -324,7 +304,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
   }
 }
 
-function getVideo (req: express.Request, res: express.Response) {
+async function getVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
   if (videoInstance.isOwned()) {
@@ -333,21 +313,11 @@ function getVideo (req: express.Request, res: express.Response) {
     // For example, only add a view when a user watch a video during 30s etc
     videoInstance.increment('views')
       .then(() => {
-        const qaduParams = {
-          videoId: videoInstance.id,
-          type: REQUEST_VIDEO_QADU_TYPES.VIEWS
-        }
-        return quickAndDirtyUpdateVideoToFriends(qaduParams)
+        // TODO: send to followers a notification
       })
       .catch(err => logger.error('Cannot add view to video %s.', videoInstance.uuid, err))
   } else {
-    // Just send the event to our friends
-    const eventParams = {
-      videoId: videoInstance.id,
-      type: REQUEST_VIDEO_EVENT_TYPES.VIEWS
-    }
-    addEventToRemoteVideo(eventParams)
-      .catch(err => logger.error('Cannot add event to remote video %s.', videoInstance.uuid, err))
+    // TODO: send view event to followers
   }
 
   // Do not wait the view system
@@ -361,7 +331,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
   if (videoInstance.isOwned()) {
     description = videoInstance.description
   } else {
-    description = await fetchRemoteDescription(videoInstance)
+    description = await fetchRemoteVideoDescription(videoInstance)
   }
 
   return res.json({ description })

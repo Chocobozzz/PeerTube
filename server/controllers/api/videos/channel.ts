@@ -1,31 +1,23 @@
 import * as express from 'express'
-
-import { database as db } from '../../../initializers'
-import {
-  logger,
-  getFormattedObjects,
-  retryTransactionWrapper,
-  resetSequelizeInstance
-} from '../../../helpers'
-import {
-  authenticate,
-  paginationValidator,
-  videoChannelsSortValidator,
-  videoChannelsAddValidator,
-  setVideoChannelsSort,
-  setPagination,
-  videoChannelsRemoveValidator,
-  videoChannelGetValidator,
-  videoChannelsUpdateValidator,
-  listVideoAccountChannelsValidator,
-  asyncMiddleware
-} from '../../../middlewares'
-import {
-  createVideoChannel,
-  updateVideoChannelToFriends
-} from '../../../lib'
-import { VideoChannelInstance, AccountInstance } from '../../../models'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared'
+import { getFormattedObjects, logger, resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers'
+import { database as db } from '../../../initializers'
+import { createVideoChannel } from '../../../lib'
+import {
+  asyncMiddleware,
+  authenticate,
+  listVideoAccountChannelsValidator,
+  paginationValidator,
+  setPagination,
+  setVideoChannelsSort,
+  videoChannelGetValidator,
+  videoChannelsAddValidator,
+  videoChannelsRemoveValidator,
+  videoChannelsSortValidator,
+  videoChannelsUpdateValidator
+} from '../../../middlewares'
+import { AccountInstance, VideoChannelInstance } from '../../../models'
+import { sendUpdateVideoChannel } from '../../../lib/activitypub/send-request'
 
 const videoChannelRouter = express.Router()
 
@@ -137,11 +129,8 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
       if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.set('description', videoChannelInfoToUpdate.description)
 
       await videoChannelInstance.save(sequelizeOptions)
-      const json = videoChannelInstance.toUpdateRemoteJSON()
 
-      // Now we'll update the video channel's meta data to our friends
-      return updateVideoChannelToFriends(json, t)
-
+      await sendUpdateVideoChannel(videoChannelInstance, t)
     })
 
     logger.info('Video channel with name %s and uuid %s updated.', videoChannelInstance.name, videoChannelInstance.uuid)

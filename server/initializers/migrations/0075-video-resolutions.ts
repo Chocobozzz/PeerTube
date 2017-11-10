@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
 import { join } from 'path'
 
 import { readdirPromise, renamePromise } from '../../helpers/core-utils'

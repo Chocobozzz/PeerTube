@@ -8,7 +8,11 @@ import { VideoChannelInstance } from '../../models/video/video-channel-interface
 import { VideoFileAttributes } from '../../models/video/video-file-interface'
 import { VideoAttributes, VideoInstance } from '../../models/video/video-interface'
 
-async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelInstance, videoObject: VideoTorrentObject, t: Sequelize.Transaction) {
+async function videoActivityObjectToDBAttributes (
+  videoChannel: VideoChannelInstance,
+  videoObject: VideoTorrentObject,
+  t: Sequelize.Transaction
+) {
   const videoFromDatabase = await db.Video.loadByUUIDOrURL(videoObject.uuid, videoObject.id, t)
   if (videoFromDatabase) throw new Error('Video with this UUID/Url already exists.')
 

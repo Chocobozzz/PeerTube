@@ -5,8 +5,6 @@ import { badRequest } from '../../helpers'
 import { oauthClientsRouter } from './oauth-clients'
 import { configRouter } from './config'
 import { podsRouter } from './pods'
-import { remoteRouter } from './remote'
-import { requestSchedulerRouter } from './request-schedulers'
 import { usersRouter } from './users'
 import { videosRouter } from './videos'
 
@@ -15,8 +13,6 @@ const apiRouter = express.Router()
 apiRouter.use('/oauth-clients', oauthClientsRouter)
 apiRouter.use('/config', configRouter)
 apiRouter.use('/pods', podsRouter)
-apiRouter.use('/remote', remoteRouter)
-apiRouter.use('/request-schedulers', requestSchedulerRouter)
 apiRouter.use('/users', usersRouter)
 apiRouter.use('/videos', videosRouter)
 apiRouter.use('/ping', pong)

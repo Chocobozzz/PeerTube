@@ -1,11 +1,11 @@
-import * as Promise from 'bluebird'
-
 import { database as db } from '../server/initializers/database'
-import { hasFriends } from '../server/lib/friends'
+// import { hasFriends } from '../server/lib/friends'
 
 db.init(true)
   .then(() => {
-    return hasFriends()
+    // FIXME: check if has followers
+    // return hasFriends()
+    return true
   })
   .then(itHasFriends => {
     if (itHasFriends === true) {

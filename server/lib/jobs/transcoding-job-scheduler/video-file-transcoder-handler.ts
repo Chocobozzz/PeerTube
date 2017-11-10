@@ -1,8 +1,8 @@
-import { database as db } from '../../../initializers/database'
-import { updateVideoToFriends } from '../../friends'
-import { logger } from '../../../helpers'
-import { VideoInstance } from '../../../models'
 import { VideoResolution } from '../../../../shared'
+import { logger } from '../../../helpers'
+import { database as db } from '../../../initializers/database'
+import { VideoInstance } from '../../../models'
+import { sendUpdateVideo } from '../../activitypub/send-request'
 
 async function process (data: { videoUUID: string, resolution: VideoResolution }, jobId: number) {
   const video = await db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(data.videoUUID)
@@ -32,10 +32,7 @@ async function onSuccess (jobId: number, video: VideoInstance) {
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 
-  const remoteVideo = videoDatabase.toUpdateRemoteJSON()
-
-  // Now we'll add the video's meta data to our friends
-  await updateVideoToFriends(remoteVideo, null)
+  await sendUpdateVideo(video, undefined)
 
   return undefined
 }

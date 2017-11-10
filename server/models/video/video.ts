@@ -1,58 +1,52 @@
-import * as safeBuffer from 'safe-buffer'
-const Buffer = safeBuffer.Buffer
-import * as magnetUtil from 'magnet-uri'
 import { map, maxBy, truncate } from 'lodash'
+import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
+import * as safeBuffer from 'safe-buffer'
 import * as Sequelize from 'sequelize'
-
-import { TagInstance } from './tag-interface'
+import { VideoPrivacy, VideoResolution } from '../../../shared'
+import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
 import {
-  logger,
-  isVideoNameValid,
+  createTorrentPromise,
+  generateImageFromVideoFile,
+  getActivityPubUrl,
+  getVideoFileHeight,
   isVideoCategoryValid,
-  isVideoLicenceValid,
-  isVideoLanguageValid,
-  isVideoNSFWValid,
   isVideoDescriptionValid,
   isVideoDurationValid,
+  isVideoLanguageValid,
+  isVideoLicenceValid,
+  isVideoNameValid,
+  isVideoNSFWValid,
   isVideoPrivacyValid,
-  readFileBufferPromise,
-  unlinkPromise,
+  logger,
   renamePromise,
-  writeFilePromise,
-  createTorrentPromise,
   statPromise,
-  generateImageFromVideoFile,
   transcode,
-  getVideoFileHeight,
-  getActivityPubUrl
+  unlinkPromise,
+  writeFilePromise
 } from '../../helpers'
 import {
+  API_VERSION,
   CONFIG,
+  CONSTRAINTS_FIELDS,
+  PREVIEWS_SIZE,
   REMOTE_SCHEME,
   STATIC_PATHS,
-  VIDEO_CATEGORIES,
-  VIDEO_LICENCES,
-  VIDEO_LANGUAGES,
   THUMBNAILS_SIZE,
-  PREVIEWS_SIZE,
-  CONSTRAINTS_FIELDS,
-  API_VERSION,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
   VIDEO_PRIVACIES
 } from '../../initializers'
-import { removeVideoToFriends } from '../../lib'
-import { VideoResolution, VideoPrivacy } from '../../../shared'
-import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 
 import { addMethodsToModel, getSort } from '../utils'
-import {
-  VideoInstance,
-  VideoAttributes,
 
-  VideoMethods
-} from './video-interface'
-import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
+import { TagInstance } from './tag-interface'
+import { VideoFileInstance, VideoFileModel } from './video-file-interface'
+import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
+
+const Buffer = safeBuffer.Buffer
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
@@ -374,8 +368,8 @@ function afterDestroy (video: VideoInstance) {
     }
 
     tasks.push(
-      video.removePreview(),
-      removeVideoToFriends(removeVideoToFriendsParams)
+      video.removePreview()
+      // FIXME: remove video for followers
     )
 
     // Remove physical files and torrents
@@ -566,7 +560,7 @@ toActivityPubObject = function (this: VideoInstance) {
   const { baseUrlHttp, baseUrlWs } = getBaseUrls(this)
 
   const tag = this.Tags.map(t => ({
-    type: 'Hashtag',
+    type: 'Hashtag' as 'Hashtag',
     name: t.name
   }))
 
@@ -596,7 +590,7 @@ toActivityPubObject = function (this: VideoInstance) {
   }
 
   const videoObject: VideoTorrentObject = {
-    type: 'Video',
+    type: 'Video' as 'Video',
     id: getActivityPubUrl('video', this.uuid),
     name: this.name,
     // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
@@ -604,15 +598,15 @@ toActivityPubObject = function (this: VideoInstance) {
     uuid: this.uuid,
     tag,
     category: {
-      id: this.category,
-      label: this.getCategoryLabel()
+      identifier: this.category + '',
+      name: this.getCategoryLabel()
     },
     licence: {
-      id: this.licence,
+      identifier: this.licence + '',
       name: this.getLicenceLabel()
     },
     language: {
-      id: this.language,
+      identifier: this.language + '',
       name: this.getLanguageLabel()
     },
     views: this.views,

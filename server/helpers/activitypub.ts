@@ -1,15 +1,15 @@
+import { join } from 'path'
+import * as request from 'request'
 import * as url from 'url'
-
-import { database as db } from '../initializers'
-import { logger } from './logger'
-import { doRequest, doRequestAndSaveToFile } from './requests'
-import { isRemoteAccountValid } from './custom-validators'
+import { ActivityIconObject } from '../../shared/index'
 import { ActivityPubActor } from '../../shared/models/activitypub/activitypub-actor'
 import { ResultList } from '../../shared/models/result-list.model'
-import { CONFIG } from '../initializers/constants'
+import { database as db, REMOTE_SCHEME } from '../initializers'
+import { CONFIG, STATIC_PATHS } from '../initializers/constants'
 import { VideoInstance } from '../models/video/video-interface'
-import { ActivityIconObject } from '../../shared/index'
-import { join } from 'path'
+import { isRemoteAccountValid } from './custom-validators'
+import { logger } from './logger'
+import { doRequest, doRequestAndSaveToFile } from './requests'
 
 function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObject) {
   const thumbnailName = video.getThumbnailName()
@@ -22,9 +22,10 @@ function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObjec
   return doRequestAndSaveToFile(options, thumbnailPath)
 }
 
-function getActivityPubUrl (type: 'video' | 'videoChannel', uuid: string) {
-  if (type === 'video') return CONFIG.WEBSERVER.URL + '/videos/watch/' + uuid
-  else if (type === 'videoChannel') return CONFIG.WEBSERVER.URL + '/video-channels/' + uuid
+function getActivityPubUrl (type: 'video' | 'videoChannel' | 'account', id: string) {
+  if (type === 'video') return CONFIG.WEBSERVER.URL + '/videos/watch/' + id
+  else if (type === 'videoChannel') return CONFIG.WEBSERVER.URL + '/video-channels/' + id
+  else if (type === 'account') return CONFIG.WEBSERVER.URL + '/account/' + id
 
   return ''
 }
@@ -94,7 +95,24 @@ async function fetchRemoteAccountAndCreatePod (accountUrl: string) {
   return { account, pod }
 }
 
-function activityPubContextify (data: object) {
+function fetchRemoteVideoPreview (video: VideoInstance) {
+  // FIXME: use url
+  const host = video.VideoChannel.Account.Pod.host
+  const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
+
+  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
+}
+
+async function fetchRemoteVideoDescription (video: VideoInstance) {
+  const options = {
+    uri: video.url
+  }
+
+  const { body } = await doRequest(options)
+  return body.description ? body.description : ''
+}
+
+function activityPubContextify <T> (data: T) {
   return Object.assign(data,{
     '@context': [
       'https://www.w3.org/ns/activitystreams',
@@ -141,7 +159,9 @@ export {
   activityPubCollectionPagination,
   getActivityPubUrl,
   generateThumbnailFromUrl,
-  getOrCreateAccount
+  getOrCreateAccount,
+  fetchRemoteVideoPreview,
+  fetchRemoteVideoDescription
 }
 
 // ---------------------------------------------------------------------------
