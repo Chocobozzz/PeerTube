@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { database as db } from '../../../initializers/database'
-import * as friends from '../../../lib/friends'
 import {
   logger,
   getFormattedObjects,
@@ -84,7 +83,8 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
         videoUUID: videoInstance.uuid
       }
 
-      await friends.reportAbuseVideoToFriend(reportData, videoInstance, t)
+      // await friends.reportAbuseVideoToFriend(reportData, videoInstance, t)
+      // TODO: send abuse to origin pod
     }
   })
 

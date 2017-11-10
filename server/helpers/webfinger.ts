@@ -35,7 +35,7 @@ export {
 
 function webfingerLookup (url: string) {
   return new Promise<WebFingerData>((res, rej) => {
-    webfinger.lookup('nick@silverbucket.net', (err, p) => {
+    webfinger.lookup(url, (err, p) => {
       if (err) return rej(err)
 
       return p

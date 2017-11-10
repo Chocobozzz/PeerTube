@@ -3,9 +3,8 @@ import { join } from 'path'
 import { createWriteStream } from 'fs'
 
 import { database as db, CONFIG, CACHE } from '../../initializers'
-import { logger, unlinkPromise } from '../../helpers'
+import { logger, unlinkPromise, fetchRemoteVideoPreview } from '../../helpers'
 import { VideoInstance } from '../../models'
-import { fetchRemotePreview } from '../../lib'
 
 class VideosPreviewCache {
 
@@ -54,7 +53,7 @@ class VideosPreviewCache {
   }
 
   private saveRemotePreviewAndReturnPath (video: VideoInstance) {
-    const req = fetchRemotePreview(video)
+    const req = fetchRemoteVideoPreview(video)
 
     return new Promise<string>((res, rej) => {
       const path = join(CACHE.DIRECTORIES.PREVIEWS, video.getPreviewName())

@@ -1,12 +1,13 @@
 import * as Bluebird from 'bluebird'
+import { computeResolutionsToTranscode, logger } from '../../../helpers'
 
 import { database as db } from '../../../initializers/database'
-import { logger, computeResolutionsToTranscode } from '../../../helpers'
 import { VideoInstance } from '../../../models'
-import { addVideoToFriends } from '../../friends'
+import { sendAddVideo } from '../../activitypub/send-request'
 import { JobScheduler } from '../job-scheduler'
+import { TranscodingJobPayload } from './transcoding-job-scheduler'
 
-async function process (data: { videoUUID: string }, jobId: number) {
+async function process (data: TranscodingJobPayload, jobId: number) {
   const video = await db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(data.videoUUID)
   // No video, maybe deleted?
   if (!video) {
@@ -24,7 +25,7 @@ function onError (err: Error, jobId: number) {
   return Promise.resolve()
 }
 
-async function onSuccess (jobId: number, video: VideoInstance) {
+async function onSuccess (jobId: number, video: VideoInstance, jobScheduler: JobScheduler<TranscodingJobPayload, VideoInstance>) {
   if (video === undefined) return undefined
 
   logger.info('Job %d is a success.', jobId)
@@ -34,10 +35,8 @@ async function onSuccess (jobId: number, video: VideoInstance) {
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 
-  const remoteVideo = await videoDatabase.toAddRemoteJSON()
-
-  // Now we'll add the video's meta data to our friends
-  await addVideoToFriends(remoteVideo, null)
+  // Now we'll add the video's meta data to our followers
+  await sendAddVideo(video, undefined)
 
   const originalFileHeight = await videoDatabase.getOriginalFileHeight()
   // Create transcoding jobs if there are enabled resolutions
@@ -59,7 +58,7 @@ async function onSuccess (jobId: number, video: VideoInstance) {
             resolution
           }
 
-          const p = JobScheduler.Instance.createJob(t, 'videoFileTranscoder', dataInput)
+          const p = jobScheduler.createJob(t, 'videoFileTranscoder', dataInput)
           tasks.push(p)
         }
 

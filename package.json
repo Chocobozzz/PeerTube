@@ -77,7 +77,6 @@
     "pg": "^6.4.2",
     "pg-hstore": "^2.3.2",
     "request": "^2.81.0",
-    "request-replay": "^1.0.2",
     "rimraf": "^2.5.4",
     "safe-buffer": "^5.0.1",
     "scripty": "^1.5.0",

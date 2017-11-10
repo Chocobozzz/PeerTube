@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize'
 
+import { database as db } from '../../initializers'
 import {
   AccountInstance,
   VideoInstance,
@@ -13,54 +14,66 @@ function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Sequeliz
   const videoChannelObject = videoChannel.toActivityPubObject()
   const data = createActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
-  return broadcastToFollowers(data, t)
+  return broadcastToFollowers(data, videoChannel.Account, t)
 }
 
 function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const videoChannelObject = videoChannel.toActivityPubObject()
   const data = updateActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
-  return broadcastToFollowers(data, t)
+  return broadcastToFollowers(data, videoChannel.Account, t)
 }
 
 function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const videoChannelObject = videoChannel.toActivityPubObject()
   const data = deleteActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
-  return broadcastToFollowers(data, t)
+  return broadcastToFollowers(data, videoChannel.Account, t)
 }
 
 function sendAddVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const videoObject = video.toActivityPubObject()
   const data = addActivityData(video.url, video.VideoChannel.Account, video.VideoChannel.url, videoObject)
 
-  return broadcastToFollowers(data, t)
+  return broadcastToFollowers(data, video.VideoChannel.Account, t)
 }
 
 function sendUpdateVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const videoObject = video.toActivityPubObject()
   const data = updateActivityData(video.url, video.VideoChannel.Account, videoObject)
 
-  return broadcastToFollowers(data, t)
+  return broadcastToFollowers(data, video.VideoChannel.Account, t)
 }
 
 function sendDeleteVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const videoObject = video.toActivityPubObject()
   const data = deleteActivityData(video.url, video.VideoChannel.Account, videoObject)
 
-  return broadcastToFollowers(data, t)
+  return broadcastToFollowers(data, video.VideoChannel.Account, t)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-
+  sendCreateVideoChannel,
+  sendUpdateVideoChannel,
+  sendDeleteVideoChannel,
+  sendAddVideo,
+  sendUpdateVideo,
+  sendDeleteVideo
 }
 
 // ---------------------------------------------------------------------------
 
-function broadcastToFollowers (data: any, t: Sequelize.Transaction) {
-  return httpRequestJobScheduler.createJob(t, 'http-request', 'httpRequestBroadcastHandler', data)
+async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t: Sequelize.Transaction) {
+  const result = await db.Account.listFollowerUrlsForApi(fromAccount.name, 0)
+
+  const jobPayload = {
+    uris: result.data,
+    body: data
+  }
+
+  return httpRequestJobScheduler.createJob(t, 'httpRequestBroadcastHandler', jobPayload)
 }
 
 function buildSignedActivity (byAccount: AccountInstance, data: Object) {

@@ -1,10 +1,10 @@
 import * as Sequelize from 'sequelize'
 
-import { addVideoChannelToFriends } from './friends'
 import { database as db } from '../initializers'
 import { logger } from '../helpers'
 import { AccountInstance } from '../models'
 import { VideoChannelCreate } from '../../shared/models'
+import { sendCreateVideoChannel } from './activitypub/send-request'
 
 async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountInstance, t: Sequelize.Transaction) {
   const videoChannelData = {
@@ -22,10 +22,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   // Do not forget to add Account information to the created video channel
   videoChannelCreated.Account = account
 
-  const remoteVideoChannel = videoChannelCreated.toAddRemoteJSON()
-
-  // Now we'll add the video channel's meta data to our friends
-  await addVideoChannelToFriends(remoteVideoChannel, t)
+  sendCreateVideoChannel(videoChannelCreated, t)
 
   return videoChannelCreated
 }

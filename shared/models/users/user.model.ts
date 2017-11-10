@@ -9,7 +9,7 @@ export interface User {
   role: UserRole
   videoQuota: number
   createdAt: Date,
-  author: {
+  account: {
     id: number
     uuid: string
   }
