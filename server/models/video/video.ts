@@ -25,7 +25,8 @@ import {
   statPromise,
   generateImageFromVideoFile,
   transcode,
-  getVideoFileHeight
+  getVideoFileHeight,
+  getActivityPubUrl
 } from '../../helpers'
 import {
   CONFIG,
@@ -88,7 +89,7 @@ let listOwnedAndPopulateAccountAndTags: VideoMethods.ListOwnedAndPopulateAccount
 let listOwnedByAccount: VideoMethods.ListOwnedByAccount
 let load: VideoMethods.Load
 let loadByUUID: VideoMethods.LoadByUUID
-let loadByUrl: VideoMethods.LoadByUrl
+let loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
 let loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
 let loadAndPopulateAccount: VideoMethods.LoadAndPopulateAccount
 let loadAndPopulateAccountAndPodAndTags: VideoMethods.LoadAndPopulateAccountAndPodAndTags
@@ -277,6 +278,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     loadAndPopulateAccount,
     loadAndPopulateAccountAndPodAndTags,
     loadByHostAndUUID,
+    loadByUUIDOrURL,
     loadByUUID,
     loadLocalVideoByUUID,
     loadByUUIDAndPopulateAccountAndPodAndTags,
@@ -595,6 +597,7 @@ toActivityPubObject = function (this: VideoInstance) {
 
   const videoObject: VideoTorrentObject = {
     type: 'Video',
+    id: getActivityPubUrl('video', this.uuid),
     name: this.name,
     // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
     duration: 'PT' + this.duration + 'S',
@@ -731,6 +734,7 @@ getCategoryLabel = function (this: VideoInstance) {
 
 getLicenceLabel = function (this: VideoInstance) {
   let licenceLabel = VIDEO_LICENCES[this.licence]
+
   // Maybe our pod is not up to date and there are new licences since our version
   if (!licenceLabel) licenceLabel = 'Unknown'
 
@@ -937,6 +941,22 @@ loadByUUID = function (uuid: string, t?: Sequelize.Transaction) {
   const query: Sequelize.FindOptions<VideoAttributes> = {
     where: {
       uuid
+    },
+    include: [ Video['sequelize'].models.VideoFile ]
+  }
+
+  if (t !== undefined) query.transaction = t
+
+  return Video.findOne(query)
+}
+
+loadByUUIDOrURL = function (uuid: string, url: string, t?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<VideoAttributes> = {
+    where: {
+      [Sequelize.Op.or]: [
+        { uuid },
+        { url }
+      ]
     },
     include: [ Video['sequelize'].models.VideoFile ]
   }

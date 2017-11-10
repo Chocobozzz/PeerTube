@@ -7,7 +7,7 @@ import { ActivityPubSignature } from './activitypub-signature'
 export type Activity = ActivityCreate | ActivityUpdate | ActivityFlag
 
 // Flag -> report abuse
-export type ActivityType = 'Create' | 'Update' | 'Flag'
+export type ActivityType = 'Create' | 'Add' | 'Update' | 'Flag'
 
 export interface BaseActivity {
   '@context'?: any[]
@@ -20,7 +20,12 @@ export interface BaseActivity {
 
 export interface ActivityCreate extends BaseActivity {
   type: 'Create'
-  object: VideoTorrentObject | VideoChannelObject
+  object: VideoChannelObject
+}
+
+export interface ActivityAdd extends BaseActivity {
+  type: 'Add'
+  object: VideoTorrentObject
 }
 
 export interface ActivityUpdate extends BaseActivity {

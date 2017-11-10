@@ -69,6 +69,7 @@ export namespace VideoMethods {
   export type LoadAndPopulateAccount = (id: number) => Bluebird<VideoInstance>
   export type LoadAndPopulateAccountAndPodAndTags = (id: number) => Bluebird<VideoInstance>
   export type LoadByUUIDAndPopulateAccountAndPodAndTags = (uuid: string) => Bluebird<VideoInstance>
+  export type LoadByUUIDOrURL = (uuid: string, url: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
 
   export type RemoveThumbnail = (this: VideoInstance) => Promise<void>
   export type RemovePreview = (this: VideoInstance) => Promise<void>
@@ -89,6 +90,7 @@ export interface VideoClass {
   loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
   loadByUUID: VideoMethods.LoadByUUID
   loadByUrl: VideoMethods.LoadByUrl
+  loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
   loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
   loadByUUIDAndPopulateAccountAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndPodAndTags
   searchAndPopulateAccountAndPodAndTags: VideoMethods.SearchAndPopulateAccountAndPodAndTags
@@ -109,7 +111,10 @@ export interface VideoAttributes {
   likes?: number
   dislikes?: number
   remote: boolean
-  url: string
+  url?: string
+
+  createdAt?: Date
+  updatedAt?: Date
 
   parentId?: number
   channelId?: number
@@ -120,9 +125,6 @@ export interface VideoAttributes {
 }
 
 export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.Instance<VideoAttributes> {
-  createdAt: Date
-  updatedAt: Date
-
   createPreview: VideoMethods.CreatePreview
   createThumbnail: VideoMethods.CreateThumbnail
   createTorrentAndSetInfoHash: VideoMethods.CreateTorrentAndSetInfoHash
@@ -158,4 +160,3 @@ export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.In
 }
 
 export interface VideoModel extends VideoClass, Sequelize.Model<VideoInstance, VideoAttributes> {}
-

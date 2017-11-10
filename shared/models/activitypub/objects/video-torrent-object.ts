@@ -7,6 +7,7 @@ import {
 
 export interface VideoTorrentObject {
   type: 'Video'
+  id: string
   name: string
   duration: string
   uuid: string

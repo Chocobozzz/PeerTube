@@ -2,10 +2,48 @@ import * as url from 'url'
 
 import { database as db } from '../initializers'
 import { logger } from './logger'
-import { doRequest } from './requests'
+import { doRequest, doRequestAndSaveToFile } from './requests'
 import { isRemoteAccountValid } from './custom-validators'
 import { ActivityPubActor } from '../../shared/models/activitypub/activitypub-actor'
 import { ResultList } from '../../shared/models/result-list.model'
+import { CONFIG } from '../initializers/constants'
+import { VideoInstance } from '../models/video/video-interface'
+import { ActivityIconObject } from '../../shared/index'
+import { join } from 'path'
+
+function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObject) {
+  const thumbnailName = video.getThumbnailName()
+  const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
+
+  const options = {
+    method: 'GET',
+    uri: icon.url
+  }
+  return doRequestAndSaveToFile(options, thumbnailPath)
+}
+
+function getActivityPubUrl (type: 'video' | 'videoChannel', uuid: string) {
+  if (type === 'video') return CONFIG.WEBSERVER.URL + '/videos/watch/' + uuid
+  else if (type === 'videoChannel') return CONFIG.WEBSERVER.URL + '/video-channels/' + uuid
+
+  return ''
+}
+
+async function getOrCreateAccount (accountUrl: string) {
+  let account = await db.Account.loadByUrl(accountUrl)
+
+  // We don't have this account in our database, fetch it on remote
+  if (!account) {
+    const { account } = await fetchRemoteAccountAndCreatePod(accountUrl)
+
+    if (!account) throw new Error('Cannot fetch remote account.')
+
+    // Save our new account in database
+    await account.save()
+  }
+
+  return account
+}
 
 async function fetchRemoteAccountAndCreatePod (accountUrl: string) {
   const options = {
@@ -100,7 +138,10 @@ function activityPubCollectionPagination (url: string, page: number, result: Res
 export {
   fetchRemoteAccountAndCreatePod,
   activityPubContextify,
-  activityPubCollectionPagination
+  activityPubCollectionPagination,
+  getActivityPubUrl,
+  generateThumbnailFromUrl,
+  getOrCreateAccount
 }
 
 // ---------------------------------------------------------------------------
