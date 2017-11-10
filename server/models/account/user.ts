@@ -164,7 +164,7 @@ toFormattedJSON = function (this: UserInstance) {
     roleLabel: USER_ROLE_LABELS[this.role],
     videoQuota: this.videoQuota,
     createdAt: this.createdAt,
-    author: {
+    account: {
       id: this.Account.id,
       uuid: this.Account.uuid
     }
@@ -295,7 +295,7 @@ function getOriginalVideoFileTotalFromUser (user: UserInstance) {
                 '(SELECT MAX("VideoFiles"."size") AS "size" FROM "VideoFiles" ' +
                 'INNER JOIN "Videos" ON "VideoFiles"."videoId" = "Videos"."id" ' +
                 'INNER JOIN "VideoChannels" ON "VideoChannels"."id" = "Videos"."channelId" ' +
-                'INNER JOIN "Accounts" ON "VideoChannels"."authorId" = "Accounts"."id" ' +
+                'INNER JOIN "Accounts" ON "VideoChannels"."accountId" = "Accounts"."id" ' +
                 'INNER JOIN "Users" ON "Accounts"."userId" = "Users"."id" ' +
                 'WHERE "Users"."id" = $userId GROUP BY "Videos"."id") t'
 

@@ -28,7 +28,7 @@ import {
   UserRole,
   UserRight
 } from '../../../shared'
-import { createUserAuthorAndChannel } from '../../lib'
+import { createUserAccountAndChannel } from '../../lib'
 import { UserInstance } from '../../models'
 import { videosSortValidator } from '../../middlewares/validators/sort'
 import { setVideosSort } from '../../middlewares/sort'
@@ -142,9 +142,9 @@ async function createUser (req: express.Request, res: express.Response, next: ex
     videoQuota: body.videoQuota
   })
 
-  await createUserAuthorAndChannel(user)
+  await createUserAccountAndChannel(user)
 
-  logger.info('User %s with its channel and author created.', body.username)
+  logger.info('User %s with its channel and account created.', body.username)
 }
 
 async function registerUser (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -159,7 +159,7 @@ async function registerUser (req: express.Request, res: express.Response, next: 
     videoQuota: CONFIG.USER.VIDEO_QUOTA
   })
 
-  await createUserAuthorAndChannel(user)
+  await createUserAccountAndChannel(user)
   return res.type('json').status(204).end()
 }
 

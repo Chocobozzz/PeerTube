@@ -32,8 +32,8 @@
 //   RemoteVideoChannelCreateData,
 //   RemoteVideoChannelUpdateData,
 //   RemoteVideoChannelRemoveData,
-//   RemoteVideoAuthorRemoveData,
-//   RemoteVideoAuthorCreateData
+//   RemoteVideoAccountRemoveData,
+//   RemoteVideoAccountCreateData
 // } from '../../../../shared'
 // import { VideoInstance } from '../../../models/video/video-interface'
 //
@@ -49,8 +49,8 @@
 // functionsHash[ENDPOINT_ACTIONS.UPDATE_CHANNEL] = updateRemoteVideoChannelRetryWrapper
 // functionsHash[ENDPOINT_ACTIONS.REMOVE_CHANNEL] = removeRemoteVideoChannelRetryWrapper
 // functionsHash[ENDPOINT_ACTIONS.REPORT_ABUSE] = reportAbuseRemoteVideoRetryWrapper
-// functionsHash[ENDPOINT_ACTIONS.ADD_AUTHOR] = addRemoteVideoAuthorRetryWrapper
-// functionsHash[ENDPOINT_ACTIONS.REMOVE_AUTHOR] = removeRemoteVideoAuthorRetryWrapper
+// functionsHash[ENDPOINT_ACTIONS.ADD_ACCOUNT] = addRemoteVideoAccountRetryWrapper
+// functionsHash[ENDPOINT_ACTIONS.REMOVE_ACCOUNT] = removeRemoteVideoAccountRetryWrapper
 //
 // const remoteVideosRouter = express.Router()
 //
@@ -245,24 +245,24 @@
 //   logger.info('Remote video with uuid %s removed.', videoToRemoveData.uuid)
 // }
 //
-// async function removeRemoteVideoAuthorRetryWrapper (authorAttributesToRemove: RemoteVideoAuthorRemoveData, fromPod: PodInstance) {
+// async function removeRemoteVideoAccountRetryWrapper (accountAttributesToRemove: RemoteVideoAccountRemoveData, fromPod: PodInstance) {
 //   const options = {
-//     arguments: [ authorAttributesToRemove, fromPod ],
-//     errorMessage: 'Cannot remove the remote video author with many retries.'
+//     arguments: [ accountAttributesToRemove, fromPod ],
+//     errorMessage: 'Cannot remove the remote video account with many retries.'
 //   }
 //
-//   await retryTransactionWrapper(removeRemoteVideoAuthor, options)
+//   await retryTransactionWrapper(removeRemoteVideoAccount, options)
 // }
 //
-// async function removeRemoteVideoAuthor (authorAttributesToRemove: RemoteVideoAuthorRemoveData, fromPod: PodInstance) {
-//   logger.debug('Removing remote video author "%s".', authorAttributesToRemove.uuid)
+// async function removeRemoteVideoAccount (accountAttributesToRemove: RemoteVideoAccountRemoveData, fromPod: PodInstance) {
+//   logger.debug('Removing remote video account "%s".', accountAttributesToRemove.uuid)
 //
 //   await db.sequelize.transaction(async t => {
-//     const videoAuthor = await db.Author.loadAuthorByPodAndUUID(authorAttributesToRemove.uuid, fromPod.id, t)
-//     await videoAuthor.destroy({ transaction: t })
+//     const videoAccount = await db.Account.loadAccountByPodAndUUID(accountAttributesToRemove.uuid, fromPod.id, t)
+//     await videoAccount.destroy({ transaction: t })
 //   })
 //
-//   logger.info('Remote video author with uuid %s removed.', authorAttributesToRemove.uuid)
+//   logger.info('Remote video account with uuid %s removed.', accountAttributesToRemove.uuid)
 // }
 //
 // async function removeRemoteVideoChannelRetryWrapper (videoChannelAttributesToRemove: RemoteVideoChannelRemoveData, fromPod: PodInstance) {

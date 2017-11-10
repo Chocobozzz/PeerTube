@@ -17,14 +17,14 @@ import {
   videoChannelsRemoveValidator,
   videoChannelGetValidator,
   videoChannelsUpdateValidator,
-  listVideoAuthorChannelsValidator,
+  listVideoAccountChannelsValidator,
   asyncMiddleware
 } from '../../../middlewares'
 import {
   createVideoChannel,
   updateVideoChannelToFriends
 } from '../../../lib'
-import { VideoChannelInstance, AuthorInstance } from '../../../models'
+import { VideoChannelInstance, AccountInstance } from '../../../models'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared'
 
 const videoChannelRouter = express.Router()
@@ -37,9 +37,9 @@ videoChannelRouter.get('/channels',
   asyncMiddleware(listVideoChannels)
 )
 
-videoChannelRouter.get('/authors/:authorId/channels',
-  listVideoAuthorChannelsValidator,
-  asyncMiddleware(listVideoAuthorChannels)
+videoChannelRouter.get('/accounts/:accountId/channels',
+  listVideoAccountChannelsValidator,
+  asyncMiddleware(listVideoAccountChannels)
 )
 
 videoChannelRouter.post('/channels',
@@ -79,8 +79,8 @@ async function listVideoChannels (req: express.Request, res: express.Response, n
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function listVideoAuthorChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.VideoChannel.listByAuthor(res.locals.author.id)
+async function listVideoAccountChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const resultList = await db.VideoChannel.listByAccount(res.locals.account.id)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -101,11 +101,11 @@ async function addVideoChannelRetryWrapper (req: express.Request, res: express.R
 
 async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
-  const author: AuthorInstance = res.locals.oauth.token.User.Author
+  const account: AccountInstance = res.locals.oauth.token.User.Account
   let videoChannelCreated: VideoChannelInstance
 
   await db.sequelize.transaction(async t => {
-    videoChannelCreated = await createVideoChannel(videoChannelInfo, author, t)
+    videoChannelCreated = await createVideoChannel(videoChannelInfo, account, t)
   })
 
   logger.info('Video channel with uuid %s created.', videoChannelCreated.uuid)
@@ -179,7 +179,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
 }
 
 async function getVideoChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoChannelWithVideos = await db.VideoChannel.loadAndPopulateAuthorAndVideos(res.locals.videoChannel.id)
+  const videoChannelWithVideos = await db.VideoChannel.loadAndPopulateAccountAndVideos(res.locals.videoChannel.id)
 
   return res.json(videoChannelWithVideos.toFormattedJSON())
 }

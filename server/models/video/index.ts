@@ -1,4 +1,3 @@
-export * from './author-interface'
 export * from './tag-interface'
 export * from './video-abuse-interface'
 export * from './video-blacklist-interface'
