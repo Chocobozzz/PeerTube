@@ -56,6 +56,18 @@ function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transaction) 
   return broadcastToFollowers(data, account, t)
 }
 
+function sendAccept (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
+  const data = acceptActivityData(fromAccount)
+
+  return unicastTo(data, toAccount, t)
+}
+
+function sendFollow (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
+  const data = followActivityData(toAccount.url, fromAccount)
+
+  return unicastTo(data, toAccount, t)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -65,7 +77,9 @@ export {
   sendAddVideo,
   sendUpdateVideo,
   sendDeleteVideo,
-  sendDeleteAccount
+  sendDeleteAccount,
+  sendAccept,
+  sendFollow
 }
 
 // ---------------------------------------------------------------------------
@@ -79,6 +93,15 @@ async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t:
   }
 
   return httpRequestJobScheduler.createJob(t, 'httpRequestBroadcastHandler', jobPayload)
+}
+
+async function unicastTo (data: any, toAccount: AccountInstance, t: Sequelize.Transaction) {
+  const jobPayload = {
+    uris: [ toAccount.url ],
+    body: data
+  }
+
+  return httpRequestJobScheduler.createJob(t, 'httpRequestUnicastHandler', jobPayload)
 }
 
 function buildSignedActivity (byAccount: AccountInstance, data: Object) {
@@ -138,6 +161,27 @@ async function addActivityData (url: string, byAccount: AccountInstance, target:
     to,
     object,
     target
+  }
+
+  return buildSignedActivity(byAccount, base)
+}
+
+async function followActivityData (url: string, byAccount: AccountInstance) {
+  const base = {
+    type: 'Follow',
+    id: byAccount.url,
+    actor: byAccount.url,
+    object: url
+  }
+
+  return buildSignedActivity(byAccount, base)
+}
+
+async function acceptActivityData (byAccount: AccountInstance) {
+  const base = {
+    type: 'Accept',
+    id: byAccount.url,
+    actor: byAccount.url
   }
 
   return buildSignedActivity(byAccount, base)

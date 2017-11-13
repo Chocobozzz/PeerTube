@@ -7,7 +7,7 @@ async function processAcceptActivity (activity: ActivityAccept, inboxAccount?: A
 
   const targetAccount = await db.Account.loadByUrl(activity.actor)
 
-  return processFollow(inboxAccount, targetAccount)
+  return processAccept(inboxAccount, targetAccount)
 }
 
 // ---------------------------------------------------------------------------
@@ -18,10 +18,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processFollow (account: AccountInstance, targetAccount: AccountInstance) {
+async function processAccept (account: AccountInstance, targetAccount: AccountInstance) {
   const follow = await db.AccountFollow.loadByAccountAndTarget(account.id, targetAccount.id)
   if (!follow) throw new Error('Cannot find associated follow.')
 
   follow.set('state', 'accepted')
-  return follow.save()
+  await follow.save()
 }
