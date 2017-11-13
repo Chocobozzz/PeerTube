@@ -15,25 +15,31 @@ import {
   activityPubContextify
 } from '../../helpers'
 
-import { addMethodsToModel } from '../utils'
+import { addMethodsToModel, getSort } from '../utils'
 import {
   AccountInstance,
   AccountAttributes,
 
   AccountMethods
 } from './account-interface'
+import LoadApplication = AccountMethods.LoadApplication
+import { sendDeleteAccount } from '../../lib/activitypub/send-request'
 
 let Account: Sequelize.Model<AccountInstance, AccountAttributes>
 let loadAccountByPodAndUUID: AccountMethods.LoadAccountByPodAndUUID
 let load: AccountMethods.Load
+let loadApplication: AccountMethods.LoadApplication
 let loadByUUID: AccountMethods.LoadByUUID
 let loadByUrl: AccountMethods.LoadByUrl
-let loadLocalAccountByName: AccountMethods.LoadLocalAccountByName
+let loadLocalAccountByNameAndPod: AccountMethods.LoadLocalAccountByNameAndPod
 let listOwned: AccountMethods.ListOwned
 let listFollowerUrlsForApi: AccountMethods.ListFollowerUrlsForApi
 let listFollowingUrlsForApi: AccountMethods.ListFollowingUrlsForApi
+let listFollowingForApi: AccountMethods.ListFollowingForApi
+let listFollowersForApi: AccountMethods.ListFollowersForApi
 let isOwned: AccountMethods.IsOwned
 let toActivityPubObject: AccountMethods.ToActivityPubObject
+let toFormattedJSON: AccountMethods.ToFormattedJSON
 let getFollowerSharedInboxUrls: AccountMethods.GetFollowerSharedInboxUrls
 let getFollowingUrl: AccountMethods.GetFollowingUrl
 let getFollowersUrl: AccountMethods.GetFollowersUrl
@@ -189,16 +195,20 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
   const classMethods = [
     associate,
     loadAccountByPodAndUUID,
+    loadApplication,
     load,
     loadByUUID,
-    loadLocalAccountByName,
+    loadLocalAccountByNameAndPod,
     listOwned,
     listFollowerUrlsForApi,
-    listFollowingUrlsForApi
+    listFollowingUrlsForApi,
+    listFollowingForApi,
+    listFollowersForApi
   ]
   const instanceMethods = [
     isOwned,
     toActivityPubObject,
+    toFormattedJSON,
     getFollowerSharedInboxUrls,
     getFollowingUrl,
     getFollowersUrl,
@@ -250,6 +260,7 @@ function associate (models) {
       name: 'accountId',
       allowNull: false
     },
+    as: 'following',
     onDelete: 'cascade'
   })
 
@@ -258,21 +269,27 @@ function associate (models) {
       name: 'targetAccountId',
       allowNull: false
     },
+    as: 'followers',
     onDelete: 'cascade'
   })
 }
 
 function afterDestroy (account: AccountInstance) {
   if (account.isOwned()) {
-    const removeVideoAccountToFriendsParams = {
-      uuid: account.uuid
-    }
-
-    // FIXME: remove account in followers
-    // return removeVideoAccountToFriends(removeVideoAccountToFriendsParams)
+    return sendDeleteAccount(account, undefined)
   }
 
   return undefined
+}
+
+toFormattedJSON = function (this: AccountInstance) {
+  const json = {
+    id: this.id,
+    host: this.Pod.host,
+    name: this.name
+  }
+
+  return json
 }
 
 toActivityPubObject = function (this: AccountInstance) {
@@ -347,12 +364,85 @@ listOwned = function () {
   return Account.findAll(query)
 }
 
-listFollowerUrlsForApi = function (name: string, start: number, count?: number) {
-  return createListFollowForApiQuery('followers', name, start, count)
+listFollowerUrlsForApi = function (id: number, start: number, count?: number) {
+  return createListFollowForApiQuery('followers', id, start, count)
 }
 
-listFollowingUrlsForApi = function (name: string, start: number, count?: number) {
-  return createListFollowForApiQuery('following', name, start, count)
+listFollowingUrlsForApi = function (id: number, start: number, count?: number) {
+  return createListFollowForApiQuery('following', id, start, count)
+}
+
+listFollowingForApi = function (id: number, start: number, count: number, sort: string) {
+  const query = {
+    distinct: true,
+    offset: start,
+    limit: count,
+    order: [ getSort(sort) ],
+    include: [
+      {
+        model: Account['sequelize'].models.AccountFollow,
+        required: true,
+        as: 'following',
+        include: [
+          {
+            model: Account['sequelize'].models.Account,
+            as: 'following',
+            required: true,
+            include: [ Account['sequelize'].models.Pod ]
+          }
+        ]
+      }
+    ]
+  }
+
+  return Account.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
+  })
+}
+
+listFollowersForApi = function (id: number, start: number, count: number, sort: string) {
+  const query = {
+    distinct: true,
+    offset: start,
+    limit: count,
+    order: [ getSort(sort) ],
+    include: [
+      {
+        model: Account['sequelize'].models.AccountFollow,
+        required: true,
+        as: 'followers',
+        include: [
+          {
+            model: Account['sequelize'].models.Account,
+            as: 'followers',
+            required: true,
+            include: [ Account['sequelize'].models.Pod ]
+          }
+        ]
+      }
+    ]
+  }
+
+  return Account.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
+  })
+}
+
+loadApplication = function () {
+  return Account.findOne({
+    include: [
+      {
+        model: Account['sequelize'].model.Application,
+        required: true
+      }
+    ]
+  })
 }
 
 load = function (id: number) {
@@ -369,14 +459,22 @@ loadByUUID = function (uuid: string) {
   return Account.findOne(query)
 }
 
-loadLocalAccountByName = function (name: string) {
+loadLocalAccountByNameAndPod = function (name: string, host: string) {
   const query: Sequelize.FindOptions<AccountAttributes> = {
     where: {
       name,
       userId: {
         [Sequelize.Op.ne]: null
       }
-    }
+    },
+    include: [
+      {
+        model: Account['sequelize'].models.Pod,
+        where: {
+          host
+        }
+      }
+    ]
   }
 
   return Account.findOne(query)
@@ -406,7 +504,7 @@ loadAccountByPodAndUUID = function (uuid: string, podId: number, transaction: Se
 
 // ------------------------------ UTILS ------------------------------
 
-async function createListFollowForApiQuery (type: 'followers' | 'following', name: string, start: number, count?: number) {
+async function createListFollowForApiQuery (type: 'followers' | 'following', id: number, start: number, count?: number) {
   let firstJoin: string
   let secondJoin: string
 
@@ -424,14 +522,14 @@ async function createListFollowForApiQuery (type: 'followers' | 'following', nam
   for (const selection of selections) {
     let query = 'SELECT ' + selection + ' FROM "Account" ' +
       'INNER JOIN "AccountFollower" ON "AccountFollower"."' + firstJoin + '" = "Account"."id" ' +
-      'INNER JOIN "Account" AS "Followers" ON "Followers"."id" = "AccountFollower"."' + secondJoin + '" ' +
-      'WHERE "Account"."name" = \'$name\' ' +
+      'INNER JOIN "Account" AS "Follows" ON "Followers"."id" = "Follows"."' + secondJoin + '" ' +
+      'WHERE "Account"."id" = $id ' +
       'LIMIT ' + start
 
     if (count !== undefined) query += ', ' + count
 
     const options = {
-      bind: { name },
+      bind: { id },
       type: Sequelize.QueryTypes.SELECT
     }
     tasks.push(Account['sequelize'].query(query, options))

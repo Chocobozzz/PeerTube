@@ -1,19 +1,12 @@
-import * as Sequelize from 'sequelize'
 import * as Bluebird from 'bluebird'
+import * as Sequelize from 'sequelize'
+import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
+import { ResultList } from '../../../shared/models/result-list.model'
+import { Video as FormattedVideo, VideoDetails as FormattedDetailsVideo } from '../../../shared/models/videos/video.model'
 
 import { TagAttributes, TagInstance } from './tag-interface'
-import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
-
-// Don't use barrel, import just what we need
-import {
-  Video as FormattedVideo,
-  VideoDetails as FormattedDetailsVideo
-} from '../../../shared/models/videos/video.model'
-import { RemoteVideoUpdateData } from '../../../shared/models/pods/remote-video/remote-video-update-request.model'
-import { RemoteVideoCreateData } from '../../../shared/models/pods/remote-video/remote-video-create-request.model'
-import { ResultList } from '../../../shared/models/result-list.model'
 import { VideoChannelInstance } from './video-channel-interface'
-import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
+import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string

@@ -14,6 +14,7 @@ import {
   JobCategory
 } from '../../shared/models'
 import { VideoPrivacy } from '../../shared/models/videos/video-privacy.enum'
+import { FollowState } from '../../shared/models/accounts/follow.model'
 
 // ---------------------------------------------------------------------------
 
@@ -34,12 +35,13 @@ const SEARCHABLE_COLUMNS = {
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  PODS: [ 'id', 'host', 'score', 'createdAt' ],
   USERS: [ 'id', 'username', 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],
-  BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ]
+  BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
+  FOLLOWERS: [ 'createdAt' ],
+  FOLLOWING: [ 'createdAt' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -236,27 +238,10 @@ const PODS_SCORE = {
   BONUS: 10
 }
 
-// Time to wait between requests to the friends (10 min)
-let REQUESTS_INTERVAL = 600000
-
-// Number of requests in parallel we can make
-const REQUESTS_IN_PARALLEL = 10
-
-// To how many pods we send requests
-const REQUESTS_LIMIT_PODS = 10
-// How many requests we send to a pod per interval
-const REQUESTS_LIMIT_PER_POD = 5
-
-const REQUESTS_VIDEO_QADU_LIMIT_PODS = 10
-// The QADU requests are not big
-const REQUESTS_VIDEO_QADU_LIMIT_PER_POD = 50
-
-const REQUESTS_VIDEO_EVENT_LIMIT_PODS = 10
-// The EVENTS requests are not big
-const REQUESTS_VIDEO_EVENT_LIMIT_PER_POD = 50
-
-// Number of requests to retry for replay requests module
-const RETRY_REQUESTS = 5
+const FOLLOW_STATES: { [ id: string ]: FollowState } = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted'
+}
 
 const REMOTE_SCHEME = {
   HTTP: 'https',
@@ -333,7 +318,6 @@ const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 if (isTestInstance() === true) {
   CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
   FRIEND_SCORE.BASE = 20
-  REQUESTS_INTERVAL = 10000
   JOBS_FETCHING_INTERVAL = 10000
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
@@ -361,15 +345,7 @@ export {
   PODS_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
-  REQUESTS_IN_PARALLEL,
-  REQUESTS_INTERVAL,
-  REQUESTS_LIMIT_PER_POD,
-  REQUESTS_LIMIT_PODS,
-  REQUESTS_VIDEO_EVENT_LIMIT_PER_POD,
-  REQUESTS_VIDEO_EVENT_LIMIT_PODS,
-  REQUESTS_VIDEO_QADU_LIMIT_PER_POD,
-  REQUESTS_VIDEO_QADU_LIMIT_PODS,
-  RETRY_REQUESTS,
+  FOLLOW_STATES,
   SEARCHABLE_COLUMNS,
   PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,

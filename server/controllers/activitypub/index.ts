@@ -6,7 +6,7 @@ import { activityPubClientRouter } from './client'
 
 const remoteRouter = express.Router()
 
-remoteRouter.use('/inbox', inboxRouter)
+remoteRouter.use('/', inboxRouter)
 remoteRouter.use('/', activityPubClientRouter)
 remoteRouter.use('/*', badRequest)
 

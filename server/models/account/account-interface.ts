@@ -1,22 +1,26 @@
-import * as Sequelize from 'sequelize'
 import * as Bluebird from 'bluebird'
-
+import * as Sequelize from 'sequelize'
+import { Account as FormattedAccount, ActivityPubActor } from '../../../shared'
+import { ResultList } from '../../../shared/models/result-list.model'
 import { PodInstance } from '../pod/pod-interface'
 import { VideoChannelInstance } from '../video/video-channel-interface'
-import { ActivityPubActor } from '../../../shared'
-import { ResultList } from '../../../shared/models/result-list.model'
 
 export namespace AccountMethods {
+  export type LoadApplication = () => Bluebird<AccountInstance>
+
   export type Load = (id: number) => Bluebird<AccountInstance>
   export type LoadByUUID = (uuid: string) => Bluebird<AccountInstance>
   export type LoadByUrl = (url: string) => Bluebird<AccountInstance>
   export type LoadAccountByPodAndUUID = (uuid: string, podId: number, transaction: Sequelize.Transaction) => Bluebird<AccountInstance>
-  export type LoadLocalAccountByName = (name: string) => Bluebird<AccountInstance>
+  export type LoadLocalAccountByNameAndPod = (name: string, host: string) => Bluebird<AccountInstance>
   export type ListOwned = () => Bluebird<AccountInstance[]>
-  export type ListFollowerUrlsForApi = (name: string, start: number, count?: number) => Promise< ResultList<string> >
-  export type ListFollowingUrlsForApi = (name: string, start: number, count?: number) => Promise< ResultList<string> >
+  export type ListFollowerUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
+  export type ListFollowingUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
+  export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
+  export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
 
   export type ToActivityPubObject = (this: AccountInstance) => ActivityPubActor
+  export type ToFormattedJSON = (this: AccountInstance) => FormattedAccount
   export type IsOwned = (this: AccountInstance) => boolean
   export type GetFollowerSharedInboxUrls = (this: AccountInstance) => Bluebird<string[]>
   export type GetFollowingUrl = (this: AccountInstance) => string
@@ -25,14 +29,17 @@ export namespace AccountMethods {
 }
 
 export interface AccountClass {
+  loadApplication: AccountMethods.LoadApplication
   loadAccountByPodAndUUID: AccountMethods.LoadAccountByPodAndUUID
   load: AccountMethods.Load
   loadByUUID: AccountMethods.LoadByUUID
   loadByUrl: AccountMethods.LoadByUrl
-  loadLocalAccountByName: AccountMethods.LoadLocalAccountByName
+  loadLocalAccountByNameAndPod: AccountMethods.LoadLocalAccountByNameAndPod
   listOwned: AccountMethods.ListOwned
   listFollowerUrlsForApi: AccountMethods.ListFollowerUrlsForApi
   listFollowingUrlsForApi: AccountMethods.ListFollowingUrlsForApi
+  listFollowingForApi: AccountMethods.ListFollowingForApi
+  listFollowersForApi: AccountMethods.ListFollowersForApi
 }
 
 export interface AccountAttributes {
@@ -58,6 +65,7 @@ export interface AccountAttributes {
 export interface AccountInstance extends AccountClass, AccountAttributes, Sequelize.Instance<AccountAttributes> {
   isOwned: AccountMethods.IsOwned
   toActivityPubObject: AccountMethods.ToActivityPubObject
+  toFormattedJSON: AccountMethods.ToFormattedJSON
   getFollowerSharedInboxUrls: AccountMethods.GetFollowerSharedInboxUrls
   getFollowingUrl: AccountMethods.GetFollowingUrl
   getFollowersUrl: AccountMethods.GetFollowersUrl
