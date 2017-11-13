@@ -198,6 +198,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
     loadApplication,
     load,
     loadByUUID,
+    loadByUrl,
     loadLocalAccountByNameAndPod,
     listOwned,
     listFollowerUrlsForApi,
@@ -480,11 +481,12 @@ loadLocalAccountByNameAndPod = function (name: string, host: string) {
   return Account.findOne(query)
 }
 
-loadByUrl = function (url: string) {
+loadByUrl = function (url: string, transaction?: Sequelize.Transaction) {
   const query: Sequelize.FindOptions<AccountAttributes> = {
     where: {
       url
-    }
+    },
+    transaction
   }
 
   return Account.findOne(query)

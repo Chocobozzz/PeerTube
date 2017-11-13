@@ -29,7 +29,7 @@ export {
 
 function processAddVideo (account: AccountInstance, videoChannelUrl: string, video: VideoTorrentObject) {
   const options = {
-    arguments: [ account, videoChannelUrl ,video ],
+    arguments: [ account, videoChannelUrl, video ],
     errorMessage: 'Cannot insert the remote video with many retries.'
   }
 

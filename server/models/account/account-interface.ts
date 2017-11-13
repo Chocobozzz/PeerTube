@@ -10,7 +10,7 @@ export namespace AccountMethods {
 
   export type Load = (id: number) => Bluebird<AccountInstance>
   export type LoadByUUID = (uuid: string) => Bluebird<AccountInstance>
-  export type LoadByUrl = (url: string) => Bluebird<AccountInstance>
+  export type LoadByUrl = (url: string, transaction?: Sequelize.Transaction) => Bluebird<AccountInstance>
   export type LoadAccountByPodAndUUID = (uuid: string, podId: number, transaction: Sequelize.Transaction) => Bluebird<AccountInstance>
   export type LoadLocalAccountByNameAndPod = (name: string, host: string) => Bluebird<AccountInstance>
   export type ListOwned = () => Bluebird<AccountInstance[]>
