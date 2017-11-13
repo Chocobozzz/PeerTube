@@ -224,67 +224,6 @@
 //   logger.info('Remote video with uuid %s quick and dirty updated', videoUUID)
 // }
 //
-// async function removeRemoteVideoRetryWrapper (videoToRemoveData: RemoteVideoRemoveData, fromPod: PodInstance) {
-//   const options = {
-//     arguments: [ videoToRemoveData, fromPod ],
-//     errorMessage: 'Cannot remove the remote video channel with many retries.'
-//   }
-//
-//   await retryTransactionWrapper(removeRemoteVideo, options)
-// }
-//
-// async function removeRemoteVideo (videoToRemoveData: RemoteVideoRemoveData, fromPod: PodInstance) {
-//   logger.debug('Removing remote video "%s".', videoToRemoveData.uuid)
-//
-//   await db.sequelize.transaction(async t => {
-//     // We need the instance because we have to remove some other stuffs (thumbnail etc)
-//     const videoInstance = await fetchVideoByHostAndUUID(fromPod.host, videoToRemoveData.uuid, t)
-//     await videoInstance.destroy({ transaction: t })
-//   })
-//
-//   logger.info('Remote video with uuid %s removed.', videoToRemoveData.uuid)
-// }
-//
-// async function removeRemoteVideoAccountRetryWrapper (accountAttributesToRemove: RemoteVideoAccountRemoveData, fromPod: PodInstance) {
-//   const options = {
-//     arguments: [ accountAttributesToRemove, fromPod ],
-//     errorMessage: 'Cannot remove the remote video account with many retries.'
-//   }
-//
-//   await retryTransactionWrapper(removeRemoteVideoAccount, options)
-// }
-//
-// async function removeRemoteVideoAccount (accountAttributesToRemove: RemoteVideoAccountRemoveData, fromPod: PodInstance) {
-//   logger.debug('Removing remote video account "%s".', accountAttributesToRemove.uuid)
-//
-//   await db.sequelize.transaction(async t => {
-//     const videoAccount = await db.Account.loadAccountByPodAndUUID(accountAttributesToRemove.uuid, fromPod.id, t)
-//     await videoAccount.destroy({ transaction: t })
-//   })
-//
-//   logger.info('Remote video account with uuid %s removed.', accountAttributesToRemove.uuid)
-// }
-//
-// async function removeRemoteVideoChannelRetryWrapper (videoChannelAttributesToRemove: RemoteVideoChannelRemoveData, fromPod: PodInstance) {
-//   const options = {
-//     arguments: [ videoChannelAttributesToRemove, fromPod ],
-//     errorMessage: 'Cannot remove the remote video channel with many retries.'
-//   }
-//
-//   await retryTransactionWrapper(removeRemoteVideoChannel, options)
-// }
-//
-// async function removeRemoteVideoChannel (videoChannelAttributesToRemove: RemoteVideoChannelRemoveData, fromPod: PodInstance) {
-//   logger.debug('Removing remote video channel "%s".', videoChannelAttributesToRemove.uuid)
-//
-//   await db.sequelize.transaction(async t => {
-//     const videoChannel = await fetchVideoChannelByHostAndUUID(fromPod.host, videoChannelAttributesToRemove.uuid, t)
-//     await videoChannel.destroy({ transaction: t })
-//   })
-//
-//   logger.info('Remote video channel with uuid %s removed.', videoChannelAttributesToRemove.uuid)
-// }
-//
 // async function reportAbuseRemoteVideoRetryWrapper (reportData: RemoteVideoReportAbuseData, fromPod: PodInstance) {
 //   const options = {
 //     arguments: [ reportData, fromPod ],

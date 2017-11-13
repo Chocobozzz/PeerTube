@@ -1,21 +1,20 @@
-import { param } from 'express-validator/check'
 import * as express from 'express'
-
-import { database as db } from '../../initializers/database'
-import { checkErrors } from './utils'
+import { param } from 'express-validator/check'
 import {
-  logger,
-  isUserUsernameValid,
-  isUserPasswordValid,
-  isUserVideoQuotaValid,
   isUserDisplayNSFWValid,
+  isUserPasswordValid,
   isUserRoleValid,
-  isAccountNameValid
+  isUserUsernameValid,
+  isUserVideoQuotaValid,
+  logger
 } from '../../helpers'
+import { isAccountNameWithHostValid } from '../../helpers/custom-validators/video-accounts'
+import { database as db } from '../../initializers/database'
 import { AccountInstance } from '../../models'
+import { checkErrors } from './utils'
 
 const localAccountValidator = [
-  param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),
+  param('nameWithHost').custom(isAccountNameWithHostValid).withMessage('Should have a valid account with domain name (myuser@domain.tld)'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking localAccountValidator parameters', { parameters: req.params })
@@ -34,8 +33,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkLocalAccountExists (name: string, res: express.Response, callback: (err: Error, account: AccountInstance) => void) {
-  db.Account.loadLocalAccountByName(name)
+function checkLocalAccountExists (nameWithHost: string, res: express.Response, callback: (err: Error, account: AccountInstance) => void) {
+  const [ name, host ] = nameWithHost.split('@')
+
+  db.Account.loadLocalAccountByNameAndPod(name, host)
     .then(account => {
       if (!account) {
         return res.status(404)

@@ -16,12 +16,12 @@ activityPubClientRouter.get('/account/:name',
   executeIfActivityPub(asyncMiddleware(accountController))
 )
 
-activityPubClientRouter.get('/account/:name/followers',
+activityPubClientRouter.get('/account/:nameWithHost/followers',
   executeIfActivityPub(localAccountValidator),
   executeIfActivityPub(asyncMiddleware(accountFollowersController))
 )
 
-activityPubClientRouter.get('/account/:name/following',
+activityPubClientRouter.get('/account/:nameWithHost/following',
   executeIfActivityPub(localAccountValidator),
   executeIfActivityPub(asyncMiddleware(accountFollowingController))
 )
@@ -46,7 +46,7 @@ async function accountFollowersController (req: express.Request, res: express.Re
   const page = req.params.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await db.Account.listFollowerUrlsForApi(account.name, start, count)
+  const result = await db.Account.listFollowerUrlsForApi(account.id, start, count)
   const activityPubResult = activityPubCollectionPagination(req.url, page, result)
 
   return res.json(activityPubResult)
@@ -58,7 +58,7 @@ async function accountFollowingController (req: express.Request, res: express.Re
   const page = req.params.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await db.Account.listFollowingUrlsForApi(account.name, start, count)
+  const result = await db.Account.listFollowingUrlsForApi(account.id, start, count)
   const activityPubResult = activityPubCollectionPagination(req.url, page, result)
 
   return res.json(activityPubResult)

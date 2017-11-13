@@ -9,6 +9,7 @@ import {
 
   VideoChannelMethods
 } from './video-channel-interface'
+import { sendDeleteVideoChannel } from '../../lib/activitypub/send-request'
 
 let VideoChannel: Sequelize.Model<VideoChannelInstance, VideoChannelAttributes>
 let toFormattedJSON: VideoChannelMethods.ToFormattedJSON
@@ -176,11 +177,7 @@ function associate (models) {
 
 function afterDestroy (videoChannel: VideoChannelInstance) {
   if (videoChannel.isOwned()) {
-    const removeVideoChannelToFriendsParams = {
-      uuid: videoChannel.uuid
-    }
-
-    // FIXME: send remove event to followers
+    return sendDeleteVideoChannel(videoChannel, undefined)
   }
 
   return undefined

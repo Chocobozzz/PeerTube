@@ -1,16 +1,27 @@
 import * as express from 'express'
 import { getFormattedObjects } from '../../helpers'
+import { getApplicationAccount } from '../../helpers/utils'
 import { database as db } from '../../initializers/database'
-import { asyncMiddleware, paginationValidator, podsSortValidator, setPagination, setPodsSort } from '../../middlewares'
+import { asyncMiddleware, paginationValidator, setFollowersSort, setPagination } from '../../middlewares'
+import { setFollowingSort } from '../../middlewares/sort'
+import { followersSortValidator, followingSortValidator } from '../../middlewares/validators/sort'
 
 const podsRouter = express.Router()
 
-podsRouter.get('/',
+podsRouter.get('/following',
   paginationValidator,
-  podsSortValidator,
-  setPodsSort,
+  followingSortValidator,
+  setFollowingSort,
   setPagination,
-  asyncMiddleware(listPods)
+  asyncMiddleware(listFollowing)
+)
+
+podsRouter.get('/followers',
+  paginationValidator,
+  followersSortValidator,
+  setFollowersSort,
+  setPagination,
+  asyncMiddleware(listFollowers)
 )
 
 // ---------------------------------------------------------------------------
@@ -21,8 +32,16 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listPods (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.Pod.listForApi(req.query.start, req.query.count, req.query.sort)
+async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const applicationAccount = await getApplicationAccount()
+  const resultList = await db.Account.listFollowingForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
+
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const applicationAccount = await getApplicationAccount()
+  const resultList = await db.Account.listFollowersForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

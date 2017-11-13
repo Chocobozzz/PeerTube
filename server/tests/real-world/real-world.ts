@@ -3,7 +3,6 @@ import * as program from 'commander'
 // /!\ Before imports /!\
 process.env.NODE_ENV = 'test'
 
-import { REQUESTS_INTERVAL } from '../../initializers/constants'
 import { Video, VideoRateType, VideoFile } from '../../../shared'
 import {
   ServerInfo as DefaultServerInfo,
@@ -137,7 +136,7 @@ async function start () {
       initializeRequestsPerServer(servers)
       checking = false
       clearInterval(waitingInterval)
-    }, REQUESTS_INTERVAL)
+    }, 10000)
   }, integrityInterval)
 }
 

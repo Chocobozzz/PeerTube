@@ -3,22 +3,37 @@ import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, Activity
 import { logger } from '../../helpers'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
 import { processCreateActivity, processFlagActivity, processUpdateActivity } from '../../lib'
+import { processAcceptActivity } from '../../lib/activitypub/process-accept'
 import { processAddActivity } from '../../lib/activitypub/process-add'
-import { asyncMiddleware, checkSignature, signatureValidator } from '../../middlewares'
+import { processDeleteActivity } from '../../lib/activitypub/process-delete'
+import { processFollowActivity } from '../../lib/activitypub/process-follow'
+import { asyncMiddleware, checkSignature, localAccountValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
+import { AccountInstance } from '../../models/account/account-interface'
 
-const processActivity: { [ P in ActivityType ]: (activity: Activity) => Promise<any> } = {
+const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccount?: AccountInstance) => Promise<any> } = {
   Create: processCreateActivity,
   Add: processAddActivity,
   Update: processUpdateActivity,
-  Flag: processFlagActivity
+  Flag: processFlagActivity,
+  Delete: processDeleteActivity,
+  Follow: processFollowActivity,
+  Accept: processAcceptActivity
 }
 
 const inboxRouter = express.Router()
 
-inboxRouter.post('/',
+inboxRouter.post('/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
+  activityPubValidator,
+  asyncMiddleware(inboxController)
+)
+
+inboxRouter.post('/:nameWithHost/inbox',
+  signatureValidator,
+  asyncMiddleware(checkSignature),
+  localAccountValidator,
   activityPubValidator,
   asyncMiddleware(inboxController)
 )
@@ -46,12 +61,12 @@ async function inboxController (req: express.Request, res: express.Response, nex
   // Only keep activities we are able to process
   activities = activities.filter(a => isActivityValid(a))
 
-  await processActivities(activities)
+  await processActivities(activities, res.locals.account)
 
   res.status(204).end()
 }
 
-async function processActivities (activities: Activity[]) {
+async function processActivities (activities: Activity[], inboxAccount?: AccountInstance) {
   for (const activity of activities) {
     const activityProcessor = processActivity[activity.type]
     if (activityProcessor === undefined) {
@@ -59,6 +74,6 @@ async function processActivities (activities: Activity[]) {
       continue
     }
 
-    await activityProcessor(activity)
+    await activityProcessor(activity, inboxAccount)
   }
 }

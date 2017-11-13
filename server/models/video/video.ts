@@ -45,6 +45,7 @@ import { addMethodsToModel, getSort } from '../utils'
 import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
+import { sendDeleteVideo } from '../../lib/activitypub/send-request'
 
 const Buffer = safeBuffer.Buffer
 
@@ -363,13 +364,9 @@ function afterDestroy (video: VideoInstance) {
   )
 
   if (video.isOwned()) {
-    const removeVideoToFriendsParams = {
-      uuid: video.uuid
-    }
-
     tasks.push(
-      video.removePreview()
-      // FIXME: remove video for followers
+      video.removePreview(),
+      sendDeleteVideo(video, undefined)
     )
 
     // Remove physical files and torrents

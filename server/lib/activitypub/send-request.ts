@@ -25,8 +25,7 @@ function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Sequeliz
 }
 
 function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
-  const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = deleteActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
+  const data = deleteActivityData(videoChannel.url, videoChannel.Account)
 
   return broadcastToFollowers(data, videoChannel.Account, t)
 }
@@ -46,10 +45,15 @@ function sendUpdateVideo (video: VideoInstance, t: Sequelize.Transaction) {
 }
 
 function sendDeleteVideo (video: VideoInstance, t: Sequelize.Transaction) {
-  const videoObject = video.toActivityPubObject()
-  const data = deleteActivityData(video.url, video.VideoChannel.Account, videoObject)
+  const data = deleteActivityData(video.url, video.VideoChannel.Account)
 
   return broadcastToFollowers(data, video.VideoChannel.Account, t)
+}
+
+function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transaction) {
+  const data = deleteActivityData(account.url, account)
+
+  return broadcastToFollowers(data, account, t)
 }
 
 // ---------------------------------------------------------------------------
@@ -60,13 +64,14 @@ export {
   sendDeleteVideoChannel,
   sendAddVideo,
   sendUpdateVideo,
-  sendDeleteVideo
+  sendDeleteVideo,
+  sendDeleteAccount
 }
 
 // ---------------------------------------------------------------------------
 
 async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t: Sequelize.Transaction) {
-  const result = await db.Account.listFollowerUrlsForApi(fromAccount.name, 0)
+  const result = await db.Account.listFollowerUrlsForApi(fromAccount.id, 0)
 
   const jobPayload = {
     uris: result.data,
@@ -114,14 +119,11 @@ async function updateActivityData (url: string, byAccount: AccountInstance, obje
   return buildSignedActivity(byAccount, base)
 }
 
-async function deleteActivityData (url: string, byAccount: AccountInstance, object: any) {
-  const to = await getPublicActivityTo(byAccount)
+async function deleteActivityData (url: string, byAccount: AccountInstance) {
   const base = {
-    type: 'Update',
+    type: 'Delete',
     id: url,
-    actor: byAccount.url,
-    to,
-    object
+    actor: byAccount.url
   }
 
   return buildSignedActivity(byAccount, base)

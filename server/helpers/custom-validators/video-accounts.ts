@@ -8,9 +8,16 @@ import { AccountInstance } from '../../models'
 import { logger } from '../logger'
 
 import { isUserUsernameValid } from './users'
+import { isHostValid } from './pods'
 
 function isVideoAccountNameValid (value: string) {
   return isUserUsernameValid(value)
+}
+
+function isAccountNameWithHostValid (value: string) {
+  const [ name, host ] = value.split('@')
+
+  return isVideoAccountNameValid(name) && isHostValid(host)
 }
 
 function checkVideoAccountExists (id: string, res: express.Response, callback: () => void) {
@@ -41,5 +48,6 @@ function checkVideoAccountExists (id: string, res: express.Response, callback: (
 
 export {
   checkVideoAccountExists,
+  isAccountNameWithHostValid,
   isVideoAccountNameValid
 }

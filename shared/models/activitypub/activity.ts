@@ -4,10 +4,11 @@ import {
 } from './objects'
 import { ActivityPubSignature } from './activitypub-signature'
 
-export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate | ActivityFlag
+export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate | ActivityFlag |
+  ActivityDelete | ActivityFollow | ActivityAccept
 
 // Flag -> report abuse
-export type ActivityType = 'Create' | 'Add' | 'Update' | 'Flag'
+export type ActivityType = 'Create' | 'Add' | 'Update' | 'Flag' | 'Delete' | 'Follow' | 'Accept'
 
 export interface BaseActivity {
   '@context'?: any[]
@@ -36,4 +37,17 @@ export interface ActivityUpdate extends BaseActivity {
 export interface ActivityFlag extends BaseActivity {
   type: 'Flag'
   object: string
+}
+
+export interface ActivityDelete extends BaseActivity {
+  type: 'Delete'
+}
+
+export interface ActivityFollow extends BaseActivity {
+  type: 'Follow'
+  object: string
+}
+
+export interface ActivityAccept extends BaseActivity {
+  type: 'Accept'
 }
