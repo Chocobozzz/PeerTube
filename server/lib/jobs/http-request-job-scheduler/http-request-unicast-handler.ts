@@ -7,6 +7,7 @@ async function process (payload: HTTPRequestPayload, jobId: number) {
 
   const uri = payload.uris[0]
   const options = {
+    method: 'POST',
     uri,
     json: payload.body
   }

@@ -1,9 +1,13 @@
 import * as validator from 'validator'
+import { isAccountAcceptActivityValid, isAccountDeleteActivityValid, isAccountFollowActivityValid } from './account'
+import { isActivityPubUrlValid } from './misc'
 import {
   isVideoChannelCreateActivityValid,
+  isVideoChannelDeleteActivityValid,
+  isVideoChannelUpdateActivityValid,
   isVideoTorrentAddActivityValid,
-  isVideoTorrentUpdateActivityValid,
-  isVideoChannelUpdateActivityValid
+  isVideoTorrentDeleteActivityValid,
+  isVideoTorrentUpdateActivityValid
 } from './videos'
 
 function isRootActivityValid (activity: any) {
@@ -14,8 +18,8 @@ function isRootActivityValid (activity: any) {
       Array.isArray(activity.items)
     ) ||
     (
-      validator.isURL(activity.id) &&
-      validator.isURL(activity.actor)
+      isActivityPubUrlValid(activity.id) &&
+      isActivityPubUrlValid(activity.actor)
     )
 }
 
@@ -23,7 +27,12 @@ function isActivityValid (activity: any) {
   return isVideoTorrentAddActivityValid(activity) ||
     isVideoChannelCreateActivityValid(activity) ||
     isVideoTorrentUpdateActivityValid(activity) ||
-    isVideoChannelUpdateActivityValid(activity)
+    isVideoChannelUpdateActivityValid(activity) ||
+    isVideoTorrentDeleteActivityValid(activity) ||
+    isVideoChannelDeleteActivityValid(activity) ||
+    isAccountDeleteActivityValid(activity) ||
+    isAccountFollowActivityValid(activity) ||
+    isAccountAcceptActivityValid(activity)
 }
 
 // ---------------------------------------------------------------------------

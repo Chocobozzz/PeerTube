@@ -8,13 +8,13 @@ import {
   isUserVideoQuotaValid,
   logger
 } from '../../helpers'
-import { isAccountNameWithHostValid } from '../../helpers/custom-validators/video-accounts'
+import { isAccountNameValid } from '../../helpers/custom-validators/accounts'
 import { database as db } from '../../initializers/database'
 import { AccountInstance } from '../../models'
 import { checkErrors } from './utils'
 
 const localAccountValidator = [
-  param('nameWithHost').custom(isAccountNameWithHostValid).withMessage('Should have a valid account with domain name (myuser@domain.tld)'),
+  param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking localAccountValidator parameters', { parameters: req.params })
@@ -33,10 +33,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkLocalAccountExists (nameWithHost: string, res: express.Response, callback: (err: Error, account: AccountInstance) => void) {
-  const [ name, host ] = nameWithHost.split('@')
-
-  db.Account.loadLocalAccountByNameAndPod(name, host)
+function checkLocalAccountExists (name: string, res: express.Response, callback: (err: Error, account: AccountInstance) => void) {
+  db.Account.loadLocalByName(name)
     .then(account => {
       if (!account) {
         return res.status(404)

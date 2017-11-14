@@ -19,11 +19,13 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     {
       indexes: [
         {
-          fields: [ 'accountId' ],
-          unique: true
+          fields: [ 'accountId' ]
         },
         {
-          fields: [ 'targetAccountId' ],
+          fields: [ 'targetAccountId' ]
+        },
+        {
+          fields: [ 'accountId', 'targetAccountId' ],
           unique: true
         }
       ]
@@ -31,7 +33,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
   )
 
   const classMethods = [
-    associate
+    associate,
+    loadByAccountAndTarget
   ]
   addMethodsToModel(AccountFollow, classMethods)
 
@@ -46,7 +49,7 @@ function associate (models) {
       name: 'accountId',
       allowNull: false
     },
-    as: 'followers',
+    as: 'accountFollowers',
     onDelete: 'CASCADE'
   })
 
@@ -55,7 +58,7 @@ function associate (models) {
       name: 'targetAccountId',
       allowNull: false
     },
-    as: 'following',
+    as: 'accountFollowing',
     onDelete: 'CASCADE'
   })
 }

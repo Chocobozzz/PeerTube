@@ -31,7 +31,8 @@ let load: AccountMethods.Load
 let loadApplication: AccountMethods.LoadApplication
 let loadByUUID: AccountMethods.LoadByUUID
 let loadByUrl: AccountMethods.LoadByUrl
-let loadLocalAccountByNameAndPod: AccountMethods.LoadLocalAccountByNameAndPod
+let loadLocalByName: AccountMethods.LoadLocalByName
+let loadByNameAndHost: AccountMethods.LoadByNameAndHost
 let listOwned: AccountMethods.ListOwned
 let listAcceptedFollowerUrlsForApi: AccountMethods.ListAcceptedFollowerUrlsForApi
 let listAcceptedFollowingUrlsForApi: AccountMethods.ListAcceptedFollowingUrlsForApi
@@ -88,7 +89,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
       },
       privateKey: {
         type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PRIVATE_KEY.max),
-        allowNull: false,
+        allowNull: true,
         validate: {
           privateKeyValid: value => {
             const res = isAccountPrivateKeyValid(value)
@@ -199,7 +200,8 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
     load,
     loadByUUID,
     loadByUrl,
-    loadLocalAccountByNameAndPod,
+    loadLocalByName,
+    loadByNameAndHost,
     listOwned,
     listAcceptedFollowerUrlsForApi,
     listAcceptedFollowingUrlsForApi,
@@ -330,6 +332,8 @@ getFollowerSharedInboxUrls = function (this: AccountInstance) {
     include: [
       {
         model: Account['sequelize'].models.AccountFollow,
+        required: true,
+        as: 'followers',
         where: {
           targetAccountId: this.id
         }
@@ -387,7 +391,7 @@ listFollowingForApi = function (id: number, start: number, count: number, sort: 
         include: [
           {
             model: Account['sequelize'].models.Account,
-            as: 'following',
+            as: 'accountFollowing',
             required: true,
             include: [ Account['sequelize'].models.Pod ]
           }
@@ -418,7 +422,7 @@ listFollowersForApi = function (id: number, start: number, count: number, sort: 
         include: [
           {
             model: Account['sequelize'].models.Account,
-            as: 'followers',
+            as: 'accountFollowers',
             required: true,
             include: [ Account['sequelize'].models.Pod ]
           }
@@ -439,7 +443,7 @@ loadApplication = function () {
   return Account.findOne({
     include: [
       {
-        model: Account['sequelize'].model.Application,
+        model: Account['sequelize'].models.Application,
         required: true
       }
     ]
@@ -460,17 +464,37 @@ loadByUUID = function (uuid: string) {
   return Account.findOne(query)
 }
 
-loadLocalAccountByNameAndPod = function (name: string, host: string) {
+loadLocalByName = function (name: string) {
   const query: Sequelize.FindOptions<AccountAttributes> = {
     where: {
       name,
-      userId: {
-        [Sequelize.Op.ne]: null
-      }
+      [Sequelize.Op.or]: [
+        {
+          userId: {
+            [Sequelize.Op.ne]: null
+          }
+        },
+        {
+          applicationId: {
+            [Sequelize.Op.ne]: null
+          }
+        }
+      ]
+    }
+  }
+
+  return Account.findOne(query)
+}
+
+loadByNameAndHost = function (name: string, host: string) {
+  const query: Sequelize.FindOptions<AccountAttributes> = {
+    where: {
+      name
     },
     include: [
       {
         model: Account['sequelize'].models.Pod,
+        required: true,
         where: {
           host
         }

@@ -1,9 +1,8 @@
 import * as validator from 'validator'
-
-import { exists, isUUIDValid } from '../misc'
-import { isActivityPubUrlValid } from './misc'
-import { isUserUsernameValid } from '../users'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { isAccountNameValid } from '../accounts'
+import { exists, isUUIDValid } from '../misc'
+import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
 function isAccountEndpointsObjectValid (endpointObject: any) {
   return isAccountSharedInboxValid(endpointObject.sharedInbox)
@@ -59,10 +58,6 @@ function isAccountOutboxValid (outbox: string) {
   return isActivityPubUrlValid(outbox)
 }
 
-function isAccountNameValid (name: string) {
-  return isUserUsernameValid(name)
-}
-
 function isAccountPreferredUsernameValid (preferredUsername: string) {
   return isAccountNameValid(preferredUsername)
 }
@@ -90,7 +85,7 @@ function isRemoteAccountValid (remoteAccount: any) {
     isAccountPreferredUsernameValid(remoteAccount.preferredUsername) &&
     isAccountUrlValid(remoteAccount.url) &&
     isAccountPublicKeyObjectValid(remoteAccount.publicKey) &&
-    isAccountEndpointsObjectValid(remoteAccount.endpoint)
+    isAccountEndpointsObjectValid(remoteAccount.endpoints)
 }
 
 function isAccountFollowingCountValid (value: string) {
@@ -99,6 +94,19 @@ function isAccountFollowingCountValid (value: string) {
 
 function isAccountFollowersCountValid (value: string) {
   return exists(value) && validator.isInt('' + value, { min: 0 })
+}
+
+function isAccountDeleteActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Delete')
+}
+
+function isAccountFollowActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Follow') &&
+    isActivityPubUrlValid(activity.object)
+}
+
+function isAccountAcceptActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Accept')
 }
 
 // ---------------------------------------------------------------------------
@@ -122,5 +130,8 @@ export {
   isRemoteAccountValid,
   isAccountFollowingCountValid,
   isAccountFollowersCountValid,
-  isAccountNameValid
+  isAccountNameValid,
+  isAccountFollowActivityValid,
+  isAccountAcceptActivityValid,
+  isAccountDeleteActivityValid
 }

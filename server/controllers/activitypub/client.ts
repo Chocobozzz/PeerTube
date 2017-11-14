@@ -16,12 +16,12 @@ activityPubClientRouter.get('/account/:name',
   executeIfActivityPub(asyncMiddleware(accountController))
 )
 
-activityPubClientRouter.get('/account/:nameWithHost/followers',
+activityPubClientRouter.get('/account/:name/followers',
   executeIfActivityPub(localAccountValidator),
   executeIfActivityPub(asyncMiddleware(accountFollowersController))
 )
 
-activityPubClientRouter.get('/account/:nameWithHost/following',
+activityPubClientRouter.get('/account/:name/following',
   executeIfActivityPub(localAccountValidator),
   executeIfActivityPub(asyncMiddleware(accountFollowingController))
 )

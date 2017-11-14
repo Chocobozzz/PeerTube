@@ -36,14 +36,18 @@ async function follow (account: AccountInstance, targetAccountURL: string) {
     if (targetAccount === undefined) throw new Error('Unknown account')
     if (targetAccount.isOwned() === false) throw new Error('This is not a local account.')
 
-    const sequelizeOptions = {
+    await db.AccountFollow.findOrCreate({
+      where: {
+        accountId: account.id,
+        targetAccountId: targetAccount.id
+      },
+      defaults: {
+        accountId: account.id,
+        targetAccountId: targetAccount.id,
+        state: 'accepted'
+      },
       transaction: t
-    }
-    await db.AccountFollow.create({
-      accountId: account.id,
-      targetAccountId: targetAccount.id,
-      state: 'accepted'
-    }, sequelizeOptions)
+    })
 
     // Target sends to account he accepted the follow request
     return sendAccept(targetAccount, account, t)

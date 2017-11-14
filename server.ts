@@ -47,7 +47,7 @@ db.init(false).then(() => onDatabaseInitDone())
 // ----------- PeerTube modules -----------
 import { migrate, installApplication } from './server/initializers'
 import { httpRequestJobScheduler, transcodingJobScheduler, VideosPreviewCache } from './server/lib'
-import { apiRouter, clientsRouter, staticRouter, servicesRouter } from './server/controllers'
+import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
 
 // ----------- Command line -----------
 
@@ -114,6 +114,9 @@ app.use(apiRoute, apiRouter)
 
 // Services (oembed...)
 app.use('/services', servicesRouter)
+
+app.use('/', webfingerRouter)
+app.use('/', activityPubRouter)
 
 // Client files
 app.use('/', clientsRouter)

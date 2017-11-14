@@ -4,12 +4,12 @@
 
     <p-dataTable
         [value]="friends" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-        sortField="id" (onLazyLoad)="loadLazy($event)"
+        sortField="createdAt" (onLazyLoad)="loadLazy($event)"
     >
-      <p-column field="id" header="ID" [sortable]="true"></p-column>
-      <p-column field="host" header="Host" [sortable]="true"></p-column>
+      <p-column field="id" header="ID"></p-column>
+      <p-column field="host" header="Host"></p-column>
       <p-column field="email" header="Email"></p-column>
-      <p-column field="score" header="Score" [sortable]="true"></p-column>
+      <p-column field="score" header="Score"></p-column>
       <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
       <p-column header="Delete" styleClass="action-cell">
         <ng-template pTemplate="body" let-pod="rowData">

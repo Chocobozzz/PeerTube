@@ -11,6 +11,7 @@ import {
 let Application: Sequelize.Model<ApplicationInstance, ApplicationAttributes>
 let loadMigrationVersion: ApplicationMethods.LoadMigrationVersion
 let updateMigrationVersion: ApplicationMethods.UpdateMigrationVersion
+let countTotal: ApplicationMethods.CountTotal
 
 export default function defineApplication (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Application = sequelize.define<ApplicationInstance, ApplicationAttributes>('Application',
@@ -26,13 +27,21 @@ export default function defineApplication (sequelize: Sequelize.Sequelize, DataT
     }
   )
 
-  const classMethods = [ loadMigrationVersion, updateMigrationVersion ]
+  const classMethods = [
+    countTotal,
+    loadMigrationVersion,
+    updateMigrationVersion
+  ]
   addMethodsToModel(Application, classMethods)
 
   return Application
 }
 
 // ---------------------------------------------------------------------------
+
+countTotal = function () {
+  return this.count()
+}
 
 loadMigrationVersion = function () {
   const query = {

@@ -1,18 +1,21 @@
 import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 
 export namespace ApplicationMethods {
-  export type LoadMigrationVersion = () => Promise<number>
+  export type LoadMigrationVersion = () => Bluebird<number>
 
   export type UpdateMigrationVersion = (
     newVersion: number,
     transaction: Sequelize.Transaction
-  ) => Promise<[ number, ApplicationInstance[] ]>
+  ) => Bluebird<[ number, ApplicationInstance[] ]>
+
+  export type CountTotal = () => Bluebird<number>
 }
 
 export interface ApplicationClass {
   loadMigrationVersion: ApplicationMethods.LoadMigrationVersion
   updateMigrationVersion: ApplicationMethods.UpdateMigrationVersion
+  countTotal: ApplicationMethods.CountTotal
 }
 
 export interface ApplicationAttributes {

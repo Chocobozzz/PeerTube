@@ -5,7 +5,7 @@ import { ActivityIconObject } from '../../shared/index'
 import { ActivityPubActor } from '../../shared/models/activitypub/activitypub-actor'
 import { ResultList } from '../../shared/models/result-list.model'
 import { database as db, REMOTE_SCHEME } from '../initializers'
-import { CONFIG, STATIC_PATHS } from '../initializers/constants'
+import { ACTIVITY_PUB_ACCEPT_HEADER, CONFIG, STATIC_PATHS } from '../initializers/constants'
 import { VideoInstance } from '../models/video/video-interface'
 import { isRemoteAccountValid } from './custom-validators'
 import { logger } from './logger'
@@ -35,11 +35,11 @@ async function getOrCreateAccount (accountUrl: string) {
 
   // We don't have this account in our database, fetch it on remote
   if (!account) {
-    const { account } = await fetchRemoteAccountAndCreatePod(accountUrl)
-
-    if (!account) throw new Error('Cannot fetch remote account.')
+    const res = await fetchRemoteAccountAndCreatePod(accountUrl)
+    if (res === undefined) throw new Error('Cannot fetch remote account.')
 
     // Save our new account in database
+    const account = res.account
     await account.save()
   }
 
@@ -49,19 +49,27 @@ async function getOrCreateAccount (accountUrl: string) {
 async function fetchRemoteAccountAndCreatePod (accountUrl: string) {
   const options = {
     uri: accountUrl,
-    method: 'GET'
+    method: 'GET',
+    headers: {
+      'Accept': ACTIVITY_PUB_ACCEPT_HEADER
+    }
   }
+
+  logger.info('Fetching remote account %s.', accountUrl)
 
   let requestResult
   try {
     requestResult = await doRequest(options)
   } catch (err) {
-    logger.warning('Cannot fetch remote account %s.', accountUrl, err)
+    logger.warn('Cannot fetch remote account %s.', accountUrl, err)
     return undefined
   }
 
-  const accountJSON: ActivityPubActor = requestResult.body
-  if (isRemoteAccountValid(accountJSON) === false) return undefined
+  const accountJSON: ActivityPubActor = JSON.parse(requestResult.body)
+  if (isRemoteAccountValid(accountJSON) === false) {
+    logger.debug('Remote account JSON is not valid.', { accountJSON })
+    return undefined
+  }
 
   const followersCount = await fetchAccountCount(accountJSON.followers)
   const followingCount = await fetchAccountCount(accountJSON.following)
@@ -90,7 +98,8 @@ async function fetchRemoteAccountAndCreatePod (accountUrl: string) {
       host: accountHost
     }
   }
-  const pod = await db.Pod.findOrCreate(podOptions)
+  const [ pod ] = await db.Pod.findOrCreate(podOptions)
+  account.set('podId', pod.id)
 
   return { account, pod }
 }
@@ -176,7 +185,7 @@ async function fetchAccountCount (url: string) {
   try {
     requestResult = await doRequest(options)
   } catch (err) {
-    logger.warning('Cannot fetch remote account count %s.', url, err)
+    logger.warn('Cannot fetch remote account count %s.', url, err)
     return undefined
   }
 

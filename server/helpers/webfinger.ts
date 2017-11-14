@@ -12,17 +12,20 @@ const webfinger = new WebFinger({
   request_timeout: 3000
 })
 
-async function getAccountFromWebfinger (url: string) {
-  const webfingerData: WebFingerData = await webfingerLookup(url)
+async function getAccountFromWebfinger (nameWithHost: string) {
+  const webfingerData: WebFingerData = await webfingerLookup(nameWithHost)
 
-  if (Array.isArray(webfingerData.links) === false) return undefined
+  if (Array.isArray(webfingerData.links) === false) throw new Error('WebFinger links is not an array.')
 
   const selfLink = webfingerData.links.find(l => l.rel === 'self')
-  if (selfLink === undefined || isActivityPubUrlValid(selfLink.href) === false) return undefined
+  if (selfLink === undefined || isActivityPubUrlValid(selfLink.href) === false) {
+    throw new Error('Cannot find self link or href is not a valid URL.')
+  }
 
-  const { account } = await fetchRemoteAccountAndCreatePod(selfLink.href)
+  const res = await fetchRemoteAccountAndCreatePod(selfLink.href)
+  if (res === undefined) throw new Error('Cannot fetch and create pod of remote account ' + selfLink.href)
 
-  return account
+  return res.account
 }
 
 // ---------------------------------------------------------------------------
@@ -33,12 +36,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function webfingerLookup (url: string) {
+function webfingerLookup (nameWithHost: string) {
   return new Promise<WebFingerData>((res, rej) => {
-    webfinger.lookup(url, (err, p) => {
+    webfinger.lookup(nameWithHost, (err, p) => {
       if (err) return rej(err)
 
-      return p
+      return res(p.object)
     })
   })
 }

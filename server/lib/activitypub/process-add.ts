@@ -54,7 +54,7 @@ async function addRemoteVideo (account: AccountInstance, videoChannelUrl: string
 
     // Don't block on request
     generateThumbnailFromUrl(video, videoToCreateData.icon)
-      .catch(err => logger.warning('Cannot generate thumbnail of %s.', videoToCreateData.id, err))
+      .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoToCreateData.id, err))
 
     const videoCreated = await video.save(sequelizeOptions)
 
