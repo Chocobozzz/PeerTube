@@ -10,14 +10,14 @@ import { logger } from '../logger'
 import { isUserUsernameValid } from './users'
 import { isHostValid } from './pods'
 
-function isVideoAccountNameValid (value: string) {
+function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
 }
 
 function isAccountNameWithHostValid (value: string) {
   const [ name, host ] = value.split('@')
 
-  return isVideoAccountNameValid(name) && isHostValid(host)
+  return isAccountNameValid(name) && isHostValid(host)
 }
 
 function checkVideoAccountExists (id: string, res: express.Response, callback: () => void) {
@@ -38,10 +38,10 @@ function checkVideoAccountExists (id: string, res: express.Response, callback: (
     res.locals.account = account
     callback()
   })
-    .catch(err => {
-      logger.error('Error in video account request validator.', err)
-      return res.sendStatus(500)
-    })
+  .catch(err => {
+    logger.error('Error in video account request validator.', err)
+    return res.sendStatus(500)
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -49,5 +49,5 @@ function checkVideoAccountExists (id: string, res: express.Response, callback: (
 export {
   checkVideoAccountExists,
   isAccountNameWithHostValid,
-  isVideoAccountNameValid
+  isAccountNameValid
 }

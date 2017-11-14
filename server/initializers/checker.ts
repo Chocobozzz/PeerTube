@@ -1,8 +1,8 @@
 import * as config from 'config'
-
 import { promisify0 } from '../helpers/core-utils'
-import { OAuthClientModel } from '../models/oauth/oauth-client-interface'
 import { UserModel } from '../models/account/user-interface'
+import { ApplicationModel } from '../models/application/application-interface'
+import { OAuthClientModel } from '../models/oauth/oauth-client-interface'
 
 // Some checks on configuration files
 function checkConfig () {
@@ -70,6 +70,13 @@ async function usersExist (User: UserModel) {
   return totalUsers !== 0
 }
 
+// We get db by param to not import it in this file (import orders)
+async function applicationExist (Application: ApplicationModel) {
+  const totalApplication = await Application.countTotal()
+
+  return totalApplication !== 0
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -77,5 +84,6 @@ export {
   checkFFmpeg,
   checkMissedConfig,
   clientsExist,
-  usersExist
+  usersExist,
+  applicationExist
 }

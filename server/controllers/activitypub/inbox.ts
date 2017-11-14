@@ -30,7 +30,7 @@ inboxRouter.post('/inbox',
   asyncMiddleware(inboxController)
 )
 
-inboxRouter.post('/:nameWithHost/inbox',
+inboxRouter.post('/account/:name/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
   localAccountValidator,
@@ -59,7 +59,9 @@ async function inboxController (req: express.Request, res: express.Response, nex
   }
 
   // Only keep activities we are able to process
+  logger.debug('Filtering activities...', { activities })
   activities = activities.filter(a => isActivityValid(a))
+  logger.debug('We keep %d activities.', activities.length, { activities })
 
   await processActivities(activities, res.locals.account)
 

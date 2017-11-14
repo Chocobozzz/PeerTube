@@ -23,7 +23,7 @@ export class FriendService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<Account>>(API_URL + '/followers', { params })
+    return this.authHttp.get<ResultList<Account>>(API_URL + '/api/v1/pods/followers', { params })
                         .map(res => this.restExtractor.convertResultListDateToHuman(res))
                         .catch(res => this.restExtractor.handleError(res))
   }
@@ -33,7 +33,7 @@ export class FriendService {
       hosts: notEmptyHosts
     }
 
-    return this.authHttp.post(API_URL + '/follow', body)
+    return this.authHttp.post(API_URL + '/api/v1/pods/follow', body)
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
   }

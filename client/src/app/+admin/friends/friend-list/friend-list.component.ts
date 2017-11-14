@@ -17,7 +17,7 @@ export class FriendListComponent extends RestTable implements OnInit {
   friends: Pod[] = []
   totalRecords = 0
   rowsPerPage = 10
-  sort: SortMeta = { field: 'id', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (

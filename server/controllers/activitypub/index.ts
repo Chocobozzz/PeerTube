@@ -4,14 +4,14 @@ import { badRequest } from '../../helpers'
 import { inboxRouter } from './inbox'
 import { activityPubClientRouter } from './client'
 
-const remoteRouter = express.Router()
+const activityPubRouter = express.Router()
 
-remoteRouter.use('/', inboxRouter)
-remoteRouter.use('/', activityPubClientRouter)
-remoteRouter.use('/*', badRequest)
+activityPubRouter.use('/', inboxRouter)
+activityPubRouter.use('/', activityPubClientRouter)
+activityPubRouter.use('/*', badRequest)
 
 // ---------------------------------------------------------------------------
 
 export {
-  remoteRouter
+  activityPubRouter
 }

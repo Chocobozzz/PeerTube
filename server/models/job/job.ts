@@ -10,7 +10,7 @@ import {
 
   JobMethods
 } from './job-interface'
-import { JobState } from '../../../shared/models/job.model'
+import { JobCategory, JobState } from '../../../shared/models/job.model'
 
 let Job: Sequelize.Model<JobInstance, JobAttributes>
 let listWithLimitByCategory: JobMethods.ListWithLimitByCategory
@@ -38,7 +38,7 @@ export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Se
     {
       indexes: [
         {
-          fields: [ 'state' ]
+          fields: [ 'state', 'category' ]
         }
       ]
     }
@@ -52,14 +52,15 @@ export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Se
 
 // ---------------------------------------------------------------------------
 
-listWithLimitByCategory = function (limit: number, state: JobState) {
+listWithLimitByCategory = function (limit: number, state: JobState, jobCategory: JobCategory) {
   const query = {
     order: [
       [ 'id', 'ASC' ]
     ],
     limit: limit,
     where: {
-      state
+      state,
+      category: jobCategory
     }
   }
 

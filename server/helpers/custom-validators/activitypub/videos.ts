@@ -14,7 +14,7 @@ import {
   isVideoUrlValid
 } from '../videos'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
-import { isBaseActivityValid } from './misc'
+import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
 function isVideoTorrentAddActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Add') &&
@@ -24,6 +24,10 @@ function isVideoTorrentAddActivityValid (activity: any) {
 function isVideoTorrentUpdateActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
     isVideoTorrentObjectValid(activity.object)
+}
+
+function isVideoTorrentDeleteActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Delete')
 }
 
 function isVideoTorrentObjectValid (video: any) {
@@ -54,6 +58,10 @@ function isVideoChannelUpdateActivityValid (activity: any) {
     isVideoChannelObjectValid(activity.object)
 }
 
+function isVideoChannelDeleteActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Delete')
+}
+
 function isVideoChannelObjectValid (videoChannel: any) {
   return videoChannel.type === 'VideoChannel' &&
     isVideoChannelNameValid(videoChannel.name) &&
@@ -67,7 +75,9 @@ export {
   isVideoTorrentAddActivityValid,
   isVideoChannelCreateActivityValid,
   isVideoTorrentUpdateActivityValid,
-  isVideoChannelUpdateActivityValid
+  isVideoChannelUpdateActivityValid,
+  isVideoChannelDeleteActivityValid,
+  isVideoTorrentDeleteActivityValid
 }
 
 // ---------------------------------------------------------------------------

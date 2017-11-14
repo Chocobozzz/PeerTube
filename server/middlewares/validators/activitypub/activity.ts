@@ -1,11 +1,10 @@
-import { body } from 'express-validator/check'
 import * as express from 'express'
-
-import { logger, isRootActivityValid } from '../../../helpers'
+import { body } from 'express-validator/check'
+import { isRootActivityValid, logger } from '../../../helpers'
 import { checkErrors } from '../utils'
 
 const activityPubValidator = [
-  body('data').custom(isRootActivityValid),
+  body('').custom((value, { req }) => isRootActivityValid(req.body)),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking activity pub parameters', { parameters: req.body })

@@ -3,8 +3,8 @@ import { UserRole } from '../../shared'
 import { logger, mkdirpPromise, rimrafPromise } from '../helpers'
 import { createUserAccountAndChannel } from '../lib'
 import { createLocalAccount } from '../lib/user'
-import { clientsExist, usersExist } from './checker'
-import { CACHE, CONFIG, LAST_MIGRATION_VERSION } from './constants'
+import { applicationExist, clientsExist, usersExist } from './checker'
+import { CACHE, CONFIG, LAST_MIGRATION_VERSION, SERVER_ACCOUNT_NAME } from './constants'
 
 import { database as db } from './database'
 
@@ -128,9 +128,13 @@ async function createOAuthAdminIfNotExist () {
 }
 
 async function createApplicationIfNotExist () {
+  const exist = await applicationExist(db.Application)
+  // Nothing to do, application already exist
+  if (exist === true) return undefined
+
   logger.info('Creating Application table.')
   const applicationInstance = await db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
 
   logger.info('Creating application account.')
-  return createLocalAccount('peertube', null, applicationInstance.id, undefined)
+  return createLocalAccount(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
 }

@@ -10,60 +10,60 @@ import { httpRequestJobScheduler } from '../jobs'
 import { signObject, activityPubContextify } from '../../helpers'
 import { Activity } from '../../../shared'
 
-function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = createActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
+  const data = await createActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
   return broadcastToFollowers(data, videoChannel.Account, t)
 }
 
-function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+async function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = updateActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
+  const data = await updateActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
   return broadcastToFollowers(data, videoChannel.Account, t)
 }
 
-function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
-  const data = deleteActivityData(videoChannel.url, videoChannel.Account)
+async function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+  const data = await deleteActivityData(videoChannel.url, videoChannel.Account)
 
   return broadcastToFollowers(data, videoChannel.Account, t)
 }
 
-function sendAddVideo (video: VideoInstance, t: Sequelize.Transaction) {
+async function sendAddVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const videoObject = video.toActivityPubObject()
-  const data = addActivityData(video.url, video.VideoChannel.Account, video.VideoChannel.url, videoObject)
+  const data = await addActivityData(video.url, video.VideoChannel.Account, video.VideoChannel.url, videoObject)
 
   return broadcastToFollowers(data, video.VideoChannel.Account, t)
 }
 
-function sendUpdateVideo (video: VideoInstance, t: Sequelize.Transaction) {
+async function sendUpdateVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const videoObject = video.toActivityPubObject()
-  const data = updateActivityData(video.url, video.VideoChannel.Account, videoObject)
+  const data = await updateActivityData(video.url, video.VideoChannel.Account, videoObject)
 
   return broadcastToFollowers(data, video.VideoChannel.Account, t)
 }
 
-function sendDeleteVideo (video: VideoInstance, t: Sequelize.Transaction) {
-  const data = deleteActivityData(video.url, video.VideoChannel.Account)
+async function sendDeleteVideo (video: VideoInstance, t: Sequelize.Transaction) {
+  const data = await deleteActivityData(video.url, video.VideoChannel.Account)
 
   return broadcastToFollowers(data, video.VideoChannel.Account, t)
 }
 
-function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transaction) {
-  const data = deleteActivityData(account.url, account)
+async function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transaction) {
+  const data = await deleteActivityData(account.url, account)
 
   return broadcastToFollowers(data, account, t)
 }
 
-function sendAccept (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
-  const data = acceptActivityData(fromAccount)
+async function sendAccept (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
+  const data = await acceptActivityData(fromAccount)
 
   return unicastTo(data, toAccount, t)
 }
 
-function sendFollow (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
-  const data = followActivityData(toAccount.url, fromAccount)
+async function sendFollow (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
+  const data = await followActivityData(toAccount.url, fromAccount)
 
   return unicastTo(data, toAccount, t)
 }
@@ -97,7 +97,7 @@ async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t:
 
 async function unicastTo (data: any, toAccount: AccountInstance, t: Sequelize.Transaction) {
   const jobPayload = {
-    uris: [ toAccount.url ],
+    uris: [ toAccount.inboxUrl ],
     body: data
   }
 

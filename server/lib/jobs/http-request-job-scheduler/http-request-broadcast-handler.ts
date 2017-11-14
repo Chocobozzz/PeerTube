@@ -6,6 +6,7 @@ async function process (payload: HTTPRequestPayload, jobId: number) {
   logger.info('Processing broadcast in job %d.', jobId)
 
   const options = {
+    method: 'POST',
     uri: '',
     json: payload.body
   }

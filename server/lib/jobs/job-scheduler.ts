@@ -4,6 +4,7 @@ import { JobCategory } from '../../../shared'
 import { logger } from '../../helpers'
 import { database as db, JOB_STATES, JOBS_FETCH_LIMIT_PER_CYCLE, JOBS_FETCHING_INTERVAL } from '../../initializers'
 import { JobInstance } from '../../models'
+import { error } from 'util'
 
 export interface JobHandler<P, T> {
   process (data: object, jobId: number): Promise<T>
@@ -80,8 +81,12 @@ class JobScheduler<P, T> {
   private async processJob (job: JobInstance, callback: (err: Error) => void) {
     const jobHandler = this.jobHandlers[job.handlerName]
     if (jobHandler === undefined) {
-      logger.error('Unknown job handler for job %s.', job.handlerName)
-      return callback(null)
+      const errorString = 'Unknown job handler ' + job.handlerName + ' for job ' + job.id
+      logger.error(errorString)
+
+      const error = new Error(errorString)
+      await this.onJobError(jobHandler, job, error)
+      return callback(error)
     }
 
     logger.info('Processing job %d with handler %s.', job.id, job.handlerName)
@@ -103,7 +108,7 @@ class JobScheduler<P, T> {
       }
     }
 
-    callback(null)
+    return callback(null)
   }
 
   private async onJobError (jobHandler: JobHandler<P, T>, job: JobInstance, err: Error) {
@@ -111,7 +116,7 @@ class JobScheduler<P, T> {
 
     try {
       await job.save()
-      await jobHandler.onError(err, job.id)
+      if (jobHandler) await jobHandler.onError(err, job.id)
     } catch (err) {
       this.cannotSaveJobError(err)
     }
