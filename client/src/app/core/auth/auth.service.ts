@@ -42,7 +42,7 @@ interface UserLoginWithUserInformation extends UserLogin {
   displayNSFW: boolean
   email: string
   videoQuota: number
-  author: {
+  account: {
     id: number
     uuid: string
   }
@@ -208,7 +208,7 @@ export class AuthService {
           this.user.displayNSFW = res.displayNSFW
           this.user.role = res.role
           this.user.videoChannels = res.videoChannels
-          this.user.author = res.author
+          this.user.account = res.account
 
           this.user.save()
         }
@@ -227,7 +227,7 @@ export class AuthService {
                         displayNSFW: res.displayNSFW,
                         email: res.email,
                         videoQuota: res.videoQuota,
-                        author: res.author,
+                        account: res.account,
                         videoChannels: res.videoChannels
                       }
 
@@ -245,7 +245,7 @@ export class AuthService {
       displayNSFW: obj.displayNSFW,
       videoQuota: obj.videoQuota,
       videoChannels: obj.videoChannels,
-      author: obj.author
+      account: obj.account
     }
     const hashTokens = {
       accessToken: obj.access_token,

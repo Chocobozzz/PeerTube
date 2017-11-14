@@ -2,7 +2,7 @@ import { Video as VideoServerModel } from '../../../../../shared'
 import { User } from '../../shared'
 
 export class Video implements VideoServerModel {
-  author: string
+  account: string
   by: string
   createdAt: Date
   updatedAt: Date
@@ -32,8 +32,8 @@ export class Video implements VideoServerModel {
   dislikes: number
   nsfw: boolean
 
-  private static createByString (author: string, podHost: string) {
-    return author + '@' + podHost
+  private static createByString (account: string, podHost: string) {
+    return account + '@' + podHost
   }
 
   private static createDurationString (duration: number) {
@@ -52,7 +52,7 @@ export class Video implements VideoServerModel {
       absoluteAPIUrl = window.location.origin
     }
 
-    this.author = hash.author
+    this.account = hash.account
     this.createdAt = new Date(hash.createdAt.toString())
     this.categoryLabel = hash.categoryLabel
     this.category = hash.category
@@ -80,7 +80,7 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
 
-    this.by = Video.createByString(hash.author, hash.podHost)
+    this.by = Video.createByString(hash.account, hash.podHost)
   }
 
   isVideoNSFWForUser (user: User) {

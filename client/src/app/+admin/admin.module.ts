@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core'
 import { AdminComponent } from './admin.component'
 import { AdminRoutingModule } from './admin-routing.module'
 import { FriendsComponent, FriendAddComponent, FriendListComponent, FriendService } from './friends'
-import { RequestSchedulersComponent, RequestSchedulersStatsComponent, RequestSchedulersService } from './request-schedulers'
 import { UsersComponent, UserAddComponent, UserUpdateComponent, UserListComponent, UserService } from './users'
 import { VideoAbusesComponent, VideoAbuseListComponent } from './video-abuses'
 import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
@@ -21,9 +20,6 @@ import { SharedModule } from '../shared'
     FriendsComponent,
     FriendAddComponent,
     FriendListComponent,
-
-    RequestSchedulersComponent,
-    RequestSchedulersStatsComponent,
 
     UsersComponent,
     UserAddComponent,
@@ -43,7 +39,6 @@ import { SharedModule } from '../shared'
 
   providers: [
     FriendService,
-    RequestSchedulersService,
     UserService
   ]
 })

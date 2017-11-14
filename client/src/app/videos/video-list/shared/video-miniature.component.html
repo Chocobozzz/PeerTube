@@ -27,7 +27,7 @@
       </span>
     </div>
 
-    <a [routerLink]="['/videos/list', { field: 'author', search: video.author, sort: currentSort }]" class="video-miniature-author">{{ video.by }}</a>
+    <a [routerLink]="['/videos/list', { field: 'account', search: video.account, sort: currentSort }]" class="video-miniature-account">{{ video.by }}</a>
     <span class="video-miniature-created-at">{{ video.createdAt | date:'short' }}</span>
   </div>
 </div>

@@ -42,8 +42,8 @@
   </div>
 
   <div class="row video-small-blocks">
-    <div class="col-xs-5 col-xs-3 col-md-3 video-small-block video-small-block-author">
-      <a class="option" title="Access to all videos of this user" [routerLink]="['/videos/list', { field: 'author', search: video.author }]">
+    <div class="col-xs-5 col-xs-3 col-md-3 video-small-block video-small-block-account">
+      <a class="option" title="Access to all videos of this user" [routerLink]="['/videos/list', { field: 'account', search: video.account }]">
         <span class="glyphicon glyphicon-user"></span>
         <span class="video-small-block-text">{{ video.by }}</span>
       </a>

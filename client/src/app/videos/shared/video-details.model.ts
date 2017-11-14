@@ -10,7 +10,7 @@ import {
 } from '../../../../../shared'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
-  author: string
+  account: string
   by: string
   createdAt: Date
   updatedAt: Date
@@ -71,7 +71,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   isRemovableBy (user: AuthUser) {
-    return user && this.isLocal === true && (this.author === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
+    return user && this.isLocal === true && (this.account === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
   }
 
   isBlackistableBy (user: AuthUser) {
@@ -79,6 +79,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   isUpdatableBy (user: AuthUser) {
-    return user && this.isLocal === true && user.username === this.author
+    return user && this.isLocal === true && user.username === this.account
   }
 }

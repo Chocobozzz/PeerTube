@@ -81,7 +81,7 @@
       }
     }
 
-    .video-miniature-author, .video-miniature-created-at {
+    .video-miniature-account, .video-miniature-created-at {
       display: block;
       margin-left: 1px;
       font-size: 11px;
@@ -89,7 +89,7 @@
       opacity: 0.9;
     }
 
-    .video-miniature-author {
+    .video-miniature-account {
       transition: color 0.2s;
 
       &:hover {

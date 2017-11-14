@@ -91,7 +91,7 @@ export class FriendAddComponent implements OnInit {
       res => {
         if (res === false) return
 
-        this.friendService.makeFriends(notEmptyHosts).subscribe(
+        this.friendService.follow(notEmptyHosts).subscribe(
           status => {
             this.notificationsService.success('Success', 'Make friends request sent!')
             // Wait requests between pods
