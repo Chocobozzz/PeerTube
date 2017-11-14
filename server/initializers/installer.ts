@@ -1,21 +1,25 @@
 import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
 import { logger, mkdirpPromise, rimrafPromise } from '../helpers'
-import { createPrivateAndPublicKeys } from '../helpers/peertube-crypto'
 import { createUserAccountAndChannel } from '../lib'
+import { createLocalAccount } from '../lib/user'
 import { clientsExist, usersExist } from './checker'
 import { CACHE, CONFIG, LAST_MIGRATION_VERSION } from './constants'
 
 import { database as db } from './database'
-import { createLocalAccount } from '../lib/user'
 
 async function installApplication () {
-  await db.sequelize.sync()
-  await removeCacheDirectories()
-  await createDirectoriesIfNotExist()
-  await createOAuthClientIfNotExist()
-  await createOAuthAdminIfNotExist()
-  await createApplicationIfNotExist()
+  try {
+    await db.sequelize.sync()
+    await removeCacheDirectories()
+    await createDirectoriesIfNotExist()
+    await createOAuthClientIfNotExist()
+    await createOAuthAdminIfNotExist()
+    await createApplicationIfNotExist()
+  } catch (err) {
+    logger.error('Cannot install application.', err)
+    throw err
+  }
 }
 
 // ---------------------------------------------------------------------------

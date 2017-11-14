@@ -1,4 +1,7 @@
+import * as validator from 'validator'
 import { exists } from '../misc'
+import { isTestInstance } from '../../core-utils'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 
 function isActivityPubUrlValid (url: string) {
   const isURLOptions = {
@@ -9,7 +12,12 @@ function isActivityPubUrlValid (url: string) {
     protocols: [ 'http', 'https' ]
   }
 
-  return exists(url) && validator.isURL(url, isURLOptions)
+  // We validate 'localhost', so we don't have the top level domain
+  if (isTestInstance()) {
+    isURLOptions.require_tld = false
+  }
+
+  return exists(url) && validator.isURL(url, isURLOptions) && validator.isLength(url, CONSTRAINTS_FIELDS.ACCOUNTS.URL)
 }
 
 function isBaseActivityValid (activity: any, type: string) {

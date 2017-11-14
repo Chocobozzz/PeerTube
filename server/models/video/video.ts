@@ -46,6 +46,7 @@ import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
 import { sendDeleteVideo } from '../../lib/activitypub/send-request'
+import { isVideoUrlValid } from '../../helpers/custom-validators/videos'
 
 const Buffer = safeBuffer.Buffer
 
@@ -220,10 +221,13 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         defaultValue: false
       },
       url: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max),
         allowNull: false,
         validate: {
-          isUrl: true
+          urlValid: value => {
+            const res = isVideoUrlValid(value)
+            if (res === false) throw new Error('Video URL is not valid.')
+          }
         }
       }
     },

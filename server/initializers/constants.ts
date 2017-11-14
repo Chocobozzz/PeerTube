@@ -121,7 +121,8 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 250 } // Length
+    DESCRIPTION: { min: 3, max: 250 }, // Length
+    URL: { min: 3, max: 2000 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
@@ -137,7 +138,13 @@ const CONSTRAINTS_FIELDS = {
     VIEWS: { min: 0 },
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
-    FILE_SIZE: { min: 10, max: 1024 * 1024 * 1024 * 3 /* 3Go */ }
+    FILE_SIZE: { min: 10, max: 1024 * 1024 * 1024 * 3 /* 3Go */ },
+    URL: { min: 3, max: 2000 } // Length
+  },
+  ACCOUNTS: {
+    PUBLIC_KEY: { min: 10, max: 5000 }, // Length
+    PRIVATE_KEY: { min: 10, max: 5000 }, // Length
+    URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_EVENTS: {
     COUNT: { min: 0 }

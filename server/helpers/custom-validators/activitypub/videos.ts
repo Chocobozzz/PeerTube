@@ -10,7 +10,8 @@ import {
   isVideoTruncatedDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
-  isVideoTagValid
+  isVideoTagValid,
+  isVideoUrlValid
 } from '../videos'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
 import { isBaseActivityValid } from './misc'
@@ -93,7 +94,7 @@ function isRemoteVideoContentValid (mediaType: string, content: string) {
 
 function isRemoteVideoIconValid (icon: any) {
   return icon.type === 'Image' &&
-    validator.isURL(icon.url) &&
+    isVideoUrlValid(icon.url) &&
     icon.mediaType === 'image/jpeg' &&
     validator.isInt(icon.width, { min: 0 }) &&
     validator.isInt(icon.height, { min: 0 })
@@ -111,7 +112,7 @@ function setValidRemoteVideoUrls (video: any) {
 function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
     ACTIVITY_PUB.VIDEO_URL_MIME_TYPES.indexOf(url.mimeType) !== -1 &&
-    validator.isURL(url.url) &&
+    isVideoUrlValid(url.url) &&
     validator.isInt(url.width, { min: 0 }) &&
     validator.isInt(url.size, { min: 0 })
 }

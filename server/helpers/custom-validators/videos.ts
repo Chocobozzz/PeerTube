@@ -19,6 +19,7 @@ import { isArray, exists } from './misc'
 import { VideoInstance } from '../../models'
 import { logger } from '../../helpers'
 import { VideoRateType } from '../../../shared'
+import { isActivityPubUrlValid } from './activitypub/misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
@@ -31,6 +32,10 @@ function isVideoCategoryValid (value: number) {
 // Maybe we don't know the remote category, but that doesn't matter
 function isRemoteVideoCategoryValid (value: string) {
   return validator.isInt('' + value)
+}
+
+function isVideoUrlValid (value: string) {
+  return isActivityPubUrlValid(value)
 }
 
 function isVideoLicenceValid (value: number) {
@@ -219,5 +224,6 @@ export {
   isVideoTagValid,
   isRemoteVideoCategoryValid,
   isRemoteVideoLicenceValid,
+  isVideoUrlValid,
   isRemoteVideoLanguageValid
 }

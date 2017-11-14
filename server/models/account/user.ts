@@ -1,23 +1,16 @@
 import * as Sequelize from 'sequelize'
-
-import { getSort, addMethodsToModel } from '../utils'
+import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import {
-  cryptPassword,
   comparePassword,
-  isUserPasswordValid,
-  isUserUsernameValid,
+  cryptPassword,
   isUserDisplayNSFWValid,
-  isUserVideoQuotaValid,
-  isUserRoleValid
+  isUserPasswordValid,
+  isUserRoleValid,
+  isUserUsernameValid,
+  isUserVideoQuotaValid
 } from '../../helpers'
-import { UserRight, USER_ROLE_LABELS, hasUserRight } from '../../../shared'
-
-import {
-  UserInstance,
-  UserAttributes,
-
-  UserMethods
-} from './user-interface'
+import { addMethodsToModel, getSort } from '../utils'
+import { UserAttributes, UserInstance, UserMethods } from './user-interface'
 
 let User: Sequelize.Model<UserInstance, UserAttributes>
 let isPasswordMatch: UserMethods.IsPasswordMatch

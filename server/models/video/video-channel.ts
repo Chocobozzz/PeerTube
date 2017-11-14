@@ -10,6 +10,8 @@ import {
   VideoChannelMethods
 } from './video-channel-interface'
 import { sendDeleteVideoChannel } from '../../lib/activitypub/send-request'
+import { isVideoChannelUrlValid } from '../../helpers/custom-validators/video-channels'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
 let VideoChannel: Sequelize.Model<VideoChannelInstance, VideoChannelAttributes>
 let toFormattedJSON: VideoChannelMethods.ToFormattedJSON
@@ -65,10 +67,13 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         defaultValue: false
       },
       url: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.URL.max),
         allowNull: false,
         validate: {
-          isUrl: true
+          urlValid: value => {
+            const res = isVideoChannelUrlValid(value)
+            if (res === false) throw new Error('Video channel URL is not valid.')
+          }
         }
       }
     },
