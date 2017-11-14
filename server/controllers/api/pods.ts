@@ -11,6 +11,9 @@ import { setFollowingSort } from '../../middlewares/sort'
 import { followValidator } from '../../middlewares/validators/pods'
 import { followersSortValidator, followingSortValidator } from '../../middlewares/validators/sort'
 import { sendFollow } from '../../lib/activitypub/send-request'
+import { authenticate } from '../../middlewares/oauth'
+import { ensureUserHasRight } from '../../middlewares/user-right'
+import { UserRight } from '../../../shared/models/users/user-right.enum'
 
 const podsRouter = express.Router()
 
@@ -23,6 +26,8 @@ podsRouter.get('/following',
 )
 
 podsRouter.post('/follow',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_PEERTUBE_FOLLOW),
   followValidator,
   setBodyHostsPort,
   asyncMiddleware(follow)

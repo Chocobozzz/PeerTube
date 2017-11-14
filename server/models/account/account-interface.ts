@@ -14,8 +14,8 @@ export namespace AccountMethods {
   export type LoadAccountByPodAndUUID = (uuid: string, podId: number, transaction: Sequelize.Transaction) => Bluebird<AccountInstance>
   export type LoadLocalAccountByNameAndPod = (name: string, host: string) => Bluebird<AccountInstance>
   export type ListOwned = () => Bluebird<AccountInstance[]>
-  export type ListFollowerUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
-  export type ListFollowingUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
+  export type ListAcceptedFollowerUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
+  export type ListAcceptedFollowingUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
   export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
   export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
 
@@ -36,8 +36,8 @@ export interface AccountClass {
   loadByUrl: AccountMethods.LoadByUrl
   loadLocalAccountByNameAndPod: AccountMethods.LoadLocalAccountByNameAndPod
   listOwned: AccountMethods.ListOwned
-  listFollowerUrlsForApi: AccountMethods.ListFollowerUrlsForApi
-  listFollowingUrlsForApi: AccountMethods.ListFollowingUrlsForApi
+  listAcceptedFollowerUrlsForApi: AccountMethods.ListAcceptedFollowerUrlsForApi
+  listAcceptedFollowingUrlsForApi: AccountMethods.ListAcceptedFollowingUrlsForApi
   listFollowingForApi: AccountMethods.ListFollowingForApi
   listFollowersForApi: AccountMethods.ListFollowersForApi
 }
