@@ -74,7 +74,7 @@ export class FriendListComponent extends RestTable implements OnInit {
   }
 
   protected loadData () {
-    this.friendService.getFriends(this.pagination, this.sort)
+    this.friendService.getFollowing(this.pagination, this.sort)
                       .subscribe(
                         resultList => {
                           this.friends = resultList.data

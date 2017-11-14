@@ -16,11 +16,7 @@ export class MenuAdminComponent {
   }
 
   hasFriendsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_PODS)
-  }
-
-  hasRequestsStatRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_REQUEST_SCHEDULERS)
+    return this.auth.getUser().hasRight(UserRight.MANAGE_PEERTUBE_FOLLOW)
   }
 
   hasVideoAbusesRight () {

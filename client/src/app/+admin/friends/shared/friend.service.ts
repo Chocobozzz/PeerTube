@@ -19,21 +19,21 @@ export class FriendService {
     private restExtractor: RestExtractor
   ) {}
 
-  getFriends (pagination: RestPagination, sort: SortMeta): Observable<ResultList<Pod>> {
+  getFollowing (pagination: RestPagination, sort: SortMeta): Observable<ResultList<Pod>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<Pod>>(FriendService.BASE_FRIEND_URL, { params })
+    return this.authHttp.get<ResultList<Account>>(API_URL + '/followers', { params })
                         .map(res => this.restExtractor.convertResultListDateToHuman(res))
                         .catch(res => this.restExtractor.handleError(res))
   }
 
-  makeFriends (notEmptyHosts: String[]) {
+  follow (notEmptyHosts: String[]) {
     const body = {
       hosts: notEmptyHosts
     }
 
-    return this.authHttp.post(FriendService.BASE_FRIEND_URL + 'make-friends', body)
+    return this.authHttp.post(API_URL + '/follow', body)
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
   }

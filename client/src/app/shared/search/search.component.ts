@@ -14,8 +14,8 @@ import { SearchService } from './search.service'
 export class SearchComponent implements OnInit {
   fieldChoices = {
     name: 'Name',
-    author: 'Author',
-    host: 'Pod Host',
+    account: 'Account',
+    host: 'Host',
     tags: 'Tags'
   }
   searchCriteria: Search = {

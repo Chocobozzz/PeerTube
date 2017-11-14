@@ -10,11 +10,6 @@
       List friends
     </a>
 
-    <a *ngIf="hasRequestsStatRight()" routerLink="/admin/requests/stats" routerLinkActive="active">
-      <span class="hidden-xs glyphicon glyphicon-stats"></span>
-      Request stats
-    </a>
-
     <a *ngIf="hasVideoAbusesRight()" routerLink="/admin/video-abuses" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-alert"></span>
       Video abuses

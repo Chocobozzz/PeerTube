@@ -14,7 +14,7 @@ export type UserConstructorHash = {
   videoQuota?: number,
   displayNSFW?: boolean,
   createdAt?: Date,
-  author?: {
+  account?: {
     id: number
     uuid: string
   },
@@ -27,7 +27,7 @@ export class User implements UserServerModel {
   role: UserRole
   displayNSFW: boolean
   videoQuota: number
-  author: {
+  account: {
     id: number
     uuid: string
   }
@@ -39,7 +39,7 @@ export class User implements UserServerModel {
     this.username = hash.username
     this.email = hash.email
     this.role = hash.role
-    this.author = hash.author
+    this.account = hash.account
 
     if (hash.videoChannels !== undefined) {
       this.videoChannels = hash.videoChannels

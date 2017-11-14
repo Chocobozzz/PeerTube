@@ -12,7 +12,7 @@ export const FriendsRoutes: Routes = [
     component: FriendsComponent,
     canActivate: [ UserRightGuard ],
     data: {
-      userRight: UserRight.MANAGE_PODS
+      userRight: UserRight.MANAGE_PEERTUBE_FOLLOW
     },
     children: [
       {
