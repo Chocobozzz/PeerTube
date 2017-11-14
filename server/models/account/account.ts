@@ -33,8 +33,8 @@ let loadByUUID: AccountMethods.LoadByUUID
 let loadByUrl: AccountMethods.LoadByUrl
 let loadLocalAccountByNameAndPod: AccountMethods.LoadLocalAccountByNameAndPod
 let listOwned: AccountMethods.ListOwned
-let listFollowerUrlsForApi: AccountMethods.ListFollowerUrlsForApi
-let listFollowingUrlsForApi: AccountMethods.ListFollowingUrlsForApi
+let listAcceptedFollowerUrlsForApi: AccountMethods.ListAcceptedFollowerUrlsForApi
+let listAcceptedFollowingUrlsForApi: AccountMethods.ListAcceptedFollowingUrlsForApi
 let listFollowingForApi: AccountMethods.ListFollowingForApi
 let listFollowersForApi: AccountMethods.ListFollowersForApi
 let isOwned: AccountMethods.IsOwned
@@ -201,8 +201,8 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
     loadByUrl,
     loadLocalAccountByNameAndPod,
     listOwned,
-    listFollowerUrlsForApi,
-    listFollowingUrlsForApi,
+    listAcceptedFollowerUrlsForApi,
+    listAcceptedFollowingUrlsForApi,
     listFollowingForApi,
     listFollowersForApi
   ]
@@ -365,12 +365,12 @@ listOwned = function () {
   return Account.findAll(query)
 }
 
-listFollowerUrlsForApi = function (id: number, start: number, count?: number) {
-  return createListFollowForApiQuery('followers', id, start, count)
+listAcceptedFollowerUrlsForApi = function (id: number, start: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('followers', id, start, count)
 }
 
-listFollowingUrlsForApi = function (id: number, start: number, count?: number) {
-  return createListFollowForApiQuery('following', id, start, count)
+listAcceptedFollowingUrlsForApi = function (id: number, start: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('following', id, start, count)
 }
 
 listFollowingForApi = function (id: number, start: number, count: number, sort: string) {
@@ -506,7 +506,7 @@ loadAccountByPodAndUUID = function (uuid: string, podId: number, transaction: Se
 
 // ------------------------------ UTILS ------------------------------
 
-async function createListFollowForApiQuery (type: 'followers' | 'following', id: number, start: number, count?: number) {
+async function createListAcceptedFollowForApiQuery (type: 'followers' | 'following', id: number, start: number, count?: number) {
   let firstJoin: string
   let secondJoin: string
 
@@ -525,7 +525,7 @@ async function createListFollowForApiQuery (type: 'followers' | 'following', id:
     let query = 'SELECT ' + selection + ' FROM "Account" ' +
       'INNER JOIN "AccountFollower" ON "AccountFollower"."' + firstJoin + '" = "Account"."id" ' +
       'INNER JOIN "Account" AS "Follows" ON "Followers"."id" = "Follows"."' + secondJoin + '" ' +
-      'WHERE "Account"."id" = $id ' +
+      'WHERE "Account"."id" = $id AND "AccountFollower"."state" = \'accepted\' ' +
       'LIMIT ' + start
 
     if (count !== undefined) query += ', ' + count
