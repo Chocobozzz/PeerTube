@@ -8,8 +8,13 @@ import { database as db, CONSTRAINTS_FIELDS } from '../../initializers'
 import { VideoChannelInstance } from '../../models'
 import { logger } from '../logger'
 import { exists } from './misc'
+import { isActivityPubUrlValid } from './index'
 
 const VIDEO_CHANNELS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_CHANNELS
+
+function isVideoChannelUrlValid (value: string) {
+  return isActivityPubUrlValid(value)
+}
 
 function isVideoChannelDescriptionValid (value: string) {
   return value === null || validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.DESCRIPTION)
@@ -53,5 +58,6 @@ export {
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelUUIDValid,
-  checkVideoChannelExists
+  checkVideoChannelExists,
+  isVideoChannelUrlValid
 }

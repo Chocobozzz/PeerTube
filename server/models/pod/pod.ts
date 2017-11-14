@@ -63,8 +63,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
   )
 
   const classMethods = [
-    associate,
-
     countAll,
     incrementScores,
     list,
@@ -97,14 +95,6 @@ toFormattedJSON = function (this: PodInstance) {
 }
 
 // ------------------------------ Statics ------------------------------
-
-function associate (models) {
-  Pod.belongsToMany(models.Request, {
-    foreignKey: 'podId',
-    through: models.RequestToPod,
-    onDelete: 'cascade'
-  })
-}
 
 countAll = function () {
   return Pod.count()

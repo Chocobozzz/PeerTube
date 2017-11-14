@@ -22,8 +22,8 @@ import {
 
   AccountMethods
 } from './account-interface'
-import LoadApplication = AccountMethods.LoadApplication
 import { sendDeleteAccount } from '../../lib/activitypub/send-request'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
 let Account: Sequelize.Model<AccountInstance, AccountAttributes>
 let loadAccountByPodAndUUID: AccountMethods.LoadAccountByPodAndUUID
@@ -60,14 +60,14 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          usernameValid: value => {
+          nameValid: value => {
             const res = isUserUsernameValid(value)
-            if (res === false) throw new Error('Username is not valid.')
+            if (res === false) throw new Error('Name is not valid.')
           }
         }
       },
       url: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
         allowNull: false,
         validate: {
           urlValid: value => {
@@ -77,7 +77,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         }
       },
       publicKey: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PUBLIC_KEY.max),
         allowNull: false,
         validate: {
           publicKeyValid: value => {
@@ -87,7 +87,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         }
       },
       privateKey: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PRIVATE_KEY.max),
         allowNull: false,
         validate: {
           privateKeyValid: value => {
@@ -110,14 +110,14 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
-          followersCountValid: value => {
+          followingCountValid: value => {
             const res = isAccountFollowingCountValid(value)
             if (res === false) throw new Error('Following count is not valid.')
           }
         }
       },
       inboxUrl: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
         allowNull: false,
         validate: {
           inboxUrlValid: value => {
@@ -127,7 +127,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         }
       },
       outboxUrl: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
         allowNull: false,
         validate: {
           outboxUrlValid: value => {
@@ -137,7 +137,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         }
       },
       sharedInboxUrl: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
         allowNull: false,
         validate: {
           sharedInboxUrlValid: value => {
@@ -147,7 +147,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         }
       },
       followersUrl: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
         allowNull: false,
         validate: {
           followersUrlValid: value => {
@@ -157,7 +157,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         }
       },
       followingUrl: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
         allowNull: false,
         validate: {
           followingUrlValid: value => {
@@ -241,7 +241,7 @@ function associate (models) {
 
   Account.belongsTo(models.Application, {
     foreignKey: {
-      name: 'userId',
+      name: 'applicationId',
       allowNull: true
     },
     onDelete: 'cascade'
@@ -256,7 +256,7 @@ function associate (models) {
     hooks: true
   })
 
-  Account.hasMany(models.AccountFollower, {
+  Account.hasMany(models.AccountFollow, {
     foreignKey: {
       name: 'accountId',
       allowNull: false
@@ -265,7 +265,7 @@ function associate (models) {
     onDelete: 'cascade'
   })
 
-  Account.hasMany(models.AccountFollower, {
+  Account.hasMany(models.AccountFollow, {
     foreignKey: {
       name: 'targetAccountId',
       allowNull: false
@@ -329,7 +329,7 @@ getFollowerSharedInboxUrls = function (this: AccountInstance) {
     attributes: [ 'sharedInboxUrl' ],
     include: [
       {
-        model: Account['sequelize'].models.AccountFollower,
+        model: Account['sequelize'].models.AccountFollow,
         where: {
           targetAccountId: this.id
         }
@@ -523,9 +523,9 @@ async function createListAcceptedFollowForApiQuery (type: 'followers' | 'followi
 
   for (const selection of selections) {
     let query = 'SELECT ' + selection + ' FROM "Account" ' +
-      'INNER JOIN "AccountFollower" ON "AccountFollower"."' + firstJoin + '" = "Account"."id" ' +
+      'INNER JOIN "AccountFollow" ON "AccountFollow"."' + firstJoin + '" = "Account"."id" ' +
       'INNER JOIN "Account" AS "Follows" ON "Followers"."id" = "Follows"."' + secondJoin + '" ' +
-      'WHERE "Account"."id" = $id AND "AccountFollower"."state" = \'accepted\' ' +
+      'WHERE "Account"."id" = $id AND "AccountFollow"."state" = \'accepted\' ' +
       'LIMIT ' + start
 
     if (count !== undefined) query += ', ' + count

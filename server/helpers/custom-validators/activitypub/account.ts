@@ -3,6 +3,7 @@ import * as validator from 'validator'
 import { exists, isUUIDValid } from '../misc'
 import { isActivityPubUrlValid } from './misc'
 import { isUserUsernameValid } from '../users'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 
 function isAccountEndpointsObjectValid (endpointObject: any) {
   return isAccountSharedInboxValid(endpointObject.sharedInbox)
@@ -34,7 +35,8 @@ function isAccountPublicKeyValid (publicKey: string) {
   return exists(publicKey) &&
     typeof publicKey === 'string' &&
     publicKey.startsWith('-----BEGIN PUBLIC KEY-----') &&
-    publicKey.endsWith('-----END PUBLIC KEY-----')
+    publicKey.endsWith('-----END PUBLIC KEY-----') &&
+    validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACCOUNTS.PUBLIC_KEY)
 }
 
 function isAccountIdValid (id: string) {
@@ -73,7 +75,8 @@ function isAccountPrivateKeyValid (privateKey: string) {
   return exists(privateKey) &&
     typeof privateKey === 'string' &&
     privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') &&
-    privateKey.endsWith('-----END RSA PRIVATE KEY-----')
+    privateKey.endsWith('-----END RSA PRIVATE KEY-----') &&
+    validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACCOUNTS.PRIVATE_KEY)
 }
 
 function isRemoteAccountValid (remoteAccount: any) {
