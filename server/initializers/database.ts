@@ -24,6 +24,8 @@ import { OAuthClientModel } from './../models/oauth/oauth-client-interface'
 import { JobModel } from './../models/job/job-interface'
 import { AccountModel } from './../models/account/account-interface'
 import { ApplicationModel } from './../models/application/application-interface'
+import { VideoChannelShareModel } from '../models/video/video-channel-share-interface'
+import { VideoShareModel } from '../models/video/video-share-interface'
 
 const dbname = CONFIG.DATABASE.DBNAME
 const username = CONFIG.DATABASE.USERNAME
@@ -45,6 +47,8 @@ const database: {
   User?: UserModel,
   VideoAbuse?: VideoAbuseModel,
   VideoChannel?: VideoChannelModel,
+  VideoChannelShare?: VideoChannelShareModel,
+  VideoShare?: VideoShareModel,
   VideoFile?: VideoFileModel,
   BlacklistedVideo?: BlacklistedVideoModel,
   VideoTag?: VideoTagModel,

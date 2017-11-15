@@ -5,6 +5,7 @@ import { isActivityValid } from '../../helpers/custom-validators/activitypub/act
 import { processCreateActivity, processFlagActivity, processUpdateActivity } from '../../lib'
 import { processAcceptActivity } from '../../lib/activitypub/process-accept'
 import { processAddActivity } from '../../lib/activitypub/process-add'
+import { processAnnounceActivity } from '../../lib/activitypub/process-announce'
 import { processDeleteActivity } from '../../lib/activitypub/process-delete'
 import { processFollowActivity } from '../../lib/activitypub/process-follow'
 import { asyncMiddleware, checkSignature, localAccountValidator, signatureValidator } from '../../middlewares'
@@ -18,7 +19,8 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccoun
   Flag: processFlagActivity,
   Delete: processDeleteActivity,
   Follow: processFollowActivity,
-  Accept: processAcceptActivity
+  Accept: processAcceptActivity,
+  Announce: processAnnounceActivity
 }
 
 const inboxRouter = express.Router()

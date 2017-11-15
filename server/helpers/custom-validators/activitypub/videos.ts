@@ -3,6 +3,7 @@ import { ACTIVITY_PUB } from '../../../initializers'
 import { exists, isDateValid, isUUIDValid } from '../misc'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
 import {
+  isVideoAbuseReasonValid,
   isVideoDurationValid,
   isVideoNameValid,
   isVideoNSFWValid,
@@ -11,7 +12,7 @@ import {
   isVideoUrlValid,
   isVideoViewsValid
 } from '../videos'
-import { isBaseActivityValid } from './misc'
+import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
 function isVideoTorrentAddActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Add') &&
@@ -54,6 +55,22 @@ function isVideoTorrentObjectValid (video: any) {
     setValidRemoteVideoUrls(video.url)
 }
 
+function isVideoFlagValid (activity: any) {
+  return isBaseActivityValid(activity, 'Flag') &&
+    isVideoAbuseReasonValid(activity.content) &&
+    isActivityPubUrlValid(activity.object)
+}
+
+function isVideoAnnounceValid (activity: any) {
+  return isBaseActivityValid(activity, 'Announce') &&
+    isVideoTorrentObjectValid(activity.object)
+}
+
+function isVideoChannelAnnounceValid (activity: any) {
+  return isBaseActivityValid(activity, 'Announce') &&
+    isVideoChannelObjectValid(activity.object)
+}
+
 function isVideoChannelCreateActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Create') &&
     isVideoChannelObjectValid(activity.object)
@@ -83,7 +100,10 @@ export {
   isVideoTorrentUpdateActivityValid,
   isVideoChannelUpdateActivityValid,
   isVideoChannelDeleteActivityValid,
-  isVideoTorrentDeleteActivityValid
+  isVideoTorrentDeleteActivityValid,
+  isVideoFlagValid,
+  isVideoAnnounceValid,
+  isVideoChannelAnnounceValid
 }
 
 // ---------------------------------------------------------------------------

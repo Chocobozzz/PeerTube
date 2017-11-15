@@ -6,4 +6,5 @@ export interface VideoChannelObject {
   uuid: string
   published: Date
   updated: Date
+  actor?: string
 }

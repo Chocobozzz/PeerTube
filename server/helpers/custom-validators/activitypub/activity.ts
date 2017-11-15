@@ -2,9 +2,12 @@ import * as validator from 'validator'
 import { isAccountAcceptActivityValid, isAccountDeleteActivityValid, isAccountFollowActivityValid } from './account'
 import { isActivityPubUrlValid } from './misc'
 import {
+  isVideoAnnounceValid,
+  isVideoChannelAnnounceValid,
   isVideoChannelCreateActivityValid,
   isVideoChannelDeleteActivityValid,
   isVideoChannelUpdateActivityValid,
+  isVideoFlagValid,
   isVideoTorrentAddActivityValid,
   isVideoTorrentDeleteActivityValid,
   isVideoTorrentUpdateActivityValid
@@ -32,7 +35,10 @@ function isActivityValid (activity: any) {
     isVideoChannelDeleteActivityValid(activity) ||
     isAccountDeleteActivityValid(activity) ||
     isAccountFollowActivityValid(activity) ||
-    isAccountAcceptActivityValid(activity)
+    isAccountAcceptActivityValid(activity) ||
+    isVideoFlagValid(activity) ||
+    isVideoAnnounceValid(activity) ||
+    isVideoChannelAnnounceValid(activity)
 }
 
 // ---------------------------------------------------------------------------

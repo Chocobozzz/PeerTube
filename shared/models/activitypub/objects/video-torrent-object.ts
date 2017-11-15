@@ -23,4 +23,5 @@ export interface VideoTorrentObject {
   content: string
   icon: ActivityIconObject
   url: ActivityUrlObject[]
+  actor?: string
 }
