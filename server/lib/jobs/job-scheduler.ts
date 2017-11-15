@@ -9,7 +9,7 @@ import { error } from 'util'
 export interface JobHandler<P, T> {
   process (data: object, jobId: number): Promise<T>
   onError (err: Error, jobId: number)
-  onSuccess (jobId: number, jobResult: T, jobScheduler: JobScheduler<P, T>)
+  onSuccess (jobId: number, jobResult: T, jobScheduler: JobScheduler<P, T>): Promise<any>
 }
 type JobQueueCallback = (err: Error) => void
 
@@ -127,7 +127,7 @@ class JobScheduler<P, T> {
 
     try {
       await job.save()
-      jobHandler.onSuccess(job.id, jobResult, this)
+      await jobHandler.onSuccess(job.id, jobResult, this)
     } catch (err) {
       this.cannotSaveJobError(err)
     }

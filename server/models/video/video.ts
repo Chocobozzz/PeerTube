@@ -329,7 +329,7 @@ function associate (models) {
     onDelete: 'cascade'
   })
 
-  Video.belongsTo(models.VideoChannel, {
+  Video.belongsTo(models.Video, {
     foreignKey: {
       name: 'parentId',
       allowNull: true
@@ -825,9 +825,11 @@ listForApi = function (start: number, count: number, sort: string) {
     include: [
       {
         model: Video['sequelize'].models.VideoChannel,
+        required: true,
         include: [
           {
             model: Video['sequelize'].models.Account,
+            required: true,
             include: [
               {
                 model: Video['sequelize'].models.Server,

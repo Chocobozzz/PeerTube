@@ -10,8 +10,8 @@ export namespace AccountFollowMethods {
   export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
   export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
 
-  export type ListAcceptedFollowerUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
-  export type ListAcceptedFollowingUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
+  export type ListAcceptedFollowerUrlsForApi = (id: number, start?: number, count?: number) => Promise< ResultList<string> >
+  export type ListAcceptedFollowingUrlsForApi = (id: number, start?: number, count?: number) => Promise< ResultList<string> >
 }
 
 export interface AccountFollowClass {

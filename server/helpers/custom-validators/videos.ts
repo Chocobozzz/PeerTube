@@ -69,21 +69,16 @@ function isVideoNSFWValid (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
 }
 
+function isVideoDurationValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
+}
+
 function isVideoTruncatedDescriptionValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.TRUNCATED_DESCRIPTION)
 }
 
 function isVideoDescriptionValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION)
-}
-
-function isVideoDurationValid (value: string) {
-  // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
-  return exists(value) &&
-    typeof value === 'string' &&
-    value.startsWith('PT') &&
-    value.endsWith('S') &&
-    validator.isInt(value.replace(/[^0-9]+/, ''), VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
 
 function isVideoNameValid (value: string) {
@@ -197,7 +192,6 @@ export {
   isVideoNSFWValid,
   isVideoTruncatedDescriptionValid,
   isVideoDescriptionValid,
-  isVideoDurationValid,
   isVideoFileInfoHashValid,
   isVideoNameValid,
   isVideoTagsValid,
@@ -214,6 +208,7 @@ export {
   isVideoFileSizeValid,
   isVideoPrivacyValid,
   isRemoteVideoPrivacyValid,
+  isVideoDurationValid,
   isVideoFileResolutionValid,
   checkVideoExists,
   isVideoTagValid,

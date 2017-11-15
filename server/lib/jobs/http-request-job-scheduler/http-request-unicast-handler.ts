@@ -20,8 +20,9 @@ function onError (err: Error, jobId: number) {
   return Promise.resolve()
 }
 
-async function onSuccess (jobId: number) {
+function onSuccess (jobId: number) {
   logger.info('Job %d is a success.', jobId)
+  return Promise.resolve()
 }
 
 // ---------------------------------------------------------------------------

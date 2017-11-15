@@ -146,17 +146,17 @@ listFollowersForApi = function (id: number, start: number, count: number, sort: 
   })
 }
 
-listAcceptedFollowerUrlsForApi = function (id: number, start: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('followers', id, start, count)
+listAcceptedFollowerUrlsForApi = function (accountId: number, start?: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('followers', accountId, start, count)
 }
 
-listAcceptedFollowingUrlsForApi = function (id: number, start: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('following', id, start, count)
+listAcceptedFollowingUrlsForApi = function (accountId: number, start?: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('following', accountId, start, count)
 }
 
 // ------------------------------ UTILS ------------------------------
 
-async function createListAcceptedFollowForApiQuery (type: 'followers' | 'following', id: number, start: number, count?: number) {
+async function createListAcceptedFollowForApiQuery (type: 'followers' | 'following', accountId: number, start?: number, count?: number) {
   let firstJoin: string
   let secondJoin: string
 
@@ -168,20 +168,20 @@ async function createListAcceptedFollowForApiQuery (type: 'followers' | 'followi
     secondJoin = 'targetAccountId'
   }
 
-  const selections = [ '"Followers"."url" AS "url"', 'COUNT(*) AS "total"' ]
+  const selections = [ '"Follows"."url" AS "url"', 'COUNT(*) AS "total"' ]
   const tasks: Promise<any>[] = []
 
   for (const selection of selections) {
-    let query = 'SELECT ' + selection + ' FROM "Account" ' +
-      'INNER JOIN "AccountFollow" ON "AccountFollow"."' + firstJoin + '" = "Account"."id" ' +
-      'INNER JOIN "Account" AS "Follows" ON "Followers"."id" = "Follows"."' + secondJoin + '" ' +
-      'WHERE "Account"."id" = $id AND "AccountFollow"."state" = \'accepted\' ' +
-      'LIMIT ' + start
+    let query = 'SELECT ' + selection + ' FROM "Accounts" ' +
+      'INNER JOIN "AccountFollows" ON "AccountFollows"."' + firstJoin + '" = "Accounts"."id" ' +
+      'INNER JOIN "Accounts" AS "Follows" ON "AccountFollows"."' + secondJoin + '" = "Follows"."id" ' +
+      'WHERE "Accounts"."id" = $accountId AND "AccountFollows"."state" = \'accepted\' '
 
+    if (start !== undefined) query += 'LIMIT ' + start
     if (count !== undefined) query += ', ' + count
 
     const options = {
-      bind: { id },
+      bind: { accountId },
       type: Sequelize.QueryTypes.SELECT
     }
     tasks.push(AccountFollow['sequelize'].query(query, options))

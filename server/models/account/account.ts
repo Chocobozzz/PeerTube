@@ -263,6 +263,7 @@ function associate (models) {
       name: 'targetAccountId',
       allowNull: false
     },
+    as: 'followers',
     onDelete: 'cascade'
   })
 }

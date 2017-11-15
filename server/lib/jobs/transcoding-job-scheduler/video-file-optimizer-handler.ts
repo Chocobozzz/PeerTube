@@ -39,8 +39,8 @@ async function onSuccess (jobId: number, video: VideoInstance, jobScheduler: Job
   await sendAddVideo(video, undefined)
 
   const originalFileHeight = await videoDatabase.getOriginalFileHeight()
-  // Create transcoding jobs if there are enabled resolutions
 
+  // Create transcoding jobs if there are enabled resolutions
   const resolutionsEnabled = computeResolutionsToTranscode(originalFileHeight)
   logger.info(
     'Resolutions computed for video %s and origin file height of %d.', videoDatabase.uuid, originalFileHeight,
