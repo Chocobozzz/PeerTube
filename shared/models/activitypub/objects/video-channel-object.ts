@@ -1,5 +1,3 @@
-import { ActivityIdentifierObject } from './common-objects'
-
 export interface VideoChannelObject {
   type: 'VideoChannel'
   id: string

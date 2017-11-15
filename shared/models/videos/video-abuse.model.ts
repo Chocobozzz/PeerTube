@@ -1,8 +1,10 @@
 export interface VideoAbuse {
   id: number
-  reporterServerHost: string
   reason: string
   reporterUsername: string
+  reporterServerHost: string
   videoId: number
+  videoUUID: string
+  videoName: string
   createdAt: Date
 }

@@ -9,6 +9,8 @@ import {
 import { httpRequestJobScheduler } from '../jobs'
 import { signObject, activityPubContextify } from '../../helpers'
 import { Activity } from '../../../shared'
+import { VideoAbuseInstance } from '../../models/video/video-abuse-interface'
+import { getActivityPubUrl } from '../../helpers/activitypub'
 
 async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const videoChannelObject = videoChannel.toActivityPubObject()
@@ -56,16 +58,28 @@ async function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transac
   return broadcastToFollowers(data, account, t)
 }
 
+async function sendVideoAbuse (
+  fromAccount: AccountInstance,
+  videoAbuse: VideoAbuseInstance,
+  video: VideoInstance,
+  t: Sequelize.Transaction
+) {
+  const url = getActivityPubUrl('videoAbuse', videoAbuse.id.toString())
+  const data = await createActivityData(url, fromAccount, video.url)
+
+  return unicastTo(data, video.VideoChannel.Account.sharedInboxUrl, t)
+}
+
 async function sendAccept (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
   const data = await acceptActivityData(fromAccount)
 
-  return unicastTo(data, toAccount, t)
+  return unicastTo(data, toAccount.inboxUrl, t)
 }
 
 async function sendFollow (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
   const data = await followActivityData(toAccount.url, fromAccount)
 
-  return unicastTo(data, toAccount, t)
+  return unicastTo(data, toAccount.inboxUrl, t)
 }
 
 // ---------------------------------------------------------------------------
@@ -79,7 +93,8 @@ export {
   sendDeleteVideo,
   sendDeleteAccount,
   sendAccept,
-  sendFollow
+  sendFollow,
+  sendVideoAbuse
 }
 
 // ---------------------------------------------------------------------------
@@ -95,9 +110,9 @@ async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t:
   return httpRequestJobScheduler.createJob(t, 'httpRequestBroadcastHandler', jobPayload)
 }
 
-async function unicastTo (data: any, toAccount: AccountInstance, t: Sequelize.Transaction) {
+async function unicastTo (data: any, toAccountUrl: string, t: Sequelize.Transaction) {
   const jobPayload = {
-    uris: [ toAccount.inboxUrl ],
+    uris: [ toAccountUrl ],
     body: data
   }
 

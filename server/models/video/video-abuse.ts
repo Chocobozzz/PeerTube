@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 
 import { CONFIG } from '../../initializers'
-import { isVideoAbuseReporterUsernameValid, isVideoAbuseReasonValid } from '../../helpers'
+import { isVideoAbuseReasonValid } from '../../helpers'
 
 import { addMethodsToModel, getSort } from '../utils'
 import {
@@ -18,16 +18,6 @@ let listForApi: VideoAbuseMethods.ListForApi
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   VideoAbuse = sequelize.define<VideoAbuseInstance, VideoAbuseAttributes>('VideoAbuse',
     {
-      reporterUsername: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          reporterUsernameValid: value => {
-            const res = isVideoAbuseReporterUsernameValid(value)
-            if (res === false) throw new Error('Video abuse reporter username is not valid.')
-          }
-        }
-      },
       reason: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -45,7 +35,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
           fields: [ 'videoId' ]
         },
         {
-          fields: [ 'reporterServerId' ]
+          fields: [ 'reporterAccountId' ]
         }
       ]
     }
@@ -69,8 +59,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 toFormattedJSON = function (this: VideoAbuseInstance) {
   let reporterServerHost
 
-  if (this.Server) {
-    reporterServerHost = this.Server.host
+  if (this.Account.Server) {
+    reporterServerHost = this.Account.Server.host
   } else {
     // It means it's our video
     reporterServerHost = CONFIG.WEBSERVER.HOST
@@ -78,10 +68,12 @@ toFormattedJSON = function (this: VideoAbuseInstance) {
 
   const json = {
     id: this.id,
-    reporterServerHost,
     reason: this.reason,
-    reporterUsername: this.reporterUsername,
-    videoId: this.videoId,
+    reporterUsername: this.Account.name,
+    reporterServerHost,
+    videoId: this.Video.id,
+    videoUUID: this.Video.uuid,
+    videoName: this.Video.name,
     createdAt: this.createdAt
   }
 
@@ -91,9 +83,9 @@ toFormattedJSON = function (this: VideoAbuseInstance) {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  VideoAbuse.belongsTo(models.Server, {
+  VideoAbuse.belongsTo(models.Account, {
     foreignKey: {
-      name: 'reporterServerId',
+      name: 'reporterAccountId',
       allowNull: true
     },
     onDelete: 'CASCADE'
@@ -115,8 +107,18 @@ listForApi = function (start: number, count: number, sort: string) {
     order: [ getSort(sort) ],
     include: [
       {
-        model: VideoAbuse['sequelize'].models.Server,
-        required: false
+        model: VideoAbuse['sequelize'].models.Account,
+        required: true,
+        include: [
+          {
+            model: VideoAbuse['sequelize'].models.Server,
+            required: false
+          }
+        ]
+      },
+      {
+        model: VideoAbuse['sequelize'].models.Video,
+        required: true
       }
     ]
   }

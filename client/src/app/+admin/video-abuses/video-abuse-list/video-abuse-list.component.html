@@ -11,6 +11,7 @@
     <p-column field="reason" header="Reason"></p-column>
     <p-column field="reporterServerHost" header="Reporter server host"></p-column>
     <p-column field="reporterUsername" header="Reporter username"></p-column>
+    <p-column field="videoName" header="Video name"></p-column>
     <p-column header="Video" styleClass="action-cell">
       <ng-template pTemplate="body" let-videoAbuse="rowData">
         <a [routerLink]="getRouterVideoLink(videoAbuse.videoId)" title="Go to the video">{{ videoAbuse.videoId }}</a>

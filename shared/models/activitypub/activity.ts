@@ -1,8 +1,6 @@
-import {
-  VideoChannelObject,
-  VideoTorrentObject
-} from './objects'
+import { VideoChannelObject, VideoTorrentObject } from './objects'
 import { ActivityPubSignature } from './activitypub-signature'
+import { VideoAbuseObject } from './objects/video-abuse-object'
 
 export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate | ActivityFlag |
   ActivityDelete | ActivityFollow | ActivityAccept
@@ -21,7 +19,7 @@ export interface BaseActivity {
 
 export interface ActivityCreate extends BaseActivity {
   type: 'Create'
-  object: VideoChannelObject
+  object: VideoChannelObject | VideoAbuseObject
 }
 
 export interface ActivityAdd extends BaseActivity {

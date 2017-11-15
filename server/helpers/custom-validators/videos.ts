@@ -112,10 +112,6 @@ function isVideoAbuseReasonValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
 }
 
-function isVideoAbuseReporterUsernameValid (value: string) {
-  return isUserUsernameValid(value)
-}
-
 function isVideoViewsValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
 }
@@ -209,7 +205,6 @@ export {
   isVideoThumbnailDataValid,
   isVideoFileExtnameValid,
   isVideoAbuseReasonValid,
-  isVideoAbuseReporterUsernameValid,
   isVideoFile,
   isVideoViewsValid,
   isVideoLikesValid,

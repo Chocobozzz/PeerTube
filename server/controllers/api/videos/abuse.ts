@@ -18,6 +18,7 @@ import {
 } from '../../../middlewares'
 import { VideoInstance } from '../../../models'
 import { VideoAbuseCreate, UserRight } from '../../../../shared'
+import { sendVideoAbuse } from '../../../lib/index'
 
 const abuseVideoRouter = express.Router()
 
@@ -63,28 +64,21 @@ async function reportVideoAbuseRetryWrapper (req: express.Request, res: express.
 
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video as VideoInstance
-  const reporterUsername = res.locals.oauth.token.User.username
+  const reporterAccount = res.locals.oauth.token.User.Account
   const body: VideoAbuseCreate = req.body
 
   const abuseToCreate = {
-    reporterUsername,
+    reporterAccountId: reporterAccount.id,
     reason: body.reason,
-    videoId: videoInstance.id,
-    reporterServerId: null // This is our server that reported this abuse
+    videoId: videoInstance.id
   }
 
   await db.sequelize.transaction(async t => {
-    const abuse = await db.VideoAbuse.create(abuseToCreate, { transaction: t })
-    // We send the information to the destination server
-    if (videoInstance.isOwned() === false) {
-      const reportData = {
-        reporterUsername,
-        reportReason: abuse.reason,
-        videoUUID: videoInstance.uuid
-      }
+    const videoAbuseInstance = await db.VideoAbuse.create(abuseToCreate, { transaction: t })
 
-      // await friends.reportAbuseVideoToFriend(reportData, videoInstance, t)
-      // TODO: send abuse to origin server
+    // We send the video abuse to the origin server
+    if (videoInstance.isOwned() === false) {
+      await sendVideoAbuse(reporterAccount, videoAbuseInstance, videoInstance, t)
     }
   })
 
