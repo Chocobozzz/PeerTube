@@ -22,10 +22,11 @@ function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObjec
   return doRequestAndSaveToFile(options, thumbnailPath)
 }
 
-function getActivityPubUrl (type: 'video' | 'videoChannel' | 'account', id: string) {
+function getActivityPubUrl (type: 'video' | 'videoChannel' | 'account' | 'videoAbuse', id: string) {
   if (type === 'video') return CONFIG.WEBSERVER.URL + '/videos/watch/' + id
   else if (type === 'videoChannel') return CONFIG.WEBSERVER.URL + '/video-channels/' + id
   else if (type === 'account') return CONFIG.WEBSERVER.URL + '/account/' + id
+  else if (type === 'videoAbuse') return CONFIG.WEBSERVER.URL + '/admin/video-abuses/' + id
 
   return ''
 }
@@ -134,7 +135,8 @@ function activityPubContextify <T> (data: T) {
         'nsfw': 'as:sensitive',
         'language': 'http://schema.org/inLanguage',
         'views': 'http://schema.org/Number',
-        'size': 'http://schema.org/Number'
+        'size': 'http://schema.org/Number',
+        'VideoChannel': 'https://peertu.be/ns/VideoChannel'
       }
     ]
   })
