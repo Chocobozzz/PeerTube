@@ -255,7 +255,6 @@ function associate (models) {
       name: 'accountId',
       allowNull: false
     },
-    as: 'following',
     onDelete: 'cascade'
   })
 
@@ -264,7 +263,6 @@ function associate (models) {
       name: 'targetAccountId',
       allowNull: false
     },
-    as: 'followers',
     onDelete: 'cascade'
   })
 }

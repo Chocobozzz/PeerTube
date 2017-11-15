@@ -94,6 +94,7 @@ export class FollowingAddComponent implements OnInit {
         this.followService.follow(notEmptyHosts).subscribe(
           status => {
             this.notificationsService.success('Success', 'Follow request(s) sent!')
+            this.router.navigate([ '/admin/follows/following-list' ])
           },
 
           err => this.notificationsService.error('Error', err.message)

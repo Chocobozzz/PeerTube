@@ -89,7 +89,12 @@ database.init = async (silent: boolean) => {
 
   for (const modelName of Object.keys(database)) {
     if ('associate' in database[modelName]) {
-      database[modelName].associate(database)
+      try {
+        database[modelName].associate(database)
+      } catch (err) {
+        logger.error('Cannot associate model %s.', modelName, err)
+        process.exit(0)
+      }
     }
   }
 
