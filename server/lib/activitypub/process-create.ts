@@ -40,7 +40,7 @@ function processCreateVideoChannel (account: AccountInstance, videoChannelToCrea
 async function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
   logger.debug('Adding remote video channel "%s".', videoChannelToCreateData.uuid)
 
-  await db.sequelize.transaction(async t => {
+  return db.sequelize.transaction(async t => {
     let videoChannel = await db.VideoChannel.loadByUUIDOrUrl(videoChannelToCreateData.uuid, videoChannelToCreateData.id, t)
     if (videoChannel) throw new Error('Video channel with this URL/UUID already exists.')
 
@@ -57,10 +57,11 @@ async function addRemoteVideoChannel (account: AccountInstance, videoChannelToCr
     videoChannel = db.VideoChannel.build(videoChannelData)
     videoChannel.url = getActivityPubUrl('videoChannel', videoChannel.uuid)
 
-    await videoChannel.save({ transaction: t })
-  })
+    videoChannel = await videoChannel.save({ transaction: t })
+    logger.info('Remote video channel with uuid %s inserted.', videoChannelToCreateData.uuid)
 
-  logger.info('Remote video channel with uuid %s inserted.', videoChannelToCreateData.uuid)
+    return videoChannel
+  })
 }
 
 function processCreateVideoAbuse (account: AccountInstance, videoAbuseToCreateData: VideoAbuseObject) {

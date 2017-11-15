@@ -39,7 +39,7 @@ function processAddVideo (account: AccountInstance, videoChannelUrl: string, vid
 async function addRemoteVideo (account: AccountInstance, videoChannelUrl: string, videoToCreateData: VideoTorrentObject) {
   logger.debug('Adding remote video %s.', videoToCreateData.url)
 
-  await db.sequelize.transaction(async t => {
+  return db.sequelize.transaction(async t => {
     const sequelizeOptions = {
       transaction: t
     }
@@ -66,7 +66,10 @@ async function addRemoteVideo (account: AccountInstance, videoChannelUrl: string
     const tags = videoToCreateData.tag.map(t => t.name)
     const tagInstances = await db.Tag.findOrCreateTags(tags, t)
     await videoCreated.setTags(tagInstances, sequelizeOptions)
+
+    logger.info('Remote video with uuid %s inserted.', videoToCreateData.uuid)
+
+    return videoCreated
   })
 
-  logger.info('Remote video with uuid %s inserted.', videoToCreateData.uuid)
 }

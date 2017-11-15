@@ -253,9 +253,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         },
         {
           fields: [ 'channelId' ]
-        },
-        {
-          fields: [ 'parentId' ]
         }
       ],
       hooks: {
@@ -325,14 +322,6 @@ function associate (models) {
     foreignKey: {
       name: 'channelId',
       allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-
-  Video.belongsTo(models.Video, {
-    foreignKey: {
-      name: 'parentId',
-      allowNull: true
     },
     onDelete: 'cascade'
   })
