@@ -10,8 +10,8 @@ import { RestExtractor, RestPagination, RestService } from '../../../shared'
 import { Pod, ResultList } from '../../../../../../shared'
 
 @Injectable()
-export class FriendService {
-  private static BASE_FRIEND_URL = API_URL + '/api/v1/pods/'
+export class FollowService {
+  private static BASE_APPLICATION_URL = API_URL + '/api/v1/application'
 
   constructor (
     private authHttp: HttpClient,
@@ -23,9 +23,18 @@ export class FriendService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<Account>>(API_URL + '/api/v1/pods/followers', { params })
+    return this.authHttp.get<ResultList<Account>>(FollowService.BASE_APPLICATION_URL + '/following', { params })
                         .map(res => this.restExtractor.convertResultListDateToHuman(res))
                         .catch(res => this.restExtractor.handleError(res))
+  }
+
+  getFollowers (pagination: RestPagination, sort: SortMeta): Observable<ResultList<Pod>> {
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp.get<ResultList<Account>>(FollowService.BASE_APPLICATION_URL + '/followers', { params })
+      .map(res => this.restExtractor.convertResultListDateToHuman(res))
+      .catch(res => this.restExtractor.handleError(res))
   }
 
   follow (notEmptyHosts: String[]) {
@@ -33,19 +42,7 @@ export class FriendService {
       hosts: notEmptyHosts
     }
 
-    return this.authHttp.post(API_URL + '/api/v1/pods/follow', body)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
-  }
-
-  quitFriends () {
-    return this.authHttp.get(FriendService.BASE_FRIEND_URL + 'quit-friends')
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
-  }
-
-  removeFriend (friend: Pod) {
-    return this.authHttp.delete(FriendService.BASE_FRIEND_URL + friend.id)
+    return this.authHttp.post(FollowService.BASE_APPLICATION_URL + '/follow', body)
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
   }

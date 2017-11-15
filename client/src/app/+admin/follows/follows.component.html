@@ -1,0 +1,11 @@
+<div class="follows-menu">
+  <tabset #followsMenuTabs>
+    <tab *ngFor="let link of links">
+      <ng-template tabHeading>
+        <a class="tab-link" [routerLink]="link.path">{{ link.title }}</a>
+      </ng-template>
+    </tab>
+  </tabset>
+</div>
+
+<router-outlet></router-outlet>

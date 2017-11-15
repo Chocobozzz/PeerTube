@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit {
 
   private routesPerRight = {
     [UserRight.MANAGE_USERS]: '/admin/users',
-    [UserRight.MANAGE_PEERTUBE_FOLLOW]: '/admin/friends',
+    [UserRight.MANAGE_APPLICATION_FOLLOW]: '/admin/friends',
     [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/video-abuses',
     [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/video-blacklist'
   }
@@ -58,7 +58,7 @@ export class MenuComponent implements OnInit {
 
     const adminRights = [
       UserRight.MANAGE_USERS,
-      UserRight.MANAGE_PEERTUBE_FOLLOW,
+      UserRight.MANAGE_APPLICATION_FOLLOW,
       UserRight.MANAGE_VIDEO_ABUSES,
       UserRight.MANAGE_VIDEO_BLACKLIST
     ]

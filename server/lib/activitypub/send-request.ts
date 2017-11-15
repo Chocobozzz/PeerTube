@@ -85,7 +85,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t: Sequelize.Transaction) {
-  const result = await db.Account.listAcceptedFollowerUrlsForApi(fromAccount.id, 0)
+  const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi(fromAccount.id, 0)
 
   const jobPayload = {
     uris: result.data,

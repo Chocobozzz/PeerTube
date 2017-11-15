@@ -1,25 +1,28 @@
 import { NgModule } from '@angular/core'
-
-import { AdminComponent } from './admin.component'
-import { AdminRoutingModule } from './admin-routing.module'
-import { FriendsComponent, FriendAddComponent, FriendListComponent, FriendService } from './friends'
-import { UsersComponent, UserAddComponent, UserUpdateComponent, UserListComponent, UserService } from './users'
-import { VideoAbusesComponent, VideoAbuseListComponent } from './video-abuses'
-import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
+import { TabsModule } from 'ngx-bootstrap/tabs'
 import { SharedModule } from '../shared'
+import { AdminRoutingModule } from './admin-routing.module'
+import { AdminComponent } from './admin.component'
+import { FollowersListComponent, FollowingAddComponent, FollowsComponent, FollowService } from './follows'
+import { FollowingListComponent } from './follows/following-list/following-list.component'
+import { UserAddComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
+import { VideoAbuseListComponent, VideoAbusesComponent } from './video-abuses'
+import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
 
 @NgModule({
   imports: [
     AdminRoutingModule,
+    TabsModule.forRoot(),
     SharedModule
   ],
 
   declarations: [
     AdminComponent,
 
-    FriendsComponent,
-    FriendAddComponent,
-    FriendListComponent,
+    FollowsComponent,
+    FollowingAddComponent,
+    FollowersListComponent,
+    FollowingListComponent,
 
     UsersComponent,
     UserAddComponent,
@@ -38,7 +41,7 @@ import { SharedModule } from '../shared'
   ],
 
   providers: [
-    FriendService,
+    FollowService,
     UserService
   ]
 })

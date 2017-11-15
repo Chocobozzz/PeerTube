@@ -5,9 +5,9 @@
       List users
     </a>
 
-    <a *ngIf="hasFriendsRight()" routerLink="/admin/friends" routerLinkActive="active">
+    <a *ngIf="hasApplicationFollowRight()" routerLink="/admin/follows" routerLinkActive="active">
       <span class="hidden-xs glyphicon glyphicon-cloud"></span>
-      List friends
+      Manage follows
     </a>
 
     <a *ngIf="hasVideoAbusesRight()" routerLink="/admin/video-abuses" routerLinkActive="active">

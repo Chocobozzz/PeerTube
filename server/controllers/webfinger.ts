@@ -8,7 +8,7 @@ import { AccountInstance } from '../models/account/account-interface'
 
 const webfingerRouter = express.Router()
 
-webfingerRouter.use('/.well-known/webfinger',
+webfingerRouter.get('/.well-known/webfinger',
   webfingerValidator,
   webfingerController
 )
