@@ -108,7 +108,11 @@ async function follow (req: express.Request, res: express.Response, next: expres
     tasks.push(p)
   }
 
-  await Promise.all(tasks)
+  // Don't make the client wait the tasks
+  Promise.all(tasks)
+    .catch(err => {
+      logger.error('Error in follow.', err)
+    })
 
   return res.status(204).end()
 }

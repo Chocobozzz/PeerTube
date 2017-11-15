@@ -1,20 +1,17 @@
 import * as validator from 'validator'
-
+import { ACTIVITY_PUB } from '../../../initializers'
+import { exists, isDateValid, isUUIDValid } from '../misc'
+import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
 import {
-  ACTIVITY_PUB
-} from '../../../initializers'
-import { isDateValid, isUUIDValid } from '../misc'
-import {
-  isVideoViewsValid,
-  isVideoNSFWValid,
-  isVideoTruncatedDescriptionValid,
   isVideoDurationValid,
   isVideoNameValid,
+  isVideoNSFWValid,
   isVideoTagValid,
-  isVideoUrlValid
+  isVideoTruncatedDescriptionValid,
+  isVideoUrlValid,
+  isVideoViewsValid
 } from '../videos'
-import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
-import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
+import { isBaseActivityValid } from './misc'
 
 function isVideoTorrentAddActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Add') &&
@@ -30,10 +27,19 @@ function isVideoTorrentDeleteActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Delete')
 }
 
+function isActivityPubVideoDurationValid (value: string) {
+  // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
+  return exists(value) &&
+    typeof value === 'string' &&
+    value.startsWith('PT') &&
+    value.endsWith('S') &&
+    isVideoDurationValid(value.replace(/[^0-9]+/, ''))
+}
+
 function isVideoTorrentObjectValid (video: any) {
   return video.type === 'Video' &&
     isVideoNameValid(video.name) &&
-    isVideoDurationValid(video.duration) &&
+    isActivityPubVideoDurationValid(video.duration) &&
     isUUIDValid(video.uuid) &&
     setValidRemoteTags(video) &&
     isRemoteIdentifierValid(video.category) &&

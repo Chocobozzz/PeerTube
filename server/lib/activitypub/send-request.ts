@@ -11,6 +11,7 @@ import { signObject, activityPubContextify } from '../../helpers'
 import { Activity } from '../../../shared'
 import { VideoAbuseInstance } from '../../models/video/video-abuse-interface'
 import { getActivityPubUrl } from '../../helpers/activitypub'
+import { logger } from '../../helpers/logger'
 
 async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const videoChannelObject = videoChannel.toActivityPubObject()
@@ -100,7 +101,11 @@ export {
 // ---------------------------------------------------------------------------
 
 async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t: Sequelize.Transaction) {
-  const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi(fromAccount.id, 0)
+  const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi(fromAccount.id)
+  if (result.data.length === 0) {
+    logger.info('Not broadcast because of 0 followers.')
+    return
+  }
 
   const jobPayload = {
     uris: result.data,
