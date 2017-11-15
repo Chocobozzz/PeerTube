@@ -6,14 +6,14 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { ConfirmService } from '../../../core'
 import { validateHost } from '../../../shared'
-import { FriendService } from '../shared'
+import { FollowService } from '../shared'
 
 @Component({
-  selector: 'my-friend-add',
-  templateUrl: './friend-add.component.html',
-  styleUrls: [ './friend-add.component.scss' ]
+  selector: 'my-following-add',
+  templateUrl: './following-add.component.html',
+  styleUrls: [ './following-add.component.scss' ]
 })
-export class FriendAddComponent implements OnInit {
+export class FollowingAddComponent implements OnInit {
   form: FormGroup
   hosts: string[] = [ ]
   error: string = null
@@ -22,7 +22,7 @@ export class FriendAddComponent implements OnInit {
     private router: Router,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private friendService: FriendService
+    private followService: FollowService
   ) {}
 
   ngOnInit () {
@@ -72,7 +72,7 @@ export class FriendAddComponent implements OnInit {
     this.hosts.splice(index, 1)
   }
 
-  makeFriends () {
+  addFollowing () {
     this.error = ''
 
     const notEmptyHosts = this.getNotEmptyHosts()
@@ -87,13 +87,13 @@ export class FriendAddComponent implements OnInit {
     }
 
     const confirmMessage = 'Are you sure to make friends with:<br /> - ' + notEmptyHosts.join('<br /> - ')
-    this.confirmService.confirm(confirmMessage, 'Make friends').subscribe(
+    this.confirmService.confirm(confirmMessage, 'Follow new server(s)').subscribe(
       res => {
         if (res === false) return
 
-        this.friendService.follow(notEmptyHosts).subscribe(
+        this.followService.follow(notEmptyHosts).subscribe(
           status => {
-            this.notificationsService.success('Success', 'Make friends request sent!')
+            this.notificationsService.success('Success', 'Follow request(s) sent!')
             // Wait requests between pods
             setTimeout(() => this.router.navigate([ '/admin/friends/list' ]), 1000)
           },

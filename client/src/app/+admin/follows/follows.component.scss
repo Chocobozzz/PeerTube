@@ -1,0 +1,21 @@
+.follows-menu {
+  margin-top: 20px;
+}
+
+tabset /deep/ {
+  .nav-link {
+    padding: 0;
+  }
+
+  .tab-link {
+    display: block;
+    text-align: center;
+    height: 40px;
+    width: 120px;
+    line-height: 40px;
+
+    &:hover, &:active, &:focus {
+      text-decoration: none !important;
+    }
+  }
+}

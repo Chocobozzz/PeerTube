@@ -15,10 +15,6 @@ export namespace AccountMethods {
   export type LoadLocalByName = (name: string) => Bluebird<AccountInstance>
   export type LoadByNameAndHost = (name: string, host: string) => Bluebird<AccountInstance>
   export type ListOwned = () => Bluebird<AccountInstance[]>
-  export type ListAcceptedFollowerUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
-  export type ListAcceptedFollowingUrlsForApi = (id: number, start: number, count?: number) => Promise< ResultList<string> >
-  export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
-  export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
 
   export type ToActivityPubObject = (this: AccountInstance) => ActivityPubActor
   export type ToFormattedJSON = (this: AccountInstance) => FormattedAccount
@@ -38,10 +34,6 @@ export interface AccountClass {
   loadLocalByName: AccountMethods.LoadLocalByName
   loadByNameAndHost: AccountMethods.LoadByNameAndHost
   listOwned: AccountMethods.ListOwned
-  listAcceptedFollowerUrlsForApi: AccountMethods.ListAcceptedFollowerUrlsForApi
-  listAcceptedFollowingUrlsForApi: AccountMethods.ListAcceptedFollowingUrlsForApi
-  listFollowingForApi: AccountMethods.ListFollowingForApi
-  listFollowersForApi: AccountMethods.ListFollowersForApi
 }
 
 export interface AccountAttributes {

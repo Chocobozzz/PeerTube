@@ -1,23 +1,23 @@
 import * as express from 'express'
-import { UserRight } from '../../../shared/models/users/user-right.enum'
-import { getFormattedObjects } from '../../helpers'
-import { logger } from '../../helpers/logger'
-import { getApplicationAccount } from '../../helpers/utils'
-import { getAccountFromWebfinger } from '../../helpers/webfinger'
-import { SERVER_ACCOUNT_NAME } from '../../initializers/constants'
-import { database as db } from '../../initializers/database'
-import { sendFollow } from '../../lib/activitypub/send-request'
-import { asyncMiddleware, paginationValidator, setFollowersSort, setPagination } from '../../middlewares'
-import { authenticate } from '../../middlewares/oauth'
-import { setBodyHostsPort } from '../../middlewares/pods'
-import { setFollowingSort } from '../../middlewares/sort'
-import { ensureUserHasRight } from '../../middlewares/user-right'
-import { followValidator } from '../../middlewares/validators/pods'
-import { followersSortValidator, followingSortValidator } from '../../middlewares/validators/sort'
+import { UserRight } from '../../../../shared/models/users/user-right.enum'
+import { getFormattedObjects } from '../../../helpers'
+import { logger } from '../../../helpers/logger'
+import { getApplicationAccount } from '../../../helpers/utils'
+import { getAccountFromWebfinger } from '../../../helpers/webfinger'
+import { SERVER_ACCOUNT_NAME } from '../../../initializers/constants'
+import { database as db } from '../../../initializers/database'
+import { sendFollow } from '../../../lib/activitypub/send-request'
+import { asyncMiddleware, paginationValidator, setFollowersSort, setPagination } from '../../../middlewares'
+import { authenticate } from '../../../middlewares/oauth'
+import { setBodyHostsPort } from '../../../middlewares/pods'
+import { setFollowingSort } from '../../../middlewares/sort'
+import { ensureUserHasRight } from '../../../middlewares/user-right'
+import { followValidator } from '../../../middlewares/validators/pods'
+import { followersSortValidator, followingSortValidator } from '../../../middlewares/validators/sort'
 
-const podsRouter = express.Router()
+const applicationFollowsRouter = express.Router()
 
-podsRouter.get('/following',
+applicationFollowsRouter.get('/following',
   paginationValidator,
   followingSortValidator,
   setFollowingSort,
@@ -25,15 +25,15 @@ podsRouter.get('/following',
   asyncMiddleware(listFollowing)
 )
 
-podsRouter.post('/follow',
+applicationFollowsRouter.post('/follow',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_PEERTUBE_FOLLOW),
+  ensureUserHasRight(UserRight.MANAGE_APPLICATION_FOLLOW),
   followValidator,
   setBodyHostsPort,
   asyncMiddleware(follow)
 )
 
-podsRouter.get('/followers',
+applicationFollowsRouter.get('/followers',
   paginationValidator,
   followersSortValidator,
   setFollowersSort,
@@ -44,21 +44,21 @@ podsRouter.get('/followers',
 // ---------------------------------------------------------------------------
 
 export {
-  podsRouter
+  applicationFollowsRouter
 }
 
 // ---------------------------------------------------------------------------
 
 async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
   const applicationAccount = await getApplicationAccount()
-  const resultList = await db.Account.listFollowingForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await db.AccountFollow.listFollowingForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
   const applicationAccount = await getApplicationAccount()
-  const resultList = await db.Account.listFollowersForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await db.AccountFollow.listFollowersForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

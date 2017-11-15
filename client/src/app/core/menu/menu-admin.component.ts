@@ -15,8 +15,8 @@ export class MenuAdminComponent {
     return this.auth.getUser().hasRight(UserRight.MANAGE_USERS)
   }
 
-  hasFriendsRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_PEERTUBE_FOLLOW)
+  hasApplicationFollowRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_APPLICATION_FOLLOW)
   }
 
   hasVideoAbusesRight () {

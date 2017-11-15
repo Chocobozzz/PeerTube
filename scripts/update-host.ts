@@ -3,7 +3,7 @@ import { database as db } from '../server/initializers/database'
 
 db.init(true)
   .then(() => {
-    // FIXME: check if has followers
+    // FIXME: check if has following
     // return hasFriends()
     return true
   })
