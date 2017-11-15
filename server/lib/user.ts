@@ -46,7 +46,7 @@ async function createLocalAccount (name: string, userId: number, applicationId: 
     followingUrl: url + '/following',
     userId,
     applicationId,
-    podId: null // It is our pod
+    serverId: null // It is our server
   })
 
   return accountInstance.save({ transaction: t })

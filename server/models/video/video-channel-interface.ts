@@ -22,7 +22,7 @@ export namespace VideoChannelMethods {
   export type LoadAndPopulateAccount = (id: number) => Promise<VideoChannelInstance>
   export type LoadByUUIDAndPopulateAccount = (uuid: string) => Promise<VideoChannelInstance>
   export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoChannelInstance>
-  export type LoadByHostAndUUID = (uuid: string, podHost: string, t?: Sequelize.Transaction) => Promise<VideoChannelInstance>
+  export type LoadByHostAndUUID = (uuid: string, serverHost: string, t?: Sequelize.Transaction) => Promise<VideoChannelInstance>
   export type LoadAndPopulateAccountAndVideos = (id: number) => Promise<VideoChannelInstance>
   export type LoadByUrl = (uuid: string, t?: Sequelize.Transaction) => Promise<VideoChannelInstance>
   export type LoadByUUIDOrUrl = (uuid: string, url: string, t?: Sequelize.Transaction) => Promise<VideoChannelInstance>

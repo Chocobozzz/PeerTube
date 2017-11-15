@@ -4,7 +4,7 @@ import { badRequest } from '../../helpers'
 
 import { oauthClientsRouter } from './oauth-clients'
 import { configRouter } from './config'
-import { applicationRouter } from './application'
+import { applicationRouter } from './server'
 import { usersRouter } from './users'
 import { videosRouter } from './videos'
 

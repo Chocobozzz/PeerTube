@@ -46,7 +46,7 @@ export namespace VideoMethods {
 
   export type ListForApi = (start: number, count: number, sort: string) => Bluebird< ResultList<VideoInstance> >
   export type ListUserVideosForApi = (userId: number, start: number, count: number, sort: string) => Bluebird< ResultList<VideoInstance> >
-  export type SearchAndPopulateAccountAndPodAndTags = (
+  export type SearchAndPopulateAccountAndServerAndTags = (
     value: string,
     field: string,
     start: number,
@@ -60,8 +60,8 @@ export namespace VideoMethods {
   export type LoadLocalVideoByUUID = (uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
   export type LoadByHostAndUUID = (fromHost: string, uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
   export type LoadAndPopulateAccount = (id: number) => Bluebird<VideoInstance>
-  export type LoadAndPopulateAccountAndPodAndTags = (id: number) => Bluebird<VideoInstance>
-  export type LoadByUUIDAndPopulateAccountAndPodAndTags = (uuid: string) => Bluebird<VideoInstance>
+  export type LoadAndPopulateAccountAndServerAndTags = (id: number) => Bluebird<VideoInstance>
+  export type LoadByUUIDAndPopulateAccountAndServerAndTags = (uuid: string) => Bluebird<VideoInstance>
   export type LoadByUUIDOrURL = (uuid: string, url: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
 
   export type RemoveThumbnail = (this: VideoInstance) => Promise<void>
@@ -79,14 +79,14 @@ export interface VideoClass {
   listOwnedByAccount: VideoMethods.ListOwnedByAccount
   load: VideoMethods.Load
   loadAndPopulateAccount: VideoMethods.LoadAndPopulateAccount
-  loadAndPopulateAccountAndPodAndTags: VideoMethods.LoadAndPopulateAccountAndPodAndTags
+  loadAndPopulateAccountAndServerAndTags: VideoMethods.LoadAndPopulateAccountAndServerAndTags
   loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
   loadByUUID: VideoMethods.LoadByUUID
   loadByUrl: VideoMethods.LoadByUrl
   loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
   loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
-  loadByUUIDAndPopulateAccountAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndPodAndTags
-  searchAndPopulateAccountAndPodAndTags: VideoMethods.SearchAndPopulateAccountAndPodAndTags
+  loadByUUIDAndPopulateAccountAndServerAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndServerAndTags
+  searchAndPopulateAccountAndServerAndTags: VideoMethods.SearchAndPopulateAccountAndServerAndTags
 }
 
 export interface VideoAttributes {

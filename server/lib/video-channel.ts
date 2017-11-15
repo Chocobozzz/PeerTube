@@ -30,14 +30,14 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   return videoChannelCreated
 }
 
-async function fetchVideoChannelByHostAndUUID (podHost: string, uuid: string, t: Sequelize.Transaction) {
+async function fetchVideoChannelByHostAndUUID (serverHost: string, uuid: string, t: Sequelize.Transaction) {
   try {
-    const videoChannel = await db.VideoChannel.loadByHostAndUUID(podHost, uuid, t)
+    const videoChannel = await db.VideoChannel.loadByHostAndUUID(serverHost, uuid, t)
     if (!videoChannel) throw new Error('Video channel not found')
 
     return videoChannel
   } catch (err) {
-    logger.error('Cannot load video channel from host and uuid.', { error: err.stack, podHost, uuid })
+    logger.error('Cannot load video channel from host and uuid.', { error: err.stack, serverHost, uuid })
     throw err
   }
 }

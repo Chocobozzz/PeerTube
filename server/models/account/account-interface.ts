@@ -1,8 +1,7 @@
 import * as Bluebird from 'bluebird'
 import * as Sequelize from 'sequelize'
 import { Account as FormattedAccount, ActivityPubActor } from '../../../shared'
-import { ResultList } from '../../../shared/models/result-list.model'
-import { PodInstance } from '../pod/pod-interface'
+import { ServerInstance } from '../server/server-interface'
 import { VideoChannelInstance } from '../video/video-channel-interface'
 
 export namespace AccountMethods {
@@ -11,7 +10,7 @@ export namespace AccountMethods {
   export type Load = (id: number) => Bluebird<AccountInstance>
   export type LoadByUUID = (uuid: string) => Bluebird<AccountInstance>
   export type LoadByUrl = (url: string, transaction?: Sequelize.Transaction) => Bluebird<AccountInstance>
-  export type LoadAccountByPodAndUUID = (uuid: string, podId: number, transaction: Sequelize.Transaction) => Bluebird<AccountInstance>
+  export type LoadAccountByServerAndUUID = (uuid: string, serverId: number, transaction: Sequelize.Transaction) => Bluebird<AccountInstance>
   export type LoadLocalByName = (name: string) => Bluebird<AccountInstance>
   export type LoadByNameAndHost = (name: string, host: string) => Bluebird<AccountInstance>
   export type ListOwned = () => Bluebird<AccountInstance[]>
@@ -27,7 +26,7 @@ export namespace AccountMethods {
 
 export interface AccountClass {
   loadApplication: AccountMethods.LoadApplication
-  loadAccountByPodAndUUID: AccountMethods.LoadAccountByPodAndUUID
+  loadAccountByServerAndUUID: AccountMethods.LoadAccountByServerAndUUID
   load: AccountMethods.Load
   loadByUUID: AccountMethods.LoadByUUID
   loadByUrl: AccountMethods.LoadByUrl
@@ -51,7 +50,7 @@ export interface AccountAttributes {
 
   uuid?: string
 
-  podId?: number
+  serverId?: number
   userId?: number
   applicationId?: number
 }
@@ -69,7 +68,7 @@ export interface AccountInstance extends AccountClass, AccountAttributes, Sequel
   createdAt: Date
   updatedAt: Date
 
-  Pod: PodInstance
+  Server: ServerInstance
   VideoChannels: VideoChannelInstance[]
 }
 

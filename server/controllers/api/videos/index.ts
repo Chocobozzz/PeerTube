@@ -233,7 +233,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
 
     // Let transcoding job send the video to friends because the video file extension might change
     if (CONFIG.TRANSCODING.ENABLED === true) return undefined
-    // Don't send video to remote pods, it is private
+    // Don't send video to remote servers, it is private
     if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
     await sendAddVideo(video, t)
@@ -287,7 +287,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         await sendUpdateVideoChannel(videoInstance, t)
       }
 
-      // Video is not private anymore, send a create action to remote pods
+      // Video is not private anymore, send a create action to remote servers
       if (wasPrivateVideo === true && videoInstance.privacy !== VideoPrivacy.PRIVATE) {
         await sendAddVideo(videoInstance, t)
       }
@@ -365,7 +365,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
 }
 
 async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.Video.searchAndPopulateAccountAndPodAndTags(
+  const resultList = await db.Video.searchAndPopulateAccountAndServerAndTags(
     req.params.value,
     req.query.field,
     req.query.start,

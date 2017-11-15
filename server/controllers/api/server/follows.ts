@@ -9,10 +9,10 @@ import { database as db } from '../../../initializers/database'
 import { sendFollow } from '../../../lib/activitypub/send-request'
 import { asyncMiddleware, paginationValidator, setFollowersSort, setPagination } from '../../../middlewares'
 import { authenticate } from '../../../middlewares/oauth'
-import { setBodyHostsPort } from '../../../middlewares/pods'
+import { setBodyHostsPort } from '../../../middlewares/servers'
 import { setFollowingSort } from '../../../middlewares/sort'
 import { ensureUserHasRight } from '../../../middlewares/user-right'
-import { followValidator } from '../../../middlewares/validators/pods'
+import { followValidator } from '../../../middlewares/validators/servers'
 import { followersSortValidator, followingSortValidator } from '../../../middlewares/validators/sort'
 
 const applicationFollowsRouter = express.Router()

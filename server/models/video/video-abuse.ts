@@ -45,7 +45,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
           fields: [ 'videoId' ]
         },
         {
-          fields: [ 'reporterPodId' ]
+          fields: [ 'reporterServerId' ]
         }
       ]
     }
@@ -67,18 +67,18 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 // ------------------------------ METHODS ------------------------------
 
 toFormattedJSON = function (this: VideoAbuseInstance) {
-  let reporterPodHost
+  let reporterServerHost
 
-  if (this.Pod) {
-    reporterPodHost = this.Pod.host
+  if (this.Server) {
+    reporterServerHost = this.Server.host
   } else {
     // It means it's our video
-    reporterPodHost = CONFIG.WEBSERVER.HOST
+    reporterServerHost = CONFIG.WEBSERVER.HOST
   }
 
   const json = {
     id: this.id,
-    reporterPodHost,
+    reporterServerHost,
     reason: this.reason,
     reporterUsername: this.reporterUsername,
     videoId: this.videoId,
@@ -91,9 +91,9 @@ toFormattedJSON = function (this: VideoAbuseInstance) {
 // ------------------------------ STATICS ------------------------------
 
 function associate (models) {
-  VideoAbuse.belongsTo(models.Pod, {
+  VideoAbuse.belongsTo(models.Server, {
     foreignKey: {
-      name: 'reporterPodId',
+      name: 'reporterServerId',
       allowNull: true
     },
     onDelete: 'CASCADE'
@@ -115,7 +115,7 @@ listForApi = function (start: number, count: number, sort: string) {
     order: [ getSort(sort) ],
     include: [
       {
-        model: VideoAbuse['sequelize'].models.Pod,
+        model: VideoAbuse['sequelize'].models.Server,
         required: false
       }
     ]

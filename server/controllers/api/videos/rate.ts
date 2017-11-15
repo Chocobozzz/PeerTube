@@ -83,7 +83,7 @@ async function rateVideo (req: express.Request, res: express.Response) {
     await videoInstance.increment(incrementQuery, sequelizeOptions)
 
     if (videoInstance.isOwned() === false) {
-      // TODO: Send a event to original pod
+      // TODO: Send a event to original server
     } else {
       // TODO: Send update to followers
     }

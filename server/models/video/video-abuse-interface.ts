@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
-import { PodInstance } from '../pod/pod-interface'
+import { ServerInstance } from '../server/server-interface'
 import { ResultList } from '../../../shared'
 
 // Don't use barrel, import just what we need
@@ -28,7 +28,7 @@ export interface VideoAbuseInstance extends VideoAbuseClass, VideoAbuseAttribute
   createdAt: Date
   updatedAt: Date
 
-  Pod: PodInstance
+  Server: ServerInstance
 
   toFormattedJSON: VideoAbuseMethods.ToFormattedJSON
 }

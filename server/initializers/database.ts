@@ -18,7 +18,7 @@ import { UserModel } from '../models/account/user-interface'
 import { AccountVideoRateModel } from '../models/account/account-video-rate-interface'
 import { AccountFollowModel } from '../models/account/account-follow-interface'
 import { TagModel } from './../models/video/tag-interface'
-import { PodModel } from './../models/pod/pod-interface'
+import { ServerModel } from '../models/server/server-interface'
 import { OAuthTokenModel } from './../models/oauth/oauth-token-interface'
 import { OAuthClientModel } from './../models/oauth/oauth-client-interface'
 import { JobModel } from './../models/job/job-interface'
@@ -38,7 +38,7 @@ const database: {
   Job?: JobModel,
   OAuthClient?: OAuthClientModel,
   OAuthToken?: OAuthTokenModel,
-  Pod?: PodModel,
+  Server?: ServerModel,
   Tag?: TagModel,
   AccountVideoRate?: AccountVideoRateModel,
   AccountFollow?: AccountFollowModel,

@@ -218,7 +218,7 @@ listForApi = function (start: number, count: number, sort: string) {
       {
         model: VideoChannel['sequelize'].models.Account,
         required: true,
-        include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
+        include: [ { model: VideoChannel['sequelize'].models.Server, required: false } ]
       }
     ]
   }
@@ -238,7 +238,7 @@ listByAccount = function (accountId: number) {
           id: accountId
         },
         required: true,
-        include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
+        include: [ { model: VideoChannel['sequelize'].models.Server, required: false } ]
       }
     ]
   }
@@ -297,7 +297,7 @@ loadByHostAndUUID = function (fromHost: string, uuid: string, t?: Sequelize.Tran
         model: VideoChannel['sequelize'].models.Account,
         include: [
           {
-            model: VideoChannel['sequelize'].models.Pod,
+            model: VideoChannel['sequelize'].models.Server,
             required: true,
             where: {
               host: fromHost
@@ -322,7 +322,7 @@ loadByIdAndAccount = function (id: number, accountId: number) {
     include: [
       {
         model: VideoChannel['sequelize'].models.Account,
-        include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
+        include: [ { model: VideoChannel['sequelize'].models.Server, required: false } ]
       }
     ]
   }
@@ -335,7 +335,7 @@ loadAndPopulateAccount = function (id: number) {
     include: [
       {
         model: VideoChannel['sequelize'].models.Account,
-        include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
+        include: [ { model: VideoChannel['sequelize'].models.Server, required: false } ]
       }
     ]
   }
@@ -351,7 +351,7 @@ loadByUUIDAndPopulateAccount = function (uuid: string) {
     include: [
       {
         model: VideoChannel['sequelize'].models.Account,
-        include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
+        include: [ { model: VideoChannel['sequelize'].models.Server, required: false } ]
       }
     ]
   }
@@ -364,7 +364,7 @@ loadAndPopulateAccountAndVideos = function (id: number) {
     include: [
       {
         model: VideoChannel['sequelize'].models.Account,
-        include: [ { model: VideoChannel['sequelize'].models.Pod, required: false } ]
+        include: [ { model: VideoChannel['sequelize'].models.Server, required: false } ]
       },
       VideoChannel['sequelize'].models.Video
     ]

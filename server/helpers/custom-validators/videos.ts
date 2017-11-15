@@ -171,9 +171,9 @@ function isVideoFileInfoHashValid (value: string) {
 function checkVideoExists (id: string, res: express.Response, callback: () => void) {
   let promise: Promise<VideoInstance>
   if (validator.isInt(id)) {
-    promise = db.Video.loadAndPopulateAccountAndPodAndTags(+id)
+    promise = db.Video.loadAndPopulateAccountAndServerAndTags(+id)
   } else { // UUID
-    promise = db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(id)
+    promise = db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(id)
   }
 
   promise.then(video => {

@@ -26,7 +26,7 @@ import { sendDeleteAccount } from '../../lib/activitypub/send-request'
 import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
 let Account: Sequelize.Model<AccountInstance, AccountAttributes>
-let loadAccountByPodAndUUID: AccountMethods.LoadAccountByPodAndUUID
+let loadAccountByServerAndUUID: AccountMethods.LoadAccountByServerAndUUID
 let load: AccountMethods.Load
 let loadApplication: AccountMethods.LoadApplication
 let loadByUUID: AccountMethods.LoadByUUID
@@ -170,7 +170,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
           fields: [ 'name' ]
         },
         {
-          fields: [ 'podId' ]
+          fields: [ 'serverId' ]
         },
         {
           fields: [ 'userId' ],
@@ -181,7 +181,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
           unique: true
         },
         {
-          fields: [ 'name', 'podId', 'applicationId' ],
+          fields: [ 'name', 'serverId', 'applicationId' ],
           unique: true
         }
       ],
@@ -191,7 +191,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
 
   const classMethods = [
     associate,
-    loadAccountByPodAndUUID,
+    loadAccountByServerAndUUID,
     loadApplication,
     load,
     loadByUUID,
@@ -217,9 +217,9 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
 // ---------------------------------------------------------------------------
 
 function associate (models) {
-  Account.belongsTo(models.Pod, {
+  Account.belongsTo(models.Server, {
     foreignKey: {
-      name: 'podId',
+      name: 'serverId',
       allowNull: true
     },
     onDelete: 'cascade'
@@ -278,19 +278,28 @@ function afterDestroy (account: AccountInstance) {
 }
 
 toFormattedJSON = function (this: AccountInstance) {
-  let host = this.Pod ? this.Pod.host : CONFIG.WEBSERVER.HOST
+  let host = CONFIG.WEBSERVER.HOST
+  let score: number
+
+  if (this.Server) {
+    host = this.Server.host
+    score = this.Server.score as number
+  }
 
   const json = {
     id: this.id,
     host,
-    name: this.name
+    score,
+    name: this.name,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
   }
 
   return json
 }
 
 toActivityPubObject = function (this: AccountInstance) {
-  const type = this.podId ? 'Application' as 'Application' : 'Person' as 'Person'
+  const type = this.serverId ? 'Application' as 'Application' : 'Person' as 'Person'
 
   const json = {
     type,
@@ -317,7 +326,7 @@ toActivityPubObject = function (this: AccountInstance) {
 }
 
 isOwned = function (this: AccountInstance) {
-  return this.podId === null
+  return this.serverId === null
 }
 
 getFollowerSharedInboxUrls = function (this: AccountInstance) {
@@ -356,7 +365,7 @@ getPublicKeyUrl = function (this: AccountInstance) {
 listOwned = function () {
   const query: Sequelize.FindOptions<AccountAttributes> = {
     where: {
-      podId: null
+      serverId: null
     }
   }
 
@@ -417,7 +426,7 @@ loadByNameAndHost = function (name: string, host: string) {
     },
     include: [
       {
-        model: Account['sequelize'].models.Pod,
+        model: Account['sequelize'].models.Server,
         required: true,
         where: {
           host
@@ -440,10 +449,10 @@ loadByUrl = function (url: string, transaction?: Sequelize.Transaction) {
   return Account.findOne(query)
 }
 
-loadAccountByPodAndUUID = function (uuid: string, podId: number, transaction: Sequelize.Transaction) {
+loadAccountByServerAndUUID = function (uuid: string, serverId: number, transaction: Sequelize.Transaction) {
   const query: Sequelize.FindOptions<AccountAttributes> = {
     where: {
-      podId,
+      serverId,
       uuid
     },
     transaction

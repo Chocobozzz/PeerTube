@@ -12,7 +12,7 @@ import { asyncMiddleware } from '../middlewares'
 const staticRouter = express.Router()
 
 /*
-  Cors is very important to let other pods access torrent and video files
+  Cors is very important to let other servers access torrent and video files
 */
 
 const torrentsPhysicalPath = CONFIG.STORAGE.TORRENTS_DIR

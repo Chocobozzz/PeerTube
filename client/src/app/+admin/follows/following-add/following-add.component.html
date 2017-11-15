@@ -26,7 +26,7 @@
       </div>
 
       <div *ngIf="canMakeFriends() === false"  class="alert alert-warning">
-        It seems that you are not on a HTTPS pod. Your webserver need to have TLS activated in order to follow servers.
+        It seems that you are not on a HTTPS server. Your webserver need to have TLS activated in order to follow servers.
       </div>
 
       <input type="submit" value="Add following" class="btn btn-default" [disabled]="!isFormValid()">

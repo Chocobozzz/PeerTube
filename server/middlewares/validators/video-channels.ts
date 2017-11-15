@@ -50,7 +50,7 @@ const videoChannelsUpdateValidator = [
         // We need to make additional checks
         if (res.locals.videoChannel.isOwned() === false) {
           return res.status(403)
-            .json({ error: 'Cannot update video channel of another pod' })
+            .json({ error: 'Cannot update video channel of another server' })
             .end()
         }
 
@@ -113,7 +113,7 @@ function checkUserCanDeleteVideoChannel (res: express.Response, callback: () => 
   // Retrieve the user who did the request
   if (res.locals.videoChannel.isOwned() === false) {
     return res.status(403)
-              .json({ error: 'Cannot remove video channel of another pod.' })
+              .json({ error: 'Cannot remove video channel of another server.' })
               .end()
   }
 

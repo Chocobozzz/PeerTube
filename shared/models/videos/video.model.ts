@@ -26,7 +26,7 @@ export interface Video {
   duration: number
   isLocal: boolean
   name: string
-  podHost: string
+  serverHost: string
   tags: string[]
   thumbnailPath: string
   previewPath: string

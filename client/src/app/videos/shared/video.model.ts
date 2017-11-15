@@ -19,7 +19,7 @@ export class Video implements VideoServerModel {
   uuid: string
   isLocal: boolean
   name: string
-  podHost: string
+  serverHost: string
   tags: string[]
   thumbnailPath: string
   thumbnailUrl: string
@@ -32,8 +32,8 @@ export class Video implements VideoServerModel {
   dislikes: number
   nsfw: boolean
 
-  private static createByString (account: string, podHost: string) {
-    return account + '@' + podHost
+  private static createByString (account: string, serverHost: string) {
+    return account + '@' + serverHost
   }
 
   private static createDurationString (duration: number) {
@@ -67,7 +67,7 @@ export class Video implements VideoServerModel {
     this.uuid = hash.uuid
     this.isLocal = hash.isLocal
     this.name = hash.name
-    this.podHost = hash.podHost
+    this.serverHost = hash.serverHost
     this.tags = hash.tags
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
@@ -80,7 +80,7 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
 
-    this.by = Video.createByString(hash.account, hash.podHost)
+    this.by = Video.createByString(hash.account, hash.serverHost)
   }
 
   isVideoNSFWForUser (user: User) {

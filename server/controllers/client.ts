@@ -110,9 +110,9 @@ async function generateWatchHtmlPage (req: express.Request, res: express.Respons
 
   // Let Angular application handle errors
   if (validator.isUUID(videoId, 4)) {
-    videoPromise = db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(videoId)
+    videoPromise = db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(videoId)
   } else if (validator.isInt(videoId)) {
-    videoPromise = db.Video.loadAndPopulateAccountAndPodAndTags(+videoId)
+    videoPromise = db.Video.loadAndPopulateAccountAndServerAndTags(+videoId)
   } else {
     return res.sendFile(indexPath)
   }

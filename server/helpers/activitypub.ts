@@ -35,7 +35,7 @@ async function getOrCreateAccount (accountUrl: string) {
 
   // We don't have this account in our database, fetch it on remote
   if (!account) {
-    const res = await fetchRemoteAccountAndCreatePod(accountUrl)
+    const res = await fetchRemoteAccountAndCreateServer(accountUrl)
     if (res === undefined) throw new Error('Cannot fetch remote account.')
 
     // Save our new account in database
@@ -46,7 +46,7 @@ async function getOrCreateAccount (accountUrl: string) {
   return account
 }
 
-async function fetchRemoteAccountAndCreatePod (accountUrl: string) {
+async function fetchRemoteAccountAndCreateServer (accountUrl: string) {
   const options = {
     uri: accountUrl,
     method: 'GET',
@@ -90,7 +90,7 @@ async function fetchRemoteAccountAndCreatePod (accountUrl: string) {
   })
 
   const accountHost = url.parse(account.url).host
-  const podOptions = {
+  const serverOptions = {
     where: {
       host: accountHost
     },
@@ -98,15 +98,15 @@ async function fetchRemoteAccountAndCreatePod (accountUrl: string) {
       host: accountHost
     }
   }
-  const [ pod ] = await db.Pod.findOrCreate(podOptions)
-  account.set('podId', pod.id)
+  const [ server ] = await db.Server.findOrCreate(serverOptions)
+  account.set('serverId', server.id)
 
-  return { account, pod }
+  return { account, server }
 }
 
 function fetchRemoteVideoPreview (video: VideoInstance) {
   // FIXME: use url
-  const host = video.VideoChannel.Account.Pod.host
+  const host = video.VideoChannel.Account.Server.host
   const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
@@ -163,7 +163,7 @@ function activityPubCollectionPagination (url: string, page: number, result: Res
 // ---------------------------------------------------------------------------
 
 export {
-  fetchRemoteAccountAndCreatePod,
+  fetchRemoteAccountAndCreateServer,
   activityPubContextify,
   activityPubCollectionPagination,
   getActivityPubUrl,

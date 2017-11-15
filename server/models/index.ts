@@ -1,6 +1,6 @@
 export * from './application'
 export * from './job'
 export * from './oauth'
-export * from './pod'
+export * from './server'
 export * from './account'
 export * from './video'

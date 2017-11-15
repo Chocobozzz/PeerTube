@@ -8,7 +8,7 @@ import { AccountInstance } from '../../models'
 import { logger } from '../logger'
 
 import { isUserUsernameValid } from './users'
-import { isHostValid } from './pods'
+import { isHostValid } from './servers'
 
 function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
