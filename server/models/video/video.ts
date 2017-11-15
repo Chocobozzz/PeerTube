@@ -88,9 +88,9 @@ let loadByUUID: VideoMethods.LoadByUUID
 let loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
 let loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
 let loadAndPopulateAccount: VideoMethods.LoadAndPopulateAccount
-let loadAndPopulateAccountAndPodAndTags: VideoMethods.LoadAndPopulateAccountAndPodAndTags
-let loadByUUIDAndPopulateAccountAndPodAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndPodAndTags
-let searchAndPopulateAccountAndPodAndTags: VideoMethods.SearchAndPopulateAccountAndPodAndTags
+let loadAndPopulateAccountAndServerAndTags: VideoMethods.LoadAndPopulateAccountAndServerAndTags
+let loadByUUIDAndPopulateAccountAndServerAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndServerAndTags
+let searchAndPopulateAccountAndServerAndTags: VideoMethods.SearchAndPopulateAccountAndServerAndTags
 let removeThumbnail: VideoMethods.RemoveThumbnail
 let removePreview: VideoMethods.RemovePreview
 let removeFile: VideoMethods.RemoveFile
@@ -275,13 +275,13 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listOwnedByAccount,
     load,
     loadAndPopulateAccount,
-    loadAndPopulateAccountAndPodAndTags,
+    loadAndPopulateAccountAndServerAndTags,
     loadByHostAndUUID,
     loadByUUIDOrURL,
     loadByUUID,
     loadLocalVideoByUUID,
-    loadByUUIDAndPopulateAccountAndPodAndTags,
-    searchAndPopulateAccountAndPodAndTags
+    loadByUUIDAndPopulateAccountAndServerAndTags,
+    searchAndPopulateAccountAndServerAndTags
   ]
   const instanceMethods = [
     createPreview,
@@ -477,13 +477,13 @@ getPreviewPath = function (this: VideoInstance) {
 }
 
 toFormattedJSON = function (this: VideoInstance) {
-  let podHost
+  let serverHost
 
-  if (this.VideoChannel.Account.Pod) {
-    podHost = this.VideoChannel.Account.Pod.host
+  if (this.VideoChannel.Account.Server) {
+    serverHost = this.VideoChannel.Account.Server.host
   } else {
     // It means it's our video
-    podHost = CONFIG.WEBSERVER.HOST
+    serverHost = CONFIG.WEBSERVER.HOST
   }
 
   const json = {
@@ -498,7 +498,7 @@ toFormattedJSON = function (this: VideoInstance) {
     languageLabel: this.getLanguageLabel(),
     nsfw: this.nsfw,
     description: this.getTruncatedDescription(),
-    podHost,
+    serverHost,
     isLocal: this.isOwned(),
     account: this.VideoChannel.Account.name,
     duration: this.duration,
@@ -519,7 +519,7 @@ toFormattedJSON = function (this: VideoInstance) {
 toFormattedDetailsJSON = function (this: VideoInstance) {
   const formattedJson = this.toFormattedJSON()
 
-  // Maybe our pod is not up to date and there are new privacy settings since our version
+  // Maybe our server is not up to date and there are new privacy settings since our version
   let privacyLabel = VIDEO_PRIVACIES[this.privacy]
   if (!privacyLabel) privacyLabel = 'Unknown'
 
@@ -721,7 +721,7 @@ getDescriptionPath = function (this: VideoInstance) {
 getCategoryLabel = function (this: VideoInstance) {
   let categoryLabel = VIDEO_CATEGORIES[this.category]
 
-  // Maybe our pod is not up to date and there are new categories since our version
+  // Maybe our server is not up to date and there are new categories since our version
   if (!categoryLabel) categoryLabel = 'Misc'
 
   return categoryLabel
@@ -730,7 +730,7 @@ getCategoryLabel = function (this: VideoInstance) {
 getLicenceLabel = function (this: VideoInstance) {
   let licenceLabel = VIDEO_LICENCES[this.licence]
 
-  // Maybe our pod is not up to date and there are new licences since our version
+  // Maybe our server is not up to date and there are new licences since our version
   if (!licenceLabel) licenceLabel = 'Unknown'
 
   return licenceLabel
@@ -830,7 +830,7 @@ listForApi = function (start: number, count: number, sort: string) {
             model: Video['sequelize'].models.Account,
             include: [
               {
-                model: Video['sequelize'].models.Pod,
+                model: Video['sequelize'].models.Server,
                 required: false
               }
             ]
@@ -866,7 +866,7 @@ loadByHostAndUUID = function (fromHost: string, uuid: string, t?: Sequelize.Tran
             model: Video['sequelize'].models.Account,
             include: [
               {
-                model: Video['sequelize'].models.Pod,
+                model: Video['sequelize'].models.Server,
                 required: true,
                 where: {
                   host: fromHost
@@ -989,7 +989,7 @@ loadAndPopulateAccount = function (id: number) {
   return Video.findById(id, options)
 }
 
-loadAndPopulateAccountAndPodAndTags = function (id: number) {
+loadAndPopulateAccountAndServerAndTags = function (id: number) {
   const options = {
     include: [
       {
@@ -997,7 +997,7 @@ loadAndPopulateAccountAndPodAndTags = function (id: number) {
         include: [
           {
             model: Video['sequelize'].models.Account,
-            include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+            include: [ { model: Video['sequelize'].models.Server, required: false } ]
           }
         ]
       },
@@ -1009,7 +1009,7 @@ loadAndPopulateAccountAndPodAndTags = function (id: number) {
   return Video.findById(id, options)
 }
 
-loadByUUIDAndPopulateAccountAndPodAndTags = function (uuid: string) {
+loadByUUIDAndPopulateAccountAndServerAndTags = function (uuid: string) {
   const options = {
     where: {
       uuid
@@ -1020,7 +1020,7 @@ loadByUUIDAndPopulateAccountAndPodAndTags = function (uuid: string) {
         include: [
           {
             model: Video['sequelize'].models.Account,
-            include: [ { model: Video['sequelize'].models.Pod, required: false } ]
+            include: [ { model: Video['sequelize'].models.Server, required: false } ]
           }
         ]
       },
@@ -1032,15 +1032,15 @@ loadByUUIDAndPopulateAccountAndPodAndTags = function (uuid: string) {
   return Video.findOne(options)
 }
 
-searchAndPopulateAccountAndPodAndTags = function (value: string, field: string, start: number, count: number, sort: string) {
-  const podInclude: Sequelize.IncludeOptions = {
-    model: Video['sequelize'].models.Pod,
+searchAndPopulateAccountAndServerAndTags = function (value: string, field: string, start: number, count: number, sort: string) {
+  const serverInclude: Sequelize.IncludeOptions = {
+    model: Video['sequelize'].models.Server,
     required: false
   }
 
   const accountInclude: Sequelize.IncludeOptions = {
     model: Video['sequelize'].models.Account,
-    include: [ podInclude ]
+    include: [ serverInclude ]
   }
 
   const videoChannelInclude: Sequelize.IncludeOptions = {
@@ -1071,13 +1071,13 @@ searchAndPopulateAccountAndPodAndTags = function (value: string, field: string, 
        )`
     )
   } else if (field === 'host') {
-    // FIXME: Include our pod? (not stored in the database)
-    podInclude.where = {
+    // FIXME: Include our server? (not stored in the database)
+    serverInclude.where = {
       host: {
         [Sequelize.Op.iLike]: '%' + value + '%'
       }
     }
-    podInclude.required = true
+    serverInclude.required = true
   } else if (field === 'account') {
     accountInclude.where = {
       name: {
@@ -1123,8 +1123,8 @@ function getBaseUrls (video: VideoInstance) {
     baseUrlHttp = CONFIG.WEBSERVER.URL
     baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
   } else {
-    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + video.VideoChannel.Account.Pod.host
-    baseUrlWs = REMOTE_SCHEME.WS + '://' + video.VideoChannel.Account.Pod.host
+    baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + video.VideoChannel.Account.Server.host
+    baseUrlWs = REMOTE_SCHEME.WS + '://' + video.VideoChannel.Account.Server.host
   }
 
   return { baseUrlHttp, baseUrlWs }

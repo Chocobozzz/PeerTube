@@ -101,7 +101,7 @@ listFollowingForApi = function (id: number, start: number, count: number, sort: 
         model: AccountFollow['sequelize'].models.Account,
         as: 'AccountFollowing',
         required: true,
-        include: [ AccountFollow['sequelize'].models.Pod ]
+        include: [ AccountFollow['sequelize'].models.Server ]
       }
     ]
   }
@@ -125,7 +125,7 @@ listFollowersForApi = function (id: number, start: number, count: number, sort: 
         model: AccountFollow[ 'sequelize' ].models.Account,
         required: true,
         as: 'AccountFollower',
-        include: [ AccountFollow['sequelize'].models.Pod ]
+        include: [ AccountFollow['sequelize'].models.Server ]
       },
       {
         model: AccountFollow['sequelize'].models.Account,

@@ -5,7 +5,7 @@ import { VideoInstance } from '../../../models'
 import { sendUpdateVideo } from '../../activitypub/send-request'
 
 async function process (data: { videoUUID: string, resolution: VideoResolution }, jobId: number) {
-  const video = await db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(data.videoUUID)
+  const video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
@@ -28,7 +28,7 @@ async function onSuccess (jobId: number, video: VideoInstance) {
   logger.info('Job %d is a success.', jobId)
 
   // Maybe the video changed in database, refresh it
-  const videoDatabase = await db.Video.loadByUUIDAndPopulateAccountAndPodAndTags(video.uuid)
+  const videoDatabase = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid)
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 

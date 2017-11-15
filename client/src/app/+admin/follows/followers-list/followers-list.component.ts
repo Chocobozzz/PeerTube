@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
-
-import { ConfirmService } from '../../../core'
-import { RestTable, RestPagination } from '../../../shared'
-import { Pod } from '../../../../../../shared'
+import { AccountFollow } from '../../../../../../shared/models/accounts/follow.model'
+import { RestPagination, RestTable } from '../../../shared'
 import { FollowService } from '../shared'
 
 @Component({
@@ -14,7 +12,7 @@ import { FollowService } from '../shared'
   styleUrls: [ './followers-list.component.scss' ]
 })
 export class FollowersListComponent extends RestTable {
-  followers: Pod[] = []
+  followers: AccountFollow[] = []
   totalRecords = 0
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }

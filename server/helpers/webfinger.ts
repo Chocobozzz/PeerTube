@@ -3,7 +3,7 @@ import * as WebFinger from 'webfinger.js'
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators'
 import { WebFingerData } from '../../shared'
-import { fetchRemoteAccountAndCreatePod } from './activitypub'
+import { fetchRemoteAccountAndCreateServer } from './activitypub'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,
@@ -22,8 +22,8 @@ async function getAccountFromWebfinger (nameWithHost: string) {
     throw new Error('Cannot find self link or href is not a valid URL.')
   }
 
-  const res = await fetchRemoteAccountAndCreatePod(selfLink.href)
-  if (res === undefined) throw new Error('Cannot fetch and create pod of remote account ' + selfLink.href)
+  const res = await fetchRemoteAccountAndCreateServer(selfLink.href)
+  if (res === undefined) throw new Error('Cannot fetch and create server of remote account ' + selfLink.href)
 
   return res.account
 }

@@ -27,7 +27,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   uuid: string
   isLocal: boolean
   name: string
-  podHost: string
+  serverHost: string
   tags: string[]
   thumbnailPath: string
   thumbnailUrl: string

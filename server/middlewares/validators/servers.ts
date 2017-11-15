@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body } from 'express-validator/check'
-import { isEachUniqueHostValid } from '../../helpers/custom-validators/pods'
+import { isEachUniqueHostValid } from '../../helpers/custom-validators/servers'
 import { isTestInstance } from '../../helpers/core-utils'
 import { CONFIG } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'

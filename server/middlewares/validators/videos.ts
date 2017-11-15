@@ -127,7 +127,7 @@ const videosUpdateValidator = [
         // We need to make additional checks
         if (video.isOwned() === false) {
           return res.status(403)
-                    .json({ error: 'Cannot update video of another pod' })
+                    .json({ error: 'Cannot update video of another server' })
                     .end()
         }
 
@@ -250,7 +250,7 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
   // Retrieve the user who did the request
   if (res.locals.video.isOwned() === false) {
     return res.status(403)
-              .json({ error: 'Cannot remove video of another pod, blacklist it' })
+              .json({ error: 'Cannot remove video of another server, blacklist it' })
               .end()
   }
 

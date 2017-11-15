@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map'
 import { SortMeta } from 'primeng/primeng'
 
 import { RestExtractor, RestPagination, RestService } from '../../../shared'
-import { Pod, ResultList } from '../../../../../../shared'
+import { AccountFollow, ResultList } from '../../../../../../shared'
 
 @Injectable()
 export class FollowService {
@@ -19,7 +19,7 @@ export class FollowService {
     private restExtractor: RestExtractor
   ) {}
 
-  getFollowing (pagination: RestPagination, sort: SortMeta): Observable<ResultList<Pod>> {
+  getFollowing (pagination: RestPagination, sort: SortMeta): Observable<ResultList<AccountFollow>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
@@ -28,7 +28,7 @@ export class FollowService {
                         .catch(res => this.restExtractor.handleError(res))
   }
 
-  getFollowers (pagination: RestPagination, sort: SortMeta): Observable<ResultList<Pod>> {
+  getFollowers (pagination: RestPagination, sort: SortMeta): Observable<ResultList<AccountFollow>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 

@@ -4,12 +4,6 @@ import * as express from 'express'
 import { SortType } from '../helpers'
 import { database } from '../initializers'
 
-function setPodsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
 function setUsersSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
@@ -70,7 +64,6 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 // ---------------------------------------------------------------------------
 
 export {
-  setPodsSort,
   setUsersSort,
   setVideoAbusesSort,
   setVideoChannelsSort,

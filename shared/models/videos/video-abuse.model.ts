@@ -1,6 +1,6 @@
 export interface VideoAbuse {
   id: number
-  reporterPodHost: string
+  reporterServerHost: string
   reason: string
   reporterUsername: string
   videoId: number

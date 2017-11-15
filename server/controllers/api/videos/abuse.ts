@@ -70,12 +70,12 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
     reporterUsername,
     reason: body.reason,
     videoId: videoInstance.id,
-    reporterPodId: null // This is our pod that reported this abuse
+    reporterServerId: null // This is our server that reported this abuse
   }
 
   await db.sequelize.transaction(async t => {
     const abuse = await db.VideoAbuse.create(abuseToCreate, { transaction: t })
-    // We send the information to the destination pod
+    // We send the information to the destination server
     if (videoInstance.isOwned() === false) {
       const reportData = {
         reporterUsername,
@@ -84,7 +84,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
       }
 
       // await friends.reportAbuseVideoToFriend(reportData, videoInstance, t)
-      // TODO: send abuse to origin pod
+      // TODO: send abuse to origin server
     }
   })
 

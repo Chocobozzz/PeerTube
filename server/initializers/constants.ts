@@ -6,10 +6,6 @@ import { root, isTestInstance } from '../helpers/core-utils'
 
 import {
   VideoRateType,
-  RequestEndpoint,
-  RequestVideoEventType,
-  RequestVideoQaduType,
-  RemoteVideoRequestType,
   JobState,
   JobCategory
 } from '../../shared/models'
@@ -220,7 +216,7 @@ const VIDEO_MIMETYPE_EXT = {
 
 // ---------------------------------------------------------------------------
 
-// Score a pod has when we create it as a friend
+// Score a server has when we create it as a friend
 const FRIEND_SCORE = {
   BASE: 100,
   MAX: 1000
@@ -243,7 +239,7 @@ const ACTIVITY_PUB = {
 // ---------------------------------------------------------------------------
 
 // Number of points we add/remove from a friend after a successful/bad request
-const PODS_SCORE = {
+const SERVERS_SCORE = {
   PENALTY: -10,
   BONUS: 10
 }
@@ -352,7 +348,7 @@ export {
   OAUTH_LIFETIME,
   OPENGRAPH_AND_OEMBED_COMMENT,
   PAGINATION_COUNT_DEFAULT,
-  PODS_SCORE,
+  SERVERS_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   ACTIVITY_PUB_ACCEPT_HEADER,
