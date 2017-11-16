@@ -11,6 +11,7 @@ let listFollowingForApi: AccountFollowMethods.ListFollowingForApi
 let listFollowersForApi: AccountFollowMethods.ListFollowersForApi
 let listAcceptedFollowerUrlsForApi: AccountFollowMethods.ListAcceptedFollowerUrlsForApi
 let listAcceptedFollowingUrlsForApi: AccountFollowMethods.ListAcceptedFollowingUrlsForApi
+let listAcceptedFollowerSharedInboxUrls: AccountFollowMethods.ListAcceptedFollowerSharedInboxUrls
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   AccountFollow = sequelize.define<AccountFollowInstance, AccountFollowAttributes>('AccountFollow',
@@ -42,7 +43,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listFollowingForApi,
     listFollowersForApi,
     listAcceptedFollowerUrlsForApi,
-    listAcceptedFollowingUrlsForApi
+    listAcceptedFollowingUrlsForApi,
+    listAcceptedFollowerSharedInboxUrls
   ]
   addMethodsToModel(AccountFollow, classMethods)
 
@@ -146,17 +148,27 @@ listFollowersForApi = function (id: number, start: number, count: number, sort: 
   })
 }
 
-listAcceptedFollowerUrlsForApi = function (accountId: number, start?: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('followers', accountId, start, count)
+listAcceptedFollowerUrlsForApi = function (accountIds: number[], start?: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('followers', accountIds, start, count)
 }
 
-listAcceptedFollowingUrlsForApi = function (accountId: number, start?: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('following', accountId, start, count)
+listAcceptedFollowerSharedInboxUrls = function (accountIds: number[]) {
+  return createListAcceptedFollowForApiQuery('followers', accountIds, undefined, undefined, 'sharedInboxUrl')
+}
+
+listAcceptedFollowingUrlsForApi = function (accountIds: number[], start?: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('following', accountIds, start, count)
 }
 
 // ------------------------------ UTILS ------------------------------
 
-async function createListAcceptedFollowForApiQuery (type: 'followers' | 'following', accountId: number, start?: number, count?: number) {
+async function createListAcceptedFollowForApiQuery (
+  type: 'followers' | 'following',
+  accountIds: number[],
+  start?: number,
+  count?: number,
+  columnUrl = 'url'
+) {
   let firstJoin: string
   let secondJoin: string
 
@@ -168,20 +180,20 @@ async function createListAcceptedFollowForApiQuery (type: 'followers' | 'followi
     secondJoin = 'targetAccountId'
   }
 
-  const selections = [ '"Follows"."url" AS "url"', 'COUNT(*) AS "total"' ]
+  const selections = [ '"Follows"."' + columnUrl + '" AS "url"', 'COUNT(*) AS "total"' ]
   const tasks: Promise<any>[] = []
 
   for (const selection of selections) {
     let query = 'SELECT ' + selection + ' FROM "Accounts" ' +
       'INNER JOIN "AccountFollows" ON "AccountFollows"."' + firstJoin + '" = "Accounts"."id" ' +
       'INNER JOIN "Accounts" AS "Follows" ON "AccountFollows"."' + secondJoin + '" = "Follows"."id" ' +
-      'WHERE "Accounts"."id" = $accountId AND "AccountFollows"."state" = \'accepted\' '
+      'WHERE "Accounts"."id" IN ($accountIds) AND "AccountFollows"."state" = \'accepted\' '
 
     if (start !== undefined) query += 'LIMIT ' + start
     if (count !== undefined) query += ', ' + count
 
     const options = {
-      bind: { accountId },
+      bind: { accountIds: accountIds.join(',') },
       type: Sequelize.QueryTypes.SELECT
     }
     tasks.push(AccountFollow['sequelize'].query(query, options))

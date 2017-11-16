@@ -2,7 +2,7 @@ import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users/user-right.enum'
 import { getFormattedObjects } from '../../../helpers'
 import { logger } from '../../../helpers/logger'
-import { getApplicationAccount } from '../../../helpers/utils'
+import { getServerAccount } from '../../../helpers/utils'
 import { getAccountFromWebfinger } from '../../../helpers/webfinger'
 import { SERVER_ACCOUNT_NAME } from '../../../initializers/constants'
 import { database as db } from '../../../initializers/database'
@@ -50,14 +50,14 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const applicationAccount = await getApplicationAccount()
+  const applicationAccount = await getServerAccount()
   const resultList = await db.AccountFollow.listFollowingForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const applicationAccount = await getApplicationAccount()
+  const applicationAccount = await getServerAccount()
   const resultList = await db.AccountFollow.listFollowersForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
@@ -65,7 +65,7 @@ async function listFollowers (req: express.Request, res: express.Response, next:
 
 async function follow (req: express.Request, res: express.Response, next: express.NextFunction) {
   const hosts = req.body.hosts as string[]
-  const fromAccount = await getApplicationAccount()
+  const fromAccount = await getServerAccount()
 
   const tasks: Promise<any>[] = []
   const accountName = SERVER_ACCOUNT_NAME

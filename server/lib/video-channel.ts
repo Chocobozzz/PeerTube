@@ -5,7 +5,7 @@ import { logger } from '../helpers'
 import { AccountInstance } from '../models'
 import { VideoChannelCreate } from '../../shared/models'
 import { sendCreateVideoChannel } from './activitypub/send-request'
-import { getActivityPubUrl } from '../helpers/activitypub'
+import { getActivityPubUrl, shareVideoChannelByServer } from '../helpers/activitypub'
 
 async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountInstance, t: Sequelize.Transaction) {
   const videoChannelData = {
@@ -25,7 +25,8 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   // Do not forget to add Account information to the created video channel
   videoChannelCreated.Account = account
 
-  sendCreateVideoChannel(videoChannelCreated, t)
+  await sendCreateVideoChannel(videoChannelCreated, t)
+  await shareVideoChannelByServer(videoChannelCreated, t)
 
   return videoChannelCreated
 }

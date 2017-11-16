@@ -1,15 +1,19 @@
 import { join } from 'path'
 import * as request from 'request'
+import * as Sequelize from 'sequelize'
 import * as url from 'url'
 import { ActivityIconObject } from '../../shared/index'
 import { ActivityPubActor } from '../../shared/models/activitypub/activitypub-actor'
 import { ResultList } from '../../shared/models/result-list.model'
 import { database as db, REMOTE_SCHEME } from '../initializers'
 import { ACTIVITY_PUB_ACCEPT_HEADER, CONFIG, STATIC_PATHS } from '../initializers/constants'
+import { sendAnnounce } from '../lib/activitypub/send-request'
+import { VideoChannelInstance } from '../models/video/video-channel-interface'
 import { VideoInstance } from '../models/video/video-interface'
 import { isRemoteAccountValid } from './custom-validators'
 import { logger } from './logger'
 import { doRequest, doRequestAndSaveToFile } from './requests'
+import { getServerAccount } from './utils'
 
 function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObject) {
   const thumbnailName = video.getThumbnailName()
@@ -20,6 +24,28 @@ function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObjec
     uri: icon.url
   }
   return doRequestAndSaveToFile(options, thumbnailPath)
+}
+
+async function shareVideoChannelByServer (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+  const serverAccount = await getServerAccount()
+
+  await db.VideoChannelShare.create({
+    accountId: serverAccount.id,
+    videoChannelId: videoChannel.id
+  }, { transaction: t })
+
+  return sendAnnounce(serverAccount, videoChannel, t)
+}
+
+async function shareVideoByServer (video: VideoInstance, t: Sequelize.Transaction) {
+  const serverAccount = await getServerAccount()
+
+  await db.VideoShare.create({
+    accountId: serverAccount.id,
+    videoId: video.id
+  }, { transaction: t })
+
+  return sendAnnounce(serverAccount, video, t)
 }
 
 function getActivityPubUrl (type: 'video' | 'videoChannel' | 'account' | 'videoAbuse', id: string) {
@@ -172,7 +198,9 @@ export {
   generateThumbnailFromUrl,
   getOrCreateAccount,
   fetchRemoteVideoPreview,
-  fetchRemoteVideoDescription
+  fetchRemoteVideoDescription,
+  shareVideoChannelByServer,
+  shareVideoByServer
 }
 
 // ---------------------------------------------------------------------------

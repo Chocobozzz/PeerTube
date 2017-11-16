@@ -257,6 +257,7 @@ export class AuthService {
     this.user.save()
 
     this.setStatus(AuthStatus.LoggedIn)
+    this.userInformationLoaded.next(true)
   }
 
   private handleRefreshToken (obj: UserRefreshToken) {

@@ -34,7 +34,7 @@ function isActivityPubVideoDurationValid (value: string) {
     typeof value === 'string' &&
     value.startsWith('PT') &&
     value.endsWith('S') &&
-    isVideoDurationValid(value.replace(/[^0-9]+/, ''))
+    isVideoDurationValid(value.replace(/[^0-9]+/g, ''))
 }
 
 function isVideoTorrentObjectValid (video: any) {
@@ -46,13 +46,14 @@ function isVideoTorrentObjectValid (video: any) {
     isRemoteIdentifierValid(video.category) &&
     isRemoteIdentifierValid(video.licence) &&
     isRemoteIdentifierValid(video.language) &&
-    isVideoViewsValid(video.video) &&
+    isVideoViewsValid(video.views) &&
     isVideoNSFWValid(video.nsfw) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
     isRemoteVideoContentValid(video.mediaType, video.content) &&
     isRemoteVideoIconValid(video.icon) &&
-    setValidRemoteVideoUrls(video.url)
+    setValidRemoteVideoUrls(video) &&
+    video.url.length !== 0
 }
 
 function isVideoFlagValid (activity: any) {
@@ -132,8 +133,8 @@ function isRemoteVideoIconValid (icon: any) {
   return icon.type === 'Image' &&
     isVideoUrlValid(icon.url) &&
     icon.mediaType === 'image/jpeg' &&
-    validator.isInt(icon.width, { min: 0 }) &&
-    validator.isInt(icon.height, { min: 0 })
+    validator.isInt(icon.width + '', { min: 0 }) &&
+    validator.isInt(icon.height + '', { min: 0 })
 }
 
 function setValidRemoteVideoUrls (video: any) {
@@ -149,6 +150,6 @@ function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
     ACTIVITY_PUB.VIDEO_URL_MIME_TYPES.indexOf(url.mimeType) !== -1 &&
     isVideoUrlValid(url.url) &&
-    validator.isInt(url.width, { min: 0 }) &&
-    validator.isInt(url.size, { min: 0 })
+    validator.isInt(url.width + '', { min: 0 }) &&
+    validator.isInt(url.size + '', { min: 0 })
 }

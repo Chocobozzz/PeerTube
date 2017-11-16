@@ -12,10 +12,10 @@ import {
   resetSequelizeInstance,
   retryTransactionWrapper
 } from '../../../helpers'
-import { getActivityPubUrl } from '../../../helpers/activitypub'
+import { getActivityPubUrl, shareVideoByServer } from '../../../helpers/activitypub'
 import { CONFIG, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT, VIDEO_PRIVACIES } from '../../../initializers'
 import { database as db } from '../../../initializers/database'
-import { sendAddVideo, sendUpdateVideoChannel } from '../../../lib/activitypub/send-request'
+import { sendAddVideo, sendUpdateVideo } from '../../../lib/activitypub/send-request'
 import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler/transcoding-job-scheduler'
 import {
   asyncMiddleware,
@@ -56,7 +56,7 @@ const storage = multer.diskStorage({
       randomString = 'fake-random-string'
     }
 
-    cb(null, randomString + '.' + extension)
+    cb(null, randomString + extension)
   }
 })
 
@@ -237,6 +237,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
     await sendAddVideo(video, t)
+    await shareVideoByServer(video, t)
   })
 
   logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoUUID)
@@ -254,7 +255,7 @@ async function updateVideoRetryWrapper (req: express.Request, res: express.Respo
 }
 
 async function updateVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance: VideoInstance = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
   const videoInfoToUpdate: VideoUpdate = req.body
   const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
@@ -284,7 +285,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       // Now we'll update the video's meta data to our friends
       if (wasPrivateVideo === false) {
-        await sendUpdateVideoChannel(videoInstance, t)
+        await sendUpdateVideo(videoInstance, t)
       }
 
       // Video is not private anymore, send a create action to remote servers

@@ -28,9 +28,9 @@ async function videoActivityObjectToDBAttributes (
     description: videoObject.content,
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),
-    createdAt: videoObject.published,
+    createdAt: new Date(videoObject.published),
     // FIXME: updatedAt does not seems to be considered by Sequelize
-    updatedAt: videoObject.updated,
+    updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
     likes: 0,
     dislikes: 0,
@@ -46,7 +46,7 @@ async function videoActivityObjectToDBAttributes (
 
 function videoFileActivityUrlToDBAttributes (videoCreated: VideoInstance, videoObject: VideoTorrentObject) {
   const fileUrls = videoObject.url
-    .filter(u => Object.keys(VIDEO_MIMETYPE_EXT).indexOf(u.mimeType) !== -1)
+    .filter(u => Object.keys(VIDEO_MIMETYPE_EXT).indexOf(u.mimeType) !== -1 && u.url.startsWith('video/'))
 
   const attributes: VideoFileAttributes[] = []
   for (const url of fileUrls) {

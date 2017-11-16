@@ -48,8 +48,8 @@ async function addRemoteVideoChannel (account: AccountInstance, videoChannelToCr
       name: videoChannelToCreateData.name,
       description: videoChannelToCreateData.content,
       uuid: videoChannelToCreateData.uuid,
-      createdAt: videoChannelToCreateData.published,
-      updatedAt: videoChannelToCreateData.updated,
+      createdAt: new Date(videoChannelToCreateData.published),
+      updatedAt: new Date(videoChannelToCreateData.updated),
       remote: true,
       accountId: account.id
     }

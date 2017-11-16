@@ -209,9 +209,9 @@ const VIDEO_PRIVACIES = {
 }
 
 const VIDEO_MIMETYPE_EXT = {
-  'video/webm': 'webm',
-  'video/ogg': 'ogv',
-  'video/mp4': 'mp4'
+  'video/webm': '.webm',
+  'video/ogg': '.ogv',
+  'video/mp4': '.mp4'
 }
 
 // ---------------------------------------------------------------------------

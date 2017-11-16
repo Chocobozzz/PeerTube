@@ -20,9 +20,6 @@ import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
 import * as rimraf from 'rimraf'
 import * as pem from 'pem'
-import * as jsonld from 'jsonld'
-import * as jsig from 'jsonld-signatures'
-jsig.use('jsonld', jsonld)
 
 function isTestInstance () {
   return process.env.NODE_ENV === 'test'
@@ -120,8 +117,6 @@ const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 const rimrafPromise = promisify1WithVoid<string>(rimraf)
 const statPromise = promisify1<string, Stats>(stat)
-const jsonldSignPromise = promisify2<object, { privateKeyPem: string, creator: string }, object>(jsig.sign)
-const jsonldVerifyPromise = promisify2<object, object, object>(jsig.verify)
 
 // ---------------------------------------------------------------------------
 
@@ -150,7 +145,5 @@ export {
   bcryptHashPromise,
   createTorrentPromise,
   rimrafPromise,
-  statPromise,
-  jsonldSignPromise,
-  jsonldVerifyPromise
+  statPromise
 }
