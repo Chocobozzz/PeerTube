@@ -58,9 +58,10 @@ function isVideoTorrentObjectValid (video: any) {
 }
 
 function isVideoFlagValid (activity: any) {
-  return isBaseActivityValid(activity, 'Flag') &&
-    isVideoAbuseReasonValid(activity.content) &&
-    isActivityPubUrlValid(activity.object)
+  return isBaseActivityValid(activity, 'Create') &&
+    activity.object.type === 'Flag' &&
+    isVideoAbuseReasonValid(activity.object.content) &&
+    isActivityPubUrlValid(activity.object.object)
 }
 
 function isAnnounceValid (activity: any) {

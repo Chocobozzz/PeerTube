@@ -75,6 +75,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
   await db.sequelize.transaction(async t => {
     const videoAbuseInstance = await db.VideoAbuse.create(abuseToCreate, { transaction: t })
+    videoAbuseInstance.Video = videoInstance
 
     // We send the video abuse to the origin server
     if (videoInstance.isOwned() === false) {
