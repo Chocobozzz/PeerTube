@@ -25,12 +25,8 @@ function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChan
 
 async function videoActivityObjectToDBAttributes (
   videoChannel: VideoChannelInstance,
-  videoObject: VideoTorrentObject,
-  t: Sequelize.Transaction
+  videoObject: VideoTorrentObject
 ) {
-  const videoFromDatabase = await db.Video.loadByUUIDOrURL(videoObject.uuid, videoObject.id, t)
-  if (videoFromDatabase) throw new Error('Video with this UUID/Url already exists.')
-
   const duration = videoObject.duration.replace(/[^\d]+/, '')
   const videoData: VideoAttributes = {
     name: videoObject.name,

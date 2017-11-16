@@ -50,14 +50,14 @@ async function updateRemoteVideo (account: AccountInstance, videoAttributesToUpd
         transaction: t
       }
 
-      const videoInstance = await db.Video.loadByUrl(videoAttributesToUpdate.id, t)
+      const videoInstance = await db.Video.loadByUrlAndPopulateAccount(videoAttributesToUpdate.id, t)
       if (!videoInstance) throw new Error('Video ' + videoAttributesToUpdate.id + ' not found.')
 
       if (videoInstance.VideoChannel.Account.id !== account.id) {
         throw new Error('Account ' + account.url + ' does not own video channel ' + videoInstance.VideoChannel.url)
       }
 
-      const videoData = await videoActivityObjectToDBAttributes(videoInstance.VideoChannel, videoAttributesToUpdate, t)
+      const videoData = await videoActivityObjectToDBAttributes(videoInstance.VideoChannel, videoAttributesToUpdate)
       videoInstance.set('name', videoData.name)
       videoInstance.set('category', videoData.category)
       videoInstance.set('licence', videoData.licence)

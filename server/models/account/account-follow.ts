@@ -187,13 +187,13 @@ async function createListAcceptedFollowForApiQuery (
     let query = 'SELECT ' + selection + ' FROM "Accounts" ' +
       'INNER JOIN "AccountFollows" ON "AccountFollows"."' + firstJoin + '" = "Accounts"."id" ' +
       'INNER JOIN "Accounts" AS "Follows" ON "AccountFollows"."' + secondJoin + '" = "Follows"."id" ' +
-      'WHERE "Accounts"."id" IN ($accountIds) AND "AccountFollows"."state" = \'accepted\' '
+      'WHERE "Accounts"."id" = ANY ($accountIds) AND "AccountFollows"."state" = \'accepted\' '
 
     if (start !== undefined) query += 'LIMIT ' + start
     if (count !== undefined) query += ', ' + count
 
     const options = {
-      bind: { accountIds: accountIds.join(',') },
+      bind: { accountIds },
       type: Sequelize.QueryTypes.SELECT
     }
     tasks.push(AccountFollow['sequelize'].query(query, options))

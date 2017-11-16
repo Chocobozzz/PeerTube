@@ -15,7 +15,7 @@ async function processDeleteActivity (activity: ActivityDelete) {
   }
 
   {
-    let videoObject = await db.Video.loadByUrl(activity.id)
+    let videoObject = await db.Video.loadByUrlAndPopulateAccount(activity.id)
     if (videoObject !== undefined) {
       return processDeleteVideo(account, videoObject)
     }

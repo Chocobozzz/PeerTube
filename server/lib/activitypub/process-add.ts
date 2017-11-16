@@ -1,12 +1,12 @@
+import * as Bluebird from 'bluebird'
 import { VideoTorrentObject } from '../../../shared'
 import { ActivityAdd } from '../../../shared/models/activitypub/activity'
-import { generateThumbnailFromUrl, logger, retryTransactionWrapper, getOrCreateAccount } from '../../helpers'
+import { generateThumbnailFromUrl, getOrCreateAccount, logger, retryTransactionWrapper } from '../../helpers'
+import { getOrCreateVideoChannel } from '../../helpers/activitypub'
 import { database as db } from '../../initializers'
 import { AccountInstance } from '../../models/account/account-interface'
-import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
-import Bluebird = require('bluebird')
-import { getOrCreateVideoChannel } from '../../helpers/activitypub'
 import { VideoChannelInstance } from '../../models/video/video-channel-interface'
+import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processAddActivity (activity: ActivityAdd) {
   const activityObject = activity.object
@@ -51,7 +51,10 @@ function addRemoteVideo (account: AccountInstance, videoChannel: VideoChannelIns
 
     if (videoChannel.Account.id !== account.id) throw new Error('Video channel is not owned by this account.')
 
-    const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoToCreateData, t)
+    const videoFromDatabase = await db.Video.loadByUUIDOrURL(videoToCreateData.uuid, videoToCreateData.id, t)
+    if (videoFromDatabase) throw new Error('Video with this UUID/Url already exists.')
+
+    const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoToCreateData)
     const video = db.Video.build(videoData)
 
     // Don't block on request
