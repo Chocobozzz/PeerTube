@@ -1,4 +1,6 @@
+import * as jsonld from 'jsonld'
 import * as jsig from 'jsonld-signatures'
+jsig.use('jsonld', jsonld)
 
 import {
   PRIVATE_RSA_KEY_SIZE,
@@ -9,9 +11,7 @@ import {
   bcryptGenSaltPromise,
   bcryptHashPromise,
   createPrivateKey,
-  getPublicKey,
-  jsonldSignPromise,
-  jsonldVerifyPromise
+  getPublicKey
 } from './core-utils'
 import { logger } from './logger'
 import { AccountInstance } from '../models/account/account-interface'
@@ -45,7 +45,7 @@ function isSignatureVerified (fromAccount: AccountInstance, signedDocument: obje
     publicKeyOwner: publicKeyOwnerObject
   }
 
-  return jsonldVerifyPromise(signedDocument, options)
+  return jsig.promises.verify(signedDocument, options)
     .catch(err => {
       logger.error('Cannot check signature.', err)
       return false
@@ -58,7 +58,7 @@ function signObject (byAccount: AccountInstance, data: any) {
     creator: byAccount.url
   }
 
-  return jsonldSignPromise(data, options)
+  return jsig.promises.sign(data, options)
 }
 
 function comparePassword (plainPassword: string, hashPassword: string) {

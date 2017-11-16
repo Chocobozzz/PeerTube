@@ -17,46 +17,67 @@ async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Se
   const videoChannelObject = videoChannel.toActivityPubObject()
   const data = await createActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
-  return broadcastToFollowers(data, videoChannel.Account, t)
+  return broadcastToFollowers(data, [ videoChannel.Account ], t)
 }
 
 async function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const videoChannelObject = videoChannel.toActivityPubObject()
   const data = await updateActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
-  return broadcastToFollowers(data, videoChannel.Account, t)
+  return broadcastToFollowers(data, [ videoChannel.Account ], t)
 }
 
 async function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const data = await deleteActivityData(videoChannel.url, videoChannel.Account)
 
-  return broadcastToFollowers(data, videoChannel.Account, t)
+  return broadcastToFollowers(data, [ videoChannel.Account ], t)
 }
 
 async function sendAddVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const videoObject = video.toActivityPubObject()
   const data = await addActivityData(video.url, video.VideoChannel.Account, video.VideoChannel.url, videoObject)
 
-  return broadcastToFollowers(data, video.VideoChannel.Account, t)
+  return broadcastToFollowers(data, [ video.VideoChannel.Account ], t)
 }
 
 async function sendUpdateVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const videoObject = video.toActivityPubObject()
   const data = await updateActivityData(video.url, video.VideoChannel.Account, videoObject)
 
-  return broadcastToFollowers(data, video.VideoChannel.Account, t)
+  return broadcastToFollowers(data, [ video.VideoChannel.Account ], t)
 }
 
 async function sendDeleteVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const data = await deleteActivityData(video.url, video.VideoChannel.Account)
 
-  return broadcastToFollowers(data, video.VideoChannel.Account, t)
+  return broadcastToFollowers(data, [ video.VideoChannel.Account ], t)
 }
 
 async function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transaction) {
   const data = await deleteActivityData(account.url, account)
 
-  return broadcastToFollowers(data, account, t)
+  return broadcastToFollowers(data, [ account ], t)
+}
+
+async function sendAnnounce (byAccount: AccountInstance, instance: VideoInstance | VideoChannelInstance, t: Sequelize.Transaction) {
+  const object = instance.toActivityPubObject()
+
+  let url = ''
+  let objectActorUrl: string
+  if ((instance as any).VideoChannel !== undefined) {
+    objectActorUrl = (instance as VideoInstance).VideoChannel.Account.url
+    url = getActivityPubUrl('video', instance.uuid) + '#announce'
+  } else {
+    objectActorUrl = (instance as VideoChannelInstance).Account.url
+    url = getActivityPubUrl('videoChannel', instance.uuid) + '#announce'
+  }
+
+  const objectWithActor = Object.assign(object, {
+    actor: objectActorUrl
+  })
+
+  const data = await announceActivityData(url, byAccount, objectWithActor)
+  return broadcastToFollowers(data, [ byAccount ], t)
 }
 
 async function sendVideoAbuse (
@@ -95,15 +116,17 @@ export {
   sendDeleteAccount,
   sendAccept,
   sendFollow,
-  sendVideoAbuse
+  sendVideoAbuse,
+  sendAnnounce
 }
 
 // ---------------------------------------------------------------------------
 
-async function broadcastToFollowers (data: any, fromAccount: AccountInstance, t: Sequelize.Transaction) {
-  const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi(fromAccount.id)
+async function broadcastToFollowers (data: any, toAccountFollowers: AccountInstance[], t: Sequelize.Transaction) {
+  const toAccountFollowerIds = toAccountFollowers.map(a => a.id)
+  const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds)
   if (result.data.length === 0) {
-    logger.info('Not broadcast because of 0 followers.')
+    logger.info('Not broadcast because of 0 followers for %s.', toAccountFollowerIds.join(', '))
     return
   }
 
@@ -181,6 +204,17 @@ async function addActivityData (url: string, byAccount: AccountInstance, target:
     to,
     object,
     target
+  }
+
+  return buildSignedActivity(byAccount, base)
+}
+
+async function announceActivityData (url: string, byAccount: AccountInstance, object: any) {
+  const base = {
+    type: 'Announce',
+    id: url,
+    actor: byAccount.url,
+    object
   }
 
   return buildSignedActivity(byAccount, base)

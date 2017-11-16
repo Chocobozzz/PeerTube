@@ -153,8 +153,8 @@ toActivityPubObject = function (this: VideoChannelInstance) {
     uuid: this.uuid,
     content: this.description,
     name: this.name,
-    published: this.createdAt,
-    updated: this.updatedAt
+    published: this.createdAt.toISOString(),
+    updated: this.updatedAt.toISOString()
   }
 
   return json

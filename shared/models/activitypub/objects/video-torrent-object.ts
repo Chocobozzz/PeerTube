@@ -17,8 +17,8 @@ export interface VideoTorrentObject {
   language: ActivityIdentifierObject
   views: number
   nsfw: boolean
-  published: Date
-  updated: Date
+  published: string
+  updated: string
   mediaType: 'text/markdown'
   content: string
   icon: ActivityIconObject

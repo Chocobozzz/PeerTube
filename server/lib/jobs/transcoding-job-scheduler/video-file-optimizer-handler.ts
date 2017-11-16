@@ -6,6 +6,7 @@ import { VideoInstance } from '../../../models'
 import { sendAddVideo } from '../../activitypub/send-request'
 import { JobScheduler } from '../job-scheduler'
 import { TranscodingJobPayload } from './transcoding-job-scheduler'
+import { shareVideoByServer } from '../../../helpers/activitypub'
 
 async function process (data: TranscodingJobPayload, jobId: number) {
   const video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)
@@ -37,6 +38,7 @@ async function onSuccess (jobId: number, video: VideoInstance, jobScheduler: Job
 
   // Now we'll add the video's meta data to our followers
   await sendAddVideo(video, undefined)
+  await shareVideoByServer(video, undefined)
 
   const originalFileHeight = await videoDatabase.getOriginalFileHeight()
 

@@ -13,9 +13,9 @@ async function installApplication () {
     await db.sequelize.sync()
     await removeCacheDirectories()
     await createDirectoriesIfNotExist()
+    await createApplicationIfNotExist()
     await createOAuthClientIfNotExist()
     await createOAuthAdminIfNotExist()
-    await createApplicationIfNotExist()
   } catch (err) {
     logger.error('Cannot install application.', err)
     throw err

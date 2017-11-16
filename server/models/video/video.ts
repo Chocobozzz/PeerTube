@@ -558,7 +558,7 @@ toActivityPubObject = function (this: VideoInstance) {
   for (const file of this.VideoFiles) {
     url.push({
       type: 'Link',
-      mimeType: 'video/' + file.extname,
+      mimeType: 'video/' + file.extname.replace('.', ''),
       url: getVideoFileUrl(this, file, baseUrlHttp),
       width: file.resolution,
       size: file.size
@@ -601,8 +601,8 @@ toActivityPubObject = function (this: VideoInstance) {
     },
     views: this.views,
     nsfw: this.nsfw,
-    published: this.createdAt,
-    updated: this.updatedAt,
+    published: this.createdAt.toISOString(),
+    updated: this.updatedAt.toISOString(),
     mediaType: 'text/markdown',
     content: this.getTruncatedDescription(),
     icon: {

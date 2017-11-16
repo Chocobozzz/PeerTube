@@ -6,6 +6,7 @@ import { CONFIG, database as db } from '../initializers'
 import { ResultList } from '../../shared'
 import { VideoResolution } from '../../shared/models/videos/video-resolution.enum'
 import { AccountInstance } from '../models/account/account-interface'
+import { logger } from './logger'
 
 function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.type('json').status(400).end()
@@ -79,13 +80,18 @@ function resetSequelizeInstance (instance: Sequelize.Instance<any>, savedFields:
   })
 }
 
-let applicationAccount: AccountInstance
-async function getApplicationAccount () {
-  if (applicationAccount === undefined) {
-    applicationAccount = await db.Account.loadApplication()
+let serverAccount: AccountInstance
+async function getServerAccount () {
+  if (serverAccount === undefined) {
+    serverAccount = await db.Account.loadApplication()
   }
 
-  return Promise.resolve(applicationAccount)
+  if (!serverAccount) {
+    logger.error('Cannot load server account.')
+    process.exit(0)
+  }
+
+  return Promise.resolve(serverAccount)
 }
 
 type SortType = { sortModel: any, sortValue: string }
@@ -99,6 +105,6 @@ export {
   isSignupAllowed,
   computeResolutionsToTranscode,
   resetSequelizeInstance,
-  getApplicationAccount,
+  getServerAccount,
   SortType
 }
