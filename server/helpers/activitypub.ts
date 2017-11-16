@@ -4,13 +4,18 @@ import * as Sequelize from 'sequelize'
 import * as url from 'url'
 import { ActivityIconObject } from '../../shared/index'
 import { ActivityPubActor } from '../../shared/models/activitypub/activitypub-actor'
+import { VideoChannelObject } from '../../shared/models/activitypub/objects/video-channel-object'
 import { ResultList } from '../../shared/models/result-list.model'
 import { database as db, REMOTE_SCHEME } from '../initializers'
 import { ACTIVITY_PUB_ACCEPT_HEADER, CONFIG, STATIC_PATHS } from '../initializers/constants'
-import { sendAnnounce } from '../lib/activitypub/send-request'
+import { videoChannelActivityObjectToDBAttributes } from '../lib/activitypub/misc'
+import { sendVideoAnnounce } from '../lib/activitypub/send-request'
+import { sendVideoChannelAnnounce } from '../lib/index'
+import { AccountInstance } from '../models/account/account-interface'
 import { VideoChannelInstance } from '../models/video/video-channel-interface'
 import { VideoInstance } from '../models/video/video-interface'
 import { isRemoteAccountValid } from './custom-validators'
+import { isVideoChannelObjectValid } from './custom-validators/activitypub/videos'
 import { logger } from './logger'
 import { doRequest, doRequestAndSaveToFile } from './requests'
 import { getServerAccount } from './utils'
@@ -34,7 +39,7 @@ async function shareVideoChannelByServer (videoChannel: VideoChannelInstance, t:
     videoChannelId: videoChannel.id
   }, { transaction: t })
 
-  return sendAnnounce(serverAccount, videoChannel, t)
+  return sendVideoChannelAnnounce(serverAccount, videoChannel, t)
 }
 
 async function shareVideoByServer (video: VideoInstance, t: Sequelize.Transaction) {
@@ -45,7 +50,7 @@ async function shareVideoByServer (video: VideoInstance, t: Sequelize.Transactio
     videoId: video.id
   }, { transaction: t })
 
-  return sendAnnounce(serverAccount, video, t)
+  return sendVideoAnnounce(serverAccount, video, t)
 }
 
 function getActivityPubUrl (type: 'video' | 'videoChannel' | 'account' | 'videoAbuse', id: string) {
@@ -66,11 +71,25 @@ async function getOrCreateAccount (accountUrl: string) {
     if (res === undefined) throw new Error('Cannot fetch remote account.')
 
     // Save our new account in database
-    const account = res.account
-    await account.save()
+    account = await res.account.save()
   }
 
   return account
+}
+
+async function getOrCreateVideoChannel (ownerAccount: AccountInstance, videoChannelUrl: string) {
+  let videoChannel = await db.VideoChannel.loadByUrl(videoChannelUrl)
+
+  // We don't have this account in our database, fetch it on remote
+  if (!videoChannel) {
+    videoChannel = await fetchRemoteVideoChannel(ownerAccount, videoChannelUrl)
+    if (videoChannel === undefined) throw new Error('Cannot fetch remote video channel.')
+
+    // Save our new video channel in database
+    await videoChannel.save()
+  }
+
+  return videoChannel
 }
 
 async function fetchRemoteAccountAndCreateServer (accountUrl: string) {
@@ -129,6 +148,38 @@ async function fetchRemoteAccountAndCreateServer (accountUrl: string) {
   account.set('serverId', server.id)
 
   return { account, server }
+}
+
+async function fetchRemoteVideoChannel (ownerAccount: AccountInstance, videoChannelUrl: string) {
+  const options = {
+    uri: videoChannelUrl,
+    method: 'GET',
+    headers: {
+      'Accept': ACTIVITY_PUB_ACCEPT_HEADER
+    }
+  }
+
+  logger.info('Fetching remote video channel %s.', videoChannelUrl)
+
+  let requestResult
+  try {
+    requestResult = await doRequest(options)
+  } catch (err) {
+    logger.warn('Cannot fetch remote video channel %s.', videoChannelUrl, err)
+    return undefined
+  }
+
+  const videoChannelJSON: VideoChannelObject = JSON.parse(requestResult.body)
+  if (isVideoChannelObjectValid(videoChannelJSON) === false) {
+    logger.debug('Remote video channel JSON is not valid.', { videoChannelJSON })
+    return undefined
+  }
+
+  const videoChannelAttributes = videoChannelActivityObjectToDBAttributes(videoChannelJSON, ownerAccount)
+  const videoChannel = db.VideoChannel.build(videoChannelAttributes)
+  videoChannel.Account = ownerAccount
+
+  return videoChannel
 }
 
 function fetchRemoteVideoPreview (video: VideoInstance) {
@@ -200,7 +251,8 @@ export {
   fetchRemoteVideoPreview,
   fetchRemoteVideoDescription,
   shareVideoChannelByServer,
-  shareVideoByServer
+  shareVideoByServer,
+  getOrCreateVideoChannel
 }
 
 // ---------------------------------------------------------------------------

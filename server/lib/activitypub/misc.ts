@@ -7,6 +7,21 @@ import { VIDEO_MIMETYPE_EXT } from '../../initializers/constants'
 import { VideoChannelInstance } from '../../models/video/video-channel-interface'
 import { VideoFileAttributes } from '../../models/video/video-file-interface'
 import { VideoAttributes, VideoInstance } from '../../models/video/video-interface'
+import { VideoChannelObject } from '../../../shared/models/activitypub/objects/video-channel-object'
+import { AccountInstance } from '../../models/account/account-interface'
+
+function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChannelObject, account: AccountInstance) {
+  return {
+    name: videoChannelObject.name,
+    description: videoChannelObject.content,
+    uuid: videoChannelObject.uuid,
+    url: videoChannelObject.id,
+    createdAt: new Date(videoChannelObject.published),
+    updatedAt: new Date(videoChannelObject.updated),
+    remote: true,
+    accountId: account.id
+  }
+}
 
 async function videoActivityObjectToDBAttributes (
   videoChannel: VideoChannelInstance,
@@ -45,26 +60,32 @@ async function videoActivityObjectToDBAttributes (
 }
 
 function videoFileActivityUrlToDBAttributes (videoCreated: VideoInstance, videoObject: VideoTorrentObject) {
-  const fileUrls = videoObject.url
-    .filter(u => Object.keys(VIDEO_MIMETYPE_EXT).indexOf(u.mimeType) !== -1 && u.url.startsWith('video/'))
+  const mimeTypes = Object.keys(VIDEO_MIMETYPE_EXT)
+  const fileUrls = videoObject.url.filter(u => {
+    return mimeTypes.indexOf(u.mimeType) !== -1 && u.mimeType.startsWith('video/')
+  })
+
+  if (fileUrls.length === 0) {
+    throw new Error('Cannot find video files for ' + videoCreated.url)
+  }
 
   const attributes: VideoFileAttributes[] = []
-  for (const url of fileUrls) {
+  for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
-    const magnet = videoObject.url
-      .find(u => {
-        return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.width === url.width
-      })
-    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + url.url)
+    const magnet = videoObject.url.find(u => {
+      return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.width === fileUrl.width
+    })
+
+    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.url)
 
     const parsed = magnetUtil.decode(magnet.url)
     if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) throw new Error('Cannot parse magnet URI ' + magnet.url)
 
     const attribute = {
-      extname: VIDEO_MIMETYPE_EXT[url.mimeType],
+      extname: VIDEO_MIMETYPE_EXT[fileUrl.mimeType],
       infoHash: parsed.infoHash,
-      resolution: url.width,
-      size: url.size,
+      resolution: fileUrl.width,
+      size: fileUrl.size,
       videoId: videoCreated.id
     }
     attributes.push(attribute)
@@ -77,5 +98,6 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoInstance, videoO
 
 export {
   videoFileActivityUrlToDBAttributes,
-  videoActivityObjectToDBAttributes
+  videoActivityObjectToDBAttributes,
+  videoChannelActivityObjectToDBAttributes
 }

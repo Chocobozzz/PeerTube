@@ -59,24 +59,21 @@ async function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transac
   return broadcastToFollowers(data, [ account ], t)
 }
 
-async function sendAnnounce (byAccount: AccountInstance, instance: VideoInstance | VideoChannelInstance, t: Sequelize.Transaction) {
-  const object = instance.toActivityPubObject()
+async function sendVideoChannelAnnounce (byAccount: AccountInstance, videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+  const url = getActivityPubUrl('videoChannel', videoChannel.uuid) + '#announce'
+  const announcedActivity = await createActivityData(url, videoChannel.Account, videoChannel.toActivityPubObject(), true)
 
-  let url = ''
-  let objectActorUrl: string
-  if ((instance as any).VideoChannel !== undefined) {
-    objectActorUrl = (instance as VideoInstance).VideoChannel.Account.url
-    url = getActivityPubUrl('video', instance.uuid) + '#announce'
-  } else {
-    objectActorUrl = (instance as VideoChannelInstance).Account.url
-    url = getActivityPubUrl('videoChannel', instance.uuid) + '#announce'
-  }
+  const data = await announceActivityData(url, byAccount, announcedActivity)
+  return broadcastToFollowers(data, [ byAccount ], t)
+}
 
-  const objectWithActor = Object.assign(object, {
-    actor: objectActorUrl
-  })
+async function sendVideoAnnounce (byAccount: AccountInstance, video: VideoInstance, t: Sequelize.Transaction) {
+  const url = getActivityPubUrl('video', video.uuid) + '#announce'
 
-  const data = await announceActivityData(url, byAccount, objectWithActor)
+  const videoChannel = video.VideoChannel
+  const announcedActivity = await addActivityData(url, videoChannel.Account, videoChannel.url, video.toActivityPubObject(), true)
+
+  const data = await announceActivityData(url, byAccount, announcedActivity)
   return broadcastToFollowers(data, [ byAccount ], t)
 }
 
@@ -117,7 +114,8 @@ export {
   sendAccept,
   sendFollow,
   sendVideoAbuse,
-  sendAnnounce
+  sendVideoChannelAnnounce,
+  sendVideoAnnounce
 }
 
 // ---------------------------------------------------------------------------
@@ -159,7 +157,7 @@ async function getPublicActivityTo (account: AccountInstance) {
   return inboxUrls.concat('https://www.w3.org/ns/activitystreams#Public')
 }
 
-async function createActivityData (url: string, byAccount: AccountInstance, object: any) {
+async function createActivityData (url: string, byAccount: AccountInstance, object: any, raw = false) {
   const to = await getPublicActivityTo(byAccount)
   const base = {
     type: 'Create',
@@ -168,6 +166,8 @@ async function createActivityData (url: string, byAccount: AccountInstance, obje
     to,
     object
   }
+
+  if (raw === true) return base
 
   return buildSignedActivity(byAccount, base)
 }
@@ -195,7 +195,7 @@ async function deleteActivityData (url: string, byAccount: AccountInstance) {
   return buildSignedActivity(byAccount, base)
 }
 
-async function addActivityData (url: string, byAccount: AccountInstance, target: string, object: any) {
+async function addActivityData (url: string, byAccount: AccountInstance, target: string, object: any, raw = false) {
   const to = await getPublicActivityTo(byAccount)
   const base = {
     type: 'Add',
@@ -205,6 +205,8 @@ async function addActivityData (url: string, byAccount: AccountInstance, target:
     object,
     target
   }
+
+  if (raw === true) return base
 
   return buildSignedActivity(byAccount, base)
 }

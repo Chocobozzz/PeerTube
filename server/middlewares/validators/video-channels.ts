@@ -83,7 +83,7 @@ const videoChannelsRemoveValidator = [
   }
 ]
 
-const videoChannelGetValidator = [
+const videoChannelsGetValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -102,7 +102,7 @@ export {
   videoChannelsAddValidator,
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
-  videoChannelGetValidator
+  videoChannelsGetValidator
 }
 
 // ---------------------------------------------------------------------------

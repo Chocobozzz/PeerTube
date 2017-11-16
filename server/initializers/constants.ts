@@ -227,13 +227,11 @@ const ACTIVITY_PUB_ACCEPT_HEADER = 'application/ld+json; profile="https://www.w3
 
 const ACTIVITY_PUB = {
   COLLECTION_ITEMS_PER_PAGE: 10,
-  VIDEO_URL_MIME_TYPES: [
-    'video/mp4',
-    'video/webm',
-    'video/ogg',
-    'application/x-bittorrent',
-    'application/x-bittorrent;x-scheme-handler/magnet'
-  ]
+  URL_MIME_TYPES: {
+    VIDEO: [ 'video/mp4', 'video/webm', 'video/ogg' ], // TODO: Merge with VIDEO_MIMETYPE_EXT
+    TORRENT: [ 'application/x-bittorrent' ],
+    MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
+  }
 }
 
 // ---------------------------------------------------------------------------

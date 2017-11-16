@@ -24,6 +24,7 @@ export interface ActivityCreate extends BaseActivity {
 
 export interface ActivityAdd extends BaseActivity {
   type: 'Add'
+  target: string
   object: VideoTorrentObject
 }
 
@@ -52,5 +53,5 @@ export interface ActivityAccept extends BaseActivity {
 
 export interface ActivityAnnounce extends BaseActivity {
   type: 'Announce'
-  object: VideoChannelObject | VideoTorrentObject
+  object: ActivityCreate | ActivityAdd
 }
