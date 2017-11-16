@@ -1,10 +1,10 @@
 // TODO: import from ES6 when retry typing file will include errorFilter function
 import * as retry from 'async/retry'
-
+import * as Bluebird from 'bluebird'
 import { logger } from './logger'
 
 type RetryTransactionWrapperOptions = { errorMessage: string, arguments?: any[] }
-function retryTransactionWrapper (functionToRetry: (...args) => Promise<any>, options: RetryTransactionWrapperOptions) {
+function retryTransactionWrapper (functionToRetry: (...args) => Promise<any> | Bluebird<any>, options: RetryTransactionWrapperOptions) {
   const args = options.arguments ? options.arguments : []
 
   return transactionRetryer(callback => {
@@ -13,8 +13,8 @@ function retryTransactionWrapper (functionToRetry: (...args) => Promise<any>, op
         .catch(err => callback(err))
   })
   .catch(err => {
-    // Do not throw the error, continue the process
     logger.error(options.errorMessage, err)
+    throw err
   })
 }
 
@@ -28,7 +28,7 @@ function transactionRetryer (func: Function) {
         logger.debug('Maybe retrying the transaction function.', { willRetry })
         return willRetry
       }
-    }, func, err => err ? rej(err) : res())
+    }, func, (err, data) => err ? rej(err) : res(data))
   })
 }
 

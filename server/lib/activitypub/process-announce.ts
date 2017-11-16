@@ -10,38 +10,33 @@ import { VideoChannelInstance } from '../../models/video/video-channel-interface
 import { VideoInstance } from '../../models/index'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {
-  const activityType = activity.object.type
+  const announcedActivity = activity.object
   const accountAnnouncer = await getOrCreateAccount(activity.actor)
 
-  if (activityType === 'VideoChannel') {
-    const activityCreate = Object.assign(activity, {
-      type: 'Create' as 'Create',
-      actor: activity.object.actor,
-      object: activity.object as VideoChannelObject
-    })
-
+  if (announcedActivity.type === 'Create' && announcedActivity.object.type === 'VideoChannel') {
     // Add share entry
-    const videoChannel: VideoChannelInstance = await processCreateActivity(activityCreate)
+    const videoChannel: VideoChannelInstance = await processCreateActivity(announcedActivity)
     await db.VideoChannelShare.create({
       accountId: accountAnnouncer.id,
       videoChannelId: videoChannel.id
     })
-  } else if (activityType === 'Video') {
-    const activityAdd = Object.assign(activity, {
-      type: 'Add' as 'Add',
-      actor: activity.object.actor,
-      object: activity.object as VideoTorrentObject
-    })
 
+    return undefined
+  } else if (announcedActivity.type === 'Add' && announcedActivity.object.type === 'Video') {
     // Add share entry
-    const video: VideoInstance = await processAddActivity(activityAdd)
+    const video: VideoInstance = await processAddActivity(announcedActivity)
     await db.VideoShare.create({
       accountId: accountAnnouncer.id,
       videoId: video.id
     })
+
+    return undefined
   }
 
-  logger.warn('Unknown activity object type %s when announcing activity.', activityType, { activity: activity.id })
+  logger.warn(
+    'Unknown activity object type %s -> %s when announcing activity.', announcedActivity.type, announcedActivity.object.type,
+    { activity: activity.id }
+  )
   return Promise.resolve(undefined)
 }
 

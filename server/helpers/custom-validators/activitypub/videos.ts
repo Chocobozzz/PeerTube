@@ -39,6 +39,7 @@ function isActivityPubVideoDurationValid (value: string) {
 
 function isVideoTorrentObjectValid (video: any) {
   return video.type === 'Video' &&
+    isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
     isActivityPubVideoDurationValid(video.duration) &&
     isUUIDValid(video.uuid) &&
@@ -62,14 +63,12 @@ function isVideoFlagValid (activity: any) {
     isActivityPubUrlValid(activity.object)
 }
 
-function isVideoAnnounceValid (activity: any) {
+function isAnnounceValid (activity: any) {
   return isBaseActivityValid(activity, 'Announce') &&
-    isVideoTorrentObjectValid(activity.object)
-}
-
-function isVideoChannelAnnounceValid (activity: any) {
-  return isBaseActivityValid(activity, 'Announce') &&
-    isVideoChannelObjectValid(activity.object)
+    (
+      isVideoChannelCreateActivityValid(activity.object) ||
+      isVideoTorrentAddActivityValid(activity.object)
+    )
 }
 
 function isVideoChannelCreateActivityValid (activity: any) {
@@ -88,8 +87,11 @@ function isVideoChannelDeleteActivityValid (activity: any) {
 
 function isVideoChannelObjectValid (videoChannel: any) {
   return videoChannel.type === 'VideoChannel' &&
+    isActivityPubUrlValid(videoChannel.id) &&
     isVideoChannelNameValid(videoChannel.name) &&
-    isVideoChannelDescriptionValid(videoChannel.description) &&
+    isVideoChannelDescriptionValid(videoChannel.content) &&
+    isDateValid(videoChannel.published) &&
+    isDateValid(videoChannel.updated) &&
     isUUIDValid(videoChannel.uuid)
 }
 
@@ -103,8 +105,8 @@ export {
   isVideoChannelDeleteActivityValid,
   isVideoTorrentDeleteActivityValid,
   isVideoFlagValid,
-  isVideoAnnounceValid,
-  isVideoChannelAnnounceValid
+  isAnnounceValid,
+  isVideoChannelObjectValid
 }
 
 // ---------------------------------------------------------------------------
@@ -148,8 +150,20 @@ function setValidRemoteVideoUrls (video: any) {
 
 function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
-    ACTIVITY_PUB.VIDEO_URL_MIME_TYPES.indexOf(url.mimeType) !== -1 &&
-    isVideoUrlValid(url.url) &&
-    validator.isInt(url.width + '', { min: 0 }) &&
-    validator.isInt(url.size + '', { min: 0 })
+    (
+      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mimeType) !== -1 &&
+      isVideoUrlValid(url.url) &&
+      validator.isInt(url.width + '', { min: 0 }) &&
+      validator.isInt(url.size + '', { min: 0 })
+    ) ||
+    (
+      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&
+      isVideoUrlValid(url.url) &&
+      validator.isInt(url.width + '', { min: 0 })
+    ) ||
+    (
+      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mimeType) !== -1 &&
+      validator.isLength(url.url, { min: 5 }) &&
+      validator.isInt(url.width + '', { min: 0 })
+    )
 }

@@ -4,10 +4,13 @@ import * as express from 'express'
 import { database as db } from '../../initializers'
 import { executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { pageToStartAndCount } from '../../helpers'
-import { AccountInstance } from '../../models'
+import { AccountInstance, VideoChannelInstance } from '../../models'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { ACTIVITY_PUB } from '../../initializers/constants'
 import { asyncMiddleware } from '../../middlewares/async'
+import { videosGetValidator } from '../../middlewares/validators/videos'
+import { VideoInstance } from '../../models/video/video-interface'
+import { videoChannelsGetValidator } from '../../middlewares/validators/video-channels'
 
 const activityPubClientRouter = express.Router()
 
@@ -24,6 +27,16 @@ activityPubClientRouter.get('/account/:name/followers',
 activityPubClientRouter.get('/account/:name/following',
   executeIfActivityPub(localAccountValidator),
   executeIfActivityPub(asyncMiddleware(accountFollowingController))
+)
+
+activityPubClientRouter.get('/videos/watch/:id',
+  executeIfActivityPub(videosGetValidator),
+  executeIfActivityPub(asyncMiddleware(videoController))
+)
+
+activityPubClientRouter.get('/video-channels/:id',
+  executeIfActivityPub(videoChannelsGetValidator),
+  executeIfActivityPub(asyncMiddleware(videoChannelController))
 )
 
 // ---------------------------------------------------------------------------
@@ -62,4 +75,16 @@ async function accountFollowingController (req: express.Request, res: express.Re
   const activityPubResult = activityPubCollectionPagination(req.url, page, result)
 
   return res.json(activityPubResult)
+}
+
+async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const video: VideoInstance = res.locals.video
+
+  return res.json(video.toActivityPubObject())
+}
+
+async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const videoChannel: VideoChannelInstance = res.locals.videoChannel
+
+  return res.json(videoChannel.toActivityPubObject())
 }

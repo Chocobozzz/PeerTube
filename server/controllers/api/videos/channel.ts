@@ -10,7 +10,7 @@ import {
   paginationValidator,
   setPagination,
   setVideoChannelsSort,
-  videoChannelGetValidator,
+  videoChannelsGetValidator,
   videoChannelsAddValidator,
   videoChannelsRemoveValidator,
   videoChannelsSortValidator,
@@ -53,7 +53,7 @@ videoChannelRouter.delete('/channels/:id',
 )
 
 videoChannelRouter.get('/channels/:id',
-  videoChannelGetValidator,
+  videoChannelsGetValidator,
   asyncMiddleware(getVideoChannel)
 )
 

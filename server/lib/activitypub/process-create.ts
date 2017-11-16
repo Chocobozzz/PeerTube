@@ -4,6 +4,7 @@ import { logger, retryTransactionWrapper } from '../../helpers'
 import { getActivityPubUrl, getOrCreateAccount } from '../../helpers/activitypub'
 import { database as db } from '../../initializers'
 import { AccountInstance } from '../../models/account/account-interface'
+import { videoChannelActivityObjectToDBAttributes } from './misc'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -37,23 +38,14 @@ function processCreateVideoChannel (account: AccountInstance, videoChannelToCrea
   return retryTransactionWrapper(addRemoteVideoChannel, options)
 }
 
-async function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
+function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
   logger.debug('Adding remote video channel "%s".', videoChannelToCreateData.uuid)
 
   return db.sequelize.transaction(async t => {
     let videoChannel = await db.VideoChannel.loadByUUIDOrUrl(videoChannelToCreateData.uuid, videoChannelToCreateData.id, t)
     if (videoChannel) throw new Error('Video channel with this URL/UUID already exists.')
 
-    const videoChannelData = {
-      name: videoChannelToCreateData.name,
-      description: videoChannelToCreateData.content,
-      uuid: videoChannelToCreateData.uuid,
-      createdAt: new Date(videoChannelToCreateData.published),
-      updatedAt: new Date(videoChannelToCreateData.updated),
-      remote: true,
-      accountId: account.id
-    }
-
+    const videoChannelData = videoChannelActivityObjectToDBAttributes(videoChannelToCreateData, account)
     videoChannel = db.VideoChannel.build(videoChannelData)
     videoChannel.url = getActivityPubUrl('videoChannel', videoChannel.uuid)
 
@@ -73,7 +65,7 @@ function processCreateVideoAbuse (account: AccountInstance, videoAbuseToCreateDa
   return retryTransactionWrapper(addRemoteVideoAbuse, options)
 }
 
-async function addRemoteVideoAbuse (account: AccountInstance, videoAbuseToCreateData: VideoAbuseObject) {
+function addRemoteVideoAbuse (account: AccountInstance, videoAbuseToCreateData: VideoAbuseObject) {
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
   return db.sequelize.transaction(async t => {

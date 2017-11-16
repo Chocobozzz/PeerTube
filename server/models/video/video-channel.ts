@@ -264,7 +264,8 @@ loadByUrl = function (url: string, t?: Sequelize.Transaction) {
   const query: Sequelize.FindOptions<VideoChannelAttributes> = {
     where: {
       url
-    }
+    },
+    include: [ VideoChannel['sequelize'].models.Account ]
   }
 
   if (t !== undefined) query.transaction = t
