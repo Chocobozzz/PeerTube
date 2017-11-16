@@ -75,7 +75,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
       },
       publicKey: {
         type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PUBLIC_KEY.max),
-        allowNull: false,
+        allowNull: true,
         validate: {
           publicKeyValid: value => {
             const res = isAccountPublicKeyValid(value)

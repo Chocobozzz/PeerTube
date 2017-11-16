@@ -25,9 +25,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   // Do not forget to add Account information to the created video channel
   videoChannelCreated.Account = account
 
-  await sendCreateVideoChannel(videoChannelCreated, t)
-  await shareVideoChannelByServer(videoChannelCreated, t)
-
+  // No need to seed this empty video channel to followers
   return videoChannelCreated
 }
 

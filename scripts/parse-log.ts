@@ -38,5 +38,5 @@ const rl = createInterface({
 
 rl.on('line', line => {
   const log = JSON.parse(line)
-  logLevels[log.level](log.message)
+  logLevels[log.level](log.message, log.stack)
 })

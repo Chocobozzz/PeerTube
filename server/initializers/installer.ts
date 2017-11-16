@@ -2,10 +2,9 @@ import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
 import { logger, mkdirpPromise, rimrafPromise } from '../helpers'
 import { createUserAccountAndChannel } from '../lib'
-import { createLocalAccount } from '../lib/user'
+import { createLocalAccountWithoutKeys } from '../lib/user'
 import { applicationExist, clientsExist, usersExist } from './checker'
 import { CACHE, CONFIG, LAST_MIGRATION_VERSION, SERVER_ACCOUNT_NAME } from './constants'
-
 import { database as db } from './database'
 
 async function installApplication () {
@@ -136,5 +135,6 @@ async function createApplicationIfNotExist () {
   const applicationInstance = await db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
 
   logger.info('Creating application account.')
-  return createLocalAccount(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
+
+  return createLocalAccountWithoutKeys(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
 }

@@ -70,7 +70,7 @@ usersRouter.post('/',
 usersRouter.post('/register',
   ensureUserRegistrationAllowed,
   usersRegisterValidator,
-  asyncMiddleware(registerUser)
+  asyncMiddleware(registerUserRetryWrapper)
 )
 
 usersRouter.put('/me',
@@ -113,7 +113,7 @@ async function getUserVideos (req: express.Request, res: express.Response, next:
 
 async function createUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
   const options = {
-    arguments: [ req, res ],
+    arguments: [ req ],
     errorMessage: 'Cannot insert the user with many retries.'
   }
 
@@ -123,7 +123,7 @@ async function createUserRetryWrapper (req: express.Request, res: express.Respon
   return res.type('json').status(204).end()
 }
 
-async function createUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function createUser (req: express.Request) {
   const body: UserCreate = req.body
   const user = db.User.build({
     username: body.username,
@@ -139,7 +139,18 @@ async function createUser (req: express.Request, res: express.Response, next: ex
   logger.info('User %s with its channel and account created.', body.username)
 }
 
-async function registerUser (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function registerUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const options = {
+    arguments: [ req ],
+    errorMessage: 'Cannot insert the user with many retries.'
+  }
+
+  await retryTransactionWrapper(registerUser, options)
+
+  return res.type('json').status(204).end()
+}
+
+async function registerUser (req: express.Request) {
   const body: UserCreate = req.body
 
   const user = db.User.build({
@@ -152,7 +163,8 @@ async function registerUser (req: express.Request, res: express.Response, next: 
   })
 
   await createUserAccountAndChannel(user)
-  return res.type('json').status(204).end()
+
+  logger.info('User %s with its channel and account registered.', body.username)
 }
 
 async function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
