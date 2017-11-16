@@ -10,10 +10,12 @@ import {
 
   VideoAbuseMethods
 } from './video-abuse-interface'
+import { VideoAbuseObject } from '../../../shared/models/activitypub/objects/video-abuse-object'
 
 let VideoAbuse: Sequelize.Model<VideoAbuseInstance, VideoAbuseAttributes>
 let toFormattedJSON: VideoAbuseMethods.ToFormattedJSON
 let listForApi: VideoAbuseMethods.ListForApi
+let toActivityPubObject: VideoAbuseMethods.ToActivityPubObject
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   VideoAbuse = sequelize.define<VideoAbuseInstance, VideoAbuseAttributes>('VideoAbuse',
@@ -47,7 +49,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listForApi
   ]
   const instanceMethods = [
-    toFormattedJSON
+    toFormattedJSON,
+    toActivityPubObject
   ]
   addMethodsToModel(VideoAbuse, classMethods, instanceMethods)
 
@@ -78,6 +81,16 @@ toFormattedJSON = function (this: VideoAbuseInstance) {
   }
 
   return json
+}
+
+toActivityPubObject = function (this: VideoAbuseInstance) {
+  const videoAbuseObject: VideoAbuseObject = {
+    type: 'Flag' as 'Flag',
+    content: this.reason,
+    object: this.Video.url
+  }
+
+  return videoAbuseObject
 }
 
 // ------------------------------ STATICS ------------------------------

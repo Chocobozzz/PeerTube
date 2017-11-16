@@ -8,7 +8,7 @@ import {
 } from '../../models'
 import { httpRequestJobScheduler } from '../jobs'
 import { signObject, activityPubContextify } from '../../helpers'
-import { Activity } from '../../../shared'
+import { Activity, VideoAbuseObject } from '../../../shared'
 import { VideoAbuseInstance } from '../../models/video/video-abuse-interface'
 import { getActivityPubUrl } from '../../helpers/activitypub'
 import { logger } from '../../helpers/logger'
@@ -96,7 +96,7 @@ async function sendVideoAbuse (
   t: Sequelize.Transaction
 ) {
   const url = getActivityPubUrl('videoAbuse', videoAbuse.id.toString())
-  const data = await createActivityData(url, fromAccount, video.url)
+  const data = await createActivityData(url, fromAccount, videoAbuse.toActivityPubObject())
 
   return unicastTo(data, video.VideoChannel.Account.sharedInboxUrl, t)
 }

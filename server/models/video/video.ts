@@ -26,6 +26,7 @@ import {
   unlinkPromise,
   writeFilePromise
 } from '../../helpers'
+import { isVideoUrlValid } from '../../helpers/custom-validators/videos'
 import {
   API_VERSION,
   CONFIG,
@@ -39,14 +40,13 @@ import {
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
 } from '../../initializers'
+import { sendDeleteVideo } from '../../lib/activitypub/send-request'
 
 import { addMethodsToModel, getSort } from '../utils'
 
 import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
-import { sendDeleteVideo } from '../../lib/activitypub/send-request'
-import { isVideoUrlValid } from '../../helpers/custom-validators/videos'
 
 const Buffer = safeBuffer.Buffer
 

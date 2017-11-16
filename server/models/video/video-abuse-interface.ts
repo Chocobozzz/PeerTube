@@ -5,15 +5,18 @@ import { VideoAbuse as FormattedVideoAbuse } from '../../../shared/models/videos
 import { AccountInstance } from '../account/account-interface'
 import { ServerInstance } from '../server/server-interface'
 import { VideoInstance } from './video-interface'
+import { VideoAbuseObject } from '../../../shared/models/activitypub/objects/video-abuse-object'
 
 export namespace VideoAbuseMethods {
   export type ToFormattedJSON = (this: VideoAbuseInstance) => FormattedVideoAbuse
 
   export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoAbuseInstance> >
+  export type ToActivityPubObject = () => VideoAbuseObject
 }
 
 export interface VideoAbuseClass {
   listForApi: VideoAbuseMethods.ListForApi
+  toActivityPubObject: VideoAbuseMethods.ToActivityPubObject
 }
 
 export interface VideoAbuseAttributes {
