@@ -40,6 +40,7 @@
     "update-host": "ts-node ./scripts/update-host.ts",
     "test": "scripty",
     "help": "scripty",
+    "parse-log": "ts-node ./scripts/parse-log.ts",
     "postinstall": "cd client && yarn install --pure-lockfile",
     "tsc": "tsc",
     "nodemon": "nodemon",
