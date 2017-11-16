@@ -15,7 +15,7 @@ describe('Test config', function () {
   let server = null
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(10000)
 
     await flushTests()
     server = await runServer(1)
@@ -29,9 +29,11 @@ describe('Test config', function () {
   })
 
   it('Should have a correct config on a server with registration enabled and a users limit', async function () {
-    await registerUser(server.url, 'user1', 'super password')
-    await registerUser(server.url, 'user2', 'super password')
-    await registerUser(server.url, 'user3', 'super password')
+    await Promise.all([
+      registerUser(server.url, 'user1', 'super password'),
+      registerUser(server.url, 'user2', 'super password'),
+      registerUser(server.url, 'user3', 'super password')
+    ])
 
     const res = await getConfig(server.url)
     const data = res.body
