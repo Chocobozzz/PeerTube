@@ -13,7 +13,7 @@ export const FollowsRoutes: Routes = [
     component: FollowsComponent,
     canActivate: [ UserRightGuard ],
     data: {
-      userRight: UserRight.MANAGE_APPLICATION_FOLLOW
+      userRight: UserRight.MANAGE_SERVER_FOLLOW
     },
     children: [
       {

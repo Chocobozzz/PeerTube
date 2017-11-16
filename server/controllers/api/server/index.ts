@@ -1,12 +1,12 @@
 import * as express from 'express'
-import { applicationFollowsRouter } from './follows'
+import { serverFollowsRouter } from './follows'
 
-const applicationRouter = express.Router()
+const serverRouter = express.Router()
 
-applicationRouter.use('/', applicationFollowsRouter)
+serverRouter.use('/', serverFollowsRouter)
 
 // ---------------------------------------------------------------------------
 
 export {
-  applicationRouter
+  serverRouter
 }

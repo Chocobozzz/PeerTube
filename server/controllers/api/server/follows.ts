@@ -15,9 +15,9 @@ import { ensureUserHasRight } from '../../../middlewares/user-right'
 import { followValidator } from '../../../middlewares/validators/servers'
 import { followersSortValidator, followingSortValidator } from '../../../middlewares/validators/sort'
 
-const applicationFollowsRouter = express.Router()
+const serverFollowsRouter = express.Router()
 
-applicationFollowsRouter.get('/following',
+serverFollowsRouter.get('/following',
   paginationValidator,
   followingSortValidator,
   setFollowingSort,
@@ -25,15 +25,15 @@ applicationFollowsRouter.get('/following',
   asyncMiddleware(listFollowing)
 )
 
-applicationFollowsRouter.post('/follow',
+serverFollowsRouter.post('/follow',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_APPLICATION_FOLLOW),
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   followValidator,
   setBodyHostsPort,
   asyncMiddleware(follow)
 )
 
-applicationFollowsRouter.get('/followers',
+serverFollowsRouter.get('/followers',
   paginationValidator,
   followersSortValidator,
   setFollowersSort,
@@ -44,21 +44,21 @@ applicationFollowsRouter.get('/followers',
 // ---------------------------------------------------------------------------
 
 export {
-  applicationFollowsRouter
+  serverFollowsRouter
 }
 
 // ---------------------------------------------------------------------------
 
 async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const applicationAccount = await getServerAccount()
-  const resultList = await db.AccountFollow.listFollowingForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
+  const serverAccount = await getServerAccount()
+  const resultList = await db.AccountFollow.listFollowingForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const applicationAccount = await getServerAccount()
-  const resultList = await db.AccountFollow.listFollowersForApi(applicationAccount.id, req.query.start, req.query.count, req.query.sort)
+  const serverAccount = await getServerAccount()
+  const resultList = await db.AccountFollow.listFollowersForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
