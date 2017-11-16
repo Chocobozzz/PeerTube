@@ -56,7 +56,7 @@ export namespace VideoMethods {
 
   export type Load = (id: number) => Bluebird<VideoInstance>
   export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
-  export type LoadByUrl = (url: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
+  export type LoadByUrlAndPopulateAccount = (url: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
   export type LoadLocalVideoByUUID = (uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
   export type LoadByHostAndUUID = (fromHost: string, uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
   export type LoadAndPopulateAccount = (id: number) => Bluebird<VideoInstance>
@@ -82,7 +82,7 @@ export interface VideoClass {
   loadAndPopulateAccountAndServerAndTags: VideoMethods.LoadAndPopulateAccountAndServerAndTags
   loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
   loadByUUID: VideoMethods.LoadByUUID
-  loadByUrl: VideoMethods.LoadByUrl
+  loadByUrlAndPopulateAccount: VideoMethods.LoadByUrlAndPopulateAccount
   loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
   loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
   loadByUUIDAndPopulateAccountAndServerAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndServerAndTags

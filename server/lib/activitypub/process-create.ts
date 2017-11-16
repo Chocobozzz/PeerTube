@@ -69,7 +69,7 @@ function addRemoteVideoAbuse (account: AccountInstance, videoAbuseToCreateData: 
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
   return db.sequelize.transaction(async t => {
-    const video = await db.Video.loadByUrl(videoAbuseToCreateData.object, t)
+    const video = await db.Video.loadByUrlAndPopulateAccount(videoAbuseToCreateData.object, t)
     if (!video) {
       logger.warn('Unknown video %s for remote video abuse.', videoAbuseToCreateData.object)
       return

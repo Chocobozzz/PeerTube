@@ -24,13 +24,19 @@ async function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Se
   const videoChannelObject = videoChannel.toActivityPubObject()
   const data = await updateActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
 
-  return broadcastToFollowers(data, [ videoChannel.Account ], t)
+  const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
+  accountsInvolved.push(videoChannel.Account)
+
+  return broadcastToFollowers(data, accountsInvolved, t)
 }
 
 async function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
   const data = await deleteActivityData(videoChannel.url, videoChannel.Account)
 
-  return broadcastToFollowers(data, [ videoChannel.Account ], t)
+  const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
+  accountsInvolved.push(videoChannel.Account)
+
+  return broadcastToFollowers(data, accountsInvolved, t)
 }
 
 async function sendAddVideo (video: VideoInstance, t: Sequelize.Transaction) {
@@ -44,13 +50,19 @@ async function sendUpdateVideo (video: VideoInstance, t: Sequelize.Transaction) 
   const videoObject = video.toActivityPubObject()
   const data = await updateActivityData(video.url, video.VideoChannel.Account, videoObject)
 
-  return broadcastToFollowers(data, [ video.VideoChannel.Account ], t)
+  const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id)
+  accountsInvolved.push(video.VideoChannel.Account)
+
+  return broadcastToFollowers(data, accountsInvolved, t)
 }
 
 async function sendDeleteVideo (video: VideoInstance, t: Sequelize.Transaction) {
   const data = await deleteActivityData(video.url, video.VideoChannel.Account)
 
-  return broadcastToFollowers(data, [ video.VideoChannel.Account ], t)
+  const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id)
+  accountsInvolved.push(video.VideoChannel.Account)
+
+  return broadcastToFollowers(data, accountsInvolved, t)
 }
 
 async function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transaction) {

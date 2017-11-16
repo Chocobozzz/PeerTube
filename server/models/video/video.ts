@@ -84,6 +84,7 @@ let loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
 let listOwnedAndPopulateAccountAndTags: VideoMethods.ListOwnedAndPopulateAccountAndTags
 let listOwnedByAccount: VideoMethods.ListOwnedByAccount
 let load: VideoMethods.Load
+let loadByUrlAndPopulateAccount: VideoMethods.LoadByUrlAndPopulateAccount
 let loadByUUID: VideoMethods.LoadByUUID
 let loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
 let loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
@@ -271,6 +272,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listOwnedAndPopulateAccountAndTags,
     listOwnedByAccount,
     load,
+    loadByUrlAndPopulateAccount,
     loadAndPopulateAccount,
     loadAndPopulateAccountAndServerAndTags,
     loadByHostAndUUID,
@@ -929,6 +931,25 @@ loadByUUID = function (uuid: string, t?: Sequelize.Transaction) {
       uuid
     },
     include: [ Video['sequelize'].models.VideoFile ]
+  }
+
+  if (t !== undefined) query.transaction = t
+
+  return Video.findOne(query)
+}
+
+loadByUrlAndPopulateAccount = function (url: string, t?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<VideoAttributes> = {
+    where: {
+      url
+    },
+    include: [
+      Video['sequelize'].models.VideoFile,
+      {
+        model: Video['sequelize'].models.VideoChannel,
+        include: [ Video['sequelize'].models.Account ]
+      }
+    ]
   }
 
   if (t !== undefined) query.transaction = t
