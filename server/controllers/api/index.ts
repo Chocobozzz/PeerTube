@@ -4,13 +4,13 @@ import { badRequest } from '../../helpers'
 
 import { oauthClientsRouter } from './oauth-clients'
 import { configRouter } from './config'
-import { applicationRouter } from './server'
+import { serverRouter } from './server'
 import { usersRouter } from './users'
 import { videosRouter } from './videos'
 
 const apiRouter = express.Router()
 
-apiRouter.use('/application', applicationRouter)
+apiRouter.use('/server', serverRouter)
 apiRouter.use('/oauth-clients', oauthClientsRouter)
 apiRouter.use('/config', configRouter)
 apiRouter.use('/users', usersRouter)

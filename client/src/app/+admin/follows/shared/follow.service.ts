@@ -11,7 +11,7 @@ import { AccountFollow, ResultList } from '../../../../../../shared'
 
 @Injectable()
 export class FollowService {
-  private static BASE_APPLICATION_URL = API_URL + '/api/v1/application'
+  private static BASE_APPLICATION_URL = API_URL + '/api/v1/server'
 
   constructor (
     private authHttp: HttpClient,

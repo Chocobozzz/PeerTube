@@ -15,8 +15,8 @@ export class MenuAdminComponent {
     return this.auth.getUser().hasRight(UserRight.MANAGE_USERS)
   }
 
-  hasApplicationFollowRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_APPLICATION_FOLLOW)
+  hasServerFollowRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_SERVER_FOLLOW)
   }
 
   hasVideoAbusesRight () {
