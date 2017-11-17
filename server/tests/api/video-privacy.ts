@@ -40,14 +40,14 @@ describe('Test video privacy', function () {
   })
 
   it('Should upload a private video on server 1', async function () {
-    this.timeout(15000)
+    this.timeout(25000)
 
     const attributes = {
       privacy: VideoPrivacy.PRIVATE
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
 
-    await wait(11000)
+    await wait(15000)
   })
 
   it('Should not have this private video on server 2', async function () {
@@ -86,8 +86,8 @@ describe('Test video privacy', function () {
     await getVideoWithToken(servers[0].url, servers[0].accessToken, privateVideoUUID)
   })
 
-  it('Should upload a unlisted video on server 2', async function () {
-    this.timeout(30000)
+  it('Should upload an unlisted video on server 2', async function () {
+    this.timeout(50000)
 
     const attributes = {
       name: 'unlisted video',
@@ -95,7 +95,7 @@ describe('Test video privacy', function () {
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, attributes)
 
-    await wait(22000)
+    await wait(40000)
   })
 
   it('Should not have this unlisted video listed on server 1 and 2', async function () {
@@ -125,7 +125,7 @@ describe('Test video privacy', function () {
   })
 
   it('Should update the private video to public on server 1', async function () {
-    this.timeout(15000)
+    this.timeout(40000)
 
     const attribute = {
       name: 'super video public',
@@ -134,10 +134,10 @@ describe('Test video privacy', function () {
 
     await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, attribute)
 
-    await wait(11000)
+    await wait(30000)
   })
 
-  it('Should not have this new unlisted video listed on server 1 and 2', async function () {
+  it('Should have this new public video listed on server 1 and 2', async function () {
     for (const server of servers) {
       const res = await getVideosList(server.url)
 

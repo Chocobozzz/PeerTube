@@ -17,7 +17,7 @@ async function processAddActivity (activity: ActivityAdd) {
     const videoChannelUrl = activity.target
     const videoChannel = await getOrCreateVideoChannel(account, videoChannelUrl)
 
-    return processAddVideo(account, videoChannel, activityObject as VideoTorrentObject)
+    return processAddVideo(account, activity, videoChannel, activityObject as VideoTorrentObject)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -32,16 +32,21 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processAddVideo (account: AccountInstance, videoChannel: VideoChannelInstance, video: VideoTorrentObject) {
+function processAddVideo (account: AccountInstance, activity: ActivityAdd, videoChannel: VideoChannelInstance, video: VideoTorrentObject) {
   const options = {
-    arguments: [ account, videoChannel, video ],
+    arguments: [ account, activity, videoChannel, video ],
     errorMessage: 'Cannot insert the remote video with many retries.'
   }
 
   return retryTransactionWrapper(addRemoteVideo, options)
 }
 
-function addRemoteVideo (account: AccountInstance, videoChannel: VideoChannelInstance, videoToCreateData: VideoTorrentObject) {
+function addRemoteVideo (
+  account: AccountInstance,
+  activity: ActivityAdd,
+  videoChannel: VideoChannelInstance,
+  videoToCreateData: VideoTorrentObject
+) {
   logger.debug('Adding remote video %s.', videoToCreateData.url)
 
   return db.sequelize.transaction(async t => {
@@ -54,7 +59,7 @@ function addRemoteVideo (account: AccountInstance, videoChannel: VideoChannelIns
     const videoFromDatabase = await db.Video.loadByUUIDOrURL(videoToCreateData.uuid, videoToCreateData.id, t)
     if (videoFromDatabase) throw new Error('Video with this UUID/Url already exists.')
 
-    const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoToCreateData)
+    const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoToCreateData, activity.to, activity.cc)
     const video = db.Video.build(videoData)
 
     // Don't block on request

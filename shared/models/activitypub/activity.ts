@@ -12,6 +12,7 @@ export interface BaseActivity {
   '@context'?: any[]
   id: string
   to?: string[]
+  cc?: string[]
   actor: string
   type: ActivityType
   signature?: ActivityPubSignature

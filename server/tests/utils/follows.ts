@@ -29,7 +29,7 @@ function getFollowingListPaginationAndSort (url: string, start: number, count: n
 }
 
 async function follow (follower: string, following: string[], accessToken: string, expectedStatus = 204) {
-  const path = '/api/v1/server/follow'
+  const path = '/api/v1/server/following'
 
   const followingHosts = following.map(f => f.replace(/^http:\/\//, ''))
   const res = await request(follower)

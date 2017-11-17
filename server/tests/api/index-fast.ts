@@ -2,7 +2,7 @@
 import './config'
 import './check-params'
 import './users'
-import './single-pod'
+import './single-server'
 import './video-abuse'
 import './video-blacklist'
 import './video-blacklist-management'

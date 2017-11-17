@@ -2,11 +2,12 @@ import * as magnetUtil from 'magnet-uri'
 import { VideoTorrentObject } from '../../../shared'
 import { VideoChannelObject } from '../../../shared/models/activitypub/objects/video-channel-object'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
-import { VIDEO_MIMETYPE_EXT } from '../../initializers/constants'
+import { ACTIVITY_PUB, VIDEO_MIMETYPE_EXT } from '../../initializers/constants'
 import { AccountInstance } from '../../models/account/account-interface'
 import { VideoChannelInstance } from '../../models/video/video-channel-interface'
 import { VideoFileAttributes } from '../../models/video/video-file-interface'
 import { VideoAttributes, VideoInstance } from '../../models/video/video-interface'
+import { VideoPrivacy } from '../../../shared/models/videos/video-privacy.enum'
 
 function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChannelObject, account: AccountInstance) {
   return {
@@ -23,8 +24,14 @@ function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChan
 
 async function videoActivityObjectToDBAttributes (
   videoChannel: VideoChannelInstance,
-  videoObject: VideoTorrentObject
+  videoObject: VideoTorrentObject,
+  to: string[] = [],
+  cc: string[] = []
 ) {
+  let privacy = VideoPrivacy.PRIVATE
+  if (to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1) privacy = VideoPrivacy.PUBLIC
+  else if (cc.indexOf(ACTIVITY_PUB.PUBLIC) !== -1) privacy = VideoPrivacy.UNLISTED
+
   const duration = videoObject.duration.replace(/[^\d]+/, '')
   const videoData: VideoAttributes = {
     name: videoObject.name,
@@ -43,11 +50,8 @@ async function videoActivityObjectToDBAttributes (
     views: videoObject.views,
     likes: 0,
     dislikes: 0,
-    // likes: videoToCreateData.likes,
-    // dislikes: videoToCreateData.dislikes,
     remote: true,
-    privacy: 1
-    // privacy: videoToCreateData.privacy
+    privacy
   }
 
   return videoData

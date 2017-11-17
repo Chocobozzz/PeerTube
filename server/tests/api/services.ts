@@ -14,7 +14,6 @@ import {
   getOEmbed
 } from '../utils'
 import { runServer } from '../utils/servers'
-import { Video } from '../../../client/src/app/videos/shared/video.model'
 
 describe('Test services', function () {
   let server: ServerInfo = null

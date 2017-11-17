@@ -26,8 +26,8 @@ describe('Test a client controllers', function () {
     server.accessToken = await loginAndGetAccessToken(server)
 
     const videoAttributes = {
-      name: 'my super name for pod 1',
-      description: 'my super description for pod 1'
+      name: 'my super name for server 1',
+      description: 'my super description for server 1'
     }
     await uploadVideo(server.url, server.accessToken, videoAttributes)
 
@@ -44,8 +44,8 @@ describe('Test a client controllers', function () {
                         .get('/videos/watch/' + server.video.id)
                         .expect(200)
 
-    expect(res.text).to.contain('<meta property="og:title" content="my super name for pod 1" />')
-    expect(res.text).to.contain('<meta property="og:description" content="my super description for pod 1" />')
+    expect(res.text).to.contain('<meta property="og:title" content="my super name for server 1" />')
+    expect(res.text).to.contain('<meta property="og:description" content="my super description for server 1" />')
   })
 
   it('Should have valid Open Graph tags on the watch page with video uuid', async function () {
@@ -53,8 +53,8 @@ describe('Test a client controllers', function () {
                         .get('/videos/watch/' + server.video.uuid)
                         .expect(200)
 
-    expect(res.text).to.contain('<meta property="og:title" content="my super name for pod 1" />')
-    expect(res.text).to.contain('<meta property="og:description" content="my super description for pod 1" />')
+    expect(res.text).to.contain('<meta property="og:title" content="my super name for server 1" />')
+    expect(res.text).to.contain('<meta property="og:description" content="my super description for server 1" />')
   })
 
   it('Should have valid oEmbed discovery tags', async function () {

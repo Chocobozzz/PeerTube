@@ -8,7 +8,7 @@ import { ActivityPubActor } from '../../shared/models/activitypub/activitypub-ac
 import { VideoChannelObject } from '../../shared/models/activitypub/objects/video-channel-object'
 import { ResultList } from '../../shared/models/result-list.model'
 import { database as db, REMOTE_SCHEME } from '../initializers'
-import { ACTIVITY_PUB_ACCEPT_HEADER, CONFIG, STATIC_PATHS } from '../initializers/constants'
+import { ACTIVITY_PUB, CONFIG, STATIC_PATHS } from '../initializers/constants'
 import { videoChannelActivityObjectToDBAttributes } from '../lib/activitypub/misc'
 import { sendVideoAnnounce } from '../lib/activitypub/send-request'
 import { sendVideoChannelAnnounce } from '../lib/index'
@@ -99,7 +99,7 @@ async function fetchRemoteAccountAndCreateServer (accountUrl: string) {
     uri: accountUrl,
     method: 'GET',
     headers: {
-      'Accept': ACTIVITY_PUB_ACCEPT_HEADER
+      'Accept': ACTIVITY_PUB.ACCEPT_HEADER
     }
   }
 
@@ -157,7 +157,7 @@ async function fetchRemoteVideoChannel (ownerAccount: AccountInstance, videoChan
     uri: videoChannelUrl,
     method: 'GET',
     headers: {
-      'Accept': ACTIVITY_PUB_ACCEPT_HEADER
+      'Accept': ACTIVITY_PUB.ACCEPT_HEADER
     }
   }
 

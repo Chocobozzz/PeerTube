@@ -25,7 +25,7 @@ serverFollowsRouter.get('/following',
   asyncMiddleware(listFollowing)
 )
 
-serverFollowsRouter.post('/follow',
+serverFollowsRouter.post('/following',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   followValidator,

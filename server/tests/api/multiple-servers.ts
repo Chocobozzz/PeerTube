@@ -10,7 +10,6 @@ import {
   getVideo,
   getVideosList,
   killallServers,
-  makeFriends,
   rateVideo,
   removeVideo,
   ServerInfo,
@@ -22,13 +21,14 @@ import {
   webtorrentAdd,
   addVideoChannel,
   getVideoChannelsList,
-  getUserAccessToken
+  getUserAccessToken,
+  doubleFollow
 } from '../utils'
 import { createUser } from '../utils/users'
 
 const expect = chai.expect
 
-describe('Test multiple pods', function () {
+describe('Test multiple servers', function () {
   let servers: ServerInfo[] = []
   const toRemove = []
   let videoUUID = ''
@@ -50,17 +50,15 @@ describe('Test multiple pods', function () {
     const channelRes = await getVideoChannelsList(servers[0].url, 0, 1)
     videoChannelId = channelRes.body.data[0].id
 
-    // The second pod make friend with the third
-    await makeFriends(servers[1].url, servers[1].accessToken)
-
-    // Wait for the request between pods
-    await wait(10000)
-
-    // Pod 1 make friends too
-    await makeFriends(servers[0].url, servers[0].accessToken)
+    // Server 1 and server 2 follow each other
+    await doubleFollow(servers[0], servers[1])
+    // Server 1 and server 3 follow each other
+    await doubleFollow(servers[0], servers[2])
+    // Server 2 and server 3 follow each other
+    await doubleFollow(servers[1], servers[2])
   })
 
-  it('Should not have videos for all pods', async function () {
+  it('Should not have videos for all servers', async function () {
     for (const server of servers) {
       const res = await getVideosList(server.url)
       const videos = res.body.data
@@ -69,18 +67,18 @@ describe('Test multiple pods', function () {
     }
   })
 
-  describe('Should upload the video and propagate on each pod', function () {
-    it('Should upload the video on pod 1 and propagate on each pod', async function () {
-      // Pod 1 has video transcoding activated
+  describe('Should upload the video and propagate on each server', function () {
+    it('Should upload the video on server 1 and propagate on each server', async function () {
+      // Server 1 has video transcoding activated
       this.timeout(15000)
 
       const videoAttributes = {
-        name: 'my super name for pod 1',
+        name: 'my super name for server 1',
         category: 5,
         licence: 4,
         language: 9,
         nsfw: true,
-        description: 'my super description for pod 1',
+        description: 'my super description for server 1',
         tags: [ 'tag1p1', 'tag2p1' ],
         channelId: videoChannelId,
         fixture: 'video_short1.webm'
@@ -89,7 +87,7 @@ describe('Test multiple pods', function () {
 
       await wait(11000)
 
-      // All pods should have this video
+      // All servers should have this video
       for (const server of servers) {
         let baseMagnet = null
 
@@ -99,7 +97,7 @@ describe('Test multiple pods', function () {
         expect(videos).to.be.an('array')
         expect(videos.length).to.equal(1)
         const video = videos[0]
-        expect(video.name).to.equal('my super name for pod 1')
+        expect(video.name).to.equal('my super name for server 1')
         expect(video.category).to.equal(5)
         expect(video.categoryLabel).to.equal('Sports')
         expect(video.licence).to.equal(4)
@@ -107,8 +105,8 @@ describe('Test multiple pods', function () {
         expect(video.language).to.equal(9)
         expect(video.languageLabel).to.equal('Japanese')
         expect(video.nsfw).to.be.ok
-        expect(video.description).to.equal('my super description for pod 1')
-        expect(video.podHost).to.equal('localhost:9001')
+        expect(video.description).to.equal('my super description for server 1')
+        expect(video.serverHost).to.equal('localhost:9001')
         expect(video.duration).to.equal(10)
         expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
         expect(dateIsValid(video.createdAt)).to.be.true
@@ -127,8 +125,9 @@ describe('Test multiple pods', function () {
         const file = videoDetails.files[0]
         const magnetUri = file.magnetUri
         expect(file.magnetUri).to.have.lengthOf.above(2)
-        expect(file.torrentUrl).to.equal(`http://${videoDetails.podHost}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
-        expect(file.fileUrl).to.equal(`http://${videoDetails.podHost}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
+        expect(file.torrentUrl).to
+          .equal(`http://${videoDetails.serverHost}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
+        expect(file.fileUrl).to.equal(`http://${videoDetails.serverHost}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
         expect(file.resolution).to.equal(720)
         expect(file.resolutionLabel).to.equal('720p')
         expect(file.size).to.equal(572456)
@@ -141,7 +140,7 @@ describe('Test multiple pods', function () {
           expect(videoDetails.channel.isLocal).to.be.true
         }
 
-        // All pods should have the same magnet Uri
+        // All servers should have the same magnet Uri
         if (baseMagnet === null) {
           baseMagnet = magnetUri
         } else {
@@ -153,7 +152,7 @@ describe('Test multiple pods', function () {
       }
     })
 
-    it('Should upload the video on pod 2 and propagate on each pod', async function () {
+    it('Should upload the video on server 2 and propagate on each server', async function () {
       this.timeout(120000)
 
       const user = {
@@ -164,12 +163,12 @@ describe('Test multiple pods', function () {
       const userAccessToken = await getUserAccessToken(servers[1], user)
 
       const videoAttributes = {
-        name: 'my super name for pod 2',
+        name: 'my super name for server 2',
         category: 4,
         licence: 3,
         language: 11,
         nsfw: true,
-        description: 'my super description for pod 2',
+        description: 'my super description for server 2',
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
         fixture: 'video_short2.webm'
       }
@@ -178,7 +177,7 @@ describe('Test multiple pods', function () {
       // Transcoding, so wait more than 22000
       await wait(60000)
 
-      // All pods should have this video
+      // All servers should have this video
       for (const server of servers) {
         let baseMagnet = {}
 
@@ -188,7 +187,7 @@ describe('Test multiple pods', function () {
         expect(videos).to.be.an('array')
         expect(videos.length).to.equal(2)
         const video = videos[1]
-        expect(video.name).to.equal('my super name for pod 2')
+        expect(video.name).to.equal('my super name for server 2')
         expect(video.category).to.equal(4)
         expect(video.categoryLabel).to.equal('Art')
         expect(video.licence).to.equal(3)
@@ -196,8 +195,8 @@ describe('Test multiple pods', function () {
         expect(video.language).to.equal(11)
         expect(video.languageLabel).to.equal('German')
         expect(video.nsfw).to.be.true
-        expect(video.description).to.equal('my super description for pod 2')
-        expect(video.podHost).to.equal('localhost:9002')
+        expect(video.description).to.equal('my super description for server 2')
+        expect(video.serverHost).to.equal('localhost:9002')
         expect(video.duration).to.equal(5)
         expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
         expect(dateIsValid(video.createdAt)).to.be.true
@@ -223,7 +222,7 @@ describe('Test multiple pods', function () {
         for (const file of videoDetails.files) {
           expect(file.magnetUri).to.have.lengthOf.above(2)
 
-          // All pods should have the same magnet Uri
+          // All servers should have the same magnet Uri
           if (baseMagnet[file.resolution] === undefined) {
             baseMagnet[file.resolution] = file.magnet
           } else {
@@ -256,28 +255,28 @@ describe('Test multiple pods', function () {
       }
     })
 
-    it('Should upload two videos on pod 3 and propagate on each pod', async function () {
+    it('Should upload two videos on server 3 and propagate on each server', async function () {
       this.timeout(45000)
 
       const videoAttributes1 = {
-        name: 'my super name for pod 3',
+        name: 'my super name for server 3',
         category: 6,
         licence: 5,
         language: 11,
         nsfw: true,
-        description: 'my super description for pod 3',
+        description: 'my super description for server 3',
         tags: [ 'tag1p3' ],
         fixture: 'video_short3.webm'
       }
       await uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes1)
 
       const videoAttributes2 = {
-        name: 'my super name for pod 3-2',
+        name: 'my super name for server 3-2',
         category: 7,
         licence: 6,
         language: 12,
         nsfw: false,
-        description: 'my super description for pod 3-2',
+        description: 'my super description for server 3-2',
         tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
         fixture: 'video_short.webm'
       }
@@ -286,7 +285,7 @@ describe('Test multiple pods', function () {
       await wait(33000)
 
       let baseMagnet = null
-      // All pods should have this video
+      // All servers should have this video
       for (const server of servers) {
         const res = await getVideosList(server.url)
 
@@ -297,7 +296,7 @@ describe('Test multiple pods', function () {
         // We not sure about the order of the two last uploads
         let video1 = null
         let video2 = null
-        if (videos[2].name === 'my super name for pod 3') {
+        if (videos[2].name === 'my super name for server 3') {
           video1 = videos[2]
           video2 = videos[3]
         } else {
@@ -305,7 +304,7 @@ describe('Test multiple pods', function () {
           video2 = videos[2]
         }
 
-        expect(video1.name).to.equal('my super name for pod 3')
+        expect(video1.name).to.equal('my super name for server 3')
         expect(video1.category).to.equal(6)
         expect(video1.categoryLabel).to.equal('Travels')
         expect(video1.licence).to.equal(5)
@@ -313,8 +312,8 @@ describe('Test multiple pods', function () {
         expect(video1.language).to.equal(11)
         expect(video1.languageLabel).to.equal('German')
         expect(video1.nsfw).to.be.ok
-        expect(video1.description).to.equal('my super description for pod 3')
-        expect(video1.podHost).to.equal('localhost:9003')
+        expect(video1.description).to.equal('my super description for server 3')
+        expect(video1.serverHost).to.equal('localhost:9003')
         expect(video1.duration).to.equal(5)
         expect(video1.tags).to.deep.equal([ 'tag1p3' ])
         expect(video1.author).to.equal('root')
@@ -331,7 +330,7 @@ describe('Test multiple pods', function () {
         expect(file1.resolutionLabel).to.equal('720p')
         expect(file1.size).to.equal(292677)
 
-        expect(video2.name).to.equal('my super name for pod 3-2')
+        expect(video2.name).to.equal('my super name for server 3-2')
         expect(video2.category).to.equal(7)
         expect(video2.categoryLabel).to.equal('Gaming')
         expect(video2.licence).to.equal(6)
@@ -339,8 +338,8 @@ describe('Test multiple pods', function () {
         expect(video2.language).to.equal(12)
         expect(video2.languageLabel).to.equal('Korean')
         expect(video2.nsfw).to.be.false
-        expect(video2.description).to.equal('my super description for pod 3-2')
-        expect(video2.podHost).to.equal('localhost:9003')
+        expect(video2.description).to.equal('my super description for server 3-2')
+        expect(video2.serverHost).to.equal('localhost:9003')
         expect(video2.duration).to.equal(5)
         expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
         expect(video2.author).to.equal('root')
@@ -367,7 +366,7 @@ describe('Test multiple pods', function () {
           expect(video2.isLocal).to.be.true
         }
 
-        // All pods should have the same magnet Uri
+        // All servers should have the same magnet Uri
         if (baseMagnet === null) {
           baseMagnet = magnetUri2
         } else {
@@ -384,7 +383,7 @@ describe('Test multiple pods', function () {
   })
 
   describe('Should seed the uploaded video', function () {
-    it('Should add the file 1 by asking pod 3', async function () {
+    it('Should add the file 1 by asking server 3', async function () {
       // Yes, this could be long
       this.timeout(200000)
 
@@ -403,7 +402,7 @@ describe('Test multiple pods', function () {
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
     })
 
-    it('Should add the file 2 by asking pod 1', async function () {
+    it('Should add the file 2 by asking server 1', async function () {
       // Yes, this could be long
       this.timeout(200000)
 
@@ -419,7 +418,7 @@ describe('Test multiple pods', function () {
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
     })
 
-    it('Should add the file 3 by asking pod 2', async function () {
+    it('Should add the file 3 by asking server 2', async function () {
       // Yes, this could be long
       this.timeout(200000)
 
@@ -435,7 +434,7 @@ describe('Test multiple pods', function () {
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
     })
 
-    it('Should add the file 3-2 by asking pod 1', async function () {
+    it('Should add the file 3-2 by asking server 1', async function () {
       // Yes, this could be long
       this.timeout(200000)
 
@@ -451,13 +450,13 @@ describe('Test multiple pods', function () {
       expect(torrent.files[0].path).to.exist.and.to.not.equal('')
     })
 
-    it('Should add the file 2 in 360p by asking pod 1', async function () {
+    it('Should add the file 2 in 360p by asking server 1', async function () {
       // Yes, this could be long
       this.timeout(200000)
 
       const res = await getVideosList(servers[0].url)
 
-      const video = res.body.data.find(v => v.name === 'my super name for pod 2')
+      const video = res.body.data.find(v => v.name === 'my super name for server 2')
       const res2 = await getVideo(servers[0].url, video.id)
       const videoDetails = res2.body
 
@@ -472,31 +471,31 @@ describe('Test multiple pods', function () {
   })
 
   describe('Should update video views, likes and dislikes', function () {
-    let localVideosPod3 = []
-    let remoteVideosPod1 = []
-    let remoteVideosPod2 = []
-    let remoteVideosPod3 = []
+    let localVideosServer3 = []
+    let remoteVideosServer1 = []
+    let remoteVideosServer2 = []
+    let remoteVideosServer3 = []
 
     before(async function () {
       const res1 = await getVideosList(servers[0].url)
-      remoteVideosPod1 = res1.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
+      remoteVideosServer1 = res1.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
 
       const res2 = await getVideosList(servers[1].url)
-      remoteVideosPod2 = res2.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
+      remoteVideosServer2 = res2.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
 
       const res3 = await getVideosList(servers[2].url)
-      localVideosPod3 = res3.body.data.filter(video => video.isLocal === true).map(video => video.uuid)
-      remoteVideosPod3 = res3.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
+      localVideosServer3 = res3.body.data.filter(video => video.isLocal === true).map(video => video.uuid)
+      remoteVideosServer3 = res3.body.data.filter(video => video.isLocal === false).map(video => video.uuid)
     })
 
     it('Should view multiple videos on owned servers', async function () {
       this.timeout(30000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(getVideo(servers[2].url, localVideosPod3[0]))
-      tasks.push(getVideo(servers[2].url, localVideosPod3[0]))
-      tasks.push(getVideo(servers[2].url, localVideosPod3[0]))
-      tasks.push(getVideo(servers[2].url, localVideosPod3[1]))
+      tasks.push(getVideo(servers[2].url, localVideosServer3[0]))
+      tasks.push(getVideo(servers[2].url, localVideosServer3[0]))
+      tasks.push(getVideo(servers[2].url, localVideosServer3[0]))
+      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
 
       await Promise.all(tasks)
 
@@ -506,8 +505,8 @@ describe('Test multiple pods', function () {
         const res = await getVideosList(server.url)
 
         const videos = res.body.data
-        const video0 = videos.find(v => v.uuid === localVideosPod3[0])
-        const video1 = videos.find(v => v.uuid === localVideosPod3[1])
+        const video0 = videos.find(v => v.uuid === localVideosServer3[0])
+        const video1 = videos.find(v => v.uuid === localVideosServer3[1])
 
         expect(video0.views).to.equal(7)
         expect(video1.views).to.equal(5)
@@ -518,16 +517,16 @@ describe('Test multiple pods', function () {
       this.timeout(30000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(getVideo(servers[0].url, remoteVideosPod1[0]))
-      tasks.push(getVideo(servers[1].url, remoteVideosPod2[0]))
-      tasks.push(getVideo(servers[1].url, remoteVideosPod2[0]))
-      tasks.push(getVideo(servers[2].url, remoteVideosPod3[0]))
-      tasks.push(getVideo(servers[2].url, remoteVideosPod3[1]))
-      tasks.push(getVideo(servers[2].url, remoteVideosPod3[1]))
-      tasks.push(getVideo(servers[2].url, remoteVideosPod3[1]))
-      tasks.push(getVideo(servers[2].url, localVideosPod3[1]))
-      tasks.push(getVideo(servers[2].url, localVideosPod3[1]))
-      tasks.push(getVideo(servers[2].url, localVideosPod3[1]))
+      tasks.push(getVideo(servers[0].url, remoteVideosServer1[0]))
+      tasks.push(getVideo(servers[1].url, remoteVideosServer2[0]))
+      tasks.push(getVideo(servers[1].url, remoteVideosServer2[0]))
+      tasks.push(getVideo(servers[2].url, remoteVideosServer3[0]))
+      tasks.push(getVideo(servers[2].url, remoteVideosServer3[1]))
+      tasks.push(getVideo(servers[2].url, remoteVideosServer3[1]))
+      tasks.push(getVideo(servers[2].url, remoteVideosServer3[1]))
+      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
+      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
+      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
 
       await Promise.all(tasks)
 
@@ -557,13 +556,13 @@ describe('Test multiple pods', function () {
       this.timeout(30000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosPod1[0], 'like'))
-      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosPod1[0], 'dislike'))
-      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosPod1[0], 'like'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, localVideosPod3[1], 'like'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, localVideosPod3[1], 'dislike'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, remoteVideosPod3[1], 'dislike'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, remoteVideosPod3[0], 'like'))
+      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like'))
+      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'dislike'))
+      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like'))
+      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'like'))
+      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'dislike'))
+      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[1], 'dislike'))
+      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[0], 'like'))
 
       await Promise.all(tasks)
 
@@ -591,7 +590,7 @@ describe('Test multiple pods', function () {
   })
 
   describe('Should manipulate these videos', function () {
-    it('Should update the video 3 by asking pod 3', async function () {
+    it('Should update the video 3 by asking server 3', async function () {
       this.timeout(15000)
 
       const attributes = {
@@ -609,7 +608,7 @@ describe('Test multiple pods', function () {
       await wait(11000)
     })
 
-    it('Should have the video 3 updated on each pod', async function () {
+    it('Should have the video 3 updated on each server', async function () {
       this.timeout(200000)
 
       for (const server of servers) {
@@ -651,7 +650,7 @@ describe('Test multiple pods', function () {
       }
     })
 
-    it('Should remove the videos 3 and 3-2 by asking pod 3', async function () {
+    it('Should remove the videos 3 and 3-2 by asking server 3', async function () {
       this.timeout(15000)
 
       await removeVideo(servers[2].url, servers[2].accessToken, toRemove[0].id)
@@ -660,7 +659,7 @@ describe('Test multiple pods', function () {
       await wait(11000)
     })
 
-    it('Should have videos 1 and 3 on each pod', async function () {
+    it('Should have videos 1 and 3 on each server', async function () {
       for (const server of servers) {
         const res = await getVideosList(server.url)
 
@@ -673,11 +672,11 @@ describe('Test multiple pods', function () {
         expect(videos[0].name).not.to.equal(toRemove[1].name)
         expect(videos[1].name).not.to.equal(toRemove[1].name)
 
-        videoUUID = videos.find(video => video.name === 'my super name for pod 1').uuid
+        videoUUID = videos.find(video => video.name === 'my super name for server 1').uuid
       }
     })
 
-    it('Should get the same video by UUID on each pod', async function () {
+    it('Should get the same video by UUID on each server', async function () {
       let baseVideo = null
       for (const server of servers) {
         const res = await getVideo(server.url, videoUUID)
@@ -701,7 +700,7 @@ describe('Test multiple pods', function () {
       }
     })
 
-    it('Should get the preview from each pod', async function () {
+    it('Should get the preview from each server', async function () {
       for (const server of servers) {
         const res = await getVideo(server.url, videoUUID)
         const video = res.body

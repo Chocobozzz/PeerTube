@@ -1,7 +1,3 @@
-import * as jsonld from 'jsonld'
-import * as jsig from 'jsonld-signatures'
-jsig.use('jsonld', jsonld)
-
 import {
   PRIVATE_RSA_KEY_SIZE,
   BCRYPT_SALT_SIZE
@@ -15,6 +11,7 @@ import {
 } from './core-utils'
 import { logger } from './logger'
 import { AccountInstance } from '../models/account/account-interface'
+import { jsig } from './custom-jsonld-signature'
 
 async function createPrivateAndPublicKeys () {
   logger.info('Generating a RSA key...')

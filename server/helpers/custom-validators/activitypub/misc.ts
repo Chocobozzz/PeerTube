@@ -28,6 +28,10 @@ function isBaseActivityValid (activity: any, type: string) {
     (
       activity.to === undefined ||
       (Array.isArray(activity.to) && activity.to.every(t => isActivityPubUrlValid(t)))
+    ) &&
+    (
+      activity.cc === undefined ||
+      (Array.isArray(activity.cc) && activity.cc.every(t => isActivityPubUrlValid(t)))
     )
 }
 

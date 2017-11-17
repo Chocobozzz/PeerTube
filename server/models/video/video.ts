@@ -550,6 +550,7 @@ toFormattedDetailsJSON = function (this: VideoInstance) {
 
 toActivityPubObject = function (this: VideoInstance) {
   const { baseUrlHttp, baseUrlWs } = getBaseUrls(this)
+  if (!this.Tags) this.Tags = []
 
   const tag = this.Tags.map(t => ({
     type: 'Hashtag' as 'Hashtag',

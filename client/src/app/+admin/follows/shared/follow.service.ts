@@ -42,7 +42,7 @@ export class FollowService {
       hosts: notEmptyHosts
     }
 
-    return this.authHttp.post(FollowService.BASE_APPLICATION_URL + '/follow', body)
+    return this.authHttp.post(FollowService.BASE_APPLICATION_URL + '/following', body)
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
   }
