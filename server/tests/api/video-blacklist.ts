@@ -1,22 +1,22 @@
 /* tslint:disable:no-unused-expression */
 
-import 'mocha'
 import * as chai from 'chai'
-const expect = chai.expect
-
+import 'mocha'
 import {
-  ServerInfo,
-  flushTests,
-  uploadVideo,
-  makeFriends,
-  getVideosList,
-  wait,
-  setAccessTokensToServers,
-  flushAndRunMultipleServers,
   addVideoToBlacklist,
+  flushAndRunMultipleServers,
+  flushTests,
+  getVideosList,
+  killallServers,
   searchVideo,
-  killallServers
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
+  wait
 } from '../utils'
+import { doubleFollow } from '../utils/follows'
+
+const expect = chai.expect
 
 describe('Test video blacklists', function () {
   let servers: ServerInfo[] = []
@@ -30,32 +30,32 @@ describe('Test video blacklists', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    // Pod 1 makes friend with pod 2
-    await makeFriends(servers[0].url, servers[0].accessToken)
+    // Server 1 and server 2 follow each other
+    await doubleFollow(servers[0], servers[1])
 
-    // Upload a video on pod 2
+    // Upload a video on server 2
     const videoAttributes = {
-      name: 'my super name for pod 2',
-      description: 'my super description for pod 2'
+      name: 'my super name for server 2',
+      description: 'my super description for server 2'
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
     // Wait videos propagation
-    await wait(22000)
+    await wait(25000)
 
     const res = await getVideosList(servers[0].url)
     const videos = res.body.data
 
     expect(videos.length).to.equal(1)
 
-    servers[0].remoteVideo = videos.find(video => video.name === 'my super name for pod 2')
+    servers[0].remoteVideo = videos.find(video => video.name === 'my super name for server 2')
   })
 
-  it('Should blacklist a remote video on pod 1', async function () {
+  it('Should blacklist a remote video on server 1', async function () {
     await addVideoToBlacklist(servers[0].url, servers[0].accessToken, servers[0].remoteVideo.id)
   })
 
-  it('Should not have the video blacklisted in videos list on pod 1', async function () {
+  it('Should not have the video blacklisted in videos list on server 1', async function () {
     const res = await getVideosList(servers[0].url)
 
     expect(res.body.total).to.equal(0)
@@ -63,7 +63,7 @@ describe('Test video blacklists', function () {
     expect(res.body.data.length).to.equal(0)
   })
 
-  it('Should not have the video blacklisted in videos search on pod 1', async function () {
+  it('Should not have the video blacklisted in videos search on server 1', async function () {
     const res = await searchVideo(servers[0].url, 'name')
 
     expect(res.body.total).to.equal(0)
@@ -71,7 +71,7 @@ describe('Test video blacklists', function () {
     expect(res.body.data.length).to.equal(0)
   })
 
-  it('Should have the blacklisted video in videos list on pod 2', async function () {
+  it('Should have the blacklisted video in videos list on server 2', async function () {
     const res = await getVideosList(servers[1].url)
 
     expect(res.body.total).to.equal(1)
@@ -79,7 +79,7 @@ describe('Test video blacklists', function () {
     expect(res.body.data.length).to.equal(1)
   })
 
-  it('Should have the video blacklisted in videos search on pod 2', async function () {
+  it('Should have the video blacklisted in videos search on server 2', async function () {
     const res = await searchVideo(servers[1].url, 'name')
 
     expect(res.body.total).to.equal(1)

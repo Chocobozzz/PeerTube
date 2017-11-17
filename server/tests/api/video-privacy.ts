@@ -1,24 +1,24 @@
 /* tslint:disable:no-unused-expression */
 
-import 'mocha'
 import * as chai from 'chai'
-const expect = chai.expect
-
-import {
-  ServerInfo,
-  flushTests,
-  uploadVideo,
-  makeFriends,
-  getVideosList,
-  wait,
-  setAccessTokensToServers,
-  flushAndRunMultipleServers,
-  killallServers
-} from '../utils'
+import 'mocha'
 import { VideoPrivacy } from '../../../shared/models/videos/video-privacy.enum'
-import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../utils/videos'
-import { createUser } from '../utils/users'
+import {
+  flushAndRunMultipleServers,
+  flushTests,
+  getVideosList,
+  killallServers,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
+  wait
+} from '../utils'
+import { doubleFollow } from '../utils/follows'
 import { getUserAccessToken } from '../utils/login'
+import { createUser } from '../utils/users'
+import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../utils/videos'
+
+const expect = chai.expect
 
 describe('Test video privacy', function () {
   let servers: ServerInfo[] = []
@@ -35,11 +35,11 @@ describe('Test video privacy', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    // Pod 1 makes friend with pod 2
-    await makeFriends(servers[0].url, servers[0].accessToken)
+    // Server 1 and server 2 follow each other
+    await doubleFollow(servers[0], servers[1])
   })
 
-  it('Should upload a private video on pod 1', async function () {
+  it('Should upload a private video on server 1', async function () {
     this.timeout(15000)
 
     const attributes = {
@@ -50,7 +50,7 @@ describe('Test video privacy', function () {
     await wait(11000)
   })
 
-  it('Should not have this private video on pod 2', async function () {
+  it('Should not have this private video on server 2', async function () {
     const res = await getVideosList(servers[1].url)
 
     expect(res.body.total).to.equal(0)
@@ -86,7 +86,7 @@ describe('Test video privacy', function () {
     await getVideoWithToken(servers[0].url, servers[0].accessToken, privateVideoUUID)
   })
 
-  it('Should upload a unlisted video on pod 2', async function () {
+  it('Should upload a unlisted video on server 2', async function () {
     this.timeout(30000)
 
     const attributes = {
@@ -98,7 +98,7 @@ describe('Test video privacy', function () {
     await wait(22000)
   })
 
-  it('Should not have this unlisted video listed on pod 1 and 2', async function () {
+  it('Should not have this unlisted video listed on server 1 and 2', async function () {
     for (const server of servers) {
       const res = await getVideosList(server.url)
 
@@ -124,7 +124,7 @@ describe('Test video privacy', function () {
     }
   })
 
-  it('Should update the private video to public on pod 1', async function () {
+  it('Should update the private video to public on server 1', async function () {
     this.timeout(15000)
 
     const attribute = {
@@ -137,7 +137,7 @@ describe('Test video privacy', function () {
     await wait(11000)
   })
 
-  it('Should not have this new unlisted video listed on pod 1 and 2', async function () {
+  it('Should not have this new unlisted video listed on server 1 and 2', async function () {
     for (const server of servers) {
       const res = await getVideosList(server.url)
 

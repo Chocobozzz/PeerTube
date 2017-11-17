@@ -13,7 +13,7 @@ import {
   getMyUserInformation,
   getVideoChannelsList,
   addVideoChannel,
-  getAuthorVideoChannelsList,
+  getAccountVideoChannelsList,
   updateVideoChannel,
   deleteVideoChannel,
   getVideoChannel
@@ -64,8 +64,8 @@ describe('Test a video channels', function () {
     expect(videoChannels[1].description).to.equal('super video channel description')
   })
 
-  it('Should have two video channels when getting author channels', async () => {
-    const res = await getAuthorVideoChannelsList(server.url, userInfo.account.uuid)
+  it('Should have two video channels when getting account channels', async () => {
+    const res = await getAccountVideoChannelsList(server.url, userInfo.account.uuid)
 
     expect(res.body.total).to.equal(2)
     expect(res.body.data).to.be.an('array')

@@ -20,8 +20,8 @@ function getVideoChannelsList (url: string, start: number, count: number, sort?:
             .expect('Content-Type', /json/)
 }
 
-function getAuthorVideoChannelsList (url: string, authorId: number | string) {
-  const path = '/api/v1/videos/authors/' + authorId + '/channels'
+function getAccountVideoChannelsList (url: string, accountId: number | string) {
+  const path = '/api/v1/videos/accounts/' + accountId + '/channels'
 
   return request(url)
     .get(path)
@@ -87,7 +87,7 @@ function getVideoChannel (url: string, channelId: number) {
 
 export {
   getVideoChannelsList,
-  getAuthorVideoChannelsList,
+  getAccountVideoChannelsList,
   addVideoChannel,
   updateVideoChannel,
   deleteVideoChannel,

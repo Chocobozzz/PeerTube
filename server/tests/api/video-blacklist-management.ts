@@ -1,31 +1,31 @@
 /* tslint:disable:no-unused-expressions */
 
-import 'mocha'
 import * as chai from 'chai'
-const expect = chai.expect
 import * as lodash from 'lodash'
-const orderBy = lodash.orderBy
-
+import 'mocha'
 import {
-  ServerInfo,
-  flushTests,
-  wait,
-  setAccessTokensToServers,
-  flushAndRunMultipleServers,
-  killallServers,
-  makeFriends,
-  getVideosList,
-  uploadVideo,
   addVideoToBlacklist,
-  removeVideoFromBlacklist,
+  flushAndRunMultipleServers,
+  flushTests,
   getBlacklistedVideosList,
-  getSortedBlacklistedVideosList
+  getSortedBlacklistedVideosList,
+  getVideosList,
+  killallServers,
+  removeVideoFromBlacklist,
+  ServerInfo,
+  setAccessTokensToServers,
+  uploadVideo,
+  wait
 } from '../utils'
+import { doubleFollow } from '../utils/follows'
+
+const expect = chai.expect
+const orderBy = lodash.orderBy
 
 describe('Test video blacklist management', function () {
   let servers: ServerInfo[] = []
 
-  async function blacklistVideosOnPod (server: ServerInfo) {
+  async function blacklistVideosOnServer (server: ServerInfo) {
     const res = await getVideosList(server.url)
 
     const videos = res.body.data
@@ -43,18 +43,18 @@ describe('Test video blacklist management', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    // Pod 1 makes friend with pod 2
-    await makeFriends(servers[0].url, servers[0].accessToken)
+    // Server 1 and server 2 follow each other
+    await doubleFollow(servers[0], servers[1])
 
-    // Upload 2 videos on pod 2
-    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'My 1st video', description: 'A video on pod 2' })
-    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'My 2nd video', description: 'A video on pod 2' })
+    // Upload 2 videos on server 2
+    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'My 1st video', description: 'A video on server 2' })
+    await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'My 2nd video', description: 'A video on server 2' })
 
     // Wait videos propagation
-    await wait(22000)
+    await wait(50000)
 
-    // Blacklist the two videos on pod 1
-    await blacklistVideosOnPod(servers[0])
+    // Blacklist the two videos on server 1
+    await blacklistVideosOnServer(servers[0])
   })
 
   describe('When listing blacklisted videos', function () {
@@ -112,14 +112,14 @@ describe('Test video blacklist management', function () {
     let videoToRemove
     let blacklist = []
 
-    it('Should not have any video in videos list on pod 1', async function () {
+    it('Should not have any video in videos list on server 1', async function () {
       const res = await getVideosList(servers[0].url)
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')
       expect(res.body.data.length).to.equal(0)
     })
 
-    it('Should remove a video from the blacklist on pod 1', async function () {
+    it('Should remove a video from the blacklist on server 1', async function () {
       // Get one video in the blacklist
       const res = await getSortedBlacklistedVideosList(servers[0].url, servers[0].accessToken, '-name')
       videoToRemove = res.body.data[0]
@@ -129,7 +129,7 @@ describe('Test video blacklist management', function () {
       await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, videoToRemove.videoId)
     })
 
-    it('Should have the ex-blacklisted video in videos list on pod 1', async function () {
+    it('Should have the ex-blacklisted video in videos list on server 1', async function () {
       const res = await getVideosList(servers[0].url)
       expect(res.body.total).to.equal(1)
 
@@ -141,7 +141,7 @@ describe('Test video blacklist management', function () {
       expect(videos[0].id).to.equal(videoToRemove.videoId)
     })
 
-    it('Should not have the ex-blacklisted video in videos blacklist list on pod 1', async function () {
+    it('Should not have the ex-blacklisted video in videos blacklist list on server 1', async function () {
       const res = await getSortedBlacklistedVideosList(servers[0].url, servers[0].accessToken, '-name')
       expect(res.body.total).to.equal(1)
 

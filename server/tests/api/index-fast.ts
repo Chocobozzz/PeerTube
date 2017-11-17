@@ -1,7 +1,6 @@
 // Order of the tests we want to execute
 import './config'
 import './check-params'
-import './friends-basic'
 import './users'
 import './single-pod'
 import './video-abuse'

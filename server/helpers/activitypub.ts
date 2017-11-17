@@ -193,8 +193,12 @@ function fetchRemoteVideoPreview (video: VideoInstance) {
 }
 
 async function fetchRemoteVideoDescription (video: VideoInstance) {
+  // FIXME: use url
+  const host = video.VideoChannel.Account.Server.host
+  const path = video.getDescriptionPath()
   const options = {
-    uri: video.url
+    uri: REMOTE_SCHEME.HTTP + '://' + host + path,
+    json: true
   }
 
   const { body } = await doRequest(options)
