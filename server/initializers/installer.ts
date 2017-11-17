@@ -6,6 +6,7 @@ import { createLocalAccountWithoutKeys } from '../lib/user'
 import { applicationExist, clientsExist, usersExist } from './checker'
 import { CACHE, CONFIG, LAST_MIGRATION_VERSION, SERVER_ACCOUNT_NAME } from './constants'
 import { database as db } from './database'
+import { createPrivateAndPublicKeys } from '../helpers/peertube-crypto'
 
 async function installApplication () {
   try {
@@ -136,5 +137,11 @@ async function createApplicationIfNotExist () {
 
   logger.info('Creating application account.')
 
-  return createLocalAccountWithoutKeys(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
+  const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
+
+  const { publicKey, privateKey } = await createPrivateAndPublicKeys()
+  accountCreated.set('publicKey', publicKey)
+  accountCreated.set('privateKey', privateKey)
+
+  return accountCreated.save()
 }
