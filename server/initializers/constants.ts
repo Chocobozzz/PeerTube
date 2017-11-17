@@ -260,7 +260,7 @@ const JOB_STATES: { [ id: string ]: JobState } = {
 }
 const JOB_CATEGORIES: { [ id: string ]: JobCategory } = {
   TRANSCODING: 'transcoding',
-  HTTP_REQUEST: 'http-request'
+  ACTIVITYPUB_HTTP: 'activitypub-http'
 }
 // How many maximum jobs we fetch from the database per cycle
 const JOBS_FETCH_LIMIT_PER_CYCLE = {

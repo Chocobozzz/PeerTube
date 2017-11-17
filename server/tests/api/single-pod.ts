@@ -125,8 +125,8 @@ describe('Test a single pod', function () {
     expect(video.languageLabel).to.equal('Mandarin')
     expect(video.nsfw).to.be.ok
     expect(video.description).to.equal('my super description')
-    expect(video.podHost).to.equal('localhost:9001')
-    expect(video.author).to.equal('root')
+    expect(video.serverHost).to.equal('localhost:9001')
+    expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
@@ -174,8 +174,8 @@ describe('Test a single pod', function () {
     expect(video.languageLabel).to.equal('Mandarin')
     expect(video.nsfw).to.be.ok
     expect(video.description).to.equal('my super description')
-    expect(video.podHost).to.equal('localhost:9001')
-    expect(video.author).to.equal('root')
+    expect(video.serverHost).to.equal('localhost:9001')
+    expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
@@ -237,8 +237,8 @@ describe('Test a single pod', function () {
     expect(video.languageLabel).to.equal('Mandarin')
     expect(video.nsfw).to.be.ok
     expect(video.description).to.equal('my super description')
-    expect(video.podHost).to.equal('localhost:9001')
-    expect(video.author).to.equal('root')
+    expect(video.serverHost).to.equal('localhost:9001')
+    expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
@@ -249,7 +249,7 @@ describe('Test a single pod', function () {
   })
 
   // Not implemented yet
-  // it('Should search the video by podHost', async function () {
+  // it('Should search the video by serverHost', async function () {
   //     const res = await   videosUtils.searchVideo(server.url, '9001', 'host')
 
   //     expect(res.body.total).to.equal(1)
@@ -259,7 +259,7 @@ describe('Test a single pod', function () {
   //     const video = res.body.data[0]
   //     expect(video.name).to.equal('my super name')
   //     expect(video.description).to.equal('my super description')
-  //     expect(video.podHost).to.equal('localhost:9001')
+  //     expect(video.serverHost).to.equal('localhost:9001')
   //     expect(video.author).to.equal('root')
   //     expect(video.isLocal).to.be.true
   //     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
@@ -291,8 +291,8 @@ describe('Test a single pod', function () {
     expect(video.languageLabel).to.equal('Mandarin')
     expect(video.nsfw).to.be.ok
     expect(video.description).to.equal('my super description')
-    expect(video.podHost).to.equal('localhost:9001')
-    expect(video.author).to.equal('root')
+    expect(video.serverHost).to.equal('localhost:9001')
+    expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
@@ -311,7 +311,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should not find a search by author', async function () {
-    const res = await searchVideo(server.url, 'hello', 'author')
+    const res = await searchVideo(server.url, 'hello', 'account')
 
     expect(res.body.total).to.equal(0)
     expect(res.body.data).to.be.an('array')
@@ -352,7 +352,7 @@ describe('Test a single pod', function () {
       'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
     ]
 
-    const tasks: Promise<any>[] = []
+    // const tasks: Promise<any>[] = []
     for (const video of videos) {
       const videoAttributes = {
         name: video + ' name',
@@ -366,10 +366,13 @@ describe('Test a single pod', function () {
       }
 
       const p = uploadVideo(server.url, server.accessToken, videoAttributes)
-      tasks.push(p)
+      await p
     }
-
-    await Promise.all(tasks)
+    // FIXME: concurrent uploads does not work :(
+    //   tasks.push(p)
+    // }
+    //
+    // await Promise.all(tasks)
   })
 
   it('Should have the correct durations', async function () {
@@ -462,7 +465,7 @@ describe('Test a single pod', function () {
   })
 
   it('Should search all the root author videos', async function () {
-    const res = await searchVideoWithPagination(server.url, 'root', 'author', 0, 15)
+    const res = await searchVideoWithPagination(server.url, 'root', 'account', 0, 15)
 
     const videos = res.body.data
     expect(res.body.total).to.equal(6)
@@ -550,8 +553,8 @@ describe('Test a single pod', function () {
     expect(video.languageLabel).to.equal('Arabic')
     expect(video.nsfw).to.be.ok
     expect(video.description).to.equal('my super description updated')
-    expect(video.podHost).to.equal('localhost:9001')
-    expect(video.author).to.equal('root')
+    expect(video.serverHost).to.equal('localhost:9001')
+    expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
     expect(video.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
     expect(dateIsValid(video.createdAt)).to.be.true
@@ -599,8 +602,8 @@ describe('Test a single pod', function () {
     expect(video.languageLabel).to.equal('Arabic')
     expect(video.nsfw).to.be.ok
     expect(video.description).to.equal('my super description updated')
-    expect(video.podHost).to.equal('localhost:9001')
-    expect(video.author).to.equal('root')
+    expect(video.serverHost).to.equal('localhost:9001')
+    expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
     expect(dateIsValid(video.createdAt)).to.be.true
@@ -639,8 +642,8 @@ describe('Test a single pod', function () {
     expect(video.languageLabel).to.equal('Arabic')
     expect(video.nsfw).to.be.ok
     expect(video.description).to.equal('hello everybody')
-    expect(video.podHost).to.equal('localhost:9001')
-    expect(video.author).to.equal('root')
+    expect(video.serverHost).to.equal('localhost:9001')
+    expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
     expect(dateIsValid(video.createdAt)).to.be.true

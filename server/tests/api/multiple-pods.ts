@@ -113,7 +113,7 @@ describe('Test multiple pods', function () {
         expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
-        expect(video.author).to.equal('root')
+        expect(video.account).to.equal('root')
 
         const res2 = await getVideo(server.url, video.uuid)
         const videoDetails = res2.body
@@ -202,7 +202,7 @@ describe('Test multiple pods', function () {
         expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
-        expect(video.author).to.equal('user1')
+        expect(video.account).to.equal('user1')
 
         if (server.url !== 'http://localhost:9002') {
           expect(video.isLocal).to.be.false
@@ -696,7 +696,7 @@ describe('Test multiple pods', function () {
         expect(baseVideo.licence).to.equal(video.licence)
         expect(baseVideo.category).to.equal(video.category)
         expect(baseVideo.nsfw).to.equal(video.nsfw)
-        expect(baseVideo.author).to.equal(video.author)
+        expect(baseVideo.author).to.equal(video.account)
         expect(baseVideo.tags).to.deep.equal(video.tags)
       }
     })

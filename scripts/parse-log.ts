@@ -38,5 +38,11 @@ const rl = createInterface({
 
 rl.on('line', line => {
   const log = JSON.parse(line)
-  logLevels[log.level](log.message, log.stack)
+  const additionalInfo: any = {}
+
+  Object.keys(log).forEach(logKey => {
+    if (logKey !== 'message' && logKey !== 'level') additionalInfo[logKey] = log[logKey]
+  })
+
+  logLevels[log.level](log.message, additionalInfo)
 })

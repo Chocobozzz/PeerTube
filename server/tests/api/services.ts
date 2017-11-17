@@ -14,6 +14,7 @@ import {
   getOEmbed
 } from '../utils'
 import { runServer } from '../utils/servers'
+import { Video } from '../../../client/src/app/videos/shared/video.model'
 
 describe('Test services', function () {
   let server: ServerInfo = null
@@ -46,7 +47,7 @@ describe('Test services', function () {
 
     expect(res.body.html).to.equal(expectedHtml)
     expect(res.body.title).to.equal(server.video.name)
-    expect(res.body.author_name).to.equal(server.video.author)
+    expect(res.body.author_name).to.equal(server.video.account)
     expect(res.body.width).to.equal(560)
     expect(res.body.height).to.equal(315)
     expect(res.body.thumbnail_url).to.equal(expectedThumbnailUrl)
@@ -66,7 +67,7 @@ describe('Test services', function () {
 
     expect(res.body.html).to.equal(expectedHtml)
     expect(res.body.title).to.equal(server.video.name)
-    expect(res.body.author_name).to.equal(server.video.author)
+    expect(res.body.author_name).to.equal(server.video.account)
     expect(res.body.height).to.equal(50)
     expect(res.body.width).to.equal(50)
     expect(res.body).to.not.have.property('thumbnail_url')
