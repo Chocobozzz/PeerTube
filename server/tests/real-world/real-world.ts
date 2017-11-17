@@ -1,25 +1,24 @@
-import * as program from 'commander'
-
 // /!\ Before imports /!\
 process.env.NODE_ENV = 'test'
 
-import { Video, VideoRateType, VideoFile } from '../../../shared'
+import * as program from 'commander'
+import { Video, VideoFile, VideoRateType } from '../../../shared'
 import {
-  ServerInfo as DefaultServerInfo,
   flushAndRunMultipleServers,
-  setAccessTokensToServers,
-  makeFriends,
-  wait,
-  killallServers,
   flushTests,
-  uploadVideo,
-  getVideosList,
-  updateVideo,
-  removeVideo,
-  getVideo,
   getAllVideosListBy,
-  getRequestsStats
+  getRequestsStats,
+  getVideo,
+  getVideosList,
+  killallServers,
+  removeVideo,
+  ServerInfo as DefaultServerInfo,
+  setAccessTokensToServers,
+  updateVideo,
+  uploadVideo,
+  wait
 } from '../utils'
+import { follow } from '../utils/follows'
 
 interface ServerInfo extends DefaultServerInfo {
   requestsNumber: number
@@ -32,7 +31,7 @@ program
   .option('-v, --view [weight]', 'Weight for viewing videos')
   .option('-l, --like [weight]', 'Weight for liking videos')
   .option('-s, --dislike [weight]', 'Weight for disliking videos')
-  .option('-p, --pods [n]', 'Number of pods to run (3 or 6)', /^3|6$/, 3)
+  .option('-p, --servers [n]', 'Number of servers to run (3 or 6)', /^3|6$/, 3)
   .option('-i, --interval-action [interval]', 'Interval in ms for an action')
   .option('-I, --interval-integrity [interval]', 'Interval in ms for an integrity check')
   .option('-f, --flush', 'Flush datas on exit')
@@ -50,7 +49,7 @@ const actionInterval = program['intervalAction'] !== undefined ? parseInt(progra
 const integrityInterval = program['intervalIntegrity'] !== undefined ? parseInt(program['intervalIntegrity'], 10) : 60000
 const displayDiffOnFail = program['difference'] || false
 
-const numberOfPods = 6
+const numberOfServers = 6
 
 console.log(
   'Create weight: %d, update weight: %d, remove weight: %d, view weight: %d, like weight: %d, dislike weight: %d.',
@@ -77,7 +76,7 @@ start()
 // ----------------------------------------------------------------------------
 
 async function start () {
-  const servers = await runServers(numberOfPods)
+  const servers = await runServers(numberOfServers)
 
   process.on('exit', async () => {
     await exitServers(servers, flushAtExit)
@@ -152,22 +151,20 @@ function getRandomNumServer (servers) {
   return getRandomInt(0, servers.length)
 }
 
-async function runServers (numberOfPods: number) {
-  const servers: ServerInfo[] = (await flushAndRunMultipleServers(numberOfPods))
+async function runServers (numberOfServers: number) {
+  const servers: ServerInfo[] = (await flushAndRunMultipleServers(numberOfServers))
     .map(s => Object.assign({ requestsNumber: 0 }, s))
 
   // Get the access tokens
   await setAccessTokensToServers(servers)
 
-  await makeFriends(servers[1].url, servers[1].accessToken)
-  await makeFriends(servers[0].url, servers[0].accessToken)
-  await wait(1000)
+  for (let i = 0; i < numberOfServers; i++) {
+    for (let j = 0; j < numberOfServers; j++) {
+      if (i === j) continue
 
-  await makeFriends(servers[3].url, servers[3].accessToken)
-  await makeFriends(servers[5].url, servers[5].accessToken)
-  await makeFriends(servers[4].url, servers[4].accessToken)
-
-  await wait(1000)
+      await follow(servers[i].url, [ servers[j].url ], servers[i].accessToken)
+    }
+  }
 
   return servers
 }
@@ -259,7 +256,7 @@ async function checkIntegrity (servers: ServerInfo[]) {
   const videos: Video[][] = []
   const tasks: Promise<any>[] = []
 
-  // Fetch all videos and remove some fields that can differ between pods
+  // Fetch all videos and remove some fields that can differ between servers
   for (const server of servers) {
     const p = getAllVideosListBy(server.url).then(res => videos.push(res.body.data))
     tasks.push(p)

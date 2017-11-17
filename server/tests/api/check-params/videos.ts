@@ -473,7 +473,7 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a video of another user')
 
-    it('Should fail with a video of another pod')
+    it('Should fail with a video of another server')
 
     it('Should succeed with the correct parameters', async function () {
       const fields = getCompleteVideoUpdateAttributes()
@@ -584,7 +584,7 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a video of another user')
 
-    it('Should fail with a video of another pod')
+    it('Should fail with a video of another server')
 
     it('Should succeed with the correct parameters')
   })

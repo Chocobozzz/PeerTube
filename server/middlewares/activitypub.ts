@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response, RequestHandler } from 'express'
+import { eachSeries } from 'async'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { isSignatureVerified, logger } from '../helpers'
 import { fetchRemoteAccountAndCreateServer } from '../helpers/activitypub'
-import { database as db, ACTIVITY_PUB_ACCEPT_HEADER } from '../initializers'
-import { each, eachSeries, waterfall } from 'async'
+import { database as db } from '../initializers'
+import { ACTIVITY_PUB } from '../initializers/constants'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   const signatureObject: ActivityPubSignature = req.body.signature
@@ -37,7 +38,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
 function executeIfActivityPub (fun: RequestHandler | RequestHandler[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (req.header('Accept') !== ACTIVITY_PUB_ACCEPT_HEADER) {
+    if (req.header('Accept') !== ACTIVITY_PUB.ACCEPT_HEADER) {
       return next()
     }
 

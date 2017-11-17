@@ -13,6 +13,8 @@ import { database as db } from '../../initializers'
 import { AccountInstance, VideoChannelInstance, VideoInstance } from '../../models'
 import { VideoAbuseInstance } from '../../models/video/video-abuse-interface'
 import { activitypubHttpJobScheduler } from '../jobs'
+import { ACTIVITY_PUB } from '../../initializers/constants'
+import { VideoPrivacy } from '../../../shared/models/videos/video-privacy.enum'
 
 async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
   const byAccount = videoChannel.Account
@@ -50,7 +52,7 @@ async function sendAddVideo (video: VideoInstance, t: Transaction) {
   const byAccount = video.VideoChannel.Account
 
   const videoObject = video.toActivityPubObject()
-  const data = await addActivityData(video.url, byAccount, video.VideoChannel.url, videoObject)
+  const data = await addActivityData(video.url, byAccount, video, video.VideoChannel.url, videoObject)
 
   return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
@@ -96,7 +98,7 @@ async function sendVideoAnnounce (byAccount: AccountInstance, video: VideoInstan
   const url = getActivityPubUrl('video', video.uuid) + '#announce'
 
   const videoChannel = video.VideoChannel
-  const announcedActivity = await addActivityData(url, videoChannel.Account, videoChannel.url, video.toActivityPubObject())
+  const announcedActivity = await addActivityData(url, videoChannel.Account, video, videoChannel.url, video.toActivityPubObject())
 
   const data = await announceActivityData(url, byAccount, announcedActivity)
   return broadcastToFollowers(data, byAccount, [ byAccount ], t)
@@ -167,19 +169,32 @@ async function unicastTo (data: any, byAccount: AccountInstance, toAccountUrl: s
   return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpUnicastHandler', jobPayload)
 }
 
-async function getPublicActivityTo (account: AccountInstance) {
-  const inboxUrls = await account.getFollowerSharedInboxUrls()
+async function getAudience (accountSender: AccountInstance, isPublic = true) {
+  const followerInboxUrls = await accountSender.getFollowerSharedInboxUrls()
 
-  return inboxUrls.concat('https://www.w3.org/ns/activitystreams#Public')
+  // Thanks Mastodon: https://github.com/tootsuite/mastodon/blob/master/app/lib/activitypub/tag_manager.rb#L47
+  let to = []
+  let cc = []
+
+  if (isPublic) {
+    to = [ ACTIVITY_PUB.PUBLIC ]
+    cc = followerInboxUrls
+  } else { // Unlisted
+    to = followerInboxUrls
+    cc = [ ACTIVITY_PUB.PUBLIC ]
+  }
+
+  return { to, cc }
 }
 
 async function createActivityData (url: string, byAccount: AccountInstance, object: any) {
-  const to = await getPublicActivityTo(byAccount)
+  const { to, cc } = await getAudience(byAccount)
   const activity: ActivityCreate = {
     type: 'Create',
     id: url,
     actor: byAccount.url,
     to,
+    cc,
     object
   }
 
@@ -187,12 +202,13 @@ async function createActivityData (url: string, byAccount: AccountInstance, obje
 }
 
 async function updateActivityData (url: string, byAccount: AccountInstance, object: any) {
-  const to = await getPublicActivityTo(byAccount)
+  const { to, cc } = await getAudience(byAccount)
   const activity: ActivityUpdate = {
     type: 'Update',
     id: url,
     actor: byAccount.url,
     to,
+    cc,
     object
   }
 
@@ -209,13 +225,16 @@ async function deleteActivityData (url: string, byAccount: AccountInstance) {
   return activity
 }
 
-async function addActivityData (url: string, byAccount: AccountInstance, target: string, object: any) {
-  const to = await getPublicActivityTo(byAccount)
+async function addActivityData (url: string, byAccount: AccountInstance, video: VideoInstance, target: string, object: any) {
+  const videoPublic = video.privacy === VideoPrivacy.PUBLIC
+
+  const { to, cc } = await getAudience(byAccount, videoPublic)
   const activity: ActivityAdd = {
     type: 'Add',
     id: url,
     actor: byAccount.url,
     to,
+    cc,
     object,
     target
   }

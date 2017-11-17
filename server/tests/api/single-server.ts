@@ -34,7 +34,7 @@ import {
   updateVideo
 } from '../utils'
 
-describe('Test a single pod', function () {
+describe('Test a single server', function () {
   let server: ServerInfo = null
   let videoId = -1
   let videoUUID = ''

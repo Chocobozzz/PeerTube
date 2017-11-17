@@ -70,7 +70,6 @@ async function updateRemoteVideo (account: AccountInstance, videoAttributesToUpd
       videoInstance.set('views', videoData.views)
       // videoInstance.set('likes', videoData.likes)
       // videoInstance.set('dislikes', videoData.dislikes)
-      // videoInstance.set('privacy', videoData.privacy)
 
       await videoInstance.save(sequelizeOptions)
 

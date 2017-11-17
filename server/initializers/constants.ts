@@ -223,9 +223,10 @@ const FRIEND_SCORE = {
 }
 
 const SERVER_ACCOUNT_NAME = 'peertube'
-const ACTIVITY_PUB_ACCEPT_HEADER = 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
 
 const ACTIVITY_PUB = {
+  ACCEPT_HEADER: 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
+  PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
   COLLECTION_ITEMS_PER_PAGE: 10,
   URL_MIME_TYPES: {
     VIDEO: [ 'video/mp4', 'video/webm', 'video/ogg' ], // TODO: Merge with VIDEO_MIMETYPE_EXT
@@ -349,7 +350,6 @@ export {
   SERVERS_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
-  ACTIVITY_PUB_ACCEPT_HEADER,
   FOLLOW_STATES,
   SEARCHABLE_COLUMNS,
   SERVER_ACCOUNT_NAME,

@@ -1,3 +1,3 @@
 // Order of the tests we want to execute
-import './multiple-pods'
+import './multiple-servers'
 import './video-transcoder'

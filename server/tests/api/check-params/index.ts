@@ -1,8 +1,6 @@
 // Order of the tests we want to execute
-import './pods'
-import './remotes'
+import './follows'
 import './users'
-import './request-schedulers'
 import './services'
 import './videos'
 import './video-abuses'
