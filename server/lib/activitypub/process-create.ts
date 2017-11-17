@@ -72,7 +72,7 @@ function addRemoteVideoAbuse (account: AccountInstance, videoAbuseToCreateData: 
     const video = await db.Video.loadByUrlAndPopulateAccount(videoAbuseToCreateData.object, t)
     if (!video) {
       logger.warn('Unknown video %s for remote video abuse.', videoAbuseToCreateData.object)
-      return
+      return undefined
     }
 
     const videoAbuseData = {

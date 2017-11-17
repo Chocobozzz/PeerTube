@@ -2,11 +2,11 @@ import { VideoChannelObject, VideoTorrentObject } from './objects'
 import { ActivityPubSignature } from './activitypub-signature'
 import { VideoAbuseObject } from './objects/video-abuse-object'
 
-export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate | ActivityFlag |
+export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate |
   ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce
 
 // Flag -> report abuse
-export type ActivityType = 'Create' | 'Add' | 'Update' | 'Flag' | 'Delete' | 'Follow' | 'Accept' | 'Announce'
+export type ActivityType = 'Create' | 'Add' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce'
 
 export interface BaseActivity {
   '@context'?: any[]
@@ -32,11 +32,6 @@ export interface ActivityAdd extends BaseActivity {
 export interface ActivityUpdate extends BaseActivity {
   type: 'Update'
   object: VideoTorrentObject | VideoChannelObject
-}
-
-export interface ActivityFlag extends BaseActivity {
-  type: 'Flag'
-  object: string
 }
 
 export interface ActivityDelete extends BaseActivity {

@@ -2,7 +2,7 @@ import * as express from 'express'
 import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, ActivityType, RootActivity } from '../../../shared'
 import { logger } from '../../helpers'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
-import { processCreateActivity, processFlagActivity, processUpdateActivity } from '../../lib'
+import { processCreateActivity, processUpdateActivity } from '../../lib'
 import { processAcceptActivity } from '../../lib/activitypub/process-accept'
 import { processAddActivity } from '../../lib/activitypub/process-add'
 import { processAnnounceActivity } from '../../lib/activitypub/process-announce'
@@ -16,7 +16,6 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccoun
   Create: processCreateActivity,
   Add: processAddActivity,
   Update: processUpdateActivity,
-  Flag: processFlagActivity,
   Delete: processDeleteActivity,
   Follow: processFollowActivity,
   Accept: processAcceptActivity,

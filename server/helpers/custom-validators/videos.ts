@@ -1,25 +1,23 @@
-import { values } from 'lodash'
-import * as validator from 'validator'
 import * as Promise from 'bluebird'
 import * as express from 'express'
 import 'express-validator'
+import { values } from 'lodash'
 import 'multer'
-
+import * as validator from 'validator'
+import { VideoRateType } from '../../../shared'
+import { logger } from '../../helpers'
 import {
   CONSTRAINTS_FIELDS,
+  database as db,
   VIDEO_CATEGORIES,
-  VIDEO_LICENCES,
   VIDEO_LANGUAGES,
-  VIDEO_RATE_TYPES,
+  VIDEO_LICENCES,
   VIDEO_PRIVACIES,
-  database as db
+  VIDEO_RATE_TYPES
 } from '../../initializers'
-import { isUserUsernameValid } from './users'
-import { isArray, exists } from './misc'
 import { VideoInstance } from '../../models'
-import { logger } from '../../helpers'
-import { VideoRateType } from '../../../shared'
 import { isActivityPubUrlValid } from './activitypub/misc'
+import { exists, isArray } from './misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES

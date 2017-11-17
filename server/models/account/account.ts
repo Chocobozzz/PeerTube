@@ -1,29 +1,24 @@
 import * as Sequelize from 'sequelize'
 
 import {
-  isUserUsernameValid,
-  isAccountPublicKeyValid,
-  isAccountUrlValid,
-  isAccountPrivateKeyValid,
+  activityPubContextify,
   isAccountFollowersCountValid,
+  isAccountFollowersValid,
   isAccountFollowingCountValid,
+  isAccountFollowingValid,
   isAccountInboxValid,
   isAccountOutboxValid,
+  isAccountPrivateKeyValid,
+  isAccountPublicKeyValid,
   isAccountSharedInboxValid,
-  isAccountFollowersValid,
-  isAccountFollowingValid,
-  activityPubContextify
+  isAccountUrlValid,
+  isUserUsernameValid
 } from '../../helpers'
-
-import { addMethodsToModel, getSort } from '../utils'
-import {
-  AccountInstance,
-  AccountAttributes,
-
-  AccountMethods
-} from './account-interface'
-import { sendDeleteAccount } from '../../lib/activitypub/send-request'
 import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
+import { sendDeleteAccount } from '../../lib/activitypub/send-request'
+
+import { addMethodsToModel } from '../utils'
+import { AccountAttributes, AccountInstance, AccountMethods } from './account-interface'
 
 let Account: Sequelize.Model<AccountInstance, AccountAttributes>
 let loadAccountByServerAndUUID: AccountMethods.LoadAccountByServerAndUUID

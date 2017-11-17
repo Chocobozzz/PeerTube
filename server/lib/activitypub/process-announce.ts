@@ -1,13 +1,11 @@
 import { ActivityAnnounce } from '../../../shared/models/activitypub/activity'
-import { VideoChannelObject } from '../../../shared/models/activitypub/objects/video-channel-object'
-import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
+import { getOrCreateAccount } from '../../helpers/activitypub'
 import { logger } from '../../helpers/logger'
+import { database as db } from '../../initializers/index'
+import { VideoInstance } from '../../models/index'
+import { VideoChannelInstance } from '../../models/video/video-channel-interface'
 import { processAddActivity } from './process-add'
 import { processCreateActivity } from './process-create'
-import { database as db } from '../../initializers/index'
-import { getOrCreateAccount } from '../../helpers/activitypub'
-import { VideoChannelInstance } from '../../models/video/video-channel-interface'
-import { VideoInstance } from '../../models/index'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {
   const announcedActivity = activity.object

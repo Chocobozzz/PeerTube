@@ -17,10 +17,12 @@ export interface AccountVideoRateAttributes {
   videoId: number
 }
 
-export interface AccountVideoRateInstance extends AccountVideoRateClass, AccountVideoRateAttributes, Sequelize.Instance<AccountVideoRateAttributes> {
+export interface AccountVideoRateInstance
+  extends AccountVideoRateClass, AccountVideoRateAttributes, Sequelize.Instance<AccountVideoRateAttributes> {
   id: number
   createdAt: Date
   updatedAt: Date
 }
 
-export interface AccountVideoRateModel extends AccountVideoRateClass, Sequelize.Model<AccountVideoRateInstance, AccountVideoRateAttributes> {}
+export interface AccountVideoRateModel
+  extends AccountVideoRateClass, Sequelize.Model<AccountVideoRateInstance, AccountVideoRateAttributes> {}

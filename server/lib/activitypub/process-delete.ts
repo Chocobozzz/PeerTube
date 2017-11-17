@@ -28,7 +28,7 @@ async function processDeleteActivity (activity: ActivityDelete) {
     }
   }
 
-  return undefined
+  return
 }
 
 // ---------------------------------------------------------------------------

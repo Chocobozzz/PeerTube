@@ -1,8 +1,4 @@
 import * as express from 'express'
-
-import { CONFIG, PREVIEWS_SIZE, EMBED_SIZE } from '../initializers'
-import { oembedValidator } from '../middlewares'
-import { VideoInstance } from '../models'
 import { webfingerValidator } from '../middlewares/validators/webfinger'
 import { AccountInstance } from '../models/account/account-interface'
 

@@ -17,7 +17,7 @@ async function processAddActivity (activity: ActivityAdd) {
     const videoChannelUrl = activity.target
     const videoChannel = await getOrCreateVideoChannel(account, videoChannelUrl)
 
-    return processAddVideo(account, activity, videoChannel, activityObject as VideoTorrentObject)
+    return processAddVideo(account, activity, videoChannel, activityObject)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -68,7 +68,7 @@ function addRemoteVideo (
 
     const videoCreated = await video.save(sequelizeOptions)
 
-    const videoFileAttributes = await videoFileActivityUrlToDBAttributes(videoCreated, videoToCreateData)
+    const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoToCreateData)
     if (videoFileAttributes.length === 0) {
       throw new Error('Cannot find valid files for video %s ' + videoToCreateData.url)
     }
