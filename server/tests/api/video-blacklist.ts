@@ -22,7 +22,7 @@ describe('Test video blacklists', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(50000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -40,8 +40,8 @@ describe('Test video blacklists', function () {
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
-    // Wait videos propagation
-    await wait(25000)
+    // Wait videos propagation, server 2 has transcoding enabled
+    await wait(10000)
 
     const res = await getVideosList(servers[0].url)
     const videos = res.body.data

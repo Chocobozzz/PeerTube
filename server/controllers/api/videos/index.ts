@@ -291,6 +291,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       // Video is not private anymore, send a create action to remote servers
       if (wasPrivateVideo === true && videoInstance.privacy !== VideoPrivacy.PRIVATE) {
         await sendAddVideo(videoInstance, t)
+        await shareVideoByServer(videoInstance, t)
       }
     })
 

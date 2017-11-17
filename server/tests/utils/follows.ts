@@ -39,9 +39,6 @@ async function follow (follower: string, following: string[], accessToken: strin
     .send({ 'hosts': followingHosts })
     .expect(expectedStatus)
 
-  // Wait request propagation
-  await wait(20000)
-
   return res
 }
 
@@ -50,6 +47,9 @@ async function doubleFollow (server1: ServerInfo, server2: ServerInfo) {
     follow(server1.url, [ server2.url ], server1.accessToken),
     follow(server2.url, [ server1.url ], server2.accessToken)
   ])
+
+  // Wait request propagation
+  await wait(20000)
 
   return true
 }

@@ -85,7 +85,7 @@ describe('Test multiple servers', function () {
       }
       await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
 
-      await wait(11000)
+      await wait(5000)
 
       // All servers should have this video
       for (const server of servers) {
@@ -153,7 +153,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should upload the video on server 2 and propagate on each server', async function () {
-      this.timeout(120000)
+      this.timeout(50000)
 
       const user = {
         username: 'user1',
@@ -174,8 +174,8 @@ describe('Test multiple servers', function () {
       }
       await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
 
-      // Transcoding, so wait more than 22000
-      await wait(60000)
+      // Transcoding
+      await wait(10000)
 
       // All servers should have this video
       for (const server of servers) {
@@ -282,7 +282,7 @@ describe('Test multiple servers', function () {
       }
       await uploadVideo(servers[2].url, servers[2].accessToken, videoAttributes2)
 
-      await wait(33000)
+      await wait(10000)
 
       let baseMagnet = null
       // All servers should have this video
@@ -384,8 +384,7 @@ describe('Test multiple servers', function () {
 
   describe('Should seed the uploaded video', function () {
     it('Should add the file 1 by asking server 3', async function () {
-      // Yes, this could be long
-      this.timeout(200000)
+      this.timeout(10000)
 
       const res = await getVideosList(servers[2].url)
 
@@ -403,8 +402,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 2 by asking server 1', async function () {
-      // Yes, this could be long
-      this.timeout(200000)
+      this.timeout(10000)
 
       const res = await getVideosList(servers[0].url)
 
@@ -419,8 +417,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 3 by asking server 2', async function () {
-      // Yes, this could be long
-      this.timeout(200000)
+      this.timeout(10000)
 
       const res = await getVideosList(servers[1].url)
 
@@ -435,8 +432,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 3-2 by asking server 1', async function () {
-      // Yes, this could be long
-      this.timeout(200000)
+      this.timeout(10000)
 
       const res = await getVideosList(servers[0].url)
 
@@ -451,8 +447,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should add the file 2 in 360p by asking server 1', async function () {
-      // Yes, this could be long
-      this.timeout(200000)
+      this.timeout(10000)
 
       const res = await getVideosList(servers[0].url)
 
@@ -489,7 +484,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should view multiple videos on owned servers', async function () {
-      this.timeout(30000)
+      this.timeout(10000)
 
       const tasks: Promise<any>[] = []
       tasks.push(getVideo(servers[2].url, localVideosServer3[0]))
@@ -499,7 +494,7 @@ describe('Test multiple servers', function () {
 
       await Promise.all(tasks)
 
-      await wait(22000)
+      await wait(5000)
 
       for (const server of servers) {
         const res = await getVideosList(server.url)
@@ -514,7 +509,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should view multiple videos on each servers', async function () {
-      this.timeout(30000)
+      this.timeout(15000)
 
       const tasks: Promise<any>[] = []
       tasks.push(getVideo(servers[0].url, remoteVideosServer1[0]))
@@ -530,7 +525,7 @@ describe('Test multiple servers', function () {
 
       await Promise.all(tasks)
 
-      await wait(22000)
+      await wait(10000)
 
       let baseVideos = null
 
@@ -553,7 +548,7 @@ describe('Test multiple servers', function () {
     })
 
     it('Should like and dislikes videos on different services', async function () {
-      this.timeout(30000)
+      this.timeout(20000)
 
       const tasks: Promise<any>[] = []
       tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like'))
@@ -566,7 +561,7 @@ describe('Test multiple servers', function () {
 
       await Promise.all(tasks)
 
-      await wait(22000)
+      await wait(10000)
 
       let baseVideos = null
       for (const server of servers) {
@@ -591,7 +586,7 @@ describe('Test multiple servers', function () {
 
   describe('Should manipulate these videos', function () {
     it('Should update the video 3 by asking server 3', async function () {
-      this.timeout(15000)
+      this.timeout(10000)
 
       const attributes = {
         name: 'my super video updated',
@@ -605,11 +600,11 @@ describe('Test multiple servers', function () {
 
       await updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, attributes)
 
-      await wait(11000)
+      await wait(5000)
     })
 
     it('Should have the video 3 updated on each server', async function () {
-      this.timeout(200000)
+      this.timeout(10000)
 
       for (const server of servers) {
         const res = await getVideosList(server.url)
@@ -651,12 +646,12 @@ describe('Test multiple servers', function () {
     })
 
     it('Should remove the videos 3 and 3-2 by asking server 3', async function () {
-      this.timeout(15000)
+      this.timeout(10000)
 
       await removeVideo(servers[2].url, servers[2].accessToken, toRemove[0].id)
       await removeVideo(servers[2].url, servers[2].accessToken, toRemove[1].id)
 
-      await wait(11000)
+      await wait(5000)
     })
 
     it('Should have videos 1 and 3 on each server', async function () {

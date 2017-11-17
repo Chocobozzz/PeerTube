@@ -41,7 +41,7 @@ describe('Test a single server', function () {
   let videosListBase: any[] = null
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(10000)
 
     await flushTests()
 

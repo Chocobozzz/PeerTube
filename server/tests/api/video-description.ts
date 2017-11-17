@@ -26,7 +26,7 @@ describe('Test video description', function () {
   let longDescription = 'my super description for server 1'.repeat(50)
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(40000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -39,14 +39,14 @@ describe('Test video description', function () {
   })
 
   it('Should upload video with long description', async function () {
-    this.timeout(30000)
+    this.timeout(10000)
 
     const attributes = {
       description: longDescription
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
 
-    await wait(25000)
+    await wait(5000)
 
     const res = await getVideosList(servers[0].url)
 
@@ -78,14 +78,14 @@ describe('Test video description', function () {
   })
 
   it('Should update with a short description', async function () {
-    this.timeout(30000)
+    this.timeout(10000)
 
     const attributes = {
       description: 'short description'
     }
     await updateVideo(servers[0].url, servers[0].accessToken, videoId, attributes)
 
-    await wait(25000)
+    await wait(5000)
   })
 
   it('Should have a small description on each server', async function () {

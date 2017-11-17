@@ -22,7 +22,7 @@ describe('Test video abuses', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {
-    this.timeout(100000)
+    this.timeout(50000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -46,8 +46,8 @@ describe('Test video abuses', function () {
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, video2Attributes)
 
-    // Wait videos propagation
-    await wait(25000)
+    // Wait videos propagation, server 2 has transcoding enabled
+    await wait(10000)
 
     const res = await getVideosList(servers[0].url)
     const videos = res.body.data
@@ -67,13 +67,13 @@ describe('Test video abuses', function () {
   })
 
   it('Should report abuse on a local video', async function () {
-    this.timeout(15000)
+    this.timeout(10000)
 
     const reason = 'my super bad reason'
     await reportVideoAbuse(servers[0].url, servers[0].accessToken, servers[0].video.id, reason)
 
     // We wait requests propagation, even if the server 1 is not supposed to make a request to server 2
-    await wait(11000)
+    await wait(5000)
   })
 
   it('Should have 1 video abuses on server 1 and 0 on server 2', async function () {
@@ -96,13 +96,13 @@ describe('Test video abuses', function () {
   })
 
   it('Should report abuse on a remote video', async function () {
-    this.timeout(25000)
+    this.timeout(10000)
 
     const reason = 'my super bad reason 2'
     await reportVideoAbuse(servers[0].url, servers[0].accessToken, servers[1].video.id, reason)
 
     // We wait requests propagation
-    await wait(15000)
+    await wait(5000)
   })
 
   it('Should have 2 video abuse on server 1 and 1 on server 2', async function () {

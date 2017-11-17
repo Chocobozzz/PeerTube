@@ -39,7 +39,7 @@ describe('Test users', function () {
   let userId: number
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(10000)
 
     await flushTests()
     server = await runServer(1)
