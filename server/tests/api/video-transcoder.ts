@@ -21,7 +21,7 @@ describe('Test video transcoding', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {
-    this.timeout(60000)
+    this.timeout(10000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -39,7 +39,7 @@ describe('Test video transcoding', function () {
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
 
-    await wait(30000)
+    await wait(10000)
 
     const res = await getVideosList(servers[0].url)
     const video = res.body.data[0]
@@ -67,7 +67,7 @@ describe('Test video transcoding', function () {
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
-    await wait(30000)
+    await wait(10000)
 
     const res = await getVideosList(servers[1].url)
 

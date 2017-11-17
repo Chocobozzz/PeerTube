@@ -35,7 +35,7 @@ describe('Test video blacklist management', function () {
   }
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(50000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -50,8 +50,8 @@ describe('Test video blacklist management', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'My 1st video', description: 'A video on server 2' })
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'My 2nd video', description: 'A video on server 2' })
 
-    // Wait videos propagation
-    await wait(50000)
+    // Wait videos propagation, server 2 has transcoding enabled
+    await wait(15000)
 
     // Blacklist the two videos on server 1
     await blacklistVideosOnServer(servers[0])
