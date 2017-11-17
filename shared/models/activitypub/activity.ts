@@ -11,10 +11,10 @@ export type ActivityType = 'Create' | 'Add' | 'Update' | 'Flag' | 'Delete' | 'Fo
 export interface BaseActivity {
   '@context'?: any[]
   id: string
-  to: string[]
+  to?: string[]
   actor: string
   type: ActivityType
-  signature: ActivityPubSignature
+  signature?: ActivityPubSignature
 }
 
 export interface ActivityCreate extends BaseActivity {

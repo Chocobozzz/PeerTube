@@ -107,7 +107,11 @@
   dependencies:
     "@types/express" "*"
 
-"@types/node@*", "@types/node@^8.0.3":
+"@types/node@*":
+  version "8.0.53"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.53.tgz#396b35af826fa66aad472c8cb7b8d5e277f4e6d8"
+
+"@types/node@^8.0.3":
   version "8.0.47"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.0.47.tgz#968e596f91acd59069054558a00708c445ca30c2"
 
@@ -2717,8 +2721,8 @@ moment-timezone@^0.5.4:
     moment ">= 2.9.0"
 
 "moment@>= 2.9.0", moment@^2.13.0:
-  version "2.19.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.1.tgz#56da1a2d1cbf01d38b7e1afc31c10bcfa1929167"
+  version "2.19.2"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.2.tgz#8a7f774c95a64550b4c7ebd496683908f9419dbe"
 
 morgan@^1.5.3:
   version "1.9.0"
@@ -3647,8 +3651,8 @@ send@0.16.1:
     statuses "~1.3.1"
 
 sequelize@^4.7.5:
-  version "4.22.5"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.22.5.tgz#5771f8dc2173c61366d77b9fb89aeb34b0522435"
+  version "4.22.7"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-4.22.7.tgz#9425ad640f9813455cdc49cbeaf54aece141d76e"
   dependencies:
     bluebird "^3.4.6"
     cls-bluebird "^2.0.1"

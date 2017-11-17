@@ -1,116 +1,124 @@
-import * as Sequelize from 'sequelize'
-
-import { database as db } from '../../initializers'
+import { Transaction } from 'sequelize'
 import {
-  AccountInstance,
-  VideoInstance,
-  VideoChannelInstance
-} from '../../models'
-import { httpRequestJobScheduler } from '../jobs'
-import { signObject, activityPubContextify } from '../../helpers'
-import { Activity, VideoAbuseObject } from '../../../shared'
-import { VideoAbuseInstance } from '../../models/video/video-abuse-interface'
+  ActivityAccept,
+  ActivityAdd,
+  ActivityCreate,
+  ActivityDelete,
+  ActivityFollow,
+  ActivityUpdate
+} from '../../../shared/models/activitypub/activity'
 import { getActivityPubUrl } from '../../helpers/activitypub'
 import { logger } from '../../helpers/logger'
+import { database as db } from '../../initializers'
+import { AccountInstance, VideoChannelInstance, VideoInstance } from '../../models'
+import { VideoAbuseInstance } from '../../models/video/video-abuse-interface'
+import { activitypubHttpJobScheduler } from '../jobs'
 
-async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
+  const byAccount = videoChannel.Account
+
   const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = await createActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
+  const data = await createActivityData(videoChannel.url, byAccount, videoChannelObject)
 
-  return broadcastToFollowers(data, [ videoChannel.Account ], t)
+  return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
 
-async function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+async function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
+  const byAccount = videoChannel.Account
+
   const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = await updateActivityData(videoChannel.url, videoChannel.Account, videoChannelObject)
+  const data = await updateActivityData(videoChannel.url, byAccount, videoChannelObject)
 
   const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
-  accountsInvolved.push(videoChannel.Account)
+  accountsInvolved.push(byAccount)
 
-  return broadcastToFollowers(data, accountsInvolved, t)
+  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
 }
 
-async function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
-  const data = await deleteActivityData(videoChannel.url, videoChannel.Account)
+async function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
+  const byAccount = videoChannel.Account
+
+  const data = await deleteActivityData(videoChannel.url, byAccount)
 
   const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
-  accountsInvolved.push(videoChannel.Account)
+  accountsInvolved.push(byAccount)
 
-  return broadcastToFollowers(data, accountsInvolved, t)
+  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
 }
 
-async function sendAddVideo (video: VideoInstance, t: Sequelize.Transaction) {
-  const videoObject = video.toActivityPubObject()
-  const data = await addActivityData(video.url, video.VideoChannel.Account, video.VideoChannel.url, videoObject)
+async function sendAddVideo (video: VideoInstance, t: Transaction) {
+  const byAccount = video.VideoChannel.Account
 
-  return broadcastToFollowers(data, [ video.VideoChannel.Account ], t)
+  const videoObject = video.toActivityPubObject()
+  const data = await addActivityData(video.url, byAccount, video.VideoChannel.url, videoObject)
+
+  return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
 
-async function sendUpdateVideo (video: VideoInstance, t: Sequelize.Transaction) {
+async function sendUpdateVideo (video: VideoInstance, t: Transaction) {
+  const byAccount = video.VideoChannel.Account
+
   const videoObject = video.toActivityPubObject()
-  const data = await updateActivityData(video.url, video.VideoChannel.Account, videoObject)
+  const data = await updateActivityData(video.url, byAccount, videoObject)
 
   const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id)
-  accountsInvolved.push(video.VideoChannel.Account)
+  accountsInvolved.push(byAccount)
 
-  return broadcastToFollowers(data, accountsInvolved, t)
+  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
 }
 
-async function sendDeleteVideo (video: VideoInstance, t: Sequelize.Transaction) {
-  const data = await deleteActivityData(video.url, video.VideoChannel.Account)
+async function sendDeleteVideo (video: VideoInstance, t: Transaction) {
+  const byAccount = video.VideoChannel.Account
+
+  const data = await deleteActivityData(video.url, byAccount)
 
   const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id)
-  accountsInvolved.push(video.VideoChannel.Account)
+  accountsInvolved.push(byAccount)
 
-  return broadcastToFollowers(data, accountsInvolved, t)
+  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
 }
 
-async function sendDeleteAccount (account: AccountInstance, t: Sequelize.Transaction) {
+async function sendDeleteAccount (account: AccountInstance, t: Transaction) {
   const data = await deleteActivityData(account.url, account)
 
-  return broadcastToFollowers(data, [ account ], t)
+  return broadcastToFollowers(data, account, [ account ], t)
 }
 
-async function sendVideoChannelAnnounce (byAccount: AccountInstance, videoChannel: VideoChannelInstance, t: Sequelize.Transaction) {
+async function sendVideoChannelAnnounce (byAccount: AccountInstance, videoChannel: VideoChannelInstance, t: Transaction) {
   const url = getActivityPubUrl('videoChannel', videoChannel.uuid) + '#announce'
-  const announcedActivity = await createActivityData(url, videoChannel.Account, videoChannel.toActivityPubObject(), true)
+  const announcedActivity = await createActivityData(url, videoChannel.Account, videoChannel.toActivityPubObject())
 
   const data = await announceActivityData(url, byAccount, announcedActivity)
-  return broadcastToFollowers(data, [ byAccount ], t)
+  return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
 
-async function sendVideoAnnounce (byAccount: AccountInstance, video: VideoInstance, t: Sequelize.Transaction) {
+async function sendVideoAnnounce (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
   const url = getActivityPubUrl('video', video.uuid) + '#announce'
 
   const videoChannel = video.VideoChannel
-  const announcedActivity = await addActivityData(url, videoChannel.Account, videoChannel.url, video.toActivityPubObject(), true)
+  const announcedActivity = await addActivityData(url, videoChannel.Account, videoChannel.url, video.toActivityPubObject())
 
   const data = await announceActivityData(url, byAccount, announcedActivity)
-  return broadcastToFollowers(data, [ byAccount ], t)
+  return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
 
-async function sendVideoAbuse (
-  fromAccount: AccountInstance,
-  videoAbuse: VideoAbuseInstance,
-  video: VideoInstance,
-  t: Sequelize.Transaction
-) {
+async function sendVideoAbuse (byAccount: AccountInstance, videoAbuse: VideoAbuseInstance, video: VideoInstance, t: Transaction) {
   const url = getActivityPubUrl('videoAbuse', videoAbuse.id.toString())
-  const data = await createActivityData(url, fromAccount, videoAbuse.toActivityPubObject())
+  const data = await createActivityData(url, byAccount, videoAbuse.toActivityPubObject())
 
-  return unicastTo(data, video.VideoChannel.Account.sharedInboxUrl, t)
+  return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
 
-async function sendAccept (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
-  const data = await acceptActivityData(fromAccount)
+async function sendAccept (byAccount: AccountInstance, toAccount: AccountInstance, t: Transaction) {
+  const data = await acceptActivityData(byAccount)
 
-  return unicastTo(data, toAccount.inboxUrl, t)
+  return unicastTo(data, byAccount, toAccount.inboxUrl, t)
 }
 
-async function sendFollow (fromAccount: AccountInstance, toAccount: AccountInstance, t: Sequelize.Transaction) {
-  const data = await followActivityData(toAccount.url, fromAccount)
+async function sendFollow (byAccount: AccountInstance, toAccount: AccountInstance, t: Transaction) {
+  const data = await followActivityData(toAccount.url, byAccount)
 
-  return unicastTo(data, toAccount.inboxUrl, t)
+  return unicastTo(data, byAccount, toAccount.inboxUrl, t)
 }
 
 // ---------------------------------------------------------------------------
@@ -132,7 +140,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function broadcastToFollowers (data: any, toAccountFollowers: AccountInstance[], t: Sequelize.Transaction) {
+async function broadcastToFollowers (data: any, byAccount: AccountInstance, toAccountFollowers: AccountInstance[], t: Transaction) {
   const toAccountFollowerIds = toAccountFollowers.map(a => a.id)
   const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds)
   if (result.data.length === 0) {
@@ -142,25 +150,21 @@ async function broadcastToFollowers (data: any, toAccountFollowers: AccountInsta
 
   const jobPayload = {
     uris: result.data,
+    signatureAccountId: byAccount.id,
     body: data
   }
 
-  return httpRequestJobScheduler.createJob(t, 'httpRequestBroadcastHandler', jobPayload)
+  return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpBroadcastHandler', jobPayload)
 }
 
-async function unicastTo (data: any, toAccountUrl: string, t: Sequelize.Transaction) {
+async function unicastTo (data: any, byAccount: AccountInstance, toAccountUrl: string, t: Transaction) {
   const jobPayload = {
     uris: [ toAccountUrl ],
+    signatureAccountId: byAccount.id,
     body: data
   }
 
-  return httpRequestJobScheduler.createJob(t, 'httpRequestUnicastHandler', jobPayload)
-}
-
-function buildSignedActivity (byAccount: AccountInstance, data: Object) {
-  const activity = activityPubContextify(data)
-
-  return signObject(byAccount, activity) as Promise<Activity>
+  return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpUnicastHandler', jobPayload)
 }
 
 async function getPublicActivityTo (account: AccountInstance) {
@@ -169,9 +173,9 @@ async function getPublicActivityTo (account: AccountInstance) {
   return inboxUrls.concat('https://www.w3.org/ns/activitystreams#Public')
 }
 
-async function createActivityData (url: string, byAccount: AccountInstance, object: any, raw = false) {
+async function createActivityData (url: string, byAccount: AccountInstance, object: any) {
   const to = await getPublicActivityTo(byAccount)
-  const base = {
+  const activity: ActivityCreate = {
     type: 'Create',
     id: url,
     actor: byAccount.url,
@@ -179,14 +183,12 @@ async function createActivityData (url: string, byAccount: AccountInstance, obje
     object
   }
 
-  if (raw === true) return base
-
-  return buildSignedActivity(byAccount, base)
+  return activity
 }
 
 async function updateActivityData (url: string, byAccount: AccountInstance, object: any) {
   const to = await getPublicActivityTo(byAccount)
-  const base = {
+  const activity: ActivityUpdate = {
     type: 'Update',
     id: url,
     actor: byAccount.url,
@@ -194,22 +196,22 @@ async function updateActivityData (url: string, byAccount: AccountInstance, obje
     object
   }
 
-  return buildSignedActivity(byAccount, base)
+  return activity
 }
 
 async function deleteActivityData (url: string, byAccount: AccountInstance) {
-  const base = {
+  const activity: ActivityDelete = {
     type: 'Delete',
     id: url,
     actor: byAccount.url
   }
 
-  return buildSignedActivity(byAccount, base)
+  return activity
 }
 
-async function addActivityData (url: string, byAccount: AccountInstance, target: string, object: any, raw = false) {
+async function addActivityData (url: string, byAccount: AccountInstance, target: string, object: any) {
   const to = await getPublicActivityTo(byAccount)
-  const base = {
+  const activity: ActivityAdd = {
     type: 'Add',
     id: url,
     actor: byAccount.url,
@@ -218,39 +220,37 @@ async function addActivityData (url: string, byAccount: AccountInstance, target:
     target
   }
 
-  if (raw === true) return base
-
-  return buildSignedActivity(byAccount, base)
+  return activity
 }
 
 async function announceActivityData (url: string, byAccount: AccountInstance, object: any) {
-  const base = {
+  const activity = {
     type: 'Announce',
     id: url,
     actor: byAccount.url,
     object
   }
 
-  return buildSignedActivity(byAccount, base)
+  return activity
 }
 
 async function followActivityData (url: string, byAccount: AccountInstance) {
-  const base = {
+  const activity: ActivityFollow = {
     type: 'Follow',
     id: byAccount.url,
     actor: byAccount.url,
     object: url
   }
 
-  return buildSignedActivity(byAccount, base)
+  return activity
 }
 
 async function acceptActivityData (byAccount: AccountInstance) {
-  const base = {
+  const activity: ActivityAccept = {
     type: 'Accept',
     id: byAccount.url,
     actor: byAccount.url
   }
 
-  return buildSignedActivity(byAccount, base)
+  return activity
 }

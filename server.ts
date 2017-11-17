@@ -46,7 +46,7 @@ db.init(false).then(() => onDatabaseInitDone())
 
 // ----------- PeerTube modules -----------
 import { migrate, installApplication } from './server/initializers'
-import { httpRequestJobScheduler, transcodingJobScheduler, VideosPreviewCache } from './server/lib'
+import { activitypubHttpJobScheduler, transcodingJobScheduler, VideosPreviewCache } from './server/lib'
 import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
 
 // ----------- Command line -----------
@@ -154,7 +154,7 @@ function onDatabaseInitDone () {
       // ----------- Make the server listening -----------
       server.listen(port, () => {
         VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
-        httpRequestJobScheduler.activate()
+        activitypubHttpJobScheduler.activate()
         transcodingJobScheduler.activate()
 
         logger.info('Server listening on port %d', port)

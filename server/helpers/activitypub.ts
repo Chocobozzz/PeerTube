@@ -3,6 +3,7 @@ import * as request from 'request'
 import * as Sequelize from 'sequelize'
 import * as url from 'url'
 import { ActivityIconObject } from '../../shared/index'
+import { Activity } from '../../shared/models/activitypub/activity'
 import { ActivityPubActor } from '../../shared/models/activitypub/activitypub-actor'
 import { VideoChannelObject } from '../../shared/models/activitypub/objects/video-channel-object'
 import { ResultList } from '../../shared/models/result-list.model'
@@ -17,6 +18,7 @@ import { VideoInstance } from '../models/video/video-interface'
 import { isRemoteAccountValid } from './custom-validators'
 import { isVideoChannelObjectValid } from './custom-validators/activitypub/videos'
 import { logger } from './logger'
+import { signObject } from './peertube-crypto'
 import { doRequest, doRequestAndSaveToFile } from './requests'
 import { getServerAccount } from './utils'
 
@@ -239,6 +241,12 @@ function activityPubCollectionPagination (url: string, page: number, result: Res
   return activityPubContextify(obj)
 }
 
+function buildSignedActivity (byAccount: AccountInstance, data: Object) {
+  const activity = activityPubContextify(data)
+
+  return signObject(byAccount, activity) as Promise<Activity>
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -252,7 +260,8 @@ export {
   fetchRemoteVideoDescription,
   shareVideoChannelByServer,
   shareVideoByServer,
-  getOrCreateVideoChannel
+  getOrCreateVideoChannel,
+  buildSignedActivity
 }
 
 // ---------------------------------------------------------------------------
