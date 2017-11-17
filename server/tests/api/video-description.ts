@@ -1,22 +1,21 @@
 /* tslint:disable:no-unused-expression */
 
-import 'mocha'
 import * as chai from 'chai'
-
+import 'mocha'
 import {
   flushAndRunMultipleServers,
   flushTests,
   getVideo,
+  getVideoDescription,
   getVideosList,
   killallServers,
-  makeFriends,
   ServerInfo,
   setAccessTokensToServers,
+  updateVideo,
   uploadVideo,
-  wait,
-  getVideoDescription,
-  updateVideo
+  wait
 } from '../utils'
+import { doubleFollow } from '../utils/follows'
 
 const expect = chai.expect
 
@@ -24,10 +23,10 @@ describe('Test video description', function () {
   let servers: ServerInfo[] = []
   let videoUUID = ''
   let videoId: number
-  let longDescription = 'my super description for pod 1'.repeat(50)
+  let longDescription = 'my super description for server 1'.repeat(50)
 
   before(async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     // Run servers
     servers = await flushAndRunMultipleServers(2)
@@ -35,19 +34,19 @@ describe('Test video description', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    // Pod 1 makes friend with pod 2
-    await makeFriends(servers[0].url, servers[0].accessToken)
+    // Server 1 and server 2 follow each other
+    await doubleFollow(servers[0], servers[1])
   })
 
   it('Should upload video with long description', async function () {
-    this.timeout(15000)
+    this.timeout(30000)
 
     const attributes = {
       description: longDescription
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
 
-    await wait(11000)
+    await wait(25000)
 
     const res = await getVideosList(servers[0].url)
 
@@ -55,20 +54,20 @@ describe('Test video description', function () {
     videoUUID = res.body.data[0].uuid
   })
 
-  it('Should have a truncated description on each pod', async function () {
+  it('Should have a truncated description on each server', async function () {
     for (const server of servers) {
       const res = await getVideo(server.url, videoUUID)
       const video = res.body
 
       // 30 characters * 6 -> 240 characters
-      const truncatedDescription = 'my super description for pod 1'.repeat(8) +
-                                   'my supe...'
+      const truncatedDescription = 'my super description for server 1'.repeat(7) +
+                                   'my super descrip...'
 
       expect(video.description).to.equal(truncatedDescription)
     }
   })
 
-  it('Should fetch long description on each pod', async function () {
+  it('Should fetch long description on each server', async function () {
     for (const server of servers) {
       const res = await getVideo(server.url, videoUUID)
       const video = res.body
@@ -79,17 +78,17 @@ describe('Test video description', function () {
   })
 
   it('Should update with a short description', async function () {
-    this.timeout(15000)
+    this.timeout(30000)
 
     const attributes = {
       description: 'short description'
     }
     await updateVideo(servers[0].url, servers[0].accessToken, videoId, attributes)
 
-    await wait(11000)
+    await wait(25000)
   })
 
-  it('Should have a small description on each pod', async function () {
+  it('Should have a small description on each server', async function () {
     for (const server of servers) {
       const res = await getVideo(server.url, videoUUID)
       const video = res.body

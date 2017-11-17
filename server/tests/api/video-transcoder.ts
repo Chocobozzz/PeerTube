@@ -33,8 +33,8 @@ describe('Test video transcoding', function () {
     this.timeout(60000)
 
     const videoAttributes = {
-      name: 'my super name for pod 1',
-      description: 'my super description for pod 1',
+      name: 'my super name for server 1',
+      description: 'my super description for server 1',
       fixture: 'video_short.webm'
     }
     await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
@@ -61,8 +61,8 @@ describe('Test video transcoding', function () {
     this.timeout(60000)
 
     const videoAttributes = {
-      name: 'my super name for pod 2',
-      description: 'my super description for pod 2',
+      name: 'my super name for server 2',
+      description: 'my super description for server 2',
       fixture: 'video_short.webm'
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
