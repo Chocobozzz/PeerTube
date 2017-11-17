@@ -1,15 +1,19 @@
 import { database as db } from '../server/initializers/database'
-// import { hasFriends } from '../server/lib/friends'
+import { getServerAccount } from '../server/helpers/utils'
 
 db.init(true)
   .then(() => {
-    // FIXME: check if has following
-    // return hasFriends()
-    return true
+    return getServerAccount()
   })
-  .then(itHasFriends => {
-    if (itHasFriends === true) {
-      console.log('Cannot update host because you have friends!')
+  .then(serverAccount => {
+    return db.AccountFollow.listAcceptedFollowingUrlsForApi([ serverAccount.id ])
+  })
+  .then(res => {
+    return res.total > 0
+  })
+  .then(hasFollowing => {
+    if (hasFollowing === true) {
+      console.log('Cannot update host because you follow other servers!')
       process.exit(-1)
     }
 
