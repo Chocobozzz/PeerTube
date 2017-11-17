@@ -147,7 +147,7 @@ async function broadcastToFollowers (data: any, byAccount: AccountInstance, toAc
   const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds)
   if (result.data.length === 0) {
     logger.info('Not broadcast because of 0 followers for %s.', toAccountFollowerIds.join(', '))
-    return
+    return undefined
   }
 
   const jobPayload = {

@@ -1,17 +1,16 @@
 /* tslint:disable:no-unused-expression */
 
-import * as request from 'supertest'
 import 'mocha'
+import * as request from 'supertest'
 
 import {
-  ServerInfo,
-  flushTests,
-  runServer,
   createUser,
-  loginAndGetAccessToken,
-  setAccessTokensToServers,
+  flushTests,
   killallServers,
-  makePostBodyRequest
+  loginAndGetAccessToken,
+  runServer,
+  ServerInfo,
+  setAccessTokensToServers
 } from '../../utils'
 
 describe('Test server follows API validators', function () {

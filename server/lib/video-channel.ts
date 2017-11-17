@@ -1,11 +1,9 @@
 import * as Sequelize from 'sequelize'
-
-import { database as db } from '../initializers'
-import { logger } from '../helpers'
-import { AccountInstance } from '../models'
 import { VideoChannelCreate } from '../../shared/models'
-import { sendCreateVideoChannel } from './activitypub/send-request'
-import { getActivityPubUrl, shareVideoChannelByServer } from '../helpers/activitypub'
+import { logger } from '../helpers'
+import { getActivityPubUrl } from '../helpers/activitypub'
+import { database as db } from '../initializers'
+import { AccountInstance } from '../models'
 
 async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountInstance, t: Sequelize.Transaction) {
   const videoChannelData = {

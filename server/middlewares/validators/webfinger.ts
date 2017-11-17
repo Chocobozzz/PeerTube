@@ -14,7 +14,7 @@ const webfingerValidator = [
     checkErrors(req, res, () => {
       // Remove 'acct:' from the beginning of the string
       const nameWithHost = req.query.resource.substr(5)
-      const [ name, ] = nameWithHost.split('@')
+      const [ name ] = nameWithHost.split('@')
 
       db.Account.loadLocalByName(name)
         .then(account => {

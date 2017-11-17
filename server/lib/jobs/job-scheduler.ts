@@ -4,7 +4,6 @@ import { JobCategory } from '../../../shared'
 import { logger } from '../../helpers'
 import { database as db, JOB_STATES, JOBS_FETCH_LIMIT_PER_CYCLE, JOBS_FETCHING_INTERVAL } from '../../initializers'
 import { JobInstance } from '../../models'
-import { error } from 'util'
 
 export interface JobHandler<P, T> {
   process (data: object, jobId: number): Promise<T>

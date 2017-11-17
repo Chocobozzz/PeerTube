@@ -1,13 +1,6 @@
 import * as express from 'express'
 import { param } from 'express-validator/check'
-import {
-  isUserDisplayNSFWValid,
-  isUserPasswordValid,
-  isUserRoleValid,
-  isUserUsernameValid,
-  isUserVideoQuotaValid,
-  logger
-} from '../../helpers'
+import { logger } from '../../helpers'
 import { isAccountNameValid } from '../../helpers/custom-validators/accounts'
 import { database as db } from '../../initializers/database'
 import { AccountInstance } from '../../models'
