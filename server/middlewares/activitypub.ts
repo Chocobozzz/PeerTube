@@ -2,9 +2,9 @@ import { eachSeries } from 'async'
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { isSignatureVerified, logger } from '../helpers'
-import { fetchRemoteAccountAndCreateServer } from '../helpers/activitypub'
 import { database as db } from '../initializers'
 import { ACTIVITY_PUB } from '../initializers/constants'
+import { fetchRemoteAccountAndCreateServer } from '../lib/activitypub/account'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   const signatureObject: ActivityPubSignature = req.body.signature

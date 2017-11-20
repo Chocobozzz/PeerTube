@@ -3,7 +3,7 @@ import { ActivityCreate } from '../../../../shared/models/activitypub/activity'
 import { AccountInstance, VideoChannelInstance, VideoInstance } from '../../../models'
 import { VideoAbuseInstance } from '../../../models/video/video-abuse-interface'
 import { broadcastToFollowers, getAudience, unicastTo } from './misc'
-import { getVideoAbuseActivityPubUrl } from '../../../helpers/activitypub'
+import { getVideoAbuseActivityPubUrl } from '../url'
 
 async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
   const byAccount = videoChannel.Account

@@ -3,8 +3,9 @@ import { join } from 'path'
 import { createWriteStream } from 'fs'
 
 import { database as db, CONFIG, CACHE } from '../../initializers'
-import { logger, unlinkPromise, fetchRemoteVideoPreview } from '../../helpers'
+import { logger, unlinkPromise } from '../../helpers'
 import { VideoInstance } from '../../models'
+import { fetchRemoteVideoPreview } from '../activitypub/videos'
 
 class VideosPreviewCache {
 

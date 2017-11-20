@@ -1,8 +1,8 @@
 import { Transaction } from 'sequelize'
 import { ActivityUpdate } from '../../../../shared/models/activitypub/activity'
-import { getUpdateActivityPubUrl } from '../../../helpers/activitypub'
 import { database as db } from '../../../initializers'
 import { AccountInstance, VideoChannelInstance, VideoInstance } from '../../../models'
+import { getUpdateActivityPubUrl } from '../url'
 import { broadcastToFollowers, getAudience } from './misc'
 
 async function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {

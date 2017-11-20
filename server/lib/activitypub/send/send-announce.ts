@@ -4,7 +4,7 @@ import { VideoChannelInstance } from '../../../models/video/video-channel-interf
 import { broadcastToFollowers } from './misc'
 import { addActivityData } from './send-add'
 import { createActivityData } from './send-create'
-import { getAnnounceActivityPubUrl } from '../../../helpers/activitypub'
+import { getAnnounceActivityPubUrl } from '../url'
 
 async function sendVideoAnnounce (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
   const url = getAnnounceActivityPubUrl(video.url, byAccount)

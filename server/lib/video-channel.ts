@@ -3,7 +3,7 @@ import { VideoChannelCreate } from '../../shared/models'
 import { logger } from '../helpers'
 import { database as db } from '../initializers'
 import { AccountInstance } from '../models'
-import { getVideoChannelActivityPubUrl } from '../helpers/activitypub'
+import { getVideoChannelActivityPubUrl } from './activitypub/url'
 
 async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountInstance, t: Sequelize.Transaction) {
   const videoChannelData = {

@@ -1,9 +1,10 @@
 import { ActivityFollow } from '../../../../shared/models/activitypub/activity'
-import { getOrCreateAccount, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { logger } from '../../../helpers/logger'
 import { sendAccept } from '../send/send-accept'
+import { getOrCreateAccount } from '../account'
 
 async function processFollowActivity (activity: ActivityFollow) {
   const activityObject = activity.object
