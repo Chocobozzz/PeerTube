@@ -37,7 +37,7 @@ export class FollowService {
       .catch(res => this.restExtractor.handleError(res))
   }
 
-  follow (notEmptyHosts: String[]) {
+  follow (notEmptyHosts: string[]) {
     const body = {
       hosts: notEmptyHosts
     }
@@ -45,5 +45,11 @@ export class FollowService {
     return this.authHttp.post(FollowService.BASE_APPLICATION_URL + '/following', body)
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
+  }
+
+  unfollow (follow: AccountFollow) {
+    return this.authHttp.delete(FollowService.BASE_APPLICATION_URL + '/following/' + follow.following.id)
+      .map(this.restExtractor.extractDataBool)
+      .catch(res => this.restExtractor.handleError(res))
   }
 }

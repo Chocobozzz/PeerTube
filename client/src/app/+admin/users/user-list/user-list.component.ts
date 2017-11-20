@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 
 import { NotificationsService } from 'angular2-notifications'
@@ -12,7 +12,7 @@ import { UserService } from '../shared'
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ]
 })
-export class UserListComponent extends RestTable implements OnInit {
+export class UserListComponent extends RestTable {
   users: User[] = []
   totalRecords = 0
   rowsPerPage = 10
@@ -25,10 +25,6 @@ export class UserListComponent extends RestTable implements OnInit {
     private userService: UserService
   ) {
     super()
-  }
-
-  ngOnInit () {
-    this.loadData()
   }
 
   removeUser (user: User) {

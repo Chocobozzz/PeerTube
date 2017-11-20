@@ -134,7 +134,7 @@ const CONSTRAINTS_FIELDS = {
     VIEWS: { min: 0 },
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
-    FILE_SIZE: { min: 10, max: 1024 * 1024 * 1024 * 3 /* 3Go */ },
+    FILE_SIZE: { min: 10, max: 1024 * 1024 * 1024 * 10 /* 10Go */ },
     URL: { min: 3, max: 2000 } // Length
   },
   ACCOUNTS: {

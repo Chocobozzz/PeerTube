@@ -1,18 +1,19 @@
-import * as Sequelize from 'sequelize'
 import * as Bluebird from 'bluebird'
-import { FollowState } from '../../../shared/models/accounts/follow.model'
+import * as Sequelize from 'sequelize'
+import { AccountFollow, FollowState } from '../../../shared/models/accounts/follow.model'
 import { ResultList } from '../../../shared/models/result-list.model'
 import { AccountInstance } from './account-interface'
 
 export namespace AccountFollowMethods {
   export type LoadByAccountAndTarget = (accountId: number, targetAccountId: number) => Bluebird<AccountFollowInstance>
 
-  export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
-  export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountInstance> >
+  export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountFollowInstance>>
+  export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountFollowInstance>>
 
   export type ListAcceptedFollowerUrlsForApi = (accountId: number[], start?: number, count?: number) => Promise< ResultList<string> >
   export type ListAcceptedFollowingUrlsForApi = (accountId: number[], start?: number, count?: number) => Promise< ResultList<string> >
   export type ListAcceptedFollowerSharedInboxUrls = (accountId: number[]) => Promise< ResultList<string> >
+  export type ToFormattedJSON = (this: AccountFollowInstance) => AccountFollow
 }
 
 export interface AccountFollowClass {
@@ -38,6 +39,8 @@ export interface AccountFollowInstance extends AccountFollowClass, AccountFollow
 
   AccountFollower?: AccountInstance
   AccountFollowing?: AccountInstance
+
+  toFormattedJSON: AccountFollowMethods.ToFormattedJSON
 }
 
 export interface AccountFollowModel extends AccountFollowClass, Sequelize.Model<AccountFollowInstance, AccountFollowAttributes> {}

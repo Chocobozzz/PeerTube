@@ -12,6 +12,7 @@ let listFollowersForApi: AccountFollowMethods.ListFollowersForApi
 let listAcceptedFollowerUrlsForApi: AccountFollowMethods.ListAcceptedFollowerUrlsForApi
 let listAcceptedFollowingUrlsForApi: AccountFollowMethods.ListAcceptedFollowingUrlsForApi
 let listAcceptedFollowerSharedInboxUrls: AccountFollowMethods.ListAcceptedFollowerSharedInboxUrls
+let toFormattedJSON: AccountFollowMethods.ToFormattedJSON
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   AccountFollow = sequelize.define<AccountFollowInstance, AccountFollowAttributes>('AccountFollow',
@@ -46,7 +47,10 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     listAcceptedFollowingUrlsForApi,
     listAcceptedFollowerSharedInboxUrls
   ]
-  addMethodsToModel(AccountFollow, classMethods)
+  const instanceMethods = [
+    toFormattedJSON
+  ]
+  addMethodsToModel(AccountFollow, classMethods, instanceMethods)
 
   return AccountFollow
 }
@@ -71,6 +75,22 @@ function associate (models) {
     as: 'AccountFollowing',
     onDelete: 'CASCADE'
   })
+}
+
+toFormattedJSON = function (this: AccountFollowInstance) {
+  const follower = this.AccountFollower.toFormattedJSON()
+  const following = this.AccountFollowing.toFormattedJSON()
+
+  const json = {
+    id: this.id,
+    follower,
+    following,
+    state: this.state,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
+  }
+
+  return json
 }
 
 loadByAccountAndTarget = function (accountId: number, targetAccountId: number) {
@@ -122,7 +142,7 @@ listFollowingForApi = function (id: number, start: number, count: number, sort: 
 
   return AccountFollow.findAndCountAll(query).then(({ rows, count }) => {
     return {
-      data: rows.map(r => r.AccountFollowing),
+      data: rows,
       total: count
     }
   })
@@ -154,7 +174,7 @@ listFollowersForApi = function (id: number, start: number, count: number, sort: 
 
   return AccountFollow.findAndCountAll(query).then(({ rows, count }) => {
     return {
-      data: rows.map(r => r.AccountFollower),
+      data: rows,
       total: count
     }
   })

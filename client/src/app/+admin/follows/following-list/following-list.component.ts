@@ -2,6 +2,7 @@ import { Component } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
 import { AccountFollow } from '../../../../../../shared/models/accounts/follow.model'
+import { ConfirmService } from '../../../core/confirm/confirm.service'
 import { RestPagination, RestTable } from '../../../shared'
 import { FollowService } from '../shared'
 
@@ -18,9 +19,27 @@ export class FollowingListComponent extends RestTable {
 
   constructor (
     private notificationsService: NotificationsService,
+    private confirmService: ConfirmService,
     private followService: FollowService
   ) {
     super()
+  }
+
+  removeFollowing (follow: AccountFollow) {
+    this.confirmService.confirm(`Do you really want to unfollow ${follow.following.host}?`, 'Unfollow').subscribe(
+      res => {
+        if (res === false) return
+
+        this.followService.unfollow(follow).subscribe(
+          () => {
+            this.notificationsService.success('Success', `You are not following ${follow.following.host} anymore.`)
+            this.loadData()
+          },
+
+          err => this.notificationsService.error('Error', err.message)
+        )
+      }
+    )
   }
 
   protected loadData () {
