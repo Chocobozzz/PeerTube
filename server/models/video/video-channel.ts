@@ -1,17 +1,11 @@
 import * as Sequelize from 'sequelize'
-
-import { isVideoChannelNameValid, isVideoChannelDescriptionValid } from '../../helpers'
-
-import { addMethodsToModel, getSort } from '../utils'
-import {
-  VideoChannelInstance,
-  VideoChannelAttributes,
-
-  VideoChannelMethods
-} from './video-channel-interface'
-import { sendDeleteVideoChannel } from '../../lib/activitypub/send-request'
+import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers'
 import { isVideoChannelUrlValid } from '../../helpers/custom-validators/video-channels'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
+import { sendDeleteVideoChannel } from '../../lib/activitypub/send/send-delete'
+
+import { addMethodsToModel, getSort } from '../utils'
+import { VideoChannelAttributes, VideoChannelInstance, VideoChannelMethods } from './video-channel-interface'
 
 let VideoChannel: Sequelize.Model<VideoChannelInstance, VideoChannelAttributes>
 let toFormattedJSON: VideoChannelMethods.ToFormattedJSON

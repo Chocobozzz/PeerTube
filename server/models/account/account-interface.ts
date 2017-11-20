@@ -37,7 +37,7 @@ export interface AccountClass {
 
 export interface AccountAttributes {
   name: string
-  url: string
+  url?: string
   publicKey: string
   privateKey: string
   followersCount: number

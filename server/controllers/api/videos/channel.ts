@@ -17,7 +17,7 @@ import {
   videoChannelsUpdateValidator
 } from '../../../middlewares'
 import { AccountInstance, VideoChannelInstance } from '../../../models'
-import { sendUpdateVideoChannel } from '../../../lib/activitypub/send-request'
+import { sendUpdateVideoChannel } from '../../../lib/activitypub/send/send-update'
 
 const videoChannelRouter = express.Router()
 
@@ -128,9 +128,9 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
       if (videoChannelInfoToUpdate.name !== undefined) videoChannelInstance.set('name', videoChannelInfoToUpdate.name)
       if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.set('description', videoChannelInfoToUpdate.description)
 
-      await videoChannelInstance.save(sequelizeOptions)
+      const videoChannelInstanceUpdated = await videoChannelInstance.save(sequelizeOptions)
 
-      await sendUpdateVideoChannel(videoChannelInstance, t)
+      await sendUpdateVideoChannel(videoChannelInstanceUpdated, t)
     })
 
     logger.info('Video channel with name %s and uuid %s updated.', videoChannelInstance.name, videoChannelInstance.uuid)

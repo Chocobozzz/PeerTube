@@ -2,12 +2,12 @@ import * as express from 'express'
 import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, ActivityType, RootActivity } from '../../../shared'
 import { logger } from '../../helpers'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
-import { processCreateActivity, processUpdateActivity } from '../../lib'
-import { processAcceptActivity } from '../../lib/activitypub/process-accept'
-import { processAddActivity } from '../../lib/activitypub/process-add'
-import { processAnnounceActivity } from '../../lib/activitypub/process-announce'
-import { processDeleteActivity } from '../../lib/activitypub/process-delete'
-import { processFollowActivity } from '../../lib/activitypub/process-follow'
+import { processCreateActivity, processUpdateActivity, processUndoActivity } from '../../lib'
+import { processAcceptActivity } from '../../lib/activitypub/process/process-accept'
+import { processAddActivity } from '../../lib/activitypub/process/process-add'
+import { processAnnounceActivity } from '../../lib/activitypub/process/process-announce'
+import { processDeleteActivity } from '../../lib/activitypub/process/process-delete'
+import { processFollowActivity } from '../../lib/activitypub/process/process-follow'
 import { asyncMiddleware, checkSignature, localAccountValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
 import { AccountInstance } from '../../models/account/account-interface'
@@ -19,7 +19,8 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccoun
   Delete: processDeleteActivity,
   Follow: processFollowActivity,
   Accept: processAcceptActivity,
-  Announce: processAnnounceActivity
+  Announce: processAnnounceActivity,
+  Undo: processUndoActivity
 }
 
 const inboxRouter = express.Router()

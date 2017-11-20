@@ -1,13 +1,13 @@
 import * as magnetUtil from 'magnet-uri'
-import { VideoTorrentObject } from '../../../shared'
-import { VideoChannelObject } from '../../../shared/models/activitypub/objects/video-channel-object'
-import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
-import { ACTIVITY_PUB, VIDEO_MIMETYPE_EXT } from '../../initializers/constants'
-import { AccountInstance } from '../../models/account/account-interface'
-import { VideoChannelInstance } from '../../models/video/video-channel-interface'
-import { VideoFileAttributes } from '../../models/video/video-file-interface'
-import { VideoAttributes, VideoInstance } from '../../models/video/video-interface'
-import { VideoPrivacy } from '../../../shared/models/videos/video-privacy.enum'
+import { VideoTorrentObject } from '../../../../shared'
+import { VideoChannelObject } from '../../../../shared/models/activitypub/objects/video-channel-object'
+import { isVideoFileInfoHashValid } from '../../../helpers/custom-validators/videos'
+import { ACTIVITY_PUB, VIDEO_MIMETYPE_EXT } from '../../../initializers/constants'
+import { AccountInstance } from '../../../models/account/account-interface'
+import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
+import { VideoFileAttributes } from '../../../models/video/video-file-interface'
+import { VideoAttributes, VideoInstance } from '../../../models/video/video-interface'
+import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 
 function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChannelObject, account: AccountInstance) {
   return {

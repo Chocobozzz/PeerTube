@@ -6,14 +6,16 @@ import { getServerAccount } from '../../../helpers/utils'
 import { getAccountFromWebfinger } from '../../../helpers/webfinger'
 import { SERVER_ACCOUNT_NAME } from '../../../initializers/constants'
 import { database as db } from '../../../initializers/database'
-import { sendFollow } from '../../../lib/activitypub/send-request'
-import { asyncMiddleware, paginationValidator, setFollowersSort, setPagination } from '../../../middlewares'
+import { asyncMiddleware, paginationValidator, removeFollowingValidator, setFollowersSort, setPagination } from '../../../middlewares'
 import { authenticate } from '../../../middlewares/oauth'
 import { setBodyHostsPort } from '../../../middlewares/servers'
 import { setFollowingSort } from '../../../middlewares/sort'
 import { ensureUserHasRight } from '../../../middlewares/user-right'
-import { followValidator } from '../../../middlewares/validators/servers'
+import { followValidator } from '../../../middlewares/validators/follows'
 import { followersSortValidator, followingSortValidator } from '../../../middlewares/validators/sort'
+import { AccountFollowInstance } from '../../../models/index'
+import { sendFollow } from '../../../lib/index'
+import { sendUndoFollow } from '../../../lib/activitypub/send/send-undo'
 
 const serverFollowsRouter = express.Router()
 
@@ -31,6 +33,13 @@ serverFollowsRouter.post('/following',
   followValidator,
   setBodyHostsPort,
   asyncMiddleware(follow)
+)
+
+serverFollowsRouter.delete('/following/:accountId',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
+  removeFollowingValidator,
+  asyncMiddleware(removeFollow)
 )
 
 serverFollowsRouter.get('/followers',
@@ -96,10 +105,12 @@ async function follow (req: express.Request, res: express.Response, next: expres
             },
             transaction: t
           })
+          accountFollow.AccountFollowing = targetAccount
+          accountFollow.AccountFollower = fromAccount
 
           // Send a notification to remote server
           if (accountFollow.state === 'pending') {
-            await sendFollow(fromAccount, targetAccount, t)
+            await sendFollow(accountFollow, t)
           }
         })
       })
@@ -113,6 +124,17 @@ async function follow (req: express.Request, res: express.Response, next: expres
     .catch(err => {
       logger.error('Error in follow.', err)
     })
+
+  return res.status(204).end()
+}
+
+async function removeFollow (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const following: AccountFollowInstance = res.locals.following
+
+  await db.sequelize.transaction(async t => {
+    await sendUndoFollow(following, t)
+    await following.destroy({ transaction: t })
+  })
 
   return res.status(204).end()
 }

@@ -1,6 +1,6 @@
-import { ActivityAccept } from '../../../shared/models/activitypub/activity'
-import { database as db } from '../../initializers'
-import { AccountInstance } from '../../models/account/account-interface'
+import { ActivityAccept } from '../../../../shared/models/activitypub/activity'
+import { database as db } from '../../../initializers'
+import { AccountInstance } from '../../../models/account/account-interface'
 
 async function processAcceptActivity (activity: ActivityAccept, inboxAccount?: AccountInstance) {
   if (inboxAccount === undefined) throw new Error('Need to accept on explicit inbox.')

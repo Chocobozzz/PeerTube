@@ -78,7 +78,19 @@ loadByAccountAndTarget = function (accountId: number, targetAccountId: number) {
     where: {
       accountId,
       targetAccountId
-    }
+    },
+    include: [
+      {
+        model: AccountFollow[ 'sequelize' ].models.Account,
+        required: true,
+        as: 'AccountFollower'
+      },
+      {
+        model: AccountFollow['sequelize'].models.Account,
+        required: true,
+        as: 'AccountFollowing'
+      }
+    ]
   }
 
   return AccountFollow.findOne(query)

@@ -9,7 +9,6 @@ import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/v
 import {
   createTorrentPromise,
   generateImageFromVideoFile,
-  getActivityPubUrl,
   getVideoFileHeight,
   isVideoCategoryValid,
   isVideoDescriptionValid,
@@ -40,13 +39,13 @@ import {
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
 } from '../../initializers'
-import { sendDeleteVideo } from '../../lib/activitypub/send-request'
 
 import { addMethodsToModel, getSort } from '../utils'
 
 import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
+import { sendDeleteVideo } from '../../lib/index'
 
 const Buffer = safeBuffer.Buffer
 
@@ -584,7 +583,7 @@ toActivityPubObject = function (this: VideoInstance) {
 
   const videoObject: VideoTorrentObject = {
     type: 'Video' as 'Video',
-    id: getActivityPubUrl('video', this.uuid),
+    id: this.url,
     name: this.name,
     // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
     duration: 'PT' + this.duration + 'S',
@@ -615,7 +614,7 @@ toActivityPubObject = function (this: VideoInstance) {
       width: THUMBNAILS_SIZE.width,
       height: THUMBNAILS_SIZE.height
     },
-    url
+    url // FIXME: needed?
   }
 
   return videoObject

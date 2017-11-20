@@ -3,10 +3,10 @@ import { ActivityPubSignature } from './activitypub-signature'
 import { VideoAbuseObject } from './objects/video-abuse-object'
 
 export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate |
-  ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce
+  ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce |
+  ActivityUndo
 
-// Flag -> report abuse
-export type ActivityType = 'Create' | 'Add' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce'
+export type ActivityType = 'Create' | 'Add' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo'
 
 export interface BaseActivity {
   '@context'?: any[]
@@ -50,4 +50,9 @@ export interface ActivityAccept extends BaseActivity {
 export interface ActivityAnnounce extends BaseActivity {
   type: 'Announce'
   object: ActivityCreate | ActivityAdd
+}
+
+export interface ActivityUndo extends BaseActivity {
+  type: 'Undo',
+  object: ActivityFollow
 }

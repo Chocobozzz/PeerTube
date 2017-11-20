@@ -1,11 +1,11 @@
 import * as Sequelize from 'sequelize'
-import { getActivityPubUrl } from '../helpers/activitypub'
 import { createPrivateAndPublicKeys } from '../helpers/peertube-crypto'
 import { database as db } from '../initializers'
 import { CONFIG } from '../initializers/constants'
 import { UserInstance } from '../models'
 import { createVideoChannel } from './video-channel'
 import { logger } from '../helpers/logger'
+import { getAccountActivityPubUrl } from '../helpers/activitypub'
 
 async function createUserAccountAndChannel (user: UserInstance, validateUser = true) {
   const { account, videoChannel } = await db.sequelize.transaction(async t => {
@@ -36,7 +36,7 @@ async function createUserAccountAndChannel (user: UserInstance, validateUser = t
 }
 
 async function createLocalAccountWithoutKeys (name: string, userId: number, applicationId: number, t: Sequelize.Transaction) {
-  const url = getActivityPubUrl('account', name)
+  const url = getAccountActivityPubUrl(name)
 
   const accountInstance = db.Account.build({
     name,

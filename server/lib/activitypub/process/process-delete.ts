@@ -1,11 +1,11 @@
-import { ActivityDelete } from '../../../shared/models/activitypub/activity'
-import { getOrCreateAccount } from '../../helpers/activitypub'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
-import { logger } from '../../helpers/logger'
-import { database as db } from '../../initializers'
-import { AccountInstance } from '../../models/account/account-interface'
-import { VideoChannelInstance } from '../../models/video/video-channel-interface'
-import { VideoInstance } from '../../models/video/video-interface'
+import { ActivityDelete } from '../../../../shared/models/activitypub/activity'
+import { getOrCreateAccount } from '../../../helpers/activitypub'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
+import { database as db } from '../../../initializers'
+import { AccountInstance } from '../../../models/account/account-interface'
+import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
+import { VideoInstance } from '../../../models/video/video-interface'
 
 async function processDeleteActivity (activity: ActivityDelete) {
   const account = await getOrCreateAccount(activity.actor)
