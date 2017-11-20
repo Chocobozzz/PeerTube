@@ -1,8 +1,12 @@
+import { Account } from './account.model'
+
 export type FollowState = 'pending' | 'accepted'
 
 export interface AccountFollow {
   id: number
-  name: string
-  score?: number // Used for followers
-  host: string
+  follower: Account
+  following: Account
+  state: FollowState
+  createdAt: Date
+  updatedAt: Date
 }

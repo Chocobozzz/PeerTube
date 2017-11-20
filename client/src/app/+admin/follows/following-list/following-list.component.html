@@ -7,10 +7,15 @@
         sortField="createdAt" (onLazyLoad)="loadLazy($event)"
     >
       <p-column field="id" header="ID"></p-column>
-      <p-column field="host" header="Host"></p-column>
+      <p-column field="following.host" header="Host"></p-column>
       <p-column field="email" header="Email"></p-column>
-      <p-column field="score" header="Score"></p-column>
+      <p-column field="following.score" header="Score"></p-column>
       <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
+      <p-column header="Unfollow" styleClass="action-cell">
+        <ng-template pTemplate="body" let-following="rowData">
+          <span (click)="removeFollowing(following)" class="glyphicon glyphicon-remove glyphicon-black" title="Unfollow"></span>
+        </ng-template>
+      </p-column>
     </p-dataTable>
   </div>
 </div>

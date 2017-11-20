@@ -10,7 +10,7 @@ async function processUndoActivity (activity: ActivityUndo) {
     const following = await db.Account.loadByUrl(activityToUndo.object)
     const accountFollow = await db.AccountFollow.loadByAccountAndTarget(follower.id, following.id)
 
-    if (!accountFollow) throw new Error(`'Unknown account follow (${follower.id} -> ${following.id}.`)
+    if (!accountFollow) throw new Error(`'Unknown account follow ${follower.id} -> ${following.id}.`)
 
     await accountFollow.destroy()
 

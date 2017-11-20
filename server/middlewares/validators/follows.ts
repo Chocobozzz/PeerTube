@@ -1,12 +1,12 @@
 import * as express from 'express'
-import { body } from 'express-validator/check'
+import { body, param } from 'express-validator/check'
 import { isTestInstance } from '../../helpers/core-utils'
-import { isAccountIdValid } from '../../helpers/custom-validators/activitypub/account'
 import { isEachUniqueHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { CONFIG, database as db } from '../../initializers'
 import { checkErrors } from './utils'
 import { getServerAccount } from '../../helpers/utils'
+import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 
 const followValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
@@ -28,7 +28,7 @@ const followValidator = [
 ]
 
 const removeFollowingValidator = [
-  body('accountId').custom(isAccountIdValid).withMessage('Should have a valid account id'),
+  param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking follow parameters', { parameters: req.body })
