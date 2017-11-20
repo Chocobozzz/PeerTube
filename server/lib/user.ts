@@ -5,7 +5,7 @@ import { CONFIG } from '../initializers/constants'
 import { UserInstance } from '../models'
 import { createVideoChannel } from './video-channel'
 import { logger } from '../helpers/logger'
-import { getAccountActivityPubUrl } from '../helpers/activitypub'
+import { getAccountActivityPubUrl } from './activitypub/url'
 
 async function createUserAccountAndChannel (user: UserInstance, validateUser = true) {
   const { account, videoChannel } = await db.sequelize.transaction(async t => {

@@ -1,11 +1,14 @@
 import * as Bluebird from 'bluebird'
 import { VideoTorrentObject } from '../../../../shared'
 import { ActivityAdd } from '../../../../shared/models/activitypub/activity'
-import { generateThumbnailFromUrl, getOrCreateAccount, logger, retryTransactionWrapper } from '../../../helpers'
-import { getOrCreateVideoChannel } from '../../../helpers/activitypub'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
+import { getOrCreateAccount } from '../account'
+import { getOrCreateVideoChannel } from '../video-channels'
+import { generateThumbnailFromUrl } from '../videos'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processAddActivity (activity: ActivityAdd) {
@@ -41,12 +44,10 @@ function processAddVideo (account: AccountInstance, activity: ActivityAdd, video
   return retryTransactionWrapper(addRemoteVideo, options)
 }
 
-function addRemoteVideo (
-  account: AccountInstance,
-  activity: ActivityAdd,
-  videoChannel: VideoChannelInstance,
-  videoToCreateData: VideoTorrentObject
-) {
+function addRemoteVideo (account: AccountInstance,
+                         activity: ActivityAdd,
+                         videoChannel: VideoChannelInstance,
+                         videoToCreateData: VideoTorrentObject) {
   logger.debug('Adding remote video %s.', videoToCreateData.url)
 
   return db.sequelize.transaction(async t => {

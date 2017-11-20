@@ -3,7 +3,7 @@ import { ActivityAccept } from '../../../../shared/models/activitypub/activity'
 import { AccountInstance } from '../../../models'
 import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
 import { unicastTo } from './misc'
-import { getAccountFollowAcceptActivityPubUrl } from '../../../helpers/activitypub'
+import { getAccountFollowAcceptActivityPubUrl } from '../url'
 
 async function sendAccept (accountFollow: AccountFollowInstance, t: Transaction) {
   const follower = accountFollow.AccountFollower

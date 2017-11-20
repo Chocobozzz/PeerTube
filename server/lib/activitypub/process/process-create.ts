@@ -1,9 +1,10 @@
 import { ActivityCreate, VideoChannelObject } from '../../../../shared'
 import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects/video-abuse-object'
 import { logger, retryTransactionWrapper } from '../../../helpers'
-import { getOrCreateAccount, getVideoChannelActivityPubUrl } from '../../../helpers/activitypub'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
+import { getOrCreateAccount } from '../account'
+import { getVideoChannelActivityPubUrl } from '../url'
 import { videoChannelActivityObjectToDBAttributes } from './misc'
 
 async function processCreateActivity (activity: ActivityCreate) {

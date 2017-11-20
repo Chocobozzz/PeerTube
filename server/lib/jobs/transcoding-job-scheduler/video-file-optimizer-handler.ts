@@ -1,13 +1,11 @@
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode, logger } from '../../../helpers'
-
 import { database as db } from '../../../initializers/database'
 import { VideoInstance } from '../../../models'
-
+import { sendAddVideo } from '../../activitypub/send/send-add'
 import { JobScheduler } from '../job-scheduler'
 import { TranscodingJobPayload } from './transcoding-job-scheduler'
-import { shareVideoByServer } from '../../../helpers/activitypub'
-import { sendAddVideo } from '../../activitypub/send/send-add'
+import { shareVideoByServer } from '../../activitypub/share'
 
 async function process (data: TranscodingJobPayload, jobId: number) {
   const video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)

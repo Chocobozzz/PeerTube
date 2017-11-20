@@ -2,8 +2,8 @@ import { Transaction } from 'sequelize'
 import { ActivityFollow } from '../../../../shared/models/activitypub/activity'
 import { AccountInstance } from '../../../models'
 import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
+import { getAccountFollowActivityPubUrl } from '../url'
 import { unicastTo } from './misc'
-import { getAccountFollowActivityPubUrl } from '../../../helpers/activitypub'
 
 async function sendFollow (accountFollow: AccountFollowInstance, t: Transaction) {
   const me = accountFollow.AccountFollower

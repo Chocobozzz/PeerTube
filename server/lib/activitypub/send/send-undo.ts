@@ -3,8 +3,8 @@ import { ActivityFollow, ActivityUndo } from '../../../../shared/models/activity
 import { AccountInstance } from '../../../models'
 import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
 import { unicastTo } from './misc'
-import { getAccountFollowActivityPubUrl, getUndoActivityPubUrl } from '../../../helpers/activitypub'
 import { followActivityData } from './send-follow'
+import { getAccountFollowActivityPubUrl, getUndoActivityPubUrl } from '../url'
 
 async function sendUndoFollow (accountFollow: AccountFollowInstance, t: Transaction) {
   const me = accountFollow.AccountFollower

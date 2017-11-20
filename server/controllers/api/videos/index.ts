@@ -3,7 +3,6 @@ import * as multer from 'multer'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoUpdate } from '../../../../shared'
 import {
-  fetchRemoteVideoDescription,
   generateRandomString,
   getFormattedObjects,
   getVideoFileHeight,
@@ -12,7 +11,6 @@ import {
   resetSequelizeInstance,
   retryTransactionWrapper
 } from '../../../helpers'
-import { getVideoActivityPubUrl, shareVideoByServer } from '../../../helpers/activitypub'
 import { CONFIG, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT, VIDEO_PRIVACIES } from '../../../initializers'
 import { database as db } from '../../../initializers/database'
 import { sendAddVideo } from '../../../lib/activitypub/send/send-add'
@@ -37,6 +35,9 @@ import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
 import { rateVideoRouter } from './rate'
+import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
+import { shareVideoByServer } from '../../../lib/activitypub/share'
+import { fetchRemoteVideoDescription } from '../../../lib/activitypub/videos'
 
 const videosRouter = express.Router()
 
