@@ -316,7 +316,7 @@ describe('Test multiple servers', function () {
         expect(video1.serverHost).to.equal('localhost:9003')
         expect(video1.duration).to.equal(5)
         expect(video1.tags).to.deep.equal([ 'tag1p3' ])
-        expect(video1.author).to.equal('root')
+        expect(video1.account).to.equal('root')
         expect(dateIsValid(video1.createdAt)).to.be.true
         expect(dateIsValid(video1.updatedAt)).to.be.true
 
@@ -342,7 +342,7 @@ describe('Test multiple servers', function () {
         expect(video2.serverHost).to.equal('localhost:9003')
         expect(video2.duration).to.equal(5)
         expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
-        expect(video2.author).to.equal('root')
+        expect(video2.account).to.equal('root')
         expect(dateIsValid(video2.createdAt)).to.be.true
         expect(dateIsValid(video2.updatedAt)).to.be.true
 
@@ -690,7 +690,7 @@ describe('Test multiple servers', function () {
         expect(baseVideo.licence).to.equal(video.licence)
         expect(baseVideo.category).to.equal(video.category)
         expect(baseVideo.nsfw).to.equal(video.nsfw)
-        expect(baseVideo.author).to.equal(video.account)
+        expect(baseVideo.account).to.equal(video.account)
         expect(baseVideo.tags).to.deep.equal(video.tags)
       }
     })

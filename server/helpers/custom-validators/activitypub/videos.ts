@@ -1,7 +1,6 @@
 import * as validator from 'validator'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { exists, isDateValid, isUUIDValid } from '../misc'
-import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
 import {
   isVideoAbuseReasonValid,
   isVideoDurationValid,
@@ -26,6 +25,13 @@ function isVideoTorrentUpdateActivityValid (activity: any) {
 
 function isVideoTorrentDeleteActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Delete')
+}
+
+function isVideoFlagValid (activity: any) {
+  return isBaseActivityValid(activity, 'Create') &&
+    activity.object.type === 'Flag' &&
+    isVideoAbuseReasonValid(activity.object.content) &&
+    isActivityPubUrlValid(activity.object.object)
 }
 
 function isActivityPubVideoDurationValid (value: string) {
@@ -57,57 +63,13 @@ function isVideoTorrentObjectValid (video: any) {
     video.url.length !== 0
 }
 
-function isVideoFlagValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    activity.object.type === 'Flag' &&
-    isVideoAbuseReasonValid(activity.object.content) &&
-    isActivityPubUrlValid(activity.object.object)
-}
-
-function isAnnounceValid (activity: any) {
-  return isBaseActivityValid(activity, 'Announce') &&
-    (
-      isVideoChannelCreateActivityValid(activity.object) ||
-      isVideoTorrentAddActivityValid(activity.object)
-    )
-}
-
-function isVideoChannelCreateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    isVideoChannelObjectValid(activity.object)
-}
-
-function isVideoChannelUpdateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Update') &&
-    isVideoChannelObjectValid(activity.object)
-}
-
-function isVideoChannelDeleteActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Delete')
-}
-
-function isVideoChannelObjectValid (videoChannel: any) {
-  return videoChannel.type === 'VideoChannel' &&
-    isActivityPubUrlValid(videoChannel.id) &&
-    isVideoChannelNameValid(videoChannel.name) &&
-    isVideoChannelDescriptionValid(videoChannel.content) &&
-    isDateValid(videoChannel.published) &&
-    isDateValid(videoChannel.updated) &&
-    isUUIDValid(videoChannel.uuid)
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   isVideoTorrentAddActivityValid,
-  isVideoChannelCreateActivityValid,
   isVideoTorrentUpdateActivityValid,
-  isVideoChannelUpdateActivityValid,
-  isVideoChannelDeleteActivityValid,
   isVideoTorrentDeleteActivityValid,
-  isVideoFlagValid,
-  isAnnounceValid,
-  isVideoChannelObjectValid
+  isVideoFlagValid
 }
 
 // ---------------------------------------------------------------------------

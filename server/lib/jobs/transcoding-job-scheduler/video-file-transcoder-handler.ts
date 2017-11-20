@@ -2,7 +2,7 @@ import { VideoResolution } from '../../../../shared'
 import { logger } from '../../../helpers'
 import { database as db } from '../../../initializers/database'
 import { VideoInstance } from '../../../models'
-import { sendUpdateVideo } from '../../activitypub/send-request'
+import { sendUpdateVideo } from '../../activitypub/send/send-update'
 
 async function process (data: { videoUUID: string, resolution: VideoResolution }, jobId: number) {
   const video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)

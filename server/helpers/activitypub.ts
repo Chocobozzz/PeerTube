@@ -9,18 +9,20 @@ import { VideoChannelObject } from '../../shared/models/activitypub/objects/vide
 import { ResultList } from '../../shared/models/result-list.model'
 import { database as db, REMOTE_SCHEME } from '../initializers'
 import { ACTIVITY_PUB, CONFIG, STATIC_PATHS } from '../initializers/constants'
-import { videoChannelActivityObjectToDBAttributes } from '../lib/activitypub/misc'
-import { sendVideoAnnounce } from '../lib/activitypub/send-request'
+import { videoChannelActivityObjectToDBAttributes } from '../lib/activitypub/process/misc'
+import { sendVideoAnnounce } from '../lib/activitypub/send/send-announce'
 import { sendVideoChannelAnnounce } from '../lib/index'
+import { AccountFollowInstance } from '../models/account/account-follow-interface'
 import { AccountInstance } from '../models/account/account-interface'
+import { VideoAbuseInstance } from '../models/video/video-abuse-interface'
 import { VideoChannelInstance } from '../models/video/video-channel-interface'
 import { VideoInstance } from '../models/video/video-interface'
 import { isRemoteAccountValid } from './custom-validators'
-import { isVideoChannelObjectValid } from './custom-validators/activitypub/videos'
 import { logger } from './logger'
 import { signObject } from './peertube-crypto'
 import { doRequest, doRequestAndSaveToFile } from './requests'
 import { getServerAccount } from './utils'
+import { isVideoChannelObjectValid } from './custom-validators/activitypub/video-channels'
 
 function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObject) {
   const thumbnailName = video.getThumbnailName()
@@ -55,13 +57,46 @@ async function shareVideoByServer (video: VideoInstance, t: Sequelize.Transactio
   return sendVideoAnnounce(serverAccount, video, t)
 }
 
-function getActivityPubUrl (type: 'video' | 'videoChannel' | 'account' | 'videoAbuse', id: string) {
-  if (type === 'video') return CONFIG.WEBSERVER.URL + '/videos/watch/' + id
-  else if (type === 'videoChannel') return CONFIG.WEBSERVER.URL + '/video-channels/' + id
-  else if (type === 'account') return CONFIG.WEBSERVER.URL + '/account/' + id
-  else if (type === 'videoAbuse') return CONFIG.WEBSERVER.URL + '/admin/video-abuses/' + id
+function getVideoActivityPubUrl (video: VideoInstance) {
+  return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
+}
 
-  return ''
+function getVideoChannelActivityPubUrl (videoChannel: VideoChannelInstance) {
+  return CONFIG.WEBSERVER.URL + '/video-channels/' + videoChannel.uuid
+}
+
+function getAccountActivityPubUrl (accountName: string) {
+  return CONFIG.WEBSERVER.URL + '/account/' + accountName
+}
+
+function getVideoAbuseActivityPubUrl (videoAbuse: VideoAbuseInstance) {
+  return CONFIG.WEBSERVER.URL + '/admin/video-abuses/' + videoAbuse.id
+}
+
+function getAccountFollowActivityPubUrl (accountFollow: AccountFollowInstance) {
+  const me = accountFollow.AccountFollower
+  const following = accountFollow.AccountFollowing
+
+  return me.url + '#follows/' + following.id
+}
+
+function getAccountFollowAcceptActivityPubUrl (accountFollow: AccountFollowInstance) {
+  const follower = accountFollow.AccountFollower
+  const me = accountFollow.AccountFollowing
+
+  return follower.url + '#accepts/follows/' + me.id
+}
+
+function getAnnounceActivityPubUrl (originalUrl: string, byAccount: AccountInstance) {
+  return originalUrl + '#announces/' + byAccount.id
+}
+
+function getUpdateActivityPubUrl (originalUrl: string, updatedAt: string) {
+  return originalUrl + '#updates/' + updatedAt
+}
+
+function getUndoActivityPubUrl (originalUrl: string) {
+  return originalUrl + '/undo'
 }
 
 async function getOrCreateAccount (accountUrl: string) {
@@ -257,7 +292,6 @@ export {
   fetchRemoteAccountAndCreateServer,
   activityPubContextify,
   activityPubCollectionPagination,
-  getActivityPubUrl,
   generateThumbnailFromUrl,
   getOrCreateAccount,
   fetchRemoteVideoPreview,
@@ -265,7 +299,16 @@ export {
   shareVideoChannelByServer,
   shareVideoByServer,
   getOrCreateVideoChannel,
-  buildSignedActivity
+  buildSignedActivity,
+  getVideoActivityPubUrl,
+  getVideoChannelActivityPubUrl,
+  getAccountActivityPubUrl,
+  getVideoAbuseActivityPubUrl,
+  getAccountFollowActivityPubUrl,
+  getAccountFollowAcceptActivityPubUrl,
+  getAnnounceActivityPubUrl,
+  getUpdateActivityPubUrl,
+  getUndoActivityPubUrl
 }
 
 // ---------------------------------------------------------------------------

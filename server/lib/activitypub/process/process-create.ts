@@ -1,9 +1,9 @@
-import { ActivityCreate, VideoChannelObject } from '../../../shared'
-import { VideoAbuseObject } from '../../../shared/models/activitypub/objects/video-abuse-object'
-import { logger, retryTransactionWrapper } from '../../helpers'
-import { getActivityPubUrl, getOrCreateAccount } from '../../helpers/activitypub'
-import { database as db } from '../../initializers'
-import { AccountInstance } from '../../models/account/account-interface'
+import { ActivityCreate, VideoChannelObject } from '../../../../shared'
+import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects/video-abuse-object'
+import { logger, retryTransactionWrapper } from '../../../helpers'
+import { getOrCreateAccount, getVideoChannelActivityPubUrl } from '../../../helpers/activitypub'
+import { database as db } from '../../../initializers'
+import { AccountInstance } from '../../../models/account/account-interface'
 import { videoChannelActivityObjectToDBAttributes } from './misc'
 
 async function processCreateActivity (activity: ActivityCreate) {
@@ -47,7 +47,7 @@ function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateDa
 
     const videoChannelData = videoChannelActivityObjectToDBAttributes(videoChannelToCreateData, account)
     videoChannel = db.VideoChannel.build(videoChannelData)
-    videoChannel.url = getActivityPubUrl('videoChannel', videoChannel.uuid)
+    videoChannel.url = getVideoChannelActivityPubUrl(videoChannel)
 
     videoChannel = await videoChannel.save({ transaction: t })
     logger.info('Remote video channel with uuid %s inserted.', videoChannelToCreateData.uuid)

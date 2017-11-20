@@ -1,9 +1,9 @@
-import { ActivityFollow } from '../../../shared/models/activitypub/activity'
-import { getOrCreateAccount, retryTransactionWrapper } from '../../helpers'
-import { database as db } from '../../initializers'
-import { AccountInstance } from '../../models/account/account-interface'
-import { sendAccept } from './send-request'
-import { logger } from '../../helpers/logger'
+import { ActivityFollow } from '../../../../shared/models/activitypub/activity'
+import { getOrCreateAccount, retryTransactionWrapper } from '../../../helpers'
+import { database as db } from '../../../initializers'
+import { AccountInstance } from '../../../models/account/account-interface'
+import { logger } from '../../../helpers/logger'
+import { sendAccept } from '../send/send-accept'
 
 async function processFollowActivity (activity: ActivityFollow) {
   const activityObject = activity.object
@@ -33,10 +33,10 @@ async function follow (account: AccountInstance, targetAccountURL: string) {
   await db.sequelize.transaction(async t => {
     const targetAccount = await db.Account.loadByUrl(targetAccountURL, t)
 
-    if (targetAccount === undefined) throw new Error('Unknown account')
+    if (!targetAccount) throw new Error('Unknown account')
     if (targetAccount.isOwned() === false) throw new Error('This is not a local account.')
 
-    await db.AccountFollow.findOrCreate({
+    const [ accountFollow ] = await db.AccountFollow.findOrCreate({
       where: {
         accountId: account.id,
         targetAccountId: targetAccount.id
@@ -48,9 +48,11 @@ async function follow (account: AccountInstance, targetAccountURL: string) {
       },
       transaction: t
     })
+    accountFollow.AccountFollower = account
+    accountFollow.AccountFollowing = targetAccount
 
     // Target sends to account he accepted the follow request
-    return sendAccept(targetAccount, account, t)
+    return sendAccept(accountFollow, t)
   })
 
   logger.info('Account uuid %s is followed by account %s.', account.url, targetAccountURL)

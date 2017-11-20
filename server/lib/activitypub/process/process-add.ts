@@ -1,11 +1,11 @@
 import * as Bluebird from 'bluebird'
-import { VideoTorrentObject } from '../../../shared'
-import { ActivityAdd } from '../../../shared/models/activitypub/activity'
-import { generateThumbnailFromUrl, getOrCreateAccount, logger, retryTransactionWrapper } from '../../helpers'
-import { getOrCreateVideoChannel } from '../../helpers/activitypub'
-import { database as db } from '../../initializers'
-import { AccountInstance } from '../../models/account/account-interface'
-import { VideoChannelInstance } from '../../models/video/video-channel-interface'
+import { VideoTorrentObject } from '../../../../shared'
+import { ActivityAdd } from '../../../../shared/models/activitypub/activity'
+import { generateThumbnailFromUrl, getOrCreateAccount, logger, retryTransactionWrapper } from '../../../helpers'
+import { getOrCreateVideoChannel } from '../../../helpers/activitypub'
+import { database as db } from '../../../initializers'
+import { AccountInstance } from '../../../models/account/account-interface'
+import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processAddActivity (activity: ActivityAdd) {

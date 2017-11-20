@@ -1,9 +1,9 @@
 import * as Sequelize from 'sequelize'
 import { VideoChannelCreate } from '../../shared/models'
 import { logger } from '../helpers'
-import { getActivityPubUrl } from '../helpers/activitypub'
 import { database as db } from '../initializers'
 import { AccountInstance } from '../models'
+import { getVideoChannelActivityPubUrl } from '../helpers/activitypub'
 
 async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountInstance, t: Sequelize.Transaction) {
   const videoChannelData = {
@@ -14,7 +14,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   }
 
   const videoChannel = db.VideoChannel.build(videoChannelData)
-  videoChannel.set('url', getActivityPubUrl('videoChannel', videoChannel.uuid))
+  videoChannel.set('url', getVideoChannelActivityPubUrl(videoChannel))
 
   const options = { transaction: t }
 

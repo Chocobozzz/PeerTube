@@ -1,5 +1,4 @@
 import * as Sequelize from 'sequelize'
-
 import {
   activityPubContextify,
   isAccountFollowersCountValid,
@@ -15,7 +14,7 @@ import {
   isUserUsernameValid
 } from '../../helpers'
 import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { sendDeleteAccount } from '../../lib/activitypub/send-request'
+import { sendDeleteAccount } from '../../lib/activitypub/send/send-delete'
 
 import { addMethodsToModel } from '../utils'
 import { AccountAttributes, AccountInstance, AccountMethods } from './account-interface'
