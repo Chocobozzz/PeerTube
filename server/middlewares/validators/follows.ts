@@ -31,19 +31,19 @@ const removeFollowingValidator = [
   param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking follow parameters', { parameters: req.body })
+    logger.debug('Checking unfollow parameters', { parameters: req.params })
 
     checkErrors(req, res, async () => {
       try {
         const serverAccount = await getServerAccount()
-        const following = await db.AccountFollow.loadByAccountAndTarget(serverAccount.id, req.params.accountId)
+        const follow = await db.AccountFollow.loadByAccountAndTarget(serverAccount.id, req.params.accountId)
 
-        if (!following) {
+        if (!follow) {
           return res.status(404)
             .end()
         }
 
-        res.locals.following = following
+        res.locals.follow = follow
 
         return next()
       } catch (err) {

@@ -4,7 +4,7 @@ import { ActivityPubSignature } from '../../shared'
 import { isSignatureVerified, logger } from '../helpers'
 import { database as db } from '../initializers'
 import { ACTIVITY_PUB } from '../initializers/constants'
-import { fetchRemoteAccountAndCreateServer } from '../lib/activitypub/account'
+import { fetchRemoteAccount, saveAccountAndServerIfNotExist } from '../lib/activitypub/account'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   const signatureObject: ActivityPubSignature = req.body.signature
@@ -15,15 +15,14 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
   // We don't have this account in our database, fetch it on remote
   if (!account) {
-    const accountResult = await fetchRemoteAccountAndCreateServer(signatureObject.creator)
+    account = await fetchRemoteAccount(signatureObject.creator)
 
-    if (!accountResult) {
+    if (!account) {
       return res.sendStatus(403)
     }
 
-    // Save our new account in database
-    account = accountResult.account
-    await account.save()
+    // Save our new account and its server in database
+    await saveAccountAndServerIfNotExist(account)
   }
 
   const verified = await isSignatureVerified(account, req.body)

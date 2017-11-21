@@ -4,11 +4,11 @@ import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { logger } from '../../../helpers/logger'
 import { sendAccept } from '../send/send-accept'
-import { getOrCreateAccount } from '../account'
+import { getOrCreateAccountAndServer } from '../account'
 
 async function processFollowActivity (activity: ActivityFollow) {
   const activityObject = activity.object
-  const account = await getOrCreateAccount(activity.actor)
+  const account = await getOrCreateAccountAndServer(activity.actor)
 
   return processFollow(account, activityObject)
 }

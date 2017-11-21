@@ -1,27 +1,65 @@
+import * as Bluebird from 'bluebird'
 import * as url from 'url'
 import { ActivityPubActor } from '../../../shared/models/activitypub/activitypub-actor'
 import { isRemoteAccountValid } from '../../helpers/custom-validators/activitypub/account'
+import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB } from '../../initializers/constants'
 import { database as db } from '../../initializers/database'
+import { AccountInstance } from '../../models/account/account-interface'
+import { Transaction } from 'sequelize'
 
-async function getOrCreateAccount (accountUrl: string) {
+async function getOrCreateAccountAndServer (accountUrl: string) {
   let account = await db.Account.loadByUrl(accountUrl)
 
   // We don't have this account in our database, fetch it on remote
   if (!account) {
-    const res = await fetchRemoteAccountAndCreateServer(accountUrl)
-    if (res === undefined) throw new Error('Cannot fetch remote account.')
+    account = await fetchRemoteAccount(accountUrl)
+    if (account === undefined) throw new Error('Cannot fetch remote account.')
 
-    // Save our new account in database
-    account = await res.account.save()
+    const options = {
+      arguments: [ account ],
+      errorMessage: 'Cannot save account and server with many retries.'
+    }
+    account = await retryTransactionWrapper(saveAccountAndServerIfNotExist, options)
   }
 
   return account
 }
 
-async function fetchRemoteAccountAndCreateServer (accountUrl: string) {
+function saveAccountAndServerIfNotExist (account: AccountInstance, t?: Transaction): Bluebird<AccountInstance> | Promise<AccountInstance> {
+  if (t !== undefined) {
+    return save(t)
+  } else {
+    return db.sequelize.transaction(t => {
+      return save(t)
+    })
+  }
+
+  async function save (t: Transaction) {
+    const accountHost = url.parse(account.url).host
+
+    const serverOptions = {
+      where: {
+        host: accountHost
+      },
+      defaults: {
+        host: accountHost
+      },
+      transaction: t
+    }
+    const [ server ] = await db.Server.findOrCreate(serverOptions)
+
+    // Save our new account in database
+    account.set('serverId', server.id)
+    account = await account.save({ transaction: t })
+
+    return account
+  }
+}
+
+async function fetchRemoteAccount (accountUrl: string) {
   const options = {
     uri: accountUrl,
     method: 'GET',
@@ -64,24 +102,13 @@ async function fetchRemoteAccountAndCreateServer (accountUrl: string) {
     followingUrl: accountJSON.following
   })
 
-  const accountHost = url.parse(account.url).host
-  const serverOptions = {
-    where: {
-      host: accountHost
-    },
-    defaults: {
-      host: accountHost
-    }
-  }
-  const [ server ] = await db.Server.findOrCreate(serverOptions)
-  account.set('serverId', server.id)
-
-  return { account, server }
+  return account
 }
 
 export {
-  getOrCreateAccount,
-  fetchRemoteAccountAndCreateServer
+  getOrCreateAccountAndServer,
+  fetchRemoteAccount,
+  saveAccountAndServerIfNotExist
 }
 
 // ---------------------------------------------------------------------------

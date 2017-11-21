@@ -3,14 +3,14 @@ import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects/
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
-import { getOrCreateAccount } from '../account'
+import { getOrCreateAccountAndServer } from '../account'
 import { getVideoChannelActivityPubUrl } from '../url'
 import { videoChannelActivityObjectToDBAttributes } from './misc'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
   const activityType = activityObject.type
-  const account = await getOrCreateAccount(activity.actor)
+  const account = await getOrCreateAccountAndServer(activity.actor)
 
   if (activityType === 'VideoChannel') {
     return processCreateVideoChannel(account, activityObject as VideoChannelObject)

@@ -42,6 +42,18 @@ async function follow (follower: string, following: string[], accessToken: strin
   return res
 }
 
+async function unfollow (url: string, accessToken: string, id: number, expectedStatus = 204) {
+  const path = '/api/v1/server/following/' + id
+
+  const res = await request(url)
+    .delete(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + accessToken)
+    .expect(expectedStatus)
+
+  return res
+}
+
 async function doubleFollow (server1: ServerInfo, server2: ServerInfo) {
   await Promise.all([
     follow(server1.url, [ server2.url ], server1.accessToken),
@@ -59,6 +71,7 @@ async function doubleFollow (server1: ServerInfo, server2: ServerInfo) {
 export {
   getFollowersListPaginationAndSort,
   getFollowingListPaginationAndSort,
+  unfollow,
   follow,
   doubleFollow
 }

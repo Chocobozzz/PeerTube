@@ -5,11 +5,11 @@ import { VideoInstance } from '../../../models/index'
 import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
 import { processAddActivity } from './process-add'
 import { processCreateActivity } from './process-create'
-import { getOrCreateAccount } from '../account'
+import { getOrCreateAccountAndServer } from '../account'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {
   const announcedActivity = activity.object
-  const accountAnnouncer = await getOrCreateAccount(activity.actor)
+  const accountAnnouncer = await getOrCreateAccountAndServer(activity.actor)
 
   if (announcedActivity.type === 'Create' && announcedActivity.object.type === 'VideoChannel') {
     // Add share entry

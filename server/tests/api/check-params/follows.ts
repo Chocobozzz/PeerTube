@@ -166,47 +166,49 @@ describe('Test server follows API validators', function () {
     })
 
     describe('When removing following', function () {
-      // it('Should fail with an invalid token', async function () {
-      // 	await request(server.url)
-      //           .delete(path + '/1')
-      //           .set('Authorization', 'Bearer faketoken')
-      //           .set('Accept', 'application/json')
-      //           .expect(401)
-      // })
-      //
-      // it('Should fail if the user is not an administrator', async function () {
-      // 	await request(server.url)
-      //           .delete(path + '/1')
-      //           .set('Authorization', 'Bearer ' + userAccessToken)
-      //           .set('Accept', 'application/json')
-      //           .expect(403)
-      // })
-      //
-      // it('Should fail with an undefined id', async function () {
-      //   await request(server.url)
-      //           .delete(path + '/' + undefined)
-      //           .set('Authorization', 'Bearer ' + server.accessToken)
-      //           .set('Accept', 'application/json')
-      //           .expect(400)
-      // })
-      //
-      // it('Should fail with an invalid id', async function () {
-	     //  await request(server.url)
-      //           .delete(path + '/foobar')
-      //           .set('Authorization', 'Bearer ' + server.accessToken)
-      //           .set('Accept', 'application/json')
-      //           .expect(400)
-      // })
-      //
-      // it('Should fail we do not follow this server', async function () {
-	     //  await request(server.url)
-      //           .delete(path + '/-1')
-      //           .set('Authorization', 'Bearer ' + server.accessToken)
-      //           .set('Accept', 'application/json')
-      //           .expect(404)
-      // })
-      //
-      // it('Should succeed with the correct parameters')
+      const path = '/api/v1/server/following'
+
+      it('Should fail with an invalid token', async function () {
+      	await request(server.url)
+                .delete(path + '/1')
+                .set('Authorization', 'Bearer faketoken')
+                .set('Accept', 'application/json')
+                .expect(401)
+      })
+
+      it('Should fail if the user is not an administrator', async function () {
+      	await request(server.url)
+                .delete(path + '/1')
+                .set('Authorization', 'Bearer ' + userAccessToken)
+                .set('Accept', 'application/json')
+                .expect(403)
+      })
+
+      it('Should fail with an undefined id', async function () {
+        await request(server.url)
+                .delete(path + '/' + undefined)
+                .set('Authorization', 'Bearer ' + server.accessToken)
+                .set('Accept', 'application/json')
+                .expect(400)
+      })
+
+      it('Should fail with an invalid id', async function () {
+	      await request(server.url)
+                .delete(path + '/foobar')
+                .set('Authorization', 'Bearer ' + server.accessToken)
+                .set('Accept', 'application/json')
+                .expect(400)
+      })
+
+      it('Should fail we do not follow this server', async function () {
+	      await request(server.url)
+                .delete(path + '/-1')
+                .set('Authorization', 'Bearer ' + server.accessToken)
+                .set('Accept', 'application/json')
+                .expect(404)
+      })
+
+      it('Should succeed with the correct parameters')
     })
   })
 
