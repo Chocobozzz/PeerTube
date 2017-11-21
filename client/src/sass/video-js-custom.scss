@@ -334,9 +334,10 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 // Thanks: https://projects.lukehaas.me/css-loaders/
 .vjs-loading-spinner {
-  margin: -25px 0 0 -25px;
+  margin: 0 !important;
   position: absolute;
-  top: 50%;
+  // 15px is the nav bar height
+  top: calc(50% - 15px);
   left: 50%;
   font-size: 10px;
   position: relative;
