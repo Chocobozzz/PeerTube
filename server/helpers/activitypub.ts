@@ -2,6 +2,7 @@ import { Activity } from '../../shared/models/activitypub/activity'
 import { ResultList } from '../../shared/models/result-list.model'
 import { AccountInstance } from '../models/account/account-interface'
 import { signObject } from './peertube-crypto'
+import { ACTIVITY_PUB } from '../initializers/constants'
 
 function activityPubContextify <T> (data: T) {
   return Object.assign(data,{
@@ -24,20 +25,32 @@ function activityPubContextify <T> (data: T) {
 }
 
 function activityPubCollectionPagination (url: string, page: number, result: ResultList<any>) {
-  const baseUrl = url.split('?').shift
+  let next: string
+  let prev: string
+
+  // There are more results
+  if (result.total > ((page + 1) * ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)) {
+    next = url + '?page=' + (page + 1)
+  }
+
+  if (page > 1) {
+    prev = url + '?page=' + (page - 1)
+  }
+
+  const orderedCollectionPagination = {
+    id: url + '?page=' + page,
+    type: 'OrderedCollectionPage',
+    prev,
+    next,
+    partOf: url,
+    orderedItems: result.data
+  }
 
   const obj = {
-    id: baseUrl,
-    type: 'Collection',
+    id: url,
+    type: 'OrderedCollection',
     totalItems: result.total,
-    first: {
-      id: baseUrl + '?page=' + page,
-      type: 'CollectionPage',
-      totalItems: result.total,
-      next: baseUrl + '?page=' + (page + 1),
-      partOf: baseUrl,
-      items: result.data
-    }
+    orderedItems: orderedCollectionPagination
   }
 
   return activityPubContextify(obj)

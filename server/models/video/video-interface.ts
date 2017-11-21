@@ -7,6 +7,7 @@ import { Video as FormattedVideo, VideoDetails as FormattedDetailsVideo } from '
 import { TagAttributes, TagInstance } from './tag-interface'
 import { VideoChannelInstance } from './video-channel-interface'
 import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
+import { VideoShareInstance } from './video-share-interface'
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string
@@ -44,6 +45,11 @@ export namespace VideoMethods {
   export type ListOwnedAndPopulateAccountAndTags = () => Bluebird<VideoInstance[]>
   export type ListOwnedByAccount = (account: string) => Bluebird<VideoInstance[]>
 
+  export type ListAllAndSharedByAccountForOutbox = (
+    accountId: number,
+    start: number,
+    count: number
+  ) => Bluebird< ResultList<VideoInstance> >
   export type ListForApi = (start: number, count: number, sort: string) => Bluebird< ResultList<VideoInstance> >
   export type ListUserVideosForApi = (userId: number, start: number, count: number, sort: string) => Bluebird< ResultList<VideoInstance> >
   export type SearchAndPopulateAccountAndServerAndTags = (
@@ -73,6 +79,7 @@ export namespace VideoMethods {
 export interface VideoClass {
   generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
   list: VideoMethods.List
+  listAllAndSharedByAccountForOutbox: VideoMethods.ListAllAndSharedByAccountForOutbox
   listForApi: VideoMethods.ListForApi
   listUserVideosForApi: VideoMethods.ListUserVideosForApi
   listOwnedAndPopulateAccountAndTags: VideoMethods.ListOwnedAndPopulateAccountAndTags
@@ -115,6 +122,7 @@ export interface VideoAttributes {
   VideoChannel?: VideoChannelInstance
   Tags?: TagInstance[]
   VideoFiles?: VideoFileInstance[]
+  VideoShare?: VideoShareInstance
 }
 
 export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.Instance<VideoAttributes> {
