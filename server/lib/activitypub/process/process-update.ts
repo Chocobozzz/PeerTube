@@ -19,7 +19,7 @@ async function processUpdateActivity (activity: ActivityUpdate) {
     return processUpdateVideoChannel(account, activity.object)
   }
 
-  return undefined
+  return
 }
 
 // ---------------------------------------------------------------------------
