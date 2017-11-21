@@ -26,7 +26,7 @@ describe('Test reset password scripts', function () {
   })
 
   it('Should change the user password from CLI', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     const env = getEnvCli(server)
     await execCLI(`echo coucou | ${env} npm run reset-password -- -u user_1`)

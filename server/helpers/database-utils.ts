@@ -4,12 +4,15 @@ import * as Bluebird from 'bluebird'
 import { logger } from './logger'
 
 type RetryTransactionWrapperOptions = { errorMessage: string, arguments?: any[] }
-function retryTransactionWrapper (functionToRetry: (...args) => Promise<any> | Bluebird<any>, options: RetryTransactionWrapperOptions) {
+function retryTransactionWrapper <T> (
+  functionToRetry: (...args) => Promise<T> | Bluebird<T>,
+  options: RetryTransactionWrapperOptions
+): Promise<T> {
   const args = options.arguments ? options.arguments : []
 
-  return transactionRetryer(callback => {
+  return transactionRetryer<T>(callback => {
     functionToRetry.apply(this, args)
-        .then(result => callback(null, result))
+        .then((result: T) => callback(null, result))
         .catch(err => callback(err))
   })
   .catch(err => {
@@ -18,8 +21,8 @@ function retryTransactionWrapper (functionToRetry: (...args) => Promise<any> | B
   })
 }
 
-function transactionRetryer (func: Function) {
-  return new Promise((res, rej) => {
+function transactionRetryer <T> (func: (err: any, data: T) => any) {
+  return new Promise<T>((res, rej) => {
     retry({
       times: 5,
 

@@ -1,9 +1,9 @@
 import * as WebFinger from 'webfinger.js'
 import { WebFingerData } from '../../shared'
+import { fetchRemoteAccount } from '../lib/activitypub/account'
 
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators'
-import { fetchRemoteAccountAndCreateServer } from '../lib/activitypub/account'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,
@@ -22,10 +22,10 @@ async function getAccountFromWebfinger (nameWithHost: string) {
     throw new Error('Cannot find self link or href is not a valid URL.')
   }
 
-  const res = await fetchRemoteAccountAndCreateServer(selfLink.href)
-  if (res === undefined) throw new Error('Cannot fetch and create server of remote account ' + selfLink.href)
+  const account = await fetchRemoteAccount(selfLink.href)
+  if (account === undefined) throw new Error('Cannot fetch remote account ' + selfLink.href)
 
-  return res.account
+  return account
 }
 
 // ---------------------------------------------------------------------------

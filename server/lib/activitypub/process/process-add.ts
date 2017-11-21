@@ -6,7 +6,7 @@ import { logger } from '../../../helpers/logger'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
-import { getOrCreateAccount } from '../account'
+import { getOrCreateAccountAndServer } from '../account'
 import { getOrCreateVideoChannel } from '../video-channels'
 import { generateThumbnailFromUrl } from '../videos'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
@@ -14,7 +14,7 @@ import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes }
 async function processAddActivity (activity: ActivityAdd) {
   const activityObject = activity.object
   const activityType = activityObject.type
-  const account = await getOrCreateAccount(activity.actor)
+  const account = await getOrCreateAccountAndServer(activity.actor)
 
   if (activityType === 'Video') {
     const videoChannelUrl = activity.target

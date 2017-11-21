@@ -16,6 +16,9 @@ import { followersSortValidator, followingSortValidator } from '../../../middlew
 import { AccountFollowInstance } from '../../../models/index'
 import { sendFollow } from '../../../lib/index'
 import { sendUndoFollow } from '../../../lib/activitypub/send/send-undo'
+import { AccountInstance } from '../../../models/account/account-interface'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { saveAccountAndServerIfNotExist } from '../../../lib/activitypub/account'
 
 const serverFollowsRouter = express.Router()
 
@@ -32,7 +35,7 @@ serverFollowsRouter.post('/following',
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   followValidator,
   setBodyHostsPort,
-  asyncMiddleware(follow)
+  asyncMiddleware(followRetry)
 )
 
 serverFollowsRouter.delete('/following/:accountId',
@@ -72,7 +75,7 @@ async function listFollowers (req: express.Request, res: express.Response, next:
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function follow (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function followRetry (req: express.Request, res: express.Response, next: express.NextFunction) {
   const hosts = req.body.hosts as string[]
   const fromAccount = await getServerAccount()
 
@@ -88,31 +91,12 @@ async function follow (req: express.Request, res: express.Response, next: expres
       .then(accountResult => {
         let targetAccount = accountResult.account
 
-        return db.sequelize.transaction(async t => {
-          if (accountResult.loadedFromDB === false) {
-            targetAccount = await targetAccount.save({ transaction: t })
-          }
+        const options = {
+          arguments: [ fromAccount, targetAccount, accountResult.loadedFromDB ],
+          errorMessage: 'Cannot follow with many retries.'
+        }
 
-          const [ accountFollow ] = await db.AccountFollow.findOrCreate({
-            where: {
-              accountId: fromAccount.id,
-              targetAccountId: targetAccount.id
-            },
-            defaults: {
-              state: 'pending',
-              accountId: fromAccount.id,
-              targetAccountId: targetAccount.id
-            },
-            transaction: t
-          })
-          accountFollow.AccountFollowing = targetAccount
-          accountFollow.AccountFollower = fromAccount
-
-          // Send a notification to remote server
-          if (accountFollow.state === 'pending') {
-            await sendFollow(accountFollow, t)
-          }
-        })
+        return retryTransactionWrapper(follow, options)
       })
       .catch(err => logger.warn('Cannot follow server %s.', `${accountName}@${host}`, err))
 
@@ -121,19 +105,51 @@ async function follow (req: express.Request, res: express.Response, next: expres
 
   // Don't make the client wait the tasks
   Promise.all(tasks)
-    .catch(err => {
-      logger.error('Error in follow.', err)
-    })
+    .catch(err => logger.error('Error in follow.', err))
 
   return res.status(204).end()
 }
 
+async function follow (fromAccount: AccountInstance, targetAccount: AccountInstance, targetAlreadyInDB: boolean) {
+  try {
+    await db.sequelize.transaction(async t => {
+      if (targetAlreadyInDB === false) {
+        await saveAccountAndServerIfNotExist(targetAccount, t)
+      }
+
+      const [ accountFollow ] = await db.AccountFollow.findOrCreate({
+        where: {
+          accountId: fromAccount.id,
+          targetAccountId: targetAccount.id
+        },
+        defaults: {
+          state: 'pending',
+          accountId: fromAccount.id,
+          targetAccountId: targetAccount.id
+        },
+        transaction: t
+      })
+      accountFollow.AccountFollowing = targetAccount
+      accountFollow.AccountFollower = fromAccount
+
+      // Send a notification to remote server
+      if (accountFollow.state === 'pending') {
+        await sendFollow(accountFollow, t)
+      }
+    })
+  } catch (err) {
+    // Reset target account
+    targetAccount.isNewRecord = !targetAlreadyInDB
+    throw err
+  }
+}
+
 async function removeFollow (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const following: AccountFollowInstance = res.locals.following
+  const follow: AccountFollowInstance = res.locals.follow
 
   await db.sequelize.transaction(async t => {
-    await sendUndoFollow(following, t)
-    await following.destroy({ transaction: t })
+    await sendUndoFollow(follow, t)
+    await follow.destroy({ transaction: t })
   })
 
   return res.status(204).end()

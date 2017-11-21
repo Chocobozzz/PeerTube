@@ -8,10 +8,10 @@ import { AccountInstance } from '../../../models/account/account-interface'
 import { VideoInstance } from '../../../models/video/video-interface'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 import Bluebird = require('bluebird')
-import { getOrCreateAccount } from '../account'
+import { getOrCreateAccountAndServer } from '../account'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
-  const account = await getOrCreateAccount(activity.actor)
+  const account = await getOrCreateAccountAndServer(activity.actor)
 
   if (activity.object.type === 'Video') {
     return processUpdateVideo(account, activity.object)
