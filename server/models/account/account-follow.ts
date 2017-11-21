@@ -221,8 +221,8 @@ async function createListAcceptedFollowForApiQuery (
       'INNER JOIN "Accounts" AS "Follows" ON "AccountFollows"."' + secondJoin + '" = "Follows"."id" ' +
       'WHERE "Accounts"."id" = ANY ($accountIds) AND "AccountFollows"."state" = \'accepted\' '
 
-    if (start !== undefined) query += 'LIMIT ' + start
-    if (count !== undefined) query += ', ' + count
+    if (count !== undefined) query += 'LIMIT ' + count
+    if (start !== undefined) query += ' OFFSET ' + start
 
     const options = {
       bind: { accountIds },

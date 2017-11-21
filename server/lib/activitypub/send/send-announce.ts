@@ -1,10 +1,12 @@
 import { Transaction } from 'sequelize'
+import { ActivityAdd } from '../../../../shared/index'
+import { ActivityAnnounce, ActivityCreate } from '../../../../shared/models/activitypub/activity'
 import { AccountInstance, VideoInstance } from '../../../models'
 import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
+import { getAnnounceActivityPubUrl } from '../url'
 import { broadcastToFollowers } from './misc'
 import { addActivityData } from './send-add'
 import { createActivityData } from './send-create'
-import { getAnnounceActivityPubUrl } from '../url'
 
 async function sendVideoAnnounce (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
   const url = getAnnounceActivityPubUrl(video.url, byAccount)
@@ -24,17 +26,8 @@ async function sendVideoChannelAnnounce (byAccount: AccountInstance, videoChanne
   return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
 
-// ---------------------------------------------------------------------------
-
-export {
-  sendVideoAnnounce,
-  sendVideoChannelAnnounce
-}
-
-// ---------------------------------------------------------------------------
-
-async function announceActivityData (url: string, byAccount: AccountInstance, object: any) {
-  const activity = {
+async function announceActivityData (url: string, byAccount: AccountInstance, object: ActivityCreate | ActivityAdd) {
+  const activity: ActivityAnnounce = {
     type: 'Announce',
     id: url,
     actor: byAccount.url,
@@ -42,4 +35,12 @@ async function announceActivityData (url: string, byAccount: AccountInstance, ob
   }
 
   return activity
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  sendVideoAnnounce,
+  sendVideoChannelAnnounce,
+  announceActivityData
 }

@@ -78,6 +78,7 @@ let getLanguageLabel: VideoMethods.GetLanguageLabel
 let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let list: VideoMethods.List
 let listForApi: VideoMethods.ListForApi
+let listAllAndSharedByAccountForOutbox: VideoMethods.ListAllAndSharedByAccountForOutbox
 let listUserVideosForApi: VideoMethods.ListUserVideosForApi
 let loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
 let listOwnedAndPopulateAccountAndTags: VideoMethods.ListOwnedAndPopulateAccountAndTags
@@ -266,6 +267,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
     generateThumbnailFromData,
     list,
+    listAllAndSharedByAccountForOutbox,
     listForApi,
     listUserVideosForApi,
     listOwnedAndPopulateAccountAndTags,
@@ -342,6 +344,14 @@ function associate (models) {
   })
 
   Video.hasMany(models.VideoFile, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+
+  Video.hasMany(models.VideoShare, {
     foreignKey: {
       name: 'videoId',
       allowNull: false
@@ -773,6 +783,54 @@ list = function () {
   }
 
   return Video.findAll(query)
+}
+
+listAllAndSharedByAccountForOutbox = function (accountId: number, start: number, count: number) {
+  const queryVideo = 'SELECT "Video"."id" FROM "Videos" AS "Video" ' +
+                'INNER JOIN "VideoChannels" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
+                'WHERE "VideoChannel"."accountId" = ' + accountId
+  const queryVideoShare = 'SELECT "Video"."id" FROM "VideoShares" AS "VideoShare" ' +
+                          'INNER JOIN "Videos" AS "Video" ON "Video"."id" = "VideoShare"."videoId" ' +
+                          'INNER JOIN "VideoChannels" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
+                          'WHERE "VideoShare"."accountId" = ' + accountId
+  const rawQuery = `(${queryVideo}) UNION (${queryVideoShare}) LIMIT ${count} OFFSET ${start}`
+
+  const query = {
+    distinct: true,
+    offset: start,
+    limit: count,
+    order: [ getSort('createdAt'), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ],
+    where: {
+      id: {
+        [Sequelize.Op.in]: Sequelize.literal('(' + rawQuery + ')')
+      }
+    },
+    include: [
+      {
+        model: Video['sequelize'].models.VideoShare,
+        required: false
+      },
+      {
+        model: Video['sequelize'].models.VideoChannel,
+        required: true,
+        include: [
+          {
+            model: Video['sequelize'].models.Account,
+            required: true
+          }
+        ]
+      },
+      Video['sequelize'].models.Tag,
+      Video['sequelize'].models.VideoFile
+    ]
+  }
+
+  return Video.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
+  })
 }
 
 listUserVideosForApi = function (userId: number, start: number, count: number, sort: string) {

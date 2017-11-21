@@ -6,7 +6,7 @@ import { executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { pageToStartAndCount } from '../../helpers'
 import { AccountInstance, VideoChannelInstance } from '../../models'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
-import { ACTIVITY_PUB } from '../../initializers/constants'
+import { ACTIVITY_PUB, CONFIG } from '../../initializers/constants'
 import { asyncMiddleware } from '../../middlewares/async'
 import { videosGetValidator } from '../../middlewares/validators/videos'
 import { VideoInstance } from '../../models/video/video-interface'
@@ -60,7 +60,7 @@ async function accountFollowersController (req: express.Request, res: express.Re
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
   const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi([ account.id ], start, count)
-  const activityPubResult = activityPubCollectionPagination(req.url, page, result)
+  const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)
 }
@@ -72,7 +72,7 @@ async function accountFollowingController (req: express.Request, res: express.Re
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
   const result = await db.AccountFollow.listAcceptedFollowingUrlsForApi([ account.id ], start, count)
-  const activityPubResult = activityPubCollectionPagination(req.url, page, result)
+  const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)
 }
