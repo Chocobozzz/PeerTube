@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Activity, ActivityAdd } from '../../../shared/models/activitypub/activity'
+import { Activity } from '../../../shared/models/activitypub/activity'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
 import { database as db } from '../../initializers'
