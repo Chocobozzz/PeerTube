@@ -34,8 +34,6 @@ async function outboxController (req: express.Request, res: express.Response, ne
   const data = await db.Video.listAllAndSharedByAccountForOutbox(account.id, start, count)
   const activities: Activity[] = []
 
-  console.log(account.url)
-
   for (const video of data.data) {
     const videoObject = video.toActivityPubObject()
     let addActivity: ActivityAdd = await addActivityData(video.url, account, video, video.VideoChannel.url, videoObject)

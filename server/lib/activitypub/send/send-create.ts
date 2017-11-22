@@ -21,6 +21,8 @@ async function sendVideoAbuse (byAccount: AccountInstance, videoAbuse: VideoAbus
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
 
+// async function sendCreateView ()
+
 async function createActivityData (url: string, byAccount: AccountInstance, object: any) {
   const { to, cc } = await getAudience(byAccount)
   const activity: ActivityCreate = {

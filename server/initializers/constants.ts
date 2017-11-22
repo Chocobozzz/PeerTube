@@ -228,6 +228,7 @@ const ACTIVITY_PUB = {
   ACCEPT_HEADER: 'application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
   PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
   COLLECTION_ITEMS_PER_PAGE: 10,
+  FETCH_PAGE_LIMIT: 100,
   URL_MIME_TYPES: {
     VIDEO: [ 'video/mp4', 'video/webm', 'video/ogg' ], // TODO: Merge with VIDEO_MIMETYPE_EXT
     TORRENT: [ 'application/x-bittorrent' ],

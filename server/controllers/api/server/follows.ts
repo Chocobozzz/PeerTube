@@ -19,6 +19,7 @@ import { sendUndoFollow } from '../../../lib/activitypub/send/send-undo'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { saveAccountAndServerIfNotExist } from '../../../lib/activitypub/account'
+import { addFetchOutboxJob } from '../../../lib/activitypub/fetch'
 
 const serverFollowsRouter = express.Router()
 
@@ -136,6 +137,8 @@ async function follow (fromAccount: AccountInstance, targetAccount: AccountInsta
       if (accountFollow.state === 'pending') {
         await sendFollow(accountFollow, t)
       }
+
+      await addFetchOutboxJob(targetAccount, t)
     })
   } catch (err) {
     // Reset target account
