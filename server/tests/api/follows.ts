@@ -22,7 +22,7 @@ describe('Test follows', function () {
   let server3Id: number
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(20000)
 
     servers = await flushAndRunMultipleServers(3)
 
@@ -161,6 +161,34 @@ describe('Test follows', function () {
     res = await getVideosList(servers[2].url)
     expect(res.body.total).to.equal(1)
     expect(res.body.data[0].name).to.equal('server3')
+  })
+
+  it('Should propagate previous uploaded videos on a new following', async function () {
+    this.timeout(20000)
+
+    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-2' })
+    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-3' })
+    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-4' })
+    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-5' })
+    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-6' })
+
+    await wait(5000)
+
+    // Server 1 follows server 3
+    await follow(servers[0].url, [ servers[2].url ], servers[0].accessToken)
+
+    await wait(7000)
+
+    let res = await getVideosList(servers[0].url)
+    expect(res.body.total).to.equal(7)
+
+    const video2 = res.body.data.find(v => v.name === 'server3-2')
+    const video4 = res.body.data.find(v => v.name === 'server3-4')
+    const video6 = res.body.data.find(v => v.name === 'server3-6')
+
+    expect(video2).to.not.be.undefined
+    expect(video4).to.not.be.undefined
+    expect(video6).to.not.be.undefined
   })
 
   after(async function () {

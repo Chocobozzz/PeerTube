@@ -2,7 +2,6 @@ import { createReadStream } from 'fs'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
-import { readFileBufferPromise } from '../server/helpers/core-utils'
 import { CONFIG } from '../server/initializers/constants'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
@@ -16,7 +15,8 @@ const logger = new winston.Logger({
       humanReadableUnhandledException: true,
       json: false,
       colorize: true,
-      prettyPrint: true
+      prettyPrint: true,
+      stderrLevels: []
     })
   ],
   exitOnError: true

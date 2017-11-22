@@ -1,11 +1,15 @@
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users/user-right.enum'
 import { getFormattedObjects } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { getServerAccount } from '../../../helpers/utils'
 import { getAccountFromWebfinger } from '../../../helpers/webfinger'
 import { SERVER_ACCOUNT_NAME } from '../../../initializers/constants'
 import { database as db } from '../../../initializers/database'
+import { saveAccountAndServerIfNotExist } from '../../../lib/activitypub/account'
+import { sendUndoFollow } from '../../../lib/activitypub/send/send-undo'
+import { sendFollow } from '../../../lib/index'
 import { asyncMiddleware, paginationValidator, removeFollowingValidator, setFollowersSort, setPagination } from '../../../middlewares'
 import { authenticate } from '../../../middlewares/oauth'
 import { setBodyHostsPort } from '../../../middlewares/servers'
@@ -13,13 +17,8 @@ import { setFollowingSort } from '../../../middlewares/sort'
 import { ensureUserHasRight } from '../../../middlewares/user-right'
 import { followValidator } from '../../../middlewares/validators/follows'
 import { followersSortValidator, followingSortValidator } from '../../../middlewares/validators/sort'
-import { AccountFollowInstance } from '../../../models/index'
-import { sendFollow } from '../../../lib/index'
-import { sendUndoFollow } from '../../../lib/activitypub/send/send-undo'
 import { AccountInstance } from '../../../models/account/account-interface'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { saveAccountAndServerIfNotExist } from '../../../lib/activitypub/account'
-import { addFetchOutboxJob } from '../../../lib/activitypub/fetch'
+import { AccountFollowInstance } from '../../../models/index'
 
 const serverFollowsRouter = express.Router()
 
@@ -137,8 +136,6 @@ async function follow (fromAccount: AccountInstance, targetAccount: AccountInsta
       if (accountFollow.state === 'pending') {
         await sendFollow(accountFollow, t)
       }
-
-      await addFetchOutboxJob(targetAccount, t)
     })
   } catch (err) {
     // Reset target account

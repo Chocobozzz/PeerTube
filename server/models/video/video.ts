@@ -46,6 +46,7 @@ import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
 import { sendDeleteVideo } from '../../lib/index'
+import * as Bluebird from 'bluebird'
 
 const Buffer = safeBuffer.Buffer
 
@@ -786,14 +787,21 @@ list = function () {
 }
 
 listAllAndSharedByAccountForOutbox = function (accountId: number, start: number, count: number) {
-  const queryVideo = 'SELECT "Video"."id" FROM "Videos" AS "Video" ' +
-                'INNER JOIN "VideoChannels" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
-                'WHERE "VideoChannel"."accountId" = ' + accountId
-  const queryVideoShare = 'SELECT "Video"."id" FROM "VideoShares" AS "VideoShare" ' +
-                          'INNER JOIN "Videos" AS "Video" ON "Video"."id" = "VideoShare"."videoId" ' +
-                          'INNER JOIN "VideoChannels" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
-                          'WHERE "VideoShare"."accountId" = ' + accountId
-  const rawQuery = `(${queryVideo}) UNION (${queryVideoShare}) LIMIT ${count} OFFSET ${start}`
+  function getRawQuery (select: string) {
+    const queryVideo = 'SELECT ' + select + ' FROM "Videos" AS "Video" ' +
+      'INNER JOIN "VideoChannels" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
+      'WHERE "VideoChannel"."accountId" = ' + accountId
+    const queryVideoShare = 'SELECT ' + select + ' FROM "VideoShares" AS "VideoShare" ' +
+      'INNER JOIN "Videos" AS "Video" ON "Video"."id" = "VideoShare"."videoId" ' +
+      'WHERE "VideoShare"."accountId" = ' + accountId
+
+    let rawQuery = `(${queryVideo}) UNION (${queryVideoShare})`
+
+    return rawQuery
+  }
+
+  const rawQuery = getRawQuery('"Video"."id"')
+  const rawCountQuery = getRawQuery('COUNT("Video"."id") as "total"')
 
   const query = {
     distinct: true,
@@ -825,10 +833,20 @@ listAllAndSharedByAccountForOutbox = function (accountId: number, start: number,
     ]
   }
 
-  return Video.findAndCountAll(query).then(({ rows, count }) => {
+  return Bluebird.all([
+    Video.findAll(query),
+    Video['sequelize'].query(rawCountQuery, { type: Sequelize.QueryTypes.SELECT })
+  ]).then(([ rows, totals ]) => {
+    // totals: totalVideos + totalVideoShares
+    let totalVideos = 0
+    let totalVideoShares = 0
+    if (totals[0]) totalVideos = parseInt(totals[0].total, 10)
+    if (totals[1]) totalVideoShares = parseInt(totals[1].total, 10)
+
+    const total = totalVideos + totalVideoShares
     return {
       data: rows,
-      total: count
+      total: total
     }
   })
 }

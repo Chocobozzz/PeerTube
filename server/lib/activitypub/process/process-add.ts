@@ -48,7 +48,7 @@ function addRemoteVideo (account: AccountInstance,
                          activity: ActivityAdd,
                          videoChannel: VideoChannelInstance,
                          videoToCreateData: VideoTorrentObject) {
-  logger.debug('Adding remote video %s.', videoToCreateData.url)
+  logger.debug('Adding remote video %s.', videoToCreateData.id)
 
   return db.sequelize.transaction(async t => {
     const sequelizeOptions = {
