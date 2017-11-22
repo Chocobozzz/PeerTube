@@ -24,12 +24,15 @@ function activityPubContextify <T> (data: T) {
   })
 }
 
-function activityPubCollectionPagination (url: string, page: number, result: ResultList<any>) {
+function activityPubCollectionPagination (url: string, page: any, result: ResultList<any>) {
   let next: string
   let prev: string
 
+  // Assert page is a number
+  page = parseInt(page, 10)
+
   // There are more results
-  if (result.total > ((page + 1) * ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)) {
+  if (result.total > page * ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE) {
     next = url + '?page=' + (page + 1)
   }
 
@@ -53,6 +56,8 @@ function activityPubCollectionPagination (url: string, page: number, result: Res
       totalItems: result.total,
       first: orderedCollectionPagination
     })
+  } else {
+    orderedCollectionPagination['totalItems'] = result.total
   }
 
   return orderedCollectionPagination

@@ -28,7 +28,7 @@ export {
 async function outboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountInstance = res.locals.account
 
-  const page = req.params.page || 1
+  const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
   const data = await db.Video.listAllAndSharedByAccountForOutbox(account.id, start, count)

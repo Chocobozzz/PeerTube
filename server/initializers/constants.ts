@@ -328,6 +328,7 @@ if (isTestInstance() === true) {
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
   STATIC_MAX_AGE = '0'
+  ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
 }
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 import { ActivityAccept } from '../../../../shared/models/activitypub/activity'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
+import { addFetchOutboxJob } from '../fetch'
 
 async function processAcceptActivity (activity: ActivityAccept, inboxAccount?: AccountInstance) {
   if (inboxAccount === undefined) throw new Error('Need to accept on explicit inbox.')
@@ -24,4 +25,5 @@ async function processAccept (account: AccountInstance, targetAccount: AccountIn
 
   follow.set('state', 'accepted')
   await follow.save()
+  await addFetchOutboxJob(targetAccount, undefined)
 }

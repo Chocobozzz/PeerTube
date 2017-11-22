@@ -56,7 +56,7 @@ async function accountController (req: express.Request, res: express.Response, n
 async function accountFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountInstance = res.locals.account
 
-  const page = req.params.page || 1
+  const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
   const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi([ account.id ], start, count)
@@ -68,7 +68,7 @@ async function accountFollowersController (req: express.Request, res: express.Re
 async function accountFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountInstance = res.locals.account
 
-  const page = req.params.page || 1
+  const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
   const result = await db.AccountFollow.listAcceptedFollowingUrlsForApi([ account.id ], start, count)

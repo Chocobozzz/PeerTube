@@ -25,7 +25,7 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
     if (firstBody.first && Array.isArray(firstBody.first.orderedItems)) {
       const activities = firstBody.first.orderedItems
 
-      logger.info('Processing %i items ActivityPub fetcher for %s.', activities.length, uri)
+      logger.info('Processing %i items ActivityPub fetcher for %s.', activities.length, options.uri)
 
       await processActivities(activities)
     }
@@ -37,12 +37,12 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
       options.uri = nextLink
 
       const { body } = await doRequest(options)
-      nextLink = body.nextLink
+      nextLink = body.next
       i++
 
       if (Array.isArray(body.orderedItems)) {
         const activities = body.orderedItems
-        logger.info('Processing %i items ActivityPub fetcher for %s.', activities.length, uri)
+        logger.info('Processing %i items ActivityPub fetcher for %s.', activities.length, options.uri)
 
         await processActivities(activities)
       }
