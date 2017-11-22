@@ -175,7 +175,7 @@ describe('Test multiple servers', function () {
       await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
 
       // Transcoding
-      await wait(10000)
+      await wait(15000)
 
       // All servers should have this video
       for (const server of servers) {
@@ -537,7 +537,7 @@ describe('Test multiple servers', function () {
         // Initialize base videos for future comparisons
         if (baseVideos === null) {
           baseVideos = videos
-          return
+          continue
         }
 
         for (const baseVideo of baseVideos) {
@@ -572,14 +572,14 @@ describe('Test multiple servers', function () {
         // Initialize base videos for future comparisons
         if (baseVideos === null) {
           baseVideos = videos
-          return
+          continue
         }
 
-        baseVideos.forEach(baseVideo => {
+        for (const baseVideo of baseVideos) {
           const sameVideo = videos.find(video => video.name === baseVideo.name)
           expect(baseVideo.likes).to.equal(sameVideo.likes)
           expect(baseVideo.dislikes).to.equal(sameVideo.dislikes)
-        })
+        }
       }
     })
   })
@@ -680,7 +680,7 @@ describe('Test multiple servers', function () {
 
         if (baseVideo === null) {
           baseVideo = video
-          return
+          continue
         }
 
         expect(baseVideo.name).to.equal(video.name)
