@@ -6,7 +6,7 @@ engines:
     enabled: true
     config:
       languages:
-      - javascript
+      - typescript
   eslint:
     enabled: true
   fixme:
@@ -18,7 +18,6 @@ ratings:
 exclude_paths:
 - config/
 - node_modules/
-- client
 - scripts/
 - server/tests/
 - .tmp/

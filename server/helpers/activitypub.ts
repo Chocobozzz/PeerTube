@@ -46,14 +46,16 @@ function activityPubCollectionPagination (url: string, page: number, result: Res
     orderedItems: result.data
   }
 
-  const obj = {
-    id: url,
-    type: 'OrderedCollection',
-    totalItems: result.total,
-    orderedItems: orderedCollectionPagination
+  if (page === 1) {
+    return activityPubContextify({
+      id: url,
+      type: 'OrderedCollection',
+      totalItems: result.total,
+      first: orderedCollectionPagination
+    })
   }
 
-  return activityPubContextify(obj)
+  return orderedCollectionPagination
 }
 
 function buildSignedActivity (byAccount: AccountInstance, data: Object) {

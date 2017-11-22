@@ -1,6 +1,7 @@
 export * from './process'
 export * from './send'
 export * from './account'
+export * from './fetch'
 export * from './share'
 export * from './video-channels'
 export * from './videos'
