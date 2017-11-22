@@ -33,13 +33,18 @@ async function videoActivityObjectToDBAttributes (
   else if (cc.indexOf(ACTIVITY_PUB.PUBLIC) !== -1) privacy = VideoPrivacy.UNLISTED
 
   const duration = videoObject.duration.replace(/[^\d]+/, '')
+  let language = null
+  if (videoObject.language) {
+    language = parseInt(videoObject.language.identifier, 10)
+  }
+
   const videoData: VideoAttributes = {
     name: videoObject.name,
     uuid: videoObject.uuid,
     url: videoObject.id,
     category: parseInt(videoObject.category.identifier, 10),
     licence: parseInt(videoObject.licence.identifier, 10),
-    language: parseInt(videoObject.language.identifier, 10),
+    language,
     nsfw: videoObject.nsfw,
     description: videoObject.content,
     channelId: videoChannel.id,

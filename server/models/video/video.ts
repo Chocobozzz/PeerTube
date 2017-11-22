@@ -567,6 +567,14 @@ toActivityPubObject = function (this: VideoInstance) {
     name: t.name
   }))
 
+  let language
+  if (this.language) {
+    language = {
+      identifier: this.language + '',
+      name: this.getLanguageLabel()
+    }
+  }
+
   const url = []
   for (const file of this.VideoFiles) {
     url.push({
@@ -608,10 +616,7 @@ toActivityPubObject = function (this: VideoInstance) {
       identifier: this.licence + '',
       name: this.getLicenceLabel()
     },
-    language: {
-      identifier: this.language + '',
-      name: this.getLanguageLabel()
-    },
+    language,
     views: this.views,
     nsfw: this.nsfw,
     published: this.createdAt.toISOString(),
@@ -816,7 +821,19 @@ listAllAndSharedByAccountForOutbox = function (accountId: number, start: number,
     include: [
       {
         model: Video['sequelize'].models.VideoShare,
-        required: false
+        required: false,
+        where: {
+          [Sequelize.Op.and]: [
+            {
+              id: {
+                [Sequelize.Op.not]: null
+              }
+            },
+            {
+              accountId
+            }
+          ]
+        }
       },
       {
         model: Video['sequelize'].models.VideoChannel,

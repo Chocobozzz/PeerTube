@@ -11,6 +11,7 @@ import {
   isVideoTorrentDeleteActivityValid,
   isVideoTorrentUpdateActivityValid
 } from './videos'
+import { isViewActivityValid } from './view'
 
 function isRootActivityValid (activity: any) {
   return Array.isArray(activity['@context']) &&
@@ -55,7 +56,8 @@ export {
 
 function checkCreateActivity (activity: any) {
   return isVideoChannelCreateActivityValid(activity) ||
-    isVideoFlagValid(activity)
+    isVideoFlagValid(activity) ||
+    isViewActivityValid(activity)
 }
 
 function checkAddActivity (activity: any) {

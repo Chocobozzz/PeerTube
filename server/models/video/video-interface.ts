@@ -122,7 +122,7 @@ export interface VideoAttributes {
   VideoChannel?: VideoChannelInstance
   Tags?: TagInstance[]
   VideoFiles?: VideoFileInstance[]
-  VideoShare?: VideoShareInstance
+  VideoShares?: VideoShareInstance[]
 }
 
 export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.Instance<VideoAttributes> {

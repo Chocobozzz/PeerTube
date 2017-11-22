@@ -4,16 +4,26 @@ import { ACTIVITY_PUB, database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { activitypubHttpJobScheduler } from '../../jobs/activitypub-http-job-scheduler/activitypub-http-job-scheduler'
 
-async function broadcastToFollowers (data: any, byAccount: AccountInstance, toAccountFollowers: AccountInstance[], t: Transaction) {
+async function broadcastToFollowers (
+  data: any,
+  byAccount: AccountInstance,
+  toAccountFollowers: AccountInstance[],
+  t: Transaction,
+  followersException: AccountInstance[] = []
+) {
   const toAccountFollowerIds = toAccountFollowers.map(a => a.id)
+
   const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds)
   if (result.data.length === 0) {
     logger.info('Not broadcast because of 0 followers for %s.', toAccountFollowerIds.join(', '))
     return undefined
   }
 
+  const followersSharedInboxException = followersException.map(f => f.sharedInboxUrl)
+  const uris = result.data.filter(sharedInbox => followersSharedInboxException.indexOf(sharedInbox) === -1)
+
   const jobPayload = {
-    uris: result.data,
+    uris,
     signatureAccountId: byAccount.id,
     body: data
   }

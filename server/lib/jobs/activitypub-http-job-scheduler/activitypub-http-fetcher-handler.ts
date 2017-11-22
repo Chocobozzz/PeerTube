@@ -1,10 +1,8 @@
 import { logger } from '../../../helpers'
-import { buildSignedActivity } from '../../../helpers/activitypub'
 import { doRequest } from '../../../helpers/requests'
-import { database as db } from '../../../initializers'
-import { ActivityPubHttpPayload } from './activitypub-http-job-scheduler'
-import { processActivities } from '../../activitypub/process/process'
 import { ACTIVITY_PUB } from '../../../initializers/constants'
+import { processActivities } from '../../activitypub/process/process'
+import { ActivityPubHttpPayload } from './activitypub-http-job-scheduler'
 
 async function process (payload: ActivityPubHttpPayload, jobId: number) {
   logger.info('Processing ActivityPub fetcher in job %d.', jobId)

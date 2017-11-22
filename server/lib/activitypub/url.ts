@@ -21,6 +21,10 @@ function getVideoAbuseActivityPubUrl (videoAbuse: VideoAbuseInstance) {
   return CONFIG.WEBSERVER.URL + '/admin/video-abuses/' + videoAbuse.id
 }
 
+function getVideoViewActivityPubUrl (byAccount: AccountInstance, video: VideoInstance) {
+  return video.url + '#views/' + byAccount.uuid + '/' + new Date().toISOString()
+}
+
 function getAccountFollowActivityPubUrl (accountFollow: AccountFollowInstance) {
   const me = accountFollow.AccountFollower
   const following = accountFollow.AccountFollowing
@@ -56,5 +60,6 @@ export {
   getAccountFollowAcceptActivityPubUrl,
   getAnnounceActivityPubUrl,
   getUpdateActivityPubUrl,
-  getUndoActivityPubUrl
+  getUndoActivityPubUrl,
+  getVideoViewActivityPubUrl
 }

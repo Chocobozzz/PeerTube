@@ -49,6 +49,12 @@ async function follow (account: AccountInstance, targetAccountURL: string) {
       },
       transaction: t
     })
+
+    if (accountFollow.state !== 'accepted') {
+      accountFollow.state = 'accepted'
+      await accountFollow.save({ transaction: t })
+    }
+
     accountFollow.AccountFollower = account
     accountFollow.AccountFollowing = targetAccount
 

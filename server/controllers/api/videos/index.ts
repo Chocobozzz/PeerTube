@@ -11,10 +11,15 @@ import {
   resetSequelizeInstance,
   retryTransactionWrapper
 } from '../../../helpers'
+import { getServerAccount } from '../../../helpers/utils'
 import { CONFIG, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT, VIDEO_PRIVACIES } from '../../../initializers'
 import { database as db } from '../../../initializers/database'
 import { sendAddVideo } from '../../../lib/activitypub/send/send-add'
 import { sendUpdateVideo } from '../../../lib/activitypub/send/send-update'
+import { shareVideoByServer } from '../../../lib/activitypub/share'
+import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
+import { fetchRemoteVideoDescription } from '../../../lib/activitypub/videos'
+import { sendCreateViewToVideoFollowers } from '../../../lib/index'
 import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler/transcoding-job-scheduler'
 import {
   asyncMiddleware,
@@ -35,9 +40,7 @@ import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
 import { rateVideoRouter } from './rate'
-import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
-import { shareVideoByServer } from '../../../lib/activitypub/share'
-import { fetchRemoteVideoDescription } from '../../../lib/activitypub/videos'
+import { sendCreateViewToOrigin } from '../../../lib/activitypub/send/send-create'
 
 const videosRouter = express.Router()
 
@@ -311,17 +314,18 @@ async function updateVideo (req: express.Request, res: express.Response) {
 async function getVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
+  const baseIncrementPromise = videoInstance.increment('views')
+    .then(() => getServerAccount())
+
   if (videoInstance.isOwned()) {
     // The increment is done directly in the database, not using the instance value
-    // FIXME: make a real view system
-    // For example, only add a view when a user watch a video during 30s etc
-    videoInstance.increment('views')
-      .then(() => {
-        // TODO: send to followers a notification
-      })
-      .catch(err => logger.error('Cannot add view to video %s.', videoInstance.uuid, err))
+    baseIncrementPromise
+      .then(serverAccount => sendCreateViewToVideoFollowers(serverAccount, videoInstance, undefined))
+      .catch(err => logger.error('Cannot add view to video/send view to followers for %s.', videoInstance.uuid, err))
   } else {
-    // TODO: send view event to followers
+    baseIncrementPromise
+      .then(serverAccount => sendCreateViewToOrigin(serverAccount, videoInstance, undefined))
+      .catch(err => logger.error('Cannot send view to origin server for %s.', videoInstance.uuid, err))
   }
 
   // Do not wait the view system

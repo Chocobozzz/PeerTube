@@ -1,9 +1,11 @@
 import { ActivityCreate, VideoChannelObject } from '../../../../shared'
 import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects/video-abuse-object'
+import { ViewObject } from '../../../../shared/models/activitypub/objects/view-object'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { getOrCreateAccountAndServer } from '../account'
+import { sendCreateViewToVideoFollowers } from '../send/send-create'
 import { getVideoChannelActivityPubUrl } from '../url'
 import { videoChannelActivityObjectToDBAttributes } from './misc'
 
@@ -12,7 +14,9 @@ async function processCreateActivity (activity: ActivityCreate) {
   const activityType = activityObject.type
   const account = await getOrCreateAccountAndServer(activity.actor)
 
-  if (activityType === 'VideoChannel') {
+  if (activityType === 'View') {
+    return processCreateView(activityObject as ViewObject)
+  } else if (activityType === 'VideoChannel') {
     return processCreateVideoChannel(account, activityObject as VideoChannelObject)
   } else if (activityType === 'Flag') {
     return processCreateVideoAbuse(account, activityObject as VideoAbuseObject)
@@ -29,6 +33,19 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function processCreateView (view: ViewObject) {
+  const video = await db.Video.loadByUrlAndPopulateAccount(view.object)
+
+  if (!video) throw new Error('Unknown video ' + view.object)
+
+  const account = await db.Account.loadByUrl(view.actor)
+  if (!account) throw new Error('Unknown account ' + view.actor)
+
+  await video.increment('views')
+
+  if (video.isOwned()) await sendCreateViewToVideoFollowers(account, video, undefined)
+}
 
 function processCreateVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
   const options = {
