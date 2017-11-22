@@ -1,14 +1,14 @@
 import * as express from 'express'
 import { Activity, ActivityAdd } from '../../../shared/models/activitypub/activity'
-import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
+import { activityPubCollectionPagination } from '../../helpers/activitypub'
+import { pageToStartAndCount } from '../../helpers/core-utils'
 import { database as db } from '../../initializers'
+import { ACTIVITY_PUB } from '../../initializers/constants'
 import { addActivityData } from '../../lib/activitypub/send/send-add'
 import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 import { announceActivityData } from '../../lib/index'
 import { asyncMiddleware, localAccountValidator } from '../../middlewares'
 import { AccountInstance } from '../../models/account/account-interface'
-import { pageToStartAndCount } from '../../helpers/core-utils'
-import { ACTIVITY_PUB } from '../../initializers/constants'
 
 const outboxRouter = express.Router()
 
@@ -36,14 +36,18 @@ async function outboxController (req: express.Request, res: express.Response, ne
 
   for (const video of data.data) {
     const videoObject = video.toActivityPubObject()
-    let addActivity: ActivityAdd = await addActivityData(video.url, account, video, video.VideoChannel.url, videoObject)
 
     // This is a shared video
-    if (video.VideoShare !== undefined) {
+    if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
+      const addActivity = await addActivityData(video.url, video.VideoChannel.Account, video, video.VideoChannel.url, videoObject)
+
       const url = getAnnounceActivityPubUrl(video.url, account)
       const announceActivity = await announceActivityData(url, account, addActivity)
+
       activities.push(announceActivity)
     } else {
+      const addActivity = await addActivityData(video.url, account, video, video.VideoChannel.url, videoObject)
+
       activities.push(addActivity)
     }
   }

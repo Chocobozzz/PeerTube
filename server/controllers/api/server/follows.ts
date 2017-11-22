@@ -148,9 +148,16 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
   const follow: AccountFollowInstance = res.locals.follow
 
   await db.sequelize.transaction(async t => {
-    await sendUndoFollow(follow, t)
+    if (follow.state === 'accepted') await sendUndoFollow(follow, t)
+
     await follow.destroy({ transaction: t })
   })
+
+  // Destroy the account that will destroy video channels, videos and video files too
+  // This could be long so don't wait this task
+  const following = follow.AccountFollowing
+  following.destroy()
+    .catch(err => logger.error('Cannot destroy account that we do not follow anymore %s.', following.url, err))
 
   return res.status(204).end()
 }
