@@ -3,13 +3,12 @@ import * as Sequelize from 'sequelize'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
 import { ResultList } from '../../../shared/models/result-list.model'
 import { Video as FormattedVideo, VideoDetails as FormattedDetailsVideo } from '../../../shared/models/videos/video.model'
+import { AccountVideoRateInstance } from '../account/account-video-rate-interface'
 
 import { TagAttributes, TagInstance } from './tag-interface'
 import { VideoChannelInstance } from './video-channel-interface'
 import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 import { VideoShareInstance } from './video-share-interface'
-import { UserVideoRate } from '../../../shared/models/videos/user-video-rate.model'
-import { AccountVideoRateInstance } from '../account/account-video-rate-interface'
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string
@@ -40,12 +39,7 @@ export namespace VideoMethods {
   export type GetLicenceLabel = (this: VideoInstance) => string
   export type GetLanguageLabel = (this: VideoInstance) => string
 
-  // Return thumbnail name
-  export type GenerateThumbnailFromData = (video: VideoInstance, thumbnailData: string) => Promise<string>
-
   export type List = () => Bluebird<VideoInstance[]>
-  export type ListOwnedAndPopulateAccountAndTags = () => Bluebird<VideoInstance[]>
-  export type ListOwnedByAccount = (account: string) => Bluebird<VideoInstance[]>
 
   export type ListAllAndSharedByAccountForOutbox = (
     accountId: number,
@@ -65,9 +59,6 @@ export namespace VideoMethods {
   export type Load = (id: number) => Bluebird<VideoInstance>
   export type LoadByUUID = (uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
   export type LoadByUrlAndPopulateAccount = (url: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
-  export type LoadLocalVideoByUUID = (uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
-  export type LoadByHostAndUUID = (fromHost: string, uuid: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
-  export type LoadAndPopulateAccount = (id: number) => Bluebird<VideoInstance>
   export type LoadAndPopulateAccountAndServerAndTags = (id: number) => Bluebird<VideoInstance>
   export type LoadByUUIDAndPopulateAccountAndServerAndTags = (uuid: string) => Bluebird<VideoInstance>
   export type LoadByUUIDOrURL = (uuid: string, url: string, t?: Sequelize.Transaction) => Bluebird<VideoInstance>
@@ -79,21 +70,15 @@ export namespace VideoMethods {
 }
 
 export interface VideoClass {
-  generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
   list: VideoMethods.List
   listAllAndSharedByAccountForOutbox: VideoMethods.ListAllAndSharedByAccountForOutbox
   listForApi: VideoMethods.ListForApi
   listUserVideosForApi: VideoMethods.ListUserVideosForApi
-  listOwnedAndPopulateAccountAndTags: VideoMethods.ListOwnedAndPopulateAccountAndTags
-  listOwnedByAccount: VideoMethods.ListOwnedByAccount
   load: VideoMethods.Load
-  loadAndPopulateAccount: VideoMethods.LoadAndPopulateAccount
   loadAndPopulateAccountAndServerAndTags: VideoMethods.LoadAndPopulateAccountAndServerAndTags
-  loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
   loadByUUID: VideoMethods.LoadByUUID
   loadByUrlAndPopulateAccount: VideoMethods.LoadByUrlAndPopulateAccount
   loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
-  loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
   loadByUUIDAndPopulateAccountAndServerAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndServerAndTags
   searchAndPopulateAccountAndServerAndTags: VideoMethods.SearchAndPopulateAccountAndServerAndTags
 }

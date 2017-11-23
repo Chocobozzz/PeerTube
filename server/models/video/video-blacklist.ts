@@ -12,10 +12,7 @@ import {
 
 let BlacklistedVideo: Sequelize.Model<BlacklistedVideoInstance, BlacklistedVideoAttributes>
 let toFormattedJSON: BlacklistedVideoMethods.ToFormattedJSON
-let countTotal: BlacklistedVideoMethods.CountTotal
-let list: BlacklistedVideoMethods.List
 let listForApi: BlacklistedVideoMethods.ListForApi
-let loadById: BlacklistedVideoMethods.LoadById
 let loadByVideoId: BlacklistedVideoMethods.LoadByVideoId
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
@@ -34,10 +31,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
   const classMethods = [
     associate,
 
-    countTotal,
-    list,
     listForApi,
-    loadById,
     loadByVideoId
   ]
   const instanceMethods = [
@@ -83,14 +77,6 @@ function associate (models) {
   })
 }
 
-countTotal = function () {
-  return BlacklistedVideo.count()
-}
-
-list = function () {
-  return BlacklistedVideo.findAll()
-}
-
 listForApi = function (start: number, count: number, sort: SortType) {
   const query = {
     offset: start,
@@ -105,10 +91,6 @@ listForApi = function (start: number, count: number, sort: SortType) {
       total: count
     }
   })
-}
-
-loadById = function (id: number) {
-  return BlacklistedVideo.findById(id)
 }
 
 loadByVideoId = function (id: number) {

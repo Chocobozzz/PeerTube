@@ -10,10 +10,8 @@ export namespace AccountMethods {
   export type Load = (id: number) => Bluebird<AccountInstance>
   export type LoadByUUID = (uuid: string) => Bluebird<AccountInstance>
   export type LoadByUrl = (url: string, transaction?: Sequelize.Transaction) => Bluebird<AccountInstance>
-  export type LoadAccountByServerAndUUID = (uuid: string, serverId: number, transaction: Sequelize.Transaction) => Bluebird<AccountInstance>
   export type LoadLocalByName = (name: string) => Bluebird<AccountInstance>
   export type LoadByNameAndHost = (name: string, host: string) => Bluebird<AccountInstance>
-  export type ListOwned = () => Bluebird<AccountInstance[]>
 
   export type ToActivityPubObject = (this: AccountInstance) => ActivityPubActor
   export type ToFormattedJSON = (this: AccountInstance) => FormattedAccount
@@ -26,13 +24,11 @@ export namespace AccountMethods {
 
 export interface AccountClass {
   loadApplication: AccountMethods.LoadApplication
-  loadAccountByServerAndUUID: AccountMethods.LoadAccountByServerAndUUID
   load: AccountMethods.Load
   loadByUUID: AccountMethods.LoadByUUID
   loadByUrl: AccountMethods.LoadByUrl
   loadLocalByName: AccountMethods.LoadLocalByName
   loadByNameAndHost: AccountMethods.LoadByNameAndHost
-  listOwned: AccountMethods.ListOwned
 }
 
 export interface AccountAttributes {

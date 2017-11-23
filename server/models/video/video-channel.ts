@@ -12,7 +12,6 @@ let toFormattedJSON: VideoChannelMethods.ToFormattedJSON
 let toActivityPubObject: VideoChannelMethods.ToActivityPubObject
 let isOwned: VideoChannelMethods.IsOwned
 let countByAccount: VideoChannelMethods.CountByAccount
-let listOwned: VideoChannelMethods.ListOwned
 let listForApi: VideoChannelMethods.ListForApi
 let listByAccount: VideoChannelMethods.ListByAccount
 let loadByIdAndAccount: VideoChannelMethods.LoadByIdAndAccount
@@ -88,7 +87,6 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
     listForApi,
     listByAccount,
-    listOwned,
     loadByIdAndAccount,
     loadAndPopulateAccount,
     loadByUUIDAndPopulateAccount,
@@ -190,17 +188,6 @@ countByAccount = function (accountId: number) {
   }
 
   return VideoChannel.count(query)
-}
-
-listOwned = function () {
-  const query = {
-    where: {
-      remote: false
-    },
-    include: [ VideoChannel['sequelize'].models.Account ]
-  }
-
-  return VideoChannel.findAll(query)
 }
 
 listForApi = function (start: number, count: number, sort: string) {

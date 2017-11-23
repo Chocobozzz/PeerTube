@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize'
 import { VideoChannelCreate } from '../../shared/models'
-import { logger } from '../helpers'
 import { database as db } from '../initializers'
 import { AccountInstance } from '../models'
 import { getVideoChannelActivityPubUrl } from './activitypub/url'
@@ -27,21 +26,8 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   return videoChannelCreated
 }
 
-async function fetchVideoChannelByHostAndUUID (serverHost: string, uuid: string, t: Sequelize.Transaction) {
-  try {
-    const videoChannel = await db.VideoChannel.loadByHostAndUUID(serverHost, uuid, t)
-    if (!videoChannel) throw new Error('Video channel not found')
-
-    return videoChannel
-  } catch (err) {
-    logger.error('Cannot load video channel from host and uuid.', { error: err.stack, serverHost, uuid })
-    throw err
-  }
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  createVideoChannel,
-  fetchVideoChannelByHostAndUUID
+  createVideoChannel
 }

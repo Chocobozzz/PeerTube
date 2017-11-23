@@ -3,19 +3,12 @@ import * as Sequelize from 'sequelize'
 import { logger } from '../../helpers'
 
 import { addMethodsToModel } from '../utils'
-import {
-  OAuthTokenInstance,
-  OAuthTokenAttributes,
-
-  OAuthTokenMethods,
-  OAuthTokenInfo
-} from './oauth-token-interface'
+import { OAuthTokenAttributes, OAuthTokenInfo, OAuthTokenInstance, OAuthTokenMethods } from './oauth-token-interface'
 
 let OAuthToken: Sequelize.Model<OAuthTokenInstance, OAuthTokenAttributes>
 let getByRefreshTokenAndPopulateClient: OAuthTokenMethods.GetByRefreshTokenAndPopulateClient
 let getByTokenAndPopulateUser: OAuthTokenMethods.GetByTokenAndPopulateUser
 let getByRefreshTokenAndPopulateUser: OAuthTokenMethods.GetByRefreshTokenAndPopulateUser
-let removeByUserId: OAuthTokenMethods.RemoveByUserId
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   OAuthToken = sequelize.define<OAuthTokenInstance, OAuthTokenAttributes>('OAuthToken',
@@ -62,8 +55,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
     getByRefreshTokenAndPopulateClient,
     getByTokenAndPopulateUser,
-    getByRefreshTokenAndPopulateUser,
-    removeByUserId
+    getByRefreshTokenAndPopulateUser
   ]
   addMethodsToModel(OAuthToken, classMethods)
 
@@ -169,14 +161,4 @@ getByRefreshTokenAndPopulateUser = function (refreshToken: string) {
 
     return token
   })
-}
-
-removeByUserId = function (userId: number) {
-  const query = {
-    where: {
-      userId: userId
-    }
-  }
-
-  return OAuthToken.destroy(query)
 }
