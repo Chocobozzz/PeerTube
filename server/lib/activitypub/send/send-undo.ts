@@ -1,14 +1,14 @@
 import { Transaction } from 'sequelize'
 import { ActivityCreate, ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub/activity'
+import { getServerAccount } from '../../../helpers/utils'
 import { AccountInstance } from '../../../models'
 import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
-import { broadcastToFollowers, getAccountsToForwardVideoAction, unicastTo } from './misc'
-import { followActivityData } from './send-follow'
-import { getAccountFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
 import { VideoInstance } from '../../../models/video/video-interface'
-import { likeActivityData } from './send-like'
+import { getAccountFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
+import { broadcastToFollowers, getAccountsToForwardVideoAction, unicastTo } from './misc'
 import { createActivityData, createDislikeActivityData } from './send-create'
-import { getServerAccount } from '../../../helpers/utils'
+import { followActivityData } from './send-follow'
+import { likeActivityData } from './send-like'
 
 async function sendUndoFollow (accountFollow: AccountFollowInstance, t: Transaction) {
   const me = accountFollow.AccountFollower
@@ -74,7 +74,6 @@ async function sendUndoDislikeToVideoFollowers (byAccount: AccountInstance, vide
   const followersException = [ byAccount ]
   return broadcastToFollowers(data, serverAccount, accountsToForwardView, t, followersException)
 }
-
 
 // ---------------------------------------------------------------------------
 
