@@ -49,7 +49,7 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
 }
 
 function onError (err: Error, jobId: number) {
-  logger.error('Error when broadcasting ActivityPub request in job %d.', jobId, err)
+  logger.error('Error when fetcher ActivityPub request in job %d.', jobId, err)
   return Promise.resolve()
 }
 

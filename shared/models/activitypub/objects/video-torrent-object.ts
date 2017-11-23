@@ -4,6 +4,7 @@ import {
   ActivityTagObject,
   ActivityUrlObject
 } from './common-objects'
+import { ActivityPubOrderedCollection } from '../activitypub-ordered-collection'
 
 export interface VideoTorrentObject {
   type: 'Video'
@@ -24,4 +25,6 @@ export interface VideoTorrentObject {
   icon: ActivityIconObject
   url: ActivityUrlObject[]
   actor?: string
+  likes?: ActivityPubOrderedCollection<string>
+  dislikes?: ActivityPubOrderedCollection<string>
 }

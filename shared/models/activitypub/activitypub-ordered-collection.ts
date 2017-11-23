@@ -1,9 +1,9 @@
 import { Activity } from './activity'
 
-export interface ActivityPubOrderedCollection {
+export interface ActivityPubOrderedCollection<T> {
   '@context': string[]
   type: 'OrderedCollection' | 'OrderedCollectionPage'
   totalItems: number
   partOf?: string
-  orderedItems: Activity[]
+  orderedItems: T[]
 }

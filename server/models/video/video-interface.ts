@@ -8,6 +8,8 @@ import { TagAttributes, TagInstance } from './tag-interface'
 import { VideoChannelInstance } from './video-channel-interface'
 import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 import { VideoShareInstance } from './video-share-interface'
+import { UserVideoRate } from '../../../shared/models/videos/user-video-rate.model'
+import { AccountVideoRateInstance } from '../account/account-video-rate-interface'
 
 export namespace VideoMethods {
   export type GetThumbnailName = (this: VideoInstance) => string
@@ -123,6 +125,7 @@ export interface VideoAttributes {
   Tags?: TagInstance[]
   VideoFiles?: VideoFileInstance[]
   VideoShares?: VideoShareInstance[]
+  AccountVideoRates?: AccountVideoRateInstance[]
 }
 
 export interface VideoInstance extends VideoClass, VideoAttributes, Sequelize.Instance<VideoAttributes> {

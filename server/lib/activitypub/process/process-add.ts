@@ -1,11 +1,13 @@
 import * as Bluebird from 'bluebird'
 import { VideoTorrentObject } from '../../../../shared'
 import { ActivityAdd } from '../../../../shared/models/activitypub/activity'
+import { VideoRateType } from '../../../../shared/models/videos/video-rate.type'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
+import { VideoInstance } from '../../../models/video/video-interface'
 import { getOrCreateAccountAndServer } from '../account'
 import { getOrCreateVideoChannel } from '../video-channels'
 import { generateThumbnailFromUrl } from '../videos'
@@ -35,13 +37,29 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processAddVideo (account: AccountInstance, activity: ActivityAdd, videoChannel: VideoChannelInstance, video: VideoTorrentObject) {
+async function processAddVideo (
+  account: AccountInstance,
+  activity: ActivityAdd,
+  videoChannel: VideoChannelInstance,
+  videoToCreateData: VideoTorrentObject
+) {
   const options = {
-    arguments: [ account, activity, videoChannel, video ],
+    arguments: [ account, activity, videoChannel, videoToCreateData ],
     errorMessage: 'Cannot insert the remote video with many retries.'
   }
 
-  return retryTransactionWrapper(addRemoteVideo, options)
+  const video = await retryTransactionWrapper(addRemoteVideo, options)
+
+  // Process outside the transaction because we could fetch remote data
+  if (videoToCreateData.likes && Array.isArray(videoToCreateData.likes.orderedItems)) {
+    await createRates(videoToCreateData.likes.orderedItems, video, 'like')
+  }
+
+  if (videoToCreateData.dislikes && Array.isArray(videoToCreateData.dislikes.orderedItems)) {
+    await createRates(videoToCreateData.dislikes.orderedItems, video, 'dislike')
+  }
+
+  return video
 }
 
 function addRemoteVideo (account: AccountInstance,
@@ -85,4 +103,31 @@ function addRemoteVideo (account: AccountInstance,
 
     return videoCreated
   })
+}
+
+async function createRates (accountUrls: string[], video: VideoInstance, rate: VideoRateType) {
+  let rateCounts = 0
+  const tasks: Bluebird<any>[] = []
+
+  for (const accountUrl of accountUrls) {
+    const account = await getOrCreateAccountAndServer(accountUrl)
+    const p = db.AccountVideoRate
+      .create({
+        videoId: video.id,
+        accountId: account.id,
+        type: rate
+      })
+      .then(() => rateCounts += 1)
+
+    tasks.push(p)
+  }
+
+  await Promise.all(tasks)
+
+  logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
+
+  // This is "likes" and "dislikes"
+  await video.increment(rate + 's', { by: rateCounts })
+
+  return
 }

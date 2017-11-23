@@ -31,7 +31,11 @@ async function processActivities (activities: Activity[], inboxAccount?: Account
       continue
     }
 
-    await activityProcessor(activity, inboxAccount)
+    try {
+      await activityProcessor(activity, inboxAccount)
+    } catch (err) {
+      logger.warn('Cannot process activity %s.', activity.type, err)
+    }
   }
 }
 
