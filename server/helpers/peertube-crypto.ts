@@ -1,17 +1,8 @@
-import {
-  PRIVATE_RSA_KEY_SIZE,
-  BCRYPT_SALT_SIZE
-} from '../initializers'
-import {
-  bcryptComparePromise,
-  bcryptGenSaltPromise,
-  bcryptHashPromise,
-  createPrivateKey,
-  getPublicKey
-} from './core-utils'
-import { logger } from './logger'
+import { BCRYPT_SALT_SIZE, PRIVATE_RSA_KEY_SIZE } from '../initializers'
 import { AccountInstance } from '../models/account/account-interface'
+import { bcryptComparePromise, bcryptGenSaltPromise, bcryptHashPromise, createPrivateKey, getPublicKey } from './core-utils'
 import { jsig } from './custom-jsonld-signature'
+import { logger } from './logger'
 
 async function createPrivateAndPublicKeys () {
   logger.info('Generating a RSA key...')

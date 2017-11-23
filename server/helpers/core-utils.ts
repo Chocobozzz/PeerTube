@@ -3,23 +3,14 @@
   Useful to avoid circular dependencies.
 */
 
-import { join } from 'path'
-import { pseudoRandomBytes } from 'crypto'
-import {
-  readdir,
-  readFile,
-  rename,
-  unlink,
-  writeFile,
-  access,
-  stat,
-  Stats
-} from 'fs'
-import * as mkdirp from 'mkdirp'
 import * as bcrypt from 'bcrypt'
 import * as createTorrent from 'create-torrent'
-import * as rimraf from 'rimraf'
+import { pseudoRandomBytes } from 'crypto'
+import { readdir, readFile, rename, stat, Stats, unlink, writeFile } from 'fs'
+import * as mkdirp from 'mkdirp'
+import { join } from 'path'
 import * as pem from 'pem'
+import * as rimraf from 'rimraf'
 
 function isTestInstance () {
   return process.env.NODE_ENV === 'test'
@@ -100,7 +91,6 @@ function promisify2WithVoid<T, U> (func: (arg1: T, arg2: U, cb: (err: any) => vo
   }
 }
 
-const readFilePromise = promisify2<string, string, string>(readFile)
 const readFileBufferPromise = promisify1<string, Buffer>(readFile)
 const unlinkPromise = promisify1WithVoid<string>(unlink)
 const renamePromise = promisify2WithVoid<string, string>(rename)
@@ -108,7 +98,6 @@ const writeFilePromise = promisify2WithVoid<string, any>(writeFile)
 const readdirPromise = promisify1<string, string[]>(readdir)
 const mkdirpPromise = promisify1<string, string>(mkdirp)
 const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
-const accessPromise = promisify1WithVoid<string | Buffer>(access)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
 const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
@@ -130,14 +119,12 @@ export {
   promisify1,
 
   readdirPromise,
-  readFilePromise,
   readFileBufferPromise,
   unlinkPromise,
   renamePromise,
   writeFilePromise,
   mkdirpPromise,
   pseudoRandomBytesPromise,
-  accessPromise,
   createPrivateKey,
   getPublicKey,
   bcryptComparePromise,

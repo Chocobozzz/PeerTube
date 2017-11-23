@@ -1,35 +1,23 @@
-import * as Promise from 'bluebird'
-import * as express from 'express'
+import * as Bluebird from 'bluebird'
+import { Response } from 'express'
 import 'express-validator'
 import { values } from 'lodash'
 import 'multer'
 import * as validator from 'validator'
 import { VideoRateType } from '../../../shared'
-import { logger } from '../../helpers'
-import {
-  CONSTRAINTS_FIELDS,
-  database as db,
-  VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
-  VIDEO_PRIVACIES,
-  VIDEO_RATE_TYPES
-} from '../../initializers'
-import { VideoInstance } from '../../models'
+import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_RATE_TYPES } from '../../initializers'
+import { database as db } from '../../initializers/database'
+import { VideoInstance } from '../../models/video/video-interface'
+import { logger } from '../logger'
 import { isActivityPubUrlValid } from './activitypub/misc'
 import { exists, isArray } from './misc'
+import { VIDEO_PRIVACIES } from '../../initializers/constants'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
-const VIDEO_EVENTS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_EVENTS
 
 function isVideoCategoryValid (value: number) {
   return VIDEO_CATEGORIES[value] !== undefined
-}
-
-// Maybe we don't know the remote category, but that doesn't matter
-function isRemoteVideoCategoryValid (value: string) {
-  return validator.isInt('' + value)
 }
 
 function isVideoUrlValid (value: string) {
@@ -40,27 +28,8 @@ function isVideoLicenceValid (value: number) {
   return VIDEO_LICENCES[value] !== undefined
 }
 
-function isVideoPrivacyValid (value: string) {
-  return VIDEO_PRIVACIES[value] !== undefined
-}
-
-// Maybe we don't know the remote privacy setting, but that doesn't matter
-function isRemoteVideoPrivacyValid (value: string) {
-  return validator.isInt('' + value)
-}
-
-// Maybe we don't know the remote licence, but that doesn't matter
-function isRemoteVideoLicenceValid (value: string) {
-  return validator.isInt('' + value)
-}
-
 function isVideoLanguageValid (value: number) {
   return value === null || VIDEO_LANGUAGES[value] !== undefined
-}
-
-// Maybe we don't know the remote language, but that doesn't matter
-function isRemoteVideoLanguageValid (value: string) {
-  return validator.isInt('' + value)
 }
 
 function isVideoNSFWValid (value: any) {
@@ -93,32 +62,12 @@ function isVideoTagsValid (tags: string[]) {
          tags.every(tag => isVideoTagValid(tag))
 }
 
-function isVideoThumbnailValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL)
-}
-
-function isVideoThumbnailDataValid (value: string) {
-  return exists(value) && validator.isByteLength(value, VIDEOS_CONSTRAINTS_FIELDS.THUMBNAIL_DATA)
-}
-
 function isVideoAbuseReasonValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
 }
 
 function isVideoViewsValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.VIEWS)
-}
-
-function isVideoLikesValid (value: string) {
-  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.LIKES)
-}
-
-function isVideoDislikesValid (value: string) {
-  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DISLIKES)
-}
-
-function isVideoEventCountValid (value: string) {
-  return exists(value) && validator.isInt(value + '', VIDEO_EVENTS_CONSTRAINTS_FIELDS.COUNT)
 }
 
 function isVideoRatingTypeValid (value: string) {
@@ -141,24 +90,16 @@ function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | 
   return new RegExp('^video/(webm|mp4|ogg)$', 'i').test(file.mimetype)
 }
 
-function isVideoFileSizeValid (value: string) {
-  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
-}
-
-function isVideoFileResolutionValid (value: string) {
-  return exists(value) && validator.isInt(value + '')
-}
-
-function isVideoFileExtnameValid (value: string) {
-  return VIDEOS_CONSTRAINTS_FIELDS.EXTNAME.indexOf(value) !== -1
-}
-
 function isVideoFileInfoHashValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
-function checkVideoExists (id: string, res: express.Response, callback: () => void) {
-  let promise: Promise<VideoInstance>
+function isVideoPrivacyValid (value: string) {
+  return VIDEO_PRIVACIES[value] !== undefined
+}
+
+function checkVideoExists (id: string, res: Response, callback: () => void) {
+  let promise: Bluebird<VideoInstance>
   if (validator.isInt(id)) {
     promise = db.Video.loadAndPopulateAccountAndServerAndTags(+id)
   } else { // UUID
@@ -168,17 +109,17 @@ function checkVideoExists (id: string, res: express.Response, callback: () => vo
   promise.then(video => {
     if (!video) {
       return res.status(404)
-                .json({ error: 'Video not found' })
-                .end()
+        .json({ error: 'Video not found' })
+        .end()
     }
 
     res.locals.video = video
     callback()
   })
-  .catch(err => {
-    logger.error('Error in video request validator.', err)
-    return res.sendStatus(500)
-  })
+    .catch(err => {
+      logger.error('Error in video request validator.', err)
+      return res.sendStatus(500)
+    })
 }
 
 // ---------------------------------------------------------------------------
@@ -193,25 +134,13 @@ export {
   isVideoFileInfoHashValid,
   isVideoNameValid,
   isVideoTagsValid,
-  isVideoThumbnailValid,
-  isVideoThumbnailDataValid,
-  isVideoFileExtnameValid,
   isVideoAbuseReasonValid,
   isVideoFile,
   isVideoViewsValid,
-  isVideoLikesValid,
   isVideoRatingTypeValid,
-  isVideoDislikesValid,
-  isVideoEventCountValid,
-  isVideoFileSizeValid,
-  isVideoPrivacyValid,
-  isRemoteVideoPrivacyValid,
   isVideoDurationValid,
-  isVideoFileResolutionValid,
-  checkVideoExists,
   isVideoTagValid,
-  isRemoteVideoCategoryValid,
-  isRemoteVideoLicenceValid,
   isVideoUrlValid,
-  isRemoteVideoLanguageValid
+  isVideoPrivacyValid,
+  checkVideoExists
 }

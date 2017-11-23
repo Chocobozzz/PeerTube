@@ -1,7 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-
-import { CONFIG } from '../initializers'
 import { VideoResolution } from '../../shared/models/videos/video-resolution.enum'
+import { CONFIG } from '../initializers'
 
 function getVideoFileHeight (path: string) {
   return new Promise<number>((res, rej) => {

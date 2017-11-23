@@ -14,12 +14,6 @@ function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
 }
 
-function isAccountNameWithHostValid (value: string) {
-  const [ name, host ] = value.split('@')
-
-  return isAccountNameValid(name) && isHostValid(host)
-}
-
 function checkVideoAccountExists (id: string, res: express.Response, callback: () => void) {
   let promise: Promise<AccountInstance>
   if (validator.isInt(id)) {
@@ -48,6 +42,5 @@ function checkVideoAccountExists (id: string, res: express.Response, callback: (
 
 export {
   checkVideoAccountExists,
-  isAccountNameWithHostValid,
   isAccountNameValid
 }

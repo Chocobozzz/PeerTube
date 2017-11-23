@@ -2,8 +2,6 @@
 import * as mkdirp from 'mkdirp'
 import * as path from 'path'
 import * as winston from 'winston'
-
-// Do not use barrel (dependencies issues)
 import { CONFIG } from '../initializers/constants'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT

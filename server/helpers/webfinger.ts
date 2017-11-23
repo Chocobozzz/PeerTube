@@ -1,7 +1,6 @@
 import * as WebFinger from 'webfinger.js'
 import { WebFingerData } from '../../shared'
 import { fetchRemoteAccount } from '../lib/activitypub/account'
-
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators'
 

@@ -1,30 +1,30 @@
-import { body, param, query } from 'express-validator/check'
 import * as express from 'express'
-
-import { database as db } from '../../initializers/database'
-import { checkErrors } from './utils'
-import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
+import { body, param, query } from 'express-validator/check'
+import { UserRight, VideoPrivacy } from '../../../shared'
+import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import {
-  logger,
+  checkVideoExists,
+  isVideoAbuseReasonValid,
+  isVideoCategoryValid,
+  isVideoDescriptionValid,
   isVideoDurationValid,
   isVideoFile,
-  isVideoNameValid,
-  isVideoCategoryValid,
-  isVideoLicenceValid,
-  isVideoDescriptionValid,
   isVideoLanguageValid,
-  isVideoTagsValid,
+  isVideoLicenceValid,
+  isVideoNameValid,
   isVideoNSFWValid,
-  isIdOrUUIDValid,
-  isVideoAbuseReasonValid,
+  isVideoPrivacyValid,
   isVideoRatingTypeValid,
-  getDurationFromVideoFile,
-  checkVideoExists,
-  isIdValid,
-  isVideoPrivacyValid
-} from '../../helpers'
-import { UserRight, VideoPrivacy } from '../../../shared'
+  isVideoTagsValid
+} from '../../helpers/custom-validators/videos'
+import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
+import { logger } from '../../helpers/logger'
+import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
+
+import { database as db } from '../../initializers/database'
+import { UserInstance } from '../../models/account/user-interface'
 import { authenticate } from '../oauth'
+import { checkErrors } from './utils'
 
 const videosAddValidator = [
   body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage(
@@ -185,7 +185,7 @@ const videosRemoveValidator = [
     checkErrors(req, res, () => {
       checkVideoExists(req.params.id, res, () => {
         // Check if the user who did the request is able to delete the video
-        checkUserCanDeleteVideo(res.locals.oauth.token.User.id, res, () => {
+        checkUserCanDeleteVideo(res.locals.oauth.token.User, res, () => {
           next()
         })
       })
@@ -246,7 +246,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserCanDeleteVideo (userId: number, res: express.Response, callback: () => void) {
+function checkUserCanDeleteVideo (user: UserInstance, res: express.Response, callback: () => void) {
   // Retrieve the user who did the request
   if (res.locals.video.isOwned() === false) {
     return res.status(403)
@@ -258,7 +258,6 @@ function checkUserCanDeleteVideo (userId: number, res: express.Response, callbac
   // The user can delete it if s/he is an admin
   // Or if s/he is the video's account
   const account = res.locals.video.VideoChannel.Account
-  const user = res.locals.oauth.token.User
   if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && account.userId !== user.id) {
     return res.status(403)
               .json({ error: 'Cannot remove video of another user' })
