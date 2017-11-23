@@ -47,6 +47,7 @@ import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
 import { sendDeleteVideo } from '../../lib/index'
 import * as Bluebird from 'bluebird'
+import { activityPubCollection } from '../../helpers/activitypub'
 
 const Buffer = safeBuffer.Buffer
 
@@ -359,6 +360,14 @@ function associate (models) {
     },
     onDelete: 'cascade'
   })
+
+  Video.hasMany(models.AccountVideoRate, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
 }
 
 function afterDestroy (video: VideoInstance) {
@@ -575,6 +584,25 @@ toActivityPubObject = function (this: VideoInstance) {
     }
   }
 
+  let likesObject
+  let dislikesObject
+
+  if (Array.isArray(this.AccountVideoRates)) {
+    const likes: string[] = []
+    const dislikes: string[] = []
+
+    for (const rate of this.AccountVideoRates) {
+      if (rate.type === 'like') {
+        likes.push(rate.Account.url)
+      } else if (rate.type === 'dislike') {
+        dislikes.push(rate.Account.url)
+      }
+    }
+
+    likesObject = activityPubCollection(likes)
+    dislikesObject = activityPubCollection(dislikes)
+  }
+
   const url = []
   for (const file of this.VideoFiles) {
     url.push({
@@ -630,7 +658,9 @@ toActivityPubObject = function (this: VideoInstance) {
       width: THUMBNAILS_SIZE.width,
       height: THUMBNAILS_SIZE.height
     },
-    url // FIXME: needed?
+    url,
+    likes: likesObject,
+    dislikes: dislikesObject
   }
 
   return videoObject
@@ -845,8 +875,12 @@ listAllAndSharedByAccountForOutbox = function (accountId: number, start: number,
           }
         ]
       },
-      Video['sequelize'].models.Tag,
-      Video['sequelize'].models.VideoFile
+      {
+        model: Video['sequelize'].models.AccountVideoRate,
+        include: [ Video['sequelize'].models.Account ]
+      },
+      Video['sequelize'].models.VideoFile,
+      Video['sequelize'].models.Tag
     ]
   }
 
@@ -1106,6 +1140,10 @@ loadAndPopulateAccountAndServerAndTags = function (id: number) {
           }
         ]
       },
+      {
+        model: Video['sequelize'].models.AccountVideoRate,
+        include: [ Video['sequelize'].models.Account ]
+      },
       Video['sequelize'].models.Tag,
       Video['sequelize'].models.VideoFile
     ]
@@ -1128,6 +1166,10 @@ loadByUUIDAndPopulateAccountAndServerAndTags = function (uuid: string) {
             include: [ { model: Video['sequelize'].models.Server, required: false } ]
           }
         ]
+      },
+      {
+        model: Video['sequelize'].models.AccountVideoRate,
+        include: [ Video['sequelize'].models.Account ]
       },
       Video['sequelize'].models.Tag,
       Video['sequelize'].models.VideoFile

@@ -24,6 +24,14 @@ function activityPubContextify <T> (data: T) {
   })
 }
 
+function activityPubCollection (results: any[]) {
+  return {
+    type: 'OrderedCollection',
+    totalItems: results.length,
+    orderedItems: results
+  }
+}
+
 function activityPubCollectionPagination (url: string, page: any, result: ResultList<any>) {
   let next: string
   let prev: string
@@ -74,5 +82,6 @@ function buildSignedActivity (byAccount: AccountInstance, data: Object) {
 export {
   activityPubContextify,
   activityPubCollectionPagination,
+  activityPubCollection,
   buildSignedActivity
 }
