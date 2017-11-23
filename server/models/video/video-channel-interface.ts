@@ -1,13 +1,11 @@
-import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
+import * as Sequelize from 'sequelize'
 
 import { ResultList } from '../../../shared'
-
-// Don't use barrel, import just what we need
-import { VideoChannel as FormattedVideoChannel } from '../../../shared/models/videos/video-channel.model'
-import { VideoInstance } from './video-interface'
-import { AccountInstance } from '../account/account-interface'
 import { VideoChannelObject } from '../../../shared/models/activitypub/objects/video-channel-object'
+import { VideoChannel as FormattedVideoChannel } from '../../../shared/models/videos/video-channel.model'
+import { AccountInstance } from '../account/account-interface'
+import { VideoInstance } from './video-interface'
 
 export namespace VideoChannelMethods {
   export type ToFormattedJSON = (this: VideoChannelInstance) => FormattedVideoChannel
@@ -15,7 +13,6 @@ export namespace VideoChannelMethods {
   export type IsOwned = (this: VideoChannelInstance) => boolean
 
   export type CountByAccount = (accountId: number) => Promise<number>
-  export type ListOwned = () => Promise<VideoChannelInstance[]>
   export type ListForApi = (start: number, count: number, sort: string) => Promise< ResultList<VideoChannelInstance> >
   export type LoadByIdAndAccount = (id: number, accountId: number) => Promise<VideoChannelInstance>
   export type ListByAccount = (accountId: number) => Promise< ResultList<VideoChannelInstance> >
@@ -32,10 +29,7 @@ export interface VideoChannelClass {
   countByAccount: VideoChannelMethods.CountByAccount
   listForApi: VideoChannelMethods.ListForApi
   listByAccount: VideoChannelMethods.ListByAccount
-  listOwned: VideoChannelMethods.ListOwned
   loadByIdAndAccount: VideoChannelMethods.LoadByIdAndAccount
-  loadByUUID: VideoChannelMethods.LoadByUUID
-  loadByHostAndUUID: VideoChannelMethods.LoadByHostAndUUID
   loadAndPopulateAccount: VideoChannelMethods.LoadAndPopulateAccount
   loadByUUIDAndPopulateAccount: VideoChannelMethods.LoadByUUIDAndPopulateAccount
   loadAndPopulateAccountAndVideos: VideoChannelMethods.LoadAndPopulateAccountAndVideos

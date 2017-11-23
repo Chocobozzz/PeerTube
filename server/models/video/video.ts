@@ -1,8 +1,8 @@
+import * as Bluebird from 'bluebird'
 import { map, maxBy, truncate } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
-import * as safeBuffer from 'safe-buffer'
 import * as Sequelize from 'sequelize'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
@@ -25,6 +25,7 @@ import {
   unlinkPromise,
   writeFilePromise
 } from '../../helpers'
+import { activityPubCollection } from '../../helpers/activitypub'
 import { isVideoUrlValid } from '../../helpers/custom-validators/videos'
 import {
   API_VERSION,
@@ -39,17 +40,13 @@ import {
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
 } from '../../initializers'
+import { sendDeleteVideo } from '../../lib/index'
 
 import { addMethodsToModel, getSort } from '../utils'
 
 import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
-import { sendDeleteVideo } from '../../lib/index'
-import * as Bluebird from 'bluebird'
-import { activityPubCollection } from '../../helpers/activitypub'
-
-const Buffer = safeBuffer.Buffer
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
@@ -77,20 +74,14 @@ let getCategoryLabel: VideoMethods.GetCategoryLabel
 let getLicenceLabel: VideoMethods.GetLicenceLabel
 let getLanguageLabel: VideoMethods.GetLanguageLabel
 
-let generateThumbnailFromData: VideoMethods.GenerateThumbnailFromData
 let list: VideoMethods.List
 let listForApi: VideoMethods.ListForApi
 let listAllAndSharedByAccountForOutbox: VideoMethods.ListAllAndSharedByAccountForOutbox
 let listUserVideosForApi: VideoMethods.ListUserVideosForApi
-let loadByHostAndUUID: VideoMethods.LoadByHostAndUUID
-let listOwnedAndPopulateAccountAndTags: VideoMethods.ListOwnedAndPopulateAccountAndTags
-let listOwnedByAccount: VideoMethods.ListOwnedByAccount
 let load: VideoMethods.Load
 let loadByUrlAndPopulateAccount: VideoMethods.LoadByUrlAndPopulateAccount
 let loadByUUID: VideoMethods.LoadByUUID
 let loadByUUIDOrURL: VideoMethods.LoadByUUIDOrURL
-let loadLocalVideoByUUID: VideoMethods.LoadLocalVideoByUUID
-let loadAndPopulateAccount: VideoMethods.LoadAndPopulateAccount
 let loadAndPopulateAccountAndServerAndTags: VideoMethods.LoadAndPopulateAccountAndServerAndTags
 let loadByUUIDAndPopulateAccountAndServerAndTags: VideoMethods.LoadByUUIDAndPopulateAccountAndServerAndTags
 let searchAndPopulateAccountAndServerAndTags: VideoMethods.SearchAndPopulateAccountAndServerAndTags
@@ -267,21 +258,15 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
   const classMethods = [
     associate,
 
-    generateThumbnailFromData,
     list,
     listAllAndSharedByAccountForOutbox,
     listForApi,
     listUserVideosForApi,
-    listOwnedAndPopulateAccountAndTags,
-    listOwnedByAccount,
     load,
     loadByUrlAndPopulateAccount,
-    loadAndPopulateAccount,
     loadAndPopulateAccountAndServerAndTags,
-    loadByHostAndUUID,
     loadByUUIDOrURL,
     loadByUUID,
-    loadLocalVideoByUUID,
     loadByUUIDAndPopulateAccountAndServerAndTags,
     searchAndPopulateAccountAndServerAndTags
   ]
@@ -803,16 +788,6 @@ removeTorrent = function (this: VideoInstance, videoFile: VideoFileInstance) {
 
 // ------------------------------ STATICS ------------------------------
 
-generateThumbnailFromData = function (video: VideoInstance, thumbnailData: string) {
-  // Creating the thumbnail for a remote video
-
-  const thumbnailName = video.getThumbnailName()
-  const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
-  return writeFilePromise(thumbnailPath, Buffer.from(thumbnailData, 'binary')).then(() => {
-    return thumbnailName
-  })
-}
-
 list = function () {
   const query = {
     include: [ Video['sequelize'].models.VideoFile ]
@@ -970,84 +945,6 @@ listForApi = function (start: number, count: number, sort: string) {
   })
 }
 
-loadByHostAndUUID = function (fromHost: string, uuid: string, t?: Sequelize.Transaction) {
-  const query: Sequelize.FindOptions<VideoAttributes> = {
-    where: {
-      uuid
-    },
-    include: [
-      {
-        model: Video['sequelize'].models.VideoFile
-      },
-      {
-        model: Video['sequelize'].models.VideoChannel,
-        include: [
-          {
-            model: Video['sequelize'].models.Account,
-            include: [
-              {
-                model: Video['sequelize'].models.Server,
-                required: true,
-                where: {
-                  host: fromHost
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-
-  if (t !== undefined) query.transaction = t
-
-  return Video.findOne(query)
-}
-
-listOwnedAndPopulateAccountAndTags = function () {
-  const query = {
-    where: {
-      remote: false
-    },
-    include: [
-      Video['sequelize'].models.VideoFile,
-      {
-        model: Video['sequelize'].models.VideoChannel,
-        include: [ Video['sequelize'].models.Account ]
-      },
-      Video['sequelize'].models.Tag
-    ]
-  }
-
-  return Video.findAll(query)
-}
-
-listOwnedByAccount = function (account: string) {
-  const query = {
-    where: {
-      remote: false
-    },
-    include: [
-      {
-        model: Video['sequelize'].models.VideoFile
-      },
-      {
-        model: Video['sequelize'].models.VideoChannel,
-        include: [
-          {
-            model: Video['sequelize'].models.Account,
-            where: {
-              name: account
-            }
-          }
-        ]
-      }
-    ]
-  }
-
-  return Video.findAll(query)
-}
-
 load = function (id: number) {
   return Video.findById(id)
 }
@@ -1098,34 +995,6 @@ loadByUUIDOrURL = function (uuid: string, url: string, t?: Sequelize.Transaction
   if (t !== undefined) query.transaction = t
 
   return Video.findOne(query)
-}
-
-loadLocalVideoByUUID = function (uuid: string, t?: Sequelize.Transaction) {
-  const query: Sequelize.FindOptions<VideoAttributes> = {
-    where: {
-      uuid,
-      remote: false
-    },
-    include: [ Video['sequelize'].models.VideoFile ]
-  }
-
-  if (t !== undefined) query.transaction = t
-
-  return Video.findOne(query)
-}
-
-loadAndPopulateAccount = function (id: number) {
-  const options = {
-    include: [
-      Video['sequelize'].models.VideoFile,
-      {
-        model: Video['sequelize'].models.VideoChannel,
-        include: [ Video['sequelize'].models.Account ]
-      }
-    ]
-  }
-
-  return Video.findById(id, options)
 }
 
 loadAndPopulateAccountAndServerAndTags = function (id: number) {

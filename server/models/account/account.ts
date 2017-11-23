@@ -20,14 +20,12 @@ import { addMethodsToModel } from '../utils'
 import { AccountAttributes, AccountInstance, AccountMethods } from './account-interface'
 
 let Account: Sequelize.Model<AccountInstance, AccountAttributes>
-let loadAccountByServerAndUUID: AccountMethods.LoadAccountByServerAndUUID
 let load: AccountMethods.Load
 let loadApplication: AccountMethods.LoadApplication
 let loadByUUID: AccountMethods.LoadByUUID
 let loadByUrl: AccountMethods.LoadByUrl
 let loadLocalByName: AccountMethods.LoadLocalByName
 let loadByNameAndHost: AccountMethods.LoadByNameAndHost
-let listOwned: AccountMethods.ListOwned
 let isOwned: AccountMethods.IsOwned
 let toActivityPubObject: AccountMethods.ToActivityPubObject
 let toFormattedJSON: AccountMethods.ToFormattedJSON
@@ -185,14 +183,12 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
 
   const classMethods = [
     associate,
-    loadAccountByServerAndUUID,
     loadApplication,
     load,
     loadByUUID,
     loadByUrl,
     loadLocalByName,
-    loadByNameAndHost,
-    listOwned
+    loadByNameAndHost
   ]
   const instanceMethods = [
     isOwned,
@@ -355,16 +351,6 @@ getPublicKeyUrl = function (this: AccountInstance) {
 
 // ------------------------------ STATICS ------------------------------
 
-listOwned = function () {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    where: {
-      serverId: null
-    }
-  }
-
-  return Account.findAll(query)
-}
-
 loadApplication = function () {
   return Account.findOne({
     include: [
@@ -440,16 +426,4 @@ loadByUrl = function (url: string, transaction?: Sequelize.Transaction) {
   }
 
   return Account.findOne(query)
-}
-
-loadAccountByServerAndUUID = function (uuid: string, serverId: number, transaction: Sequelize.Transaction) {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    where: {
-      serverId,
-      uuid
-    },
-    transaction
-  }
-
-  return Account.find(query)
 }
