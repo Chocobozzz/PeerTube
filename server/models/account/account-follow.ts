@@ -93,7 +93,7 @@ toFormattedJSON = function (this: AccountFollowInstance) {
   return json
 }
 
-loadByAccountAndTarget = function (accountId: number, targetAccountId: number) {
+loadByAccountAndTarget = function (accountId: number, targetAccountId: number, t?: Sequelize.Transaction) {
   const query = {
     where: {
       accountId,
@@ -110,7 +110,8 @@ loadByAccountAndTarget = function (accountId: number, targetAccountId: number) {
         required: true,
         as: 'AccountFollowing'
       }
-    ]
+    ],
+    transaction: t
   }
 
   return AccountFollow.findOne(query)

@@ -2,7 +2,7 @@ import { logger } from '../../../helpers'
 import { buildSignedActivity } from '../../../helpers/activitypub'
 import { doRequest } from '../../../helpers/requests'
 import { database as db } from '../../../initializers'
-import { ActivityPubHttpPayload } from './activitypub-http-job-scheduler'
+import { ActivityPubHttpPayload, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
 
 async function process (payload: ActivityPubHttpPayload, jobId: number) {
   logger.info('Processing ActivityPub broadcast in job %d.', jobId)
@@ -20,7 +20,12 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
 
   for (const uri of payload.uris) {
     options.uri = uri
-    await doRequest(options)
+
+    try {
+      await doRequest(options)
+    } catch (err) {
+      await maybeRetryRequestLater(err, payload, uri)
+    }
   }
 }
 

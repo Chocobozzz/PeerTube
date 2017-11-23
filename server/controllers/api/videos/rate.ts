@@ -3,6 +3,7 @@ import { UserVideoRateUpdate } from '../../../../shared'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { VIDEO_RATE_TYPES } from '../../../initializers'
 import { database as db } from '../../../initializers/database'
+import { sendVideoRateChangeToFollowers, sendVideoRateChangeToOrigin } from '../../../lib/activitypub/videos'
 import { asyncMiddleware, authenticate, videoRateValidator } from '../../../middlewares'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { VideoInstance } from '../../../models/video/video-interface'
@@ -82,10 +83,10 @@ async function rateVideo (req: express.Request, res: express.Response) {
     // It is useful for the user to have a feedback
     await videoInstance.increment(incrementQuery, sequelizeOptions)
 
-    if (videoInstance.isOwned() === false) {
-      // TODO: Send a event to original server
+    if (videoInstance.isOwned()) {
+      await sendVideoRateChangeToFollowers(accountInstance, videoInstance, likesToIncrement, dislikesToIncrement, t)
     } else {
-      // TODO: Send update to followers
+      await sendVideoRateChangeToOrigin(accountInstance, videoInstance, likesToIncrement, dislikesToIncrement, t)
     }
   })
 

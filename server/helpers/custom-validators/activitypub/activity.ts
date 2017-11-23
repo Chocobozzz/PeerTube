@@ -1,9 +1,9 @@
 import * as validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub/activity'
 import { isAccountAcceptActivityValid, isAccountDeleteActivityValid, isAccountFollowActivityValid } from './account'
-import { isAnnounceValid } from './announce'
+import { isAnnounceActivityValid } from './announce'
 import { isActivityPubUrlValid } from './misc'
-import { isUndoValid } from './undo'
+import { isUndoActivityValid } from './undo'
 import { isVideoChannelCreateActivityValid, isVideoChannelDeleteActivityValid, isVideoChannelUpdateActivityValid } from './video-channels'
 import {
   isVideoFlagValid,
@@ -12,6 +12,7 @@ import {
   isVideoTorrentUpdateActivityValid
 } from './videos'
 import { isViewActivityValid } from './view'
+import { isDislikeActivityValid, isLikeActivityValid } from './rate'
 
 function isRootActivityValid (activity: any) {
   return Array.isArray(activity['@context']) &&
@@ -34,7 +35,8 @@ const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean
   Follow: checkFollowActivity,
   Accept: checkAcceptActivity,
   Announce: checkAnnounceActivity,
-  Undo: checkUndoActivity
+  Undo: checkUndoActivity,
+  Like: checkLikeActivity
 }
 
 function isActivityValid (activity: any) {
@@ -55,9 +57,10 @@ export {
 // ---------------------------------------------------------------------------
 
 function checkCreateActivity (activity: any) {
-  return isVideoChannelCreateActivityValid(activity) ||
-    isVideoFlagValid(activity) ||
-    isViewActivityValid(activity)
+  return isViewActivityValid(activity) ||
+    isDislikeActivityValid(activity) ||
+    isVideoChannelCreateActivityValid(activity) ||
+    isVideoFlagValid(activity)
 }
 
 function checkAddActivity (activity: any) {
@@ -84,9 +87,13 @@ function checkAcceptActivity (activity: any) {
 }
 
 function checkAnnounceActivity (activity: any) {
-  return isAnnounceValid(activity)
+  return isAnnounceActivityValid(activity)
 }
 
 function checkUndoActivity (activity: any) {
-  return isUndoValid(activity)
+  return isUndoActivityValid(activity)
+}
+
+function checkLikeActivity (activity: any) {
+  return isLikeActivityValid(activity)
 }

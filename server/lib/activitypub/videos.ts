@@ -1,9 +1,20 @@
 import { join } from 'path'
 import * as request from 'request'
+import { Transaction } from 'sequelize'
 import { ActivityIconObject } from '../../../shared/index'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import { CONFIG, REMOTE_SCHEME, STATIC_PATHS } from '../../initializers/constants'
+import { AccountInstance } from '../../models/account/account-interface'
 import { VideoInstance } from '../../models/video/video-interface'
+import { sendLikeToOrigin } from './index'
+import { sendCreateDislikeToOrigin, sendCreateDislikeToVideoFollowers } from './send/send-create'
+import { sendLikeToVideoFollowers } from './send/send-like'
+import {
+  sendUndoDislikeToOrigin,
+  sendUndoDislikeToVideoFollowers,
+  sendUndoLikeToOrigin,
+  sendUndoLikeToVideoFollowers
+} from './send/send-undo'
 
 function fetchRemoteVideoPreview (video: VideoInstance) {
   // FIXME: use url
@@ -37,8 +48,42 @@ function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObjec
   return doRequestAndSaveToFile(options, thumbnailPath)
 }
 
+function sendVideoRateChangeToFollowers (account: AccountInstance, video: VideoInstance, likes: number, dislikes: number, t: Transaction) {
+  const tasks: Promise<any>[] = []
+
+  // Undo Like
+  if (likes < 0) tasks.push(sendUndoLikeToVideoFollowers(account, video, t))
+  // Like
+  if (likes > 0) tasks.push(sendLikeToVideoFollowers(account, video, t))
+
+  // Undo Dislike
+  if (dislikes < 0) tasks.push(sendUndoDislikeToVideoFollowers(account, video, t))
+  // Dislike
+  if (dislikes > 0) tasks.push(sendCreateDislikeToVideoFollowers(account, video, t))
+
+  return Promise.all(tasks)
+}
+
+function sendVideoRateChangeToOrigin (account: AccountInstance, video: VideoInstance, likes: number, dislikes: number, t: Transaction) {
+  const tasks: Promise<any>[] = []
+
+  // Undo Like
+  if (likes < 0) tasks.push(sendUndoLikeToOrigin(account, video, t))
+  // Like
+  if (likes > 0) tasks.push(sendLikeToOrigin(account, video, t))
+
+  // Undo Dislike
+  if (dislikes < 0) tasks.push(sendUndoDislikeToOrigin(account, video, t))
+  // Dislike
+  if (dislikes > 0) tasks.push(sendCreateDislikeToOrigin(account, video, t))
+
+  return Promise.all(tasks)
+}
+
 export {
   fetchRemoteVideoPreview,
   fetchRemoteVideoDescription,
-  generateThumbnailFromUrl
+  generateThumbnailFromUrl,
+  sendVideoRateChangeToFollowers,
+  sendVideoRateChangeToOrigin
 }

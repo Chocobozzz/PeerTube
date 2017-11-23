@@ -5,9 +5,10 @@ import { logger, retryTransactionWrapper } from '../../../helpers'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { getOrCreateAccountAndServer } from '../account'
-import { sendCreateViewToVideoFollowers } from '../send/send-create'
+import { sendCreateDislikeToVideoFollowers, sendCreateViewToVideoFollowers } from '../send/send-create'
 import { getVideoChannelActivityPubUrl } from '../url'
 import { videoChannelActivityObjectToDBAttributes } from './misc'
+import { DislikeObject } from '../../../../shared/models/activitypub/objects/dislike-object'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -16,6 +17,8 @@ async function processCreateActivity (activity: ActivityCreate) {
 
   if (activityType === 'View') {
     return processCreateView(activityObject as ViewObject)
+  } else if (activityType === 'Dislike') {
+    return processCreateDislike(account, activityObject as DislikeObject)
   } else if (activityType === 'VideoChannel') {
     return processCreateVideoChannel(account, activityObject as VideoChannelObject)
   } else if (activityType === 'Flag') {
@@ -33,6 +36,36 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function processCreateDislike (byAccount: AccountInstance, dislike: DislikeObject) {
+  const options = {
+    arguments: [ byAccount, dislike ],
+    errorMessage: 'Cannot dislike the video with many retries.'
+  }
+
+  return retryTransactionWrapper(createVideoDislike, options)
+}
+
+function createVideoDislike (byAccount: AccountInstance, dislike: DislikeObject) {
+  return db.sequelize.transaction(async t => {
+    const video = await db.Video.loadByUrlAndPopulateAccount(dislike.object)
+
+    if (!video) throw new Error('Unknown video ' + dislike.object)
+
+    const rate = {
+      type: 'dislike' as 'dislike',
+      videoId: video.id,
+      accountId: byAccount.id
+    }
+    const [ , created ] = await db.AccountVideoRate.findOrCreate({
+      where: rate,
+      defaults: rate
+    })
+    await video.increment('dislikes')
+
+    if (video.isOwned() && created === true) await sendCreateDislikeToVideoFollowers(byAccount, video, undefined)
+  })
+}
 
 async function processCreateView (view: ViewObject) {
   const video = await db.Video.loadByUrlAndPopulateAccount(view.object)
