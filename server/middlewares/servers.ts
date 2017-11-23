@@ -20,26 +20,10 @@ function setBodyHostsPort (req: express.Request, res: express.Response, next: ex
   return next()
 }
 
-function setBodyHostPort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.body.host) return next()
-
-  const hostWithPort = getHostWithPort(req.body.host)
-
-  // Problem with the url parsing?
-  if (hostWithPort === null) {
-    return res.sendStatus(500)
-  }
-
-  req.body.host = hostWithPort
-
-  return next()
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  setBodyHostsPort,
-  setBodyHostPort
+  setBodyHostsPort
 }
 
 // ---------------------------------------------------------------------------

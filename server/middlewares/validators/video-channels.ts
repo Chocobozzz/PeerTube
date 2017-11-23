@@ -1,18 +1,13 @@
-import { body, param } from 'express-validator/check'
 import * as express from 'express'
-
-import { checkErrors } from './utils'
-import { database as db } from '../../initializers'
-import {
-  logger,
-  isIdOrUUIDValid,
-  isVideoChannelDescriptionValid,
-  isVideoChannelNameValid,
-  checkVideoChannelExists,
-  checkVideoAccountExists
-} from '../../helpers'
-import { UserInstance } from '../../models'
+import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
+import { checkVideoAccountExists } from '../../helpers/custom-validators/accounts'
+import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
+import { checkVideoChannelExists, isIdOrUUIDValid } from '../../helpers/index'
+import { logger } from '../../helpers/logger'
+import { database as db } from '../../initializers'
+import { UserInstance } from '../../models'
+import { checkErrors } from './utils'
 
 const listVideoAccountChannelsValidator = [
   param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),

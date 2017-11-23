@@ -46,19 +46,6 @@ function getVideoPrivacies (url: string) {
   return makeGetRequest(url, path)
 }
 
-function getAllVideosListBy (url: string) {
-  const path = '/api/v1/videos'
-
-  return request(url)
-          .get(path)
-          .query({ sort: 'createdAt' })
-          .query({ start: 0 })
-          .query({ count: 10000 })
-          .set('Accept', 'application/json')
-          .expect(200)
-          .expect('Content-Type', /json/)
-}
-
 function getVideo (url: string, id: number | string, expectedStatus = 200) {
   const path = '/api/v1/videos/' + id
 
@@ -312,7 +299,6 @@ export {
   getVideoLicences,
   getVideoPrivacies,
   getVideoLanguages,
-  getAllVideosListBy,
   getMyVideos,
   getVideo,
   getVideoWithToken,

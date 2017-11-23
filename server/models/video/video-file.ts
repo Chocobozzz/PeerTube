@@ -1,18 +1,10 @@
-import * as Sequelize from 'sequelize'
 import { values } from 'lodash'
-
-import { CONSTRAINTS_FIELDS } from '../../initializers'
-import {
-  isVideoFileResolutionValid,
-  isVideoFileSizeValid,
-  isVideoFileInfoHashValid
-} from '../../helpers'
+import * as Sequelize from 'sequelize'
+import { isVideoFileInfoHashValid, isVideoFileResolutionValid, isVideoFileSizeValid } from '../../helpers/custom-validators/videos'
+import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 
 import { addMethodsToModel } from '../utils'
-import {
-  VideoFileInstance,
-  VideoFileAttributes
-} from './video-file-interface'
+import { VideoFileAttributes, VideoFileInstance } from './video-file-interface'
 
 let VideoFile: Sequelize.Model<VideoFileInstance, VideoFileAttributes>
 
