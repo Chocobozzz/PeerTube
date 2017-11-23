@@ -6,6 +6,8 @@
 Decentralized video streaming platform using P2P (BitTorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
 </h4>
 
+**PeerTube is sponsored by Framasoft, a non-profit that promotes, spreads and develops free-libre software. If you want to support the project, please [consider donating them](https://soutenir.framasoft.org/en/).**
+
 <p align="center">
   <strong>Client</strong>
 
