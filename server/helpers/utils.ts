@@ -1,11 +1,10 @@
 import * as express from 'express'
 import * as Sequelize from 'sequelize'
-
-import { pseudoRandomBytesPromise } from './core-utils'
-import { CONFIG, database as db } from '../initializers'
 import { ResultList } from '../../shared'
 import { VideoResolution } from '../../shared/models/videos/video-resolution.enum'
+import { CONFIG, database as db } from '../initializers'
 import { AccountInstance } from '../models/account/account-interface'
+import { pseudoRandomBytesPromise } from './core-utils'
 import { logger } from './logger'
 
 function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {

@@ -24,10 +24,6 @@ function isVideoChannelNameValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.NAME)
 }
 
-function isVideoChannelUUIDValid (value: string) {
-  return exists(value) && validator.isUUID('' + value, 4)
-}
-
 function checkVideoChannelExists (id: string, res: express.Response, callback: () => void) {
   let promise: Promise<VideoChannelInstance>
   if (validator.isInt(id)) {
@@ -57,7 +53,6 @@ function checkVideoChannelExists (id: string, res: express.Response, callback: (
 export {
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
-  isVideoChannelUUIDValid,
   checkVideoChannelExists,
   isVideoChannelUrlValid
 }

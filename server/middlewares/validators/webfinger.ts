@@ -1,9 +1,9 @@
-import { query } from 'express-validator/check'
 import * as express from 'express'
-
-import { checkErrors } from './utils'
-import { logger, isWebfingerResourceValid } from '../../helpers'
+import { query } from 'express-validator/check'
+import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
 import { database as db } from '../../initializers'
+import { checkErrors } from './utils'
+import { logger } from '../../helpers/logger'
 
 const webfingerValidator = [
   query('resource').custom(isWebfingerResourceValid).withMessage('Should have a valid webfinger resource'),
