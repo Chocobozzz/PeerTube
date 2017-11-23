@@ -14,6 +14,10 @@ import {
   wait
 } from '../utils'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../utils/follows'
+import { getUserAccessToken } from '../utils/login'
+import { dateIsValid, webtorrentAdd } from '../utils/miscs'
+import { createUser } from '../utils/users'
+import { getVideo, rateVideo, testVideoImage } from '../utils/videos'
 
 const expect = chai.expect
 
@@ -166,11 +170,31 @@ describe('Test follows', function () {
   it('Should propagate previous uploaded videos on a new following', async function () {
     this.timeout(20000)
 
+    const video4Attributes = {
+      name: 'server3-4',
+      category: 2,
+      nsfw: true,
+      licence: 6,
+      tags: [ 'tag1', 'tag2', 'tag3' ]
+    }
+
     await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-2' })
     await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-3' })
-    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-4' })
+    await uploadVideo(servers[2].url, servers[2].accessToken, video4Attributes)
     await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-5' })
     await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-6' })
+
+    {
+      const user = { username: 'captain', password: 'password' }
+      await createUser(servers[2].url, servers[2].accessToken, user.username, user.password)
+      const userAccessToken = await getUserAccessToken(servers[2], user)
+
+      const res = await getVideosList(servers[2].url)
+      const video4 = res.body.data.find(v => v.name === 'server3-4')
+
+      await rateVideo(servers[2].url, servers[2].accessToken, video4.id, 'like')
+      await rateVideo(servers[2].url, userAccessToken, video4.id, 'dislike')
+    }
 
     await wait(5000)
 
@@ -189,6 +213,45 @@ describe('Test follows', function () {
     expect(video2).to.not.be.undefined
     expect(video4).to.not.be.undefined
     expect(video6).to.not.be.undefined
+
+    const res2 = await getVideo(servers[0].url, video4.id)
+    const videoDetails = res2.body
+
+    expect(videoDetails.name).to.equal('server3-4')
+    expect(videoDetails.category).to.equal(2)
+    expect(videoDetails.categoryLabel).to.equal('Films')
+    expect(videoDetails.licence).to.equal(6)
+    expect(videoDetails.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
+    expect(videoDetails.language).to.equal(3)
+    expect(videoDetails.languageLabel).to.equal('Mandarin')
+    expect(videoDetails.nsfw).to.be.ok
+    expect(videoDetails.description).to.equal('my super description')
+    expect(videoDetails.serverHost).to.equal('localhost:9003')
+    expect(videoDetails.account).to.equal('root')
+    expect(videoDetails.likes).to.equal(1)
+    expect(videoDetails.dislikes).to.equal(1)
+    expect(videoDetails.isLocal).to.be.false
+    expect(videoDetails.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
+    expect(dateIsValid(videoDetails.createdAt)).to.be.true
+    expect(dateIsValid(videoDetails.updatedAt)).to.be.true
+    expect(videoDetails.files).to.have.lengthOf(1)
+
+    const file = videoDetails.files[0]
+    const magnetUri = file.magnetUri
+    expect(file.magnetUri).to.have.lengthOf.above(2)
+    expect(file.torrentUrl).to.equal(`${servers[2].url}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
+    expect(file.fileUrl).to.equal(`${servers[2].url}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
+    expect(file.resolution).to.equal(720)
+    expect(file.resolutionLabel).to.equal('720p')
+    expect(file.size).to.equal(218910)
+
+    const test = await testVideoImage(servers[2].url, 'video_short.webm', videoDetails.thumbnailPath)
+    expect(test).to.equal(true)
+
+    const torrent = await webtorrentAdd(magnetUri)
+    expect(torrent.files).to.be.an('array')
+    expect(torrent.files.length).to.equal(1)
+    expect(torrent.files[0].path).to.exist.and.to.not.equal('')
   })
 
   after(async function () {

@@ -1,10 +1,10 @@
-import { ActivityCreate, ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub/activity'
+import { ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub/activity'
+import { DislikeObject } from '../../../../shared/models/activitypub/objects/dislike-object'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { database as db } from '../../../initializers'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { DislikeObject } from '../../../../shared/models/activitypub/objects/dislike-object'
-import { sendUndoLikeToVideoFollowers } from '../send/send-undo'
 import { sendUndoDislikeToVideoFollowers } from '../index'
+import { sendUndoLikeToVideoFollowers } from '../send/send-undo'
 
 async function processUndoActivity (activity: ActivityUndo) {
   const activityToUndo = activity.object
