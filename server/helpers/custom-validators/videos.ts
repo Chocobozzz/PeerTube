@@ -90,12 +90,20 @@ function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | 
   return new RegExp('^video/(webm|mp4|ogg)$', 'i').test(file.mimetype)
 }
 
+function isVideoPrivacyValid (value: string) {
+  return VIDEO_PRIVACIES[value] !== undefined
+}
+
 function isVideoFileInfoHashValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.INFO_HASH)
 }
 
-function isVideoPrivacyValid (value: string) {
-  return VIDEO_PRIVACIES[value] !== undefined
+function isVideoFileResolutionValid (value: string) {
+  return exists(value) && validator.isInt(value + '')
+}
+
+function isVideoFileSizeValid (value: string) {
+  return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
 }
 
 function checkVideoExists (id: string, res: Response, callback: () => void) {
@@ -142,5 +150,7 @@ export {
   isVideoTagValid,
   isVideoUrlValid,
   isVideoPrivacyValid,
+  isVideoFileResolutionValid,
+  isVideoFileSizeValid,
   checkVideoExists
 }

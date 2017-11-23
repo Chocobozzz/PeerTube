@@ -1,14 +1,11 @@
 import * as Promise from 'bluebird'
-import * as validator from 'validator'
 import * as express from 'express'
 import 'express-validator'
-
+import * as validator from 'validator'
 import { database as db } from '../../initializers'
 import { AccountInstance } from '../../models'
 import { logger } from '../logger'
-
 import { isUserUsernameValid } from './users'
-import { isHostValid } from './servers'
 
 function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)

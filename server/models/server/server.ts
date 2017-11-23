@@ -44,7 +44,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
   )
 
   const classMethods = [
-    listBadServers
+    updateServersScoreAndRemoveBadOnes
   ]
   addMethodsToModel(Server, classMethods)
 
