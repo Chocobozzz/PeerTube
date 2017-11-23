@@ -1,6 +1,6 @@
 import { logger } from '../../../helpers'
 import { doRequest } from '../../../helpers/requests'
-import { ActivityPubHttpPayload } from './activitypub-http-job-scheduler'
+import { ActivityPubHttpPayload, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
 import { database as db } from '../../../initializers/database'
 import { buildSignedActivity } from '../../../helpers/activitypub'
 
@@ -18,7 +18,12 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
     json: signedBody
   }
 
-  await doRequest(options)
+  try {
+    await doRequest(options)
+  } catch (err) {
+    await maybeRetryRequestLater(err, payload, uri)
+    throw err
+  }
 }
 
 function onError (err: Error, jobId: number) {

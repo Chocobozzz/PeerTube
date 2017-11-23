@@ -2,7 +2,7 @@ import { isBaseActivityValid } from './misc'
 import { isVideoTorrentAddActivityValid } from './videos'
 import { isVideoChannelCreateActivityValid } from './video-channels'
 
-function isAnnounceValid (activity: any) {
+function isAnnounceActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Announce') &&
     (
       isVideoChannelCreateActivityValid(activity.object) ||
@@ -11,5 +11,5 @@ function isAnnounceValid (activity: any) {
 }
 
 export {
-  isAnnounceValid
+  isAnnounceActivityValid
 }

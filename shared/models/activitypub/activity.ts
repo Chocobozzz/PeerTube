@@ -1,13 +1,14 @@
 import { ActivityPubSignature } from './activitypub-signature'
 import { VideoChannelObject, VideoTorrentObject } from './objects'
+import { DislikeObject } from './objects/dislike-object'
 import { VideoAbuseObject } from './objects/video-abuse-object'
 import { ViewObject } from './objects/view-object'
 
 export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate |
   ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce |
-  ActivityUndo
+  ActivityUndo | ActivityLike
 
-export type ActivityType = 'Create' | 'Add' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo'
+export type ActivityType = 'Create' | 'Add' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo' | 'Like'
 
 export interface BaseActivity {
   '@context'?: any[]
@@ -21,7 +22,7 @@ export interface BaseActivity {
 
 export interface ActivityCreate extends BaseActivity {
   type: 'Create'
-  object: VideoChannelObject | VideoAbuseObject | ViewObject
+  object: VideoChannelObject | VideoAbuseObject | ViewObject | DislikeObject
 }
 
 export interface ActivityAdd extends BaseActivity {
@@ -55,5 +56,10 @@ export interface ActivityAnnounce extends BaseActivity {
 
 export interface ActivityUndo extends BaseActivity {
   type: 'Undo',
-  object: ActivityFollow
+  object: ActivityFollow | ActivityLike | ActivityCreate
+}
+
+export interface ActivityLike extends BaseActivity {
+  type: 'Like',
+  object: string
 }

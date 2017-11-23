@@ -1,13 +1,16 @@
 import { isAccountFollowActivityValid } from './account'
 import { isBaseActivityValid } from './misc'
+import { isDislikeActivityValid, isLikeActivityValid } from './rate'
 
-function isUndoValid (activity: any) {
+function isUndoActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Undo') &&
     (
-      isAccountFollowActivityValid(activity.object)
+      isAccountFollowActivityValid(activity.object) ||
+      isLikeActivityValid(activity.object) ||
+      isDislikeActivityValid(activity.object)
     )
 }
 
 export {
-  isUndoValid
+  isUndoActivityValid
 }

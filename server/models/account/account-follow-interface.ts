@@ -5,7 +5,11 @@ import { ResultList } from '../../../shared/models/result-list.model'
 import { AccountInstance } from './account-interface'
 
 export namespace AccountFollowMethods {
-  export type LoadByAccountAndTarget = (accountId: number, targetAccountId: number) => Bluebird<AccountFollowInstance>
+  export type LoadByAccountAndTarget = (
+    accountId: number,
+    targetAccountId: number,
+    t?: Sequelize.Transaction
+  ) => Bluebird<AccountFollowInstance>
 
   export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountFollowInstance>>
   export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountFollowInstance>>

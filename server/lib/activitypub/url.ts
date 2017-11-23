@@ -25,6 +25,14 @@ function getVideoViewActivityPubUrl (byAccount: AccountInstance, video: VideoIns
   return video.url + '#views/' + byAccount.uuid + '/' + new Date().toISOString()
 }
 
+function getVideoLikeActivityPubUrl (byAccount: AccountInstance, video: VideoInstance) {
+  return byAccount.url + '#likes/' + video.id
+}
+
+function getVideoDislikeActivityPubUrl (byAccount: AccountInstance, video: VideoInstance) {
+  return byAccount.url + '#dislikes/' + video.id
+}
+
 function getAccountFollowActivityPubUrl (accountFollow: AccountFollowInstance) {
   const me = accountFollow.AccountFollower
   const following = accountFollow.AccountFollowing
@@ -61,5 +69,7 @@ export {
   getAnnounceActivityPubUrl,
   getUpdateActivityPubUrl,
   getUndoActivityPubUrl,
-  getVideoViewActivityPubUrl
+  getVideoViewActivityPubUrl,
+  getVideoLikeActivityPubUrl,
+  getVideoDislikeActivityPubUrl
 }

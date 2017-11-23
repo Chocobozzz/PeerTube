@@ -3,6 +3,7 @@ import { logger } from '../../../helpers/logger'
 import { ACTIVITY_PUB, database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { activitypubHttpJobScheduler } from '../../jobs/activitypub-http-job-scheduler/activitypub-http-job-scheduler'
+import { VideoInstance } from '../../../models/video/video-interface'
 
 async function broadcastToFollowers (
   data: any,
@@ -41,6 +42,27 @@ async function unicastTo (data: any, byAccount: AccountInstance, toAccountUrl: s
   return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpUnicastHandler', jobPayload)
 }
 
+function getOriginVideoAudience (video: VideoInstance) {
+  return {
+    to: [ video.VideoChannel.Account.url ],
+    cc: [ video.VideoChannel.Account.url + '/followers' ]
+  }
+}
+
+function getVideoFollowersAudience (video: VideoInstance) {
+  return {
+    to: [ video.VideoChannel.Account.url + '/followers' ],
+    cc: []
+  }
+}
+
+async function getAccountsToForwardVideoAction (byAccount: AccountInstance, video: VideoInstance) {
+  const accountsToForwardView = await db.VideoShare.loadAccountsByShare(video.id)
+  accountsToForwardView.push(video.VideoChannel.Account)
+
+  return accountsToForwardView
+}
+
 async function getAudience (accountSender: AccountInstance, isPublic = true) {
   const followerInboxUrls = await accountSender.getFollowerSharedInboxUrls()
 
@@ -64,5 +86,8 @@ async function getAudience (accountSender: AccountInstance, isPublic = true) {
 export {
   broadcastToFollowers,
   unicastTo,
-  getAudience
+  getAudience,
+  getOriginVideoAudience,
+  getAccountsToForwardVideoAction,
+  getVideoFollowersAudience
 }
