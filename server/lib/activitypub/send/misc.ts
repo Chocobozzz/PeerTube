@@ -29,7 +29,7 @@ async function forwardActivity (
 
   if (uris.length === 0) {
     logger.info('0 followers for %s, no forwarding.', toAccountFollowers.map(a => a.id).join(', '))
-    return
+    return undefined
   }
 
   logger.debug('Creating forwarding job.', { uris })
@@ -52,7 +52,7 @@ async function broadcastToFollowers (
   const uris = await computeFollowerUris(toAccountFollowers, followersException)
   if (uris.length === 0) {
     logger.info('0 followers for %s, no broadcasting.', toAccountFollowers.map(a => a.id).join(', '))
-    return
+    return undefined
   }
 
   logger.debug('Creating broadcast job.', { uris })

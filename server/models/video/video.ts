@@ -984,6 +984,7 @@ loadByUUIDOrURL = function (uuid: string, url: string, t?: Sequelize.Transaction
 
 loadAndPopulateAccountAndServerAndTags = function (id: number) {
   const options = {
+    order: [ [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ],
     include: [
       {
         model: Video['sequelize'].models.VideoChannel,
@@ -1012,6 +1013,7 @@ loadAndPopulateAccountAndServerAndTags = function (id: number) {
 
 loadByUUIDAndPopulateAccountAndServerAndTags = function (uuid: string) {
   const options = {
+    order: [ [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ],
     where: {
       uuid
     },

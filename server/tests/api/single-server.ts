@@ -605,7 +605,7 @@ describe('Test a single server', function () {
     expect(video.serverHost).to.equal('localhost:9001')
     expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
+    expect(video.tags).to.deep.equal([ 'supertag', 'tag1', 'tag2' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
 
@@ -645,7 +645,7 @@ describe('Test a single server', function () {
     expect(video.serverHost).to.equal('localhost:9001')
     expect(video.account).to.equal('root')
     expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'supertag' ])
+    expect(video.tags).to.deep.equal([ 'supertag', 'tag1', 'tag2' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
 
