@@ -2,8 +2,45 @@ import { Transaction } from 'sequelize'
 import { logger } from '../../../helpers/logger'
 import { ACTIVITY_PUB, database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
-import { activitypubHttpJobScheduler } from '../../jobs/activitypub-http-job-scheduler/activitypub-http-job-scheduler'
+import {
+  activitypubHttpJobScheduler,
+  ActivityPubHttpPayload
+} from '../../jobs/activitypub-http-job-scheduler/activitypub-http-job-scheduler'
 import { VideoInstance } from '../../../models/video/video-interface'
+import { Activity } from '../../../../shared/models/activitypub/activity'
+
+async function forwardActivity (
+  activity: Activity,
+  t: Transaction,
+  followersException: AccountInstance[] = []
+) {
+  const to = activity.to || []
+  const cc = activity.cc || []
+
+  const followersUrls: string[] = []
+  for (const dest of to.concat(cc)) {
+    if (dest.endsWith('/followers')) {
+      followersUrls.push(dest)
+    }
+  }
+
+  const toAccountFollowers = await db.Account.listByFollowersUrls(followersUrls)
+  const uris = await computeFollowerUris(toAccountFollowers, followersException)
+
+  if (uris.length === 0) {
+    logger.info('0 followers for %s, no forwarding.', toAccountFollowers.map(a => a.id).join(', '))
+    return
+  }
+
+  logger.debug('Creating forwarding job.', { uris })
+
+  const jobPayload: ActivityPubHttpPayload = {
+    uris,
+    body: activity
+  }
+
+  return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpBroadcastHandler', jobPayload)
+}
 
 async function broadcastToFollowers (
   data: any,
@@ -12,18 +49,15 @@ async function broadcastToFollowers (
   t: Transaction,
   followersException: AccountInstance[] = []
 ) {
-  const toAccountFollowerIds = toAccountFollowers.map(a => a.id)
-
-  const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds)
-  if (result.data.length === 0) {
-    logger.info('Not broadcast because of 0 followers for %s.', toAccountFollowerIds.join(', '))
-    return undefined
+  const uris = await computeFollowerUris(toAccountFollowers, followersException)
+  if (uris.length === 0) {
+    logger.info('0 followers for %s, no broadcasting.', toAccountFollowers.map(a => a.id).join(', '))
+    return
   }
 
-  const followersSharedInboxException = followersException.map(f => f.sharedInboxUrl)
-  const uris = result.data.filter(sharedInbox => followersSharedInboxException.indexOf(sharedInbox) === -1)
+  logger.debug('Creating broadcast job.', { uris })
 
-  const jobPayload = {
+  const jobPayload: ActivityPubHttpPayload = {
     uris,
     signatureAccountId: byAccount.id,
     body: data
@@ -33,7 +67,9 @@ async function broadcastToFollowers (
 }
 
 async function unicastTo (data: any, byAccount: AccountInstance, toAccountUrl: string, t: Transaction) {
-  const jobPayload = {
+  logger.debug('Creating unicast job.', { uri: toAccountUrl })
+
+  const jobPayload: ActivityPubHttpPayload = {
     uris: [ toAccountUrl ],
     signatureAccountId: byAccount.id,
     body: data
@@ -42,21 +78,21 @@ async function unicastTo (data: any, byAccount: AccountInstance, toAccountUrl: s
   return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpUnicastHandler', jobPayload)
 }
 
-function getOriginVideoAudience (video: VideoInstance) {
+function getOriginVideoAudience (video: VideoInstance, accountsInvolvedInVideo: AccountInstance[]) {
   return {
     to: [ video.VideoChannel.Account.url ],
-    cc: [ video.VideoChannel.Account.url + '/followers' ]
+    cc: accountsInvolvedInVideo.map(a => a.followersUrl)
   }
 }
 
-function getVideoFollowersAudience (video: VideoInstance) {
+function getVideoFollowersAudience (accountsInvolvedInVideo: AccountInstance[]) {
   return {
-    to: [ video.VideoChannel.Account.url + '/followers' ],
+    to: accountsInvolvedInVideo.map(a => a.followersUrl),
     cc: []
   }
 }
 
-async function getAccountsToForwardVideoAction (byAccount: AccountInstance, video: VideoInstance) {
+async function getAccountsInvolvedInVideo (video: VideoInstance) {
   const accountsToForwardView = await db.VideoShare.loadAccountsByShare(video.id)
   accountsToForwardView.push(video.VideoChannel.Account)
 
@@ -81,6 +117,16 @@ async function getAudience (accountSender: AccountInstance, isPublic = true) {
   return { to, cc }
 }
 
+async function computeFollowerUris (toAccountFollower: AccountInstance[], followersException: AccountInstance[]) {
+  const toAccountFollowerIds = toAccountFollower.map(a => a.id)
+
+  const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds)
+  const followersSharedInboxException = followersException.map(f => f.sharedInboxUrl)
+  const uris = result.data.filter(sharedInbox => followersSharedInboxException.indexOf(sharedInbox) === -1)
+
+  return uris
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -88,6 +134,7 @@ export {
   unicastTo,
   getAudience,
   getOriginVideoAudience,
-  getAccountsToForwardVideoAction,
-  getVideoFollowersAudience
+  getAccountsInvolvedInVideo,
+  getVideoFollowersAudience,
+  forwardActivity
 }

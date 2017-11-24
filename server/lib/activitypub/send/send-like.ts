@@ -1,11 +1,10 @@
 import { Transaction } from 'sequelize'
 import { ActivityLike } from '../../../../shared/models/activitypub/activity'
-import { getServerAccount } from '../../../helpers/utils'
 import { AccountInstance, VideoInstance } from '../../../models'
 import { getVideoLikeActivityPubUrl } from '../url'
 import {
   broadcastToFollowers,
-  getAccountsToForwardVideoAction,
+  getAccountsInvolvedInVideo,
   getAudience,
   getOriginVideoAudience,
   getVideoFollowersAudience,
@@ -15,7 +14,8 @@ import {
 async function sendLikeToOrigin (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byAccount, video)
 
-  const audience = getOriginVideoAudience(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const data = await likeActivityData(url, byAccount, video, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
@@ -24,14 +24,14 @@ async function sendLikeToOrigin (byAccount: AccountInstance, video: VideoInstanc
 async function sendLikeToVideoFollowers (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byAccount, video)
 
-  const audience = getVideoFollowersAudience(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const audience = getVideoFollowersAudience(accountsInvolvedInVideo)
   const data = await likeActivityData(url, byAccount, video, audience)
 
-  const accountsToForwardView = await getAccountsToForwardVideoAction(byAccount, video)
-  const serverAccount = await getServerAccount()
+  const toAccountsFollowers = await getAccountsInvolvedInVideo(video)
 
   const followersException = [ byAccount ]
-  return broadcastToFollowers(data, serverAccount, accountsToForwardView, t, followersException)
+  return broadcastToFollowers(data, byAccount, toAccountsFollowers, t, followersException)
 }
 
 async function likeActivityData (url: string, byAccount: AccountInstance, video: VideoInstance, audience?: { to: string[], cc: string[] }) {

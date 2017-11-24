@@ -26,6 +26,7 @@ let loadByUUID: AccountMethods.LoadByUUID
 let loadByUrl: AccountMethods.LoadByUrl
 let loadLocalByName: AccountMethods.LoadLocalByName
 let loadByNameAndHost: AccountMethods.LoadByNameAndHost
+let listByFollowersUrls: AccountMethods.ListByFollowersUrls
 let isOwned: AccountMethods.IsOwned
 let toActivityPubObject: AccountMethods.ToActivityPubObject
 let toFormattedJSON: AccountMethods.ToFormattedJSON
@@ -188,7 +189,8 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
     loadByUUID,
     loadByUrl,
     loadLocalByName,
-    loadByNameAndHost
+    loadByNameAndHost,
+    listByFollowersUrls
   ]
   const instanceMethods = [
     isOwned,
@@ -426,4 +428,17 @@ loadByUrl = function (url: string, transaction?: Sequelize.Transaction) {
   }
 
   return Account.findOne(query)
+}
+
+listByFollowersUrls = function (followersUrls: string[], transaction?: Sequelize.Transaction) {
+  const query: Sequelize.FindOptions<AccountAttributes> = {
+    where: {
+      followersUrl: {
+        [Sequelize.Op.in]: followersUrls
+      }
+    },
+    transaction
+  }
+
+  return Account.findAll(query)
 }

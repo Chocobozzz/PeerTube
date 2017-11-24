@@ -3,16 +3,15 @@ import { DislikeObject } from '../../../../shared/models/activitypub/objects/dis
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { database as db } from '../../../initializers'
-import { sendUndoDislikeToVideoFollowers } from '../index'
-import { sendUndoLikeToVideoFollowers } from '../send/send-undo'
+import { forwardActivity } from '../send/misc'
 
 async function processUndoActivity (activity: ActivityUndo) {
   const activityToUndo = activity.object
 
   if (activityToUndo.type === 'Like') {
-    return processUndoLike(activity.actor, activityToUndo)
+    return processUndoLike(activity.actor, activity)
   } else if (activityToUndo.type === 'Create' && activityToUndo.object.type === 'Dislike') {
-    return processUndoDislike(activity.actor, activityToUndo.object)
+    return processUndoDislike(activity.actor, activity)
   } else if (activityToUndo.type === 'Follow') {
     return processUndoFollow(activity.actor, activityToUndo)
   }
@@ -30,57 +29,69 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processUndoLike (actor: string, likeActivity: ActivityLike) {
+function processUndoLike (actor: string, activity: ActivityUndo) {
   const options = {
-    arguments: [ actor, likeActivity ],
+    arguments: [ actor, activity ],
     errorMessage: 'Cannot undo like with many retries.'
   }
 
   return retryTransactionWrapper(undoLike, options)
 }
 
-function undoLike (actor: string, likeActivity: ActivityLike) {
+function undoLike (actor: string, activity: ActivityUndo) {
+  const likeActivity = activity.object as ActivityLike
+
   return db.sequelize.transaction(async t => {
     const byAccount = await db.Account.loadByUrl(actor, t)
     if (!byAccount) throw new Error('Unknown account ' + actor)
 
-    const video = await db.Video.loadByUrlAndPopulateAccount(likeActivity.object)
+    const video = await db.Video.loadByUrlAndPopulateAccount(likeActivity.object, t)
     if (!video) throw new Error('Unknown video ' + likeActivity.actor)
 
     const rate = await db.AccountVideoRate.load(byAccount.id, video.id, t)
     if (!rate) throw new Error(`Unknown rate by account ${byAccount.id} for video ${video.id}.`)
 
     await rate.destroy({ transaction: t })
-    await video.decrement('likes')
+    await video.decrement('likes', { transaction: t })
 
-    if (video.isOwned()) await sendUndoLikeToVideoFollowers(byAccount, video, t)
+    if (video.isOwned()) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byAccount ]
+      await forwardActivity(activity, t, exceptions)
+    }
   })
 }
 
-function processUndoDislike (actor: string, dislikeCreateActivity: DislikeObject) {
+function processUndoDislike (actor: string, activity: ActivityUndo) {
   const options = {
-    arguments: [ actor, dislikeCreateActivity ],
+    arguments: [ actor, activity ],
     errorMessage: 'Cannot undo dislike with many retries.'
   }
 
   return retryTransactionWrapper(undoDislike, options)
 }
 
-function undoDislike (actor: string, dislike: DislikeObject) {
+function undoDislike (actor: string, activity: ActivityUndo) {
+  const dislike = activity.object.object as DislikeObject
+
   return db.sequelize.transaction(async t => {
     const byAccount = await db.Account.loadByUrl(actor, t)
     if (!byAccount) throw new Error('Unknown account ' + actor)
 
-    const video = await db.Video.loadByUrlAndPopulateAccount(dislike.object)
+    const video = await db.Video.loadByUrlAndPopulateAccount(dislike.object, t)
     if (!video) throw new Error('Unknown video ' + dislike.actor)
 
     const rate = await db.AccountVideoRate.load(byAccount.id, video.id, t)
     if (!rate) throw new Error(`Unknown rate by account ${byAccount.id} for video ${video.id}.`)
 
     await rate.destroy({ transaction: t })
-    await video.decrement('dislikes')
+    await video.decrement('dislikes', { transaction: t })
 
-    if (video.isOwned()) await sendUndoDislikeToVideoFollowers(byAccount, video, t)
+    if (video.isOwned()) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byAccount ]
+      await forwardActivity(activity, t, exceptions)
+    }
   })
 }
 

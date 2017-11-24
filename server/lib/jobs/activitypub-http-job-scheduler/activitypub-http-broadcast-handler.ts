@@ -1,21 +1,16 @@
 import { logger } from '../../../helpers'
-import { buildSignedActivity } from '../../../helpers/activitypub'
 import { doRequest } from '../../../helpers/requests'
-import { database as db } from '../../../initializers'
-import { ActivityPubHttpPayload, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
+import { ActivityPubHttpPayload, computeBody, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
 
 async function process (payload: ActivityPubHttpPayload, jobId: number) {
   logger.info('Processing ActivityPub broadcast in job %d.', jobId)
 
-  const accountSignature = await db.Account.load(payload.signatureAccountId)
-  if (!accountSignature) throw new Error('Unknown signature account id.')
-
-  const signedBody = await buildSignedActivity(accountSignature, payload.body)
+  const body = await computeBody(payload)
 
   const options = {
     method: 'POST',
     uri: '',
-    json: signedBody
+    json: body
   }
 
   for (const uri of payload.uris) {

@@ -1,12 +1,12 @@
 import { Transaction } from 'sequelize'
-import { ActivityCreate } from '../../../../shared/models/activitypub/activity'
+import { ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub/activity'
 import { getServerAccount } from '../../../helpers/utils'
 import { AccountInstance, VideoChannelInstance, VideoInstance } from '../../../models'
 import { VideoAbuseInstance } from '../../../models/video/video-abuse-interface'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import {
   broadcastToFollowers,
-  getAccountsToForwardVideoAction,
+  getAccountsInvolvedInVideo,
   getAudience,
   getOriginVideoAudience,
   getVideoFollowersAudience,
@@ -35,7 +35,8 @@ async function sendCreateViewToOrigin (byAccount: AccountInstance, video: VideoI
   const url = getVideoViewActivityPubUrl(byAccount, video)
   const viewActivity = createViewActivityData(byAccount, video)
 
-  const audience = getOriginVideoAudience(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const data = await createActivityData(url, byAccount, viewActivity, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
@@ -45,12 +46,12 @@ async function sendCreateViewToVideoFollowers (byAccount: AccountInstance, video
   const url = getVideoViewActivityPubUrl(byAccount, video)
   const viewActivity = createViewActivityData(byAccount, video)
 
-  const audience = getVideoFollowersAudience(video)
+  const accountsToForwardView = await getAccountsInvolvedInVideo(video)
+  const audience = getVideoFollowersAudience(accountsToForwardView)
   const data = await createActivityData(url, byAccount, viewActivity, audience)
 
+  // Use the server account to send the view, because it could be an unregistered account
   const serverAccount = await getServerAccount()
-  const accountsToForwardView = await getAccountsToForwardVideoAction(byAccount, video)
-
   const followersException = [ byAccount ]
   return broadcastToFollowers(data, serverAccount, accountsToForwardView, t, followersException)
 }
@@ -59,7 +60,8 @@ async function sendCreateDislikeToOrigin (byAccount: AccountInstance, video: Vid
   const url = getVideoDislikeActivityPubUrl(byAccount, video)
   const dislikeActivity = createDislikeActivityData(byAccount, video)
 
-  const audience = getOriginVideoAudience(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const data = await createActivityData(url, byAccount, dislikeActivity, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
@@ -69,17 +71,15 @@ async function sendCreateDislikeToVideoFollowers (byAccount: AccountInstance, vi
   const url = getVideoDislikeActivityPubUrl(byAccount, video)
   const dislikeActivity = createDislikeActivityData(byAccount, video)
 
-  const audience = getVideoFollowersAudience(video)
+  const accountsToForwardView = await getAccountsInvolvedInVideo(video)
+  const audience = getVideoFollowersAudience(accountsToForwardView)
   const data = await createActivityData(url, byAccount, dislikeActivity, audience)
 
-  const accountsToForwardView = await getAccountsToForwardVideoAction(byAccount, video)
-  const serverAccount = await getServerAccount()
-
   const followersException = [ byAccount ]
-  return broadcastToFollowers(data, serverAccount, accountsToForwardView, t, followersException)
+  return broadcastToFollowers(data, byAccount, accountsToForwardView, t, followersException)
 }
 
-async function createActivityData (url: string, byAccount: AccountInstance, object: any, audience?: { to: string[], cc: string[] }) {
+async function createActivityData (url: string, byAccount: AccountInstance, object: any, audience?: ActivityAudience) {
   if (!audience) {
     audience = await getAudience(byAccount)
   }
