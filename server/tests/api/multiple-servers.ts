@@ -69,8 +69,7 @@ describe('Test multiple servers', function () {
 
   describe('Should upload the video and propagate on each server', function () {
     it('Should upload the video on server 1 and propagate on each server', async function () {
-      // Server 1 has video transcoding activated
-      this.timeout(15000)
+      this.timeout(25000)
 
       const videoAttributes = {
         name: 'my super name for server 1',
@@ -85,7 +84,7 @@ describe('Test multiple servers', function () {
       }
       await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
 
-      await wait(5000)
+      await wait(10000)
 
       // All servers should have this video
       for (const server of servers) {

@@ -29,6 +29,8 @@ describe('Test config', function () {
   })
 
   it('Should have a correct config on a server with registration enabled and a users limit', async function () {
+    this.timeout(5000)
+
     await Promise.all([
       registerUser(server.url, 'user1', 'super password'),
       registerUser(server.url, 'user2', 'super password'),
