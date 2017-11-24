@@ -6,27 +6,8 @@ import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
-import {
-  createTorrentPromise,
-  generateImageFromVideoFile,
-  getVideoFileHeight,
-  isVideoCategoryValid,
-  isVideoDescriptionValid,
-  isVideoDurationValid,
-  isVideoLanguageValid,
-  isVideoLicenceValid,
-  isVideoNameValid,
-  isVideoNSFWValid,
-  isVideoPrivacyValid,
-  logger,
-  renamePromise,
-  statPromise,
-  transcode,
-  unlinkPromise,
-  writeFilePromise
-} from '../../helpers'
 import { activityPubCollection } from '../../helpers/activitypub'
-import { isVideoUrlValid } from '../../helpers/custom-validators/videos'
+import { isVideoCategoryValid, isVideoLanguageValid, isVideoPrivacyValid, isVideoUrlValid } from '../../helpers/custom-validators/videos'
 import {
   API_VERSION,
   CONFIG,
@@ -39,7 +20,7 @@ import {
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
-} from '../../initializers'
+} from '../../initializers/constants'
 import { sendDeleteVideo } from '../../lib/index'
 
 import { addMethodsToModel, getSort } from '../utils'
@@ -47,6 +28,10 @@ import { addMethodsToModel, getSort } from '../utils'
 import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
+import { isVideoNameValid, isVideoLicenceValid, isVideoNSFWValid, isVideoDescriptionValid, isVideoDurationValid } from '../../helpers/index'
+import { logger } from '../../helpers/logger'
+import { generateImageFromVideoFile, transcode, getVideoFileHeight } from '../../helpers/ffmpeg-utils'
+import { createTorrentPromise, writeFilePromise, unlinkPromise, renamePromise, statPromise } from '../../helpers/core-utils'
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
@@ -1013,6 +998,10 @@ loadAndPopulateAccountAndServerAndTags = function (id: number) {
         model: Video['sequelize'].models.AccountVideoRate,
         include: [ Video['sequelize'].models.Account ]
       },
+      {
+        model: Video['sequelize'].models.VideoShare,
+        include: [ Video['sequelize'].models.Account ]
+      },
       Video['sequelize'].models.Tag,
       Video['sequelize'].models.VideoFile
     ]
@@ -1038,6 +1027,10 @@ loadByUUIDAndPopulateAccountAndServerAndTags = function (uuid: string) {
       },
       {
         model: Video['sequelize'].models.AccountVideoRate,
+        include: [ Video['sequelize'].models.Account ]
+      },
+      {
+        model: Video['sequelize'].models.VideoShare,
         include: [ Video['sequelize'].models.Account ]
       },
       Video['sequelize'].models.Tag,

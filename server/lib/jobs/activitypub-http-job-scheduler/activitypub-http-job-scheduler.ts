@@ -1,11 +1,13 @@
-import { JobScheduler, JobHandler } from '../job-scheduler'
+import { JobCategory } from '../../../../shared'
+import { buildSignedActivity } from '../../../helpers/activitypub'
+import { logger } from '../../../helpers/logger'
+import { ACTIVITY_PUB } from '../../../initializers/constants'
+import { database as db } from '../../../initializers/database'
+import { JobHandler, JobScheduler } from '../job-scheduler'
 
 import * as activitypubHttpBroadcastHandler from './activitypub-http-broadcast-handler'
-import * as activitypubHttpUnicastHandler from './activitypub-http-unicast-handler'
 import * as activitypubHttpFetcherHandler from './activitypub-http-fetcher-handler'
-import { JobCategory } from '../../../../shared'
-import { ACTIVITY_PUB } from '../../../initializers/constants'
-import { logger } from '../../../helpers/logger'
+import * as activitypubHttpUnicastHandler from './activitypub-http-unicast-handler'
 
 type ActivityPubHttpPayload = {
   uris: string[]
@@ -40,8 +42,21 @@ function maybeRetryRequestLater (err: Error, payload: ActivityPubHttpPayload, ur
   }
 }
 
+async function computeBody (payload: ActivityPubHttpPayload) {
+  let body = payload.body
+
+  if (payload.signatureAccountId) {
+    const accountSignature = await db.Account.load(payload.signatureAccountId)
+    if (!accountSignature) throw new Error('Unknown signature account id.')
+    body = await buildSignedActivity(accountSignature, payload.body)
+  }
+  
+  return body
+}
+
 export {
   ActivityPubHttpPayload,
   activitypubHttpJobScheduler,
-  maybeRetryRequestLater
+  maybeRetryRequestLater,
+  computeBody
 }

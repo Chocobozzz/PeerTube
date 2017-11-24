@@ -1,11 +1,16 @@
 import { Transaction } from 'sequelize'
-import { ActivityCreate, ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub/activity'
-import { getServerAccount } from '../../../helpers/utils'
+import {
+  ActivityAudience,
+  ActivityCreate,
+  ActivityFollow,
+  ActivityLike,
+  ActivityUndo
+} from '../../../../shared/models/activitypub/activity'
 import { AccountInstance } from '../../../models'
 import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
 import { VideoInstance } from '../../../models/video/video-interface'
 import { getAccountFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
-import { broadcastToFollowers, getAccountsToForwardVideoAction, unicastTo } from './misc'
+import { broadcastToFollowers, getAccountsInvolvedInVideo, getAudience, getVideoFollowersAudience, unicastTo } from './misc'
 import { createActivityData, createDislikeActivityData } from './send-create'
 import { followActivityData } from './send-follow'
 import { likeActivityData } from './send-like'
@@ -37,14 +42,13 @@ async function sendUndoLikeToVideoFollowers (byAccount: AccountInstance, video: 
   const likeUrl = getVideoLikeActivityPubUrl(byAccount, video)
   const undoUrl = getUndoActivityPubUrl(likeUrl)
 
+  const toAccountsFollowers = await getAccountsInvolvedInVideo(video)
+  const audience = getVideoFollowersAudience(toAccountsFollowers)
   const object = await likeActivityData(likeUrl, byAccount, video)
-  const data = await undoActivityData(undoUrl, byAccount, object)
-
-  const accountsToForwardView = await getAccountsToForwardVideoAction(byAccount, video)
-  const serverAccount = await getServerAccount()
+  const data = await undoActivityData(undoUrl, byAccount, object, audience)
 
   const followersException = [ byAccount ]
-  return broadcastToFollowers(data, serverAccount, accountsToForwardView, t, followersException)
+  return broadcastToFollowers(data, byAccount, toAccountsFollowers, t, followersException)
 }
 
 async function sendUndoDislikeToOrigin (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
@@ -68,11 +72,10 @@ async function sendUndoDislikeToVideoFollowers (byAccount: AccountInstance, vide
 
   const data = await undoActivityData(undoUrl, byAccount, object)
 
-  const accountsToForwardView = await getAccountsToForwardVideoAction(byAccount, video)
-  const serverAccount = await getServerAccount()
+  const toAccountsFollowers = await getAccountsInvolvedInVideo(video)
 
   const followersException = [ byAccount ]
-  return broadcastToFollowers(data, serverAccount, accountsToForwardView, t, followersException)
+  return broadcastToFollowers(data, byAccount, toAccountsFollowers, t, followersException)
 }
 
 // ---------------------------------------------------------------------------
@@ -87,11 +90,22 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function undoActivityData (url: string, byAccount: AccountInstance, object: ActivityFollow | ActivityLike | ActivityCreate) {
+async function undoActivityData (
+  url: string,
+  byAccount: AccountInstance,
+  object: ActivityFollow | ActivityLike | ActivityCreate,
+  audience?: ActivityAudience
+) {
+  if (!audience) {
+    audience = await getAudience(byAccount)
+  }
+
   const activity: ActivityUndo = {
     type: 'Undo',
     id: url,
     actor: byAccount.url,
+    to: audience.to,
+    cc: audience.cc,
     object
   }
 

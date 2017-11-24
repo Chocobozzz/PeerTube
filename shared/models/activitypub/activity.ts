@@ -10,6 +10,11 @@ export type Activity = ActivityCreate | ActivityAdd | ActivityUpdate |
 
 export type ActivityType = 'Create' | 'Add' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo' | 'Like'
 
+export interface ActivityAudience {
+  to: string[]
+  cc: string[]
+}
+
 export interface BaseActivity {
   '@context'?: any[]
   id: string

@@ -76,7 +76,7 @@ function addRemoteVideo (account: AccountInstance,
     if (videoChannel.Account.id !== account.id) throw new Error('Video channel is not owned by this account.')
 
     const videoFromDatabase = await db.Video.loadByUUIDOrURL(videoToCreateData.uuid, videoToCreateData.id, t)
-    if (videoFromDatabase) throw new Error('Video with this UUID/Url already exists.')
+    if (videoFromDatabase) return videoFromDatabase
 
     const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoToCreateData, activity.to, activity.cc)
     const video = db.Video.build(videoData)

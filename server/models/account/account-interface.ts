@@ -12,6 +12,7 @@ export namespace AccountMethods {
   export type LoadByUrl = (url: string, transaction?: Sequelize.Transaction) => Bluebird<AccountInstance>
   export type LoadLocalByName = (name: string) => Bluebird<AccountInstance>
   export type LoadByNameAndHost = (name: string, host: string) => Bluebird<AccountInstance>
+  export type ListByFollowersUrls = (followerUrls: string[], transaction?: Sequelize.Transaction) => Bluebird<AccountInstance[]>
 
   export type ToActivityPubObject = (this: AccountInstance) => ActivityPubActor
   export type ToFormattedJSON = (this: AccountInstance) => FormattedAccount
@@ -29,6 +30,7 @@ export interface AccountClass {
   loadByUrl: AccountMethods.LoadByUrl
   loadLocalByName: AccountMethods.LoadLocalByName
   loadByNameAndHost: AccountMethods.LoadByNameAndHost
+  listByFollowersUrls: AccountMethods.ListByFollowersUrls
 }
 
 export interface AccountAttributes {

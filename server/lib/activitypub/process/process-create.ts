@@ -1,14 +1,14 @@
 import { ActivityCreate, VideoChannelObject } from '../../../../shared'
+import { DislikeObject } from '../../../../shared/models/activitypub/objects/dislike-object'
 import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects/video-abuse-object'
 import { ViewObject } from '../../../../shared/models/activitypub/objects/view-object'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { getOrCreateAccountAndServer } from '../account'
-import { sendCreateDislikeToVideoFollowers, sendCreateViewToVideoFollowers } from '../send/send-create'
+import { forwardActivity } from '../send/misc'
 import { getVideoChannelActivityPubUrl } from '../url'
 import { videoChannelActivityObjectToDBAttributes } from './misc'
-import { DislikeObject } from '../../../../shared/models/activitypub/objects/dislike-object'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -16,9 +16,9 @@ async function processCreateActivity (activity: ActivityCreate) {
   const account = await getOrCreateAccountAndServer(activity.actor)
 
   if (activityType === 'View') {
-    return processCreateView(activityObject as ViewObject)
+    return processCreateView(account, activity)
   } else if (activityType === 'Dislike') {
-    return processCreateDislike(account, activityObject as DislikeObject)
+    return processCreateDislike(account, activity)
   } else if (activityType === 'VideoChannel') {
     return processCreateVideoChannel(account, activityObject as VideoChannelObject)
   } else if (activityType === 'Flag') {
@@ -37,19 +37,20 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateDislike (byAccount: AccountInstance, dislike: DislikeObject) {
+async function processCreateDislike (byAccount: AccountInstance, activity: ActivityCreate) {
   const options = {
-    arguments: [ byAccount, dislike ],
+    arguments: [ byAccount, activity ],
     errorMessage: 'Cannot dislike the video with many retries.'
   }
 
   return retryTransactionWrapper(createVideoDislike, options)
 }
 
-function createVideoDislike (byAccount: AccountInstance, dislike: DislikeObject) {
-  return db.sequelize.transaction(async t => {
-    const video = await db.Video.loadByUrlAndPopulateAccount(dislike.object)
+function createVideoDislike (byAccount: AccountInstance, activity: ActivityCreate) {
+  const dislike = activity.object as DislikeObject
 
+  return db.sequelize.transaction(async t => {
+    const video = await db.Video.loadByUrlAndPopulateAccount(dislike.object, t)
     if (!video) throw new Error('Unknown video ' + dislike.object)
 
     const rate = {
@@ -59,15 +60,22 @@ function createVideoDislike (byAccount: AccountInstance, dislike: DislikeObject)
     }
     const [ , created ] = await db.AccountVideoRate.findOrCreate({
       where: rate,
-      defaults: rate
+      defaults: rate,
+      transaction: t
     })
-    await video.increment('dislikes')
+    await video.increment('dislikes', { transaction: t })
 
-    if (video.isOwned() && created === true) await sendCreateDislikeToVideoFollowers(byAccount, video, undefined)
+    if (video.isOwned() && created === true) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byAccount ]
+      await forwardActivity(activity, t, exceptions)
+    }
   })
 }
 
-async function processCreateView (view: ViewObject) {
+async function processCreateView (byAccount: AccountInstance, activity: ActivityCreate) {
+  const view = activity.object as ViewObject
+
   const video = await db.Video.loadByUrlAndPopulateAccount(view.object)
 
   if (!video) throw new Error('Unknown video ' + view.object)
@@ -77,7 +85,11 @@ async function processCreateView (view: ViewObject) {
 
   await video.increment('views')
 
-  if (video.isOwned()) await sendCreateViewToVideoFollowers(account, video, undefined)
+  if (video.isOwned()) {
+    // Don't resend the activity to the sender
+    const exceptions = [ byAccount ]
+    await forwardActivity(activity, undefined, exceptions)
+  }
 }
 
 function processCreateVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
@@ -94,7 +106,7 @@ function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateDa
 
   return db.sequelize.transaction(async t => {
     let videoChannel = await db.VideoChannel.loadByUUIDOrUrl(videoChannelToCreateData.uuid, videoChannelToCreateData.id, t)
-    if (videoChannel) throw new Error('Video channel with this URL/UUID already exists.')
+    if (videoChannel) return videoChannel
 
     const videoChannelData = videoChannelActivityObjectToDBAttributes(videoChannelToCreateData, account)
     videoChannel = db.VideoChannel.build(videoChannelData)
