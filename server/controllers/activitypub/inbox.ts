@@ -48,7 +48,7 @@ async function inboxController (req: express.Request, res: express.Response, nex
   activities = activities.filter(a => isActivityValid(a))
   logger.debug('We keep %d activities.', activities.length, { activities })
 
-  await processActivities(activities, res.locals.account)
+  await processActivities(activities, res.locals.signature.account, res.locals.account)
 
   res.status(204).end()
 }

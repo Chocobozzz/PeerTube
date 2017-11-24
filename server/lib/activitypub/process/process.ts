@@ -23,8 +23,14 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccoun
   Like: processLikeActivity
 }
 
-async function processActivities (activities: Activity[], inboxAccount?: AccountInstance) {
+async function processActivities (activities: Activity[], signatureAccount?: AccountInstance, inboxAccount?: AccountInstance) {
   for (const activity of activities) {
+    // When we fetch remote data, we don't have signature
+    if (signatureAccount && activity.actor !== signatureAccount.url) {
+      logger.warn('Signature mismatch between %s and %s.', activity.actor, signatureAccount.url)
+      continue
+    }
+
     const activityProcessor = processActivity[activity.type]
     if (activityProcessor === undefined) {
       logger.warn('Unknown activity type %s.', activity.type, { activityId: activity.id })
