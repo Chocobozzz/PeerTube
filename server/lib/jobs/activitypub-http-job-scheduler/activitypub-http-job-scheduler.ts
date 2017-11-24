@@ -50,7 +50,7 @@ async function computeBody (payload: ActivityPubHttpPayload) {
     if (!accountSignature) throw new Error('Unknown signature account id.')
     body = await buildSignedActivity(accountSignature, payload.body)
   }
-  
+
   return body
 }
 
