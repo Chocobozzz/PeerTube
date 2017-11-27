@@ -15,7 +15,7 @@ It is a BitTorrent extension that allow a server to seed a file through HTTP. It
 Not really. Reverse proxies like Nginx handle very well requests of static files. In my tests it can send chunks at 10MB/s without consuming more than 5% of CPU on a very small VPS.
 
 
-## An index of all videos of the network won't be too large for small servers?
+## An index of all videos of servers you follow won't be too large for small servers?
 
 No, 1000000 videos will represent around 2GB on PostgreSQL. It is acceptable for a video platform.
 
@@ -27,5 +27,6 @@ WEBM, MP4 or OGV videos.
 
 ## I want to change my host or move to HTTPS, how can I do that?
 
-If you already have friends you need to quit them.
-Then, update your configuration and run `NODE_ENV=production npm run update-host` to update the torrent files.
+If you already have followers, you can't.
+
+If you don't: update your configuration and run `NODE_ENV=production npm run update-host` to update the torrent files.

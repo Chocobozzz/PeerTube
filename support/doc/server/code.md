@@ -28,7 +28,7 @@ All other server files are in the [server](https://github.com/Chocobozzz/PeerTub
     |__ initializers -> functions used at the server startup (installer, database, constants...)
     |__ lib          -> library function (WebTorrent, OAuth2, friends logic...)
     |__ middlewares  -> middlewares for controllers (requests validators, requests pagination...)
-    |__ models       -> Sequelize models for each SQL tables (videos, users, pods...)
+    |__ models       -> Sequelize models for each SQL tables (videos, users, accounts...)
     |__ tests        -> API tests and real world simulations (to test the decentralized feature...)
 
 
@@ -44,11 +44,11 @@ Uses [JavaScript Standard Style](http://standardjs.com/).
   * Run PostgreSQL and create the database `peertube_dev`.
   * Run `npm run dev:server` to run the server, watch server files modifications and restart it automatically. The server (API + client) listen on `localhost:9000`.
 
-The `NODE_ENV=test` is set to speed up communications between pods (see [constants.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.ts)).
+The `NODE_ENV=test` is set to speed up communications between instances (see [constants.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.ts)).
 
 `npm run help` gives you all available commands.
 
-If you want to test the decentralization feature, you can easily run 3 pods by running `npm run play`. The pods password are `test1`, `test2` and `test3`.
+If you want to test the decentralization feature, you can easily run 3 instances by running `npm run play`. The instances password are `test1`, `test2` and `test3`.
 
 
 ## Architecture
