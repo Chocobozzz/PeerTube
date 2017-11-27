@@ -66,10 +66,10 @@ Want to see in action?
 
 ## Why
 
-We can't build a FOSS video streaming alternatives to YouTube, Dailymotion, Vimeo... with a centralized software. One organization alone cannot have enought money to pay bandwith and video storage of its server.
+We can't build a FOSS video streaming alternatives to YouTube, Dailymotion, Vimeo... with a centralized software. One organization alone cannot have enough money to pay bandwidth and video storage of its server.
 
 So we need to have a decentralized network (as [Diaspora](https://github.com/diaspora/diaspora) for example).
-But it's not enought because one video could become famous and overload the server.
+But it's not enough because one video could become famous and overload the server.
 It's the reason why we need to use a P2P protocol to limit the server load.
 Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus bittorrent) inside the web browser right now.
 
@@ -184,7 +184,7 @@ The following commands will upgrade the source (according to your current branch
 
 In this mode, the server will run requests between instances more quickly, the videos duration are limited to a few seconds.
 
-To develop on the server side (server files are automatically compiled when we modify them and the server restarts automatically too):
+To develop on the server-side (server files are automatically compiled when we modify them and the server restarts automatically too):
 
     $ npm run dev:server
 
@@ -205,7 +205,7 @@ The API will listen on `localhost:9000` and the frontend on `localhost:3000` (wi
     $ npm run clean:server:test
     $ npm run play
 
-Then you will can access to the three nodes at `http://localhost:900{1,2,3}` with the `root` as username and `test{1,2,3}` for the password.
+Then you will get access to the three nodes at `http://localhost:900{1,2,3}` with the `root` as username and `test{1,2,3}` for the password.
 
 ### Other commands
 
