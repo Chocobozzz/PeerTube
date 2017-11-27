@@ -14,8 +14,22 @@ function checkErrors (req: express.Request, res: express.Response, next: express
   return next()
 }
 
+function areValidationErrors (req: express.Request, res: express.Response) {
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    logger.warn('Incorrect request parameters', { path: req.originalUrl, err: errors.mapped() })
+    res.status(400).json({ errors: errors.mapped() })
+
+    return true
+  }
+
+  return false
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  checkErrors
+  checkErrors,
+  areValidationErrors
 }

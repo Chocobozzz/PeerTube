@@ -10,7 +10,7 @@ import { AccountInstance } from '../../../models'
 import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
 import { VideoInstance } from '../../../models/video/video-interface'
 import { getAccountFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
-import { broadcastToFollowers, getAccountsInvolvedInVideo, getAudience, getVideoFollowersAudience, unicastTo } from './misc'
+import { broadcastToFollowers, getAccountsInvolvedInVideo, getAudience, getObjectFollowersAudience, unicastTo } from './misc'
 import { createActivityData, createDislikeActivityData } from './send-create'
 import { followActivityData } from './send-follow'
 import { likeActivityData } from './send-like'
@@ -43,7 +43,7 @@ async function sendUndoLikeToVideoFollowers (byAccount: AccountInstance, video: 
   const undoUrl = getUndoActivityPubUrl(likeUrl)
 
   const toAccountsFollowers = await getAccountsInvolvedInVideo(video)
-  const audience = getVideoFollowersAudience(toAccountsFollowers)
+  const audience = getObjectFollowersAudience(toAccountsFollowers)
   const object = await likeActivityData(likeUrl, byAccount, video)
   const data = await undoActivityData(undoUrl, byAccount, object, audience)
 

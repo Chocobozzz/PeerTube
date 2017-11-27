@@ -32,6 +32,7 @@ import { isVideoNameValid, isVideoLicenceValid, isVideoNSFWValid, isVideoDescrip
 import { logger } from '../../helpers/logger'
 import { generateImageFromVideoFile, transcode, getVideoFileHeight } from '../../helpers/ffmpeg-utils'
 import { createTorrentPromise, writeFilePromise, unlinkPromise, renamePromise, statPromise } from '../../helpers/core-utils'
+import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
@@ -573,6 +574,18 @@ toActivityPubObject = function (this: VideoInstance) {
     dislikesObject = activityPubCollection(dislikes)
   }
 
+  let sharesObject
+  if (Array.isArray(this.VideoShares)) {
+    const shares: string[] = []
+
+    for (const videoShare of this.VideoShares) {
+      const shareUrl = getAnnounceActivityPubUrl(this.url, videoShare.Account)
+      shares.push(shareUrl)
+    }
+
+    sharesObject = activityPubCollection(shares)
+  }
+
   const url = []
   for (const file of this.VideoFiles) {
     url.push({
@@ -630,7 +643,8 @@ toActivityPubObject = function (this: VideoInstance) {
     },
     url,
     likes: likesObject,
-    dislikes: dislikesObject
+    dislikes: dislikesObject,
+    shares: sharesObject
   }
 
   return videoObject
@@ -823,7 +837,8 @@ listAllAndSharedByAccountForOutbox = function (accountId: number, start: number,
               accountId
             }
           ]
-        }
+        },
+        include: [ Video['sequelize'].models.Account ]
       },
       {
         model: Video['sequelize'].models.VideoChannel,

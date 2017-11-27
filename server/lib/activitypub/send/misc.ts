@@ -1,13 +1,14 @@
 import { Transaction } from 'sequelize'
+import { Activity } from '../../../../shared/models/activitypub/activity'
 import { logger } from '../../../helpers/logger'
 import { ACTIVITY_PUB, database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
+import { VideoChannelInstance } from '../../../models/index'
+import { VideoInstance } from '../../../models/video/video-interface'
 import {
   activitypubHttpJobScheduler,
   ActivityPubHttpPayload
 } from '../../jobs/activitypub-http-job-scheduler/activitypub-http-job-scheduler'
-import { VideoInstance } from '../../../models/video/video-interface'
-import { Activity } from '../../../../shared/models/activitypub/activity'
 
 async function forwardActivity (
   activity: Activity,
@@ -85,9 +86,16 @@ function getOriginVideoAudience (video: VideoInstance, accountsInvolvedInVideo: 
   }
 }
 
-function getVideoFollowersAudience (accountsInvolvedInVideo: AccountInstance[]) {
+function getOriginVideoChannelAudience (videoChannel: VideoChannelInstance, accountsInvolved: AccountInstance[]) {
   return {
-    to: accountsInvolvedInVideo.map(a => a.followersUrl),
+    to: [ videoChannel.Account.url ],
+    cc: accountsInvolved.map(a => a.followersUrl)
+  }
+}
+
+function getObjectFollowersAudience (accountsInvolvedInObject: AccountInstance[]) {
+  return {
+    to: accountsInvolvedInObject.map(a => a.followersUrl),
     cc: []
   }
 }
@@ -95,6 +103,13 @@ function getVideoFollowersAudience (accountsInvolvedInVideo: AccountInstance[]) 
 async function getAccountsInvolvedInVideo (video: VideoInstance) {
   const accountsToForwardView = await db.VideoShare.loadAccountsByShare(video.id)
   accountsToForwardView.push(video.VideoChannel.Account)
+
+  return accountsToForwardView
+}
+
+async function getAccountsInvolvedInVideoChannel (videoChannel: VideoChannelInstance) {
+  const accountsToForwardView = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
+  accountsToForwardView.push(videoChannel.Account)
 
   return accountsToForwardView
 }
@@ -131,10 +146,12 @@ async function computeFollowerUris (toAccountFollower: AccountInstance[], follow
 
 export {
   broadcastToFollowers,
+  getOriginVideoChannelAudience,
   unicastTo,
   getAudience,
   getOriginVideoAudience,
   getAccountsInvolvedInVideo,
-  getVideoFollowersAudience,
+  getAccountsInvolvedInVideoChannel,
+  getObjectFollowersAudience,
   forwardActivity
 }

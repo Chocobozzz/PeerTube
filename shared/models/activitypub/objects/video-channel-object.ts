@@ -1,3 +1,5 @@
+import { ActivityPubOrderedCollection } from '../activitypub-ordered-collection'
+
 export interface VideoChannelObject {
   type: 'VideoChannel'
   id: string
@@ -7,4 +9,5 @@ export interface VideoChannelObject {
   published: string
   updated: string
   actor?: string
+  shares?: ActivityPubOrderedCollection<string>
 }

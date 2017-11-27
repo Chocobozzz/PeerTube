@@ -22,37 +22,37 @@ function getVideoAbuseActivityPubUrl (videoAbuse: VideoAbuseInstance) {
 }
 
 function getVideoViewActivityPubUrl (byAccount: AccountInstance, video: VideoInstance) {
-  return video.url + '#views/' + byAccount.uuid + '/' + new Date().toISOString()
+  return video.url + '/views/' + byAccount.uuid + '/' + new Date().toISOString()
 }
 
 function getVideoLikeActivityPubUrl (byAccount: AccountInstance, video: VideoInstance) {
-  return byAccount.url + '#likes/' + video.id
+  return byAccount.url + '/likes/' + video.id
 }
 
 function getVideoDislikeActivityPubUrl (byAccount: AccountInstance, video: VideoInstance) {
-  return byAccount.url + '#dislikes/' + video.id
+  return byAccount.url + '/dislikes/' + video.id
 }
 
 function getAccountFollowActivityPubUrl (accountFollow: AccountFollowInstance) {
   const me = accountFollow.AccountFollower
   const following = accountFollow.AccountFollowing
 
-  return me.url + '#follows/' + following.id
+  return me.url + '/follows/' + following.id
 }
 
 function getAccountFollowAcceptActivityPubUrl (accountFollow: AccountFollowInstance) {
   const follower = accountFollow.AccountFollower
   const me = accountFollow.AccountFollowing
 
-  return follower.url + '#accepts/follows/' + me.id
+  return follower.url + '/accepts/follows/' + me.id
 }
 
 function getAnnounceActivityPubUrl (originalUrl: string, byAccount: AccountInstance) {
-  return originalUrl + '#announces/' + byAccount.id
+  return originalUrl + '/announces/' + byAccount.id
 }
 
 function getUpdateActivityPubUrl (originalUrl: string, updatedAt: string) {
-  return originalUrl + '#updates/' + updatedAt
+  return originalUrl + '/updates/' + updatedAt
 }
 
 function getUndoActivityPubUrl (originalUrl: string) {

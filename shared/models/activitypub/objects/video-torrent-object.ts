@@ -27,4 +27,5 @@ export interface VideoTorrentObject {
   actor?: string
   likes?: ActivityPubOrderedCollection<string>
   dislikes?: ActivityPubOrderedCollection<string>
+  shares?: ActivityPubOrderedCollection<string>
 }

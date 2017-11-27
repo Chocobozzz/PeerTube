@@ -5,6 +5,7 @@ import { VideoShareAttributes, VideoShareInstance, VideoShareMethods } from './v
 
 let VideoShare: Sequelize.Model<VideoShareInstance, VideoShareAttributes>
 let loadAccountsByShare: VideoShareMethods.LoadAccountsByShare
+let load: VideoShareMethods.Load
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   VideoShare = sequelize.define<VideoShareInstance, VideoShareAttributes>('VideoShare',
@@ -23,7 +24,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
   const classMethods = [
     associate,
-    loadAccountsByShare
+    loadAccountsByShare,
+    load
   ]
   addMethodsToModel(VideoShare, classMethods)
 
@@ -47,6 +49,18 @@ function associate (models) {
       allowNull: true
     },
     onDelete: 'cascade'
+  })
+}
+
+load = function (accountId: number, videoId: number) {
+  return VideoShare.findOne({
+    where: {
+      accountId,
+      videoId
+    },
+    include: [
+      VideoShare['sequelize'].models.Account
+    ]
   })
 }
 

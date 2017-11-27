@@ -8,7 +8,7 @@ import { AccountInstance } from '../../../models/account/account-interface'
 import { getOrCreateAccountAndServer } from '../account'
 import { forwardActivity } from '../send/misc'
 import { getVideoChannelActivityPubUrl } from '../url'
-import { videoChannelActivityObjectToDBAttributes } from './misc'
+import { addVideoChannelShares, videoChannelActivityObjectToDBAttributes } from './misc'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -92,13 +92,19 @@ async function processCreateView (byAccount: AccountInstance, activity: Activity
   }
 }
 
-function processCreateVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
+async function processCreateVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
   const options = {
     arguments: [ account, videoChannelToCreateData ],
     errorMessage: 'Cannot insert the remote video channel with many retries.'
   }
 
-  return retryTransactionWrapper(addRemoteVideoChannel, options)
+  const videoChannel = await retryTransactionWrapper(addRemoteVideoChannel, options)
+
+  if (videoChannelToCreateData.shares && Array.isArray(videoChannelToCreateData.shares.orderedItems)) {
+    await addVideoChannelShares(videoChannel, videoChannelToCreateData.shares.orderedItems)
+  }
+
+  return videoChannel
 }
 
 function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {

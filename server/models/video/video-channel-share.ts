@@ -5,6 +5,7 @@ import { VideoChannelShareAttributes, VideoChannelShareInstance, VideoChannelSha
 
 let VideoChannelShare: Sequelize.Model<VideoChannelShareInstance, VideoChannelShareAttributes>
 let loadAccountsByShare: VideoChannelShareMethods.LoadAccountsByShare
+let load: VideoChannelShareMethods.Load
 
 export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   VideoChannelShare = sequelize.define<VideoChannelShareInstance, VideoChannelShareAttributes>('VideoChannelShare',
@@ -23,6 +24,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
 
   const classMethods = [
     associate,
+    load,
     loadAccountsByShare
   ]
   addMethodsToModel(VideoChannelShare, classMethods)
@@ -47,6 +49,19 @@ function associate (models) {
       allowNull: true
     },
     onDelete: 'cascade'
+  })
+}
+
+load = function (accountId: number, videoChannelId: number) {
+  return VideoChannelShare.findOne({
+    where: {
+      accountId,
+      videoChannelId
+    },
+    include: [
+      VideoChannelShare['sequelize'].models.Account,
+      VideoChannelShare['sequelize'].models.VideoChannel
+    ]
   })
 }
 

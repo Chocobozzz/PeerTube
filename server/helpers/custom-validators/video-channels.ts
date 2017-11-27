@@ -1,14 +1,14 @@
-import * as Promise from 'bluebird'
-import * as validator from 'validator'
+import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import 'express-validator'
 import 'multer'
+import * as validator from 'validator'
 
-import { database as db, CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONSTRAINTS_FIELDS, database as db } from '../../initializers'
 import { VideoChannelInstance } from '../../models'
 import { logger } from '../logger'
-import { exists } from './misc'
 import { isActivityPubUrlValid } from './index'
+import { exists } from './misc'
 
 const VIDEO_CHANNELS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_CHANNELS
 
@@ -25,7 +25,7 @@ function isVideoChannelNameValid (value: string) {
 }
 
 function checkVideoChannelExists (id: string, res: express.Response, callback: () => void) {
-  let promise: Promise<VideoChannelInstance>
+  let promise: Bluebird<VideoChannelInstance>
   if (validator.isInt(id)) {
     promise = db.VideoChannel.loadAndPopulateAccount(+id)
   } else { // UUID
@@ -48,11 +48,32 @@ function checkVideoChannelExists (id: string, res: express.Response, callback: (
     })
 }
 
+async function isVideoChannelExistsPromise (id: string, res: express.Response) {
+  let videoChannel: VideoChannelInstance
+  if (validator.isInt(id)) {
+    videoChannel = await db.VideoChannel.loadAndPopulateAccount(+id)
+  } else { // UUID
+    videoChannel = await db.VideoChannel.loadByUUIDAndPopulateAccount(id)
+  }
+
+  if (!videoChannel) {
+    res.status(404)
+      .json({ error: 'Video channel not found' })
+      .end()
+
+    return false
+  }
+
+  res.locals.videoChannel = videoChannel
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   isVideoChannelDescriptionValid,
-  isVideoChannelNameValid,
   checkVideoChannelExists,
+  isVideoChannelNameValid,
+  isVideoChannelExistsPromise,
   isVideoChannelUrlValid
 }

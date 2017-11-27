@@ -7,7 +7,7 @@ import {
   getAccountsInvolvedInVideo,
   getAudience,
   getOriginVideoAudience,
-  getVideoFollowersAudience,
+  getObjectFollowersAudience,
   unicastTo
 } from './misc'
 
@@ -25,7 +25,7 @@ async function sendLikeToVideoFollowers (byAccount: AccountInstance, video: Vide
   const url = getVideoLikeActivityPubUrl(byAccount, video)
 
   const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
-  const audience = getVideoFollowersAudience(accountsInvolvedInVideo)
+  const audience = getObjectFollowersAudience(accountsInvolvedInVideo)
   const data = await likeActivityData(url, byAccount, video, audience)
 
   const toAccountsFollowers = await getAccountsInvolvedInVideo(video)

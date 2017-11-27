@@ -11,7 +11,7 @@ import { VideoInstance } from '../../../models/video/video-interface'
 import { getOrCreateAccountAndServer } from '../account'
 import { getOrCreateVideoChannel } from '../video-channels'
 import { generateThumbnailFromUrl } from '../videos'
-import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
+import { addVideoShares, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processAddActivity (activity: ActivityAdd) {
   const activityObject = activity.object
@@ -37,12 +37,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processAddVideo (
-  account: AccountInstance,
-  activity: ActivityAdd,
-  videoChannel: VideoChannelInstance,
-  videoToCreateData: VideoTorrentObject
-) {
+async function processAddVideo (account: AccountInstance,
+                                activity: ActivityAdd,
+                                videoChannel: VideoChannelInstance,
+                                videoToCreateData: VideoTorrentObject) {
   const options = {
     arguments: [ account, activity, videoChannel, videoToCreateData ],
     errorMessage: 'Cannot insert the remote video with many retries.'
@@ -57,6 +55,10 @@ async function processAddVideo (
 
   if (videoToCreateData.dislikes && Array.isArray(videoToCreateData.dislikes.orderedItems)) {
     await createRates(videoToCreateData.dislikes.orderedItems, video, 'dislike')
+  }
+
+  if (videoToCreateData.shares && Array.isArray(videoToCreateData.shares.orderedItems)) {
+    await addVideoShares(video, videoToCreateData.shares.orderedItems)
   }
 
   return video
