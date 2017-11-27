@@ -24,7 +24,8 @@ import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
 import { database as db } from '../../initializers/database'
 import { UserInstance } from '../../models/account/user-interface'
 import { authenticate } from '../oauth'
-import { checkErrors } from './utils'
+import { areValidationErrors, checkErrors } from './utils'
+import { isVideoExistsPromise } from '../../helpers/index'
 
 const videosAddValidator = [
   body('videofile').custom((value, { req }) => isVideoFile(req.files)).withMessage(
@@ -230,6 +231,28 @@ const videoRateValidator = [
   }
 ]
 
+const videosShareValidator = [
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('accountId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid account id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoShare parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExistsPromise(req.params.id, res)) return
+
+    const share = await db.VideoShare.load(req.params.accountId, res.locals.video.id)
+    if (!share) {
+      return res.status(404)
+        .end()
+    }
+
+    res.locals.videoShare = share
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -238,6 +261,7 @@ export {
   videosGetValidator,
   videosRemoveValidator,
   videosSearchValidator,
+  videosShareValidator,
 
   videoAbuseReportValidator,
 

@@ -6,6 +6,7 @@ import { VideoChannelObject } from '../../../shared/models/activitypub/objects/v
 import { VideoChannel as FormattedVideoChannel } from '../../../shared/models/videos/video-channel.model'
 import { AccountInstance } from '../account/account-interface'
 import { VideoInstance } from './video-interface'
+import { VideoChannelShareInstance } from './video-channel-share-interface'
 
 export namespace VideoChannelMethods {
   export type ToFormattedJSON = (this: VideoChannelInstance) => FormattedVideoChannel
@@ -47,6 +48,7 @@ export interface VideoChannelAttributes {
 
   Account?: AccountInstance
   Videos?: VideoInstance[]
+  VideoChannelShares?: VideoChannelShareInstance[]
 }
 
 export interface VideoChannelInstance extends VideoChannelClass, VideoChannelAttributes, Sequelize.Instance<VideoChannelAttributes> {

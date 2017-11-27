@@ -9,7 +9,7 @@ import {
   getAccountsInvolvedInVideo,
   getAudience,
   getOriginVideoAudience,
-  getVideoFollowersAudience,
+  getObjectFollowersAudience,
   unicastTo
 } from './misc'
 
@@ -47,7 +47,7 @@ async function sendCreateViewToVideoFollowers (byAccount: AccountInstance, video
   const viewActivity = createViewActivityData(byAccount, video)
 
   const accountsToForwardView = await getAccountsInvolvedInVideo(video)
-  const audience = getVideoFollowersAudience(accountsToForwardView)
+  const audience = getObjectFollowersAudience(accountsToForwardView)
   const data = await createActivityData(url, byAccount, viewActivity, audience)
 
   // Use the server account to send the view, because it could be an unregistered account
@@ -72,7 +72,7 @@ async function sendCreateDislikeToVideoFollowers (byAccount: AccountInstance, vi
   const dislikeActivity = createDislikeActivityData(byAccount, video)
 
   const accountsToForwardView = await getAccountsInvolvedInVideo(video)
-  const audience = getVideoFollowersAudience(accountsToForwardView)
+  const audience = getObjectFollowersAudience(accountsToForwardView)
   const data = await createActivityData(url, byAccount, dislikeActivity, audience)
 
   const followersException = [ byAccount ]

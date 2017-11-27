@@ -6,6 +6,8 @@ import { sendDeleteVideoChannel } from '../../lib/activitypub/send/send-delete'
 
 import { addMethodsToModel, getSort } from '../utils'
 import { VideoChannelAttributes, VideoChannelInstance, VideoChannelMethods } from './video-channel-interface'
+import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
+import { activityPubCollection } from '../../helpers/activitypub'
 
 let VideoChannel: Sequelize.Model<VideoChannelInstance, VideoChannelAttributes>
 let toFormattedJSON: VideoChannelMethods.ToFormattedJSON
@@ -139,6 +141,18 @@ toFormattedJSON = function (this: VideoChannelInstance) {
 }
 
 toActivityPubObject = function (this: VideoChannelInstance) {
+  let sharesObject
+  if (Array.isArray(this.VideoChannelShares)) {
+    const shares: string[] = []
+
+    for (const videoChannelShare of this.VideoChannelShares) {
+      const shareUrl = getAnnounceActivityPubUrl(this.url, videoChannelShare.Account)
+      shares.push(shareUrl)
+    }
+
+    sharesObject = activityPubCollection(shares)
+  }
+
   const json = {
     type: 'VideoChannel' as 'VideoChannel',
     id: this.url,
@@ -146,7 +160,8 @@ toActivityPubObject = function (this: VideoChannelInstance) {
     content: this.description,
     name: this.name,
     published: this.createdAt.toISOString(),
-    updated: this.updatedAt.toISOString()
+    updated: this.updatedAt.toISOString(),
+    shares: sharesObject
   }
 
   return json

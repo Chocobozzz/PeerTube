@@ -1,13 +1,19 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
-import { checkVideoAccountExists } from '../../helpers/custom-validators/accounts'
-import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
-import { checkVideoChannelExists, isIdOrUUIDValid } from '../../helpers/index'
+import { checkAccountIdExists } from '../../helpers/custom-validators/accounts'
+import { isIdValid } from '../../helpers/custom-validators/misc'
+import {
+  checkVideoChannelExists,
+  isVideoChannelDescriptionValid,
+  isVideoChannelExistsPromise,
+  isVideoChannelNameValid
+} from '../../helpers/custom-validators/video-channels'
+import { isIdOrUUIDValid } from '../../helpers/index'
 import { logger } from '../../helpers/logger'
 import { database as db } from '../../initializers'
 import { UserInstance } from '../../models'
-import { checkErrors } from './utils'
+import { areValidationErrors, checkErrors } from './utils'
 
 const listVideoAccountChannelsValidator = [
   param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
@@ -16,7 +22,7 @@ const listVideoAccountChannelsValidator = [
     logger.debug('Checking listVideoAccountChannelsValidator parameters', { parameters: req.body })
 
     checkErrors(req, res, () => {
-      checkVideoAccountExists(req.params.accountId, res, next)
+      checkAccountIdExists(req.params.accountId, res, next)
     })
   }
 ]
@@ -90,6 +96,28 @@ const videoChannelsGetValidator = [
   }
 ]
 
+const videoChannelsShareValidator = [
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('accountId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid account id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoChannelShare parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoChannelExistsPromise(req.params.id, res)) return
+
+    const share = await db.VideoChannelShare.load(res.locals.video.id, req.params.accountId)
+    if (!share) {
+      return res.status(404)
+        .end()
+    }
+
+    res.locals.videoChannelShare = share
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -97,7 +125,8 @@ export {
   videoChannelsAddValidator,
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
-  videoChannelsGetValidator
+  videoChannelsGetValidator,
+  videoChannelsShareValidator
 }
 
 // ---------------------------------------------------------------------------

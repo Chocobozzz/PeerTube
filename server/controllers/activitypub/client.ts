@@ -1,22 +1,26 @@
 // Intercept ActivityPub client requests
 import * as express from 'express'
+import { pageToStartAndCount } from '../../helpers'
+import { activityPubCollectionPagination } from '../../helpers/activitypub'
 
 import { database as db } from '../../initializers'
-import { executeIfActivityPub, localAccountValidator } from '../../middlewares'
-import { pageToStartAndCount } from '../../helpers'
-import { AccountInstance, VideoChannelInstance } from '../../models'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { ACTIVITY_PUB, CONFIG } from '../../initializers/constants'
+import { buildVideoChannelAnnounceToFollowers } from '../../lib/activitypub/send/send-announce'
+import { buildVideoAnnounceToFollowers } from '../../lib/index'
+import { executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { asyncMiddleware } from '../../middlewares/async'
-import { videosGetValidator } from '../../middlewares/validators/videos'
+import { videoChannelsGetValidator, videoChannelsShareValidator } from '../../middlewares/validators/video-channels'
+import { videosGetValidator, videosShareValidator } from '../../middlewares/validators/videos'
+import { AccountInstance, VideoChannelInstance } from '../../models'
+import { VideoChannelShareInstance } from '../../models/video/video-channel-share-interface'
 import { VideoInstance } from '../../models/video/video-interface'
-import { videoChannelsGetValidator } from '../../middlewares/validators/video-channels'
+import { VideoShareInstance } from '../../models/video/video-share-interface'
 
 const activityPubClientRouter = express.Router()
 
 activityPubClientRouter.get('/account/:name',
   executeIfActivityPub(localAccountValidator),
-  executeIfActivityPub(asyncMiddleware(accountController))
+  executeIfActivityPub(accountController)
 )
 
 activityPubClientRouter.get('/account/:name/followers',
@@ -31,12 +35,22 @@ activityPubClientRouter.get('/account/:name/following',
 
 activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub(videosGetValidator),
-  executeIfActivityPub(asyncMiddleware(videoController))
+  executeIfActivityPub(videoController)
+)
+
+activityPubClientRouter.get('/videos/watch/:id/announces/:accountId',
+  executeIfActivityPub(asyncMiddleware(videosShareValidator)),
+  executeIfActivityPub(asyncMiddleware(videoAnnounceController))
 )
 
 activityPubClientRouter.get('/video-channels/:id',
   executeIfActivityPub(videoChannelsGetValidator),
   executeIfActivityPub(asyncMiddleware(videoChannelController))
+)
+
+activityPubClientRouter.get('/video-channels/:id/announces/:accountId',
+  executeIfActivityPub(asyncMiddleware(videoChannelsShareValidator)),
+  executeIfActivityPub(asyncMiddleware(videoChannelAnnounceController))
 )
 
 // ---------------------------------------------------------------------------
@@ -47,7 +61,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function accountController (req: express.Request, res: express.Response, next: express.NextFunction) {
+function accountController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountInstance = res.locals.account
 
   return res.json(account.toActivityPubObject()).end()
@@ -77,10 +91,24 @@ async function accountFollowingController (req: express.Request, res: express.Re
   return res.json(activityPubResult)
 }
 
-async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
+function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoInstance = res.locals.video
 
   return res.json(video.toActivityPubObject())
+}
+
+async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const share = res.locals.videoShare as VideoShareInstance
+  const object = await buildVideoAnnounceToFollowers(share.Account, res.locals.video, undefined)
+
+  return res.json(object)
+}
+
+async function videoChannelAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const share = res.locals.videoChannelShare as VideoChannelShareInstance
+  const object = await buildVideoChannelAnnounceToFollowers(share.Account, share.VideoChannel, undefined)
+
+  return res.json(object)
 }
 
 async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {

@@ -1,4 +1,4 @@
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import 'express-validator'
 import * as validator from 'validator'
@@ -11,33 +11,45 @@ function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
 }
 
-function checkVideoAccountExists (id: string, res: express.Response, callback: () => void) {
-  let promise: Promise<AccountInstance>
-  if (validator.isInt(id)) {
+function checkAccountIdExists (id: number | string, res: express.Response, callback: (err: Error, account: AccountInstance) => any) {
+  let promise: Bluebird<AccountInstance>
+
+  if (validator.isInt('' + id)) {
     promise = db.Account.load(+id)
   } else { // UUID
-    promise = db.Account.loadByUUID(id)
+    promise = db.Account.loadByUUID('' + id)
   }
 
-  promise.then(account => {
+  return checkAccountExists(promise, res, callback)
+}
+
+function checkLocalAccountNameExists (name: string, res: express.Response, callback: (err: Error, account: AccountInstance) => any) {
+  const p = db.Account.loadLocalByName(name)
+
+  return checkAccountExists(p, res, callback)
+}
+
+function checkAccountExists (p: Bluebird<AccountInstance>, res: express.Response, callback: (err: Error, account: AccountInstance) => any) {
+  p.then(account => {
     if (!account) {
       return res.status(404)
-        .json({ error: 'Video account not found' })
+        .send({ error: 'Account not found' })
         .end()
     }
 
     res.locals.account = account
-    callback()
+    return callback(null, account)
   })
-  .catch(err => {
-    logger.error('Error in video account request validator.', err)
-    return res.sendStatus(500)
-  })
+    .catch(err => {
+      logger.error('Error in account request validator.', err)
+      return res.sendStatus(500)
+    })
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  checkVideoAccountExists,
+  checkAccountIdExists,
+  checkLocalAccountNameExists,
   isAccountNameValid
 }

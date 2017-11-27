@@ -130,6 +130,27 @@ function checkVideoExists (id: string, res: Response, callback: () => void) {
     })
 }
 
+async function isVideoExistsPromise (id: string, res: Response) {
+  let video: VideoInstance
+
+  if (validator.isInt(id)) {
+    video = await db.Video.loadAndPopulateAccountAndServerAndTags(+id)
+  } else { // UUID
+    video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(id)
+  }
+
+  if (!video) {
+    res.status(404)
+      .json({ error: 'Video not found' })
+      .end()
+
+    return false
+  }
+
+  res.locals.video = video
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -152,5 +173,6 @@ export {
   isVideoPrivacyValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
-  checkVideoExists
+  checkVideoExists,
+  isVideoExistsPromise
 }

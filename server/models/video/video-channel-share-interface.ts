@@ -5,10 +5,12 @@ import { VideoChannelInstance } from './video-channel-interface'
 
 export namespace VideoChannelShareMethods {
   export type LoadAccountsByShare = (videoChannelId: number) => Bluebird<AccountInstance[]>
+  export type Load = (accountId: number, videoId: number) => Bluebird<VideoChannelShareInstance>
 }
 
 export interface VideoChannelShareClass {
   loadAccountsByShare: VideoChannelShareMethods.LoadAccountsByShare
+  load: VideoChannelShareMethods.Load
 }
 
 export interface VideoChannelShareAttributes {
