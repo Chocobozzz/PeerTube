@@ -66,10 +66,10 @@ Want to see in action?
 
 ## Why
 
-We can't build a FOSS video streaming alternatives to YouTube, Dailymotion, Vimeo... with a centralized software. One organization alone cannot have enought money to pay bandwith and video storage of its server.
+We can't build a FOSS video streaming alternatives to YouTube, Dailymotion, Vimeo... with a centralized software. One organization alone cannot have enough money to pay bandwidth and video storage of its server.
 
 So we need to have a decentralized network (as [Diaspora](https://github.com/diaspora/diaspora) for example).
-But it's not enought because one video could become famous and overload the server.
+But it's not enough because one video could become famous and overload the server.
 It's the reason why we need to use a P2P protocol to limit the server load.
 Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus bittorrent) inside the web browser right now.
 
@@ -194,9 +194,9 @@ The following commands will upgrade the source (according to your current branch
 
 ### Development
 
-In this mode, the server will run requests between pods more quickly, the videos duration are limited to a few seconds.
+In this mode, the server will run requests between pods more quickly, the video durations are limited to a few seconds.
 
-To develop on the server side (server files are automatically compiled when we modify them and the server restarts automatically too):
+To develop on the server-side (server files are automatically compiled when we modify them and the server restarts automatically too):
 
     $ npm run dev:server
 
@@ -217,7 +217,7 @@ The API will listen on `localhost:9000` and the frontend on `localhost:3000` (wi
     $ npm run clean:server:test
     $ npm run play
 
-Then you will can access to the three nodes at `http://localhost:900{1,2,3}` with the `root` as username and `test{1,2,3}` for the password. If you call "make friends" on `http://localhost:9002`, the pod 2 and 3 will become friends. Then if you call "make friends" on `http://localhost:9001` it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
+Then you will get access to the three nodes at `http://localhost:900{1,2,3}` with the `root` as username and `test{1,2,3}` for the password. If you call "make friends" on `http://localhost:9002`, the pod 2 and 3 will become friends. Then if you call "make friends" on `http://localhost:9001` it will become friend with the pod 2 and 3 (check the configuration files). Then the pod will communicate with each others. If you add a video on the pod 3 you'll can see it on the pod 1 and 2 :)
 
 ### Other commands
 
