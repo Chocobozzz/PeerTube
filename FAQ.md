@@ -1,6 +1,6 @@
 # FAQ
 
-## If nobody watch a video, is it seeded?
+## If nobody watches a video, is it seeded?
 
 Yes, the origin server always seeds videos uploaded on it through [Webseed](http://www.bittorrent.org/beps/bep_0019.html).
 
@@ -12,7 +12,7 @@ It is a BitTorrent extension that allow a server to seed a file through HTTP. It
 
 ## If a client requests each chunk of a video through HTTP, the server be overloaded!
 
-Not really. Reverse proxy like nginx handle very well requests of static files. In my tests it can send chunks at 10MB/s without consuming more than 5% of CPU on a very small VPS.
+Not really. Reverse proxies like nginx handle very well requests of static files. In my tests it can send chunks at 10MB/s without consuming more than 5% of CPU on a very small VPS.
 
 
 ## An index of all videos of servers you follow won't be too large for small servers?
@@ -25,7 +25,7 @@ No, 1000000 videos will represent around 2GB on PostgreSQL. It is acceptable for
 WEBM, MP4 or OGV videos.
 
 
-## I want to change my host or move to HTTPS, how can I do?
+## I want to change my host or move to HTTPS, how can I do that?
 
 If you already have followers, you can't.
 
