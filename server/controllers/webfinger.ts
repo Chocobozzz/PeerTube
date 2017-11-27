@@ -1,11 +1,12 @@
 import * as express from 'express'
+import { asyncMiddleware } from '../middlewares/async'
 import { webfingerValidator } from '../middlewares/validators/webfinger'
 import { AccountInstance } from '../models/account/account-interface'
 
 const webfingerRouter = express.Router()
 
 webfingerRouter.get('/.well-known/webfinger',
-  webfingerValidator,
+  asyncMiddleware(webfingerValidator),
   webfingerController
 )
 

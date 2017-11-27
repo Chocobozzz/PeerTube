@@ -8,7 +8,6 @@ import {
   isVideoNSFWValid,
   isVideoTagValid,
   isVideoTruncatedDescriptionValid,
-  isVideoUrlValid,
   isVideoViewsValid
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
@@ -77,12 +76,11 @@ export {
 function setValidRemoteTags (video: any) {
   if (Array.isArray(video.tag) === false) return false
 
-  const newTag = video.tag.filter(t => {
+  video.tag = video.tag.filter(t => {
     return t.type === 'Hashtag' &&
       isVideoTagValid(t.name)
   })
 
-  video.tag = newTag
   return true
 }
 
@@ -96,7 +94,7 @@ function isRemoteVideoContentValid (mediaType: string, content: string) {
 
 function isRemoteVideoIconValid (icon: any) {
   return icon.type === 'Image' &&
-    isVideoUrlValid(icon.url) &&
+    isActivityPubUrlValid(icon.url) &&
     icon.mediaType === 'image/jpeg' &&
     validator.isInt(icon.width + '', { min: 0 }) &&
     validator.isInt(icon.height + '', { min: 0 })
@@ -105,8 +103,7 @@ function isRemoteVideoIconValid (icon: any) {
 function setValidRemoteVideoUrls (video: any) {
   if (Array.isArray(video.url) === false) return false
 
-  const newUrl = video.url.filter(u => isRemoteVideoUrlValid(u))
-  video.url = newUrl
+  video.url = video.url.filter(u => isRemoteVideoUrlValid(u))
 
   return true
 }
@@ -115,13 +112,13 @@ function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
     (
       ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mimeType) !== -1 &&
-      isVideoUrlValid(url.url) &&
+      isActivityPubUrlValid(url.url) &&
       validator.isInt(url.width + '', { min: 0 }) &&
       validator.isInt(url.size + '', { min: 0 })
     ) ||
     (
       ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&
-      isVideoUrlValid(url.url) &&
+      isActivityPubUrlValid(url.url) &&
       validator.isInt(url.width + '', { min: 0 })
     ) ||
     (

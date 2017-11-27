@@ -1,35 +1,36 @@
-import { param } from 'express-validator/check'
 import * as express from 'express'
-
+import { param } from 'express-validator/check'
+import { isIdOrUUIDValid, logger } from '../../helpers'
+import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { database as db } from '../../initializers/database'
-import { checkErrors } from './utils'
-import { logger, isIdOrUUIDValid, checkVideoExists } from '../../helpers'
+import { VideoInstance } from '../../models/video/video-interface'
+import { areValidationErrors } from './utils'
 
 const videosBlacklistRemoveValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking blacklistRemove parameters.', { parameters: req.params })
 
-    checkErrors(req, res, () => {
-      checkVideoExists(req.params.videoId, res, () => {
-        checkVideoIsBlacklisted(req, res, next)
-      })
-    })
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await checkVideoIsBlacklisted(res.locals.video, res)) return
+
+    return next()
   }
 ]
 
 const videosBlacklistAddValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosBlacklist parameters', { parameters: req.params })
 
-    checkErrors(req, res, () => {
-      checkVideoExists(req.params.videoId, res, () => {
-        checkVideoIsBlacklistable(req, res, next)
-      })
-    })
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!checkVideoIsBlacklistable(res.locals.video, res)) return
+
+    return next()
   }
 ]
 
@@ -41,27 +42,27 @@ export {
 }
 // ---------------------------------------------------------------------------
 
-function checkVideoIsBlacklistable (req: express.Request, res: express.Response, callback: () => void) {
-  if (res.locals.video.isOwned() === true) {
-    return res.status(403)
+function checkVideoIsBlacklistable (video: VideoInstance, res: express.Response) {
+  if (video.isOwned() === true) {
+    res.status(403)
               .json({ error: 'Cannot blacklist a local video' })
               .end()
+
+    return false
   }
 
-  callback()
+  return true
 }
 
-function checkVideoIsBlacklisted (req: express.Request, res: express.Response, callback: () => void) {
-  db.BlacklistedVideo.loadByVideoId(res.locals.video.id)
-    .then(blacklistedVideo => {
-      if (!blacklistedVideo) return res.status(404).send('Blacklisted video not found')
+async function checkVideoIsBlacklisted (video: VideoInstance, res: express.Response) {
+  const blacklistedVideo = await db.BlacklistedVideo.loadByVideoId(video.id)
+  if (!blacklistedVideo) {
+    res.status(404)
+      .send('Blacklisted video not found')
 
-      res.locals.blacklistedVideo = blacklistedVideo
+    return false
+  }
 
-      callback()
-    })
-    .catch(err => {
-      logger.error('Error in blacklistRemove request validator', { error: err })
-      return res.sendStatus(500)
-    })
+  res.locals.blacklistedVideo = blacklistedVideo
+  return true
 }

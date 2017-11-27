@@ -43,7 +43,7 @@ usersRouter.get('/me/videos',
 
 usersRouter.get('/me/videos/:videoId/rating',
   authenticate,
-  usersVideoRatingValidator,
+  asyncMiddleware(usersVideoRatingValidator),
   asyncMiddleware(getUserVideoRating)
 )
 
@@ -56,20 +56,20 @@ usersRouter.get('/',
 )
 
 usersRouter.get('/:id',
-  usersGetValidator,
+  asyncMiddleware(usersGetValidator),
   getUser
 )
 
 usersRouter.post('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
-  usersAddValidator,
-  createUserRetryWrapper
+  asyncMiddleware(usersAddValidator),
+  asyncMiddleware(createUserRetryWrapper)
 )
 
 usersRouter.post('/register',
-  ensureUserRegistrationAllowed,
-  usersRegisterValidator,
+  asyncMiddleware(ensureUserRegistrationAllowed),
+  asyncMiddleware(usersRegisterValidator),
   asyncMiddleware(registerUserRetryWrapper)
 )
 
@@ -82,14 +82,14 @@ usersRouter.put('/me',
 usersRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
-  usersUpdateValidator,
+  asyncMiddleware(usersUpdateValidator),
   asyncMiddleware(updateUser)
 )
 
 usersRouter.delete('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
-  usersRemoveValidator,
+  asyncMiddleware(usersRemoveValidator),
   asyncMiddleware(removeUser)
 )
 

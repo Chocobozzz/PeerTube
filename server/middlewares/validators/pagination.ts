@@ -1,8 +1,7 @@
-import { query } from 'express-validator/check'
 import * as express from 'express'
-
-import { checkErrors } from './utils'
+import { query } from 'express-validator/check'
 import { logger } from '../../helpers'
+import { areValidationErrors } from './utils'
 
 const paginationValidator = [
   query('start').optional().isInt().withMessage('Should have a number start'),
@@ -11,7 +10,9 @@ const paginationValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking pagination parameters', { parameters: req.query })
 
-    checkErrors(req, res, next)
+    if (areValidationErrors(req, res)) return
+
+    return next()
   }
 ]
 

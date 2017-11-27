@@ -12,7 +12,7 @@ const rateVideoRouter = express.Router()
 
 rateVideoRouter.put('/:id/rate',
   authenticate,
-  videoRateValidator,
+  asyncMiddleware(videoRateValidator),
   asyncMiddleware(rateVideoRetryWrapper)
 )
 

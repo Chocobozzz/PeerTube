@@ -1,9 +1,9 @@
 import { query } from 'express-validator/check'
 import * as express from 'express'
 
-import { checkErrors } from './utils'
 import { logger } from '../../helpers'
 import { SORTABLE_COLUMNS } from '../../initializers'
+import { areValidationErrors } from './utils'
 
 // Initialize constants here for better performances
 const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
@@ -43,7 +43,9 @@ function checkSort (sortableColumns: string[]) {
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       logger.debug('Checking sort parameters', { parameters: req.query })
 
-      checkErrors(req, res, next)
+      if (areValidationErrors(req, res)) return
+
+      return next()
     }
   ]
 }

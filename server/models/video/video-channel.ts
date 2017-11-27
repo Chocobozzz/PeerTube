@@ -1,6 +1,5 @@
 import * as Sequelize from 'sequelize'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers'
-import { isVideoChannelUrlValid } from '../../helpers/custom-validators/video-channels'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { sendDeleteVideoChannel } from '../../lib/activitypub/send/send-delete'
 
@@ -8,6 +7,7 @@ import { addMethodsToModel, getSort } from '../utils'
 import { VideoChannelAttributes, VideoChannelInstance, VideoChannelMethods } from './video-channel-interface'
 import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 import { activityPubCollection } from '../../helpers/activitypub'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 
 let VideoChannel: Sequelize.Model<VideoChannelInstance, VideoChannelAttributes>
 let toFormattedJSON: VideoChannelMethods.ToFormattedJSON
@@ -66,7 +66,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         allowNull: false,
         validate: {
           urlValid: value => {
-            const res = isVideoChannelUrlValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('Video channel URL is not valid.')
           }
         }

@@ -7,7 +7,18 @@ import * as Sequelize from 'sequelize'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects/video-torrent-object'
 import { activityPubCollection } from '../../helpers/activitypub'
-import { isVideoCategoryValid, isVideoLanguageValid, isVideoPrivacyValid, isVideoUrlValid } from '../../helpers/custom-validators/videos'
+import { createTorrentPromise, renamePromise, statPromise, unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
+import { isVideoCategoryValid, isVideoLanguageValid, isVideoPrivacyValid } from '../../helpers/custom-validators/videos'
+import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
+import {
+  isActivityPubUrlValid,
+  isVideoDescriptionValid,
+  isVideoDurationValid,
+  isVideoLicenceValid,
+  isVideoNameValid,
+  isVideoNSFWValid
+} from '../../helpers/index'
+import { logger } from '../../helpers/logger'
 import {
   API_VERSION,
   CONFIG,
@@ -21,18 +32,12 @@ import {
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
 } from '../../initializers/constants'
+import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 import { sendDeleteVideo } from '../../lib/index'
-
 import { addMethodsToModel, getSort } from '../utils'
-
 import { TagInstance } from './tag-interface'
 import { VideoFileInstance, VideoFileModel } from './video-file-interface'
 import { VideoAttributes, VideoInstance, VideoMethods } from './video-interface'
-import { isVideoNameValid, isVideoLicenceValid, isVideoNSFWValid, isVideoDescriptionValid, isVideoDurationValid } from '../../helpers/index'
-import { logger } from '../../helpers/logger'
-import { generateImageFromVideoFile, transcode, getVideoFileHeight } from '../../helpers/ffmpeg-utils'
-import { createTorrentPromise, writeFilePromise, unlinkPromise, renamePromise, statPromise } from '../../helpers/core-utils'
-import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 
 let Video: Sequelize.Model<VideoInstance, VideoAttributes>
 let getOriginalFile: VideoMethods.GetOriginalFile
@@ -205,7 +210,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
         allowNull: false,
         validate: {
           urlValid: value => {
-            const res = isVideoUrlValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('Video URL is not valid.')
           }
         }

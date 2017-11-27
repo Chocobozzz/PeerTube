@@ -1,12 +1,16 @@
 import * as express from 'express'
 
-import { CONFIG, PREVIEWS_SIZE, EMBED_SIZE } from '../initializers'
+import { CONFIG, EMBED_SIZE, PREVIEWS_SIZE } from '../initializers'
 import { oembedValidator } from '../middlewares'
+import { asyncMiddleware } from '../middlewares/async'
 import { VideoInstance } from '../models'
 
 const servicesRouter = express.Router()
 
-servicesRouter.use('/oembed', oembedValidator, generateOEmbed)
+servicesRouter.use('/oembed',
+  asyncMiddleware(oembedValidator),
+  generateOEmbed
+)
 
 // ---------------------------------------------------------------------------
 

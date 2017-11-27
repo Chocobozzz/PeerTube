@@ -5,29 +5,17 @@ import { exists, isUUIDValid } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
 function isAccountEndpointsObjectValid (endpointObject: any) {
-  return isAccountSharedInboxValid(endpointObject.sharedInbox)
-}
-
-function isAccountSharedInboxValid (sharedInbox: string) {
-  return isActivityPubUrlValid(sharedInbox)
+  return isActivityPubUrlValid(endpointObject.sharedInbox)
 }
 
 function isAccountPublicKeyObjectValid (publicKeyObject: any) {
-  return isAccountPublicKeyIdValid(publicKeyObject.id) &&
-    isAccountPublicKeyOwnerValid(publicKeyObject.owner) &&
+  return isActivityPubUrlValid(publicKeyObject.id) &&
+    isActivityPubUrlValid(publicKeyObject.owner) &&
     isAccountPublicKeyValid(publicKeyObject.publicKeyPem)
-}
-
-function isAccountPublicKeyIdValid (id: string) {
-  return isActivityPubUrlValid(id)
 }
 
 function isAccountTypeValid (type: string) {
   return type === 'Person' || type === 'Application'
-}
-
-function isAccountPublicKeyOwnerValid (owner: string) {
-  return isActivityPubUrlValid(owner)
 }
 
 function isAccountPublicKeyValid (publicKey: string) {
@@ -38,32 +26,8 @@ function isAccountPublicKeyValid (publicKey: string) {
     validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACCOUNTS.PUBLIC_KEY)
 }
 
-function isAccountIdValid (id: string) {
-  return isActivityPubUrlValid(id)
-}
-
-function isAccountFollowingValid (id: string) {
-  return isActivityPubUrlValid(id)
-}
-
-function isAccountFollowersValid (id: string) {
-  return isActivityPubUrlValid(id)
-}
-
-function isAccountInboxValid (inbox: string) {
-  return isActivityPubUrlValid(inbox)
-}
-
-function isAccountOutboxValid (outbox: string) {
-  return isActivityPubUrlValid(outbox)
-}
-
 function isAccountPreferredUsernameValid (preferredUsername: string) {
   return isAccountNameValid(preferredUsername)
-}
-
-function isAccountUrlValid (url: string) {
-  return isActivityPubUrlValid(url)
 }
 
 function isAccountPrivateKeyValid (privateKey: string) {
@@ -75,15 +39,15 @@ function isAccountPrivateKeyValid (privateKey: string) {
 }
 
 function isRemoteAccountValid (remoteAccount: any) {
-  return isAccountIdValid(remoteAccount.id) &&
+  return isActivityPubUrlValid(remoteAccount.id) &&
     isUUIDValid(remoteAccount.uuid) &&
     isAccountTypeValid(remoteAccount.type) &&
-    isAccountFollowingValid(remoteAccount.following) &&
-    isAccountFollowersValid(remoteAccount.followers) &&
-    isAccountInboxValid(remoteAccount.inbox) &&
-    isAccountOutboxValid(remoteAccount.outbox) &&
+    isActivityPubUrlValid(remoteAccount.following) &&
+    isActivityPubUrlValid(remoteAccount.followers) &&
+    isActivityPubUrlValid(remoteAccount.inbox) &&
+    isActivityPubUrlValid(remoteAccount.outbox) &&
     isAccountPreferredUsernameValid(remoteAccount.preferredUsername) &&
-    isAccountUrlValid(remoteAccount.url) &&
+    isActivityPubUrlValid(remoteAccount.url) &&
     isAccountPublicKeyObjectValid(remoteAccount.publicKey) &&
     isAccountEndpointsObjectValid(remoteAccount.endpoints)
 }
@@ -113,19 +77,10 @@ function isAccountAcceptActivityValid (activity: any) {
 
 export {
   isAccountEndpointsObjectValid,
-  isAccountSharedInboxValid,
   isAccountPublicKeyObjectValid,
-  isAccountPublicKeyIdValid,
   isAccountTypeValid,
-  isAccountPublicKeyOwnerValid,
   isAccountPublicKeyValid,
-  isAccountIdValid,
-  isAccountFollowingValid,
-  isAccountFollowersValid,
-  isAccountInboxValid,
-  isAccountOutboxValid,
   isAccountPreferredUsernameValid,
-  isAccountUrlValid,
   isAccountPrivateKeyValid,
   isRemoteAccountValid,
   isAccountFollowingCountValid,

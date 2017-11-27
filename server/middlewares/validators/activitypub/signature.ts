@@ -1,14 +1,7 @@
-import { body } from 'express-validator/check'
 import * as express from 'express'
-
-import {
-  logger,
-  isDateValid,
-  isSignatureTypeValid,
-  isSignatureCreatorValid,
-  isSignatureValueValid
-} from '../../../helpers'
-import { checkErrors } from '../utils'
+import { body } from 'express-validator/check'
+import { isDateValid, isSignatureCreatorValid, isSignatureTypeValid, isSignatureValueValid, logger } from '../../../helpers'
+import { areValidationErrors } from '../utils'
 
 const signatureValidator = [
   body('signature.type').custom(isSignatureTypeValid).withMessage('Should have a valid signature type'),
@@ -19,7 +12,9 @@ const signatureValidator = [
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking activitypub signature parameter', { parameters: { signature: req.body.signature } })
 
-    checkErrors(req, res, next)
+    if (areValidationErrors(req, res)) return
+
+    return next()
   }
 ]
 

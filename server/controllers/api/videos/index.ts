@@ -86,7 +86,7 @@ videosRouter.get('/',
 )
 videosRouter.put('/:id',
   authenticate,
-  videosUpdateValidator,
+  asyncMiddleware(videosUpdateValidator),
   asyncMiddleware(updateVideoRetryWrapper)
 )
 videosRouter.post('/upload',
@@ -97,17 +97,17 @@ videosRouter.post('/upload',
 )
 
 videosRouter.get('/:id/description',
-  videosGetValidator,
+  asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
 )
 videosRouter.get('/:id',
-  videosGetValidator,
+  asyncMiddleware(videosGetValidator),
   getVideo
 )
 
 videosRouter.delete('/:id',
   authenticate,
-  videosRemoveValidator,
+  asyncMiddleware(videosRemoveValidator),
   asyncMiddleware(removeVideoRetryWrapper)
 )
 

@@ -19,22 +19,22 @@ import { VideoShareInstance } from '../../models/video/video-share-interface'
 const activityPubClientRouter = express.Router()
 
 activityPubClientRouter.get('/account/:name',
-  executeIfActivityPub(localAccountValidator),
+  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(accountController)
 )
 
 activityPubClientRouter.get('/account/:name/followers',
-  executeIfActivityPub(localAccountValidator),
+  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(asyncMiddleware(accountFollowersController))
 )
 
 activityPubClientRouter.get('/account/:name/following',
-  executeIfActivityPub(localAccountValidator),
+  executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(asyncMiddleware(accountFollowingController))
 )
 
 activityPubClientRouter.get('/videos/watch/:id',
-  executeIfActivityPub(videosGetValidator),
+  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
   executeIfActivityPub(videoController)
 )
 
@@ -44,7 +44,7 @@ activityPubClientRouter.get('/videos/watch/:id/announces/:accountId',
 )
 
 activityPubClientRouter.get('/video-channels/:id',
-  executeIfActivityPub(videoChannelsGetValidator),
+  executeIfActivityPub(asyncMiddleware(videoChannelsGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoChannelController))
 )
 

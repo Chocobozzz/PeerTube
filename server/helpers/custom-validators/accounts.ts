@@ -1,17 +1,16 @@
 import * as Bluebird from 'bluebird'
-import * as express from 'express'
+import { Response } from 'express'
 import 'express-validator'
 import * as validator from 'validator'
 import { database as db } from '../../initializers'
 import { AccountInstance } from '../../models'
-import { logger } from '../logger'
 import { isUserUsernameValid } from './users'
 
 function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
 }
 
-function checkAccountIdExists (id: number | string, res: express.Response, callback: (err: Error, account: AccountInstance) => any) {
+function isAccountIdExist (id: number | string, res: Response) {
   let promise: Bluebird<AccountInstance>
 
   if (validator.isInt('' + id)) {
@@ -20,36 +19,35 @@ function checkAccountIdExists (id: number | string, res: express.Response, callb
     promise = db.Account.loadByUUID('' + id)
   }
 
-  return checkAccountExists(promise, res, callback)
+  return isAccountExist(promise, res)
 }
 
-function checkLocalAccountNameExists (name: string, res: express.Response, callback: (err: Error, account: AccountInstance) => any) {
-  const p = db.Account.loadLocalByName(name)
+function isLocalAccountNameExist (name: string, res: Response) {
+  const promise = db.Account.loadLocalByName(name)
 
-  return checkAccountExists(p, res, callback)
+  return isAccountExist(promise, res)
 }
 
-function checkAccountExists (p: Bluebird<AccountInstance>, res: express.Response, callback: (err: Error, account: AccountInstance) => any) {
-  p.then(account => {
-    if (!account) {
-      return res.status(404)
-        .send({ error: 'Account not found' })
-        .end()
-    }
+async function isAccountExist (p: Bluebird<AccountInstance>, res: Response) {
+  const account = await p
 
-    res.locals.account = account
-    return callback(null, account)
-  })
-    .catch(err => {
-      logger.error('Error in account request validator.', err)
-      return res.sendStatus(500)
-    })
+  if (!account) {
+    res.status(404)
+      .send({ error: 'Account not found' })
+      .end()
+
+    return false
+  }
+
+  res.locals.account = account
+
+  return true
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  checkAccountIdExists,
-  checkLocalAccountNameExists,
+  isAccountIdExist,
+  isLocalAccountNameExist,
   isAccountNameValid
 }

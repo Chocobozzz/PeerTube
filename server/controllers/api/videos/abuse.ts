@@ -33,7 +33,7 @@ abuseVideoRouter.get('/abuse',
 )
 abuseVideoRouter.post('/:id/abuse',
   authenticate,
-  videoAbuseReportValidator,
+  asyncMiddleware(videoAbuseReportValidator),
   asyncMiddleware(reportVideoAbuseRetryWrapper)
 )
 

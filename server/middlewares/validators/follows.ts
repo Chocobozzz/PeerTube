@@ -4,7 +4,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { isEachUniqueHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
 import { CONFIG, database as db } from '../../initializers'
-import { checkErrors } from './utils'
+import { areValidationErrors } from './utils'
 import { getServerAccount } from '../../helpers/utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 
@@ -23,34 +23,30 @@ const followValidator = [
 
     logger.debug('Checking follow parameters', { parameters: req.body })
 
-    checkErrors(req, res, next)
+    if (areValidationErrors(req, res)) return
+
+    return next()
   }
 ]
 
 const removeFollowingValidator = [
   param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unfollow parameters', { parameters: req.params })
 
-    checkErrors(req, res, async () => {
-      try {
-        const serverAccount = await getServerAccount()
-        const follow = await db.AccountFollow.loadByAccountAndTarget(serverAccount.id, req.params.accountId)
+    if (areValidationErrors(req, res)) return
 
-        if (!follow) {
-          return res.status(404)
-            .end()
-        }
+    const serverAccount = await getServerAccount()
+    const follow = await db.AccountFollow.loadByAccountAndTarget(serverAccount.id, req.params.accountId)
 
-        res.locals.follow = follow
+    if (!follow) {
+      return res.status(404)
+        .end()
+    }
 
-        return next()
-      } catch (err) {
-        logger.error('Error in remove following validator.', err)
-        return res.sendStatus(500)
-      }
-    })
+    res.locals.follow = follow
+    return next()
   }
 ]
 

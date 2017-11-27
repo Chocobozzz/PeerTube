@@ -2,17 +2,12 @@ import * as Sequelize from 'sequelize'
 import {
   activityPubContextify,
   isAccountFollowersCountValid,
-  isAccountFollowersValid,
   isAccountFollowingCountValid,
-  isAccountFollowingValid,
-  isAccountInboxValid,
-  isAccountOutboxValid,
   isAccountPrivateKeyValid,
   isAccountPublicKeyValid,
-  isAccountSharedInboxValid,
-  isAccountUrlValid,
   isUserUsernameValid
 } from '../../helpers'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { sendDeleteAccount } from '../../lib/activitypub/send/send-delete'
 
@@ -61,7 +56,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         allowNull: false,
         validate: {
           urlValid: value => {
-            const res = isAccountUrlValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('URL is not valid.')
           }
         }
@@ -111,7 +106,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         allowNull: false,
         validate: {
           inboxUrlValid: value => {
-            const res = isAccountInboxValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('Inbox URL is not valid.')
           }
         }
@@ -121,7 +116,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         allowNull: false,
         validate: {
           outboxUrlValid: value => {
-            const res = isAccountOutboxValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('Outbox URL is not valid.')
           }
         }
@@ -131,7 +126,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         allowNull: false,
         validate: {
           sharedInboxUrlValid: value => {
-            const res = isAccountSharedInboxValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('Shared inbox URL is not valid.')
           }
         }
@@ -141,7 +136,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         allowNull: false,
         validate: {
           followersUrlValid: value => {
-            const res = isAccountFollowersValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('Followers URL is not valid.')
           }
         }
@@ -151,7 +146,7 @@ export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes
         allowNull: false,
         validate: {
           followingUrlValid: value => {
-            const res = isAccountFollowingValid(value)
+            const res = isActivityPubUrlValid(value)
             if (res === false) throw new Error('Following URL is not valid.')
           }
         }

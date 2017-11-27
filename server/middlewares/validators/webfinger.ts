@@ -1,37 +1,31 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
 import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
-import { database as db } from '../../initializers'
-import { checkErrors } from './utils'
 import { logger } from '../../helpers/logger'
+import { database as db } from '../../initializers'
+import { areValidationErrors } from './utils'
 
 const webfingerValidator = [
   query('resource').custom(isWebfingerResourceValid).withMessage('Should have a valid webfinger resource'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking webfinger parameters', { parameters: req.query })
 
-    checkErrors(req, res, () => {
-      // Remove 'acct:' from the beginning of the string
-      const nameWithHost = req.query.resource.substr(5)
-      const [ name ] = nameWithHost.split('@')
+    if (areValidationErrors(req, res)) return
 
-      db.Account.loadLocalByName(name)
-        .then(account => {
-          if (!account) {
-            return res.status(404)
-              .send({ error: 'Account not found' })
-              .end()
-          }
+    // Remove 'acct:' from the beginning of the string
+    const nameWithHost = req.query.resource.substr(5)
+    const [ name ] = nameWithHost.split('@')
 
-          res.locals.account = account
-          return next()
-        })
-        .catch(err => {
-          logger.error('Error in webfinger validator.', err)
-          return res.sendStatus(500)
-        })
-    })
+    const account = await db.Account.loadLocalByName(name)
+    if (!account) {
+      return res.status(404)
+        .send({ error: 'Account not found' })
+        .end()
+    }
+
+    res.locals.account = account
+    return next()
   }
 ]
 

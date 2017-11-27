@@ -41,7 +41,7 @@ serverFollowsRouter.post('/following',
 serverFollowsRouter.delete('/following/:accountId',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
-  removeFollowingValidator,
+  asyncMiddleware(removeFollowingValidator),
   asyncMiddleware(removeFollow)
 )
 

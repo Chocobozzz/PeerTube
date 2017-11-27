@@ -55,10 +55,10 @@ If you want to test the decentralization feature, you can easily run 3 instances
 
 The server is composed by:
 
-  * a REST API (throught Express framework)
+  * a REST API (Express framework)
   * a WebTorrent Tracker
 
-A video is seeded by the server throught the [WebSeed](http://www.bittorrent.org/beps/bep_0019.html) protocol (HTTP).
+A video is seeded by the server with the [WebSeed](http://www.bittorrent.org/beps/bep_0019.html) protocol (HTTP).
 
 ![Architecture scheme](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/upload-video.png)
 

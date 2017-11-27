@@ -1,22 +1,19 @@
-import { body, param } from 'express-validator/check'
-import 'express-validator'
 import * as express from 'express'
-import * as Promise from 'bluebird'
-import * as validator from 'validator'
-
-import { database as db } from '../../initializers/database'
-import { checkErrors } from './utils'
+import 'express-validator'
+import { body, param } from 'express-validator/check'
 import {
-  isSignupAllowed,
-  logger,
-  isUserUsernameValid,
-  isUserPasswordValid,
-  isUserVideoQuotaValid,
-  isUserDisplayNSFWValid,
   isIdOrUUIDValid,
-  isUserRoleValid
+  isSignupAllowed,
+  isUserDisplayNSFWValid,
+  isUserPasswordValid,
+  isUserRoleValid,
+  isUserUsernameValid,
+  isUserVideoQuotaValid,
+  logger
 } from '../../helpers'
-import { UserInstance, VideoInstance } from '../../models'
+import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { database as db } from '../../initializers/database'
+import { areValidationErrors } from './utils'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -25,12 +22,13 @@ const usersAddValidator = [
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersAdd parameters', { parameters: req.body })
 
-    checkErrors(req, res, () => {
-      checkUserDoesNotAlreadyExist(req.body.username, req.body.email, res, next)
-    })
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
+
+    return next()
   }
 ]
 
@@ -39,37 +37,33 @@ const usersRegisterValidator = [
   body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRegister parameters', { parameters: req.body })
 
-    checkErrors(req, res, () => {
-      checkUserDoesNotAlreadyExist(req.body.username, req.body.email, res, next)
-    })
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
+
+    return next()
   }
 ]
 
 const usersRemoveValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersRemove parameters', { parameters: req.params })
 
-    checkErrors(req, res, () => {
-      checkUserExists(req.params.id, res, (err, user) => {
-        if (err) {
-          logger.error('Error in usersRemoveValidator.', err)
-          return res.sendStatus(500)
-        }
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
 
-        if (user.username === 'root') {
-          return res.status(400)
-                    .send({ error: 'Cannot remove the root user' })
-                    .end()
-        }
+    const user = res.locals.user
+    if (user.username === 'root') {
+      return res.status(400)
+                .send({ error: 'Cannot remove the root user' })
+                .end()
+    }
 
-        return next()
-      })
-    })
+    return next()
   }
 ]
 
@@ -79,12 +73,13 @@ const usersUpdateValidator = [
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('role').optional().custom(isUserRoleValid).withMessage('Should have a valid role'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdate parameters', { parameters: req.body })
 
-    checkErrors(req, res, () => {
-      checkUserExists(req.params.id, res, next)
-    })
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
+
+    return next()
   }
 ]
 
@@ -97,64 +92,48 @@ const usersUpdateMeValidator = [
     // TODO: Add old password verification
     logger.debug('Checking usersUpdateMe parameters', { parameters: req.body })
 
-    checkErrors(req, res, next)
+    if (areValidationErrors(req, res)) return
+
+    return next()
   }
 ]
 
 const usersGetValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    checkErrors(req, res, () => {
-      checkUserExists(req.params.id, res, next)
-    })
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersGet parameters', { parameters: req.body })
+
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
+
+    return next()
   }
 ]
 
 const usersVideoRatingValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
 
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVideoRating parameters', { parameters: req.params })
 
-    checkErrors(req, res, () => {
-      let videoPromise: Promise<VideoInstance>
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.videoId, res)) return
 
-      if (validator.isUUID(req.params.videoId)) {
-        videoPromise = db.Video.loadByUUID(req.params.videoId)
-      } else {
-        videoPromise = db.Video.load(req.params.videoId)
-      }
-
-      videoPromise
-        .then(video => {
-          if (!video) {
-            return res.status(404)
-                      .json({ error: 'Video not found' })
-                      .end()
-          }
-
-          return next()
-        })
-        .catch(err => {
-          logger.error('Error in user request validator.', err)
-          return res.sendStatus(500)
-        })
-    })
+    return next()
   }
 ]
 
 const ensureUserRegistrationAllowed = [
-  (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    isSignupAllowed().then(allowed => {
-      if (allowed === false) {
-        return res.status(403)
-                  .send({ error: 'User registration is not enabled or user limit is reached.' })
-                  .end()
-      }
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const allowed = await isSignupAllowed()
+    if (allowed === false) {
+      return res.status(403)
+                .send({ error: 'User registration is not enabled or user limit is reached.' })
+                .end()
+    }
 
-      return next()
-    })
+    return next()
   }
 ]
 
@@ -173,37 +152,30 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserExists (id: number, res: express.Response, callback: (err: Error, user: UserInstance) => void) {
-  db.User.loadById(id)
-    .then(user => {
-      if (!user) {
-        return res.status(404)
-                  .send({ error: 'User not found' })
-                  .end()
-      }
+async function checkUserIdExist (id: number, res: express.Response) {
+  const user = await db.User.loadById(id)
 
-      res.locals.user = user
-      return callback(null, user)
-    })
-    .catch(err => {
-      logger.error('Error in user request validator.', err)
-      return res.sendStatus(500)
-    })
+  if (!user) {
+    res.status(404)
+              .send({ error: 'User not found' })
+              .end()
+
+    return false
+  }
+
+  res.locals.user = user
+  return true
 }
 
-function checkUserDoesNotAlreadyExist (username: string, email: string, res: express.Response, callback: () => void) {
-  db.User.loadByUsernameOrEmail(username, email)
-      .then(user => {
-        if (user) {
-          return res.status(409)
-                    .send({ error: 'User with this username of email already exists.' })
-                    .end()
-        }
+async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email: string, res: express.Response) {
+  const user = await db.User.loadByUsernameOrEmail(username, email)
 
-        return callback()
-      })
-      .catch(err => {
-        logger.error('Error in usersAdd request validator.', err)
-        return res.sendStatus(500)
-      })
+  if (user) {
+    res.status(409)
+              .send({ error: 'User with this username of email already exists.' })
+              .end()
+    return false
+  }
+
+  return true
 }

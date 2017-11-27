@@ -3,6 +3,7 @@ import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared'
 import { getFormattedObjects, logger, resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers'
 import { database as db } from '../../../initializers'
 import { createVideoChannel } from '../../../lib'
+import { sendUpdateVideoChannel } from '../../../lib/activitypub/send/send-update'
 import {
   asyncMiddleware,
   authenticate,
@@ -10,14 +11,13 @@ import {
   paginationValidator,
   setPagination,
   setVideoChannelsSort,
-  videoChannelsGetValidator,
   videoChannelsAddValidator,
+  videoChannelsGetValidator,
   videoChannelsRemoveValidator,
   videoChannelsSortValidator,
   videoChannelsUpdateValidator
 } from '../../../middlewares'
 import { AccountInstance, VideoChannelInstance } from '../../../models'
-import { sendUpdateVideoChannel } from '../../../lib/activitypub/send/send-update'
 
 const videoChannelRouter = express.Router()
 
@@ -30,7 +30,7 @@ videoChannelRouter.get('/channels',
 )
 
 videoChannelRouter.get('/accounts/:accountId/channels',
-  listVideoAccountChannelsValidator,
+  asyncMiddleware(listVideoAccountChannelsValidator),
   asyncMiddleware(listVideoAccountChannels)
 )
 
@@ -42,18 +42,18 @@ videoChannelRouter.post('/channels',
 
 videoChannelRouter.put('/channels/:id',
   authenticate,
-  videoChannelsUpdateValidator,
+  asyncMiddleware(videoChannelsUpdateValidator),
   updateVideoChannelRetryWrapper
 )
 
 videoChannelRouter.delete('/channels/:id',
   authenticate,
-  videoChannelsRemoveValidator,
+  asyncMiddleware(videoChannelsRemoveValidator),
   asyncMiddleware(removeVideoChannelRetryWrapper)
 )
 
 videoChannelRouter.get('/channels/:id',
-  videoChannelsGetValidator,
+  asyncMiddleware(videoChannelsGetValidator),
   asyncMiddleware(getVideoChannel)
 )
 

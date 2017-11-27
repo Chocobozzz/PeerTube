@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import { Response } from 'express'
 import 'express-validator'
 import { values } from 'lodash'
@@ -6,22 +5,16 @@ import 'multer'
 import * as validator from 'validator'
 import { VideoRateType } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_RATE_TYPES } from '../../initializers'
+import { VIDEO_PRIVACIES } from '../../initializers/constants'
 import { database as db } from '../../initializers/database'
 import { VideoInstance } from '../../models/video/video-interface'
-import { logger } from '../logger'
-import { isActivityPubUrlValid } from './activitypub/misc'
 import { exists, isArray } from './misc'
-import { VIDEO_PRIVACIES } from '../../initializers/constants'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
 function isVideoCategoryValid (value: number) {
   return VIDEO_CATEGORIES[value] !== undefined
-}
-
-function isVideoUrlValid (value: string) {
-  return isActivityPubUrlValid(value)
 }
 
 function isVideoLicenceValid (value: number) {
@@ -106,31 +99,7 @@ function isVideoFileSizeValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.FILE_SIZE)
 }
 
-function checkVideoExists (id: string, res: Response, callback: () => void) {
-  let promise: Bluebird<VideoInstance>
-  if (validator.isInt(id)) {
-    promise = db.Video.loadAndPopulateAccountAndServerAndTags(+id)
-  } else { // UUID
-    promise = db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(id)
-  }
-
-  promise.then(video => {
-    if (!video) {
-      return res.status(404)
-        .json({ error: 'Video not found' })
-        .end()
-    }
-
-    res.locals.video = video
-    callback()
-  })
-    .catch(err => {
-      logger.error('Error in video request validator.', err)
-      return res.sendStatus(500)
-    })
-}
-
-async function isVideoExistsPromise (id: string, res: Response) {
+async function isVideoExist (id: string, res: Response) {
   let video: VideoInstance
 
   if (validator.isInt(id)) {
@@ -169,10 +138,8 @@ export {
   isVideoRatingTypeValid,
   isVideoDurationValid,
   isVideoTagValid,
-  isVideoUrlValid,
   isVideoPrivacyValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
-  checkVideoExists,
-  isVideoExistsPromise
+  isVideoExist
 }
