@@ -99,7 +99,7 @@ function associate (models) {
   VideoAbuse.belongsTo(models.Account, {
     foreignKey: {
       name: 'reporterAccountId',
-      allowNull: true
+      allowNull: false
     },
     onDelete: 'CASCADE'
   })

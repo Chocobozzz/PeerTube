@@ -26,7 +26,12 @@ async function migrate () {
   const migrationScripts = await getMigrationScripts()
 
   for (const migrationScript of migrationScripts) {
-    await executeMigration(actualVersion, migrationScript)
+    try {
+      await executeMigration(actualVersion, migrationScript)
+    } catch (err) {
+      logger.error('Cannot execute migration %s.', migrationScript.version, err)
+      process.exit(0)
+    }
   }
 
   logger.info('Migrations finished. New migration version schema: %s', LAST_MIGRATION_VERSION)

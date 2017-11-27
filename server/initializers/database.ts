@@ -31,7 +31,7 @@ const dbname = CONFIG.DATABASE.DBNAME
 const username = CONFIG.DATABASE.USERNAME
 const password = CONFIG.DATABASE.PASSWORD
 
-const database: {
+export type PeerTubeDatabase = {
   sequelize?: Sequelize.Sequelize,
   init?: (silent: boolean) => Promise<void>,
 
@@ -53,7 +53,9 @@ const database: {
   BlacklistedVideo?: BlacklistedVideoModel,
   VideoTag?: VideoTagModel,
   Video?: VideoModel
-} = {}
+}
+
+const database: PeerTubeDatabase = {}
 
 const sequelize = new Sequelize(dbname, username, password, {
   dialect: 'postgres',
