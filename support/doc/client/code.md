@@ -8,7 +8,7 @@ The client is a HTML/CSS/JavaScript web application (single page application -> 
   * [TypeScript](https://www.typescriptlang.org/) -> Language
   * [Angular](https://angular.io) -> JavaScript framework
   * [SASS](http://sass-lang.com/) -> CSS framework
-  * [Webpack](https://webpack.github.io/docs/) -> Source builder (compile TypeScript, SASS files, bundle them...)
+  * [Webpack](https://webpack.js.org/) -> Source builder (compile TypeScript, SASS files, bundle them...)
   * [Bootstrap](http://getbootstrap.com/) -> CSS framework
   * [WebTorrent](https://webtorrent.io/) -> JavaScript library to make P2P in the browser
   * [VideoJS](http://videojs.com/) -> JavaScript player framework
