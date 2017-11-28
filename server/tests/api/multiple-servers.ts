@@ -174,7 +174,7 @@ describe('Test multiple servers', function () {
       await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
 
       // Transcoding
-      await wait(25000)
+      await wait(30000)
 
       // All servers should have this video
       for (const server of servers) {
