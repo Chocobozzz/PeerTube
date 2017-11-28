@@ -130,14 +130,15 @@
 
       <div class="video-details-description" [innerHTML]="videoHTMLDescription"></div>
 
-      <div *ngIf="completeDescriptionShown === false && video.description.length === 250" (click)="showMoreDescription()" class="video-details-description-more">
+      <div class="video-details-description-more" *ngIf="completeDescriptionShown === false && video.description.length === 250" (click)="showMoreDescription()">
         Show more
-        <span class="glyphicon glyphicon-menu-down"></span>
+        <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-down"></span>
+        <my-loader class="description-loading" [loading]="descriptionLoading"></my-loader>
       </div>
 
       <div *ngIf="completeDescriptionShown === true" (click)="showLessDescription()" class="video-details-description-more">
         Show less
-        <span class="glyphicon glyphicon-menu-up"></span>
+        <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-up"></span>
       </div>
     </div>
 

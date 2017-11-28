@@ -1,16 +1,9 @@
 import { NgModule } from '@angular/core'
-
+import { SharedModule } from '../shared'
+import { VideoService } from './shared'
+import { MyVideosComponent, VideoListComponent, VideoMiniatureComponent, VideoSortComponent } from './video-list'
 import { VideosRoutingModule } from './videos-routing.module'
 import { VideosComponent } from './videos.component'
-import {
-  LoaderComponent,
-  VideoListComponent,
-  MyVideosComponent,
-  VideoMiniatureComponent,
-  VideoSortComponent
-} from './video-list'
-import { VideoService } from './shared'
-import { SharedModule } from '../shared'
 
 @NgModule({
   imports: [
@@ -24,9 +17,7 @@ import { SharedModule } from '../shared'
     VideoListComponent,
     MyVideosComponent,
     VideoMiniatureComponent,
-    VideoSortComponent,
-
-    LoaderComponent
+    VideoSortComponent
   ],
 
   exports: [

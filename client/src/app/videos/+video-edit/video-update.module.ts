@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core'
-
+import { SharedModule } from '../../shared'
+import { VideoEditModule } from './shared/video-edit.module'
 import { VideoUpdateRoutingModule } from './video-update-routing.module'
 import { VideoUpdateComponent } from './video-update.component'
-import { VideoEditModule } from './video-edit.module'
-import { SharedModule } from '../../shared'
 
 @NgModule({
   imports: [

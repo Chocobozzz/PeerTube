@@ -23,7 +23,7 @@ import { HttpEventType, HttpResponse } from '@angular/common/http'
 
 @Component({
   selector: 'my-videos-add',
-  styleUrls: [ './video-edit.component.scss' ],
+  styleUrls: [ './shared/video-edit.component.scss' ],
   templateUrl: './video-add.component.html'
 })
 

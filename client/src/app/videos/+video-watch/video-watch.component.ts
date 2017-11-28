@@ -16,6 +16,7 @@ import { VideoReportComponent } from './video-report.component'
 import { VideoDetails, VideoService, MarkdownService } from '../shared'
 import { VideoBlacklistService } from '../../shared'
 import { UserVideoRateType, VideoRateType } from '../../../../../shared'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 
 @Component({
   selector: 'my-video-watch',
@@ -38,6 +39,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   video: VideoDetails = null
   videoPlayerLoaded = false
   videoNotFound = false
+  descriptionLoading = false
 
   completeDescriptionShown = false
   completeVideoDescription: string
@@ -159,32 +161,39 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showMoreDescription () {
-    this.completeDescriptionShown = true
-
     if (this.completeVideoDescription === undefined) {
       return this.loadCompleteDescription()
     }
 
     this.updateVideoDescription(this.completeVideoDescription)
+    this.completeDescriptionShown = true
   }
 
   showLessDescription () {
-    this.completeDescriptionShown = false
 
     this.updateVideoDescription(this.shortVideoDescription)
+    this.completeDescriptionShown = false
   }
 
   loadCompleteDescription () {
+    this.descriptionLoading = true
+
     this.videoService.loadCompleteDescription(this.video.descriptionPath)
       .subscribe(
         description => {
+          this.completeDescriptionShown = true
+          this.descriptionLoading = false
+
           this.shortVideoDescription = this.video.description
           this.completeVideoDescription = description
 
           this.updateVideoDescription(this.completeVideoDescription)
         },
 
-        error => this.notificationsService.error('Error', error.text)
+        error => {
+          this.descriptionLoading = false
+          this.notificationsService.error('Error', error.text)
+        }
       )
   }
 

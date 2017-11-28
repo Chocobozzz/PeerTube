@@ -19,6 +19,7 @@ import { SearchComponent, SearchService } from './search'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
+import { LoaderComponent } from './misc/loader.component'
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { VideoBlacklistService } from './video-blacklist'
   declarations: [
     BytesPipe,
     KeysPipe,
-    SearchComponent
+    SearchComponent,
+    LoaderComponent
   ],
 
   exports: [
@@ -59,7 +61,8 @@ import { VideoBlacklistService } from './video-blacklist'
     BytesPipe,
     KeysPipe,
 
-    SearchComponent
+    SearchComponent,
+    LoaderComponent
   ],
 
   providers: [

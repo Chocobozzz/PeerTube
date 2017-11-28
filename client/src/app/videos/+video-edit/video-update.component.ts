@@ -21,7 +21,7 @@ import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.
 
 @Component({
   selector: 'my-videos-update',
-  styleUrls: [ './video-edit.component.scss' ],
+  styleUrls: [ './shared/video-edit.component.scss' ],
   templateUrl: './video-update.component.html'
 })
 

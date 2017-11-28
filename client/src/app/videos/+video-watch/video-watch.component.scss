@@ -166,6 +166,10 @@
     .video-details-date-description {
       padding-left: $video-watch-info-padding-left;
 
+      .description-loading {
+        display: inline-block;
+      }
+
       .video-details-date {
         font-weight: bold;
         margin-bottom: 30px;
