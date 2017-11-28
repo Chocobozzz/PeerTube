@@ -51,16 +51,16 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
   const previewUrl = CONFIG.WEBSERVER.URL + STATIC_PATHS.PREVIEWS + video.getPreviewName()
   const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
 
-  const videoName = escapeHTML(video.name)
-  const videoDescription = escapeHTML(video.description)
+  const videoNameEscaped = escapeHTML(video.name)
+  const videoDescriptionEscaped = escapeHTML(video.description)
   const embedUrl = CONFIG.WEBSERVER.URL + video.getEmbedPath()
 
   const openGraphMetaTags = {
     'og:type': 'video',
-    'og:title': videoName,
+    'og:title': videoNameEscaped,
     'og:image': previewUrl,
     'og:url': videoUrl,
-    'og:description': videoDescription,
+    'og:description': videoDescriptionEscaped,
 
     'og:video:url': embedUrl,
     'og:video:secure_url': embedUrl,
@@ -68,14 +68,14 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
     'og:video:width': EMBED_SIZE.width,
     'og:video:height': EMBED_SIZE.height,
 
-    'name': videoName,
-    'description': videoDescription,
+    'name': videoNameEscaped,
+    'description': videoDescriptionEscaped,
     'image': previewUrl,
 
     'twitter:card': 'summary_large_image',
     'twitter:site': '@Chocobozzz',
-    'twitter:title': videoName,
-    'twitter:description': videoDescription,
+    'twitter:title': videoNameEscaped,
+    'twitter:description': videoDescriptionEscaped,
     'twitter:image': previewUrl,
     'twitter:player': embedUrl,
     'twitter:player:width': EMBED_SIZE.width,
@@ -86,7 +86,7 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
     {
       type: 'application/json+oembed',
       href: CONFIG.WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoUrl),
-      title: videoName
+      title: videoNameEscaped
     }
   ]
 
