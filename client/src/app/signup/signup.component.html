@@ -3,7 +3,7 @@
 
   <h3>Signup</h3>
 
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="error" class="alert alert-danger">Error : {{ error.message }}</div>
 
   <form role="form" (ngSubmit)="signup()" [formGroup]="form">
     <div class="form-group">
