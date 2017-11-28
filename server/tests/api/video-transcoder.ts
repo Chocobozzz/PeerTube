@@ -67,7 +67,7 @@ describe('Test video transcoding', function () {
     }
     await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
 
-    await wait(10000)
+    await wait(20000)
 
     const res = await getVideosList(servers[1].url)
 

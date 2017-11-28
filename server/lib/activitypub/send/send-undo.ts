@@ -10,7 +10,14 @@ import { AccountInstance } from '../../../models'
 import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
 import { VideoInstance } from '../../../models/video/video-interface'
 import { getAccountFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
-import { broadcastToFollowers, getAccountsInvolvedInVideo, getAudience, getObjectFollowersAudience, unicastTo } from './misc'
+import {
+  broadcastToFollowers,
+  getAccountsInvolvedInVideo,
+  getAudience,
+  getObjectFollowersAudience,
+  getOriginVideoAudience,
+  unicastTo
+} from './misc'
 import { createActivityData, createDislikeActivityData } from './send-create'
 import { followActivityData } from './send-follow'
 import { likeActivityData } from './send-like'
@@ -32,8 +39,10 @@ async function sendUndoLikeToOrigin (byAccount: AccountInstance, video: VideoIns
   const likeUrl = getVideoLikeActivityPubUrl(byAccount, video)
   const undoUrl = getUndoActivityPubUrl(likeUrl)
 
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const object = await likeActivityData(likeUrl, byAccount, video)
-  const data = await undoActivityData(undoUrl, byAccount, object)
+  const data = await undoActivityData(undoUrl, byAccount, object, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
@@ -55,8 +64,10 @@ async function sendUndoDislikeToOrigin (byAccount: AccountInstance, video: Video
   const dislikeUrl = getVideoDislikeActivityPubUrl(byAccount, video)
   const undoUrl = getUndoActivityPubUrl(dislikeUrl)
 
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const dislikeActivity = createDislikeActivityData(byAccount, video)
-  const object = await createActivityData(undoUrl, byAccount, dislikeActivity)
+  const object = await createActivityData(undoUrl, byAccount, dislikeActivity, audience)
 
   const data = await undoActivityData(undoUrl, byAccount, object)
 
