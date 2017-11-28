@@ -6,7 +6,6 @@ import {
   isVideoAbuseReasonValid,
   isVideoCategoryValid,
   isVideoDescriptionValid,
-  isVideoDurationValid,
   isVideoExist,
   isVideoFile,
   isVideoLanguageValid,
@@ -80,14 +79,6 @@ const videosAddValidator = [
          .end()
 
       return
-    }
-
-    if (!isVideoDurationValid('' + duration)) {
-      return res.status(400)
-                .json({
-                  error: 'Duration of the video file is too big (max: ' + CONSTRAINTS_FIELDS.VIDEOS.DURATION.max + 's).'
-                })
-                .end()
     }
 
     videoFile['duration'] = duration

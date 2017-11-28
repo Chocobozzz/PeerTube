@@ -126,7 +126,7 @@ const CONSTRAINTS_FIELDS = {
     DESCRIPTION: { min: 3, max: 3000 }, // Length
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
-    DURATION: { min: 1, max: 7200 }, // Number
+    DURATION: { min: 1 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
     TAG: { min: 2, max: 30 }, // Length
     THUMBNAIL: { min: 2, max: 30 },
@@ -134,7 +134,7 @@ const CONSTRAINTS_FIELDS = {
     VIEWS: { min: 0 },
     LIKES: { min: 0 },
     DISLIKES: { min: 0 },
-    FILE_SIZE: { min: 10, max: 1024 * 1024 * 1024 * 10 /* 10Go */ },
+    FILE_SIZE: { min: 10 },
     URL: { min: 3, max: 2000 } // Length
   },
   ACCOUNTS: {
@@ -216,12 +216,6 @@ const VIDEO_MIMETYPE_EXT = {
 
 // ---------------------------------------------------------------------------
 
-// Score a server has when we create it as a friend
-const FRIEND_SCORE = {
-  BASE: 100,
-  MAX: 1000
-}
-
 const SERVER_ACCOUNT_NAME = 'peertube'
 
 const ACTIVITY_PUB = {
@@ -242,7 +236,9 @@ const ACTIVITY_PUB = {
 // Number of points we add/remove from a friend after a successful/bad request
 const SERVERS_SCORE = {
   PENALTY: -10,
-  BONUS: 10
+  BONUS: 10,
+  BASE: 100,
+  MAX: 1000
 }
 
 const FOLLOW_STATES: { [ id: string ]: FollowState } = {
@@ -323,8 +319,7 @@ const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 
 // Special constants for a test instance
 if (isTestInstance() === true) {
-  CONSTRAINTS_FIELDS.VIDEOS.DURATION.max = 14
-  FRIEND_SCORE.BASE = 20
+  SERVERS_SCORE.BASE = 20
   JOBS_FETCHING_INTERVAL = 1000
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
@@ -341,7 +336,6 @@ export {
   CONFIG,
   CONSTRAINTS_FIELDS,
   EMBED_SIZE,
-  FRIEND_SCORE,
   JOB_STATES,
   JOBS_FETCH_LIMIT_PER_CYCLE,
   JOBS_FETCHING_INTERVAL,

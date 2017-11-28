@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import { isHostValid, logger } from '../../helpers'
-import { FRIEND_SCORE, SERVERS_SCORE } from '../../initializers'
+import { SERVERS_SCORE } from '../../initializers'
 import { addMethodsToModel } from '../utils'
 import { ServerAttributes, ServerInstance, ServerMethods } from './server-interface'
 
@@ -22,11 +22,11 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       },
       score: {
         type: DataTypes.INTEGER,
-        defaultValue: FRIEND_SCORE.BASE,
+        defaultValue: SERVERS_SCORE.BASE,
         allowNull: false,
         validate: {
           isInt: true,
-          max: FRIEND_SCORE.MAX
+          max: SERVERS_SCORE.MAX
         }
       }
     },

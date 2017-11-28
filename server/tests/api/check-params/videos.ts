@@ -333,14 +333,6 @@ describe('Test videos API validator', function () {
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
-    it('Should fail with a too big duration', async function () {
-      const fields = getCompleteVideoUploadAttributes()
-      const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_too_long.webm')
-      }
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
     it('Should succeed with the correct parameters', async function () {
       this.timeout(10000)
 
