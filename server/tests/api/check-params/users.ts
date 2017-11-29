@@ -67,6 +67,7 @@ describe('Test users API validators', function () {
               .get(path)
               .query({ start: 'hello' })
               .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + server.accessToken)
               .expect(400)
     })
 
@@ -75,6 +76,7 @@ describe('Test users API validators', function () {
               .get(path)
               .query({ count: 'hello' })
               .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + server.accessToken)
               .expect(400)
     })
 
@@ -83,7 +85,23 @@ describe('Test users API validators', function () {
               .get(path)
               .query({ sort: 'hello' })
               .set('Accept', 'application/json')
+              .set('Authorization', 'Bearer ' + server.accessToken)
               .expect(400)
+    })
+
+    it('Should fail with a non authenticated user', async function () {
+      await request(server.url)
+        .get(path)
+        .set('Accept', 'application/json')
+        .expect(401)
+    })
+
+    it('Should fail with a non admin user', async function () {
+      await request(server.url)
+        .get(path)
+        .set('Accept', 'application/json')
+        .set('Authorization', 'Bearer ' + userAccessToken)
+        .expect(403)
     })
   })
 
@@ -354,7 +372,7 @@ describe('Test users API validators', function () {
   describe('When updating a user', function () {
 
     before(async function () {
-      const res = await getUsersList(server.url)
+      const res = await getUsersList(server.url, server.accessToken)
 
       userId = res.body.data[1].id
       rootId = res.body.data[2].id

@@ -48,6 +48,8 @@ usersRouter.get('/me/videos/:videoId/rating',
 )
 
 usersRouter.get('/',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
   paginationValidator,
   usersSortValidator,
   setUsersSort,

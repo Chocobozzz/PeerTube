@@ -76,17 +76,18 @@ function getUserVideoRating (url: string, accessToken: string, videoId: number) 
           .expect('Content-Type', /json/)
 }
 
-function getUsersList (url: string) {
+function getUsersList (url: string, accessToken: string) {
   const path = '/api/v1/users'
 
   return request(url)
           .get(path)
           .set('Accept', 'application/json')
+          .set('Authorization', 'Bearer ' + accessToken)
           .expect(200)
           .expect('Content-Type', /json/)
 }
 
-function getUsersListPaginationAndSort (url: string, start: number, count: number, sort: string) {
+function getUsersListPaginationAndSort (url: string, accessToken: string, start: number, count: number, sort: string) {
   const path = '/api/v1/users'
 
   return request(url)
@@ -95,6 +96,7 @@ function getUsersListPaginationAndSort (url: string, start: number, count: numbe
           .query({ count })
           .query({ sort })
           .set('Accept', 'application/json')
+          .set('Authorization', 'Bearer ' + accessToken)
           .expect(200)
           .expect('Content-Type', /json/)
 }

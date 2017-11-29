@@ -77,7 +77,7 @@ app.use(morgan('combined', {
 }))
 // For body requests
 app.use(bodyParser.json({
-  type: 'application/*+json',
+  type: [ 'application/json', 'application/*+json' ],
   limit: '500kb'
 }))
 app.use(bodyParser.urlencoded({ extended: false }))

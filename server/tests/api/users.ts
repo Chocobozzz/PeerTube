@@ -1,4 +1,5 @@
 /* tslint:disable:no-unused-expression */
+
 import * as chai from 'chai'
 import 'mocha'
 import { UserRole } from '../../../shared'
@@ -28,6 +29,7 @@ import {
 } from '../utils'
 import { follow } from '../utils/follows'
 import { getMyVideos } from '../utils/videos'
+import { setAccessTokensToServers } from '../utils/login'
 
 const expect = chai.expect
 
@@ -43,6 +45,8 @@ describe('Test users', function () {
 
     await flushTests()
     server = await runServer(1)
+
+    await setAccessTokensToServers([ server ])
   })
 
   it('Should create a new client')
@@ -242,7 +246,7 @@ describe('Test users', function () {
   })
 
   it('Should list all the users', async function () {
-    const res = await getUsersList(server.url)
+    const res = await getUsersList(server.url, server.accessToken)
     const result = res.body
     const total = result.total
     const users = result.data
@@ -280,7 +284,7 @@ describe('Test users', function () {
   })
 
   it('Should list only the first user by username asc', async function () {
-    const res = await getUsersListPaginationAndSort(server.url, 0, 1, 'username')
+    const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, 'username')
 
     const result = res.body
     const total = result.total
@@ -307,7 +311,7 @@ describe('Test users', function () {
   })
 
   it('Should list only the first user by username desc', async function () {
-    const res = await getUsersListPaginationAndSort(server.url, 0, 1, '-username')
+    const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, '-username')
     const result = res.body
     const total = result.total
     const users = result.data
@@ -330,7 +334,7 @@ describe('Test users', function () {
   })
 
   it('Should list only the second user by createdAt desc', async function () {
-    const res = await getUsersListPaginationAndSort(server.url, 0, 1, '-createdAt')
+    const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 1, '-createdAt')
     const result = res.body
     const total = result.total
     const users = result.data
@@ -353,7 +357,7 @@ describe('Test users', function () {
   })
 
   it('Should list all the users by createdAt asc', async function () {
-    const res = await getUsersListPaginationAndSort(server.url, 0, 2, 'createdAt')
+    const res = await getUsersListPaginationAndSort(server.url, server.accessToken, 0, 2, 'createdAt')
     const result = res.body
     const total = result.total
     const users = result.data
