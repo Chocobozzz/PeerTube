@@ -37,9 +37,11 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
 function executeIfActivityPub (fun: RequestHandler | RequestHandler[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (req.header('Accept') !== ACTIVITY_PUB.ACCEPT_HEADER) {
+    if (ACTIVITY_PUB.ACCEPT_HEADERS.indexOf(req.header('Accept')) === -1) {
       return next()
     }
+
+    logger.debug('ActivityPub request for %s.', req.url)
 
     if (Array.isArray(fun) === true) {
       return eachSeries(fun as RequestHandler[], (f, cb) => {

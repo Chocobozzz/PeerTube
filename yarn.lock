@@ -471,9 +471,9 @@ bitcore-lib@^0.13.7:
     inherits "=2.0.1"
     lodash "=3.10.1"
 
-"bitcore-message@github:comakery/bitcore-message#dist":
+"bitcore-message@github:CoMakery/bitcore-message#dist":
   version "1.0.2"
-  resolved "https://codeload.github.com/comakery/bitcore-message/tar.gz/8799cc327029c3d34fc725f05b2cf981363f6ebf"
+  resolved "https://codeload.github.com/CoMakery/bitcore-message/tar.gz/8799cc327029c3d34fc725f05b2cf981363f6ebf"
   dependencies:
     bitcore-lib "^0.13.7"
 

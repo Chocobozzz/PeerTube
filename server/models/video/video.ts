@@ -616,6 +616,13 @@ toActivityPubObject = function (this: VideoInstance) {
     })
   }
 
+  // Add video url too
+  url.push({
+    type: 'Link',
+    mimeType: 'text/html',
+    url: CONFIG.WEBSERVER.URL + '/videos/watch/' + this.uuid
+  })
+
   const videoObject: VideoTorrentObject = {
     type: 'Video' as 'Video',
     id: this.url,

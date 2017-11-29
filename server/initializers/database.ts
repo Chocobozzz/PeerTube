@@ -66,6 +66,8 @@ const sequelize = new Sequelize(dbname, username, password, {
   operatorsAliases: false,
 
   logging: (message: string, benchmark: number) => {
+    if (process.env.NODE_DB_LOG === 'false') return
+
     let newMessage = message
     if (isTestInstance() === true && benchmark !== undefined) {
       newMessage += ' | ' + benchmark + 'ms'

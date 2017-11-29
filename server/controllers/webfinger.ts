@@ -27,6 +27,7 @@ function webfingerController (req: express.Request, res: express.Response, next:
     links: [
       {
         rel: 'self',
+        type: 'application/activity+json',
         href: account.url
       }
     ]

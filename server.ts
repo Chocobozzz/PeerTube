@@ -76,7 +76,10 @@ app.use(morgan('combined', {
   stream: { write: logger.info }
 }))
 // For body requests
-app.use(bodyParser.json({ limit: '500kb' }))
+app.use(bodyParser.json({
+  type: 'application/*+json',
+  limit: '500kb'
+}))
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // ----------- Tracker -----------
