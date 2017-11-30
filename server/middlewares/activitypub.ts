@@ -37,7 +37,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
 function executeIfActivityPub (fun: RequestHandler | RequestHandler[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (req.accepts(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS) === false) {
+    if (!req.accepts(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)) {
       return next()
     }
 

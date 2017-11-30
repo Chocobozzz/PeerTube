@@ -220,11 +220,11 @@ const VIDEO_MIMETYPE_EXT = {
 const SERVER_ACCOUNT_NAME = 'peertube'
 
 const ACTIVITY_PUB = {
-  ACCEPT_HEADERS: [
-    'application/activity+json, application/ld+json',
-    'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
+  POTENTIAL_ACCEPT_HEADERS: [
+    'application/activity+json',
+    'application/ld+json'
   ],
-  ACCEPT_HEADER: '',
+  ACCEPT_HEADER: 'application/activity+json, application/ld+json',
   PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 100,
@@ -235,7 +235,6 @@ const ACTIVITY_PUB = {
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   }
 }
-ACTIVITY_PUB.ACCEPT_HEADER = ACTIVITY_PUB.ACCEPT_HEADERS[0]
 
 // ---------------------------------------------------------------------------
 
