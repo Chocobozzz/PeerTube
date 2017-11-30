@@ -73,7 +73,7 @@ async function accountFollowersController (req: express.Request, res: express.Re
   const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi([ account.id ], start, count)
+  const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi([ account.id ], undefined, start, count)
   const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)
@@ -85,7 +85,7 @@ async function accountFollowingController (req: express.Request, res: express.Re
   const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await db.AccountFollow.listAcceptedFollowingUrlsForApi([ account.id ], start, count)
+  const result = await db.AccountFollow.listAcceptedFollowingUrlsForApi([ account.id ], undefined, start, count)
   const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)

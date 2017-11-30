@@ -129,7 +129,11 @@ app.use('/', staticRouter)
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 app.use('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'))
+  if (req.accepts('html')) {
+    return res.sendFile(path.join(__dirname, '../client/dist/index.html'))
+  }
+
+  return res.status(404).end()
 })
 
 // ----------- Errors -----------

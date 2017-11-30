@@ -222,7 +222,7 @@ const videosShareValidator = [
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.id, res)) return
 
-    const share = await db.VideoShare.load(req.params.accountId, res.locals.video.id)
+    const share = await db.VideoShare.load(req.params.accountId, res.locals.video.id, undefined)
     if (!share) {
       return res.status(404)
         .end()

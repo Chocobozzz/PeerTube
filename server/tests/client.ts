@@ -41,8 +41,9 @@ describe('Test a client controllers', function () {
 
   it('Should have valid Open Graph tags on the watch page with video id', async function () {
     const res = await request(server.url)
-                        .get('/videos/watch/' + server.video.id)
-                        .expect(200)
+      .get('/videos/watch/' + server.video.id)
+      .set('Accept', 'text/html')
+      .expect(200)
 
     expect(res.text).to.contain('<meta property="og:title" content="my super name for server 1" />')
     expect(res.text).to.contain('<meta property="og:description" content="my super description for server 1" />')
@@ -50,8 +51,9 @@ describe('Test a client controllers', function () {
 
   it('Should have valid Open Graph tags on the watch page with video uuid', async function () {
     const res = await request(server.url)
-                        .get('/videos/watch/' + server.video.uuid)
-                        .expect(200)
+      .get('/videos/watch/' + server.video.uuid)
+      .set('Accept', 'text/html')
+      .expect(200)
 
     expect(res.text).to.contain('<meta property="og:title" content="my super name for server 1" />')
     expect(res.text).to.contain('<meta property="og:description" content="my super description for server 1" />')
@@ -61,6 +63,7 @@ describe('Test a client controllers', function () {
     const path = '/videos/watch/' + server.video.uuid
     const res = await request(server.url)
       .get(path)
+      .set('Accept', 'text/html')
       .expect(200)
 
     const expectedLink = '<link rel="alternate" type="application/json+oembed" href="http://localhost:9001/services/oembed?' +

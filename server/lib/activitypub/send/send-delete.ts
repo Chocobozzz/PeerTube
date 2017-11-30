@@ -27,7 +27,7 @@ async function sendDeleteVideo (video: VideoInstance, t: Transaction) {
 }
 
 async function sendDeleteAccount (account: AccountInstance, t: Transaction) {
-  const data = await deleteActivityData(account.url, account)
+  const data = deleteActivityData(account.url, account)
 
   return broadcastToFollowers(data, account, [ account ], t)
 }

@@ -6,7 +6,7 @@ db.init(true)
     return getServerAccount()
   })
   .then(serverAccount => {
-    return db.AccountFollow.listAcceptedFollowingUrlsForApi([ serverAccount.id ])
+    return db.AccountFollow.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined)
   })
   .then(res => {
     return res.total > 0

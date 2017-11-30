@@ -38,15 +38,16 @@ async function outboxController (req: express.Request, res: express.Response, ne
     const videoObject = video.toActivityPubObject()
 
     // This is a shared video
+    const videoChannel = video.VideoChannel
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
-      const addActivity = await addActivityData(video.url, video.VideoChannel.Account, video, video.VideoChannel.url, videoObject)
+      const addActivity = await addActivityData(video.url, videoChannel.Account, video, videoChannel.url, videoObject, undefined)
 
       const url = getAnnounceActivityPubUrl(video.url, account)
-      const announceActivity = await announceActivityData(url, account, addActivity)
+      const announceActivity = await announceActivityData(url, account, addActivity, undefined)
 
       activities.push(announceActivity)
     } else {
-      const addActivity = await addActivityData(video.url, account, video, video.VideoChannel.url, videoObject)
+      const addActivity = await addActivityData(video.url, account, video, videoChannel.url, videoObject, undefined)
 
       activities.push(addActivity)
     }

@@ -5,9 +5,9 @@ if [ $# -eq 0 ]; then
     exit -1
 fi
 
-if [ "$1" = "client" ]; then
+if [ "$1" = "misc" ]; then
     npm run build
-    mocha --exit --require ts-node/register --bail server/tests/client.ts
+    mocha --exit --require ts-node/register --bail server/tests/client.ts server/tests/activitypub.ts
 elif [ "$1" = "api" ]; then
     npm run build:server
     mocha --exit --require ts-node/register --bail server/tests/api/index.ts
