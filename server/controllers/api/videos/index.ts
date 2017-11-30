@@ -104,6 +104,10 @@ videosRouter.get('/:id',
   asyncMiddleware(videosGetValidator),
   getVideo
 )
+videosRouter.post('/:id/views',
+  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(viewVideo)
+)
 
 videosRouter.delete('/:id',
   authenticate,
@@ -311,25 +315,25 @@ async function updateVideo (req: express.Request, res: express.Response) {
   }
 }
 
-async function getVideo (req: express.Request, res: express.Response) {
+function getVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
-  const baseIncrementPromise = videoInstance.increment('views')
-    .then(() => getServerAccount())
+  return res.json(videoInstance.toFormattedDetailsJSON())
+}
+
+async function viewVideo (req: express.Request, res: express.Response) {
+  const videoInstance = res.locals.video
+
+  await videoInstance.increment('views')
+  const serverAccount = await getServerAccount()
 
   if (videoInstance.isOwned()) {
-    // The increment is done directly in the database, not using the instance value
-    baseIncrementPromise
-      .then(serverAccount => sendCreateViewToVideoFollowers(serverAccount, videoInstance, undefined))
-      .catch(err => logger.error('Cannot add view to video/send view to followers for %s.', videoInstance.uuid, err))
+    await sendCreateViewToVideoFollowers(serverAccount, videoInstance, undefined)
   } else {
-    baseIncrementPromise
-      .then(serverAccount => sendCreateViewToOrigin(serverAccount, videoInstance, undefined))
-      .catch(err => logger.error('Cannot send view to origin server for %s.', videoInstance.uuid, err))
+    await sendCreateViewToOrigin(serverAccount, videoInstance, undefined)
   }
 
-  // Do not wait the view system
-  return res.json(videoInstance.toFormattedDetailsJSON())
+  return res.status(204).end()
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {

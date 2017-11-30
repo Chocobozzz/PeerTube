@@ -1,22 +1,18 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable } from 'rxjs/Observable'
-import { Subscription } from 'rxjs/Subscription'
-
-import videojs from 'video.js'
-import '../../../assets/player/peertube-videojs-plugin'
-
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-
-import { AuthService, ConfirmService } from '../../core'
-import { VideoDownloadComponent } from './video-download.component'
-import { VideoShareComponent } from './video-share.component'
-import { VideoReportComponent } from './video-report.component'
-import { VideoDetails, VideoService, MarkdownService } from '../shared'
-import { VideoBlacklistService } from '../../shared'
+import { Observable } from 'rxjs/Observable'
+import { Subscription } from 'rxjs/Subscription'
+import videojs from 'video.js'
 import { UserVideoRateType, VideoRateType } from '../../../../../shared'
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import '../../../assets/player/peertube-videojs-plugin'
+import { AuthService, ConfirmService } from '../../core'
+import { VideoBlacklistService } from '../../shared'
+import { MarkdownService, VideoDetails, VideoService } from '../shared'
+import { VideoDownloadComponent } from './video-download.component'
+import { VideoReportComponent } from './video-report.component'
+import { VideoShareComponent } from './video-share.component'
 
 @Component({
   selector: 'my-video-watch',
@@ -320,6 +316,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         this.setOpenGraphTags()
         this.checkUserRating()
+
+        this.prepareViewAdd()
       }
     )
   }
@@ -359,5 +357,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.setTag('og:url', window.location.href)
     this.metaService.setTag('url', window.location.href)
+  }
+
+  private prepareViewAdd () {
+    // After 30 seconds (or 3/4 of the video), increment add a view
+    let viewTimeoutSeconds = 30
+    if (this.video.duration < viewTimeoutSeconds) viewTimeoutSeconds = (this.video.duration * 3) / 4
+
+    setTimeout(() => {
+      this.videoService
+        .viewVideo(this.video.uuid)
+        .subscribe()
+
+    }, viewTimeoutSeconds * 1000)
   }
 }

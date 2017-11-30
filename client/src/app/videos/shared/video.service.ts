@@ -41,6 +41,12 @@ export class VideoService {
                         .catch((res) => this.restExtractor.handleError(res))
   }
 
+  viewVideo (uuid: string): Observable<VideoDetails> {
+    return this.authHttp.post(VideoService.BASE_VIDEO_URL + uuid + '/views', {})
+      .map(this.restExtractor.extractDataBool)
+      .catch(this.restExtractor.handleError)
+  }
+
   updateVideo (video: VideoEdit) {
     const language = video.language ? video.language : null
 

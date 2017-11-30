@@ -25,6 +25,7 @@ import {
   doubleFollow
 } from '../utils'
 import { createUser } from '../utils/users'
+import { viewVideo } from '../utils/videos'
 
 const expect = chai.expect
 
@@ -486,10 +487,10 @@ describe('Test multiple servers', function () {
       this.timeout(10000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(getVideo(servers[2].url, localVideosServer3[0]))
-      tasks.push(getVideo(servers[2].url, localVideosServer3[0]))
-      tasks.push(getVideo(servers[2].url, localVideosServer3[0]))
-      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
+      tasks.push(viewVideo(servers[2].url, localVideosServer3[0]))
+      tasks.push(viewVideo(servers[2].url, localVideosServer3[0]))
+      tasks.push(viewVideo(servers[2].url, localVideosServer3[0]))
+      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
 
       await Promise.all(tasks)
 
@@ -502,8 +503,8 @@ describe('Test multiple servers', function () {
         const video0 = videos.find(v => v.uuid === localVideosServer3[0])
         const video1 = videos.find(v => v.uuid === localVideosServer3[1])
 
-        expect(video0.views).to.equal(7)
-        expect(video1.views).to.equal(5)
+        expect(video0.views).to.equal(3)
+        expect(video1.views).to.equal(1)
       }
     })
 
@@ -511,16 +512,16 @@ describe('Test multiple servers', function () {
       this.timeout(15000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(getVideo(servers[0].url, remoteVideosServer1[0]))
-      tasks.push(getVideo(servers[1].url, remoteVideosServer2[0]))
-      tasks.push(getVideo(servers[1].url, remoteVideosServer2[0]))
-      tasks.push(getVideo(servers[2].url, remoteVideosServer3[0]))
-      tasks.push(getVideo(servers[2].url, remoteVideosServer3[1]))
-      tasks.push(getVideo(servers[2].url, remoteVideosServer3[1]))
-      tasks.push(getVideo(servers[2].url, remoteVideosServer3[1]))
-      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
-      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
-      tasks.push(getVideo(servers[2].url, localVideosServer3[1]))
+      tasks.push(viewVideo(servers[0].url, remoteVideosServer1[0]))
+      tasks.push(viewVideo(servers[1].url, remoteVideosServer2[0]))
+      tasks.push(viewVideo(servers[1].url, remoteVideosServer2[0]))
+      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[0]))
+      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[1]))
+      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[1]))
+      tasks.push(viewVideo(servers[2].url, remoteVideosServer3[1]))
+      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
+      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
+      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
 
       await Promise.all(tasks)
 

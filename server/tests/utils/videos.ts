@@ -55,6 +55,15 @@ function getVideo (url: string, id: number | string, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
+function viewVideo (url: string, id: number | string, expectedStatus = 204) {
+  const path = '/api/v1/videos/' + id + '/views'
+
+  return request(url)
+    .post(path)
+    .set('Accept', 'application/json')
+    .expect(expectedStatus)
+}
+
 function getVideoWithToken (url: string, token: string, id: number | string, expectedStatus = 200) {
   const path = '/api/v1/videos/' + id
 
@@ -313,5 +322,6 @@ export {
   uploadVideo,
   updateVideo,
   rateVideo,
+  viewVideo,
   parseTorrentVideo
 }

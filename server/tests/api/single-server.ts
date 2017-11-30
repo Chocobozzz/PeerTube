@@ -33,6 +33,7 @@ import {
   searchVideoWithSort,
   updateVideo
 } from '../utils'
+import { viewVideo } from '../utils/videos'
 
 describe('Test a single server', function () {
   let server: ServerInfo = null
@@ -214,6 +215,10 @@ describe('Test a single server', function () {
   })
 
   it('Should have the views updated', async function () {
+    await viewVideo(server.url, videoId)
+    await viewVideo(server.url, videoId)
+    await viewVideo(server.url, videoId)
+
     const res = await getVideo(server.url, videoId)
 
     const video = res.body
