@@ -29,7 +29,7 @@ if (missed.length !== 0) {
   throw new Error('Your configuration files miss keys: ' + missed)
 }
 
-import { API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
+import { ACCEPT_HEADERS, API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
 checkFFmpeg(CONFIG)
 
 const errorMessage = checkConfig()
@@ -129,7 +129,7 @@ app.use('/', staticRouter)
 
 // Always serve index client page (the client is a single page application, let it handle routing)
 app.use('/*', function (req, res) {
-  if (req.accepts('html')) {
+  if (req.accepts(ACCEPT_HEADERS) === 'html') {
     return res.sendFile(path.join(__dirname, '../client/dist/index.html'))
   }
 

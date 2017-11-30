@@ -3,7 +3,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { isSignatureVerified, logger } from '../helpers'
 import { database as db } from '../initializers'
-import { ACTIVITY_PUB } from '../initializers/constants'
+import { ACCEPT_HEADERS, ACTIVITY_PUB } from '../initializers/constants'
 import { fetchRemoteAccount, saveAccountAndServerIfNotExist } from '../lib/activitypub/account'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
@@ -37,7 +37,8 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
 function executeIfActivityPub (fun: RequestHandler | RequestHandler[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    if (!req.accepts(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)) {
+    const accepted = req.accepts(ACCEPT_HEADERS)
+    if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.indexOf(accepted) === -1) {
       return next()
     }
 

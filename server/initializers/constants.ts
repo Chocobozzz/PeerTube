@@ -316,6 +316,8 @@ const CACHE = {
   }
 }
 
+const ACCEPT_HEADERS = ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.concat('html', 'application/json')
+
 // ---------------------------------------------------------------------------
 
 const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
@@ -336,6 +338,7 @@ if (isTestInstance() === true) {
 
 export {
   API_VERSION,
+  ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
   CACHE,
   CONFIG,
