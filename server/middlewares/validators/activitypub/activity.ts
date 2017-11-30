@@ -7,7 +7,7 @@ const activityPubValidator = [
   body('').custom((value, { req }) => isRootActivityValid(req.body)),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking activity pub parameters', { parameters: req.body })
+    logger.debug('Checking activity pub parameters')
 
     if (areValidationErrors(req, res)) return
 

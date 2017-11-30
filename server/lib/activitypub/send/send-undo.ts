@@ -67,9 +67,9 @@ async function sendUndoDislikeToOrigin (byAccount: AccountInstance, video: Video
   const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const dislikeActivity = createDislikeActivityData(byAccount, video)
-  const object = await createActivityData(undoUrl, byAccount, dislikeActivity, t, audience)
+  const object = await createActivityData(undoUrl, byAccount, dislikeActivity, t)
 
-  const data = await undoActivityData(undoUrl, byAccount, object, t)
+  const data = await undoActivityData(undoUrl, byAccount, object, t, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
