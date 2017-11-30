@@ -46,7 +46,7 @@ function createVideoLike (byAccount: AccountInstance, activity: ActivityLike) {
       defaults: rate,
       transaction: t
     })
-    await video.increment('likes', { transaction: t })
+    if (created === true) await video.increment('likes', { transaction: t })
 
     if (video.isOwned() && created === true) {
       // Don't resend the activity to the sender

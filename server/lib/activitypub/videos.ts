@@ -48,36 +48,44 @@ function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObjec
   return doRequestAndSaveToFile(options, thumbnailPath)
 }
 
-function sendVideoRateChangeToFollowers (account: AccountInstance, video: VideoInstance, likes: number, dislikes: number, t: Transaction) {
-  const tasks: Promise<any>[] = []
+async function sendVideoRateChangeToFollowers (
+  account: AccountInstance,
+  video: VideoInstance,
+  likes: number,
+  dislikes: number,
+  t: Transaction
+) {
+  // Keep the order: first we undo and then we create
 
   // Undo Like
-  if (likes < 0) tasks.push(sendUndoLikeToVideoFollowers(account, video, t))
-  // Like
-  if (likes > 0) tasks.push(sendLikeToVideoFollowers(account, video, t))
-
+  if (likes < 0) await sendUndoLikeToVideoFollowers(account, video, t)
   // Undo Dislike
-  if (dislikes < 0) tasks.push(sendUndoDislikeToVideoFollowers(account, video, t))
-  // Dislike
-  if (dislikes > 0) tasks.push(sendCreateDislikeToVideoFollowers(account, video, t))
+  if (dislikes < 0) await sendUndoDislikeToVideoFollowers(account, video, t)
 
-  return Promise.all(tasks)
+  // Like
+  if (likes > 0) await sendLikeToVideoFollowers(account, video, t)
+  // Dislike
+  if (dislikes > 0) await sendCreateDislikeToVideoFollowers(account, video, t)
 }
 
-function sendVideoRateChangeToOrigin (account: AccountInstance, video: VideoInstance, likes: number, dislikes: number, t: Transaction) {
-  const tasks: Promise<any>[] = []
+async function sendVideoRateChangeToOrigin (
+  account: AccountInstance,
+  video: VideoInstance,
+  likes: number,
+  dislikes: number,
+  t: Transaction
+) {
+  // Keep the order: first we undo and then we create
 
   // Undo Like
-  if (likes < 0) tasks.push(sendUndoLikeToOrigin(account, video, t))
-  // Like
-  if (likes > 0) tasks.push(sendLikeToOrigin(account, video, t))
-
+  if (likes < 0) await sendUndoLikeToOrigin(account, video, t)
   // Undo Dislike
-  if (dislikes < 0) tasks.push(sendUndoDislikeToOrigin(account, video, t))
-  // Dislike
-  if (dislikes > 0) tasks.push(sendCreateDislikeToOrigin(account, video, t))
+  if (dislikes < 0) await sendUndoDislikeToOrigin(account, video, t)
 
-  return Promise.all(tasks)
+  // Like
+  if (likes > 0) await sendLikeToOrigin(account, video, t)
+  // Dislike
+  if (dislikes > 0) await sendCreateDislikeToOrigin(account, video, t)
 }
 
 export {

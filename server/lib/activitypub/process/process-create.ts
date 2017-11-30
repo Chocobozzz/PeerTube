@@ -63,7 +63,7 @@ function createVideoDislike (byAccount: AccountInstance, activity: ActivityCreat
       defaults: rate,
       transaction: t
     })
-    await video.increment('dislikes', { transaction: t })
+    if (created === true) await video.increment('dislikes', { transaction: t })
 
     if (video.isOwned() && created === true) {
       // Don't resend the activity to the sender
