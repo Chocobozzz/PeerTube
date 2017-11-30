@@ -10,9 +10,9 @@ async function sendUpdateVideoChannel (videoChannel: VideoChannelInstance, t: Tr
 
   const url = getUpdateActivityPubUrl(videoChannel.url, videoChannel.updatedAt.toISOString())
   const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = await updateActivityData(url, byAccount, videoChannelObject)
+  const data = await updateActivityData(url, byAccount, videoChannelObject, t)
 
-  const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
+  const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id, t)
   accountsInvolved.push(byAccount)
 
   return broadcastToFollowers(data, byAccount, accountsInvolved, t)
@@ -23,9 +23,9 @@ async function sendUpdateVideo (video: VideoInstance, t: Transaction) {
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
   const videoObject = video.toActivityPubObject()
-  const data = await updateActivityData(url, byAccount, videoObject)
+  const data = await updateActivityData(url, byAccount, videoObject, t)
 
-  const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id)
+  const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id, t)
   accountsInvolved.push(byAccount)
 
   return broadcastToFollowers(data, byAccount, accountsInvolved, t)
@@ -40,8 +40,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateActivityData (url: string, byAccount: AccountInstance, object: any) {
-  const { to, cc } = await getAudience(byAccount)
+async function updateActivityData (url: string, byAccount: AccountInstance, object: any, t: Transaction) {
+  const { to, cc } = await getAudience(byAccount, t)
   const activity: ActivityUpdate = {
     type: 'Update',
     id: url,

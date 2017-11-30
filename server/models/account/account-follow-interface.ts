@@ -14,9 +14,19 @@ export namespace AccountFollowMethods {
   export type ListFollowingForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountFollowInstance>>
   export type ListFollowersForApi = (id: number, start: number, count: number, sort: string) => Bluebird< ResultList<AccountFollowInstance>>
 
-  export type ListAcceptedFollowerUrlsForApi = (accountId: number[], start?: number, count?: number) => Promise< ResultList<string> >
-  export type ListAcceptedFollowingUrlsForApi = (accountId: number[], start?: number, count?: number) => Promise< ResultList<string> >
-  export type ListAcceptedFollowerSharedInboxUrls = (accountId: number[]) => Promise< ResultList<string> >
+  export type ListAcceptedFollowerUrlsForApi = (
+    accountId: number[],
+    t: Sequelize.Transaction,
+    start?: number,
+    count?: number
+  ) => Promise< ResultList<string> >
+  export type ListAcceptedFollowingUrlsForApi = (
+    accountId: number[],
+    t: Sequelize.Transaction,
+    start?: number,
+    count?: number
+  ) => Promise< ResultList<string> >
+  export type ListAcceptedFollowerSharedInboxUrls = (accountId: number[], t: Sequelize.Transaction) => Promise< ResultList<string> >
   export type ToFormattedJSON = (this: AccountFollowInstance) => AccountFollow
 }
 

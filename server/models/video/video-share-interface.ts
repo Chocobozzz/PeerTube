@@ -1,11 +1,12 @@
 import * as Bluebird from 'bluebird'
 import * as Sequelize from 'sequelize'
+import { Transaction } from 'sequelize'
 import { AccountInstance } from '../account/account-interface'
 import { VideoInstance } from './video-interface'
 
 export namespace VideoShareMethods {
-  export type LoadAccountsByShare = (videoId: number) => Bluebird<AccountInstance[]>
-  export type Load = (accountId: number, videoId: number) => Bluebird<VideoShareInstance>
+  export type LoadAccountsByShare = (videoId: number, t: Transaction) => Bluebird<AccountInstance[]>
+  export type Load = (accountId: number, videoId: number, t: Transaction) => Bluebird<VideoShareInstance>
 }
 
 export interface VideoShareClass {

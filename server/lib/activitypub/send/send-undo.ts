@@ -29,8 +29,8 @@ async function sendUndoFollow (accountFollow: AccountFollowInstance, t: Transact
   const followUrl = getAccountFollowActivityPubUrl(accountFollow)
   const undoUrl = getUndoActivityPubUrl(followUrl)
 
-  const object = await followActivityData(followUrl, me, following)
-  const data = await undoActivityData(undoUrl, me, object)
+  const object = followActivityData(followUrl, me, following)
+  const data = await undoActivityData(undoUrl, me, object, t)
 
   return unicastTo(data, me, following.inboxUrl, t)
 }
@@ -39,10 +39,10 @@ async function sendUndoLikeToOrigin (byAccount: AccountInstance, video: VideoIns
   const likeUrl = getVideoLikeActivityPubUrl(byAccount, video)
   const undoUrl = getUndoActivityPubUrl(likeUrl)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const object = await likeActivityData(likeUrl, byAccount, video)
-  const data = await undoActivityData(undoUrl, byAccount, object, audience)
+  const object = await likeActivityData(likeUrl, byAccount, video, t)
+  const data = await undoActivityData(undoUrl, byAccount, object, t, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
@@ -51,10 +51,10 @@ async function sendUndoLikeToVideoFollowers (byAccount: AccountInstance, video: 
   const likeUrl = getVideoLikeActivityPubUrl(byAccount, video)
   const undoUrl = getUndoActivityPubUrl(likeUrl)
 
-  const toAccountsFollowers = await getAccountsInvolvedInVideo(video)
+  const toAccountsFollowers = await getAccountsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(toAccountsFollowers)
-  const object = await likeActivityData(likeUrl, byAccount, video)
-  const data = await undoActivityData(undoUrl, byAccount, object, audience)
+  const object = await likeActivityData(likeUrl, byAccount, video, t)
+  const data = await undoActivityData(undoUrl, byAccount, object, t, audience)
 
   const followersException = [ byAccount ]
   return broadcastToFollowers(data, byAccount, toAccountsFollowers, t, followersException)
@@ -64,12 +64,12 @@ async function sendUndoDislikeToOrigin (byAccount: AccountInstance, video: Video
   const dislikeUrl = getVideoDislikeActivityPubUrl(byAccount, video)
   const undoUrl = getUndoActivityPubUrl(dislikeUrl)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const dislikeActivity = createDislikeActivityData(byAccount, video)
-  const object = await createActivityData(undoUrl, byAccount, dislikeActivity, audience)
+  const object = await createActivityData(undoUrl, byAccount, dislikeActivity, t, audience)
 
-  const data = await undoActivityData(undoUrl, byAccount, object)
+  const data = await undoActivityData(undoUrl, byAccount, object, t)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
@@ -79,11 +79,11 @@ async function sendUndoDislikeToVideoFollowers (byAccount: AccountInstance, vide
   const undoUrl = getUndoActivityPubUrl(dislikeUrl)
 
   const dislikeActivity = createDislikeActivityData(byAccount, video)
-  const object = await createActivityData(undoUrl, byAccount, dislikeActivity)
+  const object = await createActivityData(undoUrl, byAccount, dislikeActivity, t)
 
-  const data = await undoActivityData(undoUrl, byAccount, object)
+  const data = await undoActivityData(undoUrl, byAccount, object, t)
 
-  const toAccountsFollowers = await getAccountsInvolvedInVideo(video)
+  const toAccountsFollowers = await getAccountsInvolvedInVideo(video, t)
 
   const followersException = [ byAccount ]
   return broadcastToFollowers(data, byAccount, toAccountsFollowers, t, followersException)
@@ -105,10 +105,11 @@ async function undoActivityData (
   url: string,
   byAccount: AccountInstance,
   object: ActivityFollow | ActivityLike | ActivityCreate,
+  t: Transaction,
   audience?: ActivityAudience
 ) {
   if (!audience) {
-    audience = await getAudience(byAccount)
+    audience = await getAudience(byAccount, t)
   }
 
   const activity: ActivityUndo = {

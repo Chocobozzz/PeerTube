@@ -7,9 +7,9 @@ import { broadcastToFollowers } from './misc'
 async function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
   const byAccount = videoChannel.Account
 
-  const data = await deleteActivityData(videoChannel.url, byAccount)
+  const data = deleteActivityData(videoChannel.url, byAccount)
 
-  const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
+  const accountsInvolved = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id, t)
   accountsInvolved.push(byAccount)
 
   return broadcastToFollowers(data, byAccount, accountsInvolved, t)
@@ -18,9 +18,9 @@ async function sendDeleteVideoChannel (videoChannel: VideoChannelInstance, t: Tr
 async function sendDeleteVideo (video: VideoInstance, t: Transaction) {
   const byAccount = video.VideoChannel.Account
 
-  const data = await deleteActivityData(video.url, byAccount)
+  const data = deleteActivityData(video.url, byAccount)
 
-  const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id)
+  const accountsInvolved = await db.VideoShare.loadAccountsByShare(video.id, t)
   accountsInvolved.push(byAccount)
 
   return broadcastToFollowers(data, byAccount, accountsInvolved, t)
@@ -42,7 +42,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function deleteActivityData (url: string, byAccount: AccountInstance) {
+function deleteActivityData (url: string, byAccount: AccountInstance) {
   const activity: ActivityDelete = {
     type: 'Delete',
     id: url,

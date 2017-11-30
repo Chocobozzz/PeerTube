@@ -25,8 +25,8 @@ async function forwardActivity (
     }
   }
 
-  const toAccountFollowers = await db.Account.listByFollowersUrls(followersUrls)
-  const uris = await computeFollowerUris(toAccountFollowers, followersException)
+  const toAccountFollowers = await db.Account.listByFollowersUrls(followersUrls, t)
+  const uris = await computeFollowerUris(toAccountFollowers, followersException, t)
 
   if (uris.length === 0) {
     logger.info('0 followers for %s, no forwarding.', toAccountFollowers.map(a => a.id).join(', '))
@@ -50,7 +50,7 @@ async function broadcastToFollowers (
   t: Transaction,
   followersException: AccountInstance[] = []
 ) {
-  const uris = await computeFollowerUris(toAccountFollowers, followersException)
+  const uris = await computeFollowerUris(toAccountFollowers, followersException, t)
   if (uris.length === 0) {
     logger.info('0 followers for %s, no broadcasting.', toAccountFollowers.map(a => a.id).join(', '))
     return undefined
@@ -100,22 +100,22 @@ function getObjectFollowersAudience (accountsInvolvedInObject: AccountInstance[]
   }
 }
 
-async function getAccountsInvolvedInVideo (video: VideoInstance) {
-  const accountsToForwardView = await db.VideoShare.loadAccountsByShare(video.id)
+async function getAccountsInvolvedInVideo (video: VideoInstance, t: Transaction) {
+  const accountsToForwardView = await db.VideoShare.loadAccountsByShare(video.id, t)
   accountsToForwardView.push(video.VideoChannel.Account)
 
   return accountsToForwardView
 }
 
-async function getAccountsInvolvedInVideoChannel (videoChannel: VideoChannelInstance) {
-  const accountsToForwardView = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id)
+async function getAccountsInvolvedInVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
+  const accountsToForwardView = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id, t)
   accountsToForwardView.push(videoChannel.Account)
 
   return accountsToForwardView
 }
 
-async function getAudience (accountSender: AccountInstance, isPublic = true) {
-  const followerInboxUrls = await accountSender.getFollowerSharedInboxUrls()
+async function getAudience (accountSender: AccountInstance, t: Transaction, isPublic = true) {
+  const followerInboxUrls = await accountSender.getFollowerSharedInboxUrls(t)
 
   // Thanks Mastodon: https://github.com/tootsuite/mastodon/blob/master/app/lib/activitypub/tag_manager.rb#L47
   let to = []
@@ -132,10 +132,10 @@ async function getAudience (accountSender: AccountInstance, isPublic = true) {
   return { to, cc }
 }
 
-async function computeFollowerUris (toAccountFollower: AccountInstance[], followersException: AccountInstance[]) {
+async function computeFollowerUris (toAccountFollower: AccountInstance[], followersException: AccountInstance[], t: Transaction) {
   const toAccountFollowerIds = toAccountFollower.map(a => a.id)
 
-  const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds)
+  const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds, t)
   const followersSharedInboxException = followersException.map(f => f.sharedInboxUrl)
   const uris = result.data.filter(sharedInbox => followersSharedInboxException.indexOf(sharedInbox) === -1)
 

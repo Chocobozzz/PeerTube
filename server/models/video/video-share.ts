@@ -52,7 +52,7 @@ function associate (models) {
   })
 }
 
-load = function (accountId: number, videoId: number) {
+load = function (accountId: number, videoId: number, t: Sequelize.Transaction) {
   return VideoShare.findOne({
     where: {
       accountId,
@@ -60,11 +60,12 @@ load = function (accountId: number, videoId: number) {
     },
     include: [
       VideoShare['sequelize'].models.Account
-    ]
+    ],
+    transaction: t
   })
 }
 
-loadAccountsByShare = function (videoId: number) {
+loadAccountsByShare = function (videoId: number, t: Sequelize.Transaction) {
   const query = {
     where: {
       videoId
@@ -74,7 +75,8 @@ loadAccountsByShare = function (videoId: number) {
         model: VideoShare['sequelize'].models.Account,
         required: true
       }
-    ]
+    ],
+    transaction: t
   }
 
   return VideoShare.findAll(query)

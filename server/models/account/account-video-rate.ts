@@ -28,7 +28,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
     {
       indexes: [
         {
-          fields: [ 'videoId', 'accountId', 'type' ],
+          fields: [ 'videoId', 'accountId' ],
           unique: true
         }
       ]

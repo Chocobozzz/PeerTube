@@ -8,15 +8,22 @@ async function sendAddVideo (video: VideoInstance, t: Transaction) {
   const byAccount = video.VideoChannel.Account
 
   const videoObject = video.toActivityPubObject()
-  const data = await addActivityData(video.url, byAccount, video, video.VideoChannel.url, videoObject)
+  const data = await addActivityData(video.url, byAccount, video, video.VideoChannel.url, videoObject, t)
 
   return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
 
-async function addActivityData (url: string, byAccount: AccountInstance, video: VideoInstance, target: string, object: any) {
+async function addActivityData (
+  url: string,
+  byAccount: AccountInstance,
+  video: VideoInstance,
+  target: string,
+  object: any,
+  t: Transaction
+) {
   const videoPublic = video.privacy === VideoPrivacy.PUBLIC
 
-  const { to, cc } = await getAudience(byAccount, videoPublic)
+  const { to, cc } = await getAudience(byAccount, t, videoPublic)
   const activity: ActivityAdd = {
     type: 'Add',
     id: url,

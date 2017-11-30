@@ -1,3 +1,4 @@
+import * as Bluebird from 'bluebird'
 import { VideoChannelObject, VideoTorrentObject } from '../../../../shared'
 import { ActivityUpdate } from '../../../../shared/models/activitypub/activity'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -6,9 +7,8 @@ import { resetSequelizeInstance } from '../../../helpers/utils'
 import { database as db } from '../../../initializers'
 import { AccountInstance } from '../../../models/account/account-interface'
 import { VideoInstance } from '../../../models/video/video-interface'
-import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
-import Bluebird = require('bluebird')
 import { getOrCreateAccountAndServer } from '../account'
+import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
   const account = await getOrCreateAccountAndServer(activity.actor)

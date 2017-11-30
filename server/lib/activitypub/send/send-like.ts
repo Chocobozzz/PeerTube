@@ -1,5 +1,5 @@
 import { Transaction } from 'sequelize'
-import { ActivityLike } from '../../../../shared/models/activitypub/activity'
+import { ActivityAudience, ActivityLike } from '../../../../shared/models/activitypub/activity'
 import { AccountInstance, VideoInstance } from '../../../models'
 import { getVideoLikeActivityPubUrl } from '../url'
 import {
@@ -14,9 +14,9 @@ import {
 async function sendLikeToOrigin (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byAccount, video)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const data = await likeActivityData(url, byAccount, video, audience)
+  const data = await likeActivityData(url, byAccount, video, t, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
@@ -24,19 +24,23 @@ async function sendLikeToOrigin (byAccount: AccountInstance, video: VideoInstanc
 async function sendLikeToVideoFollowers (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byAccount, video)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(accountsInvolvedInVideo)
-  const data = await likeActivityData(url, byAccount, video, audience)
-
-  const toAccountsFollowers = await getAccountsInvolvedInVideo(video)
+  const data = await likeActivityData(url, byAccount, video, t, audience)
 
   const followersException = [ byAccount ]
-  return broadcastToFollowers(data, byAccount, toAccountsFollowers, t, followersException)
+  return broadcastToFollowers(data, byAccount, accountsInvolvedInVideo, t, followersException)
 }
 
-async function likeActivityData (url: string, byAccount: AccountInstance, video: VideoInstance, audience?: { to: string[], cc: string[] }) {
+async function likeActivityData (
+  url: string,
+  byAccount: AccountInstance,
+  video: VideoInstance,
+  t: Transaction,
+  audience?: ActivityAudience
+) {
   if (!audience) {
-    audience = await getAudience(byAccount)
+    audience = await getAudience(byAccount, t)
   }
 
   const activity: ActivityLike = {

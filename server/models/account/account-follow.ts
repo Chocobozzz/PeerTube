@@ -181,16 +181,16 @@ listFollowersForApi = function (id: number, start: number, count: number, sort: 
   })
 }
 
-listAcceptedFollowerUrlsForApi = function (accountIds: number[], start?: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('followers', accountIds, start, count)
+listAcceptedFollowerUrlsForApi = function (accountIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('followers', accountIds, t, start, count)
 }
 
-listAcceptedFollowerSharedInboxUrls = function (accountIds: number[]) {
-  return createListAcceptedFollowForApiQuery('followers', accountIds, undefined, undefined, 'sharedInboxUrl')
+listAcceptedFollowerSharedInboxUrls = function (accountIds: number[], t: Sequelize.Transaction) {
+  return createListAcceptedFollowForApiQuery('followers', accountIds, t, undefined, undefined, 'sharedInboxUrl')
 }
 
-listAcceptedFollowingUrlsForApi = function (accountIds: number[], start?: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('following', accountIds, start, count)
+listAcceptedFollowingUrlsForApi = function (accountIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
+  return createListAcceptedFollowForApiQuery('following', accountIds, t, start, count)
 }
 
 // ------------------------------ UTILS ------------------------------
@@ -198,6 +198,7 @@ listAcceptedFollowingUrlsForApi = function (accountIds: number[], start?: number
 async function createListAcceptedFollowForApiQuery (
   type: 'followers' | 'following',
   accountIds: number[],
+  t: Sequelize.Transaction,
   start?: number,
   count?: number,
   columnUrl = 'url'
@@ -227,7 +228,8 @@ async function createListAcceptedFollowForApiQuery (
 
     const options = {
       bind: { accountIds },
-      type: Sequelize.QueryTypes.SELECT
+      type: Sequelize.QueryTypes.SELECT,
+      transaction: t
     }
     tasks.push(AccountFollow['sequelize'].query(query, options))
   }

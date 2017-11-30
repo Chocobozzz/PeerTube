@@ -10,7 +10,6 @@ import {
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { sendDeleteAccount } from '../../lib/activitypub/send/send-delete'
-
 import { addMethodsToModel } from '../utils'
 import { AccountAttributes, AccountInstance, AccountMethods } from './account-interface'
 
@@ -315,7 +314,7 @@ isOwned = function (this: AccountInstance) {
   return this.serverId === null
 }
 
-getFollowerSharedInboxUrls = function (this: AccountInstance) {
+getFollowerSharedInboxUrls = function (this: AccountInstance, t: Sequelize.Transaction) {
   const query: Sequelize.FindOptions<AccountAttributes> = {
     attributes: [ 'sharedInboxUrl' ],
     include: [
@@ -327,7 +326,8 @@ getFollowerSharedInboxUrls = function (this: AccountInstance) {
           targetAccountId: this.id
         }
       }
-    ]
+    ],
+    transaction: t
   }
 
   return Account.findAll(query)

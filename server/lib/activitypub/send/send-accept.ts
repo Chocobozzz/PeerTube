@@ -10,7 +10,7 @@ async function sendAccept (accountFollow: AccountFollowInstance, t: Transaction)
   const me = accountFollow.AccountFollowing
 
   const url = getAccountFollowAcceptActivityPubUrl(accountFollow)
-  const data = await acceptActivityData(url, me)
+  const data = acceptActivityData(url, me)
 
   return unicastTo(data, me, follower.inboxUrl, t)
 }
@@ -23,7 +23,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function acceptActivityData (url: string, byAccount: AccountInstance) {
+function acceptActivityData (url: string, byAccount: AccountInstance) {
   const activity: ActivityAccept = {
     type: 'Accept',
     id: url,

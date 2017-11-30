@@ -21,11 +21,11 @@ async function buildVideoAnnounceToFollowers (byAccount: AccountInstance, video:
   const url = getAnnounceActivityPubUrl(video.url, byAccount)
 
   const videoChannel = video.VideoChannel
-  const announcedActivity = await addActivityData(url, videoChannel.Account, video, videoChannel.url, video.toActivityPubObject())
+  const announcedActivity = await addActivityData(url, videoChannel.Account, video, videoChannel.url, video.toActivityPubObject(), t)
 
-  const accountsToForwardView = await getAccountsInvolvedInVideo(video)
+  const accountsToForwardView = await getAccountsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(accountsToForwardView)
-  const data = await announceActivityData(url, byAccount, announcedActivity, audience)
+  const data = await announceActivityData(url, byAccount, announcedActivity, t, audience)
 
   return data
 }
@@ -40,22 +40,22 @@ async function sendVideoAnnounceToOrigin (byAccount: AccountInstance, video: Vid
   const url = getAnnounceActivityPubUrl(video.url, byAccount)
 
   const videoChannel = video.VideoChannel
-  const announcedActivity = await addActivityData(url, videoChannel.Account, video, videoChannel.url, video.toActivityPubObject())
+  const announcedActivity = await addActivityData(url, videoChannel.Account, video, videoChannel.url, video.toActivityPubObject(), t)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const data = await createActivityData(url, byAccount, announcedActivity, audience)
+  const data = await createActivityData(url, byAccount, announcedActivity, t, audience)
 
   return unicastTo(data, byAccount, videoChannel.Account.sharedInboxUrl, t)
 }
 
 async function buildVideoChannelAnnounceToFollowers (byAccount: AccountInstance, videoChannel: VideoChannelInstance, t: Transaction) {
   const url = getAnnounceActivityPubUrl(videoChannel.url, byAccount)
-  const announcedActivity = await createActivityData(url, videoChannel.Account, videoChannel.toActivityPubObject())
+  const announcedActivity = await createActivityData(url, videoChannel.Account, videoChannel.toActivityPubObject(), t)
 
-  const accountsToForwardView = await getAccountsInvolvedInVideoChannel(videoChannel)
+  const accountsToForwardView = await getAccountsInvolvedInVideoChannel(videoChannel, t)
   const audience = getObjectFollowersAudience(accountsToForwardView)
-  const data = await announceActivityData(url, byAccount, announcedActivity, audience)
+  const data = await announceActivityData(url, byAccount, announcedActivity, t, audience)
 
   return data
 }
@@ -68,11 +68,11 @@ async function sendVideoChannelAnnounceToFollowers (byAccount: AccountInstance, 
 
 async function sendVideoChannelAnnounceToOrigin (byAccount: AccountInstance, videoChannel: VideoChannelInstance, t: Transaction) {
   const url = getAnnounceActivityPubUrl(videoChannel.url, byAccount)
-  const announcedActivity = await createActivityData(url, videoChannel.Account, videoChannel.toActivityPubObject())
+  const announcedActivity = await createActivityData(url, videoChannel.Account, videoChannel.toActivityPubObject(), t)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideoChannel(videoChannel)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideoChannel(videoChannel, t)
   const audience = getOriginVideoChannelAudience(videoChannel, accountsInvolvedInVideo)
-  const data = await createActivityData(url, byAccount, announcedActivity, audience)
+  const data = await createActivityData(url, byAccount, announcedActivity, t, audience)
 
   return unicastTo(data, byAccount, videoChannel.Account.sharedInboxUrl, t)
 }
@@ -81,10 +81,11 @@ async function announceActivityData (
   url: string,
   byAccount: AccountInstance,
   object: ActivityCreate | ActivityAdd,
+  t: Transaction,
   audience?: ActivityAudience
 ) {
   if (!audience) {
-    audience = await getAudience(byAccount)
+    audience = await getAudience(byAccount, t)
   }
 
   const activity: ActivityAnnounce = {

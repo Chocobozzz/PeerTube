@@ -8,8 +8,8 @@ import {
   broadcastToFollowers,
   getAccountsInvolvedInVideo,
   getAudience,
-  getOriginVideoAudience,
   getObjectFollowersAudience,
+  getOriginVideoAudience,
   unicastTo
 } from './misc'
 
@@ -17,7 +17,7 @@ async function sendCreateVideoChannel (videoChannel: VideoChannelInstance, t: Tr
   const byAccount = videoChannel.Account
 
   const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = await createActivityData(videoChannel.url, byAccount, videoChannelObject)
+  const data = await createActivityData(videoChannel.url, byAccount, videoChannelObject, t)
 
   return broadcastToFollowers(data, byAccount, [ byAccount ], t)
 }
@@ -26,7 +26,7 @@ async function sendVideoAbuse (byAccount: AccountInstance, videoAbuse: VideoAbus
   const url = getVideoAbuseActivityPubUrl(videoAbuse)
 
   const audience = { to: [ video.VideoChannel.Account.url ], cc: [] }
-  const data = await createActivityData(url, byAccount, videoAbuse.toActivityPubObject(), audience)
+  const data = await createActivityData(url, byAccount, videoAbuse.toActivityPubObject(), t, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
@@ -35,9 +35,9 @@ async function sendCreateViewToOrigin (byAccount: AccountInstance, video: VideoI
   const url = getVideoViewActivityPubUrl(byAccount, video)
   const viewActivity = createViewActivityData(byAccount, video)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const data = await createActivityData(url, byAccount, viewActivity, audience)
+  const data = await createActivityData(url, byAccount, viewActivity, t, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
@@ -46,9 +46,9 @@ async function sendCreateViewToVideoFollowers (byAccount: AccountInstance, video
   const url = getVideoViewActivityPubUrl(byAccount, video)
   const viewActivity = createViewActivityData(byAccount, video)
 
-  const accountsToForwardView = await getAccountsInvolvedInVideo(video)
+  const accountsToForwardView = await getAccountsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(accountsToForwardView)
-  const data = await createActivityData(url, byAccount, viewActivity, audience)
+  const data = await createActivityData(url, byAccount, viewActivity, t, audience)
 
   // Use the server account to send the view, because it could be an unregistered account
   const serverAccount = await getServerAccount()
@@ -60,9 +60,9 @@ async function sendCreateDislikeToOrigin (byAccount: AccountInstance, video: Vid
   const url = getVideoDislikeActivityPubUrl(byAccount, video)
   const dislikeActivity = createDislikeActivityData(byAccount, video)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video)
+  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const data = await createActivityData(url, byAccount, dislikeActivity, audience)
+  const data = await createActivityData(url, byAccount, dislikeActivity, t, audience)
 
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
@@ -71,17 +71,17 @@ async function sendCreateDislikeToVideoFollowers (byAccount: AccountInstance, vi
   const url = getVideoDislikeActivityPubUrl(byAccount, video)
   const dislikeActivity = createDislikeActivityData(byAccount, video)
 
-  const accountsToForwardView = await getAccountsInvolvedInVideo(video)
+  const accountsToForwardView = await getAccountsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(accountsToForwardView)
-  const data = await createActivityData(url, byAccount, dislikeActivity, audience)
+  const data = await createActivityData(url, byAccount, dislikeActivity, t, audience)
 
   const followersException = [ byAccount ]
   return broadcastToFollowers(data, byAccount, accountsToForwardView, t, followersException)
 }
 
-async function createActivityData (url: string, byAccount: AccountInstance, object: any, audience?: ActivityAudience) {
+async function createActivityData (url: string, byAccount: AccountInstance, object: any, t: Transaction, audience?: ActivityAudience) {
   if (!audience) {
-    audience = await getAudience(byAccount)
+    audience = await getAudience(byAccount, t)
   }
 
   const activity: ActivityCreate = {

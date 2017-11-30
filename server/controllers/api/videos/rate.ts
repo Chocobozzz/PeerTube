@@ -58,11 +58,11 @@ async function rateVideo (req: express.Request, res: express.Response) {
       else if (previousRate.type === VIDEO_RATE_TYPES.DISLIKE) dislikesToIncrement--
 
       if (rateType === 'none') { // Destroy previous rate
-        await previousRate.destroy()
+        await previousRate.destroy({ transaction: t })
       } else { // Update previous rate
         previousRate.type = rateType
 
-        await previousRate.save()
+        await previousRate.save({ transaction: t })
       }
     } else if (rateType !== 'none') { // There was not a previous rate, insert a new one if there is a rate
       const query = {
