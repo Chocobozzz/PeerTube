@@ -10,6 +10,12 @@ function setUsersSort (req: express.Request, res: express.Response, next: expres
   return next()
 }
 
+function setJobsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.query.sort) req.query.sort = '-createdAt'
+
+  return next()
+}
+
 function setVideoAbusesSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
@@ -70,5 +76,6 @@ export {
   setVideosSort,
   setBlacklistSort,
   setFollowersSort,
-  setFollowingSort
+  setFollowingSort,
+  setJobsSort
 }

@@ -32,6 +32,7 @@ const SEARCHABLE_COLUMNS = {
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
+  JOBS: [ 'id', 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],

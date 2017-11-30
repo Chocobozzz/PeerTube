@@ -1,4 +1,5 @@
 import { UserRight } from './user-right.enum'
+import user from '../../../server/models/account/user'
 
 // Keep the order
 export enum UserRole {

@@ -3,3 +3,4 @@
 import './video-transcoder'
 import './multiple-servers'
 import './follows'
+import './jobs'

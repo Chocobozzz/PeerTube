@@ -1,12 +1,10 @@
-import * as Sequelize from 'sequelize'
 import * as Bluebird from 'bluebird'
-
-// Don't use barrel, import just what we need
-import { AccountInstance } from './account-interface'
-import { User as FormattedUser } from '../../../shared/models/users/user.model'
+import * as Sequelize from 'sequelize'
 import { ResultList } from '../../../shared/models/result-list.model'
 import { UserRight } from '../../../shared/models/users/user-right.enum'
 import { UserRole } from '../../../shared/models/users/user-role'
+import { User as FormattedUser } from '../../../shared/models/users/user.model'
+import { AccountInstance } from './account-interface'
 
 export namespace UserMethods {
   export type HasRight = (this: UserInstance, right: UserRight) => boolean

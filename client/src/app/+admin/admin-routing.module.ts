@@ -8,6 +8,7 @@ import { FollowsRoutes } from './follows'
 import { UsersRoutes } from './users'
 import { VideoAbusesRoutes } from './video-abuses'
 import { VideoBlacklistRoutes } from './video-blacklist'
+import { JobsRoutes } from './jobs/job.routes'
 
 const adminRoutes: Routes = [
   {
@@ -24,7 +25,8 @@ const adminRoutes: Routes = [
       ...FollowsRoutes,
       ...UsersRoutes,
       ...VideoAbusesRoutes,
-      ...VideoBlacklistRoutes
+      ...VideoBlacklistRoutes,
+      ...JobsRoutes
     ]
   }
 ]

@@ -1,19 +1,14 @@
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
-
-import { JOB_STATES, JOB_CATEGORIES } from '../../initializers'
-
-import { addMethodsToModel } from '../utils'
-import {
-  JobInstance,
-  JobAttributes,
-
-  JobMethods
-} from './job-interface'
 import { JobCategory, JobState } from '../../../shared/models/job.model'
+import { JOB_CATEGORIES, JOB_STATES } from '../../initializers'
+import { addMethodsToModel, getSort } from '../utils'
+import { JobAttributes, JobInstance, JobMethods } from './job-interface'
 
 let Job: Sequelize.Model<JobInstance, JobAttributes>
 let listWithLimitByCategory: JobMethods.ListWithLimitByCategory
+let listForApi: JobMethods.ListForApi
+let toFormattedJSON: JobMethods.ToFormattedJSON
 
 export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
   Job = sequelize.define<JobInstance, JobAttributes>('Job',
@@ -44,10 +39,28 @@ export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Se
     }
   )
 
-  const classMethods = [ listWithLimitByCategory ]
-  addMethodsToModel(Job, classMethods)
+  const classMethods = [
+    listWithLimitByCategory,
+    listForApi
+  ]
+  const instanceMethods = [
+    toFormattedJSON
+  ]
+  addMethodsToModel(Job, classMethods, instanceMethods)
 
   return Job
+}
+
+toFormattedJSON = function (this: JobInstance) {
+  return {
+    id: this.id,
+    state: this.state,
+    category: this.category,
+    handlerName: this.handlerName,
+    handlerInputData: this.handlerInputData,
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -65,4 +78,19 @@ listWithLimitByCategory = function (limit: number, state: JobState, jobCategory:
   }
 
   return Job.findAll(query)
+}
+
+listForApi = function (start: number, count: number, sort: string) {
+  const query = {
+    offset: start,
+    limit: count,
+    order: [ getSort(sort) ]
+  }
+
+  return Job.findAndCountAll(query).then(({ rows, count }) => {
+    return {
+      data: rows,
+      total: count
+    }
+  })
 }

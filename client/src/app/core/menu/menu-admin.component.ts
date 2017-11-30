@@ -26,4 +26,8 @@ export class MenuAdminComponent {
   hasVideoBlacklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
+
+  hasJobsRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
+  }
 }

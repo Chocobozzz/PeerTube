@@ -7,6 +7,7 @@ import { areValidationErrors } from './utils'
 
 // Initialize constants here for better performances
 const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
+const SORTABLE_JOBS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.JOBS)
 const SORTABLE_VIDEO_ABUSES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_ABUSES)
 const SORTABLE_VIDEOS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEOS)
 const SORTABLE_BLACKLISTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.BLACKLISTS)
@@ -15,6 +16,7 @@ const SORTABLE_FOLLOWERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.FOLLOW
 const SORTABLE_FOLLOWING_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.FOLLOWING)
 
 const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
+const jobsSortValidator = checkSort(SORTABLE_JOBS_COLUMNS)
 const videoAbusesSortValidator = checkSort(SORTABLE_VIDEO_ABUSES_COLUMNS)
 const videosSortValidator = checkSort(SORTABLE_VIDEOS_COLUMNS)
 const blacklistSortValidator = checkSort(SORTABLE_BLACKLISTS_COLUMNS)
@@ -31,7 +33,8 @@ export {
   videosSortValidator,
   blacklistSortValidator,
   followersSortValidator,
-  followingSortValidator
+  followingSortValidator,
+  jobsSortValidator
 }
 
 // ---------------------------------------------------------------------------

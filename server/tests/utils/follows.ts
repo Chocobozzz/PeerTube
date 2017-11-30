@@ -61,7 +61,7 @@ async function doubleFollow (server1: ServerInfo, server2: ServerInfo) {
   ])
 
   // Wait request propagation
-  await wait(20000)
+  await wait(10000)
 
   return true
 }

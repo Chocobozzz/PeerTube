@@ -5,6 +5,9 @@ import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
 import { FollowersListComponent, FollowingAddComponent, FollowsComponent, FollowService } from './follows'
 import { FollowingListComponent } from './follows/following-list/following-list.component'
+import { JobsComponent } from './jobs/job.component'
+import { JobsListComponent } from './jobs/jobs-list/jobs-list.component'
+import { JobService } from './jobs/shared/job.service'
 import { UserAddComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
 import { VideoAbuseListComponent, VideoAbusesComponent } from './video-abuses'
 import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
@@ -33,7 +36,10 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
     VideoBlacklistListComponent,
 
     VideoAbusesComponent,
-    VideoAbuseListComponent
+    VideoAbuseListComponent,
+
+    JobsComponent,
+    JobsListComponent
   ],
 
   exports: [
@@ -42,7 +48,8 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
 
   providers: [
     FollowService,
-    UserService
+    UserService,
+    JobService
   ]
 })
 export class AdminModule { }
