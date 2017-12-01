@@ -13,11 +13,17 @@
         <div class="form-group">
           <label>URL</label>
           <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoUrl()" />
+          <button [ngxClipboard]="urlInput">
+            Copy
+          </button>
         </div>
 
         <div class="form-group">
           <label>Embed</label>
           <input #shareInput (click)="shareInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoIframeCode()" />
+          <button [ngxClipboard]="shareInput">
+            Copy
+          </button>
         </div>
 
         <div *ngIf="notSecure()" class="alert alert-warning">

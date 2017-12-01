@@ -19,7 +19,9 @@
     "postinstall": "npm rebuild node-sass"
   },
   "license": "GPLv3",
-  "dependencies": {},
+  "dependencies": {
+    "ngx-clipboard": "^8.1.3"
+  },
   "devDependencies": {
     "@angular/animations": "~4.4.0",
     "@angular/common": "~4.4.0",
