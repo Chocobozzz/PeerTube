@@ -6,21 +6,20 @@ import { RouterModule } from '@angular/router'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
-import { PaginationModule } from 'ngx-bootstrap/pagination'
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
 import { BytesPipe, KeysPipe } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 import { DataTableModule } from 'primeng/components/datatable/datatable'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
+import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
+import { NumberFormatterPipe } from './misc/number-formatter.pipe'
 import { RestExtractor, RestService } from './rest'
 import { SearchComponent, SearchService } from './search'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
-import { NumberFormatterPipe } from './misc/number-formatter.pipe'
-import { FromNowPipe } from './misc/from-now.pipe'
 
 @NgModule({
   imports: [
@@ -32,7 +31,6 @@ import { FromNowPipe } from './misc/from-now.pipe'
 
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
-    PaginationModule.forRoot(),
     ProgressbarModule.forRoot(),
 
     DataTableModule,
@@ -57,7 +55,6 @@ import { FromNowPipe } from './misc/from-now.pipe'
 
     BsDropdownModule,
     ModalModule,
-    PaginationModule,
     ProgressbarModule,
     DataTableModule,
     PrimeSharedModule,

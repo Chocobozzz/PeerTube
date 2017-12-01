@@ -2,15 +2,17 @@
   {{ titlePage }}
 </div>
 
-<div class="videos-miniatures">
+<div
+  class="videos-miniatures"
+  infiniteScroll
+  [infiniteScrollUpDistance]="1.5"
+  [infiniteScrollDistance]="0.5"
+  (scrolled)="onNearOfBottom()"
+  (scrolledUp)="onNearOfTop()"
+>
   <my-video-miniature
     class="ng-animate"
     *ngFor="let video of videos" [video]="video" [user]="user" [currentSort]="sort"
   >
   </my-video-miniature>
 </div>
-
-<pagination *ngIf="pagination.totalItems !== null && pagination.totalItems !== 0"
-  [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage" [maxSize]="6" [boundaryLinks]="true" [rotate]="false"
-  [(ngModel)]="pagination.currentPage" (pageChanged)="onPageChanged($event)"
-></pagination>

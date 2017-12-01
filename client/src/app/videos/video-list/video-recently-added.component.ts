@@ -11,6 +11,7 @@ import { AbstractVideoList } from './shared'
 })
 export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Recently added'
+  currentRoute = '/videos/recently-added'
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,

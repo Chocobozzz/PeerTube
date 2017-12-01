@@ -19,44 +19,77 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   protected notificationsService: NotificationsService
   protected router: Router
   protected route: ActivatedRoute
-
   protected subActivatedRoute: Subscription
 
+  protected abstract currentRoute: string
+
   abstract titlePage: string
+  private loadedPages: { [ id: number ]: boolean } = {}
+
   abstract getVideosObservable (): Observable<{ videos: Video[], totalVideos: number}>
 
   ngOnInit () {
     // Subscribe to route changes
-    this.subActivatedRoute = this.route.params.subscribe(routeParams => {
-      this.loadRouteParams(routeParams)
-
-      this.getVideos()
-    })
+    const routeParams = this.route.snapshot.params
+    this.loadRouteParams(routeParams)
+    this.loadMoreVideos('after')
   }
 
   ngOnDestroy () {
     this.subActivatedRoute.unsubscribe()
   }
 
-  getVideos () {
-    this.videos = []
+  onNearOfTop () {
+    if (this.pagination.currentPage > 1) {
+      this.previousPage()
+    }
+  }
+
+  onNearOfBottom () {
+    if (this.hasMoreVideos()) {
+      this.nextPage()
+    }
+  }
+
+  loadMoreVideos (where: 'before' | 'after') {
+    if (this.loadedPages[this.pagination.currentPage] === true) return
 
     const observable = this.getVideosObservable()
 
     observable.subscribe(
       ({ videos, totalVideos }) => {
-        this.videos = videos
+        this.loadedPages[this.pagination.currentPage] = true
         this.pagination.totalItems = totalVideos
+
+        if (where === 'before') {
+          this.videos = videos.concat(this.videos)
+        } else {
+          this.videos = this.videos.concat(videos)
+        }
       },
       error => this.notificationsService.error('Error', error.text)
     )
   }
 
-  onPageChanged (event: { page: number }) {
-    // Be sure the current page is set
-    this.pagination.currentPage = event.page
+  protected hasMoreVideos () {
+    if (!this.pagination.totalItems) return true
 
-    this.navigateToNewParams()
+    const maxPage = this.pagination.totalItems/this.pagination.itemsPerPage
+    return maxPage > this.pagination.currentPage
+  }
+
+  protected previousPage () {
+    this.pagination.currentPage--
+
+    this.setNewRouteParams()
+    this.loadMoreVideos('before')
+  }
+
+  protected nextPage () {
+    this.pagination.currentPage++
+
+    this.setNewRouteParams()
+    this.loadMoreVideos('after')
   }
 
   protected buildRouteParams () {
@@ -79,8 +112,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     }
   }
 
-  protected navigateToNewParams () {
+  protected setNewRouteParams () {
     const routeParams = this.buildRouteParams()
-    this.router.navigate([ '/videos/list', routeParams ])
+    this.router.navigate([ this.currentRoute, routeParams ])
   }
 }

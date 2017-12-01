@@ -11,6 +11,7 @@ import { AbstractVideoList } from './shared'
 })
 export class VideoTrendingComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Trending'
+  currentRoute = '/videos/trending'
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
-// Thanks: https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
+// Thanks: https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
 
 @Pipe({name: 'fromNow'})
 export class FromNowPipe implements PipeTransform {

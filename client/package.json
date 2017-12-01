@@ -71,6 +71,7 @@
     "ngc-webpack": "3.2.2",
     "ngx-bootstrap": "2.0.0-beta.9",
     "ngx-chips": "1.5.3",
+    "ngx-infinite-scroll": "^0.7.0",
     "ngx-pipes": "^2.0.5",
     "node-sass": "^4.1.1",
     "normalize.css": "^7.0.0",
