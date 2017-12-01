@@ -6,7 +6,8 @@ import { VideoDetails } from '../shared'
 
 @Component({
   selector: 'my-video-share',
-  templateUrl: './video-share.component.html'
+  templateUrl: './video-share.component.html',
+  styleUrls: [ './video-share.component.scss' ]
 })
 export class VideoShareComponent {
   @Input() video: VideoDetails = null
