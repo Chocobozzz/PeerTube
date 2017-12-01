@@ -1,25 +1,19 @@
 import { OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
-import { Observable } from 'rxjs/Observable'
 
 import { NotificationsService } from 'angular2-notifications'
+import { Observable } from 'rxjs/Observable'
+import { Subscription } from 'rxjs/Subscription'
 
-import {
-  SortField,
-  Video,
-  VideoPagination
-} from '../../shared'
+import { SortField, Video, VideoPagination } from '../../shared'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
-  loading: BehaviorSubject<boolean> = new BehaviorSubject(false)
   pagination: VideoPagination = {
     currentPage: 1,
     itemsPerPage: 25,
     totalItems: null
   }
-  sort: SortField
+  sort: SortField = '-createdAt'
   videos: Video[] = []
 
   protected notificationsService: NotificationsService
@@ -28,6 +22,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   protected subActivatedRoute: Subscription
 
+  abstract titlePage: string
   abstract getVideosObservable (): Observable<{ videos: Video[], totalVideos: number}>
 
   ngOnInit () {
@@ -44,7 +39,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   }
 
   getVideos () {
-    this.loading.next(true)
     this.videos = []
 
     const observable = this.getVideosObservable()
@@ -53,26 +47,14 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
       ({ videos, totalVideos }) => {
         this.videos = videos
         this.pagination.totalItems = totalVideos
-
-        this.loading.next(false)
       },
       error => this.notificationsService.error('Error', error.text)
     )
   }
 
-  isThereNoVideo () {
-    return !this.loading.getValue() && this.videos.length === 0
-  }
-
   onPageChanged (event: { page: number }) {
     // Be sure the current page is set
     this.pagination.currentPage = event.page
-
-    this.navigateToNewParams()
-  }
-
-  onSort (sort: SortField) {
-    this.sort = sort
 
     this.navigateToNewParams()
   }

@@ -1,24 +1,21 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
-import { AbstractVideoList } from './shared'
 import { VideoService } from '../shared'
+import { AbstractVideoList } from './shared'
 
 @Component({
-  selector: 'my-videos',
+  selector: 'my-videos-trending',
   styleUrls: [ './shared/abstract-video-list.scss' ],
   templateUrl: './shared/abstract-video-list.html'
 })
-export class MyVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+export class VideoTrendingComponent extends AbstractVideoList implements OnInit, OnDestroy {
+  titlePage = 'Trending'
 
-  constructor (
-    protected router: Router,
-    protected route: ActivatedRoute,
-    protected notificationsService: NotificationsService,
-    private videoService: VideoService
-  ) {
+  constructor (protected router: Router,
+               protected route: ActivatedRoute,
+               protected notificationsService: NotificationsService,
+               private videoService: VideoService) {
     super()
   }
 
@@ -31,6 +28,6 @@ export class MyVideosComponent extends AbstractVideoList implements OnInit, OnDe
   }
 
   getVideosObservable () {
-    return this.videoService.getMyVideos(this.pagination, this.sort)
+    return this.videoService.getVideos(this.pagination, this.sort)
   }
 }

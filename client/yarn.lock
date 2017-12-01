@@ -264,10 +264,6 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-pipes@^6.0.0:
-  version "6.5.3"
-  resolved "https://registry.yarnpkg.com/angular-pipes/-/angular-pipes-6.5.3.tgz#6bed37c51ebc2adaf3412663bfe25179d0489b02"
-
 angular2-notifications@^0.7.7:
   version "0.7.8"
   resolved "https://registry.yarnpkg.com/angular2-notifications/-/angular2-notifications-0.7.8.tgz#ecbcb95a8d2d402af94a9a080d6664c70d33a029"
@@ -4717,6 +4713,10 @@ ngx-chips@1.5.3:
   resolved "https://registry.yarnpkg.com/ngx-chips/-/ngx-chips-1.5.3.tgz#8b47cf02bad41c0107fbf072e8f65e40c92fee59"
   dependencies:
     ng2-material-dropdown "0.7.10"
+
+ngx-pipes@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/ngx-pipes/-/ngx-pipes-2.0.5.tgz#743b827e350b1e66f5bdae49e90a02fa631d4c54"
 
 no-case@^2.2.0:
   version "2.3.2"

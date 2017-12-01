@@ -6,8 +6,7 @@
     <img [attr.src]="video.thumbnailUrl" alt="video thumbnail" [ngClass]="{ 'blur-filter': isVideoNSFWForThisUser() }" />
 
     <div class="video-miniature-thumbnail-overlay">
-      <span class="video-miniature-thumbnail-overlay-views">{{ video.views }} views</span>
-      <span class="video-miniature-thumbnail-overlay-duration">{{ video.durationLabel }}</span>
+      {{ video.durationLabel }}
     </div>
   </a>
 
@@ -21,13 +20,7 @@
       </a>
     </span>
 
-    <div class="video-miniature-tags">
-      <span *ngFor="let tag of video.tags" class="video-miniature-tag">
-        <a [routerLink]="['/videos/list', { field: 'tags', search: tag, sort: currentSort }]" class="label label-primary">{{ tag }}</a>
-      </span>
-    </div>
-
-    <a [routerLink]="['/videos/list', { field: 'account', search: video.account, sort: currentSort }]" class="video-miniature-account">{{ video.by }}</a>
-    <span class="video-miniature-created-at">{{ video.createdAt | date:'short' }}</span>
+    <span class="video-miniature-created-at-views">{{ video.createdAt | fromNow }} - {{ video.views | numberFormatter }} views</span>
+    <span class="video-miniature-account">{{ video.by }}</span>
   </div>
 </div>

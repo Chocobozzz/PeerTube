@@ -33,24 +33,14 @@ input.readonly {
 }
 
 .main-col {
-  .content-padding {
-    padding: 15px 30px;
+  padding: 30px;
 
-    @media screen and (max-width: 800px) {
-      padding: 15px 10px;
-    }
-
-    @media screen and (min-width: 1400px) {
-      padding: 15px 40px;
-    }
-
-    @media screen and (min-width: 1600px) {
-      padding: 15px 50px;
-    }
-
-    @media screen and (min-width: 1800px) {
-      padding: 15px 60px;
-    }
+  .title-page {
+    font-size: 16px;
+    font-weight: $font-bold;
+    display: inline-block;
+    border-bottom: 2px solid $orange-color;
+    margin-bottom: 25px;
   }
 }
 

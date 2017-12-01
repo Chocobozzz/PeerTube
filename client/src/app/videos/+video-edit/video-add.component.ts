@@ -184,7 +184,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           this.notificationsService.success('Success', 'Video uploaded.')
 
           // Display all the videos once it's finished
-          this.router.navigate([ '/videos/list' ])
+          this.router.navigate([ '/videos/trending' ])
         }
       },
 
