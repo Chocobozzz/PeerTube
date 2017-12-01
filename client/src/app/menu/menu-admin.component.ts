@@ -1,7 +1,7 @@
 import { Component } from '@angular/core'
 
-import { AuthService } from '../auth/auth.service'
-import { UserRight } from '../../../../../shared'
+import { AuthService } from '../core/auth/auth.service'
+import { UserRight } from '../../../../shared'
 
 @Component({
   selector: 'my-menu-admin',

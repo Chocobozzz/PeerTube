@@ -1,0 +1,131 @@
+menu {
+  background-color: $black-background;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  z-index: 1000;
+  color: $menu-color;
+
+  @media screen and (max-width: 550px) {
+    font-size: 90%;
+  }
+
+  .logged-in-block {
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 35px;
+
+    .logged-in-info {
+      flex-grow: 1;
+      margin-left: 40px;
+
+      .logged-in-username {
+        font-size: 16px;
+        font-weight: $font-semibold;
+      }
+
+      .logged-in-email {
+        font-size: 13px;
+        color: #C6C6C6;
+      }
+    }
+
+    .logged-in-more {
+      margin-right: 20px;
+
+      .glyphicon {
+        cursor: pointer;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .button-block {
+    margin: 30px 25px 35px 25px;
+
+    .login-button, .create-account-button {
+      font-weight: $font-semibold;
+      font-size: 15px;
+      height: $button-height;
+      line-height: $button-height;
+      width: 190px;
+      border-radius: 3px;
+      text-align: center;
+
+      &.login-button {
+        background-color: $orange-color;
+        margin-bottom: 10px;
+      }
+
+      &.create-account-button {
+        background-color: rgba(255, 255, 255, 0.25);
+      }
+    }
+  }
+
+  .block-title {
+    text-transform: uppercase;
+    font-weight: $font-bold; // Bold
+    font-size: 13px;
+    margin-bottom: 25px;
+  }
+
+  .panel-block {
+    margin-bottom: 45px;
+    margin-left: 26px;
+
+    a {
+      display: flex;
+
+      .icon {
+        width: 22px;
+        height: 22px;
+        display: inline-block;
+        margin-right: 18px;
+        background-size: contain;
+
+        &.icon-videos-trending {
+          position: relative;
+          top: -2px;
+          background-image: url('../../assets/menu/trending.svg');
+        }
+
+        &.icon-videos-recently-added {
+          width: 23px;
+          height: 23px;
+          position: relative;
+          top: -1px;
+          background-image: url('../../assets/menu/recently-added.svg');
+        }
+
+        &.icon-administration {
+          width: 23px;
+          height: 23px;
+
+          background-image: url('../../assets/menu/administration.svg');
+        }
+      }
+    }
+  }
+
+  a {
+    color: $menu-color;
+    height: 22px;
+    line-height: 22px;
+    display: block;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 15px;
+
+    &:hover, &:focus {
+      text-decoration: none !important;
+      outline: none !important;
+    }
+  }
+}

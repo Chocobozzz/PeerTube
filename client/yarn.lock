@@ -4708,9 +4708,9 @@ ngc-webpack@3.2.2:
     source-map "^0.5.6"
     ts-node "^3.2.0"
 
-ngx-bootstrap@1.9.3:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-1.9.3.tgz#28e75d14fb1beaee609383d7694de4eb3ba03b26"
+ngx-bootstrap@2.0.0-beta.9:
+  version "2.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.0-beta.9.tgz#9aa7c88269534e7a5440481f31b137549f749796"
 
 ngx-chips@1.5.3:
   version "1.5.3"
@@ -6601,6 +6601,10 @@ source-map@^0.4.2:
 source-map@^0.6.1, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+
+source-sans-pro@^2.0.10:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/source-sans-pro/-/source-sans-pro-2.0.10.tgz#c1ca859cf164a088944c5e83745085e87cd533a9"
 
 spdx-correct@~1.0.0:
   version "1.0.2"

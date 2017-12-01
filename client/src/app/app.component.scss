@@ -2,10 +2,23 @@
   min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
 }
 
+.main-col {
+  margin-left: $menu-width;
+
+  &.expanded {
+    margin-left: 0;
+  }
+}
+
+.sub-header-container {
+  margin-top: $header-height;
+}
+
 .title-menu-left {
   position: fixed;
   height: calc(100vh - #{$header-height});
   padding: 0;
+  width: $menu-width;
 
   .title-menu-left-block.menu {
     height: 100%;
@@ -14,35 +27,28 @@
 
 .header {
   height: $header-height;
-
-  .fake-title-block {
-    display: inline-block;
-  }
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+  display: flex;
 
   .top-left-block {
-    z-index: 100;
-    background-color: #fff;
-    border-right: 1px solid $header-border-color;
+    width: $menu-width;
+    z-index: 1001;
     height: $header-height;
     line-height: $header-height;
     margin-top: 0;
     margin-bottom: 0;
     display: flex;
-    position: fixed;
     padding: 0;
 
-    &.border-bottom {
-      border-bottom: 1px solid $header-border-color;
-    }
-
     .hamburger-block {
-      margin-right: 15px;
-      margin-left: 15px;
+      margin-right: 10px;
+      margin-left: 25px;
 
       .glyphicon {
         cursor: pointer;
-        position: relative;
-        top: 4px;
       }
     }
 
@@ -50,12 +56,9 @@
       a {
         color: inherit !important;
         display: block;
-        background: url('../assets/logo.png') no-repeat;
-        background-size: contain;
-        background-position: center;
-        height: 100%;
-        margin: auto;
-        width: 135px;
+        background: url('../assets/logo.svg') no-repeat;
+        width: 24px;
+        height: 24px;
 
         &:hover {
           color: inherit !important;
@@ -122,17 +125,11 @@
     }
   }
 
-  my-search {
-    position: fixed;
-    z-index: 1000;
-    // Fix col-md-* padding
-    padding: 0;
-  }
-
-  .search-col {
-    height: 100%;
-    margin-left: -15px;
-    padding: 0;
+  .header-right {
+    text-align: right;
+    height: $header-height;
+    margin-left: $menu-width;
+    flex-grow: 1;
   }
 }
 

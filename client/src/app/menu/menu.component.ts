@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-
-import { AuthService, AuthStatus } from '../auth'
-import { ServerService } from '../server'
-import { UserRight } from '../../../../../shared/models/users/user-right.enum'
+import { UserRight } from '../../../../shared/models/users/user-right.enum'
+import { AuthService, AuthStatus, ServerService } from '../core'
+import { User } from '../shared/users/user.model'
 
 @Component({
   selector: 'my-menu',
@@ -11,6 +10,7 @@ import { UserRight } from '../../../../../shared/models/users/user-right.enum'
   styleUrls: [ './menu.component.scss' ]
 })
 export class MenuComponent implements OnInit {
+  user: User
   isLoggedIn: boolean
   userHasAdminAccess = false
 
@@ -29,16 +29,19 @@ export class MenuComponent implements OnInit {
 
   ngOnInit () {
     this.isLoggedIn = this.authService.isLoggedIn()
+    if (this.isLoggedIn === true) this.user = this.authService.getUser()
     this.computeIsUserHasAdminAccess()
 
     this.authService.loginChangedSource.subscribe(
       status => {
         if (status === AuthStatus.LoggedIn) {
           this.isLoggedIn = true
+          this.user = this.authService.getUser()
           this.computeIsUserHasAdminAccess()
           console.log('Logged in.')
         } else if (status === AuthStatus.LoggedOut) {
           this.isLoggedIn = false
+          this.user = undefined
           this.computeIsUserHasAdminAccess()
           console.log('Logged out.')
         } else {
@@ -78,7 +81,9 @@ export class MenuComponent implements OnInit {
     return this.routesPerRight[right]
   }
 
-  logout () {
+  logout (event: Event) {
+    event.preventDefault()
+
     this.authService.logout()
     // Redirect to home page
     this.router.navigate(['/videos/list'])

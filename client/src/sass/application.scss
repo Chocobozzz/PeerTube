@@ -1,3 +1,5 @@
+$FontPathSourceSansPro: "../fonts/source-sans-pro";
+@import '~source-sans-pro/source-sans-pro';
 @import '~primeng/resources/themes/bootstrap/theme.css';
 @import '~primeng/resources/primeng.css';
 @import '~video.js/dist/video-js.css';
@@ -5,6 +7,12 @@
 
 [hidden] {
   display: none !important;
+}
+
+body {
+  font-family: 'Source Sans Pro';
+  font-weight: $font-regular;
+  color: #000;
 }
 
 input.readonly {
