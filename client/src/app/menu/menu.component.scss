@@ -123,9 +123,6 @@ menu {
     cursor: pointer;
     margin-bottom: 15px;
 
-    &:hover, &:focus {
-      text-decoration: none !important;
-      outline: none !important;
-    }
+    @include disable-default-a-behaviour;
   }
 }

@@ -1,0 +1,6 @@
+@mixin disable-default-a-behaviour {
+  &:hover, &:focus {
+    text-decoration: none !important;
+    outline: none !important;
+  }
+}

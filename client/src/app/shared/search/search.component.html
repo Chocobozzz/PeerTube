@@ -1,6 +1,10 @@
 <input
-  type="text" id="search-video" name="search-video" placeholder="Search"
-  [(ngModel)]="searchCriteria.value" (keyup.enter)="doSearch()"
+    type="text" id="search-video" name="search-video" placeholder="Search..."
+    [(ngModel)]="searchCriteria.value" (keyup.enter)="doSearch()"
 >
+<span (click)="doSearch()" class="icon icon-search"></span>
 
-<a routerLink="/videos/upload">Upload</a>
+<a class="upload-button" routerLink="/videos/upload">
+  <span class="icon icon-upload"></span>
+  Upload
+</a>

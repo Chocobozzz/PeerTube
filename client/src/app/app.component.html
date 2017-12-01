@@ -1,14 +1,13 @@
-<div class="container-fluid">
-  <div class="row header">
+<div>
+  <div class="header">
 
     <div class="top-left-block" [ngClass]="{ 'border-bottom': isMenuDisplayed === false }">
-      <div class="hamburger-block" (click)="toggleMenu()">
-        <span class="glyphicon glyphicon-menu-hamburger"></span>
-      </div>
+      <span class="icon icon-menu" (click)="toggleMenu()"></span>
 
-      <div id="peertube-title">
-        <a [routerLink]="['/videos/list']" title="Homepage"></a>
-      </div>
+      <a id="peertube-title" [routerLink]="['/videos/list']" title="Homepage">
+        <span class="icon icon-logo"></span>
+        PeerTube
+      </a>
     </div>
 
     <div class="header-right">
@@ -16,7 +15,7 @@
     </div>
   </div>
 
-  <div class="row sub-header-container">
+  <div class="sub-header-container">
     <div class="title-menu-left">
 
       <div class="title-menu-left-block menu">
@@ -25,7 +24,7 @@
       </div>
     </div>
 
-    <div class="main-col" [ngClass]="getMainColClasses()">
+    <div class="main-col container-fluid" [ngClass]="getMainColClasses()">
 
       <div class="main-row">
         <router-outlet></router-outlet>

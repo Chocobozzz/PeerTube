@@ -28,8 +28,10 @@
 .header {
   height: $header-height;
   position: fixed;
+  top: 0;
   width: 100%;
   background-color: #fff;
+  z-index: 1000;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
   display: flex;
 
@@ -37,33 +39,36 @@
     width: $menu-width;
     z-index: 1001;
     height: $header-height;
-    line-height: $header-height;
-    margin-top: 0;
-    margin-bottom: 0;
     display: flex;
-    padding: 0;
+    align-items: center;
 
-    .hamburger-block {
-      margin-right: 10px;
-      margin-left: 25px;
+    .icon {
+      cursor: pointer;
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      background-size: contain;
 
-      .glyphicon {
-        cursor: pointer;
+      &.icon-menu {
+        background-image: url('../assets/header/menu.svg');
+        margin: 0 18px 0 24px;
       }
     }
 
     #peertube-title {
-      a {
-        color: inherit !important;
-        display: block;
-        background: url('../assets/logo.svg') no-repeat;
-        width: 24px;
-        height: 24px;
+      font-size: 20px;
+      font-weight: $font-bold;
+      color: inherit !important;
+      display: flex;
+      align-items: center;
 
-        &:hover {
-          color: inherit !important;
-          text-decoration: none !important;
-        }
+      @include disable-default-a-behaviour;
+
+      .icon.icon-logo {
+        display: inline-block;
+        background: url('../assets/logo.svg') no-repeat;
+        width: 20px;
+        height: 24px;
       }
     }
 
@@ -71,65 +76,15 @@
       #peertube-title {
         display: none;
       }
-
-      .hamburger-block {
-        width: 100%;
-        text-align: center;
-      }
-    }
-
-    @media screen and (min-width: 500px) and (max-width: 600px) {
-      #peertube-title a {
-        width: 80px;
-      }
-    }
-
-    @media screen and (min-width: 600px) and (max-width: 700px) {
-      #peertube-title a {
-        width: 100px;
-      }
-    }
-
-    @media screen and (min-width: 1000px) {
-      #peertube-title a {
-        width: 120px;
-      }
-    }
-
-    @media screen and (min-width: 1000px) {
-      #peertube-title a {
-        width: 120px;
-      }
-    }
-
-    @media screen and (min-width: 1200px) {
-      padding-left: 15px;
-
-      .hamburger-block {
-        margin-right: 15px;
-      }
-
-      #peertube-title a {
-        width: 135px;
-      }
-    }
-
-    @media screen and (min-width: 1600px) {
-      .hamburger-block {
-        margin-right: 20px;
-      }
-
-      #peertube-title a {
-        width: 180px;
-      }
     }
   }
 
   .header-right {
-    text-align: right;
     height: $header-height;
-    margin-left: $menu-width;
+    display: flex;
+    align-items: center;
     flex-grow: 1;
+    justify-content: flex-end;
   }
 }
 
