@@ -1,7 +1,7 @@
 <menu>
   <div *ngIf="isLoggedIn" class="logged-in-block">
     <div class="logged-in-info">
-      <div class="logged-in-username">{{ user.username  }}</div>
+      <a routerLink="/account/settings" class="logged-in-username">{{ user.username  }}</a>
       <div class="logged-in-email">{{ user.email }}</div>
     </div>
 

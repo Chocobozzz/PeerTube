@@ -4,3 +4,38 @@
     outline: none !important;
   }
 }
+
+@mixin peertube-input-text($width) {
+  display: inline-block;
+  height: $button-height;
+  width: $width;
+  background: #fff;
+  border: 1px solid #C6C6C6;
+  border-radius: 3px;
+  padding-left: 15px;
+
+  &::placeholder {
+    color: #585858;
+  }
+}
+
+@mixin peertube-button {
+  border: none;
+  color: #fff;
+  font-weight: $font-semibold;
+  font-size: 15px;
+  height: $button-height;
+  line-height: $button-height;
+  border-radius: 3px;
+  text-align: center;
+  background-color: $orange-color;
+  padding: 0 17px 0 13px;
+  cursor: pointer;
+}
+
+@mixin peertube-button-link {
+  display: inline-block;
+
+  @include peertube-button;
+  @include disable-default-a-behaviour;
+}

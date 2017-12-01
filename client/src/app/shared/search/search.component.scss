@@ -1,13 +1,7 @@
 #search-video {
-  display: inline-block;
-  height: $button-height;
-  width: $search-input-width;
+  @include peertube-input-text($search-input-width);
   margin-right: 15px;
   padding-right: 25px; // For the search icon
-  background: #fff;
-  border: 1px solid #C6C6C6;
-  border-radius: 3px;
-  padding-left: 15px;
 
   &::placeholder {
     color: #000;
@@ -29,19 +23,9 @@
 }
 
 .upload-button {
-  display: inline-block;
-  color: #fff;
-  font-weight: $font-semibold;
-  font-size: 15px;
-  height: $button-height;
-  line-height: $button-height;
-  border-radius: 3px;
-  text-align: center;
-  margin-right: 25px;
-  background-color: $orange-color;
-  padding: 0 17px 0 13px;
+  @include peertube-button-link;
 
-  @include disable-default-a-behaviour;
+  margin-right: 25px;
 
   .icon.icon-upload {
     display: inline-block;

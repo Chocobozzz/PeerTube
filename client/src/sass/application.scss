@@ -33,14 +33,50 @@ input.readonly {
 }
 
 .main-col {
-  padding: 30px;
+  margin-left: $menu-width;
 
   .title-page {
+    color: #000;
     font-size: 16px;
-    font-weight: $font-bold;
     display: inline-block;
-    border-bottom: 2px solid $orange-color;
-    margin-bottom: 25px;
+    margin-right: 55px;
+    font-weight: $font-semibold;
+    @include disable-default-a-behaviour;
+
+    &.active, &.title-page-single {
+      border-bottom: 2px solid $orange-color;
+      font-weight: $font-bold;
+      margin-top: 30px;
+      margin-bottom: 25px;
+    }
+  }
+
+  .margin-content {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .sub-menu {
+    background-color: #F7F7F7;
+    width: 100%;
+    height: 81px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+  }
+
+  // Override some properties if the main content is expanded (no menu on the left)
+  &.expanded {
+    margin-left: 0;
+
+    .margin-content {
+      margin-left: $expanded-horizontal-margins;
+      margin-right: $expanded-horizontal-margins;
+    }
+
+    .sub-menu {
+      padding-left: $expanded-horizontal-margins;
+    }
   }
 }
 

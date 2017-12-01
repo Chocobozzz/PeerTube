@@ -1,0 +1,11 @@
+label {
+  font-size: 15px;
+  font-weight: $font-regular;
+  margin-left: 5px;
+}
+
+input[type=submit] {
+  @include peertube-button;
+
+  display: block;
+}

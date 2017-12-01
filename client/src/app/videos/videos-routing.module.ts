@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
-import { MyVideosComponent } from './video-list'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
 import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideosComponent } from './videos.component'
@@ -16,15 +15,6 @@ const videosRoutes: Routes = [
         path: 'list',
         pathMatch: 'full',
         redirectTo: 'recently-added'
-      },
-      {
-        path: 'mine',
-        component: MyVideosComponent,
-        data: {
-          meta: {
-            title: 'My videos'
-          }
-        }
       },
       {
         path: 'trending',

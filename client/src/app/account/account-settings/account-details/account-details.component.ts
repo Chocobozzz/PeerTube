@@ -1,21 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
-import { AuthService } from '../../core'
-import {
-  FormReactive,
-  User,
-  UserService,
-  USER_PASSWORD
-} from '../../shared'
-import { UserUpdateMe } from '../../../../../shared'
+import { UserUpdateMe } from '../../../../../../shared'
+import { AuthService } from '../../../core'
+import { FormReactive, User, UserService } from '../../../shared'
 
 @Component({
   selector: 'my-account-details',
-  templateUrl: './account-details.component.html'
+  templateUrl: './account-details.component.html',
+  styleUrls: [ './account-details.component.scss' ]
 })
 
 export class AccountDetailsComponent extends FormReactive implements OnInit {

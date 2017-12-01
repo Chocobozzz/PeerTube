@@ -2,14 +2,6 @@
   min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
 }
 
-.main-col {
-  margin-left: $menu-width;
-
-  &.expanded {
-    margin-left: 0;
-  }
-}
-
 .sub-header-container {
   margin-top: $header-height;
 }

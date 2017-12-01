@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
-import { FormReactive, UserService, USER_PASSWORD } from '../../shared'
+import { FormReactive, USER_PASSWORD, UserService } from '../../../shared'
 
 @Component({
   selector: 'my-account-change-password',
-  templateUrl: './account-change-password.component.html'
+  templateUrl: './account-change-password.component.html',
+  styleUrls: [ './account-change-password.component.scss' ]
 })
-
 export class AccountChangePasswordComponent extends FormReactive implements OnInit {
   error: string = null
 

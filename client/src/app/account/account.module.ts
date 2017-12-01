@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
-
-import { AccountRoutingModule } from './account-routing.module'
-import { AccountComponent } from './account.component'
-import { AccountChangePasswordComponent } from './account-change-password'
-import { AccountDetailsComponent } from './account-details'
-import { AccountService } from './account.service'
 import { SharedModule } from '../shared'
+import { AccountRoutingModule } from './account-routing.module'
+import { AccountChangePasswordComponent } from './account-settings/account-change-password/account-change-password.component'
+import { AccountDetailsComponent } from './account-settings/account-details/account-details.component'
+import { AccountSettingsComponent } from './account-settings/account-settings.component'
+import { AccountComponent } from './account.component'
+import { AccountService } from './account.service'
 
 @NgModule({
   imports: [
@@ -15,6 +15,7 @@ import { SharedModule } from '../shared'
 
   declarations: [
     AccountComponent,
+    AccountSettingsComponent,
     AccountChangePasswordComponent,
     AccountDetailsComponent
   ],

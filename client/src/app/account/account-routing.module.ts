@@ -5,17 +5,33 @@ import { MetaGuard } from '@ngx-meta/core'
 
 import { LoginGuard } from '../core'
 import { AccountComponent } from './account.component'
+import { AccountSettingsComponent } from './account-settings/account-settings.component'
 
 const accountRoutes: Routes = [
   {
     path: 'account',
     component: AccountComponent,
-    canActivate: [ MetaGuard, LoginGuard ],
-    data: {
-      meta: {
-        title: 'My account'
-      }
-    }
+    canActivateChild: [ MetaGuard, LoginGuard ],
+    children: [
+      {
+        path: 'settings',
+        component: AccountSettingsComponent,
+        data: {
+          meta: {
+            title: 'Account settings'
+          }
+        }
+      },
+      // {
+      //   path: 'videos',
+      //   component: AccountVideosComponent,
+      //   data: {
+      //     meta: {
+      //       title: 'Account videos'
+      //     }
+      //   }
+      // }
+    ]
   }
 ]
 

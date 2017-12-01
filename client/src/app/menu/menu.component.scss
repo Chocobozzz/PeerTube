@@ -28,6 +28,10 @@ menu {
       .logged-in-username {
         font-size: 16px;
         font-weight: $font-semibold;
+        color: $menu-color;
+        cursor: pointer;
+
+        @include disable-default-a-behaviour;
       }
 
       .logged-in-email {
@@ -57,6 +61,12 @@ menu {
       width: 190px;
       border-radius: 3px;
       text-align: center;
+      color: $menu-color;
+      display: block;
+      cursor: pointer;
+      margin-bottom: 15px;
+
+      @include disable-default-a-behaviour;
 
       &.login-button {
         background-color: $orange-color;
@@ -82,6 +92,13 @@ menu {
 
     a {
       display: flex;
+      color: $menu-color;
+      cursor: pointer;
+      height: 22px;
+      line-height: 22px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      @include disable-default-a-behaviour;
 
       .icon {
         width: 22px;
@@ -112,17 +129,5 @@ menu {
         }
       }
     }
-  }
-
-  a {
-    color: $menu-color;
-    height: 22px;
-    line-height: 22px;
-    display: block;
-    font-size: 16px;
-    cursor: pointer;
-    margin-bottom: 15px;
-
-    @include disable-default-a-behaviour;
   }
 }

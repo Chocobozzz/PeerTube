@@ -36,7 +36,9 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
-    this.subActivatedRoute.unsubscribe()
+    if (this.subActivatedRoute) {
+      this.subActivatedRoute.unsubscribe()
+    }
   }
 
   onNearOfTop () {
