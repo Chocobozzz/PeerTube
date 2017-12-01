@@ -20,6 +20,9 @@ import { SearchComponent, SearchService } from './search'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
+import { VideoThumbnailComponent } from './video/video-thumbnail.component'
+import { VideoService } from './video/video.service'
+import { InfiniteScrollModule } from 'ngx-infinite-scroll'
 
 @NgModule({
   imports: [
@@ -34,7 +37,8 @@ import { VideoBlacklistService } from './video-blacklist'
     ProgressbarModule.forRoot(),
 
     DataTableModule,
-    PrimeSharedModule
+    PrimeSharedModule,
+    InfiniteScrollModule
   ],
 
   declarations: [
@@ -42,6 +46,7 @@ import { VideoBlacklistService } from './video-blacklist'
     KeysPipe,
     SearchComponent,
     LoaderComponent,
+    VideoThumbnailComponent,
     NumberFormatterPipe,
     FromNowPipe
   ],
@@ -58,11 +63,13 @@ import { VideoBlacklistService } from './video-blacklist'
     ProgressbarModule,
     DataTableModule,
     PrimeSharedModule,
+    InfiniteScrollModule,
     BytesPipe,
     KeysPipe,
 
     SearchComponent,
     LoaderComponent,
+    VideoThumbnailComponent,
 
     NumberFormatterPipe,
     FromNowPipe
@@ -75,7 +82,8 @@ import { VideoBlacklistService } from './video-blacklist'
     SearchService,
     VideoAbuseService,
     VideoBlacklistService,
-    UserService
+    UserService,
+    VideoService
   ]
 })
 export class SharedModule { }

@@ -6,6 +6,7 @@ import { AccountDetailsComponent } from './account-settings/account-details/acco
 import { AccountSettingsComponent } from './account-settings/account-settings.component'
 import { AccountComponent } from './account.component'
 import { AccountService } from './account.service'
+import { AccountVideosComponent } from './account-videos/account-videos.component'
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { AccountService } from './account.service'
     AccountComponent,
     AccountSettingsComponent,
     AccountChangePasswordComponent,
-    AccountDetailsComponent
+    AccountDetailsComponent,
+    AccountVideosComponent
   ],
 
   exports: [

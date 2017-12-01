@@ -1,25 +1,23 @@
+import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
+import { VideoService } from 'app/shared/video/video.service'
+import { VideoCreate } from '../../../../../shared'
+import { AuthService, ServerService } from '../../core'
 import {
   FormReactive,
-  VIDEO_NAME,
   VIDEO_CATEGORY,
-  VIDEO_LICENCE,
-  VIDEO_LANGUAGE,
-  VIDEO_DESCRIPTION,
-  VIDEO_TAGS,
   VIDEO_CHANNEL,
+  VIDEO_DESCRIPTION,
   VIDEO_FILE,
-  VIDEO_PRIVACY
+  VIDEO_LANGUAGE,
+  VIDEO_LICENCE,
+  VIDEO_NAME,
+  VIDEO_PRIVACY,
+  VIDEO_TAGS
 } from '../../shared'
-import { AuthService, ServerService } from '../../core'
-import { VideoService } from '../shared'
-import { VideoCreate } from '../../../../../shared'
-import { HttpEventType, HttpResponse } from '@angular/common/http'
 
 @Component({
   selector: 'my-videos-add',

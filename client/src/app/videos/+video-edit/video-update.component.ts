@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import 'rxjs/add/observable/forkJoin'
-
 import { NotificationsService } from 'angular2-notifications'
-
+import 'rxjs/add/observable/forkJoin'
+import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
 import { ServerService } from '../../core'
 import {
   FormReactive,
-  VIDEO_NAME,
   VIDEO_CATEGORY,
-  VIDEO_LICENCE,
-  VIDEO_LANGUAGE,
   VIDEO_DESCRIPTION,
-  VIDEO_TAGS,
-  VIDEO_PRIVACY
+  VIDEO_LANGUAGE,
+  VIDEO_LICENCE,
+  VIDEO_NAME,
+  VIDEO_PRIVACY,
+  VIDEO_TAGS
 } from '../../shared'
-import { VideoEdit, VideoService } from '../shared'
-import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
+import { VideoService } from '../../shared/video/video.service'
+import { VideoEdit } from '../../shared/video/video-edit.model'
 
 @Component({
   selector: 'my-videos-update',

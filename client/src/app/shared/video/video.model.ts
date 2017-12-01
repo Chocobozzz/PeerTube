@@ -1,5 +1,5 @@
 import { Video as VideoServerModel } from '../../../../../shared'
-import { User } from '../../shared'
+import { User } from '../'
 
 export class Video implements VideoServerModel {
   account: string

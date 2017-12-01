@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
-
-import { SortField, Video } from '../../shared'
 import { User } from '../../../shared'
+import { SortField } from '../../../shared/video/sort-field.type'
+import { Video } from '../../../shared/video/video.model'
 
 @Component({
   selector: 'my-video-miniature',

@@ -1,0 +1,9 @@
+<div
+  infiniteScroll
+  [infiniteScrollDistance]="0.5"
+  (scrolled)="onNearOfBottom()"
+>
+  <div *ngFor="let video of videos">
+    <my-video-thumbnail [video]="video"></my-video-thumbnail>
+  </div>
+</div>

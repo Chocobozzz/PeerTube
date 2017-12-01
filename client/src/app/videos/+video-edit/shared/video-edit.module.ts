@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core'
 import { TagInputModule } from 'ngx-chips'
 import { TabsModule } from 'ngx-bootstrap/tabs'
 
-import { VideoService, MarkdownService, VideoDescriptionComponent } from '../../shared'
+import { MarkdownService, VideoDescriptionComponent } from '../../shared'
 import { SharedModule } from '../../../shared'
 
 @NgModule({
@@ -26,7 +26,6 @@ import { SharedModule } from '../../../shared'
   ],
 
   providers: [
-    VideoService,
     MarkdownService
   ]
 })

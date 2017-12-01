@@ -1,13 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoService } from '../shared'
-import { AbstractVideoList } from './shared'
+import { VideoService } from '../../shared/video/video.service'
+import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 
 @Component({
   selector: 'my-videos-recently-added',
-  styleUrls: [ './shared/abstract-video-list.scss' ],
-  templateUrl: './shared/abstract-video-list.html'
+  styleUrls: [ '../../shared/video/abstract-video-list.scss' ],
+  templateUrl: '../../shared/video/abstract-video-list.html'
 })
 export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Recently added'

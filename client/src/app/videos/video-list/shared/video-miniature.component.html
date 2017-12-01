@@ -1,14 +1,5 @@
 <div class="video-miniature">
-  <a
-    [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.description"
-    class="video-miniature-thumbnail"
-  >
-    <img [attr.src]="video.thumbnailUrl" alt="video thumbnail" [ngClass]="{ 'blur-filter': isVideoNSFWForThisUser() }" />
-
-    <div class="video-miniature-thumbnail-overlay">
-      {{ video.durationLabel }}
-    </div>
-  </a>
+  <my-video-thumbnail [video]="video" [nsfw]="isVideoNSFWForThisUser()"></my-video-thumbnail>
 
   <div class="video-miniature-information">
     <span class="video-miniature-name">

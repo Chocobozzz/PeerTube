@@ -1,4 +1,4 @@
-import { Video } from './video.model'
+import { Video } from '../../shared/video/video.model'
 import { AuthUser } from '../../core'
 import {
   VideoDetails as VideoDetailsServerModel,

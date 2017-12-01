@@ -1,11 +1,11 @@
 import { OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
-
-import { SortField, Video, VideoPagination } from '../../shared'
+import { SortField } from './sort-field.type'
+import { VideoPagination } from './video-pagination.model'
+import { Video } from './video.model'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
   pagination: VideoPagination = {
@@ -76,7 +76,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   protected hasMoreVideos () {
     if (!this.pagination.totalItems) return true
 
-    const maxPage = this.pagination.totalItems/this.pagination.itemsPerPage
+    const maxPage = this.pagination.totalItems / this.pagination.itemsPerPage
     return maxPage > this.pagination.currentPage
   }
 

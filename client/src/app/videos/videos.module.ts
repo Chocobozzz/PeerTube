@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core'
-import { InfiniteScrollModule } from 'ngx-infinite-scroll'
 import { SharedModule } from '../shared'
-import { VideoService } from './shared'
 import { VideoMiniatureComponent } from './video-list'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
 import { VideoTrendingComponent } from './video-list/video-trending.component'
@@ -11,8 +9,7 @@ import { VideosComponent } from './videos.component'
 @NgModule({
   imports: [
     VideosRoutingModule,
-    SharedModule,
-    InfiniteScrollModule
+    SharedModule
   ],
 
   declarations: [
@@ -27,8 +24,6 @@ import { VideosComponent } from './videos.component'
     VideosComponent
   ],
 
-  providers: [
-    VideoService
-  ]
+  providers: []
 })
 export class VideosModule { }

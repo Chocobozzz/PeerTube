@@ -1,29 +1,23 @@
-import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs/Observable'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
+import { Injectable } from '@angular/core'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-
+import { Observable } from 'rxjs/Observable'
+import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } from '../../../../../shared'
+import { ResultList } from '../../../../../shared/models/result-list.model'
+import { UserVideoRateUpdate } from '../../../../../shared/models/videos/user-video-rate-update.model'
+import { UserVideoRate } from '../../../../../shared/models/videos/user-video-rate.model'
+import { VideoRateType } from '../../../../../shared/models/videos/video-rate.type'
+import { VideoUpdate } from '../../../../../shared/models/videos/video-update.model'
+import { RestExtractor } from '../rest/rest-extractor.service'
+import { RestService } from '../rest/rest.service'
+import { Search } from '../search/search.model'
+import { UserService } from '../users/user.service'
 import { SortField } from './sort-field.type'
-import {
-  RestExtractor,
-  RestService,
-  UserService,
-  Search
-} from '../../shared'
-import { Video } from './video.model'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { VideoPagination } from './video-pagination.model'
-import {
-  UserVideoRate,
-  VideoRateType,
-  VideoUpdate,
-  UserVideoRateUpdate,
-  Video as VideoServerModel,
-  VideoDetails as VideoDetailsServerModel,
-  ResultList
-} from '../../../../../shared'
+import { Video } from './video.model'
 
 @Injectable()
 export class VideoService {

@@ -2,6 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
+import { VideoService } from 'app/shared/video/video.service'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 import videojs from 'video.js'
@@ -9,10 +10,11 @@ import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { VideoBlacklistService } from '../../shared'
-import { MarkdownService, VideoDetails, VideoService } from '../shared'
+import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './video-download.component'
 import { VideoReportComponent } from './video-report.component'
 import { VideoShareComponent } from './video-share.component'
+import { VideoDetails } from '../../shared/video/video-details.model'
 
 @Component({
   selector: 'my-video-watch',

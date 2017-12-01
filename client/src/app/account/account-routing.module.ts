@@ -6,6 +6,7 @@ import { MetaGuard } from '@ngx-meta/core'
 import { LoginGuard } from '../core'
 import { AccountComponent } from './account.component'
 import { AccountSettingsComponent } from './account-settings/account-settings.component'
+import { AccountVideosComponent } from './account-videos/account-videos.component'
 
 const accountRoutes: Routes = [
   {
@@ -22,15 +23,15 @@ const accountRoutes: Routes = [
           }
         }
       },
-      // {
-      //   path: 'videos',
-      //   component: AccountVideosComponent,
-      //   data: {
-      //     meta: {
-      //       title: 'Account videos'
-      //     }
-      //   }
-      // }
+      {
+        path: 'videos',
+        component: AccountVideosComponent,
+        data: {
+          meta: {
+            title: 'Account videos'
+          }
+        }
+      }
     ]
   }
 ]
