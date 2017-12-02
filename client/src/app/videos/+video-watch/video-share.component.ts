@@ -14,6 +14,8 @@ export class VideoShareComponent {
 
   @ViewChild('modal') modal: ModalDirective
 
+  copied: boolean
+
   constructor () {
     // empty
   }
@@ -39,5 +41,12 @@ export class VideoShareComponent {
 
   notSecure () {
     return window.location.protocol === 'http:'
+  }
+
+  activateCopiedMessage () {
+    this.copied = true
+    setTimeout(() => {
+      this.copied = false
+    }, 4000)
   }
 }

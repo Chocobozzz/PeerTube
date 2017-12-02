@@ -4718,6 +4718,16 @@ ngx-chips@1.5.3:
   dependencies:
     ng2-material-dropdown "0.7.10"
 
+ngx-clipboard@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-clipboard/-/ngx-clipboard-9.0.0.tgz#a56e4a3d0488a491898ee5209980b81ddad8b659"
+  dependencies:
+    ngx-window-token "0.0.4"
+
+ngx-window-token@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/ngx-window-token/-/ngx-window-token-0.0.4.tgz#47e7aaa465411c4ab5f7ba17601bc593c956c736"
+
 no-case@^2.2.0:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.2.tgz#60b813396be39b3f1288a4c1ed5d1e7d28b464ac"
