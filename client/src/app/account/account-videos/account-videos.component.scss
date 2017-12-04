@@ -1,0 +1,44 @@
+.video {
+  display: flex;
+  height: 130px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #C6C6C6;
+
+  my-video-thumbnail {
+    margin-right: 10px;
+  }
+
+  .video-info {
+    flex-grow: 1;
+
+    .video-info-name {
+      font-size: 16px;
+      font-weight: $font-semibold;
+    }
+
+    .video-info-date-views {
+      font-size: 13px;
+    }
+  }
+
+  .edit-button {
+    @include peertube-button-link;
+
+    font-size: 15px;
+    font-weight: $font-semibold;
+    color: #585858;
+    background-color: #E5E5E5;
+
+    .icon.icon-edit {
+      display: inline-block;
+      background: url('../../../assets/images/account/edit.svg') no-repeat;
+      background-size: contain;
+      width: 21px;
+      height: 21px;
+      vertical-align: middle;
+      position: relative;
+      top: -2px;
+    }
+  }
+}

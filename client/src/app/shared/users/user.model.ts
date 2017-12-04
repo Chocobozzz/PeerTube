@@ -54,6 +54,6 @@ export class User implements UserServerModel {
   getAvatarPath () {
     if (this.account && this.account.avatar) return this.account.avatar.path
 
-    return '/assets/default-avatar.png'
+    return '/assets/images/default-avatar.png'
   }
 }

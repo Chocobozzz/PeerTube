@@ -3,7 +3,17 @@
   [infiniteScrollDistance]="0.5"
   (scrolled)="onNearOfBottom()"
 >
-  <div *ngFor="let video of videos">
+  <div class="video" *ngFor="let video of videos">
     <my-video-thumbnail [video]="video"></my-video-thumbnail>
+
+    <div class="video-info">
+      <div class="video-info-name">{{ video.name }}</div>
+      <span class="video-info-date-views">{{ video.createdAt | fromNow }} - {{ video.views | numberFormatter }} views</span>
+    </div>
+
+    <a class="edit-button" [routerLink]="[ '/videos', video.id, '/edit' ]">
+      <span class="icon icon-edit"></span>
+      Edit
+    </a>
   </div>
 </div>
