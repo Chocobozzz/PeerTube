@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import { addMethodsToModel } from '../utils'
-import { AvatarAttributes, AvatarInstance, AvatarMethods } from './avatar-interface'
+import { AvatarAttributes, AvatarInstance } from './avatar-interface'
 
 let Avatar: Sequelize.Model<AvatarInstance, AvatarAttributes>
 

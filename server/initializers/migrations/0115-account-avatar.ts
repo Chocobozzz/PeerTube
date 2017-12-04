@@ -7,7 +7,7 @@ async function up (utils: {
   sequelize: Sequelize.Sequelize,
   db: PeerTubeDatabase
 }): Promise<void> {
-  await db.Avatar.sync()
+  await utils.db.Avatar.sync()
 
   const data = {
     type: Sequelize.INTEGER,

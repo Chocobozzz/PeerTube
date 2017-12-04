@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core'
 
 // Thanks: https://stackoverflow.com/questions/3177836/how-to-format-time-since-xxx-e-g-4-minutes-ago-similar-to-stack-exchange-site
-
-@Pipe({name: 'fromNow'})
+@Pipe({ name: 'myFromNow' })
 export class FromNowPipe implements PipeTransform {
 
   transform (value: number) {

@@ -8,7 +8,7 @@
 
     <div class="video-info">
       <div class="video-info-name">{{ video.name }}</div>
-      <span class="video-info-date-views">{{ video.createdAt | fromNow }} - {{ video.views | numberFormatter }} views</span>
+      <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
     </div>
 
     <a class="edit-button" [routerLink]="[ '/videos', video.id, '/edit' ]">

@@ -13,7 +13,6 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { AVATARS_DIR } from '../../initializers'
 import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { sendDeleteAccount } from '../../lib/activitypub/send/send-delete'
-import { AvatarModel } from '../avatar'
 import { addMethodsToModel } from '../utils'
 import { AccountAttributes, AccountInstance, AccountMethods } from './account-interface'
 

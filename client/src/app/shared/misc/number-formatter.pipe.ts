@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core'
 
 // Thanks: https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
 
-@Pipe({name: 'numberFormatter'})
+@Pipe({ name: 'myNumberFormatter' })
 export class NumberFormatterPipe implements PipeTransform {
   private dictionary: Array<{max: number, type: string}> = [
     { max: 1000, type: '' },

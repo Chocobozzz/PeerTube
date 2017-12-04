@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { AbstractVideoList } from '../../shared/video/abstract-video-list'
-import { ActivatedRoute } from '@angular/router'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
+import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 
 @Component({
