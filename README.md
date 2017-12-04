@@ -129,13 +129,22 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 
 #### Debian
 
-  * Install NodeJS 6.x (actual LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-  * Install yarn: [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
-  * Add jessie backports to your *source.list*: http://backports.debian.org/Instructions/
-  * Run:
+  1. Install NodeJS 6.x (previous LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  2. Install yarn: [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
+  3. Add jessie backports to your *source.list*: http://backports.debian.org/Instructions/
+  4. Run:
 
-        # apt-get update
-        # apt-get install ffmpeg postgresql-9.4 openssl
+        $ apt-get update
+        $ apt-get install ffmpeg postgresql-9.4 openssl
+
+#### Ubuntu 16.04
+
+  1. Install NodeJS 8.x (current LTS): (same as Debian)
+  2. Install yarn: (same as Debian)
+  3. Run:
+
+        $ apt-get update
+        $ apt-get install ffmpeg postgresql openssl
 
 #### Other distribution... (PR welcome)
 
