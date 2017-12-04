@@ -1,3 +1,4 @@
+import { Account } from '../accounts'
 import { VideoChannel } from '../videos/video-channel.model'
 import { UserRole } from './user-role'
 
@@ -8,10 +9,7 @@ export interface User {
   displayNSFW: boolean
   role: UserRole
   videoQuota: number
-  createdAt: Date,
-  account: {
-    id: number
-    uuid: string
-  }
+  createdAt: Date
+  account: Account
   videoChannels?: VideoChannel[]
 }

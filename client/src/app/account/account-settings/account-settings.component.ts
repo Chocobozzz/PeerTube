@@ -15,4 +15,8 @@ export class AccountSettingsComponent implements OnInit {
   ngOnInit () {
     this.user = this.authService.getUser()
   }
+
+  getAvatarPath () {
+    return this.user.getAvatarPath()
+  }
 }

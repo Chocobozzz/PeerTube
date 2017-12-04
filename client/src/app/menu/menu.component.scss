@@ -21,9 +21,15 @@ menu {
     justify-content: center;
     margin-bottom: 35px;
 
+    img {
+      margin-left: 20px;
+      margin-right: 10px;
+
+      @include avatar(34px);
+    }
+
     .logged-in-info {
       flex-grow: 1;
-      margin-left: 40px;
 
       .logged-in-username {
         font-size: 16px;

@@ -1,6 +1,12 @@
-<div class="user-info">
-  {{ user.username }}
+<div class="user">
+  <img [src]="getAvatarPath()" alt="Avatar" />
+
+  <div class="user-info">
+    <div class="user-info-username">{{ user.username }}</div>
+    <div class="user-info-followers">{{ user.account.followersCount }} subscribers</div>
+  </div>
 </div>
+
 
 <div class="account-title">Account settings</div>
 <my-account-change-password></my-account-change-password>

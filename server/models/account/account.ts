@@ -1,4 +1,6 @@
+import { join } from 'path'
 import * as Sequelize from 'sequelize'
+import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import {
   activityPubContextify,
   isAccountFollowersCountValid,
@@ -8,8 +10,10 @@ import {
   isUserUsernameValid
 } from '../../helpers'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { AVATARS_DIR } from '../../initializers'
 import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { sendDeleteAccount } from '../../lib/activitypub/send/send-delete'
+import { AvatarModel } from '../avatar'
 import { addMethodsToModel } from '../utils'
 import { AccountAttributes, AccountInstance, AccountMethods } from './account-interface'
 
@@ -252,6 +256,14 @@ function associate (models) {
     as: 'followers',
     onDelete: 'cascade'
   })
+
+  Account.hasOne(models.Avatar, {
+    foreignKey: {
+      name: 'avatarId',
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
 }
 
 function afterDestroy (account: AccountInstance) {
@@ -265,6 +277,15 @@ function afterDestroy (account: AccountInstance) {
 toFormattedJSON = function (this: AccountInstance) {
   let host = CONFIG.WEBSERVER.HOST
   let score: number
+  let avatar: Avatar = null
+
+  if (this.Avatar) {
+    avatar = {
+      path: join(AVATARS_DIR.ACCOUNT, this.Avatar.filename),
+      createdAt: this.Avatar.createdAt,
+      updatedAt: this.Avatar.updatedAt
+    }
+  }
 
   if (this.Server) {
     host = this.Server.host
@@ -273,11 +294,15 @@ toFormattedJSON = function (this: AccountInstance) {
 
   const json = {
     id: this.id,
+    uuid: this.uuid,
     host,
     score,
     name: this.name,
+    followingCount: this.followingCount,
+    followersCount: this.followersCount,
     createdAt: this.createdAt,
-    updatedAt: this.updatedAt
+    updatedAt: this.updatedAt,
+    avatar
   }
 
   return json

@@ -39,3 +39,8 @@
   @include peertube-button;
   @include disable-default-a-behaviour;
 }
+
+@mixin avatar ($size) {
+  width: $size;
+  height: $size;
+}

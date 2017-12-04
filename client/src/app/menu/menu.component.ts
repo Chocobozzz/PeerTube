@@ -51,6 +51,10 @@ export class MenuComponent implements OnInit {
     )
   }
 
+  getUserAvatarPath () {
+    return this.user.getAvatarPath()
+  }
+
   isRegistrationAllowed () {
     return this.serverService.getConfig().signup.allowed
   }

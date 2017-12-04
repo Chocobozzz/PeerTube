@@ -1,10 +1,5 @@
-import {
-  User as UserServerModel,
-  UserRole,
-  VideoChannel,
-  UserRight,
-  hasUserRight
-} from '../../../../../shared'
+import { hasUserRight, User as UserServerModel, UserRight, UserRole, VideoChannel } from '../../../../../shared'
+import { Account } from '../../../../../shared/models/accounts'
 
 export type UserConstructorHash = {
   id: number,
@@ -14,10 +9,7 @@ export type UserConstructorHash = {
   videoQuota?: number,
   displayNSFW?: boolean,
   createdAt?: Date,
-  account?: {
-    id: number
-    uuid: string
-  },
+  account?: Account,
   videoChannels?: VideoChannel[]
 }
 export class User implements UserServerModel {
@@ -27,10 +19,7 @@ export class User implements UserServerModel {
   role: UserRole
   displayNSFW: boolean
   videoQuota: number
-  account: {
-    id: number
-    uuid: string
-  }
+  account: Account
   videoChannels: VideoChannel[]
   createdAt: Date
 
@@ -60,5 +49,11 @@ export class User implements UserServerModel {
 
   hasRight (right: UserRight) {
     return hasUserRight(this.role, right)
+  }
+
+  getAvatarPath () {
+    if (this.account && this.account.avatar) return this.account.avatar.path
+
+    return '/assets/default-avatar.png'
   }
 }
