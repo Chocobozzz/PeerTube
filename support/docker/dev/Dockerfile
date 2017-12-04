@@ -9,7 +9,7 @@ RUN sudo apt-get update -q && sudo apt-get install -qy \
  openssl
 
 # Download PeerTube's source code.
-RUN git clone -b master https://github.com/Chocobozzz/PeerTube /home/user/PeerTube
+RUN git clone -b develop https://github.com/Chocobozzz/PeerTube /home/user/PeerTube
 WORKDIR /home/user/PeerTube
 
 # Configure Cloud9 IDE to use PeerTube's source directory as workspace (-w).
