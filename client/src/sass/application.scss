@@ -52,8 +52,8 @@ input.readonly {
   }
 
   .margin-content {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left: $not-expanded-horizontal-margins;
+    margin-right: $not-expanded-horizontal-margins;
   }
 
   .sub-menu {
@@ -63,6 +63,7 @@ input.readonly {
     margin-bottom: 30px;
     display: flex;
     align-items: center;
+    padding-left: $not-expanded-horizontal-margins;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
