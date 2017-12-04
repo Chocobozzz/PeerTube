@@ -7,7 +7,8 @@ import { RouterModule } from '@angular/router'
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
-import { BytesPipe, KeysPipe } from 'ngx-pipes'
+import { InfiniteScrollModule } from 'ngx-infinite-scroll'
+import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 import { DataTableModule } from 'primeng/components/datatable/datatable'
 
@@ -22,7 +23,6 @@ import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
-import { InfiniteScrollModule } from 'ngx-infinite-scroll'
 
 @NgModule({
   imports: [
@@ -38,12 +38,11 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll'
 
     DataTableModule,
     PrimeSharedModule,
-    InfiniteScrollModule
+    InfiniteScrollModule,
+    NgPipesModule
   ],
 
   declarations: [
-    BytesPipe,
-    KeysPipe,
     SearchComponent,
     LoaderComponent,
     VideoThumbnailComponent,
