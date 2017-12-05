@@ -13,6 +13,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const ngcWebpack = require('ngc-webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const WebpackNotifierPlugin = require('webpack-notifier')
 
@@ -266,6 +267,17 @@ module.exports = function (options) {
         metadata: METADATA,
         inject: 'body'
       }),
+
+      new CopyWebpackPlugin([
+        {
+          from: helpers.root('src/assets/images/favicon.png'),
+          to: 'assets/images/favicon.png'
+        },
+        {
+          from: helpers.root('src/assets/images/default-avatar.png'),
+          to: 'assets/images/default-avatar.png'
+        }
+      ]),
 
       /*
        * Plugin: ScriptExtHtmlWebpackPlugin
