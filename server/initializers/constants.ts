@@ -25,11 +25,6 @@ const API_VERSION = 'v1'
 const PAGINATION_COUNT_DEFAULT = 15
 
 // Sortable columns per schema
-const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'host', 'account', 'tags' ]
-}
-
-// Sortable columns per schema
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
   JOBS: [ 'id', 'createdAt' ],
@@ -361,7 +356,6 @@ export {
   REMOTE_SCHEME,
   FOLLOW_STATES,
   AVATARS_DIR,
-  SEARCHABLE_COLUMNS,
   SERVER_ACCOUNT_NAME,
   PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,

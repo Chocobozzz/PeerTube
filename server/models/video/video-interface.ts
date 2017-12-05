@@ -50,7 +50,6 @@ export namespace VideoMethods {
   export type ListUserVideosForApi = (userId: number, start: number, count: number, sort: string) => Bluebird< ResultList<VideoInstance> >
   export type SearchAndPopulateAccountAndServerAndTags = (
     value: string,
-    field: string,
     start: number,
     count: number,
     sort: string

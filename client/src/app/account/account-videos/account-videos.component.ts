@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -9,7 +9,7 @@ import { VideoService } from '../../shared/video/video.service'
   templateUrl: './account-videos.component.html',
   styleUrls: [ './account-videos.component.scss' ]
 })
-export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+export class AccountVideosComponent extends AbstractVideoList implements OnInit {
   titlePage = 'My videos'
   currentRoute = '/account/videos'
 
@@ -22,10 +22,6 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
   ngOnInit () {
     super.ngOnInit()
-  }
-
-  ngOnDestroy () {
-    super.ngOnDestroy()
   }
 
   getVideosObservable () {

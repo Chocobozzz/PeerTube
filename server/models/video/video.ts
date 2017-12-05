@@ -1070,7 +1070,7 @@ loadByUUIDAndPopulateAccountAndServerAndTags = function (uuid: string) {
   return Video.findOne(options)
 }
 
-searchAndPopulateAccountAndServerAndTags = function (value: string, field: string, start: number, count: number, sort: string) {
+searchAndPopulateAccountAndServerAndTags = function (value: string, start: number, count: number, sort: string) {
   const serverInclude: Sequelize.IncludeOptions = {
     model: Video['sequelize'].models.Server,
     required: false
@@ -1099,33 +1099,24 @@ searchAndPopulateAccountAndServerAndTags = function (value: string, field: strin
     order: [ getSort(sort), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ]
   }
 
-  if (field === 'tags') {
-    const escapedValue = Video['sequelize'].escape('%' + value + '%')
-    query.where['id'][Sequelize.Op.in] = Video['sequelize'].literal(
-      `(SELECT "VideoTags"."videoId"
-        FROM "Tags"
-        INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
-        WHERE name ILIKE ${escapedValue}
-       )`
-    )
-  } else if (field === 'host') {
-    // FIXME: Include our server? (not stored in the database)
-    serverInclude.where = {
-      host: {
-        [Sequelize.Op.iLike]: '%' + value + '%'
-      }
-    }
-    serverInclude.required = true
-  } else if (field === 'account') {
-    accountInclude.where = {
-      name: {
-        [Sequelize.Op.iLike]: '%' + value + '%'
-      }
-    }
-  } else {
-    query.where[field] = {
-      [Sequelize.Op.iLike]: '%' + value + '%'
-    }
+  // TODO: search on tags too
+  // const escapedValue = Video['sequelize'].escape('%' + value + '%')
+  // query.where['id'][Sequelize.Op.in] = Video['sequelize'].literal(
+  //   `(SELECT "VideoTags"."videoId"
+  //     FROM "Tags"
+  //     INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
+  //     WHERE name ILIKE ${escapedValue}
+  //    )`
+  // )
+
+  // TODO: search on account too
+  // accountInclude.where = {
+  //   name: {
+  //     [Sequelize.Op.iLike]: '%' + value + '%'
+  //   }
+  // }
+  query.where['name'] = {
+    [Sequelize.Op.iLike]: '%' + value + '%'
   }
 
   query.include = [

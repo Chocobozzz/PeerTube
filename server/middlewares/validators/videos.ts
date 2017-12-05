@@ -18,7 +18,7 @@ import {
 } from '../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
-import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { database as db } from '../../initializers/database'
 import { UserInstance } from '../../models/account/user-interface'
 import { VideoInstance } from '../../models/video/video-interface'
@@ -172,8 +172,7 @@ const videosRemoveValidator = [
 ]
 
 const videosSearchValidator = [
-  param('value').not().isEmpty().withMessage('Should have a valid search'),
-  query('field').optional().isIn(SEARCHABLE_COLUMNS.VIDEOS).withMessage('Should have correct searchable column'),
+  query('search').not().isEmpty().withMessage('Should have a valid search'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosSearch parameters', { parameters: req.params })

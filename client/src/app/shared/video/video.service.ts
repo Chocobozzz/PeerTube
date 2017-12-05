@@ -11,7 +11,7 @@ import { VideoRateType } from '../../../../../shared/models/videos/video-rate.ty
 import { VideoUpdate } from '../../../../../shared/models/videos/video-update.model'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { RestService } from '../rest/rest.service'
-import { Search } from '../search/search.model'
+import { Search } from '../header/search.model'
 import { UserService } from '../users/user.service'
 import { SortField } from './sort-field.type'
 import { VideoDetails } from './video-details.model'
@@ -91,15 +91,14 @@ export class VideoService {
       .catch((res) => this.restExtractor.handleError(res))
   }
 
-  searchVideos (search: Search, videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
-    const url = VideoService.BASE_VIDEO_URL + 'search/' + encodeURIComponent(search.value)
+  searchVideos (search: string, videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
+    const url = VideoService.BASE_VIDEO_URL + 'search'
 
     const pagination = this.videoPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
-
-    if (search.field) params.set('field', search.field)
+    params = params.append('search', search)
 
     return this.authHttp
       .get<ResultList<VideoServerModel>>(url, { params })

@@ -1,6 +1,6 @@
 <input
     type="text" id="search-video" name="search-video" placeholder="Search..."
-    [(ngModel)]="searchCriteria.value" (keyup.enter)="doSearch()"
+    [(ngModel)]="searchValue" (keyup.enter)="doSearch()"
 >
 <span (click)="doSearch()" class="icon icon-search"></span>
 

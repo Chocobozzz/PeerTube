@@ -1,25 +1,25 @@
-import { OnDestroy, OnInit } from '@angular/core'
+import { OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
-import { Subscription } from 'rxjs/Subscription'
 import { SortField } from './sort-field.type'
 import { VideoPagination } from './video-pagination.model'
 import { Video } from './video.model'
 
-export abstract class AbstractVideoList implements OnInit, OnDestroy {
+export abstract class AbstractVideoList implements OnInit {
   pagination: VideoPagination = {
     currentPage: 1,
     itemsPerPage: 25,
     totalItems: null
   }
   sort: SortField = '-createdAt'
+  defaultSort: SortField = '-createdAt'
   videos: Video[] = []
+  loadOnInit = true
 
   protected notificationsService: NotificationsService
   protected router: Router
   protected route: ActivatedRoute
-  protected subActivatedRoute: Subscription
 
   protected abstract currentRoute: string
 
@@ -32,13 +32,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     // Subscribe to route changes
     const routeParams = this.route.snapshot.params
     this.loadRouteParams(routeParams)
-    this.loadMoreVideos('after')
-  }
-
-  ngOnDestroy () {
-    if (this.subActivatedRoute) {
-      this.subActivatedRoute.unsubscribe()
-    }
+    if (this.loadOnInit === true) this.loadMoreVideos('after')
   }
 
   onNearOfTop () {
@@ -51,6 +45,12 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     if (this.hasMoreVideos()) {
       this.nextPage()
     }
+  }
+
+  reloadVideos () {
+    this.videos = []
+    this.loadedPages = {}
+    this.loadMoreVideos('before')
   }
 
   loadMoreVideos (where: 'before' | 'after') {
@@ -105,7 +105,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   }
 
   protected loadRouteParams (routeParams: { [ key: string ]: any }) {
-    this.sort = routeParams['sort'] as SortField || '-createdAt'
+    this.sort = routeParams['sort'] as SortField || this.defaultSort
 
     if (routeParams['page'] !== undefined) {
       this.pagination.currentPage = parseInt(routeParams['page'], 10)

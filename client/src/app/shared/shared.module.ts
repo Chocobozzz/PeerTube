@@ -17,7 +17,6 @@ import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
 import { NumberFormatterPipe } from './misc/number-formatter.pipe'
 import { RestExtractor, RestService } from './rest'
-import { SearchComponent, SearchService } from './search'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
@@ -43,7 +42,6 @@ import { VideoService } from './video/video.service'
   ],
 
   declarations: [
-    SearchComponent,
     LoaderComponent,
     VideoThumbnailComponent,
     NumberFormatterPipe,
@@ -66,7 +64,6 @@ import { VideoService } from './video/video.service'
     BytesPipe,
     KeysPipe,
 
-    SearchComponent,
     LoaderComponent,
     VideoThumbnailComponent,
 
@@ -78,7 +75,6 @@ import { VideoService } from './video/video.service'
     AUTH_INTERCEPTOR_PROVIDER,
     RestExtractor,
     RestService,
-    SearchService,
     VideoAbuseService,
     VideoBlacklistService,
     UserService,

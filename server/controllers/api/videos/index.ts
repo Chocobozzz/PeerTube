@@ -26,7 +26,6 @@ import {
   authenticate,
   paginationValidator,
   setPagination,
-  setVideosSearch,
   setVideosSort,
   videosAddValidator,
   videosGetValidator,
@@ -84,6 +83,14 @@ videosRouter.get('/',
   setPagination,
   asyncMiddleware(listVideos)
 )
+videosRouter.get('/search',
+  videosSearchValidator,
+  paginationValidator,
+  videosSortValidator,
+  setVideosSort,
+  setPagination,
+  asyncMiddleware(searchVideos)
+)
 videosRouter.put('/:id',
   authenticate,
   asyncMiddleware(videosUpdateValidator),
@@ -113,16 +120,6 @@ videosRouter.delete('/:id',
   authenticate,
   asyncMiddleware(videosRemoveValidator),
   asyncMiddleware(removeVideoRetryWrapper)
-)
-
-videosRouter.get('/search/:value',
-  videosSearchValidator,
-  paginationValidator,
-  videosSortValidator,
-  setVideosSort,
-  setPagination,
-  setVideosSearch,
-  asyncMiddleware(searchVideos)
 )
 
 // ---------------------------------------------------------------------------
@@ -378,8 +375,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
 async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const resultList = await db.Video.searchAndPopulateAccountAndServerAndTags(
-    req.params.value,
-    req.query.field,
+    req.query.search,
     req.query.start,
     req.query.count,
     req.query.sort
