@@ -15,18 +15,11 @@
 
 <div class="row">
   <!-- We need the video container for videojs so we just hide it -->
-  <div [hidden]="videoNotFound" class="embed-responsive embed-responsive-19by9">
-     <video id="video-container" class="video-js vjs-sublime-skin"></video>
+  <div [hidden]="videoNotFound" id="video-container">
+     <video id="video-element" class="video-js vjs-peertube-skin"></video>
   </div>
 
   <div *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
-</div>
-
-<!-- P2P information -->
-<div id="torrent-info" class="row">
-  <div id="torrent-info-download" class="col-md-4 col-sm-4 col-xs-4">Download: {{ downloadSpeed | bytes }}/s</div>
-  <div id="torrent-info-upload" class="col-md-4 col-sm-4 col-xs-4">Upload: {{ uploadSpeed | bytes }}/s</div>
-  <div id="torrent-info-peers" class="col-md-4 col-sm-4 col-xs-4">Number of peers: {{ numPeers }}</div>
 </div>
 
 <!-- Video information -->

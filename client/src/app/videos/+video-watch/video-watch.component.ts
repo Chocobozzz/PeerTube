@@ -26,13 +26,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
 
-  downloadSpeed: number
   error = false
   loading = false
-  numPeers: number
   player: videojs.Player
   playerElement: HTMLMediaElement
-  uploadSpeed: number
   userRating: UserVideoRateType = null
   video: VideoDetails = null
   videoPlayerLoaded = false
@@ -283,7 +280,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           return this.router.navigate([ '/videos/list' ])
         }
 
-        this.playerElement = this.elementRef.nativeElement.querySelector('#video-container')
+        this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
 
         const videojsOptions = {
           controls: true,
@@ -305,12 +302,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           self.player = this
           this.on('customError', (event, data) => {
             self.handleError(data.err)
-          })
-
-          this.on('torrentInfo', (event, data) => {
-            self.downloadSpeed = data.downloadSpeed
-            self.numPeers = data.numPeers
-            self.uploadSpeed = data.uploadSpeed
           })
         })
 

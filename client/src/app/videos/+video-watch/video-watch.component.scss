@@ -1,6 +1,12 @@
 #video-container {
-  width: 100%;
-  height: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+
+  #video-element {
+    width: 888px;
+    height: 500px;
+  }
 }
 
 #video-not-found {
@@ -9,14 +15,6 @@
   margin-top: 50px;
   text-align: center;
   font-weight: bold;
-}
-
-.embed-responsive {
-  height: 500px;
-
-  @media screen and (max-width: 600px) {
-    height: 300px;
-  }
 }
 
 #torrent-info {
