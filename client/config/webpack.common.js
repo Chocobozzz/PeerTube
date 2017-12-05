@@ -302,6 +302,7 @@ module.exports = function (options) {
       */
       new LoaderOptionsPlugin({
         options: {
+          context: '',
           sassLoader: {
             precision: 10,
             includePaths: [ helpers.root('src/sass') ]

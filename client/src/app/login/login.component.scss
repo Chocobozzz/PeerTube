@@ -1,0 +1,8 @@
+input:not([type=submit]) {
+  @include peertube-input-text(340px);
+  display: block;
+}
+
+input[type=submit] {
+  @include peertube-button;
+}

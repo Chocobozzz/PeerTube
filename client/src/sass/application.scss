@@ -20,12 +20,9 @@ input.readonly {
   background-color: #fff !important;
 }
 
-.form-control, .btn {
-  border-radius: 0;
-}
-
-.dropdown-menu {
-  border-radius: 0;
+label {
+  font-weight: $font-bold;
+  font-size: 15px;
 }
 
 .glyphicon-black {
