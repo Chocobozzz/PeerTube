@@ -117,10 +117,12 @@ const WebTorrentButton = videojsUntyped.extend(Button, {
 
   createEl: function () {
     const div = document.createElement('div')
+    const subDiv = document.createElement('div')
+    div.appendChild(subDiv)
 
     const downloadIcon = document.createElement('span')
     downloadIcon.classList.add('icon', 'icon-download')
-    div.appendChild(downloadIcon)
+    subDiv.appendChild(downloadIcon)
 
     const downloadSpeedText = document.createElement('span')
     downloadSpeedText.classList.add('download-speed-text')
@@ -129,11 +131,11 @@ const WebTorrentButton = videojsUntyped.extend(Button, {
     const downloadSpeedUnit = document.createElement('span')
     downloadSpeedText.appendChild(downloadSpeedNumber)
     downloadSpeedText.appendChild(downloadSpeedUnit)
-    div.appendChild(downloadSpeedText)
+    subDiv.appendChild(downloadSpeedText)
 
     const uploadIcon = document.createElement('span')
     uploadIcon.classList.add('icon', 'icon-upload')
-    div.appendChild(uploadIcon)
+    subDiv.appendChild(uploadIcon)
 
     const uploadSpeedText = document.createElement('span')
     uploadSpeedText.classList.add('upload-speed-text')
@@ -142,19 +144,19 @@ const WebTorrentButton = videojsUntyped.extend(Button, {
     const uploadSpeedUnit = document.createElement('span')
     uploadSpeedText.appendChild(uploadSpeedNumber)
     uploadSpeedText.appendChild(uploadSpeedUnit)
-    div.appendChild(uploadSpeedText)
+    subDiv.appendChild(uploadSpeedText)
 
     const peersText = document.createElement('span')
     peersText.textContent = ' peers'
     peersText.classList.add('peers-text')
     const peersNumber = document.createElement('span')
     peersNumber.classList.add('peers-number')
-    div.appendChild(peersNumber)
-    div.appendChild(peersText)
+    subDiv.appendChild(peersNumber)
+    subDiv.appendChild(peersText)
 
     div.className = 'vjs-webtorrent'
     // Hide the stats before we get the info
-    div.style.display = 'none'
+    subDiv.style.display = 'none'
 
     this.player_.on('torrentInfo', (event, data) => {
       const downloadSpeed = bytes(data.downloadSpeed)
@@ -169,7 +171,7 @@ const WebTorrentButton = videojsUntyped.extend(Button, {
 
       peersNumber.textContent = numPeers
 
-      div.style.display = 'block'
+      subDiv.style.display = 'block'
     })
 
     return div
