@@ -111,13 +111,14 @@ describe('Test multiple servers', function () {
         expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
-        expect(video.account).to.equal('root')
+        expect(video.accountName).to.equal('root')
 
         const res2 = await getVideo(server.url, video.uuid)
         const videoDetails = res2.body
 
         expect(videoDetails.channel.name).to.equal('my channel')
         expect(videoDetails.channel.description).to.equal('super channel')
+        expect(videoDetails.account.name).to.equal('root')
         expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
         expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
         expect(videoDetails.files).to.have.lengthOf(1)
@@ -201,7 +202,7 @@ describe('Test multiple servers', function () {
         expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
-        expect(video.account).to.equal('user1')
+        expect(video.accountName).to.equal('user1')
 
         if (server.url !== 'http://localhost:9002') {
           expect(video.isLocal).to.be.false
@@ -316,7 +317,7 @@ describe('Test multiple servers', function () {
         expect(video1.serverHost).to.equal('localhost:9003')
         expect(video1.duration).to.equal(5)
         expect(video1.tags).to.deep.equal([ 'tag1p3' ])
-        expect(video1.account).to.equal('root')
+        expect(video1.accountName).to.equal('root')
         expect(dateIsValid(video1.createdAt)).to.be.true
         expect(dateIsValid(video1.updatedAt)).to.be.true
 
@@ -342,7 +343,7 @@ describe('Test multiple servers', function () {
         expect(video2.serverHost).to.equal('localhost:9003')
         expect(video2.duration).to.equal(5)
         expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
-        expect(video2.account).to.equal('root')
+        expect(video2.accountName).to.equal('root')
         expect(dateIsValid(video2.createdAt)).to.be.true
         expect(dateIsValid(video2.updatedAt)).to.be.true
 
@@ -690,7 +691,7 @@ describe('Test multiple servers', function () {
         expect(baseVideo.licence).to.equal(video.licence)
         expect(baseVideo.category).to.equal(video.category)
         expect(baseVideo.nsfw).to.equal(video.nsfw)
-        expect(baseVideo.account).to.equal(video.account)
+        expect(baseVideo.accountName).to.equal(video.accountName)
         expect(baseVideo.tags).to.deep.equal(video.tags)
       }
     })

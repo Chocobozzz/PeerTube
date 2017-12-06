@@ -486,7 +486,7 @@ toFormattedJSON = function (this: VideoInstance) {
     description: this.getTruncatedDescription(),
     serverHost,
     isLocal: this.isOwned(),
-    account: this.VideoChannel.Account.name,
+    accountName: this.VideoChannel.Account.name,
     duration: this.duration,
     views: this.views,
     likes: this.likes,
@@ -514,6 +514,7 @@ toFormattedDetailsJSON = function (this: VideoInstance) {
     privacy: this.privacy,
     descriptionPath: this.getDescriptionPath(),
     channel: this.VideoChannel.toFormattedJSON(),
+    account: this.VideoChannel.Account.toFormattedJSON(),
     files: []
   }
 

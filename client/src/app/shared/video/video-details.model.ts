@@ -1,3 +1,4 @@
+import { Account } from '../../../../../shared/models/accounts'
 import { Video } from '../../shared/video/video.model'
 import { AuthUser } from '../../core'
 import {
@@ -10,7 +11,7 @@ import {
 } from '../../../../../shared'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
-  account: string
+  accountName: string
   by: string
   createdAt: Date
   updatedAt: Date
@@ -44,6 +45,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   channel: VideoChannel
   privacy: VideoPrivacy
   privacyLabel: string
+  account: Account
 
   constructor (hash: VideoDetailsServerModel) {
     super(hash)
@@ -53,6 +55,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.descriptionPath = hash.descriptionPath
     this.files = hash.files
     this.channel = hash.channel
+    this.account = hash.account
   }
 
   getAppropriateMagnetUri (actualDownloadSpeed = 0) {
@@ -71,7 +74,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   isRemovableBy (user: AuthUser) {
-    return user && this.isLocal === true && (this.account === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
+    return user && this.isLocal === true && (this.accountName === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
   }
 
   isBlackistableBy (user: AuthUser) {
@@ -79,6 +82,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   isUpdatableBy (user: AuthUser) {
-    return user && this.isLocal === true && user.username === this.account
+    return user && this.isLocal === true && user.username === this.accountName
   }
 }

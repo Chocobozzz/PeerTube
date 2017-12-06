@@ -20,6 +20,7 @@ import { RestExtractor, RestService } from './rest'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
+import { VideoMiniatureComponent } from './video/video-miniature.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
 
@@ -44,6 +45,7 @@ import { VideoService } from './video/video.service'
   declarations: [
     LoaderComponent,
     VideoThumbnailComponent,
+    VideoMiniatureComponent,
     NumberFormatterPipe,
     FromNowPipe
   ],
@@ -66,6 +68,7 @@ import { VideoService } from './video/video.service'
 
     LoaderComponent,
     VideoThumbnailComponent,
+    VideoMiniatureComponent,
 
     NumberFormatterPipe,
     FromNowPipe

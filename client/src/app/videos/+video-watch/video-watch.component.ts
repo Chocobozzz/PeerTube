@@ -10,6 +10,8 @@ import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { VideoBlacklistService } from '../../shared'
+import { Account } from '../../shared/account/account.model'
+import { Video } from '../../shared/video/video.model'
 import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './video-download.component'
 import { VideoReportComponent } from './video-report.component'
@@ -25,6 +27,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
+
+  otherVideos: Video[] = []
 
   error = false
   loading = false
@@ -57,6 +61,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit () {
+    this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
+      .subscribe(
+        data => this.otherVideos = data.videos,
+
+    err => console.error(err)
+      )
+
     this.paramsSub = this.route.params.subscribe(routeParams => {
       let uuid = routeParams['uuid']
       this.videoService.getVideo(uuid).subscribe(
@@ -114,27 +125,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                      )
   }
 
-  removeVideo (event: Event) {
-    event.preventDefault()
-
-    this.confirmService.confirm('Do you really want to delete this video?', 'Delete').subscribe(
-      res => {
-        if (res === false) return
-
-        this.videoService.removeVideo(this.video.id)
-                         .subscribe(
-                           status => {
-                             this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
-                             // Go back to the video-list.
-                             this.router.navigate(['/videos/list'])
-                           },
-
-                           error => this.notificationsService.error('Error', error.text)
-                          )
-      }
-    )
-  }
-
   blacklistVideo (event: Event) {
     event.preventDefault()
 
@@ -165,7 +155,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showLessDescription () {
-
     this.updateVideoDescription(this.shortVideoDescription)
     this.completeDescriptionShown = false
   }
@@ -220,6 +209,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoBlacklistable () {
     return this.video.isBlackistableBy(this.authService.getUser())
+  }
+
+  getAvatarPath () {
+    return Account.GET_ACCOUNT_AVATAR_PATH(this.video.account)
+  }
+
+  getVideoTags () {
+    if (!this.video || Array.isArray(this.video.tags) === false) return []
+
+    return this.video.tags.join(', ')
   }
 
   private updateVideoDescription (description: string) {

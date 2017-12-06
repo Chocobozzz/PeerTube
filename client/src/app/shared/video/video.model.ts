@@ -1,8 +1,9 @@
 import { Video as VideoServerModel } from '../../../../../shared'
 import { User } from '../'
+import { Account } from '../../../../../shared/models/accounts'
 
 export class Video implements VideoServerModel {
-  account: string
+  accountName: string
   by: string
   createdAt: Date
   updatedAt: Date
@@ -31,6 +32,7 @@ export class Video implements VideoServerModel {
   likes: number
   dislikes: number
   nsfw: boolean
+  account: Account
 
   private static createByString (account: string, serverHost: string) {
     return account + '@' + serverHost
@@ -52,7 +54,7 @@ export class Video implements VideoServerModel {
       absoluteAPIUrl = window.location.origin
     }
 
-    this.account = hash.account
+    this.accountName = hash.accountName
     this.createdAt = new Date(hash.createdAt.toString())
     this.categoryLabel = hash.categoryLabel
     this.category = hash.category
@@ -80,7 +82,7 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
 
-    this.by = Video.createByString(hash.account, hash.serverHost)
+    this.by = Video.createByString(hash.accountName, hash.serverHost)
   }
 
   isVideoNSFWForUser (user: User) {

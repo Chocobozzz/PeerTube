@@ -1,18 +1,3 @@
-<div *ngIf="error" class="row">
-  <div class="alert alert-danger">
-    The video load seems to be abnormally long.
-    <ul>
-      <li>Maybe the server {{ video.serverHost }} is down :(</li>
-      <li>
-        If not, you can report an issue on
-        <a href="https://github.com/Chocobozzz/PeerTube/issues" title="Report an issue">
-          https://github.com/Chocobozzz/PeerTube/issues
-        </a>
-      </li>
-    </ul>
-  </div>
-</div>
-
 <div class="row">
   <!-- We need the video container for videojs so we just hide it -->
   <div [hidden]="videoNotFound" id="video-container">
@@ -23,167 +8,153 @@
 </div>
 
 <!-- Video information -->
-<div *ngIf="video !== null" id="video-info">
-  <div class="row video-name-views">
-    <div class="col-xs-8 col-md-8 video-name">
-      {{ video.name }}
-    </div>
+<div *ngIf="video" class="margin-content video-bottom">
+  <div class="video-info">
+    <div class="video-info-name-actions">
+      <div class="video-info-name">{{ video.name }}</div>
 
-    <div class="col-xs-4 col-md-4 pull-right video-views">
-      {{ video.views}} views
-    </div>
-  </div>
+      <div class="video-info-actions">
+        <div class="action-button">
+          <span
+              class="icon icon-like" title="Like this video"
+              [ngClass]="{ 'interactive': isUserLoggedIn(), 'activated': userRating === 'like' }" (click)="setLike()"
+          ></span>
+        </div>
 
-  <div class="row video-small-blocks">
-    <div class="col-xs-5 col-xs-3 col-md-3 video-small-block video-small-block-account">
-      <a class="option" title="Access to all videos of this user" [routerLink]="['/videos/list', { field: 'account', search: video.account }]">
-        <span class="glyphicon glyphicon-user"></span>
-        <span class="video-small-block-text">{{ video.by }}</span>
-      </a>
-    </div>
+        <div class="action-button">
+          <span
+            class="icon icon-dislike" title="Dislike this video"
+            [ngClass]="{ 'interactive': isUserLoggedIn(), 'activated': userRating === 'dislike' }" (click)="setDislike()"
+          ></span>
+        </div>
 
-    <div class="col-xs-2 col-md-3 video-small-block video-small-block-share">
-      <a class="option" (click)="showShareModal()" title="Share the video">
-        <span class="glyphicon glyphicon-share"></span>
-        <span class="hidden-xs video-small-block-text">Share</span>
-      </a>
-    </div>
+        <div (click)="showShareModal()" class="action-button">
+          <span class="icon icon-share"></span>
+          Share
+        </div>
 
-    <div class="col-xs-2 col-md-3 video-small-block video-small-block-more">
-      <div class="video-small-block-dropdown" dropdown dropup="true" placement="right">
-        <a class="option" title="Access to more options" dropdownToggle>
-          <span class="glyphicon glyphicon-option-horizontal"></span>
-          <span class="hidden-xs video-small-block-text">More</span>
-        </a>
+        <div class="action-more" dropdown dropup="true" placement="right">
+          <div class="action-button" dropdownToggle>
+            <span class="icon icon-more"></span>
+          </div>
 
-        <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
-          <li *ngIf="canUserUpdateVideo()" role="menuitem">
-            <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.uuid ]">
-              <span class="glyphicon glyphicon-pencil"></span> Update
-            </a>
-          </li>
+          <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
+            <li *ngIf="canUserUpdateVideo()" role="menuitem">
+              <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.uuid ]">
+                <span class="glyphicon glyphicon-pencil"></span> Update
+              </a>
+            </li>
 
-          <li role="menuitem">
-            <a class="dropdown-item" title="Download the video" href="#" (click)="showDownloadModal($event)">
-              <span class="glyphicon glyphicon-download-alt"></span> Download
-            </a>
-          </li>
+            <li role="menuitem">
+              <a class="dropdown-item" title="Download the video" href="#" (click)="showDownloadModal($event)">
+                <span class="glyphicon glyphicon-download-alt"></span> Download
+              </a>
+            </li>
 
-          <li *ngIf="isUserLoggedIn()" role="menuitem">
-            <a class="dropdown-item" title="Report this video" href="#" (click)="showReportModal($event)">
-              <span class="glyphicon glyphicon-alert"></span> Report
-            </a>
-          </li>
+            <li *ngIf="isUserLoggedIn()" role="menuitem">
+              <a class="dropdown-item" title="Report this video" href="#" (click)="showReportModal($event)">
+                <span class="glyphicon glyphicon-alert"></span> Report
+              </a>
+            </li>
 
-          <li *ngIf="isVideoRemovable()" role="menuitem">
-            <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
-              <span class="glyphicon glyphicon-remove"></span> Delete
-            </a>
-          </li>
+            <li *ngIf="isVideoRemovable()" role="menuitem">
+              <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
+                <span class="glyphicon glyphicon-remove"></span> Delete
+              </a>
+            </li>
 
-          <li *ngIf="isVideoBlacklistable()" role="menuitem">
-            <a class="dropdown-item" title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
-              <span class="glyphicon glyphicon-eye-close"></span> Blacklist
-            </a>
-          </li>
-        </ul>
+            <li *ngIf="isVideoBlacklistable()" role="menuitem">
+              <a class="dropdown-item" title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
+                <span class="glyphicon glyphicon-eye-close"></span> Blacklist
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <div class="col-xs-3 col-md-3 video-small-block video-small-block-rating">
-      <div class="video-small-block-like">
-        <span
-          class="glyphicon glyphicon-thumbs-up" title="Like this video"
-          [ngClass]="{ 'interactive': isUserLoggedIn(), 'activated': userRating === 'like' }" (click)="setLike()"
-        ></span>
-
-        <span class="video-small-block-text">
-          {{ video.likes }}
-        </span>
-      </div>
-
-      <div class="video-small-block-dislike">
-        <span
-          class="glyphicon glyphicon-thumbs-down" title="Dislike this video"
-          [ngClass]="{ 'interactive': isUserLoggedIn(), 'activated': userRating === 'dislike' }" (click)="setDislike()"
-        ></span>
-
-        <span class="video-small-block-text">
-          {{ video.dislikes }}
-        </span>
-      </div>
+    <div class="video-info-date-views">
+      {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
     </div>
-  </div>
 
-  <div class="row video-details">
-    <div class="video-details-date-description col-xs-8 col-md-9">
-      <div class="video-details-date">
-        Published on {{ video.createdAt | date:'short' }}
-      </div>
+    <div class="video-info-channel">
+      {{ video.channel.name }}
+      <!-- Here will be the subscribe button -->
+    </div>
 
-      <div class="video-details-description" [innerHTML]="videoHTMLDescription"></div>
+    <div class="video-info-by">
+      By {{ video.by }}
+      <img [src]="getAvatarPath()" alt="Account avatar" />
+    </div>
 
-      <div class="video-details-description-more" *ngIf="completeDescriptionShown === false && video.description.length === 250" (click)="showMoreDescription()">
+    <div class="video-info-description">
+      <div class="video-info-description-html" [innerHTML]="videoHTMLDescription"></div>
+
+      <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description.length === 250" (click)="showMoreDescription()">
         Show more
         <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-down"></span>
         <my-loader class="description-loading" [loading]="descriptionLoading"></my-loader>
       </div>
 
-      <div *ngIf="completeDescriptionShown === true" (click)="showLessDescription()" class="video-details-description-more">
+      <div *ngIf="completeDescriptionShown === true" (click)="showLessDescription()" class="video-info-description-more">
         Show less
         <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-up"></span>
       </div>
     </div>
 
-    <div class="video-details-attributes col-xs-4 col-md-3">
-      <div class="video-details-attribute">
-        <span class="video-details-attribute-label">
-          Privacy:
+    <div class="video-attributes">
+      <div class="video-attribute">
+        <span class="video-attribute-label">
+          Privacy
         </span>
-        <span class="video-details-attribute-value">
+        <span class="video-attribute-value">
           {{ video.privacyLabel }}
         </span>
       </div>
 
-      <div class="video-details-attribute">
-        <span class="video-details-attribute-label">
-          Category:
+      <div class="video-attribute">
+        <span class="video-attribute-label">
+          Category
         </span>
-        <span class="video-details-attribute-value">
+        <span class="video-attribute-value">
           {{ video.categoryLabel }}
         </span>
       </div>
 
-      <div class="video-details-attribute">
-        <span class="video-details-attribute-label">
-          Licence:
+      <div class="video-attribute">
+        <span class="video-attribute-label">
+          Licence
         </span>
-        <span class="video-details-attribute-value">
+        <span class="video-attribute-value">
           {{ video.licenceLabel }}
         </span>
       </div>
 
-      <div class="video-details-attribute">
-        <span class="video-details-attribute-label">
-          Language:
+      <div class="video-attribute">
+        <span class="video-attribute-label">
+          Language
         </span>
-        <span class="video-details-attribute-value">
+        <span class="video-attribute-value">
           {{ video.languageLabel }}
         </span>
       </div>
 
-      <div class="video-details-attribute">
-        <span class="video-details-attribute-label">
-          Tags:
+      <div class="video-attribute">
+        <span class="video-attribute-label">
+          Tags
         </span>
 
-        <div class="video-details-tags">
-          <a *ngFor="let tag of video.tags" [routerLink]="['/videos/list', { field: 'tags', search: tag }]" class="label label-primary">
-            {{ tag }}
-          </a>
-        </div>
+        <span class="video-attribute-value">
+          {{ getVideoTags() }}
+        </span>
       </div>
+    </div>
 
+  </div>
+
+  <div class="other-videos">
+    <div *ngFor="let video of otherVideos">
+      <my-video-miniature [video]="video" [user]="user"></my-video-miniature>
     </div>
   </div>
 </div>

@@ -1,3 +1,4 @@
+import { Account } from '../accounts'
 import { VideoChannel } from './video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 
@@ -13,7 +14,7 @@ export interface VideoFile {
 export interface Video {
   id: number
   uuid: string
-  account: string
+  accountName: string
   createdAt: Date | string
   updatedAt: Date | string
   categoryLabel: string
@@ -43,4 +44,5 @@ export interface VideoDetails extends Video {
   descriptionPath: string
   channel: VideoChannel
   files: VideoFile[]
+  account: Account
 }

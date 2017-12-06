@@ -1,5 +1,5 @@
 import { hasUserRight, User as UserServerModel, UserRight, UserRole, VideoChannel } from '../../../../../shared'
-import { Account } from '../../../../../shared/models/accounts'
+import { Account } from '../account/account.model'
 
 export type UserConstructorHash = {
   id: number,
@@ -52,8 +52,6 @@ export class User implements UserServerModel {
   }
 
   getAvatarPath () {
-    if (this.account && this.account.avatar) return this.account.avatar.path
-
-    return API_URL + '/client/assets/images/default-avatar.png'
+    return Account.GET_ACCOUNT_AVATAR_PATH(this.account)
   }
 }

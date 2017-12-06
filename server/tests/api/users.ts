@@ -117,7 +117,7 @@ describe('Test users', function () {
     const res = await getVideosList(server.url)
     const video = res.body.data[ 0 ]
 
-    expect(video.account)
+    expect(video.accountName)
       .to
       .equal('root')
     videoId = video.id
@@ -487,7 +487,7 @@ describe('Test users', function () {
       .equal(1)
 
     const video = res.body.data[ 0 ]
-    expect(video.account)
+    expect(video.accountName)
       .to
       .equal('root')
   })
