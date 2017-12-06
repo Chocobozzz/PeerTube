@@ -13,7 +13,12 @@
       <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
     </div>
 
-    <a class="edit-button" [routerLink]="[ '/videos', video.id, '/edit' ]">
+    <a class="action-button action-button-delete" (click)="deleteVideo(video)">
+      <span class="icon icon-delete"></span>
+      Delete
+    </a>
+
+    <a class="action-button" [routerLink]="[ '/videos', video.id, '/edit' ]">
       <span class="icon icon-edit"></span>
       Edit
     </a>

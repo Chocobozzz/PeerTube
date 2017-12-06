@@ -25,7 +25,7 @@
     }
   }
 
-  .edit-button {
+  .action-button {
     @include peertube-button-link;
 
     font-size: 15px;
@@ -33,15 +33,27 @@
     color: #585858;
     background-color: #E5E5E5;
 
-    .icon.icon-edit {
+    &.action-button-delete {
+      margin-right: 10px;
+    }
+
+    .icon.icon-edit, .icon.icon-delete {
       display: inline-block;
-      background: url('../../../assets/images/account/edit.svg') no-repeat;
+      background-repeat: no-repeat;
       background-size: contain;
       width: 21px;
       height: 21px;
       vertical-align: middle;
       position: relative;
       top: -2px;
+
+      &.icon-edit {
+        background-image: url('../../../assets/images/account/edit.svg');
+      }
+
+      &.icon-delete {
+        background-image: url('../../../assets/images/account/delete.svg');
+      }
     }
   }
 }
