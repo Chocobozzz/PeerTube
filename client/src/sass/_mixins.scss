@@ -33,15 +33,15 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #F97D46;
+    background-color: $orange-hoover-color;
   }
 }
 
 @mixin peertube-button-link {
   display: inline-block;
 
-  @include peertube-button;
   @include disable-default-a-behaviour;
+  @include peertube-button;
 }
 
 @mixin avatar ($size) {

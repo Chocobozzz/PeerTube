@@ -1,7 +1,73 @@
+.action-selection-mode {
+  width: 174px;
+
+  .action-selection-mode-child {
+    position: fixed;
+  }
+}
+
+.action-button {
+  @include peertube-button-link;
+
+  font-size: 15px;
+  font-weight: $font-semibold;
+  color: #585858;
+  background-color: #E5E5E5;
+
+  &:hover {
+    background-color: #EFEFEF;
+  }
+
+  &.action-button-delete {
+    margin-right: 10px;
+  }
+
+  &.action-button-delete-selection {
+    background-color: $orange-color;
+    color: #fff;
+
+    &:hover {
+      background-color: $orange-hoover-color;
+    }
+  }
+
+  .icon {
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 21px;
+    height: 21px;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+
+    &.icon-edit {
+      background-image: url('../../../assets/images/account/edit.svg');
+    }
+
+    &.icon-delete-grey {
+      background-image: url('../../../assets/images/account/delete-grey.svg');
+    }
+
+    &.icon-delete-white {
+      background-image: url('../../../assets/images/account/delete-white.svg');
+    }
+  }
+}
+
 .video {
   display: flex;
   height: 130px;
   padding-bottom: 20px;
+
+  input[type=checkbox] {
+    margin-right: 20px;
+    outline: 0;
+  }
+
+  &:first-child {
+    margin-top: 47px;
+  }
 
   &:not(:last-child) {
     margin-bottom: 20px;
@@ -22,42 +88,6 @@
 
     .video-info-date-views {
       font-size: 13px;
-    }
-  }
-
-  .action-button {
-    @include peertube-button-link;
-
-    font-size: 15px;
-    font-weight: $font-semibold;
-    color: #585858;
-    background-color: #E5E5E5;
-
-    &:hover {
-      background-color: #EFEFEF;
-    }
-
-    &.action-button-delete {
-      margin-right: 10px;
-    }
-
-    .icon.icon-edit, .icon.icon-delete {
-      display: inline-block;
-      background-repeat: no-repeat;
-      background-size: contain;
-      width: 21px;
-      height: 21px;
-      vertical-align: middle;
-      position: relative;
-      top: -2px;
-
-      &.icon-edit {
-        background-image: url('../../../assets/images/account/edit.svg');
-      }
-
-      &.icon-delete {
-        background-image: url('../../../assets/images/account/delete.svg');
-      }
     }
   }
 }

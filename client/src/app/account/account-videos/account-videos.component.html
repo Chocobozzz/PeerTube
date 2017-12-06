@@ -5,7 +5,9 @@
   (scrolled)="onNearOfBottom()"
   (scrolledUp)="onNearOfTop()"
 >
-  <div class="video" *ngFor="let video of videos">
+  <div class="video" *ngFor="let video of videos; let i = index">
+    <input type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
+
     <my-video-thumbnail [video]="video"></my-video-thumbnail>
 
     <div class="video-info">
@@ -13,14 +15,30 @@
       <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
     </div>
 
-    <a class="action-button action-button-delete" (click)="deleteVideo(video)">
-      <span class="icon icon-delete"></span>
-      Delete
-    </a>
+    <!-- Display only once -->
+    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
+      <div class="action-selection-mode-child">
+        <span class="action-button" (click)="abortSelectionMode()">
+          Cancel
+        </span>
 
-    <a class="action-button" [routerLink]="[ '/videos', video.id, '/edit' ]">
-      <span class="icon icon-edit"></span>
-      Edit
-    </a>
+            <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+          <span class="icon icon-delete-white"></span>
+          Delete
+        </span>
+      </div>
+    </div>
+
+    <ng-template [ngIf]="isInSelectionMode() === false">
+      <span class="action-button action-button-delete" (click)="deleteVideo(video)">
+        <span class="icon icon-delete-grey"></span>
+        Delete
+      </span>
+
+      <a class="action-button" [routerLink]="[ '/videos', 'edit', video.uuid ]">
+        <span class="icon icon-edit"></span>
+        Edit
+      </a>
+    </ng-template>
   </div>
 </div>
