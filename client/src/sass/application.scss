@@ -25,6 +25,16 @@ label {
   font-size: 15px;
 }
 
+.form-error {
+  display: block;
+  color: $red-error;
+  margin-top: 5px;
+}
+
+.input-error {
+  border-color: $red-error !important;
+}
+
 .glyphicon-black {
   color: black;
 }

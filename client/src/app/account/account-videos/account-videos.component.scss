@@ -2,8 +2,11 @@
   display: flex;
   height: 130px;
   padding-bottom: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #C6C6C6;
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #C6C6C6;
+  }
 
   my-video-thumbnail {
     margin-right: 10px;

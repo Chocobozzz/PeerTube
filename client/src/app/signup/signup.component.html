@@ -11,9 +11,9 @@
       <label for="username">Username</label>
       <input
         type="text" class="form-control" id="username" placeholder="Username"
-        formControlName="username"
+        formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
-      <div *ngIf="formErrors.username" class="alert alert-danger">
+      <div *ngIf="formErrors.username" class="form-error">
         {{ formErrors.username }}
       </div>
     </div>
@@ -22,9 +22,9 @@
       <label for="email">Email</label>
       <input
         type="text" class="form-control" id="email" placeholder="Email"
-        formControlName="email"
+        formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
       >
-      <div *ngIf="formErrors.email" class="alert alert-danger">
+      <div *ngIf="formErrors.email" class="form-error">
         {{ formErrors.email }}
       </div>
     </div>
@@ -33,9 +33,9 @@
       <label for="password">Password</label>
       <input
         type="password" class="form-control" id="password" placeholder="Password"
-        formControlName="password"
+        formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
       >
-      <div *ngIf="formErrors.password" class="alert alert-danger">
+      <div *ngIf="formErrors.password" class="form-error">
         {{ formErrors.password }}
       </div>
     </div>

@@ -32,6 +32,7 @@ export abstract class AbstractVideoList implements OnInit {
     // Subscribe to route changes
     const routeParams = this.route.snapshot.params
     this.loadRouteParams(routeParams)
+
     if (this.loadOnInit === true) this.loadMoreVideos('after')
   }
 
@@ -60,6 +61,13 @@ export abstract class AbstractVideoList implements OnInit {
 
     observable.subscribe(
       ({ videos, totalVideos }) => {
+        // Paging is too high, return to the first one
+        if (totalVideos <= ((this.pagination.currentPage - 1) * this.pagination.itemsPerPage)) {
+          this.pagination.currentPage = 1
+          this.setNewRouteParams()
+          return this.reloadVideos()
+        }
+
         this.loadedPages[this.pagination.currentPage] = true
         this.pagination.totalItems = totalVideos
 
