@@ -158,6 +158,22 @@
         }
       }
     }
+  }
 
+  .other-videos {
+    .title-page {
+      margin-top: 0;
+    }
+
+    /deep/ .video-miniature {
+      display: flex;
+      height: 100%;
+      margin-bottom: 20px;
+
+      .video-miniature-information {
+        margin-left: 10px;
+      }
+    }
   }
 }
+
