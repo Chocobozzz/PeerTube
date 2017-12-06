@@ -31,6 +31,10 @@
   background-color: $orange-color;
   padding: 0 17px 0 13px;
   cursor: pointer;
+
+  &:hover {
+    background-color: #F97D46;
+  }
 }
 
 @mixin peertube-button-link {

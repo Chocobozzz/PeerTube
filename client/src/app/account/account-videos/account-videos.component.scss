@@ -33,6 +33,10 @@
     color: #585858;
     background-color: #E5E5E5;
 
+    &:hover {
+      background-color: #EFEFEF;
+    }
+
     &.action-button-delete {
       margin-right: 10px;
     }
