@@ -84,9 +84,26 @@
       }
     }
 
-    .video-info-date-views {
-      font-size: 16px;
-      margin-bottom: 10px;
+    .video-info-date-views-bar {
+      display: flex;
+
+      .video-info-date-views {
+        font-size: 16px;
+        margin-bottom: 10px;
+        flex-grow: 1;
+      }
+
+      .video-info-likes-dislikes-bar {
+        height: 5px;
+        width: 186px;
+        background-color: #E5E5E5;
+        margin-top: 25px;
+
+        .likes-bar {
+          height: 100%;
+          background-color: #39CC0B;
+        }
+      }
     }
 
     .video-info-channel {

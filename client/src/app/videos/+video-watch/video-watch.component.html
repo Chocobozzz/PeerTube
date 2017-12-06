@@ -73,8 +73,14 @@
       </div>
     </div>
 
-    <div class="video-info-date-views">
-      {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
+    <div class="video-info-date-views-bar">
+      <div class="video-info-date-views">
+        {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
+      </div>
+
+      <div class="video-info-likes-dislikes-bar">
+        <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+      </div>
     </div>
 
     <div class="video-info-channel">

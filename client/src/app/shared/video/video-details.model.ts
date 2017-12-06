@@ -46,6 +46,8 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   privacy: VideoPrivacy
   privacyLabel: string
   account: Account
+  likesPercent: number
+  dislikesPercent: number
 
   constructor (hash: VideoDetailsServerModel) {
     super(hash)
@@ -56,6 +58,9 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.files = hash.files
     this.channel = hash.channel
     this.account = hash.account
+
+    this.likesPercent = (this.likes / (this.likes + this.dislikes)) * 100
+    this.dislikesPercent = (this.dislikes / (this.likes + this.dislikes)) * 100
   }
 
   getAppropriateMagnetUri (actualDownloadSpeed = 0) {
