@@ -1,140 +1,44 @@
-<div class="row">
-  <div class="content-padding">
+<div class="margin-content">
+  <div class="title-page title-page-single">
+    Upload your video
+  </div>
 
-    <h3>Upload a video</h3>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-    <div *ngIf="error !== undefined" class="alert alert-danger">{{ error }}</div>
+  <div class="upload-video-container">
+    <div class="upload-video">
+      <div class="icon icon-upload"></div>
 
-    <form novalidate [formGroup]="form">
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input
-          type="text" class="form-control" id="name"
-          formControlName="name"
-        >
-        <div *ngIf="formErrors.name" class="alert alert-danger">
-          {{ formErrors.name }}
-        </div>
+      <div class="button-file">
+        <span>Select the file to upload</span>
+        <input #videofileInput type="file" name="videofile" id="videofile" (change)="fileChange($event)" />
       </div>
 
       <div class="form-group">
-        <label for="privacy">Privacy</label>
-        <select class="form-control" id="privacy" formControlName="privacy">
-          <option></option>
+        <select [(ngModel)]="firstStepPrivacy">
           <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
         </select>
-
-        <div *ngIf="formErrors.privacy" class="alert alert-danger">
-          {{ formErrors.privacy }}
-        </div>
       </div>
 
       <div class="form-group">
-        <input
-          type="checkbox" id="nsfw"
-          formControlName="nsfw"
-        >
-        <label for="nsfw">This video contains mature or explicit content</label>
-      </div>
-
-      <div class="form-group">
-        <label for="category">Channel</label>
-        <select class="form-control" id="channelId" formControlName="channelId">
+        <select [(ngModel)]="firstStepChannel">
           <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
         </select>
+      </div>
+    </div>
 
-        <div *ngIf="formErrors.channelId" class="alert alert-danger">
-          {{ formErrors.channelId }}
+
+    <form *ngIf="isUploadingVideo" novalidate [formGroup]="form">
+      <my-video-edit
+          [form]="form" [formErrors]="formErrors"
+          [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies"
+      ></my-video-edit>
+
+      <div class="submit-container">
+        <div class="submit-button" [ngClass]="{ disabled: !form.valid }">
+          <span class="icon icon-validate"></span>
+          <input type="button" value="Publish" (click)="upload()" />
         </div>
-      </div>
-
-      <div class="form-group">
-        <label for="category">Category</label>
-        <select class="form-control" id="category" formControlName="category">
-          <option></option>
-          <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
-        </select>
-
-        <div *ngIf="formErrors.category" class="alert alert-danger">
-          {{ formErrors.category }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="licence">Licence</label>
-        <select class="form-control" id="licence" formControlName="licence">
-          <option></option>
-          <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
-        </select>
-
-        <div *ngIf="formErrors.licence" class="alert alert-danger">
-          {{ formErrors.licence }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="language">Language</label>
-        <select class="form-control" id="language" formControlName="language">
-          <option></option>
-          <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
-        </select>
-
-        <div *ngIf="formErrors.language" class="alert alert-danger">
-          {{ formErrors.language }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label class="label-tags">Tags</label> <span class="little-information">(press enter to add the tag)</span>
-        <tag-input
-          [ngModel]="tags" [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
-          formControlName="tags" maxItems="5" modelAsStrings="true"
-        ></tag-input>
-      </div>
-
-      <div class="form-group">
-        <label for="videofile">File</label>
-        <div class="btn btn-default btn-file">
-          <span>Select the video...</span>
-          <input #videofileInput type="file" name="videofile" id="videofile" (change)="fileChange($event)" />
-          <input type="hidden" name="videofileHidden" formControlName="videofile"/>
-        </div>
-      </div>
-
-      <div class="file-to-upload">
-        <div class="file" *ngIf="filename">
-          <span class="filename">{{ filename }}</span>
-          <span class="glyphicon glyphicon-remove" (click)="removeFile()"></span>
-        </div>
-      </div>
-
-      <div *ngIf="formErrors.videofile" class="alert alert-danger">
-        {{ formErrors.videofile }}
-      </div>
-
-      <div class="form-group">
-        <label for="description">Description</label>
-        <my-video-description formControlName="description"></my-video-description>
-
-        <div *ngIf="formErrors.description" class="alert alert-danger">
-          {{ formErrors.description }}
-        </div>
-      </div>
-
-      <div class="progress">
-        <progressbar [value]="progressPercent" max="100">
-          <ng-template [ngIf]="progressPercent === 100">
-            <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
-            Server is processing the video
-          </ng-template>
-        </progressbar>
-      </div>
-
-      <div class="form-group">
-        <input
-          type="button" value="Upload" class="btn btn-default form-control"
-          (click)="upload()"
-        >
       </div>
     </form>
   </div>

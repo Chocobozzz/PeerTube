@@ -6,61 +6,33 @@ import { NotificationsService } from 'angular2-notifications'
 import { VideoService } from 'app/shared/video/video.service'
 import { VideoCreate } from '../../../../../shared'
 import { AuthService, ServerService } from '../../core'
-import {
-  FormReactive,
-  VIDEO_CATEGORY,
-  VIDEO_CHANNEL,
-  VIDEO_DESCRIPTION,
-  VIDEO_FILE,
-  VIDEO_LANGUAGE,
-  VIDEO_LICENCE,
-  VIDEO_NAME,
-  VIDEO_PRIVACY,
-  VIDEO_TAGS
-} from '../../shared'
+import { FormReactive } from '../../shared'
+import { ValidatorMessage } from '../../shared/forms/form-validators'
+import { VideoEdit } from '../../shared/video/video-edit.model'
 
 @Component({
   selector: 'my-videos-add',
-  styleUrls: [ './shared/video-edit.component.scss' ],
-  templateUrl: './video-add.component.html'
+  templateUrl: './video-add.component.html',
+  styleUrls: [
+    './shared/video-edit.component.scss',
+    './video-add.component.scss'
+  ]
 })
 
 export class VideoAddComponent extends FormReactive implements OnInit {
   @ViewChild('videofileInput') videofileInput
 
+  isUploadingVideo = false
   progressPercent = 0
-  tags: string[] = []
-  videoCategories = []
-  videoLicences = []
-  videoLanguages = []
-  videoPrivacies = []
-  userVideoChannels = []
 
-  tagValidators = VIDEO_TAGS.VALIDATORS
-  tagValidatorsMessages = VIDEO_TAGS.MESSAGES
-
-  error: string
+  error: string = null
   form: FormGroup
-  formErrors = {
-    name: '',
-    privacy: '',
-    category: '',
-    licence: '',
-    language: '',
-    channelId: '',
-    description: '',
-    videofile: ''
-  }
-  validationMessages = {
-    name: VIDEO_NAME.MESSAGES,
-    privacy: VIDEO_PRIVACY.MESSAGES,
-    category: VIDEO_CATEGORY.MESSAGES,
-    licence: VIDEO_LICENCE.MESSAGES,
-    language: VIDEO_LANGUAGE.MESSAGES,
-    channelId: VIDEO_CHANNEL.MESSAGES,
-    description: VIDEO_DESCRIPTION.MESSAGES,
-    videofile: VIDEO_FILE.MESSAGES
-  }
+  formErrors: { [ id: string ]: string } = {}
+  validationMessages: ValidatorMessage = {}
+  userVideoChannels = []
+  videoPrivacies = []
+  firstStepPrivacy = 0
+  firstStepChannel = 0
 
   constructor (
     private formBuilder: FormBuilder,
@@ -73,34 +45,16 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     super()
   }
 
-  get filename () {
-    return this.form.value['videofile']
-  }
-
   buildForm () {
-    this.form = this.formBuilder.group({
-      name: [ '', VIDEO_NAME.VALIDATORS ],
-      nsfw: [ false ],
-      privacy: [ '', VIDEO_PRIVACY.VALIDATORS ],
-      category: [ '', VIDEO_CATEGORY.VALIDATORS ],
-      licence: [ '', VIDEO_LICENCE.VALIDATORS ],
-      language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
-      channelId: [ '', VIDEO_CHANNEL.VALIDATORS ],
-      description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
-      videofile: [ '', VIDEO_FILE.VALIDATORS ],
-      tags: [ '' ]
-    })
-
+    this.form = this.formBuilder.group({})
     this.form.valueChanges.subscribe(data => this.onValueChanged(data))
   }
 
   ngOnInit () {
-    this.videoCategories = this.serverService.getVideoCategories()
-    this.videoLicences = this.serverService.getVideoLicences()
-    this.videoLanguages = this.serverService.getVideoLanguages()
-    this.videoPrivacies = this.serverService.getVideoPrivacies()
-
     this.buildForm()
+
+    this.videoPrivacies = this.serverService.getVideoPrivacies()
+    this.firstStepPrivacy = this.videoPrivacies[0].id
 
     this.authService.userInformationLoaded
       .subscribe(
@@ -112,21 +66,13 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           if (Array.isArray(videoChannels) === false) return
 
           this.userVideoChannels = videoChannels.map(v => ({ id: v.id, label: v.name }))
-
-          this.form.patchValue({ channelId: this.userVideoChannels[0].id })
+          this.firstStepChannel = this.userVideoChannels[0].id
         }
       )
   }
 
-  // The goal is to keep reactive form validation (required field)
-  // https://stackoverflow.com/a/44238894
   fileChange ($event) {
-    this.form.controls['videofile'].setValue($event.target.files[0].name)
-  }
-
-  removeFile () {
-    this.videofileInput.nativeElement.value = ''
-    this.form.controls['videofile'].setValue('')
+    console.log('uploading file ?')
   }
 
   checkForm () {
@@ -135,11 +81,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     return this.form.valid
   }
 
-  upload () {
-    if (this.checkForm() === false) {
-      return
-    }
-
+  uploadFirstStep () {
     const formValue: VideoCreate = this.form.value
 
     const name = formValue.name
@@ -192,5 +134,27 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         this.error = err.message
       }
     )
+  }
+
+  updateSecondStep () {
+    if (this.checkForm() === false) {
+      return
+    }
+
+    const video = new VideoEdit(this.form.value)
+
+    this.videoService.updateVideo(video)
+      .subscribe(
+        () => {
+          this.notificationsService.success('Success', 'Video published.')
+          this.router.navigate([ '/videos/watch', video.uuid ])
+        },
+
+        err => {
+          this.error = 'Cannot update the video.'
+          console.error(err)
+        }
+      )
+
   }
 }

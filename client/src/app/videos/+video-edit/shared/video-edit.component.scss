@@ -115,42 +115,7 @@
   }
 }
 
-
-.btn-file {
-  position: relative;
-  overflow: hidden;
-  display: block;
-}
-
-.btn-file input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 100%;
-  min-height: 100%;
-  font-size: 100px;
-  text-align: right;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  outline: none;
-  background: white;
-  cursor: inherit;
-  display: block;
-}
-
-div.file-to-upload {
-  height: 40px;
-
-  .glyphicon-remove {
-    cursor: pointer;
-  }
-}
-
 .little-information {
   font-size: 0.8em;
   font-style: italic;
-}
-
-.label-tags {
-  margin-bottom: 0;
 }

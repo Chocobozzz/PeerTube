@@ -67,6 +67,7 @@
     <div class="form-group">
       <label for="privacy">Privacy</label>
       <select id="privacy" formControlName="privacy">
+
         <option></option>
         <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
       </select>

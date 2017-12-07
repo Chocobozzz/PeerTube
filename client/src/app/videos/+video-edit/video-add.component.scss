@@ -1,0 +1,60 @@
+.upload-video-container {
+  border-radius: 3px;
+  background-color: #F7F7F7;
+  border: 3px solid #EAEAEA;
+  width: 100%;
+  height: 440px;
+  text-align: center;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .upload-video {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .icon.icon-upload {
+      @include icon(90px);
+      margin-bottom: 25px;
+
+      background-image: url('../../../assets/images/video/upload.svg');
+    }
+
+    .button-file {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      margin-bottom: 70px;
+
+      @include peertube-button;
+      @include orange-button;
+
+      input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        filter: alpha(opacity=0);
+        opacity: 0;
+        outline: none;
+        background: white;
+        cursor: inherit;
+        display: block;
+      }
+    }
+
+    select {
+      @include peertube-select(auto);
+
+      display: inline-block;
+      font-size: 15px
+    }
+  }
+}
+
+
