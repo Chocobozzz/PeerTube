@@ -84,19 +84,19 @@ styles:
   navs: true
   navbar: false
   breadcrumbs: false
-  pagination: true
+  pagination: false
   pager: false
-  labels: true
+  labels: false
   badges: false
   jumbotron: false
-  thumbnails: true
+  thumbnails: false
   alerts: true
-  progress-bars: true
+  progress-bars: false
   media: true
   list-group: false
   panels: true
   wells: false
-  responsive-embed: true
+  responsive-embed: false
   close: true
 
   # Components w/ JavaScript

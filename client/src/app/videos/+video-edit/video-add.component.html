@@ -28,6 +28,8 @@
     </div>
   </div>
 
+  <p-progressBar *ngIf="isUploadingVideo" [value]="videoUploadPercents"></p-progressBar>
+
   <!-- Hidden because we need to load the component -->
   <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
     <my-video-edit

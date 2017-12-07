@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
-import { ProgressbarModule } from 'ngx-bootstrap/progressbar'
 import { InfiniteScrollModule } from 'ngx-infinite-scroll'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
@@ -34,7 +33,6 @@ import { VideoService } from './video/video.service'
 
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
-    ProgressbarModule.forRoot(),
 
     DataTableModule,
     PrimeSharedModule,
@@ -59,7 +57,6 @@ import { VideoService } from './video/video.service'
 
     BsDropdownModule,
     ModalModule,
-    ProgressbarModule,
     DataTableModule,
     PrimeSharedModule,
     InfiniteScrollModule,

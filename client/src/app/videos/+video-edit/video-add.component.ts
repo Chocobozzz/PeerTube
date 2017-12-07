@@ -24,7 +24,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   isUploadingVideo = false
   videoUploaded = false
-  progressPercent = 0
+  videoUploadPercents = 0
 
   error: string = null
   form: FormGroup
@@ -55,7 +55,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm()
 
-    this.serverService.videoCategoriesLoaded
+    this.serverService.videoPrivaciesLoaded
       .subscribe(
         () => {
           this.videoPrivacies = this.serverService.getVideoPrivacies()
@@ -112,7 +112,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.videoService.uploadVideo(formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
-          this.progressPercent = Math.round(100 * event.loaded / event.total)
+          this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
         } else if (event instanceof HttpResponse) {
           console.log('Video uploaded.')
 
@@ -122,7 +122,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
       err => {
         // Reset progress
-        this.progressPercent = 0
+        this.videoUploadPercents = 0
         this.error = err.message
       }
     )

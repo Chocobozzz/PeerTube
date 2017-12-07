@@ -57,4 +57,27 @@
   }
 }
 
+p-progressBar {
+  margin-top: 50px;
+  margin-bottom: 40px;
+
+  /deep/ .ui-progressbar {
+    font-size: 15px !important;
+    color: #fff !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    border-radius: 3px !important;
+    background-color: rgba(11, 204, 41, 0.16) !important;
+
+    .ui-progressbar-value {
+      background-color: #0BCC29 !important;
+    }
+
+    .ui-progressbar-label {
+      text-align: left;
+      padding-left: 18px;
+    }
+  }
+}
+
 
