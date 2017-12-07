@@ -1,7 +1,7 @@
-<div class="row">
-  <div class="content-padding">
-
-  <h3>Update {{ video?.name }}</h3>
+<div class="margin-content">
+  <div class="title-page title-page-single">
+    Update {{ video?.name }}
+  </div>
 
   <form novalidate [formGroup]="form">
 
@@ -10,12 +10,11 @@
       [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies"
     ></my-video-edit>
 
-    <div class="form-group">
-      <input
-        type="button" value="Update" class="btn btn-default form-control"
-        (click)="update()"
-      >
+    <div class="submit-container">
+      <div class="submit-button" [ngClass]="{ disabled: !form.valid }">
+        <span class="icon icon-validate"></span>
+        <input type="button" value="Update" (click)="update()" />
+      </div>
     </div>
   </form>
-  </div>
 </div>

@@ -1,11 +1,15 @@
 textarea {
+  @include peertube-input-text(100%);
+
+  font-size: 15px;
   height: 150px;
 }
 
 .previews /deep/ {
+  font-size: 15px !important;
+
   .nav {
     margin-top: 10px;
-    font-size: 0.9em;
   }
 
   .tab-content {

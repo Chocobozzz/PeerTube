@@ -5,19 +5,10 @@ import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/forkJoin'
 import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
 import { ServerService } from '../../core'
-import {
-  FormReactive,
-  VIDEO_CATEGORY,
-  VIDEO_DESCRIPTION,
-  VIDEO_LANGUAGE,
-  VIDEO_LICENCE,
-  VIDEO_NAME,
-  VIDEO_PRIVACY,
-  VIDEO_TAGS
-} from '../../shared'
+import { FormReactive } from '../../shared'
 import { ValidatorMessage } from '../../shared/forms/form-validators'
-import { VideoService } from '../../shared/video/video.service'
 import { VideoEdit } from '../../shared/video/video-edit.model'
+import { VideoService } from '../../shared/video/video.service'
 
 @Component({
   selector: 'my-videos-update',

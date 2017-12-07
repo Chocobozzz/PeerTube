@@ -1,3 +1,121 @@
+.video-edit {
+  height: 100%;
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  input {
+    @include peertube-input-text(100%);
+    display: block;
+
+    &[type=checkbox] {
+      outline: 0;
+    }
+  }
+
+  select {
+    @include peertube-select(100%);
+  }
+
+  input, select {
+    font-size: 15px
+  }
+
+  .form-group-checkbox {
+    display: flex;
+    align-items: center;
+
+    label {
+      font-weight: $font-regular;
+      margin: 0;
+    }
+
+    input {
+      width: 10px;
+      margin-right: 10px;
+    }
+  }
+}
+
+.submit-container {
+  text-align: right;
+  position: relative;
+  bottom: $button-height;
+
+  .submit-button {
+    @include peertube-button;
+    @include orange-button;
+
+    display: inline-block;
+
+    input {
+      cursor: inherit;
+      background-color: inherit;
+      border: none;
+      padding: 0;
+    }
+
+    .icon.icon-validate {
+      @include icon(20px);
+
+      cursor: inherit;
+      position: relative;
+      top: -1px;
+      margin-right: 4px;
+      background-image: url('../../../../assets/images/global/validate.svg');
+    }
+  }
+}
+
+/deep/ {
+  .ng2-tag-input {
+    border: none !important;
+  }
+
+  .ng2-tags-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #C6C6C6;
+    border-radius: 3px;
+    padding: 5px !important;
+  }
+
+  tag {
+    background-color: #E5E5E5 !important;
+    border-radius: 3px !important;
+    font-size: 15px !important;
+    color: #000 !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    margin: 0 5px 0 0 !important;
+    cursor: default !important;
+    padding: 0 8px 0 10px !important;
+
+    div {
+      height: 100% !important;
+    }
+  }
+
+  delete-icon {
+    cursor: pointer !important;
+    height: auto !important;
+    vertical-align: middle !important;
+    padding-left: 6px !important;
+
+    svg {
+      height: auto !important;
+      vertical-align: middle !important;
+      fill: #585858 !important;
+    }
+
+    &:hover {
+      transform: none !important;
+    }
+  }
+}
+
+
 .btn-file {
   position: relative;
   overflow: hidden;
@@ -18,24 +136,6 @@
   background: white;
   cursor: inherit;
   display: block;
-}
-
-.form-group {
-  margin-bottom: 10px;
-}
-
-div.tags {
-  height: 40px;
-  font-size: 20px;
-  margin-top: 20px;
-
-  .tag {
-    margin-right: 10px;
-
-    .remove {
-      cursor: pointer;
-    }
-  }
 }
 
 div.file-to-upload {

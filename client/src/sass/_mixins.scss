@@ -23,9 +23,13 @@
   color: #fff;
   background-color: $orange-color;
 
-  &:hover, &:active, &:focus, &[disabled] {
+  &:hover, &:active, &:focus, &[disabled], &.disabled {
     color: #fff;
     background-color: $orange-hoover-color;
+  }
+
+  &[disabled], &.disabled {
+    cursor: default;
   }
 }
 
@@ -33,9 +37,13 @@
   background-color: $grey-color;
   color: #585858;
 
-  &:hover, &:active, &:focus, &[disabled] {
+  &:hover, &:active, &:focus, &[disabled], &.disabled {
     color: #585858;
     background-color: $grey-hoover-color;
+  }
+
+  &[disabled], &.disabled {
+    cursor: default;
   }
 }
 
@@ -71,4 +79,14 @@
   height: $size;
   vertical-align: middle;
   cursor: pointer;
+}
+
+
+@mixin peertube-select ($width) {
+  background-color: #fff;
+  border: 1px solid #C6C6C6;
+  height: $button-height;
+  width: $width;
+  border-radius: 3px;
+  padding-left: 15px;
 }
