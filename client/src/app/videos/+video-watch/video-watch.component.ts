@@ -11,12 +11,12 @@ import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { VideoBlacklistService } from '../../shared'
 import { Account } from '../../shared/account/account.model'
+import { VideoDetails } from '../../shared/video/video-details.model'
 import { Video } from '../../shared/video/video.model'
 import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './video-download.component'
 import { VideoReportComponent } from './video-report.component'
 import { VideoShareComponent } from './video-share.component'
-import { VideoDetails } from '../../shared/video/video-details.model'
 
 @Component({
   selector: 'my-video-watch',
@@ -197,14 +197,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
-  }
-
-  canUserUpdateVideo () {
-    return this.video.isUpdatableBy(this.authService.getUser())
-  }
-
-  isVideoRemovable () {
-    return this.video.isRemovableBy(this.authService.getUser())
   }
 
   isVideoBlacklistable () {

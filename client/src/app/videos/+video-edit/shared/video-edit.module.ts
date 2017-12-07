@@ -5,6 +5,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs'
 
 import { MarkdownService, VideoDescriptionComponent } from '../../shared'
 import { SharedModule } from '../../../shared'
+import { VideoEditComponent } from './video-edit.component'
 
 @NgModule({
   imports: [
@@ -15,14 +16,16 @@ import { SharedModule } from '../../../shared'
   ],
 
   declarations: [
-    VideoDescriptionComponent
+    VideoDescriptionComponent,
+    VideoEditComponent
   ],
 
   exports: [
     TagInputModule,
     TabsModule,
 
-    VideoDescriptionComponent
+    VideoDescriptionComponent,
+    VideoEditComponent
   ],
 
   providers: [

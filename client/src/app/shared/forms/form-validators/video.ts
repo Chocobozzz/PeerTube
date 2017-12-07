@@ -1,5 +1,11 @@
 import { Validators } from '@angular/forms'
 
+export type ValidatorMessage = {
+  [ id: string ]: {
+    [ error: string ]: string
+  }
+}
+
 export const VIDEO_NAME = {
   VALIDATORS: [ Validators.required, Validators.minLength(3), Validators.maxLength(120) ],
   MESSAGES: {
