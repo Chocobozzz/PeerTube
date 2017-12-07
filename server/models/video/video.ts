@@ -104,7 +104,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       },
       category: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
         validate: {
           categoryValid: value => {
             const res = isVideoCategoryValid(value)
@@ -114,7 +115,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       },
       licence: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         defaultValue: null,
         validate: {
           licenceValid: value => {
@@ -126,6 +127,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       language: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        defaultValue: null,
         validate: {
           languageValid: value => {
             const res = isVideoLanguageValid(value)
@@ -155,7 +157,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       },
       description: {
         type: DataTypes.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max),
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
         validate: {
           descriptionValid: value => {
             const res = isVideoDescriptionValid(value)
@@ -664,6 +667,8 @@ toActivityPubObject = function (this: VideoInstance) {
 }
 
 getTruncatedDescription = function (this: VideoInstance) {
+  if (!this.description) return null
+
   const options = {
     length: CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max
   }
@@ -754,8 +759,6 @@ getDescriptionPath = function (this: VideoInstance) {
 
 getCategoryLabel = function (this: VideoInstance) {
   let categoryLabel = VIDEO_CATEGORIES[this.category]
-
-  // Maybe our server is not up to date and there are new categories since our version
   if (!categoryLabel) categoryLabel = 'Misc'
 
   return categoryLabel
@@ -763,15 +766,12 @@ getCategoryLabel = function (this: VideoInstance) {
 
 getLicenceLabel = function (this: VideoInstance) {
   let licenceLabel = VIDEO_LICENCES[this.licence]
-
-  // Maybe our server is not up to date and there are new licences since our version
   if (!licenceLabel) licenceLabel = 'Unknown'
 
   return licenceLabel
 }
 
 getLanguageLabel = function (this: VideoInstance) {
-  // Language is an optional attribute
   let languageLabel = VIDEO_LANGUAGES[this.language]
   if (!languageLabel) languageLabel = 'Unknown'
 

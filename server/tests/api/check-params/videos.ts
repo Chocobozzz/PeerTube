@@ -189,27 +189,11 @@ describe('Test videos API validator', function () {
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
-    it('Should fail without a category', async function () {
-      const fields = getCompleteVideoUploadAttributes()
-      delete fields.category
-
-      const attaches = getVideoUploadAttaches
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
     it('Should fail with a bad category', async function () {
       const fields = getCompleteVideoUploadAttributes()
       fields.category = 125
 
       const attaches = getVideoUploadAttaches
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
-    it('Should fail without a licence', async function () {
-      const fields = getCompleteVideoUploadAttributes()
-      delete fields.licence
-
-      const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
@@ -240,14 +224,6 @@ describe('Test videos API validator', function () {
     it('Should fail with a bad nsfw attribute', async function () {
       const fields = getCompleteVideoUploadAttributes()
       fields.nsfw = 2 as any
-
-      const attaches = getVideoUploadAttaches()
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
-    it('Should fail without description', async function () {
-      const fields = getCompleteVideoUploadAttributes()
-      delete fields.description
 
       const attaches = getVideoUploadAttaches()
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
