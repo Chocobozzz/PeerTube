@@ -42,22 +42,6 @@ label {
 .main-col {
   margin-left: $menu-width;
 
-  .title-page {
-    color: #000;
-    font-size: 16px;
-    display: inline-block;
-    margin-right: 55px;
-    font-weight: $font-semibold;
-    @include disable-default-a-behaviour;
-
-    &.active, &.title-page-single {
-      border-bottom: 2px solid $orange-color;
-      font-weight: $font-bold;
-      margin-top: 30px;
-      margin-bottom: 25px;
-    }
-  }
-
   .margin-content {
     margin-left: $not-expanded-horizontal-margins;
     margin-right: $not-expanded-horizontal-margins;
@@ -85,6 +69,22 @@ label {
     .sub-menu {
       padding-left: $expanded-horizontal-margins;
     }
+  }
+}
+
+.title-page {
+  color: #000;
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 55px;
+  font-weight: $font-semibold;
+  @include disable-default-a-behaviour;
+
+  &.active, &.title-page-single {
+    border-bottom: 2px solid $orange-color;
+    font-weight: $font-bold;
+    margin-top: 30px;
+    margin-bottom: 25px;
   }
 }
 

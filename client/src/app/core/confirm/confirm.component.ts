@@ -11,7 +11,8 @@ export interface ConfigChangedEvent {
 
 @Component({
   selector: 'my-confirm',
-  templateUrl: './confirm.component.html'
+  templateUrl: './confirm.component.html',
+  styles: [ '.button { padding: 0 13px; }' ]
 })
 export class ConfirmComponent implements OnInit {
   @ViewChild('confirmModal') confirmModal: ModalDirective
