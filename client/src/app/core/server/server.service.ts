@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import 'rxjs/add/operator/do'
+import { ReplaySubject } from 'rxjs/ReplaySubject'
 
 import { ServerConfig } from '../../../../../shared'
 
@@ -7,6 +9,11 @@ import { ServerConfig } from '../../../../../shared'
 export class ServerService {
   private static BASE_CONFIG_URL = API_URL + '/api/v1/config/'
   private static BASE_VIDEO_URL = API_URL + '/api/v1/videos/'
+
+  videoPrivaciesLoaded = new ReplaySubject<boolean>(1)
+  videoCategoriesLoaded = new ReplaySubject<boolean>(1)
+  videoLicencesLoaded = new ReplaySubject<boolean>(1)
+  videoLanguagesLoaded = new ReplaySubject<boolean>(1)
 
   private config: ServerConfig = {
     signup: {
@@ -29,19 +36,19 @@ export class ServerService {
   }
 
   loadVideoCategories () {
-    return this.loadVideoAttributeEnum('categories', this.videoCategories)
+    return this.loadVideoAttributeEnum('categories', this.videoCategories, this.videoCategoriesLoaded)
   }
 
   loadVideoLicences () {
-    return this.loadVideoAttributeEnum('licences', this.videoLicences)
+    return this.loadVideoAttributeEnum('licences', this.videoLicences, this.videoLicencesLoaded)
   }
 
   loadVideoLanguages () {
-    return this.loadVideoAttributeEnum('languages', this.videoLanguages)
+    return this.loadVideoAttributeEnum('languages', this.videoLanguages, this.videoLanguagesLoaded)
   }
 
   loadVideoPrivacies () {
-    return this.loadVideoAttributeEnum('privacies', this.videoPrivacies)
+    return this.loadVideoAttributeEnum('privacies', this.videoPrivacies, this.videoPrivaciesLoaded)
   }
 
   getConfig () {
@@ -66,17 +73,19 @@ export class ServerService {
 
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
-    hashToPopulate: { id: number, label: string }[]
+    hashToPopulate: { id: number, label: string }[],
+    notifier: ReplaySubject<boolean>
   ) {
     return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
-               .subscribe(data => {
-                 Object.keys(data)
-                       .forEach(dataKey => {
-                         hashToPopulate.push({
-                           id: parseInt(dataKey, 10),
-                           label: data[dataKey]
-                         })
-                       })
+      .do(() => notifier.next(true))
+       .subscribe(data => {
+         Object.keys(data)
+               .forEach(dataKey => {
+                 hashToPopulate.push({
+                   id: parseInt(dataKey, 10),
+                   label: data[dataKey]
+                 })
                })
+       })
   }
 }

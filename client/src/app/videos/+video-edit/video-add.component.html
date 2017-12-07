@@ -5,13 +5,13 @@
 
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-  <div class="upload-video-container">
+  <div *ngIf="!isUploadingVideo" class="upload-video-container">
     <div class="upload-video">
       <div class="icon icon-upload"></div>
 
       <div class="button-file">
         <span>Select the file to upload</span>
-        <input #videofileInput type="file" name="videofile" id="videofile" (change)="fileChange($event)" />
+        <input #videofileInput type="file" name="videofile" id="videofile" (change)="fileChange()" />
       </div>
 
       <div class="form-group">
@@ -26,20 +26,20 @@
         </select>
       </div>
     </div>
-
-
-    <form *ngIf="isUploadingVideo" novalidate [formGroup]="form">
-      <my-video-edit
-          [form]="form" [formErrors]="formErrors"
-          [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies"
-      ></my-video-edit>
-
-      <div class="submit-container">
-        <div class="submit-button" [ngClass]="{ disabled: !form.valid }">
-          <span class="icon icon-validate"></span>
-          <input type="button" value="Publish" (click)="upload()" />
-        </div>
-      </div>
-    </form>
   </div>
+
+  <!-- Hidden because we need to load the component -->
+  <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
+    <my-video-edit
+        [form]="form" [formErrors]="formErrors"
+        [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies"
+    ></my-video-edit>
+
+    <div class="submit-container">
+      <div class="submit-button" [ngClass]="{ disabled: !form.valid }">
+        <span class="icon icon-validate"></span>
+        <input type="button" value="Publish" (click)="upload()" />
+      </div>
+    </div>
+  </form>
 </div>

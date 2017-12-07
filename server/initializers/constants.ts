@@ -14,7 +14,7 @@ import { FollowState } from '../../shared/models/accounts/follow.model'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 115
+const LAST_MIGRATION_VERSION = 120
 
 // ---------------------------------------------------------------------------
 

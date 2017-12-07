@@ -1,4 +1,5 @@
 import * as Sequelize from 'sequelize'
+import { CONSTRAINTS_FIELDS } from '../constants'
 import { PeerTubeDatabase } from '../database'
 
 async function up (utils: {
@@ -28,7 +29,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max),
       allowNull: true,
       defaultValue: null
     }

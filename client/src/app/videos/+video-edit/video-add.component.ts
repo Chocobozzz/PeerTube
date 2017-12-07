@@ -23,12 +23,14 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   @ViewChild('videofileInput') videofileInput
 
   isUploadingVideo = false
+  videoUploaded = false
   progressPercent = 0
 
   error: string = null
   form: FormGroup
   formErrors: { [ id: string ]: string } = {}
   validationMessages: ValidatorMessage = {}
+
   userVideoChannels = []
   videoPrivacies = []
   firstStepPrivacy = 0
@@ -53,8 +55,12 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm()
 
-    this.videoPrivacies = this.serverService.getVideoPrivacies()
-    this.firstStepPrivacy = this.videoPrivacies[0].id
+    this.serverService.videoCategoriesLoaded
+      .subscribe(
+        () => {
+          this.videoPrivacies = this.serverService.getVideoPrivacies()
+          this.firstStepPrivacy = this.videoPrivacies[0].id
+        })
 
     this.authService.userInformationLoaded
       .subscribe(
@@ -71,8 +77,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       )
   }
 
-  fileChange ($event) {
-    console.log('uploading file ?')
+  fileChange () {
+    this.uploadFirstStep()
   }
 
   checkForm () {
@@ -82,38 +88,26 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   }
 
   uploadFirstStep () {
-    const formValue: VideoCreate = this.form.value
-
-    const name = formValue.name
-    const privacy = formValue.privacy
-    const nsfw = formValue.nsfw
-    const category = formValue.category
-    const licence = formValue.licence
-    const language = formValue.language
-    const channelId = formValue.channelId
-    const description = formValue.description
-    const tags = formValue.tags
     const videofile = this.videofileInput.nativeElement.files[0]
+    const name = videofile.name
+    const privacy = this.firstStepPrivacy.toString()
+    const nsfw = false
+    const channelId = this.firstStepChannel.toString()
 
     const formData = new FormData()
     formData.append('name', name)
     formData.append('privacy', privacy.toString())
-    formData.append('category', '' + category)
     formData.append('nsfw', '' + nsfw)
-    formData.append('licence', '' + licence)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
 
-    // Language is optional
-    if (language) {
-      formData.append('language', '' + language)
-    }
-
-    formData.append('description', description)
-
-    for (let i = 0; i < tags.length; i++) {
-      formData.append(`tags[${i}]`, tags[i])
-    }
+    this.isUploadingVideo = true
+    this.form.patchValue({
+      name,
+      privacy,
+      nsfw,
+      channelId
+    })
 
     this.videoService.uploadVideo(formData).subscribe(
       event => {
@@ -121,10 +115,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           this.progressPercent = Math.round(100 * event.loaded / event.total)
         } else if (event instanceof HttpResponse) {
           console.log('Video uploaded.')
-          this.notificationsService.success('Success', 'Video uploaded.')
 
-          // Display all the videos once it's finished
-          this.router.navigate([ '/videos/trending' ])
+          this.videoUploaded = true
         }
       },
 
