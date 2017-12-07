@@ -19,22 +19,34 @@
   }
 }
 
+@mixin orange-button {
+  color: #fff;
+  background-color: $orange-color;
+
+  &:hover {
+    background-color: $orange-hoover-color;
+  }
+}
+
+@mixin grey-button {
+  background-color: $grey-color;
+  color: #585858;
+
+  &:hover {
+    background-color: $grey-hoover-color;
+  }
+}
+
 @mixin peertube-button {
   border: none;
-  color: #fff;
   font-weight: $font-semibold;
   font-size: 15px;
   height: $button-height;
   line-height: $button-height;
   border-radius: 3px;
   text-align: center;
-  background-color: $orange-color;
   padding: 0 17px 0 13px;
   cursor: pointer;
-
-  &:hover {
-    background-color: $orange-hoover-color;
-  }
 }
 
 @mixin peertube-button-link {

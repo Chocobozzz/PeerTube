@@ -6,6 +6,11 @@
   #video-element {
     width: 888px;
     height: 500px;
+
+    // VideoJS create an inner video player
+    video {
+      outline: 0;
+    }
   }
 }
 
@@ -38,47 +43,78 @@
       .video-info-actions {
         .action-button {
           @include peertube-button;
+          @include grey-button;
 
           font-size: 15px;
           font-weight: $font-semibold;
-          color: #585858;
-          background-color: #E5E5E5;
           display: inline-block;
           padding: 0 10px 0 10px;
 
-          &:hover {
-            background-color: #EFEFEF;
+          .icon {
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 21px;
+            height: 21px;
+            vertical-align: middle;
+            position: relative;
+            top: -2px;
+
+            &.icon-like {
+              background-image: url('../../../assets/images/video/like-grey.svg');
+            }
+
+            &.icon-dislike {
+              background-image: url('../../../assets/images/video/dislike-grey.svg');
+            }
+
+            &.icon-share {
+              background-image: url('../../../assets/images/video/share.svg');
+            }
+
+            &.icon-more {
+              background-image: url('../../../assets/images/video/more.svg');
+            }
+          }
+
+          &.activated {
+            @include orange-button;
+
+            .icon-like {
+              background-image: url('../../../assets/images/video/like-white.svg');
+            }
+
+            .icon-dislike {
+              background-image: url('../../../assets/images/video/dislike-white.svg');
+            }
           }
         }
 
         .action-more {
           display: inline-block;
-        }
 
-        .icon {
-          display: inline-block;
-          background-repeat: no-repeat;
-          background-size: contain;
-          width: 21px;
-          height: 21px;
-          vertical-align: middle;
-          position: relative;
-          top: -2px;
+          .dropdown-menu .icon {
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 21px;
+            height: 21px;
+            vertical-align: middle;
+            margin-right: 5px;
+            position: relative;
+            top: -1px;
 
-          &.icon-like {
-            background-image: url('../../../assets/images/video/like.svg');
-          }
+            &.icon-download {
+              background-image: url('../../../assets/images/video/download.svg');
+            }
 
-          &.icon-dislike {
-            background-image: url('../../../assets/images/video/dislike.svg');
-          }
+            &.icon-alert {
+              background-image: url('../../../assets/images/video/alert.svg');
+            }
 
-          &.icon-share {
-            background-image: url('../../../assets/images/video/share.svg');
-          }
-
-          &.icon-more {
-            background-image: url('../../../assets/images/video/more.svg');
+            &.icon-blacklist {
+              background-image: url('../../../assets/images/video/eye-closed.svg');
+            }
           }
         }
       }

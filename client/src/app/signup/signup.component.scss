@@ -5,4 +5,5 @@ input:not([type=submit]) {
 
 input[type=submit] {
   @include peertube-button;
+  @include orange-button;
 }

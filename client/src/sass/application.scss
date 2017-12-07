@@ -138,3 +138,17 @@ p-datatable {
     }
   }
 }
+
+.dropdown-menu {
+  border-radius: 3px;
+  box-shadow: 0 3px 6px;
+  font-size: 15px;
+
+  .dropdown-item {
+    padding: 3px 15px;
+  }
+
+  a {
+    color: #000 !important;
+  }
+}

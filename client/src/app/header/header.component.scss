@@ -10,7 +10,7 @@
 
 .icon.icon-search {
   display: inline-block;
-  background: url('../../../assets/images/header/search.svg') no-repeat;
+  background: url('../../assets/images/header/search.svg') no-repeat;
   background-size: contain;
   width: 25px;
   height: 21px;
@@ -24,12 +24,13 @@
 
 .upload-button {
   @include peertube-button-link;
+  @include orange-button;
 
   margin-right: 25px;
 
   .icon.icon-upload {
     display: inline-block;
-    background: url('../../../assets/images/header/upload.svg') no-repeat;
+    background: url('../../assets/images/header/upload.svg') no-repeat;
     background-size: contain;
     width: 22px;
     height: 24px;

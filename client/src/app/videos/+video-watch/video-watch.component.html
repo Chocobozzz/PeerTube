@@ -14,18 +14,12 @@
       <div class="video-info-name">{{ video.name }}</div>
 
       <div class="video-info-actions">
-        <div class="action-button">
-          <span
-              class="icon icon-like" title="Like this video"
-              [ngClass]="{ 'interactive': isUserLoggedIn(), 'activated': userRating === 'like' }" (click)="setLike()"
-          ></span>
+        <div *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" class="action-button">
+          <span class="icon icon-like" title="Like this video" (click)="setLike()"></span>
         </div>
 
-        <div class="action-button">
-          <span
-            class="icon icon-dislike" title="Dislike this video"
-            [ngClass]="{ 'interactive': isUserLoggedIn(), 'activated': userRating === 'dislike' }" (click)="setDislike()"
-          ></span>
+        <div *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" class="action-button">
+          <span class="icon icon-dislike" title="Dislike this video" (click)="setDislike()"></span>
         </div>
 
         <div (click)="showShareModal()" class="action-button">
@@ -39,33 +33,21 @@
           </div>
 
           <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
-            <li *ngIf="canUserUpdateVideo()" role="menuitem">
-              <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.uuid ]">
-                <span class="glyphicon glyphicon-pencil"></span> Update
-              </a>
-            </li>
-
             <li role="menuitem">
               <a class="dropdown-item" title="Download the video" href="#" (click)="showDownloadModal($event)">
-                <span class="glyphicon glyphicon-download-alt"></span> Download
+                <span class="icon icon-download"></span> Download
               </a>
             </li>
 
             <li *ngIf="isUserLoggedIn()" role="menuitem">
               <a class="dropdown-item" title="Report this video" href="#" (click)="showReportModal($event)">
-                <span class="glyphicon glyphicon-alert"></span> Report
-              </a>
-            </li>
-
-            <li *ngIf="isVideoRemovable()" role="menuitem">
-              <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
-                <span class="glyphicon glyphicon-remove"></span> Delete
+                <span class="icon icon-alert"></span> Report
               </a>
             </li>
 
             <li *ngIf="isVideoBlacklistable()" role="menuitem">
               <a class="dropdown-item" title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
-                <span class="glyphicon glyphicon-eye-close"></span> Blacklist
+                <span class="icon icon-blacklist"></span> Blacklist
               </a>
             </li>
           </ul>
@@ -78,7 +60,7 @@
         {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
       </div>
 
-      <div class="video-info-likes-dislikes-bar">
+      <div *ngIf="video.likes !== 0 || video.dislikes !== 0" class="video-info-likes-dislikes-bar">
         <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
       </div>
     </div>

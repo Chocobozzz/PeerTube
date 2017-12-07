@@ -2,7 +2,8 @@ $font-regular: 400;
 $font-semibold: 600;
 $font-bold: 700;
 
-$grey-color: #555;
+$grey-color: #E5E5E5;
+$grey-hoover-color: #EFEFEF;;
 $orange-color: #F1680D;
 $orange-hoover-color: #F97D46;
 
@@ -17,7 +18,6 @@ $button-height: 30px;
 
 $header-height: 50px;
 $header-border-color: #e9eff6;
-
 $search-input-width: 375px;
 
 $menu-color: #fff;
@@ -27,11 +27,3 @@ $footer-height: 30px;
 $footer-margin: 30px;
 
 $footer-border-color: $header-border-color;
-
-$video-miniature-other-infos: #686767;
-
-$video-watch-border-color: #eceef4;
-$video-watch-title-height: 90px;
-$video-watch-info-color: #9da0ae;
-$video-watch-info-height: 120px;
-$video-watch-info-padding-left: 40px;
