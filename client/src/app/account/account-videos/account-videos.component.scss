@@ -32,12 +32,8 @@
   }
 
   .icon {
-    display: inline-block;
-    background-repeat: no-repeat;
-    background-size: contain;
-    width: 21px;
-    height: 21px;
-    vertical-align: middle;
+    @include icon(21px);
+
     position: relative;
     top: -2px;
 

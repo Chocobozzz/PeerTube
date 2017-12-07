@@ -35,11 +35,7 @@
     align-items: center;
 
     .icon {
-      cursor: pointer;
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-      background-size: contain;
+      @include icon(22px);
 
       &.icon-menu {
         background-image: url('../assets/images/header/menu.svg');
@@ -59,7 +55,7 @@
       .icon.icon-logo {
         display: inline-block;
         background: url('../assets/images/logo.svg') no-repeat;
-        width: 20px;
+        width: 23px;
         height: 24px;
       }
     }

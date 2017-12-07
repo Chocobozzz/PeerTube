@@ -107,11 +107,9 @@ menu {
       @include disable-default-a-behaviour;
 
       .icon {
-        width: 22px;
-        height: 22px;
-        display: inline-block;
+        @include icon(22px);
+
         margin-right: 18px;
-        background-size: contain;
 
         &.icon-videos-trending {
           position: relative;

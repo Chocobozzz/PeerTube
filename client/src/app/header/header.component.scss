@@ -9,13 +9,11 @@
 }
 
 .icon.icon-search {
-  display: inline-block;
-  background: url('../../assets/images/header/search.svg') no-repeat;
-  background-size: contain;
-  width: 25px;
+  @include icon(25px);
   height: 21px;
-  vertical-align: middle;
-  cursor: pointer;
+
+  background-image: url('../../assets/images/header/search.svg');
+
   // yolo
   position: absolute;
   margin-left: -50px;

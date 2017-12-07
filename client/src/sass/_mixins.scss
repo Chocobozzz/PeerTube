@@ -23,7 +23,8 @@
   color: #fff;
   background-color: $orange-color;
 
-  &:hover {
+  &:hover, &:active, &:focus, &[disabled] {
+    color: #fff;
     background-color: $orange-hoover-color;
   }
 }
@@ -32,7 +33,8 @@
   background-color: $grey-color;
   color: #585858;
 
-  &:hover {
+  &:hover, &:active, &:focus, &[disabled] {
+    color: #585858;
     background-color: $grey-hoover-color;
   }
 }
@@ -59,4 +61,14 @@
 @mixin avatar ($size) {
   width: $size;
   height: $size;
+}
+
+@mixin icon ($size) {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: $size;
+  height: $size;
+  vertical-align: middle;
+  cursor: pointer;
 }

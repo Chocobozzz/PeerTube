@@ -6,18 +6,19 @@
         <button type="button" class="close" aria-label="Close" (click)="hide()">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title">Download</h4>
+        <h4 class="title-page title-page-single">Download</h4>
       </div>
 
       <div class="modal-body">
         <div *ngFor="let file of video.files" class="resolution-block">
           <label>{{ file.resolutionLabel }}</label>
-          <a class="btn btn-default " target="_blank" [href]="file.torrentUrl">
-            <span class="glyphicon glyphicon-download"></span>
+
+          <a class="orange-button-link " target="_blank" [href]="file.torrentUrl">
+            <span class="icon icon-download"></span>
             Torrent file
           </a>
-          <a class="btn btn-default" target="_blank" [href]="file.fileUrl">
-            <span class="glyphicon glyphicon-download"></span>
+          <a class="orange-button-link" target="_blank" [href]="file.fileUrl">
+            <span class="icon icon-download"></span>
             Download
           </a>
 

@@ -152,3 +152,33 @@ p-datatable {
     color: #000 !important;
   }
 }
+
+.modal {
+  .modal-header {
+    border-bottom: none;
+
+    .title-page-single {
+      margin: 0;
+    }
+  }
+}
+
+.orange-button {
+  @include peertube-button;
+  @include orange-button;
+}
+
+.orange-button-link {
+  @include peertube-button-link;
+  @include orange-button;
+}
+
+.grey-button {
+  @include peertube-button;
+  @include grey-button;
+}
+
+.grey-button-link {
+  @include peertube-button-link;
+  @include grey-button;
+}

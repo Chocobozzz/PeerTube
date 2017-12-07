@@ -51,12 +51,8 @@
           padding: 0 10px 0 10px;
 
           .icon {
-            display: inline-block;
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 21px;
-            height: 21px;
-            vertical-align: middle;
+            @include icon(21px);
+
             position: relative;
             top: -2px;
 
@@ -105,7 +101,7 @@
             top: -1px;
 
             &.icon-download {
-              background-image: url('../../../assets/images/video/download.svg');
+              background-image: url('../../../assets/images/video/download-grey.svg');
             }
 
             &.icon-alert {
