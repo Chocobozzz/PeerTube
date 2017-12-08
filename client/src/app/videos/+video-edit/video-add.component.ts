@@ -5,6 +5,7 @@ import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { VideoService } from 'app/shared/video/video.service'
 import { VideoCreate } from '../../../../../shared'
+import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
 import { ValidatorMessage } from '../../shared/forms/form-validators'
@@ -25,6 +26,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   isUploadingVideo = false
   videoUploaded = false
   videoUploadPercents = 0
+  videoUploadedId = 0
 
   error: string = null
   form: FormGroup
@@ -33,8 +35,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   userVideoChannels = []
   videoPrivacies = []
-  firstStepPrivacy = 0
-  firstStepChannel = 0
+  firstStepPrivacyId = 0
+  firstStepChannelId = 0
 
   constructor (
     private formBuilder: FormBuilder,
@@ -59,7 +61,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       .subscribe(
         () => {
           this.videoPrivacies = this.serverService.getVideoPrivacies()
-          this.firstStepPrivacy = this.videoPrivacies[0].id
+
+          // Public by default
+          this.firstStepPrivacyId = VideoPrivacy.PUBLIC
         })
 
     this.authService.userInformationLoaded
@@ -72,7 +76,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           if (Array.isArray(videoChannels) === false) return
 
           this.userVideoChannels = videoChannels.map(v => ({ id: v.id, label: v.name }))
-          this.firstStepChannel = this.userVideoChannels[0].id
+          this.firstStepChannelId = this.userVideoChannels[0].id
         }
       )
   }
@@ -89,14 +93,15 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   uploadFirstStep () {
     const videofile = this.videofileInput.nativeElement.files[0]
-    const name = videofile.name
-    const privacy = this.firstStepPrivacy.toString()
+    const name = videofile.name.replace(/\.[^/.]+$/, '')
+    const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
-    const channelId = this.firstStepChannel.toString()
+    const channelId = this.firstStepChannelId.toString()
 
     const formData = new FormData()
     formData.append('name', name)
-    formData.append('privacy', privacy.toString())
+    // Put the video "private" -> we wait he validates the second step
+    formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
@@ -117,6 +122,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           console.log('Video uploaded.')
 
           this.videoUploaded = true
+
+          this.videoUploadedId = event.body.video.id
         }
       },
 
@@ -133,13 +140,16 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       return
     }
 
-    const video = new VideoEdit(this.form.value)
+    const video = new VideoEdit()
+    video.patch(this.form.value)
+    video.channel = this.firstStepChannelId
+    video.id = this.videoUploadedId
 
     this.videoService.updateVideo(video)
       .subscribe(
         () => {
           this.notificationsService.success('Success', 'Video published.')
-          this.router.navigate([ '/videos/watch', video.uuid ])
+          this.router.navigate([ '/videos/watch', video.id ])
         },
 
         err => {

@@ -15,6 +15,7 @@ import { getServerAccount } from '../../../helpers/utils'
 import { CONFIG, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT, VIDEO_PRIVACIES } from '../../../initializers'
 import { database as db } from '../../../initializers/database'
 import { sendAddVideo } from '../../../lib/activitypub/send/send-add'
+import { sendCreateViewToOrigin } from '../../../lib/activitypub/send/send-create'
 import { sendUpdateVideo } from '../../../lib/activitypub/send/send-update'
 import { shareVideoByServer } from '../../../lib/activitypub/share'
 import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
@@ -39,7 +40,6 @@ import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
 import { rateVideoRouter } from './rate'
-import { sendCreateViewToOrigin } from '../../../lib/activitypub/send/send-create'
 
 const videosRouter = express.Router()
 
@@ -154,17 +154,20 @@ async function addVideoRetryWrapper (req: express.Request, res: express.Response
     errorMessage: 'Cannot insert the video with many retries.'
   }
 
-  await retryTransactionWrapper(addVideo, options)
+  const video = await retryTransactionWrapper(addVideo, options)
 
-  // TODO : include Location of the new video -> 201
-  res.type('json').status(204).end()
+  res.json({
+    video: {
+      id: video.id,
+      uuid: video.uuid
+    }
+  }).end()
 }
 
-async function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
+function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
   const videoInfo: VideoCreate = req.body
-  let videoUUID = ''
 
-  await db.sequelize.transaction(async t => {
+  return db.sequelize.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const videoData = {
@@ -223,7 +226,6 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     const videoCreated = await video.save(sequelizeOptions)
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel
-    videoUUID = videoCreated.uuid
 
     videoFile.videoId = video.id
 
@@ -238,15 +240,17 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     }
 
     // Let transcoding job send the video to friends because the video file extension might change
-    if (CONFIG.TRANSCODING.ENABLED === true) return undefined
+    if (CONFIG.TRANSCODING.ENABLED === true) return videoCreated
     // Don't send video to remote servers, it is private
-    if (video.privacy === VideoPrivacy.PRIVATE) return undefined
+    if (video.privacy === VideoPrivacy.PRIVATE) return videoCreated
 
     await sendAddVideo(video, t)
     await shareVideoByServer(video, t)
-  })
 
-  logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoUUID)
+    logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
+
+    return videoCreated
+  })
 }
 
 async function updateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {

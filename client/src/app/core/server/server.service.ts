@@ -77,7 +77,6 @@ export class ServerService {
     notifier: ReplaySubject<boolean>
   ) {
     return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
-      .do(() => notifier.next(true))
        .subscribe(data => {
          Object.keys(data)
                .forEach(dataKey => {
@@ -86,6 +85,8 @@ export class ServerService {
                    label: data[dataKey]
                  })
                })
+
+         notifier.next(true)
        })
   }
 }

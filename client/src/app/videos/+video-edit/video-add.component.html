@@ -15,20 +15,23 @@
       </div>
 
       <div class="form-group">
-        <select [(ngModel)]="firstStepPrivacy">
+        <select [(ngModel)]="firstStepPrivacyId">
           <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
         </select>
       </div>
 
       <div class="form-group">
-        <select [(ngModel)]="firstStepChannel">
+        <select [(ngModel)]="firstStepChannelId">
           <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
         </select>
       </div>
     </div>
   </div>
 
-  <p-progressBar *ngIf="isUploadingVideo" [value]="videoUploadPercents"></p-progressBar>
+  <p-progressBar
+      *ngIf="isUploadingVideo" [value]="videoUploadPercents"
+      [ngClass]="{ processing: videoUploadPercents === 100 && videoUploaded === false }"
+  ></p-progressBar>
 
   <!-- Hidden because we need to load the component -->
   <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
@@ -37,10 +40,13 @@
         [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies"
     ></my-video-edit>
 
+
     <div class="submit-container">
-      <div class="submit-button" [ngClass]="{ disabled: !form.valid }">
+      <div *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
+
+      <div class="submit-button" (click)="updateSecondStep()" [ngClass]="{ disabled: !form.valid || videoUploaded !== true }">
         <span class="icon icon-validate"></span>
-        <input type="button" value="Publish" (click)="upload()" />
+        <input type="button" value="Publish" />
       </div>
     </div>
   </form>

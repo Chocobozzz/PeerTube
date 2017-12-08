@@ -18,6 +18,7 @@
     .icon.icon-upload {
       @include icon(90px);
       margin-bottom: 25px;
+      cursor: default;
 
       background-image: url('../../../assets/images/video/upload.svg');
     }
@@ -58,10 +59,9 @@
 }
 
 p-progressBar {
-  margin-top: 50px;
-  margin-bottom: 40px;
-
   /deep/ .ui-progressbar {
+    margin-top: 25px !important;
+    margin-bottom: 40px !important;
     font-size: 15px !important;
     color: #fff !important;
     height: 30px !important;
@@ -76,6 +76,19 @@ p-progressBar {
     .ui-progressbar-label {
       text-align: left;
       padding-left: 18px;
+      margin-top: 0 !important;
+    }
+  }
+
+  &.processing {
+    /deep/ .ui-progressbar-label {
+      // Same color as background to hide "100%"
+      color: rgba(11, 204, 41, 0.16) !important;
+
+      &::before {
+        content: 'Processing...';
+        color: #fff;
+      }
     }
   }
 }

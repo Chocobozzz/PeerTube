@@ -86,6 +86,10 @@ label {
     margin-top: 30px;
     margin-bottom: 25px;
   }
+
+  &:hover, &:active, &:focus {
+    color: #000;
+}
 }
 
 // On small screen, menu is absolute and displayed over the page

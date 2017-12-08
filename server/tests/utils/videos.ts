@@ -201,7 +201,7 @@ async function testVideoImage (url: string, imageName: string, imagePath: string
   }
 }
 
-async function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = 204) {
+async function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = 201) {
   const path = '/api/v1/videos/upload'
   let defaultChannelId = '1'
 

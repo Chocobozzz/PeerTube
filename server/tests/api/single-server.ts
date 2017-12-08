@@ -104,7 +104,10 @@ describe('Test a single server', function () {
       licence: 6,
       tags: [ 'tag1', 'tag2', 'tag3' ]
     }
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
+    const res = await uploadVideo(server.url, server.accessToken, videoAttributes)
+    expect(res.body.video).to.not.be.undefined
+    expect(res.body.video.id).to.equal(1)
+    expect(res.body.video.uuid).to.have.length.above(5)
   })
 
   it('Should seed the uploaded video', async function () {

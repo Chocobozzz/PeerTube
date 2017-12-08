@@ -11,9 +11,9 @@
     ></my-video-edit>
 
     <div class="submit-container">
-      <div class="submit-button" [ngClass]="{ disabled: !form.valid }">
+      <div class="submit-button" (click)="update()" [ngClass]="{ disabled: !form.valid }">
         <span class="icon icon-validate"></span>
-        <input type="button" value="Update" (click)="update()" />
+        <input type="button" value="Update" />
       </div>
     </div>
   </form>

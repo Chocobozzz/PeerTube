@@ -1,5 +1,5 @@
 @mixin disable-default-a-behaviour {
-  &:hover, &:focus {
+  &:hover, &:focus, &:active {
     text-decoration: none !important;
     outline: none !important;
   }
@@ -23,13 +23,15 @@
   color: #fff;
   background-color: $orange-color;
 
-  &:hover, &:active, &:focus, &[disabled], &.disabled {
+  &:hover, &:active, &:focus {
     color: #fff;
     background-color: $orange-hoover-color;
   }
 
   &[disabled], &.disabled {
     cursor: default;
+    color: #fff;
+    background-color: #C6C6C6;
   }
 }
 

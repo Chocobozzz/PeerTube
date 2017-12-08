@@ -43,6 +43,10 @@ menu {
       .logged-in-email {
         font-size: 13px;
         color: #C6C6C6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 140px;
       }
     }
 

@@ -194,7 +194,6 @@ export class AuthService {
     }
 
     this.mergeUserInformation(obj)
-      .do(() => this.userInformationLoaded.next(true))
       .subscribe(
         res => {
           this.user.displayNSFW = res.displayNSFW
@@ -203,6 +202,8 @@ export class AuthService {
           this.user.account = res.account
 
           this.user.save()
+
+          this.userInformationLoaded.next(true)
         }
       )
   }

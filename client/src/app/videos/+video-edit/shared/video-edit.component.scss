@@ -43,6 +43,14 @@
   position: relative;
   bottom: $button-height;
 
+  .message-submit {
+    display: inline-block;
+    margin-right: 25px;
+
+    color: #585858;
+    font-size: 15px;
+  }
+
   .submit-button {
     @include peertube-button;
     @include orange-button;
@@ -54,6 +62,7 @@
       background-color: inherit;
       border: none;
       padding: 0;
+      outline: 0;
     }
 
     .icon.icon-validate {
