@@ -1,5 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core'
 
+import { NotificationsService } from 'angular2-notifications'
+
 import { ModalDirective } from 'ngx-bootstrap/modal'
 
 import { VideoDetails } from '../shared'
@@ -14,9 +16,7 @@ export class VideoShareComponent {
 
   @ViewChild('modal') modal: ModalDirective
 
-  copied: boolean
-
-  constructor () {
+  constructor (private notificationsService: NotificationsService) {
     // empty
   }
 
@@ -44,9 +44,6 @@ export class VideoShareComponent {
   }
 
   activateCopiedMessage () {
-    this.copied = true
-    setTimeout(() => {
-      this.copied = false
-    }, 4000)
+    this.notificationsService.success('Success', 'Copied')
   }
 }
