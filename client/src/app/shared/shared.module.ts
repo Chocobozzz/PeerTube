@@ -12,6 +12,8 @@ import { SharedModule as PrimeSharedModule } from 'primeng/components/common/sha
 import { DataTableModule } from 'primeng/components/datatable/datatable'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
+import { DeleteButtonComponent } from './misc/delete-button.component'
+import { EditButtonComponent } from './misc/edit-button.component'
 import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
 import { NumberFormatterPipe } from './misc/number-formatter.pipe'
@@ -44,6 +46,8 @@ import { VideoService } from './video/video.service'
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    DeleteButtonComponent,
+    EditButtonComponent,
     NumberFormatterPipe,
     FromNowPipe
   ],
@@ -66,6 +70,8 @@ import { VideoService } from './video/video.service'
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    DeleteButtonComponent,
+    EditButtonComponent,
 
     NumberFormatterPipe,
     FromNowPipe

@@ -22,7 +22,7 @@
           Cancel
         </span>
 
-            <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+        <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
           <span class="icon icon-delete-white"></span>
           Delete
         </span>
@@ -30,15 +30,9 @@
     </div>
 
     <ng-template [ngIf]="isInSelectionMode() === false">
-      <span class="action-button action-button-delete" (click)="deleteVideo(video)">
-        <span class="icon icon-delete-grey"></span>
-        Delete
-      </span>
+      <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
 
-      <a class="action-button" [routerLink]="[ '/videos', 'edit', video.uuid ]">
-        <span class="icon icon-edit"></span>
-        Edit
-      </a>
+      <my-edit-button [routerLink]="[ '/videos', 'edit', video.uuid ]"></my-edit-button>
     </ng-template>
   </div>
 </div>

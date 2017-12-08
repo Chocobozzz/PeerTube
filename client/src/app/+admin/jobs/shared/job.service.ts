@@ -25,6 +25,13 @@ export class JobService {
 
     return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL, { params })
       .map(res => this.restExtractor.convertResultListDateToHuman(res))
+      .map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData))
       .catch(err => this.restExtractor.handleError(err))
+  }
+
+  private prettyPrintData (obj: Job) {
+    const handlerInputData = JSON.stringify(obj.handlerInputData, null, 2)
+
+    return Object.assign(obj, { handlerInputData })
   }
 }

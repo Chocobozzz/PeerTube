@@ -1,4 +1,4 @@
-<div class="sub-header">
+<div class="admin-sub-header">
   <div class="admin-sub-title">Users list</div>
 
   <a class="add-button" routerLink="/admin/users/add">
@@ -17,16 +17,10 @@
   <p-column field="videoQuota" header="Video quota"></p-column>
   <p-column field="roleLabel" header="Role"></p-column>
   <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
-  <p-column header="Edit" styleClass="action-cell">
-    <ng-template pTemplate="body" let-user="rowData">
-      <a [routerLink]="getRouterUserEditLink(user)" title="Edit this user">
-        <span class="glyphicon glyphicon-pencil glyphicon-black"></span>
-      </a>
-    </ng-template>
-  </p-column>
-  <p-column header="Delete" styleClass="action-cell">
-    <ng-template pTemplate="body" let-user="rowData">
-      <span (click)="removeUser(user)" class="glyphicon glyphicon-remove glyphicon-black" title="Remove this user"></span>
+  <p-column styleClass="action-cell">
+      <ng-template pTemplate="body" let-user="rowData">
+      <my-edit-button [routerLink]="getRouterUserEditLink(user)"></my-edit-button>
+      <my-delete-button (click)="removeUser(user)"></my-delete-button>
     </ng-template>
   </p-column>
 </p-dataTable>

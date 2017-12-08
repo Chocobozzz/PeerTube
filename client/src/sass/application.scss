@@ -92,6 +92,16 @@ label {
   }
 }
 
+.admin-sub-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+
+  .admin-sub-title {
+    flex-grow: 1;
+  }
+}
+
 .admin-sub-title {
   font-size: 20px;
   font-weight: bold;
@@ -139,11 +149,96 @@ label {
 
 // ngprime data table customizations
 p-datatable {
-  .action-cell {
-    text-align: center;
+  font-size: 15px !important;
 
-    .glyphicon {
-      cursor: pointer;
+  .ui-datatable-scrollable-header {
+    background-color: #fff !important;
+  }
+
+  .ui-widget-content {
+    border: none !important;
+  }
+
+  .ui-datatable-virtual-table {
+    border-top: none !important;
+  }
+
+  td {
+    border: 1px solid #E5E5E5 !important;
+    padding: 15px;
+  }
+
+  tr {
+    background-color: #fff !important;
+    height: 46px;
+
+    &:hover {
+      background-color: #f0f0f0 !important;
+    }
+
+    &:not(:hover) {
+      .action-cell * {
+        display: none !important;
+      }
+    }
+
+    &:first-child td {
+      border-top: none !important;
+    }
+  }
+
+  th {
+    border: none !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    text-align: left !important;
+    padding: 5px 0 5px 15px !important;
+    font-weight: $font-semibold !important;
+    color: #000 !important;
+
+    &.ui-state-active, &.ui-sortable-column:hover {
+      background-color: #f0f0f0 !important;
+      border: 1px solid #f0f0f0 !important;
+    }
+  }
+
+  .action-cell {
+    width: 250px !important;
+    padding: 0 !important;
+    text-align: center;
+  }
+
+  p-paginator {
+    overflow: hidden;
+    display: block;
+    padding-top: 2px;
+    border: 1px solid #f0f0f0 !important;
+    border-top: none !important;
+
+    .ui-paginator-bottom {
+      position: relative;
+      border: none !important;
+      border-top: 1px solid #f0f0f0 !important;
+      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.16);
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        color: #000 !important;
+        font-weight: $font-semibold !important;
+        margin-right: 20px !important;
+        outline: 0 !important;
+        border-radius: 3px !important;
+        padding: 5px 2px !important;
+
+        &.ui-state-active {
+          &, &:hover, &:active, &:focus {
+            color: #fff !important;
+            background-color: $orange-color !important;
+          }
+        }
+      }
     }
   }
 }

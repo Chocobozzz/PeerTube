@@ -1,12 +1,3 @@
-.sub-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 30px;
-
-  .admin-sub-title {
-    flex-grow: 1;
-  }
-
   .add-button {
     @include peertube-button-link;
     @include orange-button;
@@ -18,4 +9,3 @@
       background-image: url('../../../../assets/images/admin/add.svg');
     }
   }
-}
