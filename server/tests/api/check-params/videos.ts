@@ -321,7 +321,7 @@ describe('Test videos API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: 204
+        statusCodeExpected: 200
       })
 
       attaches.videofile = join(__dirname, '..', 'fixtures', 'video_short.mp4')
@@ -331,7 +331,7 @@ describe('Test videos API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: 204
+        statusCodeExpected: 200
       })
 
       attaches.videofile = join(__dirname, '..', 'fixtures', 'video_short.ogv')
@@ -341,7 +341,7 @@ describe('Test videos API validator', function () {
         token: server.accessToken,
         fields,
         attaches,
-        statusCodeExpected: 204
+        statusCodeExpected: 200
       })
     })
   })
