@@ -18,7 +18,7 @@
   <p-column field="roleLabel" header="Role"></p-column>
   <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
   <p-column styleClass="action-cell">
-      <ng-template pTemplate="body" let-user="rowData">
+    <ng-template pTemplate="body" let-user="rowData">
       <my-edit-button [routerLink]="getRouterUserEditLink(user)"></my-edit-button>
       <my-delete-button (click)="removeUser(user)"></my-delete-button>
     </ng-template>

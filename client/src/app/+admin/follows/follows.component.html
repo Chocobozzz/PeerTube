@@ -1,4 +1,6 @@
-<div class="follows-menu">
+<div class="admin-sub-header">
+  <div class="admin-sub-title">Manage follows</div>
+
   <tabset #followsMenuTabs>
     <tab *ngFor="let link of links">
       <ng-template tabHeading>
@@ -7,5 +9,7 @@
     </tab>
   </tabset>
 </div>
+
+
 
 <router-outlet></router-outlet>

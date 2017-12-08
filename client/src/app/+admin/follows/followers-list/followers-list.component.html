@@ -1,5 +1,3 @@
-<h3>Followers list</h3>
-
 <p-dataTable
     [value]="followers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
     sortField="createdAt" (onLazyLoad)="loadLazy($event)"
