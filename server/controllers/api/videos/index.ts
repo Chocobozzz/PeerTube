@@ -164,52 +164,54 @@ async function addVideoRetryWrapper (req: express.Request, res: express.Response
   }).end()
 }
 
-function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
+async function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
   const videoInfo: VideoCreate = req.body
+
+  // Prepare data so we don't block the transaction
+  const videoData = {
+    name: videoInfo.name,
+    remote: false,
+    extname: extname(videoPhysicalFile.filename),
+    category: videoInfo.category,
+    licence: videoInfo.licence,
+    language: videoInfo.language,
+    nsfw: videoInfo.nsfw,
+    description: videoInfo.description,
+    privacy: videoInfo.privacy,
+    duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
+    channelId: res.locals.videoChannel.id
+  }
+  const video = db.Video.build(videoData)
+  video.url = getVideoActivityPubUrl(video)
+
+  const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
+  const videoFileHeight = await getVideoFileHeight(videoFilePath)
+
+  const videoFileData = {
+    extname: extname(videoPhysicalFile.filename),
+    resolution: videoFileHeight,
+    size: videoPhysicalFile.size
+  }
+  const videoFile = db.VideoFile.build(videoFileData)
+  const videoDir = CONFIG.STORAGE.VIDEOS_DIR
+  const source = join(videoDir, videoPhysicalFile.filename)
+  const destination = join(videoDir, video.getVideoFilename(videoFile))
+
+  await renamePromise(source, destination)
+  // This is important in case if there is another attempt in the retry process
+  videoPhysicalFile.filename = video.getVideoFilename(videoFile)
+
+  const tasks = []
+
+  tasks.push(
+    video.createTorrentAndSetInfoHash(videoFile),
+    video.createThumbnail(videoFile),
+    video.createPreview(videoFile)
+  )
+  await Promise.all(tasks)
 
   return db.sequelize.transaction(async t => {
     const sequelizeOptions = { transaction: t }
-
-    const videoData = {
-      name: videoInfo.name,
-      remote: false,
-      extname: extname(videoPhysicalFile.filename),
-      category: videoInfo.category,
-      licence: videoInfo.licence,
-      language: videoInfo.language,
-      nsfw: videoInfo.nsfw,
-      description: videoInfo.description,
-      privacy: videoInfo.privacy,
-      duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
-      channelId: res.locals.videoChannel.id
-    }
-    const video = db.Video.build(videoData)
-    video.url = getVideoActivityPubUrl(video)
-
-    const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
-    const videoFileHeight = await getVideoFileHeight(videoFilePath)
-
-    const videoFileData = {
-      extname: extname(videoPhysicalFile.filename),
-      resolution: videoFileHeight,
-      size: videoPhysicalFile.size
-    }
-    const videoFile = db.VideoFile.build(videoFileData)
-    const videoDir = CONFIG.STORAGE.VIDEOS_DIR
-    const source = join(videoDir, videoPhysicalFile.filename)
-    const destination = join(videoDir, video.getVideoFilename(videoFile))
-
-    await renamePromise(source, destination)
-    // This is important in case if there is another attempt in the retry process
-    videoPhysicalFile.filename = video.getVideoFilename(videoFile)
-
-    const tasks = []
-
-    tasks.push(
-      video.createTorrentAndSetInfoHash(videoFile),
-      video.createThumbnail(videoFile),
-      video.createPreview(videoFile)
-    )
 
     if (CONFIG.TRANSCODING.ENABLED === true) {
       // Put uuid because we don't have id auto incremented for now
@@ -217,20 +219,17 @@ function addVideo (req: express.Request, res: express.Response, videoPhysicalFil
         videoUUID: video.uuid
       }
 
-      tasks.push(
-        transcodingJobScheduler.createJob(t, 'videoFileOptimizer', dataInput)
-      )
+      await transcodingJobScheduler.createJob(t, 'videoFileOptimizer', dataInput)
     }
-    await Promise.all(tasks)
 
     const videoCreated = await video.save(sequelizeOptions)
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel
 
     videoFile.videoId = video.id
-
     await videoFile.save(sequelizeOptions)
-    video.VideoFiles = [videoFile]
+
+    video.VideoFiles = [ videoFile ]
 
     if (videoInfo.tags) {
       const tagInstances = await db.Tag.findOrCreateTags(videoInfo.tags, t)

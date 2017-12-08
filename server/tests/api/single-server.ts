@@ -364,7 +364,7 @@ describe('Test a single server', function () {
       'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
     ]
 
-    // const tasks: Promise<any>[] = []
+    const tasks: Promise<any>[] = []
     for (const video of videos) {
       const videoAttributes = {
         name: video + ' name',
@@ -378,13 +378,10 @@ describe('Test a single server', function () {
       }
 
       const p = uploadVideo(server.url, server.accessToken, videoAttributes)
-      await p
+      tasks.push(p)
     }
-    // FIXME: concurrent uploads does not work :(
-    //   tasks.push(p)
-    // }
-    //
-    // await Promise.all(tasks)
+
+    await Promise.all(tasks)
   })
 
   it('Should have the correct durations', async function () {
@@ -712,7 +709,7 @@ describe('Test a single server', function () {
     const filePath = join(__dirname, '..', 'api', 'fixtures', 'video_short.webm')
 
     await req.attach('videofile', filePath)
-      .expect(204)
+      .expect(200)
 
     const res = await getVideosList(server.url)
     const video = res.body.data.find(v => v.name === 'minimum parameters')
