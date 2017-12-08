@@ -5,37 +5,3 @@ textarea {
   font-size: 15px;
   height: 150px;
 }
-
-.previews /deep/ {
-  font-size: 15px !important;
-
-  .nav {
-    margin-top: 10px;
-    font-size: 16px !important;
-    border: none !important;
-
-    .nav-item .nav-link {
-      color: #000 !important;
-      height: 30px !important;
-      margin-right: 30px;
-      padding: 0 15px;
-      display: flex;
-      align-items: center;
-      border-radius: 3px;
-      border: none !important;
-
-      &.active, &:hover {
-        background-color: #F0F0F0;
-      }
-
-      &.active {
-        font-weight: $font-semibold !important;
-      }
-    }
-  }
-
-  .tab-content {
-    min-height: 75px;
-    padding: 15px;
-  }
-}

@@ -20,7 +20,7 @@ import { LoginModule } from './login'
 import { SignupModule } from './signup'
 import { SharedModule } from './shared'
 import { VideosModule } from './videos'
-import { MenuComponent, MenuAdminComponent } from './menu'
+import { MenuComponent } from './menu'
 import { HeaderComponent } from './header'
 
 export function metaFactory (): MetaLoader {
@@ -52,7 +52,6 @@ const APP_PROVIDERS = [
     AppComponent,
 
     MenuComponent,
-    MenuAdminComponent,
     HeaderComponent
   ],
   imports: [

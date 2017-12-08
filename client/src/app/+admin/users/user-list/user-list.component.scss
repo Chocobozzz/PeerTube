@@ -1,3 +1,21 @@
-.add-user {
-  margin-top: 10px;
+.sub-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+
+  .admin-sub-title {
+    flex-grow: 1;
+  }
+
+  .add-button {
+    @include peertube-button-link;
+    @include orange-button;
+
+    .icon.icon-add {
+      @include icon(22px);
+
+      margin-right: 3px;
+      background-image: url('../../../../assets/images/admin/add.svg');
+    }
+  }
 }

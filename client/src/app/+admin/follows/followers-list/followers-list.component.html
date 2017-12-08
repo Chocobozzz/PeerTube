@@ -1,16 +1,12 @@
-<div class="row">
-  <div class="content-padding">
-    <h3>Followers list</h3>
+<h3>Followers list</h3>
 
-    <p-dataTable
-        [value]="followers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-        sortField="createdAt" (onLazyLoad)="loadLazy($event)"
-    >
-      <p-column field="id" header="ID"></p-column>
-      <p-column field="follower.host" header="Host"></p-column>
-      <p-column field="follower.score" header="Score"></p-column>
-      <p-column field="state" header="State"></p-column>
-      <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
-    </p-dataTable>
-  </div>
-</div>
+<p-dataTable
+    [value]="followers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+    sortField="createdAt" (onLazyLoad)="loadLazy($event)"
+>
+  <p-column field="id" header="ID"></p-column>
+  <p-column field="follower.host" header="Host"></p-column>
+  <p-column field="follower.score" header="Score"></p-column>
+  <p-column field="state" header="State"></p-column>
+  <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
+</p-dataTable>

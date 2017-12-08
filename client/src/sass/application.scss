@@ -89,7 +89,12 @@ label {
 
   &:hover, &:active, &:focus {
     color: #000;
+  }
 }
+
+.admin-sub-title {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 // On small screen, menu is absolute and displayed over the page
@@ -132,7 +137,7 @@ label {
   to { -moz-transform: rotate(360deg);}
 }
 
-/* ngprime data table customizations */
+// ngprime data table customizations
 p-datatable {
   .action-cell {
     text-align: center;
@@ -143,6 +148,7 @@ p-datatable {
   }
 }
 
+// Bootstrap customizations
 .dropdown-menu {
   border-radius: 3px;
   box-shadow: 0 3px 6px;
@@ -166,6 +172,40 @@ p-datatable {
     }
   }
 }
+
+.nav {
+  margin-top: 10px;
+  font-size: 16px !important;
+  border: none !important;
+
+  .nav-item .nav-link {
+    height: 30px !important;
+    margin-right: 30px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    border-radius: 3px;
+    border: none !important;
+
+    &, & a {
+      color: #000 !important;
+    }
+
+    &.active, &:hover {
+      background-color: #F0F0F0;
+    }
+
+    &.active {
+      font-weight: $font-semibold !important;
+    }
+  }
+
+  .tab-content {
+    min-height: 75px;
+    padding: 15px;
+  }
+}
+
 
 .orange-button {
   @include peertube-button;

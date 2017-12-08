@@ -27,10 +27,9 @@
   margin-right: 25px;
 
   .icon.icon-upload {
-    display: inline-block;
-    background: url('../../assets/images/header/upload.svg') no-repeat;
-    background-size: contain;
-    width: 22px;
+    @include icon(22px);
+
+    background-image: url('../../assets/images/header/upload.svg');
     height: 24px;
     vertical-align: middle;
     margin-right: 6px;
