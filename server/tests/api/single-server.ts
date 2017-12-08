@@ -4,7 +4,6 @@ import * as chai from 'chai'
 import { keyBy } from 'lodash'
 import 'mocha'
 import { join } from 'path'
-import * as request from 'supertest'
 import {
   dateIsValid,
   flushTests,

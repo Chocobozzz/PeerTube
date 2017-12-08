@@ -9,7 +9,6 @@ import { VIDEO_PRIVACIES } from '../../initializers/constants'
 import { database as db } from '../../initializers/database'
 import { VideoInstance } from '../../models/video/video-interface'
 import { exists, isArray } from './misc'
-import isInt = require('validator/lib/isInt')
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES

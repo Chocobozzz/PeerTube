@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { join } from "path"
+import { join } from 'path'
 import * as request from 'supertest'
 
 import {
