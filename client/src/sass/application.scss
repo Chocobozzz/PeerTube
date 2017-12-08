@@ -165,7 +165,7 @@ p-datatable {
 
   td {
     border: 1px solid #E5E5E5 !important;
-    padding: 15px;
+    padding-left: 15px !important;
   }
 
   tr {
@@ -185,6 +185,10 @@ p-datatable {
     &:first-child td {
       border-top: none !important;
     }
+
+    &:last-child td {
+      border-bottom: none !important;
+    }
   }
 
   th {
@@ -198,6 +202,7 @@ p-datatable {
     &.ui-state-active, &.ui-sortable-column:hover {
       background-color: #f0f0f0 !important;
       border: 1px solid #f0f0f0 !important;
+      border-width: 0 1px !important;
     }
   }
 
@@ -208,17 +213,10 @@ p-datatable {
   }
 
   p-paginator {
-    overflow: hidden;
-    display: block;
-    padding-top: 2px;
-    border: 1px solid #f0f0f0 !important;
-    border-top: none !important;
-
     .ui-paginator-bottom {
       position: relative;
       border: none !important;
-      border-top: 1px solid #f0f0f0 !important;
-      box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.16);
+      border: 1px solid #f0f0f0 !important;
       height: 40px;
       display: flex;
       justify-content: center;
@@ -297,11 +295,6 @@ p-datatable {
     &.active {
       font-weight: $font-semibold !important;
     }
-  }
-
-  .tab-content {
-    min-height: 75px;
-    padding: 15px;
   }
 }
 

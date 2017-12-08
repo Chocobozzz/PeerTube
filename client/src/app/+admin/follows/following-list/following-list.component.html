@@ -6,7 +6,7 @@
   <p-column field="following.host" header="Host"></p-column>
   <p-column field="state" header="State"></p-column>
   <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
-  <p-column header="Unfollow" styleClass="action-cell">
+  <p-column styleClass="action-cell">
     <ng-template pTemplate="body" let-following="rowData">
       <my-delete-button (click)="removeFollowing(following)"></my-delete-button>
     </ng-template>

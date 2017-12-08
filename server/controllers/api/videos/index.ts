@@ -280,7 +280,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
-      if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', videoInfoToUpdate.privacy)
+      if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', parseInt(videoInfoToUpdate.privacy.toString(), 10))
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
 
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
@@ -298,9 +298,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Video is not private anymore, send a create action to remote servers
-      if (wasPrivateVideo === true && videoInstance.privacy !== VideoPrivacy.PRIVATE) {
-        await sendAddVideo(videoInstance, t)
-        await shareVideoByServer(videoInstance, t)
+      if (wasPrivateVideo === true && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE) {
+        await sendAddVideo(videoInstanceUpdated, t)
+        await shareVideoByServer(videoInstanceUpdated, t)
       }
     })
 

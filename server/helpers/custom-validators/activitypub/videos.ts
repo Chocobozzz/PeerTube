@@ -49,14 +49,14 @@ function isVideoTorrentObjectValid (video: any) {
     isActivityPubVideoDurationValid(video.duration) &&
     isUUIDValid(video.uuid) &&
     setValidRemoteTags(video) &&
-    isRemoteIdentifierValid(video.category) &&
-    isRemoteIdentifierValid(video.licence) &&
+    (!video.category || isRemoteIdentifierValid(video.category)) &&
+    (!video.licence || isRemoteIdentifierValid(video.licence)) &&
     (!video.language || isRemoteIdentifierValid(video.language)) &&
     isVideoViewsValid(video.views) &&
     isVideoNSFWValid(video.nsfw) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
-    isRemoteVideoContentValid(video.mediaType, video.content) &&
+    (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     isRemoteVideoIconValid(video.icon) &&
     setValidRemoteVideoUrls(video) &&
     video.url.length !== 0

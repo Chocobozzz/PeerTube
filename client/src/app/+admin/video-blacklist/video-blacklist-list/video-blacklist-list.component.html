@@ -18,7 +18,7 @@
       <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
       <p-column header="Delete" styleClass="action-cell">
         <ng-template pTemplate="body" let-entry="rowData">
-          <span (click)="removeVideoFromBlacklist(entry)" class="glyphicon glyphicon-remove glyphicon-black" title="Remove this video from blacklist"></span>
+          <my-delete-button (click)="removeVideoFromBlacklist(entry)"></my-delete-button>
         </ng-template>
       </p-column>
     </p-dataTable>

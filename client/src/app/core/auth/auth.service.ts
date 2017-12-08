@@ -169,19 +169,15 @@ export class AuthService {
 
     return this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
                     .map(res => this.handleRefreshToken(res))
-                    .catch(res => {
-                      // The refresh token is invalid?
-                      if (res.status === 400 && res.error.error === 'invalid_grant') {
-                        console.error('Cannot refresh token -> logout...')
-                        this.logout()
-                        this.router.navigate(['/login'])
+                    .catch(err => {
+                      console.error(err)
+                      console.log('Cannot refresh token -> logout...')
+                      this.logout()
+                      this.router.navigate(['/login'])
 
-                        return Observable.throw({
-                          error: 'You need to reconnect.'
-                        })
-                      }
-
-                      return this.restExtractor.handleError(res)
+                      return Observable.throw({
+                        error: 'You need to reconnect.'
+                      })
                     })
   }
 

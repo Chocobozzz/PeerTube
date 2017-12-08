@@ -564,6 +564,22 @@ toActivityPubObject = function (this: VideoInstance) {
     }
   }
 
+  let category
+  if (this.category) {
+    category = {
+      identifier: this.category + '',
+      name: this.getCategoryLabel()
+    }
+  }
+
+  let licence
+  if (this.licence) {
+    licence = {
+      identifier: this.licence + '',
+      name: this.getLicenceLabel()
+    }
+  }
+
   let likesObject
   let dislikesObject
 
@@ -635,14 +651,8 @@ toActivityPubObject = function (this: VideoInstance) {
     duration: 'PT' + this.duration + 'S',
     uuid: this.uuid,
     tag,
-    category: {
-      identifier: this.category + '',
-      name: this.getCategoryLabel()
-    },
-    licence: {
-      identifier: this.licence + '',
-      name: this.getLicenceLabel()
-    },
+    category,
+    licence,
     language,
     views: this.views,
     nsfw: this.nsfw,

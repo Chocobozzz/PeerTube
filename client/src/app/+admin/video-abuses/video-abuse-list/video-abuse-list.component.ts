@@ -8,7 +8,8 @@ import { VideoAbuse } from '../../../../../../shared'
 
 @Component({
   selector: 'my-video-abuse-list',
-  templateUrl: './video-abuse-list.component.html'
+  templateUrl: './video-abuse-list.component.html',
+  styleUrls: [ './video-abuse-list.component.scss']
 })
 export class VideoAbuseListComponent extends RestTable implements OnInit {
   videoAbuses: VideoAbuse[] = []

@@ -62,7 +62,7 @@ export abstract class AbstractVideoList implements OnInit {
     observable.subscribe(
       ({ videos, totalVideos }) => {
         // Paging is too high, return to the first one
-        if (totalVideos <= ((this.pagination.currentPage - 1) * this.pagination.itemsPerPage)) {
+        if (this.pagination.currentPage > 1 && totalVideos <= ((this.pagination.currentPage - 1) * this.pagination.itemsPerPage)) {
           this.pagination.currentPage = 1
           this.setNewRouteParams()
           return this.reloadVideos()
@@ -82,6 +82,10 @@ export abstract class AbstractVideoList implements OnInit {
   }
 
   protected hasMoreVideos () {
+    // No results
+    if (this.pagination.totalItems === 0) return false
+
+    // Not loaded yet
     if (!this.pagination.totalItems) return true
 
     const maxPage = this.pagination.totalItems / this.pagination.itemsPerPage

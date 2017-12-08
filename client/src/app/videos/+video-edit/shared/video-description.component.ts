@@ -60,6 +60,8 @@ export class VideoDescriptionComponent implements ControlValueAccessor, OnInit {
   }
 
   private updateDescriptionPreviews () {
+    if (!this.description) return
+
     this.truncatedDescriptionHTML = this.markdownService.markdownToHTML(truncate(this.description, { length: 250 }))
     this.descriptionHTML = this.markdownService.markdownToHTML(this.description)
   }

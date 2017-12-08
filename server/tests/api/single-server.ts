@@ -694,43 +694,6 @@ describe('Test a single server', function () {
     expect(video.dislikes).to.equal(1)
   })
 
-  it('Should upload a video with minimum parameters', async function () {
-    const path = '/api/v1/videos/upload'
-
-    const req = request(server.url)
-      .post(path)
-      .set('Accept', 'application/json')
-      .set('Authorization', 'Bearer ' + server.accessToken)
-      .field('name', 'minimum parameters')
-      .field('privacy', '1')
-      .field('nsfw', 'false')
-      .field('channelId', '1')
-
-    const filePath = join(__dirname, '..', 'api', 'fixtures', 'video_short.webm')
-
-    await req.attach('videofile', filePath)
-      .expect(200)
-
-    const res = await getVideosList(server.url)
-    const video = res.body.data.find(v => v.name === 'minimum parameters')
-
-    expect(video.name).to.equal('minimum parameters')
-    expect(video.category).to.equal(null)
-    expect(video.categoryLabel).to.equal('Misc')
-    expect(video.licence).to.equal(null)
-    expect(video.licenceLabel).to.equal('Unknown')
-    expect(video.language).to.equal(null)
-    expect(video.languageLabel).to.equal('Unknown')
-    expect(video.nsfw).to.not.be.ok
-    expect(video.description).to.equal(null)
-    expect(video.serverHost).to.equal('localhost:9001')
-    expect(video.accountName).to.equal('root')
-    expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ ])
-    expect(dateIsValid(video.createdAt)).to.be.true
-    expect(dateIsValid(video.updatedAt)).to.be.true
-  })
-
   after(async function () {
     killallServers([ server ])
 
