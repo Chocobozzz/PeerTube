@@ -3,7 +3,7 @@
 ## Vocabulary
 
   - **Network:** several servers communicating each others with this software compose a network
-  - **Pod:** a server of the network (inspired from Diaspora, no really signification)
+  - **Pod:** a server of the network (the term "pod" is inspired by Diaspora but otherwise not associated )
   - **Friend:** a pod that communicates with yours
   - **Origin pod:** the pod on which the video was uploaded and which is seeding (throught WebSeed protocol) the video
   - **Make friend:** the action of a server which will join a network (and so become friend with all pods that compose this network)
@@ -52,7 +52,7 @@
 
 ### Actions on a pod
   * A pod is a websocket tracker which is responsible for all the video uploaded in it
-  * A pod has an administrator that can add/remove users, make friends and quit friends
+  * A pod has an administrator that can add/remove users, connect friends and disconnect friends
   * A pod has different user accounts that can upload videos
   * All pods have an index of all videos of the network (name, origin pod url, small description, uploader username, magnet Uri, thumbnail name, created date and the thumbnail file). For example, a test with 1000000 videos (3 tags each) with alphanum characters and the following lengths: name = 50, author = 50, podHost = 25, description = 250, videoExtension = 4, remoteId = 50, infoHash = 50 and tag = 10 has a PostgreSQL size of ~ 2GB with all the useful indexes. To this, we add 1 000 000 thumbnails of 5-15 KB so 15GB maximum
 
@@ -72,7 +72,7 @@
 
   * A video could have more information (detailed description etc) that are not sent on other pods. The user who wants to see these informations has to ask its pod:
    user asks its pod -> user pod asks origin video pod -> origin video pod responds with the informations -> user pod responds to the user (and puts in cache the informations ?). We could extend this scheme with other informations
-  * Redondance: if the origin pod is down, the video is not accessible anymore (no tracker/seeds). We could imagine a redondance between pods that keep seeding the video
+  * Redundancy: if the origin pod is down, the video is not accessible anymore (no tracker/seeds). We could imagine a redundancy between pods that keep seeding the video
   * Server could transcode the video to lower qualities (cost in CPU and disk space)
   * Add subtitles to videos
   * Avoid stocking friends URL schemes (http/https)
