@@ -1,7 +1,7 @@
 <div class="row">
   <!-- We need the video container for videojs so we just hide it -->
   <div [hidden]="videoNotFound" id="video-container">
-     <video id="video-element" class="video-js vjs-peertube-skin vjs-fluid"></video>
+     <video id="video-element" class="video-js vjs-peertube-skin"></video>
   </div>
 
   <div *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
