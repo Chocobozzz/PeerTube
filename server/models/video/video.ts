@@ -104,7 +104,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       },
       category: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
         validate: {
           categoryValid: value => {
             const res = isVideoCategoryValid(value)
@@ -114,7 +115,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       },
       licence: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         defaultValue: null,
         validate: {
           licenceValid: value => {
@@ -126,6 +127,7 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       language: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        defaultValue: null,
         validate: {
           languageValid: value => {
             const res = isVideoLanguageValid(value)
@@ -155,7 +157,8 @@ export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.Da
       },
       description: {
         type: DataTypes.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max),
-        allowNull: false,
+        allowNull: true,
+        defaultValue: null,
         validate: {
           descriptionValid: value => {
             const res = isVideoDescriptionValid(value)
@@ -486,7 +489,7 @@ toFormattedJSON = function (this: VideoInstance) {
     description: this.getTruncatedDescription(),
     serverHost,
     isLocal: this.isOwned(),
-    account: this.VideoChannel.Account.name,
+    accountName: this.VideoChannel.Account.name,
     duration: this.duration,
     views: this.views,
     likes: this.likes,
@@ -514,6 +517,7 @@ toFormattedDetailsJSON = function (this: VideoInstance) {
     privacy: this.privacy,
     descriptionPath: this.getDescriptionPath(),
     channel: this.VideoChannel.toFormattedJSON(),
+    account: this.VideoChannel.Account.toFormattedJSON(),
     files: []
   }
 
@@ -557,6 +561,22 @@ toActivityPubObject = function (this: VideoInstance) {
     language = {
       identifier: this.language + '',
       name: this.getLanguageLabel()
+    }
+  }
+
+  let category
+  if (this.category) {
+    category = {
+      identifier: this.category + '',
+      name: this.getCategoryLabel()
+    }
+  }
+
+  let licence
+  if (this.licence) {
+    licence = {
+      identifier: this.licence + '',
+      name: this.getLicenceLabel()
     }
   }
 
@@ -631,14 +651,8 @@ toActivityPubObject = function (this: VideoInstance) {
     duration: 'PT' + this.duration + 'S',
     uuid: this.uuid,
     tag,
-    category: {
-      identifier: this.category + '',
-      name: this.getCategoryLabel()
-    },
-    licence: {
-      identifier: this.licence + '',
-      name: this.getLicenceLabel()
-    },
+    category,
+    licence,
     language,
     views: this.views,
     nsfw: this.nsfw,
@@ -663,6 +677,8 @@ toActivityPubObject = function (this: VideoInstance) {
 }
 
 getTruncatedDescription = function (this: VideoInstance) {
+  if (!this.description) return null
+
   const options = {
     length: CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max
   }
@@ -753,8 +769,6 @@ getDescriptionPath = function (this: VideoInstance) {
 
 getCategoryLabel = function (this: VideoInstance) {
   let categoryLabel = VIDEO_CATEGORIES[this.category]
-
-  // Maybe our server is not up to date and there are new categories since our version
   if (!categoryLabel) categoryLabel = 'Misc'
 
   return categoryLabel
@@ -762,15 +776,12 @@ getCategoryLabel = function (this: VideoInstance) {
 
 getLicenceLabel = function (this: VideoInstance) {
   let licenceLabel = VIDEO_LICENCES[this.licence]
-
-  // Maybe our server is not up to date and there are new licences since our version
   if (!licenceLabel) licenceLabel = 'Unknown'
 
   return licenceLabel
 }
 
 getLanguageLabel = function (this: VideoInstance) {
-  // Language is an optional attribute
   let languageLabel = VIDEO_LANGUAGES[this.language]
   if (!languageLabel) languageLabel = 'Unknown'
 
@@ -1070,7 +1081,7 @@ loadByUUIDAndPopulateAccountAndServerAndTags = function (uuid: string) {
   return Video.findOne(options)
 }
 
-searchAndPopulateAccountAndServerAndTags = function (value: string, field: string, start: number, count: number, sort: string) {
+searchAndPopulateAccountAndServerAndTags = function (value: string, start: number, count: number, sort: string) {
   const serverInclude: Sequelize.IncludeOptions = {
     model: Video['sequelize'].models.Server,
     required: false
@@ -1099,33 +1110,24 @@ searchAndPopulateAccountAndServerAndTags = function (value: string, field: strin
     order: [ getSort(sort), [ Video['sequelize'].models.Tag, 'name', 'ASC' ] ]
   }
 
-  if (field === 'tags') {
-    const escapedValue = Video['sequelize'].escape('%' + value + '%')
-    query.where['id'][Sequelize.Op.in] = Video['sequelize'].literal(
-      `(SELECT "VideoTags"."videoId"
-        FROM "Tags"
-        INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
-        WHERE name ILIKE ${escapedValue}
-       )`
-    )
-  } else if (field === 'host') {
-    // FIXME: Include our server? (not stored in the database)
-    serverInclude.where = {
-      host: {
-        [Sequelize.Op.iLike]: '%' + value + '%'
-      }
-    }
-    serverInclude.required = true
-  } else if (field === 'account') {
-    accountInclude.where = {
-      name: {
-        [Sequelize.Op.iLike]: '%' + value + '%'
-      }
-    }
-  } else {
-    query.where[field] = {
-      [Sequelize.Op.iLike]: '%' + value + '%'
-    }
+  // TODO: search on tags too
+  // const escapedValue = Video['sequelize'].escape('%' + value + '%')
+  // query.where['id'][Sequelize.Op.in] = Video['sequelize'].literal(
+  //   `(SELECT "VideoTags"."videoId"
+  //     FROM "Tags"
+  //     INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
+  //     WHERE name ILIKE ${escapedValue}
+  //    )`
+  // )
+
+  // TODO: search on account too
+  // accountInclude.where = {
+  //   name: {
+  //     [Sequelize.Op.iLike]: '%' + value + '%'
+  //   }
+  // }
+  query.where['name'] = {
+    [Sequelize.Op.iLike]: '%' + value + '%'
   }
 
   query.include = [

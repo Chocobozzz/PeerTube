@@ -20,6 +20,8 @@ import { LoginModule } from './login'
 import { SignupModule } from './signup'
 import { SharedModule } from './shared'
 import { VideosModule } from './videos'
+import { MenuComponent } from './menu'
+import { HeaderComponent } from './header'
 
 export function metaFactory (): MetaLoader {
   return new MetaStaticLoader({
@@ -47,7 +49,10 @@ const APP_PROVIDERS = [
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
-    AppComponent
+    AppComponent,
+
+    MenuComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

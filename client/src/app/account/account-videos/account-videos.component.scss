@@ -1,0 +1,96 @@
+.action-selection-mode {
+  width: 174px;
+  display: flex;
+  justify-content: flex-end;
+
+  .action-selection-mode-child {
+    position: fixed;
+
+    .action-button {
+      display: inline-block;
+    }
+
+    .action-button-cancel-selection {
+      @include peertube-button;
+      @include grey-button;
+
+      margin-right: 10px;
+    }
+
+    .action-button-delete-selection {
+      @include peertube-button;
+      @include orange-button;
+    }
+
+    .icon.icon-delete-white {
+      @include icon(21px);
+
+      position: relative;
+      top: -2px;
+      background-image: url('../../../assets/images/global/delete-white.svg');
+    }
+  }
+}
+
+/deep/ .action-button {
+  &.action-button-delete {
+    margin-right: 10px;
+  }
+}
+
+.video {
+  display: flex;
+  height: 130px;
+  padding-bottom: 20px;
+
+  input[type=checkbox] {
+    margin-right: 20px;
+    outline: 0;
+  }
+
+  &:first-child {
+    margin-top: 47px;
+  }
+
+  &:not(:last-child) {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #C6C6C6;
+  }
+
+  my-video-thumbnail {
+    margin-right: 10px;
+  }
+
+  .video-info {
+    flex-grow: 1;
+
+    .video-info-name {
+      font-size: 16px;
+      font-weight: $font-semibold;
+    }
+
+    .video-info-date-views {
+      font-size: 13px;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .video {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+
+    input[type=checkbox] {
+      display: none;
+    }
+
+    my-video-thumbnail {
+      margin-right: 0;
+    }
+
+    .video-buttons {
+      margin-top: 10px;
+    }
+  }
+}

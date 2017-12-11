@@ -26,17 +26,13 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
   ],
 
   declarations: [
-    ConfirmComponent,
-    MenuComponent,
-    MenuAdminComponent
+    ConfirmComponent
   ],
 
   exports: [
     SimpleNotificationsModule,
 
-    ConfirmComponent,
-    MenuComponent,
-    MenuAdminComponent
+    ConfirmComponent
   ],
 
   providers: [

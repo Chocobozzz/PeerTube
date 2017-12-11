@@ -1,3 +1,21 @@
+.admin-sub-title {
+  margin-bottom: 30px;
+}
+
+input:not([type=submit]) {
+  @include peertube-input-text(340px);
+  display: block;
+}
+
+select {
+  @include peertube-select(340px);
+}
+
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
+}
+
 .transcoding-information {
   margin-top: 5px;
   font-size: 11px;

@@ -2,9 +2,24 @@
 
 import videojs, { Player } from 'video.js'
 import * as WebTorrent from 'webtorrent'
+import { VideoFile } from '../../../../shared'
 
 import { renderVideo } from './video-renderer'
-import { VideoFile } from '../../../../shared'
+
+// https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
+// Don't import all Angular stuff, just copy the code with shame
+const dictionaryBytes: Array<{max: number, type: string}> = [
+  { max: 1024, type: 'B' },
+  { max: 1048576, type: 'KB' },
+  { max: 1073741824, type: 'MB' },
+  { max: 1.0995116e12, type: 'GB' }
+]
+function bytes (value) {
+  const format = dictionaryBytes.find(d => value < d.max) || dictionaryBytes[dictionaryBytes.length - 1]
+  const calc = Math.floor(value / (format.max / 1024)).toString()
+
+  return [ calc, format.type ]
+}
 
 // videojs typings don't have some method we need
 const videojsUntyped = videojs as any
@@ -62,6 +77,7 @@ const ResolutionMenuButton = videojsUntyped.extend(MenuButton, {
 
   update: function () {
     this.label.innerHTML = this.player_.getCurrentResolutionLabel()
+    this.hide()
     return MenuButton.prototype.update.call(this)
   },
 
@@ -74,8 +90,7 @@ MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton)
 const Button = videojsUntyped.getComponent('Button')
 const PeertubeLinkButton = videojsUntyped.extend(Button, {
   constructor: function (player) {
-    Button.apply(this, arguments)
-    this.player = player
+    Button.call(this, player)
   },
 
   createEl: function () {
@@ -90,10 +105,79 @@ const PeertubeLinkButton = videojsUntyped.extend(Button, {
   },
 
   handleClick: function () {
-    this.player.pause()
+    this.player_.pause()
   }
 })
 Button.registerComponent('PeerTubeLinkButton', PeertubeLinkButton)
+
+const WebTorrentButton = videojsUntyped.extend(Button, {
+  constructor: function (player) {
+    Button.call(this, player)
+  },
+
+  createEl: function () {
+    const div = document.createElement('div')
+    const subDiv = document.createElement('div')
+    div.appendChild(subDiv)
+
+    const downloadIcon = document.createElement('span')
+    downloadIcon.classList.add('icon', 'icon-download')
+    subDiv.appendChild(downloadIcon)
+
+    const downloadSpeedText = document.createElement('span')
+    downloadSpeedText.classList.add('download-speed-text')
+    const downloadSpeedNumber = document.createElement('span')
+    downloadSpeedNumber.classList.add('download-speed-number')
+    const downloadSpeedUnit = document.createElement('span')
+    downloadSpeedText.appendChild(downloadSpeedNumber)
+    downloadSpeedText.appendChild(downloadSpeedUnit)
+    subDiv.appendChild(downloadSpeedText)
+
+    const uploadIcon = document.createElement('span')
+    uploadIcon.classList.add('icon', 'icon-upload')
+    subDiv.appendChild(uploadIcon)
+
+    const uploadSpeedText = document.createElement('span')
+    uploadSpeedText.classList.add('upload-speed-text')
+    const uploadSpeedNumber = document.createElement('span')
+    uploadSpeedNumber.classList.add('upload-speed-number')
+    const uploadSpeedUnit = document.createElement('span')
+    uploadSpeedText.appendChild(uploadSpeedNumber)
+    uploadSpeedText.appendChild(uploadSpeedUnit)
+    subDiv.appendChild(uploadSpeedText)
+
+    const peersText = document.createElement('span')
+    peersText.textContent = ' peers'
+    peersText.classList.add('peers-text')
+    const peersNumber = document.createElement('span')
+    peersNumber.classList.add('peers-number')
+    subDiv.appendChild(peersNumber)
+    subDiv.appendChild(peersText)
+
+    div.className = 'vjs-webtorrent'
+    // Hide the stats before we get the info
+    subDiv.className = 'vjs-webtorrent-hidden'
+
+    this.player_.on('torrentInfo', (event, data) => {
+      const downloadSpeed = bytes(data.downloadSpeed)
+      const uploadSpeed = bytes(data.uploadSpeed)
+      const numPeers = data.numPeers
+
+      downloadSpeedNumber.textContent = downloadSpeed[0]
+      downloadSpeedUnit.textContent = ' ' + downloadSpeed[1]
+
+      uploadSpeedNumber.textContent = uploadSpeed[0]
+      uploadSpeedUnit.textContent = ' ' + uploadSpeed[1]
+
+      peersNumber.textContent = numPeers
+
+      subDiv.className = 'vjs-webtorrent-displayed'
+    })
+
+    return div
+  }
+})
+Button.registerComponent('WebTorrentButton', WebTorrentButton)
 
 type PeertubePluginOptions = {
   videoFiles: VideoFile[]
@@ -199,6 +283,12 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
     }
   }
 
+  player.setVideoFiles = function (files: VideoFile[]) {
+    player.videoFiles = files
+
+    player.updateVideoFile(undefined, () => player.play())
+  }
+
   player.ready(function () {
     const controlBar = player.controlBar
 
@@ -223,6 +313,12 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
       }
     }
 
+    const webTorrentButton = new WebTorrentButton(player)
+    controlBar.webTorrent = controlBar.el().insertBefore(webTorrentButton.el(), controlBar.progressControl.el())
+    controlBar.webTorrent.dispose = function () {
+      this.parentNode.removeChild(this)
+    }
+
     if (options.autoplay === true) {
       player.updateVideoFile()
     } else {
@@ -245,7 +341,7 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
     }, 1000)
   })
 
-  function handleError (err: Error|string) {
+  function handleError (err: Error | string) {
     return player.trigger('customError', { err })
   }
 }

@@ -14,11 +14,11 @@ const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
 function isVideoCategoryValid (value: number) {
-  return VIDEO_CATEGORIES[value] !== undefined
+  return value === null || VIDEO_CATEGORIES[value] !== undefined
 }
 
 function isVideoLicenceValid (value: number) {
-  return VIDEO_LICENCES[value] !== undefined
+  return value === null || VIDEO_LICENCES[value] !== undefined
 }
 
 function isVideoLanguageValid (value: number) {
@@ -38,7 +38,7 @@ function isVideoTruncatedDescriptionValid (value: string) {
 }
 
 function isVideoDescriptionValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION)
+  return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION))
 }
 
 function isVideoNameValid (value: string) {
@@ -84,7 +84,7 @@ function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | 
 }
 
 function isVideoPrivacyValid (value: string) {
-  return VIDEO_PRIVACIES[value] !== undefined
+  return validator.isInt(value + '') && VIDEO_PRIVACIES[value] !== undefined
 }
 
 function isVideoFileInfoHashValid (value: string) {

@@ -1,0 +1,58 @@
+#search-video {
+  @include peertube-input-text($search-input-width);
+  margin-right: 15px;
+  padding-right: 25px; // For the search icon
+
+  &::placeholder {
+    color: #000;
+  }
+
+  @media screen and (max-width: 600px) {
+    width: calc(100% - 150px);
+  }
+
+  @media screen and (max-width: 400px) {
+    width: calc(100% - 70px);
+  }
+}
+
+.icon.icon-search {
+  @include icon(25px);
+  height: 21px;
+
+  background-image: url('../../assets/images/header/search.svg');
+
+  // yolo
+  position: absolute;
+  margin-left: -50px;
+  margin-top: 5px;
+}
+
+.upload-button {
+  @include peertube-button-link;
+  @include orange-button;
+
+  margin-right: 25px;
+
+  .icon.icon-upload {
+    @include icon(22px);
+
+    background-image: url('../../assets/images/header/upload.svg');
+    height: 24px;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+
+  @media screen and (max-width: 400px) {
+    margin-right: 10px;
+    padding: 0 10px;
+
+    .icon.icon-upload {
+      margin-right: 0;
+    }
+
+    .upload-button-label {
+      display: none;
+    }
+  }
+}

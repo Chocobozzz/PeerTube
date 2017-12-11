@@ -47,7 +47,7 @@ export class FollowsComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < this.links.length; i++) {
       const path = this.links[i].path
 
-      if (url.endsWith(path) === true) {
+      if (url.endsWith(path) === true && this.followsMenuTabs.tabs[i]) {
         this.followsMenuTabs.tabs[i].active = true
         return
       }

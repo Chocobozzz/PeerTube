@@ -3,8 +3,10 @@ import { NgModule } from '@angular/core'
 import { TagInputModule } from 'ngx-chips'
 import { TabsModule } from 'ngx-bootstrap/tabs'
 
-import { VideoService, MarkdownService, VideoDescriptionComponent } from '../../shared'
+import { MarkdownService } from '../../shared'
 import { SharedModule } from '../../../shared'
+import { VideoDescriptionComponent } from './video-description.component'
+import { VideoEditComponent } from './video-edit.component'
 
 @NgModule({
   imports: [
@@ -15,18 +17,19 @@ import { SharedModule } from '../../../shared'
   ],
 
   declarations: [
-    VideoDescriptionComponent
+    VideoDescriptionComponent,
+    VideoEditComponent
   ],
 
   exports: [
     TagInputModule,
     TabsModule,
 
-    VideoDescriptionComponent
+    VideoDescriptionComponent,
+    VideoEditComponent
   ],
 
   providers: [
-    VideoService,
     MarkdownService
   ]
 })

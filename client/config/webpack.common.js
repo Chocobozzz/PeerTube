@@ -13,6 +13,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin')
 const InlineManifestWebpackPlugin = require('inline-manifest-webpack-plugin')
 const ngcWebpack = require('ngc-webpack')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const WebpackNotifierPlugin = require('webpack-notifier')
 
@@ -146,14 +147,15 @@ module.exports = function (options) {
               loader: 'sass-resources-loader',
               options: {
                 resources: [
-                  helpers.root('src/sass/_variables.scss')
+                  helpers.root('src/sass/_variables.scss'),
+                  helpers.root('src/sass/_mixins.scss')
                 ]
               }
             }
           ]
         },
         { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'url-loader?limit=10000&minetype=application/font-woff' },
-        { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'file-loader' },
+        { test: /\.(otf|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: 'url-loader?limit=10000' },
 
         /* Raw loader support for *.html
          * Returns file content as string
@@ -266,6 +268,17 @@ module.exports = function (options) {
         inject: 'body'
       }),
 
+      new CopyWebpackPlugin([
+        {
+          from: helpers.root('src/assets/images/favicon.png'),
+          to: 'assets/images/favicon.png'
+        },
+        {
+          from: helpers.root('src/assets/images/default-avatar.png'),
+          to: 'assets/images/default-avatar.png'
+        }
+      ]),
+
       /*
        * Plugin: ScriptExtHtmlWebpackPlugin
        * Description: Enhances html-webpack-plugin functionality
@@ -289,6 +302,7 @@ module.exports = function (options) {
       */
       new LoaderOptionsPlugin({
         options: {
+          context: '',
           sassLoader: {
             precision: 10,
             includePaths: [ helpers.root('src/sass') ]

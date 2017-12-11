@@ -10,6 +10,7 @@ database:
 
 # From the project root directory
 storage:
+  avatars: 'test4/avatars/'
   certs: 'test4/certs/'
   videos: 'test4/videos/'
   logs: 'test4/logs/'

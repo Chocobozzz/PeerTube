@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core'
 import { SharedModule } from '../shared'
-import { VideoService } from './shared'
-import { MyVideosComponent, VideoListComponent, VideoMiniatureComponent, VideoSortComponent } from './video-list'
+import { VideoSearchComponent } from './video-list'
+import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
+import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideosRoutingModule } from './videos-routing.module'
 import { VideosComponent } from './videos.component'
 
@@ -14,18 +15,15 @@ import { VideosComponent } from './videos.component'
   declarations: [
     VideosComponent,
 
-    VideoListComponent,
-    MyVideosComponent,
-    VideoMiniatureComponent,
-    VideoSortComponent
+    VideoTrendingComponent,
+    VideoRecentlyAddedComponent,
+    VideoSearchComponent
   ],
 
   exports: [
     VideosComponent
   ],
 
-  providers: [
-    VideoService
-  ]
+  providers: []
 })
 export class VideosModule { }

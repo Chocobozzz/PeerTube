@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-
 import { MetaGuard } from '@ngx-meta/core'
-
-import { VideoListComponent, MyVideosComponent } from './video-list'
+import { VideoSearchComponent } from './video-list'
+import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
+import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideosComponent } from './videos.component'
 
 const videosRoutes: Routes = [
@@ -13,20 +13,34 @@ const videosRoutes: Routes = [
     canActivateChild: [ MetaGuard ],
     children: [
       {
-        path: 'mine',
-        component: MyVideosComponent,
+        path: 'list',
+        pathMatch: 'full',
+        redirectTo: 'recently-added'
+      },
+      {
+        path: 'trending',
+        component: VideoTrendingComponent,
         data: {
           meta: {
-            title: 'My videos'
+            title: 'Trending videos'
           }
         }
       },
       {
-        path: 'list',
-        component: VideoListComponent,
+        path: 'recently-added',
+        component: VideoRecentlyAddedComponent,
         data: {
           meta: {
-            title: 'Videos list'
+            title: 'Recently added videos'
+          }
+        }
+      },
+      {
+        path: 'search',
+        component: VideoSearchComponent,
+        data: {
+          meta: {
+            title: 'Search videos'
           }
         }
       },
@@ -50,6 +64,7 @@ const videosRoutes: Routes = [
       },
       {
         path: ':uuid',
+        pathMatch: 'full',
         redirectTo: 'watch/:uuid'
       },
       {

@@ -1,0 +1,17 @@
+<div class="video-miniature">
+  <my-video-thumbnail [video]="video" [nsfw]="isVideoNSFWForThisUser()"></my-video-thumbnail>
+
+  <div class="video-miniature-information">
+    <span class="video-miniature-name">
+      <a
+        class="video-miniature-name"
+        [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoNSFWForThisUser() }"
+      >
+          {{ video.name }}
+      </a>
+    </span>
+
+    <span class="video-miniature-created-at-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+    <span class="video-miniature-account">{{ video.by }}</span>
+  </div>
+</div>

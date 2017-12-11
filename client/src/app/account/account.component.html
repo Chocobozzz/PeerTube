@@ -1,25 +1,11 @@
 <div class="row">
-  <div class="content-padding">
-    <h3>Account</h3>
+  <div class="sub-menu">
+    <a routerLink="/account/settings" routerLinkActive="active" class="title-page">My account</a>
 
-    <div class="col-md-6 col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">Change password</div>
+    <a routerLink="/account/videos" routerLinkActive="active" class="title-page">My videos</a>
+  </div>
 
-        <div class="panel-body">
-          <my-account-change-password></my-account-change-password>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-6 col-sm-12">
-      <div class="panel panel-default">
-        <div class="panel-heading">Update my informations</div>
-
-        <div class="panel-body">
-          <my-account-details [user]="user"></my-account-details>
-        </div>
-      </div>
-    </div>
+  <div class="margin-content">
+    <router-outlet></router-outlet>
   </div>
 </div>

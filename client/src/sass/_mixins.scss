@@ -1,0 +1,95 @@
+@mixin disable-default-a-behaviour {
+  &:hover, &:focus, &:active {
+    text-decoration: none !important;
+    outline: none !important;
+  }
+}
+
+@mixin peertube-input-text($width) {
+  display: inline-block;
+  height: $button-height;
+  width: $width;
+  background: #fff;
+  border: 1px solid #C6C6C6;
+  border-radius: 3px;
+  padding-left: 15px;
+
+  &::placeholder {
+    color: #585858;
+  }
+}
+
+@mixin orange-button {
+  color: #fff;
+  background-color: $orange-color;
+
+  &:hover, &:active, &:focus {
+    color: #fff;
+    background-color: $orange-hoover-color;
+  }
+
+  &[disabled], &.disabled {
+    cursor: default;
+    color: #fff;
+    background-color: #C6C6C6;
+  }
+}
+
+@mixin grey-button {
+  background-color: $grey-color;
+  color: #585858;
+
+  &:hover, &:active, &:focus, &[disabled], &.disabled {
+    color: #585858;
+    background-color: $grey-hoover-color;
+  }
+
+  &[disabled], &.disabled {
+    cursor: default;
+  }
+}
+
+@mixin peertube-button {
+  border: none;
+  font-weight: $font-semibold;
+  font-size: 15px;
+  height: $button-height;
+  line-height: $button-height;
+  border-radius: 3px;
+  text-align: center;
+  padding: 0 17px 0 13px;
+  cursor: pointer;
+  outline: 0;
+}
+
+@mixin peertube-button-link {
+  display: inline-block;
+
+  @include disable-default-a-behaviour;
+  @include peertube-button;
+}
+
+@mixin avatar ($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin icon ($size) {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: $size;
+  height: $size;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+
+@mixin peertube-select ($width) {
+  background-color: #fff;
+  border: 1px solid #C6C6C6;
+  height: $button-height;
+  width: $width;
+  border-radius: 3px;
+  padding-left: 15px;
+}

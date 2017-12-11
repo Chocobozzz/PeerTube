@@ -7,7 +7,8 @@ import { FormReactive } from '../shared'
 
 @Component({
   selector: 'my-login',
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: [ './login.component.scss' ]
 })
 
 export class LoginComponent extends FormReactive implements OnInit {

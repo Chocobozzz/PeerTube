@@ -1,11 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
-
-import { ModalDirective } from 'ngx-bootstrap/modal'
 import { NotificationsService } from 'angular2-notifications'
-
-import { FormReactive, VideoAbuseService, VIDEO_ABUSE_REASON } from '../../shared'
-import { VideoDetails, VideoService } from '../shared'
+import { ModalDirective } from 'ngx-bootstrap/modal'
+import { FormReactive, VIDEO_ABUSE_REASON, VideoAbuseService } from '../../shared'
+import { VideoDetails } from '../../shared/video/video-details.model'
 
 @Component({
   selector: 'my-video-report',

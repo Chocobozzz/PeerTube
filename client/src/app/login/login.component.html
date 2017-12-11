@@ -1,34 +1,33 @@
-<div class="row">
-  <div class="content-padding">
-
-    <h3>Login</h3>
-
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-
-    <form role="form" (ngSubmit)="login()" [formGroup]="form">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <input
-          type="text" class="form-control" id="username" placeholder="Username" required
-          formControlName="username"
-        >
-        <div *ngIf="formErrors.username" class="alert alert-danger">
-          {{ formErrors.username }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password" class="form-control" name="password" id="password" placeholder="Password" required
-          formControlName="password"
-        >
-        <div *ngIf="formErrors.password" class="alert alert-danger">
-          {{ formErrors.password }}
-        </div>
-      </div>
-
-      <input type="submit" value="Login" class="btn btn-default" [disabled]="!form.valid">
-    </form>
+<div class="margin-content">
+  <div class="title-page title-page-single">
+    Login
   </div>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <form role="form" (ngSubmit)="login()" [formGroup]="form">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text" id="username" placeholder="Username" required
+        formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+      >
+      <div *ngIf="formErrors.username" class="form-error">
+        {{ formErrors.username }}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        type="password" name="password" id="password" placeholder="Password" required
+        formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+      >
+      <div *ngIf="formErrors.password" class="form-error">
+        {{ formErrors.password }}
+      </div>
+    </div>
+
+    <input type="submit" value="Login" [disabled]="!form.valid">
+  </form>
 </div>

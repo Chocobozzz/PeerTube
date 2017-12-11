@@ -2,6 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { ActivatedRoute, Router } from '@angular/router'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
+import { VideoService } from 'app/shared/video/video.service'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 import videojs from 'video.js'
@@ -9,7 +10,10 @@ import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
 import { VideoBlacklistService } from '../../shared'
-import { MarkdownService, VideoDetails, VideoService } from '../shared'
+import { Account } from '../../shared/account/account.model'
+import { VideoDetails } from '../../shared/video/video-details.model'
+import { Video } from '../../shared/video/video.model'
+import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './video-download.component'
 import { VideoReportComponent } from './video-report.component'
 import { VideoShareComponent } from './video-share.component'
@@ -24,13 +28,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
 
-  downloadSpeed: number
+  otherVideos: Video[] = []
+
   error = false
   loading = false
-  numPeers: number
   player: videojs.Player
   playerElement: HTMLMediaElement
-  uploadSpeed: number
   userRating: UserVideoRateType = null
   video: VideoDetails = null
   videoPlayerLoaded = false
@@ -58,7 +61,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit () {
+    this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
+      .subscribe(
+        data => this.otherVideos = data.videos,
+
+    err => console.error(err)
+      )
+
     this.paramsSub = this.route.params.subscribe(routeParams => {
+      if (this.videoPlayerLoaded) {
+        this.player.pause()
+      }
+
       let uuid = routeParams['uuid']
       this.videoService.getVideo(uuid).subscribe(
         video => this.onVideoFetched(video),
@@ -115,27 +129,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                      )
   }
 
-  removeVideo (event: Event) {
-    event.preventDefault()
-
-    this.confirmService.confirm('Do you really want to delete this video?', 'Delete').subscribe(
-      res => {
-        if (res === false) return
-
-        this.videoService.removeVideo(this.video.id)
-                         .subscribe(
-                           status => {
-                             this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
-                             // Go back to the video-list.
-                             this.router.navigate(['/videos/list'])
-                           },
-
-                           error => this.notificationsService.error('Error', error.text)
-                          )
-      }
-    )
-  }
-
   blacklistVideo (event: Event) {
     event.preventDefault()
 
@@ -166,7 +159,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showLessDescription () {
-
     this.updateVideoDescription(this.shortVideoDescription)
     this.completeDescriptionShown = false
   }
@@ -211,16 +203,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
-  canUserUpdateVideo () {
-    return this.video.isUpdatableBy(this.authService.getUser())
-  }
-
-  isVideoRemovable () {
-    return this.video.isRemovableBy(this.authService.getUser())
-  }
-
   isVideoBlacklistable () {
     return this.video.isBlackistableBy(this.authService.getUser())
+  }
+
+  getAvatarPath () {
+    return Account.GET_ACCOUNT_AVATAR_PATH(this.video.account)
+  }
+
+  getVideoTags () {
+    if (!this.video || Array.isArray(this.video.tags) === false) return []
+
+    return this.video.tags.join(', ')
   }
 
   private updateVideoDescription (description: string) {
@@ -229,6 +223,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setVideoDescriptionHTML () {
+    if (!this.video.description) {
+      this.videoHTMLDescription = ''
+      return
+    }
+
     this.videoHTMLDescription = this.markdownService.markdownToHTML(this.video.description)
   }
 
@@ -281,36 +280,35 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           return this.router.navigate([ '/videos/list' ])
         }
 
-        this.playerElement = this.elementRef.nativeElement.querySelector('#video-container')
+        // Player was already loaded
+        if (this.videoPlayerLoaded !== true) {
+          this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
 
-        const videojsOptions = {
-          controls: true,
-          autoplay: true,
-          plugins: {
-            peertube: {
-              videoFiles: this.video.files,
-              playerElement: this.playerElement,
-              autoplay: true,
-              peerTubeLink: false
+          const videojsOptions = {
+            controls: true,
+            autoplay: true,
+            plugins: {
+              peertube: {
+                videoFiles: this.video.files,
+                playerElement: this.playerElement,
+                autoplay: true,
+                peerTubeLink: false
+              }
             }
           }
+
+          this.videoPlayerLoaded = true
+
+          const self = this
+          videojs(this.playerElement, videojsOptions, function () {
+            self.player = this
+            this.on('customError', (event, data) => {
+              self.handleError(data.err)
+            })
+          })
+        } else {
+          (this.player as any).setVideoFiles(this.video.files)
         }
-
-        this.videoPlayerLoaded = true
-
-        const self = this
-        videojs(this.playerElement, videojsOptions, function () {
-          self.player = this
-          this.on('customError', (event, data) => {
-            self.handleError(data.err)
-          })
-
-          this.on('torrentInfo', (event, data) => {
-            self.downloadSpeed = data.downloadSpeed
-            self.numPeers = data.numPeers
-            self.uploadSpeed = data.uploadSpeed
-          })
-        })
 
         this.setVideoDescriptionHTML()
 

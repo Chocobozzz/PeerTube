@@ -1,68 +1,42 @@
+import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
-import {
-  FormReactive,
-  VIDEO_NAME,
-  VIDEO_CATEGORY,
-  VIDEO_LICENCE,
-  VIDEO_LANGUAGE,
-  VIDEO_DESCRIPTION,
-  VIDEO_TAGS,
-  VIDEO_CHANNEL,
-  VIDEO_FILE,
-  VIDEO_PRIVACY
-} from '../../shared'
-import { AuthService, ServerService } from '../../core'
-import { VideoService } from '../shared'
+import { VideoService } from 'app/shared/video/video.service'
 import { VideoCreate } from '../../../../../shared'
-import { HttpEventType, HttpResponse } from '@angular/common/http'
+import { VideoPrivacy } from '../../../../../shared/models/videos'
+import { AuthService, ServerService } from '../../core'
+import { FormReactive } from '../../shared'
+import { ValidatorMessage } from '../../shared/forms/form-validators'
+import { VideoEdit } from '../../shared/video/video-edit.model'
 
 @Component({
   selector: 'my-videos-add',
-  styleUrls: [ './shared/video-edit.component.scss' ],
-  templateUrl: './video-add.component.html'
+  templateUrl: './video-add.component.html',
+  styleUrls: [
+    './shared/video-edit.component.scss',
+    './video-add.component.scss'
+  ]
 })
 
 export class VideoAddComponent extends FormReactive implements OnInit {
   @ViewChild('videofileInput') videofileInput
 
-  progressPercent = 0
-  tags: string[] = []
-  videoCategories = []
-  videoLicences = []
-  videoLanguages = []
-  videoPrivacies = []
-  userVideoChannels = []
+  isUploadingVideo = false
+  videoUploaded = false
+  videoUploadPercents = 0
+  videoUploadedId = 0
 
-  tagValidators = VIDEO_TAGS.VALIDATORS
-  tagValidatorsMessages = VIDEO_TAGS.MESSAGES
-
-  error: string
+  error: string = null
   form: FormGroup
-  formErrors = {
-    name: '',
-    privacy: '',
-    category: '',
-    licence: '',
-    language: '',
-    channelId: '',
-    description: '',
-    videofile: ''
-  }
-  validationMessages = {
-    name: VIDEO_NAME.MESSAGES,
-    privacy: VIDEO_PRIVACY.MESSAGES,
-    category: VIDEO_CATEGORY.MESSAGES,
-    licence: VIDEO_LICENCE.MESSAGES,
-    language: VIDEO_LANGUAGE.MESSAGES,
-    channelId: VIDEO_CHANNEL.MESSAGES,
-    description: VIDEO_DESCRIPTION.MESSAGES,
-    videofile: VIDEO_FILE.MESSAGES
-  }
+  formErrors: { [ id: string ]: string } = {}
+  validationMessages: ValidatorMessage = {}
+
+  userVideoChannels = []
+  videoPrivacies = []
+  firstStepPrivacyId = 0
+  firstStepChannelId = 0
 
   constructor (
     private formBuilder: FormBuilder,
@@ -75,34 +49,22 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     super()
   }
 
-  get filename () {
-    return this.form.value['videofile']
-  }
-
   buildForm () {
-    this.form = this.formBuilder.group({
-      name: [ '', VIDEO_NAME.VALIDATORS ],
-      nsfw: [ false ],
-      privacy: [ '', VIDEO_PRIVACY.VALIDATORS ],
-      category: [ '', VIDEO_CATEGORY.VALIDATORS ],
-      licence: [ '', VIDEO_LICENCE.VALIDATORS ],
-      language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
-      channelId: [ '', VIDEO_CHANNEL.VALIDATORS ],
-      description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
-      videofile: [ '', VIDEO_FILE.VALIDATORS ],
-      tags: [ '' ]
-    })
-
+    this.form = this.formBuilder.group({})
     this.form.valueChanges.subscribe(data => this.onValueChanged(data))
   }
 
   ngOnInit () {
-    this.videoCategories = this.serverService.getVideoCategories()
-    this.videoLicences = this.serverService.getVideoLicences()
-    this.videoLanguages = this.serverService.getVideoLanguages()
-    this.videoPrivacies = this.serverService.getVideoPrivacies()
-
     this.buildForm()
+
+    this.serverService.videoPrivaciesLoaded
+      .subscribe(
+        () => {
+          this.videoPrivacies = this.serverService.getVideoPrivacies()
+
+          // Public by default
+          this.firstStepPrivacyId = VideoPrivacy.PUBLIC
+        })
 
     this.authService.userInformationLoaded
       .subscribe(
@@ -114,21 +76,13 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           if (Array.isArray(videoChannels) === false) return
 
           this.userVideoChannels = videoChannels.map(v => ({ id: v.id, label: v.name }))
-
-          this.form.patchValue({ channelId: this.userVideoChannels[0].id })
+          this.firstStepChannelId = this.userVideoChannels[0].id
         }
       )
   }
 
-  // The goal is to keep reactive form validation (required field)
-  // https://stackoverflow.com/a/44238894
-  fileChange ($event) {
-    this.form.controls['videofile'].setValue($event.target.files[0].name)
-  }
-
-  removeFile () {
-    this.videofileInput.nativeElement.value = ''
-    this.form.controls['videofile'].setValue('')
+  fileChange () {
+    this.uploadFirstStep()
   }
 
   checkForm () {
@@ -137,62 +91,72 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     return this.form.valid
   }
 
-  upload () {
-    if (this.checkForm() === false) {
-      return
-    }
-
-    const formValue: VideoCreate = this.form.value
-
-    const name = formValue.name
-    const privacy = formValue.privacy
-    const nsfw = formValue.nsfw
-    const category = formValue.category
-    const licence = formValue.licence
-    const language = formValue.language
-    const channelId = formValue.channelId
-    const description = formValue.description
-    const tags = formValue.tags
+  uploadFirstStep () {
     const videofile = this.videofileInput.nativeElement.files[0]
+    const name = videofile.name.replace(/\.[^/.]+$/, '')
+    const privacy = this.firstStepPrivacyId.toString()
+    const nsfw = false
+    const channelId = this.firstStepChannelId.toString()
 
     const formData = new FormData()
     formData.append('name', name)
-    formData.append('privacy', privacy.toString())
-    formData.append('category', '' + category)
+    // Put the video "private" -> we wait he validates the second step
+    formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
-    formData.append('licence', '' + licence)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
 
-    // Language is optional
-    if (language) {
-      formData.append('language', '' + language)
-    }
-
-    formData.append('description', description)
-
-    for (let i = 0; i < tags.length; i++) {
-      formData.append(`tags[${i}]`, tags[i])
-    }
+    this.isUploadingVideo = true
+    this.form.patchValue({
+      name,
+      privacy,
+      nsfw,
+      channelId
+    })
 
     this.videoService.uploadVideo(formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
-          this.progressPercent = Math.round(100 * event.loaded / event.total)
+          this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
         } else if (event instanceof HttpResponse) {
           console.log('Video uploaded.')
-          this.notificationsService.success('Success', 'Video uploaded.')
 
-          // Display all the videos once it's finished
-          this.router.navigate([ '/videos/list' ])
+          this.videoUploaded = true
+
+          this.videoUploadedId = event.body.video.id
         }
       },
 
       err => {
         // Reset progress
-        this.progressPercent = 0
+        this.videoUploadPercents = 0
         this.error = err.message
       }
     )
+  }
+
+  updateSecondStep () {
+    if (this.checkForm() === false) {
+      return
+    }
+
+    const video = new VideoEdit()
+    video.patch(this.form.value)
+    video.channel = this.firstStepChannelId
+    video.id = this.videoUploadedId
+
+    this.videoService.updateVideo(video)
+      .subscribe(
+        () => {
+          this.notificationsService.success('Success', 'Video published.')
+          this.router.navigate([ '/videos/watch', video.id ])
+        },
+
+        err => {
+          this.error = 'Cannot update the video.'
+          console.error(err)
+        }
+      )
+
   }
 }

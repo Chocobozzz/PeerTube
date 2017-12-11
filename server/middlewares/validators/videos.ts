@@ -18,7 +18,7 @@ import {
 } from '../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
-import { CONSTRAINTS_FIELDS, SEARCHABLE_COLUMNS } from '../../initializers'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { database as db } from '../../initializers/database'
 import { UserInstance } from '../../models/account/user-interface'
 import { VideoInstance } from '../../models/video/video-interface'
@@ -31,11 +31,11 @@ const videosAddValidator = [
     + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
   ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
-  body('category').custom(isVideoCategoryValid).withMessage('Should have a valid category'),
-  body('licence').custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
+  body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
+  body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw').custom(isVideoNSFWValid).withMessage('Should have a valid NSFW attribute'),
-  body('description').custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
   body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
@@ -172,8 +172,7 @@ const videosRemoveValidator = [
 ]
 
 const videosSearchValidator = [
-  param('value').not().isEmpty().withMessage('Should have a valid search'),
-  query('field').optional().isIn(SEARCHABLE_COLUMNS.VIDEOS).withMessage('Should have correct searchable column'),
+  query('search').not().isEmpty().withMessage('Should have a valid search'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosSearch parameters', { parameters: req.params })

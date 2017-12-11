@@ -1,6 +1,22 @@
 #video-container {
-  width: 100%;
-  height: 100%;
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+
+  #video-element {
+    width: 888px;
+    height: 500px;
+
+    @media screen and (max-width: 800px) {
+      height: auto;
+    }
+
+    // VideoJS create an inner video player
+    video {
+      outline: 0;
+      position: relative !important;
+    }
+  }
 }
 
 #video-not-found {
@@ -11,175 +27,153 @@
   font-weight: bold;
 }
 
-.embed-responsive {
-  height: 500px;
+.video-bottom {
+  margin-top: 40px;
+  display: flex;
 
-  @media screen and (max-width: 600px) {
-    height: 300px;
-  }
-}
+  .video-info {
+    flex-grow: 1;
+    margin-right: 28px;
 
-#torrent-info {
-  font-size: 10px;
-  margin-top: 10px;
-  text-align: center;
-
-  div {
-    min-width: 60px;
-  }
-}
-
-#video-info {
-  .video-name-views {
-    font-weight: bold;
-    font-size: 18px;
-    min-height: $video-watch-title-height;
-    display: flex;
-    align-items: center;
-
-    .video-name {
-      padding-left: $video-watch-info-padding-left;
-    }
-
-    .video-views {
-      text-align: right;
-      // Keep a symmetry with the video name
-      padding-right: $video-watch-info-padding-left
-    }
-
-  }
-
-  .video-small-blocks {
-    height: $video-watch-info-height;
-    color: $video-watch-info-color;
-    border-color: $video-watch-border-color;
-    border-width: 1px 0px;
-    border-style: solid;
-
-    .video-small-block {
-      height: $video-watch-info-height;
+    .video-info-name-actions {
       display: flex;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
+      align-items: center;
 
-      a {
-        cursor: pointer;
-        transition: color 0.3s;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
-        &, &:hover {
-          color: inherit;
-          text-decoration:none;
-        }
-
-        &:hover {
-          color: #000 !important;
-        }
-
-        &:hover > .glyphicon {
-          opacity: 1 !important;
-        }
+      .video-info-name {
+        font-size: 27px;
+        font-weight: $font-semibold;
+        flex-grow: 1;
       }
 
-      .option .glyphicon {
-        font-size: 22px;
-        color: inherit;
-        opacity: 0.15;
+      .video-info-actions {
+        .action-button {
+          @include peertube-button;
+          @include grey-button;
+
+          font-size: 15px;
+          font-weight: $font-semibold;
+          display: inline-block;
+          padding: 0 10px 0 10px;
+
+          .icon {
+            @include icon(21px);
+
+            position: relative;
+            top: -2px;
+
+            &.icon-like {
+              background-image: url('../../../assets/images/video/like-grey.svg');
+            }
+
+            &.icon-dislike {
+              background-image: url('../../../assets/images/video/dislike-grey.svg');
+            }
+
+            &.icon-share {
+              background-image: url('../../../assets/images/video/share.svg');
+            }
+
+            &.icon-more {
+              background-image: url('../../../assets/images/video/more.svg');
+              top: -1px;
+            }
+          }
+
+          &.activated {
+            @include orange-button;
+
+            .icon-like {
+              background-image: url('../../../assets/images/video/like-white.svg');
+            }
+
+            .icon-dislike {
+              background-image: url('../../../assets/images/video/dislike-white.svg');
+            }
+          }
+        }
+
+        .action-more {
+          display: inline-block;
+
+          .dropdown-menu .icon {
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 21px;
+            height: 21px;
+            vertical-align: middle;
+            margin-right: 5px;
+            position: relative;
+            top: -1px;
+
+            &.icon-download {
+              background-image: url('../../../assets/images/video/download-grey.svg');
+            }
+
+            &.icon-alert {
+              background-image: url('../../../assets/images/video/alert.svg');
+            }
+
+            &.icon-blacklist {
+              background-image: url('../../../assets/images/video/eye-closed.svg');
+            }
+          }
+        }
+      }
+    }
+
+    .video-info-date-views-bar {
+      display: flex;
+
+      .video-info-date-views {
+        font-size: 16px;
         margin-bottom: 10px;
-        transition: opacity 0.3s;
+        flex-grow: 1;
       }
 
-      .video-small-block-text {
-        font-size: 15px;
-        font-weight: bold;
-      }
-    }
+      .video-info-likes-dislikes-bar {
+        height: 5px;
+        width: 186px;
+        background-color: #E5E5E5;
+        margin-top: 25px;
 
-    .video-small-block:not(:last-child) {
-      border-width: 0 1px 0 0;
-      border-color: $video-watch-border-color;
-      border-style: solid;
-    }
-
-    .video-small-block-account, .video-small-block-more {
-      a.option {
-        display: block;
-
-        .glyphicon {
-          display: block;
+        .likes-bar {
+          height: 100%;
+          background-color: #39CC0B;
         }
       }
     }
 
-    .video-small-block-share, .video-small-block-more {
-      a.option {
-        display: block;
+    .video-info-channel {
+      font-weight: $font-semibold;
+      font-size: 15px;
+    }
 
-        .glyphicon {
-          display: block;
-        }
+    .video-info-by {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+
+      img {
+        width: 16px;
+        height: 16px;
+        margin-left: 3px;
       }
     }
 
-    .video-small-block-more .video-small-block-dropdown {
-      position: relative;
-
-      .dropdown-item .glyphicon {
-        margin-right: 5px;
-      }
-    }
-
-    .video-small-block-rating {
-
-      .video-small-block-like {
-        margin-bottom: 10px;
-      }
-
-      .video-small-block-text {
-        vertical-align: top;
-      }
-
-      .glyphicon {
-        font-size: 18px;
-        margin: 0 10px 0 0;
-        opacity: 0.3;
-      }
-
-      .interactive {
-        cursor: pointer;
-        transition: opacity, color 0.3s;
-
-        &.activated, &:hover {
-          opacity: 1;
-          color: #000;
-        }
-      }
-    }
-  }
-
-  .video-details {
-    margin-top: 30px;
-
-    .video-details-date-description {
-      padding-left: $video-watch-info-padding-left;
+    .video-info-description {
+      margin: 20px 0;
+      font-size: 15px;
 
       .description-loading {
         display: inline-block;
       }
 
-      .video-details-date {
-        font-weight: bold;
-        margin-bottom: 30px;
-      }
-
-      .video-details-description-more {
+      .video-info-description-more {
         cursor: pointer;
-        margin-top: 15px;
-        font-weight: bold;
-        color: #acaeb7;
+        font-weight: $font-semibold;
+        color: #585858;
+        font-size: 14px;
 
         .glyphicon {
           position: relative;
@@ -188,108 +182,67 @@
       }
     }
 
-    .video-details-attributes {
-      font-weight: bold;
-      font-size: 12px;
+    .video-attributes {
+      .video-attribute {
+        font-size: 13px;
+        display: block;
+        margin-bottom: 12px;
 
-      .video-details-attribute {
-        display: flex;
-
-        .video-details-attribute-label {
-          color: $video-watch-info-color;
-          flex-basis: 60px;
-          flex-grow: 0;
-          flex-shrink: 0;
-          margin-right: 5px;
+        .video-attribute-label {
+          width: 86px;
+          display: inline-block;
+          color: #585858;
+          font-weight: $font-bold;
         }
       }
     }
+  }
 
-    .video-details-tags {
+  .other-videos {
+    .title-page {
+      margin-top: 0;
+    }
+
+    /deep/ .video-miniature {
       display: flex;
-      flex-wrap: wrap;
+      height: 100%;
+      margin-bottom: 20px;
 
-      a {
-        margin: 0 3px 3px 0;
-        font-size: 11px;
+      .video-miniature-information {
+        margin-left: 10px;
       }
     }
   }
+}
 
-  @media screen and (max-width: 800px) {
-    .video-name-views {
-      .video-name {
-        padding-left: 5px;
-        padding-right: 0px;
-      }
 
-      .video-views {
-        padding-left: 0px;
-        padding-right: 5px;
-      }
-    }
-
-    .video-small-blocks {
-      a, .video-small-block-text {
-        font-size: 13px !important;
-      }
-
-      .glyphicon {
-        font-size: 18px !important;
-      }
-
-      .video-small-block-account {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-    }
-
-    .video-details {
-      .video-details-date-description {
-        padding-left: 10px;
-        font-size: 13px !important;
-      }
-
-      .video-details-attributes {
-        font-size: 11px !important;
-
-        .video-details-attribute-label {
-          width: 50px;
-        }
-      }
-    }
+@media screen and (max-width: 1000px) {
+  .other-videos {
+    display: none;
   }
+}
 
-  @media screen and (max-width: 500px) {
-    .video-name-views {
-      font-size: 16px !important;
-    }
+@media screen and (max-width: 800px) {
+  .video-bottom {
+    margin: 20px 0 0 0;
 
-    // Keep the same hierarchy than max-width: 800px
-    .video-small-blocks {
-      a, .video-small-block-text {
-        font-size: 10px !important;
-      }
+    .video-info {
+      margin-right: 0;
 
-      .video-small-block-account {
-        padding-left: 5px;
-        padding-right: 5px;
-      }
-    }
-
-    .video-details {
-      .video-details-date-description {
+      .video-info-name-actions {
+        align-items: left;
+        flex-direction: column;
         margin-bottom: 30px;
-        width: 100%;
-
-        .video-details-date {
-          margin-bottom: 15px;
-        }
       }
 
-      .video-details-attributes {
-        padding-left: 10px;
-        padding-right: 10px;
+      .video-info-date-views-bar {
+        align-items: left;
+        flex-direction: column;
+        margin-bottom: 30px;
+
+        .video-info-likes-dislikes-bar {
+          margin-top: 0;
+        }
       }
     }
   }

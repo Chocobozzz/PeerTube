@@ -1,29 +1,24 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-import { Observable } from 'rxjs/Observable'
-import { Subject } from 'rxjs/Subject'
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
-import { ReplaySubject } from 'rxjs/ReplaySubject'
+
+import { NotificationsService } from 'angular2-notifications'
+import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/mergeMap'
-import 'rxjs/add/observable/throw'
-
-import { NotificationsService } from 'angular2-notifications'
+import { Observable } from 'rxjs/Observable'
+import { ReplaySubject } from 'rxjs/ReplaySubject'
+import { Subject } from 'rxjs/Subject'
+import { OAuthClientLocal, User as UserServerModel, UserRefreshToken, UserRole, VideoChannel } from '../../../../../shared'
+import { Account } from '../../../../../shared/models/accounts'
+import { UserLogin } from '../../../../../shared/models/users/user-login.model'
+// Do not use the barrel (dependency loop)
+import { RestExtractor } from '../../shared/rest'
+import { UserConstructorHash } from '../../shared/users/user.model'
 
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
-import {
-  OAuthClientLocal,
-  UserRole,
-  UserRefreshToken,
-  VideoChannel,
-  User as UserServerModel
-} from '../../../../../shared'
-// Do not use the barrel (dependency loop)
-import { RestExtractor } from '../../shared/rest'
-import { UserLogin } from '../../../../../shared/models/users/user-login.model'
-import { UserConstructorHash } from '../../shared/users/user.model'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -42,10 +37,7 @@ interface UserLoginWithUserInformation extends UserLogin {
   displayNSFW: boolean
   email: string
   videoQuota: number
-  account: {
-    id: number
-    uuid: string
-  }
+  account: Account
   videoChannels: VideoChannel[]
 }
 
@@ -177,19 +169,15 @@ export class AuthService {
 
     return this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
                     .map(res => this.handleRefreshToken(res))
-                    .catch(res => {
-                      // The refresh token is invalid?
-                      if (res.status === 400 && res.error.error === 'invalid_grant') {
-                        console.error('Cannot refresh token -> logout...')
-                        this.logout()
-                        this.router.navigate(['/login'])
+                    .catch(err => {
+                      console.error(err)
+                      console.log('Cannot refresh token -> logout...')
+                      this.logout()
+                      this.router.navigate(['/login'])
 
-                        return Observable.throw({
-                          error: 'You need to reconnect.'
-                        })
-                      }
-
-                      return this.restExtractor.handleError(res)
+                      return Observable.throw({
+                        error: 'You need to reconnect.'
+                      })
                     })
   }
 
@@ -202,7 +190,6 @@ export class AuthService {
     }
 
     this.mergeUserInformation(obj)
-      .do(() => this.userInformationLoaded.next(true))
       .subscribe(
         res => {
           this.user.displayNSFW = res.displayNSFW
@@ -211,6 +198,8 @@ export class AuthService {
           this.user.account = res.account
 
           this.user.save()
+
+          this.userInformationLoaded.next(true)
         }
       )
   }

@@ -113,11 +113,11 @@ describe('Test users', function () {
 
   it('Should upload the video with the correct token', async function () {
     const videoAttributes = {}
-    await uploadVideo(server.url, accessToken, videoAttributes, 204)
+    await uploadVideo(server.url, accessToken, videoAttributes)
     const res = await getVideosList(server.url)
     const video = res.body.data[ 0 ]
 
-    expect(video.account)
+    expect(video.accountName)
       .to
       .equal('root')
     videoId = video.id
@@ -125,7 +125,7 @@ describe('Test users', function () {
 
   it('Should upload the video again with the correct token', async function () {
     const videoAttributes = {}
-    await uploadVideo(server.url, accessToken, videoAttributes, 204)
+    await uploadVideo(server.url, accessToken, videoAttributes)
   })
 
   it('Should retrieve a video rating', async function () {
@@ -487,7 +487,7 @@ describe('Test users', function () {
       .equal(1)
 
     const video = res.body.data[ 0 ]
-    expect(video.account)
+    expect(video.accountName)
       .to
       .equal('root')
   })

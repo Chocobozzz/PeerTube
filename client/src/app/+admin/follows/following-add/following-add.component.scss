@@ -1,7 +1,9 @@
-table {
-  margin-bottom: 40px;
+textarea {
+  height: 250px;
 }
 
-.input-group-btn button {
-  width: 35px;
+input[type=submit] {
+  @include peertube-button;
+  @include orange-button;
 }
+

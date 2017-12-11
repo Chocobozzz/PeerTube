@@ -1,0 +1,44 @@
+.video-miniature {
+  display: inline-block;
+  padding-right: 15px;
+  margin-bottom: 30px;
+  height: 175px;
+  vertical-align: top;
+
+  .video-miniature-information {
+    width: 200px;
+    margin-top: 2px;
+    line-height: normal;
+
+    .video-miniature-name {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: bold;
+      transition: color 0.2s;
+      font-size: 16px;
+      font-weight: $font-semibold;
+      color: #000;
+
+      &:hover {
+        text-decoration: none;
+      }
+
+      &.blur-filter {
+        filter: blur(3px);
+        padding-left: 4px;
+      }
+    }
+
+    .video-miniature-created-at-views {
+      display: block;
+      font-size: 13px;
+    }
+
+    .video-miniature-account {
+      font-size: 13px;
+      color: #585858;
+    }
+  }
+}

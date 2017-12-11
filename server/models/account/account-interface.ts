@@ -1,6 +1,7 @@
 import * as Bluebird from 'bluebird'
 import * as Sequelize from 'sequelize'
 import { Account as FormattedAccount, ActivityPubActor } from '../../../shared'
+import { AvatarInstance } from '../avatar'
 import { ServerInstance } from '../server/server-interface'
 import { VideoChannelInstance } from '../video/video-channel-interface'
 
@@ -51,6 +52,7 @@ export interface AccountAttributes {
   serverId?: number
   userId?: number
   applicationId?: number
+  avatarId?: number
 }
 
 export interface AccountInstance extends AccountClass, AccountAttributes, Sequelize.Instance<AccountAttributes> {
@@ -68,6 +70,7 @@ export interface AccountInstance extends AccountClass, AccountAttributes, Sequel
 
   Server: ServerInstance
   VideoChannels: VideoChannelInstance[]
+  Avatar: AvatarInstance
 }
 
 export interface AccountModel extends AccountClass, Sequelize.Model<AccountInstance, AccountAttributes> {}

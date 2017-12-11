@@ -1,0 +1,20 @@
+<div class="margin-content">
+  <div class="title-page title-page-single">
+    {{ titlePage }}
+  </div>
+
+  <div
+    class="videos"
+    infiniteScroll
+    [infiniteScrollUpDistance]="1.5"
+    [infiniteScrollDistance]="0.5"
+    (scrolled)="onNearOfBottom()"
+    (scrolledUp)="onNearOfTop()"
+  >
+    <my-video-miniature
+      class="ng-animate"
+      *ngFor="let video of videos" [video]="video" [user]="user"
+    >
+    </my-video-miniature>
+  </div>
+</div>

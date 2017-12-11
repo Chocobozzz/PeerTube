@@ -2,6 +2,7 @@ import { join } from 'path'
 import { flattenDepth } from 'lodash'
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
 import * as Sequelize from 'sequelize'
+import { AvatarModel } from '../models/avatar'
 
 import { CONFIG } from './constants'
 // Do not use barrel, we need to load database first
@@ -36,6 +37,7 @@ export type PeerTubeDatabase = {
   init?: (silent: boolean) => Promise<void>,
 
   Application?: ApplicationModel,
+  Avatar?: AvatarModel,
   Account?: AccountModel,
   Job?: JobModel,
   OAuthClient?: OAuthClientModel,

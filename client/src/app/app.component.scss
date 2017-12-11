@@ -2,10 +2,15 @@
   min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
 }
 
+.sub-header-container {
+  margin-top: $header-height;
+}
+
 .title-menu-left {
   position: fixed;
   height: calc(100vh - #{$header-height});
   padding: 0;
+  width: $menu-width;
 
   .title-menu-left-block.menu {
     height: 100%;
@@ -14,125 +19,62 @@
 
 .header {
   height: $header-height;
-
-  .fake-title-block {
-    display: inline-block;
-  }
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #fff;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
+  display: flex;
 
   .top-left-block {
-    z-index: 100;
-    background-color: #fff;
-    border-right: 1px solid $header-border-color;
+    width: $menu-width;
+    z-index: 1001;
     height: $header-height;
-    line-height: $header-height;
-    margin-top: 0;
-    margin-bottom: 0;
     display: flex;
-    position: fixed;
-    padding: 0;
+    align-items: center;
 
-    &.border-bottom {
-      border-bottom: 1px solid $header-border-color;
-    }
+    .icon {
+      @include icon(22px);
 
-    .hamburger-block {
-      margin-right: 15px;
-      margin-left: 15px;
-
-      .glyphicon {
-        cursor: pointer;
-        position: relative;
-        top: 4px;
+      &.icon-menu {
+        background-image: url('../assets/images/header/menu.svg');
+        margin: 0 18px 0 24px;
       }
     }
 
     #peertube-title {
-      a {
-        color: inherit !important;
-        display: block;
-        background: url('../assets/logo.png') no-repeat;
-        background-size: contain;
-        background-position: center;
-        height: 100%;
-        margin: auto;
-        width: 135px;
+      font-size: 20px;
+      font-weight: $font-bold;
+      color: inherit !important;
+      display: flex;
+      align-items: center;
 
-        &:hover {
-          color: inherit !important;
-          text-decoration: none !important;
-        }
+      @include disable-default-a-behaviour;
+
+      .icon.icon-logo {
+        display: inline-block;
+        background: url('../assets/images/logo.svg') no-repeat;
+        width: 23px;
+        height: 24px;
       }
     }
 
     @media screen and (max-width: 500px) {
+      width: 70px;
+
       #peertube-title {
         display: none;
       }
-
-      .hamburger-block {
-        width: 100%;
-        text-align: center;
-      }
-    }
-
-    @media screen and (min-width: 500px) and (max-width: 600px) {
-      #peertube-title a {
-        width: 80px;
-      }
-    }
-
-    @media screen and (min-width: 600px) and (max-width: 700px) {
-      #peertube-title a {
-        width: 100px;
-      }
-    }
-
-    @media screen and (min-width: 1000px) {
-      #peertube-title a {
-        width: 120px;
-      }
-    }
-
-    @media screen and (min-width: 1000px) {
-      #peertube-title a {
-        width: 120px;
-      }
-    }
-
-    @media screen and (min-width: 1200px) {
-      padding-left: 15px;
-
-      .hamburger-block {
-        margin-right: 15px;
-      }
-
-      #peertube-title a {
-        width: 135px;
-      }
-    }
-
-    @media screen and (min-width: 1600px) {
-      .hamburger-block {
-        margin-right: 20px;
-      }
-
-      #peertube-title a {
-        width: 180px;
-      }
     }
   }
 
-  my-search {
-    position: fixed;
-    z-index: 1000;
-    // Fix col-md-* padding
-    padding: 0;
-  }
-
-  .search-col {
-    height: 100%;
-    margin-left: -15px;
-    padding: 0;
+  .header-right {
+    height: $header-height;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: flex-end;
   }
 }
 

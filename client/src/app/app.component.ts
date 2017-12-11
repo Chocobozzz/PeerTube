@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-
 import { AuthService, ServerService } from './core'
-import { UserService } from './shared'
 
 @Component({
   selector: 'my-app',
@@ -62,20 +60,9 @@ export class AppComponent implements OnInit {
   }
 
   getMainColClasses () {
-    const colSizes = {
-      md: 10,
-      sm: 9,
-      xs: 9
-    }
-
     // Take all width is the menu is not displayed
-    if (this.isMenuDisplayed === false) {
-      Object.keys(colSizes).forEach(col => colSizes[col] = 12)
-    }
+    if (this.isMenuDisplayed === false) return [ 'expanded' ]
 
-    const classes = []
-    Object.keys(colSizes).forEach(col => classes.push(`col-${col}-${colSizes[col]}`))
-
-    return classes
+    return []
   }
 }

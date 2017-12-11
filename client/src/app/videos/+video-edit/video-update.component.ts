@@ -1,23 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import 'rxjs/add/observable/forkJoin'
-
 import { NotificationsService } from 'angular2-notifications'
-
-import { ServerService } from '../../core'
-import {
-  FormReactive,
-  VIDEO_NAME,
-  VIDEO_CATEGORY,
-  VIDEO_LICENCE,
-  VIDEO_LANGUAGE,
-  VIDEO_DESCRIPTION,
-  VIDEO_TAGS,
-  VIDEO_PRIVACY
-} from '../../shared'
-import { VideoEdit, VideoService } from '../shared'
+import 'rxjs/add/observable/forkJoin'
 import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
+import { ServerService } from '../../core'
+import { FormReactive } from '../../shared'
+import { ValidatorMessage } from '../../shared/forms/form-validators'
+import { VideoEdit } from '../../shared/video/video-edit.model'
+import { VideoService } from '../../shared/video/video.service'
 
 @Component({
   selector: 'my-videos-update',
@@ -26,34 +17,13 @@ import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.
 })
 
 export class VideoUpdateComponent extends FormReactive implements OnInit {
-  tags: string[] = []
-  videoCategories = []
-  videoLicences = []
-  videoLanguages = []
-  videoPrivacies = []
   video: VideoEdit
-
-  tagValidators = VIDEO_TAGS.VALIDATORS
-  tagValidatorsMessages = VIDEO_TAGS.MESSAGES
 
   error: string = null
   form: FormGroup
-  formErrors = {
-    name: '',
-    privacy: '',
-    category: '',
-    licence: '',
-    language: '',
-    description: ''
-  }
-  validationMessages = {
-    name: VIDEO_NAME.MESSAGES,
-    privacy: VIDEO_PRIVACY.MESSAGES,
-    category: VIDEO_CATEGORY.MESSAGES,
-    licence: VIDEO_LICENCE.MESSAGES,
-    language: VIDEO_LANGUAGE.MESSAGES,
-    description: VIDEO_DESCRIPTION.MESSAGES
-  }
+  formErrors: { [ id: string ]: string } = {}
+  validationMessages: ValidatorMessage = {}
+  videoPrivacies = []
 
   fileError = ''
 
@@ -69,30 +39,16 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   }
 
   buildForm () {
-    this.form = this.formBuilder.group({
-      name: [ '', VIDEO_NAME.VALIDATORS ],
-      privacy: [ '', VIDEO_PRIVACY.VALIDATORS ],
-      nsfw: [ false ],
-      category: [ '', VIDEO_CATEGORY.VALIDATORS ],
-      licence: [ '', VIDEO_LICENCE.VALIDATORS ],
-      language: [ '', VIDEO_LANGUAGE.VALIDATORS ],
-      description: [ '', VIDEO_DESCRIPTION.VALIDATORS ],
-      tags: [ '' ]
-    })
-
+    this.form = this.formBuilder.group({})
     this.form.valueChanges.subscribe(data => this.onValueChanged(data))
   }
 
   ngOnInit () {
     this.buildForm()
 
-    this.videoCategories = this.serverService.getVideoCategories()
-    this.videoLicences = this.serverService.getVideoLicences()
-    this.videoLanguages = this.serverService.getVideoLanguages()
     this.videoPrivacies = this.serverService.getVideoPrivacies()
 
     const uuid: string = this.route.snapshot.params['uuid']
-
     this.videoService.getVideo(uuid)
       .switchMap(video => {
         return this.videoService
@@ -104,7 +60,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
         video => {
           this.video = new VideoEdit(video)
 
-          // We cannot set private a video that was not private anymore
+          // We cannot set private a video that was not private
           if (video.privacy !== VideoPrivacy.PRIVATE) {
             const newVideoPrivacies = []
             for (const p of this.videoPrivacies) {
