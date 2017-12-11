@@ -16,11 +16,8 @@
   </div>
 
   <div class="sub-header-container">
-    <div class="title-menu-left">
-
-      <div class="title-menu-left-block menu">
-        <my-menu *ngIf="isMenuDisplayed"></my-menu>
-      </div>
+    <div *ngIf="isMenuDisplayed" class="title-menu-left">
+        <my-menu></my-menu>
     </div>
 
     <div class="main-col container-fluid" [ngClass]="getMainColClasses()">

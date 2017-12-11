@@ -107,8 +107,8 @@ label {
   font-weight: bold;
 }
 
-// On small screen, menu is absolute and displayed over the page
-@media screen and (max-width: 500px) {
+// On small screen, menu is absolute
+@media screen and (max-width: 800px) {
   .title-menu-left {
     width: 120px;
     position: absolute !important;
@@ -116,11 +116,18 @@ label {
   }
 
   .main-col {
-    width: 100% !important;
-  }
+    margin-left: 0;
 
-  .fake-menu {
-    display: none;
+    &, &.expanded {
+      .margin-content {
+        //display: flex;
+        //flex-direction: column;
+        //align-items: center;
+        //justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
   }
 }
 

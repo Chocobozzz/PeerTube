@@ -6,6 +6,14 @@
   &::placeholder {
     color: #000;
   }
+
+  @media screen and (max-width: 800px) {
+    width: calc(100% - 150px);
+  }
+
+  @media screen and (max-width: 400px) {
+    width: calc(100% - 70px);
+  }
 }
 
 .icon.icon-search {
@@ -33,5 +41,18 @@
     height: 24px;
     vertical-align: middle;
     margin-right: 6px;
+  }
+
+  @media screen and (max-width: 400px) {
+    margin-right: 10px;
+    padding: 0 10px;
+
+    .icon.icon-upload {
+      margin-right: 0;
+    }
+
+    .upload-button-label {
+      display: none;
+    }
   }
 }
