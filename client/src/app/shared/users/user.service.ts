@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-
-import { RestExtractor } from '../rest'
 import { UserCreate, UserUpdateMe } from '../../../../../shared'
+import { environment } from '../../../environments/environment'
+import { RestExtractor } from '../rest'
 
 @Injectable()
 export class UserService {
-  static BASE_USERS_URL = API_URL + '/api/v1/users/'
+  static BASE_USERS_URL = environment.apiUrl + '/api/v1/users/'
 
   constructor (
     private authHttp: HttpClient,

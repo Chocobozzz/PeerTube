@@ -9,9 +9,9 @@ import { UserVideoRateUpdate } from '../../../../../shared/models/videos/user-vi
 import { UserVideoRate } from '../../../../../shared/models/videos/user-video-rate.model'
 import { VideoRateType } from '../../../../../shared/models/videos/video-rate.type'
 import { VideoUpdate } from '../../../../../shared/models/videos/video-update.model'
+import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { RestService } from '../rest/rest.service'
-import { Search } from '../header/search.model'
 import { UserService } from '../users/user.service'
 import { SortField } from './sort-field.type'
 import { VideoDetails } from './video-details.model'
@@ -21,7 +21,7 @@ import { Video } from './video.model'
 
 @Injectable()
 export class VideoService {
-  private static BASE_VIDEO_URL = API_URL + '/api/v1/videos/'
+  private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
 
   constructor (
     private authHttp: HttpClient,
@@ -118,7 +118,7 @@ export class VideoService {
 
   loadCompleteDescription (descriptionPath: string) {
     return this.authHttp
-      .get(API_URL + descriptionPath)
+      .get(environment.apiUrl + descriptionPath)
       .map(res => res['description'])
       .catch((res) => this.restExtractor.handleError(res))
   }

@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 #search-video {
   @include peertube-input-text($search-input-width);
   margin-right: 15px;

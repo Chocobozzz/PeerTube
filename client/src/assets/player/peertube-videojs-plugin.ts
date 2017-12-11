@@ -1,6 +1,6 @@
 // Big thanks to: https://github.com/kmoskwiak/videojs-resolution-switcher
 
-import videojs, { Player } from 'video.js'
+import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared'
 
@@ -27,7 +27,7 @@ const webtorrent = new WebTorrent({ dht: false })
 
 const MenuItem = videojsUntyped.getComponent('MenuItem')
 const ResolutionMenuItem = videojsUntyped.extend(MenuItem, {
-  constructor: function (player: Player, options) {
+  constructor: function (player: videojs.Player, options) {
     options.selectable = true
     MenuItem.call(this, player, options)
 

@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 .resolution-block:not(:first-child) {
   margin-top: 30px;
 }

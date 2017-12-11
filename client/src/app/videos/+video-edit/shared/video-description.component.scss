@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 textarea {
   @include peertube-input-text(100%);
 

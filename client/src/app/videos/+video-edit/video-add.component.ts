@@ -3,13 +3,12 @@ import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoService } from 'app/shared/video/video.service'
-import { VideoCreate } from '../../../../../shared'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
-import { ValidatorMessage } from '../../shared/forms/form-validators'
+import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
 import { VideoEdit } from '../../shared/video/video-edit.model'
+import { VideoService } from '../../shared/video/video.service'
 
 @Component({
   selector: 'my-videos-add',

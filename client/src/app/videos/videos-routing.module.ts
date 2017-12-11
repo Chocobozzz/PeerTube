@@ -46,7 +46,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'upload',
-        loadChildren: 'app/videos/+video-edit#VideoAddModule',
+        loadChildren: 'app/videos/+video-edit/video-add.module#VideoAddModule',
         data: {
           meta: {
             title: 'Upload a video'
@@ -55,7 +55,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'edit/:uuid',
-        loadChildren: 'app/videos/+video-edit#VideoUpdateModule',
+        loadChildren: 'app/videos/+video-edit/video-update.module#VideoUpdateModule',
         data: {
           meta: {
             title: 'Edit a video'
@@ -69,7 +69,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'watch/:uuid',
-        loadChildren: 'app/videos/+video-watch#VideoWatchModule',
+        loadChildren: 'app/videos/+video-watch/video-watch.module#VideoWatchModule',
         data: {
           preload: 3000
         }

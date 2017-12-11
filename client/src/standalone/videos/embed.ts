@@ -1,6 +1,6 @@
 import './embed.scss'
 
-import videojs from 'video.js'
+import * as videojs from 'video.js'
 import '../../assets/player/peertube-videojs-plugin'
 import 'videojs-dock/dist/videojs-dock.es.js'
 import { VideoDetails } from '../../../../shared'

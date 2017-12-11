@@ -6,12 +6,12 @@ import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
 import { ResultList } from '../../../../../../shared'
 import { Job } from '../../../../../../shared/models/job.model'
-
+import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../../../shared'
 
 @Injectable()
 export class JobService {
-  private static BASE_JOB_URL = API_URL + '/api/v1/jobs'
+  private static BASE_JOB_URL = environment.apiUrl + '/api/v1/jobs'
 
   constructor (
     private authHttp: HttpClient,

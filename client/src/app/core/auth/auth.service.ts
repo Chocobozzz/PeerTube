@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/throw'
 import 'rxjs/add/operator/do'
@@ -13,10 +12,9 @@ import { Subject } from 'rxjs/Subject'
 import { OAuthClientLocal, User as UserServerModel, UserRefreshToken, UserRole, VideoChannel } from '../../../../../shared'
 import { Account } from '../../../../../shared/models/accounts'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
-// Do not use the barrel (dependency loop)
+import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../../shared/rest'
 import { UserConstructorHash } from '../../shared/users/user.model'
-
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 
@@ -43,9 +41,9 @@ interface UserLoginWithUserInformation extends UserLogin {
 
 @Injectable()
 export class AuthService {
-  private static BASE_CLIENT_URL = API_URL + '/api/v1/oauth-clients/local'
-  private static BASE_TOKEN_URL = API_URL + '/api/v1/users/token'
-  private static BASE_USER_INFORMATION_URL = API_URL + '/api/v1/users/me'
+  private static BASE_CLIENT_URL = environment.apiUrl + '/api/v1/oauth-clients/local'
+  private static BASE_TOKEN_URL = environment.apiUrl + '/api/v1/users/token'
+  private static BASE_USER_INFORMATION_URL = environment.apiUrl + '/api/v1/users/me'
 
   loginChangedSource: Observable<AuthStatus>
   userInformationLoaded = new ReplaySubject<boolean>(1)

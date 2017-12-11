@@ -2,12 +2,10 @@ import { Component, Input, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import { ServerService } from 'app/core'
-import { VideoEdit } from 'app/shared/video/video-edit.model'
 import 'rxjs/add/observable/forkJoin'
-import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
+import { ServerService } from '../../../core/server'
+import { ValidatorMessage } from '../../../shared/forms/form-validators/validator-message'
 import {
-  ValidatorMessage,
   VIDEO_CATEGORY,
   VIDEO_DESCRIPTION,
   VIDEO_LANGUAGE,
@@ -15,7 +13,8 @@ import {
   VIDEO_NAME,
   VIDEO_PRIVACY,
   VIDEO_TAGS
-} from '../../../shared/forms/form-validators'
+} from '../../../shared/forms/form-validators/video'
+import { VideoEdit } from '../../../shared/video/video-edit.model'
 
 @Component({
   selector: 'my-video-edit',

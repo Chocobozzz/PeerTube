@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 .action-button {
   @include peertube-button-link;
 

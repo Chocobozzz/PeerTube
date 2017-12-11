@@ -1,6 +1,7 @@
-import { Video as VideoServerModel } from '../../../../../shared'
 import { User } from '../'
+import { Video as VideoServerModel } from '../../../../../shared'
 import { Account } from '../../../../../shared/models/accounts'
+import { environment } from '../../../environments/environment'
 
 export class Video implements VideoServerModel {
   accountName: string
@@ -48,7 +49,7 @@ export class Video implements VideoServerModel {
   }
 
   constructor (hash: VideoServerModel) {
-    let absoluteAPIUrl = API_URL
+    let absoluteAPIUrl = environment.apiUrl
     if (!absoluteAPIUrl) {
       // The API is on the same domain
       absoluteAPIUrl = window.location.origin

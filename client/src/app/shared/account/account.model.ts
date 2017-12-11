@@ -1,5 +1,6 @@
 import { Account as ServerAccount } from '../../../../../shared/models/accounts/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
+import { environment } from '../../../environments/environment'
 
 export class Account implements ServerAccount {
   id: number
@@ -15,6 +16,6 @@ export class Account implements ServerAccount {
   static GET_ACCOUNT_AVATAR_PATH (account: Account) {
     if (account && account.avatar) return account.avatar.path
 
-    return API_URL + '/client/assets/images/default-avatar.png'
+    return environment.apiUrl + '/client/assets/images/default-avatar.png'
   }
 }

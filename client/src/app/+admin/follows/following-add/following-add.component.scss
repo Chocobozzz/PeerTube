@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 textarea {
   height: 250px;
 }
@@ -6,4 +9,3 @@ input[type=submit] {
   @include peertube-button;
   @include orange-button;
 }
-

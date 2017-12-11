@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/forkJoin'
-import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.enum'
+import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { FormReactive } from '../../shared'
-import { ValidatorMessage } from '../../shared/forms/form-validators'
+import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 
@@ -24,8 +24,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   formErrors: { [ id: string ]: string } = {}
   validationMessages: ValidatorMessage = {}
   videoPrivacies = []
-
-  fileError = ''
 
   constructor (
     private formBuilder: FormBuilder,

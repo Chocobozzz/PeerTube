@@ -11,7 +11,6 @@ import { AuthService } from './auth'
 import { LoginGuard, UserRightGuard } from './routing'
 import { ServerService } from './server'
 import { ConfirmComponent, ConfirmService } from './confirm'
-import { MenuComponent, MenuAdminComponent } from './menu'
 import { throwIfAlreadyLoaded } from './module-import-guard'
 
 @NgModule({

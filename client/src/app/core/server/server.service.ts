@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
-
 import { ServerConfig } from '../../../../../shared'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class ServerService {
-  private static BASE_CONFIG_URL = API_URL + '/api/v1/config/'
-  private static BASE_VIDEO_URL = API_URL + '/api/v1/videos/'
+  private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
+  private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
 
   videoPrivaciesLoaded = new ReplaySubject<boolean>(1)
   videoCategoriesLoaded = new ReplaySubject<boolean>(1)

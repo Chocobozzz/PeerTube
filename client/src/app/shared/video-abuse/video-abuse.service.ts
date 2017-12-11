@@ -1,19 +1,17 @@
-import { Injectable } from '@angular/core'
 import { HttpClient, HttpParams } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
-
-import { SortMeta } from 'primeng/components/common/sortmeta'
-
-import { AuthService } from '../core'
+import { ResultList, VideoAbuse } from '../../../../../shared'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 import { Utils } from '../utils'
-import { ResultList, VideoAbuse } from '../../../../../shared'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class VideoAbuseService {
-  private static BASE_VIDEO_ABUSE_URL = API_URL + '/api/v1/videos/'
+  private static BASE_VIDEO_ABUSE_URL = environment.apiUrl + '/api/v1/videos/'
 
   constructor (
     private authHttp: HttpClient,

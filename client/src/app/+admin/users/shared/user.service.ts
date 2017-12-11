@@ -6,11 +6,12 @@ import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
 import { ResultList, UserCreate, UserUpdate } from '../../../../../../shared'
+import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestPagination, RestService, User } from '../../../shared'
 
 @Injectable()
 export class UserService {
-  private static BASE_USERS_URL = API_URL + '/api/v1/users/'
+  private static BASE_USERS_URL = environment.apiUrl + '/api/v1/users/'
   private bytesPipe = new BytesPipe()
 
   constructor (

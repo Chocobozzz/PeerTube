@@ -1,3 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
 .main-row {
   min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
 }

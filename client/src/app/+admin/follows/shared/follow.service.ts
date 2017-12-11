@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Observable } from 'rxjs/Observable'
+import { Injectable } from '@angular/core'
+import { SortMeta } from 'primeng/primeng'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-
-import { SortMeta } from 'primeng/primeng'
-
-import { RestExtractor, RestPagination, RestService } from '../../../shared'
+import { Observable } from 'rxjs/Observable'
 import { AccountFollow, ResultList } from '../../../../../../shared'
+import { environment } from '../../../../environments/environment'
+import { RestExtractor, RestPagination, RestService } from '../../../shared'
 
 @Injectable()
 export class FollowService {
-  private static BASE_APPLICATION_URL = API_URL + '/api/v1/server'
+  private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/server'
 
   constructor (
     private authHttp: HttpClient,

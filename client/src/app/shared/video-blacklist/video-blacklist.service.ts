@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Observable } from 'rxjs/Observable'
+import { Injectable } from '@angular/core'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-
-import { SortMeta } from 'primeng/components/common/sortmeta'
-
+import { Observable } from 'rxjs/Observable'
+import { BlacklistedVideo, ResultList } from '../../../../../shared'
+import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 import { Utils } from '../utils'
-import { BlacklistedVideo, ResultList } from '../../../../../shared'
 
 @Injectable()
 export class VideoBlacklistService {
-  private static BASE_VIDEOS_URL = API_URL + '/api/v1/videos/'
+  private static BASE_VIDEOS_URL = environment.apiUrl + '/api/v1/videos/'
 
   constructor (
     private authHttp: HttpClient,

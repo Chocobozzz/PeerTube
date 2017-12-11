@@ -1,9 +1,6 @@
 import { Routes } from '@angular/router'
-
-import { UserRightGuard } from '../../core'
-import { FollowingAddComponent } from './following-add'
 import { UserRight } from '../../../../../shared'
-import { FollowingListComponent } from './following-list/following-list.component'
+import { UserRightGuard } from '../../core'
 import { JobsComponent } from './job.component'
 import { JobsListComponent } from './jobs-list/jobs-list.component'
 
