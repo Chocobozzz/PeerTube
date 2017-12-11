@@ -23,6 +23,7 @@ $control-bar-height: 34px;
   }
 
   .vjs-big-play-button {
+    outline: 0;
     font-size: 8em;
 
     $big-play-width: 3em;

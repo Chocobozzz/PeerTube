@@ -23,17 +23,13 @@ html, body {
 }
 
 .vjs-peertube-link {
-  color: white;
+  color: #fff;
   text-decoration: none;
-  font-size: 1.3em;
-  line-height: 2.20;
+  font-size: $font-size;
+  line-height: $control-bar-height;
   transition: all .4s;
-  position: relative;
-  right: 8px;
-}
-
-.vjs-resolution-button-label {
-  left: -7px;
+  font-weight: $font-semibold;
+  margin-right: 3px;
 }
 
 .vjs-peertube-link:hover {
@@ -42,5 +38,21 @@ html, body {
 
 // Fix volume panel because we added a new component (PeerTube link)
 .vjs-volume-panel {
-  margin-right: 130px !important;
+  margin-right: 121px !important;
+}
+
+@media screen and (max-width: 350px) {
+  .vjs-play-control {
+    padding: 0 5px !important;
+    width: 25px !important;
+  }
+
+  .vjs-volume-control {
+    display: none !important;
+  }
+
+  .vjs-volume-panel {
+    width: 26px !important;
+    margin-right: 140px !important;
+  }
 }
