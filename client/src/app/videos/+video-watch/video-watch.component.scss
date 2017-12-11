@@ -7,9 +7,14 @@
     width: 888px;
     height: 500px;
 
+    @media screen and (max-width: 800px) {
+      height: auto;
+    }
+
     // VideoJS create an inner video player
     video {
       outline: 0;
+      position: relative !important;
     }
   }
 }
@@ -210,3 +215,29 @@
   }
 }
 
+
+@media screen and (max-width: 800px) {
+  .other-videos {
+    display: none;
+  }
+
+  .video-bottom {
+    .video-info {
+      .video-info-name-actions {
+        align-items: left;
+        flex-direction: column;
+        margin-bottom: 30px;
+      }
+
+      .video-info-date-views-bar {
+        align-items: left;
+        flex-direction: column;
+        margin-bottom: 30px;
+
+        .video-info-likes-dislikes-bar {
+          margin-top: 0;
+        }
+      }
+    }
+  }
+}
