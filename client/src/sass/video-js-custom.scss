@@ -138,6 +138,14 @@ $control-bar-height: 34px;
       text-align: right;
       padding-right: 60px;
 
+      .vjs-webtorrent-displayed {
+        display: block;
+      }
+
+      .vjs-webtorrent-hidden {
+        display: none;
+      }
+
       .download-speed-number, .upload-speed-number, .peers-number {
         font-weight: $font-semibold;
       }
@@ -303,6 +311,12 @@ $control-bar-height: 34px;
       }
     }
   }
+
+  @media screen and (max-width: 450px) {
+    .vjs-webtorrent-displayed {
+      display: none !important;
+    }
+  }
 }
 
 // Thanks: https://projects.lukehaas.me/css-loaders/
@@ -340,3 +354,4 @@ $control-bar-height: 34px;
     }
   }
 }
+

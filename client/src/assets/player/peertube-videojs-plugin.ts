@@ -156,7 +156,7 @@ const WebTorrentButton = videojsUntyped.extend(Button, {
 
     div.className = 'vjs-webtorrent'
     // Hide the stats before we get the info
-    subDiv.style.display = 'none'
+    subDiv.className = 'vjs-webtorrent-hidden'
 
     this.player_.on('torrentInfo', (event, data) => {
       const downloadSpeed = bytes(data.downloadSpeed)
@@ -171,7 +171,7 @@ const WebTorrentButton = videojsUntyped.extend(Button, {
 
       peersNumber.textContent = numPeers
 
-      subDiv.style.display = 'block'
+      subDiv.className = 'vjs-webtorrent-displayed'
     })
 
     return div
