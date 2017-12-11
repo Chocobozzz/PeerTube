@@ -9,10 +9,6 @@ menu {
   z-index: 1000;
   color: $menu-color;
 
-  @media screen and (max-width: 550px) {
-    font-size: 90%;
-  }
-
   .logged-in-block {
     height: 100px;
     background-color: rgba(255, 255, 255, 0.15);
@@ -68,7 +64,7 @@ menu {
       font-size: 15px;
       height: $button-height;
       line-height: $button-height;
-      width: 190px;
+      width: 100%;
       border-radius: 3px;
       text-align: center;
       color: $menu-color;
@@ -134,6 +130,62 @@ menu {
           height: 23px;
 
           background-image: url('../../assets/images/menu/administration.svg');
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  menu {
+    .logged-in-block {
+      padding-left: 10px;
+
+      img {
+        display: none;
+      }
+
+      .logged-in-info {
+        .logged-in-username {
+          font-size: 14px;
+        }
+
+        .logged-in-email {
+          font-size: 11px;
+          max-width: 120px;
+        }
+      }
+
+      .logged-in-more {
+        margin-right: 5px;
+
+        .login-button, .create-account-button {
+          font-weight: $font-semibold;
+          font-size: 15px;
+          height: $button-height;
+          line-height: $button-height;
+          width: 190px;
+        }
+      }
+    }
+
+    .button-block {
+      margin: 20px 10px 25px 10px;
+
+      .login-button, .create-account-button {
+        font-size: 13px;
+      }
+    }
+
+    .panel-block {
+      margin-bottom: 30px;
+      margin-left: 10px;
+
+      a {
+        font-size: 14px;
+
+        .icon {
+          margin-right: 10px;
         }
       }
     }

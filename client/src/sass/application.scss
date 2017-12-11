@@ -110,7 +110,7 @@ label {
 // On small screen, menu is absolute
 @media screen and (max-width: 800px) {
   .title-menu-left {
-    width: 120px;
+    width: 150px !important;
     position: absolute !important;
     z-index: 10000;
   }
@@ -120,12 +120,17 @@ label {
 
     &, &.expanded {
       .margin-content {
-        //display: flex;
-        //flex-direction: column;
-        //align-items: center;
-        //justify-content: center;
-        margin-left: auto;
-        margin-right: auto;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .sub-menu {
+        padding-left: 10px;
+        margin-bottom: 10px;
+      }
+
+      input[type=text], input[type=password] {
+        width: 100% !important;
       }
     }
   }

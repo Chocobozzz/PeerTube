@@ -64,3 +64,23 @@
     }
   }
 }
+
+@media screen and (max-width: 800px) {
+  .video {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+
+    input[type=checkbox] {
+      display: none;
+    }
+
+    my-video-thumbnail {
+      margin-right: 0;
+    }
+
+    .video-buttons {
+      margin-top: 10px;
+    }
+  }
+}

@@ -1,4 +1,5 @@
 <div
+  class="videos"
   infiniteScroll
   [infiniteScrollDistance]="0.5"
   [infiniteScrollUpDistance]="1.5"
@@ -29,10 +30,10 @@
       </div>
     </div>
 
-    <ng-template [ngIf]="isInSelectionMode() === false">
+    <div class="video-buttons" *ngIf="isInSelectionMode() === false">
       <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
 
       <my-edit-button [routerLink]="[ '/videos', 'edit', video.uuid ]"></my-edit-button>
-    </ng-template>
+    </div>
   </div>
 </div>
