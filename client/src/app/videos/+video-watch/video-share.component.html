@@ -12,12 +12,26 @@
       <div class="modal-body">
         <div class="form-group">
           <label>URL</label>
-          <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoUrl()" />
+          <div class="input-group">
+            <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoUrl()" />
+            <div class="input-group-btn" placement="bottom right">
+              <button [ngxClipboard]="urlInput" (click)="activateCopiedMessage()" type="button" class="btn btn-default btn-search">
+                <span class="glyphicon glyphicon-copy"></span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="form-group">
           <label>Embed</label>
-          <input #shareInput (click)="shareInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoIframeCode()" />
+          <div class="input-group">
+            <input #shareInput (click)="shareInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoIframeCode()" />
+            <div class="input-group-btn" placement="bottom right">
+              <button [ngxClipboard]="shareInput" (click)="activateCopiedMessage()" type="button" class="btn btn-default btn-search">
+                <span class="glyphicon glyphicon-copy"></span>
+              </button>
+            </div>
+          </div>
         </div>
 
         <div *ngIf="notSecure()" class="alert alert-warning">

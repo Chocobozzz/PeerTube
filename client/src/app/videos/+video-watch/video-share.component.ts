@@ -1,17 +1,21 @@
 import { Component, Input, ViewChild } from '@angular/core'
+
+import { NotificationsService } from 'angular2-notifications'
+
 import { ModalDirective } from 'ngx-bootstrap/modal'
 import { VideoDetails } from '../../shared/video/video-details.model'
 
 @Component({
   selector: 'my-video-share',
-  templateUrl: './video-share.component.html'
+  templateUrl: './video-share.component.html',
+  styleUrls: [ './video-share.component.scss' ]
 })
 export class VideoShareComponent {
   @Input() video: VideoDetails = null
 
   @ViewChild('modal') modal: ModalDirective
 
-  constructor () {
+  constructor (private notificationsService: NotificationsService) {
     // empty
   }
 
@@ -36,5 +40,9 @@ export class VideoShareComponent {
 
   notSecure () {
     return window.location.protocol === 'http:'
+  }
+
+  activateCopiedMessage () {
+    this.notificationsService.success('Success', 'Copied')
   }
 }

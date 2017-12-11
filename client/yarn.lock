@@ -4714,6 +4714,16 @@ ngx-chips@1.5.3:
   dependencies:
     ng2-material-dropdown "0.7.10"
 
+ngx-clipboard@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-clipboard/-/ngx-clipboard-9.0.0.tgz#a56e4a3d0488a491898ee5209980b81ddad8b659"
+  dependencies:
+    ngx-window-token "0.0.4"
+
+ngx-window-token@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/ngx-window-token/-/ngx-window-token-0.0.4.tgz#47e7aaa465411c4ab5f7ba17601bc593c956c736"
+
 ngx-infinite-scroll@^0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/ngx-infinite-scroll/-/ngx-infinite-scroll-0.7.0.tgz#a390c61c6a05ac14485e1c5bc8b4e6f6bd62fd6a"

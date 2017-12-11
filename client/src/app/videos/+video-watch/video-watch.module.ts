@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { MarkdownService } from '../shared'
 import { SharedModule } from '../../shared'
+import { ClipboardModule } from 'ngx-clipboard'
 
 import { VideoWatchComponent } from './video-watch.component'
 import { VideoReportComponent } from './video-report.component'
@@ -12,7 +13,8 @@ import { VideoDownloadComponent } from './video-download.component'
 @NgModule({
   imports: [
     VideoWatchRoutingModule,
-    SharedModule
+    SharedModule,
+    ClipboardModule
   ],
 
   declarations: [

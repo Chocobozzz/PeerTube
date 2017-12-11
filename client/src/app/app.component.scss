@@ -86,3 +86,8 @@ footer {
   margin-top: $footer-margin;
   height: $footer-height;
 }
+
+simple-notifications {
+  position: relative;
+  z-index: 1500;
+}
