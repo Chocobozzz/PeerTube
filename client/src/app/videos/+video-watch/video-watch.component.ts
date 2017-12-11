@@ -69,6 +69,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
+      if (this.videoPlayerLoaded) {
+        this.player.pause()
+      }
+
       let uuid = routeParams['uuid']
       this.videoService.getVideo(uuid).subscribe(
         video => this.onVideoFetched(video),
@@ -276,30 +280,35 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           return this.router.navigate([ '/videos/list' ])
         }
 
-        this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
+        // Player was already loaded
+        if (this.videoPlayerLoaded !== true) {
+          this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
 
-        const videojsOptions = {
-          controls: true,
-          autoplay: true,
-          plugins: {
-            peertube: {
-              videoFiles: this.video.files,
-              playerElement: this.playerElement,
-              autoplay: true,
-              peerTubeLink: false
+          const videojsOptions = {
+            controls: true,
+            autoplay: true,
+            plugins: {
+              peertube: {
+                videoFiles: this.video.files,
+                playerElement: this.playerElement,
+                autoplay: true,
+                peerTubeLink: false
+              }
             }
           }
-        }
 
-        this.videoPlayerLoaded = true
+          this.videoPlayerLoaded = true
 
-        const self = this
-        videojs(this.playerElement, videojsOptions, function () {
-          self.player = this
-          this.on('customError', (event, data) => {
-            self.handleError(data.err)
+          const self = this
+          videojs(this.playerElement, videojsOptions, function () {
+            self.player = this
+            this.on('customError', (event, data) => {
+              self.handleError(data.err)
+            })
           })
-        })
+        } else {
+          (this.player as any).setVideoFiles(this.video.files)
+        }
 
         this.setVideoDescriptionHTML()
 

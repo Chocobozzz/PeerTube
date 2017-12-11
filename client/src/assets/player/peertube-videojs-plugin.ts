@@ -283,6 +283,12 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
     }
   }
 
+  player.setVideoFiles = function (files: VideoFile[]) {
+    player.videoFiles = files
+
+    player.updateVideoFile(undefined, () => player.play())
+  }
+
   player.ready(function () {
     const controlBar = player.controlBar
 
