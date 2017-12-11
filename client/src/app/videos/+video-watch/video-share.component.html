@@ -12,7 +12,7 @@
       <div class="modal-body">
         <div class="form-group">
           <label>URL</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoUrl()" />
             <div class="input-group-btn" placement="bottom right">
               <button [ngxClipboard]="urlInput" (click)="activateCopiedMessage()" type="button" class="btn btn-default btn-search">
@@ -24,7 +24,7 @@
 
         <div class="form-group">
           <label>Embed</label>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <input #shareInput (click)="shareInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoIframeCode()" />
             <div class="input-group-btn" placement="bottom right">
               <button [ngxClipboard]="shareInput" (click)="activateCopiedMessage()" type="button" class="btn btn-default btn-search">
