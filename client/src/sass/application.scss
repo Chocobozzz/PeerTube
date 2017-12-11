@@ -107,35 +107,6 @@ label {
   font-weight: bold;
 }
 
-// On small screen, menu is absolute
-@media screen and (max-width: 800px) {
-  .title-menu-left {
-    width: 150px !important;
-    position: absolute !important;
-    z-index: 10000;
-  }
-
-  .main-col {
-    margin-left: 0;
-
-    &, &.expanded {
-      .margin-content {
-        margin-left: 10px;
-        margin-right: 10px;
-      }
-
-      .sub-menu {
-        padding-left: 10px;
-        margin-bottom: 10px;
-      }
-
-      input[type=text], input[type=password] {
-        width: 100% !important;
-      }
-    }
-  }
-}
-
 // Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
 .glyphicon-refresh-animate {
   -animation: spin .7s infinite linear;
@@ -329,4 +300,33 @@ p-datatable {
 .grey-button-link {
   @include peertube-button-link;
   @include grey-button;
+}
+
+// On small screen, menu is absolute
+@media screen and (max-width: 800px) {
+  .title-menu-left {
+    width: 150px !important;
+    position: absolute !important;
+    z-index: 10000;
+  }
+
+  .main-col {
+    margin-left: 0;
+
+    &, &.expanded {
+      .margin-content {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .sub-menu {
+        padding-left: 10px;
+        margin-bottom: 10px;
+      }
+
+      input[type=text], input[type=password] {
+        width: 100% !important;
+      }
+    }
+  }
 }

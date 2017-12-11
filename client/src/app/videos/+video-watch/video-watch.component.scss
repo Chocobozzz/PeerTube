@@ -216,14 +216,18 @@
 }
 
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1000px) {
   .other-videos {
     display: none;
   }
+}
 
+@media screen and (max-width: 800px) {
   .video-bottom {
+    margin: 20px 0 0 0;
+
     .video-info {
-      margin-right: 10px;
+      margin-right: 0;
 
       .video-info-name-actions {
         align-items: left;
