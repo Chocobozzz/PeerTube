@@ -52,7 +52,7 @@ Decentralized video streaming platform using P2P (BitTorrent) directly in the we
 
 <p align="center">
   <a href="https://peertube.cpy.re">
-    <img src="https://lutim.cpy.re/9HOUfGK8" alt="screenshot" />
+    <img src="https://lutim.cpy.re/mRdBAdeD.png" alt="screenshot" />
   </a>
 </p>
 
