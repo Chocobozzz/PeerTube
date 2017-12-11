@@ -1,14 +1,12 @@
-import { Injectable } from '@angular/core'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Observable } from 'rxjs/Observable'
+import { Injectable } from '@angular/core'
+import { BytesPipe } from 'ngx-pipes'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-
-import { SortMeta } from 'primeng/components/common/sortmeta'
-import { BytesPipe } from 'angular-pipes/src/math/bytes.pipe'
-
-import { RestExtractor, User, RestPagination, RestService } from '../../../shared'
-import { UserCreate, UserUpdate, ResultList } from '../../../../../../shared'
+import { Observable } from 'rxjs/Observable'
+import { ResultList, UserCreate, UserUpdate } from '../../../../../../shared'
+import { RestExtractor, RestPagination, RestService, User } from '../../../shared'
 
 @Injectable()
 export class UserService {

@@ -1,0 +1,39 @@
+<div
+  class="videos"
+  infiniteScroll
+  [infiniteScrollDistance]="0.5"
+  [infiniteScrollUpDistance]="1.5"
+  (scrolled)="onNearOfBottom()"
+  (scrolledUp)="onNearOfTop()"
+>
+  <div class="video" *ngFor="let video of videos; let i = index">
+    <input type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
+
+    <my-video-thumbnail [video]="video"></my-video-thumbnail>
+
+    <div class="video-info">
+      <div class="video-info-name">{{ video.name }}</div>
+      <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+    </div>
+
+    <!-- Display only once -->
+    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
+      <div class="action-selection-mode-child">
+        <span class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
+          Cancel
+        </span>
+
+        <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+          <span class="icon icon-delete-white"></span>
+          Delete
+        </span>
+      </div>
+    </div>
+
+    <div class="video-buttons" *ngIf="isInSelectionMode() === false">
+      <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
+
+      <my-edit-button [routerLink]="[ '/videos', 'edit', video.uuid ]"></my-edit-button>
+    </div>
+  </div>
+</div>

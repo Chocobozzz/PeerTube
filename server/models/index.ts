@@ -1,4 +1,5 @@
 export * from './application'
+export * from './avatar'
 export * from './job'
 export * from './oauth'
 export * from './server'

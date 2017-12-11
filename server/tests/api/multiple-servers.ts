@@ -2,6 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { join } from 'path'
+import * as request from 'supertest'
 
 import {
   dateIsValid,
@@ -111,13 +113,14 @@ describe('Test multiple servers', function () {
         expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
-        expect(video.account).to.equal('root')
+        expect(video.accountName).to.equal('root')
 
         const res2 = await getVideo(server.url, video.uuid)
         const videoDetails = res2.body
 
         expect(videoDetails.channel.name).to.equal('my channel')
         expect(videoDetails.channel.description).to.equal('super channel')
+        expect(videoDetails.account.name).to.equal('root')
         expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
         expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
         expect(videoDetails.files).to.have.lengthOf(1)
@@ -201,7 +204,7 @@ describe('Test multiple servers', function () {
         expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
-        expect(video.account).to.equal('user1')
+        expect(video.accountName).to.equal('user1')
 
         if (server.url !== 'http://localhost:9002') {
           expect(video.isLocal).to.be.false
@@ -316,7 +319,7 @@ describe('Test multiple servers', function () {
         expect(video1.serverHost).to.equal('localhost:9003')
         expect(video1.duration).to.equal(5)
         expect(video1.tags).to.deep.equal([ 'tag1p3' ])
-        expect(video1.account).to.equal('root')
+        expect(video1.accountName).to.equal('root')
         expect(dateIsValid(video1.createdAt)).to.be.true
         expect(dateIsValid(video1.updatedAt)).to.be.true
 
@@ -342,7 +345,7 @@ describe('Test multiple servers', function () {
         expect(video2.serverHost).to.equal('localhost:9003')
         expect(video2.duration).to.equal(5)
         expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
-        expect(video2.account).to.equal('root')
+        expect(video2.accountName).to.equal('root')
         expect(dateIsValid(video2.createdAt)).to.be.true
         expect(dateIsValid(video2.updatedAt)).to.be.true
 
@@ -690,7 +693,7 @@ describe('Test multiple servers', function () {
         expect(baseVideo.licence).to.equal(video.licence)
         expect(baseVideo.category).to.equal(video.category)
         expect(baseVideo.nsfw).to.equal(video.nsfw)
-        expect(baseVideo.account).to.equal(video.account)
+        expect(baseVideo.accountName).to.equal(video.accountName)
         expect(baseVideo.tags).to.deep.equal(video.tags)
       }
     })
@@ -702,6 +705,50 @@ describe('Test multiple servers', function () {
 
         const test = await testVideoImage(server.url, 'video_short1-preview.webm', video.previewPath)
         expect(test).to.equal(true)
+      }
+    })
+  })
+
+  describe('With minimum parameters', function () {
+    it('Should upload and propagate the video', async function () {
+      this.timeout(50000)
+
+      const path = '/api/v1/videos/upload'
+
+      const req = request(servers[1].url)
+        .post(path)
+        .set('Accept', 'application/json')
+        .set('Authorization', 'Bearer ' + servers[1].accessToken)
+        .field('name', 'minimum parameters')
+        .field('privacy', '1')
+        .field('nsfw', 'false')
+        .field('channelId', '1')
+
+      const filePath = join(__dirname, '..', 'api', 'fixtures', 'video_short.webm')
+
+      await req.attach('videofile', filePath)
+        .expect(200)
+
+      await wait(25000)
+
+      for (const server of servers) {
+        const res = await getVideosList(server.url)
+        const video = res.body.data.find(v => v.name === 'minimum parameters')
+
+        expect(video.name).to.equal('minimum parameters')
+        expect(video.category).to.equal(null)
+        expect(video.categoryLabel).to.equal('Misc')
+        expect(video.licence).to.equal(null)
+        expect(video.licenceLabel).to.equal('Unknown')
+        expect(video.language).to.equal(null)
+        expect(video.languageLabel).to.equal('Unknown')
+        expect(video.nsfw).to.not.be.ok
+        expect(video.description).to.equal(null)
+        expect(video.serverHost).to.equal('localhost:9002')
+        expect(video.accountName).to.equal('root')
+        expect(video.tags).to.deep.equal([ ])
+        expect(dateIsValid(video.createdAt)).to.be.true
+        expect(dateIsValid(video.updatedAt)).to.be.true
       }
     })
   })

@@ -1,24 +1,19 @@
-<div class="row">
-  <div class="content-padding">
-
-  <h3>Video abuses list</h3>
-
-  <p-dataTable
-      [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-      sortField="id" (onLazyLoad)="loadLazy($event)"
-  >
-    <p-column field="id" header="ID" [sortable]="true"></p-column>
-    <p-column field="reason" header="Reason"></p-column>
-    <p-column field="reporterServerHost" header="Reporter server host"></p-column>
-    <p-column field="reporterUsername" header="Reporter username"></p-column>
-    <p-column field="videoName" header="Video name"></p-column>
-    <p-column header="Video" styleClass="action-cell">
-      <ng-template pTemplate="body" let-videoAbuse="rowData">
-        <a [routerLink]="getRouterVideoLink(videoAbuse.videoId)" title="Go to the video">{{ videoAbuse.videoId }}</a>
-      </ng-template>
-    </p-column>
-    <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
-  </p-dataTable>
-
-  </div>
+<div class="admin-sub-header">
+  <div class="admin-sub-title">Video abuses list</div>
 </div>
+
+<p-dataTable
+    [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+    sortField="id" (onLazyLoad)="loadLazy($event)"
+>
+  <p-column field="id" header="ID" [sortable]="true"></p-column>
+  <p-column field="reason" header="Reason"></p-column>
+  <p-column field="reporterServerHost" header="Reporter server host"></p-column>
+  <p-column field="reporterUsername" header="Reporter username"></p-column>
+  <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
+  <p-column header="Video">
+    <ng-template pTemplate="body" let-videoAbuse="rowData">
+      <a [routerLink]="getRouterVideoLink(videoAbuse.videoId)" title="Go to the video">{{ videoAbuse.videoName }}</a>
+    </ng-template>
+  </p-column>
+</p-dataTable>

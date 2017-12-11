@@ -227,7 +227,7 @@ describe('Test follows', function () {
     expect(videoDetails.nsfw).to.be.ok
     expect(videoDetails.description).to.equal('my super description')
     expect(videoDetails.serverHost).to.equal('localhost:9003')
-    expect(videoDetails.account).to.equal('root')
+    expect(videoDetails.accountName).to.equal('root')
     expect(videoDetails.likes).to.equal(1)
     expect(videoDetails.dislikes).to.equal(1)
     expect(videoDetails.isLocal).to.be.false

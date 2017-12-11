@@ -41,15 +41,30 @@ async function videoActivityObjectToDBAttributes (
     language = parseInt(videoObject.language.identifier, 10)
   }
 
+  let category = null
+  if (videoObject.category) {
+    category = parseInt(videoObject.category.identifier, 10)
+  }
+
+  let licence = null
+  if (videoObject.licence) {
+    licence = parseInt(videoObject.licence.identifier, 10)
+  }
+
+  let description = null
+  if (videoObject.content) {
+    description = videoObject.content
+  }
+
   const videoData: VideoAttributes = {
     name: videoObject.name,
     uuid: videoObject.uuid,
     url: videoObject.id,
-    category: parseInt(videoObject.category.identifier, 10),
-    licence: parseInt(videoObject.licence.identifier, 10),
+    category,
+    licence,
     language,
+    description,
     nsfw: videoObject.nsfw,
-    description: videoObject.content,
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),
     createdAt: new Date(videoObject.published),

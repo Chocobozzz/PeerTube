@@ -1,0 +1,27 @@
+.action-button {
+  @include peertube-button-link;
+
+  font-size: 15px;
+  font-weight: $font-semibold;
+  color: #585858;
+  background-color: #E5E5E5;
+
+  &:hover {
+    background-color: #EFEFEF;
+  }
+
+  .icon {
+    @include icon(21px);
+
+    position: relative;
+    top: -2px;
+
+    &.icon-edit {
+      background-image: url('../../../assets/images/global/edit.svg');
+    }
+
+    &.icon-delete-grey {
+      background-image: url('../../../assets/images/global/delete-grey.svg');
+    }
+  }
+}

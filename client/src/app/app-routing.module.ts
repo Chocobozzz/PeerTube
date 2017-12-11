@@ -6,7 +6,7 @@ import { PreloadSelectedModulesList } from './core'
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/videos/list',
+    redirectTo: '/videos/trending',
     pathMatch: 'full'
   },
   {

@@ -1,0 +1,193 @@
+menu {
+  background-color: $black-background;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  z-index: 1000;
+  color: $menu-color;
+
+  .logged-in-block {
+    height: 100px;
+    background-color: rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 35px;
+
+    img {
+      margin-left: 20px;
+      margin-right: 10px;
+
+      @include avatar(34px);
+    }
+
+    .logged-in-info {
+      flex-grow: 1;
+
+      .logged-in-username {
+        font-size: 16px;
+        font-weight: $font-semibold;
+        color: $menu-color;
+        cursor: pointer;
+
+        @include disable-default-a-behaviour;
+      }
+
+      .logged-in-email {
+        font-size: 13px;
+        color: #C6C6C6;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 140px;
+      }
+    }
+
+    .logged-in-more {
+      margin-right: 20px;
+
+      .glyphicon {
+        cursor: pointer;
+        font-size: 18px;
+      }
+    }
+  }
+
+  .button-block {
+    margin: 30px 25px 35px 25px;
+
+    .login-button, .create-account-button {
+      font-weight: $font-semibold;
+      font-size: 15px;
+      height: $button-height;
+      line-height: $button-height;
+      width: 100%;
+      border-radius: 3px;
+      text-align: center;
+      color: $menu-color;
+      display: block;
+      cursor: pointer;
+      margin-bottom: 15px;
+
+      @include disable-default-a-behaviour;
+
+      &.login-button {
+        background-color: $orange-color;
+        margin-bottom: 10px;
+      }
+
+      &.create-account-button {
+        background-color: rgba(255, 255, 255, 0.25);
+      }
+    }
+  }
+
+  .block-title {
+    text-transform: uppercase;
+    font-weight: $font-bold; // Bold
+    font-size: 13px;
+    margin-bottom: 25px;
+  }
+
+  .panel-block {
+    margin-bottom: 45px;
+    margin-left: 26px;
+
+    a {
+      display: flex;
+      color: $menu-color;
+      cursor: pointer;
+      height: 22px;
+      line-height: 22px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      @include disable-default-a-behaviour;
+
+      .icon {
+        @include icon(22px);
+
+        margin-right: 18px;
+
+        &.icon-videos-trending {
+          position: relative;
+          top: -2px;
+          background-image: url('../../assets/images/menu/trending.svg');
+        }
+
+        &.icon-videos-recently-added {
+          width: 23px;
+          height: 23px;
+          position: relative;
+          top: -1px;
+          background-image: url('../../assets/images/menu/recently-added.svg');
+        }
+
+        &.icon-administration {
+          width: 23px;
+          height: 23px;
+
+          background-image: url('../../assets/images/menu/administration.svg');
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  menu {
+    .logged-in-block {
+      padding-left: 10px;
+
+      img {
+        display: none;
+      }
+
+      .logged-in-info {
+        .logged-in-username {
+          font-size: 14px;
+        }
+
+        .logged-in-email {
+          font-size: 11px;
+          max-width: 120px;
+        }
+      }
+
+      .logged-in-more {
+        margin-right: 5px;
+
+        .login-button, .create-account-button {
+          font-weight: $font-semibold;
+          font-size: 15px;
+          height: $button-height;
+          line-height: $button-height;
+          width: 190px;
+        }
+      }
+    }
+
+    .button-block {
+      margin: 20px 10px 25px 10px;
+
+      .login-button, .create-account-button {
+        font-size: 13px;
+      }
+    }
+
+    .panel-block {
+      margin-bottom: 30px;
+      margin-left: 10px;
+
+      a {
+        font-size: 14px;
+
+        .icon {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}

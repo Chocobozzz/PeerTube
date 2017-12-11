@@ -14,7 +14,7 @@ import { FollowState } from '../../shared/models/accounts/follow.model'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 110
+const LAST_MIGRATION_VERSION = 120
 
 // ---------------------------------------------------------------------------
 
@@ -23,11 +23,6 @@ const API_VERSION = 'v1'
 
 // Number of results by default for the pagination
 const PAGINATION_COUNT_DEFAULT = 15
-
-// Sortable columns per schema
-const SEARCHABLE_COLUMNS = {
-  VIDEOS: [ 'name', 'magnetUri', 'host', 'account', 'tags' ]
-}
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
@@ -60,6 +55,7 @@ const CONFIG = {
     PASSWORD: config.get<string>('database.password')
   },
   STORAGE: {
+    AVATARS_DIR: join(root(), config.get<string>('storage.avatars')),
     LOG_DIR: join(root(), config.get<string>('storage.logs')),
     VIDEOS_DIR: join(root(), config.get<string>('storage.videos')),
     THUMBNAILS_DIR: join(root(), config.get<string>('storage.thumbnails')),
@@ -105,6 +101,9 @@ const CONFIG = {
 CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 CONFIG.WEBSERVER.HOST = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
+const AVATARS_DIR = {
+  ACCOUNT: join(CONFIG.STORAGE.AVATARS_DIR, 'account')
+}
 // ---------------------------------------------------------------------------
 
 const CONSTRAINTS_FIELDS = {
@@ -356,7 +355,7 @@ export {
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   FOLLOW_STATES,
-  SEARCHABLE_COLUMNS,
+  AVATARS_DIR,
   SERVER_ACCOUNT_NAME,
   PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,

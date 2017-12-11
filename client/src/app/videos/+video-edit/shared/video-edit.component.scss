@@ -1,56 +1,130 @@
-.btn-file {
-  position: relative;
-  overflow: hidden;
-  display: block;
-}
+.video-edit {
+  height: 100%;
 
-.btn-file input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 100%;
-  min-height: 100%;
-  font-size: 100px;
-  text-align: right;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  outline: none;
-  background: white;
-  cursor: inherit;
-  display: block;
-}
+  .form-group {
+    margin-bottom: 25px;
+  }
 
-.form-group {
-  margin-bottom: 10px;
-}
+  input {
+    @include peertube-input-text(100%);
+    display: block;
 
-div.tags {
-  height: 40px;
-  font-size: 20px;
-  margin-top: 20px;
+    &[type=checkbox] {
+      outline: 0;
+    }
+  }
 
-  .tag {
-    margin-right: 10px;
+  select {
+    @include peertube-select(100%);
+  }
 
-    .remove {
-      cursor: pointer;
+  input, select {
+    font-size: 15px
+  }
+
+  .form-group-checkbox {
+    display: flex;
+    align-items: center;
+
+    label {
+      font-weight: $font-regular;
+      margin: 0;
+    }
+
+    input {
+      width: 10px;
+      margin-right: 10px;
     }
   }
 }
 
-div.file-to-upload {
-  height: 40px;
+.submit-container {
+  text-align: right;
+  position: relative;
+  bottom: $button-height;
 
-  .glyphicon-remove {
-    cursor: pointer;
+  .message-submit {
+    display: inline-block;
+    margin-right: 25px;
+
+    color: #585858;
+    font-size: 15px;
+  }
+
+  .submit-button {
+    @include peertube-button;
+    @include orange-button;
+
+    display: inline-block;
+
+    input {
+      cursor: inherit;
+      background-color: inherit;
+      border: none;
+      padding: 0;
+      outline: 0;
+    }
+
+    .icon.icon-validate {
+      @include icon(20px);
+
+      cursor: inherit;
+      position: relative;
+      top: -1px;
+      margin-right: 4px;
+      background-image: url('../../../../assets/images/global/validate.svg');
+    }
+  }
+}
+
+/deep/ {
+  .ng2-tag-input {
+    border: none !important;
+  }
+
+  .ng2-tags-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #C6C6C6;
+    border-radius: 3px;
+    padding: 5px !important;
+  }
+
+  tag {
+    background-color: #E5E5E5 !important;
+    border-radius: 3px !important;
+    font-size: 15px !important;
+    color: #000 !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    margin: 0 5px 0 0 !important;
+    cursor: default !important;
+    padding: 0 8px 0 10px !important;
+
+    div {
+      height: 100% !important;
+    }
+  }
+
+  delete-icon {
+    cursor: pointer !important;
+    height: auto !important;
+    vertical-align: middle !important;
+    padding-left: 6px !important;
+
+    svg {
+      height: auto !important;
+      vertical-align: middle !important;
+      fill: #585858 !important;
+    }
+
+    &:hover {
+      transform: none !important;
+    }
   }
 }
 
 .little-information {
   font-size: 0.8em;
   font-style: italic;
-}
-
-.label-tags {
-  margin-bottom: 0;
 }

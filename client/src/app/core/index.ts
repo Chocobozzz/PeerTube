@@ -1,6 +1,5 @@
 export * from './auth'
 export * from './server'
 export * from './confirm'
-export * from './menu'
 export * from './routing'
 export * from './core.module'

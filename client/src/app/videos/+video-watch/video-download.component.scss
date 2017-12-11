@@ -1,0 +1,23 @@
+.resolution-block:not(:first-child) {
+  margin-top: 30px;
+}
+
+.orange-button-link {
+  margin-right: 10px;
+}
+
+label {
+  display: block;
+}
+
+.icon {
+  @include icon(21px);
+
+  margin-right: 5px;
+  position: relative;
+  top: -1px;
+
+  &.icon-download {
+    background-image: url('../../../assets/images/video/download-white.svg');
+  }
+}

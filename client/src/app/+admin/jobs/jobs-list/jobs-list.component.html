@@ -1,18 +1,20 @@
-<div class="row">
-  <div class="content-padding">
-    <h3>Jobs list</h3>
-
-    <p-dataTable
-        [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-        sortField="createdAt" (onLazyLoad)="loadLazy($event)"
-    >
-      <p-column field="id" header="ID"></p-column>
-      <p-column field="category" header="Category"></p-column>
-      <p-column field="handlerName" header="Handler name"></p-column>
-      <p-column field="handlerInputData" header="Input data"></p-column>
-      <p-column field="state" header="State"></p-column>
-      <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
-      <p-column field="updatedAt" header="Updated date"></p-column>
-    </p-dataTable>
-  </div>
+<div class="admin-sub-header">
+  <div class="admin-sub-title">Jobs list</div>
 </div>
+
+<p-dataTable
+    [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+    sortField="createdAt" (onLazyLoad)="loadLazy($event)" [scrollable]="true" [virtualScroll]="true" [scrollHeight]="scrollHeight"
+>
+  <p-column field="id" header="ID" [style]="{ width: '40px' }"></p-column>
+  <p-column field="category" header="Category" [style]="{ width: '100px' }"></p-column>
+  <p-column field="handlerName" header="Handler name" [style]="{ width: '200px' }"></p-column>
+  <p-column header="Input data">
+    <ng-template pTemplate="body" let-job="rowData">
+      <pre>{{ job.handlerInputData }}</pre>
+    </ng-template>
+  </p-column>
+  <p-column field="state" header="State" [style]="{ width: '100px' }"></p-column>
+  <p-column field="createdAt" header="Created date" [sortable]="true" [style]="{ width: '250px' }"></p-column>
+  <p-column field="updatedAt" header="Updated date" [style]="{ width: '250px' }"></p-column>
+</p-dataTable>

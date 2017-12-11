@@ -264,10 +264,6 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-pipes@^6.0.0:
-  version "6.5.3"
-  resolved "https://registry.yarnpkg.com/angular-pipes/-/angular-pipes-6.5.3.tgz#6bed37c51ebc2adaf3412663bfe25179d0489b02"
-
 angular2-notifications@^0.7.7:
   version "0.7.8"
   resolved "https://registry.yarnpkg.com/angular2-notifications/-/angular2-notifications-0.7.8.tgz#ecbcb95a8d2d402af94a9a080d6664c70d33a029"
@@ -4708,15 +4704,23 @@ ngc-webpack@3.2.2:
     source-map "^0.5.6"
     ts-node "^3.2.0"
 
-ngx-bootstrap@1.9.3:
-  version "1.9.3"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-1.9.3.tgz#28e75d14fb1beaee609383d7694de4eb3ba03b26"
+ngx-bootstrap@2.0.0-beta.9:
+  version "2.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.0-beta.9.tgz#9aa7c88269534e7a5440481f31b137549f749796"
 
 ngx-chips@1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/ngx-chips/-/ngx-chips-1.5.3.tgz#8b47cf02bad41c0107fbf072e8f65e40c92fee59"
   dependencies:
     ng2-material-dropdown "0.7.10"
+
+ngx-infinite-scroll@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/ngx-infinite-scroll/-/ngx-infinite-scroll-0.7.0.tgz#a390c61c6a05ac14485e1c5bc8b4e6f6bd62fd6a"
+
+ngx-pipes@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/ngx-pipes/-/ngx-pipes-2.0.5.tgz#743b827e350b1e66f5bdae49e90a02fa631d4c54"
 
 no-case@^2.2.0:
   version "2.3.2"
@@ -6601,6 +6605,10 @@ source-map@^0.4.2:
 source-map@^0.6.1, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+
+source-sans-pro@^2.0.10:
+  version "2.0.10"
+  resolved "https://registry.yarnpkg.com/source-sans-pro/-/source-sans-pro-2.0.10.tgz#c1ca859cf164a088944c5e83745085e87cd533a9"
 
 spdx-correct@~1.0.0:
   version "1.0.2"

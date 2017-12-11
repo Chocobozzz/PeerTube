@@ -1,35 +1,22 @@
-<div class="row">
-  <div class="content-padding">
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-    <h3>Add following</h3>
+<form (ngSubmit)="addFollowing()">
+  <div class="form-group">
+    <label for="hosts">1 host (without "http://") per line</label>
 
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    <textarea
+      type="text" class="form-control" placeholder="example.com" id="hosts" name="hosts"
+      [(ngModel)]="hostsString" (ngModelChange)="onHostsChanged()" [ngClass]="{ 'input-error': hostsError }"
+    ></textarea>
 
-    <form (ngSubmit)="addFollowing()" [formGroup]="form">
-      <div class="form-group"  *ngFor="let host of hosts; let id = index; trackBy:customTrackBy">
-        <label [for]="'host-' + id">Host (so without "http://")</label>
-
-        <div class="input-group">
-          <input
-            type="text" class="form-control" placeholder="example.com"
-            [id]="'host-' + id" [formControlName]="'host-' + id"
-          />
-          <span class="input-group-btn">
-            <button *ngIf="displayAddField(id)" (click)="addField()" class="btn btn-default" type="button">+</button>
-            <button *ngIf="displayRemoveField(id)" (click)="removeField(id)" class="btn btn-default" type="button">-</button>
-          </span>
-        </div>
-
-        <div [hidden]="form.controls['host-' + id].valid || form.controls['host-' + id].pristine" class="alert alert-warning">
-          It should be a valid host.
-        </div>
-      </div>
-
-      <div *ngIf="canMakeFriends() === false"  class="alert alert-warning">
-        It seems that you are not on a HTTPS server. Your webserver need to have TLS activated in order to follow servers.
-      </div>
-
-      <input type="submit" value="Add following" class="btn btn-default" [disabled]="!isFormValid()">
-    </form>
+    <div *ngIf="hostsError" class="form-error">
+      {{ hostsError }}
+    </div>
   </div>
-</div>
+
+  <div *ngIf="httpEnabled() === false"  class="alert alert-warning">
+    It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
+  </div>
+
+  <input type="submit" value="Add following" [disabled]="hostsError || !hostsString" class="btn btn-default">
+</form>

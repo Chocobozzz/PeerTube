@@ -74,7 +74,8 @@ module.exports = function (options) {
                 loader: 'sass-resources-loader',
                 options: {
                   resources: [
-                    helpers.root('src/sass/_variables.scss')
+                    helpers.root('src/sass/_variables.scss'),
+                    helpers.root('src/sass/_mixins.scss')
                   ]
                 }
               }

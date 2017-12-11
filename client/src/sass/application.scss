@@ -1,3 +1,5 @@
+$FontPathSourceSansPro: "../fonts/source-sans-pro";
+@import '~source-sans-pro/source-sans-pro';
 @import '~primeng/resources/themes/bootstrap/theme.css';
 @import '~primeng/resources/primeng.css';
 @import '~video.js/dist/video-js.css';
@@ -7,17 +9,30 @@
   display: none !important;
 }
 
+body {
+  font-family: 'Source Sans Pro';
+  font-weight: $font-regular;
+  color: #000;
+}
+
 input.readonly {
   /* Force blank on readonly inputs */
   background-color: #fff !important;
 }
 
-.form-control, .btn {
-  border-radius: 0;
+label {
+  font-weight: $font-bold;
+  font-size: 15px;
 }
 
-.dropdown-menu {
-  border-radius: 0;
+.form-error {
+  display: block;
+  color: $red-error;
+  margin-top: 5px;
+}
+
+.input-error {
+  border-color: $red-error !important;
 }
 
 .glyphicon-black {
@@ -25,42 +40,71 @@ input.readonly {
 }
 
 .main-col {
-  .content-padding {
-    padding: 15px 30px;
+  margin-left: $menu-width;
 
-    @media screen and (max-width: 800px) {
-      padding: 15px 10px;
+  .margin-content {
+    margin-left: $not-expanded-horizontal-margins;
+    margin-right: $not-expanded-horizontal-margins;
+  }
+
+  .sub-menu {
+    background-color: #F7F7F7;
+    width: 100%;
+    height: 81px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    padding-left: $not-expanded-horizontal-margins;
+  }
+
+  // Override some properties if the main content is expanded (no menu on the left)
+  &.expanded {
+    margin-left: 0;
+
+    .margin-content {
+      margin-left: $expanded-horizontal-margins;
+      margin-right: $expanded-horizontal-margins;
     }
 
-    @media screen and (min-width: 1400px) {
-      padding: 15px 40px;
-    }
-
-    @media screen and (min-width: 1600px) {
-      padding: 15px 50px;
-    }
-
-    @media screen and (min-width: 1800px) {
-      padding: 15px 60px;
+    .sub-menu {
+      padding-left: $expanded-horizontal-margins;
     }
   }
 }
 
-// On small screen, menu is absolute and displayed over the page
-@media screen and (max-width: 500px) {
-  .title-menu-left {
-    width: 120px;
-    position: absolute !important;
-    z-index: 10000;
+.title-page {
+  color: #000;
+  font-size: 16px;
+  display: inline-block;
+  margin-right: 55px;
+  font-weight: $font-semibold;
+  @include disable-default-a-behaviour;
+
+  &.active, &.title-page-single {
+    border-bottom: 2px solid $orange-color;
+    font-weight: $font-bold;
+    margin-top: 30px;
+    margin-bottom: 25px;
   }
 
-  .main-col {
-    width: 100% !important;
+  &:hover, &:active, &:focus {
+    color: #000;
   }
+}
 
-  .fake-menu {
-    display: none;
+.admin-sub-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+
+  .admin-sub-title {
+    flex-grow: 1;
   }
+}
+
+.admin-sub-title {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 // Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
@@ -86,13 +130,209 @@ input.readonly {
   to { -moz-transform: rotate(360deg);}
 }
 
-/* ngprime data table customizations */
+// ngprime data table customizations
 p-datatable {
-  .action-cell {
-    text-align: center;
+  font-size: 15px !important;
 
-    .glyphicon {
-      cursor: pointer;
+  .ui-datatable-scrollable-header {
+    background-color: #fff !important;
+  }
+
+  .ui-widget-content {
+    border: none !important;
+  }
+
+  .ui-datatable-virtual-table {
+    border-top: none !important;
+  }
+
+  td {
+    border: 1px solid #E5E5E5 !important;
+    padding-left: 15px !important;
+  }
+
+  tr {
+    background-color: #fff !important;
+    height: 46px;
+
+    &:hover {
+      background-color: #f0f0f0 !important;
+    }
+
+    &:not(:hover) {
+      .action-cell * {
+        display: none !important;
+      }
+    }
+
+    &:first-child td {
+      border-top: none !important;
+    }
+
+    &:last-child td {
+      border-bottom: none !important;
+    }
+  }
+
+  th {
+    border: none !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    text-align: left !important;
+    padding: 5px 0 5px 15px !important;
+    font-weight: $font-semibold !important;
+    color: #000 !important;
+
+    &.ui-sortable-column:hover:not(.ui-state-active) {
+      background-color: #f0f0f0 !important;
+      border: 1px solid #f0f0f0 !important;
+      border-width: 0 1px !important;
+    }
+
+    &.ui-state-active {
+      color: #fff !important;
+      background-color: $orange-color !important;
+      border: 1px solid $orange-color !important;
+      border-width: 0 1px !important;
+    }
+  }
+
+  .action-cell {
+    width: 250px !important;
+    padding: 0 !important;
+    text-align: center;
+  }
+
+  p-paginator {
+    .ui-paginator-bottom {
+      position: relative;
+      border: none !important;
+      border: 1px solid #f0f0f0 !important;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      a {
+        color: #000 !important;
+        font-weight: $font-semibold !important;
+        margin-right: 20px !important;
+        outline: 0 !important;
+        border-radius: 3px !important;
+        padding: 5px 2px !important;
+
+        &.ui-state-active {
+          &, &:hover, &:active, &:focus {
+            color: #fff !important;
+            background-color: $orange-color !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Bootstrap customizations
+.dropdown-menu {
+  border-radius: 3px;
+  box-shadow: 0 3px 6px;
+  font-size: 15px;
+
+  .dropdown-item {
+    padding: 3px 15px;
+  }
+
+  a {
+    color: #000 !important;
+  }
+}
+
+.modal {
+  .modal-header {
+    border-bottom: none;
+
+    .title-page-single {
+      margin: 0;
+    }
+  }
+}
+
+.nav {
+  font-size: 16px !important;
+  border: none !important;
+
+  .nav-item .nav-link {
+    margin-right: 30px;
+    padding: 0;
+    border-radius: 3px;
+    border: none !important;
+
+    .tab-link {
+      display: flex !important;
+      align-items: center;
+      height: 30px !important;
+      padding: 0 15px;
+    }
+
+    &, & a {
+      color: #000 !important;
+      @include disable-default-a-behaviour;
+    }
+
+    &.active, &:hover {
+      background-color: #F0F0F0;
+    }
+
+    &.active {
+      font-weight: $font-semibold !important;
+    }
+  }
+}
+
+.orange-button {
+  @include peertube-button;
+  @include orange-button;
+}
+
+.orange-button-link {
+  @include peertube-button-link;
+  @include orange-button;
+}
+
+.grey-button {
+  @include peertube-button;
+  @include grey-button;
+}
+
+.grey-button-link {
+  @include peertube-button-link;
+  @include grey-button;
+}
+
+// On small screen, menu is absolute
+@media screen and (max-width: 800px) {
+  .title-menu-left {
+    width: 150px !important;
+    position: absolute !important;
+    z-index: 10000;
+  }
+
+  .main-col {
+    margin-left: 0;
+
+    &, &.expanded {
+      .margin-content {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+
+      .sub-menu {
+        padding-left: 10px;
+        margin-bottom: 10px;
+      }
+
+      input[type=text], input[type=password] {
+        width: 100% !important;
+      }
     }
   }
 }

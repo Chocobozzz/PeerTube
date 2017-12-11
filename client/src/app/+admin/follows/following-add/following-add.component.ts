@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core'
-import { FormControl, FormGroup } from '@angular/forms'
+import { Component } from '@angular/core'
 import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
 import { ConfirmService } from '../../../core'
 import { validateHost } from '../../../shared'
 import { FollowService } from '../shared'
@@ -13,9 +10,9 @@ import { FollowService } from '../shared'
   templateUrl: './following-add.component.html',
   styleUrls: [ './following-add.component.scss' ]
 })
-export class FollowingAddComponent implements OnInit {
-  form: FormGroup
-  hosts: string[] = [ ]
+export class FollowingAddComponent {
+  hostsString = ''
+  hostsError: string = null
   error: string = null
 
   constructor (
@@ -25,76 +22,50 @@ export class FollowingAddComponent implements OnInit {
     private followService: FollowService
   ) {}
 
-  ngOnInit () {
-    this.form = new FormGroup({})
-    this.addField()
-  }
-
-  addField () {
-    this.form.addControl(`host-${this.hosts.length}`, new FormControl('', [ validateHost ]))
-    this.hosts.push('')
-  }
-
-  canMakeFriends () {
+  httpEnabled () {
     return window.location.protocol === 'https:'
   }
 
-  customTrackBy (index: number, obj: any): any {
-    return index
-  }
+  onHostsChanged () {
+    this.hostsError = null
 
-  displayAddField (index: number) {
-    return index === (this.hosts.length - 1)
-  }
+    const newHostsErrors = []
+    const hosts = this.getNotEmptyHosts()
 
-  displayRemoveField (index: number) {
-    return (index !== 0 || this.hosts.length > 1) && index !== (this.hosts.length - 1)
-  }
-
-  isFormValid () {
-    // Do not check the last input
-    for (let i = 0; i < this.hosts.length - 1; i++) {
-      if (!this.form.controls[`host-${i}`].valid) return false
+    for (const host of hosts) {
+      if (validateHost(host) === false) {
+        newHostsErrors.push(`${host} is not valid`)
+      }
     }
 
-    const lastIndex = this.hosts.length - 1
-    // If the last input (which is not the first) is empty, it's ok
-    if (this.hosts[lastIndex] === '' && lastIndex !== 0) {
-      return true
-    } else {
-      return this.form.controls[`host-${lastIndex}`].valid
+    if (newHostsErrors.length !== 0) {
+      this.hostsError = newHostsErrors.join('. ')
     }
-  }
-
-  removeField (index: number) {
-    // Remove the last control
-    this.form.removeControl(`host-${this.hosts.length - 1}`)
-    this.hosts.splice(index, 1)
   }
 
   addFollowing () {
     this.error = ''
 
-    const notEmptyHosts = this.getNotEmptyHosts()
-    if (notEmptyHosts.length === 0) {
-      this.error = 'You need to specify at least 1 host.'
-      return
+    const hosts = this.getNotEmptyHosts()
+    if (hosts.length === 0) {
+      this.error = 'You need to specify hosts to follow.'
     }
 
-    if (!this.isHostsUnique(notEmptyHosts)) {
+    if (!this.isHostsUnique(hosts)) {
       this.error = 'Hosts need to be unique.'
       return
     }
 
-    const confirmMessage = 'Are you sure to make friends with:<br /> - ' + notEmptyHosts.join('<br /> - ')
+    const confirmMessage = 'If you confirm, you will send a follow request to:<br /> - ' + hosts.join('<br /> - ')
     this.confirmService.confirm(confirmMessage, 'Follow new server(s)').subscribe(
       res => {
         if (res === false) return
 
-        this.followService.follow(notEmptyHosts).subscribe(
+        this.followService.follow(hosts).subscribe(
           status => {
             this.notificationsService.success('Success', 'Follow request(s) sent!')
-            this.router.navigate([ '/admin/follows/following-list' ])
+
+            setTimeout(() => this.router.navigate([ '/admin/follows/following-list' ]), 500)
           },
 
           err => this.notificationsService.error('Error', err.message)
@@ -103,18 +74,15 @@ export class FollowingAddComponent implements OnInit {
     )
   }
 
-  private getNotEmptyHosts () {
-    const notEmptyHosts = []
-
-    Object.keys(this.form.value).forEach((hostKey) => {
-      const host = this.form.value[hostKey]
-      if (host !== '') notEmptyHosts.push(host)
-    })
-
-    return notEmptyHosts
-  }
-
   private isHostsUnique (hosts: string[]) {
     return hosts.every(host => hosts.indexOf(host) === hosts.lastIndexOf(host))
+  }
+
+  private getNotEmptyHosts () {
+    const hosts = this.hostsString
+      .split('\n')
+      .filter(host => host && host.length !== 0) // Eject empty hosts
+
+    return hosts
   }
 }

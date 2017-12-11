@@ -1,0 +1,50 @@
+<menu>
+  <div *ngIf="isLoggedIn" class="logged-in-block">
+    <img [src]="getUserAvatarPath()" alt="Avatar" />
+
+    <div class="logged-in-info">
+      <a routerLink="/account/settings" class="logged-in-username">{{ user.username  }}</a>
+      <div class="logged-in-email">{{ user.email }}</div>
+    </div>
+
+    <div class="logged-in-more" dropdown placement="right" container="body">
+      <span class="glyphicon glyphicon-option-vertical" dropdownToggle></span>
+
+      <ul *dropdownMenu class="dropdown-menu">
+        <li>
+          <a (click)="logout($event)" class="dropdown-item" title="Log out" href="#">
+            Log out
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoggedIn" class="button-block">
+    <a routerLink="/login" class="login-button">Login</a>
+    <a *ngIf="isRegistrationAllowed()" routerLink="/signup" class="create-account-button">Create an account</a>
+  </div>
+
+  <div class="panel-block">
+    <div class="block-title">Videos</div>
+
+    <a routerLink="/videos/trending" routerLinkActive="active">
+      <span class="icon icon-videos-trending"></span>
+      Trending
+    </a>
+
+    <a routerLink="/videos/recently-added" routerLinkActive="active">
+      <span class="icon icon-videos-recently-added"></span>
+      Recently added
+    </a>
+  </div>
+
+  <div *ngIf="userHasAdminAccess" class="panel-block">
+    <div class="block-title">More</div>
+
+    <a [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
+      <span class="icon icon-administration"></span>
+      Administration
+    </a>
+  </div>
+</menu>

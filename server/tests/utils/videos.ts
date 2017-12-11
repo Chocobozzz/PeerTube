@@ -145,26 +145,25 @@ function removeVideo (url: string, token: string, id: number, expectedStatus = 2
           .expect(expectedStatus)
 }
 
-function searchVideo (url: string, search: string, field?: string) {
+function searchVideo (url: string, search: string) {
   const path = '/api/v1/videos'
   const req = request(url)
-                .get(path + '/search/' + search)
-                .set('Accept', 'application/json')
-
-  if (field) req.query({ field })
+    .get(path + '/search')
+    .query({ search })
+    .set('Accept', 'application/json')
 
   return req.expect(200)
-            .expect('Content-Type', /json/)
+    .expect('Content-Type', /json/)
 }
 
-function searchVideoWithPagination (url: string, search: string, field: string, start: number, count: number, sort?: string) {
+function searchVideoWithPagination (url: string, search: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/videos'
 
   const req = request(url)
-                .get(path + '/search/' + search)
+                .get(path + '/search')
                 .query({ start })
+                .query({ search })
                 .query({ count })
-                .query({ field })
 
   if (sort) req.query({ sort })
 
@@ -177,7 +176,8 @@ function searchVideoWithSort (url: string, search: string, sort: string) {
   const path = '/api/v1/videos'
 
   return request(url)
-          .get(path + '/search/' + search)
+          .get(path + '/search')
+          .query({ search })
           .query({ sort })
           .set('Accept', 'application/json')
           .expect(200)
@@ -201,7 +201,7 @@ async function testVideoImage (url: string, imageName: string, imagePath: string
   }
 }
 
-async function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = 204) {
+async function uploadVideo (url: string, accessToken: string, videoAttributesArg: VideoAttributes, specialStatus = 200) {
   const path = '/api/v1/videos/upload'
   let defaultChannelId = '1'
 

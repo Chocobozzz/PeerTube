@@ -16,7 +16,8 @@ import { UserCreate } from '../../../../shared'
 
 @Component({
   selector: 'my-signup',
-  templateUrl: './signup.component.html'
+  templateUrl: './signup.component.html',
+  styleUrls: [ './signup.component.scss' ]
 })
 export class SignupComponent extends FormReactive implements OnInit {
   error: string = null

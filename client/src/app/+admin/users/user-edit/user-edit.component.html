@@ -1,73 +1,68 @@
-<div class="row">
-  <div class="content-padding">
+<div class="admin-sub-title" *ngIf="isCreation() === true">Add user</div>
+<div class="admin-sub-title" *ngIf="isCreation() === false">Edit user {{ username }}</div>
 
-    <h3 *ngIf="isCreation() === true">Add user</h3>
-    <h3 *ngIf="isCreation() === false">Edit user {{ username }}</h3>
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-
-    <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
-      <div class="form-group" *ngIf="isCreation()">
-        <label for="username">Username</label>
-        <input
-          type="text" class="form-control" id="username" placeholder="john"
-          formControlName="username"
-        >
-        <div *ngIf="formErrors.username" class="alert alert-danger">
-          {{ formErrors.username }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="text" class="form-control" id="email" placeholder="mail@example.com"
-          formControlName="email"
-        >
-        <div *ngIf="formErrors.email" class="alert alert-danger">
-          {{ formErrors.email }}
-        </div>
-      </div>
-
-      <div class="form-group" *ngIf="isCreation()">
-        <label for="password">Password</label>
-        <input
-          type="password" class="form-control" id="password"
-          formControlName="password"
-        >
-        <div *ngIf="formErrors.password" class="alert alert-danger">
-          {{ formErrors.password }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="role">Role</label>
-        <select class="form-control" id="role" formControlName="role">
-          <option *ngFor="let role of roles" [value]="role.value">
-            {{ role.label }}
-          </option>
-        </select>
-
-        <div *ngIf="formErrors.role" class="alert alert-danger">
-          {{ formErrors.role }}
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="videoQuota">Video quota</label>
-        <select class="form-control" id="videoQuota" formControlName="videoQuota">
-          <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
-            {{ videoQuotaOption.label }}
-          </option>
-        </select>
-
-        <div class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
-          Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
-          In maximum, this user could use ~ {{ computeQuotaWithTranscoding() | bytes }}.
-        </div>
-      </div>
-
-      <input type="submit" value="{{ getFormButtonTitle() }}" class="btn btn-default" [disabled]="!form.valid">
-    </form>
+<form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+  <div class="form-group" *ngIf="isCreation()">
+    <label for="username">Username</label>
+    <input
+      type="text" class="form-control" id="username" placeholder="john"
+      formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+    >
+    <div *ngIf="formErrors.username" class="form-error">
+      {{ formErrors.username }}
+    </div>
   </div>
-</div>
+
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input
+      type="text" class="form-control" id="email" placeholder="mail@example.com"
+      formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
+    >
+    <div *ngIf="formErrors.email" class="form-error">
+      {{ formErrors.email }}
+    </div>
+  </div>
+
+  <div class="form-group" *ngIf="isCreation()">
+    <label for="password">Password</label>
+    <input
+      type="password" class="form-control" id="password"
+      formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+    >
+    <div *ngIf="formErrors.password" class="form-error">
+      {{ formErrors.password }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="role">Role</label>
+    <select class="form-control" id="role" formControlName="role">
+      <option *ngFor="let role of roles" [value]="role.value">
+        {{ role.label }}
+      </option>
+    </select>
+
+    <div *ngIf="formErrors.role" class="form-error">
+      {{ formErrors.role }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="videoQuota">Video quota</label>
+    <select class="form-control" id="videoQuota" formControlName="videoQuota">
+      <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
+        {{ videoQuotaOption.label }}
+      </option>
+    </select>
+
+    <div class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
+      Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
+      In maximum, this user could use ~ {{ computeQuotaWithTranscoding() | bytes }}.
+    </div>
+  </div>
+
+  <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+</form>

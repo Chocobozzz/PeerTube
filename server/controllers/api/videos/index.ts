@@ -15,6 +15,7 @@ import { getServerAccount } from '../../../helpers/utils'
 import { CONFIG, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT, VIDEO_PRIVACIES } from '../../../initializers'
 import { database as db } from '../../../initializers/database'
 import { sendAddVideo } from '../../../lib/activitypub/send/send-add'
+import { sendCreateViewToOrigin } from '../../../lib/activitypub/send/send-create'
 import { sendUpdateVideo } from '../../../lib/activitypub/send/send-update'
 import { shareVideoByServer } from '../../../lib/activitypub/share'
 import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
@@ -26,7 +27,6 @@ import {
   authenticate,
   paginationValidator,
   setPagination,
-  setVideosSearch,
   setVideosSort,
   videosAddValidator,
   videosGetValidator,
@@ -40,7 +40,6 @@ import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
 import { rateVideoRouter } from './rate'
-import { sendCreateViewToOrigin } from '../../../lib/activitypub/send/send-create'
 
 const videosRouter = express.Router()
 
@@ -84,6 +83,14 @@ videosRouter.get('/',
   setPagination,
   asyncMiddleware(listVideos)
 )
+videosRouter.get('/search',
+  videosSearchValidator,
+  paginationValidator,
+  videosSortValidator,
+  setVideosSort,
+  setPagination,
+  asyncMiddleware(searchVideos)
+)
 videosRouter.put('/:id',
   authenticate,
   asyncMiddleware(videosUpdateValidator),
@@ -113,16 +120,6 @@ videosRouter.delete('/:id',
   authenticate,
   asyncMiddleware(videosRemoveValidator),
   asyncMiddleware(removeVideoRetryWrapper)
-)
-
-videosRouter.get('/search/:value',
-  videosSearchValidator,
-  paginationValidator,
-  videosSortValidator,
-  setVideosSort,
-  setPagination,
-  setVideosSearch,
-  asyncMiddleware(searchVideos)
 )
 
 // ---------------------------------------------------------------------------
@@ -157,59 +154,64 @@ async function addVideoRetryWrapper (req: express.Request, res: express.Response
     errorMessage: 'Cannot insert the video with many retries.'
   }
 
-  await retryTransactionWrapper(addVideo, options)
+  const video = await retryTransactionWrapper(addVideo, options)
 
-  // TODO : include Location of the new video -> 201
-  res.type('json').status(204).end()
+  res.json({
+    video: {
+      id: video.id,
+      uuid: video.uuid
+    }
+  }).end()
 }
 
 async function addVideo (req: express.Request, res: express.Response, videoPhysicalFile: Express.Multer.File) {
   const videoInfo: VideoCreate = req.body
-  let videoUUID = ''
 
-  await db.sequelize.transaction(async t => {
+  // Prepare data so we don't block the transaction
+  const videoData = {
+    name: videoInfo.name,
+    remote: false,
+    extname: extname(videoPhysicalFile.filename),
+    category: videoInfo.category,
+    licence: videoInfo.licence,
+    language: videoInfo.language,
+    nsfw: videoInfo.nsfw,
+    description: videoInfo.description,
+    privacy: videoInfo.privacy,
+    duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
+    channelId: res.locals.videoChannel.id
+  }
+  const video = db.Video.build(videoData)
+  video.url = getVideoActivityPubUrl(video)
+
+  const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
+  const videoFileHeight = await getVideoFileHeight(videoFilePath)
+
+  const videoFileData = {
+    extname: extname(videoPhysicalFile.filename),
+    resolution: videoFileHeight,
+    size: videoPhysicalFile.size
+  }
+  const videoFile = db.VideoFile.build(videoFileData)
+  const videoDir = CONFIG.STORAGE.VIDEOS_DIR
+  const source = join(videoDir, videoPhysicalFile.filename)
+  const destination = join(videoDir, video.getVideoFilename(videoFile))
+
+  await renamePromise(source, destination)
+  // This is important in case if there is another attempt in the retry process
+  videoPhysicalFile.filename = video.getVideoFilename(videoFile)
+
+  const tasks = []
+
+  tasks.push(
+    video.createTorrentAndSetInfoHash(videoFile),
+    video.createThumbnail(videoFile),
+    video.createPreview(videoFile)
+  )
+  await Promise.all(tasks)
+
+  return db.sequelize.transaction(async t => {
     const sequelizeOptions = { transaction: t }
-
-    const videoData = {
-      name: videoInfo.name,
-      remote: false,
-      extname: extname(videoPhysicalFile.filename),
-      category: videoInfo.category,
-      licence: videoInfo.licence,
-      language: videoInfo.language,
-      nsfw: videoInfo.nsfw,
-      description: videoInfo.description,
-      privacy: videoInfo.privacy,
-      duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
-      channelId: res.locals.videoChannel.id
-    }
-    const video = db.Video.build(videoData)
-    video.url = getVideoActivityPubUrl(video)
-
-    const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
-    const videoFileHeight = await getVideoFileHeight(videoFilePath)
-
-    const videoFileData = {
-      extname: extname(videoPhysicalFile.filename),
-      resolution: videoFileHeight,
-      size: videoPhysicalFile.size
-    }
-    const videoFile = db.VideoFile.build(videoFileData)
-    const videoDir = CONFIG.STORAGE.VIDEOS_DIR
-    const source = join(videoDir, videoPhysicalFile.filename)
-    const destination = join(videoDir, video.getVideoFilename(videoFile))
-
-    await renamePromise(source, destination)
-    // This is important in case if there is another attempt in the retry process
-    videoPhysicalFile.filename = video.getVideoFilename(videoFile)
-
-    const tasks = []
-
-    tasks.push(
-      video.createTorrentAndSetInfoHash(videoFile),
-      video.createThumbnail(videoFile),
-      video.createPreview(videoFile)
-    )
 
     if (CONFIG.TRANSCODING.ENABLED === true) {
       // Put uuid because we don't have id auto incremented for now
@@ -217,21 +219,17 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
         videoUUID: video.uuid
       }
 
-      tasks.push(
-        transcodingJobScheduler.createJob(t, 'videoFileOptimizer', dataInput)
-      )
+      await transcodingJobScheduler.createJob(t, 'videoFileOptimizer', dataInput)
     }
-    await Promise.all(tasks)
 
     const videoCreated = await video.save(sequelizeOptions)
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel
-    videoUUID = videoCreated.uuid
 
     videoFile.videoId = video.id
-
     await videoFile.save(sequelizeOptions)
-    video.VideoFiles = [videoFile]
+
+    video.VideoFiles = [ videoFile ]
 
     if (videoInfo.tags) {
       const tagInstances = await db.Tag.findOrCreateTags(videoInfo.tags, t)
@@ -241,15 +239,17 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     }
 
     // Let transcoding job send the video to friends because the video file extension might change
-    if (CONFIG.TRANSCODING.ENABLED === true) return undefined
+    if (CONFIG.TRANSCODING.ENABLED === true) return videoCreated
     // Don't send video to remote servers, it is private
-    if (video.privacy === VideoPrivacy.PRIVATE) return undefined
+    if (video.privacy === VideoPrivacy.PRIVATE) return videoCreated
 
     await sendAddVideo(video, t)
     await shareVideoByServer(video, t)
-  })
 
-  logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoUUID)
+    logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
+
+    return videoCreated
+  })
 }
 
 async function updateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -280,7 +280,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
-      if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', videoInfoToUpdate.privacy)
+      if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', parseInt(videoInfoToUpdate.privacy.toString(), 10))
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
 
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
@@ -298,9 +298,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       }
 
       // Video is not private anymore, send a create action to remote servers
-      if (wasPrivateVideo === true && videoInstance.privacy !== VideoPrivacy.PRIVATE) {
-        await sendAddVideo(videoInstance, t)
-        await shareVideoByServer(videoInstance, t)
+      if (wasPrivateVideo === true && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE) {
+        await sendAddVideo(videoInstanceUpdated, t)
+        await shareVideoByServer(videoInstanceUpdated, t)
       }
     })
 
@@ -378,8 +378,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
 async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const resultList = await db.Video.searchAndPopulateAccountAndServerAndTags(
-    req.params.value,
-    req.query.field,
+    req.query.search,
     req.query.start,
     req.query.count,
     req.query.sort
