@@ -182,9 +182,16 @@ p-datatable {
     font-weight: $font-semibold !important;
     color: #000 !important;
 
-    &.ui-state-active, &.ui-sortable-column:hover {
+    &.ui-sortable-column:hover:not(.ui-state-active) {
       background-color: #f0f0f0 !important;
       border: 1px solid #f0f0f0 !important;
+      border-width: 0 1px !important;
+    }
+
+    &.ui-state-active {
+      color: #fff !important;
+      background-color: $orange-color !important;
+      border: 1px solid $orange-color !important;
       border-width: 0 1px !important;
     }
   }
@@ -280,7 +287,6 @@ p-datatable {
     }
   }
 }
-
 
 .orange-button {
   @include peertube-button;
