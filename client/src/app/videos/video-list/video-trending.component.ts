@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import { AbstractVideoList } from 'app/shared/video/abstract-video-list'
+import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { SortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 

@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import { AbstractVideoList } from 'app/shared/video/abstract-video-list'
 import { Subscription } from 'rxjs/Subscription'
-import { SortField } from '../../shared/video/sort-field.type'
+import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 
 @Component({

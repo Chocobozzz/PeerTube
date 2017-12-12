@@ -2,6 +2,7 @@
 
 cd client || exit -1
 
-rm -rf ./compiled ./dist
+rm -rf ./dist
 
-npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail
+ng build -- --prod
+NODE_ENV=production npm run webpack -- --config webpack/webpack.video-embed.js

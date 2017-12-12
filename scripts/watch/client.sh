@@ -2,4 +2,4 @@
 
 cd client || exit -1
 
-npm run webpack-dev-server -- --config config/webpack.dev.js --progress --profile --colors --watch --content-base src/ --hotOnly --open
+ng server --host localhost --port 3000

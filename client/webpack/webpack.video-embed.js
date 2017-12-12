@@ -2,13 +2,14 @@ const helpers = require('./helpers')
 
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
+const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const PurifyCSSPlugin = require('purifycss-webpack')
 
-module.exports = function (options) {
-  const isProd = options && options.env === 'production'
+module.exports = function () {
+  const isProd = process.env.NODE_ENV === 'production'
 
   const configuration = {
     entry: {
@@ -43,8 +44,7 @@ module.exports = function (options) {
             {
               loader: 'awesome-typescript-loader',
               options: {
-                configFileName: 'tsconfig.webpack.json',
-                useCache: !isProd
+                configFileName: 'tsconfig.json'
               }
             }
           ],
@@ -67,15 +67,9 @@ module.exports = function (options) {
               {
                 loader: 'sass-loader',
                 options: {
-                  sourceMap: true
-                }
-              },
-              {
-                loader: 'sass-resources-loader',
-                options: {
-                  resources: [
-                    helpers.root('src/sass/_variables.scss'),
-                    helpers.root('src/sass/_mixins.scss')
+                  sourceMap: true,
+                  includePaths: [
+                    helpers.root('src/sass/include')
                   ]
                 }
               }
@@ -124,6 +118,20 @@ module.exports = function (options) {
         title: 'PeerTube',
         chunksSortMode: 'dependency',
         inject: 'body'
+      }),
+
+      /**
+       * Plugin LoaderOptionsPlugin (experimental)
+       *
+       * See: https://gist.github.com/sokra/27b24881210b56bbaff7
+       */
+      new LoaderOptionsPlugin({
+        options: {
+          context: __dirname,
+          output: {
+            path: helpers.root('dist')
+          }
+        }
       })
     ],
 
@@ -139,40 +147,21 @@ module.exports = function (options) {
   }
 
   if (isProd) {
-    configuration.module.rules.push(
-      {
-        test: /junk\/index\.js$/,
-        // exclude: /(node_modules|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [ 'env' ]
-          }
-        }
-      }
-   )
-
     configuration.plugins.push(
       new UglifyJsPlugin({
-        beautify: false,
-        output: {
-          comments: false
-        }, // prod
-        mangle: {
-          screw_ie8: true
-        }, // prod
-        compress: {
-          screw_ie8: true,
+        uglifyOptions: {
+          ecma: 6,
           warnings: false,
-          conditionals: true,
-          unused: true,
-          comparisons: true,
-          sequences: true,
-          dead_code: true,
-          evaluate: true,
-          if_return: true,
-          join_vars: true,
-          negate_iife: false // we need this for lazy v8
+          ie8: false,
+          mangle: true,
+          compress: {
+            passes: 3,
+            pure_getters: true
+          },
+          output: {
+            ascii_only: true,
+            comments: false
+          }
         }
       }),
 
