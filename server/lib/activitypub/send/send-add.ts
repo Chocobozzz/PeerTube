@@ -1,10 +1,11 @@
 import { Transaction } from 'sequelize'
-import { ActivityAdd } from '../../../../shared/models/activitypub/activity'
-import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
-import { AccountInstance, VideoInstance } from '../../../models'
+import { ActivityAdd } from '../../../../shared/models/activitypub'
+import { VideoPrivacy } from '../../../../shared/models/videos'
+import { AccountModel } from '../../../models/account/account'
+import { VideoModel } from '../../../models/video/video'
 import { broadcastToFollowers, getAudience } from './misc'
 
-async function sendAddVideo (video: VideoInstance, t: Transaction) {
+async function sendAddVideo (video: VideoModel, t: Transaction) {
   const byAccount = video.VideoChannel.Account
 
   const videoObject = video.toActivityPubObject()
@@ -15,16 +16,17 @@ async function sendAddVideo (video: VideoInstance, t: Transaction) {
 
 async function addActivityData (
   url: string,
-  byAccount: AccountInstance,
-  video: VideoInstance,
+  byAccount: AccountModel,
+  video: VideoModel,
   target: string,
   object: any,
   t: Transaction
-) {
+): Promise<ActivityAdd> {
   const videoPublic = video.privacy === VideoPrivacy.PUBLIC
 
   const { to, cc } = await getAudience(byAccount, t, videoPublic)
-  const activity: ActivityAdd = {
+
+  return {
     type: 'Add',
     id: url,
     actor: byAccount.url,
@@ -33,8 +35,6 @@ async function addActivityData (
     object,
     target
   }
-
-  return activity
 }
 
 // ---------------------------------------------------------------------------

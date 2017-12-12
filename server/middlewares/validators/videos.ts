@@ -1,6 +1,8 @@
 import * as express from 'express'
+import 'express-validator'
 import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
+import { getDurationFromVideoFile, logger } from '../../helpers'
 import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoAbuseReasonValid,
@@ -16,12 +18,11 @@ import {
   isVideoRatingTypeValid,
   isVideoTagsValid
 } from '../../helpers/custom-validators/videos'
-import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
-import { logger } from '../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
-import { database as db } from '../../initializers/database'
-import { UserInstance } from '../../models/account/user-interface'
-import { VideoInstance } from '../../models/video/video-interface'
+import { UserModel } from '../../models/account/user'
+import { VideoModel } from '../../models/video/video'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
 
@@ -48,7 +49,7 @@ const videosAddValidator = [
     const videoFile: Express.Multer.File = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
-    const videoChannel = await db.VideoChannel.loadByIdAndAccount(req.body.channelId, user.Account.id)
+    const videoChannel = await VideoChannelModel.loadByIdAndAccount(req.body.channelId, user.Account.id)
     if (!videoChannel) {
       res.status(400)
         .json({ error: 'Unknown video video channel for this account.' })
@@ -221,7 +222,7 @@ const videosShareValidator = [
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.id, res)) return
 
-    const share = await db.VideoShare.load(req.params.accountId, res.locals.video.id, undefined)
+    const share = await VideoShareModel.load(req.params.accountId, res.locals.video.id, undefined)
     if (!share) {
       return res.status(404)
         .end()
@@ -249,7 +250,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserCanDeleteVideo (user: UserInstance, video: VideoInstance, res: express.Response) {
+function checkUserCanDeleteVideo (user: UserModel, video: VideoModel, res: express.Response) {
   // Retrieve the user who did the request
   if (video.isOwned() === false) {
     res.status(403)

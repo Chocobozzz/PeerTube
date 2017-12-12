@@ -1,18 +1,18 @@
 import * as magnetUtil from 'magnet-uri'
 import { VideoTorrentObject } from '../../../../shared'
-import { VideoChannelObject } from '../../../../shared/models/activitypub/objects/video-channel-object'
-import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
+import { VideoChannelObject } from '../../../../shared/models/activitypub/objects'
+import { VideoPrivacy } from '../../../../shared/models/videos'
+import { doRequest } from '../../../helpers'
 import { isVideoFileInfoHashValid } from '../../../helpers/custom-validators/videos'
-import { doRequest } from '../../../helpers/requests'
-import { database as db } from '../../../initializers'
-import { ACTIVITY_PUB, VIDEO_MIMETYPE_EXT } from '../../../initializers/constants'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
-import { VideoFileAttributes } from '../../../models/video/video-file-interface'
-import { VideoAttributes, VideoInstance } from '../../../models/video/video-interface'
+import { ACTIVITY_PUB, VIDEO_MIMETYPE_EXT } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { VideoModel } from '../../../models/video/video'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoChannelShareModel } from '../../../models/video/video-channel-share'
+import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateAccountAndServer } from '../account'
 
-function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChannelObject, account: AccountInstance) {
+function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChannelObject, account: AccountModel) {
   return {
     name: videoChannelObject.name,
     description: videoChannelObject.content,
@@ -26,7 +26,7 @@ function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChan
 }
 
 async function videoActivityObjectToDBAttributes (
-  videoChannel: VideoChannelInstance,
+  videoChannel: VideoChannelModel,
   videoObject: VideoTorrentObject,
   to: string[] = [],
   cc: string[] = []
@@ -56,7 +56,7 @@ async function videoActivityObjectToDBAttributes (
     description = videoObject.content
   }
 
-  const videoData: VideoAttributes = {
+  return {
     name: videoObject.name,
     uuid: videoObject.uuid,
     url: videoObject.id,
@@ -76,11 +76,9 @@ async function videoActivityObjectToDBAttributes (
     remote: true,
     privacy
   }
-
-  return videoData
 }
 
-function videoFileActivityUrlToDBAttributes (videoCreated: VideoInstance, videoObject: VideoTorrentObject) {
+function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObject: VideoTorrentObject) {
   const mimeTypes = Object.keys(VIDEO_MIMETYPE_EXT)
   const fileUrls = videoObject.url.filter(u => {
     return mimeTypes.indexOf(u.mimeType) !== -1 && u.mimeType.startsWith('video/')
@@ -90,7 +88,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoInstance, videoO
     throw new Error('Cannot find video files for ' + videoCreated.url)
   }
 
-  const attributes: VideoFileAttributes[] = []
+  const attributes = []
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
     const magnet = videoObject.url.find(u => {
@@ -115,7 +113,7 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoInstance, videoO
   return attributes
 }
 
-async function addVideoShares (instance: VideoInstance, shares: string[]) {
+async function addVideoShares (instance: VideoModel, shares: string[]) {
   for (const share of shares) {
     // Fetch url
     const json = await doRequest({
@@ -132,14 +130,14 @@ async function addVideoShares (instance: VideoInstance, shares: string[]) {
       videoId: instance.id
     }
 
-    await db.VideoShare.findOrCreate({
+    await VideoShareModel.findOrCreate({
       where: entry,
       defaults: entry
     })
   }
 }
 
-async function addVideoChannelShares (instance: VideoChannelInstance, shares: string[]) {
+async function addVideoChannelShares (instance: VideoChannelModel, shares: string[]) {
   for (const share of shares) {
     // Fetch url
     const json = await doRequest({
@@ -156,7 +154,7 @@ async function addVideoChannelShares (instance: VideoChannelInstance, shares: st
       videoChannelId: instance.id
     }
 
-    await db.VideoChannelShare.findOrCreate({
+    await VideoChannelShareModel.findOrCreate({
       where: entry,
       defaults: entry
     })

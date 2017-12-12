@@ -1,10 +1,10 @@
-import { ActivityFollow } from '../../../../shared/models/activitypub/activity'
-import { retryTransactionWrapper } from '../../../helpers'
-import { database as db } from '../../../initializers'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { logger } from '../../../helpers/logger'
-import { sendAccept } from '../send/send-accept'
+import { ActivityFollow } from '../../../../shared/models/activitypub'
+import { logger, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { AccountFollowModel } from '../../../models/account/account-follow'
 import { getOrCreateAccountAndServer } from '../account'
+import { sendAccept } from '../send'
 
 async function processFollowActivity (activity: ActivityFollow) {
   const activityObject = activity.object
@@ -21,7 +21,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processFollow (account: AccountInstance, targetAccountURL: string) {
+function processFollow (account: AccountModel, targetAccountURL: string) {
   const options = {
     arguments: [ account, targetAccountURL ],
     errorMessage: 'Cannot follow with many retries.'
@@ -30,14 +30,14 @@ function processFollow (account: AccountInstance, targetAccountURL: string) {
   return retryTransactionWrapper(follow, options)
 }
 
-async function follow (account: AccountInstance, targetAccountURL: string) {
-  await db.sequelize.transaction(async t => {
-    const targetAccount = await db.Account.loadByUrl(targetAccountURL, t)
+async function follow (account: AccountModel, targetAccountURL: string) {
+  await sequelizeTypescript.transaction(async t => {
+    const targetAccount = await AccountModel.loadByUrl(targetAccountURL, t)
 
     if (!targetAccount) throw new Error('Unknown account')
     if (targetAccount.isOwned() === false) throw new Error('This is not a local account.')
 
-    const [ accountFollow ] = await db.AccountFollow.findOrCreate({
+    const [ accountFollow ] = await AccountFollowModel.findOrCreate({
       where: {
         accountId: account.id,
         targetAccountId: targetAccount.id

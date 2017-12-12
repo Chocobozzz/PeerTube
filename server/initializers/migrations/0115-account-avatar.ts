@@ -1,11 +1,10 @@
 import * as Sequelize from 'sequelize'
-import { PeerTubeDatabase } from '../database'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
   queryInterface: Sequelize.QueryInterface,
   sequelize: Sequelize.Sequelize,
-  db: PeerTubeDatabase
+  db: any
 }): Promise<void> {
   await utils.db.Avatar.sync()
 

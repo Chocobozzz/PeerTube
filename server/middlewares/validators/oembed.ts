@@ -1,10 +1,11 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
 import { join } from 'path'
-import { isIdOrUUIDValid, isTestInstance, logger } from '../../helpers'
+import { isTestInstance, logger } from '../../helpers'
+import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
+import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { CONFIG } from '../../initializers'
 import { areValidationErrors } from './utils'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
 
 const urlShouldStartWith = CONFIG.WEBSERVER.SCHEME + '://' + join(CONFIG.WEBSERVER.HOST, 'videos', 'watch') + '/'
 const videoWatchRegex = new RegExp('([^/]+)$')

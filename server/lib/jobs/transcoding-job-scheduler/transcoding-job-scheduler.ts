@@ -1,14 +1,15 @@
 import { JobCategory } from '../../../../shared'
+import { VideoModel } from '../../../models/video/video'
 import { JobHandler, JobScheduler } from '../job-scheduler'
+
 import * as videoFileOptimizer from './video-file-optimizer-handler'
 import * as videoFileTranscoder from './video-file-transcoder-handler'
-import { VideoInstance } from '../../../models/video/video-interface'
 
 type TranscodingJobPayload = {
   videoUUID: string
   resolution?: number
 }
-const jobHandlers: { [ handlerName: string ]: JobHandler<TranscodingJobPayload, VideoInstance> } = {
+const jobHandlers: { [ handlerName: string ]: JobHandler<TranscodingJobPayload, VideoModel> } = {
   videoFileOptimizer,
   videoFileTranscoder
 }

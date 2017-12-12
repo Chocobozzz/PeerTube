@@ -1,8 +1,8 @@
-import { Activity } from '../../shared/models/activitypub/activity'
-import { ResultList } from '../../shared/models/result-list.model'
-import { AccountInstance } from '../models/account/account-interface'
+import { ResultList } from '../../shared/models'
+import { Activity } from '../../shared/models/activitypub'
+import { ACTIVITY_PUB } from '../initializers'
+import { AccountModel } from '../models/account/account'
 import { signObject } from './peertube-crypto'
-import { ACTIVITY_PUB } from '../initializers/constants'
 
 function activityPubContextify <T> (data: T) {
   return Object.assign(data,{
@@ -71,7 +71,7 @@ function activityPubCollectionPagination (url: string, page: any, result: Result
   return orderedCollectionPagination
 }
 
-function buildSignedActivity (byAccount: AccountInstance, data: Object) {
+function buildSignedActivity (byAccount: AccountModel, data: Object) {
   const activity = activityPubContextify(data)
 
   return signObject(byAccount, activity) as Promise<Activity>

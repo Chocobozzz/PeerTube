@@ -2,8 +2,6 @@ import * as express from 'express'
 import { join } from 'path'
 import * as validator from 'validator'
 import * as Bluebird from 'bluebird'
-
-import { database as db } from '../initializers/database'
 import {
   CONFIG,
   STATIC_PATHS,
@@ -13,7 +11,7 @@ import {
 } from '../initializers'
 import { root, readFileBufferPromise, escapeHTML } from '../helpers'
 import { asyncMiddleware } from '../middlewares'
-import { VideoInstance } from '../models'
+import { VideoModel } from '../models/video/video'
 
 const clientsRouter = express.Router()
 
@@ -49,7 +47,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance) {
+function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
   const previewUrl = CONFIG.WEBSERVER.URL + STATIC_PATHS.PREVIEWS + video.getPreviewName()
   const videoUrl = CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
 
@@ -108,13 +106,13 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoInstance
 
 async function generateWatchHtmlPage (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoId = '' + req.params.id
-  let videoPromise: Bluebird<VideoInstance>
+  let videoPromise: Bluebird<VideoModel>
 
   // Let Angular application handle errors
   if (validator.isUUID(videoId, 4)) {
-    videoPromise = db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(videoId)
+    videoPromise = VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(videoId)
   } else if (validator.isInt(videoId)) {
-    videoPromise = db.Video.loadAndPopulateAccountAndServerAndTags(+videoId)
+    videoPromise = VideoModel.loadAndPopulateAccountAndServerAndTags(+videoId)
   } else {
     return res.sendFile(indexPath)
   }

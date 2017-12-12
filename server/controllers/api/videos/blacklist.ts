@@ -1,6 +1,4 @@
 import * as express from 'express'
-
-import { database as db } from '../../../initializers'
 import { logger, getFormattedObjects } from '../../../helpers'
 import {
   authenticate,
@@ -13,8 +11,8 @@ import {
   setPagination,
   asyncMiddleware
 } from '../../../middlewares'
-import { BlacklistedVideoInstance } from '../../../models'
 import { BlacklistedVideo, UserRight } from '../../../../shared'
+import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 
 const blacklistRouter = express.Router()
 
@@ -57,18 +55,18 @@ async function addVideoToBlacklist (req: express.Request, res: express.Response,
     videoId: videoInstance.id
   }
 
-  await db.BlacklistedVideo.create(toCreate)
+  await VideoBlacklistModel.create(toCreate)
   return res.type('json').status(204).end()
 }
 
 async function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.BlacklistedVideo.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoBlacklistModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
-  return res.json(getFormattedObjects<BlacklistedVideo, BlacklistedVideoInstance>(resultList.data, resultList.total))
+  return res.json(getFormattedObjects<BlacklistedVideo, VideoBlacklistModel>(resultList.data, resultList.total))
 }
 
 async function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const blacklistedVideo = res.locals.blacklistedVideo as BlacklistedVideoInstance
+  const blacklistedVideo = res.locals.blacklistedVideo as VideoBlacklistModel
 
   try {
     await blacklistedVideo.destroy()

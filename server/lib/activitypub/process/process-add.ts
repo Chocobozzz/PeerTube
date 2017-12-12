@@ -1,13 +1,15 @@
 import * as Bluebird from 'bluebird'
 import { VideoTorrentObject } from '../../../../shared'
-import { ActivityAdd } from '../../../../shared/models/activitypub/activity'
-import { VideoRateType } from '../../../../shared/models/videos/video-rate.type'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
-import { database as db } from '../../../initializers'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
-import { VideoInstance } from '../../../models/video/video-interface'
+import { ActivityAdd } from '../../../../shared/models/activitypub'
+import { VideoRateType } from '../../../../shared/models/videos'
+import { logger, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { TagModel } from '../../../models/video/tag'
+import { VideoModel } from '../../../models/video/video'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoFileModel } from '../../../models/video/video-file'
 import { getOrCreateAccountAndServer } from '../account'
 import { getOrCreateVideoChannel } from '../video-channels'
 import { generateThumbnailFromUrl } from '../videos'
@@ -37,9 +39,9 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processAddVideo (account: AccountInstance,
+async function processAddVideo (account: AccountModel,
                                 activity: ActivityAdd,
-                                videoChannel: VideoChannelInstance,
+                                videoChannel: VideoChannelModel,
                                 videoToCreateData: VideoTorrentObject) {
   const options = {
     arguments: [ account, activity, videoChannel, videoToCreateData ],
@@ -64,24 +66,24 @@ async function processAddVideo (account: AccountInstance,
   return video
 }
 
-function addRemoteVideo (account: AccountInstance,
+function addRemoteVideo (account: AccountModel,
                          activity: ActivityAdd,
-                         videoChannel: VideoChannelInstance,
+                         videoChannel: VideoChannelModel,
                          videoToCreateData: VideoTorrentObject) {
   logger.debug('Adding remote video %s.', videoToCreateData.id)
 
-  return db.sequelize.transaction(async t => {
+  return sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = {
       transaction: t
     }
 
     if (videoChannel.Account.id !== account.id) throw new Error('Video channel is not owned by this account.')
 
-    const videoFromDatabase = await db.Video.loadByUUIDOrURL(videoToCreateData.uuid, videoToCreateData.id, t)
+    const videoFromDatabase = await VideoModel.loadByUUIDOrURL(videoToCreateData.uuid, videoToCreateData.id, t)
     if (videoFromDatabase) return videoFromDatabase
 
     const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoToCreateData, activity.to, activity.cc)
-    const video = db.Video.build(videoData)
+    const video = VideoModel.build(videoData)
 
     // Don't block on request
     generateThumbnailFromUrl(video, videoToCreateData.icon)
@@ -94,12 +96,12 @@ function addRemoteVideo (account: AccountInstance,
       throw new Error('Cannot find valid files for video %s ' + videoToCreateData.url)
     }
 
-    const tasks: Bluebird<any>[] = videoFileAttributes.map(f => db.VideoFile.create(f, { transaction: t }))
+    const tasks: Bluebird<any>[] = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
     await Promise.all(tasks)
 
     const tags = videoToCreateData.tag.map(t => t.name)
-    const tagInstances = await db.Tag.findOrCreateTags(tags, t)
-    await videoCreated.setTags(tagInstances, sequelizeOptions)
+    const tagInstances = await TagModel.findOrCreateTags(tags, t)
+    await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
 
     logger.info('Remote video with uuid %s inserted.', videoToCreateData.uuid)
 
@@ -107,13 +109,13 @@ function addRemoteVideo (account: AccountInstance,
   })
 }
 
-async function createRates (accountUrls: string[], video: VideoInstance, rate: VideoRateType) {
+async function createRates (accountUrls: string[], video: VideoModel, rate: VideoRateType) {
   let rateCounts = 0
   const tasks: Bluebird<any>[] = []
 
   for (const accountUrl of accountUrls) {
     const account = await getOrCreateAccountAndServer(accountUrl)
-    const p = db.AccountVideoRate
+    const p = AccountVideoRateModel
       .create({
         videoId: video.id,
         accountId: account.id,

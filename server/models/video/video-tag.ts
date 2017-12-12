@@ -1,23 +1,30 @@
-import * as Sequelize from 'sequelize'
+import { Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { TagModel } from './tag'
+import { VideoModel } from './video'
 
-import {
-  VideoTagInstance,
-  VideoTagAttributes
-} from './video-tag-interface'
+@Table({
+  tableName: 'videoTag',
+  indexes: [
+    {
+      fields: [ 'videoId' ]
+    },
+    {
+      fields: [ 'tagId' ]
+    }
+  ]
+})
+export class VideoTagModel extends Model<VideoTagModel> {
+  @CreatedAt
+  createdAt: Date
 
-let VideoTag: Sequelize.Model<VideoTagInstance, VideoTagAttributes>
+  @UpdatedAt
+  updatedAt: Date
 
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  VideoTag = sequelize.define<VideoTagInstance, VideoTagAttributes>('VideoTag', {}, {
-    indexes: [
-      {
-        fields: [ 'videoId' ]
-      },
-      {
-        fields: [ 'tagId' ]
-      }
-    ]
-  })
+  @ForeignKey(() => VideoModel)
+  @Column
+  videoId: number
 
-  return VideoTag
+  @ForeignKey(() => TagModel)
+  @Column
+  tagId: number
 }

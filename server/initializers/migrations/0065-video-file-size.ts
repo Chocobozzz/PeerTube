@@ -1,8 +1,7 @@
 import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 import { stat } from 'fs'
-
-import { VideoInstance } from '../../models'
+import { VideoModel } from '../../models/video/video'
 
 function up (utils: {
   transaction: Sequelize.Transaction,
@@ -11,7 +10,7 @@ function up (utils: {
   db: any
 }): Promise<void> {
   return utils.db.Video.listOwnedAndPopulateAuthorAndTags()
-    .then((videos: VideoInstance[]) => {
+    .then((videos: VideoModel[]) => {
       const tasks: Promise<any>[] = []
 
       videos.forEach(video => {

@@ -1,12 +1,12 @@
 import * as express from 'express'
 import { UserVideoRateUpdate } from '../../../../shared'
 import { logger, retryTransactionWrapper } from '../../../helpers'
-import { VIDEO_RATE_TYPES } from '../../../initializers'
-import { database as db } from '../../../initializers/database'
-import { sendVideoRateChangeToFollowers, sendVideoRateChangeToOrigin } from '../../../lib/activitypub/videos'
+import { sequelizeTypescript, VIDEO_RATE_TYPES } from '../../../initializers'
+import { sendVideoRateChangeToFollowers, sendVideoRateChangeToOrigin } from '../../../lib/activitypub'
 import { asyncMiddleware, authenticate, videoRateValidator } from '../../../middlewares'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { VideoInstance } from '../../../models/video/video-interface'
+import { AccountModel } from '../../../models/account/account'
+import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { VideoModel } from '../../../models/video/video'
 
 const rateVideoRouter = express.Router()
 
@@ -38,12 +38,12 @@ async function rateVideoRetryWrapper (req: express.Request, res: express.Respons
 async function rateVideo (req: express.Request, res: express.Response) {
   const body: UserVideoRateUpdate = req.body
   const rateType = body.rating
-  const videoInstance: VideoInstance = res.locals.video
-  const accountInstance: AccountInstance = res.locals.oauth.token.User.Account
+  const videoInstance: VideoModel = res.locals.video
+  const accountInstance: AccountModel = res.locals.oauth.token.User.Account
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
-    const previousRate = await db.AccountVideoRate.load(accountInstance.id, videoInstance.id, t)
+    const previousRate = await AccountVideoRateModel.load(accountInstance.id, videoInstance.id, t)
 
     let likesToIncrement = 0
     let dislikesToIncrement = 0
@@ -71,7 +71,7 @@ async function rateVideo (req: express.Request, res: express.Response) {
         type: rateType
       }
 
-      await db.AccountVideoRate.create(query, sequelizeOptions)
+      await AccountVideoRateModel.create(query, sequelizeOptions)
     }
 
     const incrementQuery = {

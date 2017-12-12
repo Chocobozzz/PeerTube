@@ -1,7 +1,9 @@
-import { ActivityLike } from '../../../../shared/models/activitypub/activity'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { database as db } from '../../../initializers'
-import { AccountInstance } from '../../../models/account/account-interface'
+import { ActivityLike } from '../../../../shared/models/activitypub'
+import { retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { VideoModel } from '../../../models/video/video'
 import { getOrCreateAccountAndServer } from '../account'
 import { forwardActivity } from '../send/misc'
 
@@ -19,7 +21,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processLikeVideo (byAccount: AccountInstance, activity: ActivityLike) {
+async function processLikeVideo (byAccount: AccountModel, activity: ActivityLike) {
   const options = {
     arguments: [ byAccount, activity ],
     errorMessage: 'Cannot like the video with many retries.'
@@ -28,11 +30,11 @@ async function processLikeVideo (byAccount: AccountInstance, activity: ActivityL
   return retryTransactionWrapper(createVideoLike, options)
 }
 
-function createVideoLike (byAccount: AccountInstance, activity: ActivityLike) {
+function createVideoLike (byAccount: AccountModel, activity: ActivityLike) {
   const videoUrl = activity.object
 
-  return db.sequelize.transaction(async t => {
-    const video = await db.Video.loadByUrlAndPopulateAccount(videoUrl)
+  return sequelizeTypescript.transaction(async t => {
+    const video = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
 
     if (!video) throw new Error('Unknown video ' + videoUrl)
 
@@ -41,7 +43,7 @@ function createVideoLike (byAccount: AccountInstance, activity: ActivityLike) {
       videoId: video.id,
       accountId: byAccount.id
     }
-    const [ , created ] = await db.AccountVideoRate.findOrCreate({
+    const [ , created ] = await AccountVideoRateModel.findOrCreate({
       where: rate,
       defaults: rate,
       transaction: t

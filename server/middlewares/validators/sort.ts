@@ -1,6 +1,5 @@
 import { query } from 'express-validator/check'
 import * as express from 'express'
-
 import { logger } from '../../helpers'
 import { SORTABLE_COLUMNS } from '../../initializers'
 import { areValidationErrors } from './utils'

@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { body } from 'express-validator/check'
-import { isRootActivityValid, logger } from '../../../helpers'
+import { logger } from '../../../helpers'
+import { isRootActivityValid } from '../../../helpers/custom-validators/activitypub'
 import { areValidationErrors } from '../utils'
 
 const activityPubValidator = [

@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
+import { logger } from '../../helpers'
 import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
-import { logger } from '../../helpers/logger'
-import { database as db } from '../../initializers'
+import { AccountModel } from '../../models/account/account'
 import { areValidationErrors } from './utils'
 
 const webfingerValidator = [
@@ -17,7 +17,7 @@ const webfingerValidator = [
     const nameWithHost = req.query.resource.substr(5)
     const [ name ] = nameWithHost.split('@')
 
-    const account = await db.Account.loadLocalByName(name)
+    const account = await AccountModel.loadLocalByName(name)
     if (!account) {
       return res.status(404)
         .send({ error: 'Account not found' })

@@ -1,12 +1,11 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
-import { isTestInstance } from '../../helpers/core-utils'
-import { isEachUniqueHostValid } from '../../helpers/custom-validators/servers'
-import { logger } from '../../helpers/logger'
-import { CONFIG, database as db } from '../../initializers'
-import { areValidationErrors } from './utils'
-import { getServerAccount } from '../../helpers/utils'
+import { getServerAccount, isTestInstance, logger } from '../../helpers'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
+import { isEachUniqueHostValid } from '../../helpers/custom-validators/servers'
+import { CONFIG } from '../../initializers'
+import { AccountFollowModel } from '../../models/account/account-follow'
+import { areValidationErrors } from './utils'
 
 const followValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
@@ -38,7 +37,7 @@ const removeFollowingValidator = [
     if (areValidationErrors(req, res)) return
 
     const serverAccount = await getServerAccount()
-    const follow = await db.AccountFollow.loadByAccountAndTarget(serverAccount.id, req.params.accountId)
+    const follow = await AccountFollowModel.loadByAccountAndTarget(serverAccount.id, req.params.accountId)
 
     if (!follow) {
       return res.status(404)

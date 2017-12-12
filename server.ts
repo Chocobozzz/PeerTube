@@ -41,8 +41,8 @@ if (errorMessage !== null) {
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
 // Initialize database and models
-import { database as db } from './server/initializers/database'
-db.init(false).then(() => onDatabaseInitDone())
+import { initDatabase } from './server/initializers/database'
+initDatabase(false).then(() => onDatabaseInitDone())
 
 // ----------- PeerTube modules -----------
 import { migrate, installApplication } from './server/initializers'

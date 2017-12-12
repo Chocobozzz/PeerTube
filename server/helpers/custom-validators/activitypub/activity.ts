@@ -1,8 +1,9 @@
 import * as validator from 'validator'
-import { Activity, ActivityType } from '../../../../shared/models/activitypub/activity'
+import { Activity, ActivityType } from '../../../../shared/models/activitypub'
 import { isAccountAcceptActivityValid, isAccountDeleteActivityValid, isAccountFollowActivityValid } from './account'
 import { isAnnounceActivityValid } from './announce'
 import { isActivityPubUrlValid } from './misc'
+import { isDislikeActivityValid, isLikeActivityValid } from './rate'
 import { isUndoActivityValid } from './undo'
 import { isVideoChannelCreateActivityValid, isVideoChannelDeleteActivityValid, isVideoChannelUpdateActivityValid } from './video-channels'
 import {
@@ -12,7 +13,6 @@ import {
   isVideoTorrentUpdateActivityValid
 } from './videos'
 import { isViewActivityValid } from './view'
-import { isDislikeActivityValid, isLikeActivityValid } from './rate'
 
 function isRootActivityValid (activity: any) {
   return Array.isArray(activity['@context']) &&

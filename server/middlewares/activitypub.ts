@@ -2,16 +2,16 @@ import { eachSeries } from 'async'
 import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { isSignatureVerified, logger } from '../helpers'
-import { database as db } from '../initializers'
-import { ACCEPT_HEADERS, ACTIVITY_PUB } from '../initializers/constants'
-import { fetchRemoteAccount, saveAccountAndServerIfNotExist } from '../lib/activitypub/account'
+import { ACCEPT_HEADERS, ACTIVITY_PUB } from '../initializers'
+import { fetchRemoteAccount, saveAccountAndServerIfNotExist } from '../lib/activitypub'
+import { AccountModel } from '../models/account/account'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   const signatureObject: ActivityPubSignature = req.body.signature
 
   logger.debug('Checking signature of account %s...', signatureObject.creator)
 
-  let account = await db.Account.loadByUrl(signatureObject.creator)
+  let account = await AccountModel.loadByUrl(signatureObject.creator)
 
   // We don't have this account in our database, fetch it on remote
   if (!account) {

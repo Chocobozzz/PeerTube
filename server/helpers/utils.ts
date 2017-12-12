@@ -1,9 +1,10 @@
 import * as express from 'express'
-import * as Sequelize from 'sequelize'
+import { Model } from 'sequelize-typescript'
 import { ResultList } from '../../shared'
-import { VideoResolution } from '../../shared/models/videos/video-resolution.enum'
-import { CONFIG, database as db } from '../initializers'
-import { AccountInstance } from '../models/account/account-interface'
+import { VideoResolution } from '../../shared/models/videos'
+import { CONFIG } from '../initializers'
+import { AccountModel } from '../models/account/account'
+import { UserModel } from '../models/account/user'
 import { pseudoRandomBytesPromise } from './core-utils'
 import { logger } from './logger'
 
@@ -46,7 +47,7 @@ async function isSignupAllowed () {
     return true
   }
 
-  const totalUsers = await db.User.countTotal()
+  const totalUsers = await UserModel.countTotal()
 
   return totalUsers < CONFIG.SIGNUP.LIMIT
 }
@@ -72,17 +73,17 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   return resolutionsEnabled
 }
 
-function resetSequelizeInstance (instance: Sequelize.Instance<any>, savedFields: object) {
+function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   Object.keys(savedFields).forEach(key => {
     const value = savedFields[key]
     instance.set(key, value)
   })
 }
 
-let serverAccount: AccountInstance
+let serverAccount: AccountModel
 async function getServerAccount () {
   if (serverAccount === undefined) {
-    serverAccount = await db.Account.loadApplication()
+    serverAccount = await AccountModel.loadApplication()
   }
 
   if (!serverAccount) {

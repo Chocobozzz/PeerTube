@@ -3,8 +3,8 @@ import * as express from 'express'
 import { CONFIG } from '../../initializers'
 import { logger } from '../../helpers'
 import { asyncMiddleware } from '../../middlewares'
-import { database as db } from '../../initializers/database'
 import { OAuthClientLocal } from '../../../shared'
+import { OAuthClientModel } from '../../models/oauth/oauth-client'
 
 const oauthClientsRouter = express.Router()
 
@@ -27,7 +27,7 @@ async function getLocalClient (req: express.Request, res: express.Response, next
     return res.type('json').status(403).end()
   }
 
-  const client = await db.OAuthClient.loadFirstClient()
+  const client = await OAuthClientModel.loadFirstClient()
   if (!client) throw new Error('No client available.')
 
   const json: OAuthClientLocal = {

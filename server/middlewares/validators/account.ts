@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { param } from 'express-validator/check'
-import { logger, isLocalAccountNameExist } from '../../helpers'
-import { isAccountNameValid } from '../../helpers/custom-validators/accounts'
+import { logger } from '../../helpers'
+import { isAccountNameValid, isLocalAccountNameExist } from '../../helpers/custom-validators/accounts'
 import { areValidationErrors } from './utils'
 
 const localAccountValidator = [

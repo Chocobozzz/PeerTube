@@ -1,14 +1,14 @@
 import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode, logger } from '../../../helpers'
-import { database as db } from '../../../initializers/database'
-import { VideoInstance } from '../../../models'
-import { sendAddVideo } from '../../activitypub/send/send-add'
+import { sequelizeTypescript } from '../../../initializers'
+import { VideoModel } from '../../../models/video/video'
+import { shareVideoByServer } from '../../activitypub'
+import { sendAddVideo } from '../../activitypub/send'
 import { JobScheduler } from '../job-scheduler'
 import { TranscodingJobPayload } from './transcoding-job-scheduler'
-import { shareVideoByServer } from '../../activitypub/share'
 
 async function process (data: TranscodingJobPayload, jobId: number) {
-  const video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)
+  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
@@ -25,13 +25,13 @@ function onError (err: Error, jobId: number) {
   return Promise.resolve()
 }
 
-async function onSuccess (jobId: number, video: VideoInstance, jobScheduler: JobScheduler<TranscodingJobPayload, VideoInstance>) {
+async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobScheduler<TranscodingJobPayload, VideoModel>) {
   if (video === undefined) return undefined
 
   logger.info('Job %d is a success.', jobId)
 
   // Maybe the video changed in database, refresh it
-  const videoDatabase = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid)
+  const videoDatabase = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid)
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 
@@ -50,7 +50,7 @@ async function onSuccess (jobId: number, video: VideoInstance, jobScheduler: Job
 
   if (resolutionsEnabled.length !== 0) {
     try {
-      await db.sequelize.transaction(async t => {
+      await sequelizeTypescript.transaction(async t => {
         const tasks: Bluebird<any>[] = []
 
         for (const resolution of resolutionsEnabled) {

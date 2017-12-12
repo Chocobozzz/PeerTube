@@ -1,96 +1,79 @@
 import { values } from 'lodash'
-import * as Sequelize from 'sequelize'
-import { JobCategory, JobState } from '../../../shared/models/job.model'
+import { AllowNull, Column, CreatedAt, DataType, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { JobCategory, JobState } from '../../../shared/models'
 import { JOB_CATEGORIES, JOB_STATES } from '../../initializers'
-import { addMethodsToModel, getSort } from '../utils'
-import { JobAttributes, JobInstance, JobMethods } from './job-interface'
+import { getSort } from '../utils'
 
-let Job: Sequelize.Model<JobInstance, JobAttributes>
-let listWithLimitByCategory: JobMethods.ListWithLimitByCategory
-let listForApi: JobMethods.ListForApi
-let toFormattedJSON: JobMethods.ToFormattedJSON
-
-export default function defineJob (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  Job = sequelize.define<JobInstance, JobAttributes>('Job',
+@Table({
+  tableName: 'job',
+  indexes: [
     {
-      state: {
-        type: DataTypes.ENUM(values(JOB_STATES)),
-        allowNull: false
-      },
-      category: {
-        type: DataTypes.ENUM(values(JOB_CATEGORIES)),
-        allowNull: false
-      },
-      handlerName: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      handlerInputData: {
-        type: DataTypes.JSON,
-        allowNull: true
+      fields: [ 'state', 'category' ]
+    }
+  ]
+})
+export class JobModel extends Model<JobModel> {
+  @AllowNull(false)
+  @Column(DataType.ENUM(values(JOB_STATES)))
+  state: JobState
+
+  @AllowNull(false)
+  @Column(DataType.ENUM(values(JOB_CATEGORIES)))
+  category: JobCategory
+
+  @AllowNull(false)
+  @Column
+  handlerName: string
+
+  @AllowNull(true)
+  @Column(DataType.JSON)
+  handlerInputData: any
+
+  @CreatedAt
+  creationDate: Date
+
+  @UpdatedAt
+  updatedOn: Date
+
+  static listWithLimitByCategory (limit: number, state: JobState, jobCategory: JobCategory) {
+    const query = {
+      order: [
+        [ 'id', 'ASC' ]
+      ],
+      limit: limit,
+      where: {
+        state,
+        category: jobCategory
       }
-    },
-    {
-      indexes: [
-        {
-          fields: [ 'state', 'category' ]
-        }
-      ]
     }
-  )
 
-  const classMethods = [
-    listWithLimitByCategory,
-    listForApi
-  ]
-  const instanceMethods = [
-    toFormattedJSON
-  ]
-  addMethodsToModel(Job, classMethods, instanceMethods)
-
-  return Job
-}
-
-toFormattedJSON = function (this: JobInstance) {
-  return {
-    id: this.id,
-    state: this.state,
-    category: this.category,
-    handlerName: this.handlerName,
-    handlerInputData: this.handlerInputData,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt
+    return JobModel.findAll(query)
   }
-}
 
-// ---------------------------------------------------------------------------
-
-listWithLimitByCategory = function (limit: number, state: JobState, jobCategory: JobCategory) {
-  const query = {
-    order: [
-      [ 'id', 'ASC' ]
-    ],
-    limit: limit,
-    where: {
-      state,
-      category: jobCategory
+  static listForApi (start: number, count: number, sort: string) {
+    const query = {
+      offset: start,
+      limit: count,
+      order: [ getSort(sort) ]
     }
+
+    return JobModel.findAndCountAll(query).then(({ rows, count }) => {
+      return {
+        data: rows,
+        total: count
+      }
+    })
   }
 
-  return Job.findAll(query)
-}
-
-listForApi = function (start: number, count: number, sort: string) {
-  const query = {
-    offset: start,
-    limit: count,
-    order: [ getSort(sort) ]
-  }
-
-  return Job.findAndCountAll(query).then(({ rows, count }) => {
+  toFormattedJSON () {
     return {
-      data: rows,
-      total: count
+      id: this.id,
+      state: this.state,
+      category: this.category,
+      handlerName: this.handlerName,
+      handlerInputData: this.handlerInputData,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
     }
-  })
+  }
 }

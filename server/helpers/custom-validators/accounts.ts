@@ -2,8 +2,7 @@ import * as Bluebird from 'bluebird'
 import { Response } from 'express'
 import 'express-validator'
 import * as validator from 'validator'
-import { database as db } from '../../initializers'
-import { AccountInstance } from '../../models'
+import { AccountModel } from '../../models/account/account'
 import { isUserUsernameValid } from './users'
 
 function isAccountNameValid (value: string) {
@@ -11,24 +10,24 @@ function isAccountNameValid (value: string) {
 }
 
 function isAccountIdExist (id: number | string, res: Response) {
-  let promise: Bluebird<AccountInstance>
+  let promise: Bluebird<AccountModel>
 
   if (validator.isInt('' + id)) {
-    promise = db.Account.load(+id)
+    promise = AccountModel.load(+id)
   } else { // UUID
-    promise = db.Account.loadByUUID('' + id)
+    promise = AccountModel.loadByUUID('' + id)
   }
 
   return isAccountExist(promise, res)
 }
 
 function isLocalAccountNameExist (name: string, res: Response) {
-  const promise = db.Account.loadLocalByName(name)
+  const promise = AccountModel.loadLocalByName(name)
 
   return isAccountExist(promise, res)
 }
 
-async function isAccountExist (p: Bluebird<AccountInstance>, res: Response) {
+async function isAccountExist (p: Bluebird<AccountModel>, res: Response) {
   const account = await p
 
   if (!account) {

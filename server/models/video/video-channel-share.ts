@@ -1,85 +1,79 @@
 import * as Sequelize from 'sequelize'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AccountModel } from '../account/account'
+import { VideoChannelModel } from './video-channel'
 
-import { addMethodsToModel } from '../utils'
-import { VideoChannelShareAttributes, VideoChannelShareInstance, VideoChannelShareMethods } from './video-channel-share-interface'
-
-let VideoChannelShare: Sequelize.Model<VideoChannelShareInstance, VideoChannelShareAttributes>
-let loadAccountsByShare: VideoChannelShareMethods.LoadAccountsByShare
-let load: VideoChannelShareMethods.Load
-
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  VideoChannelShare = sequelize.define<VideoChannelShareInstance, VideoChannelShareAttributes>('VideoChannelShare',
-    { },
+@Table({
+  tableName: 'videoChannelShare',
+  indexes: [
     {
-      indexes: [
-        {
-          fields: [ 'accountId' ]
-        },
-        {
-          fields: [ 'videoChannelId' ]
-        }
-      ]
+      fields: [ 'accountId' ]
+    },
+    {
+      fields: [ 'videoChannelId' ]
     }
-  )
-
-  const classMethods = [
-    associate,
-    load,
-    loadAccountsByShare
   ]
-  addMethodsToModel(VideoChannelShare, classMethods)
+})
+export class VideoChannelShareModel extends Model<VideoChannelShareModel> {
+  @CreatedAt
+  createdAt: Date
 
-  return VideoChannelShare
-}
+  @UpdatedAt
+  updatedAt: Date
 
-// ------------------------------ METHODS ------------------------------
+  @ForeignKey(() => AccountModel)
+  @Column
+  accountId: number
 
-function associate (models) {
-  VideoChannelShare.belongsTo(models.Account, {
+  @BelongsTo(() => AccountModel, {
     foreignKey: {
-      name: 'accountId',
       allowNull: false
     },
     onDelete: 'cascade'
   })
+  Account: AccountModel
 
-  VideoChannelShare.belongsTo(models.VideoChannel, {
+  @ForeignKey(() => VideoChannelModel)
+  @Column
+  videoChannelId: number
+
+  @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
-      name: 'videoChannelId',
-      allowNull: true
+      allowNull: false
     },
     onDelete: 'cascade'
   })
-}
+  VideoChannel: VideoChannelModel
 
-load = function (accountId: number, videoChannelId: number, t: Sequelize.Transaction) {
-  return VideoChannelShare.findOne({
-    where: {
-      accountId,
-      videoChannelId
-    },
-    include: [
-      VideoChannelShare['sequelize'].models.Account,
-      VideoChannelShare['sequelize'].models.VideoChannel
-    ],
-    transaction: t
-  })
-}
-
-loadAccountsByShare = function (videoChannelId: number, t: Sequelize.Transaction) {
-  const query = {
-    where: {
-      videoChannelId
-    },
-    include: [
-      {
-        model: VideoChannelShare['sequelize'].models.Account,
-        required: true
-      }
-    ],
-    transaction: t
+  static load (accountId: number, videoChannelId: number, t: Sequelize.Transaction) {
+    return VideoChannelShareModel.findOne({
+      where: {
+        accountId,
+        videoChannelId
+      },
+      include: [
+        AccountModel,
+        VideoChannelModel
+      ],
+      transaction: t
+    })
   }
 
-  return VideoChannelShare.findAll(query)
-    .then(res => res.map(r => r.Account))
+  static loadAccountsByShare (videoChannelId: number, t: Sequelize.Transaction) {
+    const query = {
+      where: {
+        videoChannelId
+      },
+      include: [
+        {
+          model: AccountModel,
+          required: true
+        }
+      ],
+      transaction: t
+    }
+
+    return VideoChannelShareModel.findAll(query)
+      .then(res => res.map(r => r.Account))
+  }
 }

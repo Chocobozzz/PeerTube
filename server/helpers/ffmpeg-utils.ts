@@ -1,5 +1,5 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { VideoResolution } from '../../shared/models/videos/video-resolution.enum'
+import { VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers'
 
 function getVideoFileHeight (path: string) {

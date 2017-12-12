@@ -1,6 +1,7 @@
 import { Transaction } from 'sequelize'
-import { ActivityAudience, ActivityLike } from '../../../../shared/models/activitypub/activity'
-import { AccountInstance, VideoInstance } from '../../../models'
+import { ActivityAudience, ActivityLike } from '../../../../shared/models/activitypub'
+import { AccountModel } from '../../../models/account/account'
+import { VideoModel } from '../../../models/video/video'
 import { getVideoLikeActivityPubUrl } from '../url'
 import {
   broadcastToFollowers,
@@ -11,7 +12,7 @@ import {
   unicastTo
 } from './misc'
 
-async function sendLikeToOrigin (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
+async function sendLikeToOrigin (byAccount: AccountModel, video: VideoModel, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byAccount, video)
 
   const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
@@ -21,7 +22,7 @@ async function sendLikeToOrigin (byAccount: AccountInstance, video: VideoInstanc
   return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
 }
 
-async function sendLikeToVideoFollowers (byAccount: AccountInstance, video: VideoInstance, t: Transaction) {
+async function sendLikeToVideoFollowers (byAccount: AccountModel, video: VideoModel, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byAccount, video)
 
   const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
@@ -34,16 +35,16 @@ async function sendLikeToVideoFollowers (byAccount: AccountInstance, video: Vide
 
 async function likeActivityData (
   url: string,
-  byAccount: AccountInstance,
-  video: VideoInstance,
+  byAccount: AccountModel,
+  video: VideoModel,
   t: Transaction,
   audience?: ActivityAudience
-) {
+): Promise<ActivityLike> {
   if (!audience) {
     audience = await getAudience(byAccount, t)
   }
 
-  const activity: ActivityLike = {
+  return {
     type: 'Like',
     id: url,
     actor: byAccount.url,
@@ -51,8 +52,6 @@ async function likeActivityData (
     cc: audience.cc,
     object: video.url
   }
-
-  return activity
 }
 
 // ---------------------------------------------------------------------------

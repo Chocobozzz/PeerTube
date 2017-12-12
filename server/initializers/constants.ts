@@ -1,16 +1,10 @@
 import * as config from 'config'
 import { join } from 'path'
-
+import { JobCategory, JobState, VideoRateType } from '../../shared/models'
+import { FollowState } from '../../shared/models/accounts'
+import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { root, isTestInstance } from '../helpers/core-utils'
-
-import {
-  VideoRateType,
-  JobState,
-  JobCategory
-} from '../../shared/models'
-import { VideoPrivacy } from '../../shared/models/videos/video-privacy.enum'
-import { FollowState } from '../../shared/models/accounts/follow.model'
+import { isTestInstance, root } from '../helpers/core-utils'
 
 // ---------------------------------------------------------------------------
 

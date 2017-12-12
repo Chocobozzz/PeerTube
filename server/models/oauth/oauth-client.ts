@@ -1,86 +1,62 @@
-import * as Sequelize from 'sequelize'
+import { AllowNull, Column, CreatedAt, DataType, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { OAuthTokenModel } from './oauth-token'
 
-import { addMethodsToModel } from '../utils'
-import {
-  OAuthClientInstance,
-  OAuthClientAttributes,
-
-  OAuthClientMethods
-} from './oauth-client-interface'
-
-let OAuthClient: Sequelize.Model<OAuthClientInstance, OAuthClientAttributes>
-let countTotal: OAuthClientMethods.CountTotal
-let loadFirstClient: OAuthClientMethods.LoadFirstClient
-let getByIdAndSecret: OAuthClientMethods.GetByIdAndSecret
-
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  OAuthClient = sequelize.define<OAuthClientInstance, OAuthClientAttributes>('OAuthClient',
+@Table({
+  tableName: 'oAuthClient',
+  indexes: [
     {
-      clientId: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      clientSecret: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      grants: {
-        type: DataTypes.ARRAY(DataTypes.STRING)
-      },
-      redirectUris: {
-        type: DataTypes.ARRAY(DataTypes.STRING)
-      }
+      fields: [ 'clientId' ],
+      unique: true
     },
     {
-      indexes: [
-        {
-          fields: [ 'clientId' ],
-          unique: true
-        },
-        {
-          fields: [ 'clientId', 'clientSecret' ],
-          unique: true
-        }
-      ]
+      fields: [ 'clientId', 'clientSecret' ],
+      unique: true
     }
-  )
-
-  const classMethods = [
-    associate,
-
-    countTotal,
-    getByIdAndSecret,
-    loadFirstClient
   ]
-  addMethodsToModel(OAuthClient, classMethods)
+})
+export class OAuthClientModel extends Model<OAuthClientModel> {
 
-  return OAuthClient
-}
+  @AllowNull(false)
+  @Column
+  clientId: string
 
-// ---------------------------------------------------------------------------
+  @AllowNull(false)
+  @Column
+  clientSecret: string
 
-function associate (models) {
-  OAuthClient.hasMany(models.OAuthToken, {
-    foreignKey: 'oAuthClientId',
+  @Column(DataType.ARRAY(DataType.STRING))
+  grants: string[]
+
+  @Column(DataType.ARRAY(DataType.STRING))
+  redirectUris: string[]
+
+  @CreatedAt
+  createdAt: Date
+
+  @UpdatedAt
+  updatedAt: Date
+
+  @HasMany(() => OAuthTokenModel, {
     onDelete: 'cascade'
   })
-}
+  OAuthTokens: OAuthTokenModel[]
 
-countTotal = function () {
-  return OAuthClient.count()
-}
-
-loadFirstClient = function () {
-  return OAuthClient.findOne()
-}
-
-getByIdAndSecret = function (clientId: string, clientSecret: string) {
-  const query = {
-    where: {
-      clientId: clientId,
-      clientSecret: clientSecret
-    }
+  static countTotal () {
+    return OAuthClientModel.count()
   }
 
-  return OAuthClient.findOne(query)
+  static loadFirstClient () {
+    return OAuthClientModel.findOne()
+  }
+
+  static getByIdAndSecret (clientId: string, clientSecret: string) {
+    const query = {
+      where: {
+        clientId: clientId,
+        clientSecret: clientSecret
+      }
+    }
+
+    return OAuthClientModel.findOne(query)
+  }
 }

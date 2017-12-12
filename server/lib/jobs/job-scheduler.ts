@@ -2,8 +2,8 @@ import { AsyncQueue, forever, queue } from 'async'
 import * as Sequelize from 'sequelize'
 import { JobCategory } from '../../../shared'
 import { logger } from '../../helpers'
-import { database as db, JOB_STATES, JOBS_FETCH_LIMIT_PER_CYCLE, JOBS_FETCHING_INTERVAL } from '../../initializers'
-import { JobInstance } from '../../models'
+import { JOB_STATES, JOBS_FETCH_LIMIT_PER_CYCLE, JOBS_FETCHING_INTERVAL } from '../../initializers'
+import { JobModel } from '../../models/job/job'
 
 export interface JobHandler<P, T> {
   process (data: object, jobId: number): Promise<T>
@@ -24,12 +24,12 @@ class JobScheduler<P, T> {
 
     logger.info('Jobs scheduler %s activated.', this.jobCategory)
 
-    const jobsQueue = queue<JobInstance, JobQueueCallback>(this.processJob.bind(this))
+    const jobsQueue = queue<JobModel, JobQueueCallback>(this.processJob.bind(this))
 
     // Finish processing jobs from a previous start
     const state = JOB_STATES.PROCESSING
     try {
-      const jobs = await db.Job.listWithLimitByCategory(limit, state, this.jobCategory)
+      const jobs = await JobModel.listWithLimitByCategory(limit, state, this.jobCategory)
 
       this.enqueueJobs(jobsQueue, jobs)
     } catch (err) {
@@ -45,7 +45,7 @@ class JobScheduler<P, T> {
 
         const state = JOB_STATES.PENDING
         try {
-          const jobs = await db.Job.listWithLimitByCategory(limit, state, this.jobCategory)
+          const jobs = await JobModel.listWithLimitByCategory(limit, state, this.jobCategory)
 
           this.enqueueJobs(jobsQueue, jobs)
         } catch (err) {
@@ -70,14 +70,14 @@ class JobScheduler<P, T> {
 
     const options = { transaction }
 
-    return db.Job.create(createQuery, options)
+    return JobModel.create(createQuery, options)
   }
 
-  private enqueueJobs (jobsQueue: AsyncQueue<JobInstance>, jobs: JobInstance[]) {
+  private enqueueJobs (jobsQueue: AsyncQueue<JobModel>, jobs: JobModel[]) {
     jobs.forEach(job => jobsQueue.push(job))
   }
 
-  private async processJob (job: JobInstance, callback: (err: Error) => void) {
+  private async processJob (job: JobModel, callback: (err: Error) => void) {
     const jobHandler = this.jobHandlers[job.handlerName]
     if (jobHandler === undefined) {
       const errorString = 'Unknown job handler ' + job.handlerName + ' for job ' + job.id
@@ -110,7 +110,7 @@ class JobScheduler<P, T> {
     return callback(null)
   }
 
-  private async onJobError (jobHandler: JobHandler<P, T>, job: JobInstance, err: Error) {
+  private async onJobError (jobHandler: JobHandler<P, T>, job: JobModel, err: Error) {
     job.state = JOB_STATES.ERROR
 
     try {
@@ -121,7 +121,7 @@ class JobScheduler<P, T> {
     }
   }
 
-  private async onJobSuccess (jobHandler: JobHandler<P, T>, job: JobInstance, jobResult: T) {
+  private async onJobSuccess (jobHandler: JobHandler<P, T>, job: JobModel, jobResult: T) {
     job.state = JOB_STATES.SUCCESS
 
     try {

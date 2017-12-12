@@ -1,8 +1,8 @@
 import * as WebFinger from 'webfinger.js'
 import { WebFingerData } from '../../shared'
-import { fetchRemoteAccount } from '../lib/activitypub/account'
+import { fetchRemoteAccount } from '../lib/activitypub'
 import { isTestInstance } from './core-utils'
-import { isActivityPubUrlValid } from './custom-validators'
+import { isActivityPubUrlValid } from './custom-validators/activitypub'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,

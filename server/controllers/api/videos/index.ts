@@ -12,16 +12,19 @@ import {
   retryTransactionWrapper
 } from '../../../helpers'
 import { getServerAccount } from '../../../helpers/utils'
-import { CONFIG, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT, VIDEO_PRIVACIES } from '../../../initializers'
-import { database as db } from '../../../initializers/database'
-import { sendAddVideo } from '../../../lib/activitypub/send/send-add'
-import { sendCreateViewToOrigin } from '../../../lib/activitypub/send/send-create'
-import { sendUpdateVideo } from '../../../lib/activitypub/send/send-update'
-import { shareVideoByServer } from '../../../lib/activitypub/share'
-import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
-import { fetchRemoteVideoDescription } from '../../../lib/activitypub/videos'
+import {
+  CONFIG,
+  sequelizeTypescript,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_MIMETYPE_EXT,
+  VIDEO_PRIVACIES
+} from '../../../initializers'
+import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServer } from '../../../lib/activitypub'
+import { sendAddVideo, sendCreateViewToOrigin, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { sendCreateViewToVideoFollowers } from '../../../lib/index'
-import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler/transcoding-job-scheduler'
+import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler'
 import {
   asyncMiddleware,
   authenticate,
@@ -35,7 +38,9 @@ import {
   videosSortValidator,
   videosUpdateValidator
 } from '../../../middlewares'
-import { VideoInstance } from '../../../models'
+import { TagModel } from '../../../models/video/tag'
+import { VideoModel } from '../../../models/video/video'
+import { VideoFileModel } from '../../../models/video/video-file'
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
@@ -99,7 +104,7 @@ videosRouter.put('/:id',
 videosRouter.post('/upload',
   authenticate,
   reqFiles,
-  videosAddValidator,
+  asyncMiddleware(videosAddValidator),
   asyncMiddleware(addVideoRetryWrapper)
 )
 
@@ -181,7 +186,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
     channelId: res.locals.videoChannel.id
   }
-  const video = db.Video.build(videoData)
+  const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video)
 
   const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
@@ -192,7 +197,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     resolution: videoFileHeight,
     size: videoPhysicalFile.size
   }
-  const videoFile = db.VideoFile.build(videoFileData)
+  const videoFile = new VideoFileModel(videoFileData)
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
   const source = join(videoDir, videoPhysicalFile.filename)
   const destination = join(videoDir, video.getVideoFilename(videoFile))
@@ -210,7 +215,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   )
   await Promise.all(tasks)
 
-  return db.sequelize.transaction(async t => {
+  return sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     if (CONFIG.TRANSCODING.ENABLED === true) {
@@ -232,9 +237,9 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     video.VideoFiles = [ videoFile ]
 
     if (videoInfo.tags) {
-      const tagInstances = await db.Tag.findOrCreateTags(videoInfo.tags, t)
+      const tagInstances = await TagModel.findOrCreateTags(videoInfo.tags, t)
 
-      await video.setTags(tagInstances, sequelizeOptions)
+      await video.$set('Tags', tagInstances, sequelizeOptions)
       video.Tags = tagInstances
     }
 
@@ -264,13 +269,13 @@ async function updateVideoRetryWrapper (req: express.Request, res: express.Respo
 }
 
 async function updateVideo (req: express.Request, res: express.Response) {
-  const videoInstance: VideoInstance = res.locals.video
+  const videoInstance: VideoModel = res.locals.video
   const videoFieldsSave = videoInstance.toJSON()
   const videoInfoToUpdate: VideoUpdate = req.body
   const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
 
   try {
-    await db.sequelize.transaction(async t => {
+    await sequelizeTypescript.transaction(async t => {
       const sequelizeOptions = {
         transaction: t
       }
@@ -286,9 +291,9 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
 
       if (videoInfoToUpdate.tags) {
-        const tagInstances = await db.Tag.findOrCreateTags(videoInfoToUpdate.tags, t)
+        const tagInstances = await TagModel.findOrCreateTags(videoInfoToUpdate.tags, t)
 
-        await videoInstance.setTags(tagInstances, sequelizeOptions)
+        await videoInstance.$set('Tags', tagInstances, sequelizeOptions)
         videoInstance.Tags = tagInstances
       }
 
@@ -350,7 +355,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.Video.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -367,9 +372,9 @@ async function removeVideoRetryWrapper (req: express.Request, res: express.Respo
 }
 
 async function removeVideo (req: express.Request, res: express.Response) {
-  const videoInstance: VideoInstance = res.locals.video
+  const videoInstance: VideoModel = res.locals.video
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     await videoInstance.destroy({ transaction: t })
   })
 
@@ -377,7 +382,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
 }
 
 async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.Video.searchAndPopulateAccountAndServerAndTags(
+  const resultList = await VideoModel.searchAndPopulateAccountAndServerAndTags(
     req.query.search,
     req.query.start,
     req.query.count,

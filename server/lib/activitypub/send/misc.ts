@@ -1,19 +1,19 @@
 import { Transaction } from 'sequelize'
-import { Activity } from '../../../../shared/models/activitypub/activity'
-import { logger } from '../../../helpers/logger'
-import { ACTIVITY_PUB, database as db } from '../../../initializers'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { VideoChannelInstance } from '../../../models/index'
-import { VideoInstance } from '../../../models/video/video-interface'
-import {
-  activitypubHttpJobScheduler,
-  ActivityPubHttpPayload
-} from '../../jobs/activitypub-http-job-scheduler/activitypub-http-job-scheduler'
+import { Activity } from '../../../../shared/models/activitypub'
+import { logger } from '../../../helpers'
+import { ACTIVITY_PUB } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { AccountFollowModel } from '../../../models/account/account-follow'
+import { VideoModel } from '../../../models/video/video'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoChannelShareModel } from '../../../models/video/video-channel-share'
+import { VideoShareModel } from '../../../models/video/video-share'
+import { activitypubHttpJobScheduler, ActivityPubHttpPayload } from '../../jobs/activitypub-http-job-scheduler'
 
 async function forwardActivity (
   activity: Activity,
   t: Transaction,
-  followersException: AccountInstance[] = []
+  followersException: AccountModel[] = []
 ) {
   const to = activity.to || []
   const cc = activity.cc || []
@@ -25,7 +25,7 @@ async function forwardActivity (
     }
   }
 
-  const toAccountFollowers = await db.Account.listByFollowersUrls(followersUrls, t)
+  const toAccountFollowers = await AccountModel.listByFollowersUrls(followersUrls, t)
   const uris = await computeFollowerUris(toAccountFollowers, followersException, t)
 
   if (uris.length === 0) {
@@ -45,10 +45,10 @@ async function forwardActivity (
 
 async function broadcastToFollowers (
   data: any,
-  byAccount: AccountInstance,
-  toAccountFollowers: AccountInstance[],
+  byAccount: AccountModel,
+  toAccountFollowers: AccountModel[],
   t: Transaction,
-  followersException: AccountInstance[] = []
+  followersException: AccountModel[] = []
 ) {
   const uris = await computeFollowerUris(toAccountFollowers, followersException, t)
   if (uris.length === 0) {
@@ -67,7 +67,7 @@ async function broadcastToFollowers (
   return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpBroadcastHandler', jobPayload)
 }
 
-async function unicastTo (data: any, byAccount: AccountInstance, toAccountUrl: string, t: Transaction) {
+async function unicastTo (data: any, byAccount: AccountModel, toAccountUrl: string, t: Transaction) {
   logger.debug('Creating unicast job.', { uri: toAccountUrl })
 
   const jobPayload: ActivityPubHttpPayload = {
@@ -79,42 +79,42 @@ async function unicastTo (data: any, byAccount: AccountInstance, toAccountUrl: s
   return activitypubHttpJobScheduler.createJob(t, 'activitypubHttpUnicastHandler', jobPayload)
 }
 
-function getOriginVideoAudience (video: VideoInstance, accountsInvolvedInVideo: AccountInstance[]) {
+function getOriginVideoAudience (video: VideoModel, accountsInvolvedInVideo: AccountModel[]) {
   return {
     to: [ video.VideoChannel.Account.url ],
     cc: accountsInvolvedInVideo.map(a => a.followersUrl)
   }
 }
 
-function getOriginVideoChannelAudience (videoChannel: VideoChannelInstance, accountsInvolved: AccountInstance[]) {
+function getOriginVideoChannelAudience (videoChannel: VideoChannelModel, accountsInvolved: AccountModel[]) {
   return {
     to: [ videoChannel.Account.url ],
     cc: accountsInvolved.map(a => a.followersUrl)
   }
 }
 
-function getObjectFollowersAudience (accountsInvolvedInObject: AccountInstance[]) {
+function getObjectFollowersAudience (accountsInvolvedInObject: AccountModel[]) {
   return {
     to: accountsInvolvedInObject.map(a => a.followersUrl),
     cc: []
   }
 }
 
-async function getAccountsInvolvedInVideo (video: VideoInstance, t: Transaction) {
-  const accountsToForwardView = await db.VideoShare.loadAccountsByShare(video.id, t)
+async function getAccountsInvolvedInVideo (video: VideoModel, t: Transaction) {
+  const accountsToForwardView = await VideoShareModel.loadAccountsByShare(video.id, t)
   accountsToForwardView.push(video.VideoChannel.Account)
 
   return accountsToForwardView
 }
 
-async function getAccountsInvolvedInVideoChannel (videoChannel: VideoChannelInstance, t: Transaction) {
-  const accountsToForwardView = await db.VideoChannelShare.loadAccountsByShare(videoChannel.id, t)
+async function getAccountsInvolvedInVideoChannel (videoChannel: VideoChannelModel, t: Transaction) {
+  const accountsToForwardView = await VideoChannelShareModel.loadAccountsByShare(videoChannel.id, t)
   accountsToForwardView.push(videoChannel.Account)
 
   return accountsToForwardView
 }
 
-async function getAudience (accountSender: AccountInstance, t: Transaction, isPublic = true) {
+async function getAudience (accountSender: AccountModel, t: Transaction, isPublic = true) {
   const followerInboxUrls = await accountSender.getFollowerSharedInboxUrls(t)
 
   // Thanks Mastodon: https://github.com/tootsuite/mastodon/blob/master/app/lib/activitypub/tag_manager.rb#L47
@@ -132,14 +132,12 @@ async function getAudience (accountSender: AccountInstance, t: Transaction, isPu
   return { to, cc }
 }
 
-async function computeFollowerUris (toAccountFollower: AccountInstance[], followersException: AccountInstance[], t: Transaction) {
+async function computeFollowerUris (toAccountFollower: AccountModel[], followersException: AccountModel[], t: Transaction) {
   const toAccountFollowerIds = toAccountFollower.map(a => a.id)
 
-  const result = await db.AccountFollow.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds, t)
+  const result = await AccountFollowModel.listAcceptedFollowerSharedInboxUrls(toAccountFollowerIds, t)
   const followersSharedInboxException = followersException.map(f => f.sharedInboxUrl)
-  const uris = result.data.filter(sharedInbox => followersSharedInboxException.indexOf(sharedInbox) === -1)
-
-  return uris
+  return result.data.filter(sharedInbox => followersSharedInboxException.indexOf(sharedInbox) === -1)
 }
 
 // ---------------------------------------------------------------------------

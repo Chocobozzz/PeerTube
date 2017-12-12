@@ -1,11 +1,10 @@
 import * as express from 'express'
-
-import { database as db } from '../../../initializers/database'
 import {
   logger,
   getFormattedObjects,
   retryTransactionWrapper
 } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
 import {
   authenticate,
   ensureUserHasRight,
@@ -16,9 +15,11 @@ import {
   setPagination,
   asyncMiddleware
 } from '../../../middlewares'
-import { VideoInstance } from '../../../models'
 import { VideoAbuseCreate, UserRight } from '../../../../shared'
 import { sendVideoAbuse } from '../../../lib/index'
+import { AccountModel } from '../../../models/account/account'
+import { VideoModel } from '../../../models/video/video'
+import { VideoAbuseModel } from '../../../models/video/video-abuse'
 
 const abuseVideoRouter = express.Router()
 
@@ -46,7 +47,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoAbuses (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.VideoAbuse.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoAbuseModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -63,8 +64,8 @@ async function reportVideoAbuseRetryWrapper (req: express.Request, res: express.
 }
 
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video as VideoInstance
-  const reporterAccount = res.locals.oauth.token.User.Account
+  const videoInstance = res.locals.video as VideoModel
+  const reporterAccount = res.locals.oauth.token.User.Account as AccountModel
   const body: VideoAbuseCreate = req.body
 
   const abuseToCreate = {
@@ -73,8 +74,8 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
     videoId: videoInstance.id
   }
 
-  await db.sequelize.transaction(async t => {
-    const videoAbuseInstance = await db.VideoAbuse.create(abuseToCreate, { transaction: t })
+  await sequelizeTypescript.transaction(async t => {
+    const videoAbuseInstance = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
     videoAbuseInstance.Video = videoInstance
 
     // We send the video abuse to the origin server

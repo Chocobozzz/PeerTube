@@ -1,11 +1,11 @@
 import { Transaction } from 'sequelize'
-import { ActivityAccept } from '../../../../shared/models/activitypub/activity'
-import { AccountInstance } from '../../../models'
-import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
-import { unicastTo } from './misc'
+import { ActivityAccept } from '../../../../shared/models/activitypub'
+import { AccountModel } from '../../../models/account/account'
+import { AccountFollowModel } from '../../../models/account/account-follow'
 import { getAccountFollowAcceptActivityPubUrl } from '../url'
+import { unicastTo } from './misc'
 
-async function sendAccept (accountFollow: AccountFollowInstance, t: Transaction) {
+async function sendAccept (accountFollow: AccountFollowModel, t: Transaction) {
   const follower = accountFollow.AccountFollower
   const me = accountFollow.AccountFollowing
 
@@ -23,7 +23,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function acceptActivityData (url: string, byAccount: AccountInstance) {
+function acceptActivityData (url: string, byAccount: AccountModel) {
   const activity: ActivityAccept = {
     type: 'Accept',
     id: url,

@@ -1,24 +1,17 @@
-import * as Sequelize from 'sequelize'
-import { addMethodsToModel } from '../utils'
-import { AvatarAttributes, AvatarInstance } from './avatar-interface'
+import { AllowNull, Column, CreatedAt, Model, Table, UpdatedAt } from 'sequelize-typescript'
 
-let Avatar: Sequelize.Model<AvatarInstance, AvatarAttributes>
+@Table({
+  tableName: 'avatar'
+})
+export class AvatarModel extends Model<AvatarModel> {
 
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  Avatar = sequelize.define<AvatarInstance, AvatarAttributes>('Avatar',
-    {
-      filename: {
-        type: DataTypes.STRING,
-        allowNull: false
-      }
-    },
-    {}
-  )
+  @AllowNull(false)
+  @Column
+  filename: string
 
-  const classMethods = []
-  addMethodsToModel(Avatar, classMethods)
+  @CreatedAt
+  createdAt: Date
 
-  return Avatar
+  @UpdatedAt
+  updatedAt: Date
 }
-
-// ------------------------------ Statics ------------------------------

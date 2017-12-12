@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared'
 import { getFormattedObjects, logger, resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers'
-import { database as db } from '../../../initializers'
+import { sequelizeTypescript } from '../../../initializers'
 import { createVideoChannel } from '../../../lib'
 import { sendUpdateVideoChannel } from '../../../lib/activitypub/send/send-update'
 import {
@@ -17,7 +17,8 @@ import {
   videoChannelsSortValidator,
   videoChannelsUpdateValidator
 } from '../../../middlewares'
-import { AccountInstance, VideoChannelInstance } from '../../../models'
+import { AccountModel } from '../../../models/account/account'
+import { VideoChannelModel } from '../../../models/video/video-channel'
 
 const videoChannelRouter = express.Router()
 
@@ -66,13 +67,13 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.VideoChannel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoChannelModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listVideoAccountChannels (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.VideoChannel.listByAccount(res.locals.account.id)
+  const resultList = await VideoChannelModel.listByAccount(res.locals.account.id)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -93,10 +94,10 @@ async function addVideoChannelRetryWrapper (req: express.Request, res: express.R
 
 async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
-  const account: AccountInstance = res.locals.oauth.token.User.Account
-  let videoChannelCreated: VideoChannelInstance
+  const account: AccountModel = res.locals.oauth.token.User.Account
+  let videoChannelCreated: VideoChannelModel
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     videoChannelCreated = await createVideoChannel(videoChannelInfo, account, t)
   })
 
@@ -115,12 +116,12 @@ async function updateVideoChannelRetryWrapper (req: express.Request, res: expres
 }
 
 async function updateVideoChannel (req: express.Request, res: express.Response) {
-  const videoChannelInstance: VideoChannelInstance = res.locals.videoChannel
+  const videoChannelInstance = res.locals.videoChannel as VideoChannelModel
   const videoChannelFieldsSave = videoChannelInstance.toJSON()
-  const videoChannelInfoToUpdate: VideoChannelUpdate = req.body
+  const videoChannelInfoToUpdate = req.body as VideoChannelUpdate
 
   try {
-    await db.sequelize.transaction(async t => {
+    await sequelizeTypescript.transaction(async t => {
       const sequelizeOptions = {
         transaction: t
       }
@@ -158,9 +159,9 @@ async function removeVideoChannelRetryWrapper (req: express.Request, res: expres
 }
 
 async function removeVideoChannel (req: express.Request, res: express.Response) {
-  const videoChannelInstance: VideoChannelInstance = res.locals.videoChannel
+  const videoChannelInstance: VideoChannelModel = res.locals.videoChannel
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     await videoChannelInstance.destroy({ transaction: t })
   })
 
@@ -168,7 +169,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
 }
 
 async function getVideoChannel (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoChannelWithVideos = await db.VideoChannel.loadAndPopulateAccountAndVideos(res.locals.videoChannel.id)
+  const videoChannelWithVideos = await VideoChannelModel.loadAndPopulateAccountAndVideos(res.locals.videoChannel.id)
 
   return res.json(videoChannelWithVideos.toFormattedJSON())
 }

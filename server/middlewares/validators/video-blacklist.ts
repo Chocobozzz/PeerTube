@@ -1,9 +1,10 @@
 import * as express from 'express'
 import { param } from 'express-validator/check'
-import { isIdOrUUIDValid, logger } from '../../helpers'
+import { logger } from '../../helpers'
+import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
-import { database as db } from '../../initializers/database'
-import { VideoInstance } from '../../models/video/video-interface'
+import { VideoModel } from '../../models/video/video'
+import { VideoBlacklistModel } from '../../models/video/video-blacklist'
 import { areValidationErrors } from './utils'
 
 const videosBlacklistRemoveValidator = [
@@ -42,7 +43,7 @@ export {
 }
 // ---------------------------------------------------------------------------
 
-function checkVideoIsBlacklistable (video: VideoInstance, res: express.Response) {
+function checkVideoIsBlacklistable (video: VideoModel, res: express.Response) {
   if (video.isOwned() === true) {
     res.status(403)
               .json({ error: 'Cannot blacklist a local video' })
@@ -54,8 +55,8 @@ function checkVideoIsBlacklistable (video: VideoInstance, res: express.Response)
   return true
 }
 
-async function checkVideoIsBlacklisted (video: VideoInstance, res: express.Response) {
-  const blacklistedVideo = await db.BlacklistedVideo.loadByVideoId(video.id)
+async function checkVideoIsBlacklisted (video: VideoModel, res: express.Response) {
+  const blacklistedVideo = await VideoBlacklistModel.loadByVideoId(video.id)
   if (!blacklistedVideo) {
     res.status(404)
       .send('Blacklisted video not found')

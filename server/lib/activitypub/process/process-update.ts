@@ -1,12 +1,13 @@
 import * as Bluebird from 'bluebird'
 import { VideoChannelObject, VideoTorrentObject } from '../../../../shared'
-import { ActivityUpdate } from '../../../../shared/models/activitypub/activity'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
-import { resetSequelizeInstance } from '../../../helpers/utils'
-import { database as db } from '../../../initializers'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { VideoInstance } from '../../../models/video/video-interface'
+import { ActivityUpdate } from '../../../../shared/models/activitypub'
+import { logger, resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { TagModel } from '../../../models/video/tag'
+import { VideoModel } from '../../../models/video/video'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoFileModel } from '../../../models/video/video-file'
 import { getOrCreateAccountAndServer } from '../account'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
@@ -30,7 +31,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processUpdateVideo (account: AccountInstance, video: VideoTorrentObject) {
+function processUpdateVideo (account: AccountModel, video: VideoTorrentObject) {
   const options = {
     arguments: [ account, video ],
     errorMessage: 'Cannot update the remote video with many retries'
@@ -39,18 +40,18 @@ function processUpdateVideo (account: AccountInstance, video: VideoTorrentObject
   return retryTransactionWrapper(updateRemoteVideo, options)
 }
 
-async function updateRemoteVideo (account: AccountInstance, videoAttributesToUpdate: VideoTorrentObject) {
+async function updateRemoteVideo (account: AccountModel, videoAttributesToUpdate: VideoTorrentObject) {
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
-  let videoInstance: VideoInstance
+  let videoInstance: VideoModel
   let videoFieldsSave: object
 
   try {
-    await db.sequelize.transaction(async t => {
+    await sequelizeTypescript.transaction(async t => {
       const sequelizeOptions = {
         transaction: t
       }
 
-      const videoInstance = await db.Video.loadByUrlAndPopulateAccount(videoAttributesToUpdate.id, t)
+      const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(videoAttributesToUpdate.id, t)
       if (!videoInstance) throw new Error('Video ' + videoAttributesToUpdate.id + ' not found.')
 
       if (videoInstance.VideoChannel.Account.id !== account.id) {
@@ -81,12 +82,12 @@ async function updateRemoteVideo (account: AccountInstance, videoAttributesToUpd
       await Promise.all(videoFileDestroyTasks)
 
       const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoInstance, videoAttributesToUpdate)
-      const tasks: Bluebird<any>[] = videoFileAttributes.map(f => db.VideoFile.create(f))
+      const tasks: Bluebird<any>[] = videoFileAttributes.map(f => VideoFileModel.create(f))
       await Promise.all(tasks)
 
       const tags = videoAttributesToUpdate.tag.map(t => t.name)
-      const tagInstances = await db.Tag.findOrCreateTags(tags, t)
-      await videoInstance.setTags(tagInstances, sequelizeOptions)
+      const tagInstances = await TagModel.findOrCreateTags(tags, t)
+      await videoInstance.$set('Tags', tagInstances, sequelizeOptions)
     })
 
     logger.info('Remote video with uuid %s updated', videoAttributesToUpdate.uuid)
@@ -101,7 +102,7 @@ async function updateRemoteVideo (account: AccountInstance, videoAttributesToUpd
   }
 }
 
-async function processUpdateVideoChannel (account: AccountInstance, videoChannel: VideoChannelObject) {
+async function processUpdateVideoChannel (account: AccountModel, videoChannel: VideoChannelObject) {
   const options = {
     arguments: [ account, videoChannel ],
     errorMessage: 'Cannot update the remote video channel with many retries.'
@@ -110,13 +111,13 @@ async function processUpdateVideoChannel (account: AccountInstance, videoChannel
   await retryTransactionWrapper(updateRemoteVideoChannel, options)
 }
 
-async function updateRemoteVideoChannel (account: AccountInstance, videoChannel: VideoChannelObject) {
+async function updateRemoteVideoChannel (account: AccountModel, videoChannel: VideoChannelObject) {
   logger.debug('Updating remote video channel "%s".', videoChannel.uuid)
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    const videoChannelInstance = await db.VideoChannel.loadByUrl(videoChannel.id)
+    const videoChannelInstance = await VideoChannelModel.loadByUrl(videoChannel.id)
     if (!videoChannelInstance) throw new Error('Video ' + videoChannel.id + ' not found.')
 
     if (videoChannelInstance.Account.id !== account.id) {

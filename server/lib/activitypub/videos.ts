@@ -2,21 +2,22 @@ import { join } from 'path'
 import * as request from 'request'
 import { Transaction } from 'sequelize'
 import { ActivityIconObject } from '../../../shared/index'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { CONFIG, REMOTE_SCHEME, STATIC_PATHS } from '../../initializers/constants'
-import { AccountInstance } from '../../models/account/account-interface'
-import { VideoInstance } from '../../models/video/video-interface'
-import { sendLikeToOrigin } from './index'
-import { sendCreateDislikeToOrigin, sendCreateDislikeToVideoFollowers } from './send/send-create'
-import { sendLikeToVideoFollowers } from './send/send-like'
+import { doRequest, doRequestAndSaveToFile } from '../../helpers'
+import { CONFIG, REMOTE_SCHEME, STATIC_PATHS } from '../../initializers'
+import { AccountModel } from '../../models/account/account'
+import { VideoModel } from '../../models/video/video'
 import {
+  sendCreateDislikeToOrigin,
+  sendCreateDislikeToVideoFollowers,
+  sendLikeToOrigin,
+  sendLikeToVideoFollowers,
   sendUndoDislikeToOrigin,
   sendUndoDislikeToVideoFollowers,
   sendUndoLikeToOrigin,
   sendUndoLikeToVideoFollowers
-} from './send/send-undo'
+} from './send'
 
-function fetchRemoteVideoPreview (video: VideoInstance) {
+function fetchRemoteVideoPreview (video: VideoModel) {
   // FIXME: use url
   const host = video.VideoChannel.Account.Server.host
   const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
@@ -24,7 +25,7 @@ function fetchRemoteVideoPreview (video: VideoInstance) {
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
 }
 
-async function fetchRemoteVideoDescription (video: VideoInstance) {
+async function fetchRemoteVideoDescription (video: VideoModel) {
   // FIXME: use url
   const host = video.VideoChannel.Account.Server.host
   const path = video.getDescriptionPath()
@@ -37,7 +38,7 @@ async function fetchRemoteVideoDescription (video: VideoInstance) {
   return body.description ? body.description : ''
 }
 
-function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObject) {
+function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) {
   const thumbnailName = video.getThumbnailName()
   const thumbnailPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, thumbnailName)
 
@@ -49,8 +50,8 @@ function generateThumbnailFromUrl (video: VideoInstance, icon: ActivityIconObjec
 }
 
 async function sendVideoRateChangeToFollowers (
-  account: AccountInstance,
-  video: VideoInstance,
+    account: AccountModel,
+  video: VideoModel,
   likes: number,
   dislikes: number,
   t: Transaction
@@ -69,8 +70,8 @@ async function sendVideoRateChangeToFollowers (
 }
 
 async function sendVideoRateChangeToOrigin (
-  account: AccountInstance,
-  video: VideoInstance,
+    account: AccountModel,
+  video: VideoModel,
   likes: number,
   dislikes: number,
   t: Transaction

@@ -1,6 +1,7 @@
-import { OAuthClientInstance, UserInstance } from '../models'
-import { database as db } from '../initializers/database'
 import { logger } from '../helpers'
+import { UserModel } from '../models/account/user'
+import { OAuthClientModel } from '../models/oauth/oauth-client'
+import { OAuthTokenModel } from '../models/oauth/oauth-token'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 
@@ -9,25 +10,25 @@ type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpires
 function getAccessToken (bearerToken: string) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
-  return db.OAuthToken.getByTokenAndPopulateUser(bearerToken)
+  return OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
 }
 
 function getClient (clientId: string, clientSecret: string) {
   logger.debug('Getting Client (clientId: ' + clientId + ', clientSecret: ' + clientSecret + ').')
 
-  return db.OAuthClient.getByIdAndSecret(clientId, clientSecret)
+  return OAuthClientModel.getByIdAndSecret(clientId, clientSecret)
 }
 
 function getRefreshToken (refreshToken: string) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
-  return db.OAuthToken.getByRefreshTokenAndPopulateClient(refreshToken)
+  return OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 
 async function getUser (username: string, password: string) {
   logger.debug('Getting User (username: ' + username + ', password: ******).')
 
-  const user = await db.User.getByUsername(username)
+  const user = await UserModel.getByUsername(username)
   if (!user) return null
 
   const passwordMatch = await user.isPasswordMatch(password)
@@ -37,7 +38,7 @@ async function getUser (username: string, password: string) {
 }
 
 async function revokeToken (tokenInfo: TokenInfo) {
-  const token = await db.OAuthToken.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
+  const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
   if (token) token.destroy()
 
   /*
@@ -53,7 +54,7 @@ async function revokeToken (tokenInfo: TokenInfo) {
   return expiredToken
 }
 
-async function saveToken (token: TokenInfo, client: OAuthClientInstance, user: UserInstance) {
+async function saveToken (token: TokenInfo, client: OAuthClientModel, user: UserModel) {
   logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
 
   const tokenToCreate = {
@@ -65,7 +66,7 @@ async function saveToken (token: TokenInfo, client: OAuthClientInstance, user: U
     userId: user.id
   }
 
-  const tokenCreated = await db.OAuthToken.create(tokenToCreate)
+  const tokenCreated = await OAuthTokenModel.create(tokenToCreate)
   const tokenToReturn = Object.assign(tokenCreated, { client, user })
 
   return tokenToReturn

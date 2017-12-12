@@ -2,7 +2,7 @@
 import * as mkdirp from 'mkdirp'
 import * as path from 'path'
 import * as winston from 'winston'
-import { CONFIG } from '../initializers/constants'
+import { CONFIG } from '../initializers'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 

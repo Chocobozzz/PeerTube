@@ -1,7 +1,7 @@
 import * as validator from 'validator'
-import { exists } from '../misc'
+import { CONSTRAINTS_FIELDS } from '../../../initializers'
 import { isTestInstance } from '../../core-utils'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { exists } from '../misc'
 
 function isActivityPubUrlValid (url: string) {
   const isURLOptions = {

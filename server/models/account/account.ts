@@ -1,253 +1,200 @@
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
-import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import {
-  activityPubContextify,
+  AfterDestroy,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  HasMany,
+  Is,
+  IsUUID,
+  Model,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
+import { Avatar } from '../../../shared/models/avatars/avatar.model'
+import { activityPubContextify } from '../../helpers'
+import {
   isAccountFollowersCountValid,
   isAccountFollowingCountValid,
   isAccountPrivateKeyValid,
   isAccountPublicKeyValid,
-  isUserUsernameValid
-} from '../../helpers'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { AVATARS_DIR } from '../../initializers'
-import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { sendDeleteAccount } from '../../lib/activitypub/send/send-delete'
-import { addMethodsToModel } from '../utils'
-import { AccountAttributes, AccountInstance, AccountMethods } from './account-interface'
+  isActivityPubUrlValid
+} from '../../helpers/custom-validators/activitypub'
+import { isUserUsernameValid } from '../../helpers/custom-validators/users'
+import { AVATARS_DIR, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
+import { sendDeleteAccount } from '../../lib/activitypub/send'
+import { ApplicationModel } from '../application/application'
+import { AvatarModel } from '../avatar/avatar'
+import { ServerModel } from '../server/server'
+import { throwIfNotValid } from '../utils'
+import { VideoChannelModel } from '../video/video-channel'
+import { AccountFollowModel } from './account-follow'
+import { UserModel } from './user'
 
-let Account: Sequelize.Model<AccountInstance, AccountAttributes>
-let load: AccountMethods.Load
-let loadApplication: AccountMethods.LoadApplication
-let loadByUUID: AccountMethods.LoadByUUID
-let loadByUrl: AccountMethods.LoadByUrl
-let loadLocalByName: AccountMethods.LoadLocalByName
-let loadByNameAndHost: AccountMethods.LoadByNameAndHost
-let listByFollowersUrls: AccountMethods.ListByFollowersUrls
-let isOwned: AccountMethods.IsOwned
-let toActivityPubObject: AccountMethods.ToActivityPubObject
-let toFormattedJSON: AccountMethods.ToFormattedJSON
-let getFollowerSharedInboxUrls: AccountMethods.GetFollowerSharedInboxUrls
-let getFollowingUrl: AccountMethods.GetFollowingUrl
-let getFollowersUrl: AccountMethods.GetFollowersUrl
-let getPublicKeyUrl: AccountMethods.GetPublicKeyUrl
-
-export default function defineAccount (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  Account = sequelize.define<AccountInstance, AccountAttributes>('Account',
+@Table({
+  tableName: 'account',
+  indexes: [
     {
-      uuid: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        allowNull: false,
-        validate: {
-          isUUID: 4
-        }
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          nameValid: value => {
-            const res = isUserUsernameValid(value)
-            if (res === false) throw new Error('Name is not valid.')
-          }
-        }
-      },
-      url: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
-        allowNull: false,
-        validate: {
-          urlValid: value => {
-            const res = isActivityPubUrlValid(value)
-            if (res === false) throw new Error('URL is not valid.')
-          }
-        }
-      },
-      publicKey: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PUBLIC_KEY.max),
-        allowNull: true,
-        validate: {
-          publicKeyValid: value => {
-            const res = isAccountPublicKeyValid(value)
-            if (res === false) throw new Error('Public key is not valid.')
-          }
-        }
-      },
-      privateKey: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PRIVATE_KEY.max),
-        allowNull: true,
-        validate: {
-          privateKeyValid: value => {
-            const res = isAccountPrivateKeyValid(value)
-            if (res === false) throw new Error('Private key is not valid.')
-          }
-        }
-      },
-      followersCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          followersCountValid: value => {
-            const res = isAccountFollowersCountValid(value)
-            if (res === false) throw new Error('Followers count is not valid.')
-          }
-        }
-      },
-      followingCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          followingCountValid: value => {
-            const res = isAccountFollowingCountValid(value)
-            if (res === false) throw new Error('Following count is not valid.')
-          }
-        }
-      },
-      inboxUrl: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
-        allowNull: false,
-        validate: {
-          inboxUrlValid: value => {
-            const res = isActivityPubUrlValid(value)
-            if (res === false) throw new Error('Inbox URL is not valid.')
-          }
-        }
-      },
-      outboxUrl: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
-        allowNull: false,
-        validate: {
-          outboxUrlValid: value => {
-            const res = isActivityPubUrlValid(value)
-            if (res === false) throw new Error('Outbox URL is not valid.')
-          }
-        }
-      },
-      sharedInboxUrl: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
-        allowNull: false,
-        validate: {
-          sharedInboxUrlValid: value => {
-            const res = isActivityPubUrlValid(value)
-            if (res === false) throw new Error('Shared inbox URL is not valid.')
-          }
-        }
-      },
-      followersUrl: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
-        allowNull: false,
-        validate: {
-          followersUrlValid: value => {
-            const res = isActivityPubUrlValid(value)
-            if (res === false) throw new Error('Followers URL is not valid.')
-          }
-        }
-      },
-      followingUrl: {
-        type: DataTypes.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max),
-        allowNull: false,
-        validate: {
-          followingUrlValid: value => {
-            const res = isActivityPubUrlValid(value)
-            if (res === false) throw new Error('Following URL is not valid.')
-          }
-        }
-      }
+      fields: [ 'name' ]
     },
     {
-      indexes: [
-        {
-          fields: [ 'name' ]
-        },
-        {
-          fields: [ 'serverId' ]
-        },
-        {
-          fields: [ 'userId' ],
-          unique: true
-        },
-        {
-          fields: [ 'applicationId' ],
-          unique: true
-        },
-        {
-          fields: [ 'name', 'serverId', 'applicationId' ],
-          unique: true
-        }
-      ],
-      hooks: { afterDestroy }
+      fields: [ 'serverId' ]
+    },
+    {
+      fields: [ 'userId' ],
+      unique: true
+    },
+    {
+      fields: [ 'applicationId' ],
+      unique: true
+    },
+    {
+      fields: [ 'name', 'serverId', 'applicationId' ],
+      unique: true
     }
-  )
-
-  const classMethods = [
-    associate,
-    loadApplication,
-    load,
-    loadByUUID,
-    loadByUrl,
-    loadLocalByName,
-    loadByNameAndHost,
-    listByFollowersUrls
   ]
-  const instanceMethods = [
-    isOwned,
-    toActivityPubObject,
-    toFormattedJSON,
-    getFollowerSharedInboxUrls,
-    getFollowingUrl,
-    getFollowersUrl,
-    getPublicKeyUrl
-  ]
-  addMethodsToModel(Account, classMethods, instanceMethods)
+})
+export class AccountModel extends Model<Account> {
 
-  return Account
-}
+  @AllowNull(false)
+  @Default(DataType.UUIDV4)
+  @IsUUID(4)
+  @Column(DataType.UUID)
+  uuid: string
 
-// ---------------------------------------------------------------------------
+  @AllowNull(false)
+  @Is('AccountName', value => throwIfNotValid(value, isUserUsernameValid, 'account name'))
+  @Column
+  name: string
 
-function associate (models) {
-  Account.belongsTo(models.Server, {
+  @AllowNull(false)
+  @Is('AccountUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max))
+  url: string
+
+  @AllowNull(true)
+  @Is('AccountPublicKey', value => throwIfNotValid(value, isAccountPublicKeyValid, 'public key'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PUBLIC_KEY.max))
+  publicKey: string
+
+  @AllowNull(true)
+  @Is('AccountPublicKey', value => throwIfNotValid(value, isAccountPrivateKeyValid, 'private key'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.PRIVATE_KEY.max))
+  privateKey: string
+
+  @AllowNull(false)
+  @Is('AccountFollowersCount', value => throwIfNotValid(value, isAccountFollowersCountValid, 'followers count'))
+  @Column
+  followersCount: number
+
+  @AllowNull(false)
+  @Is('AccountFollowersCount', value => throwIfNotValid(value, isAccountFollowingCountValid, 'following count'))
+  @Column
+  followingCount: number
+
+  @AllowNull(false)
+  @Is('AccountInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'inbox url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max))
+  inboxUrl: string
+
+  @AllowNull(false)
+  @Is('AccountOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max))
+  outboxUrl: string
+
+  @AllowNull(false)
+  @Is('AccountSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max))
+  sharedInboxUrl: string
+
+  @AllowNull(false)
+  @Is('AccountFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max))
+  followersUrl: string
+
+  @AllowNull(false)
+  @Is('AccountFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACCOUNTS.URL.max))
+  followingUrl: string
+
+  @CreatedAt
+  createdAt: Date
+
+  @UpdatedAt
+  updatedAt: Date
+
+  @ForeignKey(() => AvatarModel)
+  @Column
+  avatarId: number
+
+  @BelongsTo(() => AvatarModel, {
     foreignKey: {
-      name: 'serverId',
       allowNull: true
     },
     onDelete: 'cascade'
   })
+  Avatar: AvatarModel
 
-  Account.belongsTo(models.User, {
+  @ForeignKey(() => ServerModel)
+  @Column
+  serverId: number
+
+  @BelongsTo(() => ServerModel, {
     foreignKey: {
-      name: 'userId',
       allowNull: true
     },
     onDelete: 'cascade'
   })
+  Server: ServerModel
 
-  Account.belongsTo(models.Application, {
+  @ForeignKey(() => UserModel)
+  @Column
+  userId: number
+
+  @BelongsTo(() => UserModel, {
     foreignKey: {
-      name: 'applicationId',
       allowNull: true
     },
     onDelete: 'cascade'
   })
+  User: UserModel
 
-  Account.hasMany(models.VideoChannel, {
+  @ForeignKey(() => ApplicationModel)
+  @Column
+  applicationId: number
+
+  @BelongsTo(() => ApplicationModel, {
     foreignKey: {
-      name: 'accountId',
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  Application: ApplicationModel
+
+  @HasMany(() => VideoChannelModel, {
+    foreignKey: {
       allowNull: false
     },
     onDelete: 'cascade',
     hooks: true
   })
+  VideoChannels: VideoChannelModel[]
 
-  Account.hasMany(models.AccountFollow, {
+  @HasMany(() => AccountFollowModel, {
     foreignKey: {
       name: 'accountId',
       allowNull: false
     },
     onDelete: 'cascade'
   })
+  AccountFollowing: AccountFollowModel[]
 
-  Account.hasMany(models.AccountFollow, {
+  @HasMany(() => AccountFollowModel, {
     foreignKey: {
       name: 'targetAccountId',
       allowNull: false
@@ -255,209 +202,199 @@ function associate (models) {
     as: 'followers',
     onDelete: 'cascade'
   })
+  AccountFollowers: AccountFollowModel[]
 
-  Account.hasOne(models.Avatar, {
-    foreignKey: {
-      name: 'avatarId',
-      allowNull: true
-    },
-    onDelete: 'cascade'
-  })
-}
-
-function afterDestroy (account: AccountInstance) {
-  if (account.isOwned()) {
-    return sendDeleteAccount(account, undefined)
-  }
-
-  return undefined
-}
-
-toFormattedJSON = function (this: AccountInstance) {
-  let host = CONFIG.WEBSERVER.HOST
-  let score: number
-  let avatar: Avatar = null
-
-  if (this.Avatar) {
-    avatar = {
-      path: join(AVATARS_DIR.ACCOUNT, this.Avatar.filename),
-      createdAt: this.Avatar.createdAt,
-      updatedAt: this.Avatar.updatedAt
+  @AfterDestroy
+  static sendDeleteIfOwned (instance: AccountModel) {
+    if (instance.isOwned()) {
+      return sendDeleteAccount(instance, undefined)
     }
+
+    return undefined
   }
 
-  if (this.Server) {
-    host = this.Server.host
-    score = this.Server.score as number
-  }
-
-  const json = {
-    id: this.id,
-    uuid: this.uuid,
-    host,
-    score,
-    name: this.name,
-    followingCount: this.followingCount,
-    followersCount: this.followersCount,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt,
-    avatar
-  }
-
-  return json
-}
-
-toActivityPubObject = function (this: AccountInstance) {
-  const type = this.serverId ? 'Application' as 'Application' : 'Person' as 'Person'
-
-  const json = {
-    type,
-    id: this.url,
-    following: this.getFollowingUrl(),
-    followers: this.getFollowersUrl(),
-    inbox: this.inboxUrl,
-    outbox: this.outboxUrl,
-    preferredUsername: this.name,
-    url: this.url,
-    name: this.name,
-    endpoints: {
-      sharedInbox: this.sharedInboxUrl
-    },
-    uuid: this.uuid,
-    publicKey: {
-      id: this.getPublicKeyUrl(),
-      owner: this.url,
-      publicKeyPem: this.publicKey
-    }
-  }
-
-  return activityPubContextify(json)
-}
-
-isOwned = function (this: AccountInstance) {
-  return this.serverId === null
-}
-
-getFollowerSharedInboxUrls = function (this: AccountInstance, t: Sequelize.Transaction) {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    attributes: [ 'sharedInboxUrl' ],
-    include: [
-      {
-        model: Account['sequelize'].models.AccountFollow,
-        required: true,
-        as: 'followers',
-        where: {
-          targetAccountId: this.id
+  static loadApplication () {
+    return AccountModel.findOne({
+      include: [
+        {
+          model: ApplicationModel,
+          required: true
         }
-      }
-    ],
-    transaction: t
+      ]
+    })
   }
 
-  return Account.findAll(query)
-    .then(accounts => accounts.map(a => a.sharedInboxUrl))
-}
+  static load (id: number) {
+    return AccountModel.findById(id)
+  }
 
-getFollowingUrl = function (this: AccountInstance) {
-  return this.url + '/following'
-}
-
-getFollowersUrl = function (this: AccountInstance) {
-  return this.url + '/followers'
-}
-
-getPublicKeyUrl = function (this: AccountInstance) {
-  return this.url + '#main-key'
-}
-
-// ------------------------------ STATICS ------------------------------
-
-loadApplication = function () {
-  return Account.findOne({
-    include: [
-      {
-        model: Account['sequelize'].models.Application,
-        required: true
+  static loadByUUID (uuid: string) {
+    const query = {
+      where: {
+        uuid
       }
-    ]
-  })
-}
-
-load = function (id: number) {
-  return Account.findById(id)
-}
-
-loadByUUID = function (uuid: string) {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    where: {
-      uuid
     }
+
+    return AccountModel.findOne(query)
   }
 
-  return Account.findOne(query)
-}
-
-loadLocalByName = function (name: string) {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    where: {
-      name,
-      [Sequelize.Op.or]: [
-        {
-          userId: {
-            [Sequelize.Op.ne]: null
+  static loadLocalByName (name: string) {
+    const query = {
+      where: {
+        name,
+        [ Sequelize.Op.or ]: [
+          {
+            userId: {
+              [ Sequelize.Op.ne ]: null
+            }
+          },
+          {
+            applicationId: {
+              [ Sequelize.Op.ne ]: null
+            }
           }
-        },
+        ]
+      }
+    }
+
+    return AccountModel.findOne(query)
+  }
+
+  static loadByNameAndHost (name: string, host: string) {
+    const query = {
+      where: {
+        name
+      },
+      include: [
         {
-          applicationId: {
-            [Sequelize.Op.ne]: null
+          model: ServerModel,
+          required: true,
+          where: {
+            host
           }
         }
       ]
     }
+
+    return AccountModel.findOne(query)
   }
 
-  return Account.findOne(query)
-}
+  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        url
+      },
+      transaction
+    }
 
-loadByNameAndHost = function (name: string, host: string) {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    where: {
-      name
-    },
-    include: [
-      {
-        model: Account['sequelize'].models.Server,
-        required: true,
-        where: {
-          host
+    return AccountModel.findOne(query)
+  }
+
+  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        followersUrl: {
+          [ Sequelize.Op.in ]: followersUrls
         }
+      },
+      transaction
+    }
+
+    return AccountModel.findAll(query)
+  }
+
+  toFormattedJSON () {
+    let host = CONFIG.WEBSERVER.HOST
+    let score: number
+    let avatar: Avatar = null
+
+    if (this.Avatar) {
+      avatar = {
+        path: join(AVATARS_DIR.ACCOUNT, this.Avatar.filename),
+        createdAt: this.Avatar.createdAt,
+        updatedAt: this.Avatar.updatedAt
       }
-    ]
+    }
+
+    if (this.Server) {
+      host = this.Server.host
+      score = this.Server.score
+    }
+
+    return {
+      id: this.id,
+      uuid: this.uuid,
+      host,
+      score,
+      name: this.name,
+      followingCount: this.followingCount,
+      followersCount: this.followersCount,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      avatar
+    }
   }
 
-  return Account.findOne(query)
-}
+  toActivityPubObject () {
+    const type = this.serverId ? 'Application' as 'Application' : 'Person' as 'Person'
 
-loadByUrl = function (url: string, transaction?: Sequelize.Transaction) {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    where: {
-      url
-    },
-    transaction
-  }
-
-  return Account.findOne(query)
-}
-
-listByFollowersUrls = function (followersUrls: string[], transaction?: Sequelize.Transaction) {
-  const query: Sequelize.FindOptions<AccountAttributes> = {
-    where: {
-      followersUrl: {
-        [Sequelize.Op.in]: followersUrls
+    const json = {
+      type,
+      id: this.url,
+      following: this.getFollowingUrl(),
+      followers: this.getFollowersUrl(),
+      inbox: this.inboxUrl,
+      outbox: this.outboxUrl,
+      preferredUsername: this.name,
+      url: this.url,
+      name: this.name,
+      endpoints: {
+        sharedInbox: this.sharedInboxUrl
+      },
+      uuid: this.uuid,
+      publicKey: {
+        id: this.getPublicKeyUrl(),
+        owner: this.url,
+        publicKeyPem: this.publicKey
       }
-    },
-    transaction
+    }
+
+    return activityPubContextify(json)
   }
 
-  return Account.findAll(query)
+  isOwned () {
+    return this.serverId === null
+  }
+
+  getFollowerSharedInboxUrls (t: Sequelize.Transaction) {
+    const query = {
+      attributes: [ 'sharedInboxUrl' ],
+      include: [
+        {
+          model: AccountFollowModel,
+          required: true,
+          as: 'followers',
+          where: {
+            targetAccountId: this.id
+          }
+        }
+      ],
+      transaction: t
+    }
+
+    return AccountModel.findAll(query)
+      .then(accounts => accounts.map(a => a.sharedInboxUrl))
+  }
+
+  getFollowingUrl () {
+    return this.url + '/following'
+  }
+
+  getFollowersUrl () {
+    return this.url + '/followers'
+  }
+
+  getPublicKeyUrl () {
+    return this.url + '#main-key'
+  }
 }

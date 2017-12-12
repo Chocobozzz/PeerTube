@@ -1,78 +1,69 @@
+import { values } from 'lodash'
+import { Transaction } from 'sequelize'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
+import { VideoRateType } from '../../../shared/models/videos'
+import { VIDEO_RATE_TYPES } from '../../initializers'
+import { VideoModel } from '../video/video'
+import { AccountModel } from './account'
+
 /*
   Account rates per video.
 */
-import { values } from 'lodash'
-import * as Sequelize from 'sequelize'
-
-import { VIDEO_RATE_TYPES } from '../../initializers'
-
-import { addMethodsToModel } from '../utils'
-import {
-  AccountVideoRateInstance,
-  AccountVideoRateAttributes,
-
-  AccountVideoRateMethods
-} from './account-video-rate-interface'
-
-let AccountVideoRate: Sequelize.Model<AccountVideoRateInstance, AccountVideoRateAttributes>
-let load: AccountVideoRateMethods.Load
-
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  AccountVideoRate = sequelize.define<AccountVideoRateInstance, AccountVideoRateAttributes>('AccountVideoRate',
+@Table({
+  tableName: 'accountVideoRate',
+  indexes: [
     {
-      type: {
-        type: DataTypes.ENUM(values(VIDEO_RATE_TYPES)),
-        allowNull: false
-      }
-    },
-    {
-      indexes: [
-        {
-          fields: [ 'videoId', 'accountId' ],
-          unique: true
-        }
-      ]
+      fields: [ 'videoId', 'accountId' ],
+      unique: true
     }
-  )
-
-  const classMethods = [
-    associate,
-
-    load
   ]
-  addMethodsToModel(AccountVideoRate, classMethods)
+})
+export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
 
-  return AccountVideoRate
-}
+  @AllowNull(false)
+  @Column(DataType.ENUM(values(VIDEO_RATE_TYPES)))
+  type: VideoRateType
 
-// ------------------------------ STATICS ------------------------------
+  @CreatedAt
+  createdAt: Date
 
-function associate (models) {
-  AccountVideoRate.belongsTo(models.Video, {
+  @UpdatedAt
+  updatedAt: Date
+
+  @ForeignKey(() => VideoModel)
+  @Column
+  videoId: number
+
+  @BelongsTo(() => VideoModel, {
     foreignKey: {
-      name: 'videoId',
       allowNull: false
     },
     onDelete: 'CASCADE'
   })
+  Video: VideoModel
 
-  AccountVideoRate.belongsTo(models.Account, {
+  @ForeignKey(() => AccountModel)
+  @Column
+  accountId: number
+
+  @BelongsTo(() => AccountModel, {
     foreignKey: {
-      name: 'accountId',
       allowNull: false
     },
     onDelete: 'CASCADE'
   })
-}
+  Account: AccountModel
 
-load = function (accountId: number, videoId: number, transaction: Sequelize.Transaction) {
-  const options: Sequelize.FindOptions<AccountVideoRateAttributes> = {
-    where: {
-      accountId,
-      videoId
+  static load (accountId: number, videoId: number, transaction: Transaction) {
+    const options: IFindOptions<AccountVideoRateModel> = {
+      where: {
+        accountId,
+        videoId
+      }
     }
-  }
-  if (transaction) options.transaction = transaction
+    if (transaction) options.transaction = transaction
 
-  return AccountVideoRate.findOne(options)
+    return AccountVideoRateModel.findOne(options)
+  }
 }

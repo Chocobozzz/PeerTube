@@ -1,8 +1,8 @@
 import { Transaction } from 'sequelize'
-import { AccountInstance } from '../../models/account/account-interface'
-import { activitypubHttpJobScheduler, ActivityPubHttpPayload } from '../jobs/activitypub-http-job-scheduler/activitypub-http-job-scheduler'
+import { AccountModel } from '../../models/account/account'
+import { activitypubHttpJobScheduler, ActivityPubHttpPayload } from '../jobs/activitypub-http-job-scheduler'
 
-async function addFetchOutboxJob (account: AccountInstance, t: Transaction) {
+async function addFetchOutboxJob (account: AccountModel, t: Transaction) {
   const jobPayload: ActivityPubHttpPayload = {
     uris: [ account.outboxUrl ]
   }

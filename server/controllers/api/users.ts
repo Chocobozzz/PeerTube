@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
 import { getFormattedObjects, logger, retryTransactionWrapper } from '../../helpers'
-import { CONFIG, database as db } from '../../initializers'
+import { CONFIG } from '../../initializers'
 import { createUserAccountAndChannel } from '../../lib'
 import {
   asyncMiddleware,
@@ -11,6 +11,7 @@ import {
   paginationValidator,
   setPagination,
   setUsersSort,
+  setVideosSort,
   token,
   usersAddValidator,
   usersGetValidator,
@@ -21,9 +22,10 @@ import {
   usersUpdateValidator,
   usersVideoRatingValidator
 } from '../../middlewares'
-import { setVideosSort } from '../../middlewares/sort'
-import { videosSortValidator } from '../../middlewares/validators/sort'
-import { UserInstance } from '../../models'
+import { videosSortValidator } from '../../middlewares/validators'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
+import { UserModel } from '../../models/account/user'
+import { VideoModel } from '../../models/video/video'
 
 const usersRouter = express.Router()
 
@@ -107,8 +109,8 @@ export {
 // ---------------------------------------------------------------------------
 
 async function getUserVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = res.locals.oauth.token.User
-  const resultList = await db.Video.listUserVideosForApi(user.id ,req.query.start, req.query.count, req.query.sort)
+  const user = res.locals.oauth.token.User as UserModel
+  const resultList = await VideoModel.listUserVideosForApi(user.id ,req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -127,7 +129,7 @@ async function createUserRetryWrapper (req: express.Request, res: express.Respon
 
 async function createUser (req: express.Request) {
   const body: UserCreate = req.body
-  const user = db.User.build({
+  const user = new UserModel({
     username: body.username,
     password: body.password,
     email: body.email,
@@ -155,7 +157,7 @@ async function registerUserRetryWrapper (req: express.Request, res: express.Resp
 async function registerUser (req: express.Request) {
   const body: UserCreate = req.body
 
-  const user = db.User.build({
+  const user = new UserModel({
     username: body.username,
     password: body.password,
     email: body.email,
@@ -171,7 +173,7 @@ async function registerUser (req: express.Request) {
 
 async function getUserInformation (req: express.Request, res: express.Response, next: express.NextFunction) {
   // We did not load channels in res.locals.user
-  const user = await db.User.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
+  const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
 
   return res.json(user.toFormattedJSON())
 }
@@ -184,7 +186,7 @@ async function getUserVideoRating (req: express.Request, res: express.Response, 
   const videoId = +req.params.videoId
   const accountId = +res.locals.oauth.token.User.Account.id
 
-  const ratingObj = await db.AccountVideoRate.load(accountId, videoId, null)
+  const ratingObj = await AccountVideoRateModel.load(accountId, videoId, null)
   const rating = ratingObj ? ratingObj.type : 'none'
 
   const json: FormattedUserVideoRate = {
@@ -195,13 +197,13 @@ async function getUserVideoRating (req: express.Request, res: express.Response, 
 }
 
 async function listUsers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await db.User.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await UserModel.listForApi(req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function removeUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const user = await db.User.loadById(req.params.id)
+  const user = await UserModel.loadById(req.params.id)
 
   await user.destroy()
 
@@ -225,7 +227,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
 
 async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdate = req.body
-  const user: UserInstance = res.locals.user
+  const user = res.locals.user as UserModel
 
   if (body.email !== undefined) user.email = body.email
   if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota

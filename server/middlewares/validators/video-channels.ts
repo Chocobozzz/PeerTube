@@ -1,19 +1,18 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
-import { isIdValid } from '../../helpers/custom-validators/misc'
+import { logger } from '../../helpers'
+import { isAccountIdExist } from '../../helpers/custom-validators/accounts'
+import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelExist,
   isVideoChannelNameValid
 } from '../../helpers/custom-validators/video-channels'
-import { isIdOrUUIDValid } from '../../helpers/index'
-import { logger } from '../../helpers/logger'
-import { database as db } from '../../initializers'
-import { UserInstance } from '../../models'
+import { UserModel } from '../../models/account/user'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { VideoChannelShareModel } from '../../models/video/video-channel-share'
 import { areValidationErrors } from './utils'
-import { isAccountIdExist } from '../../helpers/custom-validators/accounts'
-import { VideoChannelInstance } from '../../models/video/video-channel-interface'
 
 const listVideoAccountChannelsValidator = [
   param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
@@ -109,7 +108,7 @@ const videoChannelsShareValidator = [
     if (areValidationErrors(req, res)) return
     if (!await isVideoChannelExist(req.params.id, res)) return
 
-    const share = await db.VideoChannelShare.load(res.locals.video.id, req.params.accountId, undefined)
+    const share = await VideoChannelShareModel.load(res.locals.video.id, req.params.accountId, undefined)
     if (!share) {
       return res.status(404)
         .end()
@@ -134,7 +133,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserCanDeleteVideoChannel (user: UserInstance, videoChannel: VideoChannelInstance, res: express.Response) {
+function checkUserCanDeleteVideoChannel (user: UserModel, videoChannel: VideoChannelModel, res: express.Response) {
   // Retrieve the user who did the request
   if (videoChannel.isOwned() === false) {
     res.status(403)
@@ -159,7 +158,7 @@ function checkUserCanDeleteVideoChannel (user: UserInstance, videoChannel: Video
 }
 
 async function checkVideoChannelIsNotTheLastOne (res: express.Response) {
-  const count = await db.VideoChannel.countByAccount(res.locals.oauth.token.User.Account.id)
+  const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
 
   if (count <= 1) {
     res.status(409)

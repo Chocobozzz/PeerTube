@@ -1,5 +1,5 @@
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { CONSTRAINTS_FIELDS } from '../../../initializers'
 import { isAccountNameValid } from '../accounts'
 import { exists, isUUIDValid } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid } from './misc'

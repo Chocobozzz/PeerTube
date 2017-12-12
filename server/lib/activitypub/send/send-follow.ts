@@ -1,11 +1,11 @@
 import { Transaction } from 'sequelize'
-import { ActivityFollow } from '../../../../shared/models/activitypub/activity'
-import { AccountInstance } from '../../../models'
-import { AccountFollowInstance } from '../../../models/account/account-follow-interface'
+import { ActivityFollow } from '../../../../shared/models/activitypub'
+import { AccountModel } from '../../../models/account/account'
+import { AccountFollowModel } from '../../../models/account/account-follow'
 import { getAccountFollowActivityPubUrl } from '../url'
 import { unicastTo } from './misc'
 
-function sendFollow (accountFollow: AccountFollowInstance, t: Transaction) {
+function sendFollow (accountFollow: AccountFollowModel, t: Transaction) {
   const me = accountFollow.AccountFollower
   const following = accountFollow.AccountFollowing
 
@@ -15,15 +15,13 @@ function sendFollow (accountFollow: AccountFollowInstance, t: Transaction) {
   return unicastTo(data, me, following.inboxUrl, t)
 }
 
-function followActivityData (url: string, byAccount: AccountInstance, targetAccount: AccountInstance) {
-  const activity: ActivityFollow = {
+function followActivityData (url: string, byAccount: AccountModel, targetAccount: AccountModel): ActivityFollow {
+  return {
     type: 'Follow',
     id: url,
     actor: byAccount.url,
     object: targetAccount.url
   }
-
-  return activity
 }
 
 // ---------------------------------------------------------------------------

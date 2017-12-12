@@ -1,14 +1,13 @@
 import * as Sequelize from 'sequelize'
-import { createPrivateAndPublicKeys } from '../helpers/peertube-crypto'
-import { database as db } from '../initializers'
-import { CONFIG } from '../initializers/constants'
-import { UserInstance } from '../models'
+import { createPrivateAndPublicKeys, logger } from '../helpers'
+import { CONFIG, sequelizeTypescript } from '../initializers'
+import { AccountModel } from '../models/account/account'
+import { UserModel } from '../models/account/user'
+import { getAccountActivityPubUrl } from './activitypub'
 import { createVideoChannel } from './video-channel'
-import { logger } from '../helpers/logger'
-import { getAccountActivityPubUrl } from './activitypub/url'
 
-async function createUserAccountAndChannel (user: UserInstance, validateUser = true) {
-  const { account, videoChannel } = await db.sequelize.transaction(async t => {
+async function createUserAccountAndChannel (user: UserModel, validateUser = true) {
+  const { account, videoChannel } = await sequelizeTypescript.transaction(async t => {
     const userOptions = {
       transaction: t,
       validate: validateUser
@@ -38,7 +37,7 @@ async function createUserAccountAndChannel (user: UserInstance, validateUser = t
 async function createLocalAccountWithoutKeys (name: string, userId: number, applicationId: number, t: Sequelize.Transaction) {
   const url = getAccountActivityPubUrl(name)
 
-  const accountInstance = db.Account.build({
+  const accountInstance = new AccountModel({
     name,
     url,
     publicKey: null,

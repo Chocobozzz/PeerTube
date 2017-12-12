@@ -1,10 +1,10 @@
 import * as Sequelize from 'sequelize'
 import { VideoChannelCreate } from '../../shared/models'
-import { database as db } from '../initializers'
-import { AccountInstance } from '../models'
-import { getVideoChannelActivityPubUrl } from './activitypub/url'
+import { AccountModel } from '../models/account/account'
+import { VideoChannelModel } from '../models/video/video-channel'
+import { getVideoChannelActivityPubUrl } from './activitypub'
 
-async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountInstance, t: Sequelize.Transaction) {
+async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountModel, t: Sequelize.Transaction) {
   const videoChannelData = {
     name: videoChannelInfo.name,
     description: videoChannelInfo.description,
@@ -12,7 +12,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
     accountId: account.id
   }
 
-  const videoChannel = db.VideoChannel.build(videoChannelData)
+  const videoChannel = VideoChannelModel.build(videoChannelData)
   videoChannel.set('url', getVideoChannelActivityPubUrl(videoChannel))
 
   const options = { transaction: t }

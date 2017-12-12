@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as cors from 'cors'
-
 import {
   CONFIG,
   STATIC_MAX_AGE,

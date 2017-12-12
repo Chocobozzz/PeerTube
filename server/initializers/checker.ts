@@ -1,8 +1,8 @@
 import * as config from 'config'
-import { promisify0 } from '../helpers/core-utils'
-import { UserModel } from '../models/account/user-interface'
-import { ApplicationModel } from '../models/application/application-interface'
-import { OAuthClientModel } from '../models/oauth/oauth-client-interface'
+import { promisify0 } from '../helpers'
+import { UserModel } from '../models/account/user'
+import { ApplicationModel } from '../models/application/application'
+import { OAuthClientModel } from '../models/oauth/oauth-client'
 
 // Some checks on configuration files
 function checkConfig () {
@@ -57,22 +57,22 @@ async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
 }
 
 // We get db by param to not import it in this file (import orders)
-async function clientsExist (OAuthClient: OAuthClientModel) {
-  const totalClients = await OAuthClient.countTotal()
+async function clientsExist () {
+  const totalClients = await OAuthClientModel.countTotal()
 
   return totalClients !== 0
 }
 
 // We get db by param to not import it in this file (import orders)
-async function usersExist (User: UserModel) {
-  const totalUsers = await User.countTotal()
+async function usersExist () {
+  const totalUsers = await UserModel.countTotal()
 
   return totalUsers !== 0
 }
 
 // We get db by param to not import it in this file (import orders)
-async function applicationExist (Application: ApplicationModel) {
-  const totalApplication = await Application.countTotal()
+async function applicationExist () {
+  const totalApplication = await ApplicationModel.countTotal()
 
   return totalApplication !== 0
 }

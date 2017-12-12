@@ -1,11 +1,10 @@
 import { VideoResolution } from '../../../../shared'
 import { logger } from '../../../helpers'
-import { database as db } from '../../../initializers/database'
-import { VideoInstance } from '../../../models'
-import { sendUpdateVideo } from '../../activitypub/send/send-update'
+import { VideoModel } from '../../../models/video/video'
+import { sendUpdateVideo } from '../../activitypub/send'
 
 async function process (data: { videoUUID: string, resolution: VideoResolution }, jobId: number) {
-  const video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)
+  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)
   // No video, maybe deleted?
   if (!video) {
     logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
@@ -22,13 +21,13 @@ function onError (err: Error, jobId: number) {
   return Promise.resolve()
 }
 
-async function onSuccess (jobId: number, video: VideoInstance) {
+async function onSuccess (jobId: number, video: VideoModel) {
   if (video === undefined) return undefined
 
   logger.info('Job %d is a success.', jobId)
 
   // Maybe the video changed in database, refresh it
-  const videoDatabase = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid)
+  const videoDatabase = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid)
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 

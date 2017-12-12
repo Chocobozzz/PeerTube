@@ -1,24 +1,24 @@
 import * as express from 'express'
-import { UserRight } from '../../../../shared/models/users/user-right.enum'
-import { getFormattedObjects } from '../../../helpers'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
-import { getServerAccount } from '../../../helpers/utils'
-import { getAccountFromWebfinger } from '../../../helpers/webfinger'
-import { SERVER_ACCOUNT_NAME } from '../../../initializers/constants'
-import { database as db } from '../../../initializers/database'
-import { saveAccountAndServerIfNotExist } from '../../../lib/activitypub/account'
-import { sendUndoFollow } from '../../../lib/activitypub/send/send-undo'
+import { UserRight } from '../../../../shared/models/users'
+import { getAccountFromWebfinger, getFormattedObjects, getServerAccount, logger, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript, SERVER_ACCOUNT_NAME } from '../../../initializers'
+import { saveAccountAndServerIfNotExist } from '../../../lib/activitypub'
+import { sendUndoFollow } from '../../../lib/activitypub/send'
 import { sendFollow } from '../../../lib/index'
-import { asyncMiddleware, paginationValidator, removeFollowingValidator, setFollowersSort, setPagination } from '../../../middlewares'
-import { authenticate } from '../../../middlewares/oauth'
-import { setBodyHostsPort } from '../../../middlewares/servers'
-import { setFollowingSort } from '../../../middlewares/sort'
-import { ensureUserHasRight } from '../../../middlewares/user-right'
-import { followValidator } from '../../../middlewares/validators/follows'
-import { followersSortValidator, followingSortValidator } from '../../../middlewares/validators/sort'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { AccountFollowInstance } from '../../../models/index'
+import {
+  asyncMiddleware,
+  authenticate,
+  ensureUserHasRight,
+  paginationValidator,
+  removeFollowingValidator,
+  setBodyHostsPort,
+  setFollowersSort,
+  setFollowingSort,
+  setPagination
+} from '../../../middlewares'
+import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
+import { AccountModel } from '../../../models/account/account'
+import { AccountFollowModel } from '../../../models/account/account-follow'
 
 const serverFollowsRouter = express.Router()
 
@@ -63,14 +63,14 @@ export {
 
 async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
   const serverAccount = await getServerAccount()
-  const resultList = await db.AccountFollow.listFollowingForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await AccountFollowModel.listFollowingForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
   const serverAccount = await getServerAccount()
-  const resultList = await db.AccountFollow.listFollowersForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await AccountFollowModel.listFollowersForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -110,14 +110,14 @@ async function followRetry (req: express.Request, res: express.Response, next: e
   return res.status(204).end()
 }
 
-async function follow (fromAccount: AccountInstance, targetAccount: AccountInstance, targetAlreadyInDB: boolean) {
+async function follow (fromAccount: AccountModel, targetAccount: AccountModel, targetAlreadyInDB: boolean) {
   try {
-    await db.sequelize.transaction(async t => {
+    await sequelizeTypescript.transaction(async t => {
       if (targetAlreadyInDB === false) {
         await saveAccountAndServerIfNotExist(targetAccount, t)
       }
 
-      const [ accountFollow ] = await db.AccountFollow.findOrCreate({
+      const [ accountFollow ] = await AccountFollowModel.findOrCreate({
         where: {
           accountId: fromAccount.id,
           targetAccountId: targetAccount.id
@@ -145,9 +145,9 @@ async function follow (fromAccount: AccountInstance, targetAccount: AccountInsta
 }
 
 async function removeFollow (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const follow: AccountFollowInstance = res.locals.follow
+  const follow: AccountFollowModel = res.locals.follow
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     if (follow.state === 'accepted') await sendUndoFollow(follow, t)
 
     await follow.destroy({ transaction: t })
@@ -164,7 +164,7 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
 
 async function loadLocalOrGetAccountFromWebfinger (name: string, host: string) {
   let loadedFromDB = true
-  let account = await db.Account.loadByNameAndHost(name, host)
+  let account = await AccountModel.loadByNameAndHost(name, host)
 
   if (!account) {
     const nameWithDomain = name + '@' + host

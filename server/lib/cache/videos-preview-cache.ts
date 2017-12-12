@@ -1,11 +1,10 @@
 import * as asyncLRU from 'async-lru'
-import { join } from 'path'
 import { createWriteStream } from 'fs'
-
-import { database as db, CONFIG, CACHE } from '../../initializers'
+import { join } from 'path'
 import { logger, unlinkPromise } from '../../helpers'
-import { VideoInstance } from '../../models'
-import { fetchRemoteVideoPreview } from '../activitypub/videos'
+import { CACHE, CONFIG } from '../../initializers'
+import { VideoModel } from '../../models/video/video'
+import { fetchRemoteVideoPreview } from '../activitypub'
 
 class VideosPreviewCache {
 
@@ -43,7 +42,7 @@ class VideosPreviewCache {
   }
 
   private async loadPreviews (key: string) {
-    const video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(key)
+    const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(key)
     if (!video) return undefined
 
     if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName())
@@ -53,7 +52,7 @@ class VideosPreviewCache {
     return res
   }
 
-  private saveRemotePreviewAndReturnPath (video: VideoInstance) {
+  private saveRemotePreviewAndReturnPath (video: VideoModel) {
     const req = fetchRemoteVideoPreview(video)
 
     return new Promise<string>((res, rej) => {

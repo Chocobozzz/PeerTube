@@ -1,124 +1,109 @@
 import * as Sequelize from 'sequelize'
-import { isHostValid, logger } from '../../helpers'
+import { AllowNull, Column, CreatedAt, Default, Is, IsInt, Max, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { logger } from '../../helpers'
+import { isHostValid } from '../../helpers/custom-validators/servers'
 import { SERVERS_SCORE } from '../../initializers'
-import { addMethodsToModel } from '../utils'
-import { ServerAttributes, ServerInstance, ServerMethods } from './server-interface'
+import { throwIfNotValid } from '../utils'
 
-let Server: Sequelize.Model<ServerInstance, ServerAttributes>
-let updateServersScoreAndRemoveBadOnes: ServerMethods.UpdateServersScoreAndRemoveBadOnes
-
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  Server = sequelize.define<ServerInstance, ServerAttributes>('Server',
+@Table({
+  tableName: 'server',
+  indexes: [
     {
-      host: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          isHost: value => {
-            const res = isHostValid(value)
-            if (res === false) throw new Error('Host not valid.')
-          }
+      fields: [ 'host' ],
+      unique: true
+    },
+    {
+      fields: [ 'score' ]
+    }
+  ]
+})
+export class ServerModel extends Model<ServerModel> {
+
+  @AllowNull(false)
+  @Is('Host', value => throwIfNotValid(value, isHostValid, 'valid host'))
+  @Column
+  host: string
+
+  @AllowNull(false)
+  @Default(SERVERS_SCORE.BASE)
+  @IsInt
+  @Max(SERVERS_SCORE.MAX)
+  @Column
+  score: number
+
+  @CreatedAt
+  createdAt: Date
+
+  @UpdatedAt
+  updatedAt: Date
+
+  static updateServersScoreAndRemoveBadOnes (goodServers: number[], badServers: number[]) {
+    logger.info('Updating %d good servers and %d bad servers scores.', goodServers.length, badServers.length)
+
+    if (goodServers.length !== 0) {
+      ServerModel.incrementScores(goodServers, SERVERS_SCORE.BONUS)
+        .catch(err => {
+          logger.error('Cannot increment scores of good servers.', err)
+        })
+    }
+
+    if (badServers.length !== 0) {
+      ServerModel.incrementScores(badServers, SERVERS_SCORE.PENALTY)
+        .then(() => ServerModel.removeBadServers())
+        .catch(err => {
+          if (err) logger.error('Cannot decrement scores of bad servers.', err)
+        })
+
+    }
+  }
+
+  // Remove servers with a score of 0 (too many requests where they were unreachable)
+  private static async removeBadServers () {
+    try {
+      const servers = await ServerModel.listBadServers()
+
+      const serversRemovePromises = servers.map(server => server.destroy())
+      await Promise.all(serversRemovePromises)
+
+      const numberOfServersRemoved = servers.length
+
+      if (numberOfServersRemoved) {
+        logger.info('Removed %d servers.', numberOfServersRemoved)
+      } else {
+        logger.info('No need to remove bad servers.')
+      }
+    } catch (err) {
+      logger.error('Cannot remove bad servers.', err)
+    }
+  }
+
+  private static incrementScores (ids: number[], value: number) {
+    const update = {
+      score: Sequelize.literal('score +' + value)
+    }
+
+    const options = {
+      where: {
+        id: {
+          [Sequelize.Op.in]: ids
         }
       },
-      score: {
-        type: DataTypes.INTEGER,
-        defaultValue: SERVERS_SCORE.BASE,
-        allowNull: false,
-        validate: {
-          isInt: true,
-          max: SERVERS_SCORE.MAX
+      // In this case score is a literal and not an integer so we do not validate it
+      validate: false
+    }
+
+    return ServerModel.update(update, options)
+  }
+
+  private static listBadServers () {
+    const query = {
+      where: {
+        score: {
+          [Sequelize.Op.lte]: 0
         }
       }
-    },
-    {
-      indexes: [
-        {
-          fields: [ 'host' ],
-          unique: true
-        },
-        {
-          fields: [ 'score' ]
-        }
-      ]
     }
-  )
 
-  const classMethods = [
-    updateServersScoreAndRemoveBadOnes
-  ]
-  addMethodsToModel(Server, classMethods)
-
-  return Server
-}
-
-// ------------------------------ Statics ------------------------------
-
-updateServersScoreAndRemoveBadOnes = function (goodServers: number[], badServers: number[]) {
-  logger.info('Updating %d good servers and %d bad servers scores.', goodServers.length, badServers.length)
-
-  if (goodServers.length !== 0) {
-    incrementScores(goodServers, SERVERS_SCORE.BONUS).catch(err => {
-      logger.error('Cannot increment scores of good servers.', err)
-    })
+    return ServerModel.findAll(query)
   }
-
-  if (badServers.length !== 0) {
-    incrementScores(badServers, SERVERS_SCORE.PENALTY)
-      .then(() => removeBadServers())
-      .catch(err => {
-        if (err) logger.error('Cannot decrement scores of bad servers.', err)
-      })
-  }
-}
-
-// ---------------------------------------------------------------------------
-
-// Remove servers with a score of 0 (too many requests where they were unreachable)
-async function removeBadServers () {
-  try {
-    const servers = await listBadServers()
-
-    const serversRemovePromises = servers.map(server => server.destroy())
-    await Promise.all(serversRemovePromises)
-
-    const numberOfServersRemoved = servers.length
-
-    if (numberOfServersRemoved) {
-      logger.info('Removed %d servers.', numberOfServersRemoved)
-    } else {
-      logger.info('No need to remove bad servers.')
-    }
-  } catch (err) {
-    logger.error('Cannot remove bad servers.', err)
-  }
-}
-
-function incrementScores (ids: number[], value: number) {
-  const update = {
-    score: Sequelize.literal('score +' + value)
-  }
-
-  const options = {
-    where: {
-      id: {
-        [Sequelize.Op.in]: ids
-      }
-    },
-    // In this case score is a literal and not an integer so we do not validate it
-    validate: false
-  }
-
-  return Server.update(update, options)
-}
-
-function listBadServers () {
-  const query = {
-    where: {
-      score: {
-        [Sequelize.Op.lte]: 0
-      }
-    }
-  }
-
-  return Server.findAll(query)
 }

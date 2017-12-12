@@ -1,10 +1,12 @@
 import { ActivityCreate, VideoChannelObject } from '../../../../shared'
-import { DislikeObject } from '../../../../shared/models/activitypub/objects/dislike-object'
-import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects/video-abuse-object'
-import { ViewObject } from '../../../../shared/models/activitypub/objects/view-object'
+import { DislikeObject, VideoAbuseObject, ViewObject } from '../../../../shared/models/activitypub/objects'
 import { logger, retryTransactionWrapper } from '../../../helpers'
-import { database as db } from '../../../initializers'
-import { AccountInstance } from '../../../models/account/account-interface'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { VideoModel } from '../../../models/video/video'
+import { VideoAbuseModel } from '../../../models/video/video-abuse'
+import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getOrCreateAccountAndServer } from '../account'
 import { forwardActivity } from '../send/misc'
 import { getVideoChannelActivityPubUrl } from '../url'
@@ -37,7 +39,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateDislike (byAccount: AccountInstance, activity: ActivityCreate) {
+async function processCreateDislike (byAccount: AccountModel, activity: ActivityCreate) {
   const options = {
     arguments: [ byAccount, activity ],
     errorMessage: 'Cannot dislike the video with many retries.'
@@ -46,11 +48,11 @@ async function processCreateDislike (byAccount: AccountInstance, activity: Activ
   return retryTransactionWrapper(createVideoDislike, options)
 }
 
-function createVideoDislike (byAccount: AccountInstance, activity: ActivityCreate) {
+function createVideoDislike (byAccount: AccountModel, activity: ActivityCreate) {
   const dislike = activity.object as DislikeObject
 
-  return db.sequelize.transaction(async t => {
-    const video = await db.Video.loadByUrlAndPopulateAccount(dislike.object, t)
+  return sequelizeTypescript.transaction(async t => {
+    const video = await VideoModel.loadByUrlAndPopulateAccount(dislike.object, t)
     if (!video) throw new Error('Unknown video ' + dislike.object)
 
     const rate = {
@@ -58,7 +60,7 @@ function createVideoDislike (byAccount: AccountInstance, activity: ActivityCreat
       videoId: video.id,
       accountId: byAccount.id
     }
-    const [ , created ] = await db.AccountVideoRate.findOrCreate({
+    const [ , created ] = await AccountVideoRateModel.findOrCreate({
       where: rate,
       defaults: rate,
       transaction: t
@@ -73,14 +75,14 @@ function createVideoDislike (byAccount: AccountInstance, activity: ActivityCreat
   })
 }
 
-async function processCreateView (byAccount: AccountInstance, activity: ActivityCreate) {
+async function processCreateView (byAccount: AccountModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
-  const video = await db.Video.loadByUrlAndPopulateAccount(view.object)
+  const video = await VideoModel.loadByUrlAndPopulateAccount(view.object)
 
   if (!video) throw new Error('Unknown video ' + view.object)
 
-  const account = await db.Account.loadByUrl(view.actor)
+  const account = await AccountModel.loadByUrl(view.actor)
   if (!account) throw new Error('Unknown account ' + view.actor)
 
   await video.increment('views')
@@ -92,7 +94,7 @@ async function processCreateView (byAccount: AccountInstance, activity: Activity
   }
 }
 
-async function processCreateVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
+async function processCreateVideoChannel (account: AccountModel, videoChannelToCreateData: VideoChannelObject) {
   const options = {
     arguments: [ account, videoChannelToCreateData ],
     errorMessage: 'Cannot insert the remote video channel with many retries.'
@@ -107,15 +109,15 @@ async function processCreateVideoChannel (account: AccountInstance, videoChannel
   return videoChannel
 }
 
-function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateData: VideoChannelObject) {
+function addRemoteVideoChannel (account: AccountModel, videoChannelToCreateData: VideoChannelObject) {
   logger.debug('Adding remote video channel "%s".', videoChannelToCreateData.uuid)
 
-  return db.sequelize.transaction(async t => {
-    let videoChannel = await db.VideoChannel.loadByUUIDOrUrl(videoChannelToCreateData.uuid, videoChannelToCreateData.id, t)
+  return sequelizeTypescript.transaction(async t => {
+    let videoChannel = await VideoChannelModel.loadByUUIDOrUrl(videoChannelToCreateData.uuid, videoChannelToCreateData.id, t)
     if (videoChannel) return videoChannel
 
     const videoChannelData = videoChannelActivityObjectToDBAttributes(videoChannelToCreateData, account)
-    videoChannel = db.VideoChannel.build(videoChannelData)
+    videoChannel = new VideoChannelModel(videoChannelData)
     videoChannel.url = getVideoChannelActivityPubUrl(videoChannel)
 
     videoChannel = await videoChannel.save({ transaction: t })
@@ -125,7 +127,7 @@ function addRemoteVideoChannel (account: AccountInstance, videoChannelToCreateDa
   })
 }
 
-function processCreateVideoAbuse (account: AccountInstance, videoAbuseToCreateData: VideoAbuseObject) {
+function processCreateVideoAbuse (account: AccountModel, videoAbuseToCreateData: VideoAbuseObject) {
   const options = {
     arguments: [ account, videoAbuseToCreateData ],
     errorMessage: 'Cannot insert the remote video abuse with many retries.'
@@ -134,11 +136,11 @@ function processCreateVideoAbuse (account: AccountInstance, videoAbuseToCreateDa
   return retryTransactionWrapper(addRemoteVideoAbuse, options)
 }
 
-function addRemoteVideoAbuse (account: AccountInstance, videoAbuseToCreateData: VideoAbuseObject) {
+function addRemoteVideoAbuse (account: AccountModel, videoAbuseToCreateData: VideoAbuseObject) {
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
-  return db.sequelize.transaction(async t => {
-    const video = await db.Video.loadByUrlAndPopulateAccount(videoAbuseToCreateData.object, t)
+  return sequelizeTypescript.transaction(async t => {
+    const video = await VideoModel.loadByUrlAndPopulateAccount(videoAbuseToCreateData.object, t)
     if (!video) {
       logger.warn('Unknown video %s for remote video abuse.', videoAbuseToCreateData.object)
       return undefined
@@ -150,7 +152,7 @@ function addRemoteVideoAbuse (account: AccountInstance, videoAbuseToCreateData: 
       videoId: video.id
     }
 
-    await db.VideoAbuse.create(videoAbuseData)
+    await VideoAbuseModel.create(videoAbuseData)
 
     logger.info('Remote abuse for video uuid %s created', videoAbuseToCreateData.object)
   })

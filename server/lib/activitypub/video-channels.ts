@@ -1,14 +1,13 @@
-import { VideoChannelObject } from '../../../shared/models/activitypub/objects/video-channel-object'
-import { isVideoChannelObjectValid } from '../../helpers/custom-validators/activitypub/video-channels'
-import { logger } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
-import { database as db } from '../../initializers'
-import { ACTIVITY_PUB } from '../../initializers/constants'
-import { AccountInstance } from '../../models/account/account-interface'
+import { VideoChannelObject } from '../../../shared/models/activitypub/objects'
+import { doRequest, logger } from '../../helpers'
+import { isVideoChannelObjectValid } from '../../helpers/custom-validators/activitypub'
+import { ACTIVITY_PUB } from '../../initializers'
+import { AccountModel } from '../../models/account/account'
+import { VideoChannelModel } from '../../models/video/video-channel'
 import { videoChannelActivityObjectToDBAttributes } from './process/misc'
 
-async function getOrCreateVideoChannel (ownerAccount: AccountInstance, videoChannelUrl: string) {
-  let videoChannel = await db.VideoChannel.loadByUrl(videoChannelUrl)
+async function getOrCreateVideoChannel (ownerAccount: AccountModel, videoChannelUrl: string) {
+  let videoChannel = await VideoChannelModel.loadByUrl(videoChannelUrl)
 
   // We don't have this account in our database, fetch it on remote
   if (!videoChannel) {
@@ -22,7 +21,7 @@ async function getOrCreateVideoChannel (ownerAccount: AccountInstance, videoChan
   return videoChannel
 }
 
-async function fetchRemoteVideoChannel (ownerAccount: AccountInstance, videoChannelUrl: string) {
+async function fetchRemoteVideoChannel (ownerAccount: AccountModel, videoChannelUrl: string) {
   const options = {
     uri: videoChannelUrl,
     method: 'GET',
@@ -48,7 +47,7 @@ async function fetchRemoteVideoChannel (ownerAccount: AccountInstance, videoChan
   }
 
   const videoChannelAttributes = videoChannelActivityObjectToDBAttributes(videoChannelJSON, ownerAccount)
-  const videoChannel = db.VideoChannel.build(videoChannelAttributes)
+  const videoChannel = new VideoChannelModel(videoChannelAttributes)
   videoChannel.Account = ownerAccount
 
   return videoChannel

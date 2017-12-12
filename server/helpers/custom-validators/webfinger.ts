@@ -1,6 +1,4 @@
-import 'express-validator'
-import 'multer'
-import { CONFIG } from '../../initializers/constants'
+import { CONFIG } from '../../initializers'
 import { exists } from './misc'
 
 function isWebfingerResourceValid (value: string) {
@@ -13,9 +11,7 @@ function isWebfingerResourceValid (value: string) {
 
   const host = accountParts[1]
 
-  if (host !== CONFIG.WEBSERVER.HOST) return false
-
-  return true
+  return host === CONFIG.WEBSERVER.HOST
 }
 
 // ---------------------------------------------------------------------------

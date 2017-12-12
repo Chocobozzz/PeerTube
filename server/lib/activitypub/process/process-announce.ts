@@ -1,10 +1,11 @@
-import { ActivityAdd, ActivityAnnounce, ActivityCreate } from '../../../../shared/models/activitypub/activity'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
-import { database as db } from '../../../initializers/index'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { VideoInstance } from '../../../models/index'
-import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
+import { ActivityAdd, ActivityAnnounce, ActivityCreate } from '../../../../shared/models/activitypub'
+import { logger, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { VideoModel } from '../../../models/video/video'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoChannelShareModel } from '../../../models/video/video-channel-share'
+import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateAccountAndServer } from '../account'
 import { forwardActivity } from '../send/misc'
 import { processAddActivity } from './process-add'
@@ -36,7 +37,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processVideoChannelShare (accountAnnouncer: AccountInstance, activity: ActivityAnnounce) {
+function processVideoChannelShare (accountAnnouncer: AccountModel, activity: ActivityAnnounce) {
   const options = {
     arguments: [ accountAnnouncer, activity ],
     errorMessage: 'Cannot share the video channel with many retries.'
@@ -45,18 +46,18 @@ function processVideoChannelShare (accountAnnouncer: AccountInstance, activity: 
   return retryTransactionWrapper(shareVideoChannel, options)
 }
 
-async function shareVideoChannel (accountAnnouncer: AccountInstance, activity: ActivityAnnounce) {
+async function shareVideoChannel (accountAnnouncer: AccountModel, activity: ActivityAnnounce) {
   const announcedActivity = activity.object as ActivityCreate
 
-  return db.sequelize.transaction(async t => {
+  return sequelizeTypescript.transaction(async t => {
     // Add share entry
-    const videoChannel: VideoChannelInstance = await processCreateActivity(announcedActivity)
+    const videoChannel: VideoChannelModel = await processCreateActivity(announcedActivity)
     const share = {
       accountId: accountAnnouncer.id,
       videoChannelId: videoChannel.id
     }
 
-    const [ , created ] = await db.VideoChannelShare.findOrCreate({
+    const [ , created ] = await VideoChannelShareModel.findOrCreate({
       where: share,
       defaults: share,
       transaction: t
@@ -72,7 +73,7 @@ async function shareVideoChannel (accountAnnouncer: AccountInstance, activity: A
   })
 }
 
-function processVideoShare (accountAnnouncer: AccountInstance, activity: ActivityAnnounce) {
+function processVideoShare (accountAnnouncer: AccountModel, activity: ActivityAnnounce) {
   const options = {
     arguments: [ accountAnnouncer, activity ],
     errorMessage: 'Cannot share the video with many retries.'
@@ -81,19 +82,19 @@ function processVideoShare (accountAnnouncer: AccountInstance, activity: Activit
   return retryTransactionWrapper(shareVideo, options)
 }
 
-function shareVideo (accountAnnouncer: AccountInstance, activity: ActivityAnnounce) {
+function shareVideo (accountAnnouncer: AccountModel, activity: ActivityAnnounce) {
   const announcedActivity = activity.object as ActivityAdd
 
-  return db.sequelize.transaction(async t => {
+  return sequelizeTypescript.transaction(async t => {
     // Add share entry
-    const video: VideoInstance = await processAddActivity(announcedActivity)
+    const video: VideoModel = await processAddActivity(announcedActivity)
 
     const share = {
       accountId: accountAnnouncer.id,
       videoId: video.id
     }
 
-    const [ , created ] = await db.VideoShare.findOrCreate({
+    const [ , created ] = await VideoShareModel.findOrCreate({
       where: share,
       defaults: share,
       transaction: t

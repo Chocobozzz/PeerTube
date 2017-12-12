@@ -1,8 +1,11 @@
-import { ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub/activity'
-import { DislikeObject } from '../../../../shared/models/activitypub/objects/dislike-object'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
-import { database as db } from '../../../initializers'
+import { ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub'
+import { DislikeObject } from '../../../../shared/models/activitypub/objects'
+import { logger, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { AccountFollowModel } from '../../../models/account/account-follow'
+import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { VideoModel } from '../../../models/video/video'
 import { forwardActivity } from '../send/misc'
 
 async function processUndoActivity (activity: ActivityUndo) {
@@ -41,14 +44,14 @@ function processUndoLike (actor: string, activity: ActivityUndo) {
 function undoLike (actor: string, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
-  return db.sequelize.transaction(async t => {
-    const byAccount = await db.Account.loadByUrl(actor, t)
+  return sequelizeTypescript.transaction(async t => {
+    const byAccount = await AccountModel.loadByUrl(actor, t)
     if (!byAccount) throw new Error('Unknown account ' + actor)
 
-    const video = await db.Video.loadByUrlAndPopulateAccount(likeActivity.object, t)
+    const video = await VideoModel.loadByUrlAndPopulateAccount(likeActivity.object, t)
     if (!video) throw new Error('Unknown video ' + likeActivity.actor)
 
-    const rate = await db.AccountVideoRate.load(byAccount.id, video.id, t)
+    const rate = await AccountVideoRateModel.load(byAccount.id, video.id, t)
     if (!rate) throw new Error(`Unknown rate by account ${byAccount.id} for video ${video.id}.`)
 
     await rate.destroy({ transaction: t })
@@ -74,14 +77,14 @@ function processUndoDislike (actor: string, activity: ActivityUndo) {
 function undoDislike (actor: string, activity: ActivityUndo) {
   const dislike = activity.object.object as DislikeObject
 
-  return db.sequelize.transaction(async t => {
-    const byAccount = await db.Account.loadByUrl(actor, t)
+  return sequelizeTypescript.transaction(async t => {
+    const byAccount = await AccountModel.loadByUrl(actor, t)
     if (!byAccount) throw new Error('Unknown account ' + actor)
 
-    const video = await db.Video.loadByUrlAndPopulateAccount(dislike.object, t)
+    const video = await VideoModel.loadByUrlAndPopulateAccount(dislike.object, t)
     if (!video) throw new Error('Unknown video ' + dislike.actor)
 
-    const rate = await db.AccountVideoRate.load(byAccount.id, video.id, t)
+    const rate = await AccountVideoRateModel.load(byAccount.id, video.id, t)
     if (!rate) throw new Error(`Unknown rate by account ${byAccount.id} for video ${video.id}.`)
 
     await rate.destroy({ transaction: t })
@@ -105,10 +108,10 @@ function processUndoFollow (actor: string, followActivity: ActivityFollow) {
 }
 
 function undoFollow (actor: string, followActivity: ActivityFollow) {
-  return db.sequelize.transaction(async t => {
-    const follower = await db.Account.loadByUrl(actor, t)
-    const following = await db.Account.loadByUrl(followActivity.object, t)
-    const accountFollow = await db.AccountFollow.loadByAccountAndTarget(follower.id, following.id, t)
+  return sequelizeTypescript.transaction(async t => {
+    const follower = await AccountModel.loadByUrl(actor, t)
+    const following = await AccountModel.loadByUrl(followActivity.object, t)
+    const accountFollow = await AccountFollowModel.loadByAccountAndTarget(follower.id, following.id, t)
 
     if (!accountFollow) throw new Error(`'Unknown account follow ${follower.id} -> ${following.id}.`)
 

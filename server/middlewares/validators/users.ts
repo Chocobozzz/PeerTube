@@ -1,18 +1,17 @@
 import * as express from 'express'
 import 'express-validator'
 import { body, param } from 'express-validator/check'
+import { isSignupAllowed, logger } from '../../helpers'
+import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isIdOrUUIDValid,
-  isSignupAllowed,
   isUserDisplayNSFWValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
-  isUserVideoQuotaValid,
-  logger
-} from '../../helpers'
+  isUserVideoQuotaValid
+} from '../../helpers/custom-validators/users'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
-import { database as db } from '../../initializers/database'
+import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 
 const usersAddValidator = [
@@ -153,7 +152,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function checkUserIdExist (id: number, res: express.Response) {
-  const user = await db.User.loadById(id)
+  const user = await UserModel.loadById(id)
 
   if (!user) {
     res.status(404)
@@ -168,7 +167,7 @@ async function checkUserIdExist (id: number, res: express.Response) {
 }
 
 async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email: string, res: express.Response) {
-  const user = await db.User.loadByUsernameOrEmail(username, email)
+  const user = await UserModel.loadByUsernameOrEmail(username, email)
 
   if (user) {
     res.status(409)

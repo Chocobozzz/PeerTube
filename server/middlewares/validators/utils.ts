@@ -1,6 +1,5 @@
 import * as express from 'express'
 import { validationResult } from 'express-validator/check'
-
 import { logger } from '../../helpers'
 
 function areValidationErrors (req: express.Request, res: express.Response) {

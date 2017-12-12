@@ -1,164 +1,163 @@
-import * as Sequelize from 'sequelize'
-
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { logger } from '../../helpers'
+import { AccountModel } from '../account/account'
+import { UserModel } from '../account/user'
+import { OAuthClientModel } from './oauth-client'
 
-import { addMethodsToModel } from '../utils'
-import { OAuthTokenAttributes, OAuthTokenInfo, OAuthTokenInstance, OAuthTokenMethods } from './oauth-token-interface'
+export type OAuthTokenInfo = {
+  refreshToken: string
+  refreshTokenExpiresAt: Date,
+  client: {
+    id: number
+  },
+  user: {
+    id: number
+  }
+}
 
-let OAuthToken: Sequelize.Model<OAuthTokenInstance, OAuthTokenAttributes>
-let getByRefreshTokenAndPopulateClient: OAuthTokenMethods.GetByRefreshTokenAndPopulateClient
-let getByTokenAndPopulateUser: OAuthTokenMethods.GetByTokenAndPopulateUser
-let getByRefreshTokenAndPopulateUser: OAuthTokenMethods.GetByRefreshTokenAndPopulateUser
-
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  OAuthToken = sequelize.define<OAuthTokenInstance, OAuthTokenAttributes>('OAuthToken',
+@Table({
+  tableName: 'oAuthToken',
+  indexes: [
     {
-      accessToken: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      accessTokenExpiresAt: {
-        type: DataTypes.DATE,
-        allowNull: false
-      },
-      refreshToken: {
-        type: DataTypes.STRING,
-        allowNull: false
-      },
-      refreshTokenExpiresAt: {
-        type: DataTypes.DATE,
-        allowNull: false
-      }
+      fields: [ 'refreshToken' ],
+      unique: true
     },
     {
-      indexes: [
+      fields: [ 'accessToken' ],
+      unique: true
+    },
+    {
+      fields: [ 'userId' ]
+    },
+    {
+      fields: [ 'oAuthClientId' ]
+    }
+  ]
+})
+export class OAuthTokenModel extends Model<OAuthTokenModel> {
+
+  @AllowNull(false)
+  @Column
+  accessToken: string
+
+  @AllowNull(false)
+  @Column
+  accessTokenExpiresAt: Date
+
+  @AllowNull(false)
+  @Column
+  refreshToken: string
+
+  @AllowNull(false)
+  @Column
+  refreshTokenExpiresAt: Date
+
+  @CreatedAt
+  createdAt: Date
+
+  @UpdatedAt
+  updatedAt: Date
+
+  @ForeignKey(() => UserModel)
+  @Column
+  userId: number
+
+  @BelongsTo(() => UserModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  User: UserModel
+
+  @ForeignKey(() => OAuthClientModel)
+  @Column
+  oAuthClientId: number
+
+  @BelongsTo(() => OAuthClientModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  OAuthClients: OAuthClientModel[]
+
+  static getByRefreshTokenAndPopulateClient (refreshToken: string) {
+    const query = {
+      where: {
+        refreshToken: refreshToken
+      },
+      include: [ OAuthClientModel ]
+    }
+
+    return OAuthTokenModel.findOne(query)
+      .then(token => {
+        if (!token) return null
+
+        return {
+          refreshToken: token.refreshToken,
+          refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+          client: {
+            id: token.oAuthClientId
+          },
+          user: {
+            id: token.userId
+          }
+        } as OAuthTokenInfo
+      })
+      .catch(err => {
+        logger.info('getRefreshToken error.', err)
+        throw err
+      })
+  }
+
+  static getByTokenAndPopulateUser (bearerToken: string) {
+    const query = {
+      where: {
+        accessToken: bearerToken
+      },
+      include: [
         {
-          fields: [ 'refreshToken' ],
-          unique: true
-        },
-        {
-          fields: [ 'accessToken' ],
-          unique: true
-        },
-        {
-          fields: [ 'userId' ]
-        },
-        {
-          fields: [ 'oAuthClientId' ]
+          model: UserModel,
+          include: [
+            {
+              model: AccountModel,
+              required: true
+            }
+          ]
         }
       ]
     }
-  )
 
-  const classMethods = [
-    associate,
+    return OAuthTokenModel.findOne(query).then(token => {
+      if (token) token['user'] = token.User
 
-    getByRefreshTokenAndPopulateClient,
-    getByTokenAndPopulateUser,
-    getByRefreshTokenAndPopulateUser
-  ]
-  addMethodsToModel(OAuthToken, classMethods)
-
-  return OAuthToken
-}
-
-// ---------------------------------------------------------------------------
-
-function associate (models) {
-  OAuthToken.belongsTo(models.User, {
-    foreignKey: {
-      name: 'userId',
-      allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-
-  OAuthToken.belongsTo(models.OAuthClient, {
-    foreignKey: {
-      name: 'oAuthClientId',
-      allowNull: false
-    },
-    onDelete: 'cascade'
-  })
-}
-
-getByRefreshTokenAndPopulateClient = function (refreshToken: string) {
-  const query = {
-    where: {
-      refreshToken: refreshToken
-    },
-    include: [ OAuthToken['sequelize'].models.OAuthClient ]
+      return token
+    })
   }
 
-  return OAuthToken.findOne(query)
-    .then(token => {
-      if (!token) return null
-
-      const tokenInfos: OAuthTokenInfo = {
-        refreshToken: token.refreshToken,
-        refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-        client: {
-          id: token.oAuthClientId
-        },
-        user: {
-          id: token.userId
+  static getByRefreshTokenAndPopulateUser (refreshToken: string) {
+    const query = {
+      where: {
+        refreshToken: refreshToken
+      },
+      include: [
+        {
+          model: UserModel,
+          include: [
+            {
+              model: AccountModel,
+              required: true
+            }
+          ]
         }
-      }
+      ]
+    }
 
-      return tokenInfos
+    return OAuthTokenModel.findOne(query).then(token => {
+      token['user'] = token.User
+
+      return token
     })
-    .catch(err => {
-      logger.info('getRefreshToken error.', err)
-      throw err
-    })
-}
-
-getByTokenAndPopulateUser = function (bearerToken: string) {
-  const query = {
-    where: {
-      accessToken: bearerToken
-    },
-    include: [
-      {
-        model: OAuthToken['sequelize'].models.User,
-        include: [
-          {
-            model: OAuthToken['sequelize'].models.Account,
-            required: true
-          }
-        ]
-      }
-    ]
   }
-
-  return OAuthToken.findOne(query).then(token => {
-    if (token) token['user'] = token.User
-
-    return token
-  })
-}
-
-getByRefreshTokenAndPopulateUser = function (refreshToken: string) {
-  const query = {
-    where: {
-      refreshToken: refreshToken
-    },
-    include: [
-      {
-        model: OAuthToken['sequelize'].models.User,
-        include: [
-          {
-            model: OAuthToken['sequelize'].models.Account,
-            required: true
-          }
-        ]
-      }
-    ]
-  }
-
-  return OAuthToken.findOne(query).then(token => {
-    token['user'] = token.User
-
-    return token
-  })
 }

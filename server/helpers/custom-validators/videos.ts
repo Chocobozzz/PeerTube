@@ -4,10 +4,15 @@ import { values } from 'lodash'
 import 'multer'
 import * as validator from 'validator'
 import { VideoRateType } from '../../../shared'
-import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_RATE_TYPES } from '../../initializers'
-import { VIDEO_PRIVACIES } from '../../initializers/constants'
-import { database as db } from '../../initializers/database'
-import { VideoInstance } from '../../models/video/video-interface'
+import {
+  CONSTRAINTS_FIELDS,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES,
+  VIDEO_RATE_TYPES
+} from '../../initializers'
+import { VideoModel } from '../../models/video/video'
 import { exists, isArray } from './misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
@@ -100,12 +105,12 @@ function isVideoFileSizeValid (value: string) {
 }
 
 async function isVideoExist (id: string, res: Response) {
-  let video: VideoInstance
+  let video: VideoModel
 
   if (validator.isInt(id)) {
-    video = await db.Video.loadAndPopulateAccountAndServerAndTags(+id)
+    video = await VideoModel.loadAndPopulateAccountAndServerAndTags(+id)
   } else { // UUID
-    video = await db.Video.loadByUUIDAndPopulateAccountAndServerAndTags(id)
+    video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(id)
   }
 
   if (!video) {

@@ -1,7 +1,6 @@
 export * from './activitypub'
 export * from './core-utils'
 export * from './logger'
-export * from './custom-validators'
 export * from './ffmpeg-utils'
 export * from './database-utils'
 export * from './peertube-crypto'

@@ -1,8 +1,7 @@
 import { JobCategory } from '../../../../shared'
-import { buildSignedActivity } from '../../../helpers/activitypub'
-import { logger } from '../../../helpers/logger'
-import { ACTIVITY_PUB } from '../../../initializers/constants'
-import { database as db } from '../../../initializers/database'
+import { buildSignedActivity, logger } from '../../../helpers'
+import { ACTIVITY_PUB } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
 import { JobHandler, JobScheduler } from '../job-scheduler'
 
 import * as activitypubHttpBroadcastHandler from './activitypub-http-broadcast-handler'
@@ -46,7 +45,7 @@ async function computeBody (payload: ActivityPubHttpPayload) {
   let body = payload.body
 
   if (payload.signatureAccountId) {
-    const accountSignature = await db.Account.load(payload.signatureAccountId)
+    const accountSignature = await AccountModel.load(payload.signatureAccountId)
     if (!accountSignature) throw new Error('Unknown signature account id.')
     body = await buildSignedActivity(accountSignature, payload.body)
   }

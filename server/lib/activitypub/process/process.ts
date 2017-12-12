@@ -1,6 +1,6 @@
-import { Activity, ActivityType } from '../../../../shared/models/activitypub/activity'
-import { logger } from '../../../helpers/logger'
-import { AccountInstance } from '../../../models/account/account-interface'
+import { Activity, ActivityType } from '../../../../shared/models/activitypub'
+import { logger } from '../../../helpers'
+import { AccountModel } from '../../../models/account/account'
 import { processAcceptActivity } from './process-accept'
 import { processAddActivity } from './process-add'
 import { processAnnounceActivity } from './process-announce'
@@ -11,7 +11,7 @@ import { processLikeActivity } from './process-like'
 import { processUndoActivity } from './process-undo'
 import { processUpdateActivity } from './process-update'
 
-const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccount?: AccountInstance) => Promise<any> } = {
+const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccount?: AccountModel) => Promise<any> } = {
   Create: processCreateActivity,
   Add: processAddActivity,
   Update: processUpdateActivity,
@@ -23,7 +23,7 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxAccoun
   Like: processLikeActivity
 }
 
-async function processActivities (activities: Activity[], signatureAccount?: AccountInstance, inboxAccount?: AccountInstance) {
+async function processActivities (activities: Activity[], signatureAccount?: AccountModel, inboxAccount?: AccountModel) {
   for (const activity of activities) {
     // When we fetch remote data, we don't have signature
     if (signatureAccount && activity.actor !== signatureAccount.url) {

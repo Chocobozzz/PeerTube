@@ -1,73 +1,60 @@
-import * as Sequelize from 'sequelize'
-import * as Promise from 'bluebird'
+import * as Bluebird from 'bluebird'
+import { Transaction } from 'sequelize'
+import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { isVideoTagValid } from '../../helpers/custom-validators/videos'
+import { throwIfNotValid } from '../utils'
+import { VideoModel } from './video'
+import { VideoTagModel } from './video-tag'
 
-import { addMethodsToModel } from '../utils'
-import {
-  TagInstance,
-  TagAttributes,
-
-  TagMethods
-} from './tag-interface'
-
-let Tag: Sequelize.Model<TagInstance, TagAttributes>
-let findOrCreateTags: TagMethods.FindOrCreateTags
-
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  Tag = sequelize.define<TagInstance, TagAttributes>('Tag',
+@Table({
+  tableName: 'tag',
+  timestamps: false,
+  indexes: [
     {
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      }
-    },
-    {
-      timestamps: false,
-      indexes: [
-        {
-          fields: [ 'name' ],
-          unique: true
-        }
-      ]
+      fields: [ 'name' ],
+      unique: true
     }
-  )
-
-  const classMethods = [
-    associate,
-
-    findOrCreateTags
   ]
-  addMethodsToModel(Tag, classMethods)
+})
+export class TagModel extends Model<TagModel> {
 
-  return Tag
-}
+  @AllowNull(false)
+  @Is('VideoTag', value => throwIfNotValid(value, isVideoTagValid, 'tag'))
+  @Column
+  name: string
 
-// ---------------------------------------------------------------------------
+  @CreatedAt
+  createdAt: Date
 
-function associate (models) {
-  Tag.belongsToMany(models.Video, {
+  @UpdatedAt
+  updatedAt: Date
+
+  @BelongsToMany(() => VideoModel, {
     foreignKey: 'tagId',
-    through: models.VideoTag,
+    through: () => VideoTagModel,
     onDelete: 'CASCADE'
   })
-}
+  Videos: VideoModel[]
 
-findOrCreateTags = function (tags: string[], transaction: Sequelize.Transaction) {
-  const tasks: Promise<TagInstance>[] = []
-  tags.forEach(tag => {
-    const query: Sequelize.FindOrInitializeOptions<TagAttributes> = {
-      where: {
-        name: tag
-      },
-      defaults: {
-        name: tag
+  static findOrCreateTags (tags: string[], transaction: Transaction) {
+    const tasks: Bluebird<TagModel>[] = []
+    tags.forEach(tag => {
+      const query = {
+        where: {
+          name: tag
+        },
+        defaults: {
+          name: tag
+        }
       }
-    }
 
-    if (transaction) query.transaction = transaction
+      if (transaction) query['transaction'] = transaction
 
-    const promise = Tag.findOrCreate(query).then(([ tagInstance ]) => tagInstance)
-    tasks.push(promise)
-  })
+      const promise = TagModel.findOrCreate(query)
+        .then(([ tagInstance ]) => tagInstance)
+      tasks.push(promise)
+    })
 
-  return Promise.all(tasks)
+    return Promise.all(tasks)
+  }
 }

@@ -1,10 +1,9 @@
-import { ActivityDelete } from '../../../../shared/models/activitypub/activity'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
-import { database as db } from '../../../initializers'
-import { AccountInstance } from '../../../models/account/account-interface'
-import { VideoChannelInstance } from '../../../models/video/video-channel-interface'
-import { VideoInstance } from '../../../models/video/video-interface'
+import { ActivityDelete } from '../../../../shared/models/activitypub'
+import { logger, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
+import { VideoModel } from '../../../models/video/video'
+import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getOrCreateAccountAndServer } from '../account'
 
 async function processDeleteActivity (activity: ActivityDelete) {
@@ -15,14 +14,14 @@ async function processDeleteActivity (activity: ActivityDelete) {
   }
 
   {
-    let videoObject = await db.Video.loadByUrlAndPopulateAccount(activity.id)
+    let videoObject = await VideoModel.loadByUrlAndPopulateAccount(activity.id)
     if (videoObject !== undefined) {
       return processDeleteVideo(account, videoObject)
     }
   }
 
   {
-    let videoChannelObject = await db.VideoChannel.loadByUrl(activity.id)
+    let videoChannelObject = await VideoChannelModel.loadByUrl(activity.id)
     if (videoChannelObject !== undefined) {
       return processDeleteVideoChannel(account, videoChannelObject)
     }
@@ -39,7 +38,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processDeleteVideo (account: AccountInstance, videoToDelete: VideoInstance) {
+async function processDeleteVideo (account: AccountModel, videoToDelete: VideoModel) {
   const options = {
     arguments: [ account, videoToDelete ],
     errorMessage: 'Cannot remove the remote video with many retries.'
@@ -48,10 +47,10 @@ async function processDeleteVideo (account: AccountInstance, videoToDelete: Vide
   await retryTransactionWrapper(deleteRemoteVideo, options)
 }
 
-async function deleteRemoteVideo (account: AccountInstance, videoToDelete: VideoInstance) {
+async function deleteRemoteVideo (account: AccountModel, videoToDelete: VideoModel) {
   logger.debug('Removing remote video "%s".', videoToDelete.uuid)
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     if (videoToDelete.VideoChannel.Account.id !== account.id) {
       throw new Error('Account ' + account.url + ' does not own video channel ' + videoToDelete.VideoChannel.url)
     }
@@ -62,7 +61,7 @@ async function deleteRemoteVideo (account: AccountInstance, videoToDelete: Video
   logger.info('Remote video with uuid %s removed.', videoToDelete.uuid)
 }
 
-async function processDeleteVideoChannel (account: AccountInstance, videoChannelToRemove: VideoChannelInstance) {
+async function processDeleteVideoChannel (account: AccountModel, videoChannelToRemove: VideoChannelModel) {
   const options = {
     arguments: [ account, videoChannelToRemove ],
     errorMessage: 'Cannot remove the remote video channel with many retries.'
@@ -71,10 +70,10 @@ async function processDeleteVideoChannel (account: AccountInstance, videoChannel
   await retryTransactionWrapper(deleteRemoteVideoChannel, options)
 }
 
-async function deleteRemoteVideoChannel (account: AccountInstance, videoChannelToRemove: VideoChannelInstance) {
+async function deleteRemoteVideoChannel (account: AccountModel, videoChannelToRemove: VideoChannelModel) {
   logger.debug('Removing remote video channel "%s".', videoChannelToRemove.uuid)
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     if (videoChannelToRemove.Account.id !== account.id) {
       throw new Error('Account ' + account.url + ' does not own video channel ' + videoChannelToRemove.url)
     }
@@ -85,7 +84,7 @@ async function deleteRemoteVideoChannel (account: AccountInstance, videoChannelT
   logger.info('Remote video channel with uuid %s removed.', videoChannelToRemove.uuid)
 }
 
-async function processDeleteAccount (accountToRemove: AccountInstance) {
+async function processDeleteAccount (accountToRemove: AccountModel) {
   const options = {
     arguments: [ accountToRemove ],
     errorMessage: 'Cannot remove the remote account with many retries.'
@@ -94,10 +93,10 @@ async function processDeleteAccount (accountToRemove: AccountInstance) {
   await retryTransactionWrapper(deleteRemoteAccount, options)
 }
 
-async function deleteRemoteAccount (accountToRemove: AccountInstance) {
+async function deleteRemoteAccount (accountToRemove: AccountModel) {
   logger.debug('Removing remote account "%s".', accountToRemove.uuid)
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     await accountToRemove.destroy({ transaction: t })
   })
 

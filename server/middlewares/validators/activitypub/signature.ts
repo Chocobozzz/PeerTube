@@ -1,6 +1,8 @@
 import * as express from 'express'
 import { body } from 'express-validator/check'
-import { isDateValid, isSignatureCreatorValid, isSignatureTypeValid, isSignatureValueValid, logger } from '../../../helpers'
+import { logger } from '../../../helpers'
+import { isSignatureCreatorValid, isSignatureTypeValid, isSignatureValueValid } from '../../../helpers/custom-validators/activitypub'
+import { isDateValid } from '../../../helpers/custom-validators/misc'
 import { areValidationErrors } from '../utils'
 
 const signatureValidator = [

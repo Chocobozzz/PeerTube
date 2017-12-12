@@ -1,7 +1,7 @@
 import * as express from 'express'
-import { asyncMiddleware } from '../middlewares/async'
-import { webfingerValidator } from '../middlewares/validators/webfinger'
-import { AccountInstance } from '../models/account/account-interface'
+import { asyncMiddleware } from '../middlewares'
+import { webfingerValidator } from '../middlewares/validators'
+import { AccountModel } from '../models/account/account'
 
 const webfingerRouter = express.Router()
 
@@ -19,7 +19,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function webfingerController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const account: AccountInstance = res.locals.account
+  const account = res.locals.account as AccountModel
 
   const json = {
     subject: req.query.resource,

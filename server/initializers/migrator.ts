@@ -1,19 +1,19 @@
 import * as path from 'path'
-
-import { database as db } from './database'
-import { LAST_MIGRATION_VERSION } from './constants'
 import { logger, readdirPromise } from '../helpers'
+import { ApplicationModel } from '../models/application/application'
+import { LAST_MIGRATION_VERSION } from './constants'
+import { sequelizeTypescript } from './database'
 
 async function migrate () {
-  const tables = await db.sequelize.getQueryInterface().showAllTables()
+  const tables = await sequelizeTypescript.getQueryInterface().showAllTables()
 
   // No tables, we don't need to migrate anything
   // The installer will do that
   if (tables.length === 0) return
 
-  let actualVersion = await db.Application.loadMigrationVersion()
+  let actualVersion = await ApplicationModel.loadMigrationVersion()
   if (actualVersion === null) {
-    await db.Application.create({ migrationVersion: 0 })
+    await ApplicationModel.create({ migrationVersion: 0 })
     actualVersion = 0
   }
 
@@ -78,17 +78,16 @@ async function executeMigration (actualVersion: number, entity: { version: strin
 
   const migrationScript = require(path.join(__dirname, 'migrations', migrationScriptName))
 
-  await db.sequelize.transaction(async t => {
+  await sequelizeTypescript.transaction(async t => {
     const options = {
       transaction: t,
-      queryInterface: db.sequelize.getQueryInterface(),
-      sequelize: db.sequelize,
-      db
+      queryInterface: sequelizeTypescript.getQueryInterface(),
+      sequelize: sequelizeTypescript
     }
 
     await migrationScript.up(options)
 
     // Update the new migration version
-    await db.Application.updateMigrationVersion(versionScript, t)
+    await ApplicationModel.updateMigrationVersion(versionScript, t)
   })
 }

@@ -1,12 +1,14 @@
-import { database as db } from '../server/initializers/database'
-import { getServerAccount } from '../server/helpers/utils'
+import { getServerAccount } from '../server/helpers'
+import { initDatabase } from '../server/initializers'
+import { AccountFollowModel } from '../server/models/account/account-follow'
+import { VideoModel } from '../server/models/video/video'
 
-db.init(true)
+initDatabase(true)
   .then(() => {
     return getServerAccount()
   })
   .then(serverAccount => {
-    return db.AccountFollow.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined)
+    return AccountFollowModel.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined)
   })
   .then(res => {
     return res.total > 0
@@ -18,7 +20,7 @@ db.init(true)
     }
 
     console.log('Updating torrent files.')
-    return db.Video.list()
+    return VideoModel.list()
   })
   .then(videos => {
     const tasks: Promise<any>[] = []

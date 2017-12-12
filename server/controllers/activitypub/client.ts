@@ -1,20 +1,22 @@
 // Intercept ActivityPub client requests
 import * as express from 'express'
-import { pageToStartAndCount } from '../../helpers'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
-
-import { database as db } from '../../initializers'
-import { ACTIVITY_PUB, CONFIG } from '../../initializers/constants'
-import { buildVideoChannelAnnounceToFollowers } from '../../lib/activitypub/send/send-announce'
+import { activityPubCollectionPagination, pageToStartAndCount } from '../../helpers'
+import { ACTIVITY_PUB, CONFIG } from '../../initializers'
+import { buildVideoChannelAnnounceToFollowers } from '../../lib/activitypub/send'
 import { buildVideoAnnounceToFollowers } from '../../lib/index'
-import { executeIfActivityPub, localAccountValidator } from '../../middlewares'
-import { asyncMiddleware } from '../../middlewares/async'
-import { videoChannelsGetValidator, videoChannelsShareValidator } from '../../middlewares/validators/video-channels'
-import { videosGetValidator, videosShareValidator } from '../../middlewares/validators/videos'
-import { AccountInstance, VideoChannelInstance } from '../../models'
-import { VideoChannelShareInstance } from '../../models/video/video-channel-share-interface'
-import { VideoInstance } from '../../models/video/video-interface'
-import { VideoShareInstance } from '../../models/video/video-share-interface'
+import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
+import {
+  videoChannelsGetValidator,
+  videoChannelsShareValidator,
+  videosGetValidator,
+  videosShareValidator
+} from '../../middlewares/validators'
+import { AccountModel } from '../../models/account/account'
+import { AccountFollowModel } from '../../models/account/account-follow'
+import { VideoModel } from '../../models/video/video'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { VideoChannelShareModel } from '../../models/video/video-channel-share'
+import { VideoShareModel } from '../../models/video/video-share'
 
 const activityPubClientRouter = express.Router()
 
@@ -62,57 +64,57 @@ export {
 // ---------------------------------------------------------------------------
 
 function accountController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const account: AccountInstance = res.locals.account
+  const account: AccountModel = res.locals.account
 
   return res.json(account.toActivityPubObject()).end()
 }
 
 async function accountFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const account: AccountInstance = res.locals.account
+  const account: AccountModel = res.locals.account
 
   const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await db.AccountFollow.listAcceptedFollowerUrlsForApi([ account.id ], undefined, start, count)
+  const result = await AccountFollowModel.listAcceptedFollowerUrlsForApi([ account.id ], undefined, start, count)
   const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)
 }
 
 async function accountFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const account: AccountInstance = res.locals.account
+  const account: AccountModel = res.locals.account
 
   const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await db.AccountFollow.listAcceptedFollowingUrlsForApi([ account.id ], undefined, start, count)
+  const result = await AccountFollowModel.listAcceptedFollowingUrlsForApi([ account.id ], undefined, start, count)
   const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)
 }
 
 function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const video: VideoInstance = res.locals.video
+  const video: VideoModel = res.locals.video
 
   return res.json(video.toActivityPubObject())
 }
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const share = res.locals.videoShare as VideoShareInstance
+  const share = res.locals.videoShare as VideoShareModel
   const object = await buildVideoAnnounceToFollowers(share.Account, res.locals.video, undefined)
 
   return res.json(object)
 }
 
 async function videoChannelAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const share = res.locals.videoChannelShare as VideoChannelShareInstance
+  const share = res.locals.videoChannelShare as VideoChannelShareModel
   const object = await buildVideoChannelAnnounceToFollowers(share.Account, share.VideoChannel, undefined)
 
   return res.json(object)
 }
 
 async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const videoChannel: VideoChannelInstance = res.locals.videoChannel
+  const videoChannel: VideoChannelModel = res.locals.videoChannel
 
   return res.json(videoChannel.toActivityPubObject())
 }

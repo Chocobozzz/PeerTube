@@ -1,16 +1,17 @@
 import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
-import { logger, mkdirpPromise, rimrafPromise } from '../helpers'
-import { createUserAccountAndChannel } from '../lib'
-import { createLocalAccountWithoutKeys } from '../lib/user'
+import { createPrivateAndPublicKeys, logger, mkdirpPromise, rimrafPromise } from '../helpers'
+import { createLocalAccountWithoutKeys, createUserAccountAndChannel } from '../lib'
+import { UserModel } from '../models/account/user'
+import { ApplicationModel } from '../models/application/application'
+import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker'
 import { CACHE, CONFIG, LAST_MIGRATION_VERSION, SERVER_ACCOUNT_NAME } from './constants'
-import { database as db } from './database'
-import { createPrivateAndPublicKeys } from '../helpers/peertube-crypto'
+import { sequelizeTypescript } from './database'
 
 async function installApplication () {
   try {
-    await db.sequelize.sync()
+    await sequelizeTypescript.sync()
     await removeCacheDirectories()
     await createDirectoriesIfNotExist()
     await createApplicationIfNotExist()
@@ -64,7 +65,7 @@ function createDirectoriesIfNotExist () {
 }
 
 async function createOAuthClientIfNotExist () {
-  const exist = await clientsExist(db.OAuthClient)
+  const exist = await clientsExist()
   // Nothing to do, clients already exist
   if (exist === true) return undefined
 
@@ -72,7 +73,7 @@ async function createOAuthClientIfNotExist () {
 
   const id = passwordGenerator(32, false, /[a-z0-9]/)
   const secret = passwordGenerator(32, false, /[a-zA-Z0-9]/)
-  const client = db.OAuthClient.build({
+  const client = new OAuthClientModel({
     clientId: id,
     clientSecret: secret,
     grants: [ 'password', 'refresh_token' ],
@@ -87,7 +88,7 @@ async function createOAuthClientIfNotExist () {
 }
 
 async function createOAuthAdminIfNotExist () {
-  const exist = await usersExist(db.User)
+  const exist = await usersExist()
   // Nothing to do, users already exist
   if (exist === true) return undefined
 
@@ -120,7 +121,7 @@ async function createOAuthAdminIfNotExist () {
     role,
     videoQuota: -1
   }
-  const user = db.User.build(userData)
+  const user = new UserModel(userData)
 
   await createUserAccountAndChannel(user, validatePassword)
   logger.info('Username: ' + username)
@@ -128,12 +129,12 @@ async function createOAuthAdminIfNotExist () {
 }
 
 async function createApplicationIfNotExist () {
-  const exist = await applicationExist(db.Application)
+  const exist = await applicationExist()
   // Nothing to do, application already exist
   if (exist === true) return undefined
 
   logger.info('Creating Application table.')
-  const applicationInstance = await db.Application.create({ migrationVersion: LAST_MIGRATION_VERSION })
+  const applicationInstance = await ApplicationModel.create({ migrationVersion: LAST_MIGRATION_VERSION })
 
   logger.info('Creating application account.')
 

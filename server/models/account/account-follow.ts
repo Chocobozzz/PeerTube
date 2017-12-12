@@ -1,64 +1,45 @@
+import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
-
-import { addMethodsToModel, getSort } from '../utils'
-import { AccountFollowAttributes, AccountFollowInstance, AccountFollowMethods } from './account-follow-interface'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { FollowState } from '../../../shared/models/accounts'
 import { FOLLOW_STATES } from '../../initializers/constants'
+import { ServerModel } from '../server/server'
+import { getSort } from '../utils'
+import { AccountModel } from './account'
 
-let AccountFollow: Sequelize.Model<AccountFollowInstance, AccountFollowAttributes>
-let loadByAccountAndTarget: AccountFollowMethods.LoadByAccountAndTarget
-let listFollowingForApi: AccountFollowMethods.ListFollowingForApi
-let listFollowersForApi: AccountFollowMethods.ListFollowersForApi
-let listAcceptedFollowerUrlsForApi: AccountFollowMethods.ListAcceptedFollowerUrlsForApi
-let listAcceptedFollowingUrlsForApi: AccountFollowMethods.ListAcceptedFollowingUrlsForApi
-let listAcceptedFollowerSharedInboxUrls: AccountFollowMethods.ListAcceptedFollowerSharedInboxUrls
-let toFormattedJSON: AccountFollowMethods.ToFormattedJSON
-
-export default function (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  AccountFollow = sequelize.define<AccountFollowInstance, AccountFollowAttributes>('AccountFollow',
+@Table({
+  tableName: 'accountFollow',
+  indexes: [
     {
-      state: {
-        type: DataTypes.ENUM(values(FOLLOW_STATES)),
-        allowNull: false
-      }
+      fields: [ 'accountId' ]
     },
     {
-      indexes: [
-        {
-          fields: [ 'accountId' ]
-        },
-        {
-          fields: [ 'targetAccountId' ]
-        },
-        {
-          fields: [ 'accountId', 'targetAccountId' ],
-          unique: true
-        }
-      ]
+      fields: [ 'targetAccountId' ]
+    },
+    {
+      fields: [ 'accountId', 'targetAccountId' ],
+      unique: true
     }
-  )
-
-  const classMethods = [
-    associate,
-    loadByAccountAndTarget,
-    listFollowingForApi,
-    listFollowersForApi,
-    listAcceptedFollowerUrlsForApi,
-    listAcceptedFollowingUrlsForApi,
-    listAcceptedFollowerSharedInboxUrls
   ]
-  const instanceMethods = [
-    toFormattedJSON
-  ]
-  addMethodsToModel(AccountFollow, classMethods, instanceMethods)
+})
+export class AccountFollowModel extends Model<AccountFollowModel> {
 
-  return AccountFollow
-}
+  @AllowNull(false)
+  @Column(DataType.ENUM(values(FOLLOW_STATES)))
+  state: FollowState
 
-// ------------------------------ STATICS ------------------------------
+  @CreatedAt
+  createdAt: Date
 
-function associate (models) {
-  AccountFollow.belongsTo(models.Account, {
+  @UpdatedAt
+  updatedAt: Date
+
+  @ForeignKey(() => AccountModel)
+  @Column
+  accountId: number
+
+  @BelongsTo(() => AccountModel, {
     foreignKey: {
       name: 'accountId',
       allowNull: false
@@ -66,8 +47,13 @@ function associate (models) {
     as: 'AccountFollower',
     onDelete: 'CASCADE'
   })
+  AccountFollower: AccountModel
 
-  AccountFollow.belongsTo(models.Account, {
+  @ForeignKey(() => AccountModel)
+  @Column
+  targetAccountId: number
+
+  @BelongsTo(() => AccountModel, {
     foreignKey: {
       name: 'targetAccountId',
       allowNull: false
@@ -75,170 +61,168 @@ function associate (models) {
     as: 'AccountFollowing',
     onDelete: 'CASCADE'
   })
-}
+  AccountFollowing: AccountModel
 
-toFormattedJSON = function (this: AccountFollowInstance) {
-  const follower = this.AccountFollower.toFormattedJSON()
-  const following = this.AccountFollowing.toFormattedJSON()
-
-  const json = {
-    id: this.id,
-    follower,
-    following,
-    state: this.state,
-    createdAt: this.createdAt,
-    updatedAt: this.updatedAt
-  }
-
-  return json
-}
-
-loadByAccountAndTarget = function (accountId: number, targetAccountId: number, t?: Sequelize.Transaction) {
-  const query = {
-    where: {
-      accountId,
-      targetAccountId
-    },
-    include: [
-      {
-        model: AccountFollow[ 'sequelize' ].models.Account,
-        required: true,
-        as: 'AccountFollower'
+  static loadByAccountAndTarget (accountId: number, targetAccountId: number, t?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        accountId,
+        targetAccountId
       },
-      {
-        model: AccountFollow['sequelize'].models.Account,
-        required: true,
-        as: 'AccountFollowing'
-      }
-    ],
-    transaction: t
-  }
-
-  return AccountFollow.findOne(query)
-}
-
-listFollowingForApi = function (id: number, start: number, count: number, sort: string) {
-  const query = {
-    distinct: true,
-    offset: start,
-    limit: count,
-    order: [ getSort(sort) ],
-    include: [
-      {
-        model: AccountFollow[ 'sequelize' ].models.Account,
-        required: true,
-        as: 'AccountFollower',
-        where: {
-          id
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          as: 'AccountFollower'
+        },
+        {
+          model: AccountModel,
+          required: true,
+          as: 'AccountFollowing'
         }
-      },
-      {
-        model: AccountFollow['sequelize'].models.Account,
-        as: 'AccountFollowing',
-        required: true,
-        include: [ AccountFollow['sequelize'].models.Server ]
-      }
-    ]
-  }
-
-  return AccountFollow.findAndCountAll(query).then(({ rows, count }) => {
-    return {
-      data: rows,
-      total: count
-    }
-  })
-}
-
-listFollowersForApi = function (id: number, start: number, count: number, sort: string) {
-  const query = {
-    distinct: true,
-    offset: start,
-    limit: count,
-    order: [ getSort(sort) ],
-    include: [
-      {
-        model: AccountFollow[ 'sequelize' ].models.Account,
-        required: true,
-        as: 'AccountFollower',
-        include: [ AccountFollow['sequelize'].models.Server ]
-      },
-      {
-        model: AccountFollow['sequelize'].models.Account,
-        as: 'AccountFollowing',
-        required: true,
-        where: {
-          id
-        }
-      }
-    ]
-  }
-
-  return AccountFollow.findAndCountAll(query).then(({ rows, count }) => {
-    return {
-      data: rows,
-      total: count
-    }
-  })
-}
-
-listAcceptedFollowerUrlsForApi = function (accountIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('followers', accountIds, t, start, count)
-}
-
-listAcceptedFollowerSharedInboxUrls = function (accountIds: number[], t: Sequelize.Transaction) {
-  return createListAcceptedFollowForApiQuery('followers', accountIds, t, undefined, undefined, 'sharedInboxUrl')
-}
-
-listAcceptedFollowingUrlsForApi = function (accountIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
-  return createListAcceptedFollowForApiQuery('following', accountIds, t, start, count)
-}
-
-// ------------------------------ UTILS ------------------------------
-
-async function createListAcceptedFollowForApiQuery (
-  type: 'followers' | 'following',
-  accountIds: number[],
-  t: Sequelize.Transaction,
-  start?: number,
-  count?: number,
-  columnUrl = 'url'
-) {
-  let firstJoin: string
-  let secondJoin: string
-
-  if (type === 'followers') {
-    firstJoin = 'targetAccountId'
-    secondJoin = 'accountId'
-  } else {
-    firstJoin = 'accountId'
-    secondJoin = 'targetAccountId'
-  }
-
-  const selections = [ '"Follows"."' + columnUrl + '" AS "url"', 'COUNT(*) AS "total"' ]
-  const tasks: Promise<any>[] = []
-
-  for (const selection of selections) {
-    let query = 'SELECT ' + selection + ' FROM "Accounts" ' +
-      'INNER JOIN "AccountFollows" ON "AccountFollows"."' + firstJoin + '" = "Accounts"."id" ' +
-      'INNER JOIN "Accounts" AS "Follows" ON "AccountFollows"."' + secondJoin + '" = "Follows"."id" ' +
-      'WHERE "Accounts"."id" = ANY ($accountIds) AND "AccountFollows"."state" = \'accepted\' '
-
-    if (count !== undefined) query += 'LIMIT ' + count
-    if (start !== undefined) query += ' OFFSET ' + start
-
-    const options = {
-      bind: { accountIds },
-      type: Sequelize.QueryTypes.SELECT,
+      ],
       transaction: t
     }
-    tasks.push(AccountFollow['sequelize'].query(query, options))
+
+    return AccountFollowModel.findOne(query)
   }
 
-  const [ followers, [ { total } ]] = await Promise.all(tasks)
-  const urls: string[] = followers.map(f => f.url)
+  static listFollowingForApi (id: number, start: number, count: number, sort: string) {
+    const query = {
+      distinct: true,
+      offset: start,
+      limit: count,
+      order: [ getSort(sort) ],
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          as: 'AccountFollower',
+          where: {
+            id
+          }
+        },
+        {
+          model: AccountModel,
+          as: 'AccountFollowing',
+          required: true,
+          include: [ ServerModel ]
+        }
+      ]
+    }
 
-  return {
-    data: urls,
-    total: parseInt(total, 10)
+    return AccountFollowModel.findAndCountAll(query)
+      .then(({ rows, count }) => {
+        return {
+          data: rows,
+          total: count
+        }
+      })
+  }
+
+  static listFollowersForApi (id: number, start: number, count: number, sort: string) {
+    const query = {
+      distinct: true,
+      offset: start,
+      limit: count,
+      order: [ getSort(sort) ],
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          as: 'AccountFollower',
+          include: [ ServerModel ]
+        },
+        {
+          model: AccountModel,
+          as: 'AccountFollowing',
+          required: true,
+          where: {
+            id
+          }
+        }
+      ]
+    }
+
+    return AccountFollowModel.findAndCountAll(query)
+      .then(({ rows, count }) => {
+        return {
+          data: rows,
+          total: count
+        }
+      })
+  }
+
+  static listAcceptedFollowerUrlsForApi (accountIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
+    return AccountFollowModel.createListAcceptedFollowForApiQuery('followers', accountIds, t, start, count)
+  }
+
+  static listAcceptedFollowerSharedInboxUrls (accountIds: number[], t: Sequelize.Transaction) {
+    return AccountFollowModel.createListAcceptedFollowForApiQuery('followers', accountIds, t, undefined, undefined, 'sharedInboxUrl')
+  }
+
+  static listAcceptedFollowingUrlsForApi (accountIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
+    return AccountFollowModel.createListAcceptedFollowForApiQuery('following', accountIds, t, start, count)
+  }
+
+  private static async createListAcceptedFollowForApiQuery (type: 'followers' | 'following',
+                                       accountIds: number[],
+                                       t: Sequelize.Transaction,
+                                       start?: number,
+                                       count?: number,
+                                       columnUrl = 'url') {
+    let firstJoin: string
+    let secondJoin: string
+
+    if (type === 'followers') {
+      firstJoin = 'targetAccountId'
+      secondJoin = 'accountId'
+    } else {
+      firstJoin = 'accountId'
+      secondJoin = 'targetAccountId'
+    }
+
+    const selections = [ '"Follows"."' + columnUrl + '" AS "url"', 'COUNT(*) AS "total"' ]
+    const tasks: Bluebird<any>[] = []
+
+    for (const selection of selections) {
+      let query = 'SELECT ' + selection + ' FROM "account" ' +
+        'INNER JOIN "accountFollow" ON "accountFollow"."' + firstJoin + '" = "account"."id" ' +
+        'INNER JOIN "account" AS "Follows" ON "accountFollow"."' + secondJoin + '" = "Follows"."id" ' +
+        'WHERE "account"."id" = ANY ($accountIds) AND "accountFollow"."state" = \'accepted\' '
+
+      if (count !== undefined) query += 'LIMIT ' + count
+      if (start !== undefined) query += ' OFFSET ' + start
+
+      const options = {
+        bind: { accountIds },
+        type: Sequelize.QueryTypes.SELECT,
+        transaction: t
+      }
+      tasks.push(AccountFollowModel.sequelize.query(query, options))
+    }
+
+    const [ followers, [ { total } ] ] = await
+    Promise.all(tasks)
+    const urls: string[] = followers.map(f => f.url)
+
+    return {
+      data: urls,
+      total: parseInt(total, 10)
+    }
+  }
+
+  toFormattedJSON () {
+    const follower = this.AccountFollower.toFormattedJSON()
+    const following = this.AccountFollowing.toFormattedJSON()
+
+    return {
+      id: this.id,
+      follower,
+      following,
+      state: this.state,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    }
   }
 }

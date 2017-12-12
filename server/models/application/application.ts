@@ -1,61 +1,35 @@
-import * as Sequelize from 'sequelize'
+import { Transaction } from 'sequelize'
+import { AllowNull, Column, Default, IsInt, Model, Table } from 'sequelize-typescript'
 
-import { addMethodsToModel } from '../utils'
-import {
-  ApplicationAttributes,
-  ApplicationInstance,
+@Table({
+  tableName: 'application'
+})
+export class ApplicationModel extends Model<ApplicationModel> {
 
-  ApplicationMethods
-} from './application-interface'
+  @AllowNull(false)
+  @Default(0)
+  @IsInt
+  @Column
+  migrationVersion: number
 
-let Application: Sequelize.Model<ApplicationInstance, ApplicationAttributes>
-let loadMigrationVersion: ApplicationMethods.LoadMigrationVersion
-let updateMigrationVersion: ApplicationMethods.UpdateMigrationVersion
-let countTotal: ApplicationMethods.CountTotal
+  static countTotal () {
+    return ApplicationModel.count()
+  }
 
-export default function defineApplication (sequelize: Sequelize.Sequelize, DataTypes: Sequelize.DataTypes) {
-  Application = sequelize.define<ApplicationInstance, ApplicationAttributes>('Application',
-    {
-      migrationVersion: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
-        allowNull: false,
-        validate: {
-          isInt: true
-        }
-      }
+  static loadMigrationVersion () {
+    const query = {
+      attributes: [ 'migrationVersion' ]
     }
-  )
 
-  const classMethods = [
-    countTotal,
-    loadMigrationVersion,
-    updateMigrationVersion
-  ]
-  addMethodsToModel(Application, classMethods)
-
-  return Application
-}
-
-// ---------------------------------------------------------------------------
-
-countTotal = function () {
-  return this.count()
-}
-
-loadMigrationVersion = function () {
-  const query = {
-    attributes: [ 'migrationVersion' ]
+    return ApplicationModel.findOne(query).then(data => data ? data.migrationVersion : null)
   }
 
-  return Application.findOne(query).then(data => data ? data.migrationVersion : null)
-}
+  static updateMigrationVersion (newVersion: number, transaction: Transaction) {
+    const options = {
+      where: {},
+      transaction: transaction
+    }
 
-updateMigrationVersion = function (newVersion: number, transaction: Sequelize.Transaction) {
-  const options: Sequelize.UpdateOptions = {
-    where: {},
-    transaction: transaction
+    return ApplicationModel.update({ migrationVersion: newVersion }, options)
   }
-
-  return Application.update({ migrationVersion: newVersion }, options)
 }

@@ -1,12 +1,10 @@
-import * as rimraf from 'rimraf'
 import * as Promise from 'bluebird'
+import * as rimraf from 'rimraf'
+import { CONFIG, initDatabase, sequelizeTypescript } from '../../../server/initializers'
 
-import { CONFIG } from '../../../server/initializers/constants'
-import { database as db } from '../../../server/initializers/database'
-
-db.init(true)
+initDatabase(true)
   .then(() => {
-    return db.sequelize.drop()
+    return sequelizeTypescript.drop()
   })
   .then(() => {
     console.info('Tables of %s deleted.', CONFIG.DATABASE.DBNAME)

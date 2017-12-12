@@ -1,5 +1,4 @@
-import { logger } from '../../../helpers'
-import { doRequest } from '../../../helpers/requests'
+import { doRequest, logger } from '../../../helpers'
 import { ActivityPubHttpPayload, computeBody, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
 
 async function process (payload: ActivityPubHttpPayload, jobId: number) {

@@ -2,8 +2,8 @@ import * as express from 'express'
 import 'express-validator'
 import 'multer'
 import * as validator from 'validator'
-import { CONSTRAINTS_FIELDS, database as db } from '../../initializers'
-import { VideoChannelInstance } from '../../models'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { VideoChannelModel } from '../../models/video/video-channel'
 import { exists } from './misc'
 
 const VIDEO_CHANNELS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_CHANNELS
@@ -17,11 +17,11 @@ function isVideoChannelNameValid (value: string) {
 }
 
 async function isVideoChannelExist (id: string, res: express.Response) {
-  let videoChannel: VideoChannelInstance
+  let videoChannel: VideoChannelModel
   if (validator.isInt(id)) {
-    videoChannel = await db.VideoChannel.loadAndPopulateAccount(+id)
+    videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
   } else { // UUID
-    videoChannel = await db.VideoChannel.loadByUUIDAndPopulateAccount(id)
+    videoChannel = await VideoChannelModel.loadByUUIDAndPopulateAccount(id)
   }
 
   if (!videoChannel) {

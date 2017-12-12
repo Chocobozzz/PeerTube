@@ -1,6 +1,6 @@
 import * as program from 'commander'
-
-import { database as db } from '../server/initializers/database'
+import { initDatabase } from '../server/initializers'
+import { UserModel } from '../server/models/account/user'
 
 program
   .option('-u, --user [user]', 'User')
@@ -11,9 +11,9 @@ if (program['user'] === undefined) {
   process.exit(-1)
 }
 
-db.init(true)
+initDatabase(true)
   .then(() => {
-    return db.User.loadByUsername(program['user'])
+    return UserModel.loadByUsername(program['user'])
   })
   .then(user => {
     if (!user) {

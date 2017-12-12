@@ -1,17 +1,15 @@
 import * as Bluebird from 'bluebird'
-import * as url from 'url'
-import { ActivityPubActor } from '../../../shared/models/activitypub/activitypub-actor'
-import { isRemoteAccountValid } from '../../helpers/custom-validators/activitypub/account'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
-import { logger } from '../../helpers/logger'
-import { doRequest } from '../../helpers/requests'
-import { ACTIVITY_PUB } from '../../initializers/constants'
-import { database as db } from '../../initializers/database'
-import { AccountInstance } from '../../models/account/account-interface'
 import { Transaction } from 'sequelize'
+import * as url from 'url'
+import { ActivityPubActor } from '../../../shared/models/activitypub'
+import { doRequest, logger, retryTransactionWrapper } from '../../helpers'
+import { isRemoteAccountValid } from '../../helpers/custom-validators/activitypub'
+import { ACTIVITY_PUB, sequelizeTypescript } from '../../initializers'
+import { AccountModel } from '../../models/account/account'
+import { ServerModel } from '../../models/server/server'
 
 async function getOrCreateAccountAndServer (accountUrl: string) {
-  let account = await db.Account.loadByUrl(accountUrl)
+  let account = await AccountModel.loadByUrl(accountUrl)
 
   // We don't have this account in our database, fetch it on remote
   if (!account) {
@@ -28,11 +26,11 @@ async function getOrCreateAccountAndServer (accountUrl: string) {
   return account
 }
 
-function saveAccountAndServerIfNotExist (account: AccountInstance, t?: Transaction): Bluebird<AccountInstance> | Promise<AccountInstance> {
+function saveAccountAndServerIfNotExist (account: AccountModel, t?: Transaction): Bluebird<AccountModel> | Promise<AccountModel> {
   if (t !== undefined) {
     return save(t)
   } else {
-    return db.sequelize.transaction(t => {
+    return sequelizeTypescript.transaction(t => {
       return save(t)
     })
   }
@@ -49,7 +47,7 @@ function saveAccountAndServerIfNotExist (account: AccountInstance, t?: Transacti
       },
       transaction: t
     }
-    const [ server ] = await db.Server.findOrCreate(serverOptions)
+    const [ server ] = await ServerModel.findOrCreate(serverOptions)
 
     // Save our new account in database
     account.set('serverId', server.id)
@@ -87,7 +85,7 @@ async function fetchRemoteAccount (accountUrl: string) {
   const followersCount = await fetchAccountCount(accountJSON.followers)
   const followingCount = await fetchAccountCount(accountJSON.following)
 
-  const account = db.Account.build({
+  return new AccountModel({
     uuid: accountJSON.uuid,
     name: accountJSON.preferredUsername,
     url: accountJSON.url,
@@ -101,8 +99,6 @@ async function fetchRemoteAccount (accountUrl: string) {
     followersUrl: accountJSON.followers,
     followingUrl: accountJSON.following
   })
-
-  return account
 }
 
 export {

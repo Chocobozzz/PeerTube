@@ -4,14 +4,14 @@ import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { shareVideoByServer } from '../../lib/activitypub/share'
 import { getVideoActivityPubUrl, getVideoChannelActivityPubUrl } from '../../lib/activitypub/url'
 import { createLocalAccountWithoutKeys } from '../../lib/user'
+import { ApplicationModel } from '../../models/application/application'
 import { JOB_CATEGORIES, SERVER_ACCOUNT_NAME } from '../constants'
-import { PeerTubeDatabase } from '../database'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
   queryInterface: Sequelize.QueryInterface,
   sequelize: Sequelize.Sequelize,
-  db: PeerTubeDatabase
+  db: any
 }): Promise<void> {
   const q = utils.queryInterface
   const db = utils.db
@@ -65,7 +65,7 @@ async function up (utils: {
 
   // Create application account
   {
-    const applicationInstance = await db.Application.findOne()
+    const applicationInstance = await ApplicationModel.findOne()
     const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
 
     const { publicKey, privateKey } = await createPrivateAndPublicKeys()
