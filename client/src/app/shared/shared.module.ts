@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
@@ -33,6 +34,8 @@ import { VideoService } from './video/video.service'
     RouterModule,
     HttpClientModule,
 
+    LoadingBarHttpClientModule,
+
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
 
@@ -58,6 +61,8 @@ import { VideoService } from './video/video.service'
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
+
+    LoadingBarHttpClientModule,
 
     BsDropdownModule,
     ModalModule,

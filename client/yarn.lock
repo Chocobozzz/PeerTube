@@ -178,6 +178,19 @@
     source-map "^0.5.6"
     tree-kill "^1.0.0"
 
+"@ngx-loading-bar/core@1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@ngx-loading-bar/core/-/core-1.0.0-rc.1.tgz#6809578979c924fa514c0a094c0f479817635c63"
+  dependencies:
+    tslib "^1.7.1"
+
+"@ngx-loading-bar/http-client@^1.0.0-rc.1":
+  version "1.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/@ngx-loading-bar/http-client/-/http-client-1.0.0-rc.1.tgz#f4c15d9e46445bf8fe7a945c7f4eb0ef443bddd8"
+  dependencies:
+    "@ngx-loading-bar/core" "1.0.0-rc.1"
+    tslib "^1.7.1"
+
 "@ngx-meta/core@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@ngx-meta/core/-/core-4.0.1.tgz#b035febeeb92876920480f70719fcf953dc0245f"
