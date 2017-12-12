@@ -18,7 +18,7 @@ import { VideoInstance } from '../models'
 const clientsRouter = express.Router()
 
 const distPath = join(root(), 'client', 'dist')
-const assetsImagesPath = join(root(), 'client', 'dist', 'assets', 'images')
+const assetsImagesPath = join(root(), 'client', 'dist', 'client', 'assets', 'images')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const indexPath = join(distPath, 'index.html')
 

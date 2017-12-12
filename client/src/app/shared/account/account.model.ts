@@ -16,6 +16,6 @@ export class Account implements ServerAccount {
   static GET_ACCOUNT_AVATAR_PATH (account: Account) {
     if (account && account.avatar) return account.avatar.path
 
-    return environment.apiUrl + '/client/assets/images/default-avatar.png'
+    return '/client/assets/images/default-avatar.png'
   }
 }

@@ -9,7 +9,7 @@
       "outDir": "dist",
       "deployUrl": "client/",
       "assets": [
-        "assets"
+        { "glob": "**/*", "input": "./assets/images", "output": "./client/assets/" }
       ],
       "index": "index.html",
       "main": "main.ts",
