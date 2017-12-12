@@ -2,4 +2,4 @@
 
 cd client || exit -1
 
-ng server --host localhost --port 3000
+ng server --hmr --host localhost --port 3000
