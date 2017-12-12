@@ -4,6 +4,7 @@ import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/concatAll'
 import { Observable } from 'rxjs/Observable'
+import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { Video } from '../../shared/video/video.model'
@@ -21,6 +22,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,
+               protected authService: AuthService,
                protected notificationsService: NotificationsService,
                protected confirmService: ConfirmService,
                private videoService: VideoService) {

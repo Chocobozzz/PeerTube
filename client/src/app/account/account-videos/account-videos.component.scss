@@ -43,7 +43,7 @@
 
 .video {
   display: flex;
-  height: 130px;
+  min-height: 130px;
   padding-bottom: 20px;
 
   input[type=checkbox] {
@@ -68,6 +68,10 @@
     flex-grow: 1;
 
     .video-info-name {
+      @include disable-default-a-behaviour;
+
+      color: #000;
+      display: block;
       font-size: 16px;
       font-weight: $font-semibold;
     }
@@ -75,6 +79,10 @@
     .video-info-date-views {
       font-size: 13px;
     }
+  }
+
+  .video-buttons {
+    min-width: 190px;
   }
 }
 

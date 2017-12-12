@@ -43,12 +43,15 @@
       align-items: center;
 
       .video-info-name {
+        margin-right: 30px;
         font-size: 27px;
         font-weight: $font-semibold;
         flex-grow: 1;
       }
 
       .video-info-actions {
+        min-width: 215px;
+
         .action-button {
           @include peertube-button;
           @include grey-button;
@@ -219,16 +222,12 @@
 }
 
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1200px) {
   .other-videos {
     display: none;
   }
-}
 
-@media screen and (max-width: 800px) {
   .video-bottom {
-    margin: 20px 0 0 0;
-
     .video-info {
       margin-right: 0;
 
@@ -248,5 +247,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .video-bottom {
+    margin: 20px 0 0 0;
   }
 }

@@ -12,7 +12,7 @@
     <my-video-thumbnail [video]="video"></my-video-thumbnail>
 
     <div class="video-info">
-      <div class="video-info-name">{{ video.name }}</div>
+      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
       <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
     </div>
 

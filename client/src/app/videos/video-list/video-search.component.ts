@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { Subscription } from 'rxjs/Subscription'
+import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 
@@ -21,6 +22,7 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
   constructor (protected router: Router,
                protected route: ActivatedRoute,
                protected notificationsService: NotificationsService,
+               protected authService: AuthService,
                private videoService: VideoService) {
     super()
   }

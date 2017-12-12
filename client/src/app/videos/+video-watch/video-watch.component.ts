@@ -60,6 +60,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private markdownService: MarkdownService
   ) {}
 
+  get user () {
+    return this.authService.getUser()
+  }
+
   ngOnInit () {
     this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
       .subscribe(
@@ -204,7 +208,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   isVideoBlacklistable () {
-    return this.video.isBlackistableBy(this.authService.getUser())
+    return this.video.isBlackistableBy(this.user)
   }
 
   getAvatarPath () {
@@ -264,7 +268,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video = video
 
     let observable
-    if (this.video.isVideoNSFWForUser(this.authService.getUser())) {
+    if (this.video.isVideoNSFWForUser(this.user)) {
       observable = this.confirmService.confirm(
         'This video contains mature or explicit content. Are you sure you want to watch it?',
         'Mature or explicit content'

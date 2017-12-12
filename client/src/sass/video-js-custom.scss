@@ -322,6 +322,7 @@ $control-bar-height: 34px;
   border-left-color: #ffffff;
   transform: translateZ(0);
   animation: spinner 1.4s infinite linear;
+  overflow: hidden;
 
   &:before {
     animation: none !important;

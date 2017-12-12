@@ -2,6 +2,7 @@ import { OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
+import { AuthService } from '../../core/auth'
 import { SortField } from './sort-field.type'
 import { VideoPagination } from './video-pagination.model'
 import { Video } from './video.model'
@@ -17,9 +18,10 @@ export abstract class AbstractVideoList implements OnInit {
   videos: Video[] = []
   loadOnInit = true
 
-  protected notificationsService: NotificationsService
-  protected router: Router
-  protected route: ActivatedRoute
+  protected abstract notificationsService: NotificationsService
+  protected abstract authService: AuthService
+  protected abstract router: Router
+  protected abstract route: ActivatedRoute
 
   protected abstract currentRoute: string
 
@@ -27,6 +29,10 @@ export abstract class AbstractVideoList implements OnInit {
   private loadedPages: { [ id: number ]: boolean } = {}
 
   abstract getVideosObservable (): Observable<{ videos: Video[], totalVideos: number}>
+
+  get user () {
+    return this.authService.getUser()
+  }
 
   ngOnInit () {
     // Subscribe to route changes
