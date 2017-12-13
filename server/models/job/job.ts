@@ -30,10 +30,10 @@ export class JobModel extends Model<JobModel> {
   handlerInputData: any
 
   @CreatedAt
-  creationDate: Date
+  createdAt: Date
 
   @UpdatedAt
-  updatedOn: Date
+  updatedAt: Date
 
   static listWithLimitByCategory (limit: number, state: JobState, jobCategory: JobCategory) {
     const query = {
