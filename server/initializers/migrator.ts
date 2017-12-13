@@ -1,6 +1,5 @@
 import * as path from 'path'
 import { logger, readdirPromise } from '../helpers'
-import { ApplicationModel } from '../models/application/application'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 
@@ -11,9 +10,23 @@ async function migrate () {
   // The installer will do that
   if (tables.length === 0) return
 
-  let actualVersion = await ApplicationModel.loadMigrationVersion()
+  let actualVersion: number = null
+
+  // Search in "Applications" or "application" tables
+  try {
+    const [ rows ] = await sequelizeTypescript.query('SELECT "migrationVersion" FROM "Applications"')
+    if (rows && rows[ 0 ] && rows[ 0 ].migrationVersion) {
+      actualVersion = rows[ 0 ].migrationVersion
+    }
+  } catch {
+    const [ rows ] = await sequelizeTypescript.query('SELECT "migrationVersion" FROM "application"')
+    if (rows && rows[0] && rows[0].migrationVersion) {
+      actualVersion = rows[0].migrationVersion
+    }
+  }
+
   if (actualVersion === null) {
-    await ApplicationModel.create({ migrationVersion: 0 })
+    await sequelizeTypescript.query('INSERT INTO "application" ("migrationVersion") VALUES (0)')
     actualVersion = 0
   }
 
@@ -88,6 +101,6 @@ async function executeMigration (actualVersion: number, entity: { version: strin
     await migrationScript.up(options)
 
     // Update the new migration version
-    await ApplicationModel.updateMigrationVersion(versionScript, t)
+    await sequelizeTypescript.query('UPDATE "application" SET "migrationVersion" = ' + versionScript, { transaction: t })
   })
 }

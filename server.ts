@@ -40,12 +40,16 @@ if (errorMessage !== null) {
 // ----------- Database -----------
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { logger } from './server/helpers/logger'
+
 // Initialize database and models
-import { initDatabase } from './server/initializers/database'
-initDatabase(false).then(() => onDatabaseInitDone())
+import { initDatabaseModels } from './server/initializers/database'
+import { migrate } from './server/initializers/migrator'
+migrate()
+  .then(() => initDatabaseModels(false))
+  .then(() => onDatabaseInitDone())
 
 // ----------- PeerTube modules -----------
-import { migrate, installApplication } from './server/initializers'
+import { installApplication } from './server/initializers'
 import { activitypubHttpJobScheduler, transcodingJobScheduler, VideosPreviewCache } from './server/lib'
 import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
 
@@ -154,9 +158,8 @@ app.use(function (err, req, res, next) {
 
 function onDatabaseInitDone () {
   const port = CONFIG.LISTEN.PORT
-    // Run the migration scripts if needed
-  migrate()
-    .then(() => installApplication())
+
+  installApplication()
     .then(() => {
       // ----------- Make the server listening -----------
       server.listen(port, () => {

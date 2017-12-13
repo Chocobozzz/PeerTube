@@ -1,9 +1,9 @@
 import { getServerAccount } from '../server/helpers'
-import { initDatabase } from '../server/initializers'
+import { initDatabaseModels } from '../server/initializers'
 import { AccountFollowModel } from '../server/models/account/account-follow'
 import { VideoModel } from '../server/models/video/video'
 
-initDatabase(true)
+initDatabaseModels(true)
   .then(() => {
     return getServerAccount()
   })

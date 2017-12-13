@@ -1,8 +1,8 @@
 import * as Promise from 'bluebird'
 import * as rimraf from 'rimraf'
-import { CONFIG, initDatabase, sequelizeTypescript } from '../../../server/initializers'
+import { CONFIG, initDatabaseModels, sequelizeTypescript } from '../../../server/initializers'
 
-initDatabase(true)
+initDatabaseModels(true)
   .then(() => {
     return sequelizeTypescript.drop()
   })

@@ -50,7 +50,7 @@ const sequelizeTypescript = new SequelizeTypescript({
   }
 })
 
-async function initDatabase (silent: boolean) {
+async function initDatabaseModels (silent: boolean) {
   sequelizeTypescript.addModels([
     ApplicationModel,
     AvatarModel,
@@ -81,6 +81,6 @@ async function initDatabase (silent: boolean) {
 // ---------------------------------------------------------------------------
 
 export {
-  initDatabase,
+  initDatabaseModels,
   sequelizeTypescript
 }
