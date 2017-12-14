@@ -1,4 +1,4 @@
-export * from './account'
+export * from './actor'
 export * from './activity'
 export * from './misc'
 export * from './signature'

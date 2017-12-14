@@ -23,12 +23,12 @@ function webfingerController (req: express.Request, res: express.Response, next:
 
   const json = {
     subject: req.query.resource,
-    aliases: [ account.url ],
+    aliases: [ account.Actor.url ],
     links: [
       {
         rel: 'self',
         type: 'application/activity+json',
-        href: account.url
+        href: account.Actor.url
       }
     ]
   }

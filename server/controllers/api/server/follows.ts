@@ -157,7 +157,7 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
   // This could be long so don't wait this task
   const following = follow.AccountFollowing
   following.destroy()
-    .catch(err => logger.error('Cannot destroy account that we do not follow anymore %s.', following.url, err))
+    .catch(err => logger.error('Cannot destroy account that we do not follow anymore %s.', following.Actor.url, err))
 
   return res.status(204).end()
 }

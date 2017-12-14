@@ -1,4 +1,4 @@
-import { isAccountFollowActivityValid } from './account'
+import { isAccountFollowActivityValid } from './actor'
 import { isBaseActivityValid } from './misc'
 import { isDislikeActivityValid, isLikeActivityValid } from './rate'
 

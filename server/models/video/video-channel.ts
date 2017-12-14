@@ -11,18 +11,16 @@ import {
   HasMany,
   Is,
   IsUUID,
-  Model, Scopes,
+  Model,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
-import { activityPubCollection } from '../../helpers'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
-import { getAnnounceActivityPubUrl } from '../../lib/activitypub'
 import { sendDeleteVideoChannel } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
+import { ActorModel } from '../activitypub/actor'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -78,16 +76,23 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   @Column
   remote: boolean
 
-  @AllowNull(false)
-  @Is('VideoChannelUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.URL.max))
-  url: string
-
   @CreatedAt
   createdAt: Date
 
   @UpdatedAt
   updatedAt: Date
+
+  @ForeignKey(() => ActorModel)
+  @Column
+  actorId: number
+
+  @BelongsTo(() => ActorModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  Actor: ActorModel
 
   @ForeignKey(() => AccountModel)
   @Column
@@ -174,9 +179,15 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   static loadByUrl (url: string, t?: Sequelize.Transaction) {
     const query: IFindOptions<VideoChannelModel> = {
-      where: {
-        url
-      }
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            url
+          }
+        }
+      ]
     }
 
     if (t !== undefined) query.transaction = t
@@ -264,27 +275,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   }
 
   toActivityPubObject () {
-    let sharesObject
-    if (Array.isArray(this.VideoChannelShares)) {
-      const shares: string[] = []
-
-      for (const videoChannelShare of this.VideoChannelShares) {
-        const shareUrl = getAnnounceActivityPubUrl(this.url, videoChannelShare.Account)
-        shares.push(shareUrl)
-      }
-
-      sharesObject = activityPubCollection(shares)
-    }
-
-    return {
-      type: 'VideoChannel' as 'VideoChannel',
-      id: this.url,
-      uuid: this.uuid,
-      content: this.description,
-      name: this.name,
-      published: this.createdAt.toISOString(),
-      updated: this.updatedAt.toISOString(),
-      shares: sharesObject
-    }
+    return this.Actor.toActivityPubObject(this.name, this.uuid, 'VideoChannel')
   }
 }

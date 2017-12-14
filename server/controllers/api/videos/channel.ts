@@ -92,16 +92,15 @@ async function addVideoChannelRetryWrapper (req: express.Request, res: express.R
   return res.type('json').status(204).end()
 }
 
-async function addVideoChannel (req: express.Request, res: express.Response) {
+function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
   const account: AccountModel = res.locals.oauth.token.User.Account
-  let videoChannelCreated: VideoChannelModel
 
-  await sequelizeTypescript.transaction(async t => {
-    videoChannelCreated = await createVideoChannel(videoChannelInfo, account, t)
+  return sequelizeTypescript.transaction(async t => {
+    const videoChannelCreated = await createVideoChannel(videoChannelInfo, account, t)
+
+    logger.info('Video channel with uuid %s created.', videoChannelCreated.uuid)
   })
-
-  logger.info('Video channel with uuid %s created.', videoChannelCreated.uuid)
 }
 
 async function updateVideoChannelRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {

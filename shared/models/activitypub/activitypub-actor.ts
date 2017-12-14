@@ -1,6 +1,6 @@
 export interface ActivityPubActor {
   '@context': any[]
-  type: 'Person' | 'Application'
+  type: 'Person' | 'Application' | 'Group'
   id: string
   following: string
   followers: string

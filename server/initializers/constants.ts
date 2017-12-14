@@ -131,7 +131,7 @@ const CONSTRAINTS_FIELDS = {
     FILE_SIZE: { min: 10 },
     URL: { min: 3, max: 2000 } // Length
   },
-  ACCOUNTS: {
+  ACTOR: {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
     URL: { min: 3, max: 2000 } // Length

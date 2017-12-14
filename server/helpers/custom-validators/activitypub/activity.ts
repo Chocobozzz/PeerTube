@@ -1,6 +1,6 @@
 import * as validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import { isAccountAcceptActivityValid, isAccountDeleteActivityValid, isAccountFollowActivityValid } from './account'
+import { isAccountAcceptActivityValid, isAccountDeleteActivityValid, isAccountFollowActivityValid } from './actor'
 import { isAnnounceActivityValid } from './announce'
 import { isActivityPubUrlValid } from './misc'
 import { isDislikeActivityValid, isLikeActivityValid } from './rate'
