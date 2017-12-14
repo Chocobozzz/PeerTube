@@ -4,14 +4,14 @@ verlte() {
   [ "$1" = "`echo -e "$1\n$2" | sort -V | head -n1`" ]
 }
 
-nodeMinVersion="6.0.0"
+nodeMinVersion="8.0.0"
 npmMinVersion="3.0.0"
 
 actualNodeVersion=$(node --version | tr -d "v")
 actualNpmVersion=$(npm --version)
 
 if verlte $actualNodeVersion $nodeMinVersion; then
-  echo 'You need node >= 6'
+  echo 'You need node >= 8'
   exit 0
 fi
 

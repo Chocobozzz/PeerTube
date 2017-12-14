@@ -110,7 +110,6 @@ describe('Test multiple servers', function () {
         expect(video.description).to.equal('my super description for server 1')
         expect(video.serverHost).to.equal('localhost:9001')
         expect(video.duration).to.equal(10)
-        expect(video.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
         expect(video.accountName).to.equal('root')
@@ -124,6 +123,7 @@ describe('Test multiple servers', function () {
         expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
         expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
         expect(videoDetails.files).to.have.lengthOf(1)
+        expect(videoDetails.tags).to.deep.equal([ 'tag1p1', 'tag2p1' ])
 
         const file = videoDetails.files[0]
         const magnetUri = file.magnetUri
@@ -201,7 +201,6 @@ describe('Test multiple servers', function () {
         expect(video.description).to.equal('my super description for server 2')
         expect(video.serverHost).to.equal('localhost:9002')
         expect(video.duration).to.equal(5)
-        expect(video.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
         expect(video.accountName).to.equal('user1')
@@ -218,6 +217,7 @@ describe('Test multiple servers', function () {
         expect(videoDetails.channel.name).to.equal('Default user1 channel')
         expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
         expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
+        expect(videoDetails.tags).to.deep.equal([ 'tag1p2', 'tag2p2', 'tag3p2' ])
 
         expect(videoDetails.files).to.have.lengthOf(4)
 
@@ -318,7 +318,6 @@ describe('Test multiple servers', function () {
         expect(video1.description).to.equal('my super description for server 3')
         expect(video1.serverHost).to.equal('localhost:9003')
         expect(video1.duration).to.equal(5)
-        expect(video1.tags).to.deep.equal([ 'tag1p3' ])
         expect(video1.accountName).to.equal('root')
         expect(dateIsValid(video1.createdAt)).to.be.true
         expect(dateIsValid(video1.updatedAt)).to.be.true
@@ -326,6 +325,7 @@ describe('Test multiple servers', function () {
         const res2 = await getVideo(server.url, video1.id)
         const video1Details = res2.body
         expect(video1Details.files).to.have.lengthOf(1)
+        expect(video1Details.tags).to.deep.equal([ 'tag1p3' ])
 
         const file1 = video1Details.files[0]
         expect(file1.magnetUri).to.have.lengthOf.above(2)
@@ -344,13 +344,13 @@ describe('Test multiple servers', function () {
         expect(video2.description).to.equal('my super description for server 3-2')
         expect(video2.serverHost).to.equal('localhost:9003')
         expect(video2.duration).to.equal(5)
-        expect(video2.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
         expect(video2.accountName).to.equal('root')
         expect(dateIsValid(video2.createdAt)).to.be.true
         expect(dateIsValid(video2.updatedAt)).to.be.true
 
         const res3 = await getVideo(server.url, video2.id)
         const video2Details = res3.body
+        expect(video2Details.tags).to.deep.equal([ 'tag2p3', 'tag3p3', 'tag4p3' ])
 
         expect(video2Details.files).to.have.lengthOf(1)
 
@@ -624,13 +624,13 @@ describe('Test multiple servers', function () {
         expect(videoUpdated.languageLabel).to.equal('French')
         expect(videoUpdated.nsfw).to.be.ok
         expect(videoUpdated.description).to.equal('my super description updated')
-        expect(videoUpdated.tags).to.deep.equal([ 'tag_up_1', 'tag_up_2' ])
         expect(dateIsValid(videoUpdated.updatedAt, 20000)).to.be.true
 
         const res2 = await getVideo(server.url, videoUpdated.uuid)
         const videoUpdatedDetails = res2.body
+        expect(videoUpdatedDetails.tags).to.deep.equal([ 'tag_up_1', 'tag_up_2' ])
 
-        const file = videoUpdatedDetails .files[0]
+        const file = videoUpdatedDetails.files[0]
         expect(file.magnetUri).to.have.lengthOf.above(2)
         expect(file.resolution).to.equal(720)
         expect(file.resolutionLabel).to.equal('720p')
@@ -746,7 +746,6 @@ describe('Test multiple servers', function () {
         expect(video.description).to.equal(null)
         expect(video.serverHost).to.equal('localhost:9002')
         expect(video.accountName).to.equal('root')
-        expect(video.tags).to.deep.equal([ ])
         expect(dateIsValid(video.createdAt)).to.be.true
         expect(dateIsValid(video.updatedAt)).to.be.true
       }

@@ -3,7 +3,7 @@
 </h1>
 
 <h4 align="center">
-Decentralized video streaming platform using P2P (BitTorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
 </h4>
 
 **PeerTube is sponsored by [Framasoft](https://framatube.org/#en), a non-profit that promotes, spreads and develops free-libre software. If you want to support this project, please [consider donating them](https://soutenir.framasoft.org/en/).**
@@ -128,13 +128,12 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 
 #### Debian
 
-  1. Install NodeJS 6.x (previous LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  1. Install NodeJS 8.x (current LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
   2. Install yarn: [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
-  3. Add jessie backports to your *source.list*: http://backports.debian.org/Instructions/
   4. Run:
 
     $ apt-get update
-    $ apt-get install ffmpeg postgresql-9.4 openssl
+    $ apt-get install ffmpeg postgresql openssl
 
 #### Ubuntu 16.04
 
