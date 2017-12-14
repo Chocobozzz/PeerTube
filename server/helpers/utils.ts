@@ -3,8 +3,9 @@ import { Model } from 'sequelize-typescript'
 import { ResultList } from '../../shared'
 import { VideoResolution } from '../../shared/models/videos'
 import { CONFIG } from '../initializers'
-import { AccountModel } from '../models/account/account'
 import { UserModel } from '../models/account/user'
+import { ActorModel } from '../models/activitypub/actor'
+import { ApplicationModel } from '../models/application/application'
 import { pseudoRandomBytesPromise } from './core-utils'
 import { logger } from './logger'
 
@@ -80,18 +81,19 @@ function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   })
 }
 
-let serverAccount: AccountModel
-async function getServerAccount () {
-  if (serverAccount === undefined) {
-    serverAccount = await AccountModel.loadApplication()
+let serverActor: ActorModel
+async function getServerActor () {
+  if (serverActor === undefined) {
+    const application = await ApplicationModel.load()
+    serverActor = application.Account.Actor
   }
 
-  if (!serverAccount) {
-    logger.error('Cannot load server account.')
+  if (!serverActor) {
+    logger.error('Cannot load server actor.')
     process.exit(0)
   }
 
-  return Promise.resolve(serverAccount)
+  return Promise.resolve(serverActor)
 }
 
 type SortType = { sortModel: any, sortValue: string }
@@ -105,6 +107,6 @@ export {
   isSignupAllowed,
   computeResolutionsToTranscode,
   resetSequelizeInstance,
-  getServerAccount,
+  getServerActor,
   SortType
 }

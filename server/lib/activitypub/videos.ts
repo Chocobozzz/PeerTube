@@ -19,7 +19,7 @@ import {
 
 function fetchRemoteVideoPreview (video: VideoModel) {
   // FIXME: use url
-  const host = video.VideoChannel.Account.Server.host
+  const host = video.VideoChannel.Account.Actor.Server.host
   const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
@@ -27,7 +27,7 @@ function fetchRemoteVideoPreview (video: VideoModel) {
 
 async function fetchRemoteVideoDescription (video: VideoModel) {
   // FIXME: use url
-  const host = video.VideoChannel.Account.Server.host
+  const host = video.VideoChannel.Account.Actor.Server.host
   const path = video.getDescriptionPath()
   const options = {
     uri: REMOTE_SCHEME.HTTP + '://' + host + path,
@@ -50,43 +50,47 @@ function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) 
 }
 
 async function sendVideoRateChangeToFollowers (
-    account: AccountModel,
+  account: AccountModel,
   video: VideoModel,
   likes: number,
   dislikes: number,
   t: Transaction
 ) {
+  const actor = account.Actor
+
   // Keep the order: first we undo and then we create
 
   // Undo Like
-  if (likes < 0) await sendUndoLikeToVideoFollowers(account, video, t)
+  if (likes < 0) await sendUndoLikeToVideoFollowers(actor, video, t)
   // Undo Dislike
-  if (dislikes < 0) await sendUndoDislikeToVideoFollowers(account, video, t)
+  if (dislikes < 0) await sendUndoDislikeToVideoFollowers(actor, video, t)
 
   // Like
-  if (likes > 0) await sendLikeToVideoFollowers(account, video, t)
+  if (likes > 0) await sendLikeToVideoFollowers(actor, video, t)
   // Dislike
-  if (dislikes > 0) await sendCreateDislikeToVideoFollowers(account, video, t)
+  if (dislikes > 0) await sendCreateDislikeToVideoFollowers(actor, video, t)
 }
 
 async function sendVideoRateChangeToOrigin (
-    account: AccountModel,
+  account: AccountModel,
   video: VideoModel,
   likes: number,
   dislikes: number,
   t: Transaction
 ) {
+  const actor = account.Actor
+
   // Keep the order: first we undo and then we create
 
   // Undo Like
-  if (likes < 0) await sendUndoLikeToOrigin(account, video, t)
+  if (likes < 0) await sendUndoLikeToOrigin(actor, video, t)
   // Undo Dislike
-  if (dislikes < 0) await sendUndoDislikeToOrigin(account, video, t)
+  if (dislikes < 0) await sendUndoDislikeToOrigin(actor, video, t)
 
   // Like
-  if (likes > 0) await sendLikeToOrigin(account, video, t)
+  if (likes > 0) await sendLikeToOrigin(actor, video, t)
   // Dislike
-  if (dislikes > 0) await sendCreateDislikeToOrigin(account, video, t)
+  if (dislikes > 0) await sendCreateDislikeToOrigin(actor, video, t)
 }
 
 export {

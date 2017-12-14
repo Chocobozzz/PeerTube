@@ -1,26 +1,26 @@
 import { Transaction } from 'sequelize'
 import { ActivityFollow } from '../../../../shared/models/activitypub'
-import { AccountModel } from '../../../models/account/account'
-import { AccountFollowModel } from '../../../models/account/account-follow'
-import { getAccountFollowActivityPubUrl } from '../url'
+import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './misc'
 
-function sendFollow (accountFollow: AccountFollowModel, t: Transaction) {
-  const me = accountFollow.AccountFollower
-  const following = accountFollow.AccountFollowing
+function sendFollow (actorFollow: ActorFollowModel, t: Transaction) {
+  const me = actorFollow.ActorFollower
+  const following = actorFollow.ActorFollowing
 
-  const url = getAccountFollowActivityPubUrl(accountFollow)
+  const url = getActorFollowActivityPubUrl(actorFollow)
   const data = followActivityData(url, me, following)
 
   return unicastTo(data, me, following.inboxUrl, t)
 }
 
-function followActivityData (url: string, byAccount: AccountModel, targetAccount: AccountModel): ActivityFollow {
+function followActivityData (url: string, byActor: ActorModel, targetActor: ActorModel): ActivityFollow {
   return {
     type: 'Follow',
     id: url,
-    actor: byAccount.url,
-    object: targetAccount.url
+    actor: byActor.url,
+    object: targetActor.url
   }
 }
 

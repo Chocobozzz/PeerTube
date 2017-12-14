@@ -1,14 +1,14 @@
 import { ActivityAccept } from '../../../../shared/models/activitypub'
-import { AccountModel } from '../../../models/account/account'
-import { AccountFollowModel } from '../../../models/account/account-follow'
+import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { addFetchOutboxJob } from '../fetch'
 
-async function processAcceptActivity (activity: ActivityAccept, inboxAccount?: AccountModel) {
-  if (inboxAccount === undefined) throw new Error('Need to accept on explicit inbox.')
+async function processAcceptActivity (activity: ActivityAccept, inboxActor?: ActorModel) {
+  if (inboxActor === undefined) throw new Error('Need to accept on explicit inbox.')
 
-  const targetAccount = await AccountModel.loadByUrl(activity.actor)
+  const targetActor = await ActorModel.loadByUrl(activity.actor)
 
-  return processAccept(inboxAccount, targetAccount)
+  return processAccept(inboxActor, targetActor)
 }
 
 // ---------------------------------------------------------------------------
@@ -19,11 +19,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processAccept (account: AccountModel, targetAccount: AccountModel) {
-  const follow = await AccountFollowModel.loadByAccountAndTarget(account.id, targetAccount.id)
+async function processAccept (actor: ActorModel, targetActor: ActorModel) {
+  const follow = await ActorFollowModel.loadByActorAndTarget(actor.id, targetActor.id)
   if (!follow) throw new Error('Cannot find associated follow.')
 
   follow.set('state', 'accepted')
   await follow.save()
-  await addFetchOutboxJob(targetAccount, undefined)
+  await addFetchOutboxJob(targetActor, undefined)
 }

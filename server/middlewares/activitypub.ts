@@ -3,33 +3,27 @@ import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { ActivityPubSignature } from '../../shared'
 import { isSignatureVerified, logger } from '../helpers'
 import { ACCEPT_HEADERS, ACTIVITY_PUB } from '../initializers'
-import { fetchRemoteAccount, saveAccountAndServerIfNotExist } from '../lib/activitypub'
-import { AccountModel } from '../models/account/account'
+import { getOrCreateActorAndServerAndModel } from '../lib/activitypub'
+import { ActorModel } from '../models/activitypub/actor'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   const signatureObject: ActivityPubSignature = req.body.signature
 
-  logger.debug('Checking signature of account %s...', signatureObject.creator)
+  logger.debug('Checking signature of actor %s...', signatureObject.creator)
 
-  let account = await AccountModel.loadByUrl(signatureObject.creator)
-
-  // We don't have this account in our database, fetch it on remote
-  if (!account) {
-    account = await fetchRemoteAccount(signatureObject.creator)
-
-    if (!account) {
-      return res.sendStatus(403)
-    }
-
-    // Save our new account and its server in database
-    await saveAccountAndServerIfNotExist(account)
+  let actor: ActorModel
+  try {
+    actor = await getOrCreateActorAndServerAndModel(signatureObject.creator)
+  } catch (err) {
+    logger.error('Cannot create remote actor and check signature.', err)
+    return res.sendStatus(403)
   }
 
-  const verified = await isSignatureVerified(account, req.body)
+  const verified = await isSignatureVerified(actor, req.body)
   if (verified === false) return res.sendStatus(403)
 
   res.locals.signature = {
-    account
+    actor
   }
 
   return next()

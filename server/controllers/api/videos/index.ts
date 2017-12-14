@@ -11,7 +11,7 @@ import {
   resetSequelizeInstance,
   retryTransactionWrapper
 } from '../../../helpers'
-import { getServerAccount } from '../../../helpers/utils'
+import { getServerActor } from '../../../helpers/utils'
 import {
   CONFIG,
   sequelizeTypescript,
@@ -22,8 +22,7 @@ import {
   VIDEO_PRIVACIES
 } from '../../../initializers'
 import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServer } from '../../../lib/activitypub'
-import { sendAddVideo, sendCreateViewToOrigin, sendUpdateVideo } from '../../../lib/activitypub/send'
-import { sendCreateViewToVideoFollowers } from '../../../lib/index'
+import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler'
 import {
   asyncMiddleware,
@@ -248,7 +247,8 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     // Don't send video to remote servers, it is private
     if (video.privacy === VideoPrivacy.PRIVATE) return videoCreated
 
-    await sendAddVideo(video, t)
+    await sendCreateVideo(video, t)
+    // TODO: share by video channel
     await shareVideoByServer(video, t)
 
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
@@ -304,7 +304,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       // Video is not private anymore, send a create action to remote servers
       if (wasPrivateVideo === true && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE) {
-        await sendAddVideo(videoInstanceUpdated, t)
+        await sendCreateVideo(videoInstanceUpdated, t)
+        // TODO: Send by video channel
         await shareVideoByServer(videoInstanceUpdated, t)
       }
     })
@@ -330,7 +331,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
   await videoInstance.increment('views')
-  const serverAccount = await getServerAccount()
+  const serverAccount = await getServerActor()
 
   if (videoInstance.isOwned()) {
     await sendCreateViewToVideoFollowers(serverAccount, videoInstance, undefined)

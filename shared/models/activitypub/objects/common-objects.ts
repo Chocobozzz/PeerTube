@@ -23,3 +23,8 @@ export interface ActivityUrlObject {
   width: number
   size?: number
 }
+
+export interface ActivityPubAttributedTo {
+  type: 'Group' | 'Person'
+  id: string
+}

@@ -1,29 +1,74 @@
+import { values } from 'lodash'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, Is, IsUUID, Model, Table,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  HasMany,
+  HasOne,
+  Is,
+  IsUUID,
+  Model,
+  Scopes,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { ActivityPubActorType } from '../../../shared/models/activitypub'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { activityPubContextify } from '../../helpers'
 import {
   isActivityPubUrlValid,
   isActorFollowersCountValid,
-  isActorFollowingCountValid, isActorPreferredUsernameValid,
+  isActorFollowingCountValid,
+  isActorNameValid,
   isActorPrivateKeyValid,
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub'
-import { isUserUsernameValid } from '../../helpers/custom-validators/users'
-import { AVATARS_DIR, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
-import { AccountFollowModel } from '../account/account-follow'
+import { ACTIVITY_PUB_ACTOR_TYPES, AVATARS_DIR, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
+import { AccountModel } from '../account/account'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { throwIfNotValid } from '../utils'
+import { VideoChannelModel } from '../video/video-channel'
+import { ActorFollowModel } from './actor-follow'
 
+enum ScopeNames {
+  FULL = 'FULL'
+}
+
+@Scopes({
+  [ScopeNames.FULL]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: false
+      },
+      {
+        model: () => VideoChannelModel,
+        required: false
+      }
+    ]
+  }
+})
 @Table({
-  tableName: 'actor'
+  tableName: 'actor',
+  indexes: [
+    {
+      fields: [ 'name', 'serverId' ],
+      unique: true
+    }
+  ]
 })
 export class ActorModel extends Model<ActorModel> {
+
+  @AllowNull(false)
+  @Column(DataType.ENUM(values(ACTIVITY_PUB_ACTOR_TYPES)))
+  type: ActivityPubActorType
 
   @AllowNull(false)
   @Default(DataType.UUIDV4)
@@ -32,7 +77,7 @@ export class ActorModel extends Model<ActorModel> {
   uuid: string
 
   @AllowNull(false)
-  @Is('ActorName', value => throwIfNotValid(value, isActorPreferredUsernameValid, 'actor name'))
+  @Is('ActorName', value => throwIfNotValid(value, isActorNameValid, 'actor name'))
   @Column
   name: string
 
@@ -104,24 +149,24 @@ export class ActorModel extends Model<ActorModel> {
   })
   Avatar: AvatarModel
 
-  @HasMany(() => AccountFollowModel, {
+  @HasMany(() => ActorFollowModel, {
     foreignKey: {
-      name: 'accountId',
+      name: 'actorId',
       allowNull: false
     },
     onDelete: 'cascade'
   })
-  AccountFollowing: AccountFollowModel[]
+  AccountFollowing: ActorFollowModel[]
 
-  @HasMany(() => AccountFollowModel, {
+  @HasMany(() => ActorFollowModel, {
     foreignKey: {
-      name: 'targetAccountId',
+      name: 'targetActorId',
       allowNull: false
     },
     as: 'followers',
     onDelete: 'cascade'
   })
-  AccountFollowers: AccountFollowModel[]
+  AccountFollowers: ActorFollowModel[]
 
   @ForeignKey(() => ServerModel)
   @Column
@@ -135,6 +180,36 @@ export class ActorModel extends Model<ActorModel> {
   })
   Server: ServerModel
 
+  @HasOne(() => AccountModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  Account: AccountModel
+
+  @HasOne(() => VideoChannelModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'cascade'
+  })
+  VideoChannel: VideoChannelModel
+
+  static load (id: number) {
+    return ActorModel.scope(ScopeNames.FULL).findById(id)
+  }
+
+  static loadByUUID (uuid: string) {
+    const query = {
+      where: {
+        uuid
+      }
+    }
+
+    return ActorModel.scope(ScopeNames.FULL).findOne(query)
+  }
+
   static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
     const query = {
       where: {
@@ -145,7 +220,48 @@ export class ActorModel extends Model<ActorModel> {
       transaction
     }
 
-    return ActorModel.findAll(query)
+    return ActorModel.scope(ScopeNames.FULL).findAll(query)
+  }
+
+  static loadLocalByName (name: string) {
+    const query = {
+      where: {
+        name,
+        serverId: null
+      }
+    }
+
+    return ActorModel.scope(ScopeNames.FULL).findOne(query)
+  }
+
+  static loadByNameAndHost (name: string, host: string) {
+    const query = {
+      where: {
+        name
+      },
+      include: [
+        {
+          model: ServerModel,
+          required: true,
+          where: {
+            host
+          }
+        }
+      ]
+    }
+
+    return ActorModel.scope(ScopeNames.FULL).findOne(query)
+  }
+
+  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        url
+      },
+      transaction
+    }
+
+    return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
   toFormattedJSON () {
@@ -167,6 +283,7 @@ export class ActorModel extends Model<ActorModel> {
 
     return {
       id: this.id,
+      uuid: this.uuid,
       host,
       score,
       followingCount: this.followingCount,
@@ -175,28 +292,30 @@ export class ActorModel extends Model<ActorModel> {
     }
   }
 
-  toActivityPubObject (name: string, uuid: string, type: 'Account' | 'VideoChannel') {
+  toActivityPubObject (preferredUsername: string, type: 'Account' | 'Application' | 'VideoChannel') {
     let activityPubType
     if (type === 'Account') {
-      activityPubType = this.serverId ? 'Application' as 'Application' : 'Person' as 'Person'
+      activityPubType = 'Person' as 'Person'
+    } else if (type === 'Application') {
+      activityPubType = 'Application' as 'Application'
     } else { // VideoChannel
-      activityPubType = 'Group'
+      activityPubType = 'Group' as 'Group'
     }
 
     const json = {
-      type,
+      type: activityPubType,
       id: this.url,
       following: this.getFollowingUrl(),
       followers: this.getFollowersUrl(),
       inbox: this.inboxUrl,
       outbox: this.outboxUrl,
-      preferredUsername: name,
+      preferredUsername,
       url: this.url,
-      name,
+      name: this.name,
       endpoints: {
         sharedInbox: this.sharedInboxUrl
       },
-      uuid,
+      uuid: this.uuid,
       publicKey: {
         id: this.getPublicKeyUrl(),
         owner: this.url,
@@ -212,11 +331,11 @@ export class ActorModel extends Model<ActorModel> {
       attributes: [ 'sharedInboxUrl' ],
       include: [
         {
-          model: AccountFollowModel,
+          model: ActorFollowModel,
           required: true,
           as: 'followers',
           where: {
-            targetAccountId: this.id
+            targetActorId: this.id
           }
         }
       ],

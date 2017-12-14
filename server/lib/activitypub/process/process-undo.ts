@@ -3,8 +3,9 @@ import { DislikeObject } from '../../../../shared/models/activitypub/objects'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
-import { AccountFollowModel } from '../../../models/account/account-follow'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
 import { forwardActivity } from '../send/misc'
 
@@ -32,21 +33,21 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processUndoLike (actor: string, activity: ActivityUndo) {
+function processUndoLike (actorUrl: string, activity: ActivityUndo) {
   const options = {
-    arguments: [ actor, activity ],
+    arguments: [ actorUrl, activity ],
     errorMessage: 'Cannot undo like with many retries.'
   }
 
   return retryTransactionWrapper(undoLike, options)
 }
 
-function undoLike (actor: string, activity: ActivityUndo) {
+function undoLike (actorUrl: string, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
   return sequelizeTypescript.transaction(async t => {
-    const byAccount = await AccountModel.loadByUrl(actor, t)
-    if (!byAccount) throw new Error('Unknown account ' + actor)
+    const byAccount = await AccountModel.loadByUrl(actorUrl, t)
+    if (!byAccount) throw new Error('Unknown account ' + actorUrl)
 
     const video = await VideoModel.loadByUrlAndPopulateAccount(likeActivity.object, t)
     if (!video) throw new Error('Unknown video ' + likeActivity.actor)
@@ -59,27 +60,27 @@ function undoLike (actor: string, activity: ActivityUndo) {
 
     if (video.isOwned()) {
       // Don't resend the activity to the sender
-      const exceptions = [ byAccount ]
+      const exceptions = [ byAccount.Actor ]
       await forwardActivity(activity, t, exceptions)
     }
   })
 }
 
-function processUndoDislike (actor: string, activity: ActivityUndo) {
+function processUndoDislike (actorUrl: string, activity: ActivityUndo) {
   const options = {
-    arguments: [ actor, activity ],
+    arguments: [ actorUrl, activity ],
     errorMessage: 'Cannot undo dislike with many retries.'
   }
 
   return retryTransactionWrapper(undoDislike, options)
 }
 
-function undoDislike (actor: string, activity: ActivityUndo) {
+function undoDislike (actorUrl: string, activity: ActivityUndo) {
   const dislike = activity.object.object as DislikeObject
 
   return sequelizeTypescript.transaction(async t => {
-    const byAccount = await AccountModel.loadByUrl(actor, t)
-    if (!byAccount) throw new Error('Unknown account ' + actor)
+    const byAccount = await AccountModel.loadByUrl(actorUrl, t)
+    if (!byAccount) throw new Error('Unknown account ' + actorUrl)
 
     const video = await VideoModel.loadByUrlAndPopulateAccount(dislike.object, t)
     if (!video) throw new Error('Unknown video ' + dislike.actor)
@@ -92,30 +93,30 @@ function undoDislike (actor: string, activity: ActivityUndo) {
 
     if (video.isOwned()) {
       // Don't resend the activity to the sender
-      const exceptions = [ byAccount ]
+      const exceptions = [ byAccount.Actor ]
       await forwardActivity(activity, t, exceptions)
     }
   })
 }
 
-function processUndoFollow (actor: string, followActivity: ActivityFollow) {
+function processUndoFollow (actorUrl: string, followActivity: ActivityFollow) {
   const options = {
-    arguments: [ actor, followActivity ],
+    arguments: [ actorUrl, followActivity ],
     errorMessage: 'Cannot undo follow with many retries.'
   }
 
   return retryTransactionWrapper(undoFollow, options)
 }
 
-function undoFollow (actor: string, followActivity: ActivityFollow) {
+function undoFollow (actorUrl: string, followActivity: ActivityFollow) {
   return sequelizeTypescript.transaction(async t => {
-    const follower = await AccountModel.loadByUrl(actor, t)
-    const following = await AccountModel.loadByUrl(followActivity.object, t)
-    const accountFollow = await AccountFollowModel.loadByAccountAndTarget(follower.id, following.id, t)
+    const follower = await ActorModel.loadByUrl(actorUrl, t)
+    const following = await ActorModel.loadByUrl(followActivity.object, t)
+    const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, following.id, t)
 
-    if (!accountFollow) throw new Error(`'Unknown account follow ${follower.id} -> ${following.id}.`)
+    if (!actorFollow) throw new Error(`'Unknown actor follow ${follower.id} -> ${following.id}.`)
 
-    await accountFollow.destroy({ transaction: t })
+    await actorFollow.destroy({ transaction: t })
 
     return undefined
   })

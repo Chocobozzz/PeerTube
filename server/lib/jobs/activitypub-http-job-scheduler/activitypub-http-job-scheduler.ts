@@ -1,7 +1,7 @@
 import { JobCategory } from '../../../../shared'
 import { buildSignedActivity, logger } from '../../../helpers'
 import { ACTIVITY_PUB } from '../../../initializers'
-import { AccountModel } from '../../../models/account/account'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { JobHandler, JobScheduler } from '../job-scheduler'
 
 import * as activitypubHttpBroadcastHandler from './activitypub-http-broadcast-handler'
@@ -10,7 +10,7 @@ import * as activitypubHttpUnicastHandler from './activitypub-http-unicast-handl
 
 type ActivityPubHttpPayload = {
   uris: string[]
-  signatureAccountId?: number
+  signatureActorId?: number
   body?: any
   attemptNumber?: number
 }
@@ -44,10 +44,10 @@ function maybeRetryRequestLater (err: Error, payload: ActivityPubHttpPayload, ur
 async function computeBody (payload: ActivityPubHttpPayload) {
   let body = payload.body
 
-  if (payload.signatureAccountId) {
-    const accountSignature = await AccountModel.load(payload.signatureAccountId)
-    if (!accountSignature) throw new Error('Unknown signature account id.')
-    body = await buildSignedActivity(accountSignature, payload.body)
+  if (payload.signatureActorId) {
+    const actorSignature = await ActorModel.load(payload.signatureActorId)
+    if (!actorSignature) throw new Error('Unknown signature account id.')
+    body = await buildSignedActivity(actorSignature, payload.body)
   }
 
   return body

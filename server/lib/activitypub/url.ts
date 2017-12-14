@@ -1,16 +1,19 @@
 import { CONFIG } from '../../initializers'
-import { AccountModel } from '../../models/account/account'
-import { AccountFollowModel } from '../../models/account/account-follow'
+import { ActorModel } from '../../models/activitypub/actor'
+import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
 import { VideoAbuseModel } from '../../models/video/video-abuse'
-import { VideoChannelModel } from '../../models/video/video-channel'
 
 function getVideoActivityPubUrl (video: VideoModel) {
   return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
 }
 
-function getVideoChannelActivityPubUrl (videoChannel: VideoChannelModel) {
-  return CONFIG.WEBSERVER.URL + '/video-channels/' + videoChannel.uuid
+function getVideoChannelActivityPubUrl (videoChannelUUID: string) {
+  return CONFIG.WEBSERVER.URL + '/video-channels/' + videoChannelUUID
+}
+
+function getApplicationActivityPubUrl () {
+  return CONFIG.WEBSERVER.URL + '/application/peertube'
 }
 
 function getAccountActivityPubUrl (accountName: string) {
@@ -21,34 +24,34 @@ function getVideoAbuseActivityPubUrl (videoAbuse: VideoAbuseModel) {
   return CONFIG.WEBSERVER.URL + '/admin/video-abuses/' + videoAbuse.id
 }
 
-function getVideoViewActivityPubUrl (byAccount: AccountModel, video: VideoModel) {
-  return video.url + '/views/' + byAccount.uuid + '/' + new Date().toISOString()
+function getVideoViewActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+  return video.url + '/views/' + byActor.uuid + '/' + new Date().toISOString()
 }
 
-function getVideoLikeActivityPubUrl (byAccount: AccountModel, video: VideoModel) {
-  return byAccount.url + '/likes/' + video.id
+function getVideoLikeActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+  return byActor.url + '/likes/' + video.id
 }
 
-function getVideoDislikeActivityPubUrl (byAccount: AccountModel, video: VideoModel) {
-  return byAccount.url + '/dislikes/' + video.id
+function getVideoDislikeActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+  return byActor.url + '/dislikes/' + video.id
 }
 
-function getAccountFollowActivityPubUrl (accountFollow: AccountFollowModel) {
-  const me = accountFollow.AccountFollower
-  const following = accountFollow.AccountFollowing
+function getActorFollowActivityPubUrl (actorFollow: ActorFollowModel) {
+  const me = actorFollow.ActorFollower
+  const following = actorFollow.ActorFollowing
 
   return me.url + '/follows/' + following.id
 }
 
-function getAccountFollowAcceptActivityPubUrl (accountFollow: AccountFollowModel) {
-  const follower = accountFollow.AccountFollower
-  const me = accountFollow.AccountFollowing
+function getActorFollowAcceptActivityPubUrl (actorFollow: ActorFollowModel) {
+  const follower = actorFollow.ActorFollower
+  const me = actorFollow.ActorFollowing
 
   return follower.url + '/accepts/follows/' + me.id
 }
 
-function getAnnounceActivityPubUrl (originalUrl: string, byAccount: AccountModel) {
-  return originalUrl + '/announces/' + byAccount.id
+function getAnnounceActivityPubUrl (originalUrl: string, byActor: ActorModel) {
+  return originalUrl + '/announces/' + byActor.id
 }
 
 function getUpdateActivityPubUrl (originalUrl: string, updatedAt: string) {
@@ -60,12 +63,13 @@ function getUndoActivityPubUrl (originalUrl: string) {
 }
 
 export {
+  getApplicationActivityPubUrl,
   getVideoActivityPubUrl,
   getVideoChannelActivityPubUrl,
   getAccountActivityPubUrl,
   getVideoAbuseActivityPubUrl,
-  getAccountFollowActivityPubUrl,
-  getAccountFollowAcceptActivityPubUrl,
+  getActorFollowActivityPubUrl,
+  getActorFollowAcceptActivityPubUrl,
   getAnnounceActivityPubUrl,
   getUpdateActivityPubUrl,
   getUndoActivityPubUrl,

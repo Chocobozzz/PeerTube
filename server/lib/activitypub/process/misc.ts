@@ -1,29 +1,13 @@
 import * as magnetUtil from 'magnet-uri'
 import { VideoTorrentObject } from '../../../../shared'
-import { VideoChannelObject } from '../../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { doRequest } from '../../../helpers'
 import { isVideoFileInfoHashValid } from '../../../helpers/custom-validators/videos'
 import { ACTIVITY_PUB, VIDEO_MIMETYPE_EXT } from '../../../initializers'
-import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { VideoChannelShareModel } from '../../../models/video/video-channel-share'
 import { VideoShareModel } from '../../../models/video/video-share'
-import { getOrCreateAccountAndServer } from '../account'
-
-function videoChannelActivityObjectToDBAttributes (videoChannelObject: VideoChannelObject, account: AccountModel) {
-  return {
-    name: videoChannelObject.name,
-    description: videoChannelObject.content,
-    uuid: videoChannelObject.uuid,
-    url: videoChannelObject.id,
-    createdAt: new Date(videoChannelObject.published),
-    updatedAt: new Date(videoChannelObject.updated),
-    remote: true,
-    accountId: account.id
-  }
-}
+import { getOrCreateActorAndServerAndModel } from '../actor'
 
 async function videoActivityObjectToDBAttributes (
   videoChannel: VideoChannelModel,
@@ -120,41 +104,17 @@ async function addVideoShares (instance: VideoModel, shares: string[]) {
       uri: share,
       json: true
     })
-    const actor = json['actor']
-    if (!actor) continue
+    const actorUrl = json['actor']
+    if (!actorUrl) continue
 
-    const account = await getOrCreateAccountAndServer(actor)
+    const actor = await getOrCreateActorAndServerAndModel(actorUrl)
 
     const entry = {
-      accountId: account.id,
+      actorId: actor.id,
       videoId: instance.id
     }
 
     await VideoShareModel.findOrCreate({
-      where: entry,
-      defaults: entry
-    })
-  }
-}
-
-async function addVideoChannelShares (instance: VideoChannelModel, shares: string[]) {
-  for (const share of shares) {
-    // Fetch url
-    const json = await doRequest({
-      uri: share,
-      json: true
-    })
-    const actor = json['actor']
-    if (!actor) continue
-
-    const account = await getOrCreateAccountAndServer(actor)
-
-    const entry = {
-      accountId: account.id,
-      videoChannelId: instance.id
-    }
-
-    await VideoChannelShareModel.findOrCreate({
       where: entry,
       defaults: entry
     })
@@ -166,7 +126,5 @@ async function addVideoChannelShares (instance: VideoChannelModel, shares: strin
 export {
   videoFileActivityUrlToDBAttributes,
   videoActivityObjectToDBAttributes,
-  videoChannelActivityObjectToDBAttributes,
-  addVideoChannelShares,
   addVideoShares
 }

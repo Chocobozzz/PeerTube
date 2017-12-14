@@ -184,25 +184,9 @@ describe('Test server follows API validators', function () {
                 .expect(403)
       })
 
-      it('Should fail with an undefined id', async function () {
-        await request(server.url)
-                .delete(path + '/' + undefined)
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(400)
-      })
-
-      it('Should fail with an invalid id', async function () {
-	      await request(server.url)
-                .delete(path + '/foobar')
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(400)
-      })
-
       it('Should fail we do not follow this server', async function () {
 	      await request(server.url)
-                .delete(path + '/-1')
+                .delete(path + '/example.com')
                 .set('Authorization', 'Bearer ' + server.accessToken)
                 .set('Accept', 'application/json')
                 .expect(404)

@@ -1,26 +1,13 @@
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull,
-  BeforeCreate,
-  BeforeUpdate,
-  Column, CreatedAt,
-  DataType,
-  Default, DefaultScope,
-  HasMany,
-  HasOne,
-  Is,
-  IsEmail,
-  Model, Scopes,
-  Table, UpdatedAt
+  AllowNull, BeforeCreate, BeforeUpdate, Column, CreatedAt, DataType, Default, DefaultScope, HasMany, HasOne, Is, IsEmail, Model,
+  Scopes, Table, UpdatedAt
 } from 'sequelize-typescript'
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
+import { comparePassword, cryptPassword } from '../../helpers'
 import {
-  comparePassword,
-  cryptPassword
-} from '../../helpers'
-import {
-  isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
-  isUserVideoQuotaValid, isUserAutoPlayVideoValid
+  isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
+  isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
 import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getSort, throwIfNotValid } from '../utils'

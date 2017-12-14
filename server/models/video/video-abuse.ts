@@ -3,7 +3,6 @@ import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
 import { isVideoAbuseReasonValid } from '../../helpers/custom-validators/videos'
 import { CONFIG } from '../../initializers'
 import { AccountModel } from '../account/account'
-import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 
@@ -63,13 +62,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       include: [
         {
           model: AccountModel,
-          required: true,
-          include: [
-            {
-              model: ServerModel,
-              required: false
-            }
-          ]
+          required: true
         },
         {
           model: VideoModel,
@@ -87,8 +80,8 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   toFormattedJSON () {
     let reporterServerHost
 
-    if (this.Account.Server) {
-      reporterServerHost = this.Account.Server.host
+    if (this.Account.Actor.Server) {
+      reporterServerHost = this.Account.Actor.Server.host
     } else {
       // It means it's our video
       reporterServerHost = CONFIG.WEBSERVER.HOST

@@ -66,9 +66,10 @@ import {
   VIDEO_PRIVACIES
 } from '../../initializers'
 import { getAnnounceActivityPubUrl } from '../../lib/activitypub'
-import { sendDeleteVideo } from '../../lib/index'
+import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
+import { ActorModel } from '../activitypub/actor'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
@@ -79,8 +80,7 @@ import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
 
 enum ScopeNames {
-  NOT_IN_BLACKLIST = 'NOT_IN_BLACKLIST',
-  PUBLIC = 'PUBLIC',
+  AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
@@ -89,17 +89,13 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.NOT_IN_BLACKLIST]: {
+  [ScopeNames.AVAILABLE_FOR_LIST]: {
     where: {
       id: {
         [Sequelize.Op.notIn]: Sequelize.literal(
           '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
         )
-      }
-    }
-  },
-  [ScopeNames.PUBLIC]: {
-    where: {
+      },
       privacy: VideoPrivacy.PUBLIC
     }
   },
@@ -114,8 +110,14 @@ enum ScopeNames {
             required: true,
             include: [
               {
-                model: () => ServerModel,
-                required: false
+                model: () => ActorModel,
+                required: true,
+                include: [
+                  {
+                    model: () => ServerModel,
+                    required: false
+                  }
+                ]
               }
             ]
           }
@@ -138,7 +140,7 @@ enum ScopeNames {
     include: [
       {
         model: () => VideoShareModel,
-        include: [ () => AccountModel ]
+        include: [ () => ActorModel ]
       }
     ]
   },
@@ -271,7 +273,7 @@ export class VideoModel extends Model<VideoModel> {
 
   @BelongsTo(() => VideoChannelModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'cascade'
   })
@@ -351,14 +353,15 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_FILES).findAll()
   }
 
-  static listAllAndSharedByAccountForOutbox (accountId: number, start: number, count: number) {
+  static listAllAndSharedByActorForOutbox (actorId: number, start: number, count: number) {
     function getRawQuery (select: string) {
       const queryVideo = 'SELECT ' + select + ' FROM "video" AS "Video" ' +
         'INNER JOIN "videoChannel" AS "VideoChannel" ON "VideoChannel"."id" = "Video"."channelId" ' +
-        'WHERE "VideoChannel"."accountId" = ' + accountId
+        'INNER JOIN "account" AS "Account" ON "Account"."id" = "VideoChannel"."accountId" ' +
+        'WHERE "Account"."actorId" = ' + actorId
       const queryVideoShare = 'SELECT ' + select + ' FROM "videoShare" AS "VideoShare" ' +
         'INNER JOIN "video" AS "Video" ON "Video"."id" = "VideoShare"."videoId" ' +
-        'WHERE "VideoShare"."accountId" = ' + accountId
+        'WHERE "VideoShare"."actorId" = ' + actorId
 
       return `(${queryVideo}) UNION (${queryVideoShare})`
     }
@@ -388,11 +391,16 @@ export class VideoModel extends Model<VideoModel> {
                 }
               },
               {
-                accountId
+                actorId
               }
             ]
           },
-          include: [ AccountModel ]
+          include: [
+            {
+              model: ActorModel,
+              required: true
+            }
+          ]
         },
         {
           model: VideoChannelModel,
@@ -469,7 +477,7 @@ export class VideoModel extends Model<VideoModel> {
       order: [ getSort(sort) ]
     }
 
-    return VideoModel.scope([ ScopeNames.NOT_IN_BLACKLIST, ScopeNames.PUBLIC, ScopeNames.WITH_ACCOUNT ])
+    return VideoModel.scope([ ScopeNames.AVAILABLE_FOR_LIST, ScopeNames.WITH_ACCOUNT ])
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {
@@ -541,7 +549,13 @@ export class VideoModel extends Model<VideoModel> {
 
     const accountInclude: IIncludeOptions = {
       model: AccountModel,
-      include: [ serverInclude ]
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          include: [ serverInclude ]
+        }
+      ]
     }
 
     const videoChannelInclude: IIncludeOptions = {
@@ -586,7 +600,7 @@ export class VideoModel extends Model<VideoModel> {
       videoChannelInclude, tagInclude
     ]
 
-    return VideoModel.scope([ ScopeNames.NOT_IN_BLACKLIST, ScopeNames.PUBLIC ])
+    return VideoModel.scope([ ScopeNames.AVAILABLE_FOR_LIST ])
       .findAndCountAll(query).then(({ rows, count }) => {
         return {
           data: rows,
@@ -688,8 +702,8 @@ export class VideoModel extends Model<VideoModel> {
   toFormattedJSON () {
     let serverHost
 
-    if (this.VideoChannel.Account.Server) {
-      serverHost = this.VideoChannel.Account.Server.host
+    if (this.VideoChannel.Account.Actor.Server) {
+      serverHost = this.VideoChannel.Account.Actor.Server.host
     } else {
       // It means it's our video
       serverHost = CONFIG.WEBSERVER.HOST
@@ -805,9 +819,9 @@ export class VideoModel extends Model<VideoModel> {
 
       for (const rate of this.AccountVideoRates) {
         if (rate.type === 'like') {
-          likes.push(rate.Account.url)
+          likes.push(rate.Account.Actor.url)
         } else if (rate.type === 'dislike') {
-          dislikes.push(rate.Account.url)
+          dislikes.push(rate.Account.Actor.url)
         }
       }
 
@@ -820,7 +834,7 @@ export class VideoModel extends Model<VideoModel> {
       const shares: string[] = []
 
       for (const videoShare of this.VideoShares) {
-        const shareUrl = getAnnounceActivityPubUrl(this.url, videoShare.Account)
+        const shareUrl = getAnnounceActivityPubUrl(this.url, videoShare.Actor)
         shares.push(shareUrl)
       }
 
@@ -886,7 +900,13 @@ export class VideoModel extends Model<VideoModel> {
       url,
       likes: likesObject,
       dislikes: dislikesObject,
-      shares: sharesObject
+      shares: sharesObject,
+      attributedTo: [
+        {
+          type: 'Group',
+          id: this.VideoChannel.Actor.url
+        }
+      ]
     }
   }
 
@@ -1030,8 +1050,8 @@ export class VideoModel extends Model<VideoModel> {
       baseUrlHttp = CONFIG.WEBSERVER.URL
       baseUrlWs = CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
     } else {
-      baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + this.VideoChannel.Account.Server.host
-      baseUrlWs = REMOTE_SCHEME.WS + '://' + this.VideoChannel.Account.Server.host
+      baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + this.VideoChannel.Account.Actor.Server.host
+      baseUrlWs = REMOTE_SCHEME.WS + '://' + this.VideoChannel.Account.Actor.Server.host
     }
 
     return { baseUrlHttp, baseUrlWs }

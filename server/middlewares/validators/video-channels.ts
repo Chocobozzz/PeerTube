@@ -3,7 +3,7 @@ import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
 import { logger } from '../../helpers'
 import { isAccountIdExist } from '../../helpers/custom-validators/accounts'
-import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,
   isVideoChannelExist,
@@ -11,7 +11,6 @@ import {
 } from '../../helpers/custom-validators/video-channels'
 import { UserModel } from '../../models/account/user'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { VideoChannelShareModel } from '../../models/video/video-channel-share'
 import { areValidationErrors } from './utils'
 
 const listVideoAccountChannelsValidator = [
@@ -98,28 +97,6 @@ const videoChannelsGetValidator = [
   }
 ]
 
-const videoChannelsShareValidator = [
-  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('accountId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid account id'),
-
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoChannelShare parameters', { parameters: req.params })
-
-    if (areValidationErrors(req, res)) return
-    if (!await isVideoChannelExist(req.params.id, res)) return
-
-    const share = await VideoChannelShareModel.load(res.locals.video.id, req.params.accountId, undefined)
-    if (!share) {
-      return res.status(404)
-        .end()
-    }
-
-    res.locals.videoChannelShare = share
-
-    return next()
-  }
-]
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -127,15 +104,13 @@ export {
   videoChannelsAddValidator,
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
-  videoChannelsGetValidator,
-  videoChannelsShareValidator
+  videoChannelsGetValidator
 }
 
 // ---------------------------------------------------------------------------
 
 function checkUserCanDeleteVideoChannel (user: UserModel, videoChannel: VideoChannelModel, res: express.Response) {
-  // Retrieve the user who did the request
-  if (videoChannel.isOwned() === false) {
+  if (videoChannel.Actor.isOwned() === false) {
     res.status(403)
               .json({ error: 'Cannot remove video channel of another server.' })
               .end()

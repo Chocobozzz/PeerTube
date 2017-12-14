@@ -2,11 +2,6 @@ import { isDateValid, isUUIDValid } from '../misc'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
 import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
-function isVideoChannelCreateActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Create') &&
-    isVideoChannelObjectValid(activity.object)
-}
-
 function isVideoChannelUpdateActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
     isVideoChannelObjectValid(activity.object)
@@ -29,7 +24,6 @@ function isVideoChannelObjectValid (videoChannel: any) {
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoChannelCreateActivityValid,
   isVideoChannelUpdateActivityValid,
   isVideoChannelDeleteActivityValid,
   isVideoChannelObjectValid

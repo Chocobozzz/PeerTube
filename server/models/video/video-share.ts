@@ -1,18 +1,18 @@
 import * as Sequelize from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
-import { AccountModel } from '../account/account'
+import { ActorModel } from '../activitypub/actor'
 import { VideoModel } from './video'
 
 enum ScopeNames {
   FULL = 'FULL',
-  WITH_ACCOUNT = 'WITH_ACCOUNT'
+  WITH_ACTOR = 'WITH_ACTOR'
 }
 
 @Scopes({
   [ScopeNames.FULL]: {
     include: [
       {
-        model: () => AccountModel,
+        model: () => ActorModel,
         required: true
       },
       {
@@ -21,10 +21,10 @@ enum ScopeNames {
       }
     ]
   },
-  [ScopeNames.WITH_ACCOUNT]: {
+  [ScopeNames.WITH_ACTOR]: {
     include: [
       {
-        model: () => AccountModel,
+        model: () => ActorModel,
         required: true
       }
     ]
@@ -34,7 +34,7 @@ enum ScopeNames {
   tableName: 'videoShare',
   indexes: [
     {
-      fields: [ 'accountId' ]
+      fields: [ 'actorId' ]
     },
     {
       fields: [ 'videoId' ]
@@ -48,17 +48,17 @@ export class VideoShareModel extends Model<VideoShareModel> {
   @UpdatedAt
   updatedAt: Date
 
-  @ForeignKey(() => AccountModel)
+  @ForeignKey(() => ActorModel)
   @Column
-  accountId: number
+  actorId: number
 
-  @BelongsTo(() => AccountModel, {
+  @BelongsTo(() => ActorModel, {
     foreignKey: {
       allowNull: false
     },
     onDelete: 'cascade'
   })
-  Account: AccountModel
+  Actor: ActorModel
 
   @ForeignKey(() => VideoModel)
   @Column
@@ -72,24 +72,24 @@ export class VideoShareModel extends Model<VideoShareModel> {
   })
   Video: VideoModel
 
-  static load (accountId: number, videoId: number, t: Sequelize.Transaction) {
-    return VideoShareModel.scope(ScopeNames.WITH_ACCOUNT).findOne({
+  static load (actorId: number, videoId: number, t: Sequelize.Transaction) {
+    return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
       where: {
-        accountId,
+        actorId,
         videoId
       },
       transaction: t
     })
   }
 
-  static loadAccountsByShare (videoId: number, t: Sequelize.Transaction) {
+  static loadActorsByShare (videoId: number, t: Sequelize.Transaction) {
     const query = {
       where: {
         videoId
       },
       include: [
         {
-          model: AccountModel,
+          model: ActorModel,
           required: true
         }
       ],
@@ -97,6 +97,6 @@ export class VideoShareModel extends Model<VideoShareModel> {
     }
 
     return VideoShareModel.scope(ScopeNames.FULL).findAll(query)
-      .then(res => res.map(r => r.Account))
+      .then(res => res.map(r => r.Actor))
   }
 }

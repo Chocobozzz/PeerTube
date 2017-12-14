@@ -5,6 +5,7 @@ import { isActivityValid } from '../../helpers/custom-validators/activitypub/act
 import { processActivities } from '../../lib/activitypub/process/process'
 import { asyncMiddleware, checkSignature, localAccountValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
+import { ActorModel } from '../../models/activitypub/actor'
 
 const inboxRouter = express.Router()
 
@@ -48,7 +49,14 @@ async function inboxController (req: express.Request, res: express.Response, nex
   activities = activities.filter(a => isActivityValid(a))
   logger.debug('We keep %d activities.', activities.length, { activities })
 
-  await processActivities(activities, res.locals.signature.account, res.locals.account)
+  let specificActor: ActorModel = undefined
+  if (res.locals.account) {
+    specificActor = res.locals.account
+  } else if (res.locals.videoChannel) {
+    specificActor = res.locals.videoChannel
+  }
+
+  await processActivities(activities, res.locals.signature.actor, specificActor)
 
   res.status(204).end()
 }

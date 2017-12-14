@@ -10,10 +10,10 @@ import {
   isVideoTruncatedDescriptionValid,
   isVideoViewsValid
 } from '../videos'
-import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
+import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 
-function isVideoTorrentAddActivityValid (activity: any) {
-  return isBaseActivityValid(activity, 'Add') &&
+function isVideoTorrentCreateActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Create') &&
     isVideoTorrentObjectValid(activity.object)
 }
 
@@ -43,6 +43,8 @@ function isActivityPubVideoDurationValid (value: string) {
 }
 
 function isVideoTorrentObjectValid (video: any) {
+  console.log(video)
+
   return video.type === 'Video' &&
     isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
@@ -59,13 +61,15 @@ function isVideoTorrentObjectValid (video: any) {
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     isRemoteVideoIconValid(video.icon) &&
     setValidRemoteVideoUrls(video) &&
-    video.url.length !== 0
+    video.url.length !== 0 &&
+    setValidAttributedTo(video) &&
+    video.attributedTo.length !== 0
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoTorrentAddActivityValid,
+  isVideoTorrentCreateActivityValid,
   isVideoTorrentUpdateActivityValid,
   isVideoTorrentDeleteActivityValid,
   isVideoFlagValid

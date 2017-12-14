@@ -5,11 +5,11 @@ function isWebfingerResourceValid (value: string) {
   if (!exists(value)) return false
   if (value.startsWith('acct:') === false) return false
 
-  const accountWithHost = value.substr(5)
-  const accountParts = accountWithHost.split('@')
-  if (accountParts.length !== 2) return false
+  const actorWithHost = value.substr(5)
+  const actorParts = actorWithHost.split('@')
+  if (actorParts.length !== 2) return false
 
-  const host = accountParts[1]
+  const host = actorParts[1]
 
   return host === CONFIG.WEBSERVER.HOST
 }

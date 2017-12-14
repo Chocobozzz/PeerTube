@@ -1,6 +1,6 @@
 import * as WebFinger from 'webfinger.js'
 import { WebFingerData } from '../../shared'
-import { fetchRemoteAccount } from '../lib/activitypub'
+import { ActorModel } from '../models/activitypub/actor'
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators/activitypub'
 
@@ -11,9 +11,23 @@ const webfinger = new WebFinger({
   request_timeout: 3000
 })
 
-async function getAccountFromWebfinger (nameWithHost: string) {
-  const webfingerData: WebFingerData = await webfingerLookup(nameWithHost)
+async function loadActorUrlOrGetFromWebfinger (name: string, host: string) {
+  const actor = await ActorModel.loadByNameAndHost(name, host)
+  if (actor) return actor.url
 
+  const webfingerData: WebFingerData = await webfingerLookup(name + '@' + host)
+  return getLinkOrThrow(webfingerData)
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  loadActorUrlOrGetFromWebfinger
+}
+
+// ---------------------------------------------------------------------------
+
+function getLinkOrThrow (webfingerData: WebFingerData) {
   if (Array.isArray(webfingerData.links) === false) throw new Error('WebFinger links is not an array.')
 
   const selfLink = webfingerData.links.find(l => l.rel === 'self')
@@ -21,19 +35,8 @@ async function getAccountFromWebfinger (nameWithHost: string) {
     throw new Error('Cannot find self link or href is not a valid URL.')
   }
 
-  const account = await fetchRemoteAccount(selfLink.href)
-  if (account === undefined) throw new Error('Cannot fetch remote account ' + selfLink.href)
-
-  return account
+  return selfLink.href
 }
-
-// ---------------------------------------------------------------------------
-
-export {
-  getAccountFromWebfinger
-}
-
-// ---------------------------------------------------------------------------
 
 function webfingerLookup (nameWithHost: string) {
   return new Promise<WebFingerData>((res, rej) => {

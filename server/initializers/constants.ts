@@ -1,7 +1,8 @@
 import * as config from 'config'
 import { join } from 'path'
 import { JobCategory, JobState, VideoRateType } from '../../shared/models'
-import { FollowState } from '../../shared/models/accounts'
+import { FollowState } from '../../shared/models/actors'
+import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { isTestInstance, root } from '../helpers/core-utils'
@@ -210,7 +211,7 @@ const VIDEO_MIMETYPE_EXT = {
 
 // ---------------------------------------------------------------------------
 
-const SERVER_ACCOUNT_NAME = 'peertube'
+const SERVER_ACTOR_NAME = 'peertube'
 
 const ACTIVITY_PUB = {
   POTENTIAL_ACCEPT_HEADERS: [
@@ -227,6 +228,12 @@ const ACTIVITY_PUB = {
     TORRENT: [ 'application/x-bittorrent' ],
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   }
+}
+
+const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
+  GROUP: 'Group',
+  PERSON: 'Person',
+  APPLICATION: 'Application'
 }
 
 // ---------------------------------------------------------------------------
@@ -350,12 +357,13 @@ export {
   REMOTE_SCHEME,
   FOLLOW_STATES,
   AVATARS_DIR,
-  SERVER_ACCOUNT_NAME,
+  SERVER_ACTOR_NAME,
   PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   ACTIVITY_PUB,
+  ACTIVITY_PUB_ACTOR_TYPES,
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,

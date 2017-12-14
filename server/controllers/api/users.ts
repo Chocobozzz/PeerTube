@@ -2,7 +2,7 @@ import * as express from 'express'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
 import { getFormattedObjects, logger, retryTransactionWrapper } from '../../helpers'
 import { CONFIG } from '../../initializers'
-import { createUserAccountAndChannel } from '../../lib'
+import { createUserAccountAndChannel } from '../../lib/user'
 import {
   asyncMiddleware,
   authenticate,

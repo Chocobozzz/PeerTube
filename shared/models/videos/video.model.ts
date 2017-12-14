@@ -1,4 +1,4 @@
-import { Account } from '../accounts'
+import { Account } from '../actors'
 import { VideoChannel } from './video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 

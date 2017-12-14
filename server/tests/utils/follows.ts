@@ -42,8 +42,8 @@ async function follow (follower: string, following: string[], accessToken: strin
   return res
 }
 
-async function unfollow (url: string, accessToken: string, id: number, expectedStatus = 204) {
-  const path = '/api/v1/server/following/' + id
+async function unfollow (url: string, accessToken: string, target: ServerInfo, expectedStatus = 204) {
+  const path = '/api/v1/server/following/' + target.host
 
   const res = await request(url)
     .delete(path)

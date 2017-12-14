@@ -2,7 +2,7 @@ import * as express from 'express'
 import { query } from 'express-validator/check'
 import { logger } from '../../helpers'
 import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
-import { AccountModel } from '../../models/account/account'
+import { ActorModel } from '../../models/activitypub/actor'
 import { areValidationErrors } from './utils'
 
 const webfingerValidator = [
@@ -17,14 +17,14 @@ const webfingerValidator = [
     const nameWithHost = req.query.resource.substr(5)
     const [ name ] = nameWithHost.split('@')
 
-    const account = await AccountModel.loadLocalByName(name)
-    if (!account) {
+    const actor = await ActorModel.loadLocalByName(name)
+    if (!actor) {
       return res.status(404)
-        .send({ error: 'Account not found' })
+        .send({ error: 'Actor not found' })
         .end()
     }
 
-    res.locals.account = account
+    res.locals.actor = actor
     return next()
   }
 ]

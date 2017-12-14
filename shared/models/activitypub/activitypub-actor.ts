@@ -1,6 +1,10 @@
+import { ActivityPubAttributedTo } from './objects/common-objects'
+
+export type ActivityPubActorType = 'Person' | 'Application' | 'Group'
+
 export interface ActivityPubActor {
   '@context': any[]
-  type: 'Person' | 'Application' | 'Group'
+  type: ActivityPubActorType
   id: string
   following: string
   followers: string
@@ -12,6 +16,8 @@ export interface ActivityPubActor {
   endpoints: {
     sharedInbox: string
   }
+  summary: string
+  attributedTo: ActivityPubAttributedTo[]
 
   uuid: string
   publicKey: {
@@ -21,7 +27,6 @@ export interface ActivityPubActor {
   }
 
   // Not used
-  // summary: string
   // icon: string[]
   // liked: string
 }

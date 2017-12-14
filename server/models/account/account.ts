@@ -5,18 +5,16 @@ import {
   BelongsTo,
   Column,
   CreatedAt,
-  DataType,
-  Default,
+  DefaultScope,
   ForeignKey,
   HasMany,
   Is,
-  IsUUID,
   Model,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { isUserUsernameValid } from '../../helpers/custom-validators/users'
-import { sendDeleteAccount } from '../../lib/activitypub/send'
+import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
 import { ServerModel } from '../server/server'
@@ -24,30 +22,29 @@ import { throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { UserModel } from './user'
 
-@Table({
-  tableName: 'account',
-  indexes: [
+@DefaultScope({
+  include: [
     {
-      fields: [ 'name' ]
-    },
-    {
-      fields: [ 'serverId' ]
-    },
-    {
-      fields: [ 'userId' ],
-      unique: true
-    },
-    {
-      fields: [ 'applicationId' ],
-      unique: true
-    },
-    {
-      fields: [ 'name', 'serverId', 'applicationId' ],
-      unique: true
+      model: () => ActorModel,
+      required: true,
+      include: [
+        {
+          model: () => ServerModel,
+          required: false
+        }
+      ]
     }
   ]
 })
+@Table({
+  tableName: 'account'
+})
 export class AccountModel extends Model<AccountModel> {
+
+  @AllowNull(false)
+  @Is('AccountName', value => throwIfNotValid(value, isUserUsernameValid, 'account name'))
+  @Column
+  name: string
 
   @CreatedAt
   createdAt: Date
@@ -89,7 +86,7 @@ export class AccountModel extends Model<AccountModel> {
     },
     onDelete: 'cascade'
   })
-  Application: ApplicationModel
+  Account: ApplicationModel
 
   @HasMany(() => VideoChannelModel, {
     foreignKey: {
@@ -103,21 +100,10 @@ export class AccountModel extends Model<AccountModel> {
   @AfterDestroy
   static sendDeleteIfOwned (instance: AccountModel) {
     if (instance.isOwned()) {
-      return sendDeleteAccount(instance, undefined)
+      return sendDeleteActor(instance.Actor, undefined)
     }
 
     return undefined
-  }
-
-  static loadApplication () {
-    return AccountModel.findOne({
-      include: [
-        {
-          model: ApplicationModel,
-          required: true
-        }
-      ]
-    })
   }
 
   static load (id: number) {
@@ -126,9 +112,15 @@ export class AccountModel extends Model<AccountModel> {
 
   static loadByUUID (uuid: string) {
     const query = {
-      where: {
-        uuid
-      }
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            uuid
+          }
+        }
+      ]
     }
 
     return AccountModel.findOne(query)
@@ -156,25 +148,6 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByNameAndHost (name: string, host: string) {
-    const query = {
-      where: {
-        name
-      },
-      include: [
-        {
-          model: ServerModel,
-          required: true,
-          where: {
-            host
-          }
-        }
-      ]
-    }
-
-    return AccountModel.findOne(query)
-  }
-
   static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
     const query = {
       include: [
@@ -192,29 +165,11 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
-    const query = {
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          where: {
-            followersUrl: {
-              [ Sequelize.Op.in ]: followersUrls
-            }
-          }
-        }
-      ],
-      transaction
-    }
-
-    return AccountModel.findAll(query)
-  }
-
   toFormattedJSON () {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
+      name: this.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -223,7 +178,7 @@ export class AccountModel extends Model<AccountModel> {
   }
 
   toActivityPubObject () {
-    return this.Actor.toActivityPubObject(this.name, this.uuid, 'Account')
+    return this.Actor.toActivityPubObject(this.name, 'Account')
   }
 
   isOwned () {

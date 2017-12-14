@@ -1,48 +1,63 @@
-import * as Sequelize from 'sequelize'
 import {
   AfterDestroy,
   AllowNull,
   BelongsTo,
   Column,
   CreatedAt,
-  DataType,
-  Default,
+  DefaultScope,
   ForeignKey,
   HasMany,
   Is,
-  IsUUID,
   Model,
   Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { IFindOptions } from 'sequelize-typescript/lib/interfaces/IFindOptions'
+import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
-import { sendDeleteVideoChannel } from '../../lib/activitypub/send'
+import { sendDeleteActor } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
-import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { VideoChannelShareModel } from './video-channel-share'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_ACTOR = 'WITH_ACTOR',
   WITH_VIDEOS = 'WITH_VIDEOS'
 }
 
+@DefaultScope({
+  include: [
+    {
+      model: () => ActorModel,
+      required: true
+    }
+  ]
+})
 @Scopes({
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
         model: () => AccountModel,
-        include: [ { model: () => ServerModel, required: false } ]
+        required: true,
+        include: [
+          {
+            model: () => ActorModel,
+            required: true
+          }
+        ]
       }
     ]
   },
   [ScopeNames.WITH_VIDEOS]: {
     include: [
       () => VideoModel
+    ]
+  },
+  [ScopeNames.WITH_ACTOR]: {
+    include: [
+      () => ActorModel
     ]
   }
 })
@@ -57,12 +72,6 @@ enum ScopeNames {
 export class VideoChannelModel extends Model<VideoChannelModel> {
 
   @AllowNull(false)
-  @Default(DataType.UUIDV4)
-  @IsUUID(4)
-  @Column(DataType.UUID)
-  uuid: string
-
-  @AllowNull(false)
   @Is('VideoChannelName', value => throwIfNotValid(value, isVideoChannelNameValid, 'name'))
   @Column
   name: string
@@ -71,10 +80,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description'))
   @Column
   description: string
-
-  @AllowNull(false)
-  @Column
-  remote: boolean
 
   @CreatedAt
   createdAt: Date
@@ -115,19 +120,10 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   })
   Videos: VideoModel[]
 
-  @HasMany(() => VideoChannelShareModel, {
-    foreignKey: {
-      name: 'channelId',
-      allowNull: false
-    },
-    onDelete: 'CASCADE'
-  })
-  VideoChannelShares: VideoChannelShareModel[]
-
   @AfterDestroy
   static sendDeleteIfOwned (instance: VideoChannelModel) {
-    if (instance.isOwned()) {
-      return sendDeleteVideoChannel(instance, undefined)
+    if (instance.Actor.isOwned()) {
+      return sendDeleteActor(instance.Actor, undefined)
     }
 
     return undefined
@@ -150,7 +146,9 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       order: [ getSort(sort) ]
     }
 
-    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findAndCountAll(query)
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
@@ -165,49 +163,16 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
           where: {
             id: accountId
           },
-          required: true,
-          include: [ { model: ServerModel, required: false } ]
+          required: true
         }
       ]
     }
 
-    return VideoChannelModel.findAndCountAll(query)
+    return VideoChannelModel
+      .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
-  }
-
-  static loadByUrl (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoChannelModel> = {
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          where: {
-            url
-          }
-        }
-      ]
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findOne(query)
-  }
-
-  static loadByUUIDOrUrl (uuid: string, url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoChannelModel> = {
-      where: {
-        [ Sequelize.Op.or ]: [
-          { uuid },
-          { url }
-        ]
-      }
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoChannelModel.findOne(query)
   }
 
   static loadByIdAndAccount (id: number, accountId: number) {
@@ -218,21 +183,33 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       }
     }
 
-    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findOne(options)
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .findOne(options)
   }
 
   static loadAndPopulateAccount (id: number) {
-    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findById(id)
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .findById(id)
   }
 
   static loadByUUIDAndPopulateAccount (uuid: string) {
     const options = {
-      where: {
-        uuid
-      }
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            uuid
+          }
+        }
+      ]
     }
 
-    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findOne(options)
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
+      .findOne(options)
   }
 
   static loadAndPopulateAccountAndVideos (id: number) {
@@ -242,39 +219,36 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       ]
     }
 
-    return VideoChannelModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ]).findById(id, options)
-  }
-
-  isOwned () {
-    return this.remote === false
+    return VideoChannelModel
+      .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ])
+      .findById(id, options)
   }
 
   toFormattedJSON () {
-    const json = {
+    const actor = this.Actor.toFormattedJSON()
+    const account = {
       id: this.id,
-      uuid: this.uuid,
       name: this.name,
       description: this.description,
-      isLocal: this.isOwned(),
+      isLocal: this.Actor.isOwned(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
 
-    if (this.Account !== undefined) {
-      json[ 'owner' ] = {
-        name: this.Account.name,
-        uuid: this.Account.uuid
-      }
-    }
-
-    if (Array.isArray(this.Videos)) {
-      json[ 'videos' ] = this.Videos.map(v => v.toFormattedJSON())
-    }
-
-    return json
+    return Object.assign(actor, account)
   }
 
-  toActivityPubObject () {
-    return this.Actor.toActivityPubObject(this.name, this.uuid, 'VideoChannel')
+  toActivityPubObject (): ActivityPubActor {
+    const obj = this.Actor.toActivityPubObject(this.name, 'VideoChannel')
+
+    return Object.assign(obj, {
+      summary: this.description,
+      attributedTo: [
+        {
+          type: 'Person' as 'Person',
+          id: this.Account.Actor.url
+        }
+      ]
+    })
   }
 }

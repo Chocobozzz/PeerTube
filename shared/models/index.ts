@@ -1,4 +1,4 @@
-export * from './accounts'
+export * from './actors'
 export * from './activitypub'
 export * from './users'
 export * from './videos'

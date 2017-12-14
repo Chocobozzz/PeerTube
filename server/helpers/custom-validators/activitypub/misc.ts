@@ -17,7 +17,7 @@ function isActivityPubUrlValid (url: string) {
     isURLOptions.require_tld = false
   }
 
-  return exists(url) && validator.isURL(url, isURLOptions) && validator.isLength(url, CONSTRAINTS_FIELDS.ACCOUNTS.URL)
+  return exists(url) && validator.isURL(url, isURLOptions) && validator.isLength(url, CONSTRAINTS_FIELDS.ACTOR.URL)
 }
 
 function isBaseActivityValid (activity: any, type: string) {
@@ -35,7 +35,23 @@ function isBaseActivityValid (activity: any, type: string) {
     )
 }
 
+function setValidAttributedTo (obj: any) {
+  if (Array.isArray(obj.attributedTo) === false) {
+    obj.attributedTo = []
+    return true
+  }
+
+  const newAttributesTo = obj.attributedTo.filter(a => {
+    return (a.type === 'Group' || a.type === 'Person') && isActivityPubUrlValid(a.id)
+  })
+
+  obj.attributedTo = newAttributesTo
+
+  return true
+}
+
 export {
   isActivityPubUrlValid,
-  isBaseActivityValid
+  isBaseActivityValid,
+  setValidAttributedTo
 }

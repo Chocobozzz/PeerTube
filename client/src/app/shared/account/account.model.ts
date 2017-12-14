@@ -1,4 +1,4 @@
-import { Account as ServerAccount } from '../../../../../shared/models/accounts/account.model'
+import { Account as ServerAccount } from '../../../../../shared/models/actors/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { environment } from '../../../environments/environment'
 

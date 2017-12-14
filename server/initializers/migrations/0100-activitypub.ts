@@ -5,7 +5,7 @@ import { shareVideoByServer } from '../../lib/activitypub/share'
 import { getVideoActivityPubUrl, getVideoChannelActivityPubUrl } from '../../lib/activitypub/url'
 import { createLocalAccountWithoutKeys } from '../../lib/user'
 import { ApplicationModel } from '../../models/application/application'
-import { JOB_CATEGORIES, SERVER_ACCOUNT_NAME } from '../constants'
+import { JOB_CATEGORIES, SERVER_ACTOR_NAME } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
@@ -66,7 +66,7 @@ async function up (utils: {
   // Create application account
   {
     const applicationInstance = await ApplicationModel.findOne()
-    const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
+    const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACTOR_NAME, null, applicationInstance.id, undefined)
 
     const { publicKey, privateKey } = await createPrivateAndPublicKeys()
     accountCreated.set('publicKey', publicKey)

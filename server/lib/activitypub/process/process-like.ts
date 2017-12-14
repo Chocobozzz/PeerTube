@@ -1,16 +1,16 @@
 import { ActivityLike } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
-import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { getOrCreateAccountAndServer } from '../account'
+import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity } from '../send/misc'
 
 async function processLikeActivity (activity: ActivityLike) {
-  const account = await getOrCreateAccountAndServer(activity.actor)
+  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  return processLikeVideo(account, activity)
+  return processLikeVideo(actor, activity)
 }
 
 // ---------------------------------------------------------------------------
@@ -21,17 +21,20 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processLikeVideo (byAccount: AccountModel, activity: ActivityLike) {
+async function processLikeVideo (actor: ActorModel, activity: ActivityLike) {
   const options = {
-    arguments: [ byAccount, activity ],
+    arguments: [ actor, activity ],
     errorMessage: 'Cannot like the video with many retries.'
   }
 
   return retryTransactionWrapper(createVideoLike, options)
 }
 
-function createVideoLike (byAccount: AccountModel, activity: ActivityLike) {
+function createVideoLike (byActor: ActorModel, activity: ActivityLike) {
   const videoUrl = activity.object
+
+  const byAccount = byActor.Account
+  if (!byAccount) throw new Error('Cannot create like with the non account actor ' + byActor.url)
 
   return sequelizeTypescript.transaction(async t => {
     const video = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
@@ -52,7 +55,7 @@ function createVideoLike (byAccount: AccountModel, activity: ActivityLike) {
 
     if (video.isOwned() && created === true) {
       // Don't resend the activity to the sender
-      const exceptions = [ byAccount ]
+      const exceptions = [ byActor ]
       await forwardActivity(activity, t, exceptions)
     }
   })

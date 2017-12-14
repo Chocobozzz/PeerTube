@@ -3,7 +3,7 @@ import { computeResolutionsToTranscode, logger } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
 import { VideoModel } from '../../../models/video/video'
 import { shareVideoByServer } from '../../activitypub'
-import { sendAddVideo } from '../../activitypub/send'
+import { sendCreateVideo } from '../../activitypub/send'
 import { JobScheduler } from '../job-scheduler'
 import { TranscodingJobPayload } from './transcoding-job-scheduler'
 
@@ -36,7 +36,8 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
   if (!videoDatabase) return undefined
 
   // Now we'll add the video's meta data to our followers
-  await sendAddVideo(video, undefined)
+  await sendCreateVideo(video, undefined)
+  // TODO: share by channel
   await shareVideoByServer(video, undefined)
 
   const originalFileHeight = await videoDatabase.getOriginalFileHeight()

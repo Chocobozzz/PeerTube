@@ -1,4 +1,4 @@
-import { Account } from '../accounts'
+import { Account } from '../actors'
 import { VideoChannel } from '../videos/video-channel.model'
 import { UserRole } from './user-role'
 

@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
-import { AccountFollow } from '../../../../../../shared/models/accounts/follow.model'
+import { AccountFollow } from '../../../../../../shared/models/actors/follow.model'
 import { RestPagination, RestTable } from '../../../shared'
 import { FollowService } from '../shared'
 

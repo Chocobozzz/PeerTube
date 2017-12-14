@@ -1,111 +1,112 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub'
-import { getServerAccount } from '../../../helpers'
-import { AccountModel } from '../../../models/account/account'
+import { VideoPrivacy } from '../../../../shared/models/videos'
+import { getServerActor } from '../../../helpers'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
-import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import {
   broadcastToFollowers,
-  getAccountsInvolvedInVideo,
+  getActorsInvolvedInVideo,
   getAudience,
   getObjectFollowersAudience,
   getOriginVideoAudience,
   unicastTo
 } from './misc'
 
-async function sendCreateVideoChannel (videoChannel: VideoChannelModel, t: Transaction) {
-  const byAccount = videoChannel.Account
+async function sendCreateVideo (video: VideoModel, t: Transaction) {
+  const byActor = video.VideoChannel.Account.Actor
 
-  const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = await createActivityData(videoChannel.url, byAccount, videoChannelObject, t)
+  const videoObject = video.toActivityPubObject()
+  const audience = await getAudience(byActor, t, video.privacy === VideoPrivacy.PUBLIC)
+  const data = await createActivityData(video.url, byActor, videoObject, t, audience)
 
-  return broadcastToFollowers(data, byAccount, [ byAccount ], t)
+  return broadcastToFollowers(data, byActor, [ byActor ], t)
 }
 
-async function sendVideoAbuse (byAccount: AccountModel, videoAbuse: VideoAbuseModel, video: VideoModel, t: Transaction) {
+async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel, video: VideoModel, t: Transaction) {
   const url = getVideoAbuseActivityPubUrl(videoAbuse)
 
-  const audience = { to: [ video.VideoChannel.Account.url ], cc: [] }
-  const data = await createActivityData(url, byAccount, videoAbuse.toActivityPubObject(), t, audience)
+  const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
+  const data = await createActivityData(url, byActor, videoAbuse.toActivityPubObject(), t, audience)
 
-  return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
 }
 
-async function sendCreateViewToOrigin (byAccount: AccountModel, video: VideoModel, t: Transaction) {
-  const url = getVideoViewActivityPubUrl(byAccount, video)
-  const viewActivity = createViewActivityData(byAccount, video)
+async function sendCreateViewToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  const url = getVideoViewActivityPubUrl(byActor, video)
+  const viewActivity = createViewActivityData(byActor, video)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
-  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const data = await createActivityData(url, byAccount, viewActivity, t, audience)
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
+  const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
+  const data = await createActivityData(url, byActor, viewActivity, t, audience)
 
-  return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
 }
 
-async function sendCreateViewToVideoFollowers (byAccount: AccountModel, video: VideoModel, t: Transaction) {
-  const url = getVideoViewActivityPubUrl(byAccount, video)
-  const viewActivity = createViewActivityData(byAccount, video)
+async function sendCreateViewToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  const url = getVideoViewActivityPubUrl(byActor, video)
+  const viewActivity = createViewActivityData(byActor, video)
 
-  const accountsToForwardView = await getAccountsInvolvedInVideo(video, t)
-  const audience = getObjectFollowersAudience(accountsToForwardView)
-  const data = await createActivityData(url, byAccount, viewActivity, t, audience)
+  const actorsToForwardView = await getActorsInvolvedInVideo(video, t)
+  const audience = getObjectFollowersAudience(actorsToForwardView)
+  const data = await createActivityData(url, byActor, viewActivity, t, audience)
 
-  // Use the server account to send the view, because it could be an unregistered account
-  const serverAccount = await getServerAccount()
-  const followersException = [ byAccount ]
-  return broadcastToFollowers(data, serverAccount, accountsToForwardView, t, followersException)
+  // Use the server actor to send the view
+  const serverActor = await getServerActor()
+  const followersException = [ byActor ]
+  return broadcastToFollowers(data, serverActor, actorsToForwardView, t, followersException)
 }
 
-async function sendCreateDislikeToOrigin (byAccount: AccountModel, video: VideoModel, t: Transaction) {
-  const url = getVideoDislikeActivityPubUrl(byAccount, video)
-  const dislikeActivity = createDislikeActivityData(byAccount, video)
+async function sendCreateDislikeToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  const url = getVideoDislikeActivityPubUrl(byActor, video)
+  const dislikeActivity = createDislikeActivityData(byActor, video)
 
-  const accountsInvolvedInVideo = await getAccountsInvolvedInVideo(video, t)
-  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const data = await createActivityData(url, byAccount, dislikeActivity, t, audience)
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
+  const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
+  const data = await createActivityData(url, byActor, dislikeActivity, t, audience)
 
-  return unicastTo(data, byAccount, video.VideoChannel.Account.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
 }
 
-async function sendCreateDislikeToVideoFollowers (byAccount: AccountModel, video: VideoModel, t: Transaction) {
-  const url = getVideoDislikeActivityPubUrl(byAccount, video)
-  const dislikeActivity = createDislikeActivityData(byAccount, video)
+async function sendCreateDislikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
+  const url = getVideoDislikeActivityPubUrl(byActor, video)
+  const dislikeActivity = createDislikeActivityData(byActor, video)
 
-  const accountsToForwardView = await getAccountsInvolvedInVideo(video, t)
-  const audience = getObjectFollowersAudience(accountsToForwardView)
-  const data = await createActivityData(url, byAccount, dislikeActivity, t, audience)
+  const actorsToForwardView = await getActorsInvolvedInVideo(video, t)
+  const audience = getObjectFollowersAudience(actorsToForwardView)
+  const data = await createActivityData(url, byActor, dislikeActivity, t, audience)
 
-  const followersException = [ byAccount ]
-  return broadcastToFollowers(data, byAccount, accountsToForwardView, t, followersException)
+  const followersException = [ byActor ]
+  return broadcastToFollowers(data, byActor, actorsToForwardView, t, followersException)
 }
 
 async function createActivityData (
   url: string,
-  byAccount: AccountModel,
+  byActor: ActorModel,
   object: any,
   t: Transaction,
   audience?: ActivityAudience
 ): Promise<ActivityCreate> {
   if (!audience) {
-    audience = await getAudience(byAccount, t)
+    audience = await getAudience(byActor, t)
   }
 
   return {
     type: 'Create',
     id: url,
-    actor: byAccount.url,
+    actor: byActor.url,
     to: audience.to,
     cc: audience.cc,
     object
   }
 }
 
-function createDislikeActivityData (byAccount: AccountModel, video: VideoModel) {
+function createDislikeActivityData (byActor: ActorModel, video: VideoModel) {
   return {
     type: 'Dislike',
-    actor: byAccount.url,
+    actor: byActor.url,
     object: video.url
   }
 }
@@ -113,7 +114,7 @@ function createDislikeActivityData (byAccount: AccountModel, video: VideoModel) 
 // ---------------------------------------------------------------------------
 
 export {
-  sendCreateVideoChannel,
+  sendCreateVideo,
   sendVideoAbuse,
   createActivityData,
   sendCreateViewToOrigin,
@@ -125,10 +126,10 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function createViewActivityData (byAccount: AccountModel, video: VideoModel) {
+function createViewActivityData (byActor: ActorModel, video: VideoModel) {
   return {
     type: 'View',
-    actor: byAccount.url,
+    actor: byActor.url,
     object: video.url
   }
 }

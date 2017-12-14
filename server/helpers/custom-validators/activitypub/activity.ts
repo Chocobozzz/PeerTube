@@ -1,14 +1,14 @@
 import * as validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import { isAccountAcceptActivityValid, isAccountDeleteActivityValid, isAccountFollowActivityValid } from './actor'
+import { isActorAcceptActivityValid, isActorDeleteActivityValid, isActorFollowActivityValid } from './actor'
 import { isAnnounceActivityValid } from './announce'
 import { isActivityPubUrlValid } from './misc'
 import { isDislikeActivityValid, isLikeActivityValid } from './rate'
 import { isUndoActivityValid } from './undo'
-import { isVideoChannelCreateActivityValid, isVideoChannelDeleteActivityValid, isVideoChannelUpdateActivityValid } from './video-channels'
+import { isVideoChannelDeleteActivityValid, isVideoChannelUpdateActivityValid } from './video-channels'
 import {
   isVideoFlagValid,
-  isVideoTorrentAddActivityValid,
+  isVideoTorrentCreateActivityValid,
   isVideoTorrentDeleteActivityValid,
   isVideoTorrentUpdateActivityValid
 } from './videos'
@@ -29,7 +29,6 @@ function isRootActivityValid (activity: any) {
 
 const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean } = {
   Create: checkCreateActivity,
-  Add: checkAddActivity,
   Update: checkUpdateActivity,
   Delete: checkDeleteActivity,
   Follow: checkFollowActivity,
@@ -59,12 +58,8 @@ export {
 function checkCreateActivity (activity: any) {
   return isViewActivityValid(activity) ||
     isDislikeActivityValid(activity) ||
-    isVideoChannelCreateActivityValid(activity) ||
+    isVideoTorrentCreateActivityValid(activity) ||
     isVideoFlagValid(activity)
-}
-
-function checkAddActivity (activity: any) {
-  return isVideoTorrentAddActivityValid(activity)
 }
 
 function checkUpdateActivity (activity: any) {
@@ -75,15 +70,15 @@ function checkUpdateActivity (activity: any) {
 function checkDeleteActivity (activity: any) {
   return isVideoTorrentDeleteActivityValid(activity) ||
     isVideoChannelDeleteActivityValid(activity) ||
-    isAccountDeleteActivityValid(activity)
+    isActorDeleteActivityValid(activity)
 }
 
 function checkFollowActivity (activity: any) {
-  return isAccountFollowActivityValid(activity)
+  return isActorFollowActivityValid(activity)
 }
 
 function checkAcceptActivity (activity: any) {
-  return isAccountAcceptActivityValid(activity)
+  return isActorAcceptActivityValid(activity)
 }
 
 function checkAnnounceActivity (activity: any) {

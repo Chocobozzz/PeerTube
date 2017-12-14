@@ -1,10 +1,9 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
-import { getServerAccount, isTestInstance, logger } from '../../helpers'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
-import { isEachUniqueHostValid } from '../../helpers/custom-validators/servers'
+import { getServerActor, isTestInstance, logger } from '../../helpers'
+import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { CONFIG } from '../../initializers'
-import { AccountFollowModel } from '../../models/account/account-follow'
+import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidationErrors } from './utils'
 
 const followValidator = [
@@ -29,15 +28,15 @@ const followValidator = [
 ]
 
 const removeFollowingValidator = [
-  param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
+  param('host').custom(isHostValid).withMessage('Should have a valid host'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking unfollow parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
-    const serverAccount = await getServerAccount()
-    const follow = await AccountFollowModel.loadByAccountAndTarget(serverAccount.id, req.params.accountId)
+    const serverActor = await getServerActor()
+    const follow = await ActorFollowModel.loadByActorAndTargetHost(serverActor.id, req.params.host)
 
     if (!follow) {
       return res.status(404)

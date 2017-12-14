@@ -1,4 +1,4 @@
-import { Account } from '../../../../../shared/models/accounts'
+import { Account } from '../../../../../shared/models/actors'
 import { Video } from '../../shared/video/video.model'
 import { AuthUser } from '../../core'
 import {

@@ -1,12 +1,12 @@
 import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
-import { createPrivateAndPublicKeys, logger, mkdirpPromise, rimrafPromise } from '../helpers'
-import { createLocalAccountWithoutKeys, createUserAccountAndChannel } from '../lib'
+import { logger, mkdirpPromise, rimrafPromise } from '../helpers'
+import { createApplicationActor, createUserAccountAndChannel } from '../lib/user'
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { applicationExist, clientsExist, usersExist } from './checker'
-import { CACHE, CONFIG, LAST_MIGRATION_VERSION, SERVER_ACCOUNT_NAME } from './constants'
+import { CACHE, CONFIG, LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 
 async function installApplication () {
@@ -134,15 +134,12 @@ async function createApplicationIfNotExist () {
   if (exist === true) return undefined
 
   logger.info('Creating Application table.')
-  const applicationInstance = await ApplicationModel.create({ migrationVersion: LAST_MIGRATION_VERSION })
 
   logger.info('Creating application account.')
 
-  const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACCOUNT_NAME, null, applicationInstance.id, undefined)
+  const application = await ApplicationModel.create({
+    migrationVersion: LAST_MIGRATION_VERSION
+  })
 
-  const { publicKey, privateKey } = await createPrivateAndPublicKeys()
-  accountCreated.set('publicKey', publicKey)
-  accountCreated.set('privateKey', privateKey)
-
-  return accountCreated.save()
+  return createApplicationActor(application.id)
 }

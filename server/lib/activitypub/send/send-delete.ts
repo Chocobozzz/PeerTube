@@ -1,54 +1,40 @@
 import { Transaction } from 'sequelize'
 import { ActivityDelete } from '../../../../shared/models/activitypub'
-import { AccountModel } from '../../../models/account/account'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { VideoChannelModel } from '../../../models/video/video-channel'
-import { VideoChannelShareModel } from '../../../models/video/video-channel-share'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { broadcastToFollowers } from './misc'
 
-async function sendDeleteVideoChannel (videoChannel: VideoChannelModel, t: Transaction) {
-  const byAccount = videoChannel.Account
-
-  const data = deleteActivityData(videoChannel.url, byAccount)
-
-  const accountsInvolved = await VideoChannelShareModel.loadAccountsByShare(videoChannel.id, t)
-  accountsInvolved.push(byAccount)
-
-  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
-}
-
 async function sendDeleteVideo (video: VideoModel, t: Transaction) {
-  const byAccount = video.VideoChannel.Account
+  const byActor = video.VideoChannel.Account.Actor
 
-  const data = deleteActivityData(video.url, byAccount)
+  const data = deleteActivityData(video.url, byActor)
 
-  const accountsInvolved = await VideoShareModel.loadAccountsByShare(video.id, t)
-  accountsInvolved.push(byAccount)
+  const actorsInvolved = await VideoShareModel.loadActorsByShare(video.id, t)
+  actorsInvolved.push(byActor)
 
-  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
+  return broadcastToFollowers(data, byActor, actorsInvolved, t)
 }
 
-async function sendDeleteAccount (account: AccountModel, t: Transaction) {
-  const data = deleteActivityData(account.url, account)
+async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
+  const data = deleteActivityData(byActor.url, byActor)
 
-  return broadcastToFollowers(data, account, [ account ], t)
+  return broadcastToFollowers(data, byActor, [ byActor ], t)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  sendDeleteVideoChannel,
   sendDeleteVideo,
-  sendDeleteAccount
+  sendDeleteActor
 }
 
 // ---------------------------------------------------------------------------
 
-function deleteActivityData (url: string, byAccount: AccountModel): ActivityDelete {
+function deleteActivityData (url: string, byActor: ActorModel): ActivityDelete {
   return {
     type: 'Delete',
     id: url,
-    actor: byAccount.url
+    actor: byActor.url
   }
 }

@@ -1,7 +1,7 @@
 import { ResultList } from '../../shared/models'
 import { Activity } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB } from '../initializers'
-import { AccountModel } from '../models/account/account'
+import { ActorModel } from '../models/activitypub/actor'
 import { signObject } from './peertube-crypto'
 
 function activityPubContextify <T> (data: T) {
@@ -71,10 +71,10 @@ function activityPubCollectionPagination (url: string, page: any, result: Result
   return orderedCollectionPagination
 }
 
-function buildSignedActivity (byAccount: AccountModel, data: Object) {
+function buildSignedActivity (byActor: ActorModel, data: Object) {
   const activity = activityPubContextify(data)
 
-  return signObject(byAccount, activity) as Promise<Activity>
+  return signObject(byActor, activity) as Promise<Activity>
 }
 
 // ---------------------------------------------------------------------------

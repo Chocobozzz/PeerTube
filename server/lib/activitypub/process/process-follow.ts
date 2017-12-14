@@ -1,16 +1,16 @@
 import { ActivityFollow } from '../../../../shared/models/activitypub'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
-import { AccountModel } from '../../../models/account/account'
-import { AccountFollowModel } from '../../../models/account/account-follow'
-import { getOrCreateAccountAndServer } from '../account'
+import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { getOrCreateActorAndServerAndModel } from '../actor'
 import { sendAccept } from '../send'
 
 async function processFollowActivity (activity: ActivityFollow) {
   const activityObject = activity.object
-  const account = await getOrCreateAccountAndServer(activity.actor)
+  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  return processFollow(account, activityObject)
+  return processFollow(actor, activityObject)
 }
 
 // ---------------------------------------------------------------------------
@@ -21,46 +21,46 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processFollow (account: AccountModel, targetAccountURL: string) {
+function processFollow (actor: ActorModel, targetActorURL: string) {
   const options = {
-    arguments: [ account, targetAccountURL ],
+    arguments: [ actor, targetActorURL ],
     errorMessage: 'Cannot follow with many retries.'
   }
 
   return retryTransactionWrapper(follow, options)
 }
 
-async function follow (account: AccountModel, targetAccountURL: string) {
+async function follow (actor: ActorModel, targetActorURL: string) {
   await sequelizeTypescript.transaction(async t => {
-    const targetAccount = await AccountModel.loadByUrl(targetAccountURL, t)
+    const targetActor = await ActorModel.loadByUrl(targetActorURL, t)
 
-    if (!targetAccount) throw new Error('Unknown account')
-    if (targetAccount.isOwned() === false) throw new Error('This is not a local account.')
+    if (!targetActor) throw new Error('Unknown actor')
+    if (targetActor.isOwned() === false) throw new Error('This is not a local actor.')
 
-    const [ accountFollow ] = await AccountFollowModel.findOrCreate({
+    const [ actorFollow ] = await ActorFollowModel.findOrCreate({
       where: {
-        accountId: account.id,
-        targetAccountId: targetAccount.id
+        actorId: actor.id,
+        targetActorId: targetActor.id
       },
       defaults: {
-        accountId: account.id,
-        targetAccountId: targetAccount.id,
+        actorId: actor.id,
+        targetActorId: targetActor.id,
         state: 'accepted'
       },
       transaction: t
     })
 
-    if (accountFollow.state !== 'accepted') {
-      accountFollow.state = 'accepted'
-      await accountFollow.save({ transaction: t })
+    if (actorFollow.state !== 'accepted') {
+      actorFollow.state = 'accepted'
+      await actorFollow.save({ transaction: t })
     }
 
-    accountFollow.AccountFollower = account
-    accountFollow.AccountFollowing = targetAccount
+    actorFollow.ActorFollower = actor
+    actorFollow.ActorFollowing = targetActor
 
-    // Target sends to account he accepted the follow request
-    return sendAccept(accountFollow, t)
+    // Target sends to actor he accepted the follow request
+    return sendAccept(actorFollow, t)
   })
 
-  logger.info('Account uuid %s is followed by account %s.', account.url, targetAccountURL)
+  logger.info('Actor uuid %s is followed by actor %s.', actor.url, targetActorURL)
 }

@@ -1,6 +1,6 @@
 import { User } from '../'
 import { Video as VideoServerModel } from '../../../../../shared'
-import { Account } from '../../../../../shared/models/accounts'
+import { Account } from '../../../../../shared/models/actors'
 import { environment } from '../../../environments/environment'
 
 export class Video implements VideoServerModel {

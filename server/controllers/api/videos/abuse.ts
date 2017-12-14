@@ -1,22 +1,18 @@
 import * as express from 'express'
-import {
-  logger,
-  getFormattedObjects,
-  retryTransactionWrapper
-} from '../../../helpers'
+import { UserRight, VideoAbuseCreate } from '../../../../shared'
+import { getFormattedObjects, logger, retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
+import { sendVideoAbuse } from '../../../lib/activitypub/send'
 import {
+  asyncMiddleware,
   authenticate,
   ensureUserHasRight,
   paginationValidator,
-  videoAbuseReportValidator,
-  videoAbusesSortValidator,
-  setVideoAbusesSort,
   setPagination,
-  asyncMiddleware
+  setVideoAbusesSort,
+  videoAbuseReportValidator,
+  videoAbusesSortValidator
 } from '../../../middlewares'
-import { VideoAbuseCreate, UserRight } from '../../../../shared'
-import { sendVideoAbuse } from '../../../lib/index'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
@@ -80,7 +76,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
     // We send the video abuse to the origin server
     if (videoInstance.isOwned() === false) {
-      await sendVideoAbuse(reporterAccount, videoAbuseInstance, videoInstance, t)
+      await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance, t)
     }
   })
 

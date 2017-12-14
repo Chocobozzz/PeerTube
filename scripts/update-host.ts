@@ -1,14 +1,14 @@
-import { getServerAccount } from '../server/helpers'
+import { getServerActor } from '../server/helpers'
 import { initDatabaseModels } from '../server/initializers'
-import { AccountFollowModel } from '../server/models/account/account-follow'
+import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
 import { VideoModel } from '../server/models/video/video'
 
 initDatabaseModels(true)
   .then(() => {
-    return getServerAccount()
+    return getServerActor()
   })
   .then(serverAccount => {
-    return AccountFollowModel.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined)
+    return ActorFollowModel.listAcceptedFollowingUrlsForApi([ serverAccount.id ], undefined)
   })
   .then(res => {
     return res.total > 0

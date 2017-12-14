@@ -50,7 +50,8 @@ migrate()
 
 // ----------- PeerTube modules -----------
 import { installApplication } from './server/initializers'
-import { activitypubHttpJobScheduler, transcodingJobScheduler, VideosPreviewCache } from './server/lib'
+import { activitypubHttpJobScheduler, transcodingJobScheduler } from './server/lib/jobs'
+import { VideosPreviewCache } from './server/lib/cache'
 import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
 
 // ----------- Command line -----------

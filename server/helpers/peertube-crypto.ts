@@ -1,5 +1,5 @@
 import { BCRYPT_SALT_SIZE, PRIVATE_RSA_KEY_SIZE } from '../initializers'
-import { AccountModel } from '../models/account/account'
+import { ActorModel } from '../models/activitypub/actor'
 import { bcryptComparePromise, bcryptGenSaltPromise, bcryptHashPromise, createPrivateKey, getPublicKey } from './core-utils'
 import { jsig } from './custom-jsonld-signature'
 import { logger } from './logger'
@@ -13,18 +13,18 @@ async function createPrivateAndPublicKeys () {
   return { privateKey: key, publicKey }
 }
 
-function isSignatureVerified (fromAccount: AccountModel, signedDocument: object) {
+function isSignatureVerified (fromActor: ActorModel, signedDocument: object) {
   const publicKeyObject = {
     '@context': jsig.SECURITY_CONTEXT_URL,
-    '@id': fromAccount.url,
+    '@id': fromActor.url,
     '@type':  'CryptographicKey',
-    owner: fromAccount.url,
-    publicKeyPem: fromAccount.publicKey
+    owner: fromActor.url,
+    publicKeyPem: fromActor.publicKey
   }
 
   const publicKeyOwnerObject = {
     '@context': jsig.SECURITY_CONTEXT_URL,
-    '@id': fromAccount.url,
+    '@id': fromActor.url,
     publicKey: [ publicKeyObject ]
   }
 
@@ -40,10 +40,10 @@ function isSignatureVerified (fromAccount: AccountModel, signedDocument: object)
     })
 }
 
-function signObject (byAccount: AccountModel, data: any) {
+function signObject (byActor: ActorModel, data: any) {
   const options = {
-    privateKeyPem: byAccount.privateKey,
-    creator: byAccount.url
+    privateKeyPem: byActor.privateKey,
+    creator: byActor.url
   }
 
   return jsig.promises.sign(data, options)

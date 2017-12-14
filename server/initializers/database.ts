@@ -3,9 +3,10 @@ import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 
 import { AccountModel } from '../models/account/account'
-import { AccountFollowModel } from '../models/account/account-follow'
 import { AccountVideoRateModel } from '../models/account/account-video-rate'
 import { UserModel } from '../models/account/user'
+import { ActorModel } from '../models/activitypub/actor'
+import { ActorFollowModel } from '../models/activitypub/actor-follow'
 import { ApplicationModel } from '../models/application/application'
 import { AvatarModel } from '../models/avatar/avatar'
 import { JobModel } from '../models/job/job'
@@ -17,7 +18,6 @@ import { VideoModel } from '../models/video/video'
 import { VideoAbuseModel } from '../models/video/video-abuse'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { VideoChannelShareModel } from '../models/video/video-channel-share'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoShareModel } from '../models/video/video-share'
 import { VideoTagModel } from '../models/video/video-tag'
@@ -56,6 +56,8 @@ const sequelizeTypescript = new SequelizeTypescript({
 async function initDatabaseModels (silent: boolean) {
   sequelizeTypescript.addModels([
     ApplicationModel,
+    ActorModel,
+    ActorFollowModel,
     AvatarModel,
     AccountModel,
     JobModel,
@@ -64,11 +66,9 @@ async function initDatabaseModels (silent: boolean) {
     ServerModel,
     TagModel,
     AccountVideoRateModel,
-    AccountFollowModel,
     UserModel,
     VideoAbuseModel,
     VideoChannelModel,
-    VideoChannelShareModel,
     VideoShareModel,
     VideoFileModel,
     VideoBlacklistModel,

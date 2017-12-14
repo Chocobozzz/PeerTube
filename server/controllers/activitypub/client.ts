@@ -2,20 +2,13 @@
 import * as express from 'express'
 import { activityPubCollectionPagination, pageToStartAndCount } from '../../helpers'
 import { ACTIVITY_PUB, CONFIG } from '../../initializers'
-import { buildVideoChannelAnnounceToFollowers } from '../../lib/activitypub/send'
-import { buildVideoAnnounceToFollowers } from '../../lib/index'
+import { buildVideoAnnounceToFollowers } from '../../lib/activitypub/send'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
-import {
-  videoChannelsGetValidator,
-  videoChannelsShareValidator,
-  videosGetValidator,
-  videosShareValidator
-} from '../../middlewares/validators'
+import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
-import { AccountFollowModel } from '../../models/account/account-follow'
+import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { VideoChannelShareModel } from '../../models/video/video-channel-share'
 import { VideoShareModel } from '../../models/video/video-share'
 
 const activityPubClientRouter = express.Router()
@@ -50,11 +43,6 @@ activityPubClientRouter.get('/video-channels/:id',
   executeIfActivityPub(asyncMiddleware(videoChannelController))
 )
 
-activityPubClientRouter.get('/video-channels/:id/announces/:accountId',
-  executeIfActivityPub(asyncMiddleware(videoChannelsShareValidator)),
-  executeIfActivityPub(asyncMiddleware(videoChannelAnnounceController))
-)
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -75,7 +63,7 @@ async function accountFollowersController (req: express.Request, res: express.Re
   const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await AccountFollowModel.listAcceptedFollowerUrlsForApi([ account.id ], undefined, start, count)
+  const result = await ActorFollowModel.listAcceptedFollowerUrlsForApi([ account.Actor.id ], undefined, start, count)
   const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)
@@ -87,7 +75,7 @@ async function accountFollowingController (req: express.Request, res: express.Re
   const page = req.query.page || 1
   const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
 
-  const result = await AccountFollowModel.listAcceptedFollowingUrlsForApi([ account.id ], undefined, start, count)
+  const result = await ActorFollowModel.listAcceptedFollowingUrlsForApi([ account.Actor.id ], undefined, start, count)
   const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 
   return res.json(activityPubResult)
@@ -101,14 +89,7 @@ function videoController (req: express.Request, res: express.Response, next: exp
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const share = res.locals.videoShare as VideoShareModel
-  const object = await buildVideoAnnounceToFollowers(share.Account, res.locals.video, undefined)
-
-  return res.json(object)
-}
-
-async function videoChannelAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const share = res.locals.videoChannelShare as VideoChannelShareModel
-  const object = await buildVideoChannelAnnounceToFollowers(share.Account, share.VideoChannel, undefined)
+  const object = await buildVideoAnnounceToFollowers(share.Actor, res.locals.video, undefined)
 
   return res.json(object)
 }

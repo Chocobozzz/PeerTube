@@ -1,56 +1,52 @@
 import { Transaction } from 'sequelize'
-import { ActivityUpdate } from '../../../../shared/models/activitypub'
-import { AccountModel } from '../../../models/account/account'
+import { ActivityAudience, ActivityUpdate } from '../../../../shared/models/activitypub'
+import { VideoPrivacy } from '../../../../shared/models/videos'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { VideoChannelModel } from '../../../models/video/video-channel'
-import { VideoChannelShareModel } from '../../../models/video/video-channel-share'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getUpdateActivityPubUrl } from '../url'
 import { broadcastToFollowers, getAudience } from './misc'
 
-async function sendUpdateVideoChannel (videoChannel: VideoChannelModel, t: Transaction) {
-  const byAccount = videoChannel.Account
-
-  const url = getUpdateActivityPubUrl(videoChannel.url, videoChannel.updatedAt.toISOString())
-  const videoChannelObject = videoChannel.toActivityPubObject()
-  const data = await updateActivityData(url, byAccount, videoChannelObject, t)
-
-  const accountsInvolved = await VideoChannelShareModel.loadAccountsByShare(videoChannel.id, t)
-  accountsInvolved.push(byAccount)
-
-  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
-}
-
 async function sendUpdateVideo (video: VideoModel, t: Transaction) {
-  const byAccount = video.VideoChannel.Account
+  const byActor = video.VideoChannel.Account.Actor
 
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
   const videoObject = video.toActivityPubObject()
-  const data = await updateActivityData(url, byAccount, videoObject, t)
+  const audience = await getAudience(byActor, t, video.privacy === VideoPrivacy.PUBLIC)
 
-  const accountsInvolved = await VideoShareModel.loadAccountsByShare(video.id, t)
-  accountsInvolved.push(byAccount)
+  const data = await updateActivityData(url, byActor, videoObject, t, audience)
 
-  return broadcastToFollowers(data, byAccount, accountsInvolved, t)
+  const actorsInvolved = await VideoShareModel.loadActorsByShare(video.id, t)
+  actorsInvolved.push(byActor)
+
+  return broadcastToFollowers(data, byActor, actorsInvolved, t)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  sendUpdateVideoChannel,
   sendUpdateVideo
 }
 
 // ---------------------------------------------------------------------------
 
-async function updateActivityData (url: string, byAccount: AccountModel, object: any, t: Transaction): Promise<ActivityUpdate> {
-  const { to, cc } = await getAudience(byAccount, t)
+async function updateActivityData (
+  url: string,
+  byActor: ActorModel,
+  object: any,
+  t: Transaction,
+  audience?: ActivityAudience
+): Promise<ActivityUpdate> {
+  if (!audience) {
+    audience = await getAudience(byActor, t)
+  }
+
   return {
     type: 'Update',
     id: url,
-    actor: byAccount.url,
-    to,
-    cc,
+    actor: byActor.url,
+    to: audience.to,
+    cc: audience.cc,
     object
   }
 }

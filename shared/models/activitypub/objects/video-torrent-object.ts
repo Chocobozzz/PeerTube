@@ -1,6 +1,6 @@
 import {
   ActivityIconObject,
-  ActivityIdentifierObject,
+  ActivityIdentifierObject, ActivityPubAttributedTo,
   ActivityTagObject,
   ActivityUrlObject
 } from './common-objects'
@@ -24,8 +24,8 @@ export interface VideoTorrentObject {
   content: string
   icon: ActivityIconObject
   url: ActivityUrlObject[]
-  actor?: string
   likes?: ActivityPubOrderedCollection<string>
   dislikes?: ActivityPubOrderedCollection<string>
   shares?: ActivityPubOrderedCollection<string>
+  attributedTo: ActivityPubAttributedTo[]
 }

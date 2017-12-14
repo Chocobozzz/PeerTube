@@ -1,10 +1,9 @@
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
-import { getAccountFromWebfinger, getFormattedObjects, getServerAccount, logger, retryTransactionWrapper } from '../../../helpers'
-import { sequelizeTypescript, SERVER_ACCOUNT_NAME } from '../../../initializers'
-import { saveAccountAndServerIfNotExist } from '../../../lib/activitypub'
-import { sendUndoFollow } from '../../../lib/activitypub/send'
-import { sendFollow } from '../../../lib/index'
+import { getFormattedObjects, getServerActor, loadActorUrlOrGetFromWebfinger, logger, retryTransactionWrapper } from '../../../helpers'
+import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
+import { getOrCreateActorAndServerAndModel } from '../../../lib/activitypub'
+import { sendFollow, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware,
   authenticate,
@@ -17,8 +16,8 @@ import {
   setPagination
 } from '../../../middlewares'
 import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
-import { AccountModel } from '../../../models/account/account'
-import { AccountFollowModel } from '../../../models/account/account-follow'
+import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 
 const serverFollowsRouter = express.Router()
 
@@ -38,7 +37,7 @@ serverFollowsRouter.post('/following',
   asyncMiddleware(followRetry)
 )
 
-serverFollowsRouter.delete('/following/:accountId',
+serverFollowsRouter.delete('/following/:host',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   asyncMiddleware(removeFollowingValidator),
@@ -62,43 +61,41 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listFollowing (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const serverAccount = await getServerAccount()
-  const resultList = await AccountFollowModel.listFollowingForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
+  const serverActor = await getServerActor()
+  const resultList = await ActorFollowModel.listFollowingForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listFollowers (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const serverAccount = await getServerAccount()
-  const resultList = await AccountFollowModel.listFollowersForApi(serverAccount.id, req.query.start, req.query.count, req.query.sort)
+  const serverActor = await getServerActor()
+  const resultList = await ActorFollowModel.listFollowersForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function followRetry (req: express.Request, res: express.Response, next: express.NextFunction) {
   const hosts = req.body.hosts as string[]
-  const fromAccount = await getServerAccount()
+  const fromActor = await getServerActor()
 
   const tasks: Promise<any>[] = []
-  const accountName = SERVER_ACCOUNT_NAME
+  const actorName = SERVER_ACTOR_NAME
 
   for (const host of hosts) {
-
     // We process each host in a specific transaction
     // First, we add the follow request in the database
-    // Then we send the follow request to other account
-    const p = loadLocalOrGetAccountFromWebfinger(accountName, host)
-      .then(accountResult => {
-        let targetAccount = accountResult.account
-
+    // Then we send the follow request to other actor
+    const p = loadActorUrlOrGetFromWebfinger(actorName, host)
+      .then(actorUrl => getOrCreateActorAndServerAndModel(actorUrl))
+      .then(targetActor => {
         const options = {
-          arguments: [ fromAccount, targetAccount, accountResult.loadedFromDB ],
+          arguments: [ fromActor, targetActor ],
           errorMessage: 'Cannot follow with many retries.'
         }
 
         return retryTransactionWrapper(follow, options)
       })
-      .catch(err => logger.warn('Cannot follow server %s.', `${accountName}@${host}`, err))
+      .catch(err => logger.warn('Cannot follow server %s.', host, err))
 
     tasks.push(p)
   }
@@ -110,42 +107,32 @@ async function followRetry (req: express.Request, res: express.Response, next: e
   return res.status(204).end()
 }
 
-async function follow (fromAccount: AccountModel, targetAccount: AccountModel, targetAlreadyInDB: boolean) {
-  try {
-    await sequelizeTypescript.transaction(async t => {
-      if (targetAlreadyInDB === false) {
-        await saveAccountAndServerIfNotExist(targetAccount, t)
-      }
-
-      const [ accountFollow ] = await AccountFollowModel.findOrCreate({
-        where: {
-          accountId: fromAccount.id,
-          targetAccountId: targetAccount.id
-        },
-        defaults: {
-          state: 'pending',
-          accountId: fromAccount.id,
-          targetAccountId: targetAccount.id
-        },
-        transaction: t
-      })
-      accountFollow.AccountFollowing = targetAccount
-      accountFollow.AccountFollower = fromAccount
-
-      // Send a notification to remote server
-      if (accountFollow.state === 'pending') {
-        await sendFollow(accountFollow, t)
-      }
+function follow (fromActor: ActorModel, targetActor: ActorModel) {
+  return sequelizeTypescript.transaction(async t => {
+    const [ actorFollow ] = await ActorFollowModel.findOrCreate({
+      where: {
+        actorId: fromActor.id,
+        targetActorId: targetActor.id
+      },
+      defaults: {
+        state: 'pending',
+        actorId: fromActor.id,
+        targetActorId: targetActor.id
+      },
+      transaction: t
     })
-  } catch (err) {
-    // Reset target account
-    targetAccount.isNewRecord = !targetAlreadyInDB
-    throw err
-  }
+    actorFollow.ActorFollowing = targetActor
+    actorFollow.ActorFollower = fromActor
+
+    // Send a notification to remote server
+    if (actorFollow.state === 'pending') {
+      await sendFollow(actorFollow, t)
+    }
+  })
 }
 
 async function removeFollow (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const follow: AccountFollowModel = res.locals.follow
+  const follow: ActorFollowModel = res.locals.follow
 
   await sequelizeTypescript.transaction(async t => {
     if (follow.state === 'accepted') await sendUndoFollow(follow, t)
@@ -153,24 +140,11 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
     await follow.destroy({ transaction: t })
   })
 
-  // Destroy the account that will destroy video channels, videos and video files too
+  // Destroy the actor that will destroy video channels, videos and video files too
   // This could be long so don't wait this task
-  const following = follow.AccountFollowing
+  const following = follow.ActorFollowing
   following.destroy()
-    .catch(err => logger.error('Cannot destroy account that we do not follow anymore %s.', following.Actor.url, err))
+    .catch(err => logger.error('Cannot destroy actor that we do not follow anymore %s.', following.url, err))
 
   return res.status(204).end()
-}
-
-async function loadLocalOrGetAccountFromWebfinger (name: string, host: string) {
-  let loadedFromDB = true
-  let account = await AccountModel.loadByNameAndHost(name, host)
-
-  if (!account) {
-    const nameWithDomain = name + '@' + host
-    account = await getAccountFromWebfinger(nameWithDomain)
-    loadedFromDB = false
-  }
-
-  return { account, loadedFromDB }
 }

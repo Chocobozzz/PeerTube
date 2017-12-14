@@ -1,23 +1,19 @@
 import * as Bluebird from 'bluebird'
-import { VideoChannelObject, VideoTorrentObject } from '../../../../shared'
 import { ActivityUpdate } from '../../../../shared/models/activitypub'
 import { logger, resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
-import { AccountModel } from '../../../models/account/account'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
-import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { getOrCreateAccountAndServer } from '../account'
+import { getOrCreateActorAndServerAndModel } from '../actor'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
-  const account = await getOrCreateAccountAndServer(activity.actor)
+  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
   if (activity.object.type === 'Video') {
-    return processUpdateVideo(account, activity.object)
-  } else if (activity.object.type === 'VideoChannel') {
-    return processUpdateVideoChannel(account, activity.object)
+    return processUpdateVideo(actor, activity)
   }
 
   return
@@ -31,16 +27,18 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function processUpdateVideo (account: AccountModel, video: VideoTorrentObject) {
+function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
   const options = {
-    arguments: [ account, video ],
+    arguments: [ actor, activity ],
     errorMessage: 'Cannot update the remote video with many retries'
   }
 
   return retryTransactionWrapper(updateRemoteVideo, options)
 }
 
-async function updateRemoteVideo (account: AccountModel, videoAttributesToUpdate: VideoTorrentObject) {
+async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
+  const videoAttributesToUpdate = activity.object
+
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
   let videoInstance: VideoModel
   let videoFieldsSave: object
@@ -54,23 +52,23 @@ async function updateRemoteVideo (account: AccountModel, videoAttributesToUpdate
       const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(videoAttributesToUpdate.id, t)
       if (!videoInstance) throw new Error('Video ' + videoAttributesToUpdate.id + ' not found.')
 
-      if (videoInstance.VideoChannel.Account.id !== account.id) {
-        throw new Error('Account ' + account.url + ' does not own video channel ' + videoInstance.VideoChannel.url)
+      const videoChannel = videoInstance.VideoChannel
+      if (videoChannel.Account.Actor.id !== actor.id) {
+        throw new Error('Account ' + actor.url + ' does not own video channel ' + videoChannel.Actor.url)
       }
 
-      const videoData = await videoActivityObjectToDBAttributes(videoInstance.VideoChannel, videoAttributesToUpdate)
+      const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoAttributesToUpdate, activity.to, activity.cc)
       videoInstance.set('name', videoData.name)
       videoInstance.set('category', videoData.category)
       videoInstance.set('licence', videoData.licence)
       videoInstance.set('language', videoData.language)
       videoInstance.set('nsfw', videoData.nsfw)
+      videoInstance.set('privacy', videoData.privacy)
       videoInstance.set('description', videoData.description)
       videoInstance.set('duration', videoData.duration)
       videoInstance.set('createdAt', videoData.createdAt)
       videoInstance.set('updatedAt', videoData.updatedAt)
       videoInstance.set('views', videoData.views)
-      // videoInstance.set('likes', videoData.likes)
-      // videoInstance.set('dislikes', videoData.dislikes)
 
       await videoInstance.save(sequelizeOptions)
 
@@ -100,37 +98,4 @@ async function updateRemoteVideo (account: AccountModel, videoAttributesToUpdate
     logger.debug('Cannot update the remote video.', err)
     throw err
   }
-}
-
-async function processUpdateVideoChannel (account: AccountModel, videoChannel: VideoChannelObject) {
-  const options = {
-    arguments: [ account, videoChannel ],
-    errorMessage: 'Cannot update the remote video channel with many retries.'
-  }
-
-  await retryTransactionWrapper(updateRemoteVideoChannel, options)
-}
-
-async function updateRemoteVideoChannel (account: AccountModel, videoChannel: VideoChannelObject) {
-  logger.debug('Updating remote video channel "%s".', videoChannel.uuid)
-
-  await sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = { transaction: t }
-
-    const videoChannelInstance = await VideoChannelModel.loadByUrl(videoChannel.id)
-    if (!videoChannelInstance) throw new Error('Video ' + videoChannel.id + ' not found.')
-
-    if (videoChannelInstance.Account.id !== account.id) {
-      throw new Error('Account ' + account.id + ' does not own video channel ' + videoChannelInstance.url)
-    }
-
-    videoChannelInstance.set('name', videoChannel.name)
-    videoChannelInstance.set('description', videoChannel.content)
-    videoChannelInstance.set('createdAt', videoChannel.published)
-    videoChannelInstance.set('updatedAt', videoChannel.updated)
-
-    await videoChannelInstance.save(sequelizeOptions)
-  })
-
-  logger.info('Remote video channel with uuid %s updated', videoChannel.uuid)
 }

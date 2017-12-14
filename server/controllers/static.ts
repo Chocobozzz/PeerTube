@@ -1,11 +1,7 @@
-import * as express from 'express'
 import * as cors from 'cors'
-import {
-  CONFIG,
-  STATIC_MAX_AGE,
-  STATIC_PATHS
-} from '../initializers'
-import { VideosPreviewCache } from '../lib'
+import * as express from 'express'
+import { CONFIG, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
+import { VideosPreviewCache } from '../lib/cache'
 import { asyncMiddleware } from '../middlewares'
 
 const staticRouter = express.Router()

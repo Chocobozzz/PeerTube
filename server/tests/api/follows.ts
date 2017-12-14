@@ -23,7 +23,6 @@ const expect = chai.expect
 
 describe('Test follows', function () {
   let servers: ServerInfo[] = []
-  let server3Id: number
 
   before(async function () {
     this.timeout(20000)
@@ -82,8 +81,6 @@ describe('Test follows', function () {
     expect(server3Follow).to.not.be.undefined
     expect(server2Follow.state).to.equal('accepted')
     expect(server3Follow.state).to.equal('accepted')
-
-    server3Id = server3Follow.following.id
   })
 
   it('Should have 0 followings on server 1 and 2', async function () {
@@ -121,7 +118,7 @@ describe('Test follows', function () {
   it('Should unfollow server 3 on server 1', async function () {
     this.timeout(5000)
 
-    await unfollow(servers[0].url, servers[0].accessToken, server3Id)
+    await unfollow(servers[0].url, servers[0].accessToken, servers[2])
 
     await wait(3000)
   })
