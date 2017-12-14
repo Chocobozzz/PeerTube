@@ -1,8 +1,35 @@
 import * as Sequelize from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
 import { VideoChannelModel } from './video-channel'
 
+enum ScopeNames {
+  FULL = 'FULL',
+  WITH_ACCOUNT = 'WITH_ACCOUNT'
+}
+
+@Scopes({
+  [ScopeNames.FULL]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true
+      },
+      {
+        model: () => VideoChannelModel,
+        required: true
+      }
+    ]
+  },
+  [ScopeNames.WITH_ACCOUNT]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true
+      }
+    ]
+  }
+})
 @Table({
   tableName: 'videoChannelShare',
   indexes: [
@@ -46,15 +73,11 @@ export class VideoChannelShareModel extends Model<VideoChannelShareModel> {
   VideoChannel: VideoChannelModel
 
   static load (accountId: number, videoChannelId: number, t: Sequelize.Transaction) {
-    return VideoChannelShareModel.findOne({
+    return VideoChannelShareModel.scope(ScopeNames.FULL).findOne({
       where: {
         accountId,
         videoChannelId
       },
-      include: [
-        AccountModel,
-        VideoChannelModel
-      ],
       transaction: t
     })
   }
@@ -64,16 +87,10 @@ export class VideoChannelShareModel extends Model<VideoChannelShareModel> {
       where: {
         videoChannelId
       },
-      include: [
-        {
-          model: AccountModel,
-          required: true
-        }
-      ],
       transaction: t
     }
 
-    return VideoChannelShareModel.findAll(query)
+    return VideoChannelShareModel.scope(ScopeNames.WITH_ACCOUNT).findAll(query)
       .then(res => res.map(r => r.Account))
   }
 }

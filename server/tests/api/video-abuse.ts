@@ -47,7 +47,7 @@ describe('Test video abuses', function () {
     await uploadVideo(servers[1].url, servers[1].accessToken, video2Attributes)
 
     // Wait videos propagation, server 2 has transcoding enabled
-    await wait(10000)
+    await wait(15000)
 
     const res = await getVideosList(servers[0].url)
     const videos = res.body.data

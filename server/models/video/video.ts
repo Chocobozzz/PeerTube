@@ -21,12 +21,14 @@ import {
   IsUUID,
   Min,
   Model,
+  Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { IIncludeOptions } from 'sequelize-typescript/lib/interfaces/IIncludeOptions'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
+import { Video, VideoDetails } from '../../../shared/models/videos'
 import {
   activityPubCollection,
   createTorrentPromise,
@@ -76,6 +78,79 @@ import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
 
+enum ScopeNames {
+  NOT_IN_BLACKLIST = 'NOT_IN_BLACKLIST',
+  PUBLIC = 'PUBLIC',
+  WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_TAGS = 'WITH_TAGS',
+  WITH_FILES = 'WITH_FILES',
+  WITH_SHARES = 'WITH_SHARES',
+  WITH_RATES = 'WITH_RATES'
+}
+
+@Scopes({
+  [ScopeNames.NOT_IN_BLACKLIST]: {
+    where: {
+      id: {
+        [Sequelize.Op.notIn]: Sequelize.literal(
+          '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
+        )
+      }
+    }
+  },
+  [ScopeNames.PUBLIC]: {
+    where: {
+      privacy: VideoPrivacy.PUBLIC
+    }
+  },
+  [ScopeNames.WITH_ACCOUNT]: {
+    include: [
+      {
+        model: () => VideoChannelModel,
+        required: true,
+        include: [
+          {
+            model: () => AccountModel,
+            required: true,
+            include: [
+              {
+                model: () => ServerModel,
+                required: false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  [ScopeNames.WITH_TAGS]: {
+    include: [ () => TagModel ]
+  },
+  [ScopeNames.WITH_FILES]: {
+    include: [
+      {
+        model: () => VideoFileModel,
+        required: true
+      }
+    ]
+  },
+  [ScopeNames.WITH_SHARES]: {
+    include: [
+      {
+        model: () => VideoShareModel,
+        include: [ () => AccountModel ]
+      }
+    ]
+  },
+  [ScopeNames.WITH_RATES]: {
+    include: [
+      {
+        model: () => AccountVideoRateModel,
+        include: [ () => AccountModel ]
+      }
+    ]
+  }
+})
 @Table({
   tableName: 'video',
   indexes: [
@@ -273,11 +348,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   static list () {
-    const query = {
-      include: [ VideoFileModel ]
-    }
-
-    return VideoModel.findAll(query)
+    return VideoModel.scope(ScopeNames.WITH_FILES).findAll()
   }
 
   static listAllAndSharedByAccountForOutbox (accountId: number, start: number, count: number) {
@@ -363,10 +434,9 @@ export class VideoModel extends Model<VideoModel> {
 
   static listUserVideosForApi (userId: number, start: number, count: number, sort: string) {
     const query = {
-      distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort(sort), [ 'Tags', 'name', 'ASC' ] ],
+      order: [ getSort(sort) ],
       include: [
         {
           model: VideoChannelModel,
@@ -380,8 +450,7 @@ export class VideoModel extends Model<VideoModel> {
               required: true
             }
           ]
-        },
-        TagModel
+        }
       ]
     }
 
@@ -395,74 +464,35 @@ export class VideoModel extends Model<VideoModel> {
 
   static listForApi (start: number, count: number, sort: string) {
     const query = {
-      distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort(sort), [ 'Tags', 'name', 'ASC' ] ],
-      include: [
-        {
-          model: VideoChannelModel,
-          required: true,
-          include: [
-            {
-              model: AccountModel,
-              required: true,
-              include: [
-                {
-                  model: ServerModel,
-                  required: false
-                }
-              ]
-            }
-          ]
-        },
-        TagModel
-      ],
-      where: this.createBaseVideosWhere()
+      order: [ getSort(sort) ]
     }
 
-    return VideoModel.findAndCountAll(query).then(({ rows, count }) => {
-      return {
-        data: rows,
-        total: count
-      }
-    })
+    return VideoModel.scope([ ScopeNames.NOT_IN_BLACKLIST, ScopeNames.PUBLIC, ScopeNames.WITH_ACCOUNT ])
+      .findAndCountAll(query)
+      .then(({ rows, count }) => {
+        return {
+          data: rows,
+          total: count
+        }
+      })
   }
 
   static load (id: number) {
     return VideoModel.findById(id)
   }
 
-  static loadByUUID (uuid: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoModel> = {
-      where: {
-        uuid
-      },
-      include: [ VideoFileModel ]
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoModel.findOne(query)
-  }
-
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
     const query: IFindOptions<VideoModel> = {
       where: {
         url
-      },
-      include: [
-        VideoFileModel,
-        {
-          model: VideoChannelModel,
-          include: [ AccountModel ]
-        }
-      ]
+      }
     }
 
     if (t !== undefined) query.transaction = t
 
-    return VideoModel.findOne(query)
+    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_FILES ]).findOne(query)
   }
 
   static loadByUUIDOrURL (uuid: string, url: string, t?: Sequelize.Transaction) {
@@ -472,42 +502,22 @@ export class VideoModel extends Model<VideoModel> {
           { uuid },
           { url }
         ]
-      },
-      include: [ VideoFileModel ]
+      }
     }
 
     if (t !== undefined) query.transaction = t
 
-    return VideoModel.findOne(query)
+    return VideoModel.scope(ScopeNames.WITH_FILES).findOne(query)
   }
 
   static loadAndPopulateAccountAndServerAndTags (id: number) {
     const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ],
-      include: [
-        {
-          model: VideoChannelModel,
-          include: [
-            {
-              model: AccountModel,
-              include: [ { model: ServerModel, required: false } ]
-            }
-          ]
-        },
-        {
-          model: AccountVideoRateModel,
-          include: [ AccountModel ]
-        },
-        {
-          model: VideoShareModel,
-          include: [ AccountModel ]
-        },
-        TagModel,
-        VideoFileModel
-      ]
+      order: [ [ 'Tags', 'name', 'ASC' ] ]
     }
 
-    return VideoModel.findById(id, options)
+    return VideoModel
+      .scope([ ScopeNames.WITH_RATES, ScopeNames.WITH_SHARES, ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
+      .findById(id, options)
   }
 
   static loadByUUIDAndPopulateAccountAndServerAndTags (uuid: string) {
@@ -515,31 +525,12 @@ export class VideoModel extends Model<VideoModel> {
       order: [ [ 'Tags', 'name', 'ASC' ] ],
       where: {
         uuid
-      },
-      include: [
-        {
-          model: VideoChannelModel,
-          include: [
-            {
-              model: AccountModel,
-              include: [ { model: ServerModel, required: false } ]
-            }
-          ]
-        },
-        {
-          model: AccountVideoRateModel,
-          include: [ AccountModel ]
-        },
-        {
-          model: VideoShareModel,
-          include: [ AccountModel ]
-        },
-        TagModel,
-        VideoFileModel
-      ]
+      }
     }
 
-    return VideoModel.findOne(options)
+    return VideoModel
+      .scope([ ScopeNames.WITH_RATES, ScopeNames.WITH_SHARES, ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
+      .findOne(options)
   }
 
   static searchAndPopulateAccountAndServerAndTags (value: string, start: number, count: number, sort: string) {
@@ -564,11 +555,11 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const query: IFindOptions<VideoModel> = {
-      distinct: true,
-      where: this.createBaseVideosWhere(),
+      distinct: true, // Because we have tags
       offset: start,
       limit: count,
-      order: [ getSort(sort), [ 'Tags', 'name', 'ASC' ] ]
+      order: [ getSort(sort) ],
+      where: {}
     }
 
     // TODO: search on tags too
@@ -595,23 +586,13 @@ export class VideoModel extends Model<VideoModel> {
       videoChannelInclude, tagInclude
     ]
 
-    return VideoModel.findAndCountAll(query).then(({ rows, count }) => {
-      return {
-        data: rows,
-        total: count
-      }
-    })
-  }
-
-  private static createBaseVideosWhere () {
-    return {
-      id: {
-        [Sequelize.Op.notIn]: VideoModel.sequelize.literal(
-          '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
-        )
-      },
-      privacy: VideoPrivacy.PUBLIC
-    }
+    return VideoModel.scope([ ScopeNames.NOT_IN_BLACKLIST, ScopeNames.PUBLIC ])
+      .findAndCountAll(query).then(({ rows, count }) => {
+        return {
+          data: rows,
+          total: count
+        }
+      })
   }
 
   getOriginalFile () {
@@ -733,13 +714,12 @@ export class VideoModel extends Model<VideoModel> {
       views: this.views,
       likes: this.likes,
       dislikes: this.dislikes,
-      tags: map<TagModel, string>(this.Tags, 'name'),
       thumbnailPath: this.getThumbnailPath(),
       previewPath: this.getPreviewPath(),
       embedPath: this.getEmbedPath(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
-    }
+    } as Video
   }
 
   toFormattedDetailsJSON () {
@@ -755,6 +735,7 @@ export class VideoModel extends Model<VideoModel> {
       descriptionPath: this.getDescriptionPath(),
       channel: this.VideoChannel.toFormattedJSON(),
       account: this.VideoChannel.Account.toFormattedJSON(),
+      tags: map<TagModel, string>(this.Tags, 'name'),
       files: []
     }
 
@@ -779,7 +760,7 @@ export class VideoModel extends Model<VideoModel> {
         return -1
       })
 
-    return Object.assign(formattedJson, detailsJson)
+    return Object.assign(formattedJson, detailsJson) as VideoDetails
   }
 
   toActivityPubObject (): VideoTorrentObject {

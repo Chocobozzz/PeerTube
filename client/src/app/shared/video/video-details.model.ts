@@ -58,6 +58,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.files = hash.files
     this.channel = hash.channel
     this.account = hash.account
+    this.tags = hash.tags
 
     this.likesPercent = (this.likes / (this.likes + this.dislikes)) * 100
     this.dislikesPercent = (this.dislikes / (this.likes + this.dislikes)) * 100

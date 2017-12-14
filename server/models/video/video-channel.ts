@@ -11,7 +11,7 @@ import {
   HasMany,
   Is,
   IsUUID,
-  Model,
+  Model, Scopes,
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -28,6 +28,26 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelShareModel } from './video-channel-share'
 
+enum ScopeNames {
+  WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_VIDEOS = 'WITH_VIDEOS'
+}
+
+@Scopes({
+  [ScopeNames.WITH_ACCOUNT]: {
+    include: [
+      {
+        model: () => AccountModel,
+        include: [ { model: () => ServerModel, required: false } ]
+      }
+    ]
+  },
+  [ScopeNames.WITH_VIDEOS]: {
+    include: [
+      () => VideoModel
+    ]
+  }
+})
 @Table({
   tableName: 'videoChannel',
   indexes: [
@@ -122,17 +142,10 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
-      include: [
-        {
-          model: AccountModel,
-          required: true,
-          include: [ { model: ServerModel, required: false } ]
-        }
-      ]
+      order: [ getSort(sort) ]
     }
 
-    return VideoChannelModel.findAndCountAll(query)
+    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
@@ -159,29 +172,16 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static loadByUUID (uuid: string, t?: Sequelize.Transaction) {
+  static loadByUrl (url: string, t?: Sequelize.Transaction) {
     const query: IFindOptions<VideoChannelModel> = {
       where: {
-        uuid
+        url
       }
     }
 
     if (t !== undefined) query.transaction = t
 
-    return VideoChannelModel.findOne(query)
-  }
-
-  static loadByUrl (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoChannelModel> = {
-      where: {
-        url
-      },
-      include: [ AccountModel ]
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoChannelModel.findOne(query)
+    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findOne(query)
   }
 
   static loadByUUIDOrUrl (uuid: string, url: string, t?: Sequelize.Transaction) {
@@ -199,90 +199,39 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.findOne(query)
   }
 
-  static loadByHostAndUUID (fromHost: string, uuid: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoChannelModel> = {
-      where: {
-        uuid
-      },
-      include: [
-        {
-          model: AccountModel,
-          include: [
-            {
-              model: ServerModel,
-              required: true,
-              where: {
-                host: fromHost
-              }
-            }
-          ]
-        }
-      ]
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoChannelModel.findOne(query)
-  }
-
   static loadByIdAndAccount (id: number, accountId: number) {
     const options = {
       where: {
         id,
         accountId
-      },
-      include: [
-        {
-          model: AccountModel,
-          include: [ { model: ServerModel, required: false } ]
-        }
-      ]
+      }
     }
 
-    return VideoChannelModel.findOne(options)
+    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findOne(options)
   }
 
   static loadAndPopulateAccount (id: number) {
-    const options = {
-      include: [
-        {
-          model: AccountModel,
-          include: [ { model: ServerModel, required: false } ]
-        }
-      ]
-    }
-
-    return VideoChannelModel.findById(id, options)
+    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findById(id)
   }
 
   static loadByUUIDAndPopulateAccount (uuid: string) {
     const options = {
       where: {
         uuid
-      },
-      include: [
-        {
-          model: AccountModel,
-          include: [ { model: ServerModel, required: false } ]
-        }
-      ]
+      }
     }
 
-    return VideoChannelModel.findOne(options)
+    return VideoChannelModel.scope(ScopeNames.WITH_ACCOUNT).findOne(options)
   }
 
   static loadAndPopulateAccountAndVideos (id: number) {
     const options = {
       include: [
-        {
-          model: AccountModel,
-          include: [ { model: ServerModel, required: false } ]
-        },
         VideoModel
       ]
     }
 
-    return VideoChannelModel.findById(id, options)
+    return VideoChannelModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEOS ]).findById(id, options)
   }
 
   isOwned () {

@@ -132,7 +132,6 @@ describe('Test a single server', function () {
     expect(video.serverHost).to.equal('localhost:9001')
     expect(video.accountName).to.equal('root')
     expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
 
@@ -181,7 +180,6 @@ describe('Test a single server', function () {
     expect(video.serverHost).to.equal('localhost:9001')
     expect(video.accountName).to.equal('root')
     expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
     expect(video.channel.name).to.equal('Default root channel')
@@ -248,7 +246,6 @@ describe('Test a single server', function () {
     expect(video.serverHost).to.equal('localhost:9001')
     expect(video.accountName).to.equal('root')
     expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
     expect(dateIsValid(video.createdAt)).to.be.true
     expect(dateIsValid(video.updatedAt)).to.be.true
 

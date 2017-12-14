@@ -5,12 +5,12 @@ import {
   BeforeUpdate,
   Column, CreatedAt,
   DataType,
-  Default,
+  Default, DefaultScope,
   HasMany,
   HasOne,
   Is,
   IsEmail,
-  Model,
+  Model, Scopes,
   Table, UpdatedAt
 } from 'sequelize-typescript'
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
@@ -27,6 +27,25 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
 
+@DefaultScope({
+  include: [
+    {
+      model: () => AccountModel,
+      required: true
+    }
+  ]
+})
+@Scopes({
+  withVideoChannel: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true,
+        include: [ () => VideoChannelModel ]
+      }
+    ]
+  }
+})
 @Table({
   tableName: 'user',
   indexes: [
@@ -122,8 +141,7 @@ export class UserModel extends Model<UserModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
-      include: [ { model: AccountModel, required: true } ]
+      order: [ getSort(sort) ]
     }
 
     return UserModel.findAndCountAll(query)
@@ -136,19 +154,14 @@ export class UserModel extends Model<UserModel> {
   }
 
   static loadById (id: number) {
-    const options = {
-      include: [ { model: AccountModel, required: true } ]
-    }
-
-    return UserModel.findById(id, options)
+    return UserModel.findById(id)
   }
 
   static loadByUsername (username: string) {
     const query = {
       where: {
         username
-      },
-      include: [ { model: AccountModel, required: true } ]
+      }
     }
 
     return UserModel.findOne(query)
@@ -158,29 +171,20 @@ export class UserModel extends Model<UserModel> {
     const query = {
       where: {
         username
-      },
-      include: [
-        {
-          model: AccountModel,
-          required: true,
-          include: [ VideoChannelModel ]
-        }
-      ]
+      }
     }
 
-    return UserModel.findOne(query)
+    return UserModel.scope('withVideoChannel').findOne(query)
   }
 
   static loadByUsernameOrEmail (username: string, email: string) {
     const query = {
-      include: [ { model: AccountModel, required: true } ],
       where: {
         [ Sequelize.Op.or ]: [ { username }, { email } ]
       }
     }
 
-    // FIXME: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/18387
-    return (UserModel as any).findOne(query)
+    return UserModel.findOne(query)
   }
 
   private static getOriginalVideoFileTotalFromUser (user: UserModel) {

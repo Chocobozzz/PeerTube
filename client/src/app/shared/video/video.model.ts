@@ -22,7 +22,6 @@ export class Video implements VideoServerModel {
   isLocal: boolean
   name: string
   serverHost: string
-  tags: string[]
   thumbnailPath: string
   thumbnailUrl: string
   previewPath: string
@@ -71,7 +70,6 @@ export class Video implements VideoServerModel {
     this.isLocal = hash.isLocal
     this.name = hash.name
     this.serverHost = hash.serverHost
-    this.tags = hash.tags
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
     this.previewPath = hash.previewPath

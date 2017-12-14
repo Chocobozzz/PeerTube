@@ -1,8 +1,35 @@
 import * as Sequelize from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
 import { VideoModel } from './video'
 
+enum ScopeNames {
+  FULL = 'FULL',
+  WITH_ACCOUNT = 'WITH_ACCOUNT'
+}
+
+@Scopes({
+  [ScopeNames.FULL]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true
+      },
+      {
+        model: () => VideoModel,
+        required: true
+      }
+    ]
+  },
+  [ScopeNames.WITH_ACCOUNT]: {
+    include: [
+      {
+        model: () => AccountModel,
+        required: true
+      }
+    ]
+  }
+})
 @Table({
   tableName: 'videoShare',
   indexes: [
@@ -46,14 +73,11 @@ export class VideoShareModel extends Model<VideoShareModel> {
   Video: VideoModel
 
   static load (accountId: number, videoId: number, t: Sequelize.Transaction) {
-    return VideoShareModel.findOne({
+    return VideoShareModel.scope(ScopeNames.WITH_ACCOUNT).findOne({
       where: {
         accountId,
         videoId
       },
-      include: [
-        AccountModel
-      ],
       transaction: t
     })
   }
@@ -72,7 +96,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
       transaction: t
     }
 
-    return VideoShareModel.findAll(query)
+    return VideoShareModel.scope(ScopeNames.FULL).findAll(query)
       .then(res => res.map(r => r.Account))
   }
 }

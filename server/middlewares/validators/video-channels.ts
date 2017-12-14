@@ -78,7 +78,7 @@ const videoChannelsRemoveValidator = [
     if (!await isVideoChannelExist(req.params.id, res)) return
 
     // Check if the user who did the request is able to delete the video
-    if (!checkUserCanDeleteVideoChannel(res.locals.user, res.locals.videoChannel, res)) return
+    if (!checkUserCanDeleteVideoChannel(res.locals.oauth.token.User, res.locals.videoChannel, res)) return
     if (!await checkVideoChannelIsNotTheLastOne(res)) return
 
     return next()

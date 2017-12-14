@@ -28,7 +28,6 @@ export interface Video {
   isLocal: boolean
   name: string
   serverHost: string
-  tags: string[]
   thumbnailPath: string
   previewPath: string
   embedPath: string
@@ -43,6 +42,7 @@ export interface VideoDetails extends Video {
   privacyLabel: string
   descriptionPath: string
   channel: VideoChannel
+  tags: string[]
   files: VideoFile[]
   account: Account
 }

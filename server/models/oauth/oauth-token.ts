@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { logger } from '../../helpers'
 import { AccountModel } from '../account/account'
 import { UserModel } from '../account/user'
@@ -15,6 +15,25 @@ export type OAuthTokenInfo = {
   }
 }
 
+enum ScopeNames {
+  WITH_ACCOUNT = 'WITH_ACCOUNT'
+}
+
+@Scopes({
+  [ScopeNames.WITH_ACCOUNT]: {
+    include: [
+      {
+        model: () => UserModel,
+        include: [
+          {
+            model: () => AccountModel,
+            required: true
+          }
+        ]
+      }
+    ]
+  }
+})
 @Table({
   tableName: 'oAuthToken',
   indexes: [
@@ -115,21 +134,10 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     const query = {
       where: {
         accessToken: bearerToken
-      },
-      include: [
-        {
-          model: UserModel,
-          include: [
-            {
-              model: AccountModel,
-              required: true
-            }
-          ]
-        }
-      ]
+      }
     }
 
-    return OAuthTokenModel.findOne(query).then(token => {
+    return OAuthTokenModel.scope(ScopeNames.WITH_ACCOUNT).findOne(query).then(token => {
       if (token) token['user'] = token.User
 
       return token
@@ -140,24 +148,15 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     const query = {
       where: {
         refreshToken: refreshToken
-      },
-      include: [
-        {
-          model: UserModel,
-          include: [
-            {
-              model: AccountModel,
-              required: true
-            }
-          ]
-        }
-      ]
+      }
     }
 
-    return OAuthTokenModel.findOne(query).then(token => {
-      token['user'] = token.User
+    return OAuthTokenModel.scope(ScopeNames.WITH_ACCOUNT)
+      .findOne(query)
+      .then(token => {
+        token['user'] = token.User
 
-      return token
-    })
+        return token
+      })
   }
 }
