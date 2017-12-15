@@ -28,13 +28,16 @@ require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to strin
 const dbname = CONFIG.DATABASE.DBNAME
 const username = CONFIG.DATABASE.USERNAME
 const password = CONFIG.DATABASE.PASSWORD
+const host = CONFIG.DATABASE.HOSTNAME
+const port = CONFIG.DATABASE.PORT
 
 const sequelizeTypescript = new SequelizeTypescript({
   database: dbname,
   dialect: 'postgres',
+  host,
+  port,
   username,
   password,
-  modelPaths: [__dirname + '/models'],
   benchmark: isTestInstance(),
   isolationLevel: SequelizeTypescript.Transaction.ISOLATION_LEVELS.SERIALIZABLE,
   operatorsAliases: false,
