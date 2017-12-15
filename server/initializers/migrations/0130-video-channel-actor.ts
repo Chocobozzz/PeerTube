@@ -1,5 +1,6 @@
 import * as Sequelize from 'sequelize'
 import { DataType } from 'sequelize-typescript'
+import { createPrivateAndPublicKeys } from '../../helpers'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
@@ -221,6 +222,18 @@ async function up (utils: {
     ]
     for (const columnToDelete of columnsToDelete) {
       await utils.queryInterface.removeColumn('videoChannel', columnToDelete)
+    }
+  }
+
+  {
+    const query = 'SELECT * FROM "actor" WHERE "serverId" IS NULL AND "publicKey" IS NULL'
+    const [ res ] = await utils.sequelize.query(query)
+
+    for (const actor of res) {
+      const { privateKey, publicKey } = await createPrivateAndPublicKeys()
+
+      const queryUpdate = `UPDATE "actor" SET "publicKey" = '${publicKey}', "privateKey" = '${privateKey}' WHERE id = ${actor.id}`
+      await utils.sequelize.query(queryUpdate)
     }
   }
 }
