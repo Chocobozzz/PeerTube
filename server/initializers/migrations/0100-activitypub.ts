@@ -1,7 +1,7 @@
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { shareVideoByServer } from '../../lib/activitypub/share'
+import { shareVideoByServerAndChannel } from '../../lib/activitypub/share'
 import { getVideoActivityPubUrl, getVideoChannelActivityPubUrl } from '../../lib/activitypub/url'
 import { createLocalAccountWithoutKeys } from '../../lib/user'
 import { ApplicationModel } from '../../models/application/application'
@@ -197,7 +197,7 @@ async function up (utils: {
     })
 
     for (const video of videos) {
-      await shareVideoByServer(video, undefined)
+      await shareVideoByServerAndChannel(video, undefined)
     }
   }
 }

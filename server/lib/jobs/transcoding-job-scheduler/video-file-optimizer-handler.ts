@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode, logger } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
 import { VideoModel } from '../../../models/video/video'
-import { shareVideoByServer } from '../../activitypub'
+import { shareVideoByServerAndChannel } from '../../activitypub'
 import { sendCreateVideo } from '../../activitypub/send'
 import { JobScheduler } from '../job-scheduler'
 import { TranscodingJobPayload } from './transcoding-job-scheduler'
@@ -38,7 +38,7 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
   // Now we'll add the video's meta data to our followers
   await sendCreateVideo(video, undefined)
   // TODO: share by channel
-  await shareVideoByServer(video, undefined)
+  await shareVideoByServerAndChannel(video, undefined)
 
   const originalFileHeight = await videoDatabase.getOriginalFileHeight()
 

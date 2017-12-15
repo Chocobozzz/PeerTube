@@ -21,7 +21,11 @@ import {
   VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
 } from '../../../initializers'
-import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServer } from '../../../lib/activitypub'
+import {
+  fetchRemoteVideoDescription,
+  getVideoActivityPubUrl,
+  shareVideoByServerAndChannel
+} from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler'
 import {
@@ -249,7 +253,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
 
     await sendCreateVideo(video, t)
     // TODO: share by video channel
-    await shareVideoByServer(video, t)
+    await shareVideoByServerAndChannel(video, t)
 
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
@@ -306,7 +310,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (wasPrivateVideo === true && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE) {
         await sendCreateVideo(videoInstanceUpdated, t)
         // TODO: Send by video channel
-        await shareVideoByServer(videoInstanceUpdated, t)
+        await shareVideoByServerAndChannel(videoInstanceUpdated, t)
       }
     })
 
