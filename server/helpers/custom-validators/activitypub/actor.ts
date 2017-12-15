@@ -1,8 +1,5 @@
-import * as Bluebird from 'bluebird'
-import { Response } from 'express'
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { isAccountNameValid } from '../accounts'
 import { exists, isUUIDValid } from '../misc'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
@@ -88,40 +85,6 @@ function isActorAcceptActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Accept')
 }
 
-function isActorIdExist (id: number | string, res: Response) {
-  let promise: Bluebird<ActorModel>
-
-  if (validator.isInt('' + id)) {
-    promise = ActorModel.load(+id)
-  } else { // UUID
-    promise = ActorModel.loadByUUID('' + id)
-  }
-
-  return isActorExist(promise, res)
-}
-
-function isLocalActorNameExist (name: string, res: Response) {
-  const promise = ActorModel.loadLocalByName(name)
-
-  return isActorExist(promise, res)
-}
-
-async function isActorExist (p: Bluebird<ActorModel>, res: Response) {
-  const actor = await p
-
-  if (!actor) {
-    res.status(404)
-      .send({ error: 'Actor not found' })
-      .end()
-
-    return false
-  }
-
-  res.locals.actor = actor
-
-  return true
-}
-
 // ---------------------------------------------------------------------------
 
 export {
@@ -137,8 +100,5 @@ export {
   isActorFollowActivityValid,
   isActorAcceptActivityValid,
   isActorDeleteActivityValid,
-  isActorIdExist,
-  isLocalActorNameExist,
-  isActorNameValid,
-  isActorExist
+  isActorNameValid
 }

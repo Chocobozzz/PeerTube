@@ -167,12 +167,12 @@ async function up (utils: {
 
     const query1 = `UPDATE "actorFollow" 
       SET "actorId" = 
-      (SELECT "actorId" FROM account WHERE id = "actorFollow"."actorId")`
+      (SELECT "account"."actorId" FROM account WHERE "account"."id" = "actorFollow"."actorId")`
     await utils.sequelize.query(query1)
 
     const query2 = `UPDATE "actorFollow" 
       SET "targetActorId" = 
-      (SELECT "actorId" FROM account WHERE id = "actorFollow"."actorId")`
+      (SELECT "account"."actorId" FROM account WHERE "account"."id" = "actorFollow"."targetActorId")`
 
     await utils.sequelize.query(query2)
   }

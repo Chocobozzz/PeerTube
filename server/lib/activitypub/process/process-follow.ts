@@ -62,5 +62,5 @@ async function follow (actor: ActorModel, targetActorURL: string) {
     return sendAccept(actorFollow, t)
   })
 
-  logger.info('Actor uuid %s is followed by actor %s.', actor.url, targetActorURL)
+  logger.info('Actor %s is followed by actor %s.', actor.url, targetActorURL)
 }

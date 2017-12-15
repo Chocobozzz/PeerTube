@@ -47,7 +47,7 @@ export class FollowService {
   }
 
   unfollow (follow: AccountFollow) {
-    return this.authHttp.delete(FollowService.BASE_APPLICATION_URL + '/following/' + follow.following.id)
+    return this.authHttp.delete(FollowService.BASE_APPLICATION_URL + '/following/' + follow.following.host)
       .map(this.restExtractor.extractDataBool)
       .catch(res => this.restExtractor.handleError(res))
   }
