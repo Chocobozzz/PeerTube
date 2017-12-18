@@ -8,6 +8,7 @@ export type UserConstructorHash = {
   role: UserRole,
   videoQuota?: number,
   displayNSFW?: boolean,
+  autoPlayVideo?: boolean,
   createdAt?: Date,
   account?: Account,
   videoChannels?: VideoChannel[]
@@ -18,6 +19,7 @@ export class User implements UserServerModel {
   email: string
   role: UserRole
   displayNSFW: boolean
+  autoPlayVideo: boolean
   videoQuota: number
   account: Account
   videoChannels: VideoChannel[]
@@ -40,6 +42,10 @@ export class User implements UserServerModel {
 
     if (hash.displayNSFW !== undefined) {
       this.displayNSFW = hash.displayNSFW
+    }
+
+    if (hash.autoPlayVideo !== undefined) {
+      this.autoPlayVideo = hash.autoPlayVideo
     }
 
     if (hash.createdAt !== undefined) {

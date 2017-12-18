@@ -111,12 +111,14 @@ function removeUser (url: string, userId: number, accessToken: string, expectedS
           .expect(expectedStatus)
 }
 
-function updateMyUser (url: string, accessToken: string, newPassword: string, displayNSFW?: boolean, email?: string) {
+function updateMyUser (url: string, accessToken: string, newPassword: string, displayNSFW?: boolean,
+  email?: string, autoPlayVideo?: boolean) {
   const path = '/api/v1/users/me'
 
   const toSend = {}
   if (newPassword !== undefined && newPassword !== null) toSend['password'] = newPassword
   if (displayNSFW !== undefined && displayNSFW !== null) toSend['displayNSFW'] = displayNSFW
+  if (autoPlayVideo !== undefined && autoPlayVideo !== null) toSend['autoPlayVideo'] = autoPlayVideo
   if (email !== undefined && email !== null) toSend['email'] = email
 
   return request(url)

@@ -5,6 +5,7 @@ import { isSignupAllowed, logger } from '../../helpers'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isUserDisplayNSFWValid,
+  isUserAutoPlayVideoValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
@@ -86,6 +87,7 @@ const usersUpdateMeValidator = [
   body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
   body('displayNSFW').optional().custom(isUserDisplayNSFWValid).withMessage('Should have a valid display Not Safe For Work attribute'),
+  body('autoPlayVideo').optional().custom(isUserAutoPlayVideoValid).withMessage('Should have a valid automatically plays video attribute'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // TODO: Add old password verification

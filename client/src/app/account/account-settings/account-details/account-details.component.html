@@ -9,6 +9,12 @@
   <div *ngIf="formErrors['displayNSFW']" class="alert alert-danger">
     {{ formErrors['displayNSFW'] }}
   </div>
+  <br/>
+  <input
+    type="checkbox" id="autoPlayVideo"
+    formControlName="autoPlayVideo"
+  >
+  <label for="autoPlayVideo">Automatically plays video</label>
 
   <input type="submit" value="Save" [disabled]="!form.valid">
 </form>

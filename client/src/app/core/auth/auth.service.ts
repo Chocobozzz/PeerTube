@@ -33,6 +33,7 @@ interface UserLoginWithUserInformation extends UserLogin {
   id: number
   role: UserRole
   displayNSFW: boolean
+  autoPlayVideo: boolean
   email: string
   videoQuota: number
   account: Account
@@ -191,6 +192,7 @@ export class AuthService {
       .subscribe(
         res => {
           this.user.displayNSFW = res.displayNSFW
+          this.user.autoPlayVideo = res.autoPlayVideo
           this.user.role = res.role
           this.user.videoChannels = res.videoChannels
           this.user.account = res.account
@@ -212,6 +214,7 @@ export class AuthService {
                         id: res.id,
                         role: res.role,
                         displayNSFW: res.displayNSFW,
+                        autoPlayVideo: res.autoPlayVideo,
                         email: res.email,
                         videoQuota: res.videoQuota,
                         account: res.account,
@@ -230,6 +233,7 @@ export class AuthService {
       role: obj.role,
       email: obj.email,
       displayNSFW: obj.displayNSFW,
+      autoPlayVideo: obj.autoPlayVideo,
       videoQuota: obj.videoQuota,
       videoChannels: obj.videoChannels,
       account: obj.account

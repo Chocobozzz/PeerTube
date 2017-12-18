@@ -21,8 +21,16 @@ function isUserUsernameValid (value: string) {
   return exists(value) && validator.matches(value, new RegExp(`^[a-z0-9._]{${min},${max}}$`))
 }
 
-function isUserDisplayNSFWValid (value: any) {
+function isBoolean (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
+}
+
+function isUserDisplayNSFWValid (value: any) {
+  return isBoolean(value)
+}
+
+function isUserAutoPlayVideoValid (value: any) {
+  return isBoolean(value)
 }
 
 function isUserRoleValid (value: any) {
@@ -36,5 +44,6 @@ export {
   isUserRoleValid,
   isUserVideoQuotaValid,
   isUserUsernameValid,
-  isUserDisplayNSFWValid
+  isUserDisplayNSFWValid,
+  isUserAutoPlayVideoValid
 }

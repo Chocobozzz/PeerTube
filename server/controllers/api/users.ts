@@ -134,6 +134,7 @@ async function createUser (req: express.Request) {
     password: body.password,
     email: body.email,
     displayNSFW: false,
+    autoPlayVideo: true,
     role: body.role,
     videoQuota: body.videoQuota
   })
@@ -162,6 +163,7 @@ async function registerUser (req: express.Request) {
     password: body.password,
     email: body.email,
     displayNSFW: false,
+    autoPlayVideo: true,
     role: UserRole.USER,
     videoQuota: CONFIG.USER.VIDEO_QUOTA
   })
@@ -219,6 +221,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
   if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
+  if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
   await user.save()
 

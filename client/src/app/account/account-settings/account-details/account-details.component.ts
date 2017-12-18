@@ -31,7 +31,8 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
 
   buildForm () {
     this.form = this.formBuilder.group({
-      displayNSFW: [ this.user.displayNSFW ]
+      displayNSFW: [ this.user.displayNSFW ],
+      autoPlayVideo: [ this.user.autoPlayVideo ]
     })
 
     this.form.valueChanges.subscribe(data => this.onValueChanged(data))
@@ -43,8 +44,10 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
 
   updateDetails () {
     const displayNSFW = this.form.value['displayNSFW']
+    const autoPlayVideo = this.form.value['autoPlayVideo']
     const details: UserUpdateMe = {
-      displayNSFW
+      displayNSFW,
+      autoPlayVideo
     }
 
     this.error = null

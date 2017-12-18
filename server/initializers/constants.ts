@@ -8,7 +8,7 @@ import { isTestInstance, root } from '../helpers/core-utils'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 125
+const LAST_MIGRATION_VERSION = 130
 
 // ---------------------------------------------------------------------------
 

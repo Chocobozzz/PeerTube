@@ -350,6 +350,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid autoPlayVideo attribute', async function () {
+      const fields = {
+        autoPlayVideo: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should fail with an non authenticated user', async function () {
       const fields = {
         password: 'my super password'
@@ -362,6 +370,7 @@ describe('Test users API validators', function () {
       const fields = {
         password: 'my super password',
         displayNSFW: true,
+        autoPlayVideo: false,
         email: 'super_email@example.com'
       }
 
