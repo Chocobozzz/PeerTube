@@ -2,7 +2,7 @@ import { exists } from '../misc'
 import { isActivityPubUrlValid } from './misc'
 
 function isSignatureTypeValid (signatureType: string) {
-  return exists(signatureType) && signatureType === 'GraphSignature2012'
+  return exists(signatureType) && signatureType === 'RsaSignature2017'
 }
 
 function isSignatureCreatorValid (signatureCreator: string) {

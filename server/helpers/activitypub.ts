@@ -10,6 +10,7 @@ function activityPubContextify <T> (data: T) {
       'https://www.w3.org/ns/activitystreams',
       'https://w3id.org/security/v1',
       {
+        'RsaSignature2017': 'https://w3id.org/security#RsaSignature2017',
         'Hashtag': 'as:Hashtag',
         'uuid': 'http://schema.org/identifier',
         'category': 'http://schema.org/category',
@@ -17,8 +18,7 @@ function activityPubContextify <T> (data: T) {
         'nsfw': 'as:sensitive',
         'language': 'http://schema.org/inLanguage',
         'views': 'http://schema.org/Number',
-        'size': 'http://schema.org/Number',
-        'VideoChannel': 'https://peertu.be/ns/VideoChannel'
+        'size': 'http://schema.org/Number'
       }
     ]
   })

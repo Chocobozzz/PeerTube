@@ -1,8 +1,6 @@
 import * as AsyncLRU from 'async-lru'
-import * as jsonld from 'jsonld'
+import * as jsonld from 'jsonld/'
 import * as jsig from 'jsonld-signatures'
-
-jsig.use('jsonld', jsonld)
 
 const nodeDocumentLoader = jsonld.documentLoaders.node()
 
@@ -16,5 +14,7 @@ const lru = new AsyncLRU({
 jsonld.documentLoader = (url, cb) => {
   lru.get(url, cb)
 }
+
+jsig.use('jsonld', jsonld)
 
 export { jsig }

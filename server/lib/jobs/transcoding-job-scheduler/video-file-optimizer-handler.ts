@@ -37,7 +37,6 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
 
   // Now we'll add the video's meta data to our followers
   await sendCreateVideo(video, undefined)
-  // TODO: share by channel
   await shareVideoByServerAndChannel(video, undefined)
 
   const originalFileHeight = await videoDatabase.getOriginalFileHeight()

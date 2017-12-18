@@ -5,7 +5,7 @@
   "private": true,
   "licence": "GPLv3",
   "engines": {
-    "node": ">=4.x"
+    "node": ">=8.x"
   },
   "author": {
     "name": "Florian Bigard",
@@ -65,8 +65,8 @@
     "express-validator": "^4.1.1",
     "fluent-ffmpeg": "^2.1.0",
     "js-yaml": "^3.5.4",
-    "jsonld": "^0.4.12",
-    "jsonld-signatures": "^1.2.1",
+    "jsonld": "^0.5.12",
+    "jsonld-signatures": "https://github.com/Chocobozzz/jsonld-signatures#rsa2017",
     "lodash": "^4.11.1",
     "magnet-uri": "^5.1.4",
     "mkdirp": "^0.5.1",
@@ -82,7 +82,7 @@
     "rimraf": "^2.5.4",
     "safe-buffer": "^5.0.1",
     "scripty": "^1.5.0",
-    "sequelize": "^4.7.5",
+    "sequelize": "4.25.2",
     "sequelize-typescript": "^0.6.1",
     "ts-node": "^3.3.0",
     "typescript": "^2.5.2",

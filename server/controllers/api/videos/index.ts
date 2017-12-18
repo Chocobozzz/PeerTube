@@ -252,7 +252,6 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     if (video.privacy === VideoPrivacy.PRIVATE) return videoCreated
 
     await sendCreateVideo(video, t)
-    // TODO: share by video channel
     await shareVideoByServerAndChannel(video, t)
 
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
@@ -309,7 +308,6 @@ async function updateVideo (req: express.Request, res: express.Response) {
       // Video is not private anymore, send a create action to remote servers
       if (wasPrivateVideo === true && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE) {
         await sendCreateVideo(videoInstanceUpdated, t)
-        // TODO: Send by video channel
         await shareVideoByServerAndChannel(videoInstanceUpdated, t)
       }
     })

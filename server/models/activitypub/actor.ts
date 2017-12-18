@@ -7,7 +7,7 @@ import {
   Column,
   CreatedAt,
   DataType,
-  Default,
+  Default, DefaultScope,
   ForeignKey,
   HasMany,
   HasOne,
@@ -41,6 +41,14 @@ enum ScopeNames {
   FULL = 'FULL'
 }
 
+@DefaultScope({
+  include: [
+    {
+      model: () => ServerModel,
+      required: false
+    }
+  ]
+})
 @Scopes({
   [ScopeNames.FULL]: {
     include: [
@@ -50,6 +58,10 @@ enum ScopeNames {
       },
       {
         model: () => VideoChannelModel,
+        required: false
+      },
+      {
+        model: () => ServerModel,
         required: false
       }
     ]

@@ -43,7 +43,8 @@ function isSignatureVerified (fromActor: ActorModel, signedDocument: object) {
 function signObject (byActor: ActorModel, data: any) {
   const options = {
     privateKeyPem: byActor.privateKey,
-    creator: byActor.url
+    creator: byActor.url,
+    algorithm: 'RsaSignature2017'
   }
 
   return jsig.promises.sign(data, options)
