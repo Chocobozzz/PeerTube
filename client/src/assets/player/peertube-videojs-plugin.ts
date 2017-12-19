@@ -235,9 +235,7 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
         if (err) return handleError(err)
 
         this.renderer = renderer
-        player.play()
-
-        return done()
+        player.play().then(done)
       })
     })
 
@@ -323,10 +321,14 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
       player.updateVideoFile()
     } else {
       player.one('play', () => {
-        // Pause, we wait the video to load before
-        player.pause()
+        // On firefox, we need to wait to load the video before playing
+        if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1) {
+          player.pause()
+          player.updateVideoFile(undefined, () => player.play())
+          return
+        }
 
-        player.updateVideoFile(undefined, () => player.play())
+        player.updateVideoFile(undefined)
       })
     }
 

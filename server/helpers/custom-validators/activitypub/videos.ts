@@ -43,8 +43,6 @@ function isActivityPubVideoDurationValid (value: string) {
 }
 
 function isVideoTorrentObjectValid (video: any) {
-  console.log(video)
-
   return video.type === 'Video' &&
     isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
