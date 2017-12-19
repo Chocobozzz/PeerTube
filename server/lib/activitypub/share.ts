@@ -1,10 +1,13 @@
 import { Transaction } from 'sequelize'
+import { VideoPrivacy } from '../../../shared/models/videos'
 import { getServerActor } from '../../helpers'
 import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
 import { sendVideoAnnounceToFollowers } from './send'
 
 async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
+  if (video.privacy === VideoPrivacy.PRIVATE) return
+
   const serverActor = await getServerActor()
 
   const serverShare = VideoShareModel.create({

@@ -7,6 +7,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import {
+  audiencify,
   broadcastToFollowers,
   getActorsInvolvedInVideo,
   getAudience,
@@ -16,9 +17,11 @@ import {
 } from './misc'
 
 async function sendCreateVideo (video: VideoModel, t: Transaction) {
-  const byActor = video.VideoChannel.Account.Actor
+  if (video.privacy === VideoPrivacy.PRIVATE) return
 
+  const byActor = video.VideoChannel.Account.Actor
   const videoObject = video.toActivityPubObject()
+
   const audience = await getAudience(byActor, t, video.privacy === VideoPrivacy.PUBLIC)
   const data = await createActivityData(video.url, byActor, videoObject, t, audience)
 
@@ -93,14 +96,12 @@ async function createActivityData (
     audience = await getAudience(byActor, t)
   }
 
-  return {
+  return audiencify({
     type: 'Create',
     id: url,
     actor: byActor.url,
-    to: audience.to,
-    cc: audience.cc,
-    object
-  }
+    object: audiencify(object, audience)
+  }, audience)
 }
 
 function createDislikeActivityData (byActor: ActorModel, video: VideoModel) {

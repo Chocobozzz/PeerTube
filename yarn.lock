@@ -2378,9 +2378,9 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
-"jsonld-signatures@https://github.com/digitalbazaar/jsonld-signatures#rsa2017":
+"jsonld-signatures@https://github.com/Chocobozzz/jsonld-signatures#rsa2017":
   version "1.2.2-2"
-  resolved "https://github.com/digitalbazaar/jsonld-signatures#ccb5ca156d72d7632131080d6ef564681791391e"
+  resolved "https://github.com/Chocobozzz/jsonld-signatures#77660963e722eb4541d2d255f9d9d4216329665f"
   dependencies:
     bitcore-message "github:CoMakery/bitcore-message#dist"
     jsonld "^0.5.12"

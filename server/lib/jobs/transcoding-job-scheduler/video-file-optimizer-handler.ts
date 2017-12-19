@@ -1,4 +1,5 @@
 import * as Bluebird from 'bluebird'
+import { VideoPrivacy } from '../../../../shared/models/videos'
 import { computeResolutionsToTranscode, logger } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
 import { VideoModel } from '../../../models/video/video'
@@ -35,9 +36,11 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 
-  // Now we'll add the video's meta data to our followers
-  await sendCreateVideo(video, undefined)
-  await shareVideoByServerAndChannel(video, undefined)
+  if (video.privacy !== VideoPrivacy.PRIVATE) {
+    // Now we'll add the video's meta data to our followers
+    await sendCreateVideo(video, undefined)
+    await shareVideoByServerAndChannel(video, undefined)
+  }
 
   const originalFileHeight = await videoDatabase.getOriginalFileHeight()
 

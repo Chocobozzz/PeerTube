@@ -4,6 +4,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { getVideoLikeActivityPubUrl } from '../url'
 import {
+  audiencify,
   broadcastToFollowers,
   getActorsInvolvedInVideo,
   getAudience,
@@ -44,14 +45,12 @@ async function likeActivityData (
     audience = await getAudience(byActor, t)
   }
 
-  return {
+  return audiencify({
     type: 'Like',
     id: url,
     actor: byActor.url,
-    to: audience.to,
-    cc: audience.cc,
     object: video.url
-  }
+  }, audience)
 }
 
 // ---------------------------------------------------------------------------

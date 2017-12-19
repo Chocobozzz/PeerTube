@@ -46,6 +46,7 @@ export interface ActivityFollow extends BaseActivity {
 
 export interface ActivityAccept extends BaseActivity {
   type: 'Accept'
+  object: ActivityFollow
 }
 
 export interface ActivityAnnounce extends BaseActivity {

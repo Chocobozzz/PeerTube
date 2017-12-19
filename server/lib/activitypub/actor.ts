@@ -11,7 +11,7 @@ import { ActorModel } from '../../models/activitypub/actor'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
 
-  // Set account keys, this could be long so process after the account creation and do not block the client
+// Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys (actor: ActorModel) {
   return createPrivateAndPublicKeys()
     .then(({ publicKey, privateKey }) => {
@@ -107,7 +107,7 @@ function saveActorAndServerAndModelIfNotExist (
 
 type FetchRemoteActorResult = {
   actor: ActorModel
-  preferredUsername: string
+  name: string
   summary: string
   attributedTo: ActivityPubAttributedTo[]
 }
@@ -142,8 +142,8 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
   const actor = new ActorModel({
     type: actorJSON.type,
     uuid: actorJSON.uuid,
-    name: actorJSON.name,
-    url: actorJSON.url,
+    preferredUsername: actorJSON.preferredUsername,
+    url: actorJSON.id,
     publicKey: actorJSON.publicKey.publicKeyPem,
     privateKey: null,
     followersCount: followersCount,
@@ -155,19 +155,20 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
     followingUrl: actorJSON.following
   })
 
+  const name = actorJSON.name || actorJSON.preferredUsername
   return {
     actor,
-    preferredUsername: actorJSON.preferredUsername,
+    name,
     summary: actorJSON.summary,
     attributedTo: actorJSON.attributedTo
   }
 }
 
-function buildActorInstance (type: ActivityPubActorType, url: string, name: string, uuid?: string) {
+function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
   return new ActorModel({
     type,
     url,
-    name,
+    preferredUsername,
     uuid,
     publicKey: null,
     privateKey: null,
@@ -210,7 +211,7 @@ async function fetchActorTotalItems (url: string) {
 
 function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t: Transaction) {
   const account = new AccountModel({
-    name: result.preferredUsername,
+    name: result.name,
     actorId: actor.id
   })
 
@@ -219,7 +220,7 @@ function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t: Tran
 
 async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResult, ownerActor: ActorModel, t: Transaction) {
   const videoChannel = new VideoChannelModel({
-    name: result.preferredUsername,
+    name: result.name,
     description: result.summary,
     actorId: actor.id,
     accountId: ownerActor.Account.id

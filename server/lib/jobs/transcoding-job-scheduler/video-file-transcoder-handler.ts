@@ -1,4 +1,5 @@
 import { VideoResolution } from '../../../../shared'
+import { VideoPrivacy } from '../../../../shared/models/videos'
 import { logger } from '../../../helpers'
 import { VideoModel } from '../../../models/video/video'
 import { sendUpdateVideo } from '../../activitypub/send'
@@ -31,7 +32,9 @@ async function onSuccess (jobId: number, video: VideoModel) {
   // Video does not exist anymore
   if (!videoDatabase) return undefined
 
-  await sendUpdateVideo(video, undefined)
+  if (video.privacy !== VideoPrivacy.PRIVATE) {
+    await sendUpdateVideo(video, undefined)
+  }
 
   return undefined
 }

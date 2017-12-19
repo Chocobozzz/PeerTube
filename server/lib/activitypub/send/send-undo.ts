@@ -11,6 +11,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
 import { getActorFollowActivityPubUrl, getUndoActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from '../url'
 import {
+  audiencify,
   broadcastToFollowers,
   getActorsInvolvedInVideo,
   getAudience,
@@ -112,12 +113,10 @@ async function undoActivityData (
     audience = await getAudience(byActor, t)
   }
 
-  return {
+  return audiencify({
     type: 'Undo',
     id: url,
     actor: byActor.url,
-    to: audience.to,
-    cc: audience.cc,
     object
-  }
+  }, audience)
 }

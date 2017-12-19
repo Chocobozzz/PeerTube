@@ -316,7 +316,7 @@ const CACHE = {
   }
 }
 
-const ACCEPT_HEADERS = ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.concat('html', 'application/json')
+const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
 // ---------------------------------------------------------------------------
 

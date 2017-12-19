@@ -1,5 +1,5 @@
 import { JobCategory } from '../../../../shared'
-import { buildSignedActivity, logger } from '../../../helpers'
+import { buildSignedActivity, getServerActor, logger } from '../../../helpers'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { JobHandler, JobScheduler } from '../job-scheduler'
@@ -46,16 +46,36 @@ async function computeBody (payload: ActivityPubHttpPayload) {
 
   if (payload.signatureActorId) {
     const actorSignature = await ActorModel.load(payload.signatureActorId)
-    if (!actorSignature) throw new Error('Unknown signature account id.')
+    if (!actorSignature) throw new Error('Unknown signature actor id.')
     body = await buildSignedActivity(actorSignature, payload.body)
   }
 
   return body
 }
 
+async function buildSignedRequestOptions (payload: ActivityPubHttpPayload) {
+  let actor: ActorModel
+  if (payload.signatureActorId) {
+    actor = await ActorModel.load(payload.signatureActorId)
+    if (!actor) throw new Error('Unknown signature actor id.')
+  } else {
+    // We need to sign the request, so use the server
+    actor = await getServerActor()
+  }
+
+  const keyId = actor.getWebfingerUrl()
+  return {
+    algorithm: 'rsa-sha256',
+    authorizationHeaderName: 'Signature',
+    keyId,
+    key: actor.privateKey
+  }
+}
+
 export {
   ActivityPubHttpPayload,
   activitypubHttpJobScheduler,
   maybeRetryRequestLater,
-  computeBody
+  computeBody,
+  buildSignedRequestOptions
 }

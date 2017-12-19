@@ -22,7 +22,7 @@ async function up (utils: {
         id integer NOT NULL,
         type enum_actor_type NOT NULL,
         uuid uuid NOT NULL,
-        name character varying(255) NOT NULL,
+        "preferredUsername" character varying(255) NOT NULL,
         url character varying(2000) NOT NULL,
         "publicKey" character varying(5000),
         "privateKey" character varying(5000),
@@ -50,7 +50,7 @@ async function up (utils: {
       `ALTER SEQUENCE actor_id_seq OWNED BY actor.id`,
       `ALTER TABLE ONLY actor ALTER COLUMN id SET DEFAULT nextval('actor_id_seq'::regclass)`,
       `ALTER TABLE ONLY actor ADD CONSTRAINT actor_pkey PRIMARY KEY (id);`,
-      `CREATE UNIQUE INDEX actor_name_server_id ON actor USING btree (name, "serverId")`,
+      `CREATE UNIQUE INDEX actor_preferred_username_server_id ON actor USING btree ("preferredUsername", "serverId")`,
       `ALTER TABLE ONLY actor
         ADD CONSTRAINT "actor_avatarId_fkey" FOREIGN KEY ("avatarId") REFERENCES avatar(id) ON UPDATE CASCADE ON DELETE CASCADE`,
       `ALTER TABLE ONLY actor
@@ -68,7 +68,7 @@ async function up (utils: {
       `
       INSERT INTO "actor"
         (
-          type, uuid, name, url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
+          type, uuid, "preferredUsername", url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
           "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
         )
         SELECT 
@@ -83,7 +83,7 @@ async function up (utils: {
       `
       INSERT INTO "actor"
         (
-          type, uuid, name, url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
+          type, uuid, "preferredUsername", url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
           "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
         )
         SELECT 
@@ -119,7 +119,7 @@ async function up (utils: {
     const query = `  
     INSERT INTO actor 
     (
-    type, uuid, name, url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl", 
+    type, uuid, "preferredUsername", url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl", 
     "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
     )
     SELECT 

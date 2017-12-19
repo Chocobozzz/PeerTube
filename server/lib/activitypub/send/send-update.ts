@@ -5,7 +5,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getUpdateActivityPubUrl } from '../url'
-import { broadcastToFollowers, getAudience } from './misc'
+import { audiencify, broadcastToFollowers, getAudience } from './misc'
 
 async function sendUpdateVideo (video: VideoModel, t: Transaction) {
   const byActor = video.VideoChannel.Account.Actor
@@ -41,12 +41,10 @@ async function updateActivityData (
     audience = await getAudience(byActor, t)
   }
 
-  return {
+  return audiencify({
     type: 'Update',
     id: url,
     actor: byActor.url,
-    to: audience.to,
-    cc: audience.cc,
-    object
-  }
+    object: audiencify(object, audience)
+  }, audience)
 }

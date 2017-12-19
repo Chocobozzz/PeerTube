@@ -1,5 +1,5 @@
 import { Transaction } from 'sequelize'
-import { Activity } from '../../../../shared/models/activitypub'
+import { Activity, ActivityAudience } from '../../../../shared/models/activitypub'
 import { logger } from '../../../helpers'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
@@ -116,6 +116,10 @@ async function getAudience (actorSender: ActorModel, t: Transaction, isPublic = 
   return { to, cc }
 }
 
+function audiencify (object: any, audience: ActivityAudience) {
+  return Object.assign(object, audience)
+}
+
 async function computeFollowerUris (toActorFollower: ActorModel[], followersException: ActorModel[], t: Transaction) {
   const toActorFollowerIds = toActorFollower.map(a => a.id)
 
@@ -133,5 +137,6 @@ export {
   getOriginVideoAudience,
   getActorsInvolvedInVideo,
   getObjectFollowersAudience,
-  forwardActivity
+  forwardActivity,
+  audiencify
 }

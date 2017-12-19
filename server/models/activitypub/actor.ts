@@ -2,32 +2,15 @@ import { values } from 'lodash'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  Default, DefaultScope,
-  ForeignKey,
-  HasMany,
-  HasOne,
-  Is,
-  IsUUID,
-  Model,
-  Scopes,
-  Table,
-  UpdatedAt
+  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, DefaultScope, ForeignKey, HasMany, HasOne, Is, IsUUID, Model, Scopes,
+  Table, UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityPubActorType } from '../../../shared/models/activitypub'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { activityPubContextify } from '../../helpers'
 import {
-  isActivityPubUrlValid,
-  isActorFollowersCountValid,
-  isActorFollowingCountValid,
-  isActorNameValid,
-  isActorPrivateKeyValid,
-  isActorPublicKeyValid
+  isActivityPubUrlValid, isActorFollowersCountValid, isActorFollowingCountValid, isActorPreferredUsernameValid,
+  isActorPrivateKeyValid, isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub'
 import { ACTIVITY_PUB_ACTOR_TYPES, AVATARS_DIR, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../account/account'
@@ -71,7 +54,7 @@ enum ScopeNames {
   tableName: 'actor',
   indexes: [
     {
-      fields: [ 'name', 'serverId' ],
+      fields: [ 'preferredUsername', 'serverId' ],
       unique: true
     }
   ]
@@ -89,9 +72,9 @@ export class ActorModel extends Model<ActorModel> {
   uuid: string
 
   @AllowNull(false)
-  @Is('ActorName', value => throwIfNotValid(value, isActorNameValid, 'actor name'))
+  @Is('ActorPreferredUsername', value => throwIfNotValid(value, isActorPreferredUsernameValid, 'actor preferred username'))
   @Column
-  name: string
+  preferredUsername: string
 
   @AllowNull(false)
   @Is('ActorUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
@@ -212,16 +195,6 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findById(id)
   }
 
-  static loadByUUID (uuid: string) {
-    const query = {
-      where: {
-        uuid
-      }
-    }
-
-    return ActorModel.scope(ScopeNames.FULL).findOne(query)
-  }
-
   static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
     const query = {
       where: {
@@ -235,10 +208,10 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (name: string) {
+  static loadLocalByName (preferredUsername: string) {
     const query = {
       where: {
-        name,
+        preferredUsername,
         serverId: null
       }
     }
@@ -246,10 +219,10 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByNameAndHost (name: string, host: string) {
+  static loadByNameAndHost (preferredUsername: string, host: string) {
     const query = {
       where: {
-        name
+        preferredUsername
       },
       include: [
         {
@@ -286,17 +259,15 @@ export class ActorModel extends Model<ActorModel> {
       }
     }
 
-    let host = CONFIG.WEBSERVER.HOST
     let score: number
     if (this.Server) {
-      host = this.Server.host
       score = this.Server.score
     }
 
     return {
       id: this.id,
       uuid: this.uuid,
-      host,
+      host: this.getHost(),
       score,
       followingCount: this.followingCount,
       followersCount: this.followersCount,
@@ -304,7 +275,7 @@ export class ActorModel extends Model<ActorModel> {
     }
   }
 
-  toActivityPubObject (preferredUsername: string, type: 'Account' | 'Application' | 'VideoChannel') {
+  toActivityPubObject (name: string, type: 'Account' | 'Application' | 'VideoChannel') {
     let activityPubType
     if (type === 'Account') {
       activityPubType = 'Person' as 'Person'
@@ -321,9 +292,9 @@ export class ActorModel extends Model<ActorModel> {
       followers: this.getFollowersUrl(),
       inbox: this.inboxUrl,
       outbox: this.outboxUrl,
-      preferredUsername,
+      preferredUsername: this.preferredUsername,
       url: this.url,
-      name: this.name,
+      name,
       endpoints: {
         sharedInbox: this.sharedInboxUrl
       },
@@ -372,5 +343,13 @@ export class ActorModel extends Model<ActorModel> {
 
   isOwned () {
     return this.serverId === null
+  }
+
+  getWebfingerUrl () {
+    return 'acct:' + this.preferredUsername + '@' + this.getHost()
+  }
+
+  getHost () {
+    return this.Server ? this.Server.host : CONFIG.WEBSERVER.HOST
   }
 }

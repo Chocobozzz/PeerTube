@@ -1,15 +1,17 @@
 import { doRequest, logger } from '../../../helpers'
-import { ActivityPubHttpPayload, computeBody, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
+import { ActivityPubHttpPayload, buildSignedRequestOptions, computeBody, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
 
 async function process (payload: ActivityPubHttpPayload, jobId: number) {
   logger.info('Processing ActivityPub broadcast in job %d.', jobId)
 
   const body = await computeBody(payload)
+  const httpSignatureOptions = await buildSignedRequestOptions(payload)
 
   const options = {
     method: 'POST',
     uri: '',
-    json: body
+    json: body,
+    httpSignature: httpSignatureOptions
   }
 
   for (const uri of payload.uris) {

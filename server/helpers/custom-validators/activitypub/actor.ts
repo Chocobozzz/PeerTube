@@ -1,8 +1,8 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
 import { isAccountNameValid } from '../accounts'
-import { exists, isUUIDValid } from '../misc'
-import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../video-channels'
+import { exists } from '../misc'
+import { isVideoChannelNameValid } from '../video-channels'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
@@ -23,41 +23,39 @@ function isActorPublicKeyValid (publicKey: string) {
   return exists(publicKey) &&
     typeof publicKey === 'string' &&
     publicKey.startsWith('-----BEGIN PUBLIC KEY-----') &&
-    publicKey.endsWith('-----END PUBLIC KEY-----') &&
+    publicKey.indexOf('-----END PUBLIC KEY-----') !== -1 &&
     validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTOR.PUBLIC_KEY)
 }
 
+const actorNameRegExp = new RegExp('[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_]+')
 function isActorPreferredUsernameValid (preferredUsername: string) {
-  return isAccountNameValid(preferredUsername) || isVideoChannelNameValid(preferredUsername)
+  return exists(preferredUsername) && validator.matches(preferredUsername, actorNameRegExp)
 }
 
-const actorNameRegExp = new RegExp('[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_]+')
 function isActorNameValid (name: string) {
-  return exists(name) && validator.matches(name, actorNameRegExp)
+  return isAccountNameValid(name) || isVideoChannelNameValid(name)
 }
 
 function isActorPrivateKeyValid (privateKey: string) {
   return exists(privateKey) &&
     typeof privateKey === 'string' &&
     privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') &&
-    privateKey.endsWith('-----END RSA PRIVATE KEY-----') &&
+    // Sometimes there is a \n at the end, so just assert the string contains the end mark
+    privateKey.indexOf('-----END RSA PRIVATE KEY-----') !== -1 &&
     validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACTOR.PRIVATE_KEY)
 }
 
 function isRemoteActorValid (remoteActor: any) {
   return isActivityPubUrlValid(remoteActor.id) &&
-    isUUIDValid(remoteActor.uuid) &&
     isActorTypeValid(remoteActor.type) &&
     isActivityPubUrlValid(remoteActor.following) &&
     isActivityPubUrlValid(remoteActor.followers) &&
     isActivityPubUrlValid(remoteActor.inbox) &&
     isActivityPubUrlValid(remoteActor.outbox) &&
-    isActorNameValid(remoteActor.name) &&
     isActorPreferredUsernameValid(remoteActor.preferredUsername) &&
     isActivityPubUrlValid(remoteActor.url) &&
     isActorPublicKeyObjectValid(remoteActor.publicKey) &&
     isActorEndpointsObjectValid(remoteActor.endpoints) &&
-    (!remoteActor.summary || isVideoChannelDescriptionValid(remoteActor.summary)) &&
     setValidAttributedTo(remoteActor) &&
     // If this is not an account, it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
