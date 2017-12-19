@@ -99,7 +99,11 @@ async function up (utils: {
     const data = {
       type: DataType.INTEGER,
       allowNull: true,
-      defaultValue: null
+      references: {
+        model: 'actor',
+        key: 'id'
+      },
+      onDelete: 'CASCADE'
     }
     await utils.queryInterface.addColumn('account', 'actorId', data)
 
@@ -108,11 +112,6 @@ async function up (utils: {
 
     data.allowNull = false
     await utils.queryInterface.changeColumn('account', 'actorId', data)
-
-    const query2 = `ALTER TABLE ONLY account
-    ADD CONSTRAINT "account_actorId_fkey" FOREIGN KEY ("actorId") REFERENCES actor(id) ON UPDATE CASCADE ON DELETE CASCADE;
-  `
-    await utils.sequelize.query(query2)
   }
 
   {
@@ -136,7 +135,11 @@ async function up (utils: {
     const data = {
       type: DataType.INTEGER,
       allowNull: true,
-      defaultValue: null
+      references: {
+        model: 'actor',
+        key: 'id'
+      },
+      onDelete: 'CASCADE'
     }
     await utils.queryInterface.addColumn('videoChannel', 'actorId', data)
 
@@ -145,12 +148,6 @@ async function up (utils: {
 
     data.allowNull = false
     await utils.queryInterface.changeColumn('videoChannel', 'actorId', data)
-
-    const query2 = `
-    ALTER TABLE ONLY "videoChannel"
-    ADD CONSTRAINT "videoChannel_actorId_fkey" FOREIGN KEY ("actorId") REFERENCES actor(id) ON UPDATE CASCADE ON DELETE CASCADE;
-    `
-    await utils.sequelize.query(query2)
   }
 
   {
@@ -166,16 +163,28 @@ async function up (utils: {
       await utils.queryInterface.removeConstraint('actorFollow', 'accountFollow_targetAccountId_fkey')
     }
 
-    const query1 = `UPDATE "actorFollow" 
+    {
+      const query1 = `UPDATE "actorFollow" 
       SET "actorId" = 
       (SELECT "account"."actorId" FROM account WHERE "account"."id" = "actorFollow"."actorId")`
-    await utils.sequelize.query(query1)
+      await utils.sequelize.query(query1)
 
-    const query2 = `UPDATE "actorFollow" 
+      const query2 = `UPDATE "actorFollow" 
       SET "targetActorId" = 
       (SELECT "account"."actorId" FROM account WHERE "account"."id" = "actorFollow"."targetActorId")`
 
-    await utils.sequelize.query(query2)
+      await utils.sequelize.query(query2)
+    }
+
+    {
+      const query1 = `ALTER TABLE ONLY "actorFollow"
+    ADD CONSTRAINT "actorFollow_actorId_fkey" FOREIGN KEY ("actorId") REFERENCES actor(id) ON UPDATE CASCADE ON DELETE CASCADE;`
+      await utils.sequelize.query(query1)
+
+      const query2 = `ALTER TABLE ONLY "actorFollow"
+    ADD CONSTRAINT "actorFollow_targetActorId_fkey" FOREIGN KEY ("targetActorId") REFERENCES actor(id) ON UPDATE CASCADE ON DELETE CASCADE;`
+      await utils.sequelize.query(query2)
+    }
   }
 
   {
@@ -191,6 +200,16 @@ async function up (utils: {
       SET "actorId" = 
       (SELECT "actorId" FROM account WHERE id = "videoShare"."actorId")`
     await utils.sequelize.query(query)
+
+    {
+      const query1 = `ALTER TABLE ONLY "videoShare"
+    ADD CONSTRAINT "videoShare_actorId_fkey" FOREIGN KEY ("actorId") REFERENCES actor(id) ON UPDATE CASCADE ON DELETE CASCADE;`
+      await utils.sequelize.query(query1)
+
+      const query2 = `ALTER TABLE ONLY "videoShare"
+    ADD CONSTRAINT "videoShare_videoId_fkey" FOREIGN KEY ("videoId") REFERENCES video(id) ON UPDATE CASCADE ON DELETE CASCADE;`
+      await utils.sequelize.query(query2)
+    }
   }
 
   {
