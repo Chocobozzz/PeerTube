@@ -17,7 +17,7 @@ import {
 } from './misc'
 
 async function sendCreateVideo (video: VideoModel, t: Transaction) {
-  if (video.privacy === VideoPrivacy.PRIVATE) return
+  if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
   const byActor = video.VideoChannel.Account.Actor
   const videoObject = video.toActivityPubObject()

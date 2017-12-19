@@ -6,7 +6,7 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { sendVideoAnnounceToFollowers } from './send'
 
 async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
-  if (video.privacy === VideoPrivacy.PRIVATE) return
+  if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
   const serverActor = await getServerActor()
 

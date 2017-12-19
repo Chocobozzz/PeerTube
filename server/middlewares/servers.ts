@@ -1,8 +1,6 @@
-import 'express-validator'
 import * as express from 'express'
+import 'express-validator'
 import { getHostWithPort } from '../helpers'
-
-import { REMOTE_SCHEME } from '../initializers'
 
 function setBodyHostsPort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.body.hosts) return next()
