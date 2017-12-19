@@ -39,15 +39,7 @@ async function up (utils: {
         "createdAt" timestamp with time zone NOT NULL,
         "updatedAt" timestamp with time zone NOT NULL
       );`,
-      `
-      CREATE SEQUENCE actor_id_seq
-      AS integer
-      START WITH 1
-      INCREMENT BY 1
-      NO MINVALUE
-      NO MAXVALUE
-      CACHE 1
-      `,
+      `CREATE SEQUENCE actor_id_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1`,
       `ALTER SEQUENCE actor_id_seq OWNED BY actor.id`,
       `ALTER TABLE ONLY actor ALTER COLUMN id SET DEFAULT nextval('actor_id_seq'::regclass)`,
       `ALTER TABLE ONLY actor ADD CONSTRAINT actor_pkey PRIMARY KEY (id);`,
