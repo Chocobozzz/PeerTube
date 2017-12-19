@@ -3,10 +3,6 @@ language: node_js
 node_js:
   - "8"
 
-env:
-  - CXX=g++-4.9
-  - CC=gcc-4.9
-
 addons:
   apt:
     sources:
@@ -21,6 +17,9 @@ sudo: false
 
 services:
   - postgresql
+
+install:
+  - CC=gcc-4.9 CXX=g++-4.9 yarn install
 
 before_script:
   - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"
