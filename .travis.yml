@@ -5,6 +5,7 @@ node_js:
 
 env:
   - CXX=g++-4.9
+  - CC=gcc-4.9
 
 addons:
   apt:

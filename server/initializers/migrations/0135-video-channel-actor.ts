@@ -10,6 +10,7 @@ async function up (utils: {
   // Create actor table
   {
     const queries = [
+      `DROP TYPE IF EXISTS enum_actor_type`,
       `
       CREATE TYPE enum_actor_type AS ENUM (
         'Group',
