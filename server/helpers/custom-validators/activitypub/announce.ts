@@ -5,8 +5,8 @@ function isAnnounceActivityValid (activity: any) {
   console.log(activity)
   return isBaseActivityValid(activity, 'Announce') &&
     (
-      isActivityPubUrlValid(activity.object) ||
-      isVideoTorrentCreateActivityValid(activity.object)
+      isVideoTorrentCreateActivityValid(activity.object) ||
+      isActivityPubUrlValid(activity.object)
     )
 }
 

@@ -17,7 +17,7 @@ function isActivityPubUrlValid (url: string) {
     isURLOptions.require_tld = false
   }
 
-  return exists(url) && validator.isURL(url, isURLOptions) && validator.isLength(url, CONSTRAINTS_FIELDS.ACTOR.URL)
+  return exists(url) && validator.isURL('' + url, isURLOptions) && validator.isLength('' + url, CONSTRAINTS_FIELDS.ACTOR.URL)
 }
 
 function isBaseActivityValid (activity: any, type: string) {
