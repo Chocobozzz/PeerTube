@@ -415,6 +415,15 @@ describe('Test users', function () {
       .a('number')
   })
 
+  it('Should be able to change the autoPlayVideo attribute', async function () {
+    await updateMyUser(server.url, accessTokenUser, undefined, undefined, undefined, false)
+
+    const res = await getMyUserInformation(server.url, accessTokenUser)
+    const user = res.body
+
+    expect(user.autoPlayVideo).to.be.false
+  })
+
   it('Should be able to change the email display attribute', async function () {
     await updateMyUser(server.url, accessTokenUser, undefined, undefined, 'updated@example.com')
 

@@ -20,7 +20,7 @@ import {
 } from '../../helpers'
 import {
   isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
-  isUserVideoQuotaValid
+  isUserVideoQuotaValid, isUserAutoPlayVideoValid
 } from '../../helpers/custom-validators/users'
 import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getSort, throwIfNotValid } from '../utils'
@@ -81,6 +81,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserDisplayNSFW', value => throwIfNotValid(value, isUserDisplayNSFWValid, 'display NSFW boolean'))
   @Column
   displayNSFW: boolean
+
+  @AllowNull(false)
+  @Default(true)
+  @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
+  @Column
+  autoPlayVideo: boolean
 
   @AllowNull(false)
   @Is('UserRole', value => throwIfNotValid(value, isUserRoleValid, 'role'))
@@ -223,6 +229,7 @@ export class UserModel extends Model<UserModel> {
       username: this.username,
       email: this.email,
       displayNSFW: this.displayNSFW,
+      autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,

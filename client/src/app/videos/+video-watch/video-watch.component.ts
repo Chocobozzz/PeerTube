@@ -290,12 +290,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
           const videojsOptions = {
             controls: true,
-            autoplay: true,
+            autoplay: this.user.autoPlayVideo,
             plugins: {
               peertube: {
                 videoFiles: this.video.files,
                 playerElement: this.playerElement,
-                autoplay: true,
+                autoplay: this.user.autoPlayVideo,
                 peerTubeLink: false
               }
             }

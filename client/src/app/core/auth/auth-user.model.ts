@@ -69,7 +69,8 @@ export class AuthUser extends User {
     ROLE: 'role',
     EMAIL: 'email',
     USERNAME: 'username',
-    DISPLAY_NSFW: 'display_nsfw'
+    DISPLAY_NSFW: 'display_nsfw',
+    AUTO_PLAY_VIDEO: 'auto_play_video'
   }
 
   tokens: Tokens
@@ -83,7 +84,8 @@ export class AuthUser extends User {
           username: localStorage.getItem(this.KEYS.USERNAME),
           email: localStorage.getItem(this.KEYS.EMAIL),
           role: parseInt(localStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
-          displayNSFW: localStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true'
+          displayNSFW: localStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true',
+          autoPlayVideo: localStorage.getItem(this.KEYS.AUTO_PLAY_VIDEO) === 'true'
         },
         Tokens.load()
       )
@@ -97,6 +99,7 @@ export class AuthUser extends User {
     localStorage.removeItem(this.KEYS.ID)
     localStorage.removeItem(this.KEYS.ROLE)
     localStorage.removeItem(this.KEYS.DISPLAY_NSFW)
+    localStorage.removeItem(this.KEYS.AUTO_PLAY_VIDEO)
     localStorage.removeItem(this.KEYS.EMAIL)
     Tokens.flush()
   }
@@ -133,6 +136,7 @@ export class AuthUser extends User {
     localStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
     localStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
     localStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW))
+    localStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
     this.tokens.save()
   }
 }
