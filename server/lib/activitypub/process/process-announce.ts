@@ -1,4 +1,4 @@
-import { ActivityAnnounce } from '../../../../shared/models/activitypub'
+import { ActivityAnnounce, ActivityCreate } from '../../../../shared/models/activitypub'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
@@ -12,7 +12,9 @@ async function processAnnounceActivity (activity: ActivityAnnounce) {
   const announcedActivity = activity.object
   const actorAnnouncer = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  if (announcedActivity.type === 'Create' && announcedActivity.object.type === 'Video') {
+  if (typeof announcedActivity === 'string') {
+    return processVideoShare(actorAnnouncer, activity)
+  } else if (announcedActivity.type === 'Create' && announcedActivity.object.type === 'Video') {
     return processVideoShare(actorAnnouncer, activity)
   }
 
@@ -35,18 +37,25 @@ export {
 function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
   const options = {
     arguments: [ actorAnnouncer, activity ],
-    errorMessage: 'Cannot share the video with many retries.'
+    errorMessage: 'Cannot share the video activity with many retries.'
   }
 
   return retryTransactionWrapper(shareVideo, options)
 }
 
 function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
-  const announcedActivity = activity.object
+  const announced = activity.object
 
   return sequelizeTypescript.transaction(async t => {
     // Add share entry
-    const video: VideoModel = await processCreateActivity(announcedActivity)
+    let video: VideoModel
+
+    if (typeof announced === 'string') {
+      video = await VideoModel.loadByUrlAndPopulateAccount(announced as string)
+      if (!video) throw new Error('Unknown video to share ' + announced)
+    } else {
+      video = await processCreateActivity(announced as ActivityCreate)
+    }
 
     const share = {
       actorId: actorAnnouncer.id,

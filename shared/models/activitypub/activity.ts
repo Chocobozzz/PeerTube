@@ -51,7 +51,7 @@ export interface ActivityAccept extends BaseActivity {
 
 export interface ActivityAnnounce extends BaseActivity {
   type: 'Announce'
-  object: ActivityCreate
+  object: ActivityCreate | string
 }
 
 export interface ActivityUndo extends BaseActivity {
