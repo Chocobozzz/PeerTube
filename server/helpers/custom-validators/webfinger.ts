@@ -11,7 +11,7 @@ function isWebfingerResourceValid (value: string) {
 
   const host = actorParts[1]
 
-  return host === CONFIG.WEBSERVER.HOST
+  return host === CONFIG.WEBSERVER.HOSTNAME || host === CONFIG.WEBSERVER.HOST
 }
 
 // ---------------------------------------------------------------------------
