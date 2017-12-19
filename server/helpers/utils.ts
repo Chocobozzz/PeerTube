@@ -2,12 +2,25 @@ import * as express from 'express'
 import { Model } from 'sequelize-typescript'
 import { ResultList } from '../../shared'
 import { VideoResolution } from '../../shared/models/videos'
-import { CONFIG } from '../initializers'
+import { CONFIG, REMOTE_SCHEME } from '../initializers'
 import { UserModel } from '../models/account/user'
 import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
 import { pseudoRandomBytesPromise } from './core-utils'
 import { logger } from './logger'
+
+function getHostWithPort (host: string) {
+  const splitted = host.split(':')
+
+  // The port was not specified
+  if (splitted.length === 1) {
+    if (REMOTE_SCHEME.HTTP === 'https') return host + ':443'
+
+    return host + ':80'
+  }
+
+  return host
+}
 
 function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.type('json').status(400).end()
@@ -108,5 +121,6 @@ export {
   computeResolutionsToTranscode,
   resetSequelizeInstance,
   getServerActor,
-  SortType
+  SortType,
+  getHostWithPort
 }

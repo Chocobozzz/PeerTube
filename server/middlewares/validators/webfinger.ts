@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
-import { logger } from '../../helpers'
+import { getHostWithPort, logger } from '../../helpers'
 import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
 import { ActorModel } from '../../models/activitypub/actor'
 import { areValidationErrors } from './utils'
@@ -14,7 +14,7 @@ const webfingerValidator = [
     if (areValidationErrors(req, res)) return
 
     // Remove 'acct:' from the beginning of the string
-    const nameWithHost = req.query.resource.substr(5)
+    const nameWithHost = getHostWithPort(req.query.resource.substr(5))
     const [ name ] = nameWithHost.split('@')
 
     const actor = await ActorModel.loadLocalByName(name)
