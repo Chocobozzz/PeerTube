@@ -144,6 +144,12 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
     $ apt-get update
     $ apt-get install ffmpeg postgresql openssl
 
+#### Arch Linux
+
+  1. Run: 
+
+    $ pacman -S nodejs yarn ffmpeg postgresql openssl
+
 #### Other distribution... (PR welcome)
 
 
