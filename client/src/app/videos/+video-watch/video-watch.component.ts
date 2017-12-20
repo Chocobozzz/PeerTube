@@ -33,7 +33,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   error = false
   loading = false
   player: videojs.Player
-  playerElement: HTMLMediaElement
+  playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
   video: VideoDetails = null
   videoPlayerLoaded = false
@@ -287,6 +287,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         // Player was already loaded
         if (this.videoPlayerLoaded !== true) {
           this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
+
+          // If autoplay is true, we don't really need a poster
+          if (this.isAutoplay() === false) {
+            console.log('coucou')
+            this.playerElement.poster = this.video.previewUrl
+          }
 
           const videojsOptions = {
             controls: true,
