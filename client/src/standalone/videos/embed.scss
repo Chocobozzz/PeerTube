@@ -14,47 +14,54 @@ html, body {
   margin: 0;
 }
 
-.video-js {
+
+
+.video-js.vjs-peertube-skin {
   width: 100%;
   height: 100%;
   overflow: hidden;
-}
 
-.vjs-poster {
-  background-size: 100% auto;
-}
-
-.vjs-peertube-link {
-  color: #fff;
-  text-decoration: none;
-  font-size: $font-size;
-  line-height: $control-bar-height;
-  transition: all .4s;
-  font-weight: $font-semibold;
-  margin-right: 3px;
-}
-
-.vjs-peertube-link:hover {
-  text-shadow: 0 0 1em #fff;
-}
-
-// Fix volume panel because we added a new component (PeerTube link)
-.vjs-volume-panel {
-  margin-right: 121px !important;
-}
-
-@media screen and (max-width: 350px) {
-  .vjs-play-control {
-    padding: 0 5px !important;
-    width: 25px !important;
+  .vjs-poster {
+    background-size: 100% auto;
   }
 
-  .vjs-volume-control {
-    display: none !important;
+  .vjs-peertube-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: $font-size;
+    line-height: $control-bar-height;
+    transition: all .4s;
+    font-weight: $font-semibold;
+    margin-right: 3px;
+    padding: 0 5px;
   }
 
+  .vjs-peertube-link:hover {
+    text-shadow: 0 0 1em #fff;
+  }
+
+  // Fix volume panel because we added a new component (PeerTube link)
   .vjs-volume-panel {
-    width: 26px !important;
-    margin-right: 140px !important;
+    margin-right: 137px !important;
+  }
+
+  @media screen and (max-width: 350px) {
+    .vjs-play-control {
+      padding: 0 5px !important;
+      width: 25px !important;
+    }
+
+    .vjs-volume-control {
+      display: none !important;
+    }
+
+    .vjs-volume-panel {
+      width: 26px !important;
+      margin-right: 140px !important;
+    }
+
+    .vjs-peertube-link {
+      padding: 0;
+    }
   }
 }

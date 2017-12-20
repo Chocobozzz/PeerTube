@@ -102,7 +102,7 @@ $control-bar-height: 34px;
         padding: 0;
 
         .vjs-current-time-display {
-          line-height: $control-bar-height;
+          line-height: calc(#{$control-bar-height} + 1px);
 
           &::after {
             content: "/";
@@ -117,7 +117,7 @@ $control-bar-height: 34px;
         padding: 0;
 
         .vjs-duration-display {
-          line-height: $control-bar-height;
+          line-height: calc(#{$control-bar-height} + 1px);
         }
       }
 
@@ -271,18 +271,19 @@ $control-bar-height: 34px;
     .vjs-menu-button-popup {
       font-size: 13px;
       font-weight: $font-semibold;
-      width: 42px;
+      width: 50px;
 
       // Thanks: https://github.com/kmoskwiak/videojs-resolution-switcher/pull/92/files
       .vjs-resolution-button-label {
         line-height: $control-bar-height;
         position: absolute;
         top: 0;
-        left: -1px;
+        left: 4px;
         width: 100%;
         height: 100%;
         text-align: center;
         box-sizing: inherit;
+        text-align: center;
       }
 
       .vjs-resolution-button {
@@ -293,9 +294,9 @@ $control-bar-height: 34px;
         top: 20px;
 
         .vjs-menu-content {
-          width: 4em;
+          width: 50px;
           left: 50%; /* Center the menu, in it's parent */
-          margin-left: -2em; /* half of width, to center */
+          margin-left: -21px;
         }
 
         li {
@@ -306,9 +307,24 @@ $control-bar-height: 34px;
     }
   }
 
-  @media screen and (max-width: 450px) {
-    .vjs-webtorrent-displayed {
+  @media screen and (max-width: 550px) {
+    .vjs-webtorrent {
+      padding: 0 !important;
+
+      .vjs-webtorrent-displayed {
+        display: none !important;
+      }
+    }
+  }
+
+  @media screen and (max-width: 300px) {
+    .vjs-volume-control {
       display: none !important;
+    }
+
+    .vjs-volume-panel {
+      width: 26px !important;
+      margin-right: 83px !important;
     }
   }
 }
