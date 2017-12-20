@@ -14,16 +14,22 @@
         <input #videofileInput type="file" name="videofile" id="videofile" (change)="fileChange()" />
       </div>
 
-      <div class="form-group">
-        <select [(ngModel)]="firstStepPrivacyId">
-          <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
-        </select>
+      <div class="form-group form-group-channel">
+        <label for="first-step-channel">Channel</label>
+        <div class="peertube-select-container">
+          <select id="first-step-channel" [(ngModel)]="firstStepChannelId">
+            <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
+          </select>
+        </div>
       </div>
 
       <div class="form-group">
-        <select [(ngModel)]="firstStepChannelId">
-          <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
-        </select>
+        <label for="first-step-privacy">Privacy</label>
+        <div class="peertube-select-container">
+          <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId">
+            <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
+          </select>
+        </div>
       </div>
     </div>
   </div>
@@ -37,7 +43,7 @@
   <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
     <my-video-edit
         [form]="form" [formErrors]="formErrors"
-        [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies"
+        [validationMessages]="validationMessages" [videoPrivacies]="videoPrivacies" [userVideoChannels]="userVideoChannels"
     ></my-video-edit>
 
 

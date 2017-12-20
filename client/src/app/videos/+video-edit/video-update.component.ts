@@ -5,8 +5,10 @@ import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/forkJoin'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
+import { AuthService } from '../../core/auth'
 import { FormReactive } from '../../shared'
 import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
+import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 
@@ -24,6 +26,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   formErrors: { [ id: string ]: string } = {}
   validationMessages: ValidatorMessage = {}
   videoPrivacies = []
+  userVideoChannels = []
 
   constructor (
     private formBuilder: FormBuilder,
@@ -31,7 +34,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private router: Router,
     private notificationsService: NotificationsService,
     private serverService: ServerService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private authService: AuthService
   ) {
     super()
   }
@@ -44,7 +48,12 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm()
 
-    this.videoPrivacies = this.serverService.getVideoPrivacies()
+    this.serverService.videoPrivaciesLoaded
+      .subscribe(
+        () => this.videoPrivacies = this.serverService.getVideoPrivacies()
+      )
+
+    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
 
     const uuid: string = this.route.snapshot.params['uuid']
     this.videoService.getVideo(uuid)

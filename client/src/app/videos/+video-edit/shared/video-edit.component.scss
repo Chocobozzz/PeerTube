@@ -1,6 +1,14 @@
 @import '_variables';
 @import '_mixins';
 
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
+.peertube-select-disabled-container {
+  @include peertube-select-disabled-container(auto);
+}
+
 .video-edit {
   height: 100%;
 
@@ -15,10 +23,6 @@
     &[type=checkbox] {
       outline: 0;
     }
-  }
-
-  select {
-    @include peertube-select(100%);
   }
 
   input, select {

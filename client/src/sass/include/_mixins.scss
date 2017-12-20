@@ -23,10 +23,12 @@
 }
 
 @mixin orange-button {
-  color: #fff;
-  background-color: $orange-color;
+  &, &:active, &:focus {
+    color: #fff;
+    background-color: $orange-color;
+  }
 
-  &:hover, &:active, &:focus {
+  &:hover {
     color: #fff;
     background-color: $orange-hoover-color;
   }
@@ -39,8 +41,10 @@
 }
 
 @mixin grey-button {
-  background-color: $grey-color;
-  color: #585858;
+  &, &:active, &:focus {
+    background-color: $grey-color;
+    color: #585858;
+  }
 
   &:hover, &:active, &:focus, &[disabled], &.disabled {
     color: #585858;
@@ -88,12 +92,59 @@
 }
 
 
-@mixin peertube-select ($width) {
-  background-color: #fff;
+@mixin peertube-select-container ($width) {
+  padding: 0;
+  margin: 0;
   border: 1px solid #C6C6C6;
-  height: $button-height;
   width: $width;
   border-radius: 3px;
-  padding-left: 15px;
-  padding-right: 15px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+
+  &:after {
+    top: 50%;
+    right: calc(0% + 15px);
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border: 5px solid rgba(0, 0, 0, 0);
+    border-top-color: #000000;
+    margin-top: -2px;
+    z-index: 100;
+  }
+
+  select {
+    padding: 0 12px;
+    width: calc(100% + 2px);
+    position: relative;
+    left: 1px;
+    border: none;
+    box-shadow: none;
+    background: transparent none;
+    appearance: none;
+    cursor: pointer;
+    height: $button-height;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:-moz-focusring {
+      color: transparent;
+      text-shadow: 0 0 0 #000;
+    }
+  }
+}
+
+@mixin peertube-select-disabled-container ($width) {
+  @include peertube-select-container($width);
+
+  background-color: #E5E5E5;
+
+  select {
+    cursor: default;
+  }
 }

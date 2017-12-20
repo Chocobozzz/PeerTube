@@ -10,8 +10,8 @@ input:not([type=submit]) {
   display: block;
 }
 
-select {
-  @include peertube-select(340px);
+.peertube-select-container {
+  @include peertube-select-container(340px);
 }
 
 input[type=submit] {

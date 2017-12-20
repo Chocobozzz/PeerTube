@@ -7,6 +7,7 @@ import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
 import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
+import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 
@@ -59,6 +60,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm()
 
+    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
+      .then(() => this.firstStepChannelId = this.userVideoChannels[0].id)
+
     this.serverService.videoPrivaciesLoaded
       .subscribe(
         () => {
@@ -67,20 +71,6 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           // Public by default
           this.firstStepPrivacyId = VideoPrivacy.PUBLIC
         })
-
-    this.authService.userInformationLoaded
-      .subscribe(
-        () => {
-          const user = this.authService.getUser()
-          if (!user) return
-
-          const videoChannels = user.videoChannels
-          if (Array.isArray(videoChannels) === false) return
-
-          this.userVideoChannels = videoChannels.map(v => ({ id: v.id, label: v.name }))
-          this.firstStepChannelId = this.userVideoChannels[0].id
-        }
-      )
   }
 
   fileChange () {

@@ -45,7 +45,7 @@ export class VideoEdit {
       name: this.name,
       tags: this.tags,
       nsfw: this.nsfw,
-      channel: this.channel,
+      channelId: this.channel,
       privacy: this.privacy
     }
   }

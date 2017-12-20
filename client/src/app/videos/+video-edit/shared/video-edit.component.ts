@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/forkJoin'
 import { ServerService } from '../../../core/server'
+import { VIDEO_CHANNEL } from '../../../shared/forms/form-validators'
 import { ValidatorMessage } from '../../../shared/forms/form-validators/validator-message'
 import {
   VIDEO_CATEGORY,
@@ -27,6 +28,7 @@ export class VideoEditComponent implements OnInit {
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: ValidatorMessage = {}
   @Input() videoPrivacies = []
+  @Input() userVideoChannels = []
 
   tags: string[] = []
   videoCategories = []
@@ -50,6 +52,7 @@ export class VideoEditComponent implements OnInit {
   updateForm () {
     this.formErrors['name'] = ''
     this.formErrors['privacy'] = ''
+    this.formErrors['channelId'] = ''
     this.formErrors['category'] = ''
     this.formErrors['licence'] = ''
     this.formErrors['language'] = ''
@@ -57,6 +60,7 @@ export class VideoEditComponent implements OnInit {
 
     this.validationMessages['name'] = VIDEO_NAME.MESSAGES
     this.validationMessages['privacy'] = VIDEO_PRIVACY.MESSAGES
+    this.validationMessages['channelId'] = VIDEO_CHANNEL.MESSAGES
     this.validationMessages['category'] = VIDEO_CATEGORY.MESSAGES
     this.validationMessages['licence'] = VIDEO_LICENCE.MESSAGES
     this.validationMessages['language'] = VIDEO_LANGUAGE.MESSAGES
@@ -64,6 +68,7 @@ export class VideoEditComponent implements OnInit {
 
     this.form.addControl('name', new FormControl('', VIDEO_NAME.VALIDATORS))
     this.form.addControl('privacy', new FormControl('', VIDEO_PRIVACY.VALIDATORS))
+    this.form.addControl('channelId', new FormControl({ value: '', disabled: true }))
     this.form.addControl('nsfw', new FormControl(false))
     this.form.addControl('category', new FormControl('', VIDEO_CATEGORY.VALIDATORS))
     this.form.addControl('licence', new FormControl('', VIDEO_LICENCE.VALIDATORS))

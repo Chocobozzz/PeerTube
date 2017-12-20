@@ -7,7 +7,7 @@
   <div class="form-group" *ngIf="isCreation()">
     <label for="username">Username</label>
     <input
-      type="text" class="form-control" id="username" placeholder="john"
+      type="text" id="username" placeholder="john"
       formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
     >
     <div *ngIf="formErrors.username" class="form-error">
@@ -18,7 +18,7 @@
   <div class="form-group">
     <label for="email">Email</label>
     <input
-      type="text" class="form-control" id="email" placeholder="mail@example.com"
+      type="text" id="email" placeholder="mail@example.com"
       formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
     >
     <div *ngIf="formErrors.email" class="form-error">
@@ -29,7 +29,7 @@
   <div class="form-group" *ngIf="isCreation()">
     <label for="password">Password</label>
     <input
-      type="password" class="form-control" id="password"
+      type="password" id="password"
       formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
     >
     <div *ngIf="formErrors.password" class="form-error">
@@ -39,11 +39,13 @@
 
   <div class="form-group">
     <label for="role">Role</label>
-    <select class="form-control" id="role" formControlName="role">
-      <option *ngFor="let role of roles" [value]="role.value">
-        {{ role.label }}
-      </option>
-    </select>
+    <div class="peertube-select-container">
+      <select id="role" formControlName="role">
+        <option *ngFor="let role of roles" [value]="role.value">
+          {{ role.label }}
+        </option>
+      </select>
+    </div>
 
     <div *ngIf="formErrors.role" class="form-error">
       {{ formErrors.role }}
@@ -52,11 +54,13 @@
 
   <div class="form-group">
     <label for="videoQuota">Video quota</label>
-    <select class="form-control" id="videoQuota" formControlName="videoQuota">
-      <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
-        {{ videoQuotaOption.label }}
-      </option>
-    </select>
+    <div class="peertube-select-container">
+      <select id="videoQuota" formControlName="videoQuota">
+        <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
+          {{ videoQuotaOption.label }}
+        </option>
+      </select>
+    </div>
 
     <div class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
       Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
