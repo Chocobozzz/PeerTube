@@ -43,6 +43,10 @@
       margin-right: 10px;
     }
   }
+
+  .label-tags + span {
+    font-size: 15px;
+  }
 }
 
 .submit-container {
@@ -95,6 +99,14 @@
     border: 1px solid #C6C6C6;
     border-radius: 3px;
     padding: 5px !important;
+    height: 40px;
+  }
+
+  tag-input-form {
+    input {
+      height: 30px !important;
+      background-color: #fff !important;
+    }
   }
 
   tag {
@@ -120,6 +132,8 @@
     padding-left: 6px !important;
 
     svg {
+      position: relative;
+      top: -1px;
       height: auto !important;
       vertical-align: middle !important;
       fill: #585858 !important;

@@ -1,4 +1,4 @@
-import { ActivityAnnounce, ActivityCreate } from '../../../../shared/models/activitypub'
+import { ActivityAnnounce } from '../../../../shared/models/activitypub'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
