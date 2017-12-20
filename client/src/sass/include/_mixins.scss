@@ -15,6 +15,7 @@
   border: 1px solid #C6C6C6;
   border-radius: 3px;
   padding-left: 15px;
+  padding-right: 15px;
 
   &::placeholder {
     color: #585858;
@@ -94,4 +95,5 @@
   width: $width;
   border-radius: 3px;
   padding-left: 15px;
+  padding-right: 15px;
 }

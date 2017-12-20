@@ -290,7 +290,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
           // If autoplay is true, we don't really need a poster
           if (this.isAutoplay() === false) {
-            console.log('coucou')
             this.playerElement.poster = this.video.previewUrl
           }
 
