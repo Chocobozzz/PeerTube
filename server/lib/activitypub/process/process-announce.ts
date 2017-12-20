@@ -51,10 +51,10 @@ function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
     let video: VideoModel
 
     if (typeof announced === 'string') {
-      video = await VideoModel.loadByUrlAndPopulateAccount(announced as string)
+      video = await VideoModel.loadByUrlAndPopulateAccount(announced)
       if (!video) throw new Error('Unknown video to share ' + announced)
     } else {
-      video = await processCreateActivity(announced as ActivityCreate)
+      video = await processCreateActivity(announced)
     }
 
     const share = {

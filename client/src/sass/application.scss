@@ -2,7 +2,7 @@
 @import '_mixins';
 
 $icon-font-path: '../../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
-@import '~bootstrap-sass/assets/stylesheets/_bootstrap';
+@import '_bootstrap';
 
 $FontPathSourceSansPro: '../../node_modules/npm-font-source-sans-pro/fonts';
 @import '~npm-font-source-sans-pro/source-sans-pro';
