@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { TabsModule } from 'ngx-bootstrap/tabs'
+import { DataTableModule } from 'primeng/components/datatable/datatable'
 import { SharedModule } from '../shared'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
@@ -16,6 +17,7 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
   imports: [
     AdminRoutingModule,
     TabsModule.forRoot(),
+    DataTableModule,
     SharedModule
   ],
 

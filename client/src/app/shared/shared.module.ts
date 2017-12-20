@@ -10,7 +10,6 @@ import { ModalModule } from 'ngx-bootstrap/modal'
 import { InfiniteScrollModule } from 'ngx-infinite-scroll'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
-import { DataTableModule } from 'primeng/components/datatable/datatable'
 
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { DeleteButtonComponent } from './misc/delete-button.component'
@@ -39,7 +38,6 @@ import { VideoService } from './video/video.service'
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
 
-    DataTableModule,
     PrimeSharedModule,
     InfiniteScrollModule,
     NgPipesModule
@@ -66,7 +64,6 @@ import { VideoService } from './video/video.service'
 
     BsDropdownModule,
     ModalModule,
-    DataTableModule,
     PrimeSharedModule,
     InfiniteScrollModule,
     BytesPipe,

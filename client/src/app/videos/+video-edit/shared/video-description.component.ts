@@ -1,10 +1,10 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { truncate } from 'lodash'
 import 'rxjs/add/operator/debounceTime'
 import 'rxjs/add/operator/distinctUntilChanged'
 import { Subject } from 'rxjs/Subject'
 import { MarkdownService } from '../../shared'
+import truncate from 'lodash-es/truncate'
 
 @Component({
   selector: 'my-video-description',

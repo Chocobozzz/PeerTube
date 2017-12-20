@@ -47,7 +47,8 @@
     "ts-node": "ts-node",
     "tslint": "tslint",
     "travis": "scripty",
-    "release": "scripty"
+    "release": "scripty",
+    "client-report": "scripty"
   },
   "dependencies": {
     "async": "^2.0.0",
