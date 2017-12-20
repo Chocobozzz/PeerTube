@@ -33,7 +33,12 @@ class VideosPreviewCache {
     })
   }
 
-  getPreviewPath (key: string) {
+  async getPreviewPath (key: string) {
+    const video = await VideoModel.loadByUUID(key)
+    if (!video) return undefined
+
+    if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName())
+
     return new Promise<string>((res, rej) => {
       this.lru.get(key, (err, value) => {
         err ? rej(err) : res(value)
@@ -42,10 +47,10 @@ class VideosPreviewCache {
   }
 
   private async loadPreviews (key: string) {
-    const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(key)
+    const video = await VideoModel.loadByUUID(key)
     if (!video) return undefined
 
-    if (video.isOwned()) return join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName())
+    if (video.isOwned()) throw new Error('Cannot load preview of owned video.')
 
     const res = await this.saveRemotePreviewAndReturnPath(video)
 

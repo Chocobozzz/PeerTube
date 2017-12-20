@@ -263,7 +263,7 @@ const peertubePlugin = function (options: PeertubePluginOptions) {
     const isPaused = player.paused()
 
     // Hide bigPlayButton
-    if (!isPaused && this.player_.options_.bigPlayButton) {
+    if (!isPaused) {
       this.player_.bigPlayButton.hide()
     }
 

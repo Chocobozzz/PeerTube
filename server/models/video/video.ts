@@ -528,6 +528,18 @@ export class VideoModel extends Model<VideoModel> {
       .findById(id, options)
   }
 
+  static loadByUUID (uuid: string) {
+    const options = {
+      where: {
+        uuid
+      }
+    }
+
+    return VideoModel
+      .scope([ ScopeNames.WITH_FILES ])
+      .findOne(options)
+  }
+
   static loadByUUIDAndPopulateAccountAndServerAndTags (uuid: string) {
     const options = {
       order: [ [ 'Tags', 'name', 'ASC' ] ],

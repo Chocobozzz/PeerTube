@@ -39,6 +39,25 @@ $control-bar-height: 34px;
     background-color: transparent !important;
   }
 
+  &.vjs-has-started .vjs-big-play-button {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.5s, opacity 0.5s;
+  }
+
+  .vjs-loading-spinner {
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  &.vjs-waiting .vjs-loading-spinner {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0.5s, opacity 0.5s;
+  }
+
   .vjs-control-bar,
   .vjs-big-play-button,
   .vjs-menu-button .vjs-menu-content {
@@ -308,6 +327,10 @@ $control-bar-height: 34px;
   }
 
   @media screen and (max-width: 550px) {
+    .vjs-big-play-button {
+      font-size: 6.5em;
+    }
+
     .vjs-webtorrent {
       padding: 0 !important;
 
@@ -318,6 +341,14 @@ $control-bar-height: 34px;
   }
 
   @media screen and (max-width: 300px) {
+    .vjs-dock-text {
+      font-size: 1.5em;
+    }
+
+    .vjs-big-play-button {
+      font-size: 5em;
+    }
+
     .vjs-volume-control {
       display: none !important;
     }
