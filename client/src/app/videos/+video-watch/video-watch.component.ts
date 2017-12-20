@@ -221,6 +221,32 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.tags.join(', ')
   }
 
+  isVideoRemovable () {
+    return this.video.isRemovableBy(this.authService.getUser())
+  }
+
+  removeVideo (event: Event) {
+    event.preventDefault()
+
+    this.confirmService.confirm('Do you really want to delete this video?', 'Delete').subscribe(
+      res => {
+        if (res === false) return
+
+        this.videoService.removeVideo(this.video.id)
+          .subscribe(
+            status => {
+              this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
+
+              // Go back to the video-list.
+              this.router.navigate([ '/videos/list' ])
+            },
+
+            error => this.notificationsService.error('Error', error.text)
+          )
+      }
+    )
+  }
+
   private updateVideoDescription (description: string) {
     this.video.description = description
     this.setVideoDescriptionHTML()

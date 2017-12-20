@@ -49,6 +49,12 @@
                   <span class="icon icon-blacklist"></span> Blacklist
                 </a>
               </li>
+
+              <li *ngIf="isVideoRemovable()" role="menuitem">
+                <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
+                  <span class="icon icon-blacklist"></span> Delete
+                </a>
+              </li>
             </ul>
           </div>
         </div>
