@@ -1,10 +1,8 @@
 @import '_variables';
 @import '_mixins';
 
-label {
-  font-size: 15px;
-  font-weight: $font-regular;
-  margin-left: 5px;
+input[type=checkbox] {
+  @include peertube-checkbox(1px);
 }
 
 input[type=submit] {

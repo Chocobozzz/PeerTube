@@ -7,7 +7,10 @@
   (scrolledUp)="onNearOfTop()"
 >
   <div class="video" *ngFor="let video of videos; let i = index">
-    <input type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
+    <div class="checkbox-container">
+      <input [id]="'video-check-' + i" type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
+      <label [for]="'video-check-' + i"></label>
+    </div>
 
     <my-video-thumbnail [video]="video"></my-video-thumbnail>
 

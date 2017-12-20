@@ -46,11 +46,6 @@
   min-height: 130px;
   padding-bottom: 20px;
 
-  input[type=checkbox] {
-    margin-right: 20px;
-    outline: 0;
-  }
-
   &:first-child {
     margin-top: 47px;
   }
@@ -58,6 +53,17 @@
   &:not(:last-child) {
     margin-bottom: 20px;
     border-bottom: 1px solid #C6C6C6;
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    margin-left: 12px;
+
+    input[type=checkbox] {
+      @include peertube-checkbox(2px);
+    }
   }
 
   my-video-thumbnail {

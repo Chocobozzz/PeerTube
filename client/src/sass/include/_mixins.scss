@@ -148,3 +148,49 @@
     cursor: default;
   }
 }
+
+@mixin peertube-checkbox ($border-width) {
+  display: none;
+
+  & + label {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    border: $border-width solid #000;
+    border-radius: 3px;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: calc(2px - #{$border-width});
+      left: 5px;
+      width: 5px;
+      height: 12px;
+      opacity: 0;
+      transform: rotate(45deg) scale(0);
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+    }
+  }
+
+  &:checked + label {
+    border-color: transparent;
+    background: $orange-color;
+    animation: jelly 0.6s ease;
+
+    &:after {
+      opacity: 1;
+      transform: rotate(45deg) scale(1);
+    }
+  }
+
+  & + label + label {
+    font-size: 15px;
+    font-weight: $font-regular;
+    margin-left: 5px;
+    cursor: pointer;
+  }
+}
+

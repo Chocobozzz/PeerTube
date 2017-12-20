@@ -21,7 +21,7 @@
     display: block;
 
     &[type=checkbox] {
-      outline: 0;
+      @include peertube-checkbox(1px);
     }
   }
 

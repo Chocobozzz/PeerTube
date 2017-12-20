@@ -1,20 +1,23 @@
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
 <form role="form" (ngSubmit)="updateDetails()" [formGroup]="form">
-  <input
-    type="checkbox" id="displayNSFW"
-    formControlName="displayNSFW"
-  >
-  <label for="displayNSFW">Display videos that contain mature or explicit content</label>
-  <div *ngIf="formErrors['displayNSFW']" class="alert alert-danger">
-    {{ formErrors['displayNSFW'] }}
+  <div class="form-group">
+    <input
+      type="checkbox" id="displayNSFW"
+      formControlName="displayNSFW"
+    >
+    <label for="displayNSFW"></label>
+    <label for="displayNSFW">Display videos that contain mature or explicit content</label>
   </div>
-  <br/>
-  <input
-    type="checkbox" id="autoPlayVideo"
-    formControlName="autoPlayVideo"
-  >
-  <label for="autoPlayVideo">Automatically plays video</label>
+
+  <div class="form-group">
+    <input
+      type="checkbox" id="autoPlayVideo"
+      formControlName="autoPlayVideo"
+    >
+    <label for="autoPlayVideo"></label>
+    <label for="autoPlayVideo">Automatically plays video</label>
+  </div>
 
   <input type="submit" value="Save" [disabled]="!form.valid">
 </form>
