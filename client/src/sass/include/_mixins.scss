@@ -22,6 +22,14 @@
   }
 }
 
+@mixin peertube-textarea ($width, $height) {
+  @include peertube-input-text($width);
+
+  height: $height;
+  padding: 5px 15px;
+  font-size: 15px;
+}
+
 @mixin orange-button {
   &, &:active, &:focus {
     color: #fff;
@@ -101,6 +109,7 @@
   overflow: hidden;
   background: #fff;
   position: relative;
+  font-size: 15px;
 
   &:after {
     top: 50%;
@@ -146,6 +155,44 @@
 
   select {
     cursor: default;
+  }
+}
+
+// Thanks: https://codepen.io/triss90/pen/XNEdRe/
+@mixin peertube-radio-container {
+  input[type="radio"] {
+    display: none;
+
+    & + label {
+      font-weight: $font-regular;
+      cursor: pointer;
+
+      &:before {
+        position: relative;
+        top: -2px;
+        content: '';
+        background: #fff;
+        border-radius: 100%;
+        border: 1px solid #000;
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        vertical-align: middle;
+        cursor: pointer;
+        text-align: center;
+        margin-right: 10px;
+      }
+    }
+
+    &:checked + label:before {
+      background-color: #000;
+      box-shadow: inset 0 0 0 4px #fff;
+    }
+
+    &:focus + label:before {
+      outline: none;
+      border-color: #000;
+    }
   }
 }
 

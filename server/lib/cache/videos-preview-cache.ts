@@ -47,7 +47,7 @@ class VideosPreviewCache {
   }
 
   private async loadPreviews (key: string) {
-    const video = await VideoModel.loadByUUID(key)
+    const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(key)
     if (!video) return undefined
 
     if (video.isOwned()) throw new Error('Cannot load preview of owned video.')

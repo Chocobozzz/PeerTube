@@ -101,27 +101,27 @@
         .action-more {
           display: inline-block;
 
-          .dropdown-menu .icon {
-            display: inline-block;
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 21px;
-            height: 21px;
-            vertical-align: middle;
-            margin-right: 5px;
-            position: relative;
-            top: -1px;
+          .dropdown-menu .dropdown-item {
+            padding: 6px 24px;
 
-            &.icon-download {
-              background-image: url('../../../assets/images/video/download-grey.svg');
-            }
+            .icon {
+              @include icon(24px);
 
-            &.icon-alert {
-              background-image: url('../../../assets/images/video/alert.svg');
-            }
+              margin-right: 10px;
+              position: relative;
+              top: -1px;
 
-            &.icon-blacklist {
-              background-image: url('../../../assets/images/video/eye-closed.svg');
+              &.icon-download {
+                background-image: url('../../../assets/images/video/download-black.svg');
+              }
+
+              &.icon-alert {
+                background-image: url('../../../assets/images/video/alert.svg');
+              }
+
+              &.icon-blacklist {
+                background-image: url('../../../assets/images/video/blacklist.svg');
+              }
             }
           }
         }

@@ -1,26 +1,17 @@
 @import '_variables';
 @import '_mixins';
 
-.resolution-block:not(:first-child) {
+.peertube-select-container {
+  @include peertube-select-container(130px);
+}
+
+.download-type {
   margin-top: 30px;
-}
 
-.orange-button-link {
-  margin-right: 10px;
-}
+  .peertube-radio-container {
+    @include peertube-radio-container;
 
-label {
-  display: block;
-}
-
-.icon {
-  @include icon(21px);
-
-  margin-right: 5px;
-  position: relative;
-  top: -1px;
-
-  &.icon-download {
-    background-image: url('../../../assets/images/video/download-white.svg');
+    display: inline-block;
+    margin-right: 30px;
   }
 }

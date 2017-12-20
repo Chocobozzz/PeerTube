@@ -7,7 +7,8 @@ import { VideoDetails } from '../../shared/video/video-details.model'
 
 @Component({
   selector: 'my-video-report',
-  templateUrl: './video-report.component.html'
+  templateUrl: './video-report.component.html',
+  styleUrls: [ './video-report.component.scss' ]
 })
 export class VideoReportComponent extends FormReactive implements OnInit {
   @Input() video: VideoDetails = null

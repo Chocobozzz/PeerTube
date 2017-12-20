@@ -3,17 +3,23 @@
     <div class="modal-content">
 
       <div class="modal-header">
-        <button type="button" class="close" aria-label="Close" (click)="cancel()">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="title-page title-page-single">{{ title }}</h4>
+        <span class="close" aria-hidden="true" (click)="cancel()"></span>
+        <h4 class="modal-title">{{ title }}</h4>
       </div>
 
-      <div class="modal-body" [innerHtml]="message"></div>
+      <div class="modal-body" >
+        <div [innerHtml]="message"></div>
 
-      <div class="modal-footer">
-        <button type="button" class="grey-button" data-dismiss="modal" (click)="cancel()">Cancel</button>
-        <button type="button" class="orange-button" (click)="confirm()">Confirm</button>
+        <div class="form-group inputs">
+          <span class="action-button action-button-cancel" (click)="cancel()">
+            Cancel
+          </span>
+
+          <input
+            type="submit" value="Confirm" class="action-button-submit"
+            (click)="confirm()"
+          >
+        </div>
       </div>
     </div>
   </div>

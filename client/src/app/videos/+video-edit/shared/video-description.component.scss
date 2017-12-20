@@ -2,11 +2,8 @@
 @import '_mixins';
 
 textarea {
-  @include peertube-input-text(100%);
+  @include peertube-textarea(100%, 150px);
 
-  padding: 5px 15px;
-  font-size: 15px;
-  height: 150px;
   margin-bottom: 15px;
 }
 
