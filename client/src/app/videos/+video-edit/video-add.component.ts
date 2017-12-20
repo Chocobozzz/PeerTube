@@ -25,7 +25,10 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   isUploadingVideo = false
   videoUploaded = false
   videoUploadPercents = 0
-  videoUploadedId = 0
+  videoUploadedIds = {
+    id: 0,
+    uuid: ''
+  }
 
   error: string = null
   form: FormGroup
@@ -122,7 +125,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
           this.videoUploaded = true
 
-          this.videoUploadedId = event.body.video.id
+          this.videoUploadedIds = event.body.video
         }
       },
 
@@ -142,13 +145,14 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     const video = new VideoEdit()
     video.patch(this.form.value)
     video.channel = this.firstStepChannelId
-    video.id = this.videoUploadedId
+    video.id = this.videoUploadedIds.id
+    video.uuid = this.videoUploadedIds.uuid
 
     this.videoService.updateVideo(video)
       .subscribe(
         () => {
           this.notificationsService.success('Success', 'Video published.')
-          this.router.navigate([ '/videos/watch', video.id ])
+          this.router.navigate([ '/videos/watch', video.uuid ])
         },
 
         err => {
