@@ -11,8 +11,7 @@ function isWebfingerResourceValid (value: string) {
   if (actorParts.length !== 2) return false
 
   const host = actorParts[1]
-
-  return sanitizeHost(host, REMOTE_SCHEME.HTTP) === CONFIG.WEBSERVER.HOSTNAME
+  return sanitizeHost(host, REMOTE_SCHEME.HTTP) === CONFIG.WEBSERVER.HOST
 }
 
 // ---------------------------------------------------------------------------

@@ -1,6 +1,4 @@
 import * as Sequelize from 'sequelize'
-import { DataType } from 'sequelize-typescript'
-import { createPrivateAndPublicKeys } from '../../helpers'
 import { CONFIG } from '../constants'
 
 async function up (utils: {

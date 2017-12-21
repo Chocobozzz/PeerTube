@@ -27,7 +27,7 @@ function sanitizeUrl (url: string) {
 
 // Don't import remote scheme from constants because we are in core utils
 function sanitizeHost (host: string, remoteScheme: string) {
-  let toRemove = remoteScheme === 'https' ? 443 : 80
+  const toRemove = remoteScheme === 'https' ? 443 : 80
 
   return host.replace(new RegExp(`:${toRemove}$`), '')
 }
