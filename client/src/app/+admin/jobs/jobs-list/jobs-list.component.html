@@ -6,9 +6,9 @@
     [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
     sortField="createdAt" (onLazyLoad)="loadLazy($event)" [scrollable]="true" [virtualScroll]="true" [scrollHeight]="scrollHeight"
 >
-  <p-column field="id" header="ID" [style]="{ width: '40px' }"></p-column>
-  <p-column field="category" header="Category" [style]="{ width: '100px' }"></p-column>
-  <p-column field="handlerName" header="Handler name" [style]="{ width: '200px' }"></p-column>
+  <p-column field="id" header="ID" [style]="{ width: '60px' }"></p-column>
+  <p-column field="category" header="Category" [style]="{ width: '130px' }"></p-column>
+  <p-column field="handlerName" header="Handler name" [style]="{ width: '210px' }"></p-column>
   <p-column header="Input data">
     <ng-template pTemplate="body" let-job="rowData">
       <pre>{{ job.handlerInputData }}</pre>
