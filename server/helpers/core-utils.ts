@@ -11,6 +11,26 @@ import * as mkdirp from 'mkdirp'
 import { join } from 'path'
 import * as pem from 'pem'
 import * as rimraf from 'rimraf'
+import { URL } from 'url'
+
+function sanitizeUrl (url: string) {
+  const urlObject = new URL(url)
+
+  if (urlObject.protocol === 'https:' && urlObject.port === '443') {
+    urlObject.port = ''
+  } else if (urlObject.protocol === 'http:' && urlObject.port === '80') {
+    urlObject.port = ''
+  }
+
+  return urlObject.href.replace(/\/$/, '')
+}
+
+// Don't import remote scheme from constants because we are in core utils
+function sanitizeHost (host: string, remoteScheme: string) {
+  let toRemove = remoteScheme === 'https' ? 443 : 80
+
+  return host.replace(new RegExp(`:${toRemove}$`), '')
+}
 
 function isTestInstance () {
   return process.env.NODE_ENV === 'test'
@@ -114,6 +134,8 @@ export {
   root,
   escapeHTML,
   pageToStartAndCount,
+  sanitizeUrl,
+  sanitizeHost,
 
   promisify0,
   promisify1,

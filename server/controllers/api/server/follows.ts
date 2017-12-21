@@ -1,19 +1,15 @@
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
-import { getFormattedObjects, getServerActor, loadActorUrlOrGetFromWebfinger, logger, retryTransactionWrapper } from '../../../helpers'
-import { sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
+import {
+  getFormattedObjects, getServerActor, loadActorUrlOrGetFromWebfinger, logger, retryTransactionWrapper,
+  sanitizeHost
+} from '../../../helpers'
+import { REMOTE_SCHEME, sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
 import { getOrCreateActorAndServerAndModel } from '../../../lib/activitypub'
 import { sendFollow, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware,
-  authenticate,
-  ensureUserHasRight,
-  paginationValidator,
-  removeFollowingValidator,
-  setBodyHostsPort,
-  setFollowersSort,
-  setFollowingSort,
-  setPagination
+  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, removeFollowingValidator, setBodyHostsPort,
+  setFollowersSort, setFollowingSort, setPagination
 } from '../../../middlewares'
 import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
 import { ActorModel } from '../../../models/activitypub/actor'
@@ -82,10 +78,12 @@ async function followRetry (req: express.Request, res: express.Response, next: e
   const actorName = SERVER_ACTOR_NAME
 
   for (const host of hosts) {
+    const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
+
     // We process each host in a specific transaction
     // First, we add the follow request in the database
     // Then we send the follow request to other actor
-    const p = loadActorUrlOrGetFromWebfinger(actorName, host)
+    const p = loadActorUrlOrGetFromWebfinger(actorName, sanitizedHost)
       .then(actorUrl => getOrCreateActorAndServerAndModel(actorUrl))
       .then(targetActor => {
         const options = {
@@ -95,7 +93,7 @@ async function followRetry (req: express.Request, res: express.Response, next: e
 
         return retryTransactionWrapper(follow, options)
       })
-      .catch(err => logger.warn('Cannot follow server %s.', host, err))
+      .catch(err => logger.warn('Cannot follow server %s.', sanitizedHost, err))
 
     tasks.push(p)
   }

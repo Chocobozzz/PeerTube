@@ -1,15 +1,15 @@
 import * as config from 'config'
 import { join } from 'path'
 import { JobCategory, JobState, VideoRateType } from '../../shared/models'
-import { FollowState } from '../../shared/models/actors'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
+import { FollowState } from '../../shared/models/actors'
 import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, root } from '../helpers/core-utils'
+import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 135
+const LAST_MIGRATION_VERSION = 140
 
 // ---------------------------------------------------------------------------
 
@@ -35,6 +35,44 @@ const OAUTH_LIFETIME = {
   ACCESS_TOKEN: 3600 * 4, // 4 hours
   REFRESH_TOKEN: 1209600 // 2 weeks
 }
+
+// ---------------------------------------------------------------------------
+
+// Number of points we add/remove from a friend after a successful/bad request
+const SERVERS_SCORE = {
+  PENALTY: -10,
+  BONUS: 10,
+  BASE: 100,
+  MAX: 1000
+}
+
+const FOLLOW_STATES: { [ id: string ]: FollowState } = {
+  PENDING: 'pending',
+  ACCEPTED: 'accepted'
+}
+
+const REMOTE_SCHEME = {
+  HTTP: 'https',
+  WS: 'wss'
+}
+
+const JOB_STATES: { [ id: string ]: JobState } = {
+  PENDING: 'pending',
+  PROCESSING: 'processing',
+  ERROR: 'error',
+  SUCCESS: 'success'
+}
+const JOB_CATEGORIES: { [ id: string ]: JobCategory } = {
+  TRANSCODING: 'transcoding',
+  ACTIVITYPUB_HTTP: 'activitypub-http'
+}
+// How many maximum jobs we fetch from the database per cycle
+const JOBS_FETCH_LIMIT_PER_CYCLE = {
+  transcoding: 10,
+  httpRequest: 20
+}
+// 1 minutes
+let JOBS_FETCHING_INTERVAL = 60000
 
 // ---------------------------------------------------------------------------
 
@@ -93,8 +131,6 @@ const CONFIG = {
     }
   }
 }
-CONFIG.WEBSERVER.URL = CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
-CONFIG.WEBSERVER.HOST = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
 const AVATARS_DIR = {
   ACCOUNT: join(CONFIG.STORAGE.AVATARS_DIR, 'account')
@@ -238,44 +274,6 @@ const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
 
 // ---------------------------------------------------------------------------
 
-// Number of points we add/remove from a friend after a successful/bad request
-const SERVERS_SCORE = {
-  PENALTY: -10,
-  BONUS: 10,
-  BASE: 100,
-  MAX: 1000
-}
-
-const FOLLOW_STATES: { [ id: string ]: FollowState } = {
-  PENDING: 'pending',
-  ACCEPTED: 'accepted'
-}
-
-const REMOTE_SCHEME = {
-  HTTP: 'https',
-  WS: 'wss'
-}
-
-const JOB_STATES: { [ id: string ]: JobState } = {
-  PENDING: 'pending',
-  PROCESSING: 'processing',
-  ERROR: 'error',
-  SUCCESS: 'success'
-}
-const JOB_CATEGORIES: { [ id: string ]: JobCategory } = {
-  TRANSCODING: 'transcoding',
-  ACTIVITYPUB_HTTP: 'activitypub-http'
-}
-// How many maximum jobs we fetch from the database per cycle
-const JOBS_FETCH_LIMIT_PER_CYCLE = {
-  transcoding: 10,
-  httpRequest: 20
-}
-// 1 minutes
-let JOBS_FETCHING_INTERVAL = 60000
-
-// ---------------------------------------------------------------------------
-
 const PRIVATE_RSA_KEY_SIZE = 2048
 
 // Password encryption
@@ -333,6 +331,9 @@ if (isTestInstance() === true) {
   STATIC_MAX_AGE = '0'
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
 }
+
+CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
+CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
 
 // ---------------------------------------------------------------------------
 
