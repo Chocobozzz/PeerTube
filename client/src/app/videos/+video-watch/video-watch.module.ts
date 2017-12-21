@@ -4,6 +4,7 @@ import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { MarkdownService } from '../shared'
 import { SharedModule } from '../../shared'
 import { ClipboardModule } from 'ngx-clipboard'
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { VideoWatchComponent } from './video-watch.component'
 import { VideoReportComponent } from './video-report.component'
@@ -14,7 +15,8 @@ import { VideoDownloadComponent } from './video-download.component'
   imports: [
     VideoWatchRoutingModule,
     SharedModule,
-    ClipboardModule
+    ClipboardModule,
+    TooltipModule.forRoot()
   ],
 
   declarations: [

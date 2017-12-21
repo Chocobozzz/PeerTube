@@ -65,7 +65,9 @@
           {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
         </div>
 
-        <div *ngIf="video.likes !== 0 || video.dislikes !== 0" class="video-info-likes-dislikes-bar">
+        <div
+          class="video-info-likes-dislikes-bar"
+          *ngIf="video.likes !== 0 || video.dislikes !== 0"  [tooltip]="likesBarTooltipText">
           <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
         </div>
       </div>

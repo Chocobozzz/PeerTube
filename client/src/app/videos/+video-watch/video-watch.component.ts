@@ -44,6 +44,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   completeVideoDescription: string
   shortVideoDescription: string
   videoHTMLDescription = ''
+  likesBarTooltipText = ''
 
   private paramsSub: Subscription
 
@@ -228,23 +229,24 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   removeVideo (event: Event) {
     event.preventDefault()
 
-    this.confirmService.confirm('Do you really want to delete this video?', 'Delete').subscribe(
-      res => {
-        if (res === false) return
+    this.confirmService.confirm('Do you really want to delete this video?', 'Delete')
+      .subscribe(
+        res => {
+          if (res === false) return
 
-        this.videoService.removeVideo(this.video.id)
-          .subscribe(
-            status => {
-              this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
+          this.videoService.removeVideo(this.video.id)
+            .subscribe(
+              status => {
+                this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
 
-              // Go back to the video-list.
-              this.router.navigate([ '/videos/list' ])
-            },
+                // Go back to the video-list.
+                this.router.navigate([ '/videos/list' ])
+              },
 
-            error => this.notificationsService.error('Error', error.text)
-          )
-      }
-    )
+              error => this.notificationsService.error('Error', error.text)
+            )
+        }
+      )
   }
 
   private updateVideoDescription (description: string) {
@@ -259,6 +261,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.videoHTMLDescription = this.markdownService.markdownToHTML(this.video.description)
+  }
+
+  private setVideoLikesBarTooltipText () {
+    this.likesBarTooltipText = `${this.video.likes} likes / ${this.video.dislikes} dislikes`
   }
 
   private handleError (err: any) {
@@ -346,6 +352,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         }
 
         this.setVideoDescriptionHTML()
+        this.setVideoLikesBarTooltipText()
 
         this.setOpenGraphTags()
         this.checkUserRating()

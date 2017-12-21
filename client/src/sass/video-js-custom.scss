@@ -50,12 +50,14 @@ $control-bar-height: 34px;
     display: block;
     visibility: hidden;
     opacity: 0;
+    transition-delay: 0.5s;
+    transition: visibility 0.5s, opacity 0.5s;
   }
 
   &.vjs-waiting .vjs-loading-spinner {
     visibility: visible;
     opacity: 1;
-    transition: visibility 0.5s, opacity 0.5s;
+
   }
 
   .vjs-control-bar,
