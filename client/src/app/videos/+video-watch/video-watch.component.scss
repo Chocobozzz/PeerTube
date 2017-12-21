@@ -51,6 +51,12 @@
 
       .video-info-actions {
         min-width: 215px;
+        display: flex;
+        justify-content: end;
+
+        .action-button:not(:first-child), .action-more {
+          margin-left: 10px;
+        }
 
         .action-button {
           @include peertube-button;
@@ -85,12 +91,16 @@
             }
           }
 
-          &.activated {
-            @include orange-button;
+          &.action-button-like.activated {
+            background-color: #39CC0B;
 
             .icon-like {
               background-image: url('../../../assets/images/video/like-white.svg');
             }
+          }
+
+          &.action-button-dislike.activated {
+            background-color: #FF0000;
 
             .icon-dislike {
               background-image: url('../../../assets/images/video/dislike-white.svg');
@@ -222,7 +232,7 @@
 }
 
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1300px) {
   .other-videos {
     display: none;
   }

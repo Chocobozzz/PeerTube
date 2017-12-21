@@ -13,12 +13,16 @@
         <div class="video-info-name">{{ video.name }}</div>
 
         <div class="video-info-actions">
-          <div *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" class="action-button">
-            <span class="icon icon-like" title="Like this video" (click)="setLike()"></span>
+          <div
+              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
+              class="action-button action-button-like">
+            <span class="icon icon-like" title="Like this video" ></span>
           </div>
 
-          <div *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" class="action-button">
-            <span class="icon icon-dislike" title="Dislike this video" (click)="setDislike()"></span>
+          <div
+              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
+              class="action-button action-button-dislike">
+            <span class="icon icon-dislike" title="Dislike this video"></span>
           </div>
 
           <div (click)="showShareModal()" class="action-button">
