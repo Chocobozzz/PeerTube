@@ -6,6 +6,7 @@ import { isActivityPubUrlValid } from './misc'
 import { isDislikeActivityValid, isLikeActivityValid } from './rate'
 import { isUndoActivityValid } from './undo'
 import { isVideoChannelDeleteActivityValid, isVideoChannelUpdateActivityValid } from './video-channels'
+import { isVideoCommentCreateActivityValid } from './video-comments'
 import {
   isVideoFlagValid,
   isVideoTorrentCreateActivityValid,
@@ -59,7 +60,8 @@ function checkCreateActivity (activity: any) {
   return isViewActivityValid(activity) ||
     isDislikeActivityValid(activity) ||
     isVideoTorrentCreateActivityValid(activity) ||
-    isVideoFlagValid(activity)
+    isVideoFlagValid(activity) ||
+    isVideoCommentCreateActivityValid(activity)
 }
 
 function checkUpdateActivity (activity: any) {

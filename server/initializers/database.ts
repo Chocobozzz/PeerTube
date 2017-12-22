@@ -18,6 +18,7 @@ import { VideoModel } from '../models/video/video'
 import { VideoAbuseModel } from '../models/video/video-abuse'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { VideoChannelModel } from '../models/video/video-channel'
+import { VideoCommentModel } from '../models/video/video-comment'
 import { VideoFileModel } from '../models/video/video-file'
 import { VideoShareModel } from '../models/video/video-share'
 import { VideoTagModel } from '../models/video/video-tag'
@@ -73,7 +74,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoFileModel,
     VideoBlacklistModel,
     VideoTagModel,
-    VideoModel
+    VideoModel,
+    VideoCommentModel
   ])
 
   if (!silent) logger.info('Database %s is ready.', dbname)

@@ -2,6 +2,7 @@ import { ActivityPubSignature } from './activitypub-signature'
 import { VideoTorrentObject } from './objects'
 import { DislikeObject } from './objects/dislike-object'
 import { VideoAbuseObject } from './objects/video-abuse-object'
+import { VideoCommentObject } from './objects/video-comment-object'
 import { ViewObject } from './objects/view-object'
 
 export type Activity = ActivityCreate | ActivityUpdate |
@@ -27,7 +28,7 @@ export interface BaseActivity {
 
 export interface ActivityCreate extends BaseActivity {
   type: 'Create'
-  object: VideoTorrentObject | VideoAbuseObject | ViewObject | DislikeObject
+  object: VideoTorrentObject | VideoAbuseObject | ViewObject | DislikeObject | VideoCommentObject
 }
 
 export interface ActivityUpdate extends BaseActivity {

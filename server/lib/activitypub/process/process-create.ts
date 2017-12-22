@@ -1,6 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { ActivityCreate, VideoTorrentObject } from '../../../../shared'
 import { DislikeObject, VideoAbuseObject, ViewObject } from '../../../../shared/models/activitypub/objects'
+import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoRateType } from '../../../../shared/models/videos'
 import { logger, retryTransactionWrapper } from '../../../helpers'
 import { sequelizeTypescript } from '../../../initializers'
@@ -9,6 +10,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity } from '../send/misc'
@@ -28,6 +30,8 @@ async function processCreateActivity (activity: ActivityCreate) {
     return processCreateVideo(actor, activity)
   } else if (activityType === 'Flag') {
     return processCreateVideoAbuse(actor, activityObject as VideoAbuseObject)
+  } else if (activityType === 'Note') {
+    return processCreateVideoComment(actor, activity)
   }
 
   logger.warn('Unknown activity object type %s when creating activity.', activityType, { activity: activity.id })
@@ -184,7 +188,7 @@ function createVideoDislike (byActor: ActorModel, activity: ActivityCreate) {
   })
 }
 
-async function processCreateView (byAccount: ActorModel, activity: ActivityCreate) {
+async function processCreateView (byActor: ActorModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
   const video = await VideoModel.loadByUrlAndPopulateAccount(view.object)
@@ -198,7 +202,7 @@ async function processCreateView (byAccount: ActorModel, activity: ActivityCreat
 
   if (video.isOwned()) {
     // Don't resend the activity to the sender
-    const exceptions = [ byAccount ]
+    const exceptions = [ byActor ]
     await forwardActivity(activity, undefined, exceptions)
   }
 }
@@ -234,5 +238,50 @@ function addRemoteVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAb
     await VideoAbuseModel.create(videoAbuseData)
 
     logger.info('Remote abuse for video uuid %s created', videoAbuseToCreateData.object)
+  })
+}
+
+function processCreateVideoComment (byActor: ActorModel, activity: ActivityCreate) {
+  const options = {
+    arguments: [ byActor, activity ],
+    errorMessage: 'Cannot create video comment with many retries.'
+  }
+
+  return retryTransactionWrapper(createVideoComment, options)
+}
+
+function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
+  const comment = activity.object as VideoCommentObject
+  const byAccount = byActor.Account
+
+  if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
+
+  return sequelizeTypescript.transaction(async t => {
+    const video = await VideoModel.loadByUrl(comment.inReplyTo, t)
+
+    // This is a new thread
+    if (video) {
+      return VideoCommentModel.create({
+        url: comment.id,
+        text: comment.content,
+        originCommentId: null,
+        inReplyToComment: null,
+        videoId: video.id,
+        actorId: byActor.id
+      }, { transaction: t })
+    }
+
+    const inReplyToComment = await VideoCommentModel.loadByUrl(comment.inReplyTo, t)
+    if (!inReplyToComment) throw new Error('Unknown replied comment ' + comment.inReplyTo)
+
+    const originCommentId = inReplyToComment.originCommentId || inReplyToComment.id
+    return VideoCommentModel.create({
+      url: comment.id,
+      text: comment.content,
+      originCommentId,
+      inReplyToCommentId: inReplyToComment.id,
+      videoId: inReplyToComment.videoId,
+      actorId: byActor.id
+    }, { transaction: t })
   })
 }

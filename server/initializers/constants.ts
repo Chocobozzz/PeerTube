@@ -175,6 +175,9 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_EVENTS: {
     COUNT: { min: 0 }
+  },
+  COMMENT: {
+    URL: { min: 3, max: 2000 } // Length
   }
 }
 

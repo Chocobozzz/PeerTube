@@ -491,6 +491,18 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.findById(id)
   }
 
+  static loadByUrl (url: string, t?: Sequelize.Transaction) {
+    const query: IFindOptions<VideoModel> = {
+      where: {
+        url
+      }
+    }
+
+    if (t !== undefined) query.transaction = t
+
+    return VideoModel.findOne(query)
+  }
+
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
     const query: IFindOptions<VideoModel> = {
       where: {
