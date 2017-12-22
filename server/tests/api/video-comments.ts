@@ -1,0 +1,135 @@
+/* tslint:disable:no-unused-expression */
+
+import * as chai from 'chai'
+import 'mocha'
+import { VideoComment, VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
+import { dateIsValid, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../utils'
+import { addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads, getVideoThreadComments } from '../utils/video-comments'
+
+const expect = chai.expect
+
+describe('Test a video comments', function () {
+  let server: ServerInfo
+  let videoId
+  let videoUUID
+  let threadId
+
+  before(async function () {
+    this.timeout(10000)
+
+    await flushTests()
+
+    server = await runServer(1)
+
+    await setAccessTokensToServers([ server ])
+
+    const res = await uploadVideo(server.url, server.accessToken, {})
+    videoUUID = res.body.video.uuid
+    videoId = res.body.video.id
+  })
+
+  it('Should not have threads on this video', async function () {
+    const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+
+    expect(res.body.total).to.equal(0)
+    expect(res.body.data).to.be.an('array')
+    expect(res.body.data).to.have.lengthOf(0)
+  })
+
+  it('Should create a thread in this video', async function () {
+    const text = 'my super first comment'
+
+    await addVideoCommentThread(server.url, server.accessToken, videoUUID, text)
+  })
+
+  it('Should list threads of this video', async function () {
+    const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+
+    expect(res.body.total).to.equal(1)
+    expect(res.body.data).to.be.an('array')
+    expect(res.body.data).to.have.lengthOf(1)
+
+    const comment: VideoComment = res.body.data[0]
+    expect(comment.inReplyToCommentId).to.be.null
+    expect(comment.text).equal('my super first comment')
+    expect(comment.videoId).to.equal(videoId)
+    expect(comment.id).to.equal(comment.threadId)
+    expect(comment.account.name).to.equal('root')
+    expect(dateIsValid(comment.createdAt as string)).to.be.true
+    expect(dateIsValid(comment.updatedAt as string)).to.be.true
+
+    threadId = comment.threadId
+  })
+
+  it('Should get all the thread created', async function () {
+    const res = await getVideoThreadComments(server.url, videoUUID, threadId)
+
+    const rootComment = res.body.comment
+    expect(rootComment.inReplyToCommentId).to.be.null
+    expect(rootComment.text).equal('my super first comment')
+    expect(rootComment.videoId).to.equal(videoId)
+    expect(dateIsValid(rootComment.createdAt as string)).to.be.true
+    expect(dateIsValid(rootComment.updatedAt as string)).to.be.true
+  })
+
+  it('Should create multiple replies in this thread', async function () {
+    const text1 = 'my super answer to thread 1'
+    const childCommentRes = await addVideoCommentReply(server.url, server.accessToken, videoId, threadId, text1)
+    const childCommentId = childCommentRes.body.comment.id
+
+    const text2 = 'my super answer to answer of thread 1'
+    await addVideoCommentReply(server.url, server.accessToken, videoId, childCommentId, text2)
+
+    const text3 = 'my second answer to thread 1'
+    await addVideoCommentReply(server.url, server.accessToken, videoId, threadId, text3)
+  })
+
+  it('Should get correctly the replies', async function () {
+    const res = await getVideoThreadComments(server.url, videoUUID, threadId)
+
+    const tree: VideoCommentThreadTree = res.body
+    expect(tree.comment.text).equal('my super first comment')
+    expect(tree.children).to.have.lengthOf(2)
+
+    const firstChild = tree.children[0]
+    expect(firstChild.comment.text).to.equal('my super answer to thread 1')
+    expect(firstChild.children).to.have.lengthOf(1)
+
+    const childOfFirstChild = firstChild.children[0]
+    expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
+    expect(childOfFirstChild.children).to.have.lengthOf(0)
+
+    const secondChild = tree.children[1]
+    expect(secondChild.comment.text).to.equal('my second answer to thread 1')
+    expect(secondChild.children).to.have.lengthOf(0)
+  })
+
+  it('Should create other threads', async function () {
+    const text1 = 'super thread 2'
+    await addVideoCommentThread(server.url, server.accessToken, videoUUID, text1)
+
+    const text2 = 'super thread 3'
+    await addVideoCommentThread(server.url, server.accessToken, videoUUID, text2)
+  })
+
+  it('Should list the threads', async function () {
+    const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5, 'createdAt')
+
+    expect(res.body.total).to.equal(3)
+    expect(res.body.data).to.be.an('array')
+    expect(res.body.data).to.have.lengthOf(3)
+
+    expect(res.body.data[0].text).to.equal('my super first comment')
+    expect(res.body.data[1].text).to.equal('super thread 2')
+    expect(res.body.data[2].text).to.equal('super thread 3')
+  })
+
+  after(async function () {
+    killallServers([ server ])
+
+    // Keep the logs if the test failed
+    if (this['ok']) {
+      await flushTests()
+    }
+  })
+})

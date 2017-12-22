@@ -6,18 +6,18 @@ import {
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
-import { ActorModel } from '../activitypub/actor'
+import { AccountModel } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 
 enum ScopeNames {
-  WITH_ACTOR = 'WITH_ACTOR'
+  WITH_ACCOUNT = 'WITH_ACCOUNT'
 }
 
 @Scopes({
-  [ScopeNames.WITH_ACTOR]: {
+  [ScopeNames.WITH_ACCOUNT]: {
     include: [
-      () => ActorModel
+      () => AccountModel
     ]
   }
 })
@@ -84,17 +84,17 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   })
   Video: VideoModel
 
-  @ForeignKey(() => ActorModel)
+  @ForeignKey(() => AccountModel)
   @Column
-  actorId: number
+  accountId: number
 
-  @BelongsTo(() => ActorModel, {
+  @BelongsTo(() => AccountModel, {
     foreignKey: {
       allowNull: false
     },
     onDelete: 'CASCADE'
   })
-  Actor: ActorModel
+  Account: AccountModel
 
   @AfterDestroy
   static sendDeleteIfOwned (instance: VideoCommentModel) {
@@ -132,12 +132,13 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       limit: count,
       order: [ getSort(sort) ],
       where: {
-        videoId
+        videoId,
+        inReplyToCommentId: null
       }
     }
 
     return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACTOR ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -146,7 +147,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   static listThreadCommentsForApi (videoId: number, threadId: number) {
     const query = {
-      order: [ 'id', 'ASC' ],
+      order: [ [ 'id', 'ASC' ] ],
       where: {
         videoId,
         [ Sequelize.Op.or ]: [
@@ -157,7 +158,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
 
     return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACTOR ])
+      .scope([ ScopeNames.WITH_ACCOUNT ])
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -173,7 +174,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       inReplyToCommentId: this.inReplyToCommentId,
       videoId: this.videoId,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      account: {
+        name: this.Account.name
+      }
     } as VideoComment
   }
 }

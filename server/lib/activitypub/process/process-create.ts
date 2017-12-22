@@ -267,7 +267,7 @@ function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
         originCommentId: null,
         inReplyToComment: null,
         videoId: video.id,
-        actorId: byActor.id
+        accountId: byAccount.id
       }, { transaction: t })
     }
 
@@ -281,7 +281,7 @@ function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
       originCommentId,
       inReplyToCommentId: inReplyToComment.id,
       videoId: inReplyToComment.videoId,
-      actorId: byActor.id
+      accountId: byAccount.id
     }, { transaction: t })
   })
 }

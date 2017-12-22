@@ -7,11 +7,14 @@ export interface VideoComment {
   videoId: number
   createdAt: Date | string
   updatedAt: Date | string
+  account: {
+    name: string
+  }
 }
 
-export interface VideoCommentThread {
+export interface VideoCommentThreadTree {
   comment: VideoComment
-  children: VideoCommentThread[]
+  children: VideoCommentThreadTree[]
 }
 
 export interface VideoCommentCreate {
