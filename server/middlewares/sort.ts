@@ -32,6 +32,12 @@ function setVideosSort (req: express.Request, res: express.Response, next: expre
   return next()
 }
 
+function setVideoCommentThreadsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.query.sort) req.query.sort = '-createdAt'
+
+  return next()
+}
+
 function setFollowersSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
@@ -75,5 +81,6 @@ export {
   setBlacklistSort,
   setFollowersSort,
   setFollowingSort,
-  setJobsSort
+  setJobsSort,
+  setVideoCommentThreadsSort
 }

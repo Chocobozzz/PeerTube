@@ -3,17 +3,18 @@ import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
 import { VideoAbuseModel } from '../../models/video/video-abuse'
+import { VideoCommentModel } from '../../models/video/video-comment'
 
 function getVideoActivityPubUrl (video: VideoModel) {
   return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid
 }
 
-function getVideoChannelActivityPubUrl (videoChannelUUID: string) {
-  return CONFIG.WEBSERVER.URL + '/video-channels/' + videoChannelUUID
+function getVideoCommentActivityPubUrl (video: VideoModel, videoComment: VideoCommentModel) {
+  return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid + '#comment-' + videoComment.id
 }
 
-function getApplicationActivityPubUrl () {
-  return CONFIG.WEBSERVER.URL + '/application/peertube'
+function getVideoChannelActivityPubUrl (videoChannelUUID: string) {
+  return CONFIG.WEBSERVER.URL + '/video-channels/' + videoChannelUUID
 }
 
 function getAccountActivityPubUrl (accountName: string) {
@@ -63,7 +64,6 @@ function getUndoActivityPubUrl (originalUrl: string) {
 }
 
 export {
-  getApplicationActivityPubUrl,
   getVideoActivityPubUrl,
   getVideoChannelActivityPubUrl,
   getAccountActivityPubUrl,
@@ -75,5 +75,6 @@ export {
   getUndoActivityPubUrl,
   getVideoViewActivityPubUrl,
   getVideoLikeActivityPubUrl,
-  getVideoDislikeActivityPubUrl
+  getVideoDislikeActivityPubUrl,
+  getVideoCommentActivityPubUrl
 }

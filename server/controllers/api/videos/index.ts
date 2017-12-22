@@ -47,6 +47,7 @@ import { VideoFileModel } from '../../../models/video/video-file'
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
+import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
 
 const videosRouter = express.Router()
@@ -78,6 +79,7 @@ videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
 videosRouter.use('/', videoChannelRouter)
+videosRouter.use('/', videoCommentRouter)
 
 videosRouter.get('/categories', listVideoCategories)
 videosRouter.get('/licences', listVideoLicences)

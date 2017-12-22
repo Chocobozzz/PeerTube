@@ -26,6 +26,7 @@ const SORTABLE_COLUMNS = {
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],
+  VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],
   FOLLOWING: [ 'createdAt' ]
@@ -176,7 +177,8 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_EVENTS: {
     COUNT: { min: 0 }
   },
-  COMMENT: {
+  VIDEO_COMMENTS: {
+    TEXT: { min: 2, max: 3000 }, // Length
     URL: { min: 3, max: 2000 } // Length
   }
 }
