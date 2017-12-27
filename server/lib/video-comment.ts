@@ -3,27 +3,25 @@ import { ResultList } from '../../shared/models'
 import { VideoCommentThreadTree } from '../../shared/models/videos/video-comment.model'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { getVideoCommentActivityPubUrl } from './activitypub'
+import { getVideoCommentActivityPubUrl, sendVideoRateChangeToFollowers } from './activitypub'
+import { sendCreateVideoCommentToOrigin, sendCreateVideoCommentToVideoFollowers } from './activitypub/send'
 
 async function createVideoComment (obj: {
   text: string,
-  inReplyToCommentId: number,
+  inReplyToComment: VideoCommentModel,
   video: VideoModel
   accountId: number
 }, t: Sequelize.Transaction) {
   let originCommentId: number = null
 
-  if (obj.inReplyToCommentId) {
-    const repliedComment = await VideoCommentModel.loadById(obj.inReplyToCommentId)
-    if (!repliedComment) throw new Error('Unknown replied comment.')
-
-    originCommentId = repliedComment.originCommentId || repliedComment.id
+  if (obj.inReplyToComment) {
+    originCommentId = obj.inReplyToComment.originCommentId || obj.inReplyToComment.id
   }
 
   const comment = await VideoCommentModel.create({
     text: obj.text,
     originCommentId,
-    inReplyToCommentId: obj.inReplyToCommentId,
+    inReplyToCommentId: obj.inReplyToComment.id,
     videoId: obj.video.id,
     accountId: obj.accountId,
     url: 'fake url'
@@ -31,7 +29,17 @@ async function createVideoComment (obj: {
 
   comment.set('url', getVideoCommentActivityPubUrl(obj.video, comment))
 
-  return comment.save({ transaction: t })
+  const savedComment = await comment.save({ transaction: t })
+  savedComment.InReplyToVideoComment = obj.inReplyToComment
+  savedComment.Video = obj.video
+
+  if (savedComment.Video.isOwned()) {
+    await sendCreateVideoCommentToVideoFollowers(savedComment, t)
+  } else {
+    await sendCreateVideoCommentToOrigin(savedComment, t)
+  }
+
+  return savedComment
 }
 
 function buildFormattedCommentTree (resultList: ResultList<VideoCommentModel>): VideoCommentThreadTree {

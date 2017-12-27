@@ -257,11 +257,11 @@ function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
   return sequelizeTypescript.transaction(async t => {
-    const video = await VideoModel.loadByUrl(comment.inReplyTo, t)
+    let video = await VideoModel.loadByUrl(comment.inReplyTo, t)
 
     // This is a new thread
     if (video) {
-      return VideoCommentModel.create({
+      await VideoCommentModel.create({
         url: comment.id,
         text: comment.content,
         originCommentId: null,
@@ -269,19 +269,27 @@ function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
         videoId: video.id,
         accountId: byAccount.id
       }, { transaction: t })
+    } else {
+      const inReplyToComment = await VideoCommentModel.loadByUrl(comment.inReplyTo, t)
+      if (!inReplyToComment) throw new Error('Unknown replied comment ' + comment.inReplyTo)
+
+      video = await VideoModel.load(inReplyToComment.videoId)
+
+      const originCommentId = inReplyToComment.originCommentId || inReplyToComment.id
+      await VideoCommentModel.create({
+        url: comment.id,
+        text: comment.content,
+        originCommentId,
+        inReplyToCommentId: inReplyToComment.id,
+        videoId: video.id,
+        accountId: byAccount.id
+      }, { transaction: t })
     }
 
-    const inReplyToComment = await VideoCommentModel.loadByUrl(comment.inReplyTo, t)
-    if (!inReplyToComment) throw new Error('Unknown replied comment ' + comment.inReplyTo)
-
-    const originCommentId = inReplyToComment.originCommentId || inReplyToComment.id
-    return VideoCommentModel.create({
-      url: comment.id,
-      text: comment.content,
-      originCommentId,
-      inReplyToCommentId: inReplyToComment.id,
-      videoId: inReplyToComment.videoId,
-      accountId: byAccount.id
-    }, { transaction: t })
+    if (video.isOwned()) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byActor ]
+      await forwardActivity(activity, t, exceptions)
+    }
   })
 }

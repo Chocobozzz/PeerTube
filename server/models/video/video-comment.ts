@@ -3,6 +3,7 @@ import {
   AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, IFindOptions, Is, Model, Scopes, Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
@@ -11,13 +12,22 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 
 enum ScopeNames {
-  WITH_ACCOUNT = 'WITH_ACCOUNT'
+  WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_IN_REPLY_TO = 'WITH_IN_REPLY_TO'
 }
 
 @Scopes({
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       () => AccountModel
+    ]
+  },
+  [ScopeNames.WITH_IN_REPLY_TO]: {
+    include: [
+      {
+        model: () => VideoCommentModel,
+        as: 'InReplyTo'
+      }
     ]
   }
 })
@@ -68,6 +78,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     foreignKey: {
       allowNull: true
     },
+    as: 'InReplyTo',
     onDelete: 'CASCADE'
   })
   InReplyToVideoComment: VideoCommentModel
@@ -179,5 +190,24 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         name: this.Account.name
       }
     } as VideoComment
+  }
+
+  toActivityPubObject (): VideoCommentObject {
+    let inReplyTo: string
+    // New thread, so in AS we reply to the video
+    if (this.inReplyToCommentId === null) {
+      inReplyTo = this.Video.url
+    } else {
+      inReplyTo = this.InReplyToVideoComment.url
+    }
+
+    return {
+      type: 'Note' as 'Note',
+      id: this.url,
+      content: this.text,
+      inReplyTo,
+      published: this.createdAt.toISOString(),
+      url: this.url
+    }
   }
 }

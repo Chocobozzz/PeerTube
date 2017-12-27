@@ -78,7 +78,7 @@ function addVideoCommentThread (req: express.Request, res: express.Response) {
   return sequelizeTypescript.transaction(async t => {
     return createVideoComment({
       text: videoCommentInfo.text,
-      inReplyToCommentId: null,
+      inReplyToComment: null,
       video: res.locals.video,
       accountId: res.locals.oauth.token.User.Account.id
     }, t)
@@ -106,7 +106,7 @@ function addVideoCommentReply (req: express.Request, res: express.Response, next
   return sequelizeTypescript.transaction(async t => {
     return createVideoComment({
       text: videoCommentInfo.text,
-      inReplyToCommentId: res.locals.videoComment.id,
+      inReplyToComment: res.locals.videoComment,
       video: res.locals.video,
       accountId: res.locals.oauth.token.User.Account.id
     }, t)

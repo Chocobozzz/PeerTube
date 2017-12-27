@@ -5,14 +5,10 @@ import { getServerActor } from '../../../helpers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import {
-  audiencify,
-  broadcastToFollowers,
-  getActorsInvolvedInVideo,
-  getAudience,
-  getObjectFollowersAudience,
-  getOriginVideoAudience,
+  audiencify, broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience, getOriginVideoAudience,
   unicastTo
 } from './misc'
 
@@ -37,24 +33,49 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
   return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
 }
 
+async function sendCreateVideoCommentToOrigin (comment: VideoCommentModel, t: Transaction) {
+  const byActor = comment.Account.Actor
+
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(comment.Video, t)
+  const audience = getOriginVideoAudience(comment.Video, actorsInvolvedInVideo)
+
+  const commentObject = comment.toActivityPubObject()
+  const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
+
+  return unicastTo(data, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+}
+
+async function sendCreateVideoCommentToVideoFollowers (comment: VideoCommentModel, t: Transaction) {
+  const byActor = comment.Account.Actor
+
+  const actorsToForwardView = await getActorsInvolvedInVideo(comment.Video, t)
+  const audience = getObjectFollowersAudience(actorsToForwardView)
+
+  const commentObject = comment.toActivityPubObject()
+  const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
+
+  const followersException = [ byActor ]
+  return broadcastToFollowers(data, byActor, actorsToForwardView, t, followersException)
+}
+
 async function sendCreateViewToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const url = getVideoViewActivityPubUrl(byActor, video)
-  const viewActivity = createViewActivityData(byActor, video)
+  const viewActivityData = createViewActivityData(byActor, video)
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
-  const data = await createActivityData(url, byActor, viewActivity, t, audience)
+  const data = await createActivityData(url, byActor, viewActivityData, t, audience)
 
   return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
 }
 
 async function sendCreateViewToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const url = getVideoViewActivityPubUrl(byActor, video)
-  const viewActivity = createViewActivityData(byActor, video)
+  const viewActivityData = createViewActivityData(byActor, video)
 
   const actorsToForwardView = await getActorsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(actorsToForwardView)
-  const data = await createActivityData(url, byActor, viewActivity, t, audience)
+  const data = await createActivityData(url, byActor, viewActivityData, t, audience)
 
   // Use the server actor to send the view
   const serverActor = await getServerActor()
@@ -64,22 +85,22 @@ async function sendCreateViewToVideoFollowers (byActor: ActorModel, video: Video
 
 async function sendCreateDislikeToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const url = getVideoDislikeActivityPubUrl(byActor, video)
-  const dislikeActivity = createDislikeActivityData(byActor, video)
+  const dislikeActivityData = createDislikeActivityData(byActor, video)
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
   const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
-  const data = await createActivityData(url, byActor, dislikeActivity, t, audience)
+  const data = await createActivityData(url, byActor, dislikeActivityData, t, audience)
 
   return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
 }
 
 async function sendCreateDislikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const url = getVideoDislikeActivityPubUrl(byActor, video)
-  const dislikeActivity = createDislikeActivityData(byActor, video)
+  const dislikeActivityData = createDislikeActivityData(byActor, video)
 
   const actorsToForwardView = await getActorsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(actorsToForwardView)
-  const data = await createActivityData(url, byActor, dislikeActivity, t, audience)
+  const data = await createActivityData(url, byActor, dislikeActivityData, t, audience)
 
   const followersException = [ byActor ]
   return broadcastToFollowers(data, byActor, actorsToForwardView, t, followersException)
@@ -112,6 +133,14 @@ function createDislikeActivityData (byActor: ActorModel, video: VideoModel) {
   }
 }
 
+function createViewActivityData (byActor: ActorModel, video: VideoModel) {
+  return {
+    type: 'View',
+    actor: byActor.url,
+    object: video.url
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -122,15 +151,7 @@ export {
   sendCreateViewToVideoFollowers,
   sendCreateDislikeToOrigin,
   sendCreateDislikeToVideoFollowers,
-  createDislikeActivityData
-}
-
-// ---------------------------------------------------------------------------
-
-function createViewActivityData (byActor: ActorModel, video: VideoModel) {
-  return {
-    type: 'View',
-    actor: byActor.url,
-    object: video.url
-  }
+  createDislikeActivityData,
+  sendCreateVideoCommentToOrigin,
+  sendCreateVideoCommentToVideoFollowers
 }
