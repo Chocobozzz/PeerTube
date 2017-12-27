@@ -66,7 +66,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
       err => this.notificationsService.error('Error', err.text)
     )
-}
+  }
 
   isAddButtonDisplayed () {
     return this.form.value['text']

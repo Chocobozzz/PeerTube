@@ -40,7 +40,7 @@ describe('Test video comments', function () {
     const text = 'my super first comment'
 
     const res = await addVideoCommentThread(server.url, server.accessToken, videoUUID, text)
-    const comment = res.body
+    const comment = res.body.comment
 
     expect(comment.inReplyToCommentId).to.be.null
     expect(comment.text).equal('my super first comment')
@@ -133,9 +133,9 @@ describe('Test video comments', function () {
     expect(res.body.data).to.have.lengthOf(3)
 
     expect(res.body.data[0].text).to.equal('my super first comment')
-    expect(res.body.data[0].totalReplies).to.equal(2)
+    expect(res.body.data[0].totalReplies).to.equal(3)
     expect(res.body.data[1].text).to.equal('super thread 2')
-    expect(res.body.data[1].totalReplies).to.equal(1)
+    expect(res.body.data[1].totalReplies).to.equal(0)
     expect(res.body.data[2].text).to.equal('super thread 3')
     expect(res.body.data[2].totalReplies).to.equal(0)
   })

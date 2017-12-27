@@ -51,7 +51,7 @@ const videoChannelsUpdateValidator = [
     if (!await isVideoChannelExist(req.params.id, res)) return
 
     // We need to make additional checks
-    if (res.locals.videoChannel.isOwned() === false) {
+    if (res.locals.videoChannel.Actor.isOwned() === false) {
       return res.status(403)
         .json({ error: 'Cannot update video channel of another server' })
         .end()

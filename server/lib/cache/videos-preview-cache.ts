@@ -52,21 +52,19 @@ class VideosPreviewCache {
 
     if (video.isOwned()) throw new Error('Cannot load preview of owned video.')
 
-    const res = await this.saveRemotePreviewAndReturnPath(video)
-
-    return res
+    return this.saveRemotePreviewAndReturnPath(video)
   }
 
   private saveRemotePreviewAndReturnPath (video: VideoModel) {
-    const req = fetchRemoteVideoPreview(video)
 
     return new Promise<string>((res, rej) => {
+      const req = fetchRemoteVideoPreview(video, rej)
       const path = join(CACHE.DIRECTORIES.PREVIEWS, video.getPreviewName())
       const stream = createWriteStream(path)
 
       req.pipe(stream)
-         .on('finish', () => res(path))
-         .on('error', (err) => rej(err))
+        .on('error', (err) => rej(err))
+        .on('finish', () => res(path))
     })
   }
 }

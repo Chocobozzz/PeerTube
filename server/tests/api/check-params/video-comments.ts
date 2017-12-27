@@ -2,17 +2,13 @@
 
 import 'mocha'
 import * as request from 'supertest'
-import {
-  createUser, flushTests, getUserAccessToken, killallServers, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
-  uploadVideo
-} from '../../utils'
+import { flushTests, killallServers, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils'
 import { addVideoCommentThread } from '../../utils/video-comments'
 
 describe('Test video comments API validator', function () {
   let pathThread: string
   let pathComment: string
   let server: ServerInfo
-  let accessTokenUser: string
   let videoUUID: string
   let commentId: number
 
@@ -26,16 +22,6 @@ describe('Test video comments API validator', function () {
     server = await runServer(1)
 
     await setAccessTokensToServers([ server ])
-
-    {
-      const user = {
-        username: 'fake',
-        password: 'fake_password'
-      }
-      await createUser(server.url, server.accessToken, user.username, user.password)
-
-      accessTokenUser = await getUserAccessToken(server, user)
-    }
 
     {
       const res = await uploadVideo(server.url, server.accessToken, {})

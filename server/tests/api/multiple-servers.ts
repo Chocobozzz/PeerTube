@@ -1,32 +1,18 @@
 /* tslint:disable:no-unused-expression */
 
-import 'mocha'
 import * as chai from 'chai'
+import 'mocha'
 import { join } from 'path'
 import * as request from 'supertest'
+import { VideoComment, VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 
 import {
-  dateIsValid,
-  flushAndRunMultipleServers,
-  flushTests,
-  getVideo,
-  getVideosList,
-  killallServers,
-  rateVideo,
-  removeVideo,
-  ServerInfo,
-  setAccessTokensToServers,
-  testVideoImage,
-  updateVideo,
-  uploadVideo,
-  wait,
-  webtorrentAdd,
-  addVideoChannel,
-  getVideoChannelsList,
-  getUserAccessToken,
-  doubleFollow
+  addVideoChannel, dateIsValid, doubleFollow, flushAndRunMultipleServers, flushTests, getUserAccessToken, getVideo,
+  getVideoChannelsList, getVideosList, killallServers, rateVideo, removeVideo, ServerInfo, setAccessTokensToServers, testVideoImage,
+  updateVideo, uploadVideo, wait, webtorrentAdd
 } from '../utils'
 import { createUser } from '../utils/users'
+import { addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads, getVideoThreadComments } from '../utils/video-comments'
 import { viewVideo } from '../utils/videos'
 
 const expect = chai.expect
@@ -705,6 +691,115 @@ describe('Test multiple servers', function () {
 
         const test = await testVideoImage(server.url, 'video_short1-preview.webm', video.previewPath)
         expect(test).to.equal(true)
+      }
+    })
+  })
+
+  describe('Should comment these videos', function () {
+    it('Should add comment (threads and replies)', async function () {
+      this.timeout(25000)
+
+      {
+        const text = 'my super first comment'
+        await addVideoCommentThread(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID, text)
+      }
+
+      {
+        const text = 'my super second comment'
+        await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, text)
+      }
+
+      await wait(5000)
+
+      {
+        const res = await getVideoCommentThreads(servers[1].url, videoUUID, 0, 5)
+        const threadId = res.body.data.find(c => c.text === 'my super first comment').id
+
+        const text = 'my super answer to thread 1'
+        await addVideoCommentReply(servers[ 1 ].url, servers[ 1 ].accessToken, videoUUID, threadId, text)
+      }
+
+      await wait(5000)
+
+      {
+        const res1 = await getVideoCommentThreads(servers[2].url, videoUUID, 0, 5)
+        const threadId = res1.body.data.find(c => c.text === 'my super first comment').id
+
+        const res2 = await getVideoThreadComments(servers[2].url, videoUUID, threadId)
+        const childCommentId = res2.body.children[0].comment.id
+
+        const text3 = 'my second answer to thread 1'
+        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, threadId, text3)
+
+        const text2 = 'my super answer to answer of thread 1'
+        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, childCommentId, text2)
+      }
+
+      await wait(5000)
+    })
+
+    it('Should have these threads', async function () {
+      for (const server of servers) {
+        const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+
+        expect(res.body.total).to.equal(2)
+        expect(res.body.data).to.be.an('array')
+        expect(res.body.data).to.have.lengthOf(2)
+
+        {
+          const comment: VideoComment = res.body.data.find(c => c.text === 'my super first comment')
+          expect(comment).to.not.be.undefined
+          expect(comment.inReplyToCommentId).to.be.null
+          expect(comment.account.name).to.equal('root')
+          expect(comment.account.host).to.equal('localhost:9001')
+          expect(comment.totalReplies).to.equal(3)
+          expect(dateIsValid(comment.createdAt as string)).to.be.true
+          expect(dateIsValid(comment.updatedAt as string)).to.be.true
+        }
+
+        {
+          const comment: VideoComment = res.body.data.find(c => c.text === 'my super second comment')
+          expect(comment).to.not.be.undefined
+          expect(comment.inReplyToCommentId).to.be.null
+          expect(comment.account.name).to.equal('root')
+          expect(comment.account.host).to.equal('localhost:9003')
+          expect(comment.totalReplies).to.equal(0)
+          expect(dateIsValid(comment.createdAt as string)).to.be.true
+          expect(dateIsValid(comment.updatedAt as string)).to.be.true
+        }
+      }
+    })
+
+    it('Should have these comments', async function () {
+      for (const server of servers) {
+        const res1 = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+        const threadId = res1.body.data.find(c => c.text === 'my super first comment').id
+
+        const res2 = await getVideoThreadComments(server.url, videoUUID, threadId)
+
+        const tree: VideoCommentThreadTree = res2.body
+        expect(tree.comment.text).equal('my super first comment')
+        expect(tree.comment.account.name).equal('root')
+        expect(tree.comment.account.host).equal('localhost:9001')
+        expect(tree.children).to.have.lengthOf(2)
+
+        const firstChild = tree.children[0]
+        expect(firstChild.comment.text).to.equal('my super answer to thread 1')
+        expect(firstChild.comment.account.name).equal('root')
+        expect(firstChild.comment.account.host).equal('localhost:9002')
+        expect(firstChild.children).to.have.lengthOf(1)
+
+        const childOfFirstChild = firstChild.children[0]
+        expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
+        expect(childOfFirstChild.comment.account.name).equal('root')
+        expect(childOfFirstChild.comment.account.host).equal('localhost:9003')
+        expect(childOfFirstChild.children).to.have.lengthOf(0)
+
+        const secondChild = tree.children[1]
+        expect(secondChild.comment.text).to.equal('my second answer to thread 1')
+        expect(secondChild.comment.account.name).equal('root')
+        expect(secondChild.comment.account.host).equal('localhost:9003')
+        expect(secondChild.children).to.have.lengthOf(0)
       }
     })
   })

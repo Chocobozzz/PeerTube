@@ -212,7 +212,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       url: this.url,
       text: this.text,
       threadId: this.originCommentId || this.id,
-      inReplyToCommentId: this.inReplyToCommentId,
+      inReplyToCommentId: this.inReplyToCommentId || null,
       videoId: this.videoId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

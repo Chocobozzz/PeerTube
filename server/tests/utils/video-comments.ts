@@ -1,6 +1,6 @@
 import * as request from 'supertest'
 
-function getVideoCommentThreads (url: string, videoId: number, start: number, count: number, sort?: string) {
+function getVideoCommentThreads (url: string, videoId: number | string, start: number, count: number, sort?: string) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
   const req = request(url)
@@ -15,7 +15,7 @@ function getVideoCommentThreads (url: string, videoId: number, start: number, co
     .expect('Content-Type', /json/)
 }
 
-function getVideoThreadComments (url: string, videoId: number, threadId: number) {
+function getVideoThreadComments (url: string, videoId: number | string, threadId: number) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads/' + threadId
 
   return request(url)
@@ -39,7 +39,7 @@ function addVideoCommentThread (url: string, token: string, videoId: number | st
 function addVideoCommentReply (
   url: string,
   token: string,
-  videoId: number,
+  videoId: number | string,
   inReplyToCommentId: number,
   text: string,
   expectedStatus = 200

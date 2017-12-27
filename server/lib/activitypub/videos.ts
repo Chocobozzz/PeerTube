@@ -17,12 +17,12 @@ import {
   sendUndoLikeToVideoFollowers
 } from './send'
 
-function fetchRemoteVideoPreview (video: VideoModel) {
+function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
   // FIXME: use url
   const host = video.VideoChannel.Account.Actor.Server.host
   const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
-  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path)
+  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => reject(err))
 }
 
 async function fetchRemoteVideoDescription (video: VideoModel) {

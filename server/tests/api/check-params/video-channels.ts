@@ -69,9 +69,9 @@ describe('Test videos API validator', function () {
     })
   })
 
-  describe('When listing author video channels', function () {
-    it('Should fail with bad author', async function () {
-      const path = '/api/v1/videos/authors/hello/channels'
+  describe('When listing account video channels', function () {
+    it('Should fail with bad account', async function () {
+      const path = '/api/v1/videos/accounts/hello/channels'
 
       await request(server.url)
         .get(path)
@@ -79,8 +79,8 @@ describe('Test videos API validator', function () {
         .expect(400)
     })
 
-    it('Should fail with a unknown author', async function () {
-      const path = '/api/v1/videos/authors/156/channels'
+    it('Should fail with a unknown account', async function () {
+      const path = '/api/v1/videos/accounts/156/channels'
 
       await request(server.url)
         .get(path)
