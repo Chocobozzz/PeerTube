@@ -1,0 +1,14 @@
+@import '_variables';
+@import '_mixins';
+
+.view-replies {
+  font-weight: $font-semibold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.glyphicon, .comment-thread-loading {
+  margin-left: 5px;
+  display: inline-block;
+  font-size: 13px;
+}

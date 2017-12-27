@@ -8,18 +8,48 @@ import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../account/account'
+import { ActorModel } from '../activitypub/actor'
+import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
-  WITH_IN_REPLY_TO = 'WITH_IN_REPLY_TO'
+  WITH_IN_REPLY_TO = 'WITH_IN_REPLY_TO',
+  ATTRIBUTES_FOR_API = 'ATTRIBUTES_FOR_API'
 }
 
 @Scopes({
+  [ScopeNames.ATTRIBUTES_FOR_API]: {
+    attributes: {
+      include: [
+        [
+          Sequelize.literal(
+            '(SELECT COUNT("replies"."id") ' +
+            'FROM "videoComment" AS "replies" ' +
+            'WHERE "replies"."originCommentId" = "VideoCommentModel"."id")'
+          ),
+          'totalReplies'
+        ]
+      ]
+    }
+  },
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
-      () => AccountModel
+      {
+        model: () => AccountModel,
+        include: [
+          {
+            model: () => ActorModel,
+            include: [
+              {
+                model: () => ServerModel,
+                required: false
+              }
+            ]
+          }
+        ]
+      }
     ]
   },
   [ScopeNames.WITH_IN_REPLY_TO]: {
@@ -149,7 +179,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
 
     return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.ATTRIBUTES_FOR_API ])
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -169,7 +199,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
 
     return VideoCommentModel
-      .scope([ ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.ATTRIBUTES_FOR_API ])
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -186,8 +216,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       videoId: this.videoId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      totalReplies: this.get('totalReplies') || 0,
       account: {
-        name: this.Account.name
+        name: this.Account.name,
+        host: this.Account.Actor.getHost()
       }
     } as VideoComment
   }

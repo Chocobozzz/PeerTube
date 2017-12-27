@@ -1,0 +1,15 @@
+<form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
+  <div class="form-group">
+    <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }">
+    </textarea>
+    <div *ngIf="formErrors.text" class="form-error">
+      {{ formErrors.text }}
+    </div>
+  </div>
+
+  <div class="submit-comment">
+    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid }">
+      Post comment
+    </button>
+  </div>
+</form>

@@ -10,13 +10,13 @@ import { UserVideoRate } from '../../../../../shared/models/videos/user-video-ra
 import { VideoRateType } from '../../../../../shared/models/videos/video-rate.type'
 import { VideoUpdate } from '../../../../../shared/models/videos/video-update.model'
 import { environment } from '../../../environments/environment'
+import { ComponentPagination } from '../rest/component-pagination.model'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { RestService } from '../rest/rest.service'
 import { UserService } from '../users/user.service'
 import { SortField } from './sort-field.type'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
-import { VideoPagination } from './video-pagination.model'
 import { Video } from './video.model'
 
 @Injectable()
@@ -71,8 +71,8 @@ export class VideoService {
       .catch(this.restExtractor.handleError)
   }
 
-  getMyVideos (videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
-    const pagination = this.videoPaginationToRestPagination(videoPagination)
+  getMyVideos (videoPagination: ComponentPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -82,8 +82,8 @@ export class VideoService {
       .catch((res) => this.restExtractor.handleError(res))
   }
 
-  getVideos (videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
-    const pagination = this.videoPaginationToRestPagination(videoPagination)
+  getVideos (videoPagination: ComponentPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -94,10 +94,14 @@ export class VideoService {
       .catch((res) => this.restExtractor.handleError(res))
   }
 
-  searchVideos (search: string, videoPagination: VideoPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
+  searchVideos (
+    search: string,
+    videoPagination: ComponentPagination,
+    sort: SortField
+  ): Observable<{ videos: Video[], totalVideos: number}> {
     const url = VideoService.BASE_VIDEO_URL + 'search'
 
-    const pagination = this.videoPaginationToRestPagination(videoPagination)
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -137,13 +141,6 @@ export class VideoService {
     return this.authHttp
       .get(url)
       .catch(res => this.restExtractor.handleError(res))
-  }
-
-  private videoPaginationToRestPagination (videoPagination: VideoPagination) {
-    const start: number = (videoPagination.currentPage - 1) * videoPagination.itemsPerPage
-    const count: number = videoPagination.itemsPerPage
-
-    return { start, count }
   }
 
   private setVideoRate (id: number, rateType: VideoRateType) {

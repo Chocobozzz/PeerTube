@@ -1,0 +1,29 @@
+<div class="comment">
+  <div class="comment-account-date">
+    <div class="comment-account">{{ comment.by }}</div>
+    <div class="comment-date">{{ comment.createdAt | myFromNow }}</div>
+  </div>
+  <div>{{ comment.text }}</div>
+
+  <div class="comment-actions">
+    <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply">Reply</div>
+  </div>
+
+  <my-video-comment-add
+    *ngIf="isUserLoggedIn() && inReplyToCommentId === comment.id" [video]="video" [parentComment]="comment"
+    (commentCreated)="onCommentReplyCreated($event)"
+  ></my-video-comment-add>
+
+  <div *ngIf="commentTree" class="children">
+    <div *ngFor="let commentChild of commentTree.children">
+      <my-video-comment
+        [comment]="commentChild.comment"
+        [video]="video"
+        [inReplyToCommentId]="inReplyToCommentId"
+        [commentTree]="commentChild"
+        (wantedToReply)="onWantedToReply($event)"
+        (resetReply)="onResetReply()"
+      ></my-video-comment>
+    </div>
+  </div>
+</div>

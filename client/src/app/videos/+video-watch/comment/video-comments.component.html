@@ -1,0 +1,31 @@
+<div>
+  <div class="title-page title-page-single">
+    Comments
+  </div>
+
+  <my-video-comment-add
+    *ngIf="isUserLoggedIn()"
+    [video]="video"
+    (commentCreated)="onCommentThreadCreated($event)"
+  ></my-video-comment-add>
+
+  <div class="comment-threads">
+    <div *ngFor="let comment of comments">
+      <my-video-comment
+        [comment]="comment"
+        [video]="video"
+        [inReplyToCommentId]="inReplyToCommentId"
+        [commentTree]="threadComments[comment.id]"
+        (wantedToReply)="onWantedToReply($event)"
+        (resetReply)="onResetReply()"
+      ></my-video-comment>
+
+      <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment)" class="view-replies">
+        View all {{ comment.totalReplies }} replies
+
+        <span *ngIf="!threadLoading[comment.id]" class="glyphicon glyphicon-menu-down"></span>
+        <my-loader class="comment-thread-loading" [loading]="threadLoading[comment.id]"></my-loader>
+      </div>
+    </div>
+  </div>
+</div>

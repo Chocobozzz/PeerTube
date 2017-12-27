@@ -66,9 +66,7 @@ async function addVideoCommentThreadRetryWrapper (req: express.Request, res: exp
   const comment = await retryTransactionWrapper(addVideoCommentThread, options)
 
   res.json({
-    comment: {
-      id: comment.id
-    }
+    comment: comment.toFormattedJSON()
   }).end()
 }
 
@@ -80,7 +78,7 @@ function addVideoCommentThread (req: express.Request, res: express.Response) {
       text: videoCommentInfo.text,
       inReplyToComment: null,
       video: res.locals.video,
-      accountId: res.locals.oauth.token.User.Account.id
+      account: res.locals.oauth.token.User.Account
     }, t)
   })
 }
@@ -94,9 +92,7 @@ async function addVideoCommentReplyRetryWrapper (req: express.Request, res: expr
   const comment = await retryTransactionWrapper(addVideoCommentReply, options)
 
   res.json({
-    comment: {
-      id: comment.id
-    }
+    comment: comment.toFormattedJSON()
   }).end()
 }
 
@@ -108,7 +104,7 @@ function addVideoCommentReply (req: express.Request, res: express.Response, next
       text: videoCommentInfo.text,
       inReplyToComment: res.locals.videoComment,
       video: res.locals.video,
-      accountId: res.locals.oauth.token.User.Account.id
+      account: res.locals.oauth.token.User.Account
     }, t)
   })
 }

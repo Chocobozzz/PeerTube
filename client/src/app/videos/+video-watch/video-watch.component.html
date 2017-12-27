@@ -54,6 +54,12 @@
                 </a>
               </li>
 
+              <li *ngIf="isVideoUpdatable()" role="menuitem">
+                <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.uuid ]">
+                  <span class="icon icon-edit"></span> Update
+                </a>
+              </li>
+
               <li *ngIf="isVideoRemovable()" role="menuitem">
                 <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
                   <span class="icon icon-blacklist"></span> Delete
@@ -149,6 +155,7 @@
         </div>
       </div>
 
+      <my-video-comments [video]="video" [user]="user"></my-video-comments>
     </div>
 
     <div class="other-videos">

@@ -39,7 +39,18 @@ describe('Test video comments', function () {
   it('Should create a thread in this video', async function () {
     const text = 'my super first comment'
 
-    await addVideoCommentThread(server.url, server.accessToken, videoUUID, text)
+    const res = await addVideoCommentThread(server.url, server.accessToken, videoUUID, text)
+    const comment = res.body
+
+    expect(comment.inReplyToCommentId).to.be.null
+    expect(comment.text).equal('my super first comment')
+    expect(comment.videoId).to.equal(videoId)
+    expect(comment.id).to.equal(comment.threadId)
+    expect(comment.account.name).to.equal('root')
+    expect(comment.account.host).to.equal('localhost:9001')
+    expect(comment.totalReplies).to.equal(0)
+    expect(dateIsValid(comment.createdAt as string)).to.be.true
+    expect(dateIsValid(comment.updatedAt as string)).to.be.true
   })
 
   it('Should list threads of this video', async function () {
@@ -55,6 +66,8 @@ describe('Test video comments', function () {
     expect(comment.videoId).to.equal(videoId)
     expect(comment.id).to.equal(comment.threadId)
     expect(comment.account.name).to.equal('root')
+    expect(comment.account.host).to.equal('localhost:9001')
+    expect(comment.totalReplies).to.equal(0)
     expect(dateIsValid(comment.createdAt as string)).to.be.true
     expect(dateIsValid(comment.updatedAt as string)).to.be.true
 
@@ -120,8 +133,11 @@ describe('Test video comments', function () {
     expect(res.body.data).to.have.lengthOf(3)
 
     expect(res.body.data[0].text).to.equal('my super first comment')
+    expect(res.body.data[0].totalReplies).to.equal(2)
     expect(res.body.data[1].text).to.equal('super thread 2')
+    expect(res.body.data[1].totalReplies).to.equal(1)
     expect(res.body.data[2].text).to.equal('super thread 3')
+    expect(res.body.data[2].totalReplies).to.equal(0)
   })
 
   after(async function () {

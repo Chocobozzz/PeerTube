@@ -1,29 +1,32 @@
 import * as Sequelize from 'sequelize'
 import { ResultList } from '../../shared/models'
 import { VideoCommentThreadTree } from '../../shared/models/videos/video-comment.model'
+import { AccountModel } from '../models/account/account'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { getVideoCommentActivityPubUrl, sendVideoRateChangeToFollowers } from './activitypub'
+import { getVideoCommentActivityPubUrl } from './activitypub'
 import { sendCreateVideoCommentToOrigin, sendCreateVideoCommentToVideoFollowers } from './activitypub/send'
 
 async function createVideoComment (obj: {
   text: string,
   inReplyToComment: VideoCommentModel,
   video: VideoModel
-  accountId: number
+  account: AccountModel
 }, t: Sequelize.Transaction) {
   let originCommentId: number = null
+  let inReplyToCommentId: number = null
 
   if (obj.inReplyToComment) {
     originCommentId = obj.inReplyToComment.originCommentId || obj.inReplyToComment.id
+    inReplyToCommentId = obj.inReplyToComment.id
   }
 
   const comment = await VideoCommentModel.create({
     text: obj.text,
     originCommentId,
-    inReplyToCommentId: obj.inReplyToComment.id,
+    inReplyToCommentId,
     videoId: obj.video.id,
-    accountId: obj.accountId,
+    accountId: obj.account.id,
     url: 'fake url'
   }, { transaction: t, validate: false })
 
@@ -32,6 +35,7 @@ async function createVideoComment (obj: {
   const savedComment = await comment.save({ transaction: t })
   savedComment.InReplyToVideoComment = obj.inReplyToComment
   savedComment.Video = obj.video
+  savedComment.Account = obj.account
 
   if (savedComment.Video.isOwned()) {
     await sendCreateVideoCommentToVideoFollowers(savedComment, t)

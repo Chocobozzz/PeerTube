@@ -3,12 +3,12 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
 import { AuthService } from '../../core/auth'
+import { ComponentPagination } from '../rest/component-pagination.model'
 import { SortField } from './sort-field.type'
-import { VideoPagination } from './video-pagination.model'
 import { Video } from './video.model'
 
 export abstract class AbstractVideoList implements OnInit {
-  pagination: VideoPagination = {
+  pagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 25,
     totalItems: null

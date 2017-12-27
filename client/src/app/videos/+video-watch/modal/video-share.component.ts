@@ -3,7 +3,7 @@ import { Component, Input, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 
 import { ModalDirective } from 'ngx-bootstrap/modal'
-import { VideoDetails } from '../../shared/video/video-details.model'
+import { VideoDetails } from '../../../shared/video/video-details.model'
 
 @Component({
   selector: 'my-video-share',

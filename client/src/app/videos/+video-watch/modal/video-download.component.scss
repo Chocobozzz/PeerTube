@@ -1,5 +1,5 @@
-@import '_variables';
-@import '_mixins';
+@import 'variables';
+@import 'mixins';
 
 .peertube-select-container {
   @include peertube-select-container(130px);

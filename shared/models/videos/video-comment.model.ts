@@ -7,8 +7,10 @@ export interface VideoComment {
   videoId: number
   createdAt: Date | string
   updatedAt: Date | string
+  totalReplies: number
   account: {
     name: string
+    host: string
   }
 }
 

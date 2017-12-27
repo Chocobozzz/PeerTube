@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpParams } from '@angular/common/http'
 import { SortMeta } from 'primeng/components/common/sortmeta'
+import { ComponentPagination } from './component-pagination.model'
 
 import { RestPagination } from './rest-pagination'
 
@@ -31,4 +32,10 @@ export class RestService {
     return newParams
   }
 
+  componentPaginationToRestPagination (componentPagination: ComponentPagination): RestPagination {
+    const start: number = (componentPagination.currentPage - 1) * componentPagination.itemsPerPage
+    const count: number = componentPagination.itemsPerPage
+
+    return { start, count }
+  }
 }

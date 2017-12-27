@@ -14,9 +14,9 @@ import { VideoDetails } from '../../shared/video/video-details.model'
 import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
 import { MarkdownService } from '../shared'
-import { VideoDownloadComponent } from './video-download.component'
-import { VideoReportComponent } from './video-report.component'
-import { VideoShareComponent } from './video-share.component'
+import { VideoDownloadComponent } from './modal/video-download.component'
+import { VideoReportComponent } from './modal/video-report.component'
+import { VideoShareComponent } from './modal/video-share.component'
 
 @Component({
   selector: 'my-video-watch',
@@ -206,6 +206,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  isVideoUpdatable () {
+    return this.video.isUpdatableBy(this.authService.getUser())
   }
 
   isVideoBlacklistable () {

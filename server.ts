@@ -151,7 +151,7 @@ app.use(function (req, res, next) {
 })
 
 app.use(function (err, req, res, next) {
-  logger.error(err)
+  logger.error(err, err)
   res.sendStatus(err.status || 500)
 })
 

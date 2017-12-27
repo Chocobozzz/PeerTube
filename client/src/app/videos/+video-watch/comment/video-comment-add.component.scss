@@ -1,0 +1,20 @@
+@import '_variables';
+@import '_mixins';
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+textarea {
+  @include peertube-textarea(100%, 150px);
+}
+
+.submit-comment {
+  display: flex;
+  justify-content: end;
+
+  button {
+    @include peertube-button;
+    @include orange-button
+  }
+}
