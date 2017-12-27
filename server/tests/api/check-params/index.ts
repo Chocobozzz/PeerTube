@@ -1,8 +1,10 @@
 // Order of the tests we want to execute
 import './follows'
 import './jobs'
-import './users'
 import './services'
-import './videos'
+import './users'
 import './video-abuses'
 import './video-blacklist'
+import './video-channels'
+import './video-comments'
+import './videos'

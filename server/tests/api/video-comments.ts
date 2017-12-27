@@ -8,7 +8,7 @@ import { addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads, ge
 
 const expect = chai.expect
 
-describe('Test a video comments', function () {
+describe('Test video comments', function () {
   let server: ServerInfo
   let videoId
   let videoUUID

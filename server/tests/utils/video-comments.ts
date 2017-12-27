@@ -25,7 +25,7 @@ function getVideoThreadComments (url: string, videoId: number, threadId: number)
     .expect('Content-Type', /json/)
 }
 
-function addVideoCommentThread (url: string, token: string, videoId: number, text: string, expectedStatus = 200) {
+function addVideoCommentThread (url: string, token: string, videoId: number | string, text: string, expectedStatus = 200) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
 
   return request(url)
