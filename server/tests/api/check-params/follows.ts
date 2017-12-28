@@ -1,7 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
 import 'mocha'
-import * as request from 'supertest'
 
 import {
   createUser, flushTests, killallServers, makeDeleteRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,

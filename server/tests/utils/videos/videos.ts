@@ -143,7 +143,7 @@ function getVideosListSort (url: string, sort: string) {
           .expect('Content-Type', /json/)
 }
 
-function removeVideo (url: string, token: string, id: number, expectedStatus = 204) {
+function removeVideo (url: string, token: string, id: number | string, expectedStatus = 204) {
   const path = '/api/v1/videos'
 
   return request(url)

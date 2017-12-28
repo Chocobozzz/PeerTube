@@ -1,9 +1,8 @@
 /* tslint:disable:no-unused-expression */
 
 import 'mocha'
-import * as request from 'supertest'
 
-import { createUser, flushTests, userLogin, killallServers, runServer, ServerInfo, setAccessTokensToServers } from '../../utils'
+import { createUser, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, userLogin } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { makeGetRequest } from '../../utils/requests/requests'
 

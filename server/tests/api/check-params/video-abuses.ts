@@ -1,20 +1,12 @@
 /* tslint:disable:no-unused-expression */
 
-import * as request from 'supertest'
 import 'mocha'
 
 import {
-  ServerInfo,
-  flushTests,
-  runServer,
-  uploadVideo,
-  getVideosList,
-  createUser,
-  setAccessTokensToServers,
-  killallServers,
-  makePostBodyRequest,
-  userLogin
+  createUser, flushTests, killallServers, makeGetRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
+  uploadVideo, userLogin
 } from '../../utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
 describe('Test video abuses API validators', function () {
   let server: ServerInfo
@@ -34,63 +26,42 @@ describe('Test video abuses API validators', function () {
     const username = 'user1'
     const password = 'my super password'
     await createUser(server.url, server.accessToken, username, password)
-
     userAccessToken = await userLogin(server, { username, password })
 
-    // Upload a video
-    const videoAttributes = {}
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
-
-    const res = await getVideosList(server.url)
-    const videos = res.body.data
-    server.video = videos[0]
+    const res = await uploadVideo(server.url, server.accessToken, {})
+    server.video = res.body.video
   })
 
   describe('When listing video abuses', function () {
     const path = '/api/v1/videos/abuse'
 
     it('Should fail with a bad start pagination', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ start: 'hello' })
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .set('Accept', 'application/json')
-              .expect(400)
+      await checkBadStartPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ count: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadCountPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with a non authenticated user', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'hello' })
-              .set('Accept', 'application/json')
-              .expect(401)
+      await makeGetRequest({
+        url: server.url,
+        path,
+        statusCodeExpected: 401
+      })
     })
 
     it('Should fail with a non admin user', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + userAccessToken)
-              .expect(403)
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        statusCodeExpected: 403
+      })
     })
   })
 
@@ -105,32 +76,33 @@ describe('Test video abuses API validators', function () {
 
     it('Should fail with a wrong video', async function () {
       const wrongPath = '/api/v1/videos/blabla/abuse'
-      const fields = {}
+      const fields = {
+        reason: 'my super reason'
+      }
       await makePostBodyRequest({ url: server.url, path: wrongPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a non authenticated user', async function () {
-      const fields = {}
       const path = basePath + server.video.id + '/abuse'
+      const fields = {
+        reason: 'my super reason'
+      }
       await makePostBodyRequest({ url: server.url, path, token: 'hello', fields, statusCodeExpected: 401 })
     })
 
     it('Should fail with a reason too short', async function () {
+      const path = basePath + server.video.id + '/abuse'
       const fields = {
         reason: 'h'
       }
-      const path = basePath + server.video.id + '/abuse'
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a reason too big', async function () {
-      const fields = {
-        reason: '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' +
-                '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' +
-                '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' +
-                '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'
-      }
       const path = basePath + server.video.id + '/abuse'
+      const fields = {
+        reason: 'super'.repeat(61)
+      }
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
   })

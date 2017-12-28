@@ -1,8 +1,11 @@
 /* tslint:disable:no-unused-expression */
 
 import 'mocha'
-import * as request from 'supertest'
-import { flushTests, killallServers, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils'
+import {
+  flushTests, killallServers, makeGetRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
+  uploadVideo
+} from '../../utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { addVideoCommentThread } from '../../utils/videos/video-comments'
 
 describe('Test video comments API validator', function () {
@@ -38,57 +41,52 @@ describe('Test video comments API validator', function () {
 
   describe('When listing video comment threads', function () {
     it('Should fail with a bad start pagination', async function () {
-      await request(server.url)
-              .get(pathThread)
-              .query({ start: 'hello' })
-              .set('Accept', 'application/json')
-              .expect(400)
+      await checkBadStartPagination(server.url, pathThread, server.accessToken)
+
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await request(server.url)
-              .get(pathThread)
-              .query({ count: 'hello' })
-              .set('Accept', 'application/json')
-              .expect(400)
+      await checkBadCountPagination(server.url, pathThread, server.accessToken)
+
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await request(server.url)
-              .get(pathThread)
-              .query({ sort: 'hello' })
-              .set('Accept', 'application/json')
-              .expect(400)
+      await checkBadSortPagination(server.url, pathThread, server.accessToken)
+
     })
 
     it('Should fail with an incorrect video', async function () {
-      await request(server.url)
-        .get('/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comment-threads')
-        .set('Accept', 'application/json')
-        .expect(404)
+      await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comment-threads',
+        statusCodeExpected: 404
+      })
     })
   })
 
   describe('When listing comments of a thread', function () {
     it('Should fail with an incorrect video', async function () {
-      await request(server.url)
-        .get('/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comment-threads/' + commentId)
-        .set('Accept', 'application/json')
-        .expect(404)
+      await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comment-threads/' + commentId,
+        statusCodeExpected: 404
+      })
     })
 
     it('Should fail with an incorrect thread id', async function () {
-      await request(server.url)
-        .get('/api/v1/videos/' + videoUUID + '/comment-threads/156')
-        .set('Accept', 'application/json')
-        .expect(404)
+      await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/videos/' + videoUUID + '/comment-threads/156',
+        statusCodeExpected: 404
+      })
     })
 
     it('Should success with the correct params', async function () {
-      await request(server.url)
-        .get('/api/v1/videos/' + videoUUID + '/comment-threads/' + commentId)
-        .set('Accept', 'application/json')
-        .expect(200)
+      await makeGetRequest({
+        url: server.url,
+        path: '/api/v1/videos/' + videoUUID + '/comment-threads/' + commentId,
+        statusCodeExpected: 200
+      })
     })
   })
 

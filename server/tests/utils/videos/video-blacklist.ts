@@ -10,7 +10,7 @@ function addVideoToBlacklist (url: string, token: string, videoId: number, speci
           .expect(specialStatus)
 }
 
-function removeVideoFromBlacklist (url: string, token: string, videoId: number, specialStatus = 204) {
+function removeVideoFromBlacklist (url: string, token: string, videoId: number | string, specialStatus = 204) {
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
   return request(url)

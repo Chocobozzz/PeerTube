@@ -1,20 +1,12 @@
 /* tslint:disable:no-unused-expression */
 
 import 'mocha'
-import * as request from 'supertest'
 
 import {
-  ServerInfo,
-  flushTests,
-  runServer,
-  uploadVideo,
-  getVideosList,
-  createUser,
-  setAccessTokensToServers,
-  killallServers,
-  makePostBodyRequest,
-  userLogin
+  createUser, flushTests, getBlacklistedVideosList, killallServers, makePostBodyRequest, removeVideoFromBlacklist, runServer,
+  ServerInfo, setAccessTokensToServers, uploadVideo, userLogin
 } from '../../utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
 describe('Test video blacklist API validators', function () {
   let server: ServerInfo
@@ -36,14 +28,8 @@ describe('Test video blacklist API validators', function () {
     await createUser(server.url, server.accessToken, username, password)
     userAccessToken = await userLogin(server, { username, password })
 
-    // Upload a video
-    const videoAttributes = {}
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
-
-    const res = await getVideosList(server.url)
-
-    const videos = res.body.data
-    server.video = videos[0]
+    const res = await uploadVideo(server.url, server.accessToken, {})
+    server.video = res.body.video
   })
 
   describe('When adding a video in blacklist', function () {
@@ -62,66 +48,40 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should fail with a non authenticated user', async function () {
-      const fields = {}
       const path = basePath + server.video + '/blacklist'
+      const fields = {}
       await makePostBodyRequest({ url: server.url, path, token: 'hello', fields, statusCodeExpected: 401 })
     })
 
     it('Should fail with a non admin user', async function () {
-      const fields = {}
       const path = basePath + server.video + '/blacklist'
+      const fields = {}
       await makePostBodyRequest({ url: server.url, path, token: userAccessToken, fields, statusCodeExpected: 403 })
     })
 
     it('Should fail with a local video', async function () {
-      const fields = {}
       const path = basePath + server.video.id + '/blacklist'
+      const fields = {}
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 403 })
     })
   })
 
   describe('When removing a video in blacklist', function () {
-    const basePath = '/api/v1/videos/'
-
     it('Should fail with a non authenticated user', async function () {
-      const path = basePath + server.video.id + '/blacklist'
-
-      await request(server.url)
-              .delete(path)
-              .set('Authorization', 'Bearer ' + 'fake token')
-              .set('Accept', 'application/json')
-              .expect(401)
+      await removeVideoFromBlacklist(server.url, 'fake token', server.video.id, 401)
     })
 
     it('Should fail with a non admin user', async function () {
-      const path = basePath + server.video.id + '/blacklist'
-
-      await request(server.url)
-              .delete(path)
-              .set('Authorization', 'Bearer ' + userAccessToken)
-              .set('Accept', 'application/json')
-              .expect(403)
+      await removeVideoFromBlacklist(server.url, userAccessToken, server.video.id, 403)
     })
 
     it('Should fail with an incorrect id', async function () {
-      const path = basePath + 'foobar/blacklist'
-
-      await request(server.url)
-              .delete(path)
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .set('Accept', 'application/json')
-              .expect(400)
+      await removeVideoFromBlacklist(server.url, server.accessToken, 'hello', 400)
     })
 
     it('Should fail with a not blacklisted video', async function () {
       // The video was not added to the blacklist so it should fail
-      const path = basePath + server.video.id + '/blacklist'
-
-      await request(server.url)
-              .delete(path)
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .set('Accept', 'application/json')
-              .expect(404)
+      await removeVideoFromBlacklist(server.url, server.accessToken, server.video.id, 404)
     })
   })
 
@@ -129,58 +89,23 @@ describe('Test video blacklist API validators', function () {
     const basePath = '/api/v1/videos/blacklist/'
 
     it('Should fail with a non authenticated user', async function () {
-      const path = basePath
-
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'createdAt' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + 'fake token')
-              .expect(401)
+      await getBlacklistedVideosList(server.url, 'fake token', 401)
     })
 
     it('Should fail with a non admin user', async function () {
-      const path = basePath
-
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'createdAt' })
-              .set('Authorization', 'Bearer ' + userAccessToken)
-              .set('Accept', 'application/json')
-              .expect(403)
+      await getBlacklistedVideosList(server.url, userAccessToken, 403)
     })
 
     it('Should fail with a bad start pagination', async function () {
-      const path = basePath
-
-      await request(server.url)
-              .get(path)
-              .query({ start: 'foobar' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadStartPagination(server.url, basePath, server.accessToken)
     })
 
     it('Should fail with a bad count pagination', async function () {
-      const path = basePath
-
-      await request(server.url)
-              .get(path)
-              .query({ count: 'foobar' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadCountPagination(server.url, basePath, server.accessToken)
     })
 
     it('Should fail with an incorrect sort', async function () {
-      const path = basePath
-
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'foobar' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadSortPagination(server.url, basePath, server.accessToken)
     })
   })
 

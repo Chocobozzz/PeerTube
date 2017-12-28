@@ -4,32 +4,13 @@ import * as chai from 'chai'
 import 'mocha'
 import { UserRole } from '../../../../shared/index'
 import {
-  createUser,
-  flushTests,
-  getBlacklistedVideosList,
-  getMyUserInformation,
-  getUserInformation,
-  getUsersList,
-  getUsersListPaginationAndSort,
-  getMyUserVideoRating,
-  getVideosList,
-  killallServers,
-  login,
-  serverLogin,
-  makePutBodyRequest,
-  rateVideo,
-  registerUser,
-  removeUser,
-  removeVideo,
-  runServer,
-  ServerInfo,
-  updateMyUser,
-  updateUser,
-  uploadVideo
+  createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoRating, getUserInformation, getUsersList,
+  getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo, registerUser, removeUser, removeVideo,
+  runServer, ServerInfo, serverLogin, updateMyUser, updateUser, uploadVideo
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
-import { getMyVideos } from '../../utils/videos/videos'
 import { setAccessTokensToServers } from '../../utils/users/login'
+import { getMyVideos } from '../../utils/videos/videos'
 
 const expect = chai.expect
 
@@ -387,14 +368,22 @@ describe('Test users', function () {
   })
 
   it('Should update my password', async function () {
-    await updateMyUser(server.url, accessTokenUser, 'new password')
+    await updateMyUser({
+      url: server.url,
+      accessToken: accessTokenUser,
+      newPassword: 'new password'
+    })
     server.user.password = 'new password'
 
     await login(server.url, server.client, server.user, 200)
   })
 
   it('Should be able to change the NSFW display attribute', async function () {
-    await updateMyUser(server.url, accessTokenUser, undefined, true)
+    await updateMyUser({
+      url: server.url,
+      accessToken: accessTokenUser,
+      displayNSFW: true
+    })
 
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
@@ -416,7 +405,11 @@ describe('Test users', function () {
   })
 
   it('Should be able to change the autoPlayVideo attribute', async function () {
-    await updateMyUser(server.url, accessTokenUser, undefined, undefined, undefined, false)
+    await updateMyUser({
+      url: server.url,
+      accessToken: accessTokenUser,
+      autoPlayVideo: false
+    })
 
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
@@ -425,7 +418,11 @@ describe('Test users', function () {
   })
 
   it('Should be able to change the email display attribute', async function () {
-    await updateMyUser(server.url, accessTokenUser, undefined, undefined, 'updated@example.com')
+    await updateMyUser({
+      url: server.url,
+      accessToken: accessTokenUser,
+      email: 'updated@example.com'
+    })
 
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
@@ -447,7 +444,14 @@ describe('Test users', function () {
   })
 
   it('Should be able to update another user', async function () {
-    await updateUser(server.url, userId, accessToken, 'updated2@example.com', 42, UserRole.MODERATOR)
+    await updateUser({
+      url: server.url,
+      userId,
+      accessToken,
+      email: 'updated2@example.com',
+      videoQuota: 42,
+      role: UserRole.MODERATOR
+    })
 
     const res = await getUserInformation(server.url, accessToken, userId)
     const user = res.body
