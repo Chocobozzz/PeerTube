@@ -42,7 +42,7 @@ describe('Test users', function () {
 
     expect(res.body.error)
       .to
-      .equal('invalid_client')
+      .equal('Authentication failed.')
   })
 
   it('Should not login with an invalid client secret', async function () {
@@ -51,7 +51,7 @@ describe('Test users', function () {
 
     expect(res.body.error)
       .to
-      .equal('invalid_client')
+      .equal('Authentication failed.')
   })
 
   it('Should not login with an invalid username', async function () {
@@ -60,7 +60,7 @@ describe('Test users', function () {
 
     expect(res.body.error)
       .to
-      .equal('invalid_grant')
+      .equal('Authentication failed.')
   })
 
   it('Should not login with an invalid password', async function () {
@@ -69,7 +69,7 @@ describe('Test users', function () {
 
     expect(res.body.error)
       .to
-      .equal('invalid_grant')
+      .equal('Authentication failed.')
   })
 
   it('Should not be able to upload a video', async function () {

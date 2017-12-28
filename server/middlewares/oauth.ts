@@ -15,7 +15,7 @@ function authenticate (req: express.Request, res: express.Response, next: expres
     if (err) {
       return res.status(err.status)
         .json({
-          error: 'Authentication failed.',
+          error: 'Token is invalid.',
           code: err.name
         })
         .end()
@@ -26,7 +26,18 @@ function authenticate (req: express.Request, res: express.Response, next: expres
 }
 
 function token (req: express.Request, res: express.Response, next: express.NextFunction) {
-  return oAuthServer.token()(req, res, next)
+  return oAuthServer.token()(req, res, err => {
+    if (err) {
+      return res.status(err.status)
+        .json({
+          error: 'Authentication failed.',
+          code: err.name
+        })
+        .end()
+    }
+
+    return next()
+  })
 }
 
 // ---------------------------------------------------------------------------
