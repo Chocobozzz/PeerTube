@@ -2,21 +2,17 @@
 
 import * as chai from 'chai'
 import 'mocha'
+import { VideoComment, VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 
 import {
-  flushAndRunMultipleServers,
-  flushTests,
-  getVideosList,
-  killallServers,
-  ServerInfo,
-  setAccessTokensToServers,
-  uploadVideo,
+  flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
   wait
 } from '../utils'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../utils/follows'
 import { getUserAccessToken } from '../utils/login'
 import { dateIsValid, webtorrentAdd } from '../utils/miscs'
 import { createUser } from '../utils/users'
+import { addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads, getVideoThreadComments } from '../utils/video-comments'
 import { getVideo, rateVideo, testVideoImage } from '../utils/videos'
 
 const expect = chai.expect
@@ -186,11 +182,29 @@ describe('Test follows', function () {
       await createUser(servers[2].url, servers[2].accessToken, user.username, user.password)
       const userAccessToken = await getUserAccessToken(servers[2], user)
 
-      const res = await getVideosList(servers[2].url)
-      const video4 = res.body.data.find(v => v.name === 'server3-4')
+      const resVideos = await getVideosList(servers[ 2 ].url)
+      const video4 = resVideos.body.data.find(v => v.name === 'server3-4')
 
-      await rateVideo(servers[2].url, servers[2].accessToken, video4.id, 'like')
-      await rateVideo(servers[2].url, userAccessToken, video4.id, 'dislike')
+      {
+        await rateVideo(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, 'like')
+        await rateVideo(servers[ 2 ].url, userAccessToken, video4.id, 'dislike')
+      }
+
+      {
+        const text = 'my super first comment'
+        const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
+        const threadId = res.body.comment.id
+
+        const text1 = 'my super answer to thread 1'
+        const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
+        const childCommentId = childCommentRes.body.comment.id
+
+        const text2 = 'my super answer to answer of thread 1'
+        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text2)
+
+        const text3 = 'my second answer to thread 1'
+        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
+      }
     }
 
     await wait(5000)
@@ -249,6 +263,45 @@ describe('Test follows', function () {
     expect(torrent.files).to.be.an('array')
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+
+    {
+      const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5)
+
+      expect(res1.body.total).to.equal(1)
+      expect(res1.body.data).to.be.an('array')
+      expect(res1.body.data).to.have.lengthOf(1)
+
+      const comment: VideoComment = res1.body.data[0]
+      expect(comment.inReplyToCommentId).to.be.null
+      expect(comment.text).equal('my super first comment')
+      expect(comment.videoId).to.equal(video4.id)
+      expect(comment.id).to.equal(comment.threadId)
+      expect(comment.account.name).to.equal('root')
+      expect(comment.account.host).to.equal('localhost:9003')
+      expect(comment.totalReplies).to.equal(3)
+      expect(dateIsValid(comment.createdAt as string)).to.be.true
+      expect(dateIsValid(comment.updatedAt as string)).to.be.true
+
+      const threadId = comment.threadId
+
+      const res2 = await getVideoThreadComments(servers[0].url, video4.id, threadId)
+
+      const tree: VideoCommentThreadTree = res2.body
+      expect(tree.comment.text).equal('my super first comment')
+      expect(tree.children).to.have.lengthOf(2)
+
+      const firstChild = tree.children[0]
+      expect(firstChild.comment.text).to.equal('my super answer to thread 1')
+      expect(firstChild.children).to.have.lengthOf(1)
+
+      const childOfFirstChild = firstChild.children[0]
+      expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
+      expect(childOfFirstChild.children).to.have.lengthOf(0)
+
+      const secondChild = tree.children[1]
+      expect(secondChild.comment.text).to.equal('my second answer to thread 1')
+      expect(secondChild.children).to.have.lengthOf(0)
+    }
   })
 
   after(async function () {

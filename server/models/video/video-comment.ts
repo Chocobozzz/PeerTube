@@ -103,8 +103,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   @BelongsTo(() => VideoCommentModel, {
     foreignKey: {
+      name: 'originCommentId',
       allowNull: true
     },
+    as: 'OriginVideoComment',
     onDelete: 'CASCADE'
   })
   OriginVideoComment: VideoCommentModel
@@ -115,6 +117,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   @BelongsTo(() => VideoCommentModel, {
     foreignKey: {
+      name: 'inReplyToCommentId',
       allowNull: true
     },
     as: 'InReplyToVideoComment',
