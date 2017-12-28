@@ -822,7 +822,7 @@ describe('Test multiple servers', function () {
         .field('nsfw', 'false')
         .field('channelId', '1')
 
-      const filePath = join(__dirname, '..', 'api', 'fixtures', 'video_short.webm')
+      const filePath = join(__dirname, '..', '..', 'api', 'fixtures', 'video_short.webm')
 
       await req.attach('videofile', filePath)
         .expect(200)

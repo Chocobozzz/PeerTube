@@ -337,10 +337,10 @@ describe('Test a single server', function () {
   it('Should remove the video', async function () {
     await removeVideo(server.url, server.accessToken, videoId)
 
-    const files1 = await readdirPromise(join(__dirname, '..', '..', '..', 'test1/videos/'))
+    const files1 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1/videos/'))
     expect(files1).to.have.lengthOf(0)
 
-    const files2 = await readdirPromise(join(__dirname, '..', '..', '..', 'test1/thumbnails/'))
+    const files2 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1/thumbnails/'))
     expect(files2).to.have.lengthOf(0)
   })
 

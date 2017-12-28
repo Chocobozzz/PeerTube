@@ -23,7 +23,8 @@ function getVideoCategories (url: string) {
 
   return makeGetRequest({
     url,
-    path
+    path,
+    statusCodeExpected: 200
   })
 }
 
@@ -32,7 +33,8 @@ function getVideoLicences (url: string) {
 
   return makeGetRequest({
     url,
-    path
+    path,
+    statusCodeExpected: 200
   })
 }
 
@@ -41,7 +43,8 @@ function getVideoLanguages (url: string) {
 
   return makeGetRequest({
     url,
-    path
+    path,
+    statusCodeExpected: 200
   })
 }
 
@@ -50,7 +53,8 @@ function getVideoPrivacies (url: string) {
 
   return makeGetRequest({
     url,
-    path
+    path,
+    statusCodeExpected: 200
   })
 }
 
