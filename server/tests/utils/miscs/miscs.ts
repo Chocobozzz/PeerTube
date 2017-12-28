@@ -3,6 +3,10 @@ import { readFile, readdir } from 'fs'
 
 let webtorrent = new WebTorrent()
 
+function immutableAssign <T, U> (target: T, source: U) {
+  return Object.assign<{}, T, U>({}, target, source)
+}
+
 function readFilePromise (path: string) {
   return new Promise<Buffer>((res, rej) => {
     readFile(path, (err, data) => {
@@ -48,5 +52,6 @@ export {
   readdirPromise,
   dateIsValid,
   wait,
-  webtorrentAdd
+  webtorrentAdd,
+  immutableAssign
 }

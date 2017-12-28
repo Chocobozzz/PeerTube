@@ -102,7 +102,6 @@ function checkParamEmbed (server: ServerInfo, embedUrl: string, statusCodeExpect
     url: server.url,
     path,
     query: Object.assign(query, { url: embedUrl }),
-    token: server.accessToken,
     statusCodeExpected
   })
 }

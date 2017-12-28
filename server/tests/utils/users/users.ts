@@ -1,4 +1,5 @@
 import * as request from 'supertest'
+import { makePutBodyRequest } from '../'
 
 import { UserRole } from '../../../../shared/index'
 
@@ -43,14 +44,14 @@ function registerUser (url: string, username: string, password: string, specialS
           .expect(specialStatus)
 }
 
-function getMyUserInformation (url: string, accessToken: string) {
+function getMyUserInformation (url: string, accessToken: string, specialStatus = 200) {
   const path = '/api/v1/users/me'
 
   return request(url)
           .get(path)
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
-          .expect(200)
+          .expect(specialStatus)
           .expect('Content-Type', /json/)
 }
 
@@ -65,14 +66,14 @@ function getUserInformation (url: string, accessToken: string, userId: number) {
     .expect('Content-Type', /json/)
 }
 
-function getUserVideoRating (url: string, accessToken: string, videoId: number) {
+function getMyUserVideoRating (url: string, accessToken: string, videoId: number | string, specialStatus = 200) {
   const path = '/api/v1/users/me/videos/' + videoId + '/rating'
 
   return request(url)
           .get(path)
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
-          .expect(200)
+          .expect(specialStatus)
           .expect('Content-Type', /json/)
 }
 
@@ -101,7 +102,7 @@ function getUsersListPaginationAndSort (url: string, accessToken: string, start:
           .expect('Content-Type', /json/)
 }
 
-function removeUser (url: string, userId: number, accessToken: string, expectedStatus = 204) {
+function removeUser (url: string, userId: number | string, accessToken: string, expectedStatus = 204) {
   const path = '/api/v1/users'
 
   return request(url)
@@ -111,38 +112,53 @@ function removeUser (url: string, userId: number, accessToken: string, expectedS
           .expect(expectedStatus)
 }
 
-function updateMyUser (url: string, accessToken: string, newPassword: string, displayNSFW?: boolean,
-  email?: string, autoPlayVideo?: boolean) {
+function updateMyUser (options: {
+  url: string
+  accessToken: string,
+  newPassword?: string,
+  displayNSFW?: boolean,
+  email?: string,
+  autoPlayVideo?: boolean
+}) {
   const path = '/api/v1/users/me'
 
   const toSend = {}
-  if (newPassword !== undefined && newPassword !== null) toSend['password'] = newPassword
-  if (displayNSFW !== undefined && displayNSFW !== null) toSend['displayNSFW'] = displayNSFW
-  if (autoPlayVideo !== undefined && autoPlayVideo !== null) toSend['autoPlayVideo'] = autoPlayVideo
-  if (email !== undefined && email !== null) toSend['email'] = email
+  if (options.newPassword !== undefined && options.newPassword !== null) toSend['password'] = options.newPassword
+  if (options.displayNSFW !== undefined && options.displayNSFW !== null) toSend['displayNSFW'] = options.displayNSFW
+  if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend['autoPlayVideo'] = options.autoPlayVideo
+  if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
 
-  return request(url)
-    .put(path)
-    .set('Accept', 'application/json')
-    .set('Authorization', 'Bearer ' + accessToken)
-    .send(toSend)
-    .expect(204)
+  return makePutBodyRequest({
+    url: options.url,
+    path,
+    token: options.accessToken,
+    fields: toSend,
+    statusCodeExpected: 204
+  })
 }
 
-function updateUser (url: string, userId: number, accessToken: string, email: string, videoQuota: number, role: UserRole) {
-  const path = '/api/v1/users/' + userId
+function updateUser (options: {
+  url: string
+  userId: number,
+  accessToken: string,
+  email?: string,
+  videoQuota?: number,
+  role?: UserRole
+}) {
+  const path = '/api/v1/users/' + options.userId
 
   const toSend = {}
-  if (email !== undefined && email !== null) toSend['email'] = email
-  if (videoQuota !== undefined && videoQuota !== null) toSend['videoQuota'] = videoQuota
-  if (role !== undefined && role !== null) toSend['role'] = role
+  if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
+  if (options.videoQuota !== undefined && options.videoQuota !== null) toSend['videoQuota'] = options.videoQuota
+  if (options.role !== undefined && options.role !== null) toSend['role'] = options.role
 
-  return request(url)
-          .put(path)
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + accessToken)
-          .send(toSend)
-          .expect(204)
+  return makePutBodyRequest({
+    url: options.url,
+    path,
+    token: options.accessToken,
+    fields: toSend,
+    statusCodeExpected: 204
+  })
 }
 
 // ---------------------------------------------------------------------------
@@ -151,7 +167,7 @@ export {
   createUser,
   registerUser,
   getMyUserInformation,
-  getUserVideoRating,
+  getMyUserVideoRating,
   getUsersList,
   getUsersListPaginationAndSort,
   removeUser,

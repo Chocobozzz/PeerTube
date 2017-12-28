@@ -11,7 +11,7 @@ import {
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
-  getUserVideoRating,
+  getMyUserVideoRating,
   getVideosList,
   killallServers,
   login,
@@ -130,7 +130,7 @@ describe('Test users', function () {
 
   it('Should retrieve a video rating', async function () {
     await rateVideo(server.url, accessToken, videoId, 'like')
-    const res = await getUserVideoRating(server.url, accessToken, videoId)
+    const res = await getMyUserVideoRating(server.url, accessToken, videoId)
     const rating = res.body
 
     expect(rating.videoId)

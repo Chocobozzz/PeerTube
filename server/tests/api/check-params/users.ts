@@ -1,25 +1,15 @@
 /* tslint:disable:no-unused-expression */
 
-import * as request from 'supertest'
+import { omit } from 'lodash'
 import 'mocha'
+import { UserRole } from '../../../../shared'
 
 import {
-  ServerInfo,
-  flushTests,
-  runServer,
-  uploadVideo,
-  getVideosList,
-  makePutBodyRequest,
-  createUser,
-  serverLogin,
-  getUsersList,
-  registerUser,
-  setAccessTokensToServers,
-  killallServers,
-  makePostBodyRequest,
-  userLogin
+  createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
+  makePostBodyRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers, updateUser,
+  uploadVideo, userLogin
 } from '../../utils'
-import { UserRole } from '../../../../shared'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
 describe('Test users API validators', function () {
   const path = '/api/v1/users/'
@@ -42,269 +32,169 @@ describe('Test users API validators', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const username = 'user1'
-    const password = 'my super password'
-    const videoQuota = 42000000
-    await createUser(server.url, server.accessToken, username, password, videoQuota)
-
-    const videoAttributes = {}
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
-
-    const res = await getVideosList(server.url)
-    const videos = res.body.data
-    videoId = videos[0].id
-
     const user = {
       username: 'user1',
       password: 'my super password'
     }
+    const videoQuota = 42000000
+    await createUser(server.url, server.accessToken, user.username, user.password, videoQuota)
     userAccessToken = await userLogin(server, user)
+
+    const res = await uploadVideo(server.url, server.accessToken, {})
+    videoId = res.body.video.id
   })
 
   describe('When listing users', function () {
     it('Should fail with a bad start pagination', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ start: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadStartPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ count: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadCountPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with a non authenticated user', async function () {
-      await request(server.url)
-        .get(path)
-        .set('Accept', 'application/json')
-        .expect(401)
+      await makeGetRequest({
+        url: server.url,
+        path,
+        statusCodeExpected: 401
+      })
     })
 
     it('Should fail with a non admin user', async function () {
-      await request(server.url)
-        .get(path)
-        .set('Accept', 'application/json')
-        .set('Authorization', 'Bearer ' + userAccessToken)
-        .expect(403)
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        statusCodeExpected: 403
+      })
     })
   })
 
   describe('When adding a new user', function () {
+    const baseCorrectParams = {
+      username: 'user2',
+      email: 'test@example.com',
+      password: 'my super password',
+      videoQuota: -1,
+      role: UserRole.USER
+    }
+
     it('Should fail with a too small username', async function () {
-      const fields = {
-        username: 'ji',
-        email: 'test@example.com',
-        password: 'my_super_password',
-        role: UserRole.USER,
-        videoQuota: 42000000
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'fi' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = {
-        username: 'my_super_username_which_is_very_long',
-        email: 'test@example.com',
-        password: 'my_super_password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a not lowercase username', async function () {
-      const fields = {
-        username: 'Toto',
-        email: 'test@example.com',
-        password: 'my_super_password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'Toto' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with an incorrect username', async function () {
-      const fields = {
-        username: 'my username',
-        email: 'test@example.com',
-        password: 'my_super_password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'my username' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a missing email', async function () {
-      const fields = {
-        username: 'ji',
-        password: 'my_super_password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = omit(baseCorrectParams, 'email')
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with an invalid email', async function () {
-      const fields = {
-        username: 'my_super_username_which_is_very_long',
-        email: 'test_example.com',
-        password: 'my_super_password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { email: 'test_example.com' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too small password', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'test@example.com',
-        password: 'bla',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { password: 'bla' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long password', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'test@example.com',
-        password: 'my super long password which is very very very very very very very very very very very very very very' +
-                  'very very very very very very very very very very very very very very very veryv very very very very' +
-                  'very very very very very very very very very very very very very very very very very very very very long',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { password: 'super'.repeat(61) })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with an non authenticated user', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'test@example.com',
-        password: 'my super password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
-
-      await makePostBodyRequest({ url: server.url, path, token: 'super token', fields, statusCodeExpected: 401 })
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: 'super token',
+        fields: baseCorrectParams,
+        statusCodeExpected: 401
+      })
     })
 
     it('Should fail if we add a user with the same username', async function () {
-      const fields = {
-        username: 'user1',
-        email: 'test@example.com',
-        password: 'my super password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'user1' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 409 })
     })
 
     it('Should fail if we add a user with the same email', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'user1@example.com',
-        password: 'my super password',
-        videoQuota: 42000000,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { email: 'user1@example.com' })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 409 })
     })
 
     it('Should fail without a videoQuota', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'user1@example.com',
-        password: 'my super password',
-        role: UserRole.USER
-      }
+      const fields = omit(baseCorrectParams, 'videoQuota')
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with an invalid videoQuota', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'user1@example.com',
-        password: 'my super password',
-        videoQuota: -5,
-        role: UserRole.USER
-      }
+      const fields = immutableAssign(baseCorrectParams, { videoQuota: -5 })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail without a user role', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'user1@example.com',
-        password: 'my super password',
-        videoQuota: 0
-      }
+      const fields = omit(baseCorrectParams, 'role')
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with an invalid user role', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'user1@example.com',
-        password: 'my super password',
-        videoQuota: 0,
-        role: 88989
-      }
+      const fields = immutableAssign(baseCorrectParams, { role: 88989 })
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should succeed with the correct params', async function () {
-      const fields = {
-        username: 'user2',
-        email: 'test@example.com',
-        password: 'my super password',
-        videoQuota: -1,
-        role: UserRole.USER
-      }
-
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 204 })
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        fields: baseCorrectParams,
+        statusCodeExpected: 204
+      })
     })
 
     it('Should fail with a non admin user', async function () {
-      server.user = {
+      const user = {
         username: 'user1',
-        email: 'test@example.com',
         password: 'my super password'
       }
+      userAccessToken = await userLogin(server, user)
 
-      userAccessToken = await serverLogin(server)
       const fields = {
         username: 'user3',
         email: 'test@example.com',
@@ -334,9 +224,7 @@ describe('Test users API validators', function () {
 
     it('Should fail with a too long password', async function () {
       const fields = {
-        password: 'my super long password which is very very very very very very very very very very very very very very' +
-                  'very very very very very very very very very very very very very very very veryv very very very very' +
-                  'very very very very very very very very very very very very very very very very very very very very long'
+        password: 'super'.repeat(61)
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
@@ -432,204 +320,128 @@ describe('Test users API validators', function () {
 
   describe('When getting my information', function () {
     it('Should fail with a non authenticated user', async function () {
-      await request(server.url)
-              .get(path + 'me')
-              .set('Authorization', 'Bearer fake_token')
-              .set('Accept', 'application/json')
-              .expect(401)
+      await getMyUserInformation(server.url, 'fake_token', 401)
     })
 
     it('Should success with the correct parameters', async function () {
-      await request(server.url)
-              .get(path + 'me')
-              .set('Authorization', 'Bearer ' + userAccessToken)
-              .set('Accept', 'application/json')
-              .expect(200)
+      await getMyUserInformation(server.url, userAccessToken)
     })
   })
 
   describe('When getting my video rating', function () {
     it('Should fail with a non authenticated user', async function () {
-      await request(server.url)
-              .get(path + 'me/videos/' + videoId + '/rating')
-              .set('Authorization', 'Bearer fake_token')
-              .set('Accept', 'application/json')
-              .expect(401)
+      await getMyUserVideoRating(server.url, 'fake_token', videoId, 401)
     })
 
     it('Should fail with an incorrect video uuid', async function () {
-      await request(server.url)
-              .get(path + 'me/videos/blabla/rating')
-              .set('Authorization', 'Bearer ' + userAccessToken)
-              .set('Accept', 'application/json')
-              .expect(400)
+      await getMyUserVideoRating(server.url, server.accessToken, 'blabla', 400)
     })
 
     it('Should fail with an unknown video', async function () {
-      await request(server.url)
-              .get(path + 'me/videos/4da6fde3-88f7-4d16-b119-108df5630b06/rating')
-              .set('Authorization', 'Bearer ' + userAccessToken)
-              .set('Accept', 'application/json')
-              .expect(404)
+      await getMyUserVideoRating(server.url, server.accessToken, '4da6fde3-88f7-4d16-b119-108df5630b06', 404)
     })
 
-    it('Should success with the correct parameters', async function () {
-      await request(server.url)
-              .get(path + 'me/videos/' + videoId + '/rating')
-              .set('Authorization', 'Bearer ' + userAccessToken)
-              .set('Accept', 'application/json')
-              .expect(200)
+    it('Should succeed with the correct parameters', async function () {
+      await getMyUserVideoRating(server.url, server.accessToken, videoId)
     })
   })
 
   describe('When removing an user', function () {
     it('Should fail with an incorrect id', async function () {
-      await request(server.url)
-              .delete(path + 'bla-bla')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await removeUser(server.url, 'blabla', server.accessToken, 400)
     })
 
     it('Should fail with the root user', async function () {
-      await request(server.url)
-              .delete(path + rootId)
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await removeUser(server.url, rootId, server.accessToken, 400)
     })
 
     it('Should return 404 with a non existing id', async function () {
-      await request(server.url)
-              .delete(path + '45')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(404)
-    })
-  })
-
-  describe('When removing an user', function () {
-    it('Should fail with an incorrect id', async function () {
-      await request(server.url)
-              .delete(path + 'bla-bla')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
-    })
-
-    it('Should fail with the root user', async function () {
-      await request(server.url)
-              .delete(path + rootId)
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
-    })
-
-    it('Should return 404 with a non existing id', async function () {
-      await request(server.url)
-              .delete(path + '45')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(404)
+      await removeUser(server.url, 4545454, server.accessToken, 404)
     })
   })
 
   describe('When register a new user', function () {
     const registrationPath = path + '/register'
+    const baseCorrectParams = {
+      username: 'user3',
+      email: 'test3@example.com',
+      password: 'my super password'
+    }
 
     it('Should fail with a too small username', async function () {
-      const fields = {
-        username: 'ji',
-        email: 'test@example.com',
-        password: 'my_super_password'
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'ji' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long username', async function () {
-      const fields = {
-        username: 'my_super_username_which_is_very_long',
-        email: 'test@example.com',
-        password: 'my_super_password'
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'my_super_username_which_is_very_long' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with an incorrect username', async function () {
-      const fields = {
-        username: 'my username',
-        email: 'test@example.com',
-        password: 'my_super_password'
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'my username' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a missing email', async function () {
-      const fields = {
-        username: 'ji',
-        password: 'my_super_password'
-      }
+      const fields = omit(baseCorrectParams, 'email')
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with an invalid email', async function () {
-      const fields = {
-        username: 'my_super_username_which_is_very_long',
-        email: 'test_example.com',
-        password: 'my_super_password'
-      }
+      const fields = immutableAssign(baseCorrectParams, { email: 'test_example.com' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too small password', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'test@example.com',
-        password: 'bla'
-      }
+      const fields = immutableAssign(baseCorrectParams, { password: 'bla' })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a too long password', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'test@example.com',
-        password: 'my super long password which is very very very very very very very very very very very very very very' +
-                  'very very very very very very very very very very very very very very very veryv very very very very' +
-                  'very very very very very very very very very very very very very very very very very very very very long'
-      }
+      const fields = immutableAssign(baseCorrectParams, { password: 'super'.repeat(61) })
 
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
     it('Should fail if we register a user with the same username', async function () {
-      const fields = {
-        username: 'root',
-        email: 'test@example.com',
-        password: 'my super password'
-      }
+      const fields = immutableAssign(baseCorrectParams, { username: 'root' })
 
-      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields, statusCodeExpected: 409 })
+      await makePostBodyRequest({
+        url: server.url,
+        path: registrationPath,
+        token: server.accessToken,
+        fields,
+        statusCodeExpected: 409
+      })
     })
 
     it('Should fail if we register a user with the same email', async function () {
-      const fields = {
-        username: 'my_username',
-        email: 'admin1@example.com',
-        password: 'my super password'
-      }
+      const fields = immutableAssign(baseCorrectParams, { email: 'admin1@example.com' })
 
-      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields, statusCodeExpected: 409 })
+      await makePostBodyRequest({
+        url: server.url,
+        path: registrationPath,
+        token: server.accessToken,
+        fields,
+        statusCodeExpected: 409
+      })
     })
 
     it('Should succeed with the correct params', async function () {
-      const fields = {
-        username: 'user3',
-        email: 'test3@example.com',
-        password: 'my super password'
-      }
-
-      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields, statusCodeExpected: 204 })
+      await makePostBodyRequest({
+        url: server.url,
+        path: registrationPath,
+        token: server.accessToken,
+        fields: baseCorrectParams,
+        statusCodeExpected: 204
+      })
     })
 
     it('Should fail on a server with registration disabled', async function () {
@@ -657,25 +469,24 @@ describe('Test users API validators', function () {
 
   describe('When having a video quota', function () {
     it('Should fail with a user having too many video', async function () {
-      const fields = {
+      await updateUser({
+        url: server.url,
+        userId: rootId,
+        accessToken: server.accessToken,
         videoQuota: 42
-      }
+      })
 
-      await makePutBodyRequest({ url: server.url, path: path + rootId, token: server.accessToken, fields, statusCodeExpected: 204 })
-
-      const videoAttributes = {}
-      await uploadVideo(server.url, server.accessToken, videoAttributes, 403)
+      await uploadVideo(server.url, server.accessToken, {}, 403)
     })
 
     it('Should fail with a registered user having too many video', async function () {
       this.timeout(10000)
 
-      server.user = {
+      const user = {
         username: 'user3',
-        email: 'test3@example.com',
         password: 'my super password'
       }
-      userAccessToken = await serverLogin(server)
+      userAccessToken = await userLogin(server, user)
 
       const videoAttributes = { fixture: 'video_short2.webm' }
       await uploadVideo(server.url, userAccessToken, videoAttributes)
