@@ -14,8 +14,8 @@ import {
   updateVideo,
   uploadVideo,
   wait
-} from '../utils'
-import { doubleFollow } from '../utils/follows'
+} from '../../utils/index'
+import { doubleFollow } from '../../utils/server/follows'
 
 const expect = chai.expect
 

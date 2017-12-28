@@ -1,6 +1,6 @@
 import * as request from 'supertest'
 
-import { ServerInfo } from './servers'
+import { ServerInfo } from '../server/servers'
 
 type Client = { id: string, secret: string }
 type User = { username: string, password: string }

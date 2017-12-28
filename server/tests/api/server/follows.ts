@@ -2,18 +2,21 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { VideoComment, VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
+import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 import {
   flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
   wait
-} from '../utils'
-import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../utils/follows'
-import { getUserAccessToken } from '../utils/login'
-import { dateIsValid, webtorrentAdd } from '../utils/miscs'
-import { createUser } from '../utils/users'
-import { addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads, getVideoThreadComments } from '../utils/video-comments'
-import { getVideo, rateVideo, testVideoImage } from '../utils/videos'
+} from '../../utils/index'
+import { dateIsValid, webtorrentAdd } from '../../utils/miscs/miscs'
+import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
+import { getUserAccessToken } from '../../utils/users/login'
+import { createUser } from '../../utils/users/users'
+import {
+  addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
+  getVideoThreadComments
+} from '../../utils/videos/video-comments'
+import { getVideo, rateVideo, testVideoImage } from '../../utils/videos/videos'
 
 const expect = chai.expect
 

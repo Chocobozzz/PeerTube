@@ -4,16 +4,19 @@ import * as chai from 'chai'
 import 'mocha'
 import { join } from 'path'
 import * as request from 'supertest'
-import { VideoComment, VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
+import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 import {
   addVideoChannel, dateIsValid, doubleFollow, flushAndRunMultipleServers, flushTests, getUserAccessToken, getVideo,
   getVideoChannelsList, getVideosList, killallServers, rateVideo, removeVideo, ServerInfo, setAccessTokensToServers, testVideoImage,
   updateVideo, uploadVideo, wait, webtorrentAdd
-} from '../utils'
-import { createUser } from '../utils/users'
-import { addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads, getVideoThreadComments } from '../utils/video-comments'
-import { viewVideo } from '../utils/videos'
+} from '../../utils/index'
+import { createUser } from '../../utils/users/users'
+import {
+  addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
+  getVideoThreadComments
+} from '../../utils/videos/video-comments'
+import { viewVideo } from '../../utils/videos/videos'
 
 const expect = chai.expect
 

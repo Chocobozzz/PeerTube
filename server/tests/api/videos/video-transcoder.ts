@@ -15,7 +15,7 @@ import {
   killallServers,
   webtorrentAdd,
   getVideo
-} from '../utils'
+} from '../../utils/index'
 
 describe('Test video transcoding', function () {
   let servers: ServerInfo[] = []

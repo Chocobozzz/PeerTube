@@ -3,7 +3,7 @@
 import 'mocha'
 import * as request from 'supertest'
 import { flushTests, killallServers, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils'
-import { addVideoCommentThread } from '../../utils/video-comments'
+import { addVideoCommentThread } from '../../utils/videos/video-comments'
 
 describe('Test video comments API validator', function () {
   let pathThread: string

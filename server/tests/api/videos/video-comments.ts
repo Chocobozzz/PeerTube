@@ -2,9 +2,12 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { VideoComment, VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
-import { dateIsValid, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../utils'
-import { addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads, getVideoThreadComments } from '../utils/video-comments'
+import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { dateIsValid, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils/index'
+import {
+  addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
+  getVideoThreadComments
+} from '../../utils/videos/video-comments'
 
 const expect = chai.expect
 

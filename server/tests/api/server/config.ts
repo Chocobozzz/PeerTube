@@ -9,7 +9,7 @@ import {
   flushTests,
   runServer,
   registerUser
-} from '../utils'
+} from '../../utils/index'
 
 describe('Test config', function () {
   let server = null

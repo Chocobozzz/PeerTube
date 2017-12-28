@@ -1,6 +1,6 @@
 import { exec } from 'child_process'
 
-import { ServerInfo } from './servers'
+import { ServerInfo } from '../server/servers'
 
 function getEnvCli (server?: ServerInfo) {
   return `NODE_ENV=test NODE_APP_INSTANCE=${server.serverNumber}`

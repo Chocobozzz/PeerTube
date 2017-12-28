@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { UserRole } from '../../../shared'
+import { UserRole } from '../../../../shared/index'
 import {
   createUser,
   flushTests,
@@ -26,10 +26,10 @@ import {
   updateMyUser,
   updateUser,
   uploadVideo
-} from '../utils'
-import { follow } from '../utils/follows'
-import { getMyVideos } from '../utils/videos'
-import { setAccessTokensToServers } from '../utils/login'
+} from '../../utils/index'
+import { follow } from '../../utils/server/follows'
+import { getMyVideos } from '../../utils/videos/videos'
+import { setAccessTokensToServers } from '../../utils/users/login'
 
 const expect = chai.expect
 

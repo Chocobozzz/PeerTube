@@ -30,8 +30,8 @@ import {
   uploadVideo,
   wait,
   webtorrentAdd
-} from '../utils'
-import { viewVideo } from '../utils/videos'
+} from '../../utils/index'
+import { viewVideo } from '../../utils/videos/videos'
 
 const expect = chai.expect
 

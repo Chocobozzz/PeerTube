@@ -12,8 +12,8 @@ import {
   setAccessTokensToServers,
   killallServers,
   getOEmbed
-} from '../utils'
-import { runServer } from '../utils/servers'
+} from '../../utils/index'
+import { runServer } from '../../utils/server/servers'
 
 describe('Test services', function () {
   let server: ServerInfo = null

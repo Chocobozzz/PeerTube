@@ -1,13 +1,9 @@
 import { readFile } from 'fs'
-import * as request from 'supertest'
-import { join, isAbsolute } from 'path'
 import * as parseTorrent from 'parse-torrent'
-
-import { makeGetRequest } from './requests'
-import { readFilePromise } from './miscs'
-import { ServerInfo } from './servers'
-import { getMyUserInformation } from './users'
-import { VideoPrivacy } from '../../../shared'
+import { isAbsolute, join } from 'path'
+import * as request from 'supertest'
+import { getMyUserInformation, makeGetRequest, readFilePromise, ServerInfo } from '../'
+import { VideoPrivacy } from '../../../../shared/models/videos'
 
 type VideoAttributes = {
   name?: string

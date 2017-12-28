@@ -9,7 +9,7 @@ import {
   setAccessTokensToServers,
   killallServers
 } from '../../utils'
-import { getVideosList, uploadVideo } from '../../utils/videos'
+import { getVideosList, uploadVideo } from '../../utils/videos/videos'
 
 describe('Test services API validators', function () {
   let server

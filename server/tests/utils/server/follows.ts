@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { wait } from './miscs'
+import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
 
 function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string) {

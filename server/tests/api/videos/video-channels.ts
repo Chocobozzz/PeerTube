@@ -17,8 +17,8 @@ import {
   updateVideoChannel,
   deleteVideoChannel,
   getVideoChannel
-} from '../utils'
-import { User } from '../../../shared'
+} from '../../utils/index'
+import { User } from '../../../../shared/index'
 
 describe('Test a video channels', function () {
   let server: ServerInfo

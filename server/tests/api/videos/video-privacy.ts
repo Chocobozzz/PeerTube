@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { VideoPrivacy } from '../../../shared/models/videos/video-privacy.enum'
+import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
   flushAndRunMultipleServers,
   flushTests,
@@ -12,11 +12,11 @@ import {
   setAccessTokensToServers,
   uploadVideo,
   wait
-} from '../utils'
-import { doubleFollow } from '../utils/follows'
-import { getUserAccessToken } from '../utils/login'
-import { createUser } from '../utils/users'
-import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../utils/videos'
+} from '../../utils/index'
+import { doubleFollow } from '../../utils/server/follows'
+import { getUserAccessToken } from '../../utils/users/login'
+import { createUser } from '../../utils/users/users'
+import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../utils/videos/videos'
 
 const expect = chai.expect
 

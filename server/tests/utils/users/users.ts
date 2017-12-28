@@ -1,6 +1,6 @@
 import * as request from 'supertest'
 
-import { UserRole } from '../../../shared'
+import { UserRole } from '../../../../shared/index'
 
 function createUser (
   url: string,
