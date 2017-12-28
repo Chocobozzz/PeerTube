@@ -200,7 +200,7 @@ async function testVideoImage (url: string, imageName: string, imagePath: string
                         .get(imagePath)
                         .expect(200)
 
-    const data = await readFilePromise(join(__dirname, '..', 'api', 'fixtures', imageName + '.jpg'))
+    const data = await readFilePromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + '.jpg'))
 
     return data.equals(res.body)
   } else {
@@ -257,7 +257,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
   if (isAbsolute(attributes.fixture)) {
     filePath = attributes.fixture
   } else {
-    filePath = join(__dirname, '..', 'api', 'fixtures', attributes.fixture)
+    filePath = join(__dirname, '..', '..', 'api', 'fixtures', attributes.fixture)
   }
 
   return req.attach('videofile', filePath)
@@ -299,7 +299,7 @@ function rateVideo (url: string, accessToken: string, id: number, rating: string
 function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
   return new Promise<any>((res, rej) => {
     const torrentName = videoUUID + '-' + resolution + '.torrent'
-    const torrentPath = join(__dirname, '..', '..', '..', 'test' + server.serverNumber, 'torrents', torrentName)
+    const torrentPath = join(__dirname, '..', '..', '..', '..', 'test' + server.serverNumber, 'torrents', torrentName)
     readFile(torrentPath, (err, data) => {
       if (err) return rej(err)
 
