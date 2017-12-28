@@ -1,9 +1,9 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
-import { logger } from '../../helpers'
 import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import { isValidVideoCommentText } from '../../helpers/custom-validators/video-comments'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { logger } from '../../helpers/logger'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { areValidationErrors } from './utils'
@@ -66,13 +66,29 @@ const addVideoCommentReplyValidator = [
   }
 ]
 
+const videoCommentGetValidator = [
+  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('commentId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid commentId'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoCommentGetValidator parameters.', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await isVideoCommentExist(req.params.commentId, res.locals.video, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   listVideoCommentThreadsValidator,
   listVideoThreadCommentsValidator,
   addVideoCommentThreadValidator,
-  addVideoCommentReplyValidator
+  addVideoCommentReplyValidator,
+  videoCommentGetValidator
 }
 
 // ---------------------------------------------------------------------------
@@ -109,7 +125,7 @@ async function isVideoCommentThreadExist (id: number, video: VideoModel, res: ex
 }
 
 async function isVideoCommentExist (id: number, video: VideoModel, res: express.Response) {
-  const videoComment = await VideoCommentModel.loadById(id)
+  const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {
     res.status(404)

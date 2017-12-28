@@ -1,8 +1,14 @@
 import * as Promise from 'bluebird'
 import { createWriteStream } from 'fs'
 import * as request from 'request'
+import { ACTIVITY_PUB } from '../initializers'
 
-function doRequest (requestOptions: request.CoreOptions & request.UriOptions) {
+function doRequest (requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean }) {
+  if (requestOptions.activityPub === true) {
+    if (!Array.isArray(requestOptions.headers)) requestOptions.headers = {}
+    requestOptions.headers['accept'] = ACTIVITY_PUB.ACCEPT_HEADER
+  }
+
   return new Promise<{ response: request.RequestResponse, body: any }>((res, rej) => {
     request(requestOptions, (err, response, body) => err ? rej(err) : res({ response, body }))
   })

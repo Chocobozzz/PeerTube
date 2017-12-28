@@ -1,9 +1,10 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
 import { join } from 'path'
-import { isTestInstance, logger } from '../../helpers'
+import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { logger } from '../../helpers/logger'
 import { CONFIG } from '../../initializers'
 import { areValidationErrors } from './utils'
 

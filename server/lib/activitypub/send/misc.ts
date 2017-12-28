@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize'
 import { Activity, ActivityAudience } from '../../../../shared/models/activitypub'
-import { logger } from '../../../helpers'
+import { logger } from '../../../helpers/logger'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'

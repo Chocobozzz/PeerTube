@@ -1,5 +1,5 @@
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { SortType } from '../../helpers'
+import { SortType } from '../../helpers/utils'
 import { getSortOnModel } from '../utils'
 import { VideoModel } from './video'
 

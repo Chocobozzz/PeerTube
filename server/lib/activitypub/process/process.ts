@@ -1,5 +1,5 @@
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import { logger } from '../../../helpers'
+import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { processAcceptActivity } from './process-accept'
 import { processAnnounceActivity } from './process-announce'

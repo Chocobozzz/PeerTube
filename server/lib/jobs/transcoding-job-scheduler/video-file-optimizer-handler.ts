@@ -1,6 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { computeResolutionsToTranscode, logger } from '../../../helpers'
+import { logger } from '../../../helpers/logger'
+import { computeResolutionsToTranscode } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { VideoModel } from '../../../models/video/video'
 import { shareVideoByServerAndChannel } from '../../activitypub'

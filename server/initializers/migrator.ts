@@ -1,5 +1,6 @@
 import * as path from 'path'
-import { logger, readdirPromise } from '../helpers'
+import { readdirPromise } from '../helpers/core-utils'
+import { logger } from '../helpers/logger'
 import { LAST_MIGRATION_VERSION } from './constants'
 import { sequelizeTypescript } from './database'
 

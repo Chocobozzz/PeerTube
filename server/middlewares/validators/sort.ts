@@ -1,6 +1,6 @@
-import { query } from 'express-validator/check'
 import * as express from 'express'
-import { logger } from '../../helpers'
+import { query } from 'express-validator/check'
+import { logger } from '../../helpers/logger'
 import { SORTABLE_COLUMNS } from '../../initializers'
 import { areValidationErrors } from './utils'
 

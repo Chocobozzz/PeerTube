@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import { DataType } from 'sequelize-typescript'
-import { createPrivateAndPublicKeys } from '../../helpers'
+import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,

@@ -1,7 +1,7 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { getServerActor } from '../../../helpers'
+import { getServerActor } from '../../../helpers/utils'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'

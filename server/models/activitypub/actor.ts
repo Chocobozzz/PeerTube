@@ -7,11 +7,12 @@ import {
 } from 'sequelize-typescript'
 import { ActivityPubActorType } from '../../../shared/models/activitypub'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
-import { activityPubContextify } from '../../helpers'
+import { activityPubContextify } from '../../helpers/activitypub'
 import {
-  isActivityPubUrlValid, isActorFollowersCountValid, isActorFollowingCountValid, isActorPreferredUsernameValid,
-  isActorPrivateKeyValid, isActorPublicKeyValid
-} from '../../helpers/custom-validators/activitypub'
+  isActorFollowersCountValid, isActorFollowingCountValid, isActorPreferredUsernameValid, isActorPrivateKeyValid,
+  isActorPublicKeyValid
+} from '../../helpers/custom-validators/activitypub/actor'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { ACTIVITY_PUB_ACTOR_TYPES, AVATARS_DIR, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../account/account'
 import { AvatarModel } from '../avatar/avatar'

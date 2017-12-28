@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
-import { logger } from '../../helpers'
+import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 
 const paginationValidator = [

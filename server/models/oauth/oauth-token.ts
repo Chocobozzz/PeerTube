@@ -1,5 +1,5 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
-import { logger } from '../../helpers'
+import { logger } from '../../helpers/logger'
 import { AccountModel } from '../account/account'
 import { UserModel } from '../account/user'
 import { OAuthClientModel } from './oauth-client'

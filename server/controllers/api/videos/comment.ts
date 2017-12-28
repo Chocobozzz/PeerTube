@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
-import { getFormattedObjects, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { buildFormattedCommentTree, createVideoComment } from '../../../lib/video-comment'
 import { asyncMiddleware, authenticate, paginationValidator, setPagination, setVideoCommentThreadsSort } from '../../../middlewares'

@@ -1,13 +1,11 @@
 import * as express from 'express'
-
-import { badRequest } from '../../helpers'
-
-import { oauthClientsRouter } from './oauth-clients'
+import { badRequest } from '../../helpers/utils'
 import { configRouter } from './config'
+import { jobsRouter } from './jobs'
+import { oauthClientsRouter } from './oauth-clients'
 import { serverRouter } from './server'
 import { usersRouter } from './users'
 import { videosRouter } from './videos'
-import { jobsRouter } from './jobs'
 
 const apiRouter = express.Router()
 

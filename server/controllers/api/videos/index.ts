@@ -2,44 +2,21 @@ import * as express from 'express'
 import * as multer from 'multer'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoUpdate } from '../../../../shared'
+import { renamePromise } from '../../../helpers/core-utils'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { getVideoFileHeight } from '../../../helpers/ffmpeg-utils'
+import { logger } from '../../../helpers/logger'
+import { generateRandomString, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
 import {
-  generateRandomString,
-  getFormattedObjects,
-  getVideoFileHeight,
-  logger,
-  renamePromise,
-  resetSequelizeInstance,
-  retryTransactionWrapper
-} from '../../../helpers'
-import { getServerActor } from '../../../helpers/utils'
-import {
-  CONFIG,
-  sequelizeTypescript,
-  VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
-  VIDEO_MIMETYPE_EXT,
+  CONFIG, sequelizeTypescript, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
 } from '../../../initializers'
-import {
-  fetchRemoteVideoDescription,
-  getVideoActivityPubUrl,
-  shareVideoByServerAndChannel
-} from '../../../lib/activitypub'
+import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler'
 import {
-  asyncMiddleware,
-  authenticate,
-  paginationValidator,
-  setPagination,
-  setVideosSort,
-  videosAddValidator,
-  videosGetValidator,
-  videosRemoveValidator,
-  videosSearchValidator,
-  videosSortValidator,
-  videosUpdateValidator
+  asyncMiddleware, authenticate, paginationValidator, setPagination, setVideosSort, videosAddValidator, videosGetValidator,
+  videosRemoveValidator, videosSearchValidator, videosSortValidator, videosUpdateValidator
 } from '../../../middlewares'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'

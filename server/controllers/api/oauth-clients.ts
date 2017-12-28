@@ -1,9 +1,8 @@
 import * as express from 'express'
-
-import { CONFIG } from '../../initializers'
-import { logger } from '../../helpers'
-import { asyncMiddleware } from '../../middlewares'
 import { OAuthClientLocal } from '../../../shared'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers'
+import { asyncMiddleware } from '../../middlewares'
 import { OAuthClientModel } from '../../models/oauth/oauth-client'
 
 const oauthClientsRouter = express.Router()

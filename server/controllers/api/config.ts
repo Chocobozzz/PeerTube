@@ -1,6 +1,6 @@
 import * as express from 'express'
+import { isSignupAllowed } from '../../helpers/utils'
 
-import { isSignupAllowed } from '../../helpers'
 import { CONFIG } from '../../initializers'
 import { asyncMiddleware } from '../../middlewares'
 import { ServerConfig } from '../../../shared'

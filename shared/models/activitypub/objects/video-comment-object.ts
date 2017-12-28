@@ -4,5 +4,7 @@ export interface VideoCommentObject {
   content: string
   inReplyTo: string
   published: string
+  updated: string
   url: string
+  attributedTo: string
 }

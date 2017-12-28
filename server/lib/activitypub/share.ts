@@ -1,6 +1,6 @@
 import { Transaction } from 'sequelize'
 import { VideoPrivacy } from '../../../shared/models/videos'
-import { getServerActor } from '../../helpers'
+import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
 import { sendVideoAnnounceToFollowers } from './send'

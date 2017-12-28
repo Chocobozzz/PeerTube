@@ -1,20 +1,14 @@
 import * as express from 'express'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared'
-import { getFormattedObjects, logger, resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
+import { getFormattedObjects, resetSequelizeInstance } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { setAsyncActorKeys } from '../../../lib/activitypub'
 import { createVideoChannel } from '../../../lib/video-channel'
 import {
-  asyncMiddleware,
-  authenticate,
-  listVideoAccountChannelsValidator,
-  paginationValidator,
-  setPagination,
-  setVideoChannelsSort,
-  videoChannelsAddValidator,
-  videoChannelsGetValidator,
-  videoChannelsRemoveValidator,
-  videoChannelsSortValidator,
+  asyncMiddleware, authenticate, listVideoAccountChannelsValidator, paginationValidator, setPagination, setVideoChannelsSort,
+  videoChannelsAddValidator, videoChannelsGetValidator, videoChannelsRemoveValidator, videoChannelsSortValidator,
   videoChannelsUpdateValidator
 } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'

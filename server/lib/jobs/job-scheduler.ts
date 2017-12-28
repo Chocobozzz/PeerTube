@@ -1,7 +1,7 @@
 import { AsyncQueue, forever, queue } from 'async'
 import * as Sequelize from 'sequelize'
 import { JobCategory } from '../../../shared'
-import { logger } from '../../helpers'
+import { logger } from '../../helpers/logger'
 import { JOB_STATES, JOBS_FETCH_LIMIT_PER_CYCLE, JOBS_FETCHING_INTERVAL } from '../../initializers'
 import { JobModel } from '../../models/job/job'
 

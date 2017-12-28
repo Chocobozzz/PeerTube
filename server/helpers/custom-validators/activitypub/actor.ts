@@ -46,7 +46,8 @@ function isActorPrivateKeyValid (privateKey: string) {
 }
 
 function isRemoteActorValid (remoteActor: any) {
-  return isActivityPubUrlValid(remoteActor.id) &&
+  return exists(remoteActor) &&
+    isActivityPubUrlValid(remoteActor.id) &&
     isActorTypeValid(remoteActor.type) &&
     isActivityPubUrlValid(remoteActor.following) &&
     isActivityPubUrlValid(remoteActor.followers) &&

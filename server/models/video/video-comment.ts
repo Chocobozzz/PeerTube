@@ -5,7 +5,7 @@ import {
 } from 'sequelize-typescript'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
@@ -16,6 +16,7 @@ import { VideoModel } from './video'
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_IN_REPLY_TO = 'WITH_IN_REPLY_TO',
+  WITH_VIDEO = 'WITH_VIDEO',
   ATTRIBUTES_FOR_API = 'ATTRIBUTES_FOR_API'
 }
 
@@ -56,7 +57,15 @@ enum ScopeNames {
     include: [
       {
         model: () => VideoCommentModel,
-        as: 'InReplyTo'
+        as: 'InReplyToVideoComment'
+      }
+    ]
+  },
+  [ScopeNames.WITH_VIDEO]: {
+    include: [
+      {
+        model: () => VideoModel,
+        required: false
       }
     ]
   }
@@ -108,7 +117,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     foreignKey: {
       allowNull: true
     },
-    as: 'InReplyTo',
+    as: 'InReplyToVideoComment',
     onDelete: 'CASCADE'
   })
   InReplyToVideoComment: VideoCommentModel
@@ -153,6 +162,20 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     if (t !== undefined) query.transaction = t
 
     return VideoCommentModel.findOne(query)
+  }
+
+  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Sequelize.Transaction) {
+    const query: IFindOptions<VideoCommentModel> = {
+      where: {
+        id
+      }
+    }
+
+    if (t !== undefined) query.transaction = t
+
+    return VideoCommentModel
+      .scope([ ScopeNames.WITH_VIDEO, ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_IN_REPLY_TO ])
+      .findOne(query)
   }
 
   static loadByUrl (url: string, t?: Sequelize.Transaction) {
@@ -238,8 +261,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       id: this.url,
       content: this.text,
       inReplyTo,
+      updated: this.updatedAt.toISOString(),
       published: this.createdAt.toISOString(),
-      url: this.url
+      url: this.url,
+      attributedTo: this.Account.Actor.url
     }
   }
 }

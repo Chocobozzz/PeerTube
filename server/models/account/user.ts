@@ -4,11 +4,11 @@ import {
   Scopes, Table, UpdatedAt
 } from 'sequelize-typescript'
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
-import { comparePassword, cryptPassword } from '../../helpers'
 import {
   isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
   isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
+import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'

@@ -1,4 +1,4 @@
-import { getServerActor } from '../server/helpers'
+import { getServerActor } from '../server/helpers/utils'
 import { initDatabaseModels } from '../server/initializers'
 import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
 import { VideoModel } from '../server/models/video/video'

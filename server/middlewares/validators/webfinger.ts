@@ -1,7 +1,8 @@
 import * as express from 'express'
 import { query } from 'express-validator/check'
-import { getHostWithPort, logger } from '../../helpers'
 import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
+import { logger } from '../../helpers/logger'
+import { getHostWithPort } from '../../helpers/utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { areValidationErrors } from './utils'
 

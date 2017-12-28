@@ -1,5 +1,6 @@
 import { ActivityFollow } from '../../../../shared/models/activitypub'
-import { logger, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'

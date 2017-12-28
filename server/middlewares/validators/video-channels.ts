@@ -1,14 +1,13 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
-import { logger } from '../../helpers'
 import { isAccountIdExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoChannelDescriptionValid,
-  isVideoChannelExist,
+  isVideoChannelDescriptionValid, isVideoChannelExist,
   isVideoChannelNameValid
 } from '../../helpers/custom-validators/video-channels'
+import { logger } from '../../helpers/logger'
 import { UserModel } from '../../models/account/user'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { areValidationErrors } from './utils'

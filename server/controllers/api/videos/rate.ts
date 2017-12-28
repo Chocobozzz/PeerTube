@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { UserVideoRateUpdate } from '../../../../shared'
-import { logger, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript, VIDEO_RATE_TYPES } from '../../../initializers'
 import { sendVideoRateChangeToFollowers, sendVideoRateChangeToOrigin } from '../../../lib/activitypub'
 import { asyncMiddleware, authenticate, videoRateValidator } from '../../../middlewares'

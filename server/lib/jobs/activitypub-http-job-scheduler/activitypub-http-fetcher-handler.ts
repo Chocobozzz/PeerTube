@@ -1,4 +1,5 @@
-import { doRequest, logger } from '../../../helpers'
+import { logger } from '../../../helpers/logger'
+import { doRequest } from '../../../helpers/requests'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { processActivities } from '../../activitypub/process'
 import { ActivityPubHttpPayload } from './activitypub-http-job-scheduler'
@@ -9,7 +10,8 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
   const options = {
     method: 'GET',
     uri: '',
-    json: true
+    json: true,
+    activityPub: true
   }
 
   for (const uri of payload.uris) {

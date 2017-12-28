@@ -1,5 +1,5 @@
 import { ActivityLike } from '../../../../shared/models/activitypub'
-import { retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'

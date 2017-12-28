@@ -1,17 +1,13 @@
 import * as express from 'express'
 import { UserRight, VideoAbuseCreate } from '../../../../shared'
-import { getFormattedObjects, logger, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
+import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { sendVideoAbuse } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware,
-  authenticate,
-  ensureUserHasRight,
-  paginationValidator,
-  setPagination,
-  setVideoAbusesSort,
-  videoAbuseReportValidator,
-  videoAbusesSortValidator
+  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, setPagination, setVideoAbusesSort,
+  videoAbuseReportValidator, videoAbusesSortValidator
 } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { VideoModel } from '../../../models/video/video'

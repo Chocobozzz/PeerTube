@@ -1,5 +1,6 @@
 import { ActivityDelete } from '../../../../shared/models/activitypub'
-import { logger, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'

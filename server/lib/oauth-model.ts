@@ -1,4 +1,4 @@
-import { logger } from '../helpers'
+import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'

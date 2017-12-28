@@ -1,5 +1,5 @@
 import * as config from 'config'
-import { promisify0 } from '../helpers'
+import { promisify0 } from '../helpers/core-utils'
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'

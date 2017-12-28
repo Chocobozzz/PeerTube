@@ -1,6 +1,6 @@
 import { VideoResolution } from '../../../../shared'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { logger } from '../../../helpers'
+import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { sendUpdateVideo } from '../../activitypub/send'
 

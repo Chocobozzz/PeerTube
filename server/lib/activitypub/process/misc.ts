@@ -1,11 +1,15 @@
 import * as magnetUtil from 'magnet-uri'
 import { VideoTorrentObject } from '../../../../shared'
+import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { doRequest } from '../../../helpers'
 import { isVideoFileInfoHashValid } from '../../../helpers/custom-validators/videos'
+import { logger } from '../../../helpers/logger'
+import { doRequest } from '../../../helpers/requests'
 import { ACTIVITY_PUB, VIDEO_MIMETYPE_EXT } from '../../../initializers'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 
@@ -97,14 +101,43 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
   return attributes
 }
 
-async function addVideoShares (instance: VideoModel, shares: string[]) {
-  for (const share of shares) {
+async function videoCommentActivityObjectToDBAttributes (video: VideoModel, actor: ActorModel, comment: VideoCommentObject) {
+  let originCommentId: number = null
+  let inReplyToCommentId: number = null
+
+  // If this is not a reply to the video (thread), create or get the parent comment
+  if (video.url !== comment.inReplyTo) {
+    const [ parent ] = await addVideoComment(video, comment.inReplyTo)
+    if (!parent) {
+      logger.warn('Cannot fetch or get parent comment %s of comment %s.', comment.inReplyTo, comment.id)
+      return undefined
+    }
+
+    originCommentId = parent.originCommentId || parent.id
+    inReplyToCommentId = parent.id
+  }
+
+  return {
+    url: comment.url,
+    text: comment.content,
+    videoId: video.id,
+    accountId: actor.Account.id,
+    inReplyToCommentId,
+    originCommentId,
+    createdAt: new Date(comment.published),
+    updatedAt: new Date(comment.updated)
+  }
+}
+
+async function addVideoShares (instance: VideoModel, shareUrls: string[]) {
+  for (const shareUrl of shareUrls) {
     // Fetch url
-    const json = await doRequest({
-      uri: share,
-      json: true
+    const { body } = await doRequest({
+      uri: shareUrl,
+      json: true,
+      activityPub: true
     })
-    const actorUrl = json['actor']
+    const actorUrl = body.actor
     if (!actorUrl) continue
 
     const actor = await getOrCreateActorAndServerAndModel(actorUrl)
@@ -121,10 +154,40 @@ async function addVideoShares (instance: VideoModel, shares: string[]) {
   }
 }
 
+async function addVideoComments (instance: VideoModel, commentUrls: string[]) {
+  for (const commentUrl of commentUrls) {
+    await addVideoComment(instance, commentUrl)
+  }
+}
+
+async function addVideoComment (instance: VideoModel, commentUrl: string) {
+  // Fetch url
+  const { body } = await doRequest({
+    uri: commentUrl,
+    json: true,
+    activityPub: true
+  })
+
+  const actorUrl = body.attributedTo
+  if (!actorUrl) return []
+
+  const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+  const entry = await videoCommentActivityObjectToDBAttributes(instance, actor, body)
+  if (!entry) return []
+
+  return VideoCommentModel.findOrCreate({
+    where: {
+      url: body.id
+    },
+    defaults: entry
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   videoFileActivityUrlToDBAttributes,
   videoActivityObjectToDBAttributes,
-  addVideoShares
+  addVideoShares,
+  addVideoComments
 }

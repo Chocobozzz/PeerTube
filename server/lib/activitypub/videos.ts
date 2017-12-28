@@ -2,19 +2,13 @@ import { join } from 'path'
 import * as request from 'request'
 import { Transaction } from 'sequelize'
 import { ActivityIconObject } from '../../../shared/index'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers'
+import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import { CONFIG, REMOTE_SCHEME, STATIC_PATHS } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
 import {
-  sendCreateDislikeToOrigin,
-  sendCreateDislikeToVideoFollowers,
-  sendLikeToOrigin,
-  sendLikeToVideoFollowers,
-  sendUndoDislikeToOrigin,
-  sendUndoDislikeToVideoFollowers,
-  sendUndoLikeToOrigin,
-  sendUndoLikeToVideoFollowers
+  sendCreateDislikeToOrigin, sendCreateDislikeToVideoFollowers, sendLikeToOrigin, sendLikeToVideoFollowers, sendUndoDislikeToOrigin,
+  sendUndoDislikeToVideoFollowers, sendUndoLikeToOrigin, sendUndoLikeToVideoFollowers
 } from './send'
 
 function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {

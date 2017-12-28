@@ -2,22 +2,13 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
-import { getDurationFromVideoFile, logger } from '../../helpers'
 import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoAbuseReasonValid,
-  isVideoCategoryValid,
-  isVideoDescriptionValid,
-  isVideoExist,
-  isVideoFile,
-  isVideoLanguageValid,
-  isVideoLicenceValid,
-  isVideoNameValid,
-  isVideoNSFWValid,
-  isVideoPrivacyValid,
-  isVideoRatingTypeValid,
-  isVideoTagsValid
+  isVideoAbuseReasonValid, isVideoCategoryValid, isVideoDescriptionValid, isVideoExist, isVideoFile, isVideoLanguageValid,
+  isVideoLicenceValid, isVideoNameValid, isVideoNSFWValid, isVideoPrivacyValid, isVideoRatingTypeValid, isVideoTagsValid
 } from '../../helpers/custom-validators/videos'
+import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
+import { logger } from '../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserModel } from '../../models/account/user'
 import { VideoModel } from '../../models/video/video'

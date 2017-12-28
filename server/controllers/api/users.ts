@@ -1,26 +1,14 @@
 import * as express from 'express'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
-import { getFormattedObjects, logger, retryTransactionWrapper } from '../../helpers'
+import { retryTransactionWrapper } from '../../helpers/database-utils'
+import { logger } from '../../helpers/logger'
+import { getFormattedObjects } from '../../helpers/utils'
 import { CONFIG } from '../../initializers'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
-  asyncMiddleware,
-  authenticate,
-  ensureUserHasRight,
-  ensureUserRegistrationAllowed,
-  paginationValidator,
-  setPagination,
-  setUsersSort,
-  setVideosSort,
-  token,
-  usersAddValidator,
-  usersGetValidator,
-  usersRegisterValidator,
-  usersRemoveValidator,
-  usersSortValidator,
-  usersUpdateMeValidator,
-  usersUpdateValidator,
-  usersVideoRatingValidator
+  asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setPagination, setUsersSort,
+  setVideosSort, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
+  usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator
 } from '../../middlewares'
 import { videosSortValidator } from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'

@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { UserRight } from '../../../shared/models/users'
-import { getFormattedObjects } from '../../helpers'
+import { getFormattedObjects } from '../../helpers/utils'
 import { asyncMiddleware, authenticate, ensureUserHasRight, jobsSortValidator, setJobsSort, setPagination } from '../../middlewares'
 import { paginationValidator } from '../../middlewares/validators'
 import { JobModel } from '../../models/job/job'

@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import { AllowNull, Column, CreatedAt, Default, Is, IsInt, Max, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { logger } from '../../helpers'
 import { isHostValid } from '../../helpers/custom-validators/servers'
+import { logger } from '../../helpers/logger'
 import { SERVERS_SCORE } from '../../initializers'
 import { throwIfNotValid } from '../utils'
 

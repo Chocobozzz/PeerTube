@@ -1,6 +1,7 @@
 import * as passwordGenerator from 'password-generator'
 import { UserRole } from '../../shared'
-import { logger, mkdirpPromise, rimrafPromise } from '../helpers'
+import { mkdirpPromise, rimrafPromise } from '../helpers/core-utils'
+import { logger } from '../helpers/logger'
 import { createApplicationActor, createUserAccountAndChannel } from '../lib/user'
 import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'

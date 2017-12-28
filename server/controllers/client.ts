@@ -1,15 +1,9 @@
+import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import { join } from 'path'
 import * as validator from 'validator'
-import * as Bluebird from 'bluebird'
-import {
-  CONFIG,
-  STATIC_PATHS,
-  STATIC_MAX_AGE,
-  OPENGRAPH_AND_OEMBED_COMMENT,
-  EMBED_SIZE
-} from '../initializers'
-import { root, readFileBufferPromise, escapeHTML } from '../helpers'
+import { escapeHTML, readFileBufferPromise, root } from '../helpers/core-utils'
+import { CONFIG, EMBED_SIZE, OPENGRAPH_AND_OEMBED_COMMENT, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
 import { asyncMiddleware } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 

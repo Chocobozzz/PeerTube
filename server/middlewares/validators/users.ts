@@ -1,17 +1,14 @@
 import * as express from 'express'
 import 'express-validator'
 import { body, param } from 'express-validator/check'
-import { isSignupAllowed, logger } from '../../helpers'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isUserDisplayNSFWValid,
-  isUserAutoPlayVideoValid,
-  isUserPasswordValid,
-  isUserRoleValid,
-  isUserUsernameValid,
+  isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
   isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { logger } from '../../helpers/logger'
+import { isSignupAllowed } from '../../helpers/utils'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 

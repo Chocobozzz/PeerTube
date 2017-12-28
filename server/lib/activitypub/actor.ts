@@ -3,9 +3,12 @@ import { Transaction } from 'sequelize'
 import * as url from 'url'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
-import { createPrivateAndPublicKeys, doRequest, logger, retryTransactionWrapper } from '../../helpers'
-import { isRemoteActorValid } from '../../helpers/custom-validators/activitypub'
-import { ACTIVITY_PUB, CONFIG, sequelizeTypescript } from '../../initializers'
+import { isRemoteActorValid } from '../../helpers/custom-validators/activitypub/actor'
+import { retryTransactionWrapper } from '../../helpers/database-utils'
+import { logger } from '../../helpers/logger'
+import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
+import { doRequest } from '../../helpers/requests'
+import { CONFIG, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { ServerModel } from '../../models/server/server'
@@ -115,22 +118,15 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
   const options = {
     uri: actorUrl,
     method: 'GET',
-    headers: {
-      'Accept': ACTIVITY_PUB.ACCEPT_HEADER
-    }
+    json: true,
+    activityPub: true
   }
 
   logger.info('Fetching remote actor %s.', actorUrl)
 
-  let requestResult
-  try {
-    requestResult = await doRequest(options)
-  } catch (err) {
-    logger.warn('Cannot fetch remote actor %s.', actorUrl, err)
-    return undefined
-  }
+  const requestResult = await doRequest(options)
+  const actorJSON: ActivityPubActor = requestResult.body
 
-  const actorJSON: ActivityPubActor = JSON.parse(requestResult.body)
   if (isRemoteActorValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
     return undefined
@@ -195,7 +191,9 @@ export {
 async function fetchActorTotalItems (url: string) {
   const options = {
     uri: url,
-    method: 'GET'
+    method: 'GET',
+    json: true,
+    activityPub: true
   }
 
   let requestResult

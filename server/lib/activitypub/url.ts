@@ -10,7 +10,7 @@ function getVideoActivityPubUrl (video: VideoModel) {
 }
 
 function getVideoCommentActivityPubUrl (video: VideoModel, videoComment: VideoCommentModel) {
-  return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid + '#comment-' + videoComment.id
+  return CONFIG.WEBSERVER.URL + '/videos/watch/' + video.uuid + '/comments/' + videoComment.id
 }
 
 function getVideoChannelActivityPubUrl (videoChannelUUID: string) {

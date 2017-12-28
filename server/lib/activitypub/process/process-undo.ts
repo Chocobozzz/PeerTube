@@ -1,6 +1,7 @@
 import { ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub'
 import { DislikeObject } from '../../../../shared/models/activitypub/objects'
-import { logger, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'

@@ -1,11 +1,12 @@
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
-import {
-  getFormattedObjects, getServerActor, loadActorUrlOrGetFromWebfinger, logger, retryTransactionWrapper,
-  sanitizeHost
-} from '../../../helpers'
+import { sanitizeHost } from '../../../helpers/core-utils'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
+import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
+import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
 import { REMOTE_SCHEME, sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
-import { getOrCreateActorAndServerAndModel } from '../../../lib/activitypub'
+import { getOrCreateActorAndServerAndModel } from '../../../lib/activitypub/actor'
 import { sendFollow, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, removeFollowingValidator, setBodyHostsPort,

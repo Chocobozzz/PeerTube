@@ -1,5 +1,7 @@
 import { JobCategory } from '../../../../shared'
-import { buildSignedActivity, getServerActor, logger } from '../../../helpers'
+import { buildSignedActivity } from '../../../helpers/activitypub'
+import { logger } from '../../../helpers/logger'
+import { getServerActor } from '../../../helpers/utils'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { JobHandler, JobScheduler } from '../job-scheduler'

@@ -3,7 +3,8 @@ import { ActivityCreate, VideoTorrentObject } from '../../../../shared'
 import { DislikeObject, VideoAbuseObject, ViewObject } from '../../../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoRateType } from '../../../../shared/models/videos'
-import { logger, retryTransactionWrapper } from '../../../helpers'
+import { retryTransactionWrapper } from '../../../helpers/database-utils'
+import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
@@ -15,7 +16,7 @@ import { VideoFileModel } from '../../../models/video/video-file'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity } from '../send/misc'
 import { generateThumbnailFromUrl } from '../videos'
-import { addVideoShares, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
+import { addVideoComments, addVideoShares, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -66,15 +67,23 @@ async function processCreateVideo (
 
   // Process outside the transaction because we could fetch remote data
   if (videoToCreateData.likes && Array.isArray(videoToCreateData.likes.orderedItems)) {
+    logger.info('Adding likes of video %s.', video.uuid)
     await createRates(videoToCreateData.likes.orderedItems, video, 'like')
   }
 
   if (videoToCreateData.dislikes && Array.isArray(videoToCreateData.dislikes.orderedItems)) {
+    logger.info('Adding dislikes of video %s.', video.uuid)
     await createRates(videoToCreateData.dislikes.orderedItems, video, 'dislike')
   }
 
   if (videoToCreateData.shares && Array.isArray(videoToCreateData.shares.orderedItems)) {
+    logger.info('Adding shares of video %s.', video.uuid)
     await addVideoShares(video, videoToCreateData.shares.orderedItems)
+  }
+
+  if (videoToCreateData.comments && Array.isArray(videoToCreateData.comments.orderedItems)) {
+    logger.info('Adding comments of video %s.', video.uuid)
+    await addVideoComments(video, videoToCreateData.comments.orderedItems)
   }
 
   return video

@@ -2,7 +2,7 @@ import * as WebFinger from 'webfinger.js'
 import { WebFingerData } from '../../shared'
 import { ActorModel } from '../models/activitypub/actor'
 import { isTestInstance } from './core-utils'
-import { isActivityPubUrlValid } from './custom-validators/activitypub'
+import { isActivityPubUrlValid } from './custom-validators/activitypub/misc'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,

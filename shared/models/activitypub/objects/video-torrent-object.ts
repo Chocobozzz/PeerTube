@@ -27,5 +27,6 @@ export interface VideoTorrentObject {
   likes?: ActivityPubOrderedCollection<string>
   dislikes?: ActivityPubOrderedCollection<string>
   shares?: ActivityPubOrderedCollection<string>
+  comments?: ActivityPubOrderedCollection<string>
   attributedTo: ActivityPubAttributedTo[]
 }

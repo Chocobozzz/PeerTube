@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { Activity, ActivityPubCollection, ActivityPubOrderedCollection, RootActivity } from '../../../shared'
-import { logger } from '../../helpers'
 import { isActivityValid } from '../../helpers/custom-validators/activitypub/activity'
+import { logger } from '../../helpers/logger'
 import { processActivities } from '../../lib/activitypub/process/process'
 import { asyncMiddleware, checkSignature, localAccountValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'

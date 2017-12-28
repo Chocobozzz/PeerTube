@@ -1,14 +1,17 @@
 // Intercept ActivityPub client requests
 import * as express from 'express'
-import { activityPubCollectionPagination, pageToStartAndCount } from '../../helpers'
+import { activityPubCollectionPagination } from '../../helpers/activitypub'
+import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB, CONFIG } from '../../initializers'
 import { buildVideoAnnounceToFollowers } from '../../lib/activitypub/send'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
+import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
 import { AccountModel } from '../../models/account/account'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
+import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoShareModel } from '../../models/video/video-share'
 
 const activityPubClientRouter = express.Router()
@@ -30,12 +33,17 @@ activityPubClientRouter.get('/account/:name/following',
 
 activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub(asyncMiddleware(videosGetValidator)),
-  executeIfActivityPub(videoController)
+  executeIfActivityPub(asyncMiddleware(videoController))
 )
 
 activityPubClientRouter.get('/videos/watch/:id/announces/:accountId',
   executeIfActivityPub(asyncMiddleware(videosShareValidator)),
   executeIfActivityPub(asyncMiddleware(videoAnnounceController))
+)
+
+activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
+  executeIfActivityPub(asyncMiddleware(videoCommentGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoCommentController))
 )
 
 activityPubClientRouter.get('/video-channels/:id',
@@ -54,7 +62,8 @@ export {
 function accountController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
 
-  return res.json(account.toActivityPubObject()).end()
+  return res.json(account.toActivityPubObject())
+    .end()
 }
 
 async function accountFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -81,10 +90,12 @@ async function accountFollowingController (req: express.Request, res: express.Re
   return res.json(activityPubResult)
 }
 
-function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const video: VideoModel = res.locals.video
 
-  return res.json(video.toActivityPubObject())
+  // We need more attributes
+  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
+  return res.json(videoAll.toActivityPubObject())
 }
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -98,4 +109,10 @@ async function videoChannelController (req: express.Request, res: express.Respon
   const videoChannel: VideoChannelModel = res.locals.videoChannel
 
   return res.json(videoChannel.toActivityPubObject())
+}
+
+async function videoCommentController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const videoComment: VideoCommentModel = res.locals.videoComment
+
+  return res.json(videoComment.toActivityPubObject())
 }

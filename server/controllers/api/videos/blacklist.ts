@@ -1,17 +1,11 @@
 import * as express from 'express'
-import { logger, getFormattedObjects } from '../../../helpers'
-import {
-  authenticate,
-  ensureUserHasRight,
-  videosBlacklistAddValidator,
-  videosBlacklistRemoveValidator,
-  paginationValidator,
-  blacklistSortValidator,
-  setBlacklistSort,
-  setPagination,
-  asyncMiddleware
-} from '../../../middlewares'
 import { BlacklistedVideo, UserRight } from '../../../../shared'
+import { logger } from '../../../helpers/logger'
+import { getFormattedObjects } from '../../../helpers/utils'
+import {
+  asyncMiddleware, authenticate, blacklistSortValidator, ensureUserHasRight, paginationValidator, setBlacklistSort, setPagination,
+  videosBlacklistAddValidator, videosBlacklistRemoveValidator
+} from '../../../middlewares'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 
 const blacklistRouter = express.Router()

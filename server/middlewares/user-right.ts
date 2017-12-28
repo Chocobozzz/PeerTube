@@ -1,7 +1,7 @@
 import * as express from 'express'
 import 'express-validator'
 import { UserRight } from '../../shared'
-import { logger } from '../helpers'
+import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 
 function ensureUserHasRight (userRight: UserRight) {

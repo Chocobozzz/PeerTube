@@ -5,65 +5,25 @@ import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy,
-  AllowNull,
-  BelongsTo,
-  BelongsToMany,
-  Column,
-  CreatedAt,
-  DataType,
-  Default,
-  ForeignKey,
-  HasMany,
-  IFindOptions,
-  Is,
-  IsInt,
-  IsUUID,
-  Min,
-  Model,
-  Scopes,
-  Table,
-  UpdatedAt
+  AfterDestroy, AllowNull, BelongsTo, BelongsToMany, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IFindOptions, Is,
+  IsInt, IsUUID, Min, Model, Scopes, Table, UpdatedAt
 } from 'sequelize-typescript'
 import { IIncludeOptions } from 'sequelize-typescript/lib/interfaces/IIncludeOptions'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../shared/models/videos'
+import { activityPubCollection } from '../../helpers/activitypub'
+import { createTorrentPromise, renamePromise, statPromise, unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import {
-  activityPubCollection,
-  createTorrentPromise,
-  generateImageFromVideoFile,
-  getVideoFileHeight,
-  logger,
-  renamePromise,
-  statPromise,
-  transcode,
-  unlinkPromise,
-  writeFilePromise
-} from '../../helpers'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub'
-import {
-  isVideoCategoryValid,
-  isVideoDescriptionValid,
-  isVideoDurationValid,
-  isVideoLanguageValid,
-  isVideoLicenceValid,
-  isVideoNameValid,
-  isVideoNSFWValid,
-  isVideoPrivacyValid
+  isVideoCategoryValid, isVideoDescriptionValid, isVideoDurationValid, isVideoLanguageValid, isVideoLicenceValid, isVideoNameValid,
+  isVideoNSFWValid, isVideoPrivacyValid
 } from '../../helpers/custom-validators/videos'
+import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
+import { logger } from '../../helpers/logger'
 import {
-  API_VERSION,
-  CONFIG,
-  CONSTRAINTS_FIELDS,
-  PREVIEWS_SIZE,
-  REMOTE_SCHEME,
-  STATIC_PATHS,
-  THUMBNAILS_SIZE,
-  VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
-  VIDEO_PRIVACIES
+  API_VERSION, CONFIG, CONSTRAINTS_FIELDS, PREVIEWS_SIZE, REMOTE_SCHEME, STATIC_PATHS, THUMBNAILS_SIZE, VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES
 } from '../../initializers'
 import { getAnnounceActivityPubUrl } from '../../lib/activitypub'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
@@ -75,6 +35,7 @@ import { getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoChannelModel } from './video-channel'
+import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
 import { VideoTagModel } from './video-tag'
@@ -85,7 +46,8 @@ enum ScopeNames {
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
   WITH_SHARES = 'WITH_SHARES',
-  WITH_RATES = 'WITH_RATES'
+  WITH_RATES = 'WITH_RATES',
+  WITH_COMMENTS = 'WITH_COMMENTS'
 }
 
 @Scopes({
@@ -149,6 +111,13 @@ enum ScopeNames {
       {
         model: () => AccountVideoRateModel,
         include: [ () => AccountModel ]
+      }
+    ]
+  },
+  [ScopeNames.WITH_COMMENTS]: {
+    include: [
+      {
+        model: () => VideoCommentModel
       }
     ]
   }
@@ -322,6 +291,15 @@ export class VideoModel extends Model<VideoModel> {
   })
   AccountVideoRates: AccountVideoRateModel[]
 
+  @HasMany(() => VideoCommentModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: false
+    },
+    onDelete: 'cascade'
+  })
+  VideoComments: VideoCommentModel[]
+
   @AfterDestroy
   static removeFilesAndSendDelete (instance: VideoModel) {
     const tasks = []
@@ -417,7 +395,8 @@ export class VideoModel extends Model<VideoModel> {
           include: [ AccountModel ]
         },
         VideoFileModel,
-        TagModel
+        TagModel,
+        VideoCommentModel
       ]
     }
 
@@ -536,7 +515,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_RATES, ScopeNames.WITH_SHARES, ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
       .findById(id, options)
   }
 
@@ -561,7 +540,27 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_RATES, ScopeNames.WITH_SHARES, ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
+      .findOne(options)
+  }
+
+  static loadAndPopulateAll (id: number) {
+    const options = {
+      order: [ [ 'Tags', 'name', 'ASC' ] ],
+      where: {
+        id
+      }
+    }
+
+    return VideoModel
+      .scope([
+        ScopeNames.WITH_RATES,
+        ScopeNames.WITH_SHARES,
+        ScopeNames.WITH_TAGS,
+        ScopeNames.WITH_FILES,
+        ScopeNames.WITH_ACCOUNT,
+        ScopeNames.WITH_COMMENTS
+      ])
       .findOne(options)
   }
 
@@ -865,6 +864,17 @@ export class VideoModel extends Model<VideoModel> {
       sharesObject = activityPubCollection(shares)
     }
 
+    let commentsObject
+    if (Array.isArray(this.VideoComments)) {
+      const comments: string[] = []
+
+      for (const videoComment of this.VideoComments) {
+        comments.push(videoComment.url)
+      }
+
+      commentsObject = activityPubCollection(comments)
+    }
+
     const url = []
     for (const file of this.VideoFiles) {
       url.push({
@@ -925,6 +935,7 @@ export class VideoModel extends Model<VideoModel> {
       likes: likesObject,
       dislikes: dislikesObject,
       shares: sharesObject,
+      comments: commentsObject,
       attributedTo: [
         {
           type: 'Group',
