@@ -4,6 +4,8 @@ import 'mocha'
 import * as request from 'supertest'
 
 import { createUser, flushTests, userLogin, killallServers, runServer, ServerInfo, setAccessTokensToServers } from '../../utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+import { makeGetRequest } from '../../utils/requests/requests'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/'
@@ -31,45 +33,32 @@ describe('Test jobs API validators', function () {
 
   describe('When listing jobs', function () {
     it('Should fail with a bad start pagination', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ start: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadStartPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with a bad count pagination', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ count: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadCountPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with an incorrect sort', async function () {
-      await request(server.url)
-              .get(path)
-              .query({ sort: 'hello' })
-              .set('Accept', 'application/json')
-              .set('Authorization', 'Bearer ' + server.accessToken)
-              .expect(400)
+      await checkBadSortPagination(server.url, path, server.accessToken)
     })
 
     it('Should fail with a non authenticated user', async function () {
-      await request(server.url)
-        .get(path)
-        .set('Accept', 'application/json')
-        .expect(401)
+      await makeGetRequest({
+        url: server.url,
+        path,
+        statusCodeExpected: 401
+      })
     })
 
     it('Should fail with a non admin user', async function () {
-      await request(server.url)
-        .get(path)
-        .set('Accept', 'application/json')
-        .set('Authorization', 'Bearer ' + userAccessToken)
-        .expect(403)
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: userAccessToken,
+        statusCodeExpected: 403
+      })
     })
   })
 
