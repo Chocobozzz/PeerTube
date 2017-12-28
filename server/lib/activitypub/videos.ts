@@ -22,7 +22,9 @@ function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
   const host = video.VideoChannel.Account.Actor.Server.host
   const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
-  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => reject(err))
+  return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => {
+    if (err) reject(err)
+  })
 }
 
 async function fetchRemoteVideoDescription (video: VideoModel) {
