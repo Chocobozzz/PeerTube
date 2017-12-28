@@ -17,7 +17,7 @@ import {
   makePostUploadRequest,
   getMyUserInformation,
   createUser,
-  getUserAccessToken
+  userLogin
 } from '../../utils'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 
@@ -260,7 +260,7 @@ describe('Test videos API validator', function () {
       }
       await createUser(server.url, server.accessToken, user.username, user.password)
 
-      const accessTokenUser = await getUserAccessToken(server, user)
+      const accessTokenUser = await userLogin(server, user)
       const res = await getMyUserInformation(server.url, accessTokenUser)
       const customChannelId = res.body.videoChannels[0].id
 

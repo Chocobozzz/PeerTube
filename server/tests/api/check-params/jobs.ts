@@ -3,7 +3,7 @@
 import 'mocha'
 import * as request from 'supertest'
 
-import { createUser, flushTests, getUserAccessToken, killallServers, runServer, ServerInfo, setAccessTokensToServers } from '../../utils'
+import { createUser, flushTests, userLogin, killallServers, runServer, ServerInfo, setAccessTokensToServers } from '../../utils'
 
 describe('Test jobs API validators', function () {
   const path = '/api/v1/jobs/'
@@ -26,7 +26,7 @@ describe('Test jobs API validators', function () {
       password: 'my super password'
     }
     await createUser(server.url, server.accessToken, user.username, user.password)
-    userAccessToken = await getUserAccessToken(server, user)
+    userAccessToken = await userLogin(server, user)
   })
 
   describe('When listing jobs', function () {

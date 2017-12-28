@@ -15,7 +15,7 @@ import {
   makePostBodyRequest,
   getVideoChannelsList,
   createUser,
-  getUserAccessToken
+  userLogin
 } from '../../utils'
 
 describe('Test videos API validator', function () {
@@ -40,7 +40,7 @@ describe('Test videos API validator', function () {
     }
     await createUser(server.url, server.accessToken, user.username, user.password)
 
-    accessTokenUser = await getUserAccessToken(server, user)
+    accessTokenUser = await userLogin(server, user)
   })
 
   describe('When listing a video channels', function () {

@@ -21,25 +21,37 @@ type VideoAttributes = {
 function getVideoCategories (url: string) {
   const path = '/api/v1/videos/categories'
 
-  return makeGetRequest(url, path)
+  return makeGetRequest({
+    url,
+    path
+  })
 }
 
 function getVideoLicences (url: string) {
   const path = '/api/v1/videos/licences'
 
-  return makeGetRequest(url, path)
+  return makeGetRequest({
+    url,
+    path
+  })
 }
 
 function getVideoLanguages (url: string) {
   const path = '/api/v1/videos/languages'
 
-  return makeGetRequest(url, path)
+  return makeGetRequest({
+    url,
+    path
+  })
 }
 
 function getVideoPrivacies (url: string) {
   const path = '/api/v1/videos/privacies'
 
-  return makeGetRequest(url, path)
+  return makeGetRequest({
+    url,
+    path
+  })
 }
 
 function getVideo (url: string, id: number | string, expectedStatus = 200) {

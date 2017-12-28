@@ -114,7 +114,7 @@ function runServer (serverNumber: number, configOverride?: Object) {
   }
 
   return new Promise<ServerInfo>(res => {
-    server.app = fork(join(__dirname, '..', '..', '..', 'dist', 'server.js'), [], options)
+    server.app = fork(join(__dirname, '..', '..', '..', '..', 'dist', 'server.js'), [], options)
     server.app.stdout.on('data', function onStdout (data) {
       let dontContinue = false
 

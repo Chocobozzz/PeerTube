@@ -11,13 +11,13 @@ import {
   getVideosList,
   makePutBodyRequest,
   createUser,
-  loginAndGetAccessToken,
+  serverLogin,
   getUsersList,
   registerUser,
   setAccessTokensToServers,
   killallServers,
   makePostBodyRequest,
-  getUserAccessToken
+  userLogin
 } from '../../utils'
 import { UserRole } from '../../../../shared'
 
@@ -58,7 +58,7 @@ describe('Test users API validators', function () {
       username: 'user1',
       password: 'my super password'
     }
-    userAccessToken = await getUserAccessToken(server, user)
+    userAccessToken = await userLogin(server, user)
   })
 
   describe('When listing users', function () {
@@ -304,7 +304,7 @@ describe('Test users API validators', function () {
         password: 'my super password'
       }
 
-      userAccessToken = await loginAndGetAccessToken(server)
+      userAccessToken = await serverLogin(server)
       const fields = {
         username: 'user3',
         email: 'test@example.com',
@@ -675,7 +675,7 @@ describe('Test users API validators', function () {
         email: 'test3@example.com',
         password: 'my super password'
       }
-      userAccessToken = await loginAndGetAccessToken(server)
+      userAccessToken = await serverLogin(server)
 
       const videoAttributes = { fixture: 'video_short2.webm' }
       await uploadVideo(server.url, userAccessToken, videoAttributes)

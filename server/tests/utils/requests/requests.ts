@@ -1,11 +1,43 @@
 import * as request from 'supertest'
 
-function makeGetRequest (url: string, path: string) {
-  return request(url)
-    .get(path)
+function makeGetRequest (options: {
+  url: string,
+  path: string,
+  query?: any,
+  token?: string,
+  statusCodeExpected?: number
+}) {
+  if (!options.statusCodeExpected) options.statusCodeExpected = 400
+
+  const req = request(options.url)
+    .get(options.path)
     .set('Accept', 'application/json')
-    .expect(200)
+
+  if (options.token) req.set('Authorization', 'Bearer ' + options.token)
+  if (options.query) req.query(options.query)
+
+  return req
     .expect('Content-Type', /json/)
+    .expect(options.statusCodeExpected)
+}
+
+function makeDeleteRequest (options: {
+  url: string,
+  path: string,
+  token?: string,
+  statusCodeExpected?: number
+}) {
+  if (!options.statusCodeExpected) options.statusCodeExpected = 400
+
+  const req = request(options.url)
+    .delete(options.path)
+    .set('Accept', 'application/json')
+
+  if (options.token) req.set('Authorization', 'Bearer ' + options.token)
+
+  return req
+    .expect('Content-Type', /json/)
+    .expect(options.statusCodeExpected)
 }
 
 function makePostUploadRequest (options: {
@@ -48,9 +80,10 @@ function makePostBodyRequest (options: {
   url: string,
   path: string,
   token?: string,
-  fields: { [ fieldName: string ]: any },
+  fields?: { [ fieldName: string ]: any },
   statusCodeExpected?: number
 }) {
+  if (!options.fields) options.fields = {}
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
 
   const req = request(options.url)
@@ -88,5 +121,6 @@ export {
   makeGetRequest,
   makePostUploadRequest,
   makePostBodyRequest,
-  makePutBodyRequest
+  makePutBodyRequest,
+  makeDeleteRequest
 }

@@ -13,7 +13,7 @@ import {
   setAccessTokensToServers,
   killallServers,
   makePostBodyRequest,
-  getUserAccessToken
+  userLogin
 } from '../../utils'
 
 describe('Test video abuses API validators', function () {
@@ -35,7 +35,7 @@ describe('Test video abuses API validators', function () {
     const password = 'my super password'
     await createUser(server.url, server.accessToken, username, password)
 
-    userAccessToken = await getUserAccessToken(server, { username, password })
+    userAccessToken = await userLogin(server, { username, password })
 
     // Upload a video
     const videoAttributes = {}

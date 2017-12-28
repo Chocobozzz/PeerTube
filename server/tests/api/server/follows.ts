@@ -10,7 +10,7 @@ import {
 } from '../../utils/index'
 import { dateIsValid, webtorrentAdd } from '../../utils/miscs/miscs'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
-import { getUserAccessToken } from '../../utils/users/login'
+import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
 import {
   addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
@@ -183,7 +183,7 @@ describe('Test follows', function () {
     {
       const user = { username: 'captain', password: 'password' }
       await createUser(servers[2].url, servers[2].accessToken, user.username, user.password)
-      const userAccessToken = await getUserAccessToken(servers[2], user)
+      const userAccessToken = await userLogin(servers[2], user)
 
       const resVideos = await getVideosList(servers[ 2 ].url)
       const video4 = resVideos.body.data.find(v => v.name === 'server3-4')

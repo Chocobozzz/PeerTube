@@ -9,7 +9,7 @@ import {
   ServerInfo,
   flushTests,
   runServer,
-  loginAndGetAccessToken,
+  serverLogin,
   uploadVideo,
   getVideosList
 } from './utils'
@@ -23,7 +23,7 @@ describe('Test a client controllers', function () {
     await flushTests()
 
     server = await runServer(1)
-    server.accessToken = await loginAndGetAccessToken(server)
+    server.accessToken = await serverLogin(server)
 
     const videoAttributes = {
       name: 'my super name for server 1',

@@ -15,7 +15,7 @@ import {
   getVideosList,
   killallServers,
   login,
-  loginAndGetAccessToken,
+  serverLogin,
   makePutBodyRequest,
   rateVideo,
   registerUser,
@@ -193,7 +193,7 @@ describe('Test users', function () {
       password: 'super password'
     }
 
-    accessTokenUser = await loginAndGetAccessToken(server)
+    accessTokenUser = await serverLogin(server)
   })
 
   it('Should be able to get the user information', async function () {
@@ -511,7 +511,7 @@ describe('Test users', function () {
       password: 'my super password'
     }
 
-    accessToken = await loginAndGetAccessToken(server)
+    accessToken = await serverLogin(server)
   })
 
   it('Should have the correct video quota', async function () {

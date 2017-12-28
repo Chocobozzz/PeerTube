@@ -7,7 +7,7 @@ import * as request from 'supertest'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 import {
-  addVideoChannel, dateIsValid, doubleFollow, flushAndRunMultipleServers, flushTests, getUserAccessToken, getVideo,
+  addVideoChannel, dateIsValid, doubleFollow, flushAndRunMultipleServers, flushTests, userLogin, getVideo,
   getVideoChannelsList, getVideosList, killallServers, rateVideo, removeVideo, ServerInfo, setAccessTokensToServers, testVideoImage,
   updateVideo, uploadVideo, wait, webtorrentAdd
 } from '../../utils/index'
@@ -152,7 +152,7 @@ describe('Test multiple servers', function () {
         password: 'super_password'
       }
       await createUser(servers[1].url, servers[1].accessToken, user.username, user.password)
-      const userAccessToken = await getUserAccessToken(servers[1], user)
+      const userAccessToken = await userLogin(servers[1], user)
 
       const videoAttributes = {
         name: 'my super name for server 2',

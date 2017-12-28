@@ -2,7 +2,7 @@ import * as program from 'commander'
 
 import {
   getClient,
-  loginAndGetAccessToken
+  serverLogin
 } from '../../utils'
 
 program
@@ -36,7 +36,7 @@ getClient(program.url)
     server.client.id = res.body.client_id
     server.client.secret = res.body.client_secret
 
-    return loginAndGetAccessToken(server)
+    return serverLogin(server)
   })
   .then(accessToken => {
     console.log(accessToken)

@@ -14,7 +14,7 @@ import {
   wait
 } from '../../utils/index'
 import { doubleFollow } from '../../utils/server/follows'
-import { getUserAccessToken } from '../../utils/users/login'
+import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
 import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../utils/videos/videos'
 
@@ -78,7 +78,7 @@ describe('Test video privacy', function () {
     }
     await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
 
-    const token = await getUserAccessToken(servers[0], user)
+    const token = await userLogin(servers[0], user)
     await getVideoWithToken(servers[0].url, token, privateVideoUUID, 403)
   })
 

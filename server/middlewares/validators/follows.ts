@@ -41,7 +41,11 @@ const removeFollowingValidator = [
     const follow = await ActorFollowModel.loadByActorAndTargetHost(serverActor.id, req.params.host)
 
     if (!follow) {
-      return res.status(404)
+      return res
+        .status(404)
+        .json({
+          error: `Follower ${req.params.host} not found.`
+        })
         .end()
     }
 

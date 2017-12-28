@@ -17,7 +17,11 @@ function authenticate (req: express.Request, res: express.Response, next: expres
       return res.sendStatus(500)
     }
 
-    if (res.statusCode === 401 || res.statusCode === 400 || res.statusCode === 503) return res.end()
+    if (res.statusCode === 401 || res.statusCode === 400 || res.statusCode === 503) {
+      return res.json({
+        error: 'Authentication failed.'
+      }).end()
+    }
 
     return next()
   })

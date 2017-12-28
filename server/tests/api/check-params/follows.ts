@@ -4,14 +4,10 @@ import 'mocha'
 import * as request from 'supertest'
 
 import {
-  createUser,
-  flushTests,
-  killallServers,
-  loginAndGetAccessToken,
-  runServer,
-  ServerInfo,
-  setAccessTokensToServers
+  createUser, flushTests, killallServers, makeDeleteRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
+  userLogin
 } from '../../utils'
+import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
 describe('Test server follows API validators', function () {
   let server: ServerInfo
@@ -19,7 +15,7 @@ describe('Test server follows API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(45000)
+    this.timeout(20000)
 
     await flushTests()
     server = await runServer(1)
@@ -31,81 +27,85 @@ describe('Test server follows API validators', function () {
     let userAccessToken = null
 
     before(async function () {
-      await createUser(server.url, server.accessToken, 'user1', 'password')
-      server.user = {
+      const user = {
         username: 'user1',
         password: 'password'
       }
 
-      userAccessToken = await loginAndGetAccessToken(server)
+      await createUser(server.url, server.accessToken, user.username, user.password)
+      userAccessToken = await userLogin(server, user)
     })
 
     describe('When adding follows', function () {
       const path = '/api/v1/server/following'
-      const body = {
-        hosts: [ 'localhost:9002' ]
-      }
 
       it('Should fail without hosts', async function () {
-        await request(server.url)
-                .post(path)
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(400)
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
       })
 
       it('Should fail if hosts is not an array', async function () {
-        await request(server.url)
-                .post(path)
-                .send({ hosts: 'localhost:9002' })
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(400)
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: server.accessToken,
+          fields: { hosts: 'localhost:9002' },
+          statusCodeExpected: 400
+        })
       })
 
       it('Should fail if the array is not composed by hosts', async function () {
-        await request(server.url)
-                .post(path)
-                .send({ hosts: [ 'localhost:9002', 'localhost:coucou' ] })
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(400)
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          fields: { hosts: [ 'localhost:9002', 'localhost:coucou' ] },
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
       })
 
       it('Should fail if the array is composed with http schemes', async function () {
-        await request(server.url)
-                .post(path)
-                .send({ hosts: [ 'localhost:9002', 'http://localhost:9003' ] })
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(400)
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          fields: { hosts: [ 'localhost:9002', 'http://localhost:9003' ] },
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
       })
 
       it('Should fail if hosts are not unique', async function () {
-        await request(server.url)
-                .post(path)
-                .send({ urls: [ 'localhost:9002', 'localhost:9002' ] })
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(400)
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          fields: { urls: [ 'localhost:9002', 'localhost:9002' ] },
+          token: server.accessToken,
+          statusCodeExpected: 400
+        })
       })
 
       it('Should fail with an invalid token', async function () {
-        await request(server.url)
-                .post(path)
-                .send(body)
-                .set('Authorization', 'Bearer fake_token')
-                .set('Accept', 'application/json')
-                .expect(401)
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          fields: { hosts: [ 'localhost:9002' ] },
+          token: 'fake_token',
+          statusCodeExpected: 401
+        })
       })
 
       it('Should fail if the user is not an administrator', async function () {
-        await request(server.url)
-                .post(path)
-                .send(body)
-                .set('Authorization', 'Bearer ' + userAccessToken)
-                .set('Accept', 'application/json')
-                .expect(403)
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          fields: { hosts: [ 'localhost:9002' ] },
+          token: userAccessToken,
+          statusCodeExpected: 403
+        })
       })
     })
 
@@ -113,27 +113,15 @@ describe('Test server follows API validators', function () {
       const path = '/api/v1/server/following'
 
       it('Should fail with a bad start pagination', async function () {
-        await request(server.url)
-          .get(path)
-          .query({ start: 'hello' })
-          .set('Accept', 'application/json')
-          .expect(400)
+        await checkBadStartPagination(server.url, path)
       })
 
       it('Should fail with a bad count pagination', async function () {
-        await request(server.url)
-          .get(path)
-          .query({ count: 'hello' })
-          .set('Accept', 'application/json')
-          .expect(400)
+        await checkBadCountPagination(server.url, path)
       })
 
       it('Should fail with an incorrect sort', async function () {
-        await request(server.url)
-          .get(path)
-          .query({ sort: 'hello' })
-          .set('Accept', 'application/json')
-          .expect(400)
+        await checkBadSortPagination(server.url, path)
       })
     })
 
@@ -141,27 +129,15 @@ describe('Test server follows API validators', function () {
       const path = '/api/v1/server/followers'
 
       it('Should fail with a bad start pagination', async function () {
-        await request(server.url)
-          .get(path)
-          .query({ start: 'hello' })
-          .set('Accept', 'application/json')
-          .expect(400)
+        await checkBadStartPagination(server.url, path)
       })
 
       it('Should fail with a bad count pagination', async function () {
-        await request(server.url)
-          .get(path)
-          .query({ count: 'hello' })
-          .set('Accept', 'application/json')
-          .expect(400)
+        await checkBadCountPagination(server.url, path)
       })
 
       it('Should fail with an incorrect sort', async function () {
-        await request(server.url)
-          .get(path)
-          .query({ sort: 'hello' })
-          .set('Accept', 'application/json')
-          .expect(400)
+        await checkBadSortPagination(server.url, path)
       })
     })
 
@@ -169,30 +145,40 @@ describe('Test server follows API validators', function () {
       const path = '/api/v1/server/following'
 
       it('Should fail with an invalid token', async function () {
-      	await request(server.url)
-                .delete(path + '/1')
-                .set('Authorization', 'Bearer faketoken')
-                .set('Accept', 'application/json')
-                .expect(401)
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/localhost:9002',
+          token: 'fake_token',
+          statusCodeExpected: 401
+        })
       })
 
       it('Should fail if the user is not an administrator', async function () {
-      	await request(server.url)
-                .delete(path + '/1')
-                .set('Authorization', 'Bearer ' + userAccessToken)
-                .set('Accept', 'application/json')
-                .expect(403)
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/localhost:9002',
+          token: userAccessToken,
+          statusCodeExpected: 403
+        })
       })
 
-      it('Should fail we do not follow this server', async function () {
-	      await request(server.url)
-                .delete(path + '/example.com')
-                .set('Authorization', 'Bearer ' + server.accessToken)
-                .set('Accept', 'application/json')
-                .expect(404)
+      it('Should fail if we do not follow this server', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/example.com',
+          token: server.accessToken,
+          statusCodeExpected: 404
+        })
       })
 
-      it('Should succeed with the correct parameters')
+      it('Should succeed with the correct parameters', async function () {
+        await makeDeleteRequest({
+          url: server.url,
+          path: path + '/localhost:9002',
+          token: server.accessToken,
+          statusCodeExpected: 404
+        })
+      })
     })
   })
 

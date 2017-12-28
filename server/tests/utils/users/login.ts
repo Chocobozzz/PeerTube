@@ -26,13 +26,13 @@ function login (url: string, client: Client, user: User, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
-async function loginAndGetAccessToken (server: Server) {
+async function serverLogin (server: Server) {
   const res = await login(server.url, server.client, server.user, 200)
 
   return res.body.access_token as string
 }
 
-async function getUserAccessToken (server: Server, user: User) {
+async function userLogin (server: Server, user: User) {
   const res = await login(server.url, server.client, user, 200)
 
   return res.body.access_token as string
@@ -42,7 +42,7 @@ function setAccessTokensToServers (servers: ServerInfo[]) {
   const tasks: Promise<any>[] = []
 
   for (const server of servers) {
-    const p = loginAndGetAccessToken(server).then(t => server.accessToken = t)
+    const p = serverLogin(server).then(t => server.accessToken = t)
     tasks.push(p)
   }
 
@@ -53,7 +53,7 @@ function setAccessTokensToServers (servers: ServerInfo[]) {
 
 export {
   login,
-  loginAndGetAccessToken,
-  getUserAccessToken,
+  serverLogin,
+  userLogin,
   setAccessTokensToServers
 }
