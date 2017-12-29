@@ -1,19 +1,11 @@
 /* tslint:disable:no-unused-expression */
 
-import 'mocha'
 import * as chai from 'chai'
-const expect = chai.expect
-
-import {
-  ServerInfo,
-  flushTests,
-  uploadVideo,
-  getVideosList,
-  setAccessTokensToServers,
-  killallServers,
-  getOEmbed
-} from '../../utils/index'
+import 'mocha'
+import { flushTests, getOEmbed, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils/index'
 import { runServer } from '../../utils/server/servers'
+
+const expect = chai.expect
 
 describe('Test services', function () {
   let server: ServerInfo = null
@@ -30,8 +22,10 @@ describe('Test services', function () {
     const videoAttributes = {
       name: 'my super name'
     }
-    const res = await uploadVideo(server.url, server.accessToken, videoAttributes)
-    server.video = res.body.video
+    await uploadVideo(server.url, server.accessToken, videoAttributes)
+
+    const res = await getVideosList(server.url)
+    server.video = res.body.data[0]
   })
 
   it('Should have a valid oEmbed response', async function () {

@@ -10,7 +10,7 @@ import {
   flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
   wait
 } from '../../utils/index'
-import { dateIsValid, webtorrentAdd } from '../../utils/miscs/miscs'
+import { dateIsValid } from '../../utils/miscs/miscs'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
 import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
@@ -18,7 +18,7 @@ import {
   addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
-import { getVideo, rateVideo, testVideoImage } from '../../utils/videos/videos'
+import { rateVideo } from '../../utils/videos/videos'
 
 const expect = chai.expect
 

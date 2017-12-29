@@ -98,7 +98,7 @@ describe('Test multiple servers', function () {
             description: 'super channel',
             isLocal
           },
-          fixture: 'video_short.webm',
+          fixture: 'video_short1.webm',
           files: [
             {
               resolution: 720,
@@ -289,7 +289,7 @@ describe('Test multiple servers', function () {
             description: '',
             isLocal
           },
-          fixture: 'video_short3.webm',
+          fixture: 'video_short.webm',
           files: [
             {
               resolution: 720,

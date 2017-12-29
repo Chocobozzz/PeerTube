@@ -6,32 +6,9 @@ import 'mocha'
 import { join } from 'path'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
-  dateIsValid,
-  flushTests,
-  getVideo,
-  getVideoCategories,
-  getVideoLanguages,
-  getVideoLicences,
-  getVideoPrivacies,
-  getVideosList,
-  getVideosListPagination,
-  getVideosListSort,
-  killallServers,
-  rateVideo,
-  readdirPromise,
-  removeVideo,
-  runServer,
-  searchVideo,
-  searchVideoWithPagination,
-  searchVideoWithSort,
-  ServerInfo,
-  setAccessTokensToServers,
-  testVideoImage,
-  updateVideo,
-  uploadVideo,
-  wait,
-  webtorrentAdd,
-  viewVideo, completeVideoCheck, immutableAssign
+  completeVideoCheck, flushTests, getVideo, getVideoCategories, getVideoLanguages, getVideoLicences, getVideoPrivacies,
+  getVideosList, getVideosListPagination, getVideosListSort, killallServers, rateVideo, readdirPromise, removeVideo, runServer, searchVideo,
+  searchVideoWithPagination, searchVideoWithSort, ServerInfo, setAccessTokensToServers, testVideoImage, updateVideo, uploadVideo, viewVideo
 } from '../../utils'
 
 const expect = chai.expect
