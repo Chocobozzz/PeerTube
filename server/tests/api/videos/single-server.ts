@@ -4,6 +4,7 @@ import * as chai from 'chai'
 import { keyBy } from 'lodash'
 import 'mocha'
 import { join } from 'path'
+import { VideoPrivacy } from '../../../../shared/models/videos'
 import {
   dateIsValid,
   flushTests,
@@ -29,9 +30,9 @@ import {
   updateVideo,
   uploadVideo,
   wait,
-  webtorrentAdd
-} from '../../utils/index'
-import { viewVideo } from '../../utils/videos/videos'
+  webtorrentAdd,
+  viewVideo, completeVideoCheck, immutableAssign
+} from '../../utils'
 
 const expect = chai.expect
 
@@ -40,6 +41,56 @@ describe('Test a single server', function () {
   let videoId = -1
   let videoUUID = ''
   let videosListBase: any[] = null
+
+  const getCheckAttributes = {
+    name: 'my super name',
+    category: 2,
+    licence: 6,
+    language: 3,
+    nsfw: true,
+    description: 'my super description',
+    host: 'localhost:9001',
+    account: 'root',
+    isLocal: true,
+    tags: [ 'tag1', 'tag2', 'tag3' ],
+    privacy: VideoPrivacy.PUBLIC,
+    channel: {
+      name: 'Default root channel',
+      isLocal: true
+    },
+    fixture: 'video_short.webm',
+    files: [
+      {
+        resolution: 720,
+        size: 218910
+      }
+    ]
+  }
+
+  const updateCheckAttributes = {
+    name: 'my super video updated',
+    category: 4,
+    licence: 2,
+    language: 5,
+    nsfw: true,
+    description: 'my super description updated',
+    host: 'localhost:9001',
+    account: 'root',
+    isLocal: true,
+    tags: [ 'tagup1', 'tagup2' ],
+    privacy: VideoPrivacy.PUBLIC,
+    channel: {
+      name: 'Default root channel',
+      isLocal: true
+    },
+    fixture: 'video_short3.webm',
+    files: [
+      {
+        resolution: 720,
+        size: 292677
+      }
+    ]
+  }
 
   before(async function () {
     this.timeout(10000)
@@ -107,9 +158,12 @@ describe('Test a single server', function () {
     expect(res.body.video).to.not.be.undefined
     expect(res.body.video.id).to.equal(1)
     expect(res.body.video.uuid).to.have.length.above(5)
+
+    videoId = res.body.video.id
+    videoUUID = res.body.video.uuid
   })
 
-  it('Should seed the uploaded video', async function () {
+  it('Should get and seed the uploaded video', async function () {
     // Yes, this could be long
     this.timeout(60000)
 
@@ -120,86 +174,7 @@ describe('Test a single server', function () {
     expect(res.body.data.length).to.equal(1)
 
     const video = res.body.data[0]
-    expect(video.name).to.equal('my super name')
-    expect(video.category).to.equal(2)
-    expect(video.categoryLabel).to.equal('Films')
-    expect(video.licence).to.equal(6)
-    expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
-    expect(video.language).to.equal(3)
-    expect(video.languageLabel).to.equal('Mandarin')
-    expect(video.nsfw).to.be.ok
-    expect(video.description).to.equal('my super description')
-    expect(video.serverHost).to.equal('localhost:9001')
-    expect(video.accountName).to.equal('root')
-    expect(video.isLocal).to.be.true
-    expect(dateIsValid(video.createdAt)).to.be.true
-    expect(dateIsValid(video.updatedAt)).to.be.true
-
-    const res2 = await getVideo(server.url, res.body.data[0].id)
-    const videoDetails = res2.body
-
-    expect(videoDetails.files).to.have.lengthOf(1)
-
-    const file = videoDetails.files[0]
-    const magnetUri = file.magnetUri
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`${server.url}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
-    expect(file.fileUrl).to.equal(`${server.url}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(218910)
-
-    const test = await testVideoImage(server.url, 'video_short.webm', videoDetails.thumbnailPath)
-    expect(test).to.equal(true)
-
-    videoId = videoDetails.id
-    videoUUID = videoDetails.uuid
-
-    const torrent = await webtorrentAdd(magnetUri)
-    expect(torrent.files).to.be.an('array')
-    expect(torrent.files.length).to.equal(1)
-    expect(torrent.files[0].path).to.exist.and.to.not.equal('')
-  })
-
-  it('Should get the video', async function () {
-    // Yes, this could be long
-    this.timeout(60000)
-
-    const res = await getVideo(server.url, videoId)
-
-    const video = res.body
-    expect(video.name).to.equal('my super name')
-    expect(video.category).to.equal(2)
-    expect(video.categoryLabel).to.equal('Films')
-    expect(video.licence).to.equal(6)
-    expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
-    expect(video.language).to.equal(3)
-    expect(video.languageLabel).to.equal('Mandarin')
-    expect(video.nsfw).to.be.ok
-    expect(video.description).to.equal('my super description')
-    expect(video.serverHost).to.equal('localhost:9001')
-    expect(video.accountName).to.equal('root')
-    expect(video.isLocal).to.be.true
-    expect(dateIsValid(video.createdAt)).to.be.true
-    expect(dateIsValid(video.updatedAt)).to.be.true
-    expect(video.channel.name).to.equal('Default root channel')
-    expect(video.channel.isLocal).to.be.true
-    expect(dateIsValid(video.channel.createdAt)).to.be.true
-    expect(dateIsValid(video.channel.updatedAt)).to.be.true
-
-    expect(video.files).to.have.lengthOf(1)
-
-    const file = video.files[0]
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(218910)
-
-    const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
-    expect(test).to.equal(true)
-
-    // Wait the async views increment
-    await wait(500)
+    await completeVideoCheck(server.url, video, getCheckAttributes)
   })
 
   it('Should get the video by UUID', async function () {
@@ -209,10 +184,7 @@ describe('Test a single server', function () {
     const res = await getVideo(server.url, videoUUID)
 
     const video = res.body
-    expect(video.name).to.equal('my super name')
-
-    // Wait the async views increment
-    await wait(500)
+    await completeVideoCheck(server.url, video, getCheckAttributes)
   })
 
   it('Should have the views updated', async function () {
@@ -234,23 +206,7 @@ describe('Test a single server', function () {
     expect(res.body.data.length).to.equal(1)
 
     const video = res.body.data[0]
-    expect(video.name).to.equal('my super name')
-    expect(video.category).to.equal(2)
-    expect(video.categoryLabel).to.equal('Films')
-    expect(video.licence).to.equal(6)
-    expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
-    expect(video.language).to.equal(3)
-    expect(video.languageLabel).to.equal('Mandarin')
-    expect(video.nsfw).to.be.ok
-    expect(video.description).to.equal('my super description')
-    expect(video.serverHost).to.equal('localhost:9001')
-    expect(video.accountName).to.equal('root')
-    expect(video.isLocal).to.be.true
-    expect(dateIsValid(video.createdAt)).to.be.true
-    expect(dateIsValid(video.updatedAt)).to.be.true
-
-    const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
-    expect(test).to.equal(true)
+    await completeVideoCheck(server.url, video, getCheckAttributes)
   })
 
   // Not implemented yet
@@ -337,10 +293,10 @@ describe('Test a single server', function () {
   it('Should remove the video', async function () {
     await removeVideo(server.url, server.accessToken, videoId)
 
-    const files1 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1/videos/'))
+    const files1 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1', 'videos'))
     expect(files1).to.have.lengthOf(0)
 
-    const files2 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1/thumbnails/'))
+    const files2 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1', 'thumbnails'))
     expect(files2).to.have.lengthOf(0)
   })
 
@@ -547,127 +503,33 @@ describe('Test a single server', function () {
     this.timeout(60000)
 
     const res = await getVideo(server.url, videoId)
-
     const video = res.body
 
-    expect(video.name).to.equal('my super video updated')
-    expect(video.category).to.equal(4)
-    expect(video.categoryLabel).to.equal('Art')
-    expect(video.licence).to.equal(2)
-    expect(video.licenceLabel).to.equal('Attribution - Share Alike')
-    expect(video.language).to.equal(5)
-    expect(video.languageLabel).to.equal('Arabic')
-    expect(video.nsfw).to.be.ok
-    expect(video.description).to.equal('my super description updated')
-    expect(video.serverHost).to.equal('localhost:9001')
-    expect(video.accountName).to.equal('root')
-    expect(video.account.name).to.equal('root')
-    expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'tagup1', 'tagup2' ])
-    expect(dateIsValid(video.createdAt)).to.be.true
-    expect(dateIsValid(video.updatedAt)).to.be.true
-
-    expect(video.channel.name).to.equal('Default root channel')
-    expect(video.channel.isLocal).to.be.true
-    expect(dateIsValid(video.channel.createdAt)).to.be.true
-    expect(dateIsValid(video.channel.updatedAt)).to.be.true
-
-    expect(video.files).to.have.lengthOf(1)
-
-    const file = video.files[0]
-    const magnetUri = file.magnetUri
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(292677)
-
-    const test = await testVideoImage(server.url, 'video_short3.webm', video.thumbnailPath)
-    expect(test).to.equal(true)
-
-    const torrent = await webtorrentAdd(magnetUri)
-    expect(torrent.files).to.be.an('array')
-    expect(torrent.files.length).to.equal(1)
-    expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+    await completeVideoCheck(server.url, video, updateCheckAttributes)
   })
 
   it('Should update only the tags of a video', async function () {
     const attributes = {
-      tags: [ 'tag1', 'tag2', 'supertag' ]
+      tags: [ 'supertag', 'tag1', 'tag2' ]
     }
-
     await updateVideo(server.url, server.accessToken, videoId, attributes)
 
     const res = await getVideo(server.url, videoId)
     const video = res.body
 
-    expect(video.name).to.equal('my super video updated')
-    expect(video.category).to.equal(4)
-    expect(video.categoryLabel).to.equal('Art')
-    expect(video.licence).to.equal(2)
-    expect(video.licenceLabel).to.equal('Attribution - Share Alike')
-    expect(video.language).to.equal(5)
-    expect(video.languageLabel).to.equal('Arabic')
-    expect(video.nsfw).to.be.ok
-    expect(video.description).to.equal('my super description updated')
-    expect(video.serverHost).to.equal('localhost:9001')
-    expect(video.accountName).to.equal('root')
-    expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'supertag', 'tag1', 'tag2' ])
-    expect(dateIsValid(video.createdAt)).to.be.true
-    expect(dateIsValid(video.updatedAt)).to.be.true
-
-    expect(video.channel.name).to.equal('Default root channel')
-    expect(video.channel.isLocal).to.be.true
-    expect(dateIsValid(video.channel.createdAt)).to.be.true
-    expect(dateIsValid(video.channel.updatedAt)).to.be.true
-
-    expect(video.files).to.have.lengthOf(1)
-
-    const file = video.files[0]
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(292677)
+    await completeVideoCheck(server.url, video, Object.assign(updateCheckAttributes, attributes))
   })
 
   it('Should update only the description of a video', async function () {
     const attributes = {
       description: 'hello everybody'
     }
-
     await updateVideo(server.url, server.accessToken, videoId, attributes)
 
     const res = await getVideo(server.url, videoId)
     const video = res.body
 
-    expect(video.name).to.equal('my super video updated')
-    expect(video.category).to.equal(4)
-    expect(video.categoryLabel).to.equal('Art')
-    expect(video.licence).to.equal(2)
-    expect(video.licenceLabel).to.equal('Attribution - Share Alike')
-    expect(video.language).to.equal(5)
-    expect(video.languageLabel).to.equal('Arabic')
-    expect(video.nsfw).to.be.ok
-    expect(video.description).to.equal('hello everybody')
-    expect(video.serverHost).to.equal('localhost:9001')
-    expect(video.accountName).to.equal('root')
-    expect(video.isLocal).to.be.true
-    expect(video.tags).to.deep.equal([ 'supertag', 'tag1', 'tag2' ])
-    expect(dateIsValid(video.createdAt)).to.be.true
-    expect(dateIsValid(video.updatedAt)).to.be.true
-
-    expect(video.channel.name).to.equal('Default root channel')
-    expect(video.channel.isLocal).to.be.true
-    expect(dateIsValid(video.channel.createdAt)).to.be.true
-    expect(dateIsValid(video.channel.updatedAt)).to.be.true
-
-    expect(video.files).to.have.lengthOf(1)
-
-    const file = video.files[0]
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(292677)
+    await completeVideoCheck(server.url, video, Object.assign(updateCheckAttributes, attributes))
   })
 
   it('Should like a video', async function () {
