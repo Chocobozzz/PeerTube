@@ -40,36 +40,28 @@ describe('Test users', function () {
     const client = { id: 'client', secret: server.client.secret }
     const res = await login(server.url, client, server.user, 400)
 
-    expect(res.body.error)
-      .to
-      .equal('Authentication failed.')
+    expect(res.body.error).to.equal('Authentication failed.')
   })
 
   it('Should not login with an invalid client secret', async function () {
     const client = { id: server.client.id, secret: 'coucou' }
     const res = await login(server.url, client, server.user, 400)
 
-    expect(res.body.error)
-      .to
-      .equal('Authentication failed.')
+    expect(res.body.error).to.equal('Authentication failed.')
   })
 
   it('Should not login with an invalid username', async function () {
     const user = { username: 'captain crochet', password: server.user.password }
     const res = await login(server.url, server.client, user, 400)
 
-    expect(res.body.error)
-      .to
-      .equal('Authentication failed.')
+    expect(res.body.error).to.equal('Authentication failed.')
   })
 
   it('Should not login with an invalid password', async function () {
     const user = { username: server.user.username, password: 'mew_three' }
     const res = await login(server.url, server.client, user, 400)
 
-    expect(res.body.error)
-      .to
-      .equal('Authentication failed.')
+    expect(res.body.error).to.equal('Authentication failed.')
   })
 
   it('Should not be able to upload a video', async function () {
@@ -98,9 +90,7 @@ describe('Test users', function () {
     const res = await getVideosList(server.url)
     const video = res.body.data[ 0 ]
 
-    expect(video.accountName)
-      .to
-      .equal('root')
+    expect(video.accountName).to.equal('root')
     videoId = video.id
   })
 
@@ -114,12 +104,8 @@ describe('Test users', function () {
     const res = await getMyUserVideoRating(server.url, accessToken, videoId)
     const rating = res.body
 
-    expect(rating.videoId)
-      .to
-      .equal(videoId)
-    expect(rating.rating)
-      .to
-      .equal('like')
+    expect(rating.videoId).to.equal(videoId)
+    expect(rating.rating).to.equal('like')
   })
 
   it('Should not be able to remove the video with an incorrect token', async function () {
@@ -181,23 +167,12 @@ describe('Test users', function () {
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
-    expect(user.username)
-      .to
-      .equal('user_1')
-    expect(user.email)
-      .to
-      .equal('user_1@example.com')
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.false
-    expect(user.videoQuota)
-      .to
-      .equal(2 * 1024 * 1024)
-    expect(user.roleLabel)
-      .to
-      .equal('User')
-    expect(user.id)
-      .to
-      .be
-      .a('number')
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.roleLabel).to.equal('User')
+    expect(user.id).to.be.a('number')
   })
 
   it('Should be able to upload a video with this user', async function () {
@@ -211,19 +186,12 @@ describe('Test users', function () {
 
   it('Should be able to list my videos', async function () {
     const res = await getMyVideos(server.url, accessTokenUser, 0, 5)
-    expect(res.body.total)
-      .to
-      .equal(1)
+    expect(res.body.total).to.equal(1)
 
     const videos = res.body.data
-    expect(videos)
-      .to
-      .have
-      .lengthOf(1)
+    expect(videos).to.have.lengthOf(1)
 
-    expect(videos[ 0 ].name)
-      .to
-      .equal('super user video')
+    expect(videos[ 0 ].name).to.equal('super user video')
   })
 
   it('Should list all the users', async function () {
@@ -232,33 +200,18 @@ describe('Test users', function () {
     const total = result.total
     const users = result.data
 
-    expect(total)
-      .to
-      .equal(2)
-    expect(users)
-      .to
-      .be
-      .an('array')
-    expect(users.length)
-      .to
-      .equal(2)
+    expect(total).to.equal(2)
+    expect(users).to.be.an('array')
+    expect(users.length).to.equal(2)
 
     const user = users[ 0 ]
-    expect(user.username)
-      .to
-      .equal('user_1')
-    expect(user.email)
-      .to
-      .equal('user_1@example.com')
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.false
 
     const rootUser = users[ 1 ]
-    expect(rootUser.username)
-      .to
-      .equal('root')
-    expect(rootUser.email)
-      .to
-      .equal('admin1@example.com')
+    expect(rootUser.username).to.equal('root')
+    expect(rootUser.email).to.equal('admin1@example.com')
     expect(rootUser.displayNSFW).to.be.false
 
     userId = user.id
@@ -271,23 +224,13 @@ describe('Test users', function () {
     const total = result.total
     const users = result.data
 
-    expect(total)
-      .to
-      .equal(2)
-    expect(users.length)
-      .to
-      .equal(1)
+    expect(total).to.equal(2)
+    expect(users.length).to.equal(1)
 
     const user = users[ 0 ]
-    expect(user.username)
-      .to
-      .equal('root')
-    expect(user.email)
-      .to
-      .equal('admin1@example.com')
-    expect(user.roleLabel)
-      .to
-      .equal('Administrator')
+    expect(user.username).to.equal('root')
+    expect(user.email).to.equal('admin1@example.com')
+    expect(user.roleLabel).to.equal('Administrator')
     expect(user.displayNSFW).to.be.false
   })
 
@@ -297,20 +240,12 @@ describe('Test users', function () {
     const total = result.total
     const users = result.data
 
-    expect(total)
-      .to
-      .equal(2)
-    expect(users.length)
-      .to
-      .equal(1)
+    expect(total).to.equal(2)
+    expect(users.length).to.equal(1)
 
     const user = users[ 0 ]
-    expect(user.username)
-      .to
-      .equal('user_1')
-    expect(user.email)
-      .to
-      .equal('user_1@example.com')
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.false
   })
 
@@ -320,20 +255,12 @@ describe('Test users', function () {
     const total = result.total
     const users = result.data
 
-    expect(total)
-      .to
-      .equal(2)
-    expect(users.length)
-      .to
-      .equal(1)
+    expect(total).to.equal(2)
+    expect(users.length).to.equal(1)
 
     const user = users[ 0 ]
-    expect(user.username)
-      .to
-      .equal('user_1')
-    expect(user.email)
-      .to
-      .equal('user_1@example.com')
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.false
   })
 
@@ -343,27 +270,15 @@ describe('Test users', function () {
     const total = result.total
     const users = result.data
 
-    expect(total)
-      .to
-      .equal(2)
-    expect(users.length)
-      .to
-      .equal(2)
+    expect(total).to.equal(2)
+    expect(users.length).to.equal(2)
 
-    expect(users[ 0 ].username)
-      .to
-      .equal('root')
-    expect(users[ 0 ].email)
-      .to
-      .equal('admin1@example.com')
+    expect(users[ 0 ].username).to.equal('root')
+    expect(users[ 0 ].email).to.equal('admin1@example.com')
     expect(users[ 0 ].displayNSFW).to.be.false
 
-    expect(users[ 1 ].username)
-      .to
-      .equal('user_1')
-    expect(users[ 1 ].email)
-      .to
-      .equal('user_1@example.com')
+    expect(users[ 1 ].username).to.equal('user_1')
+    expect(users[ 1 ].email).to.equal('user_1@example.com')
     expect(users[ 1 ].displayNSFW).to.be.false
   })
 
@@ -388,20 +303,11 @@ describe('Test users', function () {
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
-    expect(user.username)
-      .to
-      .equal('user_1')
-    expect(user.email)
-      .to
-      .equal('user_1@example.com')
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('user_1@example.com')
     expect(user.displayNSFW).to.be.ok
-    expect(user.videoQuota)
-      .to
-      .equal(2 * 1024 * 1024)
-    expect(user.id)
-      .to
-      .be
-      .a('number')
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.id).to.be.a('number')
   })
 
   it('Should be able to change the autoPlayVideo attribute', async function () {
@@ -427,20 +333,11 @@ describe('Test users', function () {
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
-    expect(user.username)
-      .to
-      .equal('user_1')
-    expect(user.email)
-      .to
-      .equal('updated@example.com')
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('updated@example.com')
     expect(user.displayNSFW).to.be.ok
-    expect(user.videoQuota)
-      .to
-      .equal(2 * 1024 * 1024)
-    expect(user.id)
-      .to
-      .be
-      .a('number')
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.id).to.be.a('number')
   })
 
   it('Should be able to update another user', async function () {
@@ -456,23 +353,12 @@ describe('Test users', function () {
     const res = await getUserInformation(server.url, accessToken, userId)
     const user = res.body
 
-    expect(user.username)
-      .to
-      .equal('user_1')
-    expect(user.email)
-      .to
-      .equal('updated2@example.com')
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('updated2@example.com')
     expect(user.displayNSFW).to.be.ok
-    expect(user.videoQuota)
-      .to
-      .equal(42)
-    expect(user.roleLabel)
-      .to
-      .equal('Moderator')
-    expect(user.id)
-      .to
-      .be
-      .a('number')
+    expect(user.videoQuota).to.equal(42)
+    expect(user.roleLabel).to.equal('Moderator')
+    expect(user.id).to.be.a('number')
   })
 
   it('Should not be able to delete a user by a moderator', async function () {
@@ -495,14 +381,10 @@ describe('Test users', function () {
   it('Should not have videos of this user', async function () {
     const res = await getVideosList(server.url)
 
-    expect(res.body.total)
-      .to
-      .equal(1)
+    expect(res.body.total).to.equal(1)
 
     const video = res.body.data[ 0 ]
-    expect(video.accountName)
-      .to
-      .equal('root')
+    expect(video.accountName).to.equal('root')
   })
 
   it('Should register a new user', async function () {
@@ -522,9 +404,7 @@ describe('Test users', function () {
     const res = await getMyUserInformation(server.url, accessToken)
     const user = res.body
 
-    expect(user.videoQuota)
-      .to
-      .equal(5 * 1024 * 1024)
+    expect(user.videoQuota).to.equal(5 * 1024 * 1024)
   })
 
   after(async function () {

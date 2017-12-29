@@ -1,21 +1,13 @@
 /* tslint:disable:no-unused-expression */
 
-import 'mocha'
 import * as chai from 'chai'
-const expect = chai.expect
-
+import 'mocha'
 import {
-  ServerInfo,
-  flushTests,
-  uploadVideo,
-  getVideosList,
-  wait,
-  setAccessTokensToServers,
-  flushAndRunMultipleServers,
-  killallServers,
-  webtorrentAdd,
-  getVideo
-} from '../../utils/index'
+  flushAndRunMultipleServers, flushTests, getVideo, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
+  wait, webtorrentAdd
+} from '../../utils'
+
+const expect = chai.expect
 
 describe('Test video transcoding', function () {
   let servers: ServerInfo[] = []

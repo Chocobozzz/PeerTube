@@ -30,10 +30,8 @@ describe('Test services', function () {
     const videoAttributes = {
       name: 'my super name'
     }
-    await uploadVideo(server.url, server.accessToken, videoAttributes)
-
-    const res = await getVideosList(server.url)
-    server.video = res.body.data[0]
+    const res = await uploadVideo(server.url, server.accessToken, videoAttributes)
+    server.video = res.body.video
   })
 
   it('Should have a valid oEmbed response', async function () {
