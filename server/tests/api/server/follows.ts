@@ -2,7 +2,9 @@
 
 import * as chai from 'chai'
 import 'mocha'
+import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
+import { completeVideoCheck } from '../../utils'
 
 import {
   flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
@@ -163,111 +165,109 @@ describe('Test follows', function () {
     expect(res.body.data[0].name).to.equal('server3')
   })
 
-  it('Should propagate previous uploaded videos on a new following', async function () {
-    this.timeout(20000)
+  describe('Should propagate data on a new following', async function () {
+    let video4: Video
 
-    const video4Attributes = {
-      name: 'server3-4',
-      category: 2,
-      nsfw: true,
-      licence: 6,
-      tags: [ 'tag1', 'tag2', 'tag3' ]
-    }
+    before(async function () {
+      this.timeout(20000)
 
-    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-2' })
-    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-3' })
-    await uploadVideo(servers[2].url, servers[2].accessToken, video4Attributes)
-    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-5' })
-    await uploadVideo(servers[2].url, servers[2].accessToken, { name: 'server3-6' })
-
-    {
-      const user = { username: 'captain', password: 'password' }
-      await createUser(servers[2].url, servers[2].accessToken, user.username, user.password)
-      const userAccessToken = await userLogin(servers[2], user)
-
-      const resVideos = await getVideosList(servers[ 2 ].url)
-      const video4 = resVideos.body.data.find(v => v.name === 'server3-4')
-
-      {
-        await rateVideo(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, 'like')
-        await rateVideo(servers[ 2 ].url, userAccessToken, video4.id, 'dislike')
+      const video4Attributes = {
+        name: 'server3-4',
+        category: 2,
+        nsfw: true,
+        licence: 6,
+        tags: [ 'tag1', 'tag2', 'tag3' ]
       }
 
+      await uploadVideo(servers[ 2 ].url, servers[ 2 ].accessToken, { name: 'server3-2' })
+      await uploadVideo(servers[ 2 ].url, servers[ 2 ].accessToken, { name: 'server3-3' })
+      await uploadVideo(servers[ 2 ].url, servers[ 2 ].accessToken, video4Attributes)
+      await uploadVideo(servers[ 2 ].url, servers[ 2 ].accessToken, { name: 'server3-5' })
+      await uploadVideo(servers[ 2 ].url, servers[ 2 ].accessToken, { name: 'server3-6' })
+
       {
-        const text = 'my super first comment'
-        const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
-        const threadId = res.body.comment.id
+        const user = { username: 'captain', password: 'password' }
+        await createUser(servers[ 2 ].url, servers[ 2 ].accessToken, user.username, user.password)
+        const userAccessToken = await userLogin(servers[ 2 ], user)
 
-        const text1 = 'my super answer to thread 1'
-        const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
-        const childCommentId = childCommentRes.body.comment.id
+        const resVideos = await getVideosList(servers[ 2 ].url)
+        video4 = resVideos.body.data.find(v => v.name === 'server3-4')
 
-        const text2 = 'my super answer to answer of thread 1'
-        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text2)
+        {
+          await rateVideo(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, 'like')
+          await rateVideo(servers[ 2 ].url, userAccessToken, video4.id, 'dislike')
+        }
 
-        const text3 = 'my second answer to thread 1'
-        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
+        {
+          const text = 'my super first comment'
+          const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
+          const threadId = res.body.comment.id
+
+          const text1 = 'my super answer to thread 1'
+          const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
+          const childCommentId = childCommentRes.body.comment.id
+
+          const text2 = 'my super answer to answer of thread 1'
+          await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text2)
+
+          const text3 = 'my second answer to thread 1'
+          await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
+        }
       }
-    }
 
-    await wait(5000)
+      await wait(5000)
 
-    // Server 1 follows server 3
-    await follow(servers[0].url, [ servers[2].url ], servers[0].accessToken)
+      // Server 1 follows server 3
+      await follow(servers[ 0 ].url, [ servers[ 2 ].url ], servers[ 0 ].accessToken)
 
-    await wait(7000)
+      await wait(7000)
+    })
 
-    let res = await getVideosList(servers[0].url)
-    expect(res.body.total).to.equal(7)
+    it('Should propagate videos', async function () {
+      const res = await getVideosList(servers[ 0 ].url)
+      expect(res.body.total).to.equal(7)
 
-    const video2 = res.body.data.find(v => v.name === 'server3-2')
-    const video4 = res.body.data.find(v => v.name === 'server3-4')
-    const video6 = res.body.data.find(v => v.name === 'server3-6')
+      const video2 = res.body.data.find(v => v.name === 'server3-2')
+      video4 = res.body.data.find(v => v.name === 'server3-4')
+      const video6 = res.body.data.find(v => v.name === 'server3-6')
 
-    expect(video2).to.not.be.undefined
-    expect(video4).to.not.be.undefined
-    expect(video6).to.not.be.undefined
+      expect(video2).to.not.be.undefined
+      expect(video4).to.not.be.undefined
+      expect(video6).to.not.be.undefined
 
-    const res2 = await getVideo(servers[0].url, video4.id)
-    const videoDetails = res2.body
+      const isLocal = false
+      const checkAttributes = {
+        name: 'server3-4',
+        category: 2,
+        licence: 6,
+        language: 3,
+        nsfw: true,
+        description: 'my super description',
+        host: 'localhost:9003',
+        account: 'root',
+        isLocal,
+        duration: 5,
+        tags: [ 'tag1', 'tag2', 'tag3' ],
+        privacy: VideoPrivacy.PUBLIC,
+        likes: 1,
+        dislikes: 1,
+        channel: {
+          name: 'Default root channel',
+          description: '',
+          isLocal
+        },
+        fixture: 'video_short.webm',
+        files: [
+          {
+            resolution: 720,
+            size: 218910
+          }
+        ]
+      }
+      await completeVideoCheck(servers[ 0 ].url, video4, checkAttributes)
+    })
 
-    expect(videoDetails.name).to.equal('server3-4')
-    expect(videoDetails.category).to.equal(2)
-    expect(videoDetails.categoryLabel).to.equal('Films')
-    expect(videoDetails.licence).to.equal(6)
-    expect(videoDetails.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
-    expect(videoDetails.language).to.equal(3)
-    expect(videoDetails.languageLabel).to.equal('Mandarin')
-    expect(videoDetails.nsfw).to.be.ok
-    expect(videoDetails.description).to.equal('my super description')
-    expect(videoDetails.serverHost).to.equal('localhost:9003')
-    expect(videoDetails.accountName).to.equal('root')
-    expect(videoDetails.likes).to.equal(1)
-    expect(videoDetails.dislikes).to.equal(1)
-    expect(videoDetails.isLocal).to.be.false
-    expect(videoDetails.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
-    expect(dateIsValid(videoDetails.createdAt)).to.be.true
-    expect(dateIsValid(videoDetails.updatedAt)).to.be.true
-    expect(videoDetails.files).to.have.lengthOf(1)
-
-    const file = videoDetails.files[0]
-    const magnetUri = file.magnetUri
-    expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`${servers[2].url}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
-    expect(file.fileUrl).to.equal(`${servers[2].url}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
-    expect(file.resolution).to.equal(720)
-    expect(file.resolutionLabel).to.equal('720p')
-    expect(file.size).to.equal(218910)
-
-    const test = await testVideoImage(servers[2].url, 'video_short.webm', videoDetails.thumbnailPath)
-    expect(test).to.equal(true)
-
-    const torrent = await webtorrentAdd(magnetUri)
-    expect(torrent.files).to.be.an('array')
-    expect(torrent.files.length).to.equal(1)
-    expect(torrent.files[0].path).to.exist.and.to.not.equal('')
-
-    {
+    it('Should propagate comments', async function () {
       const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5)
 
       expect(res1.body.total).to.equal(1)
@@ -304,7 +304,7 @@ describe('Test follows', function () {
       const secondChild = tree.children[1]
       expect(secondChild.comment.text).to.equal('my second answer to thread 1')
       expect(secondChild.children).to.have.lengthOf(0)
-    }
+    })
   })
 
   after(async function () {

@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { readFile } from 'fs'
 import * as parseTorrent from 'parse-torrent'
-import { isAbsolute, join } from 'path'
+import { extname, isAbsolute, join } from 'path'
 import * as request from 'supertest'
 import { getMyUserInformation, makeGetRequest, readFilePromise, ServerInfo } from '../'
 import { VideoPrivacy } from '../../../../shared/models/videos'
@@ -332,8 +332,12 @@ async function completeVideoCheck (
     isLocal: boolean,
     tags: string[],
     privacy: number,
+    likes?: number,
+    dislikes?: number,
+    duration: number,
     channel: {
       name: string,
+      description
       isLocal: boolean
     }
     fixture: string,
@@ -343,18 +347,24 @@ async function completeVideoCheck (
     }[]
   }
 ) {
+  if (!attributes.likes) attributes.likes = 0
+  if (!attributes.dislikes) attributes.dislikes = 0
+
   expect(video.name).to.equal(attributes.name)
   expect(video.category).to.equal(attributes.category)
-  expect(video.categoryLabel).to.equal(VIDEO_CATEGORIES[attributes.category])
+  expect(video.categoryLabel).to.equal(VIDEO_CATEGORIES[attributes.category] || 'Misc')
   expect(video.licence).to.equal(attributes.licence)
-  expect(video.licenceLabel).to.equal(VIDEO_LICENCES[attributes.licence])
+  expect(video.licenceLabel).to.equal(VIDEO_LICENCES[attributes.licence] || 'Unknown')
   expect(video.language).to.equal(attributes.language)
-  expect(video.languageLabel).to.equal(VIDEO_LANGUAGES[attributes.language])
+  expect(video.languageLabel).to.equal(VIDEO_LANGUAGES[attributes.language] || 'Unknown')
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
   expect(video.serverHost).to.equal(attributes.host)
   expect(video.accountName).to.equal(attributes.account)
+  expect(video.likes).to.equal(attributes.likes)
+  expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
+  expect(video.duration).to.equal(attributes.duration)
   expect(dateIsValid(video.createdAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
 
@@ -376,13 +386,20 @@ async function completeVideoCheck (
     const file = videoDetails.files.find(f => f.resolution === attributeFile.resolution)
     expect(file).not.to.be.undefined
 
+    let extension = extname(attributes.fixture)
+    // Transcoding enabled on server 2, extension will always be .mp4
+    if (attributes.host === 'localhost:9002') extension = '.mp4'
+
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`${url}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
-    expect(file.fileUrl).to.equal(`${url}/static/webseed/${videoDetails.uuid}-${file.resolution}.webm`)
+    expect(file.torrentUrl).to.equal(`http://${attributes.host}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
+    expect(file.fileUrl).to.equal(`http://${attributes.host}/static/webseed/${videoDetails.uuid}-${file.resolution}${extension}`)
     expect(file.resolution).to.equal(attributeFile.resolution)
     expect(file.resolutionLabel).to.equal(attributeFile.resolution + 'p')
-    expect(file.size).to.equal(attributeFile.size)
+
+    const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
+    const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
+    expect(file.size).to.be.above(minSize).and.below(maxSize)
 
     const test = await testVideoImage(url, attributes.fixture, videoDetails.thumbnailPath)
     expect(test).to.equal(true)

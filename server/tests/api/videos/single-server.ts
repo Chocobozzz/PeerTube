@@ -52,10 +52,12 @@ describe('Test a single server', function () {
     host: 'localhost:9001',
     account: 'root',
     isLocal: true,
+    duration: 5,
     tags: [ 'tag1', 'tag2', 'tag3' ],
     privacy: VideoPrivacy.PUBLIC,
     channel: {
       name: 'Default root channel',
+      description: '',
       isLocal: true
     },
     fixture: 'video_short.webm',
@@ -79,8 +81,10 @@ describe('Test a single server', function () {
     isLocal: true,
     tags: [ 'tagup1', 'tagup2' ],
     privacy: VideoPrivacy.PUBLIC,
+    duration: 5,
     channel: {
       name: 'Default root channel',
+      description: '',
       isLocal: true
     },
     fixture: 'video_short3.webm',

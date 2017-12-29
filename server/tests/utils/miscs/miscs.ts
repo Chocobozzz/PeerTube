@@ -27,8 +27,8 @@ function readdirPromise (path: string) {
   })
 }
 
-  // Default interval -> 2 minutes
-function dateIsValid (dateString: string, interval = 120000) {
+  // Default interval -> 5 minutes
+function dateIsValid (dateString: string, interval = 300000) {
   const dateToCheck = new Date(dateString)
   const now = new Date()
 
