@@ -10,7 +10,7 @@
   </div>
 
   <my-video-comment-add
-    *ngIf="isUserLoggedIn() && inReplyToCommentId === comment.id" [video]="video" [parentComment]="comment"
+    *ngIf="isUserLoggedIn() && inReplyToCommentId === comment.id" [video]="video" [parentComment]="comment" [focusOnInit]="true"
     (commentCreated)="onCommentReplyCreated($event)"
   ></my-video-comment-add>
 

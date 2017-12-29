@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
@@ -17,6 +17,7 @@ import { VideoCommentService } from './video-comment.service'
 export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @Input() video: Video
   @Input() parentComment: VideoComment
+  @Input() focusOnInit = false
 
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
 
@@ -27,6 +28,8 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   validationMessages = {
     'text': VIDEO_COMMENT_TEXT.MESSAGES
   }
+
+  @ViewChild('textarea') private textareaElement: ElementRef
 
   constructor (
     private formBuilder: FormBuilder,
@@ -46,6 +49,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm()
+
+    if (this.focusOnInit === true) {
+      this.textareaElement.nativeElement.focus()
+    }
   }
 
   formValidated () {

@@ -1,6 +1,6 @@
 <form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
   <div class="form-group">
-    <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }">
+    <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }" #textarea>
     </textarea>
     <div *ngIf="formErrors.text" class="form-error">
       {{ formErrors.text }}
