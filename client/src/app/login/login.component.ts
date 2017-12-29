@@ -55,15 +55,9 @@ export class LoginComponent extends FormReactive implements OnInit {
     const { username, password } = this.form.value
 
     this.authService.login(username, password).subscribe(
-      result => this.router.navigate(['/videos/list']),
+      () => this.router.navigate(['/videos/list']),
 
-      err => {
-        if (err.message === 'invalid_grant') {
-          this.error = 'Credentials are invalid.'
-        } else {
-          this.error = `${err.body.error_description}`
-        }
-      }
+      err => this.error = err.message
     )
   }
 }
