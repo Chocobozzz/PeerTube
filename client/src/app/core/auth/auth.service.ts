@@ -9,8 +9,8 @@ import 'rxjs/add/operator/mergeMap'
 import { Observable } from 'rxjs/Observable'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { Subject } from 'rxjs/Subject'
-import { OAuthClientLocal, User as UserServerModel, UserRefreshToken, UserRole, VideoChannel } from '../../../../../shared'
-import { Account } from '../../../../../shared/models/actors'
+import { OAuthClientLocal, User as UserServerModel, UserRefreshToken } from '../../../../../shared'
+import { User } from '../../../../../shared/models/users'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../../shared/rest'
@@ -25,20 +25,7 @@ interface UserLoginWithUsername extends UserLogin {
   username: string
 }
 
-interface UserLoginWithUserInformation extends UserLogin {
-  access_token: string
-  refresh_token: string
-  token_type: string
-  username: string
-  id: number
-  role: UserRole
-  displayNSFW: boolean
-  autoPlayVideo: boolean
-  email: string
-  videoQuota: number
-  account: Account
-  videoChannels: VideoChannel[]
-}
+type UserLoginWithUserInformation = UserLoginWithUsername & User
 
 @Injectable()
 export class AuthService {
@@ -209,21 +196,7 @@ export class AuthService {
     const headers = new HttpHeaders().set('Authorization', `${obj.token_type} ${obj.access_token}`)
 
     return this.http.get<UserServerModel>(AuthService.BASE_USER_INFORMATION_URL, { headers })
-                    .map(res => {
-                      const newProperties = {
-                        id: res.id,
-                        role: res.role,
-                        displayNSFW: res.displayNSFW,
-                        autoPlayVideo: res.autoPlayVideo,
-                        email: res.email,
-                        videoQuota: res.videoQuota,
-                        account: res.account,
-                        videoChannels: res.videoChannels
-                      }
-
-                      return Object.assign(obj, newProperties)
-                    }
-    )
+                    .map(res => Object.assign(obj, res))
   }
 
   private handleLogin (obj: UserLoginWithUserInformation) {

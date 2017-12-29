@@ -32,6 +32,12 @@ staticRouter.use(
   express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE })
 )
 
+const avatarsPhysicalPath = CONFIG.STORAGE.AVATARS_DIR
+staticRouter.use(
+  STATIC_PATHS.AVATARS,
+  express.static(avatarsPhysicalPath, { maxAge: STATIC_MAX_AGE })
+)
+
 // Video previews path for express
 staticRouter.use(
   STATIC_PATHS.PREVIEWS + ':uuid.jpg',

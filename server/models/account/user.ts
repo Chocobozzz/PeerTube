@@ -4,6 +4,7 @@ import {
   Scopes, Table, UpdatedAt
 } from 'sequelize-typescript'
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
+import { User } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
   isUserVideoQuotaValid
@@ -210,7 +211,7 @@ export class UserModel extends Model<UserModel> {
     return comparePassword(password, this.password)
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (): User {
     const json = {
       id: this.id,
       username: this.username,
@@ -221,11 +222,12 @@ export class UserModel extends Model<UserModel> {
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
       createdAt: this.createdAt,
-      account: this.Account.toFormattedJSON()
+      account: this.Account.toFormattedJSON(),
+      videoChannels: []
     }
 
     if (Array.isArray(this.Account.VideoChannels) === true) {
-      json['videoChannels'] = this.Account.VideoChannels
+      json.videoChannels = this.Account.VideoChannels
         .map(c => c.toFormattedJSON())
         .sort((v1, v2) => {
           if (v1.createdAt < v2.createdAt) return -1

@@ -148,7 +148,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                                       this.router.navigate(['/videos/list'])
                                     },
 
-                                    error => this.notificationsService.error('Error', error.text)
+                                    error => this.notificationsService.error('Error', error.message)
                                   )
       }
     )
@@ -185,7 +185,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         error => {
           this.descriptionLoading = false
-          this.notificationsService.error('Error', error.text)
+          this.notificationsService.error('Error', error.message)
         }
       )
   }
@@ -217,7 +217,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   getAvatarPath () {
-    return Account.GET_ACCOUNT_AVATAR_PATH(this.video.account)
+    return Account.GET_ACCOUNT_AVATAR_URL(this.video.account)
   }
 
   getVideoTags () {
@@ -247,7 +247,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                 this.router.navigate([ '/videos/list' ])
               },
 
-              error => this.notificationsService.error('Error', error.text)
+              error => this.notificationsService.error('Error', error.message)
             )
         }
       )

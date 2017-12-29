@@ -27,6 +27,10 @@ export interface ActivityPubActor {
   }
 
   // Not used
-  // icon: string[]
+  icon: {
+    type: 'Image'
+    mediaType: 'image/png'
+    url: string
+  }
   // liked: string
 }

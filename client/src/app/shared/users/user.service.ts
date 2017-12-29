@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map'
 import { UserCreate, UserUpdateMe } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
+import { User } from './user.model'
 
 @Injectable()
 export class UserService {
@@ -34,9 +35,24 @@ export class UserService {
                         .catch(res => this.restExtractor.handleError(res))
   }
 
+  changeAvatar (avatarForm: FormData) {
+    const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
+
+    return this.authHttp.post(url, avatarForm)
+                        .catch(this.restExtractor.handleError)
+  }
+
   signup (userCreate: UserCreate) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
+  }
+
+  getMyInformation () {
+    const url = UserService.BASE_USERS_URL + 'me'
+
+    return this.authHttp.get(url)
+      .map((userHash: any) => new User(userHash))
+      .catch(res => this.restExtractor.handleError(res))
   }
 }

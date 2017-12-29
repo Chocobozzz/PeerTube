@@ -6,7 +6,7 @@ import { UserRole } from '../../../../shared/index'
 import {
   createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoRating, getUserInformation, getUsersList,
   getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo, registerUser, removeUser, removeVideo,
-  runServer, ServerInfo, serverLogin, updateMyUser, updateUser, uploadVideo
+  runServer, ServerInfo, serverLogin, testVideoImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
 import { setAccessTokensToServers } from '../../utils/users/login'
@@ -338,6 +338,22 @@ describe('Test users', function () {
     expect(user.displayNSFW).to.be.ok
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.id).to.be.a('number')
+  })
+
+  it('Should be able to update my avatar', async function () {
+    const fixture = 'avatar.png'
+
+    await updateMyAvatar({
+      url: server.url,
+      accessToken: accessTokenUser,
+      fixture
+    })
+
+    const res = await getMyUserInformation(server.url, accessTokenUser)
+    const user = res.body
+
+    const test = await testVideoImage(server.url, 'avatar', user.account.avatar.path, '.png')
+    expect(test).to.equal(true)
   })
 
   it('Should be able to update another user', async function () {

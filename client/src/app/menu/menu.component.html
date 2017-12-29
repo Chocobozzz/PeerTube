@@ -1,6 +1,6 @@
 <menu>
   <div *ngIf="isLoggedIn" class="logged-in-block">
-    <img [src]="getUserAvatarPath()" alt="Avatar" />
+    <img [src]="getUserAvatarUrl()" alt="Avatar" />
 
     <div class="logged-in-info">
       <a routerLink="/account/settings" class="logged-in-username">{{ user.username }}</a>

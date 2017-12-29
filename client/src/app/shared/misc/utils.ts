@@ -1,5 +1,6 @@
 // Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 
+import { environment } from '../../../environments/environment'
 import { AuthService } from '../../core/auth'
 
 function getParameterByName (name: string, url: string) {
@@ -38,8 +39,19 @@ function populateAsyncUserVideoChannels (authService: AuthService, channel: any[
   })
 }
 
+function getAbsoluteAPIUrl () {
+  let absoluteAPIUrl = environment.apiUrl
+  if (!absoluteAPIUrl) {
+    // The API is on the same domain
+    absoluteAPIUrl = window.location.origin
+  }
+
+  return absoluteAPIUrl
+}
+
 export {
   viewportHeight,
   getParameterByName,
-  populateAsyncUserVideoChannels
+  populateAsyncUserVideoChannels,
+  getAbsoluteAPIUrl
 }

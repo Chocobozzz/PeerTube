@@ -57,7 +57,7 @@ export class User implements UserServerModel {
     return hasUserRight(this.role, right)
   }
 
-  getAvatarPath () {
-    return Account.GET_ACCOUNT_AVATAR_PATH(this.account)
+  getAvatarUrl () {
+    return Account.GET_ACCOUNT_AVATAR_URL(this.account)
   }
 }

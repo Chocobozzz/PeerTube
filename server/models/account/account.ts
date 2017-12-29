@@ -13,6 +13,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
+import { Account } from '../../../shared/models/actors'
 import { isUserUsernameValid } from '../../helpers/custom-validators/users'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
@@ -165,11 +166,12 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (): Account {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
-      name: this.name,
+      name: this.Actor.preferredUsername,
+      displayName: this.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }

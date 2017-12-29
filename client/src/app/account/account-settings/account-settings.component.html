@@ -1,5 +1,5 @@
 <div class="user">
-  <img [src]="getAvatarPath()" alt="Avatar" />
+  <img [src]="getAvatarUrl()" alt="Avatar" />
 
   <div class="user-info">
     <div class="user-info-username">{{ user.username }}</div>
@@ -7,6 +7,10 @@
   </div>
 </div>
 
+<div class="button-file">
+  <span>Change your avatar</span>
+  <input #avatarfileInput type="file" name="avatarfile" id="avatarfile" (change)="changeAvatar()" />
+</div>
 
 <div class="account-title">Account settings</div>
 <my-account-change-password></my-account-change-password>

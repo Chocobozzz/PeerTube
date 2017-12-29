@@ -3,12 +3,14 @@ import 'express-validator'
 import { body, param } from 'express-validator/check'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
+  isAvatarFile,
   isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
   isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
-import { isVideoExist } from '../../helpers/custom-validators/videos'
+import { isVideoExist, isVideoFile } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { isSignupAllowed } from '../../helpers/utils'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 
@@ -96,6 +98,21 @@ const usersUpdateMeValidator = [
   }
 ]
 
+const usersUpdateMyAvatarValidator = [
+  body('avatarfile').custom((value, { req }) => isAvatarFile(req.files)).withMessage(
+    'This file is not supported. Please, make sure it is of the following type : '
+    + CONSTRAINTS_FIELDS.ACTOR.AVATAR.EXTNAME.join(', ')
+  ),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersUpdateMyAvatarValidator parameters', { parameters: req.body })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 const usersGetValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
 
@@ -145,7 +162,8 @@ export {
   usersUpdateMeValidator,
   usersVideoRatingValidator,
   ensureUserRegistrationAllowed,
-  usersGetValidator
+  usersGetValidator,
+  usersUpdateMyAvatarValidator
 }
 
 // ---------------------------------------------------------------------------

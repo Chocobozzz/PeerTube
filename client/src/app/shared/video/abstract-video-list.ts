@@ -83,7 +83,7 @@ export abstract class AbstractVideoList implements OnInit {
           this.videos = this.videos.concat(videos)
         }
       },
-      error => this.notificationsService.error('Error', error.text)
+      error => this.notificationsService.error('Error', error.message)
     )
   }
 

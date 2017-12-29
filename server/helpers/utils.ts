@@ -1,8 +1,9 @@
 import * as express from 'express'
+import * as multer from 'multer'
 import { Model } from 'sequelize-typescript'
 import { ResultList } from '../../shared'
 import { VideoResolution } from '../../shared/models/videos'
-import { CONFIG, REMOTE_SCHEME } from '../initializers'
+import { CONFIG, REMOTE_SCHEME, VIDEO_MIMETYPE_EXT } from '../initializers'
 import { UserModel } from '../models/account/user'
 import { ActorModel } from '../models/activitypub/actor'
 import { ApplicationModel } from '../models/application/application'
@@ -24,6 +25,30 @@ function getHostWithPort (host: string) {
 
 function badRequest (req: express.Request, res: express.Response, next: express.NextFunction) {
   return res.type('json').status(400).end()
+}
+
+function createReqFiles (fieldName: string, storageDir: string, mimeTypes: { [ id: string ]: string }) {
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, storageDir)
+    },
+
+    filename: async (req, file, cb) => {
+      const extension = mimeTypes[file.mimetype]
+      let randomString = ''
+
+      try {
+        randomString = await generateRandomString(16)
+      } catch (err) {
+        logger.error('Cannot generate random string for file name.', err)
+        randomString = 'fake-random-string'
+      }
+
+      cb(null, randomString + extension)
+    }
+  })
+
+  return multer({ storage }).fields([{ name: fieldName, maxCount: 1 }])
 }
 
 async function generateRandomString (size: number) {
@@ -122,5 +147,6 @@ export {
   resetSequelizeInstance,
   getServerActor,
   SortType,
-  getHostWithPort
+  getHostWithPort,
+  createReqFiles
 }

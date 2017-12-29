@@ -1,7 +1,7 @@
 import * as validator from 'validator'
 import 'express-validator'
 
-import { exists } from './misc'
+import { exists, isArray } from './misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserRole } from '../../../shared'
 
@@ -37,6 +37,22 @@ function isUserRoleValid (value: any) {
   return exists(value) && validator.isInt('' + value) && UserRole[value] !== undefined
 }
 
+function isAvatarFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
+  // Should have files
+  if (!files) return false
+  if (isArray(files)) return false
+
+  // Should have videofile file
+  const avatarfile = files['avatarfile']
+  if (!avatarfile || avatarfile.length === 0) return false
+
+  // The file should exist
+  const file = avatarfile[0]
+  if (!file || !file.originalname) return false
+
+  return new RegExp('^image/(png|jpeg)$', 'i').test(file.mimetype)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -45,5 +61,6 @@ export {
   isUserVideoQuotaValid,
   isUserUsernameValid,
   isUserDisplayNSFWValid,
-  isUserAutoPlayVideoValid
+  isUserAutoPlayVideoValid,
+  isAvatarFile
 }

@@ -16,17 +16,17 @@ import { VideoShareModel } from '../../models/video/video-share'
 
 const activityPubClientRouter = express.Router()
 
-activityPubClientRouter.get('/account/:name',
+activityPubClientRouter.get('/accounts/:name',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(accountController)
 )
 
-activityPubClientRouter.get('/account/:name/followers',
+activityPubClientRouter.get('/accounts/:name/followers',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(asyncMiddleware(accountFollowersController))
 )
 
-activityPubClientRouter.get('/account/:name/following',
+activityPubClientRouter.get('/accounts/:name/following',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(asyncMiddleware(accountFollowingController))
 )

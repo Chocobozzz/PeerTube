@@ -21,6 +21,12 @@
   }
 }
 
+.button-file {
+  @include peertube-button-file(auto);
+
+  margin-top: 10px;
+}
+
 .account-title {
   text-transform: uppercase;
   color: $orange-color;

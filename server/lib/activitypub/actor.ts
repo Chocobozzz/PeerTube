@@ -1,16 +1,20 @@
 import * as Bluebird from 'bluebird'
+import { join } from 'path'
 import { Transaction } from 'sequelize'
 import * as url from 'url'
+import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
 import { isRemoteActorValid } from '../../helpers/custom-validators/activitypub/actor'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doRequest } from '../../helpers/requests'
+import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import { CONFIG, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
+import { AvatarModel } from '../../models/avatar/avatar'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
 
@@ -62,6 +66,32 @@ async function getOrCreateActorAndServerAndModel (actorUrl: string, recurseIfNee
   return actor
 }
 
+function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
+  return new ActorModel({
+    type,
+    url,
+    preferredUsername,
+    uuid,
+    publicKey: null,
+    privateKey: null,
+    followersCount: 0,
+    followingCount: 0,
+    inboxUrl: url + '/inbox',
+    outboxUrl: url + '/outbox',
+    sharedInboxUrl: CONFIG.WEBSERVER.URL + '/inbox',
+    followersUrl: url + '/followers',
+    followingUrl: url + '/following'
+  })
+}
+
+export {
+  getOrCreateActorAndServerAndModel,
+  buildActorInstance,
+  setAsyncActorKeys
+}
+
+// ---------------------------------------------------------------------------
+
 function saveActorAndServerAndModelIfNotExist (
   result: FetchRemoteActorResult,
   ownerActor?: ActorModel,
@@ -90,6 +120,14 @@ function saveActorAndServerAndModelIfNotExist (
     // Save our new account in database
     actor.set('serverId', server.id)
 
+    // Avatar?
+    if (result.avatarName) {
+      const avatar = await AvatarModel.create({
+        filename: result.avatarName
+      }, { transaction: t })
+      actor.set('avatarId', avatar.id)
+    }
+
     // Force the actor creation, sometimes Sequelize skips the save() when it thinks the instance already exists
     // (which could be false in a retried query)
     const actorCreated = await ActorModel.create(actor.toJSON(), { transaction: t })
@@ -112,6 +150,7 @@ type FetchRemoteActorResult = {
   actor: ActorModel
   name: string
   summary: string
+  avatarName?: string
   attributedTo: ActivityPubAttributedTo[]
 }
 async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResult> {
@@ -151,42 +190,32 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
     followingUrl: actorJSON.following
   })
 
+  // Fetch icon?
+  let avatarName: string = undefined
+  if (
+    actorJSON.icon && actorJSON.icon.type === 'Image' && actorJSON.icon.mediaType === 'image/png' &&
+    isActivityPubUrlValid(actorJSON.icon.url)
+  ) {
+    const extension = actorJSON.icon.mediaType === 'image/png' ? '.png' : '.jpg'
+
+    avatarName = uuidv4() + extension
+    const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
+
+    await doRequestAndSaveToFile({
+      method: 'GET',
+      uri: actorJSON.icon.url
+    }, destPath)
+  }
+
   const name = actorJSON.name || actorJSON.preferredUsername
   return {
     actor,
     name,
+    avatarName,
     summary: actorJSON.summary,
     attributedTo: actorJSON.attributedTo
   }
 }
-
-function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
-  return new ActorModel({
-    type,
-    url,
-    preferredUsername,
-    uuid,
-    publicKey: null,
-    privateKey: null,
-    followersCount: 0,
-    followingCount: 0,
-    inboxUrl: url + '/inbox',
-    outboxUrl: url + '/outbox',
-    sharedInboxUrl: CONFIG.WEBSERVER.URL + '/inbox',
-    followersUrl: url + '/followers',
-    followingUrl: url + '/following'
-  })
-}
-
-export {
-  getOrCreateActorAndServerAndModel,
-  saveActorAndServerAndModelIfNotExist,
-  fetchRemoteActor,
-  buildActorInstance,
-  setAsyncActorKeys
-}
-
-// ---------------------------------------------------------------------------
 
 async function fetchActorTotalItems (url: string) {
   const options = {

@@ -2,6 +2,7 @@ import { User } from '../'
 import { Video as VideoServerModel } from '../../../../../shared'
 import { Account } from '../../../../../shared/models/actors'
 import { environment } from '../../../environments/environment'
+import { getAbsoluteAPIUrl } from '../misc/utils'
 
 export class Video implements VideoServerModel {
   accountName: string
@@ -48,11 +49,7 @@ export class Video implements VideoServerModel {
   }
 
   constructor (hash: VideoServerModel) {
-    let absoluteAPIUrl = environment.apiUrl
-    if (!absoluteAPIUrl) {
-      // The API is on the same domain
-      absoluteAPIUrl = window.location.origin
-    }
+    const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.accountName = hash.accountName
     this.createdAt = new Date(hash.createdAt.toString())

@@ -68,7 +68,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
           .subscribe(
             res => this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`),
 
-          err => this.notificationsService.error('Error', err.text)
+          err => this.notificationsService.error('Error', err.message)
           )
       }
     )
@@ -86,7 +86,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
               this.spliceVideosById(video.id)
             },
 
-            error => this.notificationsService.error('Error', error.text)
+            error => this.notificationsService.error('Error', error.message)
           )
       }
     )

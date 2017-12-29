@@ -9,7 +9,7 @@ import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 145
+const LAST_MIGRATION_VERSION = 150
 
 // ---------------------------------------------------------------------------
 
@@ -172,7 +172,10 @@ const CONSTRAINTS_FIELDS = {
   ACTOR: {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
-    URL: { min: 3, max: 2000 } // Length
+    URL: { min: 3, max: 2000 }, // Length
+    AVATAR: {
+      EXTNAME: [ '.png', '.jpeg', '.jpg' ]
+    }
   },
   VIDEO_EVENTS: {
     COUNT: { min: 0 }
@@ -250,6 +253,12 @@ const VIDEO_MIMETYPE_EXT = {
   'video/mp4': '.mp4'
 }
 
+const AVATAR_MIMETYPE_EXT = {
+  'image/png': '.png',
+  'image/jpg': '.jpg',
+  'image/jpeg': '.jpg'
+}
+
 // ---------------------------------------------------------------------------
 
 const SERVER_ACTOR_NAME = 'peertube'
@@ -291,7 +300,8 @@ const STATIC_PATHS = {
   PREVIEWS: '/static/previews/',
   THUMBNAILS: '/static/thumbnails/',
   TORRENTS: '/static/torrents/',
-  WEBSEED: '/static/webseed/'
+  WEBSEED: '/static/webseed/',
+  AVATARS: '/static/avatars/'
 }
 
 // Cache control
@@ -376,5 +386,6 @@ export {
   VIDEO_PRIVACIES,
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES,
-  VIDEO_MIMETYPE_EXT
+  VIDEO_MIMETYPE_EXT,
+  AVATAR_MIMETYPE_EXT
 }

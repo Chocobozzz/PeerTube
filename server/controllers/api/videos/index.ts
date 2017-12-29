@@ -6,7 +6,7 @@ import { renamePromise } from '../../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { getVideoFileHeight } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
-import { generateRandomString, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
+import { createReqFiles, generateRandomString, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
 import {
   CONFIG, sequelizeTypescript, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
@@ -29,28 +29,7 @@ import { rateVideoRouter } from './rate'
 
 const videosRouter = express.Router()
 
-// multer configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, CONFIG.STORAGE.VIDEOS_DIR)
-  },
-
-  filename: async (req, file, cb) => {
-    const extension = VIDEO_MIMETYPE_EXT[file.mimetype]
-    let randomString = ''
-
-    try {
-      randomString = await generateRandomString(16)
-    } catch (err) {
-      logger.error('Cannot generate random string for file name.', err)
-      randomString = 'fake-random-string'
-    }
-
-    cb(null, randomString + extension)
-  }
-})
-
-const reqFiles = multer({ storage: storage }).fields([{ name: 'videofile', maxCount: 1 }])
+const reqVideoFile = createReqFiles('videofile', CONFIG.STORAGE.VIDEOS_DIR, VIDEO_MIMETYPE_EXT)
 
 videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
@@ -85,7 +64,7 @@ videosRouter.put('/:id',
 )
 videosRouter.post('/upload',
   authenticate,
-  reqFiles,
+  reqVideoFile,
   asyncMiddleware(videosAddValidator),
   asyncMiddleware(addVideoRetryWrapper)
 )

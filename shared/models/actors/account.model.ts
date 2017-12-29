@@ -4,6 +4,7 @@ export interface Account {
   id: number
   uuid: string
   name: string
+  displayName: string
   host: string
   followingCount: number
   followersCount: number

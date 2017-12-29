@@ -18,7 +18,7 @@ function getVideoChannelActivityPubUrl (videoChannelUUID: string) {
 }
 
 function getAccountActivityPubUrl (accountName: string) {
-  return CONFIG.WEBSERVER.URL + '/account/' + accountName
+  return CONFIG.WEBSERVER.URL + '/accounts/' + accountName
 }
 
 function getVideoAbuseActivityPubUrl (videoAbuse: VideoAbuseModel) {

@@ -1,5 +1,5 @@
 import { values } from 'lodash'
-import { join } from 'path'
+import { extname, join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
   AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, DefaultScope, ForeignKey, HasMany, HasOne, Is, IsUUID, Model, Scopes,
@@ -30,6 +30,10 @@ enum ScopeNames {
     {
       model: () => ServerModel,
       required: false
+    },
+    {
+      model: () => AvatarModel,
+      required: false
     }
   ]
 })
@@ -46,6 +50,10 @@ enum ScopeNames {
       },
       {
         model: () => ServerModel,
+        required: false
+      },
+      {
+        model: () => AvatarModel,
         required: false
       }
     ]
@@ -141,7 +149,7 @@ export class ActorModel extends Model<ActorModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'set null'
   })
   Avatar: AvatarModel
 
@@ -253,11 +261,7 @@ export class ActorModel extends Model<ActorModel> {
   toFormattedJSON () {
     let avatar: Avatar = null
     if (this.Avatar) {
-      avatar = {
-        path: join(AVATARS_DIR.ACCOUNT, this.Avatar.filename),
-        createdAt: this.Avatar.createdAt,
-        updatedAt: this.Avatar.updatedAt
-      }
+      avatar = this.Avatar.toFormattedJSON()
     }
 
     let score: number
@@ -286,6 +290,16 @@ export class ActorModel extends Model<ActorModel> {
       activityPubType = 'Group' as 'Group'
     }
 
+    let icon = undefined
+    if (this.avatarId) {
+      const extension = extname(this.Avatar.filename)
+      icon = {
+        type: 'Image',
+        mediaType: extension === '.png' ? 'image/png' : 'image/jpeg',
+        url: this.getAvatarUrl()
+      }
+    }
+
     const json = {
       type: activityPubType,
       id: this.url,
@@ -304,7 +318,8 @@ export class ActorModel extends Model<ActorModel> {
         id: this.getPublicKeyUrl(),
         owner: this.url,
         publicKeyPem: this.publicKey
-      }
+      },
+      icon
     }
 
     return activityPubContextify(json)
@@ -352,5 +367,11 @@ export class ActorModel extends Model<ActorModel> {
 
   getHost () {
     return this.Server ? this.Server.host : CONFIG.WEBSERVER.HOST
+  }
+
+  getAvatarUrl () {
+    if (!this.avatarId) return undefined
+
+    return CONFIG.WEBSERVER.URL + this.Avatar.getWebserverPath
   }
 }

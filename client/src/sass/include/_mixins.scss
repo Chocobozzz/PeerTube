@@ -84,6 +84,32 @@
   @include peertube-button;
 }
 
+@mixin peertube-button-file ($width) {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  width: $width;
+
+  @include peertube-button;
+  @include orange-button;
+
+  input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+  }
+}
+
 @mixin avatar ($size) {
   width: $size;
   height: $size;

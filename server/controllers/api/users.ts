@@ -1,19 +1,25 @@
 import * as express from 'express'
+import { extname, join } from 'path'
+import * as uuidv4 from 'uuid/v4'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
+import { renamePromise } from '../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { getFormattedObjects } from '../../helpers/utils'
-import { CONFIG } from '../../initializers'
+import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
+import { AVATAR_MIMETYPE_EXT, CONFIG, sequelizeTypescript } from '../../initializers'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
   asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setPagination, setUsersSort,
   setVideosSort, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
   usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator
 } from '../../middlewares'
-import { videosSortValidator } from '../../middlewares/validators'
+import { usersUpdateMyAvatarValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { UserModel } from '../../models/account/user'
+import { AvatarModel } from '../../models/avatar/avatar'
 import { VideoModel } from '../../models/video/video'
+
+const reqAvatarFile = createReqFiles('avatarfile', CONFIG.STORAGE.AVATARS_DIR, AVATAR_MIMETYPE_EXT)
 
 const usersRouter = express.Router()
 
@@ -69,6 +75,13 @@ usersRouter.put('/me',
   authenticate,
   usersUpdateMeValidator,
   asyncMiddleware(updateMe)
+)
+
+usersRouter.post('/me/avatar/pick',
+  authenticate,
+  reqAvatarFile,
+  usersUpdateMyAvatarValidator,
+  asyncMiddleware(updateMyAvatar)
 )
 
 usersRouter.put('/:id',
@@ -214,6 +227,40 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   await user.save()
 
   return res.sendStatus(204)
+}
+
+async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const avatarPhysicalFile = req.files['avatarfile'][0]
+  const actor = res.locals.oauth.token.user.Account.Actor
+
+  const avatarDir = CONFIG.STORAGE.AVATARS_DIR
+  const source = join(avatarDir, avatarPhysicalFile.filename)
+  const extension = extname(avatarPhysicalFile.filename)
+  const avatarName = uuidv4() + extension
+  const destination = join(avatarDir, avatarName)
+
+  await renamePromise(source, destination)
+
+  const { avatar } = await sequelizeTypescript.transaction(async t => {
+    const avatar = await AvatarModel.create({
+      filename: avatarName
+    }, { transaction: t })
+
+    if (actor.Avatar) {
+      await actor.Avatar.destroy({ transaction: t })
+    }
+
+    actor.set('avatarId', avatar.id)
+    await actor.save({ transaction: t })
+
+    return { actor, avatar }
+  })
+
+  return res
+    .json({
+      avatar: avatar.toFormattedJSON()
+    })
+    .end()
 }
 
 async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {

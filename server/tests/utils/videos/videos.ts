@@ -201,7 +201,7 @@ function searchVideoWithSort (url: string, search: string, sort: string) {
           .expect('Content-Type', /json/)
 }
 
-async function testVideoImage (url: string, imageName: string, imagePath: string) {
+async function testVideoImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
   // Don't test images if the node env is not set
   // Because we need a special ffmpeg version for this test
   if (process.env['NODE_TEST_IMAGE']) {
@@ -209,7 +209,7 @@ async function testVideoImage (url: string, imageName: string, imagePath: string
                         .get(imagePath)
                         .expect(200)
 
-    const data = await readFilePromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + '.jpg'))
+    const data = await readFilePromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + extension))
 
     return data.equals(res.body)
   } else {
