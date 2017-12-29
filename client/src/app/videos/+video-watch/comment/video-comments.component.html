@@ -9,7 +9,13 @@
     (commentCreated)="onCommentThreadCreated($event)"
   ></my-video-comment-add>
 
-  <div class="comment-threads">
+  <div
+    class="comment-threads"
+    infiniteScroll
+    [infiniteScrollUpDistance]="1.5"
+    [infiniteScrollDistance]="0.5"
+    (scrolled)="onNearOfBottom()"
+  >
     <div *ngFor="let comment of comments">
       <my-video-comment
         [comment]="comment"

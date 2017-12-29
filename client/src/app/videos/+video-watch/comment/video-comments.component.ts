@@ -22,7 +22,7 @@ export class VideoCommentsComponent implements OnInit {
   sort: SortField = '-createdAt'
   componentPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 25,
+    itemsPerPage: 10,
     totalItems: null
   }
   inReplyToCommentId: number
@@ -36,15 +36,7 @@ export class VideoCommentsComponent implements OnInit {
   ) {}
 
   ngOnInit () {
-    this.videoCommentService.getVideoCommentThreads(this.video.id, this.componentPagination, this.sort)
-      .subscribe(
-        res => {
-          this.comments = res.comments
-          this.componentPagination.totalItems = res.totalComments
-        },
-
-        err => this.notificationsService.error('Error', err.message)
-      )
+    this.loadMoreComments()
   }
 
   viewReplies (comment: VideoComment) {
@@ -55,6 +47,18 @@ export class VideoCommentsComponent implements OnInit {
         res => {
           this.threadComments[comment.id] = res
           this.threadLoading[comment.id] = false
+        },
+
+        err => this.notificationsService.error('Error', err.message)
+      )
+  }
+
+  loadMoreComments () {
+    this.videoCommentService.getVideoCommentThreads(this.video.id, this.componentPagination, this.sort)
+      .subscribe(
+        res => {
+          this.comments = this.comments.concat(res.comments)
+          this.componentPagination.totalItems = res.totalComments
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -75,5 +79,24 @@ export class VideoCommentsComponent implements OnInit {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  onNearOfBottom () {
+    this.componentPagination.currentPage++
+
+    if (this.hasMoreComments()) {
+      this.loadMoreComments()
+    }
+  }
+
+  protected hasMoreComments () {
+    // No results
+    if (this.componentPagination.totalItems === 0) return false
+
+    // Not loaded yet
+    if (!this.componentPagination.totalItems) return true
+
+    const maxPage = this.componentPagination.totalItems / this.componentPagination.itemsPerPage
+    return maxPage > this.componentPagination.currentPage
   }
 }
