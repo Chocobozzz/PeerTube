@@ -1,9 +1,8 @@
-import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoPrivacy } from '../../../../../shared/models/videos'
-import { User } from '../../shared'
 import { AuthService } from '../../core'
+import { ServerService } from '../../core/server'
+import { User } from '../../shared'
 import { UserService } from '../../shared/users'
 
 @Component({
@@ -19,6 +18,7 @@ export class AccountSettingsComponent implements OnInit {
   constructor (
     private userService: UserService,
     private authService: AuthService,
+    private serverService: ServerService,
     private notificationsService: NotificationsService
   ) {}
 
@@ -46,5 +46,13 @@ export class AccountSettingsComponent implements OnInit {
 
         err => this.notificationsService.error('Error', err.message)
       )
+  }
+
+  get maxAvatarSize () {
+    return this.serverService.getConfig().avatar.file.size.max
+  }
+
+  get avatarExtensions () {
+    return this.serverService.getConfig().avatar.file.extensions.join(',')
   }
 }

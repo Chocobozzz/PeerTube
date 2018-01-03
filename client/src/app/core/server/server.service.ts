@@ -21,6 +21,17 @@ export class ServerService {
     },
     transcoding: {
       enabledResolutions: []
+    },
+    avatar: {
+      file: {
+        size: { max: 0 },
+        extensions: []
+      }
+    },
+    video: {
+      file: {
+        extensions: []
+      }
     }
   }
   private videoCategories: Array<{ id: number, label: string }> = []

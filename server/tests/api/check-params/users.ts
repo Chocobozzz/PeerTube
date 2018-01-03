@@ -276,6 +276,14 @@ describe('Test users API validators', function () {
       await makePostUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
+    it('Should fail with a big file', async function () {
+      const fields = {}
+      const attaches = {
+        'avatarfile': join(__dirname, '..', 'fixtures', 'avatar-big.png')
+      }
+      await makePostUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
+    })
+
     it('Should succeed with the correct params', async function () {
       const fields = {}
       const attaches = {

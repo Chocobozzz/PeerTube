@@ -86,6 +86,7 @@
     "scripty": "^1.5.0",
     "sequelize": "4.25.2",
     "sequelize-typescript": "^0.6.1",
+    "sharp": "^0.18.4",
     "ts-node": "^3.3.0",
     "typescript": "^2.5.2",
     "uuid": "^3.1.0",

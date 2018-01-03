@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { isSignupAllowed } from '../../helpers/utils'
 
-import { CONFIG } from '../../initializers'
+import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { asyncMiddleware } from '../../middlewares'
 import { ServerConfig } from '../../../shared'
 
@@ -24,6 +24,19 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
     },
     transcoding: {
       enabledResolutions
+    },
+    avatar: {
+      file: {
+        size: {
+          max: CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max
+        },
+        extensions: CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
+      }
+    },
+    video: {
+      file: {
+        extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
+      }
     }
   }
 

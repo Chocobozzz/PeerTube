@@ -22,9 +22,17 @@
 }
 
 .button-file {
-  @include peertube-button-file(auto);
+  @include peertube-button-file(160px);
 
   margin-top: 10px;
+}
+
+.file-max-size {
+  display: inline-block;
+  font-size: 13px;
+
+  position: relative;
+  top: -10px;
 }
 
 .account-title {

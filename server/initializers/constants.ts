@@ -133,9 +133,6 @@ const CONFIG = {
   }
 }
 
-const AVATARS_DIR = {
-  ACCOUNT: join(CONFIG.STORAGE.AVATARS_DIR, 'account')
-}
 // ---------------------------------------------------------------------------
 
 const CONSTRAINTS_FIELDS = {
@@ -169,12 +166,15 @@ const CONSTRAINTS_FIELDS = {
     FILE_SIZE: { min: 10 },
     URL: { min: 3, max: 2000 } // Length
   },
-  ACTOR: {
+  ACTORS: {
     PUBLIC_KEY: { min: 10, max: 5000 }, // Length
     PRIVATE_KEY: { min: 10, max: 5000 }, // Length
     URL: { min: 3, max: 2000 }, // Length
     AVATAR: {
-      EXTNAME: [ '.png', '.jpeg', '.jpg' ]
+      EXTNAME: [ '.png', '.jpeg', '.jpg' ],
+      FILE_SIZE: {
+        max: 2 * 1024 * 1024 // 2MB
+      }
     }
   },
   VIDEO_EVENTS: {
@@ -345,6 +345,7 @@ if (isTestInstance() === true) {
   REMOTE_SCHEME.WS = 'ws'
   STATIC_MAX_AGE = '0'
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
+  CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 }
 
 CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
@@ -372,7 +373,6 @@ export {
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   FOLLOW_STATES,
-  AVATARS_DIR,
   SERVER_ACTOR_NAME,
   PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,

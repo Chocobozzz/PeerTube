@@ -24,7 +24,7 @@ function isActorPublicKeyValid (publicKey: string) {
     typeof publicKey === 'string' &&
     publicKey.startsWith('-----BEGIN PUBLIC KEY-----') &&
     publicKey.indexOf('-----END PUBLIC KEY-----') !== -1 &&
-    validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTOR.PUBLIC_KEY)
+    validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY)
 }
 
 const actorNameRegExp = new RegExp('[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_]+')
@@ -42,7 +42,7 @@ function isActorPrivateKeyValid (privateKey: string) {
     privateKey.startsWith('-----BEGIN RSA PRIVATE KEY-----') &&
     // Sometimes there is a \n at the end, so just assert the string contains the end mark
     privateKey.indexOf('-----END RSA PRIVATE KEY-----') !== -1 &&
-    validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACTOR.PRIVATE_KEY)
+    validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY)
 }
 
 function isRemoteActorValid (remoteActor: any) {

@@ -87,17 +87,17 @@ export class ActorModel extends Model<ActorModel> {
 
   @AllowNull(false)
   @Is('ActorUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.URL.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   url: string
 
   @AllowNull(true)
   @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPublicKeyValid, 'public key'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.PUBLIC_KEY.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY.max))
   publicKey: string
 
   @AllowNull(true)
   @Is('ActorPublicKey', value => throwIfNotValid(value, isActorPrivateKeyValid, 'private key'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.PRIVATE_KEY.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY.max))
   privateKey: string
 
   @AllowNull(false)
@@ -112,27 +112,27 @@ export class ActorModel extends Model<ActorModel> {
 
   @AllowNull(false)
   @Is('ActorInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'inbox url'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.URL.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   inboxUrl: string
 
   @AllowNull(false)
   @Is('ActorOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.URL.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   outboxUrl: string
 
   @AllowNull(false)
   @Is('ActorSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.URL.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   sharedInboxUrl: string
 
   @AllowNull(false)
   @Is('ActorFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.URL.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followersUrl: string
 
   @AllowNull(false)
   @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url'))
-  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTOR.URL.max))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followingUrl: string
 
   @CreatedAt
