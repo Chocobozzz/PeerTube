@@ -2,6 +2,12 @@ import * as express from 'express'
 import 'express-validator'
 import { SortType } from '../helpers/utils'
 
+function setAccountsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (!req.query.sort) req.query.sort = '-createdAt'
+
+  return next()
+}
+
 function setUsersSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
@@ -82,5 +88,6 @@ export {
   setFollowersSort,
   setFollowingSort,
   setJobsSort,
-  setVideoCommentThreadsSort
+  setVideoCommentThreadsSort,
+  setAccountsSort
 }

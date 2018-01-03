@@ -45,22 +45,22 @@ function isActorPrivateKeyValid (privateKey: string) {
     validator.isLength(privateKey, CONSTRAINTS_FIELDS.ACTORS.PRIVATE_KEY)
 }
 
-function isRemoteActorValid (remoteActor: any) {
-  return exists(remoteActor) &&
-    isActivityPubUrlValid(remoteActor.id) &&
-    isActorTypeValid(remoteActor.type) &&
-    isActivityPubUrlValid(remoteActor.following) &&
-    isActivityPubUrlValid(remoteActor.followers) &&
-    isActivityPubUrlValid(remoteActor.inbox) &&
-    isActivityPubUrlValid(remoteActor.outbox) &&
-    isActorPreferredUsernameValid(remoteActor.preferredUsername) &&
-    isActivityPubUrlValid(remoteActor.url) &&
-    isActorPublicKeyObjectValid(remoteActor.publicKey) &&
-    isActorEndpointsObjectValid(remoteActor.endpoints) &&
-    setValidAttributedTo(remoteActor) &&
+function isActorObjectValid (actor: any) {
+  return exists(actor) &&
+    isActivityPubUrlValid(actor.id) &&
+    isActorTypeValid(actor.type) &&
+    isActivityPubUrlValid(actor.following) &&
+    isActivityPubUrlValid(actor.followers) &&
+    isActivityPubUrlValid(actor.inbox) &&
+    isActivityPubUrlValid(actor.outbox) &&
+    isActorPreferredUsernameValid(actor.preferredUsername) &&
+    isActivityPubUrlValid(actor.url) &&
+    isActorPublicKeyObjectValid(actor.publicKey) &&
+    isActorEndpointsObjectValid(actor.endpoints) &&
+    setValidAttributedTo(actor) &&
     // If this is not an account, it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
-    (remoteActor.type === 'Person' || remoteActor.attributedTo.length !== 0)
+    (actor.type === 'Person' || actor.attributedTo.length !== 0)
 }
 
 function isActorFollowingCountValid (value: string) {
@@ -84,6 +84,11 @@ function isActorAcceptActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Accept')
 }
 
+function isActorUpdateActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Update') &&
+    isActorObjectValid(activity.object)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -93,11 +98,11 @@ export {
   isActorPublicKeyValid,
   isActorPreferredUsernameValid,
   isActorPrivateKeyValid,
-  isRemoteActorValid,
+  isActorObjectValid,
   isActorFollowingCountValid,
   isActorFollowersCountValid,
   isActorFollowActivityValid,
   isActorAcceptActivityValid,
   isActorDeleteActivityValid,
-  isActorNameValid
+  isActorUpdateActivityValid
 }

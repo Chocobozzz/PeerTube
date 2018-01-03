@@ -8,6 +8,7 @@ import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
 import { AVATAR_MIMETYPE_EXT, AVATARS_SIZE, CONFIG, sequelizeTypescript } from '../../initializers'
+import { sendUpdateUser } from '../../lib/activitypub/send'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
   asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setPagination, setUsersSort,
@@ -217,7 +218,6 @@ async function removeUser (req: express.Request, res: express.Response, next: ex
 async function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdateMe = req.body
 
-  // FIXME: user is not already a Sequelize instance?
   const user = res.locals.oauth.token.user
 
   if (body.password !== undefined) user.password = body.password
@@ -226,13 +226,15 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
   await user.save()
+  await sendUpdateUser(user, undefined)
 
   return res.sendStatus(204)
 }
 
 async function updateMyAvatar (req: express.Request, res: express.Response, next: express.NextFunction) {
   const avatarPhysicalFile = req.files['avatarfile'][0]
-  const actor = res.locals.oauth.token.user.Account.Actor
+  const user = res.locals.oauth.token.user
+  const actor = user.Account.Actor
 
   const avatarDir = CONFIG.STORAGE.AVATARS_DIR
   const source = join(avatarDir, avatarPhysicalFile.filename)
@@ -252,11 +254,18 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
     }, { transaction: t })
 
     if (actor.Avatar) {
-      await actor.Avatar.destroy({ transaction: t })
+      try {
+        await actor.Avatar.destroy({ transaction: t })
+      } catch (err) {
+        logger.error('Cannot remove old avatar of user %s.', user.username, err)
+      }
     }
 
     actor.set('avatarId', avatar.id)
+    actor.Avatar = avatar
     await actor.save({ transaction: t })
+
+    await sendUpdateUser(user, undefined)
 
     return { actor, avatar }
   })
@@ -277,6 +286,8 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   if (body.role !== undefined) user.role = body.role
 
   await user.save()
+
+  // Don't need to send this update to followers, these attributes are not propagated
 
   return res.sendStatus(204)
 }

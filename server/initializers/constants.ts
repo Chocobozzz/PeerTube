@@ -22,6 +22,7 @@ const PAGINATION_COUNT_DEFAULT = 15
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
+  ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'id', 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],

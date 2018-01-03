@@ -1,6 +1,6 @@
 import * as validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import { isActorAcceptActivityValid, isActorDeleteActivityValid, isActorFollowActivityValid } from './actor'
+import { isActorAcceptActivityValid, isActorDeleteActivityValid, isActorFollowActivityValid, isActorUpdateActivityValid } from './actor'
 import { isAnnounceActivityValid } from './announce'
 import { isActivityPubUrlValid } from './misc'
 import { isDislikeActivityValid, isLikeActivityValid } from './rate'
@@ -64,7 +64,8 @@ function checkCreateActivity (activity: any) {
 }
 
 function checkUpdateActivity (activity: any) {
-  return isVideoTorrentUpdateActivityValid(activity)
+  return isVideoTorrentUpdateActivityValid(activity) ||
+    isActorUpdateActivityValid(activity)
 }
 
 function checkDeleteActivity (activity: any) {

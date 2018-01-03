@@ -18,8 +18,9 @@ import { isUserUsernameValid } from '../../helpers/custom-validators/users'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
+import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { throwIfNotValid } from '../utils'
+import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { UserModel } from './user'
 
@@ -31,6 +32,10 @@ import { UserModel } from './user'
       include: [
         {
           model: () => ServerModel,
+          required: false
+        },
+        {
+          model: () => AvatarModel,
           required: false
         }
       ]
@@ -164,6 +169,22 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     return AccountModel.findOne(query)
+  }
+
+  static listForApi (start: number, count: number, sort: string) {
+    const query = {
+      offset: start,
+      limit: count,
+      order: [ getSort(sort) ]
+    }
+
+    return AccountModel.findAndCountAll(query)
+      .then(({ rows, count }) => {
+        return {
+          data: rows,
+          total: count
+        }
+      })
   }
 
   toFormattedJSON (): Account {

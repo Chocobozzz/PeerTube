@@ -1,3 +1,4 @@
+import { ActivityPubActor } from './activitypub-actor'
 import { ActivityPubSignature } from './activitypub-signature'
 import { VideoTorrentObject } from './objects'
 import { DislikeObject } from './objects/dislike-object'
@@ -33,7 +34,7 @@ export interface ActivityCreate extends BaseActivity {
 
 export interface ActivityUpdate extends BaseActivity {
   type: 'Update'
-  object: VideoTorrentObject
+  object: VideoTorrentObject | ActivityPubActor
 }
 
 export interface ActivityDelete extends BaseActivity {

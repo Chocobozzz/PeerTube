@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { param } from 'express-validator/check'
-import { isAccountNameValid, isLocalAccountNameExist } from '../../helpers/custom-validators/accounts'
+import { isAccountIdExist, isAccountNameValid, isLocalAccountNameExist } from '../../helpers/custom-validators/accounts'
+import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 
@@ -17,8 +18,22 @@ const localAccountValidator = [
   }
 ]
 
+const accountsGetValidator = [
+  param('id').custom(isIdOrUUIDValid).withMessage('Should have a valid id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking accountsGetValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isAccountIdExist(req.params.id, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
-  localAccountValidator
+  localAccountValidator,
+  accountsGetValidator
 }

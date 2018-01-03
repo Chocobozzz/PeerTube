@@ -372,6 +372,6 @@ export class ActorModel extends Model<ActorModel> {
   getAvatarUrl () {
     if (!this.avatarId) return undefined
 
-    return CONFIG.WEBSERVER.URL + this.Avatar.getWebserverPath
+    return CONFIG.WEBSERVER.URL + this.Avatar.getWebserverPath()
   }
 }

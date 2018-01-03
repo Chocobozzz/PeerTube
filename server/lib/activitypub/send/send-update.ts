@@ -1,6 +1,7 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityUpdate } from '../../../../shared/models/activitypub'
 import { VideoPrivacy } from '../../../../shared/models/videos'
+import { UserModel } from '../../../models/account/user'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
@@ -22,9 +23,24 @@ async function sendUpdateVideo (video: VideoModel, t: Transaction) {
   return broadcastToFollowers(data, byActor, actorsInvolved, t)
 }
 
+async function sendUpdateUser (user: UserModel, t: Transaction) {
+  const byActor = user.Account.Actor
+
+  const url = getUpdateActivityPubUrl(byActor.url, byActor.updatedAt.toISOString())
+  const accountObject = user.Account.toActivityPubObject()
+  const audience = await getAudience(byActor, t)
+  const data = await updateActivityData(url, byActor, accountObject, t, audience)
+
+  const actorsInvolved = await VideoShareModel.loadActorsByVideoOwner(byActor.id, t)
+  actorsInvolved.push(byActor)
+
+  return broadcastToFollowers(data, byActor, actorsInvolved, t)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  sendUpdateUser,
   sendUpdateVideo
 }
 

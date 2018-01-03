@@ -5,13 +5,13 @@ import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
-import { isRemoteActorValid } from '../../helpers/custom-validators/activitypub/actor'
+import { isActorObjectValid } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
-import { CONFIG, sequelizeTypescript } from '../../initializers'
+import { AVATAR_MIMETYPE_EXT, CONFIG, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -84,10 +84,52 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
   })
 }
 
+async function fetchActorTotalItems (url: string) {
+  const options = {
+    uri: url,
+    method: 'GET',
+    json: true,
+    activityPub: true
+  }
+
+  let requestResult
+  try {
+    requestResult = await doRequest(options)
+  } catch (err) {
+    logger.warn('Cannot fetch remote actor count %s.', url, err)
+    return undefined
+  }
+
+  return requestResult.totalItems ? requestResult.totalItems : 0
+}
+
+async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
+  if (
+    actorJSON.icon && actorJSON.icon.type === 'Image' && AVATAR_MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
+    isActivityPubUrlValid(actorJSON.icon.url)
+  ) {
+    const extension = AVATAR_MIMETYPE_EXT[actorJSON.icon.mediaType]
+
+    const avatarName = uuidv4() + extension
+    const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
+
+    await doRequestAndSaveToFile({
+      method: 'GET',
+      uri: actorJSON.icon.url
+    }, destPath)
+
+    return avatarName
+  }
+
+  return undefined
+}
+
 export {
   getOrCreateActorAndServerAndModel,
   buildActorInstance,
-  setAsyncActorKeys
+  setAsyncActorKeys,
+  fetchActorTotalItems,
+  fetchAvatarIfExists
 }
 
 // ---------------------------------------------------------------------------
@@ -166,7 +208,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
   const requestResult = await doRequest(options)
   const actorJSON: ActivityPubActor = requestResult.body
 
-  if (isRemoteActorValid(actorJSON) === false) {
+  if (isActorObjectValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
     return undefined
   }
@@ -190,22 +232,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
     followingUrl: actorJSON.following
   })
 
-  // Fetch icon?
-  let avatarName: string = undefined
-  if (
-    actorJSON.icon && actorJSON.icon.type === 'Image' && actorJSON.icon.mediaType === 'image/png' &&
-    isActivityPubUrlValid(actorJSON.icon.url)
-  ) {
-    const extension = actorJSON.icon.mediaType === 'image/png' ? '.png' : '.jpg'
-
-    avatarName = uuidv4() + extension
-    const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
-
-    await doRequestAndSaveToFile({
-      method: 'GET',
-      uri: actorJSON.icon.url
-    }, destPath)
-  }
+  const avatarName = await fetchAvatarIfExists(actorJSON)
 
   const name = actorJSON.name || actorJSON.preferredUsername
   return {
@@ -215,25 +242,6 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
     summary: actorJSON.summary,
     attributedTo: actorJSON.attributedTo
   }
-}
-
-async function fetchActorTotalItems (url: string) {
-  const options = {
-    uri: url,
-    method: 'GET',
-    json: true,
-    activityPub: true
-  }
-
-  let requestResult
-  try {
-    requestResult = await doRequest(options)
-  } catch (err) {
-    logger.warn('Cannot fetch remote actor count %s.', url, err)
-    return undefined
-  }
-
-  return requestResult.totalItems ? requestResult.totalItems : 0
 }
 
 function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t: Transaction) {

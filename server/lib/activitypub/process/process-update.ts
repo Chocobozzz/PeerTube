@@ -1,14 +1,18 @@
 import * as Bluebird from 'bluebird'
 import { ActivityUpdate } from '../../../../shared/models/activitypub'
+import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
+import { VideoTorrentObject } from '../../../../shared/models/activitypub/objects'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { resetSequelizeInstance } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
+import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
+import { AvatarModel } from '../../../models/avatar/avatar'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { getOrCreateActorAndServerAndModel } from '../actor'
+import { fetchActorTotalItems, fetchAvatarIfExists, getOrCreateActorAndServerAndModel } from '../actor'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
@@ -16,6 +20,8 @@ async function processUpdateActivity (activity: ActivityUpdate) {
 
   if (activity.object.type === 'Video') {
     return processUpdateVideo(actor, activity)
+  } else if (activity.object.type === 'Person') {
+    return processUpdateAccount(actor, activity)
   }
 
   return
@@ -39,11 +45,11 @@ function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
 }
 
 async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
-  const videoAttributesToUpdate = activity.object
+  const videoAttributesToUpdate = activity.object as VideoTorrentObject
 
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
   let videoInstance: VideoModel
-  let videoFieldsSave: object
+  let videoFieldsSave: any
 
   try {
     await sequelizeTypescript.transaction(async t => {
@@ -53,6 +59,8 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
 
       const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(videoAttributesToUpdate.id, t)
       if (!videoInstance) throw new Error('Video ' + videoAttributesToUpdate.id + ' not found.')
+
+      videoFieldsSave = videoInstance.toJSON()
 
       const videoChannel = videoInstance.VideoChannel
       if (videoChannel.Account.Actor.id !== actor.id) {
@@ -99,6 +107,86 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
 
     // This is just a debug because we will retry the insert
     logger.debug('Cannot update the remote video.', err)
+    throw err
+  }
+}
+
+function processUpdateAccount (actor: ActorModel, activity: ActivityUpdate) {
+  const options = {
+    arguments: [ actor, activity ],
+    errorMessage: 'Cannot update the remote account with many retries'
+  }
+
+  return retryTransactionWrapper(updateRemoteAccount, options)
+}
+
+async function updateRemoteAccount (actor: ActorModel, activity: ActivityUpdate) {
+  const accountAttributesToUpdate = activity.object as ActivityPubActor
+
+  logger.debug('Updating remote account "%s".', accountAttributesToUpdate.uuid)
+  let actorInstance: ActorModel
+  let accountInstance: AccountModel
+  let actorFieldsSave: object
+  let accountFieldsSave: object
+
+  // Fetch icon?
+  const avatarName = await fetchAvatarIfExists(accountAttributesToUpdate)
+
+  try {
+    await sequelizeTypescript.transaction(async t => {
+      actorInstance = await ActorModel.loadByUrl(accountAttributesToUpdate.id, t)
+      if (!actorInstance) throw new Error('Actor ' + accountAttributesToUpdate.id + ' not found.')
+
+      actorFieldsSave = actorInstance.toJSON()
+      accountInstance = actorInstance.Account
+      accountFieldsSave = actorInstance.Account.toJSON()
+
+      const followersCount = await fetchActorTotalItems(accountAttributesToUpdate.followers)
+      const followingCount = await fetchActorTotalItems(accountAttributesToUpdate.following)
+
+      actorInstance.set('type', accountAttributesToUpdate.type)
+      actorInstance.set('uuid', accountAttributesToUpdate.uuid)
+      actorInstance.set('preferredUsername', accountAttributesToUpdate.preferredUsername)
+      actorInstance.set('url', accountAttributesToUpdate.id)
+      actorInstance.set('publicKey', accountAttributesToUpdate.publicKey.publicKeyPem)
+      actorInstance.set('followersCount', followersCount)
+      actorInstance.set('followingCount', followingCount)
+      actorInstance.set('inboxUrl', accountAttributesToUpdate.inbox)
+      actorInstance.set('outboxUrl', accountAttributesToUpdate.outbox)
+      actorInstance.set('sharedInboxUrl', accountAttributesToUpdate.endpoints.sharedInbox)
+      actorInstance.set('followersUrl', accountAttributesToUpdate.followers)
+      actorInstance.set('followingUrl', accountAttributesToUpdate.following)
+
+      if (avatarName !== undefined) {
+        if (actorInstance.avatarId) {
+          await actorInstance.Avatar.destroy({ transaction: t })
+        }
+
+        const avatar = await AvatarModel.create({
+          filename: avatarName
+        }, { transaction: t })
+
+        actor.set('avatarId', avatar.id)
+      }
+
+      await actor.save({ transaction: t })
+
+      actor.Account.set('name', accountAttributesToUpdate.name || accountAttributesToUpdate.preferredUsername)
+      await actor.Account.save({ transaction: t })
+    })
+
+    logger.info('Remote account with uuid %s updated', accountAttributesToUpdate.uuid)
+  } catch (err) {
+    if (actorInstance !== undefined && actorFieldsSave !== undefined) {
+      resetSequelizeInstance(actorInstance, actorFieldsSave)
+    }
+
+    if (accountInstance !== undefined && accountFieldsSave !== undefined) {
+      resetSequelizeInstance(accountInstance, accountFieldsSave)
+    }
+
+    // This is just a debug because we will retry the insert
+    logger.debug('Cannot update the remote account.', err)
     throw err
   }
 }

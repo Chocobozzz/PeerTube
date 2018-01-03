@@ -1,7 +1,9 @@
 import * as Sequelize from 'sequelize'
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { VideoModel } from './video'
+import { VideoChannelModel } from './video-channel'
 
 enum ScopeNames {
   FULL = 'FULL',
@@ -91,6 +93,44 @@ export class VideoShareModel extends Model<VideoShareModel> {
         {
           model: ActorModel,
           required: true
+        }
+      ],
+      transaction: t
+    }
+
+    return VideoShareModel.scope(ScopeNames.FULL).findAll(query)
+      .then(res => res.map(r => r.Actor))
+  }
+
+  static loadActorsByVideoOwner (actorOwnerId: number, t: Sequelize.Transaction) {
+    const query = {
+      attributes: [],
+      include: [
+        {
+          model: ActorModel,
+          required: true
+        },
+        {
+          attributes: [],
+          model: VideoModel,
+          required: true,
+          include: [
+            {
+              attributes: [],
+              model: VideoChannelModel.unscoped(),
+              required: true,
+              include: [
+                {
+                  attributes: [],
+                  model: AccountModel.unscoped(),
+                  required: true,
+                  where: {
+                    actorId: actorOwnerId
+                  }
+                }
+              ]
+            }
+          ]
         }
       ],
       transaction: t
