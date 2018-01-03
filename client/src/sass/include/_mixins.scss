@@ -110,11 +110,6 @@
   }
 }
 
-@mixin avatar ($size) {
-  width: $size;
-  height: $size;
-}
-
 @mixin icon ($size) {
   display: inline-block;
   background-repeat: no-repeat;
@@ -124,7 +119,6 @@
   vertical-align: middle;
   cursor: pointer;
 }
-
 
 @mixin peertube-select-container ($width) {
   padding: 0;
@@ -267,3 +261,10 @@
   }
 }
 
+
+@mixin avatar ($size) {
+  object-fit: cover;
+  border-radius:50%;
+  width: $size;
+  height: $size;
+}

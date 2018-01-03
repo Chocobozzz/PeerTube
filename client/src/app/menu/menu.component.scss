@@ -21,10 +21,10 @@ menu {
     margin-bottom: 35px;
 
     img {
+      @include avatar(34px);
+
       margin-left: 20px;
       margin-right: 10px;
-
-      @include avatar(34px);
     }
 
     .logged-in-info {

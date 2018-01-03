@@ -65,6 +65,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       videoInstance.set('licence', videoData.licence)
       videoInstance.set('language', videoData.language)
       videoInstance.set('nsfw', videoData.nsfw)
+      videoInstance.set('commentsEnabled', videoData.commentsEnabled)
       videoInstance.set('privacy', videoData.privacy)
       videoInstance.set('description', videoData.description)
       videoInstance.set('duration', videoData.duration)
