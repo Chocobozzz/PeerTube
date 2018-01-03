@@ -3,7 +3,11 @@
 import * as chai from 'chai'
 import 'mocha'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { dateIsValid, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../utils/index'
+import { testVideoImage } from '../../utils'
+import {
+  dateIsValid, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, updateMyAvatar,
+  uploadVideo
+} from '../../utils/index'
 import {
   addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
   getVideoThreadComments
@@ -29,6 +33,12 @@ describe('Test video comments', function () {
     const res = await uploadVideo(server.url, server.accessToken, {})
     videoUUID = res.body.video.uuid
     videoId = res.body.video.id
+
+    await updateMyAvatar({
+      url: server.url,
+      accessToken: server.accessToken,
+      fixture: 'avatar.png'
+    })
   })
 
   it('Should not have threads on this video', async function () {
@@ -70,6 +80,10 @@ describe('Test video comments', function () {
     expect(comment.id).to.equal(comment.threadId)
     expect(comment.account.name).to.equal('root')
     expect(comment.account.host).to.equal('localhost:9001')
+
+    const test = await testVideoImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
+    expect(test).to.equal(true)
+
     expect(comment.totalReplies).to.equal(0)
     expect(dateIsValid(comment.createdAt as string)).to.be.true
     expect(dateIsValid(comment.updatedAt as string)).to.be.true

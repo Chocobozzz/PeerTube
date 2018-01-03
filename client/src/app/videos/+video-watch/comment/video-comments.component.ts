@@ -6,7 +6,6 @@ import { ComponentPagination } from '../../../shared/rest/component-pagination.m
 import { User } from '../../../shared/users'
 import { SortField } from '../../../shared/video/sort-field.type'
 import { VideoDetails } from '../../../shared/video/video-details.model'
-import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
 

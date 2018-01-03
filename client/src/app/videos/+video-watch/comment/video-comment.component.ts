@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
+import { Account } from '../../../shared/account/account.model'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 
@@ -18,7 +20,10 @@ export class VideoCommentComponent {
   @Output() wantedToReply = new EventEmitter<VideoComment>()
   @Output() resetReply = new EventEmitter()
 
-  constructor (private authService: AuthService) {
+  constructor (private authService: AuthService) {}
+
+  get user () {
+    return this.authService.getUser()
   }
 
   onCommentReplyCreated (createdComment: VideoComment) {
@@ -51,5 +56,9 @@ export class VideoCommentComponent {
 
   onResetReply () {
     this.resetReply.emit()
+  }
+
+  getAvatarUrl (account: AccountInterface) {
+    return Account.GET_ACCOUNT_AVATAR_URL(account)
   }
 }

@@ -1,3 +1,4 @@
+import { Account } from '../../../../../../shared/models/actors'
 import { VideoComment as VideoCommentServerModel } from '../../../../../../shared/models/videos/video-comment.model'
 
 export class VideoComment implements VideoCommentServerModel {
@@ -9,10 +10,7 @@ export class VideoComment implements VideoCommentServerModel {
   videoId: number
   createdAt: Date | string
   updatedAt: Date | string
-  account: {
-    name: string
-    host: string
-  }
+  account: Account
   totalReplies: number
 
   by: string

@@ -9,6 +9,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
+import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -45,6 +46,10 @@ enum ScopeNames {
             include: [
               {
                 model: () => ServerModel,
+                required: false
+              },
+              {
+                model: () => AvatarModel,
                 required: false
               }
             ]
@@ -243,10 +248,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       totalReplies: this.get('totalReplies') || 0,
-      account: {
-        name: this.Account.name,
-        host: this.Account.Actor.getHost()
-      }
+      account: this.Account.toFormattedJSON()
     } as VideoComment
   }
 

@@ -7,6 +7,7 @@
     <my-video-comment-add
       *ngIf="isUserLoggedIn()"
       [video]="video"
+      [user]="user"
       (commentCreated)="onCommentThreadCreated($event)"
     ></my-video-comment-add>
 

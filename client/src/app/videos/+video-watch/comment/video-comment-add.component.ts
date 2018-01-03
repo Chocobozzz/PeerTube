@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable'
 import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
 import { FormReactive } from '../../../shared'
 import { VIDEO_COMMENT_TEXT } from '../../../shared/forms/form-validators/video-comment'
+import { User } from '../../../shared/users'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
@@ -15,6 +16,7 @@ import { VideoCommentService } from './video-comment.service'
   styleUrls: ['./video-comment-add.component.scss']
 })
 export class VideoCommentAddComponent extends FormReactive implements OnInit {
+  @Input() user: User
   @Input() video: Video
   @Input() parentComment: VideoComment
   @Input() focusOnInit = false
@@ -77,6 +79,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   isAddButtonDisplayed () {
     return this.form.value['text']
+  }
+
+  getUserAvatarUrl () {
+    return this.user.getAvatarUrl()
   }
 
   private addCommentReply (commentCreate: VideoCommentCreate) {

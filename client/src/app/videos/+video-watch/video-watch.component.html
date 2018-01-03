@@ -14,14 +14,16 @@
 
         <div class="video-info-actions">
           <div
-              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
-              class="action-button action-button-like">
+            *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
+            class="action-button action-button-like"
+          >
             <span class="icon icon-like" title="Like this video" ></span>
           </div>
 
           <div
-              *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
-              class="action-button action-button-dislike">
+            *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
+            class="action-button action-button-dislike"
+          >
             <span class="icon icon-dislike" title="Dislike this video"></span>
           </div>
 

@@ -1,38 +1,41 @@
 @import '_variables';
 @import '_mixins';
 
-.comment {
+.root-comment {
   font-size: 15px;
-  margin-top: 30px;
+  display: flex;
 
-  .comment-account-date {
-    display: flex;
-    margin-bottom: 4px;
+  img {
+    @include avatar(36px);
 
-    .comment-account {
-      font-weight: $font-bold;
-    }
-
-    .comment-date {
-      color: #585858;
-      margin-left: 10px;
-    }
+    margin-top: 5px;
+    margin-right: 20px;
   }
-
-  .comment-actions {
-    margin: 10px 0;
-
-    .comment-action-reply {
-      color: #585858;
-      cursor: pointer;
-    }
-  }
-}
-
-.children {
-  margin-left: 20px;
 
   .comment {
-    margin-top: 15px;
+    flex-grow: 1;
+
+    .comment-account-date {
+      display: flex;
+      margin-bottom: 4px;
+
+      .comment-account {
+        font-weight: $font-bold;
+      }
+
+      .comment-date {
+        color: #585858;
+        margin-left: 10px;
+      }
+    }
+
+    .comment-actions {
+      margin: 10px 0;
+
+      .comment-action-reply {
+        color: #585858;
+        cursor: pointer;
+      }
+    }
   }
 }

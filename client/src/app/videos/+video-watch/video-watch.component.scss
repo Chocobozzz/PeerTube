@@ -176,9 +176,9 @@
       font-size: 13px;
 
       img {
-        width: 16px;
-        height: 16px;
-        margin-left: 3px;
+        @include avatar(18px);
+
+        margin-left: 7px;
       }
     }
 

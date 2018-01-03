@@ -1,8 +1,6 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { isAccountNameValid } from '../accounts'
 import { exists } from '../misc'
-import { isVideoChannelNameValid } from '../video-channels'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
@@ -30,10 +28,6 @@ function isActorPublicKeyValid (publicKey: string) {
 const actorNameRegExp = new RegExp('[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_]+')
 function isActorPreferredUsernameValid (preferredUsername: string) {
   return exists(preferredUsername) && validator.matches(preferredUsername, actorNameRegExp)
-}
-
-function isActorNameValid (name: string) {
-  return isAccountNameValid(name) || isVideoChannelNameValid(name)
 }
 
 function isActorPrivateKeyValid (privateKey: string) {

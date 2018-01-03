@@ -1,3 +1,5 @@
+import { Account } from '../actors'
+
 export interface VideoComment {
   id: number
   url: string
@@ -8,10 +10,7 @@ export interface VideoComment {
   createdAt: Date | string
   updatedAt: Date | string
   totalReplies: number
-  account: {
-    name: string
-    host: string
-  }
+  account: Account
 }
 
 export interface VideoCommentThreadTree {
