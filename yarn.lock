@@ -170,6 +170,12 @@
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
 
+"@types/sharp@^0.17.6":
+  version "0.17.6"
+  resolved "https://registry.yarnpkg.com/@types/sharp/-/sharp-0.17.6.tgz#3138602163b30b4969f75a2755a3f90caaaa9be3"
+  dependencies:
+    "@types/node" "*"
+
 "@types/simple-peer@*":
   version "6.1.4"
   resolved "https://registry.yarnpkg.com/@types/simple-peer/-/simple-peer-6.1.4.tgz#1d1384e1d8dc17b9e7d1673d704febe91ca48191"

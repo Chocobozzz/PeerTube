@@ -27,7 +27,7 @@ export class ServerModel extends Model<ServerModel> {
   @AllowNull(false)
   @Default(SERVERS_SCORE.BASE)
   @IsInt
-  @Max(SERVERS_SCORE.max)
+  @Max(SERVERS_SCORE.MAX)
   @Column
   score: number
 

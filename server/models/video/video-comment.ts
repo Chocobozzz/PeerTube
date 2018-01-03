@@ -214,7 +214,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   static listThreadCommentsForApi (videoId: number, threadId: number) {
     const query = {
-      order: [ [ 'createdAt', 'DESC' ] ],
+      order: [ [ 'createdAt', 'ASC' ] ],
       where: {
         videoId,
         [ Sequelize.Op.or ]: [

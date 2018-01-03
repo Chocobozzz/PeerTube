@@ -352,7 +352,7 @@ describe('Test users', function () {
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
-    const test = await testVideoImage(server.url, 'avatar', user.account.avatar.path, '.png')
+    const test = await testVideoImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
     expect(test).to.equal(true)
   })
 

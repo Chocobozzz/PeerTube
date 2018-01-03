@@ -16,7 +16,7 @@ inboxRouter.post('/inbox',
   asyncMiddleware(inboxController)
 )
 
-inboxRouter.post('/account/:name/inbox',
+inboxRouter.post('/accounts/:name/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
   localAccountValidator,

@@ -114,6 +114,7 @@
     "@types/request": "^2.0.3",
     "@types/sanitize-html": "^1.14.0",
     "@types/sequelize": "^4.0.55",
+    "@types/sharp": "^0.17.6",
     "@types/supertest": "^2.0.3",
     "@types/validator": "^6.2.0",
     "@types/webtorrent": "^0.98.4",

@@ -12,7 +12,6 @@ import { isSignupAllowed } from '../../helpers/utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
-import Multer = require('multer')
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -105,7 +104,7 @@ const usersUpdateMyAvatarValidator = [
   ),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersUpdateMyAvatarValidator parameters', { parameters: req.body })
+    logger.debug('Checking usersUpdateMyAvatarValidator parameters', { files: req.files })
 
     if (areValidationErrors(req, res)) return
 

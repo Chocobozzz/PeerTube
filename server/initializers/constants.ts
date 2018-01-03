@@ -316,6 +316,10 @@ const PREVIEWS_SIZE = {
   width: 560,
   height: 315
 }
+const AVATARS_SIZE = {
+  width: 120,
+  height: 120
+}
 
 const EMBED_SIZE = {
   width: 560,
@@ -355,6 +359,7 @@ CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WE
 
 export {
   API_VERSION,
+  AVATARS_SIZE,
   ACCEPT_HEADERS,
   BCRYPT_SALT_SIZE,
   CACHE,

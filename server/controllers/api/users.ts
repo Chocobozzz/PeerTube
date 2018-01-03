@@ -1,12 +1,13 @@
 import * as express from 'express'
 import { extname, join } from 'path'
+import * as sharp from 'sharp'
 import * as uuidv4 from 'uuid/v4'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
-import { renamePromise } from '../../helpers/core-utils'
+import { renamePromise, unlinkPromise } from '../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
-import { AVATAR_MIMETYPE_EXT, CONFIG, sequelizeTypescript } from '../../initializers'
+import { AVATAR_MIMETYPE_EXT, AVATARS_SIZE, CONFIG, sequelizeTypescript } from '../../initializers'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
   asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setPagination, setUsersSort,
@@ -239,7 +240,11 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
   const avatarName = uuidv4() + extension
   const destination = join(avatarDir, avatarName)
 
-  await renamePromise(source, destination)
+  await sharp(source)
+    .resize(AVATARS_SIZE.width, AVATARS_SIZE.height)
+    .toFile(destination)
+
+  await unlinkPromise(source)
 
   const { avatar } = await sequelizeTypescript.transaction(async t => {
     const avatar = await AvatarModel.create({

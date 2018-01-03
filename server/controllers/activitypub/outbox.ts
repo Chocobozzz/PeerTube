@@ -11,7 +11,7 @@ import { VideoModel } from '../../models/video/video'
 
 const outboxRouter = express.Router()
 
-outboxRouter.get('/account/:name/outbox',
+outboxRouter.get('/accounts/:name/outbox',
   localAccountValidator,
   asyncMiddleware(outboxController)
 )

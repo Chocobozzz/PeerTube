@@ -164,7 +164,7 @@ function onDatabaseInitDone () {
     .then(() => {
       // ----------- Make the server listening -----------
       server.listen(port, () => {
-        VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.FILE_SIZE)
+        VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
         activitypubHttpJobScheduler.activate()
         transcodingJobScheduler.activate()
 
