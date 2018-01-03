@@ -62,28 +62,26 @@ menu {
   .button-block {
     margin: 30px 25px 35px 25px;
 
-    .login-button, .create-account-button {
-      font-weight: $font-semibold;
-      font-size: 15px;
-      height: $button-height;
-      line-height: $button-height;
-      width: 100%;
-      border-radius: 3px;
-      text-align: center;
-      color: $menu-color;
+    .login-button {
+      @include peertube-button-link;
+      @include orange-button;
+
       display: block;
-      cursor: pointer;
-      margin-bottom: 15px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
 
-      @include disable-default-a-behaviour;
+    .create-account-button {
+      @include peertube-button-link;
 
-      &.login-button {
-        background-color: $orange-color;
-        margin-bottom: 10px;
-      }
+      display: block;
+      width: 100%;
 
-      &.create-account-button {
-        background-color: rgba(255, 255, 255, 0.25);
+      color: #fff;
+      background-color: rgba(255, 255, 255, 0.25);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.28);
       }
     }
   }
