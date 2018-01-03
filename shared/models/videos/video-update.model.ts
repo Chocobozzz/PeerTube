@@ -8,5 +8,6 @@ export interface VideoUpdate {
   description?: string
   privacy?: VideoPrivacy
   tags?: string[]
+  commentsEnabled?: boolean
   nsfw?: boolean
 }

@@ -2,14 +2,13 @@
 
 import { omit } from 'lodash'
 import 'mocha'
-import { join } from "path"
+import { join } from 'path'
 import { UserRole } from '../../../../shared'
 
 import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
   makePostBodyRequest, makePostUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
-  updateUser,
-  uploadVideo, userLogin
+  updateUser, uploadVideo, userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
@@ -25,7 +24,7 @@ describe('Test users API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(120000)
+    this.timeout(20000)
 
     await flushTests()
 
@@ -282,7 +281,14 @@ describe('Test users API validators', function () {
       const attaches = {
         'avatarfile': join(__dirname, '..', 'fixtures', 'avatar.png')
       }
-      await makePostUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
+      await makePostUploadRequest({
+        url: server.url,
+        path: path + '/me/avatar/pick',
+        token: server.accessToken,
+        fields,
+        attaches,
+        statusCodeExpected: 200
+      })
     })
   })
 

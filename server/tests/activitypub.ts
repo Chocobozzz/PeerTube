@@ -20,11 +20,11 @@ describe('Test activitypub', function () {
   })
 
   it('Should return the account object', async function () {
-    const res = await makeActivityPubGetRequest(server.url, '/account/root')
+    const res = await makeActivityPubGetRequest(server.url, '/accounts/root')
     const object = res.body
 
     expect(object.type).to.equal('Person')
-    expect(object.id).to.equal('http://localhost:9001/account/root')
+    expect(object.id).to.equal('http://localhost:9001/accounts/root')
     expect(object.name).to.equal('root')
     expect(object.preferredUsername).to.equal('root')
   })

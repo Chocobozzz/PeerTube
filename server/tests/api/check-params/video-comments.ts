@@ -1,5 +1,6 @@
 /* tslint:disable:no-unused-expression */
 
+import * as chai from 'chai'
 import 'mocha'
 import {
   flushTests, killallServers, makeGetRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
@@ -7,6 +8,8 @@ import {
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { addVideoCommentThread } from '../../utils/videos/video-comments'
+
+const expect = chai.expect
 
 describe('Test video comments API validator', function () {
   let pathThread: string
@@ -42,17 +45,14 @@ describe('Test video comments API validator', function () {
   describe('When listing video comment threads', function () {
     it('Should fail with a bad start pagination', async function () {
       await checkBadStartPagination(server.url, pathThread, server.accessToken)
-
     })
 
     it('Should fail with a bad count pagination', async function () {
       await checkBadCountPagination(server.url, pathThread, server.accessToken)
-
     })
 
     it('Should fail with an incorrect sort', async function () {
       await checkBadSortPagination(server.url, pathThread, server.accessToken)
-
     })
 
     it('Should fail with an incorrect video', async function () {
@@ -183,6 +183,35 @@ describe('Test video comments API validator', function () {
       }
       await makePostBodyRequest({ url: server.url, path: pathComment, token: server.accessToken, fields, statusCodeExpected: 200 })
     })
+  })
+
+  describe('When a video has comments disabled', function () {
+    before(async function () {
+      const res = await uploadVideo(server.url, server.accessToken, { commentsEnabled: false })
+      videoUUID = res.body.video.uuid
+      pathThread = '/api/v1/videos/' + videoUUID + '/comment-threads'
+    })
+
+    it('Should return an empty thread list', async function () {
+      const res = await makeGetRequest({
+        url: server.url,
+        path: pathThread,
+        statusCodeExpected: 200
+      })
+      expect(res.body.total).to.equal(0)
+      expect(res.body.data).to.have.lengthOf(0)
+    })
+
+    it('Should return an thread comments list')
+
+    it('Should return conflict on thread add', async function () {
+      const fields = {
+        text: 'super comment'
+      }
+      await makePostBodyRequest({ url: server.url, path: pathThread, token: server.accessToken, fields, statusCodeExpected: 409 })
+    })
+
+    it('Should return conflict on comment thread add')
   })
 
   after(async function () {

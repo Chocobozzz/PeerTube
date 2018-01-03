@@ -1,4 +1,5 @@
 import * as express from 'express'
+import { ResultList } from '../../../../shared/models'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { getFormattedObjects } from '../../../helpers/utils'
@@ -10,6 +11,7 @@ import {
   addVideoCommentReplyValidator, addVideoCommentThreadValidator, listVideoCommentThreadsValidator,
   listVideoThreadCommentsValidator
 } from '../../../middlewares/validators/video-comments'
+import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 
 const videoCommentRouter = express.Router()
@@ -47,13 +49,33 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoThreads (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoCommentModel.listThreadsForApi(res.locals.video.id, req.query.start, req.query.count, req.query.sort)
+  const video = res.locals.video as VideoModel
+  let resultList: ResultList<VideoCommentModel>
+
+  if (video.commentsEnabled === true) {
+    resultList = await VideoCommentModel.listThreadsForApi(video.id, req.query.start, req.query.count, req.query.sort)
+  } else {
+    resultList = {
+      total: 0,
+      data: []
+    }
+  }
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listVideoThreadComments (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoCommentModel.listThreadCommentsForApi(res.locals.video.id, res.locals.videoCommentThread.id)
+  const video = res.locals.video as VideoModel
+  let resultList: ResultList<VideoCommentModel>
+
+  if (video.commentsEnabled === true) {
+    resultList = await VideoCommentModel.listThreadCommentsForApi(res.locals.video.id, res.locals.videoCommentThread.id)
+  } else {
+    resultList = {
+      total: 0,
+      data: []
+    }
+  }
 
   return res.json(buildFormattedCommentTree(resultList))
 }

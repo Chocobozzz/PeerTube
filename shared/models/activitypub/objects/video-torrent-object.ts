@@ -18,6 +18,7 @@ export interface VideoTorrentObject {
   language: ActivityIdentifierObject
   views: number
   nsfw: boolean
+  commentsEnabled: boolean
   published: string
   updated: string
   mediaType: 'text/markdown'

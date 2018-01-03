@@ -2,9 +2,7 @@ import { join } from 'path'
 import { AfterDestroy, AllowNull, Column, CreatedAt, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { unlinkPromise } from '../../helpers/core-utils'
-import { logger } from '../../helpers/logger'
 import { CONFIG, STATIC_PATHS } from '../../initializers'
-import { sendDeleteVideo } from '../../lib/activitypub/send'
 
 @Table({
   tableName: 'avatar'

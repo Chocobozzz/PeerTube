@@ -3,11 +3,10 @@ import 'express-validator'
 import { body, param } from 'express-validator/check'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isAvatarFile,
-  isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
+  isAvatarFile, isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
   isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
-import { isVideoExist, isVideoFile } from '../../helpers/custom-validators/videos'
+import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { isSignupAllowed } from '../../helpers/utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers'

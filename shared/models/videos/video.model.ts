@@ -45,4 +45,5 @@ export interface VideoDetails extends Video {
   tags: string[]
   files: VideoFile[]
   account: Account
+  commentsEnabled: boolean
 }

@@ -55,7 +55,8 @@ export class VideoService {
       description,
       privacy: video.privacy,
       tags: video.tags,
-      nsfw: video.nsfw
+      nsfw: video.nsfw,
+      commentsEnabled: video.commentsEnabled
     }
 
     return this.authHttp.put(VideoService.BASE_VIDEO_URL + video.id, body)

@@ -70,6 +70,7 @@ export class VideoEditComponent implements OnInit {
     this.form.addControl('privacy', new FormControl('', VIDEO_PRIVACY.VALIDATORS))
     this.form.addControl('channelId', new FormControl({ value: '', disabled: true }))
     this.form.addControl('nsfw', new FormControl(false))
+    this.form.addControl('commentsEnabled', new FormControl(true))
     this.form.addControl('category', new FormControl('', VIDEO_CATEGORY.VALIDATORS))
     this.form.addControl('licence', new FormControl('', VIDEO_LICENCE.VALIDATORS))
     this.form.addControl('language', new FormControl('', VIDEO_LANGUAGE.VALIDATORS))

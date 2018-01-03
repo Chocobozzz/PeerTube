@@ -3,35 +3,43 @@
     Comments
   </div>
 
-  <my-video-comment-add
-    *ngIf="isUserLoggedIn()"
-    [video]="video"
-    (commentCreated)="onCommentThreadCreated($event)"
-  ></my-video-comment-add>
+  <ng-template [ngIf]="video.commentsEnabled === true">
+    <my-video-comment-add
+      *ngIf="isUserLoggedIn()"
+      [video]="video"
+      (commentCreated)="onCommentThreadCreated($event)"
+    ></my-video-comment-add>
 
-  <div
-    class="comment-threads"
-    infiniteScroll
-    [infiniteScrollUpDistance]="1.5"
-    [infiniteScrollDistance]="0.5"
-    (scrolled)="onNearOfBottom()"
-  >
-    <div *ngFor="let comment of comments">
-      <my-video-comment
-        [comment]="comment"
-        [video]="video"
-        [inReplyToCommentId]="inReplyToCommentId"
-        [commentTree]="threadComments[comment.id]"
-        (wantedToReply)="onWantedToReply($event)"
-        (resetReply)="onResetReply()"
-      ></my-video-comment>
+    <div *ngIf="componentPagination.totalItems === 0 && comments.length === 0">No comments.</div>
 
-      <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment)" class="view-replies">
-        View all {{ comment.totalReplies }} replies
+    <div
+      class="comment-threads"
+      infiniteScroll
+      [infiniteScrollUpDistance]="1.5"
+      [infiniteScrollDistance]="0.5"
+      (scrolled)="onNearOfBottom()"
+    >
+      <div *ngFor="let comment of comments">
+        <my-video-comment
+          [comment]="comment"
+          [video]="video"
+          [inReplyToCommentId]="inReplyToCommentId"
+          [commentTree]="threadComments[comment.id]"
+          (wantedToReply)="onWantedToReply($event)"
+          (resetReply)="onResetReply()"
+        ></my-video-comment>
 
-        <span *ngIf="!threadLoading[comment.id]" class="glyphicon glyphicon-menu-down"></span>
-        <my-loader class="comment-thread-loading" [loading]="threadLoading[comment.id]"></my-loader>
+        <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment)" class="view-replies">
+          View all {{ comment.totalReplies }} replies
+
+          <span *ngIf="!threadLoading[comment.id]" class="glyphicon glyphicon-menu-down"></span>
+          <my-loader class="comment-thread-loading" [loading]="threadLoading[comment.id]"></my-loader>
+        </div>
       </div>
     </div>
+  </ng-template>
+
+  <div *ngIf="video.commentsEnabled === false">
+    Comments are disabled.
   </div>
 </div>

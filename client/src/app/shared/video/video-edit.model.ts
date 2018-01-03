@@ -9,6 +9,7 @@ export class VideoEdit {
   name: string
   tags: string[]
   nsfw: boolean
+  commentsEnabled: boolean
   channel: number
   privacy: VideoPrivacy
   uuid?: string
@@ -25,6 +26,7 @@ export class VideoEdit {
       this.name = videoDetails.name
       this.tags = videoDetails.tags
       this.nsfw = videoDetails.nsfw
+      this.commentsEnabled = videoDetails.commentsEnabled
       this.channel = videoDetails.channel.id
       this.privacy = videoDetails.privacy
     }
@@ -45,6 +47,7 @@ export class VideoEdit {
       name: this.name,
       tags: this.tags,
       nsfw: this.nsfw,
+      commentsEnabled: this.commentsEnabled,
       channelId: this.channel,
       privacy: this.privacy
     }

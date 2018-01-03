@@ -1,11 +1,10 @@
 import * as validator from 'validator'
 import { ACTIVITY_PUB } from '../../../initializers'
-import { exists, isDateValid, isUUIDValid } from '../misc'
+import { exists, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import {
   isVideoAbuseReasonValid,
   isVideoDurationValid,
   isVideoNameValid,
-  isVideoNSFWValid,
   isVideoTagValid,
   isVideoTruncatedDescriptionValid,
   isVideoViewsValid
@@ -53,7 +52,8 @@ function isVideoTorrentObjectValid (video: any) {
     (!video.licence || isRemoteIdentifierValid(video.licence)) &&
     (!video.language || isRemoteIdentifierValid(video.language)) &&
     isVideoViewsValid(video.views) &&
-    isVideoNSFWValid(video.nsfw) &&
+    isBooleanValid(video.nsfw) &&
+    isBooleanValid(video.commentsEnabled) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&

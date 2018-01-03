@@ -2,10 +2,10 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
-import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoAbuseReasonValid, isVideoCategoryValid, isVideoDescriptionValid, isVideoExist, isVideoFile, isVideoLanguageValid,
-  isVideoLicenceValid, isVideoNameValid, isVideoNSFWValid, isVideoPrivacyValid, isVideoRatingTypeValid, isVideoTagsValid
+  isVideoLicenceValid, isVideoNameValid, isVideoPrivacyValid, isVideoRatingTypeValid, isVideoTagsValid
 } from '../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
@@ -26,11 +26,12 @@ const videosAddValidator = [
   body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
   body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
-  body('nsfw').custom(isVideoNSFWValid).withMessage('Should have a valid NSFW attribute'),
+  body('nsfw').custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
   body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
+  body('commentsEnabled').custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
@@ -85,10 +86,11 @@ const videosUpdateValidator = [
   body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
   body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
-  body('nsfw').optional().custom(isVideoNSFWValid).withMessage('Should have a valid NSFW attribute'),
+  body('nsfw').optional().custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
   body('privacy').optional().custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
+  body('commentsEnabled').optional().custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })

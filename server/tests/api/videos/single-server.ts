@@ -32,6 +32,7 @@ describe('Test a single server', function () {
     duration: 5,
     tags: [ 'tag1', 'tag2', 'tag3' ],
     privacy: VideoPrivacy.PUBLIC,
+    commentsEnabled: true,
     channel: {
       name: 'Default root channel',
       description: '',
@@ -51,7 +52,7 @@ describe('Test a single server', function () {
     category: 4,
     licence: 2,
     language: 5,
-    nsfw: true,
+    nsfw: false,
     description: 'my super description updated',
     host: 'localhost:9001',
     account: 'root',
@@ -59,6 +60,7 @@ describe('Test a single server', function () {
     tags: [ 'tagup1', 'tagup2' ],
     privacy: VideoPrivacy.PUBLIC,
     duration: 5,
+    commentsEnabled: false,
     channel: {
       name: 'Default root channel',
       description: '',
@@ -475,6 +477,7 @@ describe('Test a single server', function () {
       language: 5,
       nsfw: false,
       description: 'my super description updated',
+      commentsEnabled: false,
       tags: [ 'tagup1', 'tagup2' ]
     }
     await updateVideo(server.url, server.accessToken, videoId, attributes)

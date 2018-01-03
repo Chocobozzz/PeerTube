@@ -53,6 +53,7 @@ async function videoActivityObjectToDBAttributes (
     language,
     description,
     nsfw: videoObject.nsfw,
+    commentsEnabled: videoObject.commentsEnabled,
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),
     createdAt: new Date(videoObject.published),

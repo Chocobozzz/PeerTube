@@ -5,6 +5,7 @@ import { AuthService } from '../../../core/auth'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
 import { SortField } from '../../../shared/video/sort-field.type'
+import { VideoDetails } from '../../../shared/video/video-details.model'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
@@ -15,7 +16,7 @@ import { VideoCommentService } from './video-comment.service'
   styleUrls: ['./video-comments.component.scss']
 })
 export class VideoCommentsComponent implements OnInit {
-  @Input() video: Video
+  @Input() video: VideoDetails
   @Input() user: User
 
   comments: VideoComment[] = []
@@ -36,7 +37,9 @@ export class VideoCommentsComponent implements OnInit {
   ) {}
 
   ngOnInit () {
-    this.loadMoreComments()
+    if (this.video.commentsEnabled === true) {
+      this.loadMoreComments()
+    }
   }
 
   viewReplies (comment: VideoComment) {

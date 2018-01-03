@@ -45,6 +45,7 @@ const addVideoCommentThreadValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.videoId, res)) return
+    if (!isVideoCommentsEnabled(res.locals.video, res)) return
 
     return next()
   }
@@ -60,6 +61,7 @@ const addVideoCommentReplyValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.videoId, res)) return
+    if (!isVideoCommentsEnabled(res.locals.video, res)) return
     if (!await isVideoCommentExist(req.params.commentId, res.locals.video, res)) return
 
     return next()
@@ -144,5 +146,17 @@ async function isVideoCommentExist (id: number, video: VideoModel, res: express.
   }
 
   res.locals.videoComment = videoComment
+  return true
+}
+
+function isVideoCommentsEnabled (video: VideoModel, res: express.Response) {
+  if (video.commentsEnabled !== true) {
+    res.status(409)
+      .json({ error: 'Video comments are disabled for this video.' })
+      .end()
+
+    return false
+  }
+
   return true
 }

@@ -9,5 +9,6 @@ export interface VideoCreate {
   nsfw: boolean
   name: string
   tags?: string[]
+  commentsEnabled?: boolean
   privacy: VideoPrivacy
 }

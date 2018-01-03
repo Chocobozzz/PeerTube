@@ -1,12 +1,11 @@
 import * as express from 'express'
-import * as multer from 'multer'
 import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoUpdate } from '../../../../shared'
 import { renamePromise } from '../../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { getVideoFileHeight } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
-import { createReqFiles, generateRandomString, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
+import { createReqFiles, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
 import {
   CONFIG, sequelizeTypescript, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
@@ -141,6 +140,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     category: videoInfo.category,
     licence: videoInfo.licence,
     language: videoInfo.language,
+    commentsEnabled: videoInfo.commentsEnabled,
     nsfw: videoInfo.nsfw,
     description: videoInfo.description,
     privacy: videoInfo.privacy,
@@ -248,6 +248,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
       if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', parseInt(videoInfoToUpdate.privacy.toString(), 10))
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
+      if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
 
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
 

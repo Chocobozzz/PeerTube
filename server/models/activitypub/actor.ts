@@ -1,5 +1,5 @@
 import { values } from 'lodash'
-import { extname, join } from 'path'
+import { extname } from 'path'
 import * as Sequelize from 'sequelize'
 import {
   AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, DefaultScope, ForeignKey, HasMany, HasOne, Is, IsUUID, Model, Scopes,
@@ -13,7 +13,7 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { ACTIVITY_PUB_ACTOR_TYPES, AVATARS_DIR, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
+import { ACTIVITY_PUB_ACTOR_TYPES, CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../account/account'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'

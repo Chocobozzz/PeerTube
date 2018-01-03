@@ -100,6 +100,7 @@ describe('Test videos API validator', function () {
         licence: 1,
         language: 6,
         nsfw: false,
+        commentsEnabled: true,
         description: 'my super description',
         tags: [ 'tag1', 'tag2' ],
         privacy: VideoPrivacy.PUBLIC,
@@ -157,6 +158,20 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a bad nsfw attribute', async function () {
       const fields = immutableAssign(baseCorrectParams, { nsfw: 2 })
+      const attaches = baseCorrectAttaches
+
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail without commentsEnabled attribute', async function () {
+      const fields = omit(baseCorrectParams, 'commentsEnabled')
+      const attaches = baseCorrectAttaches
+
+      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with a bad commentsEnabled attribute', async function () {
+      const fields = immutableAssign(baseCorrectParams, { commentsEnabled: 2 })
       const attaches = baseCorrectAttaches
 
       await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -291,6 +306,7 @@ describe('Test videos API validator', function () {
       licence: 2,
       language: 6,
       nsfw: false,
+      commentsEnabled: false,
       description: 'my super description',
       privacy: VideoPrivacy.PUBLIC,
       tags: [ 'tag1', 'tag2' ]
@@ -350,6 +366,12 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a bad nsfw attribute', async function () {
       const fields = immutableAssign(baseCorrectParams, { nsfw: 2 })
+
+      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad commentsEnabled attribute', async function () {
+      const fields = immutableAssign(baseCorrectParams, { commentsEnabled: 2 })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })

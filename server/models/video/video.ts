@@ -15,9 +15,10 @@ import { Video, VideoDetails } from '../../../shared/models/videos'
 import { activityPubCollection } from '../../helpers/activitypub'
 import { createTorrentPromise, renamePromise, statPromise, unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoCategoryValid, isVideoDescriptionValid, isVideoDurationValid, isVideoLanguageValid, isVideoLicenceValid, isVideoNameValid,
-  isVideoNSFWValid, isVideoPrivacyValid
+  isVideoPrivacyValid
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
@@ -185,7 +186,7 @@ export class VideoModel extends Model<VideoModel> {
   privacy: number
 
   @AllowNull(false)
-  @Is('VideoNSFW', value => throwIfNotValid(value, isVideoNSFWValid, 'NSFW boolean'))
+  @Is('VideoNSFW', value => throwIfNotValid(value, isBooleanValid, 'NSFW boolean'))
   @Column
   nsfw: boolean
 
@@ -229,6 +230,10 @@ export class VideoModel extends Model<VideoModel> {
   @Is('VideoUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.URL.max))
   url: string
+
+  @AllowNull(false)
+  @Column
+  commentsEnabled: boolean
 
   @CreatedAt
   createdAt: Date
@@ -773,6 +778,7 @@ export class VideoModel extends Model<VideoModel> {
       channel: this.VideoChannel.toFormattedJSON(),
       account: this.VideoChannel.Account.toFormattedJSON(),
       tags: map<TagModel, string>(this.Tags, 'name'),
+      commentsEnabled: this.commentsEnabled,
       files: []
     }
 
@@ -920,6 +926,7 @@ export class VideoModel extends Model<VideoModel> {
       language,
       views: this.views,
       nsfw: this.nsfw,
+      commentsEnabled: this.commentsEnabled,
       published: this.createdAt.toISOString(),
       updated: this.updatedAt.toISOString(),
       mediaType: 'text/markdown',

@@ -30,10 +30,6 @@ function isVideoLanguageValid (value: number) {
   return value === null || VIDEO_LANGUAGES[value] !== undefined
 }
 
-function isVideoNSFWValid (value: any) {
-  return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
-}
-
 function isVideoDurationValid (value: string) {
   return exists(value) && validator.isInt(value + '', VIDEOS_CONSTRAINTS_FIELDS.DURATION)
 }
@@ -131,7 +127,6 @@ export {
   isVideoCategoryValid,
   isVideoLicenceValid,
   isVideoLanguageValid,
-  isVideoNSFWValid,
   isVideoTruncatedDescriptionValid,
   isVideoDescriptionValid,
   isVideoFileInfoHashValid,

@@ -24,6 +24,10 @@ function isIdOrUUIDValid (value: string) {
   return isIdValid(value) || isUUIDValid(value)
 }
 
+function isBooleanValid (value: string) {
+  return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -32,5 +36,6 @@ export {
   isIdValid,
   isUUIDValid,
   isIdOrUUIDValid,
-  isDateValid
+  isDateValid,
+  isBooleanValid
 }

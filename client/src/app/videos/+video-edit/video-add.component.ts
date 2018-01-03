@@ -88,6 +88,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     const name = videofile.name.replace(/\.[^/.]+$/, '')
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
+    const commentsEnabled = true
     const channelId = this.firstStepChannelId.toString()
 
     const formData = new FormData()
@@ -95,6 +96,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     // Put the video "private" -> we wait he validates the second step
     formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
+    formData.append('commentsEnabled', '' + commentsEnabled)
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
 

@@ -16,6 +16,7 @@ type VideoAttributes = {
   licence?: number
   language?: number
   nsfw?: boolean
+  commentsEnabled?: boolean
   description?: string
   tags?: string[]
   channelId?: number
@@ -238,6 +239,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     description: 'my super description',
     tags: [ 'tag' ],
     privacy: VideoPrivacy.PUBLIC,
+    commentsEnabled: true,
     fixture: 'video_short.webm'
   }
   attributes = Object.assign(attributes, videoAttributesArg)
@@ -250,6 +252,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .field('category', attributes.category.toString())
               .field('licence', attributes.licence.toString())
               .field('nsfw', JSON.stringify(attributes.nsfw))
+              .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
               .field('description', attributes.description)
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
@@ -273,7 +276,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
             .expect(specialStatus)
 }
 
-function updateVideo (url: string, accessToken: string, id: number, attributes: VideoAttributes, specialStatus = 204) {
+function updateVideo (url: string, accessToken: string, id: number | string, attributes: VideoAttributes, specialStatus = 204) {
   const path = '/api/v1/videos/' + id
   const body = {}
 
@@ -281,7 +284,8 @@ function updateVideo (url: string, accessToken: string, id: number, attributes: 
   if (attributes.category) body['category'] = attributes.category
   if (attributes.licence) body['licence'] = attributes.licence
   if (attributes.language) body['language'] = attributes.language
-  if (attributes.nsfw) body['nsfw'] = attributes.nsfw
+  if (attributes.nsfw !== undefined) body['nsfw'] = JSON.stringify(attributes.nsfw)
+  if (attributes.commentsEnabled !== undefined) body['commentsEnabled'] = JSON.stringify(attributes.commentsEnabled)
   if (attributes.description) body['description'] = attributes.description
   if (attributes.tags) body['tags'] = attributes.tags
   if (attributes.privacy) body['privacy'] = attributes.privacy
@@ -326,6 +330,7 @@ async function completeVideoCheck (
     licence: number
     language: number
     nsfw: boolean
+    commentsEnabled: boolean
     description: string
     host: string
     account: string
@@ -376,6 +381,7 @@ async function completeVideoCheck (
   expect(videoDetails.privacy).to.deep.equal(attributes.privacy)
   expect(videoDetails.privacyLabel).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(videoDetails.account.name).to.equal(attributes.account)
+  expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
 
   expect(videoDetails.channel.name).to.equal(attributes.channel.name)
   expect(videoDetails.channel.isLocal).to.equal(attributes.channel.isLocal)

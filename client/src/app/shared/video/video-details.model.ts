@@ -1,14 +1,10 @@
-import { Account } from '../../../../../shared/models/actors'
-import { Video } from '../../shared/video/video.model'
-import { AuthUser } from '../../core'
 import {
-  VideoDetails as VideoDetailsServerModel,
-  VideoFile,
-  VideoChannel,
-  VideoResolution,
-  UserRight,
-  VideoPrivacy
+  UserRight, VideoChannel, VideoDetails as VideoDetailsServerModel, VideoFile, VideoPrivacy,
+  VideoResolution
 } from '../../../../../shared'
+import { Account } from '../../../../../shared/models/actors'
+import { AuthUser } from '../../core'
+import { Video } from '../../shared/video/video.model'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
   accountName: string
@@ -48,6 +44,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   account: Account
   likesPercent: number
   dislikesPercent: number
+  commentsEnabled: boolean
 
   constructor (hash: VideoDetailsServerModel) {
     super(hash)
@@ -59,6 +56,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.channel = hash.channel
     this.account = hash.account
     this.tags = hash.tags
+    this.commentsEnabled = hash.commentsEnabled
 
     this.likesPercent = (this.likes / (this.likes + this.dislikes)) * 100
     this.dislikesPercent = (this.dislikes / (this.likes + this.dislikes)) * 100
