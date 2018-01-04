@@ -8,6 +8,7 @@ import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
 import { AVATAR_MIMETYPE_EXT, AVATARS_SIZE, CONFIG, sequelizeTypescript } from '../../initializers'
+import { updateActorAvatarInstance } from '../../lib/activitypub'
 import { sendUpdateUser } from '../../lib/activitypub/send'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
@@ -18,7 +19,6 @@ import {
 import { usersUpdateMyAvatarValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { UserModel } from '../../models/account/user'
-import { AvatarModel } from '../../models/avatar/avatar'
 import { VideoModel } from '../../models/video/video'
 
 const reqAvatarFile = createReqFiles('avatarfile', CONFIG.STORAGE.AVATARS_DIR, AVATAR_MIMETYPE_EXT)
@@ -248,26 +248,12 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
 
   await unlinkPromise(source)
 
-  const { avatar } = await sequelizeTypescript.transaction(async t => {
-    const avatar = await AvatarModel.create({
-      filename: avatarName
-    }, { transaction: t })
+  const avatar = await sequelizeTypescript.transaction(async t => {
+    await updateActorAvatarInstance(actor, avatarName, t)
 
-    if (actor.Avatar) {
-      try {
-        await actor.Avatar.destroy({ transaction: t })
-      } catch (err) {
-        logger.error('Cannot remove old avatar of user %s.', user.username, err)
-      }
-    }
+    await sendUpdateUser(user, t)
 
-    actor.set('avatarId', avatar.id)
-    actor.Avatar = avatar
-    await actor.save({ transaction: t })
-
-    await sendUpdateUser(user, undefined)
-
-    return { actor, avatar }
+    return avatar
   })
 
   return res

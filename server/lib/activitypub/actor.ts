@@ -7,10 +7,11 @@ import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/a
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
 import { isActorObjectValid } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { retryTransactionWrapper } from '../../helpers/database-utils'
+import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
+import { getUrlFromWebfinger } from '../../helpers/webfinger'
 import { AVATAR_MIMETYPE_EXT, CONFIG, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
@@ -63,7 +64,7 @@ async function getOrCreateActorAndServerAndModel (actorUrl: string, recurseIfNee
     actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, options)
   }
 
-  return actor
+  return refreshActorIfNeeded(actor)
 }
 
 function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
@@ -82,6 +83,45 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
     followersUrl: url + '/followers',
     followingUrl: url + '/following'
   })
+}
+
+async function updateActorInstance (actorInstance: ActorModel, attributes: ActivityPubActor) {
+  const followersCount = await fetchActorTotalItems(attributes.followers)
+  const followingCount = await fetchActorTotalItems(attributes.following)
+
+  actorInstance.set('type', attributes.type)
+  actorInstance.set('uuid', attributes.uuid)
+  actorInstance.set('preferredUsername', attributes.preferredUsername)
+  actorInstance.set('url', attributes.id)
+  actorInstance.set('publicKey', attributes.publicKey.publicKeyPem)
+  actorInstance.set('followersCount', followersCount)
+  actorInstance.set('followingCount', followingCount)
+  actorInstance.set('inboxUrl', attributes.inbox)
+  actorInstance.set('outboxUrl', attributes.outbox)
+  actorInstance.set('sharedInboxUrl', attributes.endpoints.sharedInbox)
+  actorInstance.set('followersUrl', attributes.followers)
+  actorInstance.set('followingUrl', attributes.following)
+}
+
+async function updateActorAvatarInstance (actorInstance: ActorModel, avatarName: string, t: Transaction) {
+  if (avatarName !== undefined) {
+    if (actorInstance.avatarId) {
+      try {
+        await actorInstance.Avatar.destroy({ transaction: t })
+      } catch (err) {
+        logger.error('Cannot remove old avatar of actor %s.', actorInstance.url, err)
+      }
+    }
+
+    const avatar = await AvatarModel.create({
+      filename: avatarName
+    }, { transaction: t })
+
+    actorInstance.set('avatarId', avatar.id)
+    actorInstance.Avatar = avatar
+  }
+
+  return actorInstance
 }
 
 async function fetchActorTotalItems (url: string) {
@@ -129,7 +169,9 @@ export {
   buildActorInstance,
   setAsyncActorKeys,
   fetchActorTotalItems,
-  fetchAvatarIfExists
+  fetchAvatarIfExists,
+  updateActorInstance,
+  updateActorAvatarInstance
 }
 
 // ---------------------------------------------------------------------------
@@ -262,4 +304,36 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
   })
 
   return videoChannel.save({ transaction: t })
+}
+
+async function refreshActorIfNeeded (actor: ActorModel) {
+  if (!actor.isOutdated()) return actor
+
+  const actorUrl = await getUrlFromWebfinger(actor.preferredUsername, actor.getHost())
+  const result = await fetchRemoteActor(actorUrl)
+  if (result === undefined) throw new Error('Cannot fetch remote actor in refresh actor.')
+
+  return sequelizeTypescript.transaction(async t => {
+    updateInstanceWithAnother(actor, result.actor)
+
+    if (result.avatarName !== undefined) {
+      await updateActorAvatarInstance(actor, result.avatarName, t)
+    }
+
+    await actor.save({ transaction: t })
+
+    if (actor.Account) {
+      await actor.save({ transaction: t })
+
+      actor.Account.set('name', result.name)
+      await actor.Account.save({ transaction: t })
+    } else if (actor.VideoChannel) {
+      await actor.save({ transaction: t })
+
+      actor.VideoChannel.set('name', result.name)
+      await actor.VideoChannel.save({ transaction: t })
+    }
+
+    return actor
+  })
 }

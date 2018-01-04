@@ -8,11 +8,10 @@ import { resetSequelizeInstance } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { AvatarModel } from '../../../models/avatar/avatar'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
-import { fetchActorTotalItems, fetchAvatarIfExists, getOrCreateActorAndServerAndModel } from '../actor'
+import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
 import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
@@ -124,7 +123,6 @@ async function updateRemoteAccount (actor: ActorModel, activity: ActivityUpdate)
   const accountAttributesToUpdate = activity.object as ActivityPubActor
 
   logger.debug('Updating remote account "%s".', accountAttributesToUpdate.uuid)
-  let actorInstance: ActorModel
   let accountInstance: AccountModel
   let actorFieldsSave: object
   let accountFieldsSave: object
@@ -134,39 +132,14 @@ async function updateRemoteAccount (actor: ActorModel, activity: ActivityUpdate)
 
   try {
     await sequelizeTypescript.transaction(async t => {
-      actorInstance = await ActorModel.loadByUrl(accountAttributesToUpdate.id, t)
-      if (!actorInstance) throw new Error('Actor ' + accountAttributesToUpdate.id + ' not found.')
+      actorFieldsSave = actor.toJSON()
+      accountInstance = actor.Account
+      accountFieldsSave = actor.Account.toJSON()
 
-      actorFieldsSave = actorInstance.toJSON()
-      accountInstance = actorInstance.Account
-      accountFieldsSave = actorInstance.Account.toJSON()
-
-      const followersCount = await fetchActorTotalItems(accountAttributesToUpdate.followers)
-      const followingCount = await fetchActorTotalItems(accountAttributesToUpdate.following)
-
-      actorInstance.set('type', accountAttributesToUpdate.type)
-      actorInstance.set('uuid', accountAttributesToUpdate.uuid)
-      actorInstance.set('preferredUsername', accountAttributesToUpdate.preferredUsername)
-      actorInstance.set('url', accountAttributesToUpdate.id)
-      actorInstance.set('publicKey', accountAttributesToUpdate.publicKey.publicKeyPem)
-      actorInstance.set('followersCount', followersCount)
-      actorInstance.set('followingCount', followingCount)
-      actorInstance.set('inboxUrl', accountAttributesToUpdate.inbox)
-      actorInstance.set('outboxUrl', accountAttributesToUpdate.outbox)
-      actorInstance.set('sharedInboxUrl', accountAttributesToUpdate.endpoints.sharedInbox)
-      actorInstance.set('followersUrl', accountAttributesToUpdate.followers)
-      actorInstance.set('followingUrl', accountAttributesToUpdate.following)
+      await updateActorInstance(actor, accountAttributesToUpdate)
 
       if (avatarName !== undefined) {
-        if (actorInstance.avatarId) {
-          await actorInstance.Avatar.destroy({ transaction: t })
-        }
-
-        const avatar = await AvatarModel.create({
-          filename: avatarName
-        }, { transaction: t })
-
-        actor.set('avatarId', avatar.id)
+        await updateActorAvatarInstance(actor, avatarName, t)
       }
 
       await actor.save({ transaction: t })
@@ -177,8 +150,8 @@ async function updateRemoteAccount (actor: ActorModel, activity: ActivityUpdate)
 
     logger.info('Remote account with uuid %s updated', accountAttributesToUpdate.uuid)
   } catch (err) {
-    if (actorInstance !== undefined && actorFieldsSave !== undefined) {
-      resetSequelizeInstance(actorInstance, actorFieldsSave)
+    if (actor !== undefined && actorFieldsSave !== undefined) {
+      resetSequelizeInstance(actor, actorFieldsSave)
     }
 
     if (accountInstance !== undefined && accountFieldsSave !== undefined) {

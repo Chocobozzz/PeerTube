@@ -278,7 +278,8 @@ const ACTIVITY_PUB = {
     VIDEO: [ 'video/mp4', 'video/webm', 'video/ogg' ], // TODO: Merge with VIDEO_MIMETYPE_EXT
     TORRENT: [ 'application/x-bittorrent' ],
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
-  }
+  },
+  ACTOR_REFRESH_INTERVAL: 3600 * 24 // 1 day
 }
 
 const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
@@ -350,6 +351,7 @@ if (isTestInstance() === true) {
   REMOTE_SCHEME.WS = 'ws'
   STATIC_MAX_AGE = '0'
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
+  ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 60 // 1 minute
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
 }
 

@@ -15,6 +15,10 @@ async function loadActorUrlOrGetFromWebfinger (name: string, host: string) {
   const actor = await ActorModel.loadByNameAndHost(name, host)
   if (actor) return actor.url
 
+  return getUrlFromWebfinger(name, host)
+}
+
+async function getUrlFromWebfinger (name: string, host: string) {
   const webfingerData: WebFingerData = await webfingerLookup(name + '@' + host)
   return getLinkOrThrow(webfingerData)
 }
@@ -22,6 +26,7 @@ async function loadActorUrlOrGetFromWebfinger (name: string, host: string) {
 // ---------------------------------------------------------------------------
 
 export {
+  getUrlFromWebfinger,
   loadActorUrlOrGetFromWebfinger
 }
 
