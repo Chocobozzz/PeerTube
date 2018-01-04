@@ -1,4 +1,5 @@
 import * as request from 'supertest'
+import { makeDeleteRequest } from '../'
 
 function getVideoCommentThreads (url: string, videoId: number | string, start: number, count: number, sort?: string) {
   const path = '/api/v1/videos/' + videoId + '/comment-threads'
@@ -54,11 +55,29 @@ function addVideoCommentReply (
     .expect(expectedStatus)
 }
 
+function deleteVideoComment (
+  url: string,
+  token: string,
+  videoId: number | string,
+  commentId: number,
+  statusCodeExpected = 204
+) {
+  const path = '/api/v1/videos/' + videoId + '/comments/' + commentId
+
+  return makeDeleteRequest({
+    url,
+    path,
+    token,
+    statusCodeExpected
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getVideoCommentThreads,
   getVideoThreadComments,
   addVideoCommentThread,
-  addVideoCommentReply
+  addVideoCommentReply,
+  deleteVideoComment
 }

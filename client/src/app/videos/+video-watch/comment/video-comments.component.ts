@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
+import { ConfirmService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
+import { VideoComment as VideoCommentInterface, VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
@@ -32,6 +33,7 @@ export class VideoCommentsComponent implements OnInit {
   constructor (
     private authService: AuthService,
     private notificationsService: NotificationsService,
+    private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService
   ) {}
 
@@ -41,7 +43,7 @@ export class VideoCommentsComponent implements OnInit {
     }
   }
 
-  viewReplies (comment: VideoComment) {
+  viewReplies (comment: VideoCommentInterface) {
     this.threadLoading[comment.id] = true
 
     this.videoCommentService.getVideoThreadComments(this.video.id, comment.id)
@@ -79,6 +81,44 @@ export class VideoCommentsComponent implements OnInit {
     this.inReplyToCommentId = undefined
   }
 
+  onThreadCreated (commentTree: VideoCommentThreadTree) {
+    this.viewReplies(commentTree.comment)
+  }
+
+  onWantedToDelete (commentToDelete: VideoComment) {
+    let message = 'Do you really want to delete this comment?'
+    if (commentToDelete.totalReplies !== 0) message += `${commentToDelete.totalReplies} would be deleted too.`
+
+    this.confirmService.confirm(message, 'Delete').subscribe(
+      res => {
+        if (res === false) return
+
+        this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
+          .subscribe(
+            () => {
+              // Delete the comment in the tree
+              if (commentToDelete.inReplyToCommentId) {
+                const thread = this.threadComments[commentToDelete.threadId]
+                if (!thread) {
+                  console.error(`Cannot find thread ${commentToDelete.threadId} of the comment to delete ${commentToDelete.id}`)
+                  return
+                }
+
+                this.deleteLocalCommentThread(thread, commentToDelete)
+                return
+              }
+
+              // Delete the thread
+              this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
+              this.componentPagination.totalItems--
+            },
+
+            err => this.notificationsService.error('Error', err.message)
+          )
+      }
+    )
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
@@ -91,7 +131,7 @@ export class VideoCommentsComponent implements OnInit {
     }
   }
 
-  protected hasMoreComments () {
+  private hasMoreComments () {
     // No results
     if (this.componentPagination.totalItems === 0) return false
 
@@ -100,5 +140,16 @@ export class VideoCommentsComponent implements OnInit {
 
     const maxPage = this.componentPagination.totalItems / this.componentPagination.itemsPerPage
     return maxPage > this.componentPagination.currentPage
+  }
+
+  private deleteLocalCommentThread (parentComment: VideoCommentThreadTree, commentToDelete: VideoComment) {
+    for (const commentChild of parentComment.children) {
+      if (commentChild.comment.id === commentToDelete.id) {
+        parentComment.children = parentComment.children.filter(c => c.comment.id !== commentToDelete.id)
+        return
+      }
+
+      this.deleteLocalCommentThread(commentChild, commentToDelete)
+    }
   }
 }

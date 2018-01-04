@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { AuthService, ServerService } from './core'
+import { AuthService, ServerService } from '@app/core'
 
 @Component({
   selector: 'my-app',
@@ -48,10 +48,6 @@ export class AppComponent implements OnInit {
     if (window.innerWidth < 600) {
       this.isMenuDisplayed = false
     }
-  }
-
-  isInAdmin () {
-    return this.router.url.indexOf('/admin/') !== -1
   }
 
   toggleMenu () {

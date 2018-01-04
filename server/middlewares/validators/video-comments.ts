@@ -1,9 +1,11 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
+import { UserRight } from '../../../shared'
 import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import { isValidVideoCommentText } from '../../helpers/custom-validators/video-comments'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
+import { UserModel } from '../../models/account/user'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { areValidationErrors } from './utils'
@@ -83,6 +85,24 @@ const videoCommentGetValidator = [
   }
 ]
 
+const removeVideoCommentValidator = [
+  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
+  param('commentId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid commentId'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking removeVideoCommentValidator parameters.', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await isVideoExist(req.params.videoId, res)) return
+    if (!await isVideoCommentExist(req.params.commentId, res.locals.video, res)) return
+
+    // Check if the user who did the request is able to delete the video
+    if (!checkUserCanDeleteVideoComment(res.locals.oauth.token.User, res.locals.videoComment, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -90,7 +110,8 @@ export {
   listVideoThreadCommentsValidator,
   addVideoCommentThreadValidator,
   addVideoCommentReplyValidator,
-  videoCommentGetValidator
+  videoCommentGetValidator,
+  removeVideoCommentValidator
 }
 
 // ---------------------------------------------------------------------------
@@ -155,6 +176,18 @@ function isVideoCommentsEnabled (video: VideoModel, res: express.Response) {
       .json({ error: 'Video comments are disabled for this video.' })
       .end()
 
+    return false
+  }
+
+  return true
+}
+
+function checkUserCanDeleteVideoComment (user: UserModel, videoComment: VideoCommentModel, res: express.Response) {
+  const account = videoComment.Account
+  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT) === false && account.userId !== user.id) {
+    res.status(403)
+      .json({ error: 'Cannot remove video comment of another user' })
+      .end()
     return false
   }
 

@@ -18,10 +18,15 @@ function isVideoCommentObjectValid (comment: any) {
     isActivityPubUrlValid(comment.url)
 }
 
+function isVideoCommentDeleteActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Delete')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoCommentCreateActivityValid
+  isVideoCommentCreateActivityValid,
+  isVideoCommentDeleteActivityValid
 }
 
 // ---------------------------------------------------------------------------

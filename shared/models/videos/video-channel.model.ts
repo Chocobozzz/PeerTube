@@ -3,6 +3,7 @@ import { Video } from './video.model'
 export interface VideoChannel {
   id: number
   name: string
+  url: string
   description: string
   isLocal: boolean
   createdAt: Date | string

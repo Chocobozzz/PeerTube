@@ -137,7 +137,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   blacklistVideo (event: Event) {
     event.preventDefault()
 
-    this.confirmService.confirm('Do you really want to blacklist this video ?', 'Blacklist').subscribe(
+    this.confirmService.confirm('Do you really want to blacklist this video?', 'Blacklist').subscribe(
       res => {
         if (res === false) return
 

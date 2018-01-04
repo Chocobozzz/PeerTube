@@ -13,7 +13,7 @@ import {
   updateVideo, uploadVideo, userLogin, viewVideo, wait, webtorrentAdd
 } from '../../utils'
 import {
-  addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
+  addVideoCommentReply, addVideoCommentThread, deleteVideoComment, getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
 
@@ -735,6 +735,37 @@ describe('Test multiple servers', function () {
         expect(secondChild.comment.account.name).equal('root')
         expect(secondChild.comment.account.host).equal('localhost:9003')
         expect(secondChild.children).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should delete the thread comments', async function () {
+      this.timeout(10000)
+
+      const res1 = await getVideoCommentThreads(servers[0].url, videoUUID, 0, 5)
+      const threadId = res1.body.data.find(c => c.text === 'my super first comment').id
+      await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
+
+      await wait(5000)
+    })
+
+    it('Should have the thread comments deleted on other servers too', async function () {
+      for (const server of servers) {
+        const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+
+        expect(res.body.total).to.equal(1)
+        expect(res.body.data).to.be.an('array')
+        expect(res.body.data).to.have.lengthOf(1)
+
+        {
+          const comment: VideoComment = res.body.data[0]
+          expect(comment).to.not.be.undefined
+          expect(comment.inReplyToCommentId).to.be.null
+          expect(comment.account.name).to.equal('root')
+          expect(comment.account.host).to.equal('localhost:9003')
+          expect(comment.totalReplies).to.equal(0)
+          expect(dateIsValid(comment.createdAt as string)).to.be.true
+          expect(dateIsValid(comment.updatedAt as string)).to.be.true
+        }
       }
     })
 

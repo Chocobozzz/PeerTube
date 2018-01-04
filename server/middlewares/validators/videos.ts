@@ -253,7 +253,7 @@ function checkUserCanDeleteVideo (user: UserModel, video: VideoModel, res: expre
   }
 
   // Check if the user can delete the video
-  // The user can delete it if s/he is an admin
+  // The user can delete it if he has the right
   // Or if s/he is the video's account
   const account = video.VideoChannel.Account
   if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && account.userId !== user.id) {

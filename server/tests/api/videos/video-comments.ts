@@ -9,7 +9,7 @@ import {
   uploadVideo
 } from '../../utils/index'
 import {
-  addVideoCommentReply, addVideoCommentThread, getVideoCommentThreads,
+  addVideoCommentReply, addVideoCommentThread, deleteVideoComment, getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
 
@@ -20,6 +20,7 @@ describe('Test video comments', function () {
   let videoId
   let videoUUID
   let threadId
+  let replyToDeleteId: number
 
   before(async function () {
     this.timeout(10000)
@@ -61,6 +62,7 @@ describe('Test video comments', function () {
     expect(comment.id).to.equal(comment.threadId)
     expect(comment.account.name).to.equal('root')
     expect(comment.account.host).to.equal('localhost:9001')
+    expect(comment.account.url).to.equal('http://localhost:9001/accounts/root')
     expect(comment.totalReplies).to.equal(0)
     expect(dateIsValid(comment.createdAt as string)).to.be.true
     expect(dateIsValid(comment.updatedAt as string)).to.be.true
@@ -132,6 +134,8 @@ describe('Test video comments', function () {
     const secondChild = tree.children[1]
     expect(secondChild.comment.text).to.equal('my second answer to thread 1')
     expect(secondChild.children).to.have.lengthOf(0)
+
+    replyToDeleteId = secondChild.comment.id
   })
 
   it('Should create other threads', async function () {
@@ -155,6 +159,38 @@ describe('Test video comments', function () {
     expect(res.body.data[1].totalReplies).to.equal(0)
     expect(res.body.data[2].text).to.equal('super thread 3')
     expect(res.body.data[2].totalReplies).to.equal(0)
+  })
+
+  it('Should delete a reply', async function () {
+    await deleteVideoComment(server.url, server.accessToken, videoId, replyToDeleteId)
+
+    const res = await getVideoThreadComments(server.url, videoUUID, threadId)
+
+    const tree: VideoCommentThreadTree = res.body
+    expect(tree.comment.text).equal('my super first comment')
+    expect(tree.children).to.have.lengthOf(1)
+
+    const firstChild = tree.children[0]
+    expect(firstChild.comment.text).to.equal('my super answer to thread 1')
+    expect(firstChild.children).to.have.lengthOf(1)
+
+    const childOfFirstChild = firstChild.children[0]
+    expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
+    expect(childOfFirstChild.children).to.have.lengthOf(0)
+  })
+
+  it('Should delete a complete thread', async function () {
+    await deleteVideoComment(server.url, server.accessToken, videoId, threadId)
+
+    const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5, 'createdAt')
+    expect(res.body.total).to.equal(2)
+    expect(res.body.data).to.be.an('array')
+    expect(res.body.data).to.have.lengthOf(2)
+
+    expect(res.body.data[0].text).to.equal('super thread 2')
+    expect(res.body.data[0].totalReplies).to.equal(0)
+    expect(res.body.data[1].text).to.equal('super thread 3')
+    expect(res.body.data[1].totalReplies).to.equal(0)
   })
 
   after(async function () {

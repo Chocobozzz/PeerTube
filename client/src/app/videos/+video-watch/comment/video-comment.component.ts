@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
+import { UserRight } from '../../../../../../shared/models/users'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { Account } from '../../../shared/account/account.model'
@@ -17,7 +18,9 @@ export class VideoCommentComponent {
   @Input() commentTree: VideoCommentThreadTree
   @Input() inReplyToCommentId: number
 
+  @Output() wantedToDelete = new EventEmitter<VideoComment>()
   @Output() wantedToReply = new EventEmitter<VideoComment>()
+  @Output() threadCreated = new EventEmitter<VideoCommentThreadTree>()
   @Output() resetReply = new EventEmitter()
 
   constructor (private authService: AuthService) {}
@@ -32,6 +35,8 @@ export class VideoCommentComponent {
         comment: this.comment,
         children: []
       }
+
+      this.threadCreated.emit(this.commentTree)
     }
 
     this.commentTree.children.push({
@@ -41,17 +46,16 @@ export class VideoCommentComponent {
     this.resetReply.emit()
   }
 
-  onWantToReply () {
-    this.wantedToReply.emit(this.comment)
+  onWantToReply (comment?: VideoComment) {
+    this.wantedToReply.emit(comment || this.comment)
+  }
+
+  onWantToDelete (comment?: VideoComment) {
+    this.wantedToDelete.emit(comment || this.comment)
   }
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
-  }
-
-  // Event from child comment
-  onWantedToReply (comment: VideoComment) {
-    this.wantedToReply.emit(comment)
   }
 
   onResetReply () {
@@ -60,5 +64,13 @@ export class VideoCommentComponent {
 
   getAvatarUrl (account: AccountInterface) {
     return Account.GET_ACCOUNT_AVATAR_URL(account)
+  }
+
+  isRemovableByUser () {
+    return this.isUserLoggedIn() &&
+      (
+        this.user.account.id === this.comment.account.id ||
+        this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
+      )
   }
 }

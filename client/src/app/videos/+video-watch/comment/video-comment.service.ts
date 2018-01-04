@@ -66,6 +66,15 @@ export class VideoCommentService {
       .catch((res) => this.restExtractor.handleError(res))
   }
 
+  deleteVideoComment (videoId: number | string, commentId: number) {
+    const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comments/${commentId}`
+
+    return this.authHttp
+      .delete(url)
+      .map(this.restExtractor.extractDataBool)
+      .catch((res) => this.restExtractor.handleError(res))
+  }
+
   private extractVideoComment (videoComment: VideoCommentServerModel) {
     return new VideoComment(videoComment)
   }

@@ -271,6 +271,7 @@ export class ActorModel extends Model<ActorModel> {
 
     return {
       id: this.id,
+      url: this.url,
       uuid: this.uuid,
       host: this.getHost(),
       score,

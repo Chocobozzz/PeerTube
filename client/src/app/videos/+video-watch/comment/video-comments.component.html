@@ -27,6 +27,8 @@
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="threadComments[comment.id]"
           (wantedToReply)="onWantedToReply($event)"
+          (wantedToDelete)="onWantedToDelete($event)"
+          (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
         ></my-video-comment>
 

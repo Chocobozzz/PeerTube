@@ -43,7 +43,8 @@ import { VideoTagModel } from './video-tag'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
-  WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_ACCOUNT_API = 'WITH_ACCOUNT_API',
+  WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
   WITH_SHARES = 'WITH_SHARES',
@@ -62,7 +63,35 @@ enum ScopeNames {
       privacy: VideoPrivacy.PUBLIC
     }
   },
-  [ScopeNames.WITH_ACCOUNT]: {
+  [ScopeNames.WITH_ACCOUNT_API]: {
+    include: [
+      {
+        model: () => VideoChannelModel.unscoped(),
+        required: true,
+        include: [
+          {
+            attributes: [ 'name' ],
+            model: () => AccountModel.unscoped(),
+            required: true,
+            include: [
+              {
+                attributes: [ 'serverId' ],
+                model: () => ActorModel.unscoped(),
+                required: true,
+                include: [
+                  {
+                    model: () => ServerModel.unscoped(),
+                    required: false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  [ScopeNames.WITH_ACCOUNT_DETAILS]: {
     include: [
       {
         model: () => VideoChannelModel,
@@ -146,6 +175,9 @@ enum ScopeNames {
     },
     {
       fields: [ 'channelId' ]
+    },
+    {
+      fields: [ 'id', 'privacy' ]
     }
   ]
 })
@@ -461,7 +493,7 @@ export class VideoModel extends Model<VideoModel> {
       order: [ getSort(sort) ]
     }
 
-    return VideoModel.scope([ ScopeNames.AVAILABLE_FOR_LIST, ScopeNames.WITH_ACCOUNT ])
+    return VideoModel.scope([ ScopeNames.AVAILABLE_FOR_LIST, ScopeNames.WITH_ACCOUNT_API ])
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {
@@ -496,7 +528,7 @@ export class VideoModel extends Model<VideoModel> {
 
     if (t !== undefined) query.transaction = t
 
-    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_FILES ]).findOne(query)
+    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
   }
 
   static loadByUUIDOrURL (uuid: string, url: string, t?: Sequelize.Transaction) {
@@ -520,7 +552,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS ])
       .findById(id, options)
   }
 
@@ -545,7 +577,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel
-      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT ])
+      .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS ])
       .findOne(options)
   }
 
@@ -563,7 +595,7 @@ export class VideoModel extends Model<VideoModel> {
         ScopeNames.WITH_SHARES,
         ScopeNames.WITH_TAGS,
         ScopeNames.WITH_FILES,
-        ScopeNames.WITH_ACCOUNT,
+        ScopeNames.WITH_ACCOUNT_DETAILS,
         ScopeNames.WITH_COMMENTS
       ])
       .findOne(options)

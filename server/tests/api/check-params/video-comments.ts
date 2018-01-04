@@ -3,8 +3,9 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
-  flushTests, killallServers, makeGetRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
-  uploadVideo
+  createUser,
+  flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePostBodyRequest, runServer, ServerInfo, setAccessTokensToServers,
+  uploadVideo, userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 import { addVideoCommentThread } from '../../utils/videos/video-comments'
@@ -16,6 +17,7 @@ describe('Test video comments API validator', function () {
   let pathComment: string
   let server: ServerInfo
   let videoUUID: string
+  let userAccessToken: string
   let commentId: number
 
   // ---------------------------------------------------------------
@@ -39,6 +41,15 @@ describe('Test video comments API validator', function () {
       const res = await addVideoCommentThread(server.url, server.accessToken, videoUUID, 'coucou')
       commentId = res.body.comment.id
       pathComment = '/api/v1/videos/' + videoUUID + '/comments/' + commentId
+    }
+
+    {
+      const user = {
+        username: 'user1',
+        password: 'my super password'
+      }
+      await createUser(server.url, server.accessToken, user.username, user.password)
+      userAccessToken = await userLogin(server, user)
     }
   })
 
@@ -182,6 +193,30 @@ describe('Test video comments API validator', function () {
         text: 'super comment'
       }
       await makePostBodyRequest({ url: server.url, path: pathComment, token: server.accessToken, fields, statusCodeExpected: 200 })
+    })
+  })
+
+  describe('When removing video comments', function () {
+    it('Should fail with a non authenticated user', async function () {
+      await makeDeleteRequest({ url: server.url, path: pathComment, token: 'none', statusCodeExpected: 401 })
+    })
+
+    it('Should fail with another user', async function () {
+      await makeDeleteRequest({ url: server.url, path: pathComment, token: userAccessToken, statusCodeExpected: 403 })
+    })
+
+    it('Should fail with an incorrect video', async function () {
+      const path = '/api/v1/videos/ba708d62-e3d7-45d9-9d73-41b9097cc02d/comments/' + commentId
+      await makeDeleteRequest({ url: server.url, path, token: server.accessToken, statusCodeExpected: 404 })
+    })
+
+    it('Should fail with an incorrect comment', async function () {
+      const path = '/api/v1/videos/' + videoUUID + '/comments/124'
+      await makeDeleteRequest({ url: server.url, path, token: server.accessToken, statusCodeExpected: 404 })
+    })
+
+    it('Should succeed with the correct parameters', async function () {
+      await makeDeleteRequest({ url: server.url, path: pathComment, token: server.accessToken, statusCodeExpected: 204 })
     })
   })
 

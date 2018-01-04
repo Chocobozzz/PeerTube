@@ -6,6 +6,7 @@ import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 
 async function processDeleteActivity (activity: ActivityDelete) {
@@ -24,9 +25,16 @@ async function processDeleteActivity (activity: ActivityDelete) {
   }
 
   {
-    let videoObject = await VideoModel.loadByUrlAndPopulateAccount(activity.id)
-    if (videoObject !== undefined) {
-      return processDeleteVideo(actor, videoObject)
+    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(activity.id)
+    if (videoCommentInstance) {
+      return processDeleteVideoComment(actor, videoCommentInstance)
+    }
+  }
+
+  {
+    const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(activity.id)
+    if (videoInstance) {
+      return processDeleteVideo(actor, videoInstance)
     }
   }
 
@@ -100,4 +108,23 @@ async function deleteRemoteVideoChannel (videoChannelToRemove: VideoChannelModel
   })
 
   logger.info('Remote video channel with uuid %s removed.', videoChannelToRemove.Actor.uuid)
+}
+
+async function processDeleteVideoComment (actor: ActorModel, videoComment: VideoCommentModel) {
+  const options = {
+    arguments: [ actor, videoComment ],
+    errorMessage: 'Cannot remove the remote video comment with many retries.'
+  }
+
+  await retryTransactionWrapper(deleteRemoteVideoComment, options)
+}
+
+function deleteRemoteVideoComment (actor: ActorModel, videoComment: VideoCommentModel) {
+  logger.debug('Removing remote video comment "%s".', videoComment.url)
+
+  return sequelizeTypescript.transaction(async t => {
+    await videoComment.destroy({ transaction: t })
+
+    logger.info('Remote video comment %s removed.', videoComment.url)
+  })
 }

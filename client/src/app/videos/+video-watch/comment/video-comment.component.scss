@@ -20,6 +20,9 @@
       margin-bottom: 4px;
 
       .comment-account {
+        @include disable-default-a-behaviour;
+
+        color: #000;
         font-weight: $font-bold;
       }
 
@@ -31,10 +34,16 @@
 
     .comment-actions {
       margin: 10px 0;
+      display: flex;
 
-      .comment-action-reply {
+      .comment-action-reply, .comment-action-delete {
         color: #585858;
         cursor: pointer;
+        margin-right: 10px;
+
+        &:hover {
+          color: #000;
+        }
       }
     }
   }

@@ -1,11 +1,11 @@
 import { Account as ServerAccount } from '../../../../../shared/models/actors/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
-import { environment } from '../../../environments/environment'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 
 export class Account implements ServerAccount {
   id: number
   uuid: string
+  url: string
   name: string
   displayName: string
   host: string

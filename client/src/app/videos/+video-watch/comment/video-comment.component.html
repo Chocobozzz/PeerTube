@@ -3,13 +3,14 @@
 
   <div class="comment">
     <div class="comment-account-date">
-      <div class="comment-account">{{ comment.by }}</div>
+      <a target="_blank" [href]="comment.account.url" class="comment-account">{{ comment.by }}</a>
       <div class="comment-date">{{ comment.createdAt | myFromNow }}</div>
     </div>
     <div>{{ comment.text }}</div>
 
     <div class="comment-actions">
       <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply">Reply</div>
+      <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete">Delete</div>
     </div>
 
     <my-video-comment-add
@@ -28,7 +29,8 @@
           [video]="video"
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="commentChild"
-          (wantedToReply)="onWantedToReply($event)"
+          (wantedToReply)="onWantToReply($event)"
+          (wantedToDelete)="onWantToDelete($event)"
           (resetReply)="onResetReply()"
         ></my-video-comment>
       </div>

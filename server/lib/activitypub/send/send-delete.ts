@@ -2,6 +2,7 @@ import { Transaction } from 'sequelize'
 import { ActivityDelete } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { broadcastToFollowers } from './misc'
 
@@ -22,11 +23,24 @@ async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
   return broadcastToFollowers(data, byActor, [ byActor ], t)
 }
 
+async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Transaction) {
+  const byActor = videoComment.Account.Actor
+
+  const data = deleteActivityData(videoComment.url, byActor)
+
+  const actorsInvolved = await VideoShareModel.loadActorsByShare(videoComment.Video.id, t)
+  actorsInvolved.push(videoComment.Video.VideoChannel.Account.Actor)
+  actorsInvolved.push(byActor)
+
+  return broadcastToFollowers(data, byActor, actorsInvolved, t)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   sendDeleteVideo,
-  sendDeleteActor
+  sendDeleteActor,
+  sendDeleteVideoComment
 }
 
 // ---------------------------------------------------------------------------

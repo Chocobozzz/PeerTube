@@ -7,12 +7,14 @@ import { VideoCommentObject } from '../../../shared/models/activitypub/objects/v
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { sendDeleteVideoComment } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
+import { VideoChannelModel } from './video-channel'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -70,7 +72,25 @@ enum ScopeNames {
     include: [
       {
         model: () => VideoModel,
-        required: false
+        required: true,
+        include: [
+          {
+            model: () => VideoChannelModel.unscoped(),
+            required: true,
+            include: [
+              {
+                model: () => AccountModel,
+                required: true,
+                include: [
+                  {
+                    model: () => ActorModel,
+                    required: true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
     ]
   }
@@ -155,9 +175,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   Account: AccountModel
 
   @AfterDestroy
-  static sendDeleteIfOwned (instance: VideoCommentModel) {
-    // TODO
-    return undefined
+  static async sendDeleteIfOwned (instance: VideoCommentModel) {
+    if (instance.isOwned()) {
+      await sendDeleteVideoComment(instance, undefined)
+    }
   }
 
   static loadById (id: number, t?: Sequelize.Transaction) {
@@ -198,6 +219,18 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.findOne(query)
   }
 
+  static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
+    const query: IFindOptions<VideoCommentModel> = {
+      where: {
+        url
+      }
+    }
+
+    if (t !== undefined) query.transaction = t
+
+    return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
+  }
+
   static listThreadsForApi (videoId: number, start: number, count: number, sort: string) {
     const query = {
       offset: start,
@@ -235,6 +268,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
+  }
+
+  isOwned () {
+    return this.Account.isOwned()
   }
 
   toFormattedJSON () {
