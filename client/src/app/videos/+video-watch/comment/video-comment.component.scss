@@ -32,6 +32,14 @@
       }
     }
 
+    .comment-html {
+      a {
+        @include disable-default-a-behaviour;
+
+        color: #000;
+      }
+    }
+
     .comment-actions {
       margin: 10px 0;
       display: flex;

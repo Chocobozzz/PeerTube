@@ -6,7 +6,7 @@
       <a target="_blank" [href]="comment.account.url" class="comment-account">{{ comment.by }}</a>
       <div class="comment-date">{{ comment.createdAt | myFromNow }}</div>
     </div>
-    <div>{{ comment.text }}</div>
+    <div class="comment-html" [innerHTML]="sanitizedCommentHTML"></div>
 
     <div class="comment-actions">
       <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply">Reply</div>

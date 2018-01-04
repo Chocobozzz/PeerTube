@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import * as sanitizeHtml from 'sanitize-html'
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { UserRight } from '../../../../../../shared/models/users'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
@@ -12,7 +13,7 @@ import { VideoComment } from './video-comment.model'
   templateUrl: './video-comment.component.html',
   styleUrls: ['./video-comment.component.scss']
 })
-export class VideoCommentComponent {
+export class VideoCommentComponent implements OnInit {
   @Input() video: Video
   @Input() comment: VideoComment
   @Input() commentTree: VideoCommentThreadTree
@@ -23,10 +24,18 @@ export class VideoCommentComponent {
   @Output() threadCreated = new EventEmitter<VideoCommentThreadTree>()
   @Output() resetReply = new EventEmitter()
 
+  sanitizedCommentHTML = ''
+
   constructor (private authService: AuthService) {}
 
   get user () {
     return this.authService.getUser()
+  }
+
+  ngOnInit () {
+    this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
+      allowedTags: [ 'p', 'span' ]
+    })
   }
 
   onCommentReplyCreated (createdComment: VideoComment) {

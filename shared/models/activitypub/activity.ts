@@ -39,7 +39,7 @@ export interface ActivityUpdate extends BaseActivity {
 
 export interface ActivityDelete extends BaseActivity {
   type: 'Delete'
-  object: string
+  object: string | { id: string }
 }
 
 export interface ActivityFollow extends BaseActivity {
