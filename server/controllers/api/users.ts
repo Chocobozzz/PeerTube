@@ -249,11 +249,12 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
   await unlinkPromise(source)
 
   const avatar = await sequelizeTypescript.transaction(async t => {
-    await updateActorAvatarInstance(actor, avatarName, t)
+    const updatedActor = await updateActorAvatarInstance(actor, avatarName, t)
+    await updatedActor.save({ transaction: t })
 
     await sendUpdateUser(user, t)
 
-    return avatar
+    return updatedActor.Avatar
   })
 
   return res
