@@ -12,7 +12,7 @@ import { getOrCreateActorAndServerAndModel } from '../actor'
 async function processDeleteActivity (activity: ActivityDelete) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  if (actor.url === activity.id) {
+  if (actor.url === activity.object) {
     if (actor.type === 'Person') {
       if (!actor.Account) throw new Error('Actor ' + actor.url + ' is a person but we cannot find it in database.')
 
@@ -25,14 +25,14 @@ async function processDeleteActivity (activity: ActivityDelete) {
   }
 
   {
-    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(activity.id)
+    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(activity.object)
     if (videoCommentInstance) {
       return processDeleteVideoComment(actor, videoCommentInstance)
     }
   }
 
   {
-    const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(activity.id)
+    const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(activity.object)
     if (videoInstance) {
       return processDeleteVideo(actor, videoInstance)
     }

@@ -55,6 +55,10 @@ function getAnnounceActivityPubUrl (originalUrl: string, byActor: ActorModel) {
   return originalUrl + '/announces/' + byActor.id
 }
 
+function getDeleteActivityPubUrl (originalUrl: string) {
+  return originalUrl + '/delete'
+}
+
 function getUpdateActivityPubUrl (originalUrl: string, updatedAt: string) {
   return originalUrl + '/updates/' + updatedAt
 }
@@ -76,5 +80,6 @@ export {
   getVideoViewActivityPubUrl,
   getVideoLikeActivityPubUrl,
   getVideoDislikeActivityPubUrl,
-  getVideoCommentActivityPubUrl
+  getVideoCommentActivityPubUrl,
+  getDeleteActivityPubUrl
 }
