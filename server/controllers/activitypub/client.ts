@@ -114,5 +114,6 @@ async function videoChannelController (req: express.Request, res: express.Respon
 async function videoCommentController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoComment: VideoCommentModel = res.locals.videoComment
 
-  return res.json(videoComment.toActivityPubObject())
+  const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
+  return res.json(videoComment.toActivityPubObject(threadParentComments))
 }

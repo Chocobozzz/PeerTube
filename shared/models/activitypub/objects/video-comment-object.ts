@@ -1,3 +1,5 @@
+import { ActivityTagObject } from './common-objects'
+
 export interface VideoCommentObject {
   type: 'Note'
   id: string
@@ -7,4 +9,5 @@ export interface VideoCommentObject {
   updated: string
   url: string
   attributedTo: string
+  tag: ActivityTagObject[]
 }

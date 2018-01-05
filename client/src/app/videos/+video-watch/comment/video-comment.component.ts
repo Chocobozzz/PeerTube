@@ -16,6 +16,7 @@ import { VideoComment } from './video-comment.model'
 export class VideoCommentComponent implements OnInit {
   @Input() video: Video
   @Input() comment: VideoComment
+  @Input() parentComments: VideoComment[] = []
   @Input() commentTree: VideoCommentThreadTree
   @Input() inReplyToCommentId: number
 
@@ -25,6 +26,7 @@ export class VideoCommentComponent implements OnInit {
   @Output() resetReply = new EventEmitter()
 
   sanitizedCommentHTML = ''
+  newParentComments = []
 
   constructor (private authService: AuthService) {}
 
@@ -36,6 +38,8 @@ export class VideoCommentComponent implements OnInit {
     this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
       allowedTags: [ 'p', 'span' ]
     })
+
+    this.newParentComments = this.parentComments.concat([ this.comment ])
   }
 
   onCommentReplyCreated (createdComment: VideoComment) {

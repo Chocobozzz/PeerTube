@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
-import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
+import { VideoCommentCreate, VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { FormReactive } from '../../../shared'
 import { VIDEO_COMMENT_TEXT } from '../../../shared/forms/form-validators/video-comment'
 import { User } from '../../../shared/users'
@@ -19,6 +19,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @Input() user: User
   @Input() video: Video
   @Input() parentComment: VideoComment
+  @Input() parentComments: VideoComment[]
   @Input() focusOnInit = false
 
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
@@ -54,6 +55,17 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
     if (this.focusOnInit === true) {
       this.textareaElement.nativeElement.focus()
+    }
+
+    if (this.parentComment) {
+      const mentions = this.parentComments
+        .filter(c => c.account.id !== this.user.account.id)
+        .map(c => '@' + c.account.name)
+
+      const mentionsSet = new Set(mentions)
+      const mentionsText = Array.from(mentionsSet).join(' ') + ' '
+
+      this.form.patchValue({ text: mentionsText })
     }
   }
 

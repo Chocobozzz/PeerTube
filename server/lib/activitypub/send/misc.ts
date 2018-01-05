@@ -5,6 +5,7 @@ import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { activitypubHttpJobScheduler, ActivityPubHttpPayload } from '../../jobs/activitypub-http-job-scheduler'
 
@@ -84,6 +85,34 @@ function getOriginVideoAudience (video: VideoModel, actorsInvolvedInVideo: Actor
   }
 }
 
+function getOriginVideoCommentAudience (
+  videoComment: VideoCommentModel,
+  threadParentComments: VideoCommentModel[],
+  actorsInvolvedInVideo: ActorModel[],
+  isOrigin = false
+) {
+  const to = [ ACTIVITY_PUB.PUBLIC ]
+  const cc = [ ]
+
+  // Owner of the video we comment
+  if (isOrigin === false) {
+    cc.push(videoComment.Video.VideoChannel.Account.Actor.url)
+  }
+
+  // Followers of the poster
+  cc.push(videoComment.Account.Actor.followersUrl)
+
+  // Send to actors we reply to
+  for (const parentComment of threadParentComments) {
+    cc.push(parentComment.Account.Actor.url)
+  }
+
+  return {
+    to,
+    cc: cc.concat(actorsInvolvedInVideo.map(a => a.followersUrl))
+  }
+}
+
 function getObjectFollowersAudience (actorsInvolvedInObject: ActorModel[]) {
   return {
     to: actorsInvolvedInObject.map(a => a.followersUrl),
@@ -92,10 +121,10 @@ function getObjectFollowersAudience (actorsInvolvedInObject: ActorModel[]) {
 }
 
 async function getActorsInvolvedInVideo (video: VideoModel, t: Transaction) {
-  const actorsToForwardView = await VideoShareModel.loadActorsByShare(video.id, t)
-  actorsToForwardView.push(video.VideoChannel.Account.Actor)
+  const actors = await VideoShareModel.loadActorsByShare(video.id, t)
+  actors.push(video.VideoChannel.Account.Actor)
 
-  return actorsToForwardView
+  return actors
 }
 
 async function getAudience (actorSender: ActorModel, t: Transaction, isPublic = true) {
@@ -138,5 +167,6 @@ export {
   getActorsInvolvedInVideo,
   getObjectFollowersAudience,
   forwardActivity,
-  audiencify
+  audiencify,
+  getOriginVideoCommentAudience
 }

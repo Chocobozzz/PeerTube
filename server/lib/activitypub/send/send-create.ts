@@ -8,7 +8,8 @@ import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import {
-  audiencify, broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience, getOriginVideoAudience,
+  audiencify, broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience,
+  getOriginVideoAudience, getOriginVideoCommentAudience,
   unicastTo
 } from './misc'
 
@@ -35,11 +36,12 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
 
 async function sendCreateVideoCommentToOrigin (comment: VideoCommentModel, t: Transaction) {
   const byActor = comment.Account.Actor
+  const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, t)
+  const commentObject = comment.toActivityPubObject(threadParentComments)
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(comment.Video, t)
-  const audience = getOriginVideoAudience(comment.Video, actorsInvolvedInVideo)
+  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInVideo)
 
-  const commentObject = comment.toActivityPubObject()
   const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
 
   return unicastTo(data, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl, t)
@@ -47,15 +49,15 @@ async function sendCreateVideoCommentToOrigin (comment: VideoCommentModel, t: Tr
 
 async function sendCreateVideoCommentToVideoFollowers (comment: VideoCommentModel, t: Transaction) {
   const byActor = comment.Account.Actor
+  const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, t)
+  const commentObject = comment.toActivityPubObject(threadParentComments)
 
-  const actorsToForwardView = await getActorsInvolvedInVideo(comment.Video, t)
-  const audience = getObjectFollowersAudience(actorsToForwardView)
-
-  const commentObject = comment.toActivityPubObject()
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(comment.Video, t)
+  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInVideo)
   const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
 
   const followersException = [ byActor ]
-  return broadcastToFollowers(data, byActor, actorsToForwardView, t, followersException)
+  return broadcastToFollowers(data, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
 async function sendCreateViewToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {

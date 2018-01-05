@@ -18,6 +18,7 @@
       [user]="user"
       [video]="video"
       [parentComment]="comment"
+      [parentComments]="newParentComments"
       [focusOnInit]="true"
       (commentCreated)="onCommentReplyCreated($event)"
     ></my-video-comment-add>
@@ -29,6 +30,7 @@
           [video]="video"
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="commentChild"
+          [parentComments]="newParentComments"
           (wantedToReply)="onWantToReply($event)"
           (wantedToDelete)="onWantToDelete($event)"
           (resetReply)="onResetReply()"
