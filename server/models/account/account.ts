@@ -48,7 +48,6 @@ import { UserModel } from './user'
 export class AccountModel extends Model<AccountModel> {
 
   @AllowNull(false)
-  @Is('AccountName', value => throwIfNotValid(value, isUserUsernameValid, 'account name'))
   @Column
   name: string
 
