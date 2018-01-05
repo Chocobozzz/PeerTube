@@ -1,3 +1,6 @@
+// FIXME: https://github.com/nodejs/node/pull/16853
+require('tls').DEFAULT_ECDH_CURVE = 'auto'
+
 import { isTestInstance } from './server/helpers/core-utils'
 
 if (isTestInstance()) {
