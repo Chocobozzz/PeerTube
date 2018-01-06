@@ -2,4 +2,4 @@
 
 cd client || exit -1
 
-ng server --hmr --host localhost --port 3000
+npm run ng -- server --hmr --host localhost --port 3000
