@@ -3,10 +3,14 @@
 </h1>
 
 <h4 align="center">
-Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
+Federated (ActivityPub) video streaming platform using P2P (BitTorrent)
+directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
 </h4>
 
-**PeerTube is sponsored by [Framasoft](https://framatube.org/#en), a non-profit that promotes, spreads and develops free culture in general, and free-libre software in particular. If you want to support this project, please [consider donating them](https://soutenir.framasoft.org/en/).**
+**PeerTube is sponsored by [Framasoft](https://framatube.org/#en), a non-profit
+that promotes, spreads and develops free culture in general, and free-libre
+software in particular. If you want to support this project, please [consider
+donating them](https://soutenir.framasoft.org/en/).**
 
 <p align="center">
   <strong>Client</strong>
@@ -61,17 +65,25 @@ Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly
 Want to see it in action?
 
    * [Demo server](http://peertube.cpy.re)
-   * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504) to see how the "decentralization feature" looks like
-   * Experimental demo servers that share videos (they are in the same network): [peertube2](http://peertube2.cpy.re), [peertube3](http://peertube3.cpy.re). Since I do experiments with them, sometimes they might not work correctly.
+   * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
+     to see how the "decentralization feature" looks like
+   * Experimental demo servers that share videos (they are in the same
+     network): [peertube2](http://peertube2.cpy.re),
+     [peertube3](http://peertube3.cpy.re). Since I do experiments with them,
+     sometimes they might not work correctly.
 
 ## Why
 
-We can't build a FOSS video streaming alternatives to YouTube, Dailymotion, Vimeo... with a centralized software. One organization alone may not have enough money to pay for bandwidth and video storage of its servers.
+We can't build a FOSS video streaming alternatives to YouTube, Dailymotion,
+Vimeo... with a centralized software. One organization alone may not have
+enough money to pay for bandwidth and video storage of its servers.
 
-So we need to have a decentralized network of servers seeding videos (as [Diaspora](https://github.com/diaspora/diaspora) for example).
-But it's not enough because one video could become famous and overload the server.
-It's the reason why we need to use a P2P protocol to limit the server load.
-Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus bittorrent) inside the web browser, as of today.
+So we need to have a decentralized network of servers seeding videos (as
+[Diaspora](https://github.com/diaspora/diaspora) for example).  But it's not
+enough because one video could become famous and overload the server.  It's the
+reason why we need to use a P2P protocol to limit the server load.  Thanks to
+[WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus
+bittorrent) inside the web browser, as of today.
 
 ## Features
 
@@ -111,7 +123,8 @@ Thanks to [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (t
 
 ## Installation
 
-See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installation commands.
+See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete
+installation commands.
 
 ### Front compatibility
 
@@ -128,8 +141,10 @@ See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete installatio
 
 #### Debian
 
-  1. Install NodeJS 8.x (current LTS): [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-  2. Install yarn: [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
+  1. Install NodeJS 8.x (current LTS):
+     [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
+  2. Install yarn:
+     [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
   4. Run:
 
 ```bash
@@ -179,15 +194,19 @@ If you want to run PeerTube in production (which might be a bad idea for now :) 
     $ cp config/production.yaml.example config/production.yaml
 ```
 
-Then edit the `config/production.yaml` file according to your webserver configuration. Keys set in this file will override those of `config/default.yml`.
+Then edit the `config/production.yaml` file according to your webserver
+configuration. Keys set in this file will override those of
+`config/default.yml`.
 
-Finally, run the server with the `NODE_ENV` environment variable set to `production`:
+Finally, run the server with the `NODE_ENV` environment variable set to
+`production`:
 
 ```bash
     $ NODE_ENV=production npm start
 ```
 
-The administrator password is automatically generated and can be found in the logs. You can set another password with:
+The administrator password is automatically generated and can be found in the
+logs. You can set another password with:
 
 ```bash
     $ NODE_ENV=production npm run reset-password -- -u root
@@ -204,7 +223,8 @@ You can check the application (CORS headers, tracker websocket...) by running:
 
 ### Upgrade
 
-The following commands will upgrade the source (according to your current branch), upgrade node modules and rebuild client application:
+The following commands will upgrade the source (according to your current
+branch), upgrade node modules and rebuild client application:
 
 ```bash
     # systemctl stop peertube
@@ -214,7 +234,8 @@ The following commands will upgrade the source (according to your current branch
 
 ### Development
 
-In this mode, the server will run requests between instances more quickly, the video durations are limited to a few seconds.
+In this mode, the server will run requests between instances more quickly, the
+video durations are limited to a few seconds.
 
 To develop on the server-side:
 
@@ -222,7 +243,9 @@ To develop on the server-side:
     $ npm run dev:server
 ```
 
-Then, the server will listen on `localhost:9000`. When server source files change, these are automatically recompiled and the server will automatically restart.
+Then, the server will listen on `localhost:9000`. When server source files
+change, these are automatically recompiled and the server will automatically
+restart.
 
 To develop on the client side:
 
@@ -230,7 +253,9 @@ To develop on the client side:
     $ npm run dev:client
 ```
 
-The API will listen on `localhost:9000` and the frontend on `localhost:3000`. Client files are automatically compiled on change, and the web browser will reload them automatically thanks to hot module replacement.
+The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
+Client files are automatically compiled on change, and the web browser will
+reload them automatically thanks to hot module replacement.
 
 **Username**: *root* <br/>
 **Password**: *test*
@@ -242,7 +267,8 @@ The API will listen on `localhost:9000` and the frontend on `localhost:3000`. Cl
     $ npm run play
 ```
 
-Then you will get access to the three nodes at `http://localhost:900{1,2,3}` with the `root` as username and `test{1,2,3}` for the password.
+Then you will get access to the three nodes at `http://localhost:900{1,2,3}`
+with the `root` as username and `test{1,2,3}` for the password.
 
 ### Other commands
 
@@ -268,11 +294,16 @@ See [ARCHITECTURE.md](https://github.com/Chocobozzz/PeerTube/blob/master/ARCHITE
 ### Backend
 
   * The backend is a REST API.
-  * Servers communicate with each others with [Activity Pub](https://www.w3.org/TR/activitypub/).
-  * Each server has its own users who query it (search videos, query where the torrent URI of this specific video is...).
-  * If a user uploads a video, the server seeds it and sends its followers some metadata (name, short description, torrent URI...).
+  * Servers communicate with each others with [Activity
+    Pub](https://www.w3.org/TR/activitypub/).
+  * Each server has its own users who query it (search videos, query where the
+    torrent URI of this specific video is...).
+  * If a user uploads a video, the server seeds it and sends its followers some
+    metadata (name, short description, torrent URI...).
   * A server is a tracker responsible for all the videos uploaded in it.
-  * Even if nobody watches a video, it is seeded by the server (through [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the video was uploaded.
+  * Even if nobody watches a video, it is seeded by the server (through
+    [WebSeed protocol](http://www.bittorrent.org/beps/bep_0019.html)) where the
+    video was uploaded.
 
 Here are some simple schemes:
 
