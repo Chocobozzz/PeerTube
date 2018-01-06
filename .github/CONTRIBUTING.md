@@ -7,6 +7,7 @@ Interesting in contributing? Awesome :)
   * [Give your feedback](#give-your-feedback)
   * [Develop on the Server side](#develop-on-the-server-side)
   * [Develop on the Client side](#develop-on-the-client-side)
+  * [Get started with development](#get-started-with-development)
   * [Write documentation](#write-documentation)
 
 
@@ -17,6 +18,8 @@ contributions are very valuable too, among which: you can test the software and
 report bugs, you can give feedback on potential bugs, features that you are
 interested in, user interace, design, decentralized architecture...
 
+
+## Development
 
 ## Develop on the Server side
 
@@ -37,6 +40,35 @@ The client is a web application developed with
 
 Newcomer? You can find a documentation of the server code/architecture
 [here](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/client/code.md).
+
+
+## Get started with development
+
+In this mode, the server will run requests between instances more quickly, the
+video durations are limited to a few seconds.
+
+To develop on the server-side:
+
+```bash
+    $ npm run dev:server
+```
+
+Then, the server will listen on `localhost:9000`. When server source files
+change, these are automatically recompiled and the server will automatically
+restart.
+
+To develop on the client side:
+
+```bash
+    $ npm run dev:client
+```
+
+The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
+Client files are automatically compiled on change, and the web browser will
+reload them automatically thanks to hot module replacement.
+
+**Username**: *root* <br/>
+**Password**: *test*
 
 
 ## Write documentation

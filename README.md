@@ -232,34 +232,6 @@ branch), upgrade node modules and rebuild client application:
     # systemctl start peertube
 ```
 
-### Development
-
-In this mode, the server will run requests between instances more quickly, the
-video durations are limited to a few seconds.
-
-To develop on the server-side:
-
-```bash
-    $ npm run dev:server
-```
-
-Then, the server will listen on `localhost:9000`. When server source files
-change, these are automatically recompiled and the server will automatically
-restart.
-
-To develop on the client side:
-
-```bash
-    $ npm run dev:client
-```
-
-The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
-Client files are automatically compiled on change, and the web browser will
-reload them automatically thanks to hot module replacement.
-
-**Username**: *root* <br/>
-**Password**: *test*
-
 ### Test with three fresh nodes
 
 ```bash
@@ -280,12 +252,10 @@ To print all available commands, run:
 
 ## Contributing
 
-See the [contributing guide](https://github.com/Chocobozzz/PeerTube/blob/master/.github/CONTRIBUTING.md).
-
-See the [server code documentation](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/code.md).
-
-See the [client code documentation](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/client/code.md).
-
+See the [contributing
+guide](https://github.com/Chocobozzz/PeerTube/blob/master/.github/CONTRIBUTING.md)
+to see how to contribute to PeerTube. Spoiler alert: you don't need to be a
+coder to help!
 
 ## Architecture
 
