@@ -29,6 +29,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
 
   otherVideos: Video[] = []
+  otherVideosDisplayed: Video[] = []
 
   error = false
   loading = false
@@ -69,8 +70,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
       .subscribe(
         data => this.otherVideos = data.videos,
-
-    err => console.error(err)
+        err => console.error(err)
       )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -302,6 +302,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private onVideoFetched (video: VideoDetails) {
     this.video = video
+
+    if (this.otherVideos.length > 0) {
+      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
+    }
 
     let observable
     if (this.video.isVideoNSFWForUser(this.user)) {
