@@ -12,9 +12,10 @@ Interesting in contributing? Awesome :)
 
 ## Give your feedback
 
-Even if you are not a developer, or you do not want to develop on PeerTube you
-can give a feedback on potential bugs, features that you are interested in,
-user interace, design, decentralized architecture...
+You don't need to know how to code to start contributing to PeerTube! Other
+contributions are very valuable too, among which: you can test the software and
+report bugs, you can give feedback on potential bugs, features that you are
+interested in, user interace, design, decentralized architecture...
 
 
 ## Develop on the Server side
@@ -22,19 +23,19 @@ user interace, design, decentralized architecture...
 The server is a web server developed with
 [NodeJS](https://nodejs.org)/[Express](http://expressjs.com).
 
-Newcommer? You can find a documentation of the server code/architecture
+Newcomer? You can find a documentation of the server code/architecture
 [here](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/code.md).
 
-Do not hesitate to talk about the functionnality you want to develop by
-creating an issue :)
+Don't hesitate to talk about features you want to develop by creating an issue
+before you start working on them :).
 
 
 ## Develop on the Client side
 
 The client is a web application developed with
-[TypeScript](https://www.typescriptlang.org/)/[Angular2](https://angular.io/)
+[TypeScript](https://www.typescriptlang.org/)/[Angular2](https://angular.io/).
 
-Newcommer? You can find a documentation of the server code/architecture
+Newcomer? You can find a documentation of the server code/architecture
 [here](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/client/code.md).
 
 
