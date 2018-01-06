@@ -6,7 +6,7 @@ server {
 }
 
 server {
-  listen 443 ssl spdy; # or http2
+  listen 443 ssl http2; # spdy is deprecated on nginx
   # listen [::]:443 ssl spdy;
   server_name domain.tld;
 
