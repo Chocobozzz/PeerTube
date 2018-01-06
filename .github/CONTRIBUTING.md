@@ -47,6 +47,23 @@ Newcomer? You can find a documentation of the server code/architecture
 In this mode, the server will run requests between instances more quickly, the
 video durations are limited to a few seconds.
 
+### Prerequisites
+
+First, make sure that you have followed the steps to install the dependencies.
+
+Then, create a postgres database and user with the values set in the
+`config/default.yaml` file. For instance, if you do not change the values
+there, the following commands would create a new database called `peertube_dev`
+and a postgres user called `peertube` with password `peertube`:
+
+```bash
+    # sudo -u postgres createuser -P peertube
+    Enter password for new role: peertube
+    # sudo -u postgres createdb -O peertube peertube_dev
+```
+
+### Server side
+
 To develop on the server-side:
 
 ```bash
@@ -56,6 +73,8 @@ To develop on the server-side:
 Then, the server will listen on `localhost:9000`. When server source files
 change, these are automatically recompiled and the server will automatically
 restart.
+
+### Client side
 
 To develop on the client side:
 
