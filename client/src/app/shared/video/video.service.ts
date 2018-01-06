@@ -136,6 +136,10 @@ export class VideoService {
     return this.setVideoRate(id, 'dislike')
   }
 
+  unsetVideoLike (id: number) {
+    return this.setVideoRate(id, 'none')
+  }
+
   getUserVideoRating (id: number): Observable<UserVideoRate> {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 

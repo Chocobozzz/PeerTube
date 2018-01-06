@@ -62,7 +62,6 @@ async function rateVideo (req: express.Request, res: express.Response) {
         await previousRate.destroy({ transaction: t })
       } else { // Update previous rate
         previousRate.type = rateType
-
         await previousRate.save({ transaction: t })
       }
     } else if (rateType !== 'none') { // There was not a previous rate, insert a new one if there is a rate

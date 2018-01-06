@@ -1,1 +1,1 @@
-export type VideoRateType = 'like' | 'dislike'
+export type VideoRateType = 'like' | 'dislike' | 'none'
