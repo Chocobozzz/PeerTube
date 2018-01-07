@@ -65,7 +65,7 @@ function isVideoViewsValid (value: string) {
 }
 
 function isVideoRatingTypeValid (value: string) {
-  return values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
+  return value === 'none' || values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
 }
 
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {

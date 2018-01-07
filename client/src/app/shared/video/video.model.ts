@@ -35,7 +35,10 @@ export class Video implements VideoServerModel {
   nsfw: boolean
   account: Account
 
-  private static createByString (account: string, serverHost: string) {
+  private static createByString (account: string, serverHost: string, apiURL: string) {
+    const thisHost = new URL(apiURL).host
+    if (serverHost.trim() === thisHost)
+      return account
     return account + '@' + serverHost
   }
 
@@ -78,7 +81,7 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
 
-    this.by = Video.createByString(hash.accountName, hash.serverHost)
+    this.by = Video.createByString(hash.accountName, hash.serverHost, absoluteAPIUrl)
   }
 
   isVideoNSFWForUser (user: User) {

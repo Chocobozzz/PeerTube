@@ -29,6 +29,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
 
   otherVideos: Video[] = []
+  otherVideosDisplayed: Video[] = []
 
   error = false
   loading = false
@@ -69,8 +70,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
       .subscribe(
         data => this.otherVideos = data.videos,
-
-    err => console.error(err)
+        err => console.error(err)
       )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -102,36 +102,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   setLike () {
     if (this.isUserLoggedIn() === false) return
-    // Already liked this video
-    if (this.userRating === 'like') return
-
-    this.videoService.setVideoLike(this.video.id)
-                     .subscribe(
-                      () => {
-                        // Update the video like attribute
-                        this.updateVideoRating(this.userRating, 'like')
-                        this.userRating = 'like'
-                      },
-
-                      err => this.notificationsService.error('Error', err.message)
-                     )
+    if (this.userRating === 'like') {
+      // Already liked this video
+      this.setRating('none')
+    } else {
+      this.setRating('like')
+    }
   }
 
   setDislike () {
     if (this.isUserLoggedIn() === false) return
-    // Already disliked this video
-    if (this.userRating === 'dislike') return
-
-    this.videoService.setVideoDislike(this.video.id)
-                     .subscribe(
-                      () => {
-                        // Update the video dislike attribute
-                        this.updateVideoRating(this.userRating, 'dislike')
-                        this.userRating = 'dislike'
-                      },
-
-                      err => this.notificationsService.error('Error', err.message)
-                     )
+    if (this.userRating === 'dislike') {
+      // Already disliked this video
+      this.setRating('none')
+    } else {
+      this.setRating('dislike')
+    }
   }
 
   blacklistVideo (event: Event) {
@@ -303,6 +289,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private onVideoFetched (video: VideoDetails) {
     this.video = video
 
+    if (this.otherVideos.length > 0) {
+      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
+    }
+
     let observable
     if (this.video.isVideoNSFWForUser(this.user)) {
       observable = this.confirmService.confirm(
@@ -364,6 +354,31 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.prepareViewAdd()
       }
     )
+  }
+
+  private setRating (nextRating) {
+    let method
+    switch (nextRating) {
+      case 'like':
+        method = this.videoService.setVideoLike
+        break
+      case 'dislike':
+        method = this.videoService.setVideoDislike
+        break
+      case 'none':
+        method = this.videoService.unsetVideoLike
+        break
+    }
+
+    method.call(this.videoService, this.video.id)
+     .subscribe(
+      () => {
+        // Update the video like attribute
+        this.updateVideoRating(this.userRating, nextRating)
+        this.userRating = nextRating
+      },
+      err => this.notificationsService.error('Error', err.message)
+     )
   }
 
   private updateVideoRating (oldRating: UserVideoRateType, newRating: VideoRateType) {
