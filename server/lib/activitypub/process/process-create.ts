@@ -283,7 +283,7 @@ function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
       const inReplyToComment = await VideoCommentModel.loadByUrl(comment.inReplyTo, t)
       if (!inReplyToComment) throw new Error('Unknown replied comment ' + comment.inReplyTo)
 
-      video = await VideoModel.load(inReplyToComment.videoId)
+      video = await VideoModel.loadAndPopulateAccount(inReplyToComment.videoId)
 
       const originCommentId = inReplyToComment.originCommentId || inReplyToComment.id
       objectToCreate = {

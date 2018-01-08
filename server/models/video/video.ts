@@ -507,6 +507,10 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.findById(id)
   }
 
+  static loadAndPopulateAccount (id: number) {
+    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS ]).findById(id)
+  }
+
   static loadByUrl (url: string, t?: Sequelize.Transaction) {
     const query: IFindOptions<VideoModel> = {
       where: {
