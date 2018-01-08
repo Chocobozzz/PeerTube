@@ -1,4 +1,5 @@
-import { Account } from '../../../../../../shared/models/actors'
+import { Account } from '@app/shared/account/account.model'
+import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { VideoComment as VideoCommentServerModel } from '../../../../../../shared/models/videos/video-comment.model'
 
 export class VideoComment implements VideoCommentServerModel {
@@ -10,14 +11,10 @@ export class VideoComment implements VideoCommentServerModel {
   videoId: number
   createdAt: Date | string
   updatedAt: Date | string
-  account: Account
+  account: AccountInterface
   totalReplies: number
 
   by: string
-
-  private static createByString (account: string, serverHost: string) {
-    return account + '@' + serverHost
-  }
 
   constructor (hash: VideoCommentServerModel) {
     this.id = hash.id
@@ -31,6 +28,6 @@ export class VideoComment implements VideoCommentServerModel {
     this.account = hash.account
     this.totalReplies = hash.totalReplies
 
-    this.by = VideoComment.createByString(this.account.name, this.account.host)
+    this.by = Account.CREATE_BY_STRING(this.account.name, this.account.host)
   }
 }

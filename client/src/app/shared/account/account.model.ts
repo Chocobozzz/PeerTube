@@ -22,4 +22,13 @@ export class Account implements ServerAccount {
 
     return window.location.origin + '/client/assets/images/default-avatar.png'
   }
+
+  static CREATE_BY_STRING (accountName: string, host: string) {
+    const absoluteAPIUrl = getAbsoluteAPIUrl()
+    const thisHost = new URL(absoluteAPIUrl).host
+
+    if (host.trim() === thisHost) return accountName
+
+    return accountName + '@' + host
+  }
 }

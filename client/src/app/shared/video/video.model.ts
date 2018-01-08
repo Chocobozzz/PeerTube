@@ -1,7 +1,6 @@
+import { Account } from '@app/shared/account/account.model'
 import { User } from '../'
 import { Video as VideoServerModel } from '../../../../../shared'
-import { Account } from '../../../../../shared/models/actors'
-import { environment } from '../../../environments/environment'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 
 export class Video implements VideoServerModel {
@@ -34,13 +33,6 @@ export class Video implements VideoServerModel {
   dislikes: number
   nsfw: boolean
   account: Account
-
-  private static createByString (account: string, serverHost: string, apiURL: string) {
-    const thisHost = new URL(apiURL).host
-    if (serverHost.trim() === thisHost)
-      return account
-    return account + '@' + serverHost
-  }
 
   private static createDurationString (duration: number) {
     const minutes = Math.floor(duration / 60)
@@ -81,7 +73,7 @@ export class Video implements VideoServerModel {
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
 
-    this.by = Video.createByString(hash.accountName, hash.serverHost, absoluteAPIUrl)
+    this.by = Account.CREATE_BY_STRING(hash.accountName, hash.serverHost)
   }
 
   isVideoNSFWForUser (user: User) {
