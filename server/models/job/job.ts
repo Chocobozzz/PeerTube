@@ -44,7 +44,8 @@ export class JobModel extends Model<JobModel> {
       where: {
         state,
         category: jobCategory
-      }
+      },
+      logging: false
     }
 
     return JobModel.findAll(query)
