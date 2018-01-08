@@ -2,7 +2,9 @@ import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
+import { UserService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
+import { BytesPipe } from 'ngx-pipes'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
@@ -31,12 +33,12 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     uuid: ''
   }
 
-  error: string = null
   form: FormGroup
   formErrors: { [ id: string ]: string } = {}
   validationMessages: ValidatorMessage = {}
 
   userVideoChannels = []
+  userVideoQuotaUsed = 0
   videoPrivacies = []
   firstStepPrivacyId = 0
   firstStepChannelId = 0
@@ -46,6 +48,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     private router: Router,
     private notificationsService: NotificationsService,
     private authService: AuthService,
+    private userService: UserService,
     private serverService: ServerService,
     private videoService: VideoService
   ) {
@@ -66,6 +69,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
       .then(() => this.firstStepChannelId = this.userVideoChannels[0].id)
+
+    this.userService.getMyVideoQuotaUsed()
+      .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
 
     this.serverService.videoPrivaciesLoaded
       .subscribe(
@@ -89,6 +95,18 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   uploadFirstStep () {
     const videofile = this.videofileInput.nativeElement.files[0]
+    const videoQuota = this.authService.getUser().videoQuota
+    if ((this.userVideoQuotaUsed + videofile.size) > videoQuota) {
+      const bytePipes = new BytesPipe()
+
+      const msg = 'Your video quota is exceeded with this video ' +
+        `(video size: ${bytePipes.transform(videofile.size, 0)}, ` +
+        `used: ${bytePipes.transform(this.userVideoQuotaUsed, 0)}, ` +
+        `quota: ${bytePipes.transform(videoQuota, 0)})`
+      this.notificationsService.error('Error', msg)
+      return
+    }
+
     const name = videofile.name.replace(/\.[^/.]+$/, '')
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
@@ -127,8 +145,9 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
       err => {
         // Reset progress
+        this.isUploadingVideo = false
         this.videoUploadPercents = 0
-        this.error = err.message
+        this.notificationsService.error('Error', err.message)
       }
     )
   }
@@ -152,7 +171,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         },
 
         err => {
-          this.error = 'Cannot update the video.'
+          this.notificationsService.error('Error', err.message)
           console.error(err)
         }
       )

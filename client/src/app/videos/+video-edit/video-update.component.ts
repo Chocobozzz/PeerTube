@@ -21,7 +21,6 @@ import { VideoService } from '../../shared/video/video.service'
 export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
-  error: string = null
   form: FormGroup
   formErrors: { [ id: string ]: string } = {}
   validationMessages: ValidatorMessage = {}
@@ -82,7 +81,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
         err => {
           console.error(err)
-          this.error = 'Cannot fetch video.'
+          this.notificationsService.error('Error', err.message)
         }
       )
   }
@@ -108,7 +107,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                        },
 
                        err => {
-                         this.error = 'Cannot update the video.'
+                         this.notificationsService.error('Error', err.message)
                          console.error(err)
                        }
                       )

@@ -13,8 +13,12 @@
 </div>
 <div class="file-max-size">(extensions: {{ avatarExtensions }}, max size: {{ maxAvatarSize | bytes }})</div>
 
+<div class="user-quota">
+  <span class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ user.videoQuota | bytes: 0 }}
+</div>
+
 <div class="account-title">Account settings</div>
 <my-account-change-password></my-account-change-password>
 
-<div class="account-title">Videos</div>
+<div class="account-title">Video settings</div>
 <my-account-details [user]="user"></my-account-details>

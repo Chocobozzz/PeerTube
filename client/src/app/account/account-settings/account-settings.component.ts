@@ -14,6 +14,7 @@ export class AccountSettingsComponent implements OnInit {
   @ViewChild('avatarfileInput') avatarfileInput
 
   user: User = null
+  userVideoQuotaUsed = 0
 
   constructor (
     private userService: UserService,
@@ -24,6 +25,9 @@ export class AccountSettingsComponent implements OnInit {
 
   ngOnInit () {
     this.user = this.authService.getUser()
+
+    this.userService.getMyVideoQuotaUsed()
+      .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
   }
 
   getAvatarUrl () {

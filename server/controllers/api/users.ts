@@ -30,6 +30,11 @@ usersRouter.get('/me',
   asyncMiddleware(getUserInformation)
 )
 
+usersRouter.get('/me/video-quota-used',
+  authenticate,
+  asyncMiddleware(getUserVideoQuotaUsed)
+)
+
 usersRouter.get('/me/videos',
   authenticate,
   paginationValidator,
@@ -183,8 +188,18 @@ async function getUserInformation (req: express.Request, res: express.Response, 
   return res.json(user.toFormattedJSON())
 }
 
+async function getUserVideoQuotaUsed (req: express.Request, res: express.Response, next: express.NextFunction) {
+  // We did not load channels in res.locals.user
+  const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
+  const videoQuotaUsed = await UserModel.getOriginalVideoFileTotalFromUser(user)
+
+  return res.json({
+    videoQuotaUsed
+  })
+}
+
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
-  return res.json(res.locals.user.toFormattedJSON())
+  return res.json((res.locals.user as UserModel).toFormattedJSON())
 }
 
 async function getUserVideoRating (req: express.Request, res: express.Response, next: express.NextFunction) {

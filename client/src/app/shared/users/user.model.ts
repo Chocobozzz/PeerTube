@@ -60,4 +60,10 @@ export class User implements UserServerModel {
   getAvatarUrl () {
     return Account.GET_ACCOUNT_AVATAR_URL(this.account)
   }
+
+  patch (obj: UserServerModel) {
+    for (const key of Object.keys(obj)) {
+      this[key] = obj[key]
+    }
+  }
 }

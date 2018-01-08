@@ -181,7 +181,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  private static getOriginalVideoFileTotalFromUser (user: UserModel) {
+  static getOriginalVideoFileTotalFromUser (user: UserModel) {
     // Don't use sequelize because we need to use a sub query
     const query = 'SELECT SUM("size") AS "total" FROM ' +
       '(SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +

@@ -14,7 +14,6 @@ import { User } from '../../../../../shared/models/users'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../../shared/rest'
-import { UserConstructorHash } from '../../shared/users/user.model'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 
@@ -178,12 +177,7 @@ export class AuthService {
     this.mergeUserInformation(obj)
       .subscribe(
         res => {
-          this.user.displayNSFW = res.displayNSFW
-          this.user.autoPlayVideo = res.autoPlayVideo
-          this.user.role = res.role
-          this.user.videoChannels = res.videoChannels
-          this.user.account = res.account
-
+          this.user.patch(res)
           this.user.save()
 
           this.userInformationLoaded.next(true)
@@ -200,24 +194,13 @@ export class AuthService {
   }
 
   private handleLogin (obj: UserLoginWithUserInformation) {
-    const hashUser: UserConstructorHash = {
-      id: obj.id,
-      username: obj.username,
-      role: obj.role,
-      email: obj.email,
-      displayNSFW: obj.displayNSFW,
-      autoPlayVideo: obj.autoPlayVideo,
-      videoQuota: obj.videoQuota,
-      videoChannels: obj.videoChannels,
-      account: obj.account
-    }
     const hashTokens = {
       accessToken: obj.access_token,
       tokenType: obj.token_type,
       refreshToken: obj.refresh_token
     }
 
-    this.user = new AuthUser(hashUser, hashTokens)
+    this.user = new AuthUser(obj, hashTokens)
     this.user.save()
 
     this.setStatus(AuthStatus.LoggedIn)

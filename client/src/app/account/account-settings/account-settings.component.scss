@@ -36,6 +36,15 @@
   top: -10px;
 }
 
+.user-quota {
+  font-size: 15px;
+  margin-top: 20px;
+
+  .user-quota-label {
+    font-weight: $font-semibold;
+  }
+}
+
 .account-title {
   text-transform: uppercase;
   color: $orange-color;

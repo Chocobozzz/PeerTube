@@ -4,7 +4,8 @@ import * as chai from 'chai'
 import 'mocha'
 import { UserRole } from '../../../../shared/index'
 import {
-  createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoRating, getUserInformation, getUsersList,
+  createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating, getUserInformation,
+  getUsersList,
   getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo, registerUser, removeUser, removeVideo,
   runServer, ServerInfo, serverLogin, testVideoImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo
 } from '../../utils/index'
@@ -179,9 +180,17 @@ describe('Test users', function () {
     this.timeout(5000)
 
     const videoAttributes = {
-      name: 'super user video'
+      name: 'super user video',
+      fixture: 'video_short.webm'
     }
     await uploadVideo(server.url, accessTokenUser, videoAttributes)
+  })
+
+  it('Should have video quota updated', async function () {
+    const res = await getMyUserVideoQuotaUsed(server.url, accessTokenUser)
+    const data = res.body
+
+    expect(data.videoQuotaUsed).to.equal(218910)
   })
 
   it('Should be able to list my videos', async function () {

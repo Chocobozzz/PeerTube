@@ -48,11 +48,10 @@ export class UserService {
                         .catch(res => this.restExtractor.handleError(res))
   }
 
-  getMyInformation () {
-    const url = UserService.BASE_USERS_URL + 'me'
+  getMyVideoQuotaUsed () {
+    const url = UserService.BASE_USERS_URL + '/me/video-quota-used'
 
     return this.authHttp.get(url)
-      .map((userHash: any) => new User(userHash))
       .catch(res => this.restExtractor.handleError(res))
   }
 }
