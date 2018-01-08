@@ -16,7 +16,7 @@ import { VideoShareModel } from '../../models/video/video-share'
 
 const activityPubClientRouter = express.Router()
 
-activityPubClientRouter.get('/accounts/:name',
+activityPubClientRouter.get('/accounts?/:name',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(accountController)
 )

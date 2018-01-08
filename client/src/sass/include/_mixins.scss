@@ -146,7 +146,7 @@
   }
 
   select {
-    padding: 0 12px;
+    padding: 0 35px 0 12px;
     width: calc(100% + 2px);
     position: relative;
     left: 1px;
@@ -156,6 +156,7 @@
     appearance: none;
     cursor: pointer;
     height: $button-height;
+    text-overflow: ellipsis;
 
     &:focus {
       outline: none;

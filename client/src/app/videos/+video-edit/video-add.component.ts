@@ -52,6 +52,10 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     super()
   }
 
+  get videoExtensions () {
+    return this.serverService.getConfig().video.file.extensions.join(',')
+  }
+
   buildForm () {
     this.form = this.formBuilder.group({})
     this.form.valueChanges.subscribe(data => this.onValueChanged(data))
