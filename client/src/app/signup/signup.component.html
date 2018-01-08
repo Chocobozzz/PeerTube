@@ -10,7 +10,7 @@
     <div class="form-group">
       <label for="username">Username</label>
       <input
-        type="text" class="form-control" id="username" placeholder="Username"
+        type="text" id="username" placeholder="Username"
         formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
       <div *ngIf="formErrors.username" class="form-error">
@@ -21,7 +21,7 @@
     <div class="form-group">
       <label for="email">Email</label>
       <input
-        type="text" class="form-control" id="email" placeholder="Email"
+        type="text" id="email" placeholder="Email"
         formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
       >
       <div *ngIf="formErrors.email" class="form-error">
@@ -32,7 +32,7 @@
     <div class="form-group">
       <label for="password">Password</label>
       <input
-        type="password" class="form-control" id="password" placeholder="Password"
+        type="password" id="password" placeholder="Password"
         formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
       >
       <div *ngIf="formErrors.password" class="form-error">
