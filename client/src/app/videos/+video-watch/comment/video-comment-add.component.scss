@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+form {
+  margin-bottom: 30px;
+}
+
 .avatar-and-textarea {
   display: flex;
   margin-bottom: 10px;

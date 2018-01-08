@@ -13,8 +13,9 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoFileModel } from '../../../models/video/video-file'
+import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { forwardActivity } from '../send/misc'
+import { forwardActivity, getActorsInvolvedInVideo } from '../send/misc'
 import { generateThumbnailFromUrl } from '../videos'
 import { addVideoComments, addVideoShares, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
 
@@ -266,18 +267,19 @@ function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
   return sequelizeTypescript.transaction(async t => {
-    let video = await VideoModel.loadByUrl(comment.inReplyTo, t)
+    let video = await VideoModel.loadByUrlAndPopulateAccount(comment.inReplyTo, t)
+    let objectToCreate
 
     // This is a new thread
     if (video) {
-      await VideoCommentModel.create({
+      objectToCreate = {
         url: comment.id,
         text: comment.content,
         originCommentId: null,
         inReplyToComment: null,
         videoId: video.id,
         accountId: byAccount.id
-      }, { transaction: t })
+      }
     } else {
       const inReplyToComment = await VideoCommentModel.loadByUrl(comment.inReplyTo, t)
       if (!inReplyToComment) throw new Error('Unknown replied comment ' + comment.inReplyTo)
@@ -285,20 +287,34 @@ function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
       video = await VideoModel.load(inReplyToComment.videoId)
 
       const originCommentId = inReplyToComment.originCommentId || inReplyToComment.id
-      await VideoCommentModel.create({
+      objectToCreate = {
         url: comment.id,
         text: comment.content,
         originCommentId,
         inReplyToCommentId: inReplyToComment.id,
         videoId: video.id,
         accountId: byAccount.id
-      }, { transaction: t })
+      }
     }
 
-    if (video.isOwned()) {
+    const options = {
+      where: {
+        url: objectToCreate.url
+      },
+      defaults: objectToCreate,
+      transaction: t
+    }
+    const [ ,created ] = await VideoCommentModel.findOrCreate(options)
+
+    if (video.isOwned() && created === true) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
-      await forwardActivity(activity, t, exceptions)
+
+      // Mastodon does not add our announces in audience, so we forward to them manually
+      const additionalActors = await getActorsInvolvedInVideo(video, t)
+      const additionalFollowerUrls = additionalActors.map(a => a.followersUrl)
+
+      await forwardActivity(activity, t, exceptions, additionalFollowerUrls)
     }
   })
 }

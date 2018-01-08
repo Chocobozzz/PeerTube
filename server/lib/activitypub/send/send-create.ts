@@ -8,7 +8,7 @@ import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import {
-  audiencify, broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience,
+  audiencify, broadcastToActors, broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience,
   getOriginVideoAudience, getOriginVideoCommentAudience,
   unicastTo
 } from './misc'
@@ -39,11 +39,20 @@ async function sendCreateVideoCommentToOrigin (comment: VideoCommentModel, t: Tr
   const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, t)
   const commentObject = comment.toActivityPubObject(threadParentComments)
 
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(comment.Video, t)
-  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInVideo)
+  const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, t)
+  actorsInvolvedInComment.push(byActor)
+  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment)
 
   const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
 
+  // This was a reply, send it to the parent actors
+  const actorsException = [ byActor ]
+  await broadcastToActors(data, byActor, threadParentComments.map(c => c.Account.Actor), t, actorsException)
+
+  // Broadcast to our followers
+  await broadcastToFollowers(data, byActor, [ byActor ], t)
+
+  // Send to origin
   return unicastTo(data, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl, t)
 }
 
@@ -52,12 +61,21 @@ async function sendCreateVideoCommentToVideoFollowers (comment: VideoCommentMode
   const threadParentComments = await VideoCommentModel.listThreadParentComments(comment, t)
   const commentObject = comment.toActivityPubObject(threadParentComments)
 
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(comment.Video, t)
-  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInVideo)
+  const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, t)
+  actorsInvolvedInComment.push(byActor)
+
+  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment)
   const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
 
-  const followersException = [ byActor ]
-  return broadcastToFollowers(data, byActor, actorsInvolvedInVideo, t, followersException)
+  // This was a reply, send it to the parent actors
+  const actorsException = [ byActor ]
+  await broadcastToActors(data, byActor, threadParentComments.map(c => c.Account.Actor), t, actorsException)
+
+  // Broadcast to our followers
+  await broadcastToFollowers(data, byActor, [ byActor ], t)
+
+  // Send to actors involved in the comment
+  return broadcastToFollowers(data, byActor, actorsInvolvedInComment, t, actorsException)
 }
 
 async function sendCreateViewToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
@@ -81,8 +99,8 @@ async function sendCreateViewToVideoFollowers (byActor: ActorModel, video: Video
 
   // Use the server actor to send the view
   const serverActor = await getServerActor()
-  const followersException = [ byActor ]
-  return broadcastToFollowers(data, serverActor, actorsToForwardView, t, followersException)
+  const actorsException = [ byActor ]
+  return broadcastToFollowers(data, serverActor, actorsToForwardView, t, actorsException)
 }
 
 async function sendCreateDislikeToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
@@ -104,8 +122,8 @@ async function sendCreateDislikeToVideoFollowers (byActor: ActorModel, video: Vi
   const audience = getObjectFollowersAudience(actorsToForwardView)
   const data = await createActivityData(url, byActor, dislikeActivityData, t, audience)
 
-  const followersException = [ byActor ]
-  return broadcastToFollowers(data, byActor, actorsToForwardView, t, followersException)
+  const actorsException = [ byActor ]
+  return broadcastToFollowers(data, byActor, actorsToForwardView, t, actorsException)
 }
 
 async function createActivityData (

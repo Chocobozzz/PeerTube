@@ -12,12 +12,13 @@ import { activitypubHttpJobScheduler, ActivityPubHttpPayload } from '../../jobs/
 async function forwardActivity (
   activity: Activity,
   t: Transaction,
-  followersException: ActorModel[] = []
+  followersException: ActorModel[] = [],
+  additionalFollowerUrls: string[] = []
 ) {
   const to = activity.to || []
   const cc = activity.cc || []
 
-  const followersUrls: string[] = []
+  const followersUrls = additionalFollowerUrls
   for (const dest of to.concat(cc)) {
     if (dest.endsWith('/followers')) {
       followersUrls.push(dest)
@@ -47,13 +48,25 @@ async function broadcastToFollowers (
   byActor: ActorModel,
   toActorFollowers: ActorModel[],
   t: Transaction,
-  followersException: ActorModel[] = []
+  actorsException: ActorModel[] = []
 ) {
-  const uris = await computeFollowerUris(toActorFollowers, followersException, t)
-  if (uris.length === 0) {
-    logger.info('0 followers for %s, no broadcasting.', toActorFollowers.map(a => a.id).join(', '))
-    return undefined
-  }
+  const uris = await computeFollowerUris(toActorFollowers, actorsException, t)
+  return broadcastTo(uris, data, byActor, t)
+}
+
+async function broadcastToActors (
+  data: any,
+  byActor: ActorModel,
+  toActors: ActorModel[],
+  t: Transaction,
+  actorsException: ActorModel[] = []
+) {
+  const uris = await computeUris(toActors, actorsException)
+  return broadcastTo(uris, data, byActor, t)
+}
+
+async function broadcastTo (uris: string[], data: any, byActor: ActorModel, t: Transaction) {
+  if (uris.length === 0) return undefined
 
   logger.debug('Creating broadcast job.', { uris })
 
@@ -149,12 +162,20 @@ function audiencify (object: any, audience: ActivityAudience) {
   return Object.assign(object, audience)
 }
 
-async function computeFollowerUris (toActorFollower: ActorModel[], followersException: ActorModel[], t: Transaction) {
+async function computeFollowerUris (toActorFollower: ActorModel[], actorsException: ActorModel[], t: Transaction) {
   const toActorFollowerIds = toActorFollower.map(a => a.id)
 
   const result = await ActorFollowModel.listAcceptedFollowerSharedInboxUrls(toActorFollowerIds, t)
-  const followersSharedInboxException = followersException.map(f => f.sharedInboxUrl)
-  return result.data.filter(sharedInbox => followersSharedInboxException.indexOf(sharedInbox) === -1)
+  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl)
+  return result.data.filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
+}
+
+async function computeUris (toActors: ActorModel[], actorsException: ActorModel[] = []) {
+  const toActorSharedInboxesSet = new Set(toActors.map(a => a.sharedInboxUrl))
+
+  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl)
+  return Array.from(toActorSharedInboxesSet)
+    .filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
 }
 
 // ---------------------------------------------------------------------------
@@ -168,5 +189,7 @@ export {
   getObjectFollowersAudience,
   forwardActivity,
   audiencify,
-  getOriginVideoCommentAudience
+  getOriginVideoCommentAudience,
+  computeUris,
+  broadcastToActors
 }

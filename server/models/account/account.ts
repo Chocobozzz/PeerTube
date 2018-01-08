@@ -1,26 +1,15 @@
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy,
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DefaultScope,
-  ForeignKey,
-  HasMany,
-  Is,
-  Model,
-  Table,
+  AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Model, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { Account } from '../../../shared/models/actors'
-import { isUserUsernameValid } from '../../helpers/custom-validators/users'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { getSort, throwIfNotValid } from '../utils'
+import { getSort } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { UserModel } from './user'
 
