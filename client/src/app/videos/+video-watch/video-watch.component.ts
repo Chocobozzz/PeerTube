@@ -28,7 +28,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
 
-  otherVideos: Video[] = []
   otherVideosDisplayed: Video[] = []
 
   error = false
@@ -47,6 +46,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   videoHTMLDescription = ''
   likesBarTooltipText = ''
 
+  private otherVideos: Video[] = []
   private paramsSub: Subscription
 
   constructor (
