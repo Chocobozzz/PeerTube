@@ -42,7 +42,8 @@ loadVideoInfo(videoId, (err, videoInfo) => {
         videoFiles: videoInfo.files,
         playerElement: videoElement,
         peerTubeLink: true
-      }
+      },
+      hotkeys: {}
     }
   }
   videojs('video-container', videojsOptions, function () {

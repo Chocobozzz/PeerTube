@@ -5,6 +5,7 @@ import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 import * as videojs from 'video.js'
+import 'videojs-hotkeys'
 import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
@@ -327,7 +328,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                 videoFiles: this.video.files,
                 playerElement: this.playerElement,
                 peerTubeLink: false
-              }
+              },
+              hotkeys: {}
             }
           }
 

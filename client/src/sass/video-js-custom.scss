@@ -111,6 +111,7 @@ $control-bar-height: 34px;
     }
 
     .vjs-play-control {
+      outline: 0;
       font-size: $font-size;
       padding: 0 17px;
       margin-right: 5px;
@@ -191,6 +192,8 @@ $control-bar-height: 34px;
     }
 
     .vjs-mute-control {
+      outline: 0;
+
       .vjs-icon-placeholder {
         display: inline-block;
         width: 22px;
@@ -274,6 +277,7 @@ $control-bar-height: 34px;
 
     .vjs-fullscreen-control {
       width: 37px;
+      outline: 0;
 
       .vjs-icon-placeholder {
         display: inline-block;

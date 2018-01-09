@@ -3,7 +3,6 @@
 import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
-
 import { renderVideo } from './video-renderer'
 
 interface VideoJSComponentInterface {
