@@ -326,7 +326,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               peertube: {
                 videoFiles: this.video.files,
                 playerElement: this.playerElement,
-                autoplay: this.isAutoplay(),
                 peerTubeLink: false
               }
             }

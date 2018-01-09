@@ -95,8 +95,10 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   uploadFirstStep () {
     const videofile = this.videofileInput.nativeElement.files[0]
+    if (!videofile) return
+
     const videoQuota = this.authService.getUser().videoQuota
-    if ((this.userVideoQuotaUsed + videofile.size) > videoQuota) {
+    if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
       const bytePipes = new BytesPipe()
 
       const msg = 'Your video quota is exceeded with this video ' +

@@ -41,7 +41,6 @@ loadVideoInfo(videoId, (err, videoInfo) => {
       peertube: {
         videoFiles: videoInfo.files,
         playerElement: videoElement,
-        autoplay: false,
         peerTubeLink: true
       }
     }

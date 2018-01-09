@@ -12,5 +12,5 @@ signup:
   enabled: true
 
 transcoding:
-  enabled: false
-  threads: 4
+  enabled: true
+  threads: 2
