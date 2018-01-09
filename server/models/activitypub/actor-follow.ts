@@ -191,12 +191,13 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
   static listAcceptedFollowerSharedInboxUrls (actorIds: number[], t: Sequelize.Transaction) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery(
-      'DISTINCT(followers)',
+      'followers',
       actorIds,
       t,
       undefined,
       undefined,
-      'sharedInboxUrl'
+      'sharedInboxUrl',
+      true
     )
   }
 
@@ -204,12 +205,15 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.createListAcceptedFollowForApiQuery('following', actorIds, t, start, count)
   }
 
-  private static async createListAcceptedFollowForApiQuery (type: 'followers' | 'following' | 'DISTINCT(followers)',
-                                       actorIds: number[],
-                                       t: Sequelize.Transaction,
-                                       start?: number,
-                                       count?: number,
-                                       columnUrl = 'url') {
+  private static async createListAcceptedFollowForApiQuery (
+    type: 'followers' | 'following',
+    actorIds: number[],
+    t: Sequelize.Transaction,
+    start?: number,
+    count?: number,
+    columnUrl = 'url',
+    distinct = false
+  ) {
     let firstJoin: string
     let secondJoin: string
 
@@ -221,10 +225,15 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       secondJoin = 'targetActorId'
     }
 
-    const selections = [ '"Follows"."' + columnUrl + '" AS "url"', 'COUNT(*) AS "total"' ]
+    const selections: string[] = []
+    if (distinct === true) selections.push('DISTINCT("Follows"."' + columnUrl + '") AS "url"')
+    else selections.push('"Follows"."' + columnUrl + '" AS "url"')
+
+    selections.push('COUNT(*) AS "total"')
+
     const tasks: Bluebird<any>[] = []
 
-    for (const selection of selections) {
+    for (let selection of selections) {
       let query = 'SELECT ' + selection + ' FROM "actor" ' +
         'INNER JOIN "actorFollow" ON "actorFollow"."' + firstJoin + '" = "actor"."id" ' +
         'INNER JOIN "actor" AS "Follows" ON "actorFollow"."' + secondJoin + '" = "Follows"."id" ' +
