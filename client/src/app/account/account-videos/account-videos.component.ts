@@ -19,6 +19,11 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
   titlePage = 'My videos'
   currentRoute = '/account/videos'
   checkedVideos: { [ id: number ]: boolean } = {}
+  pagination = {
+    currentPage: 1,
+    itemsPerPage: 10,
+    totalItems: null
+  }
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,

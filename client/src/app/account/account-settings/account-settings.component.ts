@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
+import { BytesPipe } from 'ngx-pipes'
 import { AuthService } from '../../core'
 import { ServerService } from '../../core/server'
 import { User } from '../../shared'
@@ -14,6 +15,7 @@ export class AccountSettingsComponent implements OnInit {
   @ViewChild('avatarfileInput') avatarfileInput
 
   user: User = null
+  userVideoQuota = '0'
   userVideoQuotaUsed = 0
 
   constructor (
@@ -25,6 +27,16 @@ export class AccountSettingsComponent implements OnInit {
 
   ngOnInit () {
     this.user = this.authService.getUser()
+
+    this.authService.userInformationLoaded.subscribe(
+      () => {
+        if (this.user.videoQuota !== -1) {
+          this.userVideoQuota = new BytesPipe().transform(this.user.videoQuota, 0).toString()
+        } else {
+          this.userVideoQuota = 'Unlimited'
+        }
+      }
+    )
 
     this.userService.getMyVideoQuotaUsed()
       .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)

@@ -329,7 +329,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                 playerElement: this.playerElement,
                 peerTubeLink: false
               },
-              hotkeys: {}
+              hotkeys: {
+                enableVolumeScroll: false
+              }
             }
           }
 

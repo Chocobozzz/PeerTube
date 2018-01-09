@@ -43,7 +43,9 @@ loadVideoInfo(videoId, (err, videoInfo) => {
         playerElement: videoElement,
         peerTubeLink: true
       },
-      hotkeys: {}
+      hotkeys: {
+        enableVolumeScroll: false
+      }
     }
   }
   videojs('video-container', videojsOptions, function () {
