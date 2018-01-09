@@ -8,6 +8,11 @@
   },
   "exclude": [
     "test.ts",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "../node_modules/ngx-clipboard/**/*.spec.ts"
+  ],
+  "include": [
+    "**/*.ts",
+    "../node_modules/ngx-clipboard/*/**.ts"
   ]
 }

@@ -57,7 +57,7 @@
     "markdown-it": "^8.4.0",
     "ngx-bootstrap": "2.0.0-rc.0",
     "ngx-chips": "1.6.2",
-    "ngx-clipboard": "^9.0.0",
+    "ngx-clipboard": "9.0.1",
     "ngx-infinite-scroll": "0.7.2",
     "ngx-pipes": "^2.0.5",
     "node-sass": "^4.1.1",

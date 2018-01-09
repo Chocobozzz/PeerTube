@@ -64,7 +64,7 @@
 
     <div class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
       Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
-      In maximum, this user could use ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
+      At most, this user could use ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
     </div>
   </div>
 

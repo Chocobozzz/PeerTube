@@ -190,14 +190,21 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   }
 
   static listAcceptedFollowerSharedInboxUrls (actorIds: number[], t: Sequelize.Transaction) {
-    return ActorFollowModel.createListAcceptedFollowForApiQuery('followers', actorIds, t, undefined, undefined, 'sharedInboxUrl')
+    return ActorFollowModel.createListAcceptedFollowForApiQuery(
+      'DISTINCT(followers)',
+      actorIds,
+      t,
+      undefined,
+      undefined,
+      'sharedInboxUrl'
+    )
   }
 
   static listAcceptedFollowingUrlsForApi (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery('following', actorIds, t, start, count)
   }
 
-  private static async createListAcceptedFollowForApiQuery (type: 'followers' | 'following',
+  private static async createListAcceptedFollowForApiQuery (type: 'followers' | 'following' | 'DISTINCT(followers)',
                                        actorIds: number[],
                                        t: Sequelize.Transaction,
                                        start?: number,

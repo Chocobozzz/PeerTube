@@ -4444,7 +4444,7 @@ ngx-chips@1.6.2:
   dependencies:
     ng2-material-dropdown "~0.8.2"
 
-ngx-clipboard@^9.0.0:
+ngx-clipboard@9.0.1:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/ngx-clipboard/-/ngx-clipboard-9.0.1.tgz#3829ef67d00a447303af4faf96c705de435d80f8"
   dependencies:
