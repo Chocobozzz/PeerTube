@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
@@ -60,7 +60,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private metaService: MetaService,
     private authService: AuthService,
     private notificationsService: NotificationsService,
-    private markdownService: MarkdownService
+    private markdownService: MarkdownService,
+    private zone: NgZone
   ) {}
 
   get user () {
@@ -338,10 +339,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           this.videoPlayerLoaded = true
 
           const self = this
-          videojs(this.playerElement, videojsOptions, function () {
-            self.player = this
-            this.on('customError', (event, data) => {
-              self.handleError(data.err)
+          this.zone.runOutsideAngular(() => {
+            videojs(this.playerElement, videojsOptions, function () {
+              self.player = this
+              this.on('customError', (event, data) => {
+                self.handleError(data.err)
+              })
             })
           })
         } else {

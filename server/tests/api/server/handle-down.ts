@@ -133,7 +133,6 @@ describe('Test handle downs', function () {
     expect(videoServer2).not.to.be.undefined
 
     await completeVideoCheck(servers[1].url, videoServer2, checkAttributes)
-
   })
 
   after(async function () {
