@@ -24,7 +24,8 @@ function isVideoCommentDeleteActivityValid (activity: any) {
 
 export {
   isVideoCommentCreateActivityValid,
-  isVideoCommentDeleteActivityValid
+  isVideoCommentDeleteActivityValid,
+  isVideoCommentObjectValid
 }
 
 // ---------------------------------------------------------------------------

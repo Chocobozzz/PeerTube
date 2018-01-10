@@ -8,15 +8,13 @@ import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { VideoFileModel } from '../../../models/video/video-file'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity, getActorsInvolvedInVideo } from '../send/misc'
-import { generateThumbnailFromUrl } from '../videos'
-import { addVideoComments, addVideoShares, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
+import { addVideoComments, resolveThread } from '../video-comments'
+import { addVideoShares, getOrCreateAccountAndVideoAndChannel } from '../videos'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -53,17 +51,7 @@ async function processCreateVideo (
 ) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
-  const channel = videoToCreateData.attributedTo.find(a => a.type === 'Group')
-  if (!channel) throw new Error('Cannot find associated video channel to video ' + videoToCreateData.url)
-
-  const channelActor = await getOrCreateActorAndServerAndModel(channel.id)
-
-  const options = {
-    arguments: [ actor, activity, videoToCreateData, channelActor ],
-    errorMessage: 'Cannot insert the remote video with many retries.'
-  }
-
-  const video = await retryTransactionWrapper(createRemoteVideo, options)
+  const { video } = await getOrCreateAccountAndVideoAndChannel(videoToCreateData, actor)
 
   // Process outside the transaction because we could fetch remote data
   if (videoToCreateData.likes && Array.isArray(videoToCreateData.likes.orderedItems)) {
@@ -87,48 +75,6 @@ async function processCreateVideo (
   }
 
   return video
-}
-
-function createRemoteVideo (
-  account: ActorModel,
-  activity: ActivityCreate,
-  videoToCreateData: VideoTorrentObject,
-  channelActor: ActorModel
-) {
-  logger.debug('Adding remote video %s.', videoToCreateData.id)
-
-  return sequelizeTypescript.transaction(async t => {
-    const sequelizeOptions = {
-      transaction: t
-    }
-    const videoFromDatabase = await VideoModel.loadByUUIDOrURL(videoToCreateData.uuid, videoToCreateData.id, t)
-    if (videoFromDatabase) return videoFromDatabase
-
-    const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoToCreateData, activity.to, activity.cc)
-    const video = VideoModel.build(videoData)
-
-    // Don't block on request
-    generateThumbnailFromUrl(video, videoToCreateData.icon)
-      .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoToCreateData.id, err))
-
-    const videoCreated = await video.save(sequelizeOptions)
-
-    const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoToCreateData)
-    if (videoFileAttributes.length === 0) {
-      throw new Error('Cannot find valid files for video %s ' + videoToCreateData.url)
-    }
-
-    const tasks: Bluebird<any>[] = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
-    await Promise.all(tasks)
-
-    const tags = videoToCreateData.tag.map(t => t.name)
-    const tagInstances = await TagModel.findOrCreateTags(tags, t)
-    await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
-
-    logger.info('Remote video with uuid %s inserted.', videoToCreateData.uuid)
-
-    return videoCreated
-  })
 }
 
 async function createRates (actorUrls: string[], video: VideoModel, rate: VideoRateType) {
@@ -167,16 +113,15 @@ async function processCreateDislike (byActor: ActorModel, activity: ActivityCrea
   return retryTransactionWrapper(createVideoDislike, options)
 }
 
-function createVideoDislike (byActor: ActorModel, activity: ActivityCreate) {
+async function createVideoDislike (byActor: ActorModel, activity: ActivityCreate) {
   const dislike = activity.object as DislikeObject
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
 
-  return sequelizeTypescript.transaction(async t => {
-    const video = await VideoModel.loadByUrlAndPopulateAccount(dislike.object, t)
-    if (!video) throw new Error('Unknown video ' + dislike.object)
+  const { video } = await getOrCreateAccountAndVideoAndChannel(dislike.object)
 
+  return sequelizeTypescript.transaction(async t => {
     const rate = {
       type: 'dislike' as 'dislike',
       videoId: video.id,
@@ -200,9 +145,7 @@ function createVideoDislike (byActor: ActorModel, activity: ActivityCreate) {
 async function processCreateView (byActor: ActorModel, activity: ActivityCreate) {
   const view = activity.object as ViewObject
 
-  const video = await VideoModel.loadByUrlAndPopulateAccount(view.object)
-
-  if (!video) throw new Error('Unknown video ' + view.object)
+  const { video } = await getOrCreateAccountAndVideoAndChannel(view.object)
 
   const account = await ActorModel.loadByUrl(view.actor)
   if (!account) throw new Error('Unknown account ' + view.actor)
@@ -225,19 +168,15 @@ function processCreateVideoAbuse (actor: ActorModel, videoAbuseToCreateData: Vid
   return retryTransactionWrapper(addRemoteVideoAbuse, options)
 }
 
-function addRemoteVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
+async function addRemoteVideoAbuse (actor: ActorModel, videoAbuseToCreateData: VideoAbuseObject) {
   logger.debug('Reporting remote abuse for video %s.', videoAbuseToCreateData.object)
 
   const account = actor.Account
   if (!account) throw new Error('Cannot create dislike with the non account actor ' + actor.url)
 
-  return sequelizeTypescript.transaction(async t => {
-    const video = await VideoModel.loadByUrlAndPopulateAccount(videoAbuseToCreateData.object, t)
-    if (!video) {
-      logger.warn('Unknown video %s for remote video abuse.', videoAbuseToCreateData.object)
-      return undefined
-    }
+  const { video } = await getOrCreateAccountAndVideoAndChannel(videoAbuseToCreateData.object)
 
+  return sequelizeTypescript.transaction(async t => {
     const videoAbuseData = {
       reporterAccountId: account.id,
       reason: videoAbuseToCreateData.content,
@@ -259,41 +198,33 @@ function processCreateVideoComment (byActor: ActorModel, activity: ActivityCreat
   return retryTransactionWrapper(createVideoComment, options)
 }
 
-function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
+async function createVideoComment (byActor: ActorModel, activity: ActivityCreate) {
   const comment = activity.object as VideoCommentObject
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
+  const { video, parents } = await resolveThread(comment.inReplyTo)
+
   return sequelizeTypescript.transaction(async t => {
-    let video = await VideoModel.loadByUrlAndPopulateAccount(comment.inReplyTo, t)
-    let objectToCreate
+    let originCommentId = null
+    let inReplyToCommentId = null
+
+    if (parents.length !== 0) {
+      const parent = parents[0]
+
+      originCommentId = parent.getThreadId()
+      inReplyToCommentId = parent.id
+    }
 
     // This is a new thread
-    if (video) {
-      objectToCreate = {
-        url: comment.id,
-        text: comment.content,
-        originCommentId: null,
-        inReplyToComment: null,
-        videoId: video.id,
-        accountId: byAccount.id
-      }
-    } else {
-      const inReplyToComment = await VideoCommentModel.loadByUrl(comment.inReplyTo, t)
-      if (!inReplyToComment) throw new Error('Unknown replied comment ' + comment.inReplyTo)
-
-      video = await VideoModel.loadAndPopulateAccount(inReplyToComment.videoId)
-
-      const originCommentId = inReplyToComment.originCommentId || inReplyToComment.id
-      objectToCreate = {
-        url: comment.id,
-        text: comment.content,
-        originCommentId,
-        inReplyToCommentId: inReplyToComment.id,
-        videoId: video.id,
-        accountId: byAccount.id
-      }
+    const objectToCreate = {
+      url: comment.id,
+      text: comment.content,
+      originCommentId,
+      inReplyToCommentId,
+      videoId: video.id,
+      accountId: byAccount.id
     }
 
     const options = {

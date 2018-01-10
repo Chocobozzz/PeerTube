@@ -44,7 +44,7 @@ async function migrate () {
       await executeMigration(actualVersion, migrationScript)
     } catch (err) {
       logger.error('Cannot execute migration %s.', migrationScript.version, err)
-      process.exit(0)
+      process.exit(-1)
     }
   }
 
@@ -92,7 +92,7 @@ async function executeMigration (actualVersion: number, entity: { version: strin
 
   const migrationScript = require(path.join(__dirname, 'migrations', migrationScriptName))
 
-  await sequelizeTypescript.transaction(async t => {
+  return sequelizeTypescript.transaction(async t => {
     const options = {
       transaction: t,
       queryInterface: sequelizeTypescript.getQueryInterface(),

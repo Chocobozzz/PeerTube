@@ -1,9 +1,11 @@
 // Intercept ActivityPub client requests
 import * as express from 'express'
+import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB, CONFIG } from '../../initializers'
 import { buildVideoAnnounceToFollowers } from '../../lib/activitypub/send'
+import { audiencify, getAudience } from '../../lib/activitypub/send/misc'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
@@ -95,7 +97,9 @@ async function videoController (req: express.Request, res: express.Response, nex
 
   // We need more attributes
   const videoAll = await VideoModel.loadAndPopulateAll(video.id)
-  return res.json(videoAll.toActivityPubObject())
+  const audience = await getAudience(video.VideoChannel.Account.Actor, undefined, video.privacy === VideoPrivacy.PUBLIC)
+
+  return res.json(audiencify(videoAll.toActivityPubObject(), audience))
 }
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {

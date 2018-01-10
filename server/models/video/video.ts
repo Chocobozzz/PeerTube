@@ -178,6 +178,10 @@ enum ScopeNames {
     },
     {
       fields: [ 'id', 'privacy' ]
+    },
+    {
+      fields: [ 'url'],
+      unique: true
     }
   ]
 })
@@ -535,7 +539,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
   }
 
-  static loadByUUIDOrURL (uuid: string, url: string, t?: Sequelize.Transaction) {
+  static loadByUUIDOrURLAndPopulateAccount (uuid: string, url: string, t?: Sequelize.Transaction) {
     const query: IFindOptions<VideoModel> = {
       where: {
         [Sequelize.Op.or]: [
@@ -547,7 +551,7 @@ export class VideoModel extends Model<VideoModel> {
 
     if (t !== undefined) query.transaction = t
 
-    return VideoModel.scope(ScopeNames.WITH_FILES).findOne(query)
+    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS, ScopeNames.WITH_FILES ]).findOne(query)
   }
 
   static loadAndPopulateAccountAndServerAndTags (id: number) {
@@ -983,6 +987,10 @@ export class VideoModel extends Model<VideoModel> {
         {
           type: 'Group',
           id: this.VideoChannel.Actor.url
+        },
+        {
+          type: 'Person',
+          id: this.VideoChannel.Account.Actor.url
         }
       ]
     }

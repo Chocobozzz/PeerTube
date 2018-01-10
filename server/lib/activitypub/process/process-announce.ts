@@ -7,6 +7,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity } from '../send/misc'
+import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 import { processCreateActivity } from './process-create'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {
@@ -44,19 +45,19 @@ function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnoun
   return retryTransactionWrapper(shareVideo, options)
 }
 
-function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
+async function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
   const announced = activity.object
+  let video: VideoModel
+
+  if (typeof announced === 'string') {
+    const res = await getOrCreateAccountAndVideoAndChannel(announced)
+    video = res.video
+  } else {
+    video = await processCreateActivity(announced)
+  }
 
   return sequelizeTypescript.transaction(async t => {
     // Add share entry
-    let video: VideoModel
-
-    if (typeof announced === 'string') {
-      video = await VideoModel.loadByUrlAndPopulateAccount(announced)
-      if (!video) throw new Error('Unknown video to share ' + announced)
-    } else {
-      video = await processCreateActivity(announced)
-    }
 
     const share = {
       actorId: actorAnnouncer.id,

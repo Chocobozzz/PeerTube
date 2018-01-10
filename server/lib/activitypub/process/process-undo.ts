@@ -7,8 +7,8 @@ import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { VideoModel } from '../../../models/video/video'
 import { forwardActivity } from '../send/misc'
+import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 
 async function processUndoActivity (activity: ActivityUndo) {
   const activityToUndo = activity.object
@@ -43,15 +43,14 @@ function processUndoLike (actorUrl: string, activity: ActivityUndo) {
   return retryTransactionWrapper(undoLike, options)
 }
 
-function undoLike (actorUrl: string, activity: ActivityUndo) {
+async function undoLike (actorUrl: string, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
+
+  const { video } = await getOrCreateAccountAndVideoAndChannel(likeActivity.object)
 
   return sequelizeTypescript.transaction(async t => {
     const byAccount = await AccountModel.loadByUrl(actorUrl, t)
     if (!byAccount) throw new Error('Unknown account ' + actorUrl)
-
-    const video = await VideoModel.loadByUrlAndPopulateAccount(likeActivity.object, t)
-    if (!video) throw new Error('Unknown video ' + likeActivity.actor)
 
     const rate = await AccountVideoRateModel.load(byAccount.id, video.id, t)
     if (!rate) throw new Error(`Unknown rate by account ${byAccount.id} for video ${video.id}.`)
@@ -76,15 +75,14 @@ function processUndoDislike (actorUrl: string, activity: ActivityUndo) {
   return retryTransactionWrapper(undoDislike, options)
 }
 
-function undoDislike (actorUrl: string, activity: ActivityUndo) {
+async function undoDislike (actorUrl: string, activity: ActivityUndo) {
   const dislike = activity.object.object as DislikeObject
+
+  const { video } = await getOrCreateAccountAndVideoAndChannel(dislike.object)
 
   return sequelizeTypescript.transaction(async t => {
     const byAccount = await AccountModel.loadByUrl(actorUrl, t)
     if (!byAccount) throw new Error('Unknown account ' + actorUrl)
-
-    const video = await VideoModel.loadByUrlAndPopulateAccount(dislike.object, t)
-    if (!video) throw new Error('Unknown video ' + dislike.actor)
 
     const rate = await AccountVideoRateModel.load(byAccount.id, video.id, t)
     if (!rate) throw new Error(`Unknown rate by account ${byAccount.id} for video ${video.id}.`)

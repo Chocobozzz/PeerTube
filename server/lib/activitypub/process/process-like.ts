@@ -3,9 +3,9 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity } from '../send/misc'
+import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 
 async function processLikeActivity (activity: ActivityLike) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -30,17 +30,15 @@ async function processLikeVideo (actor: ActorModel, activity: ActivityLike) {
   return retryTransactionWrapper(createVideoLike, options)
 }
 
-function createVideoLike (byActor: ActorModel, activity: ActivityLike) {
+async function createVideoLike (byActor: ActorModel, activity: ActivityLike) {
   const videoUrl = activity.object
 
   const byAccount = byActor.Account
   if (!byAccount) throw new Error('Cannot create like with the non account actor ' + byActor.url)
 
+  const { video } = await getOrCreateAccountAndVideoAndChannel(videoUrl)
+
   return sequelizeTypescript.transaction(async t => {
-    const video = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
-
-    if (!video) throw new Error('Unknown video ' + videoUrl)
-
     const rate = {
       type: 'like' as 'like',
       videoId: video.id,

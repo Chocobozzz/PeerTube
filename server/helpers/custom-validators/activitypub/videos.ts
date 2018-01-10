@@ -70,7 +70,8 @@ export {
   isVideoTorrentCreateActivityValid,
   isVideoTorrentUpdateActivityValid,
   isVideoTorrentDeleteActivityValid,
-  isVideoFlagValid
+  isVideoFlagValid,
+  isVideoTorrentObjectValid
 }
 
 // ---------------------------------------------------------------------------

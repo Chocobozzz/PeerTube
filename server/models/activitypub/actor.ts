@@ -63,6 +63,9 @@ enum ScopeNames {
   tableName: 'actor',
   indexes: [
     {
+      fields: [ 'url' ]
+    },
+    {
       fields: [ 'preferredUsername', 'serverId' ],
       unique: true
     }

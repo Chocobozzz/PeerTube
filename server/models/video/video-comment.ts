@@ -208,18 +208,6 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findOne(query)
   }
 
-  static loadByUrl (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoCommentModel> = {
-      where: {
-        url
-      }
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoCommentModel.findOne(query)
-  }
-
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
     const query: IFindOptions<VideoCommentModel> = {
       where: {
@@ -230,6 +218,18 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     if (t !== undefined) query.transaction = t
 
     return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
+  }
+
+  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Sequelize.Transaction) {
+    const query: IFindOptions<VideoCommentModel> = {
+      where: {
+        url
+      }
+    }
+
+    if (t !== undefined) query.transaction = t
+
+    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
   static listThreadsForApi (videoId: number, start: number, count: number, sort: string) {
@@ -271,9 +271,9 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static listThreadParentComments (comment: VideoCommentModel, t: Sequelize.Transaction) {
+  static listThreadParentComments (comment: VideoCommentModel, t: Sequelize.Transaction, order: 'ASC' | 'DESC' = 'ASC') {
     const query = {
-      order: [ [ 'createdAt', 'ASC' ] ],
+      order: [ [ 'createdAt', order ] ],
       where: {
         [ Sequelize.Op.or ]: [
           { id: comment.getThreadId() },
@@ -281,6 +281,9 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         ],
         id: {
           [ Sequelize.Op.ne ]: comment.id
+        },
+        createdAt: {
+          [ Sequelize.Op.lt ]: comment.createdAt
         }
       },
       transaction: t

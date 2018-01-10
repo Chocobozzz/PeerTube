@@ -9,10 +9,9 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { TagModel } from '../../../models/video/tag'
-import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
-import { videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from './misc'
+import { getOrCreateAccountAndVideoAndChannel, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from '../videos'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -46,8 +45,10 @@ function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
 async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
   const videoAttributesToUpdate = activity.object as VideoTorrentObject
 
+  const res = await getOrCreateAccountAndVideoAndChannel(videoAttributesToUpdate.id)
+
   logger.debug('Updating remote video "%s".', videoAttributesToUpdate.uuid)
-  let videoInstance: VideoModel
+  let videoInstance = res.video
   let videoFieldsSave: any
 
   try {
@@ -55,9 +56,6 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       const sequelizeOptions = {
         transaction: t
       }
-
-      const videoInstance = await VideoModel.loadByUrlAndPopulateAccount(videoAttributesToUpdate.id, t)
-      if (!videoInstance) throw new Error('Video ' + videoAttributesToUpdate.id + ' not found.')
 
       videoFieldsSave = videoInstance.toJSON()
 

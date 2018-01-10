@@ -279,6 +279,7 @@ const ACTIVITY_PUB = {
     TORRENT: [ 'application/x-bittorrent' ],
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
+  MAX_RECURSION_COMMENTS: 100,
   ACTOR_REFRESH_INTERVAL: 3600 * 24 // 1 day
 }
 

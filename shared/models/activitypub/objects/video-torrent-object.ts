@@ -30,4 +30,6 @@ export interface VideoTorrentObject {
   shares?: ActivityPubOrderedCollection<string>
   comments?: ActivityPubOrderedCollection<string>
   attributedTo: ActivityPubAttributedTo[]
+  to?: string[]
+  cc?: string[]
 }
