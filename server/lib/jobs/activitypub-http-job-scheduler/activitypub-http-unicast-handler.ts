@@ -1,5 +1,6 @@
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActivityPubHttpPayload, buildSignedRequestOptions, computeBody, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
 
 async function process (payload: ActivityPubHttpPayload, jobId: number) {
@@ -18,8 +19,13 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
 
   try {
     await doRequest(options)
+    await ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([ uri ], [], undefined)
   } catch (err) {
-    await maybeRetryRequestLater(err, payload, uri)
+    const isRetryingLater = await maybeRetryRequestLater(err, payload, uri)
+    if (isRetryingLater === false) {
+      await ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([], [ uri ], undefined)
+    }
+
     throw err
   }
 }

@@ -9,7 +9,7 @@ import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 165
+const LAST_MIGRATION_VERSION = 170
 
 // ---------------------------------------------------------------------------
 
@@ -40,12 +40,12 @@ const OAUTH_LIFETIME = {
 
 // ---------------------------------------------------------------------------
 
-// Number of points we add/remove from a friend after a successful/bad request
-const SERVERS_SCORE = {
+// Number of points we add/remove after a successful/bad request
+const ACTOR_FOLLOW_SCORE = {
   PENALTY: -10,
   BONUS: 10,
-  BASE: 100,
-  MAX: 1000
+  BASE: 1000,
+  MAX: 10000
 }
 
 const FOLLOW_STATES: { [ id: string ]: FollowState } = {
@@ -75,6 +75,9 @@ const JOBS_FETCH_LIMIT_PER_CYCLE = {
 }
 // 1 minutes
 let JOBS_FETCHING_INTERVAL = 60000
+
+// 1 hour
+let SCHEDULER_INTERVAL = 60000 * 60
 
 // ---------------------------------------------------------------------------
 
@@ -346,7 +349,7 @@ const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 
 // Special constants for a test instance
 if (isTestInstance() === true) {
-  SERVERS_SCORE.BASE = 20
+  ACTOR_FOLLOW_SCORE.BASE = 20
   JOBS_FETCHING_INTERVAL = 1000
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
@@ -354,6 +357,7 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 60 // 1 minute
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
+  SCHEDULER_INTERVAL = 10000
 }
 
 CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
@@ -378,7 +382,7 @@ export {
   OAUTH_LIFETIME,
   OPENGRAPH_AND_OEMBED_COMMENT,
   PAGINATION_COUNT_DEFAULT,
-  SERVERS_SCORE,
+  ACTOR_FOLLOW_SCORE,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   FOLLOW_STATES,
@@ -396,5 +400,6 @@ export {
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
-  AVATAR_MIMETYPE_EXT
+  AVATAR_MIMETYPE_EXT,
+  SCHEDULER_INTERVAL
 }

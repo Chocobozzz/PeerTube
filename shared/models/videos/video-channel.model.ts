@@ -1,13 +1,10 @@
+import { Actor } from '../actors/actor.model'
 import { Video } from './video.model'
 
-export interface VideoChannel {
-  id: number
-  name: string
-  url: string
+export interface VideoChannel extends Actor {
+  displayName: string
   description: string
   isLocal: boolean
-  createdAt: Date | string
-  updatedAt: Date | string
   owner?: {
     name: string
     uuid: string

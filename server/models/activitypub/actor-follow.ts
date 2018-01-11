@@ -1,8 +1,14 @@
 import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, IsInt, Max, Model, Table,
+  UpdatedAt
+} from 'sequelize-typescript'
 import { FollowState } from '../../../shared/models/actors'
+import { AccountFollow } from '../../../shared/models/actors/follow.model'
+import { logger } from '../../helpers/logger'
+import { ACTOR_FOLLOW_SCORE } from '../../initializers'
 import { FOLLOW_STATES } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { getSort } from '../utils'
@@ -20,6 +26,9 @@ import { ActorModel } from './actor'
     {
       fields: [ 'actorId', 'targetActorId' ],
       unique: true
+    },
+    {
+      fields: [ 'score' ]
     }
   ]
 })
@@ -28,6 +37,13 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   @AllowNull(false)
   @Column(DataType.ENUM(values(FOLLOW_STATES)))
   state: FollowState
+
+  @AllowNull(false)
+  @Default(ACTOR_FOLLOW_SCORE.BASE)
+  @IsInt
+  @Max(ACTOR_FOLLOW_SCORE.MAX)
+  @Column
+  score: number
 
   @CreatedAt
   createdAt: Date
@@ -62,6 +78,34 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     onDelete: 'CASCADE'
   })
   ActorFollowing: ActorModel
+
+  // Remove actor follows with a score of 0 (too many requests where they were unreachable)
+  static async removeBadActorFollows () {
+    const actorFollows = await ActorFollowModel.listBadActorFollows()
+
+    const actorFollowsRemovePromises = actorFollows.map(actorFollow => actorFollow.destroy())
+    await Promise.all(actorFollowsRemovePromises)
+
+    const numberOfActorFollowsRemoved = actorFollows.length
+
+    if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
+  }
+
+  static updateActorFollowsScoreAndRemoveBadOnes (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction) {
+    if (goodInboxes.length === 0 && badInboxes.length === 0) return
+
+    logger.info('Updating %d good actor follows and %d bad actor follows scores.', goodInboxes.length, badInboxes.length)
+
+    if (goodInboxes.length !== 0) {
+      ActorFollowModel.incrementScores(goodInboxes, ACTOR_FOLLOW_SCORE.BONUS, t)
+        .catch(err => logger.error('Cannot increment scores of good actor follows.', err))
+    }
+
+    if (badInboxes.length !== 0) {
+      ActorFollowModel.incrementScores(badInboxes, ACTOR_FOLLOW_SCORE.PENALTY, t)
+        .catch(err => logger.error('Cannot decrement scores of bad actor follows.', err))
+    }
+  }
 
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Sequelize.Transaction) {
     const query = {
@@ -260,7 +304,37 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
   }
 
-  toFormattedJSON () {
+  private static incrementScores (inboxUrls: string[], value: number, t: Sequelize.Transaction) {
+    const inboxUrlsString = inboxUrls.map(url => `'${url}'`).join(',')
+
+    const query = 'UPDATE "actorFollow" SET "score" = "score" +' + value + ' ' +
+      'WHERE id IN (' +
+        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
+        'WHERE "actor"."inboxUrl" IN (' + inboxUrlsString + ') OR "actor"."sharedInboxUrl" IN (' + inboxUrlsString + ')' +
+      ')'
+
+    const options = {
+      type: Sequelize.QueryTypes.BULKUPDATE,
+      transaction: t
+    }
+
+    return ActorFollowModel.sequelize.query(query, options)
+  }
+
+  private static listBadActorFollows () {
+    const query = {
+      where: {
+        score: {
+          [Sequelize.Op.lte]: 0
+        }
+      }
+    }
+
+    return ActorFollowModel.findAll(query)
+  }
+
+  toFormattedJSON (): AccountFollow {
     const follower = this.ActorFollower.toFormattedJSON()
     const following = this.ActorFollowing.toFormattedJSON()
 
@@ -268,6 +342,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       id: this.id,
       follower,
       following,
+      score: this.score,
       state: this.state,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt

@@ -228,7 +228,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
-      name: this.name,
+      displayName: this.name,
       description: this.description,
       isLocal: this.Actor.isOwned(),
       createdAt: this.createdAt,

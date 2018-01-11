@@ -179,7 +179,6 @@ export class AccountModel extends Model<AccountModel> {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
-      name: this.Actor.preferredUsername,
       displayName: this.name,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt

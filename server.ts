@@ -56,6 +56,7 @@ import { installApplication } from './server/initializers'
 import { activitypubHttpJobScheduler, transcodingJobScheduler } from './server/lib/jobs'
 import { VideosPreviewCache } from './server/lib/cache'
 import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
+import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
 
 // ----------- Command line -----------
 
@@ -168,6 +169,8 @@ function onDatabaseInitDone () {
       // ----------- Make the server listening -----------
       server.listen(port, () => {
         VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
+        BadActorFollowScheduler.Instance.enable()
+
         activitypubHttpJobScheduler.activate()
         transcodingJobScheduler.activate()
 

@@ -31,7 +31,7 @@ function populateAsyncUserVideoChannels (authService: AuthService, channel: any[
           const videoChannels = user.videoChannels
           if (Array.isArray(videoChannels) === false) return
 
-          videoChannels.forEach(c => channel.push({ id: c.id, label: c.name }))
+          videoChannels.forEach(c => channel.push({ id: c.id, label: c.displayName }))
 
           return res()
         }

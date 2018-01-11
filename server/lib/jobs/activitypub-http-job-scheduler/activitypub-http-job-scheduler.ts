@@ -4,6 +4,7 @@ import { logger } from '../../../helpers/logger'
 import { getServerActor } from '../../../helpers/utils'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobHandler, JobScheduler } from '../job-scheduler'
 
 import * as activitypubHttpBroadcastHandler from './activitypub-http-broadcast-handler'
@@ -26,7 +27,7 @@ const jobCategory: JobCategory = 'activitypub-http'
 
 const activitypubHttpJobScheduler = new JobScheduler(jobCategory, jobHandlers)
 
-function maybeRetryRequestLater (err: Error, payload: ActivityPubHttpPayload, uri: string) {
+async function maybeRetryRequestLater (err: Error, payload: ActivityPubHttpPayload, uri: string) {
   logger.warn('Cannot make request to %s.', uri, err)
 
   let attemptNumber = payload.attemptNumber || 1
@@ -39,8 +40,12 @@ function maybeRetryRequestLater (err: Error, payload: ActivityPubHttpPayload, ur
       uris: [ uri ],
       attemptNumber
     })
-    return activitypubHttpJobScheduler.createJob(undefined, 'activitypubHttpUnicastHandler', newPayload)
+    await activitypubHttpJobScheduler.createJob(undefined, 'activitypubHttpUnicastHandler', newPayload)
+
+    return true
   }
+
+  return false
 }
 
 async function computeBody (payload: ActivityPubHttpPayload) {

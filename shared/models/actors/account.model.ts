@@ -1,15 +1,5 @@
-import { Avatar } from '../avatars/avatar.model'
+import { Actor } from './actor.model'
 
-export interface Account {
-  id: number
-  uuid: string
-  url: string
-  name: string
+export interface Account extends Actor {
   displayName: string
-  host: string
-  followingCount: number
-  followersCount: number
-  createdAt: Date
-  updatedAt: Date
-  avatar: Avatar
 }

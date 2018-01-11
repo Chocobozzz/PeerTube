@@ -204,7 +204,7 @@ export class ActorModel extends Model<ActorModel> {
   VideoChannel: VideoChannelModel
 
   static load (id: number) {
-    return ActorModel.scope(ScopeNames.FULL).findById(id)
+    return ActorModel.unscoped().findById(id)
   }
 
   static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
@@ -267,20 +267,17 @@ export class ActorModel extends Model<ActorModel> {
       avatar = this.Avatar.toFormattedJSON()
     }
 
-    let score: number
-    if (this.Server) {
-      score = this.Server.score
-    }
-
     return {
       id: this.id,
       url: this.url,
       uuid: this.uuid,
+      name: this.preferredUsername,
       host: this.getHost(),
-      score,
       followingCount: this.followingCount,
       followersCount: this.followersCount,
-      avatar
+      avatar,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
     }
   }
 
