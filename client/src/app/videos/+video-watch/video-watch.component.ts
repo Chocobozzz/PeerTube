@@ -32,7 +32,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   otherVideosDisplayed: Video[] = []
 
   error = false
-  loading = false
   player: videojs.Player
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null

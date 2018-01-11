@@ -46,20 +46,6 @@ $control-bar-height: 34px;
     transition: visibility 0.5s, opacity 0.5s;
   }
 
-  .vjs-loading-spinner {
-    display: block;
-    visibility: hidden;
-    opacity: 0;
-    transition-delay: 0.5s;
-    transition: visibility 0.5s, opacity 0.5s;
-  }
-
-  &.vjs-waiting .vjs-loading-spinner {
-    visibility: visible;
-    opacity: 1;
-
-  }
-
   .vjs-control-bar,
   .vjs-big-play-button,
   .vjs-menu-button .vjs-menu-content {
@@ -374,8 +360,9 @@ $control-bar-height: 34px;
   border: 0.7em solid rgba(255, 255, 255, 0.2);
   border-left-color: #ffffff;
   transform: translateZ(0);
-  animation: spinner 1.4s infinite linear;
+  animation: 0.3s ease-out 0.3s forwards vjs-spinner-show, spinner 1.4s infinite linear !important;
   overflow: hidden;
+  visibility: hidden;
 
   &:before {
     animation: none !important;
@@ -394,6 +381,25 @@ $control-bar-height: 34px;
     }
     100% {
       transform: rotate(360deg);
+    }
+  }
+
+  @keyframes vjs-spinner-show {
+    0% {
+      display: none;
+      opacity: 0;
+    }
+
+    1% {
+      display: block;
+      visibility: visible;
+      opacity: 0;
+    }
+
+    100% {
+      display: block;
+      visibility: visible;
+      opacity: 1;
     }
   }
 }
