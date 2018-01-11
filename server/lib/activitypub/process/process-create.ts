@@ -147,8 +147,8 @@ async function processCreateView (byActor: ActorModel, activity: ActivityCreate)
 
   const { video } = await getOrCreateAccountAndVideoAndChannel(view.object)
 
-  const account = await ActorModel.loadByUrl(view.actor)
-  if (!account) throw new Error('Unknown account ' + view.actor)
+  const actor = await ActorModel.loadByUrl(view.actor)
+  if (!actor) throw new Error('Unknown actor ' + view.actor)
 
   await video.increment('views')
 

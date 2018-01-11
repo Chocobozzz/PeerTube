@@ -4,7 +4,6 @@ import { logger } from '../../../helpers/logger'
 import { getServerActor } from '../../../helpers/utils'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobHandler, JobScheduler } from '../job-scheduler'
 
 import * as activitypubHttpBroadcastHandler from './activitypub-http-broadcast-handler'

@@ -19,11 +19,11 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
 
   try {
     await doRequest(options)
-    await ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([ uri ], [], undefined)
+    ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([ uri ], [], undefined)
   } catch (err) {
     const isRetryingLater = await maybeRetryRequestLater(err, payload, uri)
     if (isRetryingLater === false) {
-      await ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([], [ uri ], undefined)
+      ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([], [ uri ], undefined)
     }
 
     throw err

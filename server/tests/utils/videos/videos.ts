@@ -383,7 +383,8 @@ async function completeVideoCheck (
   expect(videoDetails.account.name).to.equal(attributes.account)
   expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
 
-  expect(videoDetails.channel.name).to.equal(attributes.channel.name)
+  expect(videoDetails.channel.displayName).to.equal(attributes.channel.name)
+  expect(videoDetails.channel.name).to.have.lengthOf(36)
   expect(videoDetails.channel.isLocal).to.equal(attributes.channel.isLocal)
   expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
   expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true

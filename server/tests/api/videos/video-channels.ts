@@ -59,8 +59,8 @@ describe('Test a video channels', function () {
     expect(userInfo.videoChannels).to.have.lengthOf(2)
 
     const videoChannels = userInfo.videoChannels
-    expect(videoChannels[0].name).to.equal('Default root channel')
-    expect(videoChannels[1].name).to.equal('second video channel')
+    expect(videoChannels[0].displayName).to.equal('Default root channel')
+    expect(videoChannels[1].displayName).to.equal('second video channel')
     expect(videoChannels[1].description).to.equal('super video channel description')
   })
 
@@ -72,8 +72,8 @@ describe('Test a video channels', function () {
     expect(res.body.data).to.have.lengthOf(2)
 
     const videoChannels = res.body.data
-    expect(videoChannels[0].name).to.equal('Default root channel')
-    expect(videoChannels[1].name).to.equal('second video channel')
+    expect(videoChannels[0].displayName).to.equal('Default root channel')
+    expect(videoChannels[1].displayName).to.equal('second video channel')
     expect(videoChannels[1].description).to.equal('super video channel description')
 
     videoChannelId = videoChannels[1].id
@@ -85,7 +85,7 @@ describe('Test a video channels', function () {
     expect(res.body.total).to.equal(2)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].name).to.equal('Default root channel')
+    expect(res.body.data[0].displayName).to.equal('Default root channel')
   })
 
   it('Should update video channel', async () => {
@@ -103,7 +103,7 @@ describe('Test a video channels', function () {
     expect(res.body.total).to.equal(2)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].name).to.equal('video channel updated')
+    expect(res.body.data[0].displayName).to.equal('video channel updated')
     expect(res.body.data[0].description).to.equal('video channel description updated')
   })
 
@@ -111,7 +111,7 @@ describe('Test a video channels', function () {
     const res = await getVideoChannel(server.url, videoChannelId)
 
     const videoChannel = res.body
-    expect(videoChannel.name).to.equal('video channel updated')
+    expect(videoChannel.displayName).to.equal('video channel updated')
     expect(videoChannel.description).to.equal('video channel description updated')
   })
 
@@ -125,7 +125,7 @@ describe('Test a video channels', function () {
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].name).to.equal('Default root channel')
+    expect(res.body.data[0].displayName).to.equal('Default root channel')
   })
 
   after(async function () {

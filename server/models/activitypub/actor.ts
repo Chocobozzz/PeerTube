@@ -41,11 +41,11 @@ enum ScopeNames {
   [ScopeNames.FULL]: {
     include: [
       {
-        model: () => AccountModel,
+        model: () => AccountModel.unscoped(),
         required: false
       },
       {
-        model: () => VideoChannelModel,
+        model: () => VideoChannelModel.unscoped(),
         required: false
       },
       {

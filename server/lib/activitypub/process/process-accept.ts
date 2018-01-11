@@ -23,7 +23,9 @@ async function processAccept (actor: ActorModel, targetActor: ActorModel) {
   const follow = await ActorFollowModel.loadByActorAndTarget(actor.id, targetActor.id)
   if (!follow) throw new Error('Cannot find associated follow.')
 
-  follow.set('state', 'accepted')
-  await follow.save()
-  await addFetchOutboxJob(targetActor, undefined)
+  if (follow.state !== 'accepted') {
+    follow.set('state', 'accepted')
+    await follow.save()
+    await addFetchOutboxJob(targetActor, undefined)
+  }
 }

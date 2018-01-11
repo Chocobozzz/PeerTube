@@ -124,9 +124,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
     actorFollow.ActorFollower = fromActor
 
     // Send a notification to remote server
-    if (actorFollow.state === 'pending') {
-      await sendFollow(actorFollow, t)
-    }
+    await sendFollow(actorFollow, t)
   })
 }
 

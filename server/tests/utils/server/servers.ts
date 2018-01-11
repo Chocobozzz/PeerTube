@@ -145,6 +145,13 @@ function runServer (serverNumber: number, configOverride?: Object) {
   })
 }
 
+async function reRunServer (server: ServerInfo) {
+  const newServer = await runServer(server.serverNumber)
+  server.app = newServer.app
+
+  return server
+}
+
 function killallServers (servers: ServerInfo[]) {
   for (const server of servers) {
     process.kill(-server.app.pid)
@@ -158,5 +165,6 @@ export {
   flushAndRunMultipleServers,
   flushTests,
   runServer,
-  killallServers
+  killallServers,
+  reRunServer
 }
