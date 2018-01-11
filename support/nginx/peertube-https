@@ -6,8 +6,8 @@ server {
 }
 
 server {
-  listen 443 ssl http2; # spdy is deprecated on nginx
-  # listen [::]:443 ssl spdy;
+  listen 443 ssl http2;
+  # listen [::]:443 ssl http2;
   server_name domain.tld;
 
   # For example with Let's Encrypt
@@ -30,6 +30,9 @@ server {
 
   # Bypass PeerTube webseed route for better performances
   location /static/webseed {
+    # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
+    limit_rate 800k;
+
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
