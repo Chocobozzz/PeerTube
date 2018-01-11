@@ -307,7 +307,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   private static incrementScores (inboxUrls: string[], value: number, t: Sequelize.Transaction) {
     const inboxUrlsString = inboxUrls.map(url => `'${url}'`).join(',')
 
-    const query = 'UPDATE "actorFollow" SET "score" = "score" +' + value + ' ' +
+    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
         'SELECT "actorFollow"."id" FROM "actorFollow" ' +
         'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
