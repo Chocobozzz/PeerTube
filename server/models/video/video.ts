@@ -94,15 +94,25 @@ enum ScopeNames {
   [ScopeNames.WITH_ACCOUNT_DETAILS]: {
     include: [
       {
-        model: () => VideoChannelModel,
+        model: () => VideoChannelModel.unscoped(),
         required: true,
         include: [
+          {
+            attributes: {
+              exclude: [ 'privateKey', 'publicKey' ]
+            },
+            model: () => ActorModel,
+            required: true
+          },
           {
             model: () => AccountModel,
             required: true,
             include: [
               {
                 model: () => ActorModel,
+                attributes: {
+                  exclude: [ 'privateKey', 'publicKey' ]
+                },
                 required: true,
                 include: [
                   {
@@ -509,22 +519,6 @@ export class VideoModel extends Model<VideoModel> {
 
   static load (id: number) {
     return VideoModel.findById(id)
-  }
-
-  static loadAndPopulateAccount (id: number) {
-    return VideoModel.scope([ ScopeNames.WITH_ACCOUNT_DETAILS ]).findById(id)
-  }
-
-  static loadByUrl (url: string, t?: Sequelize.Transaction) {
-    const query: IFindOptions<VideoModel> = {
-      where: {
-        url
-      }
-    }
-
-    if (t !== undefined) query.transaction = t
-
-    return VideoModel.findOne(query)
   }
 
   static loadByUrlAndPopulateAccount (url: string, t?: Sequelize.Transaction) {
