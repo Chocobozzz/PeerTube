@@ -166,14 +166,14 @@ async function computeFollowerUris (toActorFollower: ActorModel[], actorsExcepti
   const toActorFollowerIds = toActorFollower.map(a => a.id)
 
   const result = await ActorFollowModel.listAcceptedFollowerSharedInboxUrls(toActorFollowerIds, t)
-  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl)
+  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl || f.inboxUrl)
   return result.data.filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
 }
 
 async function computeUris (toActors: ActorModel[], actorsException: ActorModel[] = []) {
-  const toActorSharedInboxesSet = new Set(toActors.map(a => a.sharedInboxUrl))
+  const toActorSharedInboxesSet = new Set(toActors.map(a => a.sharedInboxUrl || a.inboxUrl))
 
-  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl)
+  const sharedInboxesException = actorsException.map(f => f.sharedInboxUrl || f.inboxUrl)
   return Array.from(toActorSharedInboxesSet)
     .filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
 }

@@ -66,17 +66,19 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
 
       const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoAttributesToUpdate, activity.to, activity.cc)
       videoInstance.set('name', videoData.name)
+      videoInstance.set('uuid', videoData.uuid)
+      videoInstance.set('url', videoData.url)
       videoInstance.set('category', videoData.category)
       videoInstance.set('licence', videoData.licence)
       videoInstance.set('language', videoData.language)
+      videoInstance.set('description', videoData.description)
       videoInstance.set('nsfw', videoData.nsfw)
       videoInstance.set('commentsEnabled', videoData.commentsEnabled)
-      videoInstance.set('privacy', videoData.privacy)
-      videoInstance.set('description', videoData.description)
       videoInstance.set('duration', videoData.duration)
       videoInstance.set('createdAt', videoData.createdAt)
       videoInstance.set('updatedAt', videoData.updatedAt)
       videoInstance.set('views', videoData.views)
+      videoInstance.set('privacy', videoData.privacy)
 
       await videoInstance.save(sequelizeOptions)
 

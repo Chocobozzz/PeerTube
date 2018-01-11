@@ -270,7 +270,8 @@ const SERVER_ACTOR_NAME = 'peertube'
 const ACTIVITY_PUB = {
   POTENTIAL_ACCEPT_HEADERS: [
     'application/activity+json',
-    'application/ld+json'
+    'application/ld+json',
+    'application/ld+json; profile="https://www.w3.org/ns/activitystreams"'
   ],
   ACCEPT_HEADER: 'application/activity+json, application/ld+json',
   PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
