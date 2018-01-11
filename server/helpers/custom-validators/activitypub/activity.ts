@@ -1,6 +1,9 @@
 import * as validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
-import { isActorAcceptActivityValid, isActorDeleteActivityValid, isActorFollowActivityValid, isActorUpdateActivityValid } from './actor'
+import {
+  isActorAcceptActivityValid, isActorDeleteActivityValid, isActorFollowActivityValid, isActorRejectActivityValid,
+  isActorUpdateActivityValid
+} from './actor'
 import { isAnnounceActivityValid } from './announce'
 import { isActivityPubUrlValid } from './misc'
 import { isDislikeActivityValid, isLikeActivityValid } from './rate'
@@ -33,6 +36,7 @@ const activityCheckers: { [ P in ActivityType ]: (activity: Activity) => boolean
   Delete: checkDeleteActivity,
   Follow: checkFollowActivity,
   Accept: checkAcceptActivity,
+  Reject: checkRejectActivity,
   Announce: checkAnnounceActivity,
   Undo: checkUndoActivity,
   Like: checkLikeActivity
@@ -80,6 +84,10 @@ function checkFollowActivity (activity: any) {
 
 function checkAcceptActivity (activity: any) {
   return isActorAcceptActivityValid(activity)
+}
+
+function checkRejectActivity (activity: any) {
+  return isActorRejectActivityValid(activity)
 }
 
 function checkAnnounceActivity (activity: any) {

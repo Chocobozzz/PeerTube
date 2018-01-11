@@ -78,6 +78,10 @@ function isActorAcceptActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Accept')
 }
 
+function isActorRejectActivityValid (activity: any) {
+  return isBaseActivityValid(activity, 'Reject')
+}
+
 function isActorUpdateActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
     isActorObjectValid(activity.object)
@@ -97,6 +101,7 @@ export {
   isActorFollowersCountValid,
   isActorFollowActivityValid,
   isActorAcceptActivityValid,
+  isActorRejectActivityValid,
   isActorDeleteActivityValid,
   isActorUpdateActivityValid
 }

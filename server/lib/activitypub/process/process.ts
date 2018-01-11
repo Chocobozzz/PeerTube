@@ -7,6 +7,7 @@ import { processCreateActivity } from './process-create'
 import { processDeleteActivity } from './process-delete'
 import { processFollowActivity } from './process-follow'
 import { processLikeActivity } from './process-like'
+import { processRejectActivity } from './process-reject'
 import { processUndoActivity } from './process-undo'
 import { processUpdateActivity } from './process-update'
 
@@ -16,6 +17,7 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxActor?
   Delete: processDeleteActivity,
   Follow: processFollowActivity,
   Accept: processAcceptActivity,
+  Reject: processRejectActivity,
   Announce: processAnnounceActivity,
   Undo: processUndoActivity,
   Like: processLikeActivity

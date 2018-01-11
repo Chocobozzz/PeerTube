@@ -8,9 +8,9 @@ import { ViewObject } from './objects/view-object'
 
 export type Activity = ActivityCreate | ActivityUpdate |
   ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce |
-  ActivityUndo | ActivityLike
+  ActivityUndo | ActivityLike | ActivityReject
 
-export type ActivityType = 'Create' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo' | 'Like'
+export type ActivityType = 'Create' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo' | 'Like' | 'Reject'
 
 export interface ActivityAudience {
   to: string[]
@@ -49,6 +49,11 @@ export interface ActivityFollow extends BaseActivity {
 
 export interface ActivityAccept extends BaseActivity {
   type: 'Accept'
+  object: ActivityFollow
+}
+
+export interface ActivityReject extends BaseActivity {
+  type: 'Reject'
   object: ActivityFollow
 }
 
