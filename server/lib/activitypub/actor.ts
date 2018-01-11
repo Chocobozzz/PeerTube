@@ -320,6 +320,8 @@ async function refreshActorIfNeeded (actor: ActorModel) {
       await updateActorAvatarInstance(actor, result.avatarName, t)
     }
 
+    // Force update
+    actor.setDataValue('updatedAt', new Date())
     await actor.save({ transaction: t })
 
     if (actor.Account) {
