@@ -117,7 +117,7 @@ describe('Test follows', function () {
     expect(follows.length).to.equal(0)
   })
 
-  it('Should have the correct following counts', async function () {
+  it('Should have the correct follows counts', async function () {
     await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 2)
     await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
     await expectAccountFollows(servers[0].url, 'peertube@localhost:9003', 1, 0)
@@ -158,7 +158,7 @@ describe('Test follows', function () {
     expect(follows.length).to.equal(0)
   })
 
-  it('Should have the correct following counts 2', async function () {
+  it('Should have the correct follows counts 2', async function () {
     await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 1)
     await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
 
@@ -248,7 +248,7 @@ describe('Test follows', function () {
       await wait(7000)
     })
 
-    it('Should have the correct following counts 2', async function () {
+    it('Should have the correct follows counts 3', async function () {
       await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 2)
       await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
       await expectAccountFollows(servers[0].url, 'peertube@localhost:9003', 1, 0)

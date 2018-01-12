@@ -2,9 +2,8 @@ import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 import {
-  AfterCreate, AfterDestroy, AfterUpdate,
-  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, IsInt, Max, Model, Table,
-  UpdatedAt
+  AfterCreate, AfterDestroy, AfterUpdate, AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, IsInt, Max, Model,
+  Table, UpdatedAt
 } from 'sequelize-typescript'
 import { FollowState } from '../../../shared/models/actors'
 import { AccountFollow } from '../../../shared/models/actors/follow.model'
@@ -83,7 +82,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   @AfterCreate
   @AfterUpdate
   static incrementFollowerAndFollowingCount (instance: ActorFollowModel) {
-    if (instance.state !== 'accepted') return
+    if (instance.state !== 'accepted') return undefined
 
     return Promise.all([
       ActorModel.incrementFollows(instance.actorId, 'followingCount', 1),
