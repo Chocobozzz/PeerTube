@@ -122,10 +122,10 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
       return u.mimeType === 'application/x-bittorrent;x-scheme-handler/magnet' && u.width === fileUrl.width
     })
 
-    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.url)
+    if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
 
-    const parsed = magnetUtil.decode(magnet.url)
-    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) throw new Error('Cannot parse magnet URI ' + magnet.url)
+    const parsed = magnetUtil.decode(magnet.href)
+    if (!parsed || isVideoFileInfoHashValid(parsed.infoHash) === false) throw new Error('Cannot parse magnet URI ' + magnet.href)
 
     const attribute = {
       extname: VIDEO_MIMETYPE_EXT[ fileUrl.mimeType ],

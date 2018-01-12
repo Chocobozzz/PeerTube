@@ -115,18 +115,18 @@ function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
     (
       ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mimeType) !== -1 &&
-      isActivityPubUrlValid(url.url) &&
+      isActivityPubUrlValid(url.href) &&
       validator.isInt(url.width + '', { min: 0 }) &&
       validator.isInt(url.size + '', { min: 0 })
     ) ||
     (
       ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mimeType) !== -1 &&
-      isActivityPubUrlValid(url.url) &&
+      isActivityPubUrlValid(url.href) &&
       validator.isInt(url.width + '', { min: 0 })
     ) ||
     (
       ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mimeType) !== -1 &&
-      validator.isLength(url.url, { min: 5 }) &&
+      validator.isLength(url.href, { min: 5 }) &&
       validator.isInt(url.width + '', { min: 0 })
     )
 }

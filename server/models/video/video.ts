@@ -920,7 +920,7 @@ export class VideoModel extends Model<VideoModel> {
       url.push({
         type: 'Link',
         mimeType: 'video/' + file.extname.replace('.', ''),
-        url: this.getVideoFileUrl(file, baseUrlHttp),
+        href: this.getVideoFileUrl(file, baseUrlHttp),
         width: file.resolution,
         size: file.size
       })
@@ -928,14 +928,14 @@ export class VideoModel extends Model<VideoModel> {
       url.push({
         type: 'Link',
         mimeType: 'application/x-bittorrent',
-        url: this.getTorrentUrl(file, baseUrlHttp),
+        href: this.getTorrentUrl(file, baseUrlHttp),
         width: file.resolution
       })
 
       url.push({
         type: 'Link',
         mimeType: 'application/x-bittorrent;x-scheme-handler/magnet',
-        url: this.generateMagnetUri(file, baseUrlHttp, baseUrlWs),
+        href: this.generateMagnetUri(file, baseUrlHttp, baseUrlWs),
         width: file.resolution
       })
     }
@@ -944,7 +944,7 @@ export class VideoModel extends Model<VideoModel> {
     url.push({
       type: 'Link',
       mimeType: 'text/html',
-      url: CONFIG.WEBSERVER.URL + '/videos/watch/' + this.uuid
+      href: CONFIG.WEBSERVER.URL + '/videos/watch/' + this.uuid
     })
 
     return {

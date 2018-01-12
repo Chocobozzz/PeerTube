@@ -20,7 +20,7 @@ export interface ActivityIconObject {
 export interface ActivityUrlObject {
   type: 'Link'
   mimeType: 'video/mp4' | 'video/webm' | 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
-  url: string
+  href: string
   width: number
   size?: number
 }
