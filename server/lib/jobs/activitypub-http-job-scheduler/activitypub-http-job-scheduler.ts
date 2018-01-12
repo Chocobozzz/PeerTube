@@ -4,6 +4,7 @@ import { logger } from '../../../helpers/logger'
 import { getServerActor } from '../../../helpers/utils'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
+import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobHandler, JobScheduler } from '../job-scheduler'
 
 import * as activitypubHttpBroadcastHandler from './activitypub-http-broadcast-handler'
@@ -34,6 +35,12 @@ async function maybeRetryRequestLater (err: Error, payload: ActivityPubHttpPaylo
 
   if (attemptNumber < ACTIVITY_PUB.MAX_HTTP_ATTEMPT) {
     logger.debug('Retrying request to %s (attempt %d/%d).', uri, attemptNumber, ACTIVITY_PUB.MAX_HTTP_ATTEMPT, err)
+
+    const actor = await ActorFollowModel.loadByFollowerInbox(uri, undefined)
+    if (!actor) {
+      logger.debug('Actor %s is not a follower, do not retry the request.', uri)
+      return false
+    }
 
     const newPayload = Object.assign(payload, {
       uris: [ uri ],

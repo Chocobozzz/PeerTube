@@ -113,6 +113,10 @@ describe('Test handle downs', function () {
       videos.push(resVideo.body.video)
     }
 
+    await wait(2000)
+
+    await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributes)
+
     // Add comments to video 2
     {
       const text = 'thread 1'

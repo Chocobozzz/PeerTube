@@ -6,10 +6,11 @@ import { ActivityPubHttpPayload, buildSignedRequestOptions, computeBody, maybeRe
 async function process (payload: ActivityPubHttpPayload, jobId: number) {
   logger.info('Processing ActivityPub unicast in job %d.', jobId)
 
+  const uri = payload.uris[0]
+
   const body = await computeBody(payload)
   const httpSignatureOptions = await buildSignedRequestOptions(payload)
 
-  const uri = payload.uris[0]
   const options = {
     method: 'POST',
     uri,

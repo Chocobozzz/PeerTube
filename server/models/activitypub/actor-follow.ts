@@ -163,6 +163,34 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
+  static loadByFollowerInbox (url: string, t?: Sequelize.Transaction) {
+    const query = {
+      where: {
+        state: 'accepted'
+      },
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          as: 'ActorFollower',
+          where: {
+            [Sequelize.Op.or]: [
+              {
+                inboxUrl: url
+              },
+              {
+                sharedInboxUrl: url
+              }
+            ]
+          }
+        }
+      ],
+      transaction: t
+    } as any // FIXME: typings does not work
+
+    return ActorFollowModel.findOne(query)
+  }
+
   static listFollowingForApi (id: number, start: number, count: number, sort: string) {
     const query = {
       distinct: true,

@@ -81,7 +81,6 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
     // Speed up things and resolve directly the thread
     if (commentFromDatabase.InReplyToVideoComment) {
       const data = await VideoCommentModel.listThreadParentComments(commentFromDatabase, undefined, 'DESC')
-      console.log(data)
 
       parentComments = parentComments.concat(data)
     }

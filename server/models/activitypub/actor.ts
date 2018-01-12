@@ -68,6 +68,9 @@ enum ScopeNames {
     {
       fields: [ 'preferredUsername', 'serverId' ],
       unique: true
+    },
+    {
+      fields: [ 'inboxUrl', 'sharedInboxUrl' ]
     }
   ]
 })
