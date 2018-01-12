@@ -2,6 +2,7 @@ import * as Bluebird from 'bluebird'
 import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 import {
+  AfterCreate, AfterDestroy, AfterUpdate,
   AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, IsInt, Max, Model, Table,
   UpdatedAt
 } from 'sequelize-typescript'
@@ -78,6 +79,25 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     onDelete: 'CASCADE'
   })
   ActorFollowing: ActorModel
+
+  @AfterCreate
+  @AfterUpdate
+  static incrementFollowerAndFollowingCount (instance: ActorFollowModel) {
+    if (instance.state !== 'accepted') return
+
+    return Promise.all([
+      ActorModel.incrementFollows(instance.actorId, 'followingCount', 1),
+      ActorModel.incrementFollows(instance.targetActorId, 'followersCount', 1)
+    ])
+  }
+
+  @AfterDestroy
+  static decrementFollowerAndFollowingCount (instance: ActorFollowModel) {
+    return Promise.all([
+      ActorModel.incrementFollows(instance.actorId, 'followingCount',-1),
+      ActorModel.incrementFollows(instance.targetActorId, 'followersCount', -1)
+    ])
+  }
 
   // Remove actor follows with a score of 0 (too many requests where they were unreachable)
   static async removeBadActorFollows () {

@@ -9,7 +9,7 @@ import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 170
+const LAST_MIGRATION_VERSION = 175
 
 // ---------------------------------------------------------------------------
 

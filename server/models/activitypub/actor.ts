@@ -264,6 +264,16 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
+  static incrementFollows (id: number, column: 'followersCount' | 'followingCount', by: number) {
+    // FIXME: typings
+    return (ActorModel as any).increment(column, {
+      by,
+      where: {
+        id
+      }
+    })
+  }
+
   toFormattedJSON () {
     let avatar: Avatar = null
     if (this.Avatar) {

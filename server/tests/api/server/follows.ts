@@ -12,6 +12,7 @@ import {
 } from '../../utils/index'
 import { dateIsValid } from '../../utils/miscs/miscs'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
+import { expectAccountFollows } from '../../utils/users/accounts'
 import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
 import {
@@ -116,6 +117,19 @@ describe('Test follows', function () {
     expect(follows.length).to.equal(0)
   })
 
+  it('Should have the correct following counts', async function () {
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 2)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:9003', 1, 0)
+
+    // Server 2 and 3 does not know server 1 follow another server (there was not a refresh)
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:9001', 0, 1)
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:9002', 1, 0)
+
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 1)
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 1, 0)
+  })
+
   it('Should unfollow server 3 on server 1', async function () {
     this.timeout(5000)
 
@@ -142,6 +156,17 @@ describe('Test follows', function () {
     expect(res.body.total).to.equal(0)
     expect(follows).to.be.an('array')
     expect(follows.length).to.equal(0)
+  })
+
+  it('Should have the correct following counts 2', async function () {
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 1)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
+
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:9001', 0, 1)
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:9002', 1, 0)
+
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 0)
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 0, 0)
   })
 
   it('Should upload a video on server 2 ans 3 and propagate only the video of server 2', async function () {
@@ -221,6 +246,18 @@ describe('Test follows', function () {
       await follow(servers[ 0 ].url, [ servers[ 2 ].url ], servers[ 0 ].accessToken)
 
       await wait(7000)
+    })
+
+    it('Should have the correct following counts 2', async function () {
+      await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 2)
+      await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
+      await expectAccountFollows(servers[0].url, 'peertube@localhost:9003', 1, 0)
+
+      await expectAccountFollows(servers[1].url, 'peertube@localhost:9001', 0, 1)
+      await expectAccountFollows(servers[1].url, 'peertube@localhost:9002', 1, 0)
+
+      await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 1)
+      await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 1, 0)
     })
 
     it('Should propagate videos', async function () {

@@ -51,6 +51,9 @@ async function follow (actor: ActorModel, targetActorURL: string) {
       transaction: t
     })
 
+    actorFollow.ActorFollower = actor
+    actorFollow.ActorFollowing = targetActor
+
     if (actorFollow.state !== 'accepted') {
       actorFollow.state = 'accepted'
       await actorFollow.save({ transaction: t })

@@ -314,6 +314,7 @@ async function refreshActorIfNeeded (actor: ActorModel) {
   if (result === undefined) throw new Error('Cannot fetch remote actor in refresh actor.')
 
   return sequelizeTypescript.transaction(async t => {
+    logger.info('coucou', result.actor.toJSON())
     updateInstanceWithAnother(actor, result.actor)
 
     if (result.avatarName !== undefined) {
