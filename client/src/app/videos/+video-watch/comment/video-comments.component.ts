@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
 import { ConfirmService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
 import { VideoComment as VideoCommentInterface, VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
@@ -15,7 +15,7 @@ import { VideoCommentService } from './video-comment.service'
   templateUrl: './video-comments.component.html',
   styleUrls: ['./video-comments.component.scss']
 })
-export class VideoCommentsComponent implements OnInit {
+export class VideoCommentsComponent implements OnChanges {
   @Input() video: VideoDetails
   @Input() user: User
 
@@ -37,9 +37,9 @@ export class VideoCommentsComponent implements OnInit {
     private videoCommentService: VideoCommentService
   ) {}
 
-  ngOnInit () {
-    if (this.video.commentsEnabled === true) {
-      this.loadMoreComments()
+  ngOnChanges (changes: SimpleChanges) {
+    if (changes['video']) {
+      this.loadVideoComments()
     }
   }
 
@@ -150,6 +150,23 @@ export class VideoCommentsComponent implements OnInit {
       }
 
       this.deleteLocalCommentThread(commentChild, commentToDelete)
+    }
+  }
+
+  private loadVideoComments () {
+    if (this.video.commentsEnabled === true) {
+      // Reset all our fields
+      this.comments = []
+      this.threadComments = {}
+      this.threadLoading = {}
+      this.inReplyToCommentId = undefined
+      this.componentPagination = {
+        currentPage: 1,
+        itemsPerPage: 10,
+        totalItems: null
+      }
+
+      this.loadMoreComments()
     }
   }
 }

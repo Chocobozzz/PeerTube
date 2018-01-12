@@ -5,16 +5,18 @@ import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 
-interface VideoJSComponentInterface {
-  _player: VideoJSPlayer
-
-  new (player: VideoJSPlayer, options?: any)
-
-  registerComponent (name: string, obj: any)
+declare module 'video.js' {
+  interface Player {
+    peertube (): PeerTubePlugin
+  }
 }
 
-interface VideoJSPlayer extends videojs.Player {
-  peertube (): PeerTubePlugin
+interface VideoJSComponentInterface {
+  _player: videojs.Player
+
+  new (player: videojs.Player, options?: any)
+
+  registerComponent (name: string, obj: any)
 }
 
 type PeertubePluginOptions = {
@@ -45,7 +47,7 @@ const webtorrent = new WebTorrent({ dht: false })
 const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
 class ResolutionMenuItem extends MenuItem {
 
-  constructor (player: VideoJSPlayer, options) {
+  constructor (player: videojs.Player, options) {
     options.selectable = true
     super(player, options)
 
@@ -64,7 +66,7 @@ const MenuButton: VideoJSComponentInterface = videojsUntyped.getComponent('MenuB
 class ResolutionMenuButton extends MenuButton {
   label: HTMLElement
 
-  constructor (player: VideoJSPlayer, options) {
+  constructor (player: videojs.Player, options) {
     options.label = 'Quality'
     super(player, options)
 
@@ -215,7 +217,7 @@ class PeerTubePlugin extends Plugin {
   private videoFiles: VideoFile[]
   private torrent: WebTorrent.Torrent
 
-  constructor (player: VideoJSPlayer, options: PeertubePluginOptions) {
+  constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
 
     this.videoFiles = options.videoFiles

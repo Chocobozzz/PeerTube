@@ -26,7 +26,7 @@ All other server files are in the [server](https://github.com/Chocobozzz/PeerTub
     |__ controllers  -> API routes/controllers files
     |__ helpers      -> functions used by different part of the project (logger, utils...)
     |__ initializers -> functions used at the server startup (installer, database, constants...)
-    |__ lib          -> library function (WebTorrent, OAuth2, friends logic...)
+    |__ lib          -> library function (WebTorrent, OAuth2, ActivityPub...)
     |__ middlewares  -> middlewares for controllers (requests validators, requests pagination...)
     |__ models       -> Sequelize models for each SQL tables (videos, users, accounts...)
     |__ tests        -> API tests and real world simulations (to test the decentralized feature...)

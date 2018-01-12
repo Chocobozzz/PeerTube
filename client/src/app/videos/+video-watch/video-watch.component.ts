@@ -347,7 +347,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             })
           })
         } else {
-          (this.player as any).setVideoFiles(this.video.files)
+          this.player.peertube().setVideoFiles(this.video.files)
         }
 
         this.setVideoDescriptionHTML()
