@@ -18,7 +18,8 @@ function activityPubContextify <T> (data: T) {
         'nsfw': 'as:sensitive',
         'language': 'http://schema.org/inLanguage',
         'views': 'http://schema.org/Number',
-        'size': 'http://schema.org/Number'
+        'size': 'http://schema.org/Number',
+        'commentsEnabled': 'http://schema.org/Boolean'
       }
     ]
   })
