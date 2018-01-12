@@ -20,7 +20,6 @@
     [shared/models/activitypub
     directory](https://github.com/Chocobozzz/PeerTube/tree/develop/shared/models/activitypub).
   * All the requests are retried several times if they fail.
-  * The maximum of points would be defined.
 
 ### Instance
   * An instance has a websocket tracker which is responsible for all the video
