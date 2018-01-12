@@ -17,7 +17,7 @@ The client is a HTML/CSS/JavaScript web application (single page application -> 
 ## Files
 
 The client files are in the `client` directory. The Webpack 2 configurations files are in `client/config` and the source files in `client/src`.
-The client modules description are in the [client/package.json](https://github.com/Chocobozzz/PeerTube/blob/master/client/package.json). There are many modules that are used to compile the web application in development or production mode.
+The client modules description are in the [client/package.json](/client/package.json). There are many modules that are used to compile the web application in development or production mode.
 Here is the description of the useful `client` files directory:
 
     tslint.json   -> TypeScript linter rules
@@ -60,7 +60,7 @@ If you are not familiar with Angular I recommend you to read the [quickstart gui
 
 ## Components tree
 
-![Components tree](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/client/components-tree.png)
+![Components tree](/support/doc/client/development/components-tree.png)
 
 ## Newcomers
 

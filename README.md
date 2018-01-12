@@ -143,13 +143,13 @@ See the [production guide](support/doc/production.md).
 ## Contributing
 
 See the [contributing
-guide](https://github.com/Chocobozzz/PeerTube/blob/master/.github/CONTRIBUTING.md)
+guide](/.github/CONTRIBUTING.md)
 to see how to contribute to PeerTube. Spoiler alert: you don't need to be a
 coder to help!
 
 ## Architecture
 
-See [ARCHITECTURE.md](https://github.com/Chocobozzz/PeerTube/blob/master/ARCHITECTURE.md) for a more detailed explanation.
+See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation.
 
 ### Backend
 

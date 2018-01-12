@@ -15,9 +15,9 @@ The server is a web server developed with [TypeScript](https://www.typescriptlan
 
 ## Files
 
-The server main file is [server.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server.ts).
-The server modules description are in the [package.json](https://github.com/Chocobozzz/PeerTube/blob/master/package.json) at the project root.
-All other server files are in the [server](https://github.com/Chocobozzz/PeerTube/tree/master/server) directory:
+The server main file is [server.ts](/server.ts).
+The server modules description are in the [package.json](/package.json) at the project root.
+All other server files are in the [server](/server) directory:
 
     server.ts -> app initilization, main routes configuration (static routes...)
     config    -> server YAML configurations (for tests, production...)
@@ -45,7 +45,7 @@ The server is composed by:
 
 A video is seeded by the server with the [WebSeed](http://www.bittorrent.org/beps/bep_0019.html) protocol (HTTP).
 
-![Architecture scheme](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/upload-video.png)
+![Architecture scheme](/support/doc/development/server/upload-video.png)
 
 When a user uploads a video, the rest API create the torrent file and then adds it to its database.
 
@@ -53,5 +53,5 @@ If a user wants to watch the video, the tracker will indicate all other users th
 
 ## Newcomers
 
-The server entrypoint is [server.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server.ts). You can begin to look at this file.
-Then you can try to understand the [controllers](https://github.com/Chocobozzz/PeerTube/tree/master/server/controllers): they are the entrypoint of each API request.
+The server entrypoint is [server.ts](/server.ts). You can begin to look at this file.
+Then you can try to understand the [controllers](/server/controllers): they are the entrypoint of each API request.

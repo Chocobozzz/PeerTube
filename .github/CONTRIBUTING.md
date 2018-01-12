@@ -35,7 +35,7 @@ to install the dependencies.
 
 Then clone the sources and install node modules:
 
-```bash
+```
 $ git clone -b master https://github.com/Chocobozzz/PeerTube
 $ cd PeerTube
 $ yarn install --pure-lockfile
@@ -46,7 +46,7 @@ Then, create a postgres database and user with the values set in the
 there, the following commands would create a new database called `peertube_dev`
 and a postgres user called `peertube` with password `peertube`:
 
-```bash
+```
 # sudo -u postgres createuser -P peertube
 Enter password for new role: peertube
 # sudo -u postgres createdb -O peertube peertube_dev
@@ -60,7 +60,7 @@ You can find a documentation of the server code/architecture [here](/support/doc
 
 To develop on the server-side:
 
-```bash
+```
 $ npm run dev:server
 ```
 
@@ -76,7 +76,7 @@ You can find a documentation of the server code/architecture
 
 To develop on the client side:
 
-```bash
+```
 $ npm run dev:client
 ```
 
@@ -88,7 +88,7 @@ reload them automatically thanks to hot module replacement.
 
 This will run 3 nodes:
 
-```bash
+```
 $ npm run clean:server:test
 $ npm run play
 ```

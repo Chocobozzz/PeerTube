@@ -10,7 +10,7 @@ Follow the steps of the [dependencies guide](dependencies.md).
 
 Create a `peertube` user with `/home/peertube` home:
 
-```bash
+```
 sudo useradd -m -d /home/peertube -s /bin/bash -p peertube peertube
 sudo passwd peertube
 ```
@@ -19,7 +19,7 @@ sudo passwd peertube
 
 Create production database and peertube user:
 
-```bash
+```
 sudo -u postgres createuser -P peertube
 sudo -u postgres createdb -O peertube peertube_prod
 ```
@@ -28,7 +28,7 @@ sudo -u postgres createdb -O peertube peertube_prod
 
 Clone, install node dependencies and build application:
 
-```bash
+```
 $ cd /home/peertube
 $ sudo -u peertube git clone -b master https://github.com/Chocobozzz/PeerTube
 $ cd PeerTube
@@ -40,7 +40,7 @@ $ sudo -u peertube npm run build
 
 Copy example configuration:
 
-```bash
+```
 $ sudo -u peertube cp config/production.yaml.example config/production.yaml
 ```
 
@@ -52,14 +52,14 @@ configuration. Keys set in this file will override those of
 
 Copy the nginx configuration template:
 
-```bash
+```
 $ sudo cp /home/peertube/PeerTube/support/nginx/peertube-https /etc/nginx/sites-available/peertube
 ```
 
 Then modify the webserver configuration file. Please pay attention to the `alias` key of `/static/webseed` location. 
 It should correspond to the path of your videos directory (set in the configuration file as `storage->videos` key).
 
-```bash
+```
 $ sudo vim /etc/nginx/sites-available/peertube
 ```
 
@@ -150,7 +150,7 @@ server {
 
 Activate the configuration file:
 
-```bash
+```
 $ sudo ln -s /etc/nginx/sites-available/peertube /etc/nginx/sites-enabled/peertube
 $ sudo systemctl reload nginx
 ```
@@ -159,13 +159,13 @@ $ sudo systemctl reload nginx
 
 Copy the nginx configuration template:
 
-```bash
+```
 sudo cp /home/peertube/PeerTube/support/systemd/peertube.service /etc/systemd/system/
 ```
 
 Update the service file:
 
-```bash
+```
 sudo vim /etc/systemd/system/peertube.service
 ```
 
@@ -195,13 +195,13 @@ WantedBy=multi-user.target
 
 Tell systemd to reload its config:
 
-```bash
+```
 sudo systemctl daemon-reload
 ```
 
 ### Run
 
-```bash
+```
 sudo systemctl start peertube
 sudo journalctl -feu peertube
 ```
@@ -211,7 +211,7 @@ sudo journalctl -feu peertube
 The administrator password is automatically generated and can be found in the
 logs. You can set another password with:
 
-```bash
+```
 $ NODE_ENV=production npm run reset-password -- -u root
 ```
 
@@ -220,7 +220,7 @@ $ NODE_ENV=production npm run reset-password -- -u root
 The following commands will upgrade the source (according to your current
 branch), upgrade node modules and rebuild client application:
 
-```bash
+```
 # systemctl stop peertube
 $ npm run upgrade-peertube
 # systemctl start peertube
