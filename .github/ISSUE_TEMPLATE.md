@@ -1,10 +1,15 @@
-<!--
-  Problem with the demonstration server?
-    -> Please retry in a few hours or send me directly an email: https://github.com/Chocobozzz
-  Bug?
-    -> Please check first you're running on the latest version of Firefox/Chromium
-    -> Please check the console log to add informations to the bug report
--->
+<!-- If you report a bug please fill the form -->
 
-* Browser name/version:
-* Console log if useful (Gist/Pastebin...):
+* **PeerTube version or commit:**
+* **Browser name/version:**
+* **NodeJS version:**
+* **PostgreSQL version:**
+
+
+* **What is the expected behaviour?**
+* **What do you see instead?**
+
+
+* **Browser console log if useful (Gist/Pastebin...):**
+* **Server log if useful (Gist/Pastebin...):**
+

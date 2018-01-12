@@ -64,13 +64,12 @@ donating them](https://soutenir.framasoft.org/en/).**
 
 Want to see it in action?
 
-   * [Demo server](http://peertube.cpy.re)
+   * Demonstration servers:
+     * [peertube.cpy.re](http://peertube.cpy.re) 
+     * [peertube2.cpy.re](http://peertube2.cpy.re) 
+     * [peertube3.cpy.re](http://peertube3.cpy.re)
    * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
      to see how the "decentralization feature" looks like
-   * Experimental demo servers that share videos (they are in the same
-     network): [peertube2](http://peertube2.cpy.re),
-     [peertube3](http://peertube3.cpy.re). Since I do experiments with them,
-     sometimes they might not work correctly.
 
 ## Why
 
@@ -83,12 +82,11 @@ So we need to have a decentralized network of servers seeding videos (as
 enough because one video could become famous and overload the server.  It's the
 reason why we need to use a P2P protocol to limit the server load.  Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus
-bittorrent) inside the web browser, as of today.
+BitTorrent) inside the web browser, as of today.
 
 ## Features
 
-- [X] Frontend
-  - [X] Angular frontend
+- [X] Angular frontend
 - [X] Join the fediverse
   - [X] Follow other instances
   - [X] Unfollow an instance
@@ -103,8 +101,8 @@ bittorrent) inside the web browser, as of today.
 - [X] OpenGraph tags
 - [X] OEmbed
 - [X] Update video
-- [X] Videos view counter
-- [X] Videos likes/dislikes
+- [X] Federated videos view counter
+- [X] Federated videos likes/dislikes
 - [X] Transcoding to different definitions
 - [X] Download file/torrent
 - [X] User video bytes quota
@@ -115,140 +113,32 @@ bittorrent) inside the web browser, as of today.
 - [X] User registration
 - [X] Video privacy settings (public, unlisted or private)
 - [X] Signaling a video to the admin origin PeerTube instance
-- [ ] Videos comments
+- [X] Federated videos comments
+- [ ] Video imports (URL, Torrent, YouTube...)
+- [ ] Advanced search
+- [ ] Subtitles
 - [ ] User playlist
 - [ ] User subscriptions (by tags, author...)
 - [ ] Add "DDOS" security
 
 
-## Installation
+## Front compatibility
 
-See [wiki](https://github.com/Chocobozzz/PeerTube/wiki) for complete
-installation commands.
+  * Firefox
+  * Chrome/Chromium
 
-### Front compatibility
+## Dependencies
 
-  * Chromium
-  * Firefox (>= 42 for MediaSource support)
-
-### Dependencies
-
+  * nginx
+  * PostgreSQL
   * **NodeJS >= 8.x**
   * yarn
   * OpenSSL (cli)
-  * PostgreSQL
   * FFmpeg
 
-#### Debian
+## Production
 
-  1. Install NodeJS 8.x (current LTS):
-     [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-  2. Install yarn:
-     [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
-  4. Run:
-
-```bash
-    $ apt-get update
-    $ apt-get install ffmpeg postgresql openssl
-```
-
-#### Ubuntu 16.04
-
-  1. Install NodeJS 8.x (current LTS): (same as Debian)
-  2. Install yarn: (same as Debian)
-  3. Run:
-
-```bash
-    $ apt-get update
-    $ apt-get install ffmpeg postgresql openssl
-```
-
-#### Arch Linux
-
-  1. Run:
-
-```bash
-    $ pacman -S nodejs yarn ffmpeg postgresql openssl
-```
-
-#### Other distributions
-
-Feel free to update this README file in a pull request!
-
-### Build from the sources
-
-```bash
-    $ git clone -b master https://github.com/Chocobozzz/PeerTube
-    $ cd PeerTube
-    $ yarn install
-    $ npm run build
-```
-
-## Usage
-
-### Production
-
-If you want to run PeerTube in production (which might be a bad idea for now :) ):
-
-```bash
-    $ cp config/production.yaml.example config/production.yaml
-```
-
-Then edit the `config/production.yaml` file according to your webserver
-configuration. Keys set in this file will override those of
-`config/default.yml`.
-
-Finally, run the server with the `NODE_ENV` environment variable set to
-`production`:
-
-```bash
-    $ NODE_ENV=production npm start
-```
-
-The administrator password is automatically generated and can be found in the
-logs. You can set another password with:
-
-```bash
-    $ NODE_ENV=production npm run reset-password -- -u root
-```
-
-**Nginx template** (reverse proxy): https://github.com/Chocobozzz/PeerTube/tree/master/support/nginx <br />
-**Systemd template**: https://github.com/Chocobozzz/PeerTube/tree/master/support/systemd
-
-You can check the application (CORS headers, tracker websocket...) by running:
-
-```bash
-    $ NODE_ENV=production npm run check
-```
-
-### Upgrade
-
-The following commands will upgrade the source (according to your current
-branch), upgrade node modules and rebuild client application:
-
-```bash
-    # systemctl stop peertube
-    $ npm run upgrade-peertube
-    # systemctl start peertube
-```
-
-### Test with three fresh nodes
-
-```bash
-    $ npm run clean:server:test
-    $ npm run play
-```
-
-Then you will get access to the three nodes at `http://localhost:900{1,2,3}`
-with the `root` as username and `test{1,2,3}` for the password.
-
-### Other commands
-
-To print all available commands, run:
-
-```bash
-    $ npm run help
-```
+See the [production guide](support/doc/production.md).
 
 ## Contributing
 

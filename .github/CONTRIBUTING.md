@@ -1,14 +1,12 @@
 # Welcome to the contributing guide for PeerTube
 
-Interesting in contributing? Awesome :)
+Interesting in contributing? Awesome!
 
 **Quick Links:**
 
   * [Give your feedback](#give-your-feedback)
-  * [Develop on the Server side](#develop-on-the-server-side)
-  * [Develop on the Client side](#develop-on-the-client-side)
-  * [Get started with development](#get-started-with-development)
   * [Write documentation](#write-documentation)
+  * [Develop](#develop)
 
 
 ## Give your feedback
@@ -16,40 +14,32 @@ Interesting in contributing? Awesome :)
 You don't need to know how to code to start contributing to PeerTube! Other
 contributions are very valuable too, among which: you can test the software and
 report bugs, you can give feedback on potential bugs, features that you are
-interested in, user interace, design, decentralized architecture...
+interested in, user interface, design, decentralized architecture...
 
 
-## Development
+## Write documentation
 
-## Develop on the Server side
+You can help to write the documentation of the REST API, code, architecture,
+demonstrations...
 
-The server is a web server developed with
-[NodeJS](https://nodejs.org)/[Express](http://expressjs.com).
-
-Newcomer? You can find a documentation of the server code/architecture
-[here](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/server/code.md).
+## Develop
 
 Don't hesitate to talk about features you want to develop by creating an issue
 before you start working on them :).
 
-
-## Develop on the Client side
-
-The client is a web application developed with
-[TypeScript](https://www.typescriptlang.org/)/[Angular2](https://angular.io/).
-
-Newcomer? You can find a documentation of the server code/architecture
-[here](https://github.com/Chocobozzz/PeerTube/blob/master/support/doc/client/code.md).
-
-
-## Get started with development
-
-In this mode, the server will run requests between instances more quickly, the
-video durations are limited to a few seconds.
-
 ### Prerequisites
 
-First, make sure that you have followed the steps to install the dependencies.
+First, make sure that you have followed 
+[the steps](/support/doc/dependencies.md) 
+to install the dependencies.
+
+Then clone the sources and install node modules:
+
+```bash
+$ git clone -b master https://github.com/Chocobozzz/PeerTube
+$ cd PeerTube
+$ yarn install --pure-lockfile
+```
 
 Then, create a postgres database and user with the values set in the
 `config/default.yaml` file. For instance, if you do not change the values
@@ -57,40 +47,51 @@ there, the following commands would create a new database called `peertube_dev`
 and a postgres user called `peertube` with password `peertube`:
 
 ```bash
-    # sudo -u postgres createuser -P peertube
-    Enter password for new role: peertube
-    # sudo -u postgres createdb -O peertube peertube_dev
+# sudo -u postgres createuser -P peertube
+Enter password for new role: peertube
+# sudo -u postgres createdb -O peertube peertube_dev
 ```
 
+In dev mode, administrator username is **root** and password is **test**.
+
 ### Server side
+
+You can find a documentation of the server code/architecture [here](/support/doc/development/server/code.md).
 
 To develop on the server-side:
 
 ```bash
-    $ npm run dev:server
+$ npm run dev:server
 ```
 
 Then, the server will listen on `localhost:9000`. When server source files
 change, these are automatically recompiled and the server will automatically
-restart.
+restart. Server is in `TEST` mode so it will run requests between instances more quickly.
 
 ### Client side
+
+You can find a documentation of the server code/architecture
+[here](/support/doc/development/client/code.md).
+
 
 To develop on the client side:
 
 ```bash
-    $ npm run dev:client
+$ npm run dev:client
 ```
 
 The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
 Client files are automatically compiled on change, and the web browser will
 reload them automatically thanks to hot module replacement.
 
-**Username**: *root* <br/>
-**Password**: *test*
+### Test federation
 
+This will run 3 nodes:
 
-## Write documentation
+```bash
+$ npm run clean:server:test
+$ npm run play
+```
 
-You can help to write the documentation of the REST API, code, architecture,
-demonstrations...
+Then you will get access to the three nodes at `http://localhost:900{1,2,3}`
+with the `root` as username and `test{1,2,3}` for the password.

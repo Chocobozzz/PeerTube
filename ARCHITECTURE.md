@@ -18,7 +18,7 @@
   * We use the [ActivityPub](https://www.w3.org/TR/activitypub/) protocol (only
     server-server for now). Object models could be found in
     [shared/models/activitypub
-    directory](https://github.com/Chocobozzz/PeerTube/tree/develop/shared/models/activitypub).
+    directory](/shared/models/activitypub).
   * All the requests are retried several times if they fail.
 
 ### Instance

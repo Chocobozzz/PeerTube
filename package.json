@@ -34,7 +34,6 @@
     "dev:server": "scripty",
     "dev:client": "scripty",
     "start": "node dist/server",
-    "check": "ts-node ./scripts/check.ts",
     "upgrade-peertube": "scripty",
     "upgrade": "echo 'This command was renamed to upgrade-peertube.'",
     "update-host": "ts-node ./scripts/update-host.ts",

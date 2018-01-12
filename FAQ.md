@@ -31,9 +31,9 @@ We think it is acceptable for a video platform.
 WEBM, MP4 or OGV videos.
 
 
-## I want to change my host or move to HTTPS, how can I do that?
+## I want to change my host, how can I do that?
 
 If you already have followers, you can't.
 
 If you don't have any followers, update your configuration and run
-`NODE_ENV=production npm run update-host` to update the torrent files.
+`NODE_ENV=production npm run update-host` to update the torrent files (they contain your domain name).

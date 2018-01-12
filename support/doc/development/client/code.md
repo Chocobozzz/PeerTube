@@ -53,12 +53,7 @@ Details of the Angular application file structure. It tries to follow [the offic
 
 Uses [TSLint](https://palantir.github.io/tslint/) for TypeScript linting and [Angular styleguide](https://angular.io/docs/ts/latest/guide/style-guide.html).
 
-## Developing
-
-  * Install [the dependencies](https://github.com/Chocobozzz/PeerTube#dependencies)
-  * Run `yarn install --pure-lockfile` at the root directory to install all the dependencies
-  * Run PostgreSQL and create the database `peertube_dev`.
-  * Run `npm run dev:client` to compile the client, run the server, watch client files modifications and reload modules on the fly (you don't need to refresh manually the web browser). The API listen on `localhost:9000` and the client on `localhost:3000`.
+## Concepts
 
 In a Angular application, we create components that we put together. Each component is defined by an HTML structure, a TypeScript file and optionally a SASS file.
 If you are not familiar with Angular I recommend you to read the [quickstart guide](https://angular.io/docs/ts/latest/quickstart.html).

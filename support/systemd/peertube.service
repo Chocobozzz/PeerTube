@@ -1,5 +1,6 @@
 [Unit]
 Description=PeerTube daemon
+After=network.target
 
 [Service]
 Type=simple

@@ -36,21 +36,6 @@ All other server files are in the [server](https://github.com/Chocobozzz/PeerTub
 
 Uses [JavaScript Standard Style](http://standardjs.com/).
 
-
-## Developing
-
-  * Install [the dependencies](https://github.com/Chocobozzz/PeerTube#dependencies)
-  * Run `yarn install` at the root directory to install all the dependencies
-  * Run PostgreSQL and create the database `peertube_dev`.
-  * Run `npm run dev:server` to run the server, watch server files modifications and restart it automatically. The server (API + client) listen on `localhost:9000`.
-
-The `NODE_ENV=test` is set to speed up communications between instances (see [constants.ts](https://github.com/Chocobozzz/PeerTube/blob/master/server/initializers/constants.ts)).
-
-`npm run help` gives you all available commands.
-
-If you want to test the decentralization feature, you can easily run 3 instances by running `npm run play`. The instances password are `test1`, `test2` and `test3`.
-
-
 ## Architecture
 
 The server is composed by:
