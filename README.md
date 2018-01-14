@@ -136,6 +136,22 @@ BitTorrent) inside the web browser, as of today.
   * OpenSSL (cli)
   * FFmpeg
 
+## Run using Docker
+
+You can quickly get a server running using Docker. You need to have [docker](https://www.docker.com/community-edition) and [docker-compose](https://docs.docker.com/compose/install/) installed.
+
+Example for running a server locally:
+
+```bash
+sudo \
+  PEERTUBE_HOSTNAME=peertube.lvh.me \
+  PEERTUBE_ADMIN_EMAIL=test@example.com \
+  PEERTUBE_TRANSCODING_ENABLED=true \
+  docker-compose up app
+```
+
+(Get the initial root user password from the program output.)
+
 ## Production
 
 See the [production guide](support/doc/production.md).

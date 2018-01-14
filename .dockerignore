@@ -1,0 +1,4 @@
+.git
+*.swp
+Dockerfile
+docker-compose.yml
