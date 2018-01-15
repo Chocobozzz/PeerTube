@@ -1,13 +1,12 @@
 import * as Promise from 'bluebird'
 import { createWriteStream } from 'fs'
-import { RequestResponse } from 'request'
 import * as request from 'request'
 import { ACTIVITY_PUB } from '../initializers'
 import Bluebird = require('bluebird')
 
 function doRequest (
   requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean }
-): Bluebird<{ response: RequestResponse, body: any }> {
+): Bluebird<{ response: request.RequestResponse, body: any }> {
   if (requestOptions.activityPub === true) {
     if (!Array.isArray(requestOptions.headers)) requestOptions.headers = {}
     requestOptions.headers['accept'] = ACTIVITY_PUB.ACCEPT_HEADER
