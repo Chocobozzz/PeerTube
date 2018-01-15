@@ -29,5 +29,7 @@ npm run build || exit -1
 #npm test || exit -1
 
 cd ../ || exit -1
-rm -f PeerTube/peertube.zip || exit -1
-zip -r PeerTube/peertube.zip PeerTube/{CREDITS.md,FAQ.md,LICENSE,README.md,client/dist/,client/yarn.lock,client/package.json,config,dist,package.json,scripts,support,tsconfig.json,yarn.lock}
+
+ln -s "PeerTube" "peertube-v$1" || exit -1
+zip -r "PeerTube/peertube-v$1.zip" "peertube-v$1"/{CREDITS.md,FAQ.md,LICENSE,README.md,client/dist/,client/yarn.lock,client/package.json,config,dist,package.json,scripts,support,tsconfig.json,yarn.lock} || exit -1
+rm "peertube-v$1" || exit -1
