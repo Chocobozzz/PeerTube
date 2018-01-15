@@ -1,5 +1,12 @@
 #!/bin/bash
 
+if [ -z "$1" ]; then
+  echo "Need version as argument"
+  exti -1
+fi
+
+npm version $1
+
 npm run build
 npm test
 
