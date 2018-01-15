@@ -11,8 +11,8 @@ Follow the steps of the [dependencies guide](dependencies.md).
 Create a `peertube` user with `/home/peertube` home:
 
 ```
-sudo useradd -m -d /home/peertube -s /bin/bash -p peertube peertube
-sudo passwd peertube
+$ sudo useradd -m -d /home/peertube -s /bin/bash -p peertube peertube
+$ sudo passwd peertube
 ```
 
 ### Database
@@ -20,20 +20,24 @@ sudo passwd peertube
 Create production database and peertube user:
 
 ```
-sudo -u postgres createuser -P peertube
-sudo -u postgres createdb -O peertube peertube_prod
+$ sudo -u postgres createuser -P peertube
+$ sudo -u postgres createdb -O peertube peertube_prod
 ```
 
-### Sources
+### Prepare PeerTube directory
 
-Clone, install node dependencies and build application:
+Check the latest release: https://github.com/Chocobozzz/PeerTube/releases or the release version you want.
+We assume in the following commands the version is 0.42.42:
 
 ```
-$ cd /home/peertube
-$ sudo -u peertube git clone -b master https://github.com/Chocobozzz/PeerTube
-$ cd PeerTube
-$ sudo -u peertube yarn install --pure-lockfile
-$ sudo -u peertube npm run build
+$ VERSION="0.42.42" && \
+    cd /home/peertube && \
+    sudo -u peertube mkdir config storage versions && \
+    cd versions && \
+    sudo -u peertube wget "https://github.com/Chocobozzz/PeerTube/releases/download/v${VERSION}/peertube-v${VERSION}.zip" && \
+    sudo -u peertube unzip peertube-v${VERSION}.zip && sudo -u peertube rm peertube-v${VERSION}.zip && \
+    cd ../ && sudo -u peertube ln -s versions/peertube-v${VERSION} ./peertube-latest && \
+    cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile
 ```
 
 ### PeerTube configuration
@@ -41,19 +45,18 @@ $ sudo -u peertube npm run build
 Copy example configuration:
 
 ```
-$ sudo -u peertube cp config/production.yaml.example config/production.yaml
+$ cd /home/peertube && sudo -u peertube cp peertube-latest/config/production.yaml.example config/production.yaml
 ```
 
 Then edit the `config/production.yaml` file according to your webserver
-configuration. Keys set in this file will override those of
-`config/default.yml`.
+configuration.
 
 ### Webserver
 
 Copy the nginx configuration template:
 
 ```
-$ sudo cp /home/peertube/PeerTube/support/nginx/peertube-https /etc/nginx/sites-available/peertube
+$ sudo cp /home/peertube/PeerTube/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
 Then modify the webserver configuration file. Please pay attention to the `alias` key of `/static/webseed` location. 
@@ -129,7 +132,7 @@ server {
       add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
     }
 
-    alias /var/www/PeerTube/videos;
+    alias /home/peertube/storage/videos;
   }
 
   # Websocket tracker
@@ -160,13 +163,13 @@ $ sudo systemctl reload nginx
 Copy the nginx configuration template:
 
 ```
-sudo cp /home/peertube/PeerTube/support/systemd/peertube.service /etc/systemd/system/
+$ sudo cp /home/peertube/PeerTube/support/systemd/peertube.service /etc/systemd/system/
 ```
 
 Update the service file:
 
 ```
-sudo vim /etc/systemd/system/peertube.service
+$ sudo vim /etc/systemd/system/peertube.service
 ```
 
 It should look like this:
@@ -179,10 +182,11 @@ After=network.target
 [Service]
 Type=simple
 Environment=NODE_ENV=production
+Environment=NODE_CONFIG_DIR=/home/peertube/config
 User=peertube
 Group=peertube
 ExecStart=/usr/bin/npm start
-WorkingDirectory=/home/peertube/PeerTube
+WorkingDirectory=/home/peertube/peertube-latest
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=peertube
@@ -196,20 +200,20 @@ WantedBy=multi-user.target
 Tell systemd to reload its config:
 
 ```
-sudo systemctl daemon-reload
+$ sudo systemctl daemon-reload
 ```
 
 If you want to start PeerTube on boot:
 
 ```
-sudo systemctl enabled peertube
+$ sudo systemctl enabled peertube
 ```
 
 ### Run
 
 ```
-sudo systemctl start peertube
-sudo journalctl -feu peertube
+$ sudo systemctl start peertube
+$ sudo journalctl -feu peertube
 ```
 
 ### Administrator

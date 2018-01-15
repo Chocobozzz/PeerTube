@@ -2,7 +2,9 @@ server {
   listen 80;
   # listen [::]:80;
   server_name domain.tld;
-  rewrite ^ https://$server_name$request_uri? permanent;
+
+  location /.well-known/acme-challenge/ { allow all; }
+  location / { return 301 https://$host$request_uri; }
 }
 
 server {
@@ -49,7 +51,7 @@ server {
       add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
     }
 
-    alias /your/installation/PeerTube/videos;
+    alias /home/peertube/storage/videos;
   }
 
   # Websocket tracker
