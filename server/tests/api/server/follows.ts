@@ -256,7 +256,7 @@ describe('Test follows', function () {
       await expectAccountFollows(servers[1].url, 'peertube@localhost:9001', 0, 1)
       await expectAccountFollows(servers[1].url, 'peertube@localhost:9002', 1, 0)
 
-      await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 1)
+      await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 2)
       await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 1, 0)
     })
 

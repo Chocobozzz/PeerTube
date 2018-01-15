@@ -132,15 +132,13 @@ async function fetchActorTotalItems (url: string) {
     activityPub: true
   }
 
-  let requestResult
   try {
-    requestResult = await doRequest(options)
+    const { body } = await doRequest(options)
+    return body.totalItems ? body.totalItems : 0
   } catch (err) {
     logger.warn('Cannot fetch remote actor count %s.', url, err)
-    return undefined
+    return 0
   }
-
-  return requestResult.totalItems ? requestResult.totalItems : 0
 }
 
 async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
@@ -314,7 +312,6 @@ async function refreshActorIfNeeded (actor: ActorModel) {
   if (result === undefined) throw new Error('Cannot fetch remote actor in refresh actor.')
 
   return sequelizeTypescript.transaction(async t => {
-    logger.info('coucou', result.actor.toJSON())
     updateInstanceWithAnother(actor, result.actor)
 
     if (result.avatarName !== undefined) {

@@ -10,6 +10,7 @@ import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '..
 import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
 import { AccountModel } from '../../models/account/account'
+import { ActorModel } from '../../models/activitypub/actor'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
@@ -22,13 +23,11 @@ activityPubClientRouter.get('/accounts?/:name',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(accountController)
 )
-
-activityPubClientRouter.get('/accounts/:name/followers',
+activityPubClientRouter.get('/accounts?/:name/followers',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(asyncMiddleware(accountFollowersController))
 )
-
-activityPubClientRouter.get('/accounts/:name/following',
+activityPubClientRouter.get('/accounts?/:name/following',
   executeIfActivityPub(asyncMiddleware(localAccountValidator)),
   executeIfActivityPub(asyncMiddleware(accountFollowingController))
 )
@@ -37,12 +36,10 @@ activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub(asyncMiddleware(videosGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoController))
 )
-
 activityPubClientRouter.get('/videos/watch/:id/announces/:accountId',
   executeIfActivityPub(asyncMiddleware(videosShareValidator)),
   executeIfActivityPub(asyncMiddleware(videoAnnounceController))
 )
-
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
   executeIfActivityPub(asyncMiddleware(videoCommentGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoCommentController))
@@ -51,6 +48,14 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
 activityPubClientRouter.get('/video-channels/:id',
   executeIfActivityPub(asyncMiddleware(videoChannelsGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoChannelController))
+)
+activityPubClientRouter.get('/video-channels/:id/followers',
+  executeIfActivityPub(asyncMiddleware(videoChannelsGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoChannelFollowersController))
+)
+activityPubClientRouter.get('/video-channels/:id/following',
+  executeIfActivityPub(asyncMiddleware(videoChannelsGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoChannelFollowingController))
 )
 
 // ---------------------------------------------------------------------------
@@ -70,24 +75,14 @@ function accountController (req: express.Request, res: express.Response, next: e
 
 async function accountFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
-
-  const page = req.query.page || 1
-  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
-
-  const result = await ActorFollowModel.listAcceptedFollowerUrlsForApi([ account.Actor.id ], undefined, start, count)
-  const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
+  const activityPubResult = await actorFollowers(req, account.Actor)
 
   return res.json(activityPubResult)
 }
 
 async function accountFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
-
-  const page = req.query.page || 1
-  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
-
-  const result = await ActorFollowModel.listAcceptedFollowingUrlsForApi([ account.Actor.id ], undefined, start, count)
-  const activityPubResult = activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
+  const activityPubResult = await actorFollowing(req, account.Actor)
 
   return res.json(activityPubResult)
 }
@@ -115,9 +110,41 @@ async function videoChannelController (req: express.Request, res: express.Respon
   return res.json(videoChannel.toActivityPubObject())
 }
 
+async function videoChannelFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const videoChannel: VideoChannelModel = res.locals.videoChannel
+  const activityPubResult = await actorFollowers(req, videoChannel.Actor)
+
+  return res.json(activityPubResult)
+}
+
+async function videoChannelFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const videoChannel: VideoChannelModel = res.locals.videoChannel
+  const activityPubResult = await actorFollowing(req, videoChannel.Actor)
+
+  return res.json(activityPubResult)
+}
+
 async function videoCommentController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoComment: VideoCommentModel = res.locals.videoComment
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
   return res.json(videoComment.toActivityPubObject(threadParentComments))
+}
+
+// ---------------------------------------------------------------------------
+
+async function actorFollowing (req: express.Request, actor: ActorModel) {
+  const page = req.query.page || 1
+  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
+
+  const result = await ActorFollowModel.listAcceptedFollowingUrlsForApi([ actor.id ], undefined, start, count)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
+}
+
+async function actorFollowers (req: express.Request, actor: ActorModel) {
+  const page = req.query.page || 1
+  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
+
+  const result = await ActorFollowModel.listAcceptedFollowerUrlsForApi([ actor.id ], undefined, start, count)
+  return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
 }
