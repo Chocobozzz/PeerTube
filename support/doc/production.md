@@ -26,17 +26,14 @@ $ sudo -u postgres createdb -O peertube peertube_prod
 
 ### Prepare PeerTube directory
 
-Check the latest release: https://github.com/Chocobozzz/PeerTube/releases or the release version you want.
-We assume in the following commands the version is 0.42.42:
-
 ```
-$ VERSION="0.42.42" && \
+$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
     cd /home/peertube && \
     sudo -u peertube mkdir config storage versions && \
     cd versions && \
-    sudo -u peertube wget "https://github.com/Chocobozzz/PeerTube/releases/download/v${VERSION}/peertube-v${VERSION}.zip" && \
-    sudo -u peertube unzip peertube-v${VERSION}.zip && sudo -u peertube rm peertube-v${VERSION}.zip && \
-    cd ../ && sudo -u peertube ln -s versions/peertube-v${VERSION} ./peertube-latest && \
+    sudo -u peertube wget "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
+    sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
+    cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
     cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile
 ```
 
@@ -227,11 +224,12 @@ $ NODE_ENV=production npm run reset-password -- -u root
 
 ## Upgrade
 
-The following commands will upgrade the source (according to your current
-branch), upgrade node modules and rebuild client application:
-
 ```
-# systemctl stop peertube
-$ npm run upgrade-peertube
-# systemctl start peertube
+$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
+    cd /home/peertube/versions && \
+    sudo -u peertube wget "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
+    sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
+    cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
+    cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile && \
+    sudo systemctl restart peertube
 ```
