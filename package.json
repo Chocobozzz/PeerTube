@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "Prototype of a decentralized video streaming platform using P2P (bittorent) directly in the web browser with WebTorrent and Angular 2.",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha",
   "private": true,
   "licence": "GPLv3",
   "engines": {
