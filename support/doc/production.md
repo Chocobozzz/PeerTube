@@ -199,6 +199,12 @@ Tell systemd to reload its config:
 sudo systemctl daemon-reload
 ```
 
+If you want to start PeerTube on boot:
+
+```
+sudo systemctl enabled peertube
+```
+
 ### Run
 
 ```
