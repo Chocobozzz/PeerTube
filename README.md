@@ -21,7 +21,7 @@ donating them](https://soutenir.framasoft.org/en/).**
     <img src="https://david-dm.org/Chocobozzz/PeerTube.svg?path=client" alt="Dependency Status" />
   </a>
 
-  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client#info=dev">
+  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client&type=dev">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
   </a>
 </p>
@@ -39,7 +39,7 @@ donating them](https://soutenir.framasoft.org/en/).**
     <img src="https://david-dm.org/Chocobozzz/PeerTube.svg" alt="Dependencies Status" />
   </a>
 
-  <a href="https://david-dm.org/Chocobozzz/PeerTube#info=dev">
+  <a href="https://david-dm.org/Chocobozzz/PeerTube?type=dev">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg" alt="devDependency Status" />
   </a>
 
