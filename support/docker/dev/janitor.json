@@ -10,6 +10,11 @@
       "label": "SSH",
       "proxy": "none"
     },
+    "3000": {
+      "label": "PeerTube web app",
+      "proxy": "https",
+      "preview": true
+    },
     "8088": {
       "label": "VNC",
       "proxy": "https"
@@ -19,13 +24,12 @@
       "proxy": "https"
     },
     "9000": {
-      "label": "PeerTube",
-      "proxy": "https",
-      "preview": true
+      "label": "PeerTube API",
+      "proxy": "https"
     }
   },
   "scripts": {
-    "Start PeerTube": "npm start",
+    "Start PeerTube": "npm run dev",
     "Build PeerTube": "npm run build",
     "Run tests": "npm test",
     "Update source code": "git pull --rebase origin",
