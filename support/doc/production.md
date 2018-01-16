@@ -229,7 +229,7 @@ $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/la
     cd /home/peertube/versions && \
     sudo -u peertube wget "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
     sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
-    cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
+    cd ../ && sudo rm ./peertube-latest && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
     cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile && \
     sudo systemctl restart peertube
 ```
