@@ -15,6 +15,10 @@ WORKDIR /home/user/PeerTube
 # Configure Cloud9 IDE to use PeerTube's source directory as workspace (-w).
 RUN sudo sed -i "s/-w \/home\/user/-w \/home\/user\/PeerTube/" /etc/supervisord.conf
 
+# Configure Janitor for PeerTube.
+ADD janitor.json /home/user/
+RUN sudo chown user:user /home/user/janitor.json
+
 # Configure and build PeerTube.
 RUN yarn install \
  && npm run build
