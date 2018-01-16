@@ -5,7 +5,7 @@ import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 
 // ---------------------------------------------------------------------------
 
@@ -93,13 +93,13 @@ const CONFIG = {
     PASSWORD: config.get<string>('database.password')
   },
   STORAGE: {
-    AVATARS_DIR: join(root(), config.get<string>('storage.avatars')),
-    LOG_DIR: join(root(), config.get<string>('storage.logs')),
-    VIDEOS_DIR: join(root(), config.get<string>('storage.videos')),
-    THUMBNAILS_DIR: join(root(), config.get<string>('storage.thumbnails')),
-    PREVIEWS_DIR: join(root(), config.get<string>('storage.previews')),
-    TORRENTS_DIR: join(root(), config.get<string>('storage.torrents')),
-    CACHE_DIR: join(root(), config.get<string>('storage.cache'))
+    AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
+    LOG_DIR: buildPath(config.get<string>('storage.logs')),
+    VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
+    THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
+    PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
+    TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
+    CACHE_DIR: buildPath(config.get<string>('storage.cache'))
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
