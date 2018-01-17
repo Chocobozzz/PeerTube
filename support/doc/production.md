@@ -225,3 +225,21 @@ branch), upgrade node modules and rebuild client application:
 $ npm run upgrade-peertube
 # systemctl start peertube
 ```
+
+## Installation on Docker Swarm
+
+There is an example configuration for deploying peertube and a postgres database as a Docker swarm stack. It works like this:
+
+(_Note_: You need to make sure to set `traefik` and `peertube` labels on the target node(s) for this configuration to work.)
+
+1. Install a traefik loadbalancer stack (including Let's Encrypt) on your docker swarm. [Here](https://gist.github.com/djmaze/2684fbf147d775c8ee441b4302554823) is an example configuration.
+
+2. Copy the [example stack file](docker/docker-stack.example.yml) for peertube:
+
+        scp docker/docker-stack.example.yml root@your-server:/path/to/your/swarm-config/peertube.yml
+
+2. Have a look at the file and adjust the variables to your need.
+
+3. Deploy the stack:
+
+        docker stack deploy -c peertube.yml peertube
