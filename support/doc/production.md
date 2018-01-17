@@ -53,7 +53,7 @@ configuration.
 Copy the nginx configuration template:
 
 ```
-$ sudo cp /home/peertube/PeerTube/support/nginx/peertube /etc/nginx/sites-available/peertube
+$ sudo cp /home/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
 Then modify the webserver configuration file. Please pay attention to the `alias` key of `/static/webseed` location. 
