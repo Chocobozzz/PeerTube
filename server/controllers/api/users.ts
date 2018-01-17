@@ -12,8 +12,8 @@ import { updateActorAvatarInstance } from '../../lib/activitypub'
 import { sendUpdateUser } from '../../lib/activitypub/send'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
-  asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setPagination, setUsersSort,
-  setVideosSort, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
+  asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setDefaultSort,
+  setPagination, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
   usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator
 } from '../../middlewares'
 import { usersUpdateMyAvatarValidator, videosSortValidator } from '../../middlewares/validators'
@@ -39,7 +39,7 @@ usersRouter.get('/me/videos',
   authenticate,
   paginationValidator,
   videosSortValidator,
-  setVideosSort,
+  setDefaultSort,
   setPagination,
   asyncMiddleware(getUserVideos)
 )
@@ -55,7 +55,7 @@ usersRouter.get('/',
   ensureUserHasRight(UserRight.MANAGE_USERS),
   paginationValidator,
   usersSortValidator,
-  setUsersSort,
+  setDefaultSort,
   setPagination,
   asyncMiddleware(listUsers)
 )

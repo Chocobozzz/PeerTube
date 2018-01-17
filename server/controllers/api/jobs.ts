@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { UserRight } from '../../../shared/models/users'
 import { getFormattedObjects } from '../../helpers/utils'
-import { asyncMiddleware, authenticate, ensureUserHasRight, jobsSortValidator, setJobsSort, setPagination } from '../../middlewares'
+import { asyncMiddleware, authenticate, ensureUserHasRight, jobsSortValidator, setDefaultSort, setPagination } from '../../middlewares'
 import { paginationValidator } from '../../middlewares/validators'
 import { JobModel } from '../../models/job/job'
 
@@ -12,7 +12,7 @@ jobsRouter.get('/',
   ensureUserHasRight(UserRight.MANAGE_JOBS),
   paginationValidator,
   jobsSortValidator,
-  setJobsSort,
+  setDefaultSort,
   setPagination,
   asyncMiddleware(listJobs)
 )

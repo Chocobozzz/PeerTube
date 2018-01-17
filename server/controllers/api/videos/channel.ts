@@ -7,7 +7,7 @@ import { sequelizeTypescript } from '../../../initializers'
 import { setAsyncActorKeys } from '../../../lib/activitypub'
 import { createVideoChannel } from '../../../lib/video-channel'
 import {
-  asyncMiddleware, authenticate, listVideoAccountChannelsValidator, paginationValidator, setPagination, setVideoChannelsSort,
+  asyncMiddleware, authenticate, listVideoAccountChannelsValidator, paginationValidator, setDefaultSort, setPagination,
   videoChannelsAddValidator, videoChannelsGetValidator, videoChannelsRemoveValidator, videoChannelsSortValidator,
   videoChannelsUpdateValidator
 } from '../../../middlewares'
@@ -19,7 +19,7 @@ const videoChannelRouter = express.Router()
 videoChannelRouter.get('/channels',
   paginationValidator,
   videoChannelsSortValidator,
-  setVideoChannelsSort,
+  setDefaultSort,
   setPagination,
   asyncMiddleware(listVideoChannels)
 )
