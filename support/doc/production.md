@@ -160,7 +160,7 @@ $ sudo systemctl reload nginx
 Copy the nginx configuration template:
 
 ```
-$ sudo cp /home/peertube/PeerTube/support/systemd/peertube.service /etc/systemd/system/
+$ sudo cp /home/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
 ```
 
 Update the service file:
@@ -203,7 +203,7 @@ $ sudo systemctl daemon-reload
 If you want to start PeerTube on boot:
 
 ```
-$ sudo systemctl enabled peertube
+$ sudo systemctl enable peertube
 ```
 
 ### Run
