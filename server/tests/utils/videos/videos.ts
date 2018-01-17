@@ -5,8 +5,9 @@ import { readFile } from 'fs'
 import * as parseTorrent from 'parse-torrent'
 import { extname, isAbsolute, join } from 'path'
 import * as request from 'supertest'
-import { getMyUserInformation, makeGetRequest, readFilePromise, ServerInfo } from '../'
+import { getMyUserInformation, makeGetRequest, ServerInfo } from '../'
 import { VideoPrivacy } from '../../../../shared/models/videos'
+import { readFileBufferPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
 import { dateIsValid, webtorrentAdd } from '../index'
 
@@ -210,7 +211,7 @@ async function testVideoImage (url: string, imageName: string, imagePath: string
                         .get(imagePath)
                         .expect(200)
 
-    const data = await readFilePromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + extension))
+    const data = await readFileBufferPromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + extension))
 
     return data.equals(res.body)
   } else {

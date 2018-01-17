@@ -28,4 +28,8 @@ export class AdminComponent {
   hasJobsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_JOBS)
   }
+
+  hasConfigRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
+  }
 }

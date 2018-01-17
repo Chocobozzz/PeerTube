@@ -35,6 +35,7 @@ git commit package.json client/package.json -m "Bumped to version $version" || e
 git tag -s -a "$version" -m "$version"
 
 npm run build || exit -1
+rm "./client/dist/stats.json" || exit -1
 
 cd ../ || exit -1
 

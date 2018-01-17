@@ -31,7 +31,7 @@ $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/la
     cd /home/peertube && \
     sudo -u peertube mkdir config storage versions && \
     cd versions && \
-    sudo -u peertube wget "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
+    sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
     sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
     cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
     cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile
@@ -227,7 +227,7 @@ $ NODE_ENV=production npm run reset-password -- -u root
 ```
 $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
     cd /home/peertube/versions && \
-    sudo -u peertube wget "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
+    sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
     sudo -u peertube unzip -o peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
     cd ../ && sudo rm ./peertube-latest && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
     cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile && \
