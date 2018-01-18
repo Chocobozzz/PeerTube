@@ -187,10 +187,6 @@ describe('Test handle downs', function () {
 
     await wait(5000)
 
-    const res = await getVideosList(servers[1].url)
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(2)
-
     const resVideo = await getVideo(servers[1].url, videos[0].uuid)
     expect(resVideo.body).not.to.be.undefined
 

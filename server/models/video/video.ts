@@ -459,7 +459,8 @@ export class VideoModel extends Model<VideoModel> {
       },
       include: [
         {
-          model: VideoShareModel,
+          attributes: [ 'id' ],
+          model: VideoShareModel.unscoped(),
           required: false,
           where: {
             [Sequelize.Op.and]: [
@@ -475,28 +476,65 @@ export class VideoModel extends Model<VideoModel> {
           },
           include: [
             {
-              model: ActorModel,
-              required: true
+              attributes: [ 'id', 'url' ],
+              model: ActorModel.unscoped()
             }
           ]
         },
         {
-          model: VideoChannelModel,
+          model: VideoChannelModel.unscoped(),
           required: true,
           include: [
             {
-              model: AccountModel,
+              attributes: [ 'name' ],
+              model: AccountModel.unscoped(),
+              required: true,
+              include: [
+                {
+                  attributes: [ 'id', 'url' ],
+                  model: ActorModel.unscoped(),
+                  required: true
+                }
+              ]
+            },
+            {
+              attributes: [ 'id', 'url' ],
+              model: ActorModel.unscoped(),
               required: true
             }
           ]
         },
         {
+          attributes: [ 'type' ],
           model: AccountVideoRateModel,
-          include: [ AccountModel ]
+          required: false,
+          include: [
+            {
+              attributes: [ 'id' ],
+              model: AccountModel.unscoped(),
+              include: [
+                {
+                  attributes: [ 'url' ],
+                  model: ActorModel.unscoped(),
+                  include: [
+                    {
+                      attributes: [ 'host' ],
+                      model: ServerModel,
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          attributes: [ 'url' ],
+          model: VideoCommentModel,
+          required: false
         },
         VideoFileModel,
-        TagModel,
-        VideoCommentModel
+        TagModel
       ]
     }
 

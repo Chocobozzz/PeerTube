@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { checkVideoFilesWereRemoved, completeVideoCheck } from '../../utils'
+import { completeVideoCheck } from '../../utils'
 
 import {
   flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
@@ -353,8 +353,6 @@ describe('Test follows', function () {
 
       let res = await getVideosList(servers[ 0 ].url)
       expect(res.body.total).to.equal(1)
-
-      await checkVideoFilesWereRemoved(video4.uuid, servers[0].serverNumber)
     })
 
   })
