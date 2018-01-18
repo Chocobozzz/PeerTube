@@ -10,7 +10,7 @@ directly in the web browser with <a href="https://github.com/feross/webtorrent">
 **PeerTube is sponsored by [Framasoft](https://framatube.org/#en), a non-profit
 that promotes, spreads and develops free culture in general, and free-libre
 software in particular. If you want to support this project, please [consider
-donating them](https://soutenir.framasoft.org/en/).**
+donating to them](https://soutenir.framasoft.org/en/).**
 
 <p align="center">
   <strong>Client</strong>
@@ -69,7 +69,7 @@ Want to see it in action?
      * [peertube2.cpy.re](http://peertube2.cpy.re) 
      * [peertube3.cpy.re](http://peertube3.cpy.re)
    * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
-     to see how the "decentralization feature" looks like
+     to see what the "decentralization feature" looks like
 
 ## Why
 
