@@ -39,9 +39,7 @@ RUN groupadd -g 991 peertube && useradd -u 991 -g 991  --create-home peertube \
 COPY ./ /
 WORKDIR /PeerTube/
 
-RUN echo "****** Clone Peertube ******" \
-	&& git clone --branch develop https://github.com/Chocobozzz/PeerTube /PeerTube \
-	&& echo "****** chown ******" \
+RUN echo "****** chown ******" \
 	&& chown -R peertube:peertube PeerTube \
         && cd /PeerTube \
 	&& echo "****** run npm install as user ******" \
