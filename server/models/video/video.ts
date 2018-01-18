@@ -127,22 +127,30 @@ enum ScopeNames {
             attributes: {
               exclude: [ 'privateKey', 'publicKey' ]
             },
-            model: () => ActorModel,
-            required: true
-          },
-          {
-            model: () => AccountModel,
+            model: () => ActorModel.unscoped(),
             required: true,
             include: [
               {
-                model: () => ActorModel,
+                attributes: [ 'host' ],
+                model: () => ServerModel.unscoped(),
+                required: false
+              }
+            ]
+          },
+          {
+            model: () => AccountModel.unscoped(),
+            required: true,
+            include: [
+              {
+                model: () => ActorModel.unscoped(),
                 attributes: {
                   exclude: [ 'privateKey', 'publicKey' ]
                 },
                 required: true,
                 include: [
                   {
-                    model: () => ServerModel,
+                    attributes: [ 'host' ],
+                    model: () => ServerModel.unscoped(),
                     required: false
                   }
                 ]
