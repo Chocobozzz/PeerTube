@@ -3,6 +3,9 @@ server {
   # listen [::]:80;
   server_name domain.tld;
 
+  access_log /var/log/nginx/peertube_access.log;
+  error_log /var/log/nginx/peertube_error.log;
+
   location /.well-known/acme-challenge/ { allow all; }
   location / { return 301 https://$host$request_uri; }
 }
@@ -12,10 +15,25 @@ server {
   # listen [::]:443 ssl http2;
   server_name domain.tld;
 
+  access_log /var/log/nginx/peertube_access.log;
+  error_log /var/log/nginx/peertube_error.log;
+
   # For example with Let's Encrypt
   ssl_certificate      /etc/letsencrypt/live/domain.tld/fullchain.pem;
   ssl_certificate_key  /etc/letsencrypt/live/domain.tld/privkey.pem;
   ssl_trusted_certificate /etc/letsencrypt/live/domain.tld/chain.pem;
+
+  location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+
+    alias /home/peertube/peertube-latest/client/dist/$1;
+  }
+
+  location ~ ^/static/(thumbnails|avatars|previews)/(.*)$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+
+    alias /home/peertube/storage/$1/$2;
+  }
 
   location / {
     proxy_pass http://localhost:9000;
@@ -49,6 +67,9 @@ server {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
       add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+
+      # Don't spam access log file with byte range requests
+      access_log off;
     }
 
     alias /home/peertube/storage/videos;

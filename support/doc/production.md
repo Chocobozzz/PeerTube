@@ -56,8 +56,8 @@ Copy the nginx configuration template:
 $ sudo cp /home/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
-Then modify the webserver configuration file. Please pay attention to the `alias` key of `/static/webseed` location. 
-It should correspond to the path of your videos directory (set in the configuration file as `storage->videos` key).
+Then modify the webserver configuration file. Please pay attention to the `alias` keys of the static locations.
+It should correspond to the paths of your storage directories (set in the configuration file inside the `storage` key).
 
 ```
 $ sudo vim /etc/nginx/sites-available/peertube
@@ -97,6 +97,18 @@ server {
     root /var/www/certbot;
   }
 
+  location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+
+    alias /home/peertube/peertube-latest/client/dist/$1;
+  }
+
+  location ~ ^/static/(thumbnails|avatars|previews)/(.*)$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+
+    alias /home/peertube/storage/$1/$2;
+  }
+
   location / {
     proxy_pass http://localhost:9000;
     proxy_set_header X-Real-IP $remote_addr;
@@ -127,6 +139,9 @@ server {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
       add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+
+      # Don't spam access log file with byte range requests
+      access_log off;
     }
 
     alias /home/peertube/storage/videos;
@@ -219,7 +234,7 @@ The administrator password is automatically generated and can be found in the
 logs. You can set another password with:
 
 ```
-$ NODE_ENV=production npm run reset-password -- -u root
+$ cd /home/peertube/peertube-latest && NODE_ENV=production npm run reset-password -- -u root
 ```
 
 ## Upgrade
