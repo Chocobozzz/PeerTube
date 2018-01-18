@@ -140,7 +140,7 @@ BitTorrent) inside the web browser, as of today.
 
 You can quickly get a server running using Docker. You need to have [docker](https://www.docker.com/community-edition) and [docker-compose](https://docs.docker.com/compose/install/) installed.
 
-Also, you need to run a Traefik loadbalancer using Docker Compose. You can start one locally with this [example compose config](https://gist.github.com/djmaze/72f0565715c59712ce191b41d3c377da).
+For this example configuration, you also need to run a Traefik loadbalancer using Docker Compose. You can start one locally with this [example compose config](https://gist.github.com/djmaze/72f0565715c59712ce191b41d3c377da).
 
 Example for running a peertube server locally:
 
