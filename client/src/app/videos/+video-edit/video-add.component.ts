@@ -83,6 +83,10 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         })
   }
 
+  canDeactivate () {
+    return !this.isUploadingVideo
+  }
+
   fileChange () {
     this.uploadFirstStep()
   }
