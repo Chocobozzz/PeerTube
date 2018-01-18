@@ -31,7 +31,6 @@ import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
-import { ActorFollowModel } from '../activitypub/actor-follow'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
@@ -54,33 +53,27 @@ enum ScopeNames {
 
 @Scopes({
   [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number) => ({
-    subQuery: false,
     where: {
       id: {
         [Sequelize.Op.notIn]: Sequelize.literal(
           '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
+        ),
+        [ Sequelize.Op.in ]: Sequelize.literal(
+          '(' +
+            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+            'WHERE "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
+            ' UNION ' +
+            'SELECT "video"."id" AS "id" FROM "video" ' +
+            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+            'LEFT JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+            'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
+          ')'
         )
       },
-      privacy: VideoPrivacy.PUBLIC,
-      [Sequelize.Op.or]: [
-        {
-          '$VideoChannel.Account.Actor.serverId$': null
-        },
-        {
-          '$VideoChannel.Account.Actor.ActorFollowers.actorId$': actorId
-        },
-        {
-          id: {
-            [ Sequelize.Op.in ]: Sequelize.literal(
-              '(' +
-                'SELECT "videoShare"."videoId" FROM "videoShare" ' +
-                'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-                'WHERE "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
-              ')'
-            )
-          }
-        }
-      ]
+      privacy: VideoPrivacy.PUBLIC
     },
     include: [
       {
@@ -100,14 +93,7 @@ enum ScopeNames {
                 include: [
                   {
                     attributes: [ 'host' ],
-                    model: ServerModel.unscoped(),
-                    required: false
-                  },
-                  {
-                    attributes: [ ],
-                    model: ActorFollowModel.unscoped(),
-                    as: 'ActorFollowers',
-                    required: false
+                    model: ServerModel.unscoped()
                   }
                 ]
               }
