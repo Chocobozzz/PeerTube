@@ -1,0 +1,38 @@
+#!/bin/sh
+
+#groupadd -g ${GID} peertube && useradd -u ${UID} -M -g ${GID} peertube
+
+usermod -u ${GID} peertube
+groupmod -g ${UID} peertube
+
+sed -i -e 's|<https>|'${HTTPS}'|' \
+		-e 's|<hostname>|'${HOSTNAME}'|' \
+		-e 's|<port>|'${PORT}'|' \
+		-e 's|<database_host>|'${DATABASE_HOST}'|' \
+		-e 's|<database_port>|'${DATABASE_PORT}'|' \
+		-e 's|<database_username>|'${DATABASE_USERNAME}'|' \
+		-e 's|<database_password>|'${DATABASE_PASSWORD}'|' \
+		-e 's|<admin_email>|'${ADMIN_EMAIL}'|' \
+		-e 's|<signup_enabled>|'${SIGNUP_ENABLE}'|' \
+		-e 's|<transcoding_enable>|'${TRANSCODING_ENABLE}'|' \
+		-e 's|<transcoding_threads>|'${TRANSCODING_THREADS}'|' \
+  		-e 's|<cache_size>|'${CACHE_SIZE}'|' \
+  		-e 's|<signup_limit>|'${SIGNUP_LIMIT}'|' \
+		-e 's|<video_quota>|'${VIDEO_QUOTA}'|' \
+  		-e 's|<resolution_280>|'${RESOLUTION_280}'|' \
+  		-e 's|<resolution_360>|'${RESOLUTION_360}'|' \
+  		-e 's|<resolution_480>|'${RESOLUTION_480}'|' \
+  		-e 's|<resolution_720>|'${RESOLUTION_720}'|' \
+  		-e 's|<resolution_1080>|'${RESOLUTION_1080}'|' /PeerTube/config/production.yaml
+
+sed -i -e 's|<body_size>|'${BODY_SIZE}'|' /etc/nginx/sites-enabled/peertube.conf
+
+chown -R $UID:$GID /home/peertube
+chown -R $UID:$GID /PeerTube
+
+nginx
+if [ $# -eq 0 ]; then
+   su - peertube -c "cd /PeerTube && NODE_ENV=production npm start"
+else
+   su - peertube -c "cd /PeerTube && NODE_ENV=production npm $#"
+fi
