@@ -185,7 +185,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: 204
+        statusCodeExpected: 200
       })
     })
 

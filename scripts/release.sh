@@ -21,6 +21,12 @@ if [ -z $GITHUB_TOKEN ]; then
   exit -1
 fi
 
+branch=$(git symbolic-ref --short -q HEAD)
+if [ "$branch" != "develop" ]; then
+  echo "Need to be on develop branch."
+  exit -1
+fi
+
 version="v$1"
 directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
@@ -56,3 +62,10 @@ git push origin --tag
 
 github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version"
 github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
+
+# Update master branch
+git checkout master
+git rebase develop
+git git push origin master
+git checkout develop
+

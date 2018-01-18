@@ -1,13 +1,13 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { readFile } from 'fs'
+import { existsSync, readFile } from 'fs'
 import * as parseTorrent from 'parse-torrent'
 import { extname, isAbsolute, join } from 'path'
 import * as request from 'supertest'
-import { getMyUserInformation, makeGetRequest, ServerInfo } from '../'
+import { getMyUserInformation, makeGetRequest, root, ServerInfo } from '../'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { readFileBufferPromise } from '../../../helpers/core-utils'
+import { readdirPromise, readFileBufferPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
 import { dateIsValid, webtorrentAdd } from '../index'
 
@@ -203,7 +203,23 @@ function searchVideoWithSort (url: string, search: string, sort: string) {
           .expect('Content-Type', /json/)
 }
 
-async function testVideoImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
+async function checkVideoFilesWereRemoved (videoUUID: string, serverNumber: number) {
+  const testDirectory = 'test' + serverNumber
+
+  for (const directory of [ 'videos', 'thumbnails', 'torrents', 'previews' ]) {
+    const directoryPath = join(root(), testDirectory, directory)
+
+    const directoryExists = existsSync(directoryPath)
+    expect(directoryExists).to.be.true
+
+    const files = await readdirPromise(directoryPath)
+    for (const file of files) {
+      expect(file).to.not.contain(videoUUID)
+    }
+  }
+}
+
+async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
   // Don't test images if the node env is not set
   // Because we need a special ffmpeg version for this test
   if (process.env['NODE_TEST_IMAGE']) {
@@ -409,7 +425,7 @@ async function completeVideoCheck (
     const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
     expect(file.size).to.be.above(minSize).and.below(maxSize)
 
-    const test = await testVideoImage(url, attributes.fixture, videoDetails.thumbnailPath)
+    const test = await testImage(url, attributes.fixture, videoDetails.thumbnailPath)
     expect(test).to.equal(true)
 
     const torrent = await webtorrentAdd(magnetUri, true)
@@ -437,11 +453,12 @@ export {
   searchVideo,
   searchVideoWithPagination,
   searchVideoWithSort,
-  testVideoImage,
+  testImage,
   uploadVideo,
   updateVideo,
   rateVideo,
   viewVideo,
   parseTorrentVideo,
-  completeVideoCheck
+  completeVideoCheck,
+  checkVideoFilesWereRemoved
 }

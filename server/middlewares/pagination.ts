@@ -3,7 +3,7 @@ import * as express from 'express'
 
 import { PAGINATION_COUNT_DEFAULT } from '../initializers'
 
-function setPagination (req: express.Request, res: express.Response, next: express.NextFunction) {
+function setDefaultPagination (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.start) req.query.start = 0
   else req.query.start = parseInt(req.query.start, 10)
 
@@ -16,5 +16,5 @@ function setPagination (req: express.Request, res: express.Response, next: expre
 // ---------------------------------------------------------------------------
 
 export {
-  setPagination
+  setDefaultPagination
 }

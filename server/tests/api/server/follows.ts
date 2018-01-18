@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { completeVideoCheck } from '../../utils'
+import { checkVideoFilesWereRemoved, completeVideoCheck, getVideoChannelsList } from '../../utils'
 
 import {
   flushAndRunMultipleServers, flushTests, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
@@ -12,7 +12,7 @@ import {
 } from '../../utils/index'
 import { dateIsValid } from '../../utils/miscs/miscs'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort, unfollow } from '../../utils/server/follows'
-import { expectAccountFollows } from '../../utils/users/accounts'
+import { expectAccountFollows, getAccountsList } from '../../utils/users/accounts'
 import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
 import {
@@ -343,6 +343,26 @@ describe('Test follows', function () {
       expect(secondChild.comment.text).to.equal('my second answer to thread 1')
       expect(secondChild.children).to.have.lengthOf(0)
     })
+
+    it('Should unfollow server 3 on server 1 and does not list server 3 videos', async function () {
+      this.timeout(5000)
+
+      await unfollow(servers[0].url, servers[0].accessToken, servers[2])
+
+      await wait(3000)
+
+      let res = await getVideosList(servers[ 0 ].url)
+      expect(res.body.total).to.equal(1)
+
+      res = await getVideoChannelsList(servers[0].url, 0, 1)
+      expect(res.body.total).to.equal(2)
+
+      res = await getAccountsList(servers[0].url)
+      expect(res.body.total).to.equal(2)
+
+      await checkVideoFilesWereRemoved(video4.uuid, servers[0].serverNumber)
+    })
+
   })
 
   after(async function () {

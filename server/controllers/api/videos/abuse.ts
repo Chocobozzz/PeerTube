@@ -6,7 +6,7 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { sendVideoAbuse } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, setDefaultSort, setPagination, videoAbuseReportValidator,
+  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, setDefaultSort, setDefaultPagination, videoAbuseReportValidator,
   videoAbusesSortValidator
 } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
@@ -21,7 +21,7 @@ abuseVideoRouter.get('/abuse',
   paginationValidator,
   videoAbusesSortValidator,
   setDefaultSort,
-  setPagination,
+  setDefaultPagination,
   asyncMiddleware(listVideoAbuses)
 )
 abuseVideoRouter.post('/:id/abuse',

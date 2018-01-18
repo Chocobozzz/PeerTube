@@ -10,7 +10,7 @@ import { getOrCreateActorAndServerAndModel } from '../../../lib/activitypub/acto
 import { sendFollow, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
   asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, removeFollowingValidator, setBodyHostsPort, setDefaultSort,
-  setPagination
+  setDefaultPagination
 } from '../../../middlewares'
 import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
 import { ActorModel } from '../../../models/activitypub/actor'
@@ -22,7 +22,7 @@ serverFollowsRouter.get('/following',
   paginationValidator,
   followingSortValidator,
   setDefaultSort,
-  setPagination,
+  setDefaultPagination,
   asyncMiddleware(listFollowing)
 )
 
@@ -45,7 +45,7 @@ serverFollowsRouter.get('/followers',
   paginationValidator,
   followersSortValidator,
   setDefaultSort,
-  setPagination,
+  setDefaultPagination,
   asyncMiddleware(listFollowers)
 )
 

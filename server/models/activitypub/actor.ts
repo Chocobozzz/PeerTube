@@ -155,7 +155,8 @@ export class ActorModel extends Model<ActorModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'set null'
+    onDelete: 'set null',
+    hooks: true
   })
   Avatar: AvatarModel
 
@@ -194,7 +195,8 @@ export class ActorModel extends Model<ActorModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   Account: AccountModel
 
@@ -202,7 +204,8 @@ export class ActorModel extends Model<ActorModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   VideoChannel: VideoChannelModel
 

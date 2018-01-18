@@ -3,13 +3,12 @@
 import * as chai from 'chai'
 import { keyBy } from 'lodash'
 import 'mocha'
-import { join } from 'path'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { readdirPromise } from '../../../helpers/core-utils'
 import {
-  completeVideoCheck, flushTests, getVideo, getVideoCategories, getVideoLanguages, getVideoLicences, getVideoPrivacies,
-  getVideosList, getVideosListPagination, getVideosListSort, killallServers, rateVideo, removeVideo, runServer, searchVideo,
-  searchVideoWithPagination, searchVideoWithSort, ServerInfo, setAccessTokensToServers, testVideoImage, updateVideo, uploadVideo, viewVideo
+  checkVideoFilesWereRemoved, completeVideoCheck, flushTests, getVideo, getVideoCategories, getVideoLanguages, getVideoLicences,
+  getVideoPrivacies, getVideosList, getVideosListPagination, getVideosListSort, killallServers, rateVideo, removeVideo, runServer,
+  searchVideo, searchVideoWithPagination, searchVideoWithSort, ServerInfo, setAccessTokensToServers, testImage, updateVideo, uploadVideo,
+  viewVideo
 } from '../../utils'
 
 const expect = chai.expect
@@ -277,11 +276,7 @@ describe('Test a single server', function () {
   it('Should remove the video', async function () {
     await removeVideo(server.url, server.accessToken, videoId)
 
-    const files1 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1', 'videos'))
-    expect(files1).to.have.lengthOf(0)
-
-    const files2 = await readdirPromise(join(__dirname, '..', '..', '..', '..', 'test1', 'thumbnails'))
-    expect(files2).to.have.lengthOf(0)
+    await checkVideoFilesWereRemoved(videoUUID, 1)
   })
 
   it('Should not have videos', async function () {
@@ -346,7 +341,7 @@ describe('Test a single server', function () {
 
     for (const video of videos) {
       const videoName = video.name.replace(' name', '')
-      const test = await testVideoImage(server.url, videoName, video.thumbnailPath)
+      const test = await testImage(server.url, videoName, video.thumbnailPath)
 
       expect(test).to.equal(true)
     }

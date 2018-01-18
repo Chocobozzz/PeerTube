@@ -1,3 +1,4 @@
+import { join } from 'path'
 import * as WebTorrent from 'webtorrent'
 
 let webtorrent = new WebTorrent()
@@ -24,11 +25,17 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
   return new Promise<WebTorrent.Torrent>(res => webtorrent.add(torrent, res))
 }
 
+function root () {
+  // We are in server/tests/utils/miscs
+  return join(__dirname, '..', '..', '..', '..')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   dateIsValid,
   wait,
   webtorrentAdd,
-  immutableAssign
+  immutableAssign,
+  root
 }

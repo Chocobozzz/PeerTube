@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { testVideoImage } from '../../utils'
+import { testImage } from '../../utils'
 import {
   dateIsValid, flushTests, killallServers, runServer, ServerInfo, setAccessTokensToServers, updateMyAvatar,
   uploadVideo
@@ -83,7 +83,7 @@ describe('Test video comments', function () {
     expect(comment.account.name).to.equal('root')
     expect(comment.account.host).to.equal('localhost:9001')
 
-    const test = await testVideoImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
+    const test = await testImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
     expect(test).to.equal(true)
 
     expect(comment.totalReplies).to.equal(0)

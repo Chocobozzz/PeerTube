@@ -5,10 +5,9 @@ import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy, AllowNull, BelongsTo, BelongsToMany, Column, CreatedAt, DataType, Default, ForeignKey, HasMany, IFindOptions, Is,
-  IsInt, IsUUID, Min, Model, Scopes, Table, UpdatedAt
+  AfterDestroy, AllowNull, BeforeDestroy, BelongsTo, BelongsToMany, Column, CreatedAt, DataType, Default, ForeignKey, HasMany,
+  IFindOptions, Is, IsInt, IsUUID, Min, Model, Scopes, Table, UpdatedAt
 } from 'sequelize-typescript'
-import { IIncludeOptions } from 'sequelize-typescript/lib/interfaces/IIncludeOptions'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../shared/models/videos'
@@ -22,6 +21,7 @@ import {
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
+import { getServerActor } from '../../helpers/utils'
 import {
   API_VERSION, CONFIG, CONSTRAINTS_FIELDS, PREVIEWS_SIZE, REMOTE_SCHEME, STATIC_PATHS, THUMBNAILS_SIZE, VIDEO_CATEGORIES,
   VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES
@@ -31,6 +31,7 @@ import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
+import { ActorFollowModel } from '../activitypub/actor-follow'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
@@ -43,7 +44,6 @@ import { VideoTagModel } from './video-tag'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
-  WITH_ACCOUNT_API = 'WITH_ACCOUNT_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
   WITH_FILES = 'WITH_FILES',
@@ -53,34 +53,60 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: {
+  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number) => ({
+    subQuery: false,
     where: {
       id: {
         [Sequelize.Op.notIn]: Sequelize.literal(
           '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
         )
       },
-      privacy: VideoPrivacy.PUBLIC
-    }
-  },
-  [ScopeNames.WITH_ACCOUNT_API]: {
+      privacy: VideoPrivacy.PUBLIC,
+      [Sequelize.Op.or]: [
+        {
+          '$VideoChannel.Account.Actor.serverId$': null
+        },
+        {
+          '$VideoChannel.Account.Actor.followers.actorId$': actorId
+        },
+        {
+          id: {
+            [ Sequelize.Op.in ]: Sequelize.literal(
+              '(' +
+                'SELECT "videoShare"."videoId" FROM "videoShare" ' +
+                'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+                'WHERE "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
+              ')'
+            )
+          }
+        }
+      ]
+    },
     include: [
       {
-        model: () => VideoChannelModel.unscoped(),
+        attributes: [ 'name', 'description' ],
+        model: VideoChannelModel.unscoped(),
         required: true,
         include: [
           {
             attributes: [ 'name' ],
-            model: () => AccountModel.unscoped(),
+            model: AccountModel.unscoped(),
             required: true,
             include: [
               {
                 attributes: [ 'serverId' ],
-                model: () => ActorModel.unscoped(),
+                model: ActorModel.unscoped(),
                 required: true,
                 include: [
                   {
-                    model: () => ServerModel.unscoped(),
+                    attributes: [ 'host' ],
+                    model: ServerModel.unscoped(),
+                    required: false
+                  },
+                  {
+                    attributes: [ ],
+                    model: ActorFollowModel.unscoped(),
+                    as: 'followers',
                     required: false
                   }
                 ]
@@ -90,7 +116,7 @@ enum ScopeNames {
         ]
       }
     ]
-  },
+  }),
   [ScopeNames.WITH_ACCOUNT_DETAILS]: {
     include: [
       {
@@ -347,23 +373,46 @@ export class VideoModel extends Model<VideoModel> {
       name: 'videoId',
       allowNull: false
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   VideoComments: VideoCommentModel[]
 
-  @AfterDestroy
-  static removeFilesAndSendDelete (instance: VideoModel) {
-    const tasks = []
+  @BeforeDestroy
+  static async sendDelete (instance: VideoModel, options) {
+    if (instance.isOwned()) {
+      if (!instance.VideoChannel) {
+        instance.VideoChannel = await instance.$get('VideoChannel', {
+          include: [
+            {
+              model: AccountModel,
+              include: [ ActorModel ]
+            }
+          ],
+          transaction: options.transaction
+        }) as VideoChannelModel
+      }
 
-    tasks.push(
-      instance.removeThumbnail()
-    )
+      logger.debug('Sending delete of video %s.', instance.url)
+
+      return sendDeleteVideo(instance, options.transaction)
+    }
+
+    return undefined
+  }
+
+  @AfterDestroy
+  static async removeFilesAndSendDelete (instance: VideoModel) {
+    const tasks: Promise<any>[] = []
+
+    tasks.push(instance.removeThumbnail())
 
     if (instance.isOwned()) {
-      tasks.push(
-        instance.removePreview(),
-        sendDeleteVideo(instance, undefined)
-      )
+      if (!Array.isArray(instance.VideoFiles)) {
+        instance.VideoFiles = await instance.$get('VideoFiles') as VideoFileModel[]
+      }
+
+      tasks.push(instance.removePreview())
 
       // Remove physical files and torrents
       instance.VideoFiles.forEach(file => {
@@ -500,16 +549,41 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listForApi (start: number, count: number, sort: string) {
+  static async listForApi (start: number, count: number, sort: string) {
     const query = {
       offset: start,
       limit: count,
       order: [ getSort(sort) ]
     }
 
-    return VideoModel.scope([ ScopeNames.AVAILABLE_FOR_LIST, ScopeNames.WITH_ACCOUNT_API ])
+    const serverActor = await getServerActor()
+
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id ] })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
+        return {
+          data: rows,
+          total: count
+        }
+      })
+  }
+
+  static async searchAndPopulateAccountAndServerAndTags (value: string, start: number, count: number, sort: string) {
+    const query: IFindOptions<VideoModel> = {
+      offset: start,
+      limit: count,
+      order: [ getSort(sort) ],
+      where: {
+        name: {
+          [Sequelize.Op.iLike]: '%' + value + '%'
+        }
+      }
+    }
+
+    const serverActor = await getServerActor()
+
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id ] })
+      .findAndCountAll(query).then(({ rows, count }) => {
         return {
           data: rows,
           total: count
@@ -601,74 +675,6 @@ export class VideoModel extends Model<VideoModel> {
         ScopeNames.WITH_COMMENTS
       ])
       .findOne(options)
-  }
-
-  static searchAndPopulateAccountAndServerAndTags (value: string, start: number, count: number, sort: string) {
-    const serverInclude: IIncludeOptions = {
-      model: ServerModel,
-      required: false
-    }
-
-    const accountInclude: IIncludeOptions = {
-      model: AccountModel,
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          include: [ serverInclude ]
-        }
-      ]
-    }
-
-    const videoChannelInclude: IIncludeOptions = {
-      model: VideoChannelModel,
-      include: [ accountInclude ],
-      required: true
-    }
-
-    const tagInclude: IIncludeOptions = {
-      model: TagModel
-    }
-
-    const query: IFindOptions<VideoModel> = {
-      distinct: true, // Because we have tags
-      offset: start,
-      limit: count,
-      order: [ getSort(sort) ],
-      where: {}
-    }
-
-    // TODO: search on tags too
-    // const escapedValue = Video['sequelize'].escape('%' + value + '%')
-    // query.where['id'][Sequelize.Op.in] = Video['sequelize'].literal(
-    //   `(SELECT "VideoTags"."videoId"
-    //     FROM "Tags"
-    //     INNER JOIN "VideoTags" ON "Tags"."id" = "VideoTags"."tagId"
-    //     WHERE name ILIKE ${escapedValue}
-    //    )`
-    // )
-
-    // TODO: search on account too
-    // accountInclude.where = {
-    //   name: {
-    //     [Sequelize.Op.iLike]: '%' + value + '%'
-    //   }
-    // }
-    query.where['name'] = {
-      [Sequelize.Op.iLike]: '%' + value + '%'
-    }
-
-    query.include = [
-      videoChannelInclude, tagInclude
-    ]
-
-    return VideoModel.scope([ ScopeNames.AVAILABLE_FOR_LIST ])
-      .findAndCountAll(query).then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
   }
 
   getOriginalFile () {

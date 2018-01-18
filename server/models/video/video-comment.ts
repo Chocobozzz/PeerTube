@@ -1,6 +1,6 @@
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, IFindOptions, Is, Model, Scopes, Table,
+  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DataType, ForeignKey, IFindOptions, Is, Model, Scopes, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityTagObject } from '../../../shared/models/activitypub/objects/common-objects'
@@ -175,10 +175,17 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   })
   Account: AccountModel
 
-  @AfterDestroy
-  static async sendDeleteIfOwned (instance: VideoCommentModel) {
+  @BeforeDestroy
+  static async sendDeleteIfOwned (instance: VideoCommentModel, options) {
+    if (!instance.Account || !instance.Account.Actor) {
+      instance.Account = await instance.$get('Account', {
+        include: [ ActorModel ],
+        transaction: options.transaction
+      }) as AccountModel
+    }
+
     if (instance.isOwned()) {
-      await sendDeleteVideoComment(instance, undefined)
+      await sendDeleteVideoComment(instance, options.transaction)
     }
   }
 

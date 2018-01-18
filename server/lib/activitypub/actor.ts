@@ -309,7 +309,10 @@ async function refreshActorIfNeeded (actor: ActorModel) {
 
   const actorUrl = await getUrlFromWebfinger(actor.preferredUsername, actor.getHost())
   const result = await fetchRemoteActor(actorUrl)
-  if (result === undefined) throw new Error('Cannot fetch remote actor in refresh actor.')
+  if (result === undefined) {
+    logger.warn('Cannot fetch remote actor in refresh actor.')
+    return actor
+  }
 
   return sequelizeTypescript.transaction(async t => {
     updateInstanceWithAnother(actor, result.actor)

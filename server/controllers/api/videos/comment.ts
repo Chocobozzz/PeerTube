@@ -6,7 +6,7 @@ import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { buildFormattedCommentTree, createVideoComment } from '../../../lib/video-comment'
-import { asyncMiddleware, authenticate, paginationValidator, setDefaultSort, setPagination } from '../../../middlewares'
+import { asyncMiddleware, authenticate, paginationValidator, setDefaultSort, setDefaultPagination } from '../../../middlewares'
 import { videoCommentThreadsSortValidator } from '../../../middlewares/validators'
 import {
   addVideoCommentReplyValidator, addVideoCommentThreadValidator, listVideoCommentThreadsValidator, listVideoThreadCommentsValidator,
@@ -21,7 +21,7 @@ videoCommentRouter.get('/:videoId/comment-threads',
   paginationValidator,
   videoCommentThreadsSortValidator,
   setDefaultSort,
-  setPagination,
+  setDefaultPagination,
   asyncMiddleware(listVideoCommentThreadsValidator),
   asyncMiddleware(listVideoThreads)
 )

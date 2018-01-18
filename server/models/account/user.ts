@@ -94,7 +94,8 @@ export class UserModel extends Model<UserModel> {
 
   @HasOne(() => AccountModel, {
     foreignKey: 'userId',
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   Account: AccountModel
 

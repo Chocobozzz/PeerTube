@@ -14,7 +14,7 @@ import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServer
 import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler'
 import {
-  asyncMiddleware, authenticate, paginationValidator, setDefaultSort, setPagination, videosAddValidator, videosGetValidator,
+  asyncMiddleware, authenticate, paginationValidator, setDefaultSort, setDefaultPagination, videosAddValidator, videosGetValidator,
   videosRemoveValidator, videosSearchValidator, videosSortValidator, videosUpdateValidator
 } from '../../../middlewares'
 import { TagModel } from '../../../models/video/tag'
@@ -45,7 +45,7 @@ videosRouter.get('/',
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
-  setPagination,
+  setDefaultPagination,
   asyncMiddleware(listVideos)
 )
 videosRouter.get('/search',
@@ -53,7 +53,7 @@ videosRouter.get('/search',
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
-  setPagination,
+  setDefaultPagination,
   asyncMiddleware(searchVideos)
 )
 videosRouter.put('/:id',
