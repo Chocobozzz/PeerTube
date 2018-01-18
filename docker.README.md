@@ -9,9 +9,6 @@ A docker image for [PeerTube](https://github.com/Chocobozzz/PeerTube/) the feder
 #### Features
 - Based on a Debian Jessie (slim image base of 80MB)
 
-#### Build-time variables
-- **PEERTUBE_VER** : version of PeerTube.
-
 #### Environment variables
 - **GID** : peertube group id *(default : 991)*
 - **UID** : peertube user id *(default : 991)*
