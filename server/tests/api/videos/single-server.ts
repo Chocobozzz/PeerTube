@@ -76,7 +76,7 @@ describe('Test a single server', function () {
   }
 
   before(async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     await flushTests()
 

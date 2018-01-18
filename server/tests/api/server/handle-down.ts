@@ -76,7 +76,7 @@ describe('Test handle downs', function () {
   })
 
   before(async function () {
-    this.timeout(20000)
+    this.timeout(30000)
 
     servers = await flushAndRunMultipleServers(2)
 
