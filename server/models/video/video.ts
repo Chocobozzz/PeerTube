@@ -67,7 +67,7 @@ enum ScopeNames {
           '$VideoChannel.Account.Actor.serverId$': null
         },
         {
-          '$VideoChannel.Account.Actor.followers.actorId$': actorId
+          '$VideoChannel.Account.Actor.ActorFollowers.actorId$': actorId
         },
         {
           id: {
@@ -106,7 +106,7 @@ enum ScopeNames {
                   {
                     attributes: [ ],
                     model: ActorFollowModel.unscoped(),
-                    as: 'followers',
+                    as: 'ActorFollowers',
                     required: false
                   }
                 ]
