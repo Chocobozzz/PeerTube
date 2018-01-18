@@ -29,7 +29,7 @@ server {
     alias /home/peertube/peertube-latest/client/dist/$1;
   }
 
-  location ~ ^/static/(thumbnails|avatars|previews)/(.*)$ {
+  location ~ ^/static/(thumbnails|avatars)/(.*)$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
     alias /home/peertube/storage/$1/$2;
