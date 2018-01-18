@@ -66,6 +66,6 @@ github-release upload --user chocobozzz --repo peertube --tag "$version" --name 
 # Update master branch
 git checkout master
 git rebase develop
-git git push origin master
+git push origin master
 git checkout develop
 
