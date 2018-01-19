@@ -239,6 +239,16 @@ $ cd /home/peertube/peertube-latest && NODE_ENV=production npm run reset-passwor
 
 ## Upgrade
 
+Make a SQL backup:
+
+```
+$ SQL_BACKUP_PATH="backup/sql-peertube_prod-$(date -Im).bak" && \
+    cd /home/peertube && sudo -u peertube mkdir -p backup && \
+    sudo pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH"
+```
+
+Upgrade PeerTube:
+
 ```
 $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
     cd /home/peertube/versions && \
@@ -246,5 +256,15 @@ $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/la
     sudo -u peertube unzip -o peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
     cd ../ && sudo rm ./peertube-latest && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
     cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile && \
+    sudo systemctl restart peertube
+```
+
+Things went wrong? Change `peertube-latest` destination to the previous version and restore your SQL backup:
+
+```
+$ OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
+    cd /home/peertube && rm ./peertube-latest && \
+    sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
+    pg_restore -U peertube -c -d peertube_prod "$SQL_BACKUP_PATH"
     sudo systemctl restart peertube
 ```
