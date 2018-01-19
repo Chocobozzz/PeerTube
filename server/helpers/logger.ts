@@ -24,8 +24,9 @@ function keysExcluder (key, value) {
 const loggerFormat = winston.format.printf((info) => {
   let additionalInfos = JSON.stringify(info, keysExcluder, 2)
   if (additionalInfos === '{}') additionalInfos = ''
+  else additionalInfos = ' ' + additionalInfos
 
-  return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message} ${additionalInfos}`
+  return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
 const timestampFormatter = winston.format.timestamp({
