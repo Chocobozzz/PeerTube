@@ -25,16 +25,104 @@ const reqAvatarFile = createReqFiles('avatarfile', CONFIG.STORAGE.AVATARS_DIR, A
 
 const usersRouter = express.Router()
 
+/**
+ * 
+ * @api {get} /user/me Get my information
+ * @apiName GetMe
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * 
+ * @apiSuccessExample {type} Success-Response:
+ *  {
+ *    id: string,
+ *    username: string,
+ *    email: string,
+ *    displayNSFW: boolean,
+ *    autoPlayVideo: boolean,
+ *    role: string,
+ *    roleLabel: string,
+ *    videoQuota: number,
+ *    createdAt: string,
+ *    account: {
+ *      id: number
+ *      uuid: string
+ *      url: string
+ *      name: string
+ *      host: string
+ *      followingCount: number
+ *      followersCount: number
+ *      createdAt: Date
+ *      updatedAt: Date
+ *      avatar: Avatar
+ *      displayName: string
+ *    },
+ *    videoChannels: []
+ *  }
+ * 
+ * 
+ */
 usersRouter.get('/me',
   authenticate,
   asyncMiddleware(getUserInformation)
 )
 
+/**
+ * 
+ * @api {get} /user/me/video-quota-used Get my quota usage
+ * @apiName GetMeVideoQuotaUsed
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * @apiSuccess (200) {number} UserVideoQuotaUsed Amount of quota used
+ * 
+ * 
+ */
 usersRouter.get('/me/video-quota-used',
   authenticate,
   asyncMiddleware(getUserVideoQuotaUsed)
 )
 
+/**
+ * 
+ * @api {get} /user/me/video Get my videos
+ * @apiName GetMeVideos
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * 
+ * @apiSuccessExample {String} Success-Response:
+ *  [
+ *    {
+ *      id: number
+ *      uuid: string
+ *      accountName: string
+ *      createdAt: Date | string
+ *      updatedAt: Date | string
+ *      categoryLabel: string
+ *      category: number
+ *      licenceLabel: string
+ *      licence: number
+ *      languageLabel: string
+ *      language: number
+ *      description: string
+ *      duration: number
+ *      isLocal: boolean
+ *      name: string
+ *      serverHost: string
+ *      thumbnailPath: string
+ *      previewPath: string
+ *      embedPath: string
+ *      views: number
+ *      likes: number
+ *      dislikes: number
+ *      nsfw: boolean
+ *    },
+ *    ...
+ *  ]
+ * 
+ * 
+ */
 usersRouter.get('/me/videos',
   authenticate,
   paginationValidator,
@@ -44,12 +132,72 @@ usersRouter.get('/me/videos',
   asyncMiddleware(getUserVideos)
 )
 
+/**
+ * 
+ * @api {get} /user/me/videos/:videoId/rating Get the rating of one of my video
+ * @apiName GetMeVideoRating
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * @apiSuccess {String} id Id of the video
+ * @apiSuccess {number} rating Rating of the video
+ *  
+ * @apiSuccessExample {String} Success-Response:
+ *  {
+ *     String,
+ *     Number
+ *  }
+ * 
+ * 
+ */
 usersRouter.get('/me/videos/:videoId/rating',
   authenticate,
   asyncMiddleware(usersVideoRatingValidator),
   asyncMiddleware(getUserVideoRating)
 )
 
+/**
+ * 
+ * @api {get} /user Get a list of all users
+ * @apiName GetUsers
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * @apiPermission MANAGE_USERS
+ * 
+ * @apiSuccessExample {String} Success-Response:
+ *  {
+ *     [
+ *       {
+ *         id: string,
+ *         username: string,
+ *         email: string,
+ *         displayNSFW: boolean,
+ *         autoPlayVideo: boolean,
+ *         role: string,
+ *         roleLabel: string,
+ *         videoQuota: number,
+ *         createdAt: string,
+ *         account: {
+ *           id: number
+ *           uuid: string
+ *           url: string
+ *           name: string
+ *           host: string
+ *           followingCount: number
+ *           followersCount: number
+ *           createdAt: Date
+ *           updatedAt: Date
+ *           avatar: Avatar
+ *           displayName: string
+ *         },
+ *         videoChannels: []
+ *       },
+ *       ...
+ *     ]
+ *  }
+ * 
+ * 
+ */
 usersRouter.get('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
@@ -60,11 +208,63 @@ usersRouter.get('/',
   asyncMiddleware(listUsers)
 )
 
+/**
+ * 
+ * @api {get} /user/:id Get a user information
+ * @apiName GetUser
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * @apiParam  {String} id The user id
+ * 
+ * @apiSuccessExample {type} Success-Response:
+ *  {
+ *    id: string,
+ *    username: string,
+ *    email: string,
+ *    displayNSFW: boolean,
+ *    autoPlayVideo: boolean,
+ *    role: string,
+ *    roleLabel: string,
+ *    videoQuota: number,
+ *    createdAt: string,
+ *    account: {
+ *      id: number
+ *      uuid: string
+ *      url: string
+ *      name: string
+ *      host: string
+ *      followingCount: number
+ *      followersCount: number
+ *      createdAt: Date
+ *      updatedAt: Date
+ *      avatar: Avatar
+ *      displayName: string
+ *    },
+ *    videoChannels: []
+ *  }
+ * 
+ */
 usersRouter.get('/:id',
   asyncMiddleware(usersGetValidator),
   getUser
 )
 
+/**
+ * 
+ * @api {post} /user Create a user
+ * @apiName AddUser
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * @apiPermission MANAGE_USERS
+ * 
+ * @apiParam  {String} username The user username
+ * @apiParam  {String} password The user password
+ * @apiParam  {String} email The user email
+ * @apiParam  {String} videoQuota The user videoQuota
+ * @apiParam  {String} role The user role
+ * 
+ */
 usersRouter.post('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
@@ -72,18 +272,53 @@ usersRouter.post('/',
   asyncMiddleware(createUserRetryWrapper)
 )
 
+/**
+ * 
+ * @api {post} /user/register Register a new user
+ * @apiName RegisterUser
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * @apiParam  {String} username The username of the user
+ * @apiParam  {String} password The password of the user
+ * @apiParam  {String} email The email of the user
+ * 
+ */
 usersRouter.post('/register',
   asyncMiddleware(ensureUserRegistrationAllowed),
   asyncMiddleware(usersRegisterValidator),
   asyncMiddleware(registerUserRetryWrapper)
 )
 
+/**
+ * 
+ * @api {put} /user/me Update my information
+ * @apiName UpdateMe
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * @apiParam  {String} password Your new password
+ * @apiParam  {String} email Your new email
+ * @apiParam  {String} displayNSFW Your new displayNSFW
+ * @apiParam  {String} autoPlayVideo Your new autoPlayVideo
+ * 
+ */
 usersRouter.put('/me',
   authenticate,
   usersUpdateMeValidator,
   asyncMiddleware(updateMe)
 )
 
+/**
+ * 
+ * @api {post} /user/me/avatar/pick Set my avatar
+ * @apiName SetMeAvatar
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * 
+ * @apiParam  {File} avatarfile The avatar file
+ * 
+ */
 usersRouter.post('/me/avatar/pick',
   authenticate,
   reqAvatarFile,
@@ -91,6 +326,21 @@ usersRouter.post('/me/avatar/pick',
   asyncMiddleware(updateMyAvatar)
 )
 
+/**
+ * 
+ * @api {put} /user/:id Update a user
+ * @apiName UpdateUser
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * @apiPermission MANAGE_USERS
+ * 
+ * 
+ * @apiParam  {String} id The user id
+ * @apiParam  {String} email The updated email of the user
+ * @apiParam  {String} videoQuota The updated videoQuota of the user
+ * @apiParam  {String} role The updated role of the user
+ * 
+ */
 usersRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
@@ -98,6 +348,17 @@ usersRouter.put('/:id',
   asyncMiddleware(updateUser)
 )
 
+/**
+ * 
+ * @api {delete} /user/:id Delete a user
+ * @apiName DeleteUser
+ * @apiGroup User
+ * @apiVersion  1.0.0
+ * @apiPermission MANAGE_USERS
+ * 
+ * @apiParam  {String} id The user id
+ * 
+ */
 usersRouter.delete('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),

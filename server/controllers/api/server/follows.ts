@@ -18,6 +18,50 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 
 const serverFollowsRouter = express.Router()
 
+/**
+ * 
+ * @api {get} /server/following List of server followed
+ * @apiName GetServerFollowing
+ * @apiGroup ServerFollowing
+ * @apiVersion  1.0.0
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *  [
+ *    {
+ *      id: number
+ *      follower: {
+ *        id: number
+ *        uuid: string
+ *        url: string
+ *        name: string
+ *        host: string
+ *        followingCount: number
+ *        followersCount: number
+ *        createdAt: Date
+ *        updatedAt: Date
+ *        avatar: Avatar
+ *      }
+ *      following: {
+ *        id: number
+ *        uuid: string
+ *        url: string
+ *        name: string
+ *        host: string
+ *        followingCount: number
+ *        followersCount: number
+ *        createdAt: Date
+ *        updatedAt: Date
+ *        avatar: Avatar
+ *      }
+ *      score: number
+ *      state: string
+ *      createdAt: Date
+ *      updatedAt: Date
+ *    },
+ *    ...
+ *  ]
+ * 
+ */
 serverFollowsRouter.get('/following',
   paginationValidator,
   followingSortValidator,
@@ -26,6 +70,15 @@ serverFollowsRouter.get('/following',
   asyncMiddleware(listFollowing)
 )
 
+/**
+ * 
+ * @api {post} /server/following Modify the following server
+ * @apiName SetServerFollowing
+ * @apiGroup ServerFollowing
+ * @apiVersion  1.0.0
+ * @apiPermission MANAGE_SERVER_FOLLOW
+ * 
+ */
 serverFollowsRouter.post('/following',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
@@ -34,6 +87,17 @@ serverFollowsRouter.post('/following',
   asyncMiddleware(followRetry)
 )
 
+/**
+ * 
+ * @api {delete} /server/following/:host Delete a following
+ * @apiName DeleteServerFollowing
+ * @apiGroup ServerFollowing
+ * @apiVersion  1.0.0
+ * @apiPermission MANAGE_SERVER_FOLLOW
+ * 
+ * @apiParam  {String} host The host to unfollow
+ * 
+ */ 
 serverFollowsRouter.delete('/following/:host',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
@@ -41,6 +105,50 @@ serverFollowsRouter.delete('/following/:host',
   asyncMiddleware(removeFollow)
 )
 
+/**
+ * 
+ * @api {get} /server/followers Get the list of followers
+ * @apiName GetFollowers
+ * @apiGroup ServerFollowing
+ * @apiVersion  1.0.0
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *  [
+ *    {
+ *      id: number
+ *      follower: {
+ *        id: number
+ *        uuid: string
+ *        url: string
+ *        name: string
+ *        host: string
+ *        followingCount: number
+ *        followersCount: number
+ *        createdAt: Date
+ *        updatedAt: Date
+ *        avatar: Avatar
+ *      }
+ *      following: {
+ *        id: number
+ *        uuid: string
+ *        url: string
+ *        name: string
+ *        host: string
+ *        followingCount: number
+ *        followersCount: number
+ *        createdAt: Date
+ *        updatedAt: Date
+ *        avatar: Avatar
+ *      }
+ *      score: number
+ *      state: string
+ *      createdAt: Date
+ *      updatedAt: Date
+ *    },
+ *    ...
+ *  ]
+ * 
+ */
 serverFollowsRouter.get('/followers',
   paginationValidator,
   followersSortValidator,

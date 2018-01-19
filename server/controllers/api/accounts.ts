@@ -6,6 +6,25 @@ import { AccountModel } from '../../models/account/account'
 
 const accountsRouter = express.Router()
 
+/**
+ * 
+ * @api {get} /accounts Get a list of accounts
+ * @apiName GetAccounts
+ * @apiGroup Accounts
+ * @apiVersion  1.0.0
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *  [
+ *    {
+ *       id: number,
+ *       displayName: string,
+ *       createdAt: Date | string,
+ *       updatedAt: Date | string
+ *     },
+ *     ...
+ *  ]
+ * 
+ */
 accountsRouter.get('/',
   paginationValidator,
   accountsSortValidator,
@@ -14,6 +33,24 @@ accountsRouter.get('/',
   asyncMiddleware(listAccounts)
 )
 
+/**
+ * 
+ * @api {get} /accounts/:id Get a unique account
+ * @apiName GetAccount
+ * @apiGroup Account
+ * @apiVersion  1.0.0
+ * 
+ * @apiParam  {String} id The id of the account
+ * 
+ * @apiSuccessExample {json} Success-Response:
+ *  {
+ *    id: number,
+ *    displayName: string,
+ *    createdAt: Date | string,
+ *    updatedAt: Date | string
+ *  }
+ * 
+ */
 accountsRouter.get('/:id',
   asyncMiddleware(accountsGetValidator),
   getAccount

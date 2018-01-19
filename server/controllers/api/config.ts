@@ -7,6 +7,43 @@ import { ServerConfig } from '../../../shared'
 
 const configRouter = express.Router()
 
+/**
+ * 
+ * @api {get} /config Get Application configuration
+ * @apiName GetConfig
+ * @apiGroup Config
+ * @apiVersion  1.0.0
+ * 
+ * 
+ * 
+ * @apiSuccessExample {String} Success-Response:
+ *  {
+ *      signup: {
+ *       boolean
+ *     },
+ *     transcoding: {
+ *       {
+ *         'number': boolean
+ *         ...
+ *       }
+ *     },
+ *     avatar: {
+ *       file: {
+ *         size: {
+ *           max: number
+ *         },
+ *         extensions: string[]
+ *       }
+ *     },
+ *     video: {
+ *       file: {
+ *         extensions: string[]
+ *       }
+ *     }
+ *  }
+ * 
+ * 
+ */
 configRouter.get('/',
   asyncMiddleware(getConfig)
 )
