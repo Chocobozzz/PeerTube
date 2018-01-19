@@ -769,7 +769,8 @@ export class VideoModel extends Model<VideoModel> {
   createTorrentAndSetInfoHash = async function (videoFile: VideoFileModel) {
     const options = {
       announceList: [
-        [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
+        [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ],
+        [ CONFIG.WEBSERVER.URL + '/tracker/announce' ]
       ],
       urlList: [
         CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)

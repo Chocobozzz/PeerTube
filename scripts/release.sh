@@ -63,6 +63,8 @@ git push origin --tag
 github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version"
 github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
 
+git push origin develop
+
 # Update master branch
 git checkout master
 git rebase develop
