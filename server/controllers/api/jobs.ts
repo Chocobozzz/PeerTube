@@ -8,12 +8,12 @@ import { JobModel } from '../../models/job/job'
 const jobsRouter = express.Router()
 
 /**
- * 
+ *
  * @api {get} /jobs Get a list of jobs
  * @apiName GetJobs
  * @apiGroup Job
  * @apiVersion  1.0.0
- * 
+ *
  * @apiSuccessExample {json} Success-Response:
  *  [
  *    {
@@ -27,7 +27,7 @@ const jobsRouter = express.Router()
  *    },
  *    ...
  *  ]
- * 
+ *
  */
 jobsRouter.get('/',
   authenticate,

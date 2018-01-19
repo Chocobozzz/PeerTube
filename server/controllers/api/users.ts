@@ -26,13 +26,12 @@ const reqAvatarFile = createReqFiles('avatarfile', CONFIG.STORAGE.AVATARS_DIR, A
 const usersRouter = express.Router()
 
 /**
- * 
+ *
  * @api {get} /user/me Get my information
  * @apiName GetMe
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
- * 
+ *
  * @apiSuccessExample {type} Success-Response:
  *  {
  *    id: string,
@@ -59,8 +58,7 @@ const usersRouter = express.Router()
  *    },
  *    videoChannels: []
  *  }
- * 
- * 
+ *
  */
 usersRouter.get('/me',
   authenticate,
@@ -68,15 +66,14 @@ usersRouter.get('/me',
 )
 
 /**
- * 
+ *
  * @api {get} /user/me/video-quota-used Get my quota usage
  * @apiName GetMeVideoQuotaUsed
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
+ *
  * @apiSuccess (200) {number} UserVideoQuotaUsed Amount of quota used
- * 
- * 
+ *
  */
 usersRouter.get('/me/video-quota-used',
   authenticate,
@@ -84,13 +81,12 @@ usersRouter.get('/me/video-quota-used',
 )
 
 /**
- * 
+ *
  * @api {get} /user/me/video Get my videos
  * @apiName GetMeVideos
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
- * 
+ *
  * @apiSuccessExample {String} Success-Response:
  *  [
  *    {
@@ -120,8 +116,7 @@ usersRouter.get('/me/video-quota-used',
  *    },
  *    ...
  *  ]
- * 
- * 
+ *
  */
 usersRouter.get('/me/videos',
   authenticate,
@@ -133,12 +128,12 @@ usersRouter.get('/me/videos',
 )
 
 /**
- * 
+ *
  * @api {get} /user/me/videos/:videoId/rating Get the rating of one of my video
  * @apiName GetMeVideoRating
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
+ *
  * @apiSuccess {String} id Id of the video
  * @apiSuccess {number} rating Rating of the video
  *  
@@ -147,8 +142,7 @@ usersRouter.get('/me/videos',
  *     String,
  *     Number
  *  }
- * 
- * 
+ *
  */
 usersRouter.get('/me/videos/:videoId/rating',
   authenticate,
@@ -157,13 +151,13 @@ usersRouter.get('/me/videos/:videoId/rating',
 )
 
 /**
- * 
+ *
  * @api {get} /user Get a list of all users
  * @apiName GetUsers
  * @apiGroup User
  * @apiVersion  1.0.0
  * @apiPermission MANAGE_USERS
- * 
+ *
  * @apiSuccessExample {String} Success-Response:
  *  {
  *     [
@@ -195,8 +189,7 @@ usersRouter.get('/me/videos/:videoId/rating',
  *       ...
  *     ]
  *  }
- * 
- * 
+ *
  */
 usersRouter.get('/',
   authenticate,
@@ -209,14 +202,14 @@ usersRouter.get('/',
 )
 
 /**
- * 
+ *
  * @api {get} /user/:id Get a user information
  * @apiName GetUser
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
+ *
  * @apiParam  {String} id The user id
- * 
+ *
  * @apiSuccessExample {type} Success-Response:
  *  {
  *    id: string,
@@ -243,7 +236,7 @@ usersRouter.get('/',
  *    },
  *    videoChannels: []
  *  }
- * 
+ *
  */
 usersRouter.get('/:id',
   asyncMiddleware(usersGetValidator),
@@ -251,19 +244,19 @@ usersRouter.get('/:id',
 )
 
 /**
- * 
+ *
  * @api {post} /user Create a user
  * @apiName AddUser
  * @apiGroup User
  * @apiVersion  1.0.0
  * @apiPermission MANAGE_USERS
- * 
+ *
  * @apiParam  {String} username The user username
  * @apiParam  {String} password The user password
  * @apiParam  {String} email The user email
  * @apiParam  {String} videoQuota The user videoQuota
  * @apiParam  {String} role The user role
- * 
+ *
  */
 usersRouter.post('/',
   authenticate,
@@ -273,16 +266,16 @@ usersRouter.post('/',
 )
 
 /**
- * 
+ *
  * @api {post} /user/register Register a new user
  * @apiName RegisterUser
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
+ *
  * @apiParam  {String} username The username of the user
  * @apiParam  {String} password The password of the user
  * @apiParam  {String} email The email of the user
- * 
+ *
  */
 usersRouter.post('/register',
   asyncMiddleware(ensureUserRegistrationAllowed),
@@ -291,17 +284,17 @@ usersRouter.post('/register',
 )
 
 /**
- * 
+ *
  * @api {put} /user/me Update my information
  * @apiName UpdateMe
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
+ *
  * @apiParam  {String} password Your new password
  * @apiParam  {String} email Your new email
  * @apiParam  {String} displayNSFW Your new displayNSFW
  * @apiParam  {String} autoPlayVideo Your new autoPlayVideo
- * 
+ *
  */
 usersRouter.put('/me',
   authenticate,
@@ -310,14 +303,14 @@ usersRouter.put('/me',
 )
 
 /**
- * 
+ *
  * @api {post} /user/me/avatar/pick Set my avatar
  * @apiName SetMeAvatar
  * @apiGroup User
  * @apiVersion  1.0.0
- * 
+ *
  * @apiParam  {File} avatarfile The avatar file
- * 
+ *
  */
 usersRouter.post('/me/avatar/pick',
   authenticate,
@@ -327,19 +320,18 @@ usersRouter.post('/me/avatar/pick',
 )
 
 /**
- * 
+ *
  * @api {put} /user/:id Update a user
  * @apiName UpdateUser
  * @apiGroup User
  * @apiVersion  1.0.0
  * @apiPermission MANAGE_USERS
- * 
- * 
+ *
  * @apiParam  {String} id The user id
  * @apiParam  {String} email The updated email of the user
  * @apiParam  {String} videoQuota The updated videoQuota of the user
  * @apiParam  {String} role The updated role of the user
- * 
+ *
  */
 usersRouter.put('/:id',
   authenticate,
@@ -349,15 +341,15 @@ usersRouter.put('/:id',
 )
 
 /**
- * 
+ *
  * @api {delete} /user/:id Delete a user
  * @apiName DeleteUser
  * @apiGroup User
  * @apiVersion  1.0.0
  * @apiPermission MANAGE_USERS
- * 
+ *
  * @apiParam  {String} id The user id
- * 
+ *
  */
 usersRouter.delete('/:id',
   authenticate,

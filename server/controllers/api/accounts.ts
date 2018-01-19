@@ -7,12 +7,12 @@ import { AccountModel } from '../../models/account/account'
 const accountsRouter = express.Router()
 
 /**
- * 
+ *
  * @api {get} /accounts Get a list of accounts
  * @apiName GetAccounts
  * @apiGroup Accounts
  * @apiVersion  1.0.0
- * 
+ *
  * @apiSuccessExample {json} Success-Response:
  *  [
  *    {
@@ -23,7 +23,7 @@ const accountsRouter = express.Router()
  *     },
  *     ...
  *  ]
- * 
+ *
  */
 accountsRouter.get('/',
   paginationValidator,
@@ -34,14 +34,14 @@ accountsRouter.get('/',
 )
 
 /**
- * 
+ *
  * @api {get} /accounts/:id Get a unique account
  * @apiName GetAccount
  * @apiGroup Account
  * @apiVersion  1.0.0
- * 
+ *
  * @apiParam  {String} id The id of the account
- * 
+ *
  * @apiSuccessExample {json} Success-Response:
  *  {
  *    id: number,
@@ -49,7 +49,7 @@ accountsRouter.get('/',
  *    createdAt: Date | string,
  *    updatedAt: Date | string
  *  }
- * 
+ *
  */
 accountsRouter.get('/:id',
   asyncMiddleware(accountsGetValidator),
