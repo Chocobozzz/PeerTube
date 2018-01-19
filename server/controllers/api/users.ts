@@ -136,7 +136,7 @@ usersRouter.get('/me/videos',
  *
  * @apiSuccess {String} id Id of the video
  * @apiSuccess {number} rating Rating of the video
- *  
+ *
  * @apiSuccessExample {String} Success-Response:
  *  {
  *     String,

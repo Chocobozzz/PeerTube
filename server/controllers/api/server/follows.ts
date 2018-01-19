@@ -97,7 +97,7 @@ serverFollowsRouter.post('/following',
  *
  * @apiParam  {String} host The host to unfollow
  *
- */ 
+ */
 serverFollowsRouter.delete('/following/:host',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
