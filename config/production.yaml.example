@@ -25,6 +25,9 @@ storage:
   torrents: '/home/peertube/storage/torrents/'
   cache: '/home/peertube/storage/cache/'
 
+log:
+  level: 'debug' # debug/info/warning/error
+
 cache:
   previews:
     size: 100 # Max number of previews you want to cache

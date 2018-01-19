@@ -247,6 +247,12 @@ $ SQL_BACKUP_PATH="backup/sql-peertube_prod-$(date -Im).bak" && \
     sudo pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH"
 ```
 
+Update your configuration file. **If some keys are missing, your upgraded PeerTube won't start!**
+
+```
+$ diff <(curl -s https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/config/production.yaml.example) /home/peertube/config/production.yaml
+```
+
 Upgrade PeerTube:
 
 ```
