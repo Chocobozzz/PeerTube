@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
 
 import { LoginGuard } from '../../core'
-import { VideoUploadGuard } from "./video-upload-guard";
+import { VideoUploadGuard } from './video-upload-guard'
 import { VideoAddComponent } from './video-add.component'
 
 const videoAddRoutes: Routes = [
