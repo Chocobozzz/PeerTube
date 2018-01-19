@@ -153,7 +153,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           this.videoUploaded = true
 
           this.videoUploadedIds = event.body.video
-          
+
           this.videoUpload = null
         }
       },
