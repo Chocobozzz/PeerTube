@@ -97,10 +97,10 @@ export class VideoAddComponent extends FormReactive implements OnInit {
   uploadCancel () {
     if (this.videoUpload !== null) {
       this.videoUpload.unsubscribe()
-      this.videoUpload = null
       this.isUploadingVideo = false
       this.videoUploadPercents = 0
       this.notificationsService.error('Error', 'Upload cancelled')
+      this.videoUpload = null
     }
   }
 
@@ -143,8 +143,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       channelId
     })
 
-    this.videoUpload = this.videoService.uploadVideo(formData)
-    this.videoUpload.subscribe(
+    this.videoUpload = this.videoService.uploadVideo(formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
