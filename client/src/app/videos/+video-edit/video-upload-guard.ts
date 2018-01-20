@@ -10,10 +10,6 @@ export class VideoUploadGuard implements CanDeactivate<VideoAddComponent> {
     currentState: RouterStateSnapshot,
     nextState: RouterStateSnapshot
   ): boolean {
-    console.log('VideoUploadGuard')
-    console.log(currentRoute.params)
-    console.log(currentState.url)
     return component.canDeactivate() || window.confirm('Your upload will be canceled, are you sure?')
-    // return true;
   }
 }
