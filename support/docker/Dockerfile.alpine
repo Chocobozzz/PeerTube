@@ -1,0 +1,20 @@
+FROM node:alpine
+
+RUN apk add --no-cache ffmpeg openssl git bash python py-jinja2 make g++ \
+ && apk add --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ vips-dev fftw-dev
+
+WORKDIR /app
+
+COPY . ./
+RUN bash -c 'yarn install --pure-lockfile && npm run build'
+
+RUN addgroup -g 991 peertube \
+ && adduser -D -u 991 -G peertube -h /data peertube
+USER peertube
+
+ENV NODE_ENV production
+ENV NODE_CONFIG_DIR /app/support/docker/config/
+
+CMD ["npm", "start"]
+VOLUME ["/data"]
+EXPOSE 9000

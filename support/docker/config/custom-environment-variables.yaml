@@ -1,0 +1,30 @@
+webserver:
+  hostname: "PEERTUBE_HOSTNAME"
+  port:
+    __name: "PEERTUBE_PORT"
+    __format: "json"
+  https:
+    __name: "PEERTUBE_HTTPS"
+    __format: "json"
+
+database:
+  hostname: "PEERTUBE_DB_HOSTNAME"
+  port:
+    __name: "PEERTUBE_DB_PORT"
+    __format: "json"
+  suffix: "PEERTUBE_DB_SUFFIX"
+  username: "PEERTUBE_DB_USERNAME"
+  password: "PEERTUBE_DB_PASSWORD"
+
+admin:
+  email: "PEERTUBE_ADMIN_EMAIL"
+
+signup:
+  enabled:
+    __name: "PEERTUBE_SIGNUP_ENABLED"
+    __format: "json"
+
+transcoding:
+  enabled:
+    __name: "PEERTUBE_TRANSCODING_ENABLED"
+    __format: "json"
