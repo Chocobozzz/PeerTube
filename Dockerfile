@@ -19,5 +19,5 @@ ENV NODE_ENV production
 ENV NODE_CONFIG_DIR ./docker
 
 CMD ["npm", "start"]
-VOLUME ["/data"]
+VOLUME ["/usr/src/app/data"]
 EXPOSE 9000
