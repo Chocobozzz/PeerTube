@@ -234,7 +234,7 @@ The administrator password is automatically generated and can be found in the
 logs. You can set another password with:
 
 ```
-$ cd /home/peertube/peertube-latest && NODE_ENV=production npm run reset-password -- -u root
+$ cd /home/peertube/peertube-latest && NODE_CONFIG_DIR=/home/peertube/config NODE_ENV=production npm run reset-password -- -u root
 ```
 
 ## Upgrade
