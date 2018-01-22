@@ -12,12 +12,16 @@ Create a `peertube` user with `/home/peertube` home:
 
 ```
 $ sudo useradd -m -d /home/peertube -s /bin/bash -p peertube peertube
+```
+
+Set its password:
+```
 $ sudo passwd peertube
 ```
 
 ### Database
 
-Create production database and peertube user:
+Create the production database and a peertube user inside PostgreSQL:
 
 ```
 $ sudo -u postgres createuser -P peertube
@@ -26,13 +30,21 @@ $ sudo -u postgres createdb -O peertube peertube_prod
 
 ### Prepare PeerTube directory
 
+Fetch the latest tagged version of Peertube
 ```
-$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
-    cd /home/peertube && \
-    sudo -u peertube mkdir config storage versions && \
-    cd versions && \
+$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && echo "Latest Peertube version is $VERSION"
+```
+Open the peertube directory, create a few required directories
+```
+    cd /home/peertube && sudo -u peertube mkdir config storage versions && cd versions
+```
+Download the latest version of the Peertube client, unzip it and remove the zip
+```
     sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
-    sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
+    sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
+```
+Install Peertube
+```
     cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
     cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile
 ```
