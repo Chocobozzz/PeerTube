@@ -23,7 +23,7 @@ describe('Test video comments API validator', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(20000)
+    this.timeout(30000)
 
     await flushTests()
 

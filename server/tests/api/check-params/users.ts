@@ -24,7 +24,7 @@ describe('Test users API validators', function () {
   // ---------------------------------------------------------------
 
   before(async function () {
-    this.timeout(20000)
+    this.timeout(30000)
 
     await flushTests()
 
@@ -185,7 +185,7 @@ describe('Test users API validators', function () {
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: 204
+        statusCodeExpected: 200
       })
     })
 

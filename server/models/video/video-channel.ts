@@ -1,20 +1,10 @@
 import {
-  AfterDestroy,
-  AllowNull,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DefaultScope,
-  ForeignKey,
-  HasMany,
-  Is,
-  Model,
-  Scopes,
-  Table,
+  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Is, Model, Scopes, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
+import { logger } from '../../helpers/logger'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
@@ -116,14 +106,21 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       name: 'channelId',
       allowNull: false
     },
-    onDelete: 'CASCADE'
+    onDelete: 'CASCADE',
+    hooks: true
   })
   Videos: VideoModel[]
 
-  @AfterDestroy
-  static sendDeleteIfOwned (instance: VideoChannelModel) {
+  @BeforeDestroy
+  static async sendDeleteIfOwned (instance: VideoChannelModel, options) {
+    if (!instance.Actor) {
+      instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
+    }
+
     if (instance.Actor.isOwned()) {
-      return sendDeleteActor(instance.Actor, undefined)
+      logger.debug('Sending delete of actor of video channel %s.', instance.Actor.url)
+
+      return sendDeleteActor(instance.Actor, options.transaction)
     }
 
     return undefined

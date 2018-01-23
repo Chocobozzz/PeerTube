@@ -99,7 +99,7 @@ function makePostBodyRequest (options: {
 function makePutBodyRequest (options: {
   url: string,
   path: string,
-  token: string,
+  token?: string,
   fields: { [ fieldName: string ]: any },
   statusCodeExpected?: number
 }) {

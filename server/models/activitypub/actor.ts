@@ -155,7 +155,8 @@ export class ActorModel extends Model<ActorModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'set null'
+    onDelete: 'set null',
+    hooks: true
   })
   Avatar: AvatarModel
 
@@ -166,17 +167,17 @@ export class ActorModel extends Model<ActorModel> {
     },
     onDelete: 'cascade'
   })
-  AccountFollowing: ActorFollowModel[]
+  ActorFollowing: ActorFollowModel[]
 
   @HasMany(() => ActorFollowModel, {
     foreignKey: {
       name: 'targetActorId',
       allowNull: false
     },
-    as: 'followers',
+    as: 'ActorFollowers',
     onDelete: 'cascade'
   })
-  AccountFollowers: ActorFollowModel[]
+  ActorFollowers: ActorFollowModel[]
 
   @ForeignKey(() => ServerModel)
   @Column
@@ -194,7 +195,8 @@ export class ActorModel extends Model<ActorModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   Account: AccountModel
 
@@ -202,7 +204,8 @@ export class ActorModel extends Model<ActorModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'cascade',
+    hooks: true
   })
   VideoChannel: VideoChannelModel
 
@@ -272,6 +275,45 @@ export class ActorModel extends Model<ActorModel> {
         id
       }
     })
+  }
+
+  static async getActorsFollowerSharedInboxUrls (actors: ActorModel[], t: Sequelize.Transaction) {
+    const query = {
+      // attribute: [],
+      where: {
+        id: {
+          [Sequelize.Op.in]: actors.map(a => a.id)
+        }
+      },
+      include: [
+        {
+          // attributes: [ ],
+          model: ActorFollowModel.unscoped(),
+          required: true,
+          as: 'ActorFollowers',
+          where: {
+            state: 'accepted'
+          },
+          include: [
+            {
+              attributes: [ 'sharedInboxUrl' ],
+              model: ActorModel.unscoped(),
+              as: 'ActorFollower',
+              required: true
+            }
+          ]
+        }
+      ],
+      transaction: t
+    }
+
+    const hash: { [ id: number ]: string[] } = {}
+    const res = await ActorModel.findAll(query)
+    for (const actor of res) {
+      hash[actor.id] = actor.ActorFollowers.map(follow => follow.ActorFollower.sharedInboxUrl)
+    }
+
+    return hash
   }
 
   toFormattedJSON () {
@@ -344,10 +386,12 @@ export class ActorModel extends Model<ActorModel> {
       attributes: [ 'sharedInboxUrl' ],
       include: [
         {
-          model: ActorFollowModel,
+          attribute: [],
+          model: ActorFollowModel.unscoped(),
           required: true,
-          as: 'followers',
+          as: 'ActorFollowers',
           where: {
+            state: 'accepted',
             targetActorId: this.id
           }
         }

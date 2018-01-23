@@ -23,7 +23,10 @@ async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
   const url = getDeleteActivityPubUrl(byActor.url)
   const data = deleteActivityData(url, byActor.url, byActor)
 
-  return broadcastToFollowers(data, byActor, [ byActor ], t)
+  const actorsInvolved = await VideoShareModel.loadActorsByVideoOwner(byActor.id, t)
+  actorsInvolved.push(byActor)
+
+  return broadcastToFollowers(data, byActor, actorsInvolved, t)
 }
 
 async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Transaction) {

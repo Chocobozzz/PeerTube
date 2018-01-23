@@ -1,14 +1,15 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { ConfigRoutes } from '@app/+admin/config'
 
 import { MetaGuard } from '@ngx-meta/core'
 
 import { AdminComponent } from './admin.component'
 import { FollowsRoutes } from './follows'
+import { JobsRoutes } from './jobs/job.routes'
 import { UsersRoutes } from './users'
 import { VideoAbusesRoutes } from './video-abuses'
 import { VideoBlacklistRoutes } from './video-blacklist'
-import { JobsRoutes } from './jobs/job.routes'
 
 const adminRoutes: Routes = [
   {
@@ -26,7 +27,8 @@ const adminRoutes: Routes = [
       ...UsersRoutes,
       ...VideoAbusesRoutes,
       ...VideoBlacklistRoutes,
-      ...JobsRoutes
+      ...JobsRoutes,
+      ...ConfigRoutes
     ]
   }
 ]

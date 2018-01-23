@@ -5,16 +5,9 @@
 /test4/
 /test5/
 /test6/
-/uploads/
-/videos/
-/avatars/
-/thumbnails/
-/previews/
-/certs/
-/logs/
-/torrents/
-/cache/
+/storage/
 /config/production.yaml
+/config/local*.json
 /ffmpeg/
 /*.sublime-project
 /*.sublime-workspace
@@ -23,3 +16,4 @@
 /PeerTube.iml
 peertube.zip
 /profiling/
+/*.zip

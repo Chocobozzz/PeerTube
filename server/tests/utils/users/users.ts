@@ -11,7 +11,7 @@ function createUser (
   password: string,
   videoQuota = 1000000,
   role: UserRole = UserRole.USER,
-  specialStatus = 204
+  specialStatus = 200
 ) {
   const path = '/api/v1/users'
   const body = {

@@ -76,7 +76,7 @@ describe('Test handle downs', function () {
   })
 
   before(async function () {
-    this.timeout(20000)
+    this.timeout(30000)
 
     servers = await flushAndRunMultipleServers(2)
 
@@ -186,10 +186,6 @@ describe('Test handle downs', function () {
     await addVideoCommentReply(servers[0].url, servers[0].accessToken, videos[1].uuid, commentIdServer1, 'comment 1-3')
 
     await wait(5000)
-
-    const res = await getVideosList(servers[1].url)
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(2)
 
     const resVideo = await getVideo(servers[1].url, videos[0].uuid)
     expect(resVideo.body).not.to.be.undefined

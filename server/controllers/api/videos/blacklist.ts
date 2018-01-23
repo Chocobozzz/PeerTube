@@ -3,7 +3,7 @@ import { BlacklistedVideo, UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import {
-  asyncMiddleware, authenticate, blacklistSortValidator, ensureUserHasRight, paginationValidator, setBlacklistSort, setPagination,
+  asyncMiddleware, authenticate, blacklistSortValidator, ensureUserHasRight, paginationValidator, setBlacklistSort, setDefaultPagination,
   videosBlacklistAddValidator, videosBlacklistRemoveValidator
 } from '../../../middlewares'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
@@ -23,7 +23,7 @@ blacklistRouter.get('/blacklist',
   paginationValidator,
   blacklistSortValidator,
   setBlacklistSort,
-  setPagination,
+  setDefaultPagination,
   asyncMiddleware(listBlacklist)
 )
 

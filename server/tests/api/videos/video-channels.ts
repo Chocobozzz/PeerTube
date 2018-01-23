@@ -26,7 +26,7 @@ describe('Test a video channels', function () {
   let videoChannelId: number
 
   before(async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     await flushTests()
 

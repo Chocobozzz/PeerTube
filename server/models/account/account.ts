@@ -1,9 +1,10 @@
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Model, Table,
+  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Model, Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { Account } from '../../../shared/models/actors'
+import { logger } from '../../helpers/logger'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
@@ -11,6 +12,7 @@ import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { getSort } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
+import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
 
 @DefaultScope({
@@ -80,7 +82,7 @@ export class AccountModel extends Model<AccountModel> {
     },
     onDelete: 'cascade'
   })
-  Account: ApplicationModel
+  Application: ApplicationModel
 
   @HasMany(() => VideoChannelModel, {
     foreignKey: {
@@ -91,10 +93,24 @@ export class AccountModel extends Model<AccountModel> {
   })
   VideoChannels: VideoChannelModel[]
 
-  @AfterDestroy
-  static sendDeleteIfOwned (instance: AccountModel) {
+  @HasMany(() => VideoCommentModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'cascade',
+    hooks: true
+  })
+  VideoComments: VideoCommentModel[]
+
+  @BeforeDestroy
+  static async sendDeleteIfOwned (instance: AccountModel, options) {
+    if (!instance.Actor) {
+      instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
+    }
+
     if (instance.isOwned()) {
-      return sendDeleteActor(instance.Actor, undefined)
+      logger.debug('Sending delete of actor of account %s.', instance.Actor.url)
+      return sendDeleteActor(instance.Actor, options.transaction)
     }
 
     return undefined

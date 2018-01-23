@@ -11,8 +11,8 @@ Follow the steps of the [dependencies guide](dependencies.md).
 Create a `peertube` user with `/home/peertube` home:
 
 ```
-sudo useradd -m -d /home/peertube -s /bin/bash -p peertube peertube
-sudo passwd peertube
+$ sudo useradd -m -d /home/peertube -s /bin/bash -p peertube peertube
+$ sudo passwd peertube
 ```
 
 ### Database
@@ -20,20 +20,21 @@ sudo passwd peertube
 Create production database and peertube user:
 
 ```
-sudo -u postgres createuser -P peertube
-sudo -u postgres createdb -O peertube peertube_prod
+$ sudo -u postgres createuser -P peertube
+$ sudo -u postgres createdb -O peertube peertube_prod
 ```
 
-### Sources
-
-Clone, install node dependencies and build application:
+### Prepare PeerTube directory
 
 ```
-$ cd /home/peertube
-$ sudo -u peertube git clone -b master https://github.com/Chocobozzz/PeerTube
-$ cd PeerTube
-$ sudo -u peertube yarn install --pure-lockfile
-$ sudo -u peertube npm run build
+$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
+    cd /home/peertube && \
+    sudo -u peertube mkdir config storage versions && \
+    cd versions && \
+    sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
+    sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
+    cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
+    cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile
 ```
 
 ### PeerTube configuration
@@ -41,23 +42,22 @@ $ sudo -u peertube npm run build
 Copy example configuration:
 
 ```
-$ sudo -u peertube cp config/production.yaml.example config/production.yaml
+$ cd /home/peertube && sudo -u peertube cp peertube-latest/config/production.yaml.example config/production.yaml
 ```
 
 Then edit the `config/production.yaml` file according to your webserver
-configuration. Keys set in this file will override those of
-`config/default.yml`.
+configuration.
 
 ### Webserver
 
 Copy the nginx configuration template:
 
 ```
-$ sudo cp /home/peertube/PeerTube/support/nginx/peertube-https /etc/nginx/sites-available/peertube
+$ sudo cp /home/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
-Then modify the webserver configuration file. Please pay attention to the `alias` key of `/static/webseed` location. 
-It should correspond to the path of your videos directory (set in the configuration file as `storage->videos` key).
+Then modify the webserver configuration file. Please pay attention to the `alias` keys of the static locations.
+It should correspond to the paths of your storage directories (set in the configuration file inside the `storage` key).
 
 ```
 $ sudo vim /etc/nginx/sites-available/peertube
@@ -97,6 +97,18 @@ server {
     root /var/www/certbot;
   }
 
+  location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+
+    alias /home/peertube/peertube-latest/client/dist/$1;
+  }
+
+  location ~ ^/static/(thumbnails|avatars)/(.*)$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+
+    alias /home/peertube/storage/$1/$2;
+  }
+
   location / {
     proxy_pass http://localhost:9000;
     proxy_set_header X-Real-IP $remote_addr;
@@ -127,9 +139,12 @@ server {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
       add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+
+      # Don't spam access log file with byte range requests
+      access_log off;
     }
 
-    alias /var/www/PeerTube/videos;
+    alias /home/peertube/storage/videos;
   }
 
   # Websocket tracker
@@ -160,13 +175,13 @@ $ sudo systemctl reload nginx
 Copy the nginx configuration template:
 
 ```
-sudo cp /home/peertube/PeerTube/support/systemd/peertube.service /etc/systemd/system/
+$ sudo cp /home/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
 ```
 
 Update the service file:
 
 ```
-sudo vim /etc/systemd/system/peertube.service
+$ sudo vim /etc/systemd/system/peertube.service
 ```
 
 It should look like this:
@@ -179,10 +194,11 @@ After=network.target
 [Service]
 Type=simple
 Environment=NODE_ENV=production
+Environment=NODE_CONFIG_DIR=/home/peertube/config
 User=peertube
 Group=peertube
 ExecStart=/usr/bin/npm start
-WorkingDirectory=/home/peertube/PeerTube
+WorkingDirectory=/home/peertube/peertube-latest
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=peertube
@@ -196,14 +212,20 @@ WantedBy=multi-user.target
 Tell systemd to reload its config:
 
 ```
-sudo systemctl daemon-reload
+$ sudo systemctl daemon-reload
+```
+
+If you want to start PeerTube on boot:
+
+```
+$ sudo systemctl enable peertube
 ```
 
 ### Run
 
 ```
-sudo systemctl start peertube
-sudo journalctl -feu peertube
+$ sudo systemctl start peertube
+$ sudo journalctl -feu peertube
 ```
 
 ### Administrator
@@ -212,16 +234,17 @@ The administrator password is automatically generated and can be found in the
 logs. You can set another password with:
 
 ```
-$ NODE_ENV=production npm run reset-password -- -u root
+$ cd /home/peertube/peertube-latest && NODE_ENV=production npm run reset-password -- -u root
 ```
 
 ## Upgrade
 
-The following commands will upgrade the source (according to your current
-branch), upgrade node modules and rebuild client application:
-
 ```
-# systemctl stop peertube
-$ npm run upgrade-peertube
-# systemctl start peertube
+$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
+    cd /home/peertube/versions && \
+    sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
+    sudo -u peertube unzip -o peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
+    cd ../ && sudo rm ./peertube-latest && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
+    cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile && \
+    sudo systemctl restart peertube
 ```

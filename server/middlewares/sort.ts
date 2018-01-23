@@ -2,55 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import { SortType } from '../helpers/utils'
 
-function setAccountsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setUsersSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setJobsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setVideoAbusesSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setVideoChannelsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setVideosSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setVideoCommentThreadsSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setFollowersSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
-
-  return next()
-}
-
-function setFollowingSort (req: express.Request, res: express.Response, next: express.NextFunction) {
+function setDefaultSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   if (!req.query.sort) req.query.sort = '-createdAt'
 
   return next()
@@ -80,14 +32,6 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 // ---------------------------------------------------------------------------
 
 export {
-  setUsersSort,
-  setVideoAbusesSort,
-  setVideoChannelsSort,
-  setVideosSort,
-  setBlacklistSort,
-  setFollowersSort,
-  setFollowingSort,
-  setJobsSort,
-  setVideoCommentThreadsSort,
-  setAccountsSort
+  setDefaultSort,
+  setBlacklistSort
 }

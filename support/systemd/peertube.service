@@ -5,10 +5,11 @@ After=network.target
 [Service]
 Type=simple
 Environment=NODE_ENV=production
-User=myuser
-Group=myuser
+Environment=NODE_CONFIG_DIR=/home/peertube/config
+User=peertube
+Group=peertube
 ExecStart=/usr/bin/npm start
-WorkingDirectory=/path/to/peertube
+WorkingDirectory=/home/peertube/peertube-latest
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=peertube

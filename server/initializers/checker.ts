@@ -21,7 +21,7 @@ function checkMissedConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
-    'storage.certs', 'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews', 'storage.torrents', 'storage.cache',
+    'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews', 'storage.torrents', 'storage.cache',
     'cache.previews.size', 'admin.email', 'signup.enabled', 'signup.limit', 'transcoding.enabled', 'transcoding.threads', 'user.video_quota'
   ]
   const miss: string[] = []
