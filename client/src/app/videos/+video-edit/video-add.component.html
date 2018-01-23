@@ -32,10 +32,15 @@
     </div>
   </div>
 
-  <p-progressBar
-      *ngIf="isUploadingVideo" [value]="videoUploadPercents"
+  <div
+    *ngIf="isUploadingVideo"
+  >
+    <p-progressBar
+      [value]="videoUploadPercents"
       [ngClass]="{ processing: videoUploadPercents === 100 && videoUploaded === false }"
-  ></p-progressBar>
+    ></p-progressBar>
+    <input type="button" value="Cancel" (click)="cancelUpload()" />
+  </div>
 
   <!-- Hidden because we need to load the component -->
   <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
