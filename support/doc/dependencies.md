@@ -1,6 +1,6 @@
 # Dependencies
 
-## Debian / Ubuntu
+## Debian / Ubuntu and derivatives
 
   1. Install NodeJS 8.x (current LTS):
      [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
@@ -9,8 +9,8 @@
   4. Run:
 
 ```
-$ apt-get update
-$ apt-get install nginx ffmpeg postgresql openssl g++ make
+$ sudo apt update
+$ sudo apt install nginx ffmpeg postgresql openssl g++ make
 ```
 
 ## Arch Linux
@@ -18,7 +18,7 @@ $ apt-get install nginx ffmpeg postgresql openssl g++ make
   1. Run:
 
 ```
-$ pacman -S nodejs yarn ffmpeg postgresql openssl
+$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl
 ```
 
 ## Other distributions
