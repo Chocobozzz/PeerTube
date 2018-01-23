@@ -1,22 +1,25 @@
 version: "3.3"
 
 services:
-  app:
+  peertube:
+
     build: .
-    image: decentralize/peertube
+    image: peertube:stretch
     environment:
-      NODE_CONFIG: '{"webserver": {"https": false, "port": 80}}'
-      PEERTUBE_HOSTNAME:
-      PEERTUBE_ADMIN_EMAIL:
-      PEERTUBE_SIGNUP_ENABLED:
-      PEERTUBE_TRANSCODING_ENABLED:
+      PEERTUBE_HOSTNAME: my.domain.tld
+      PEERTUBE_PORT: 443
+      PEERTUBE_HTTPS: true
+      PEERTUBE_ADMIN_EMAIL: admin@domain.tld
+      PEERTUBE_DB_USERNAME: user
+      PEERTUBE_DB_PASSWORD: password
+      PEERTUBE_SIGNUP_ENABLED: true
+      PEERTUBE_TRANSCODING_ENABLED: true
     labels:
       traefik.enable: "true"
       traefik.frontend.rule: "Host:${PEERTUBE_HOSTNAME}"
-      traefik.docker.network: traefik_traefik
       traefik.port: "9000"
     volumes:
-      - app_data:/usr/src/app/data
+      - ./data:/usr/src/app/data
     networks:
       - traefik
       - backend
@@ -26,9 +29,11 @@ services:
   db:
     image: postgres:10
     environment:
+      POSTGRES_USERNAME: user
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: peertube_prod
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - ./db:/var/lib/postgresql/data
     networks:
       - backend
 
