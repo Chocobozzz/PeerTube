@@ -99,8 +99,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       this.videoUploadObservable.unsubscribe()
       this.isUploadingVideo = false
       this.videoUploadPercents = 0
-      this.notificationsService.error('Error', 'Upload cancelled')
       this.videoUploadObservable = null
+      this.notificationsService.info('Info', 'Upload cancelled')
     }
   }
 
