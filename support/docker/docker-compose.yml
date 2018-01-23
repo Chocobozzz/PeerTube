@@ -14,6 +14,8 @@ services:
       PEERTUBE_DB_PASSWORD: password
       PEERTUBE_SIGNUP_ENABLED: true
       PEERTUBE_TRANSCODING_ENABLED: true
+    # Traefik labels are suggested as an example for people using Traefik,
+    # remove them if you are using another reverse proxy.
     labels:
       traefik.enable: "true"
       traefik.frontend.rule: "Host:${PEERTUBE_HOSTNAME}"
