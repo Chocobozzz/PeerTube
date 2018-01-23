@@ -4,11 +4,6 @@ node_js:
   - "8"
 
 addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
   postgresql: "9.4"
 
 cache: yarn
@@ -22,11 +17,8 @@ install:
   - CC=gcc-4.9 CXX=g++-4.9 yarn install
 
 before_script:
-  - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-3.0.2-64bit-static.tar.xz"
-  - tar xf ffmpeg-release-3.0.2-64bit-static.tar.xz
-  - mkdir -p $HOME/bin
-  - cp ffmpeg-*-64bit-static/{ffmpeg,ffprobe,ffserver} $HOME/bin
-  - export PATH=$HOME/bin:$PATH
+  - curl https://nixos.org/nix/install | sh && . ~/.nix-profile/etc/profile.d/nix.sh
+  - nix-env -i gcc49 ffmpeg
   - export NODE_TEST_IMAGE=true
   - psql -c 'create database peertube_test1;' -U postgres
   - psql -c 'create database peertube_test2;' -U postgres
