@@ -94,7 +94,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     return this.form.valid
   }
 
-  uploadCancel () {
+  cancelUpload () {
     if (this.videoUploadObservable !== null) {
       this.videoUploadObservable.unsubscribe()
       this.isUploadingVideo = false

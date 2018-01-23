@@ -39,7 +39,7 @@
       [value]="videoUploadPercents"
       [ngClass]="{ processing: videoUploadPercents === 100 && videoUploaded === false }"
     ></p-progressBar>
-    <input type="button" value="Cancel" (click)="uploadCancel()" />
+    <input type="button" value="Cancel" (click)="cancelUpload()" />
   </div>
 
   <!-- Hidden because we need to load the component -->
