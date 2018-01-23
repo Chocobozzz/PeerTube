@@ -3,11 +3,11 @@ import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@ang
 
 import { VideoAddComponent } from './video-add.component'
 import { ConfirmService } from '../../core'
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable'
 
 @Injectable()
 export class VideoUploadGuard implements CanDeactivate<VideoAddComponent> {
-  constructor(private confirmService: ConfirmService) { }
+  constructor (private confirmService: ConfirmService) { }
 
   canDeactivate (component: VideoAddComponent,
     currentRoute: ActivatedRouteSnapshot,
