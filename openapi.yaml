@@ -59,6 +59,13 @@ paths:
         - application/json
       produces:
         - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Job' 
   '/server/following/{host}':
     delete:
       tags:
@@ -135,6 +142,11 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/AddUser'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/AddUserResponse'
     get:
       tags:
         - User
@@ -163,6 +175,9 @@ paths:
           required: true
           type: string
           description: 'The user id '
+      responses:
+        '204':
+          description: successful operation
     get:
       tags:
         - User
@@ -199,6 +214,9 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/UpdateUser'
+      responses:
+        '204':
+          description: successful operation
   /users/me:
     get:
       tags:
@@ -227,6 +245,9 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/UpdateMe'
+      responses:
+        '204':
+          description: successful operation
   /users/me/video-quota-used:
     get:
       tags:
@@ -249,6 +270,12 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          type: string
+          description: 'The video id '
       responses:
         '200':
           description: successful operation
@@ -283,20 +310,27 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/RegisterUser'
+      responses:
+        '204':
+          description: successful operation
   /users/me/avatar/pick:
     post:
       tags:
         - User
       consumes:
-        - application/json
+        - multipart/form-data
       produces:
         - application/json
       parameters:
-        - in: body
-          name: body
-          required: true
+        - in: formData
+          name: avatarfile
+          type: file
+          description: The file to upload.
+      responses:
+        '200':
+          description: successful operation
           schema:
-            $ref: '#/definitions/SetMeAvatar'
+            $ref: '#/definitions/Avatar'
 definitions:
   Video:
     properties:
@@ -307,9 +341,9 @@ definitions:
       accountName:
         type: string
       createdAt:
-        type: Date | string
+        type: string
       updatedAt:
-        type: Date | string
+        type: string
       categoryLabel:
         type: string
       category:
@@ -355,7 +389,7 @@ definitions:
       isLocal:
         type: boolean
       owner:
-        type: Object
+        type: object
         properties: 
           name: 
             type: string
@@ -414,13 +448,15 @@ definitions:
       autoPlayVideo:
         type: boolean
       role:
-        type: UserRole
+        type: string
+        enum: [User, Moderator, Administrator] 
       videoQuota:
         type: number
       createdAt:
         type: string
       account:
-        type: Account
+        type: object
+        $ref: "#/definitions/Account"
       videoChannels:
         type:  array
         items:
@@ -428,34 +464,34 @@ definitions:
   ServerConfig:
     properties:
       signup: 
-        type: Object
+        type: object
         properties:
           allowed:
             type: boolean
       transcoding:
-        type: Object
+        type: object
         properties:
           enabledResolutions:
             type: array
             items: number
       avatar:
-        type: Object
+        type: object
         properties:
           file:
-            type: Object
+            type: object
             properties:
               size:
-                type: Object
+                type: object
                 properties:
                   max: number
           extensions: 
             type: array
             items: string
       video:
-        type: Object
+        type: object
         properties:
           file:
-            type: Object
+            type: object
             properties: 
               extensions: 
                 type: array
@@ -477,9 +513,32 @@ definitions:
         type: string
       updatedAt:
         type: string
+  Job:
+    properties:
+      id:
+        type: number
+      state:
+        type: string
+        enum: [pending, processing, error, success]
+      category:
+        type: string
+        enum: [transcoding, activitypub-http]
+      handlerName:
+        type: string
+      handlerInputData:
+        type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
 
-
-
+#Api responses
+  AddUserResponse:
+    properties:
+      id:
+        type: number
+      uuid:
+        type: string
 
 
 #input bodies
@@ -591,10 +650,3 @@ definitions:
       - username
       - password
       - email
-  SetMeAvatar:
-    properties:
-      avatarfile:
-        type: file
-        description: 'The avatar file '
-    required:
-      - avatarfile
