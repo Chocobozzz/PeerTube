@@ -1,23 +1,25 @@
 FROM node:8-stretch
 
-# install ffmpeg
+# Install dpeendencies
 RUN apt-get update \
  && apt-get -y install ffmpeg \
  && rm /var/lib/apt/lists/* -fR
 
-WORKDIR /usr/src/app
-
-COPY package.json yarn.lock ./
-COPY client/package.json client/yarn.lock client/
-RUN yarn install --pure-lockfile
+# Install the application
+WORKDIR /app
 
 COPY . ./
+RUN yarn install --pure-lockfile && npm run build
 
-RUN npm run build
+# Configuration the application
+RUN addgroup -g 991 peertube \
+ && adduser -D -u 991 -G peertube -h /data peertube
+USER peertube
 
 ENV NODE_ENV production
-ENV NODE_CONFIG_DIR ./docker
+ENV NODE_CONFIG_DIR /app/support/docker/config
 
+# Run the application
 CMD ["npm", "start"]
-VOLUME ["/usr/src/app/data"]
+VOLUME ["/data"]
 EXPOSE 9000

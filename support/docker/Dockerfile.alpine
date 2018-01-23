@@ -1,5 +1,6 @@
 FROM node:8-alpine
 
+# Install dpeendencies
 RUN apk add --no-cache ffmpeg openssl bash make g++ \
  && apk add --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ vips-dev fftw-dev
 
