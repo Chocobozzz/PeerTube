@@ -19,6 +19,7 @@ import {
 import { usersUpdateMyAvatarValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { UserModel } from '../../models/account/user'
+import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { VideoModel } from '../../models/video/video'
 
 const reqAvatarFile = createReqFiles('avatarfile', CONFIG.STORAGE.AVATARS_DIR, AVATAR_MIMETYPE_EXT)
@@ -288,12 +289,18 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
 async function updateUser (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdate = req.body
   const user = res.locals.user as UserModel
+  const roleChanged = body.role !== undefined && body.role !== user.role
 
   if (body.email !== undefined) user.email = body.email
   if (body.videoQuota !== undefined) user.videoQuota = body.videoQuota
   if (body.role !== undefined) user.role = body.role
 
   await user.save()
+
+  // Destroy user token to refresh rights
+  if (roleChanged) {
+    await OAuthTokenModel.deleteUserToken(user.id)
+  }
 
   // Don't need to send this update to followers, these attributes are not propagated
 

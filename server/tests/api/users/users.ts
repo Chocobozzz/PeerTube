@@ -4,10 +4,9 @@ import * as chai from 'chai'
 import 'mocha'
 import { UserRole } from '../../../../shared/index'
 import {
-  createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating, getUserInformation,
-  getUsersList,
-  getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo, registerUser, removeUser, removeVideo,
-  runServer, ServerInfo, serverLogin, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo
+  createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating,
+  getUserInformation, getUsersList, getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo,
+  registerUser, removeUser, removeVideo, runServer, ServerInfo, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo, userLogin
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
 import { setAccessTokensToServers } from '../../utils/users/login'
@@ -21,6 +20,10 @@ describe('Test users', function () {
   let accessTokenUser: string
   let videoId: number
   let userId: number
+  const user = {
+    username: 'user_1',
+    password: 'super password'
+  }
 
   before(async function () {
     this.timeout(30000)
@@ -152,16 +155,11 @@ describe('Test users', function () {
   it('Should be able to upload a video again')
 
   it('Should be able to create a new user', async function () {
-    await createUser(server.url, accessToken, 'user_1', 'super password', 2 * 1024 * 1024)
+    await createUser(server.url, accessToken, user.username,user.password, 2 * 1024 * 1024)
   })
 
   it('Should be able to login with this user', async function () {
-    server.user = {
-      username: 'user_1',
-      password: 'super password'
-    }
-
-    accessTokenUser = await serverLogin(server)
+    accessTokenUser = await userLogin(server, user)
   })
 
   it('Should be able to get the user information', async function () {
@@ -297,9 +295,9 @@ describe('Test users', function () {
       accessToken: accessTokenUser,
       newPassword: 'new password'
     })
-    server.user.password = 'new password'
+    user.password = 'new password'
 
-    await login(server.url, server.client, server.user, 200)
+    await userLogin(server, user, 200)
   })
 
   it('Should be able to change the NSFW display attribute', async function () {
@@ -386,6 +384,12 @@ describe('Test users', function () {
     expect(user.id).to.be.a('number')
   })
 
+  it('Should have removed the user token', async function () {
+    await getMyUserVideoQuotaUsed(server.url, accessTokenUser, 401)
+
+    accessTokenUser = await userLogin(server, user)
+  })
+
   it('Should not be able to delete a user by a moderator', async function () {
     await removeUser(server.url, 2, accessTokenUser, 403)
   })
@@ -399,8 +403,7 @@ describe('Test users', function () {
   })
 
   it('Should not be able to login with this user', async function () {
-    // server.user is already set to user 1
-    await login(server.url, server.client, server.user, 400)
+    await userLogin(server, user, 400)
   })
 
   it('Should not have videos of this user', async function () {
@@ -417,12 +420,12 @@ describe('Test users', function () {
   })
 
   it('Should be able to login with this registered user', async function () {
-    server.user = {
+    const user15 = {
       username: 'user_15',
       password: 'my super password'
     }
 
-    accessToken = await serverLogin(server)
+    accessToken = await userLogin(server, user15)
   })
 
   it('Should have the correct video quota', async function () {
