@@ -298,7 +298,7 @@ There is an example configuration for deploying peertube and a postgres database
 
 1. Install a traefik loadbalancer stack (including Let's Encrypt) on your docker swarm. [Here](https://gist.github.com/djmaze/2684fbf147d775c8ee441b4302554823) is an example configuration.
 
-2. Copy the [example stack file](docker/docker-stack.example.yml) for peertube:
+2. Copy the [example stack file](support/docker/docker-stack.example.yml) for peertube:
 
         scp docker/docker-stack.example.yml root@your-server:/path/to/your/swarm-config/peertube.yml
 
