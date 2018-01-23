@@ -12,11 +12,11 @@ services:
   - postgresql
 
 install:
-  - CC=gcc-4.9 CXX=g++-4.9 yarn install
+  - curl https://nixos.org/nix/install | sh && . ~/.nix-profile/etc/profile.d/nix.sh
+  - nix-env -i gcc-wrapper-4.9.4 ffmpeg-3.3.5
+  - CC=gcc CXX=g++ yarn install
 
 before_script:
-  - curl https://nixos.org/nix/install | sh && . ~/.nix-profile/etc/profile.d/nix.sh
-  - nix-env -i gcc49 ffmpeg
   - export NODE_TEST_IMAGE=true
   - psql -c 'create database peertube_test1;' -U postgres
   - psql -c 'create database peertube_test2;' -U postgres
