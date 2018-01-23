@@ -8,7 +8,7 @@ import * as createTorrent from 'create-torrent'
 import { pseudoRandomBytes } from 'crypto'
 import { readdir, readFile, rename, stat, Stats, unlink, writeFile } from 'fs'
 import * as mkdirp from 'mkdirp'
-import { join } from 'path'
+import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
 import * as rimraf from 'rimraf'
 import { URL } from 'url'
@@ -68,6 +68,12 @@ function pageToStartAndCount (page: number, itemsPerPage: number) {
   const start = (page - 1) * itemsPerPage
 
   return { start, count: itemsPerPage }
+}
+
+function buildPath (path: string) {
+  if (isAbsolute(path)) return path
+
+  return join(root(), path)
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
@@ -136,6 +142,7 @@ export {
   pageToStartAndCount,
   sanitizeUrl,
   sanitizeHost,
+  buildPath,
 
   promisify0,
   promisify1,

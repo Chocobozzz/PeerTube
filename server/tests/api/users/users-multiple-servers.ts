@@ -3,18 +3,20 @@
 import * as chai from 'chai'
 import 'mocha'
 import { Account } from '../../../../shared/models/actors'
-import { doubleFollow, flushAndRunMultipleServers, wait } from '../../utils'
-import {
-  flushTests, getMyUserInformation, killallServers, ServerInfo, testVideoImage, updateMyAvatar,
-  uploadVideo
-} from '../../utils/index'
-import { getAccount, getAccountsList } from '../../utils/users/accounts'
+import { checkVideoFilesWereRemoved, createUser, doubleFollow, flushAndRunMultipleServers, removeUser, userLogin, wait } from '../../utils'
+import { flushTests, getMyUserInformation, killallServers, ServerInfo, testImage, updateMyAvatar, uploadVideo } from '../../utils/index'
+import { checkActorFilesWereRemoved, getAccount, getAccountsList } from '../../utils/users/accounts'
 import { setAccessTokensToServers } from '../../utils/users/login'
 
 const expect = chai.expect
 
 describe('Test users with multiple servers', function () {
   let servers: ServerInfo[] = []
+  let user
+  let userUUID
+  let userId
+  let videoUUID
+  let userAccessToken
 
   before(async function () {
     this.timeout(120000)
@@ -34,6 +36,18 @@ describe('Test users with multiple servers', function () {
     // The root user of server 1 is propagated to servers 2 and 3
     await uploadVideo(servers[0].url, servers[0].accessToken, {})
 
+    const user = {
+      username: 'user1',
+      password: 'password'
+    }
+    const resUser = await createUser(servers[0].url, servers[0].accessToken, user.username, user.password)
+    userUUID = resUser.body.user.uuid
+    userId = resUser.body.user.id
+    userAccessToken = await userLogin(servers[0], user)
+
+    const resVideo = await uploadVideo(servers[0].url, userAccessToken, {})
+    videoUUID = resVideo.body.uuid
+
     await wait(5000)
   })
 
@@ -49,9 +63,9 @@ describe('Test users with multiple servers', function () {
     })
 
     const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-    const user = res.body
+    user = res.body
 
-    const test = await testVideoImage(servers[0].url, 'avatar2-resized', user.account.avatar.path, '.png')
+    const test = await testImage(servers[0].url, 'avatar2-resized', user.account.avatar.path, '.png')
     expect(test).to.equal(true)
 
     await wait(5000)
@@ -69,8 +83,42 @@ describe('Test users with multiple servers', function () {
       expect(rootServer1Get.name).to.equal('root')
       expect(rootServer1Get.host).to.equal('localhost:9001')
 
-      const test = await testVideoImage(server.url, 'avatar2-resized', rootServer1Get.avatar.path, '.png')
+      const test = await testImage(server.url, 'avatar2-resized', rootServer1Get.avatar.path, '.png')
       expect(test).to.equal(true)
+    }
+  })
+
+  it('Should remove the user', async function () {
+    this.timeout(10000)
+
+    for (const server of servers) {
+      const resAccounts = await getAccountsList(server.url, '-createdAt')
+
+      const userServer1List = resAccounts.body.data.find(a => a.name === 'user1' && a.host === 'localhost:9001') as Account
+      expect(userServer1List).not.to.be.undefined
+    }
+
+    await removeUser(servers[0].url, userId, servers[0].accessToken)
+
+    await wait(5000)
+
+    for (const server of servers) {
+      const resAccounts = await getAccountsList(server.url, '-createdAt')
+
+      const userServer1List = resAccounts.body.data.find(a => a.name === 'user1' && a.host === 'localhost:9001') as Account
+      expect(userServer1List).to.be.undefined
+    }
+  })
+
+  it('Should not have actor files', async () => {
+    for (const server of servers) {
+      await checkActorFilesWereRemoved(userUUID, server.serverNumber)
+    }
+  })
+
+  it('Should not have video files', async () => {
+    for (const server of servers) {
+      await checkVideoFilesWereRemoved(videoUUID, server.serverNumber)
     }
   })
 

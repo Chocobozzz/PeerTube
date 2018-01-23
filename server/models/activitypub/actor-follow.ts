@@ -375,7 +375,8 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
         score: {
           [Sequelize.Op.lte]: 0
         }
-      }
+      },
+      logger: false
     }
 
     return ActorFollowModel.findAll(query)

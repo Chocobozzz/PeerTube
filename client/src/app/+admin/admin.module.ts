@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core'
+import { ConfigComponent, EditCustomConfigComponent } from '@app/+admin/config'
+import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { TabsModule } from 'ngx-bootstrap/tabs'
 import { DataTableModule } from 'primeng/components/datatable/datatable'
 import { SharedModule } from '../shared'
@@ -41,7 +43,10 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
     VideoAbuseListComponent,
 
     JobsComponent,
-    JobsListComponent
+    JobsListComponent,
+
+    ConfigComponent,
+    EditCustomConfigComponent
   ],
 
   exports: [
@@ -51,7 +56,8 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
   providers: [
     FollowService,
     UserService,
-    JobService
+    JobService,
+    ConfigService
   ]
 })
 export class AdminModule { }

@@ -10,7 +10,7 @@ describe('Test activitypub', function () {
   let server: ServerInfo = null
 
   before(async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     await flushTests()
 

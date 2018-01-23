@@ -1,11 +1,14 @@
-import * as config from 'config'
-import { join } from 'path'
+import { IConfig } from 'config'
+import { dirname, join } from 'path'
 import { JobCategory, JobState, VideoRateType } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+
+// Use a variable to reload the configuration if we need
+let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
@@ -82,6 +85,7 @@ let SCHEDULER_INTERVAL = 60000 * 60
 // ---------------------------------------------------------------------------
 
 const CONFIG = {
+  CUSTOM_FILE: getLocalConfigFilePath(),
   LISTEN: {
     PORT: config.get<number>('listen.port')
   },
@@ -93,13 +97,13 @@ const CONFIG = {
     PASSWORD: config.get<string>('database.password')
   },
   STORAGE: {
-    AVATARS_DIR: join(root(), config.get<string>('storage.avatars')),
-    LOG_DIR: join(root(), config.get<string>('storage.logs')),
-    VIDEOS_DIR: join(root(), config.get<string>('storage.videos')),
-    THUMBNAILS_DIR: join(root(), config.get<string>('storage.thumbnails')),
-    PREVIEWS_DIR: join(root(), config.get<string>('storage.previews')),
-    TORRENTS_DIR: join(root(), config.get<string>('storage.torrents')),
-    CACHE_DIR: join(root(), config.get<string>('storage.cache'))
+    AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
+    LOG_DIR: buildPath(config.get<string>('storage.logs')),
+    VIDEOS_DIR: buildPath(config.get<string>('storage.videos')),
+    THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
+    PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
+    TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
+    CACHE_DIR: buildPath(config.get<string>('storage.cache'))
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
@@ -110,29 +114,29 @@ const CONFIG = {
     HOST: ''
   },
   ADMIN: {
-    EMAIL: config.get<string>('admin.email')
+    get EMAIL () { return config.get<string>('admin.email') }
   },
   SIGNUP: {
-    ENABLED: config.get<boolean>('signup.enabled'),
-    LIMIT: config.get<number>('signup.limit')
+    get ENABLED () { return config.get<boolean>('signup.enabled') },
+    get LIMIT () { return config.get<number>('signup.limit') }
   },
   USER: {
-    VIDEO_QUOTA: config.get<number>('user.video_quota')
+    get VIDEO_QUOTA () { return config.get<number>('user.video_quota') }
   },
   TRANSCODING: {
-    ENABLED: config.get<boolean>('transcoding.enabled'),
-    THREADS: config.get<number>('transcoding.threads'),
+    get ENABLED () { return config.get<boolean>('transcoding.enabled') },
+    get THREADS () { return config.get<number>('transcoding.threads') },
     RESOLUTIONS: {
-      '240' : config.get<boolean>('transcoding.resolutions.240p'),
-      '360': config.get<boolean>('transcoding.resolutions.360p'),
-      '480': config.get<boolean>('transcoding.resolutions.480p'),
-      '720': config.get<boolean>('transcoding.resolutions.720p'),
-      '1080': config.get<boolean>('transcoding.resolutions.1080p')
+      get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
+      get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
+      get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
+      get '720p' () { return config.get<boolean>('transcoding.resolutions.720p') },
+      get '1080p' () { return config.get<boolean>('transcoding.resolutions.1080p') }
     }
   },
   CACHE: {
     PREVIEWS: {
-      SIZE: config.get<number>('cache.previews.size')
+      get SIZE () { return config.get<number>('cache.previews.size') }
     }
   }
 }
@@ -279,7 +283,7 @@ const ACTIVITY_PUB = {
   FETCH_PAGE_LIMIT: 100,
   MAX_HTTP_ATTEMPT: 5,
   URL_MIME_TYPES: {
-    VIDEO: [ 'video/mp4', 'video/webm', 'video/ogg' ], // TODO: Merge with VIDEO_MIMETYPE_EXT
+    VIDEO: Object.keys(VIDEO_MIMETYPE_EXT),
     TORRENT: [ 'application/x-bittorrent' ],
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
@@ -361,8 +365,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVAL = 10000
 }
 
-CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
-CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+updateWebserverConfig()
 
 // ---------------------------------------------------------------------------
 
@@ -403,4 +406,51 @@ export {
   VIDEO_MIMETYPE_EXT,
   AVATAR_MIMETYPE_EXT,
   SCHEDULER_INTERVAL
+}
+
+// ---------------------------------------------------------------------------
+
+function getLocalConfigFilePath () {
+  const configSources = config.util.getConfigSources()
+  if (configSources.length === 0) throw new Error('Invalid config source.')
+
+  let filename = 'local'
+  if (process.env.NODE_ENV) filename += `-${process.env.NODE_ENV}`
+  if (process.env.NODE_APP_INSTANCE) filename += `-${process.env.NODE_APP_INSTANCE}`
+
+  return join(dirname(configSources[ 0 ].name), filename + '.json')
+}
+
+function updateWebserverConfig () {
+  CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
+  CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+}
+
+export function reloadConfig () {
+
+  function directory () {
+    if (process.env.NODE_CONFIG_DIR) {
+      return process.env.NODE_CONFIG_DIR
+    }
+
+    return join(root(), 'config')
+  }
+
+  function purge () {
+    for (const fileName in require.cache) {
+      if (-1 === fileName.indexOf(directory())) {
+        continue
+      }
+
+      delete require.cache[fileName]
+    }
+
+    delete require.cache[require.resolve('config')]
+  }
+
+  purge()
+
+  config = require('config')
+
+  updateWebserverConfig()
 }

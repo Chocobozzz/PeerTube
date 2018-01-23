@@ -1,30 +1,10 @@
+import { join } from 'path'
 import * as WebTorrent from 'webtorrent'
-import { readFile, readdir } from 'fs'
 
 let webtorrent = new WebTorrent()
 
 function immutableAssign <T, U> (target: T, source: U) {
   return Object.assign<{}, T, U>({}, target, source)
-}
-
-function readFilePromise (path: string) {
-  return new Promise<Buffer>((res, rej) => {
-    readFile(path, (err, data) => {
-      if (err) return rej(err)
-
-      return res(data)
-    })
-  })
-}
-
-function readdirPromise (path: string) {
-  return new Promise<string[]>((res, rej) => {
-    readdir(path, (err, files) => {
-      if (err) return rej(err)
-
-      return res(files)
-    })
-  })
 }
 
   // Default interval -> 5 minutes
@@ -45,13 +25,17 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
   return new Promise<WebTorrent.Torrent>(res => webtorrent.add(torrent, res))
 }
 
+function root () {
+  // We are in server/tests/utils/miscs
+  return join(__dirname, '..', '..', '..', '..')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  readFilePromise,
-  readdirPromise,
   dateIsValid,
   wait,
   webtorrentAdd,
-  immutableAssign
+  immutableAssign,
+  root
 }

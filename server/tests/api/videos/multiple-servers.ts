@@ -8,8 +8,9 @@ import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 import {
-  addVideoChannel, completeVideoCheck, createUser, dateIsValid, doubleFollow, flushAndRunMultipleServers, flushTests, getVideo,
-  getVideoChannelsList, getVideosList, killallServers, rateVideo, removeVideo, ServerInfo, setAccessTokensToServers, testVideoImage,
+  addVideoChannel, checkVideoFilesWereRemoved, completeVideoCheck, createUser, dateIsValid, doubleFollow, flushAndRunMultipleServers,
+  flushTests, getVideo,
+  getVideoChannelsList, getVideosList, killallServers, rateVideo, removeVideo, ServerInfo, setAccessTokensToServers, testImage,
   updateVideo, uploadVideo, userLogin, viewVideo, wait, webtorrentAdd
 } from '../../utils'
 import {
@@ -578,6 +579,13 @@ describe('Test multiple servers', function () {
       await wait(5000)
     })
 
+    it('Should not have files of videos 3 and 3-2 on each server', async function () {
+      for (const server of servers) {
+        await checkVideoFilesWereRemoved(toRemove[0].uuid, server.serverNumber)
+        await checkVideoFilesWereRemoved(toRemove[1].uuid, server.serverNumber)
+      }
+    })
+
     it('Should have videos 1 and 3 on each server', async function () {
       for (const server of servers) {
         const res = await getVideosList(server.url)
@@ -624,7 +632,7 @@ describe('Test multiple servers', function () {
         const res = await getVideo(server.url, videoUUID)
         const video = res.body
 
-        const test = await testVideoImage(server.url, 'video_short1-preview.webm', video.previewPath)
+        const test = await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
         expect(test).to.equal(true)
       }
     })

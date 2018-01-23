@@ -7,7 +7,7 @@ import {
   createUser, flushTests, getBlacklistedVideosList, getMyUserInformation, getMyUserVideoQuotaUsed, getMyUserVideoRating, getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort, getVideosList, killallServers, login, makePutBodyRequest, rateVideo, registerUser, removeUser, removeVideo,
-  runServer, ServerInfo, serverLogin, testVideoImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo
+  runServer, ServerInfo, serverLogin, testImage, updateMyAvatar, updateMyUser, updateUser, uploadVideo
 } from '../../utils/index'
 import { follow } from '../../utils/server/follows'
 import { setAccessTokensToServers } from '../../utils/users/login'
@@ -23,7 +23,7 @@ describe('Test users', function () {
   let userId: number
 
   before(async function () {
-    this.timeout(10000)
+    this.timeout(30000)
 
     await flushTests()
     server = await runServer(1)
@@ -361,7 +361,7 @@ describe('Test users', function () {
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
-    const test = await testVideoImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
+    const test = await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
     expect(test).to.equal(true)
   })
 

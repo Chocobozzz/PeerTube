@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { getFormattedObjects } from '../../helpers/utils'
-import { asyncMiddleware, paginationValidator, setAccountsSort, setPagination } from '../../middlewares'
+import { asyncMiddleware, paginationValidator, setDefaultSort, setDefaultPagination } from '../../middlewares'
 import { accountsGetValidator, accountsSortValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 
@@ -28,8 +28,8 @@ const accountsRouter = express.Router()
 accountsRouter.get('/',
   paginationValidator,
   accountsSortValidator,
-  setAccountsSort,
-  setPagination,
+  setDefaultSort,
+  setDefaultPagination,
   asyncMiddleware(listAccounts)
 )
 

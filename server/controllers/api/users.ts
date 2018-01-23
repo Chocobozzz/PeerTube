@@ -12,8 +12,8 @@ import { updateActorAvatarInstance } from '../../lib/activitypub'
 import { sendUpdateUser } from '../../lib/activitypub/send'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
-  asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setPagination, setUsersSort,
-  setVideosSort, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
+  asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setDefaultSort,
+  setDefaultPagination, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
   usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator
 } from '../../middlewares'
 import { usersUpdateMyAvatarValidator, videosSortValidator } from '../../middlewares/validators'
@@ -122,8 +122,8 @@ usersRouter.get('/me/videos',
   authenticate,
   paginationValidator,
   videosSortValidator,
-  setVideosSort,
-  setPagination,
+  setDefaultSort,
+  setDefaultPagination,
   asyncMiddleware(getUserVideos)
 )
 
@@ -196,8 +196,8 @@ usersRouter.get('/',
   ensureUserHasRight(UserRight.MANAGE_USERS),
   paginationValidator,
   usersSortValidator,
-  setUsersSort,
-  setPagination,
+  setDefaultSort,
+  setDefaultPagination,
   asyncMiddleware(listUsers)
 )
 
@@ -382,15 +382,19 @@ async function createUserRetryWrapper (req: express.Request, res: express.Respon
     errorMessage: 'Cannot insert the user with many retries.'
   }
 
-  await retryTransactionWrapper(createUser, options)
+  const { user, account } = await retryTransactionWrapper(createUser, options)
 
-  // TODO : include Location of the new user -> 201
-  return res.type('json').status(204).end()
+  return res.json({
+    user: {
+      id: user.id,
+      uuid: account.uuid
+    }
+  }).end()
 }
 
 async function createUser (req: express.Request) {
   const body: UserCreate = req.body
-  const user = new UserModel({
+  const userToCreate = new UserModel({
     username: body.username,
     password: body.password,
     email: body.email,
@@ -400,9 +404,11 @@ async function createUser (req: express.Request) {
     videoQuota: body.videoQuota
   })
 
-  await createUserAccountAndChannel(user)
+  const { user, account } = await createUserAccountAndChannel(userToCreate)
 
   logger.info('User %s with its channel and account created.', body.username)
+
+  return { user, account }
 }
 
 async function registerUserRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {

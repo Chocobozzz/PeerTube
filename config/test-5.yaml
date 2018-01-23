@@ -11,7 +11,6 @@ database:
 # From the project root directory
 storage:
   avatars: 'test5/avatars/'
-  certs: 'test5/certs/'
   videos: 'test5/videos/'
   logs: 'test5/logs/'
   previews: 'test5/previews/'

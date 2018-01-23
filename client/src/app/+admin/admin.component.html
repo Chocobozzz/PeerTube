@@ -19,6 +19,10 @@
     <a *ngIf="hasJobsRight()" routerLink="/admin/jobs" routerLinkActive="active" class="title-page">
       Jobs
     </a>
+
+    <a *ngIf="hasConfigRight()" routerLink="/admin/config" routerLinkActive="active" class="title-page">
+      Configuration
+    </a>
   </div>
 
   <div class="margin-content">
