@@ -18,7 +18,7 @@ peertube.zip
 /profiling/
 /*.zip
 thumbnails/
-logs/
-previews/
-videos/
 torrents/
+videos/
+previews/
+logs/
