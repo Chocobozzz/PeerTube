@@ -10,28 +10,6 @@ import { JobModel } from '../../models/job/job'
 
 const jobsRouter = express.Router()
 
-/**
- *
- * @api {get} /jobs Get a list of jobs
- * @apiName GetJobs
- * @apiGroup Job
- * @apiVersion  1.0.0
- *
- * @apiSuccessExample {json} Success-Response:
- *  [
- *    {
- *      id: number,
- *      state: string,
- *      category: string,
- *      handlerName: string,
- *      handlerInputData: string[],
- *      createdAt: Date | string,
- *      updatedAt: Date | string
- *    },
- *    ...
- *  ]
- *
- */
 jobsRouter.get('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_JOBS),
