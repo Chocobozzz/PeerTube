@@ -35,6 +35,9 @@ export class MarkdownService {
   }
 
   markdownToHTML (markdown: string) {
-    return this.markdownIt.render(markdown)
+    const html = this.markdownIt.render(markdown)
+
+    // Avoid linkify truncated links
+    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...(<\/p>)?$/mi, '$1...')
   }
 }

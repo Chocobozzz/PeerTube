@@ -50,6 +50,8 @@ function root () {
 
 // Thanks: https://stackoverflow.com/a/12034334
 function escapeHTML (stringParam) {
+  if (!stringParam) return ''
+
   const entityMap = {
     '&': '&amp;',
     '<': '&lt;',

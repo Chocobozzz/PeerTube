@@ -37,6 +37,11 @@ $control-bar-height: 34px;
     margin-left: -($big-play-width / 2);
     margin-top: -($big-play-height / 2);
     background-color: transparent !important;
+
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0
+    }
   }
 
   &.vjs-has-started .vjs-big-play-button {

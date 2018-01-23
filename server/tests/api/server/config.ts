@@ -112,6 +112,8 @@ describe('Test config', function () {
   })
 
   it('Should have the configuration updated after a restart', async function () {
+    this.timeout(10000)
+
     killallServers([ server ])
 
     await reRunServer(server)
@@ -134,6 +136,8 @@ describe('Test config', function () {
   })
 
   it('Should remove the custom configuration', async function () {
+    this.timeout(10000)
+
     await deleteCustomConfig(server.url, server.accessToken)
 
     const res = await getCustomConfig(server.url, server.accessToken)

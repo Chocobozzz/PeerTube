@@ -113,6 +113,9 @@ const CONFIG = {
     URL: '',
     HOST: ''
   },
+  LOG: {
+    LEVEL: config.get<string>('log.level')
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
