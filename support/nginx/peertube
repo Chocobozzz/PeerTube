@@ -26,13 +26,13 @@ server {
   location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
-    alias /home/peertube/peertube-latest/client/dist/$1;
+    alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
   location ~ ^/static/(thumbnails|avatars)/(.*)$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
-    alias /home/peertube/storage/$1/$2;
+    alias /var/www/peertube/storage/$1/$2;
   }
 
   location / {
@@ -72,7 +72,7 @@ server {
       access_log off;
     }
 
-    alias /home/peertube/storage/videos;
+    alias /var/www/peertube/storage/videos;
   }
 
   # Websocket tracker
