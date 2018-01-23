@@ -8,6 +8,8 @@ addons:
 
 cache: yarn
 
+sudo: required
+
 services:
   - postgresql
 
