@@ -1,0 +1,55 @@
+listen:
+  port: 9000
+
+# Correspond to your reverse proxy "listen" configuration
+webserver:
+  https: true
+  hostname: undefined
+  port: 443
+
+# Your database name will be "peertube"+database.suffix
+database:
+  hostname: 'db'
+  port: 5432
+  suffix: '_prod'
+  username: 'postgres'
+  password: 'postgres'
+
+# From the project root directory
+storage:
+  avatars: 'data/avatars/'
+  certs: 'data/certs/'
+  videos: 'data/videos/'
+  logs: 'data/logs/'
+  previews: 'data/previews/'
+  thumbnails: 'data/thumbnails/'
+  torrents: 'data/torrents/'
+  cache: 'data/cache/'
+
+cache:
+  previews:
+    size: 100 # Max number of previews you want to cache
+
+admin:
+  email: undefined
+
+signup:
+  enabled: false
+  limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+
+user:
+  # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
+  # -1 == unlimited
+  video_quota: -1
+
+# If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
+# Uses a lot of CPU!
+transcoding:
+  enabled: false
+  threads: 2
+  resolutions: # Only created if the original video has a higher resolution
+    240p: true
+    360p: true
+    480p: true
+    720p: true
+    1080p: true
