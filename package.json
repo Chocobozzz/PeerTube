@@ -116,7 +116,7 @@
     "@types/webtorrent": "^0.98.4",
     "@types/ws": "^3.0.2",
     "chai": "^4.1.1",
-    "commander": "^2.9.0",
+    "commander": "^2.13.0",
     "mocha": "^4.0.1",
     "nodemon": "^1.11.0",
     "source-map-support": "^0.5.0",

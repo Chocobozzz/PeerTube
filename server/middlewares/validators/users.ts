@@ -77,6 +77,13 @@ const usersUpdateValidator = [
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
 
+    const user = res.locals.user
+    if (user.username === 'root' && req.body.role !== undefined && user.role !== req.body.role) {
+      return res.status(400)
+        .send({ error: 'Cannot change root role.' })
+        .end()
+    }
+
     return next()
   }
 ]

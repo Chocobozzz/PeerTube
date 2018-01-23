@@ -32,8 +32,8 @@ async function serverLogin (server: Server) {
   return res.body.access_token as string
 }
 
-async function userLogin (server: Server, user: User) {
-  const res = await login(server.url, server.client, user, 200)
+async function userLogin (server: Server, user: User, expectedStatus = 200) {
+  const res = await login(server.url, server.client, user, expectedStatus)
 
   return res.body.access_token as string
 }

@@ -17,13 +17,13 @@ database:
 
 # From the project root directory
 storage:
-  avatars: '/home/peertube/storage/avatars/'
-  videos: '/home/peertube/storage/videos/'
-  logs: '/home/peertube/storage/logs/'
-  previews: '/home/peertube/storage/previews/'
-  thumbnails: '/home/peertube/storage/thumbnails/'
-  torrents: '/home/peertube/storage/torrents/'
-  cache: '/home/peertube/storage/cache/'
+  avatars: '/var/www/peertube/storage/avatars/'
+  videos: '/var/www/peertube/storage/videos/'
+  logs: '/var/www/peertube/storage/logs/'
+  previews: '/var/www/peertube/storage/previews/'
+  thumbnails: '/var/www/peertube/storage/thumbnails/'
+  torrents: '/var/www/peertube/storage/torrents/'
+  cache: '/var/www/peertube/storage/cache/'
 
 log:
   level: 'debug' # debug/info/warning/error

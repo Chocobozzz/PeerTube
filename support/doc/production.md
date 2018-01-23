@@ -8,16 +8,20 @@ Follow the steps of the [dependencies guide](dependencies.md).
 
 ### PeerTube user
 
-Create a `peertube` user with `/home/peertube` home:
+Create a `peertube` user with `/var/www/peertube` home:
 
 ```
-$ sudo useradd -m -d /home/peertube -s /bin/bash -p peertube peertube
+$ sudo useradd -m -d /var/www/peertube -s /bin/bash -p peertube peertube
+```
+
+Set its password:
+```
 $ sudo passwd peertube
 ```
 
 ### Database
 
-Create production database and peertube user:
+Create the production database and a peertube user inside PostgreSQL:
 
 ```
 $ sudo -u postgres createuser -P peertube
@@ -26,15 +30,26 @@ $ sudo -u postgres createdb -O peertube peertube_prod
 
 ### Prepare PeerTube directory
 
+Fetch the latest tagged version of Peertube
 ```
-$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
-    cd /home/peertube && \
-    sudo -u peertube mkdir config storage versions && \
-    cd versions && \
-    sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
-    sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
-    cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
-    cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile
+$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && echo "Latest Peertube version is $VERSION"
+```
+
+Open the peertube directory, create a few required directories
+```
+cd /var/www/peertube && sudo -u peertube mkdir config storage versions && cd versions
+```
+
+Download the latest version of the Peertube client, unzip it and remove the zip
+```
+sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
+sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
+```
+
+Install Peertube
+```
+cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
+cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile
 ```
 
 ### PeerTube configuration
@@ -42,7 +57,7 @@ $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/la
 Copy example configuration:
 
 ```
-$ cd /home/peertube && sudo -u peertube cp peertube-latest/config/production.yaml.example config/production.yaml
+$ cd /var/www/peertube && sudo -u peertube cp peertube-latest/config/production.yaml.example config/production.yaml
 ```
 
 Then edit the `config/production.yaml` file according to your webserver
@@ -53,7 +68,7 @@ configuration.
 Copy the nginx configuration template:
 
 ```
-$ sudo cp /home/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
+$ sudo cp /var/www/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
 Then modify the webserver configuration file. Please pay attention to the `alias` keys of the static locations.
@@ -100,13 +115,13 @@ server {
   location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
-    alias /home/peertube/peertube-latest/client/dist/$1;
+    alias /var/www/peertube/peertube-latest/client/dist/$1;
   }
 
   location ~ ^/static/(thumbnails|avatars)/(.*)$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
-    alias /home/peertube/storage/$1/$2;
+    alias /var/www/peertube/storage/$1/$2;
   }
 
   location / {
@@ -144,7 +159,7 @@ server {
       access_log off;
     }
 
-    alias /home/peertube/storage/videos;
+    alias /var/www/peertube/storage/videos;
   }
 
   # Websocket tracker
@@ -175,7 +190,7 @@ $ sudo systemctl reload nginx
 Copy the nginx configuration template:
 
 ```
-$ sudo cp /home/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
+$ sudo cp /var/www/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
 ```
 
 Update the service file:
@@ -194,11 +209,11 @@ After=network.target
 [Service]
 Type=simple
 Environment=NODE_ENV=production
-Environment=NODE_CONFIG_DIR=/home/peertube/config
+Environment=NODE_CONFIG_DIR=/var/www/peertube/config
 User=peertube
 Group=peertube
 ExecStart=/usr/bin/npm start
-WorkingDirectory=/home/peertube/peertube-latest
+WorkingDirectory=/var/www/peertube/peertube-latest
 StandardOutput=syslog
 StandardError=syslog
 SyslogIdentifier=peertube
@@ -234,7 +249,7 @@ The administrator password is automatically generated and can be found in the
 logs. You can set another password with:
 
 ```
-$ cd /home/peertube/peertube-latest && NODE_ENV=production npm run reset-password -- -u root
+$ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
 ```
 
 ## Upgrade
@@ -243,21 +258,21 @@ Make a SQL backup:
 
 ```
 $ SQL_BACKUP_PATH="backup/sql-peertube_prod-$(date -Im).bak" && \
-    cd /home/peertube && sudo -u peertube mkdir -p backup && \
+    cd /var/www/peertube && sudo -u peertube mkdir -p backup && \
     sudo pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH"
 ```
 
 Update your configuration file. **If some keys are missing, your upgraded PeerTube won't start!**
 
 ```
-$ diff <(curl -s https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/config/production.yaml.example) /home/peertube/config/production.yaml
+$ diff <(curl -s https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/config/production.yaml.example) /var/www/peertube/config/production.yaml
 ```
 
 Upgrade PeerTube:
 
 ```
 $ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
-    cd /home/peertube/versions && \
+    cd /var/www/peertube/versions && \
     sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
     sudo -u peertube unzip -o peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
     cd ../ && sudo rm ./peertube-latest && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
@@ -269,7 +284,7 @@ Things went wrong? Change `peertube-latest` destination to the previous version 
 
 ```
 $ OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
-    cd /home/peertube && rm ./peertube-latest && \
+    cd /var/www/peertube && rm ./peertube-latest && \
     sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
     pg_restore -U peertube -c -d peertube_prod "$SQL_BACKUP_PATH"
     sudo systemctl restart peertube
