@@ -1,0 +1,600 @@
+swagger: '2.0'
+info:
+  title: peertube
+  version: 0.0.13-alpha
+  description: Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.
+paths:
+  '/accounts/{id}':
+    get:
+      tags:
+        - Accounts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The id of the account'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Account'
+  /accounts:
+    get:
+      tags:
+        - Accounts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+  /config:
+    get:
+      tags:
+        - Config
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ServerConfig' 
+  /jobs:
+    get:
+      tags:
+        - Job
+      consumes:
+        - application/json
+      produces:
+        - application/json
+  '/server/following/{host}':
+    delete:
+      tags:
+        - ServerFollowing
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: host
+          in: path
+          required: true
+          type: string
+          description: 'The host to unfollow '
+      responses:
+        '201':
+          description: successful operation
+  /server/followers:
+    get:
+      tags:
+        - ServerFollowing
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Follow'
+  /server/following:
+    get:
+      tags:
+        - ServerFollowing
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Follow'
+    post:
+      tags:
+        - ServerFollowing
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/Follow'
+      responses:
+        '204':
+          description: successful operation
+  /users:
+    post:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/AddUser'
+    get:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+  '/users/{id}':
+    delete:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The user id '
+    get:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The user id '
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/User'
+    put:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The user id '
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateUser'
+  /users/me:
+    get:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/User'
+    put:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/UpdateMe'
+  /users/me/video-quota-used:
+    get:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters: []
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: number
+  '/users/me/videos/{videoId}/rating':
+    get:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/GetMeVideoRating'
+  /users/me/videos:
+    get:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Video'
+  /users/register:
+    post:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/RegisterUser'
+  /users/me/avatar/pick:
+    post:
+      tags:
+        - User
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/SetMeAvatar'
+definitions:
+  Video:
+    properties:
+      id:
+        type: number
+      uuid:
+        type: string
+      accountName:
+        type: string
+      createdAt:
+        type: Date | string
+      updatedAt:
+        type: Date | string
+      categoryLabel:
+        type: string
+      category:
+        type: number
+      licenceLabel:
+        type: string
+      licence:
+        type: number
+      languageLabel:
+        type: string
+      language:
+        type: number
+      description:
+        type: string
+      duration:
+        type: number
+      isLocal:
+        type: boolean
+      name:
+        type: string
+      serverHost:
+        type: string
+      thumbnailPath:
+        type: string
+      previewPath:
+        type: string
+      embedPath:
+        type: string
+      views:
+        type: number
+      likes:
+        type: number
+      dislikes:
+        type: number
+      nsfw:
+        type: boolean
+  VideoChannel:
+    properties:
+      displayName:
+        type: string
+      description:
+        type: string
+      isLocal:
+        type: boolean
+      owner:
+        type: Object
+        properties: 
+          name: 
+            type: string
+          uuid: 
+            type: string
+      videos:
+        type: array
+        items: 
+          $ref: "#/definitions/Video"
+  Avatar:
+    properties:
+      path:
+        type: string
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+  Actor:
+    properties:
+      id:
+        type: number
+      uuid:
+        type: string
+      url:
+        type: string
+      name:
+        type: string
+      host:
+        type: string
+      followingCount:
+        type: number
+      followersCount:
+        type: number
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+      avatar:
+        $ref: "#/definitions/Avatar"
+  Account:
+    allOf:
+      - $ref: "#/definitions/Actor"
+      - properties:
+          displayName:
+            type: string
+  User:
+    properties:
+      id:
+        type: number
+      username:
+        type: string
+      email:
+        type: string
+      displayNSFW:
+        type: boolean
+      autoPlayVideo:
+        type: boolean
+      role:
+        type: UserRole
+      videoQuota:
+        type: number
+      createdAt:
+        type: string
+      account:
+        type: Account
+      videoChannels:
+        type:  array
+        items:
+          $ref: "#/definitions/VideoChannel"
+  ServerConfig:
+    properties:
+      signup: 
+        type: Object
+        properties:
+          allowed:
+            type: boolean
+      transcoding:
+        type: Object
+        properties:
+          enabledResolutions:
+            type: array
+            items: number
+      avatar:
+        type: Object
+        properties:
+          file:
+            type: Object
+            properties:
+              size:
+                type: Object
+                properties:
+                  max: number
+          extensions: 
+            type: array
+            items: string
+      video:
+        type: Object
+        properties:
+          file:
+            type: Object
+            properties: 
+              extensions: 
+                type: array
+                items: string
+  Follow:
+    properties:
+      id:
+        type: number
+      follower:
+        $ref: "#/definitions/Actor"
+      following:
+        $ref: "#/definitions/Actor"
+      score:
+        type: number
+      state:
+        type: string
+        enum: [pending, accepted]
+      createdAt:
+        type: string
+      updatedAt:
+        type: string
+
+
+
+
+
+#input bodies
+  GetAccount:
+    properties:
+      id:
+        type: string
+        description: 'The id of the account '
+    required:
+      - id
+  AddUser:
+    properties:
+      username:
+        type: string
+        description: 'The user username '
+      password:
+        type: string
+        description: 'The user password '
+      email:
+        type: string
+        description: 'The user email '
+      videoQuota:
+        type: string
+        description: 'The user videoQuota '
+      role:
+        type: string
+        description: 'The user role '
+    required:
+      - username
+      - password
+      - email
+      - videoQuota
+      - role
+  DeleteUser:
+    properties:
+      id:
+        type: string
+        description: 'The user id '
+    required:
+      - id
+  GetUser:
+    properties:
+      id:
+        type: string
+        description: 'The user id '
+    required:
+      - id
+  UpdateUser:
+    properties:
+      id:
+        type: string
+        description: 'The user id '
+      email:
+        type: string
+        description: 'The updated email of the user '
+      videoQuota:
+        type: string
+        description: 'The updated videoQuota of the user '
+      role:
+        type: string
+        description: 'The updated role of the user '
+    required:
+      - id
+      - email
+      - videoQuota
+      - role
+  UpdateMe:
+    properties:
+      password:
+        type: string
+        description: 'Your new password '
+      email:
+        type: string
+        description: 'Your new email '
+      displayNSFW:
+        type: string
+        description: 'Your new displayNSFW '
+      autoPlayVideo:
+        type: string
+        description: 'Your new autoPlayVideo '
+    required:
+      - password
+      - email
+      - displayNSFW
+      - autoPlayVideo
+  GetMeVideoRating:
+    properties:
+      id:
+        type: string
+        description: 'Id of the video '
+      rating:
+        type: number
+        description: 'Rating of the video '
+    required:
+      - id
+      - rating
+  RegisterUser:
+    properties:
+      username:
+        type: string
+        description: 'The username of the user '
+      password:
+        type: string
+        description: 'The password of the user '
+      email:
+        type: string
+        description: 'The email of the user '
+    required:
+      - username
+      - password
+      - email
+  SetMeAvatar:
+    properties:
+      avatarfile:
+        type: file
+        description: 'The avatar file '
+    required:
+      - avatarfile
