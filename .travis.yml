@@ -15,7 +15,7 @@ services:
 
 install:
   - curl https://nixos.org/nix/install | sh && . ~/.nix-profile/etc/profile.d/nix.sh
-  - nix-env -i gcc-wrapper-4.9.4 ffmpeg-3.3.5
+  - nix-env -i gcc-wrapper-4.9.4 ffmpeg
   - CC=gcc CXX=g++ yarn install
 
 before_script:
