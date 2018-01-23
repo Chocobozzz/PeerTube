@@ -1,6 +1,6 @@
-FROM node:alpine
+FROM node:8-alpine
 
-RUN apk add --no-cache ffmpeg openssl git bash python py-jinja2 make g++ \
+RUN apk add --no-cache ffmpeg openssl bash make g++ \
  && apk add --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ vips-dev fftw-dev
 
 WORKDIR /app
