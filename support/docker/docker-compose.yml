@@ -20,9 +20,6 @@ services:
       traefik.port: "9000"
     volumes:
       - ./data:/usr/src/app/data
-    networks:
-      - traefik
-      - backend
     depends_on:
       - db
 
@@ -34,15 +31,3 @@ services:
       POSTGRES_DB: peertube_prod
     volumes:
       - ./db:/var/lib/postgresql/data
-    networks:
-      - backend
-
-volumes:
-  app_data:
-  db_data:
-
-networks:
-  backend:
-  traefik:
-    external:
-      name: traefik_traefik
