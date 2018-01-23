@@ -14,8 +14,6 @@ import { FormReactive, User, UserService } from '../../../shared'
 export class AccountDetailsComponent extends FormReactive implements OnInit {
   @Input() user: User = null
 
-  error: string = null
-
   form: FormGroup
   formErrors = {}
   validationMessages = {}
@@ -50,7 +48,6 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
       autoPlayVideo
     }
 
-    this.error = null
     this.userService.updateMyDetails(details).subscribe(
       () => {
         this.notificationsService.success('Success', 'Information updated.')
@@ -58,7 +55,7 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
         this.authService.refreshUserInformation()
       },
 
-      err => this.error = err.message
+      err => this.notificationsService.error('Error', err.message)
     )
   }
 }

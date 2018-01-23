@@ -212,7 +212,13 @@ function saveActorAndServerAndModelIfNotExist (
 
     // Force the actor creation, sometimes Sequelize skips the save() when it thinks the instance already exists
     // (which could be false in a retried query)
-    const actorCreated = await ActorModel.create(actor.toJSON(), { transaction: t })
+    const [ actorCreated ] = await ActorModel.findOrCreate({
+      defaults: actor.toJSON(),
+      where: {
+        url: actor.url
+      },
+      transaction: t
+    })
 
     if (actorCreated.type === 'Person' || actorCreated.type === 'Application') {
       const account = await saveAccount(actorCreated, result, t)
@@ -284,24 +290,36 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
   }
 }
 
-function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t: Transaction) {
-  const account = new AccountModel({
-    name: result.name,
-    actorId: actor.id
+async function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t: Transaction) {
+  const [ accountCreated ] = await AccountModel.findOrCreate({
+    defaults: {
+      name: result.name,
+      actorId: actor.id
+    },
+    where: {
+      actorId: actor.id
+    },
+    transaction: t
   })
 
-  return account.save({ transaction: t })
+  return accountCreated
 }
 
 async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResult, ownerActor: ActorModel, t: Transaction) {
-  const videoChannel = new VideoChannelModel({
-    name: result.name,
-    description: result.summary,
-    actorId: actor.id,
-    accountId: ownerActor.Account.id
+  const [ videoChannelCreated ] = await VideoChannelModel.findOrCreate({
+    defaults: {
+      name: result.name,
+      description: result.summary,
+      actorId: actor.id,
+      accountId: ownerActor.Account.id
+    },
+    where: {
+      actorId: actor.id
+    },
+    transaction: t
   })
 
-  return videoChannel.save({ transaction: t })
+  return videoChannelCreated
 }
 
 async function refreshActorIfNeeded (actor: ActorModel) {
@@ -309,7 +327,10 @@ async function refreshActorIfNeeded (actor: ActorModel) {
 
   const actorUrl = await getUrlFromWebfinger(actor.preferredUsername, actor.getHost())
   const result = await fetchRemoteActor(actorUrl)
-  if (result === undefined) throw new Error('Cannot fetch remote actor in refresh actor.')
+  if (result === undefined) {
+    logger.warn('Cannot fetch remote actor in refresh actor.')
+    return actor
+  }
 
   return sequelizeTypescript.transaction(async t => {
     updateInstanceWithAnother(actor, result.actor)

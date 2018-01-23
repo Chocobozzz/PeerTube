@@ -9,8 +9,8 @@ import { REMOTE_SCHEME, sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../
 import { getOrCreateActorAndServerAndModel } from '../../../lib/activitypub/actor'
 import { sendFollow, sendUndoFollow } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, removeFollowingValidator, setBodyHostsPort,
-  setFollowersSort, setFollowingSort, setPagination
+  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, removeFollowingValidator, setBodyHostsPort, setDefaultSort,
+  setDefaultPagination
 } from '../../../middlewares'
 import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
 import { ActorModel } from '../../../models/activitypub/actor'
@@ -21,8 +21,8 @@ const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
   paginationValidator,
   followingSortValidator,
-  setFollowingSort,
-  setPagination,
+  setDefaultSort,
+  setDefaultPagination,
   asyncMiddleware(listFollowing)
 )
 
@@ -44,8 +44,8 @@ serverFollowsRouter.delete('/following/:host',
 serverFollowsRouter.get('/followers',
   paginationValidator,
   followersSortValidator,
-  setFollowersSort,
-  setPagination,
+  setDefaultSort,
+  setDefaultPagination,
   asyncMiddleware(listFollowers)
 )
 

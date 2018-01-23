@@ -27,7 +27,7 @@ describe('Test follows', function () {
   let servers: ServerInfo[] = []
 
   before(async function () {
-    this.timeout(20000)
+    this.timeout(30000)
 
     servers = await flushAndRunMultipleServers(3)
 
@@ -343,6 +343,18 @@ describe('Test follows', function () {
       expect(secondChild.comment.text).to.equal('my second answer to thread 1')
       expect(secondChild.children).to.have.lengthOf(0)
     })
+
+    it('Should unfollow server 3 on server 1 and does not list server 3 videos', async function () {
+      this.timeout(5000)
+
+      await unfollow(servers[0].url, servers[0].accessToken, servers[2])
+
+      await wait(3000)
+
+      let res = await getVideosList(servers[ 0 ].url)
+      expect(res.body.total).to.equal(1)
+    })
+
   })
 
   after(async function () {

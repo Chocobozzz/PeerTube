@@ -20,17 +20,16 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from './actor'
 
 function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
-  // FIXME: use url
   const host = video.VideoChannel.Account.Actor.Server.host
   const path = join(STATIC_PATHS.PREVIEWS, video.getPreviewName())
 
+  // We need to provide a callback, if no we could have an uncaught exception
   return request.get(REMOTE_SCHEME.HTTP + '://' + host + path, err => {
     if (err) reject(err)
   })
 }
 
 async function fetchRemoteVideoDescription (video: VideoModel) {
-  // FIXME: use url
   const host = video.VideoChannel.Account.Actor.Server.host
   const path = video.getDescriptionPath()
   const options = {

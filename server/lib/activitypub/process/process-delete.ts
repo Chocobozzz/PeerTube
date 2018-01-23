@@ -10,21 +10,26 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 
 async function processDeleteActivity (activity: ActivityDelete) {
-  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
 
-  if (actor.url === objectUrl) {
+  if (activity.actor === objectUrl) {
+    let actor = await ActorModel.loadByUrl(activity.actor)
+    if (!actor) return
+
     if (actor.type === 'Person') {
       if (!actor.Account) throw new Error('Actor ' + actor.url + ' is a person but we cannot find it in database.')
 
+      actor.Account.Actor = await actor.Account.$get('Actor') as ActorModel
       return processDeleteAccount(actor.Account)
     } else if (actor.type === 'Group') {
       if (!actor.VideoChannel) throw new Error('Actor ' + actor.url + ' is a group but we cannot find it in database.')
 
+      actor.VideoChannel.Actor = await actor.VideoChannel.$get('Actor') as ActorModel
       return processDeleteVideoChannel(actor.VideoChannel)
     }
   }
 
+  const actor = await getOrCreateActorAndServerAndModel(activity.actor)
   {
     const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoCommentInstance) {

@@ -43,7 +43,7 @@ $control-bar-height: 34px;
     display: block;
     visibility: hidden;
     opacity: 0;
-    transition: visibility 0.5s, opacity 0.5s;
+    transition: visibility 0.3s, opacity 0.3s;
   }
 
   .vjs-control-bar,
@@ -360,7 +360,7 @@ $control-bar-height: 34px;
   border: 0.7em solid rgba(255, 255, 255, 0.2);
   border-left-color: #ffffff;
   transform: translateZ(0);
-  animation: 0.3s ease-out 0.3s forwards vjs-spinner-show, spinner 1.4s infinite linear !important;
+  animation: 0.3s ease-out 1.1s forwards vjs-spinner-show, spinner 1.4s infinite linear !important;
   overflow: hidden;
   visibility: hidden;
 

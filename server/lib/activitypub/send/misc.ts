@@ -143,6 +143,10 @@ async function getActorsInvolvedInVideo (video: VideoModel, t: Transaction) {
 async function getAudience (actorSender: ActorModel, t: Transaction, isPublic = true) {
   const followerInboxUrls = await actorSender.getFollowerSharedInboxUrls(t)
 
+  return buildAudience(followerInboxUrls, isPublic)
+}
+
+function buildAudience (followerInboxUrls: string[], isPublic = true) {
   // Thanks Mastodon: https://github.com/tootsuite/mastodon/blob/master/app/lib/activitypub/tag_manager.rb#L47
   let to = []
   let cc = []
@@ -183,6 +187,7 @@ async function computeUris (toActors: ActorModel[], actorsException: ActorModel[
 export {
   broadcastToFollowers,
   unicastTo,
+  buildAudience,
   getAudience,
   getOriginVideoAudience,
   getActorsInvolvedInVideo,

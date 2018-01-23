@@ -1,7 +1,7 @@
 {
   "name": "peertube",
-  "description": "Prototype of a decentralized video streaming platform using P2P (bittorent) directly in the web browser with WebTorrent and Angular 2.",
-  "version": "0.0.1",
+  "description": "Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.",
+  "version": "0.0.13-alpha",
   "private": true,
   "licence": "GPLv3",
   "engines": {
@@ -34,8 +34,6 @@
     "dev:server": "scripty",
     "dev:client": "scripty",
     "start": "node dist/server",
-    "upgrade-peertube": "scripty",
-    "upgrade": "echo 'This command was renamed to upgrade-peertube.'",
     "update-host": "ts-node ./scripts/update-host.ts",
     "test": "scripty",
     "help": "scripty",
@@ -83,7 +81,7 @@
     "rimraf": "^2.5.4",
     "safe-buffer": "^5.0.1",
     "scripty": "^1.5.0",
-    "sequelize": "4.25.2",
+    "sequelize": "4.31.2",
     "sequelize-typescript": "^0.6.1",
     "sharp": "^0.18.4",
     "ts-node": "^3.3.0",

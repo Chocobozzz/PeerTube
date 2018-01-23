@@ -1,0 +1,97 @@
+<div class="admin-sub-title">Update PeerTube configuration</div>
+
+<form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+
+  <div class="inner-form-title">Cache</div>
+
+  <div class="form-group">
+    <label for="cachePreviewsSize">Preview cache size</label>
+    <input
+      type="text" id="cachePreviewsSize"
+      formControlName="cachePreviewsSize" [ngClass]="{ 'input-error': formErrors['cachePreviewsSize'] }"
+    >
+    <div *ngIf="formErrors.cachePreviewsSize" class="form-error">
+      {{ formErrors.cachePreviewsSize }}
+    </div>
+  </div>
+
+  <div class="inner-form-title">Signup</div>
+
+  <div class="form-group">
+    <input type="checkbox" id="signupEnabled" formControlName="signupEnabled">
+
+    <label for="signupEnabled"></label>
+    <label for="signupEnabled">Signup enabled</label>
+  </div>
+
+  <div *ngIf="isSignupEnabled()" class="form-group">
+    <label for="signupLimit">Signup limit</label>
+    <input
+        type="text" id="signupLimit"
+        formControlName="signupLimit" [ngClass]="{ 'input-error': formErrors['signupLimit'] }"
+    >
+    <div *ngIf="formErrors.signupLimit" class="form-error">
+      {{ formErrors.signupLimit }}
+    </div>
+  </div>
+
+  <div class="inner-form-title">Administrator</div>
+
+  <div class="form-group">
+    <label for="adminEmail">Admin email</label>
+    <input
+        type="text" id="adminEmail"
+        formControlName="adminEmail" [ngClass]="{ 'input-error': formErrors['adminEmail'] }"
+    >
+    <div *ngIf="formErrors.adminEmail" class="form-error">
+      {{ formErrors.adminEmail }}
+    </div>
+  </div>
+
+  <div class="inner-form-title">Users</div>
+
+  <div class="form-group">
+    <label for="userVideoQuota">User default video quota</label>
+    <div class="peertube-select-container">
+      <select id="userVideoQuota" formControlName="userVideoQuota">
+        <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
+          {{ videoQuotaOption.label }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="inner-form-title">Transcoding</div>
+
+  <div class="form-group">
+    <input type="checkbox" id="transcodingEnabled" formControlName="transcodingEnabled">
+
+    <label for="transcodingEnabled"></label>
+    <label for="transcodingEnabled">Transcoding enabled</label>
+  </div>
+
+  <ng-template [ngIf]="isTranscodingEnabled()">
+
+    <div class="form-group">
+      <label for="transcodingThreads">Transcoding threads</label>
+      <div class="peertube-select-container">
+        <select id="transcodingThreads" formControlName="transcodingThreads">
+          <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
+            {{ transcodingThreadOption.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" *ngFor="let resolution of resolutions">
+      <input
+        type="checkbox" [id]="getResolutionKey(resolution)"
+        [formControlName]="getResolutionKey(resolution)"
+      >
+      <label [for]="getResolutionKey(resolution)"></label>
+      <label [for]="getResolutionKey(resolution)">Resolution {{ resolution }} enabled</label>
+    </div>
+  </ng-template>
+
+  <input type="submit" value="Update configuration" [disabled]="!form.valid">
+</form>

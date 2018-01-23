@@ -4,9 +4,11 @@ import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB } from '../../initializers/constants'
 import { announceActivityData, createActivityData } from '../../lib/activitypub/send'
+import { buildAudience } from '../../lib/activitypub/send/misc'
 import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 import { asyncMiddleware, localAccountValidator } from '../../middlewares'
 import { AccountModel } from '../../models/account/account'
+import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 
 const outboxRouter = express.Router()
@@ -34,20 +36,29 @@ async function outboxController (req: express.Request, res: express.Response, ne
   const data = await VideoModel.listAllAndSharedByActorForOutbox(actor.id, start, count)
   const activities: Activity[] = []
 
+  // Avoid too many SQL requests
+  const actors = data.data.map(v => v.VideoChannel.Account.Actor)
+  actors.push(actor)
+
+  const followersMatrix = await ActorModel.getActorsFollowerSharedInboxUrls(actors, undefined)
+
   for (const video of data.data) {
     const videoObject = video.toActivityPubObject()
 
-    const videoChannel = video.VideoChannel
+    const byActor = video.VideoChannel.Account.Actor
+    const createActivityAudience = buildAudience(followersMatrix[byActor.id])
+
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
-      const createActivity = await createActivityData(video.url, videoChannel.Account.Actor, videoObject, undefined)
+      const createActivity = await createActivityData(video.url, byActor, videoObject, undefined, createActivityAudience)
 
+      const announceAudience = buildAudience(followersMatrix[actor.id])
       const url = getAnnounceActivityPubUrl(video.url, actor)
-      const announceActivity = await announceActivityData(url, actor, createActivity, undefined)
+      const announceActivity = await announceActivityData(url, actor, createActivity, undefined, announceAudience)
 
       activities.push(announceActivity)
     } else {
-      const createActivity = await createActivityData(video.url, videoChannel.Account.Actor, videoObject, undefined)
+      const createActivity = await createActivityData(video.url, byActor, videoObject, undefined, createActivityAudience)
 
       activities.push(createActivity)
     }
