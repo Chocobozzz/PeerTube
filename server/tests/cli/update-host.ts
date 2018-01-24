@@ -1,3 +1,5 @@
+/* tslint:disable:no-unused-expression */
+
 import 'mocha'
 import * as chai from 'chai'
 const expect = chai.expect
@@ -66,7 +68,12 @@ describe('Test update host scripts', function () {
         expect(file.magnetUri).to.contain('localhost%3A9002%2Fstatic%2Fwebseed%2F')
 
         const torrent = await parseTorrentVideo(server, videoDetails.uuid, file.resolution)
-        expect(torrent.announce[0]).to.equal('ws://localhost:9002/tracker/socket')
+        const announceWS = torrent.announce.find(a => a === 'ws://localhost:9002/tracker/socket')
+        expect(announceWS).to.not.be.undefined
+
+        const announceHttp = torrent.announce.find(a => a === 'http://localhost:9002/tracker/announce')
+        expect(announceHttp).to.not.be.undefined
+
         expect(torrent.urlList[0]).to.contain('http://localhost:9002/static/webseed')
       }
     }

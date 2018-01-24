@@ -84,16 +84,34 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
     }
   ]
 
+  const schemaTags = {
+    '@context': 'http://schema.org',
+    '@type': 'VideoObject',
+    name: videoNameEscaped,
+    description: videoDescriptionEscaped,
+    duration: video.getActivityStreamDuration(),
+    thumbnailURL: previewUrl,
+    contentURL: videoUrl,
+    embedURL: embedUrl,
+    uploadDate: video.createdAt
+  }
+
   let tagsString = ''
+
+  // Opengraph
   Object.keys(openGraphMetaTags).forEach(tagName => {
     const tagValue = openGraphMetaTags[tagName]
 
     tagsString += `<meta property="${tagName}" content="${tagValue}" />`
   })
 
+  // OEmbed
   for (const oembedLinkTag of oembedLinkTags) {
     tagsString += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${oembedLinkTag.title}" />`
   }
+
+  // Schema.org
+  tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
 
   return htmlStringPage.replace(OPENGRAPH_AND_OEMBED_COMMENT, tagsString)
 }

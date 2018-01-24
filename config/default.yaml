@@ -24,6 +24,9 @@ storage:
   torrents: 'storage/torrents/'
   cache: 'storage/cache/'
 
+log:
+  level: 'debug' # debug/info/warning/error
+
 cache:
   previews:
     size: 1 # Max number of previews you want to cache

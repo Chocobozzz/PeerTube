@@ -769,7 +769,8 @@ export class VideoModel extends Model<VideoModel> {
   createTorrentAndSetInfoHash = async function (videoFile: VideoFileModel) {
     const options = {
       announceList: [
-        [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ]
+        [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ],
+        [ CONFIG.WEBSERVER.URL + '/tracker/announce' ]
       ],
       urlList: [
         CONFIG.WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
@@ -989,8 +990,7 @@ export class VideoModel extends Model<VideoModel> {
       type: 'Video' as 'Video',
       id: this.url,
       name: this.name,
-      // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
-      duration: 'PT' + this.duration + 'S',
+      duration: this.getActivityStreamDuration(),
       uuid: this.uuid,
       tag,
       category,
@@ -1158,6 +1158,11 @@ export class VideoModel extends Model<VideoModel> {
   removeTorrent (videoFile: VideoFileModel) {
     const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
     return unlinkPromise(torrentPath)
+  }
+
+  getActivityStreamDuration () {
+    // https://www.w3.org/TR/activitystreams-vocabulary/#dfn-duration
+    return 'PT' + this.duration + 'S'
   }
 
   private getBaseUrls () {

@@ -27,6 +27,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
 
   isUploadingVideo = false
   videoUploaded = false
+  videoUploadObservable = null
   videoUploadPercents = 0
   videoUploadedIds = {
     id: 0,
@@ -97,6 +98,16 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     return this.form.valid
   }
 
+  cancelUpload () {
+    if (this.videoUploadObservable !== null) {
+      this.videoUploadObservable.unsubscribe()
+      this.isUploadingVideo = false
+      this.videoUploadPercents = 0
+      this.videoUploadObservable = null
+      this.notificationsService.info('Info', 'Upload cancelled')
+    }
+  }
+
   uploadFirstStep () {
     const videofile = this.videofileInput.nativeElement.files[0]
     if (!videofile) return
@@ -136,7 +147,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       channelId
     })
 
-    this.videoService.uploadVideo(formData).subscribe(
+    this.videoUploadObservable = this.videoService.uploadVideo(formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
@@ -146,6 +157,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           this.videoUploaded = true
 
           this.videoUploadedIds = event.body.video
+
+          this.videoUploadObservable = null
         }
       },
 
@@ -153,6 +166,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         // Reset progress
         this.isUploadingVideo = false
         this.videoUploadPercents = 0
+        this.videoUploadObservable = null
         this.notificationsService.error('Error', err.message)
       }
     )

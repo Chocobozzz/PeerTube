@@ -2,34 +2,34 @@ import { createReadStream } from 'fs'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
+import { labelFormatter, loggerFormat, timestampFormatter } from '../server/helpers/logger'
 import { CONFIG } from '../server/initializers/constants'
 
-const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
-
-const logger = new winston.Logger({
+const logger = new winston.createLogger({
   transports: [
     new winston.transports.Console({
       level: 'debug',
-      label: label,
-      handleExceptions: true,
-      humanReadableUnhandledException: true,
-      json: false,
-      colorize: true,
-      prettyPrint: true,
-      stderrLevels: []
+      stderrLevels: [],
+      format: winston.format.combine(
+        timestampFormatter,
+        winston.format.splat(),
+        labelFormatter,
+        winston.format.colorize(),
+        loggerFormat
+      )
     })
   ],
   exitOnError: true
 })
 
 const logLevels = {
-  error: logger.error,
-  warn: logger.warn,
-  info: logger.info,
-  debug: logger.debug
+  error: logger.error.bind(logger),
+  warn: logger.warn.bind(logger),
+  info: logger.info.bind(logger),
+  debug: logger.debug.bind(logger)
 }
 
-const path = join(CONFIG.STORAGE.LOG_DIR, 'all-logs.log')
+const path = join(CONFIG.STORAGE.LOG_DIR, 'peertube.log')
 console.log('Opening %s.', path)
 
 const rl = createInterface({
@@ -38,11 +38,8 @@ const rl = createInterface({
 
 rl.on('line', line => {
   const log = JSON.parse(line)
-  const additionalInfo: any = {}
+  // Don't know why but loggerFormat does not remove splat key
+  Object.assign(log, { splat: undefined })
 
-  Object.keys(log).forEach(logKey => {
-    if (logKey !== 'message' && logKey !== 'level') additionalInfo[logKey] = log[logKey]
-  })
-
-  logLevels[log.level](log.message, additionalInfo)
+  logLevels[log.level](log)
 })
