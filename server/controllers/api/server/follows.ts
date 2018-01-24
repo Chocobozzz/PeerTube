@@ -17,7 +17,6 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 
 const serverFollowsRouter = express.Router()
-
 serverFollowsRouter.get('/following',
   paginationValidator,
   followingSortValidator,
