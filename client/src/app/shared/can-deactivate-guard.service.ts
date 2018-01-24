@@ -9,14 +9,14 @@ export interface CanComponentDeactivate {
 
 @Injectable()
 export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate> {
-    constructor (private confirmService: ConfirmService) { }
+  constructor (private confirmService: ConfirmService) { }
 
-  canDeactivate(component: CanComponentDeactivate,
+  canDeactivate (component: CanComponentDeactivate,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState: RouterStateSnapshot
   ): Observable<boolean> | boolean {
-    return this.confirmService.confirm(
+    return component.canDeactivate() || this.confirmService.confirm(
       'All unsaved data will be lost, are you sure you want to leave ?',
       'Unsaved Data'
     )
