@@ -159,4 +159,14 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
         return token
       })
   }
+
+  static deleteUserToken (userId: number) {
+    const query = {
+      where: {
+        userId
+      }
+    }
+
+    return OAuthTokenModel.destroy(query)
+  }
 }

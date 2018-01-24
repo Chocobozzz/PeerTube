@@ -82,7 +82,7 @@ if (isTestInstance()) {
 
 // For the logger
 app.use(morgan('combined', {
-  stream: { write: logger.info }
+  stream: { write: logger.info.bind(logger) }
 }))
 // For body requests
 app.use(bodyParser.json({

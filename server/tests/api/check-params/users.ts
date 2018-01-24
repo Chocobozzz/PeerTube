@@ -20,6 +20,10 @@ describe('Test users API validators', function () {
   let server: ServerInfo
   let serverWithRegistrationDisabled: ServerInfo
   let userAccessToken = ''
+  const user = {
+    username: 'user1',
+    password: 'my super password'
+  }
 
   // ---------------------------------------------------------------
 
@@ -33,10 +37,6 @@ describe('Test users API validators', function () {
 
     await setAccessTokensToServers([ server ])
 
-    const user = {
-      username: 'user1',
-      password: 'my super password'
-    }
     const videoQuota = 42000000
     await createUser(server.url, server.accessToken, user.username, user.password, videoQuota)
     userAccessToken = await userLogin(server, user)
@@ -341,6 +341,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + userId, token: 'super token', fields, statusCodeExpected: 401 })
     })
 
+    it('Should fail when updating root role', async function () {
+      const fields = {
+        role: UserRole.MODERATOR
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + rootId, token: server.accessToken, fields })
+    })
+
     it('Should succeed with the correct params', async function () {
       const fields = {
         email: 'email@example.com',
@@ -349,6 +357,7 @@ describe('Test users API validators', function () {
       }
 
       await makePutBodyRequest({ url: server.url, path: path + userId, token: server.accessToken, fields, statusCodeExpected: 204 })
+      userAccessToken = await userLogin(server, user)
     })
   })
 
