@@ -4,7 +4,7 @@ import { SharedModule } from '../../shared'
 import { VideoEditModule } from './shared/video-edit.module'
 import { VideoAddRoutingModule } from './video-add-routing.module'
 import { VideoAddComponent } from './video-add.component'
-import { VideoUploadGuard } from '@app/videos/+video-edit/video-upload-guard'
+import { CanDeactivateGuard } from "../../shared/can-deactivate-guard.service";
 
 @NgModule({
   imports: [
@@ -20,7 +20,7 @@ import { VideoUploadGuard } from '@app/videos/+video-edit/video-upload-guard'
     VideoAddComponent
   ],
   providers: [
-    VideoUploadGuard
+    CanDeactivateGuard
   ]
 })
 export class VideoAddModule { }

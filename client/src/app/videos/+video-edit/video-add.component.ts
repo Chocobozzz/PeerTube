@@ -12,6 +12,7 @@ import { ValidatorMessage } from '../../shared/forms/form-validators/validator-m
 import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
+import { CanComponentDeactivate } from '@app/shared/can-deactivate-guard.service';
 
 @Component({
   selector: 'my-videos-add',
@@ -22,7 +23,7 @@ import { VideoService } from '../../shared/video/video.service'
   ]
 })
 
-export class VideoAddComponent extends FormReactive implements OnInit {
+export class VideoAddComponent extends FormReactive implements OnInit, CanComponentDeactivate {
   @ViewChild('videofileInput') videofileInput
 
   isUploadingVideo = false
