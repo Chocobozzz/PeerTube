@@ -5,7 +5,7 @@ import { existsSync, readFile } from 'fs'
 import * as parseTorrent from 'parse-torrent'
 import { extname, isAbsolute, join } from 'path'
 import * as request from 'supertest'
-import { getMyUserInformation, makeGetRequest, root, ServerInfo } from '../'
+import { getMyUserInformation, makeGetRequest, root, ServerInfo, testImage } from '../'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { readdirPromise, readFileBufferPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
@@ -216,23 +216,6 @@ async function checkVideoFilesWereRemoved (videoUUID: string, serverNumber: numb
     for (const file of files) {
       expect(file).to.not.contain(videoUUID)
     }
-  }
-}
-
-async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
-  // Don't test images if the node env is not set
-  // Because we need a special ffmpeg version for this test
-  if (process.env['NODE_TEST_IMAGE']) {
-    const res = await request(url)
-                        .get(imagePath)
-                        .expect(200)
-
-    const data = await readFileBufferPromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + extension))
-
-    return data.equals(res.body)
-  } else {
-    console.log('Do not test images. Enable it by setting NODE_TEST_IMAGE env variable.')
-    return true
   }
 }
 
@@ -453,7 +436,6 @@ export {
   searchVideo,
   searchVideoWithPagination,
   searchVideoWithSort,
-  testImage,
   uploadVideo,
   updateVideo,
   rateVideo,
