@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import * as magnetUtil from 'magnet-uri'
 import { join } from 'path'
 import * as request from 'request'
