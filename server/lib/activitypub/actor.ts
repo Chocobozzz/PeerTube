@@ -252,7 +252,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
   logger.info('Fetching remote actor %s.', actorUrl)
 
   const requestResult = await doRequest(options)
-  const actorJSON: ActivityPubActor = requestResult.body
+  const actorJSON: ActivityPubActor = normalizeActor(requestResult.body)
 
   if (isActorObjectValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
@@ -357,4 +357,11 @@ async function refreshActorIfNeeded (actor: ActorModel) {
 
     return actor
   })
+}
+
+function normalizeActor (actor: any) {
+  if (actor && actor.url && typeof actor.url === 'string') return actor
+
+  actor.url = actor.url.href || actor.url.url
+  return actor
 }
