@@ -1,7 +1,7 @@
 {
   "name": "peertube",
   "description": "Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.",
-  "version": "0.0.14-alpha",
+  "version": "0.0.15-alpha",
   "private": true,
   "licence": "GPLv3",
   "engines": {
@@ -40,6 +40,7 @@
     "parse-log": "ts-node ./scripts/parse-log.ts",
     "postinstall": "cd client && yarn install --pure-lockfile",
     "tsc": "tsc",
+    "commander": "commander",
     "ng": "ng",
     "nodemon": "nodemon",
     "ts-node": "ts-node",
@@ -55,6 +56,7 @@
     "bittorrent-tracker": "^9.0.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.12.4",
+    "commander": "^2.13.0",
     "concurrently": "^3.1.0",
     "config": "^1.14.0",
     "cors": "^2.8.1",
@@ -116,7 +118,6 @@
     "@types/webtorrent": "^0.98.4",
     "@types/ws": "^3.0.2",
     "chai": "^4.1.1",
-    "commander": "^2.13.0",
     "mocha": "^4.0.1",
     "nodemon": "^1.11.0",
     "source-map-support": "^0.5.0",

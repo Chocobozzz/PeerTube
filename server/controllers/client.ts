@@ -85,6 +85,8 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
   ]
 
   const schemaTags = {
+    '@context': 'http://schema.org',
+    '@type': 'VideoObject',
     name: videoNameEscaped,
     description: videoDescriptionEscaped,
     duration: video.getActivityStreamDuration(),
@@ -95,25 +97,21 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
   }
 
   let tagsString = ''
+
+  // Opengraph
   Object.keys(openGraphMetaTags).forEach(tagName => {
     const tagValue = openGraphMetaTags[tagName]
 
     tagsString += `<meta property="${tagName}" content="${tagValue}" />`
   })
 
+  // OEmbed
   for (const oembedLinkTag of oembedLinkTags) {
     tagsString += `<link rel="alternate" type="${oembedLinkTag.type}" href="${oembedLinkTag.href}" title="${oembedLinkTag.title}" />`
   }
 
-  tagsString += '<div itemprop="video" itemscope itemtype="http://schema.org/VideoObject">'
-  tagsString += '<h2>Video: <span itemprop="name">' + schemaTags.name + '</span></h2>'
-
-  Object.keys(schemaTags).forEach(tagName => {
-    const tagValue = schemaTags[tagName]
-    tagsString += `<meta itemprop="${tagName}" content="${tagValue}" />`
-  })
-
-  tagsString += '</div>'
+  // Schema.org
+  tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
 
   return htmlStringPage.replace(OPENGRAPH_AND_OEMBED_COMMENT, tagsString)
 }

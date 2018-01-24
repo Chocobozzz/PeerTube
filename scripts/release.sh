@@ -53,7 +53,7 @@ zip -r "PeerTube/$zip_name" "$directory_name/CREDITS.md" "$directory_name/FAQ.md
                             "$directory_name/dist" "$directory_name/package.json" \
                             "$directory_name/scripts" "$directory_name/support" \
                             "$directory_name/tsconfig.json" "$directory_name/yarn.lock" \
-                            "$directory_name/server/" \
+                            "$directory_name/server/" "$directory_name/shared/" \
                             || exit -1
 rm "$directory_name" || exit -1
 
