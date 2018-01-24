@@ -1,6 +1,5 @@
 /* tslint:disable:no-unused-expression */
 
-import { expect } from 'chai'
 import { join } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'

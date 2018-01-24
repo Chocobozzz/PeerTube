@@ -7,7 +7,7 @@ import { extname, isAbsolute, join } from 'path'
 import * as request from 'supertest'
 import { getMyUserInformation, makeGetRequest, root, ServerInfo, testImage } from '../'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { readdirPromise, readFileBufferPromise } from '../../../helpers/core-utils'
+import { readdirPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
 import { dateIsValid, webtorrentAdd } from '../index'
 

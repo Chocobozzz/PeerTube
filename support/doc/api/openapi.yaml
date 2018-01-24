@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  title: peertube
-  version: 0.0.13-alpha
+  title: PeerTube
+  version: 0.0.15-alpha
   description: Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.
 paths:
   '/accounts/{id}':
@@ -731,6 +731,10 @@ paths:
       responses:
         '200':
           description: successful operation
+          schema:
+            items:
+              type: array
+              $ref: '#/definitions/VideoComment'
     post:
       tags:
         - VideoComment
@@ -769,6 +773,8 @@ paths:
       responses:
         '200':
           description: successful operation
+          schema:
+            $ref: '#/definitions/VideoCommentThreadTree'
   "/video/{videoId}/comments/{commentId}":
     post:
       tags:
@@ -963,6 +969,14 @@ definitions:
         type: number
       account:
         $ref: "#/definitions/Account"
+  VideoCommentThreadTree:
+    properties:
+      comment:
+        $ref: "#/definitions/VideoComment"
+      children:
+        type: array
+        items:
+          $ref: "#/definitions/VideoCommentThreadTree"
   Avatar:
     properties:
       path:
