@@ -20,7 +20,16 @@ interested in, user interface, design, decentralized architecture...
 ## Write documentation
 
 You can help to write the documentation of the REST API, code, architecture,
-demonstrations...
+demonstrations.
+
+For the REST API you can see the documentation in [/support/doc/api](/support/doc/api) directory.
+Then, you can just open the `openapi.yaml` file in a special editor like [http://editor.swagger.io/](http://editor.swagger.io/) to easily see and edit the documentation.
+
+Some hints:
+ * Routes are defined in [/server/controllers/](/server/controllers/) directory
+ * Parameters validators are defined in [/server/middlewares/validators](/server/middlewares/validators) directory
+ * Models sent/received by the controllers are defined in [/shared/models](/shared/models) directory
+
 
 ## Develop
 
