@@ -1019,7 +1019,6 @@ definitions:
       createdAt:
         type: string
       account:
-        type: object
         $ref: "#/definitions/Account"
       videoChannels:
         type:  array
@@ -1037,7 +1036,8 @@ definitions:
         properties:
           enabledResolutions:
             type: array
-            items: number
+            items:
+              type: number
       avatar:
         type: object
         properties:
@@ -1047,10 +1047,12 @@ definitions:
               size:
                 type: object
                 properties:
-                  max: number
+                  max:
+                    type: number
           extensions: 
             type: array
-            items: string
+            items:
+              type: string
       video:
         type: object
         properties:
@@ -1059,7 +1061,8 @@ definitions:
             properties: 
               extensions: 
                 type: array
-                items: string
+                items:
+                  type: string
   Follow:
     properties:
       id:
@@ -1111,13 +1114,6 @@ definitions:
         type: string
 
 #input bodies
-  GetAccount:
-    properties:
-      id:
-        type: string
-        description: 'The id of the account '
-    required:
-      - id
   AddUser:
     properties:
       username:
@@ -1141,20 +1137,6 @@ definitions:
       - email
       - videoQuota
       - role
-  DeleteUser:
-    properties:
-      id:
-        type: string
-        description: 'The user id '
-    required:
-      - id
-  GetUser:
-    properties:
-      id:
-        type: string
-        description: 'The user id '
-    required:
-      - id
   UpdateUser:
     properties:
       id:
