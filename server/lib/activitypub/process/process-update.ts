@@ -2,6 +2,7 @@ import * as Bluebird from 'bluebird'
 import { ActivityUpdate } from '../../../../shared/models/activitypub'
 import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
 import { VideoTorrentObject } from '../../../../shared/models/activitypub/objects'
+import { VideoFile } from '../../../../shared/models/videos'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { resetSequelizeInstance } from '../../../helpers/utils'
@@ -90,7 +91,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       await Promise.all(videoFileDestroyTasks)
 
       const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoInstance, videoAttributesToUpdate)
-      const tasks: Bluebird<any>[] = videoFileAttributes.map(f => VideoFileModel.create(f))
+      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f))
       await Promise.all(tasks)
 
       const tags = videoAttributesToUpdate.tag.map(t => t.name)

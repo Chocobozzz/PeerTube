@@ -163,7 +163,7 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
       throw new Error('Cannot find valid files for video %s ' + videoObject.url)
     }
 
-    const tasks: Bluebird<any>[] = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
+    const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
     await Promise.all(tasks)
 
     const tags = videoObject.tag.map(t => t.name)
