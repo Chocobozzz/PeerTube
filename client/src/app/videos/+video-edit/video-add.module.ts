@@ -4,6 +4,7 @@ import { SharedModule } from '../../shared'
 import { VideoEditModule } from './shared/video-edit.module'
 import { VideoAddRoutingModule } from './video-add-routing.module'
 import { VideoAddComponent } from './video-add.component'
+import { CanDeactivateGuard } from '../../shared/can-deactivate-guard.service'
 
 @NgModule({
   imports: [
@@ -12,15 +13,14 @@ import { VideoAddComponent } from './video-add.component'
     SharedModule,
     ProgressBarModule
   ],
-
   declarations: [
     VideoAddComponent
   ],
-
   exports: [
     VideoAddComponent
   ],
-
-  providers: [ ]
+  providers: [
+    CanDeactivateGuard
+  ]
 })
 export class VideoAddModule { }
