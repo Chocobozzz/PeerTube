@@ -79,7 +79,7 @@ async function processCreateVideo (
 
 async function createRates (actorUrls: string[], video: VideoModel, rate: VideoRateType) {
   let rateCounts = 0
-  const tasks: Bluebird<any>[] = []
+  const tasks: Bluebird<number>[] = []
 
   for (const actorUrl of actorUrls) {
     const actor = await getOrCreateActorAndServerAndModel(actorUrl)

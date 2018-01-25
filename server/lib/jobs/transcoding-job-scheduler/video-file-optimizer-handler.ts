@@ -3,6 +3,7 @@ import { VideoPrivacy } from '../../../../shared/models/videos'
 import { logger } from '../../../helpers/logger'
 import { computeResolutionsToTranscode } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
+import { JobModel } from '../../../models/job/job'
 import { VideoModel } from '../../../models/video/video'
 import { shareVideoByServerAndChannel } from '../../activitypub'
 import { sendCreateVideo } from '../../activitypub/send'
@@ -55,7 +56,7 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
   if (resolutionsEnabled.length !== 0) {
     try {
       await sequelizeTypescript.transaction(async t => {
-        const tasks: Bluebird<any>[] = []
+        const tasks: Bluebird<JobModel>[] = []
 
         for (const resolution of resolutionsEnabled) {
           const dataInput = {

@@ -15,10 +15,19 @@ WORKDIR /home/user/PeerTube
 # Configure Cloud9 IDE to use PeerTube's source directory as workspace (-w).
 RUN sudo sed -i "s/-w \/home\/user/-w \/home\/user\/PeerTube/" /etc/supervisord.conf
 
+# Install dependencies.
+RUN yarn install --pure-lockfile
+
 # Configure Janitor for PeerTube.
 ADD janitor.json /home/user/
 RUN sudo chown user:user /home/user/janitor.json
 
 # Configure and build PeerTube.
-RUN yarn install \
- && npm run build
+ADD create_user.sql /tmp/
+RUN sudo service postgresql start && \
+    sudo -u postgres psql --file=/tmp/create_user.sql
+
+ADD supervisord.conf /tmp/supervisord-extra.conf
+RUN cat /tmp/supervisord-extra.conf | sudo tee -a /etc/supervisord.conf
+
+EXPOSE 3000 9000

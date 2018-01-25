@@ -147,6 +147,13 @@ guide](/.github/CONTRIBUTING.md)
 to see how to contribute to PeerTube. Spoiler alert: you don't need to be a
 coder to help!
 
+## API REST documentation
+
+For now only on Github:
+
+ * HTML version: [/support/doc/api/html/index.html](/support/doc/api/html/index.html)
+ * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
+
 ## Architecture
 
 See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation.
