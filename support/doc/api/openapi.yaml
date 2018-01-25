@@ -331,7 +331,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Avatar'
-  /video:
+  /videos:
     get:
       tags:
         - Video
@@ -346,7 +346,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Video'
-  /video/categories:
+  /videos/categories:
     get:
       tags:
         - Video
@@ -361,7 +361,7 @@ paths:
             type: array
             items:
               type: string
-  /video/licences:
+  /videos/licences:
     get:
       tags:
         - Video
@@ -376,7 +376,7 @@ paths:
             type: array
             items:
               type: string
-  /video/languages:
+  /videos/languages:
     get:
       tags:
         - Video
@@ -391,7 +391,7 @@ paths:
             type: array
             items:
               type: string
-  /video/privacies:
+  /videos/privacies:
     get:
       tags:
         - Video
@@ -406,7 +406,7 @@ paths:
             type: array
             items:
               type: string
-  /video/search:
+  /videos/search:
     get:
       tags:
         - Video
@@ -421,7 +421,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Video'
-  "/video/{id}":
+  "/videos/{id}":
     put:
       tags:
         - Video
@@ -474,7 +474,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  "/video/{id}/description":
+  "/videos/{id}/description":
     get:
       tags:
         - Video
@@ -493,7 +493,7 @@ paths:
           description: successful operation
           schema:
             type: string
-  "/video/{id}/views":
+  "/videos/{id}/views":
     post:
       tags:
         - Video
@@ -510,7 +510,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  /video/upload:
+  /videos/upload:
     post:
       tags:
         - Video
@@ -528,7 +528,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/VideoUploadResponse'
-  /video/abuse:
+  /videos/abuse:
     get:
       tags:
         - VideoAbuse
@@ -543,7 +543,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoAbuse'
-  "/video/{id}/abuse":
+  "/videos/{id}/abuse":
     post:
       tags:
         - VideoAbuse
@@ -560,7 +560,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  "/video/{videoId}/blacklist":
+  "/videos/{videoId}/blacklist":
     post:
       tags:
         - VideoBlacklist
@@ -593,7 +593,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  /video/blacklist:
+  /videos/blacklist:
     get:
       tags:
         - VideoBlacklist
@@ -608,7 +608,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoBlacklist'
-  /video/channels:
+  /videos/channels:
     get:
       tags:
         - VideoChannel
@@ -638,7 +638,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  "/video/channels/{id}":
+  "/videos/channels/{id}":
     get:
       tags:
         - VideoChannel
@@ -693,7 +693,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  /video/accounts/{accountId}/channels:
+  /videos/accounts/{accountId}/channels:
     get:
       tags:
         - VideoChannel
@@ -714,7 +714,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoChannel'
-  "/video/{videoId}/comment-threads":
+  "/videos/{videoId}/comment-threads":
     get:
       tags:
         - VideoComment
@@ -732,9 +732,7 @@ paths:
         '200':
           description: successful operation
           schema:
-            items:
-              type: array
-              $ref: '#/definitions/VideoComment'
+            $ref: '#/definitions/CommentThreadResponse'
     post:
       tags:
         - VideoComment
@@ -751,7 +749,9 @@ paths:
       responses:
         '200':
           description: successful operation
-  "/video/{videoId}/comment-threads/{threadId}":
+          schema:
+            $ref: '#/definitions/CommentThreadPostResponse'
+  "/videos/{videoId}/comment-threads/{threadId}":
     get:
       tags:
         - VideoComment
@@ -775,7 +775,7 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/VideoCommentThreadTree'
-  "/video/{videoId}/comments/{commentId}":
+  "/videos/{videoId}/comments/{commentId}":
     post:
       tags:
         - VideoComment
@@ -797,6 +797,8 @@ paths:
       responses:
         '200':
           description: successful operation
+          schema:
+            $ref: '#/definitions/CommentThreadPostResponse'
     delete:
       tags:
         - VideoComment
@@ -818,7 +820,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  "/video/{id}/rate":
+  "/videos/{id}/rate":
     put:
       tags:
         - VideoRate
@@ -1126,8 +1128,20 @@ definitions:
         type: number
       uuid:
         type: string
+  CommentThreadResponse:
+    properties:
+      total:
+        type: number
+      data:
+        type: array
+        items:
+          $ref: "#/definitions/VideoComment"
+  CommentThreadPostResponse:
+    properties:
+      comment:
+        $ref: "#/definitions/VideoComment"
 
-#input bodies
+#request bodies
   AddUser:
     properties:
       username:
