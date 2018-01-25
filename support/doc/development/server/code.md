@@ -19,7 +19,7 @@ The server main file is [server.ts](/server.ts).
 The server modules description are in the [package.json](/package.json) at the project root.
 All other server files are in the [server](/server) directory:
 
-    server.ts -> app initilization, main routes configuration (static routes...)
+    server.ts -> app initialization, main routes configuration (static routes...)
     config    -> server YAML configurations (for tests, production...)
     scripts   -> Scripts files for npm run
     server

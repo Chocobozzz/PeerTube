@@ -169,7 +169,7 @@ describe('Test follows', function () {
     await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 0, 0)
   })
 
-  it('Should upload a video on server 2 ans 3 and propagate only the video of server 2', async function () {
+  it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
     this.timeout(10000)
 
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'server2' })
