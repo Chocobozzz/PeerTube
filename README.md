@@ -131,6 +131,7 @@ BitTorrent) inside the web browser, as of today.
 
   * nginx
   * PostgreSQL
+  * Redis
   * **NodeJS >= 8.x**
   * yarn
   * OpenSSL (cli)

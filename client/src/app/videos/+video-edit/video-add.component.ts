@@ -1,10 +1,12 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from '@app/shared'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
+import { Subscription } from 'rxjs/Subscription'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
@@ -22,12 +24,12 @@ import { VideoService } from '../../shared/video/video.service'
   ]
 })
 
-export class VideoAddComponent extends FormReactive implements OnInit {
+export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
   @ViewChild('videofileInput') videofileInput
 
   isUploadingVideo = false
   videoUploaded = false
-  videoUploadObservable = null
+  videoUploadObservable: Subscription = null
   videoUploadPercents = 0
   videoUploadedIds = {
     id: 0,
@@ -82,6 +84,28 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           // Public by default
           this.firstStepPrivacyId = VideoPrivacy.PUBLIC
         })
+  }
+
+  ngOnDestroy () {
+    if (this.videoUploadObservable) {
+      this.videoUploadObservable.unsubscribe()
+    }
+  }
+
+  canDeactivate () {
+    let text = ''
+
+    if (this.videoUploaded === true) {
+      text = 'Your video was uploaded in your account and is private.' +
+        ' But associated data (tags, description...) will be lost, are you sure you want to leave this page?'
+    } else {
+      text = 'Your video is not uploaded yet, are you sure you want to leave this page?'
+    }
+
+    return {
+      canDeactivate: !this.isUploadingVideo,
+      text
+    }
   }
 
   fileChange () {

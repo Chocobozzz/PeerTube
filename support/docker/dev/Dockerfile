@@ -24,8 +24,9 @@ RUN sudo chown user:user /home/user/janitor.json
 
 # Configure and build PeerTube.
 ADD create_user.sql /tmp/
-RUN sudo service postgresql start && \
-    sudo -u postgres psql --file=/tmp/create_user.sql
+RUN sudo service postgresql start \
+ && sudo -u postgres psql --file=/tmp/create_user.sql \
+ && npm run build
 
 ADD supervisord.conf /tmp/supervisord-extra.conf
 RUN cat /tmp/supervisord-extra.conf | sudo tee -a /etc/supervisord.conf

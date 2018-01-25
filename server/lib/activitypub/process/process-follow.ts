@@ -63,7 +63,7 @@ async function follow (actor: ActorModel, targetActorURL: string) {
     actorFollow.ActorFollowing = targetActor
 
     // Target sends to actor he accepted the follow request
-    return sendAccept(actorFollow, t)
+    return sendAccept(actorFollow)
   })
 
   logger.info('Actor %s is followed by actor %s.', targetActorURL, actor.url)

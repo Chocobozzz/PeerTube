@@ -3,6 +3,7 @@ process.env.NODE_ENV = 'test'
 
 import * as program from 'commander'
 import { Video, VideoFile, VideoRateType } from '../../../shared'
+import { JobState } from '../../../shared/models'
 import {
   flushAndRunMultipleServers,
   flushTests, follow,
@@ -346,23 +347,19 @@ function goodbye () {
 }
 
 async function isTherePendingRequests (servers: ServerInfo[]) {
+  const states: JobState[] = [ 'inactive', 'active' ]
   const tasks: Promise<any>[] = []
   let pendingRequests = false
 
   // Check if each server has pending request
   for (const server of servers) {
-    const p = getJobsListPaginationAndSort(server.url, server.accessToken, 0, 10, '-createdAt')
-      .then(res => {
-        const jobs = res.body.data
-
-        for (const job of jobs) {
-          if (job.state === 'pending' || job.state === 'processing') {
-            pendingRequests = true
-          }
-        }
-      })
-
-    tasks.push(p)
+    for (const state of states) {
+      const p = getJobsListPaginationAndSort(server.url, server.accessToken, state, 0, 10, '-createdAt')
+        .then(res => {
+          if (res.body.total > 0) pendingRequests = true
+        })
+      tasks.push(p)
+    }
   }
 
   await Promise.all(tasks)

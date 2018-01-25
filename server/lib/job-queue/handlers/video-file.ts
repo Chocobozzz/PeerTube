@@ -1,37 +1,59 @@
-import * as Bluebird from 'bluebird'
+import * as kue from 'kue'
+import { VideoResolution } from '../../../../shared'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { logger } from '../../../helpers/logger'
 import { computeResolutionsToTranscode } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
-import { JobModel } from '../../../models/job/job'
 import { VideoModel } from '../../../models/video/video'
 import { shareVideoByServerAndChannel } from '../../activitypub'
-import { sendCreateVideo } from '../../activitypub/send'
-import { JobScheduler } from '../job-scheduler'
-import { TranscodingJobPayload } from './transcoding-job-scheduler'
+import { sendCreateVideo, sendUpdateVideo } from '../../activitypub/send'
+import { JobQueue } from '../job-queue'
 
-async function process (data: TranscodingJobPayload, jobId: number) {
-  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(data.videoUUID)
+export type VideoFilePayload = {
+  videoUUID: string
+  resolution?: VideoResolution
+}
+
+async function processVideoFile (job: kue.Job) {
+  const payload = job.data as VideoFilePayload
+  logger.info('Processing video file in job %d.', job.id)
+
+  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
   if (!video) {
-    logger.info('Do not process job %d, video does not exist.', jobId, { videoUUID: video.uuid })
+    logger.info('Do not process job %d, video does not exist.', job.id, { videoUUID: video.uuid })
     return undefined
   }
 
-  await video.optimizeOriginalVideofile()
+  // Transcoding in other resolution
+  if (payload.resolution) {
+    await video.transcodeOriginalVideofile(payload.resolution)
+    await onVideoFileTranscoderSuccess(video)
+  } else {
+    await video.optimizeOriginalVideofile()
+    await onVideoFileOptimizerSuccess(video)
+  }
 
   return video
 }
 
-function onError (err: Error, jobId: number) {
-  logger.error('Error when optimized video file in job %d.', jobId, err)
-  return Promise.resolve()
-}
-
-async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobScheduler<TranscodingJobPayload, VideoModel>) {
+async function onVideoFileTranscoderSuccess (video: VideoModel) {
   if (video === undefined) return undefined
 
-  logger.info('Job %d is a success.', jobId)
+  // Maybe the video changed in database, refresh it
+  const videoDatabase = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid)
+  // Video does not exist anymore
+  if (!videoDatabase) return undefined
+
+  if (video.privacy !== VideoPrivacy.PRIVATE) {
+    await sendUpdateVideo(video, undefined)
+  }
+
+  return undefined
+}
+
+async function onVideoFileOptimizerSuccess (video: VideoModel) {
+  if (video === undefined) return undefined
 
   // Maybe the video changed in database, refresh it
   const videoDatabase = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(video.uuid)
@@ -56,7 +78,7 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
   if (resolutionsEnabled.length !== 0) {
     try {
       await sequelizeTypescript.transaction(async t => {
-        const tasks: Bluebird<JobModel>[] = []
+        const tasks: Promise<any>[] = []
 
         for (const resolution of resolutionsEnabled) {
           const dataInput = {
@@ -64,7 +86,7 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
             resolution
           }
 
-          const p = jobScheduler.createJob(t, 'videoFileTranscoder', dataInput)
+          const p = JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
           tasks.push(p)
         }
 
@@ -84,7 +106,5 @@ async function onSuccess (jobId: number, video: VideoModel, jobScheduler: JobSch
 // ---------------------------------------------------------------------------
 
 export {
-  process,
-  onError,
-  onSuccess
+  processVideoFile
 }

@@ -14,6 +14,11 @@ database:
   username: 'peertube'
   password: 'peertube'
 
+redis:
+  hostname: 'localhost'
+  port: 6379
+  auth: null
+
 # From the project root directory
 storage:
   avatars: 'storage/avatars/'

@@ -7,6 +7,7 @@ The server is a web server developed with [TypeScript](https://www.typescriptlan
 
   * [TypeScript](https://www.typescriptlang.org/) -> Language
   * [PostgreSQL](https://www.postgresql.org/) -> Database
+  * [Redis](https://redis.io/) -> Job queue/cache
   * [Express](http://expressjs.com) -> Web server framework
   * [Sequelize](http://docs.sequelizejs.com/en/v3/) -> SQL ORM
   * [WebTorrent](https://webtorrent.io/) -> BitTorrent tracker and torrent creation

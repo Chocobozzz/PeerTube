@@ -17,6 +17,7 @@ sudo: false
 
 services:
   - postgresql
+  - redis-server
 
 install:
   - CC=gcc-4.9 CXX=g++-4.9 yarn install

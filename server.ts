@@ -53,10 +53,11 @@ migrate()
 
 // ----------- PeerTube modules -----------
 import { installApplication } from './server/initializers'
-import { activitypubHttpJobScheduler, transcodingJobScheduler } from './server/lib/jobs'
+import { JobQueue } from './server/lib/job-queue'
 import { VideosPreviewCache } from './server/lib/cache'
 import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
 import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
+import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 
 // ----------- Command line -----------
 
@@ -170,9 +171,8 @@ function onDatabaseInitDone () {
       server.listen(port, () => {
         VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
         BadActorFollowScheduler.Instance.enable()
-
-        activitypubHttpJobScheduler.activate()
-        transcodingJobScheduler.activate()
+        RemoveOldJobsScheduler.Instance.enable()
+        JobQueue.Instance.init()
 
         logger.info('Server listening on port %d', port)
         logger.info('Web server: %s', CONFIG.WEBSERVER.URL)

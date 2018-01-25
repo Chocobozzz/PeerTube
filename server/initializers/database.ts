@@ -9,7 +9,6 @@ import { ActorModel } from '../models/activitypub/actor'
 import { ActorFollowModel } from '../models/activitypub/actor-follow'
 import { ApplicationModel } from '../models/application/application'
 import { AvatarModel } from '../models/avatar/avatar'
-import { JobModel } from '../models/job/job'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
 import { ServerModel } from '../models/server/server'
@@ -61,7 +60,6 @@ async function initDatabaseModels (silent: boolean) {
     ActorFollowModel,
     AvatarModel,
     AccountModel,
-    JobModel,
     OAuthClientModel,
     OAuthTokenModel,
     ServerModel,

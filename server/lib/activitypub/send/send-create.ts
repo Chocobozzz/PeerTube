@@ -8,8 +8,14 @@ import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getVideoAbuseActivityPubUrl, getVideoDislikeActivityPubUrl, getVideoViewActivityPubUrl } from '../url'
 import {
-  audiencify, broadcastToActors, broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience,
-  getOriginVideoAudience, getOriginVideoCommentAudience,
+  audiencify,
+  broadcastToActors,
+  broadcastToFollowers,
+  getActorsInvolvedInVideo,
+  getAudience,
+  getObjectFollowersAudience,
+  getOriginVideoAudience,
+  getOriginVideoCommentAudience,
   unicastTo
 } from './misc'
 
@@ -31,7 +37,7 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
   const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
   const data = await createActivityData(url, byActor, videoAbuse.toActivityPubObject(), t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function sendCreateVideoCommentToOrigin (comment: VideoCommentModel, t: Transaction) {
@@ -47,13 +53,13 @@ async function sendCreateVideoCommentToOrigin (comment: VideoCommentModel, t: Tr
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
-  await broadcastToActors(data, byActor, threadParentComments.map(c => c.Account.Actor), t, actorsException)
+  await broadcastToActors(data, byActor, threadParentComments.map(c => c.Account.Actor), actorsException)
 
   // Broadcast to our followers
   await broadcastToFollowers(data, byActor, [ byActor ], t)
 
   // Send to origin
-  return unicastTo(data, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function sendCreateVideoCommentToVideoFollowers (comment: VideoCommentModel, t: Transaction) {
@@ -69,7 +75,7 @@ async function sendCreateVideoCommentToVideoFollowers (comment: VideoCommentMode
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
-  await broadcastToActors(data, byActor, threadParentComments.map(c => c.Account.Actor), t, actorsException)
+  await broadcastToActors(data, byActor, threadParentComments.map(c => c.Account.Actor), actorsException)
 
   // Broadcast to our followers
   await broadcastToFollowers(data, byActor, [ byActor ], t)
@@ -86,7 +92,7 @@ async function sendCreateViewToOrigin (byActor: ActorModel, video: VideoModel, t
   const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
   const data = await createActivityData(url, byActor, viewActivityData, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function sendCreateViewToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
@@ -111,7 +117,7 @@ async function sendCreateDislikeToOrigin (byActor: ActorModel, video: VideoModel
   const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
   const data = await createActivityData(url, byActor, dislikeActivityData, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function sendCreateDislikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
