@@ -1,4 +1,3 @@
-import { Transaction } from 'sequelize'
 import { ActivityAccept, ActivityFollow } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
@@ -6,7 +5,7 @@ import { getActorFollowAcceptActivityPubUrl, getActorFollowActivityPubUrl } from
 import { unicastTo } from './misc'
 import { followActivityData } from './send-follow'
 
-async function sendAccept (actorFollow: ActorFollowModel, t: Transaction) {
+async function sendAccept (actorFollow: ActorFollowModel) {
   const follower = actorFollow.ActorFollower
   const me = actorFollow.ActorFollowing
 
@@ -16,7 +15,7 @@ async function sendAccept (actorFollow: ActorFollowModel, t: Transaction) {
   const url = getActorFollowAcceptActivityPubUrl(actorFollow)
   const data = acceptActivityData(url, me, followData)
 
-  return unicastTo(data, me, follower.inboxUrl, t)
+  return unicastTo(data, me, follower.inboxUrl)
 }
 
 // ---------------------------------------------------------------------------

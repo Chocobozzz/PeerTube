@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
 import { Job } from '../../../../../../shared/index'
+import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'
 import { viewportHeight } from '../../../shared/misc/utils'
 import { JobService } from '../shared'
@@ -13,10 +14,12 @@ import { RestExtractor } from '../../../shared/rest/rest-extractor.service'
   styleUrls: [ './jobs-list.component.scss' ]
 })
 export class JobsListComponent extends RestTable implements OnInit {
+  jobState: JobState = 'inactive'
+  jobStates: JobState[] = [ 'active', 'complete', 'failed', 'inactive', 'delayed' ]
   jobs: Job[] = []
   totalRecords = 0
   rowsPerPage = 20
-  sort: SortMeta = { field: 'createdAt', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   scrollHeight = ''
 
@@ -33,9 +36,13 @@ export class JobsListComponent extends RestTable implements OnInit {
     this.scrollHeight = (viewportHeight() - 380) + 'px'
   }
 
+  onJobStateChanged () {
+    this.loadData()
+  }
+
   protected loadData () {
     this.jobsService
-      .getJobs(this.pagination, this.sort)
+      .getJobs(this.jobState, this.pagination, this.sort)
       .subscribe(
         resultList => {
           this.jobs = resultList.data

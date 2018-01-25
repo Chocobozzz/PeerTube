@@ -7,7 +7,7 @@ import { checkBadCountPagination, checkBadSortPagination, checkBadStartPaginatio
 import { makeGetRequest } from '../../utils/requests/requests'
 
 describe('Test jobs API validators', function () {
-  const path = '/api/v1/jobs/'
+  const path = '/api/v1/jobs/failed'
   let server: ServerInfo
   let userAccessToken = ''
 
@@ -31,6 +31,15 @@ describe('Test jobs API validators', function () {
   })
 
   describe('When listing jobs', function () {
+
+    it('Should fail with a bad state', async function () {
+      await makeGetRequest({
+        url: server.url,
+        token: server.accessToken,
+        path: path + 'ade'
+      })
+    })
+
     it('Should fail with a bad start pagination', async function () {
       await checkBadStartPagination(server.url, path, server.accessToken)
     })

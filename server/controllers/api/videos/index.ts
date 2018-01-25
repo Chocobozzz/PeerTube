@@ -12,7 +12,7 @@ import {
 } from '../../../initializers'
 import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
-import { transcodingJobScheduler } from '../../../lib/jobs/transcoding-job-scheduler'
+import { JobQueue } from '../../../lib/job-queue'
 import {
   asyncMiddleware, authenticate, paginationValidator, setDefaultSort, setDefaultPagination, videosAddValidator, videosGetValidator,
   videosRemoveValidator, videosSearchValidator, videosSortValidator, videosUpdateValidator
@@ -176,17 +176,8 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   )
   await Promise.all(tasks)
 
-  return sequelizeTypescript.transaction(async t => {
+  const videoCreated = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
-
-    if (CONFIG.TRANSCODING.ENABLED === true) {
-      // Put uuid because we don't have id auto incremented for now
-      const dataInput = {
-        videoUUID: video.uuid
-      }
-
-      await transcodingJobScheduler.createJob(t, 'videoFileOptimizer', dataInput)
-    }
 
     const videoCreated = await video.save(sequelizeOptions)
     // Do not forget to add video channel information to the created video
@@ -216,6 +207,17 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
 
     return videoCreated
   })
+
+  if (CONFIG.TRANSCODING.ENABLED === true) {
+    // Put uuid because we don't have id auto incremented for now
+    const dataInput = {
+      videoUUID: videoCreated.uuid
+    }
+
+    await JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
+  }
+
+  return videoCreated
 }
 
 async function updateVideoRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {

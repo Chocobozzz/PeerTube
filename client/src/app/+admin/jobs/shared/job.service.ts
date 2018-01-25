@@ -5,6 +5,7 @@ import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
 import { ResultList } from '../../../../../../shared'
+import { JobState } from '../../../../../../shared/models'
 import { Job } from '../../../../../../shared/models/job.model'
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../../../shared'
@@ -19,19 +20,19 @@ export class JobService {
     private restExtractor: RestExtractor
   ) {}
 
-  getJobs (pagination: RestPagination, sort: SortMeta): Observable<ResultList<Job>> {
+  getJobs (state: JobState, pagination: RestPagination, sort: SortMeta): Observable<ResultList<Job>> {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL, { params })
+    return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + '/' + state, { params })
       .map(res => this.restExtractor.convertResultListDateToHuman(res))
       .map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData))
       .catch(err => this.restExtractor.handleError(err))
   }
 
   private prettyPrintData (obj: Job) {
-    const handlerInputData = JSON.stringify(obj.handlerInputData, null, 2)
+    const data = JSON.stringify(obj.data, null, 2)
 
-    return Object.assign(obj, { handlerInputData })
+    return Object.assign(obj, { data })
   }
 }

@@ -1,11 +1,10 @@
-import { values } from 'lodash'
 import * as Sequelize from 'sequelize'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { shareVideoByServerAndChannel } from '../../lib/activitypub/share'
 import { getVideoActivityPubUrl, getVideoChannelActivityPubUrl } from '../../lib/activitypub/url'
 import { createLocalAccountWithoutKeys } from '../../lib/user'
 import { ApplicationModel } from '../../models/application/application'
-import { JOB_CATEGORIES, SERVER_ACTOR_NAME } from '../constants'
+import { SERVER_ACTOR_NAME } from '../constants'
 
 async function up (utils: {
   transaction: Sequelize.Transaction,
@@ -161,7 +160,7 @@ async function up (utils: {
 
   {
     const data = {
-      type: Sequelize.ENUM(values(JOB_CATEGORIES)),
+      type: Sequelize.ENUM('transcoding', 'activitypub-http'),
       defaultValue: 'transcoding',
       allowNull: false
     }

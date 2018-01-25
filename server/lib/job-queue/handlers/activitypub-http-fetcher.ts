@@ -1,11 +1,18 @@
+import * as kue from 'kue'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ACTIVITY_PUB } from '../../../initializers'
 import { processActivities } from '../../activitypub/process'
-import { ActivityPubHttpPayload } from './activitypub-http-job-scheduler'
+import { ActivitypubHttpBroadcastPayload } from './activitypub-http-broadcast'
 
-async function process (payload: ActivityPubHttpPayload, jobId: number) {
-  logger.info('Processing ActivityPub fetcher in job %d.', jobId)
+export type ActivitypubHttpFetcherPayload = {
+  uris: string[]
+}
+
+async function processActivityPubHttpFetcher (job: kue.Job) {
+  logger.info('Processing ActivityPub fetcher in job %d.', job.id)
+
+  const payload = job.data as ActivitypubHttpBroadcastPayload
 
   const options = {
     method: 'GET',
@@ -49,20 +56,8 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
   }
 }
 
-function onError (err: Error, jobId: number) {
-  logger.error('Error when fetcher ActivityPub request in job %d.', jobId, err)
-  return Promise.resolve()
-}
-
-function onSuccess (jobId: number) {
-  logger.info('Job %d is a success.', jobId)
-  return Promise.resolve()
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  process,
-  onError,
-  onSuccess
+  processActivityPubHttpFetcher
 }

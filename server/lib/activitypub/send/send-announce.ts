@@ -42,7 +42,7 @@ async function sendVideoAnnounceToOrigin (byActor: ActorModel, video: VideoModel
   const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
   const data = await createActivityData(url, byActor, announcedActivity, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function announceActivityData (

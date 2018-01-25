@@ -2,6 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
+import { JobState } from '../../../../shared/models'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import { completeVideoCheck, getVideo, immutableAssign, reRunServer, viewVideo } from '../../utils'
@@ -139,12 +140,11 @@ describe('Test handle downs', function () {
   })
 
   it('Should not have pending/processing jobs anymore', async function () {
-    const res = await getJobsListPaginationAndSort(servers[0].url, servers[0].accessToken, 0, 50, '-createdAt')
-    const jobs = res.body.data
+    const states: JobState[] = [ 'inactive', 'active' ]
 
-    for (const job of jobs) {
-      expect(job.state).not.to.equal('pending')
-      expect(job.state).not.to.equal('processing')
+    for (const state of states) {
+      const res = await getJobsListPaginationAndSort(servers[ 0 ].url, servers[ 0 ].accessToken, state,0, 50, '-createdAt')
+      expect(res.body.data).to.have.length(0)
     }
   })
 

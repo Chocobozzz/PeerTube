@@ -123,7 +123,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
     actorFollow.ActorFollower = fromActor
 
     // Send a notification to remote server
-    await sendFollow(actorFollow, t)
+    await sendFollow(actorFollow)
   })
 }
 

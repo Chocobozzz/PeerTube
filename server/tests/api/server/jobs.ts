@@ -35,20 +35,20 @@ describe('Test jobs', function () {
   })
 
   it('Should list jobs', async function () {
-    const res = await getJobsList(servers[1].url, servers[1].accessToken)
+    const res = await getJobsList(servers[1].url, servers[1].accessToken, 'complete')
     expect(res.body.total).to.be.above(2)
     expect(res.body.data).to.have.length.above(2)
   })
 
   it('Should list jobs with sort and pagination', async function () {
-    const res = await getJobsListPaginationAndSort(servers[1].url, servers[1].accessToken, 4, 1, 'createdAt')
+    const res = await getJobsListPaginationAndSort(servers[1].url, servers[1].accessToken, 'complete', 1, 1, 'createdAt')
     expect(res.body.total).to.be.above(2)
     expect(res.body.data).to.have.lengthOf(1)
 
     const job = res.body.data[0]
-    expect(job.state).to.equal('success')
-    expect(job.category).to.equal('transcoding')
-    expect(job.handlerName).to.have.length.above(3)
+
+    expect(job.state).to.equal('complete')
+    expect(job.type).to.equal('activitypub-http-unicast')
     expect(dateIsValid(job.createdAt)).to.be.true
     expect(dateIsValid(job.updatedAt)).to.be.true
   })
