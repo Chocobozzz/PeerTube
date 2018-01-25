@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
 
 import { LoginGuard } from '../../core'
-import { CanDeactivateGuard } from '../../shared/can-deactivate-guard.service'
+import { CanDeactivateGuard } from '../../shared/guards/can-deactivate-guard.service'
 import { VideoAddComponent } from './video-add.component'
 
 const videoAddRoutes: Routes = [
@@ -12,7 +12,7 @@ const videoAddRoutes: Routes = [
     path: '',
     component: VideoAddComponent,
     canActivate: [ MetaGuard, LoginGuard ],
-    canDeactivate: [CanDeactivateGuard]
+    canDeactivate: [ CanDeactivateGuard ]
   }
 ]
 

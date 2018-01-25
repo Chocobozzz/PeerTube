@@ -1,10 +1,12 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from '@app/shared'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
+import { Subscription } from 'rxjs/Subscription'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
@@ -12,7 +14,6 @@ import { ValidatorMessage } from '../../shared/forms/form-validators/validator-m
 import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
-import { CanComponentDeactivate } from '@app/shared/can-deactivate-guard.service'
 
 @Component({
   selector: 'my-videos-add',
@@ -23,12 +24,12 @@ import { CanComponentDeactivate } from '@app/shared/can-deactivate-guard.service
   ]
 })
 
-export class VideoAddComponent extends FormReactive implements OnInit, CanComponentDeactivate {
+export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
   @ViewChild('videofileInput') videofileInput
 
   isUploadingVideo = false
   videoUploaded = false
-  videoUploadObservable = null
+  videoUploadObservable: Subscription = null
   videoUploadPercents = 0
   videoUploadedIds = {
     id: 0,
@@ -85,8 +86,26 @@ export class VideoAddComponent extends FormReactive implements OnInit, CanCompon
         })
   }
 
+  ngOnDestroy () {
+    if (this.videoUploadObservable) {
+      this.videoUploadObservable.unsubscribe()
+    }
+  }
+
   canDeactivate () {
-    return !this.isUploadingVideo
+    let text = ''
+
+    if (this.videoUploaded === true) {
+      text = 'Your video was uploaded in your account and is private.' +
+        ' But associated data (tags, description...) will be lost, are you sure you want to leave this page?'
+    } else {
+      text = 'Your video is not uploaded yet, are you sure you want to leave this page?'
+    }
+
+    return {
+      canDeactivate: !this.isUploadingVideo,
+      text
+    }
   }
 
   fileChange () {
