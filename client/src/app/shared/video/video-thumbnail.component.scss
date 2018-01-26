@@ -6,6 +6,11 @@
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  height: $video-thumbnail-height;
+  width: $video-thumbnail-width;
+  text-align: center;
+  background-color: black;
+  line-height: $video-thumbnail-height;
 
   &:hover {
     text-decoration: none !important;
@@ -27,5 +32,6 @@
     font-weight: $font-bold;
     border-radius: 3px;
     padding: 0 5px;
+    line-height: initial;
   }
 }
