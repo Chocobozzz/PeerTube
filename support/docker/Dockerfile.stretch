@@ -1,6 +1,6 @@
 FROM node:8-stretch
 
-# Install dpeendencies
+# Install dependencies
 RUN apt-get update \
  && apt-get -y install ffmpeg \
  && rm /var/lib/apt/lists/* -fR
@@ -11,9 +11,9 @@ WORKDIR /app
 COPY . ./
 RUN yarn install --pure-lockfile && npm run build
 
-# Configuration the application
-RUN addgroup -g 991 peertube \
- && adduser -D -u 991 -G peertube -h /data peertube
+# Configure the application
+RUN groupadd -g 991 peertube \
+ && useradd -u 991 -g peertube -d /data -m peertube
 USER peertube
 
 ENV NODE_ENV production
