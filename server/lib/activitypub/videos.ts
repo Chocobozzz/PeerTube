@@ -279,11 +279,14 @@ async function addVideoShares (instance: VideoModel, shareUrls: string[]) {
 
     const entry = {
       actorId: actor.id,
-      videoId: instance.id
+      videoId: instance.id,
+      url: shareUrl
     }
 
     await VideoShareModel.findOrCreate({
-      where: entry,
+      where: {
+        url: shareUrl
+      },
       defaults: entry
     })
   }
