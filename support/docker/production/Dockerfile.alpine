@@ -16,7 +16,7 @@ RUN addgroup -g 991 peertube \
 # USER peertube
 
 ENV NODE_ENV production
-ENV NODE_CONFIG_DIR /app/support/docker/config/
+ENV NODE_CONFIG_DIR /app/support/docker/production/config/
 
 # Run the application
 CMD ["npm", "start"]
