@@ -43,11 +43,14 @@ async function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounc
 
     const share = {
       actorId: actorAnnouncer.id,
-      videoId: video.id
+      videoId: video.id,
+      url: activity.id
     }
 
     const [ , created ] = await VideoShareModel.findOrCreate({
-      where: share,
+      where: {
+        url: activity.id
+      },
       defaults: share,
       transaction: t
     })

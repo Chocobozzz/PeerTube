@@ -100,7 +100,7 @@ async function videoController (req: express.Request, res: express.Response, nex
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const share = res.locals.videoShare as VideoShareModel
-  const object = await buildVideoAnnounceToFollowers(share.Actor, res.locals.video, undefined)
+  const object = await buildVideoAnnounceToFollowers(share.Actor, share, res.locals.video, undefined)
 
   return res.json(activityPubContextify(object))
 }

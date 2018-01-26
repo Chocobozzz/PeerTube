@@ -5,7 +5,6 @@ import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB } from '../../initializers/constants'
 import { announceActivityData, createActivityData } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/send/misc'
-import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 import { asyncMiddleware, localAccountValidator } from '../../middlewares'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
@@ -48,9 +47,9 @@ async function outboxController (req: express.Request, res: express.Response, ne
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
+      const videoShare = video.VideoShares[0]
       const announceAudience = buildAudience(followersMatrix[actor.id])
-      const url = getAnnounceActivityPubUrl(video.url, actor)
-      const announceActivity = await announceActivityData(url, actor, video.url, undefined, announceAudience)
+      const announceActivity = await announceActivityData(videoShare.url, actor, video.url, undefined, announceAudience)
 
       activities.push(announceActivity)
     } else {

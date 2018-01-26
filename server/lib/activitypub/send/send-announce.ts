@@ -2,43 +2,21 @@ import { Transaction } from 'sequelize'
 import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { getAnnounceActivityPubUrl } from '../url'
-import {
-  broadcastToFollowers,
-  getActorsInvolvedInVideo,
-  getAudience,
-  getObjectFollowersAudience,
-  getOriginVideoAudience,
-  unicastTo
-} from './misc'
-import { createActivityData } from './send-create'
+import { VideoShareModel } from '../../../models/video/video-share'
+import { broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from './misc'
 
-async function buildVideoAnnounceToFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  const url = getAnnounceActivityPubUrl(video.url, byActor)
+async function buildVideoAnnounceToFollowers (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   const announcedObject = video.url
 
   const accountsToForwardView = await getActorsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(accountsToForwardView)
-  return announceActivityData(url, byActor, announcedObject, t, audience)
+  return announceActivityData(videoShare.url, byActor, announcedObject, t, audience)
 }
 
-async function sendVideoAnnounceToFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  const data = await buildVideoAnnounceToFollowers(byActor, video, t)
+async function sendVideoAnnounceToFollowers (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
+  const data = await buildVideoAnnounceToFollowers(byActor, videoShare, video, t)
 
   return broadcastToFollowers(data, byActor, [ byActor ], t)
-}
-
-async function sendVideoAnnounceToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  const url = getAnnounceActivityPubUrl(video.url, byActor)
-
-  const videoObject = video.toActivityPubObject()
-  const announcedActivity = await createActivityData(url, video.VideoChannel.Account.Actor, videoObject, t)
-
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-  const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
-  const data = await createActivityData(url, byActor, announcedActivity, t, audience)
-
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function announceActivityData (
@@ -66,7 +44,6 @@ async function announceActivityData (
 
 export {
   sendVideoAnnounceToFollowers,
-  sendVideoAnnounceToOrigin,
   announceActivityData,
   buildVideoAnnounceToFollowers
 }

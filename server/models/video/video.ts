@@ -5,8 +5,26 @@ import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy, AllowNull, BeforeDestroy, BelongsTo, BelongsToMany, Column, CreatedAt, DataType, Default, ForeignKey, HasMany,
-  IFindOptions, Is, IsInt, IsUUID, Min, Model, Scopes, Table, UpdatedAt
+  AfterDestroy,
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  HasMany,
+  IFindOptions,
+  Is,
+  IsInt,
+  IsUUID,
+  Min,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -16,17 +34,30 @@ import { createTorrentPromise, renamePromise, statPromise, unlinkPromise, writeF
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoCategoryValid, isVideoDescriptionValid, isVideoDurationValid, isVideoLanguageValid, isVideoLicenceValid, isVideoNameValid,
+  isVideoCategoryValid,
+  isVideoDescriptionValid,
+  isVideoDurationValid,
+  isVideoLanguageValid,
+  isVideoLicenceValid,
+  isVideoNameValid,
   isVideoPrivacyValid
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
-  API_VERSION, CONFIG, CONSTRAINTS_FIELDS, PREVIEWS_SIZE, REMOTE_SCHEME, STATIC_PATHS, THUMBNAILS_SIZE, VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES
+  API_VERSION,
+  CONFIG,
+  CONSTRAINTS_FIELDS,
+  PREVIEWS_SIZE,
+  REMOTE_SCHEME,
+  STATIC_PATHS,
+  THUMBNAILS_SIZE,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES
 } from '../../initializers'
-import { getAnnounceActivityPubUrl } from '../../lib/activitypub'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
@@ -936,8 +967,7 @@ export class VideoModel extends Model<VideoModel> {
       const shares: string[] = []
 
       for (const videoShare of this.VideoShares) {
-        const shareUrl = getAnnounceActivityPubUrl(this.url, videoShare.Actor)
-        shares.push(shareUrl)
+        shares.push(videoShare.url)
       }
 
       sharesObject = activityPubCollection(shares)

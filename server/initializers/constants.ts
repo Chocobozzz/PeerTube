@@ -12,7 +12,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 180
+const LAST_MIGRATION_VERSION = 185
 
 // ---------------------------------------------------------------------------
 
@@ -195,6 +195,9 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_COMMENTS: {
     TEXT: { min: 2, max: 3000 }, // Length
+    URL: { min: 3, max: 2000 } // Length
+  },
+  VIDEO_SHARE: {
     URL: { min: 3, max: 2000 } // Length
   }
 }
