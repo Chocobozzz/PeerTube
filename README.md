@@ -71,6 +71,8 @@ Want to see it in action?
    * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
      to see what the "decentralization feature" looks like
 
+*Currently PeerTube is still in alpha (we plan to release a beta in march). Demonstration servers do not support public registration. If you really want to test PeerTube before the public release, here is a list of PeerTube servers: https://github.com/Chocobozzz/PeerTube/wiki#other-peertube-servers.*
+
 ## Why
 
 We can't build a FOSS video streaming alternatives to YouTube, Dailymotion,
