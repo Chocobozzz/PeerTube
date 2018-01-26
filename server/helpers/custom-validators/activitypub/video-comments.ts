@@ -1,5 +1,6 @@
 import * as validator from 'validator'
-import { exists, isDateValid } from '../misc'
+import { ACTIVITY_PUB } from '../../../initializers'
+import { exists, isArray, isDateValid } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
 function isVideoCommentCreateActivityValid (activity: any) {
@@ -13,7 +14,9 @@ function isVideoCommentObjectValid (comment: any) {
     isCommentContentValid(comment.content) &&
     isActivityPubUrlValid(comment.inReplyTo) &&
     isDateValid(comment.published) &&
-    isActivityPubUrlValid(comment.url)
+    isActivityPubUrlValid(comment.url) &&
+    isArray(comment.to) &&
+    comment.to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 // Only accept public comments
 }
 
 function isVideoCommentDeleteActivityValid (activity: any) {
