@@ -254,7 +254,7 @@ $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/conf
 
 ## Upgrade
 
-Make a SQL backup:
+Make a SQL backup
 
 ```
 $ SQL_BACKUP_PATH="backup/sql-peertube_prod-$(date -Im).bak" && \
@@ -262,25 +262,51 @@ $ SQL_BACKUP_PATH="backup/sql-peertube_prod-$(date -Im).bak" && \
     sudo pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH"
 ```
 
-Update your configuration file. **If some keys are missing, your upgraded PeerTube won't start!**
+Fetch the latest tagged version of Peertube:
 
 ```
-$ diff <(curl -s https://raw.githubusercontent.com/Chocobozzz/PeerTube/develop/config/production.yaml.example) /var/www/peertube/config/production.yaml
+$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && echo "Latest Peertube version is $VERSION"
 ```
 
-Upgrade PeerTube:
+Download the new version and unzip it:
 
 ```
-$ VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4) && \
-    cd /var/www/peertube/versions && \
+$ cd /var/www/peertube/versions && \
     sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/download/${VERSION}/peertube-${VERSION}.zip" && \
-    sudo -u peertube unzip -o peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip && \
-    cd ../ && sudo rm ./peertube-latest && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest && \
-    cd ./peertube-latest && sudo -u peertube yarn install --production --pure-lockfile && \
-    sudo systemctl restart peertube
+    sudo -u peertube unzip -o peertube-${VERSION}.zip && \
+    sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
-Things went wrong? Change `peertube-latest` destination to the previous version and restore your SQL backup:
+Change the link to point to the latest version:
+
+```
+$ cd /var/www/peertube && \
+    sudo rm ./peertube-latest && \
+    sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
+```
+
+Install node dependencies:
+
+```
+$ cd /var/www/peertube/peertube-latest && \
+    sudo -u peertube yarn install --production --pure-lockfile
+```
+
+Copy new configuration defaults values and update your configuration file:
+
+```
+$ sudo -u peertube cp /var/www/peertube/peertube-latest/config/default.yaml /var/www/peertube/config/default.yaml
+$ diff /var/www/peertube/peertube-latest/config//production.yaml.example /var/www/peertube/config/production.yaml
+```
+
+Restart PeerTube:
+```
+$ sudo systemctl restart peertube
+```
+
+### Things went wrong? 
+
+Change `peertube-latest` destination to the previous version and restore your SQL backup:
 
 ```
 $ OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
