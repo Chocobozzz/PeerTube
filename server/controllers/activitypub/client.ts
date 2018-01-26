@@ -1,7 +1,7 @@
 // Intercept ActivityPub client requests
 import * as express from 'express'
 import { VideoPrivacy } from '../../../shared/models/videos'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
+import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB, CONFIG } from '../../initializers'
 import { buildVideoAnnounceToFollowers } from '../../lib/activitypub/send'
@@ -69,7 +69,7 @@ export {
 function accountController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
 
-  return res.json(account.toActivityPubObject())
+  return res.json(activityPubContextify(account.toActivityPubObject()))
     .end()
 }
 
@@ -77,14 +77,14 @@ async function accountFollowersController (req: express.Request, res: express.Re
   const account: AccountModel = res.locals.account
   const activityPubResult = await actorFollowers(req, account.Actor)
 
-  return res.json(activityPubResult)
+  return res.json(activityPubContextify(activityPubResult))
 }
 
 async function accountFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
   const activityPubResult = await actorFollowing(req, account.Actor)
 
-  return res.json(activityPubResult)
+  return res.json(activityPubContextify(activityPubResult))
 }
 
 async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -93,42 +93,48 @@ async function videoController (req: express.Request, res: express.Response, nex
   // We need more attributes
   const videoAll = await VideoModel.loadAndPopulateAll(video.id)
   const audience = await getAudience(video.VideoChannel.Account.Actor, undefined, video.privacy === VideoPrivacy.PUBLIC)
+  const videoObject = audiencify(videoAll.toActivityPubObject(), audience)
 
-  return res.json(audiencify(videoAll.toActivityPubObject(), audience))
+  return res.json(activityPubContextify(videoObject))
 }
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const share = res.locals.videoShare as VideoShareModel
   const object = await buildVideoAnnounceToFollowers(share.Actor, res.locals.video, undefined)
 
-  return res.json(object)
+  return res.json(activityPubContextify(object))
 }
 
 async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
 
-  return res.json(videoChannel.toActivityPubObject())
+  return res.json(activityPubContextify(videoChannel.toActivityPubObject()))
 }
 
 async function videoChannelFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
   const activityPubResult = await actorFollowers(req, videoChannel.Actor)
 
-  return res.json(activityPubResult)
+  return res.json(activityPubContextify(activityPubResult))
 }
 
 async function videoChannelFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
   const activityPubResult = await actorFollowing(req, videoChannel.Actor)
 
-  return res.json(activityPubResult)
+  return res.json(activityPubContextify(activityPubResult))
 }
 
 async function videoCommentController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoComment: VideoCommentModel = res.locals.videoComment
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
-  return res.json(videoComment.toActivityPubObject(threadParentComments))
+  const isPublic = true // Comments are always public
+  const audience = await getAudience(videoComment.Account.Actor, undefined, isPublic)
+
+  const videoCommentObject = audiencify(videoComment.toActivityPubObject(threadParentComments), audience)
+
+  return res.json(activityPubContextify(videoCommentObject))
 }
 
 // ---------------------------------------------------------------------------
