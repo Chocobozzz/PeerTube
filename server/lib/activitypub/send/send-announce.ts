@@ -1,6 +1,5 @@
 import { Transaction } from 'sequelize'
-import { ActivityAnnounce, ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { getAnnounceActivityPubUrl } from '../url'
@@ -16,14 +15,11 @@ import { createActivityData } from './send-create'
 
 async function buildVideoAnnounceToFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const url = getAnnounceActivityPubUrl(video.url, byActor)
-  const videoObject = video.toActivityPubObject()
-
-  const announcedAudience = await getAudience(byActor, t, video.privacy === VideoPrivacy.PUBLIC)
-  const announcedActivity = await createActivityData(url, video.VideoChannel.Account.Actor, videoObject, t, announcedAudience)
+  const announcedObject = video.url
 
   const accountsToForwardView = await getActorsInvolvedInVideo(video, t)
   const audience = getObjectFollowersAudience(accountsToForwardView)
-  return announceActivityData(url, byActor, announcedActivity, t, audience)
+  return announceActivityData(url, byActor, announcedObject, t, audience)
 }
 
 async function sendVideoAnnounceToFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
@@ -48,7 +44,7 @@ async function sendVideoAnnounceToOrigin (byActor: ActorModel, video: VideoModel
 async function announceActivityData (
   url: string,
   byActor: ActorModel,
-  object: ActivityCreate,
+  object: string,
   t: Transaction,
   audience?: ActivityAudience
 ): Promise<ActivityAnnounce> {

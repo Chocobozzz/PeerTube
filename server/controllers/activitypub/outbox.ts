@@ -43,21 +43,18 @@ async function outboxController (req: express.Request, res: express.Response, ne
   const followersMatrix = await ActorModel.getActorsFollowerSharedInboxUrls(actors, undefined)
 
   for (const video of data.data) {
-    const videoObject = video.toActivityPubObject()
-
     const byActor = video.VideoChannel.Account.Actor
     const createActivityAudience = buildAudience(followersMatrix[byActor.id])
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
-      const createActivity = await createActivityData(video.url, byActor, videoObject, undefined, createActivityAudience)
-
       const announceAudience = buildAudience(followersMatrix[actor.id])
       const url = getAnnounceActivityPubUrl(video.url, actor)
-      const announceActivity = await announceActivityData(url, actor, createActivity, undefined, announceAudience)
+      const announceActivity = await announceActivityData(url, actor, video.url, undefined, announceAudience)
 
       activities.push(announceActivity)
     } else {
+      const videoObject = video.toActivityPubObject()
       const createActivity = await createActivityData(video.url, byActor, videoObject, undefined, createActivityAudience)
 
       activities.push(createActivity)
