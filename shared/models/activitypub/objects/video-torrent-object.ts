@@ -17,7 +17,7 @@ export interface VideoTorrentObject {
   licence: ActivityIdentifierObject
   language: ActivityIdentifierObject
   views: number
-  nsfw: boolean
+  sensitive: boolean
   commentsEnabled: boolean
   published: string
   updated: string

@@ -91,7 +91,7 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     licence,
     language,
     description,
-    nsfw: videoObject.nsfw,
+    nsfw: videoObject.sensitive,
     commentsEnabled: videoObject.commentsEnabled,
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),

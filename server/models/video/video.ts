@@ -1027,7 +1027,7 @@ export class VideoModel extends Model<VideoModel> {
       licence,
       language,
       views: this.views,
-      nsfw: this.nsfw,
+      sensitive: this.nsfw,
       commentsEnabled: this.commentsEnabled,
       published: this.createdAt.toISOString(),
       updated: this.updatedAt.toISOString(),
