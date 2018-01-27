@@ -1,12 +1,16 @@
-export type JobState = 'pending' | 'processing' | 'error' | 'success'
-export type JobCategory = 'transcoding' | 'activitypub-http'
+export type JobState = 'active' | 'complete' | 'failed' | 'inactive' | 'delayed'
+
+export type JobType = 'activitypub-http-unicast' |
+  'activitypub-http-broadcast' |
+  'activitypub-http-fetcher' |
+  'video-file'
 
 export interface Job {
   id: number
   state: JobState
-  category: JobCategory
-  handlerName: string
-  handlerInputData: any
+  type: JobType
+  data: any,
+  error: any,
   createdAt: Date
   updatedAt: Date
 }

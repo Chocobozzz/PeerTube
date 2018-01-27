@@ -5,7 +5,6 @@ import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB } from '../../initializers/constants'
 import { announceActivityData, createActivityData } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/send/misc'
-import { getAnnounceActivityPubUrl } from '../../lib/activitypub/url'
 import { asyncMiddleware, localAccountValidator } from '../../middlewares'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
@@ -43,21 +42,18 @@ async function outboxController (req: express.Request, res: express.Response, ne
   const followersMatrix = await ActorModel.getActorsFollowerSharedInboxUrls(actors, undefined)
 
   for (const video of data.data) {
-    const videoObject = video.toActivityPubObject()
-
     const byActor = video.VideoChannel.Account.Actor
     const createActivityAudience = buildAudience(followersMatrix[byActor.id])
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
-      const createActivity = await createActivityData(video.url, byActor, videoObject, undefined, createActivityAudience)
-
+      const videoShare = video.VideoShares[0]
       const announceAudience = buildAudience(followersMatrix[actor.id])
-      const url = getAnnounceActivityPubUrl(video.url, actor)
-      const announceActivity = await announceActivityData(url, actor, createActivity, undefined, announceAudience)
+      const announceActivity = await announceActivityData(videoShare.url, actor, video.url, undefined, announceAudience)
 
       activities.push(announceActivity)
     } else {
+      const videoObject = video.toActivityPubObject()
       const createActivity = await createActivityData(video.url, byActor, videoObject, undefined, createActivityAudience)
 
       activities.push(createActivity)

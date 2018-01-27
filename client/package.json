@@ -1,6 +1,6 @@
 {
   "name": "peertube-client",
-  "version": "0.0.13-alpha",
+  "version": "0.0.15-alpha",
   "private": true,
   "licence": "GPLv3",
   "author": {
@@ -13,7 +13,7 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "lint": "standard && tslint --type-check --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
+    "lint": "standard && tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
     "webpack": "webpack",
     "ng": "ng",
     "postinstall": "npm rebuild node-sass",

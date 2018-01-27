@@ -1,3 +1,10 @@
+@import '_variables';
+@import '_mixins';
+
+.peertube-select-container {
+  @include peertube-select-container(auto);
+}
+
 pre {
   font-size: 11px;
 }

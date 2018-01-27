@@ -7,6 +7,7 @@ The server is a web server developed with [TypeScript](https://www.typescriptlan
 
   * [TypeScript](https://www.typescriptlang.org/) -> Language
   * [PostgreSQL](https://www.postgresql.org/) -> Database
+  * [Redis](https://redis.io/) -> Job queue/cache
   * [Express](http://expressjs.com) -> Web server framework
   * [Sequelize](http://docs.sequelizejs.com/en/v3/) -> SQL ORM
   * [WebTorrent](https://webtorrent.io/) -> BitTorrent tracker and torrent creation
@@ -19,7 +20,7 @@ The server main file is [server.ts](/server.ts).
 The server modules description are in the [package.json](/package.json) at the project root.
 All other server files are in the [server](/server) directory:
 
-    server.ts -> app initilization, main routes configuration (static routes...)
+    server.ts -> app initialization, main routes configuration (static routes...)
     config    -> server YAML configurations (for tests, production...)
     scripts   -> Scripts files for npm run
     server

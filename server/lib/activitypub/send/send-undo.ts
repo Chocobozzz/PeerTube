@@ -1,11 +1,5 @@
 import { Transaction } from 'sequelize'
-import {
-  ActivityAudience,
-  ActivityCreate,
-  ActivityFollow,
-  ActivityLike,
-  ActivityUndo
-} from '../../../../shared/models/activitypub'
+import { ActivityAudience, ActivityCreate, ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { VideoModel } from '../../../models/video/video'
@@ -33,7 +27,7 @@ async function sendUndoFollow (actorFollow: ActorFollowModel, t: Transaction) {
   const object = followActivityData(followUrl, me, following)
   const data = await undoActivityData(undoUrl, me, object, t)
 
-  return unicastTo(data, me, following.inboxUrl, t)
+  return unicastTo(data, me, following.inboxUrl)
 }
 
 async function sendUndoLikeToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
@@ -45,7 +39,7 @@ async function sendUndoLikeToOrigin (byActor: ActorModel, video: VideoModel, t: 
   const object = await likeActivityData(likeUrl, byActor, video, t)
   const data = await undoActivityData(undoUrl, byActor, object, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function sendUndoLikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
@@ -72,7 +66,7 @@ async function sendUndoDislikeToOrigin (byActor: ActorModel, video: VideoModel, 
 
   const data = await undoActivityData(undoUrl, byActor, object, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function sendUndoDislikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {

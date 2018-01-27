@@ -90,7 +90,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       await Promise.all(videoFileDestroyTasks)
 
       const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoInstance, videoAttributesToUpdate)
-      const tasks: Bluebird<any>[] = videoFileAttributes.map(f => VideoFileModel.create(f))
+      const tasks = videoFileAttributes.map(f => VideoFileModel.create(f))
       await Promise.all(tasks)
 
       const tags = videoAttributesToUpdate.tag.map(t => t.name)

@@ -1,10 +1,12 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from '@app/shared'
+import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
+import { Subscription } from 'rxjs/Subscription'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
@@ -22,11 +24,12 @@ import { VideoService } from '../../shared/video/video.service'
   ]
 })
 
-export class VideoAddComponent extends FormReactive implements OnInit {
+export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy, CanComponentDeactivate {
   @ViewChild('videofileInput') videofileInput
 
   isUploadingVideo = false
   videoUploaded = false
+  videoUploadObservable: Subscription = null
   videoUploadPercents = 0
   videoUploadedIds = {
     id: 0,
@@ -83,6 +86,28 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         })
   }
 
+  ngOnDestroy () {
+    if (this.videoUploadObservable) {
+      this.videoUploadObservable.unsubscribe()
+    }
+  }
+
+  canDeactivate () {
+    let text = ''
+
+    if (this.videoUploaded === true) {
+      text = 'Your video was uploaded in your account and is private.' +
+        ' But associated data (tags, description...) will be lost, are you sure you want to leave this page?'
+    } else {
+      text = 'Your video is not uploaded yet, are you sure you want to leave this page?'
+    }
+
+    return {
+      canDeactivate: !this.isUploadingVideo,
+      text
+    }
+  }
+
   fileChange () {
     this.uploadFirstStep()
   }
@@ -91,6 +116,16 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.forceCheck()
 
     return this.form.valid
+  }
+
+  cancelUpload () {
+    if (this.videoUploadObservable !== null) {
+      this.videoUploadObservable.unsubscribe()
+      this.isUploadingVideo = false
+      this.videoUploadPercents = 0
+      this.videoUploadObservable = null
+      this.notificationsService.info('Info', 'Upload cancelled')
+    }
   }
 
   uploadFirstStep () {
@@ -132,7 +167,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
       channelId
     })
 
-    this.videoService.uploadVideo(formData).subscribe(
+    this.videoUploadObservable = this.videoService.uploadVideo(formData).subscribe(
       event => {
         if (event.type === HttpEventType.UploadProgress) {
           this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
@@ -142,6 +177,8 @@ export class VideoAddComponent extends FormReactive implements OnInit {
           this.videoUploaded = true
 
           this.videoUploadedIds = event.body.video
+
+          this.videoUploadObservable = null
         }
       },
 
@@ -149,6 +186,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
         // Reset progress
         this.isUploadingVideo = false
         this.videoUploadPercents = 0
+        this.videoUploadObservable = null
         this.notificationsService.error('Error', err.message)
       }
     )
@@ -168,6 +206,7 @@ export class VideoAddComponent extends FormReactive implements OnInit {
     this.videoService.updateVideo(video)
       .subscribe(
         () => {
+          this.isUploadingVideo = false
           this.notificationsService.success('Success', 'Video published.')
           this.router.navigate([ '/videos/watch', video.uuid ])
         },

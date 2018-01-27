@@ -1,6 +1,5 @@
 import { ActivityAnnounce } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
@@ -8,24 +7,11 @@ import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity } from '../send/misc'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
-import { processCreateActivity } from './process-create'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {
-  const announcedActivity = activity.object
   const actorAnnouncer = await getOrCreateActorAndServerAndModel(activity.actor)
 
-  if (typeof announcedActivity === 'string') {
-    return processVideoShare(actorAnnouncer, activity)
-  } else if (announcedActivity.type === 'Create' && announcedActivity.object.type === 'Video') {
-    return processVideoShare(actorAnnouncer, activity)
-  }
-
-  logger.warn(
-    'Unknown activity object type %s -> %s when announcing activity.', announcedActivity.type, announcedActivity.object.type,
-    { activity: activity.id }
-  )
-
-  return undefined
+  return processVideoShare(actorAnnouncer, activity)
 }
 
 // ---------------------------------------------------------------------------
@@ -46,26 +32,25 @@ function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnoun
 }
 
 async function shareVideo (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
-  const announced = activity.object
+  const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
   let video: VideoModel
 
-  if (typeof announced === 'string') {
-    const res = await getOrCreateAccountAndVideoAndChannel(announced)
-    video = res.video
-  } else {
-    video = await processCreateActivity(announced)
-  }
+  const res = await getOrCreateAccountAndVideoAndChannel(objectUri)
+  video = res.video
 
   return sequelizeTypescript.transaction(async t => {
     // Add share entry
 
     const share = {
       actorId: actorAnnouncer.id,
-      videoId: video.id
+      videoId: video.id,
+      url: activity.id
     }
 
     const [ , created ] = await VideoShareModel.findOrCreate({
-      where: share,
+      where: {
+        url: activity.id
+      },
       defaults: share,
       transaction: t
     })

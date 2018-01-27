@@ -15,7 +15,7 @@ function activityPubContextify <T> (data: T) {
         'uuid': 'http://schema.org/identifier',
         'category': 'http://schema.org/category',
         'licence': 'http://schema.org/license',
-        'nsfw': 'as:sensitive',
+        'sensitive': 'as:sensitive',
         'language': 'http://schema.org/inLanguage',
         'views': 'http://schema.org/Number',
         'size': 'http://schema.org/Number',

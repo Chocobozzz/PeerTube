@@ -1,10 +1,19 @@
+import * as kue from 'kue'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { ActivityPubHttpPayload, buildSignedRequestOptions, computeBody, maybeRetryRequestLater } from './activitypub-http-job-scheduler'
+import { buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 
-async function process (payload: ActivityPubHttpPayload, jobId: number) {
-  logger.info('Processing ActivityPub broadcast in job %d.', jobId)
+export type ActivitypubHttpBroadcastPayload = {
+  uris: string[]
+  signatureActorId?: number
+  body: any
+}
+
+async function processActivityPubHttpBroadcast (job: kue.Job) {
+  logger.info('Processing ActivityPub broadcast in job %d.', job.id)
+
+  const payload = job.data as ActivitypubHttpBroadcastPayload
 
   const body = await computeBody(payload)
   const httpSignatureOptions = await buildSignedRequestOptions(payload)
@@ -26,28 +35,15 @@ async function process (payload: ActivityPubHttpPayload, jobId: number) {
       await doRequest(options)
       goodUrls.push(uri)
     } catch (err) {
-      const isRetryingLater = await maybeRetryRequestLater(err, payload, uri)
-      if (isRetryingLater === false) badUrls.push(uri)
+      badUrls.push(uri)
     }
   }
 
   return ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes(goodUrls, badUrls, undefined)
 }
 
-function onError (err: Error, jobId: number) {
-  logger.error('Error when broadcasting ActivityPub request in job %d.', jobId, err)
-  return Promise.resolve()
-}
-
-function onSuccess (jobId: number) {
-  logger.info('Job %d is a success.', jobId)
-  return Promise.resolve()
-}
-
 // ---------------------------------------------------------------------------
 
 export {
-  process,
-  onError,
-  onSuccess
+  processActivityPubHttpBroadcast
 }

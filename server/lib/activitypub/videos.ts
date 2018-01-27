@@ -4,13 +4,14 @@ import { join } from 'path'
 import * as request from 'request'
 import { ActivityIconObject } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
-import { VideoPrivacy } from '../../../shared/models/videos'
+import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { isVideoTorrentObjectValid } from '../../helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import { ACTIVITY_PUB, CONFIG, REMOTE_SCHEME, sequelizeTypescript, STATIC_PATHS, VIDEO_MIMETYPE_EXT } from '../../initializers'
+import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -18,6 +19,7 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoFileModel } from '../../models/video/video-file'
 import { VideoShareModel } from '../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from './actor'
+import { addVideoComments } from './video-comments'
 
 function fetchRemoteVideoPreview (video: VideoModel, reject: Function) {
   const host = video.VideoChannel.Account.Actor.Server.host
@@ -89,7 +91,7 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     licence,
     language,
     description,
-    nsfw: videoObject.nsfw,
+    nsfw: videoObject.sensitive,
     commentsEnabled: videoObject.commentsEnabled,
     channelId: videoChannel.id,
     duration: parseInt(duration, 10),
@@ -163,7 +165,7 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
       throw new Error('Cannot find valid files for video %s ' + videoObject.url)
     }
 
-    const tasks: Bluebird<any>[] = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
+    const tasks = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
     await Promise.all(tasks)
 
     const tags = videoObject.tag.map(t => t.name)
@@ -211,7 +213,55 @@ async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentOb
 
   const video = await retryTransactionWrapper(getOrCreateVideo, options)
 
+  // Process outside the transaction because we could fetch remote data
+  if (videoObject.likes && Array.isArray(videoObject.likes.orderedItems)) {
+    logger.info('Adding likes of video %s.', video.uuid)
+    await createRates(videoObject.likes.orderedItems, video, 'like')
+  }
+
+  if (videoObject.dislikes && Array.isArray(videoObject.dislikes.orderedItems)) {
+    logger.info('Adding dislikes of video %s.', video.uuid)
+    await createRates(videoObject.dislikes.orderedItems, video, 'dislike')
+  }
+
+  if (videoObject.shares && Array.isArray(videoObject.shares.orderedItems)) {
+    logger.info('Adding shares of video %s.', video.uuid)
+    await addVideoShares(video, videoObject.shares.orderedItems)
+  }
+
+  if (videoObject.comments && Array.isArray(videoObject.comments.orderedItems)) {
+    logger.info('Adding comments of video %s.', video.uuid)
+    await addVideoComments(video, videoObject.comments.orderedItems)
+  }
+
   return { actor, channelActor, video }
+}
+
+async function createRates (actorUrls: string[], video: VideoModel, rate: VideoRateType) {
+  let rateCounts = 0
+  const tasks: Bluebird<number>[] = []
+
+  for (const actorUrl of actorUrls) {
+    const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+    const p = AccountVideoRateModel
+      .create({
+        videoId: video.id,
+        accountId: actor.Account.id,
+        type: rate
+      })
+      .then(() => rateCounts += 1)
+
+    tasks.push(p)
+  }
+
+  await Promise.all(tasks)
+
+  logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
+
+  // This is "likes" and "dislikes"
+  await video.increment(rate + 's', { by: rateCounts })
+
+  return
 }
 
 async function addVideoShares (instance: VideoModel, shareUrls: string[]) {
@@ -229,11 +279,14 @@ async function addVideoShares (instance: VideoModel, shareUrls: string[]) {
 
     const entry = {
       actorId: actor.id,
-      videoId: instance.id
+      videoId: instance.id,
+      url: shareUrl
     }
 
     await VideoShareModel.findOrCreate({
-      where: entry,
+      where: {
+        url: shareUrl
+      },
       defaults: entry
     })
   }

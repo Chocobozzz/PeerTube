@@ -10,7 +10,7 @@
 
 ```
 $ sudo apt update
-$ sudo apt install nginx ffmpeg postgresql openssl g++ make
+$ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server
 ```
 
 ## Arch Linux
@@ -18,7 +18,7 @@ $ sudo apt install nginx ffmpeg postgresql openssl g++ make
   1. Run:
 
 ```
-$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl
+$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis
 ```
 
 ## Other distributions

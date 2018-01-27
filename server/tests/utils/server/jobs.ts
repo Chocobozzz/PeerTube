@@ -1,7 +1,8 @@
 import * as request from 'supertest'
+import { JobState } from '../../../../shared/models'
 
-function getJobsList (url: string, accessToken: string) {
-  const path = '/api/v1/jobs'
+function getJobsList (url: string, accessToken: string, state: JobState) {
+  const path = '/api/v1/jobs/' + state
 
   return request(url)
           .get(path)
@@ -11,8 +12,8 @@ function getJobsList (url: string, accessToken: string) {
           .expect('Content-Type', /json/)
 }
 
-function getJobsListPaginationAndSort (url: string, accessToken: string, start: number, count: number, sort: string) {
-  const path = '/api/v1/jobs'
+function getJobsListPaginationAndSort (url: string, accessToken: string, state: JobState, start: number, count: number, sort: string) {
+  const path = '/api/v1/jobs/' + state
 
   return request(url)
           .get(path)

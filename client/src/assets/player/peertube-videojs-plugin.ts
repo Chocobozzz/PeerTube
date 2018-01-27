@@ -56,7 +56,8 @@ class ResolutionMenuItem extends MenuItem {
   }
 
   handleClick (event) {
-    MenuItem.prototype.handleClick.call(this, event)
+    super.handleClick(event)
+
     this.player_.peertube().updateResolution(this.options_.id)
   }
 }
@@ -279,14 +280,14 @@ class PeerTubePlugin extends Plugin {
         if (err) return this.handleError(err)
 
         this.renderer = renderer
-        this.player.play().then(done)
+        if (!this.player.paused()) this.player.play().then(done)
       })
     })
 
     this.torrent.on('error', err => this.handleError(err))
     this.torrent.on('warning', (err: any) => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
-      if (err.message.indexOf('Unsupported tracker protocol: http') !== -1) return
+      if (err.message.indexOf('Unsupported tracker protocol') !== -1) return
       // Users don't care about issues with WebRTC, but developers do so log it in the console
       if (err.message.indexOf('Ice connection failed') !== -1) {
         console.error(err)
@@ -303,6 +304,9 @@ class PeerTubePlugin extends Plugin {
     // Remember player state
     const currentTime = this.player.currentTime()
     const isPaused = this.player.paused()
+
+    // Remove poster to have black background
+    this.playerElement.poster = ''
 
     // Hide bigPlayButton
     if (!isPaused) {

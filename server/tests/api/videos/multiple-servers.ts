@@ -475,16 +475,17 @@ describe('Test multiple servers', function () {
     it('Should like and dislikes videos on different services', async function () {
       this.timeout(20000)
 
-      const tasks: Promise<any>[] = []
-      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like'))
-      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'dislike'))
-      tasks.push(rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'like'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'dislike'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[1], 'dislike'))
-      tasks.push(rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[0], 'like'))
-
-      await Promise.all(tasks)
+      await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like')
+      await wait(200)
+      await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'dislike')
+      await wait(200)
+      await rateVideo(servers[0].url, servers[0].accessToken, remoteVideosServer1[0], 'like')
+      await rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'like')
+      await wait(200)
+      await rateVideo(servers[2].url, servers[2].accessToken, localVideosServer3[1], 'dislike')
+      await rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[1], 'dislike')
+      await wait(200)
+      await rateVideo(servers[2].url, servers[2].accessToken, remoteVideosServer3[0], 'like')
 
       await wait(10000)
 

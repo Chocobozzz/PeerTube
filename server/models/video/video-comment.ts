@@ -104,6 +104,10 @@ enum ScopeNames {
     },
     {
       fields: [ 'videoId', 'originCommentId' ]
+    },
+    {
+      fields: [ 'url' ],
+      unique: true
     }
   ]
 })

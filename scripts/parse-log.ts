@@ -2,8 +2,27 @@ import { createReadStream } from 'fs'
 import { join } from 'path'
 import { createInterface } from 'readline'
 import * as winston from 'winston'
-import { labelFormatter, loggerFormat, timestampFormatter } from '../server/helpers/logger'
+import { labelFormatter } from '../server/helpers/logger'
 import { CONFIG } from '../server/initializers/constants'
+
+const excludedKeys = {
+  level: true,
+  message: true,
+  splat: true,
+  timestamp: true,
+  label: true
+}
+function keysExcluder (key, value) {
+  return excludedKeys[key] === true ? undefined : value
+}
+
+const loggerFormat = winston.format.printf((info) => {
+  let additionalInfos = JSON.stringify(info, keysExcluder, 2)
+  if (additionalInfos === '{}') additionalInfos = ''
+  else additionalInfos = ' ' + additionalInfos
+
+  return `[${info.label}] ${new Date(info.timestamp).toISOString()} ${info.level}: ${info.message}${additionalInfos}`
+})
 
 const logger = new winston.createLogger({
   transports: [
@@ -11,7 +30,6 @@ const logger = new winston.createLogger({
       level: 'debug',
       stderrLevels: [],
       format: winston.format.combine(
-        timestampFormatter,
         winston.format.splat(),
         labelFormatter,
         winston.format.colorize(),

@@ -16,6 +16,7 @@ function retryTransactionWrapper <T> (
         .catch(err => callback(err))
   })
   .catch(err => {
+    console.error(err)
     logger.error(options.errorMessage, err)
     throw err
   })

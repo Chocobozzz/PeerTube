@@ -20,7 +20,7 @@ async function sendLikeToOrigin (byActor: ActorModel, video: VideoModel, t: Tran
   const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
   const data = await likeActivityData(url, byActor, video, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl, t)
+  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
 }
 
 async function sendLikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {

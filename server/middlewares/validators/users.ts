@@ -12,6 +12,7 @@ import { isSignupAllowed } from '../../helpers/utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
+import { omit } from 'lodash'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -21,7 +22,7 @@ const usersAddValidator = [
   body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersAdd parameters', { parameters: req.body })
+    logger.debug('Checking usersAdd parameters', { parameters: omit(req.body, 'password') })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
@@ -36,7 +37,7 @@ const usersRegisterValidator = [
   body('email').isEmail().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersRegister parameters', { parameters: req.body })
+    logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
@@ -96,7 +97,7 @@ const usersUpdateMeValidator = [
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // TODO: Add old password verification
-    logger.debug('Checking usersUpdateMe parameters', { parameters: req.body })
+    logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
 
     if (areValidationErrors(req, res)) return
 
@@ -131,7 +132,7 @@ const usersGetValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersGet parameters', { parameters: req.body })
+    logger.debug('Checking usersGet parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return

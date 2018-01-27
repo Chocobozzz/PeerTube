@@ -17,7 +17,6 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 
 const serverFollowsRouter = express.Router()
-
 serverFollowsRouter.get('/following',
   paginationValidator,
   followingSortValidator,
@@ -124,7 +123,7 @@ function follow (fromActor: ActorModel, targetActor: ActorModel) {
     actorFollow.ActorFollower = fromActor
 
     // Send a notification to remote server
-    await sendFollow(actorFollow, t)
+    await sendFollow(actorFollow)
   })
 }
 

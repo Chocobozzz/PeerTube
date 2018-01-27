@@ -19,6 +19,12 @@
   },
   "exclude": [
     "node_modules",
-    "client"
+    "client",
+    "test1",
+    "test2",
+    "test3",
+    "test4",
+    "test5",
+    "test6"
   ]
 }

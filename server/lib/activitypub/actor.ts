@@ -64,7 +64,11 @@ async function getOrCreateActorAndServerAndModel (actorUrl: string, recurseIfNee
     actor = await retryTransactionWrapper(saveActorAndServerAndModelIfNotExist, options)
   }
 
-  return refreshActorIfNeeded(actor)
+  const options = {
+    arguments: [ actor ],
+    errorMessage: 'Cannot refresh actor if needed with many retries.'
+  }
+  return retryTransactionWrapper(refreshActorIfNeeded, options)
 }
 
 function buildActorInstance (type: ActivityPubActorType, url: string, preferredUsername: string, uuid?: string) {
@@ -252,7 +256,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
   logger.info('Fetching remote actor %s.', actorUrl)
 
   const requestResult = await doRequest(options)
-  const actorJSON: ActivityPubActor = requestResult.body
+  const actorJSON: ActivityPubActor = normalizeActor(requestResult.body)
 
   if (isActorObjectValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
@@ -325,36 +329,48 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
 async function refreshActorIfNeeded (actor: ActorModel) {
   if (!actor.isOutdated()) return actor
 
-  const actorUrl = await getUrlFromWebfinger(actor.preferredUsername, actor.getHost())
-  const result = await fetchRemoteActor(actorUrl)
-  if (result === undefined) {
-    logger.warn('Cannot fetch remote actor in refresh actor.')
+  try {
+    const actorUrl = await getUrlFromWebfinger(actor.preferredUsername, actor.getHost())
+    const result = await fetchRemoteActor(actorUrl)
+    if (result === undefined) {
+      logger.warn('Cannot fetch remote actor in refresh actor.')
+      return actor
+    }
+
+    return sequelizeTypescript.transaction(async t => {
+      updateInstanceWithAnother(actor, result.actor)
+
+      if (result.avatarName !== undefined) {
+        await updateActorAvatarInstance(actor, result.avatarName, t)
+      }
+
+      // Force update
+      actor.setDataValue('updatedAt', new Date())
+      await actor.save({ transaction: t })
+
+      if (actor.Account) {
+        await actor.save({ transaction: t })
+
+        actor.Account.set('name', result.name)
+        await actor.Account.save({ transaction: t })
+      } else if (actor.VideoChannel) {
+        await actor.save({ transaction: t })
+
+        actor.VideoChannel.set('name', result.name)
+        await actor.VideoChannel.save({ transaction: t })
+      }
+
+      return actor
+    })
+  } catch (err) {
+    logger.warn('Cannot refresh actor.', err)
     return actor
   }
+}
 
-  return sequelizeTypescript.transaction(async t => {
-    updateInstanceWithAnother(actor, result.actor)
+function normalizeActor (actor: any) {
+  if (actor && actor.url && typeof actor.url === 'string') return actor
 
-    if (result.avatarName !== undefined) {
-      await updateActorAvatarInstance(actor, result.avatarName, t)
-    }
-
-    // Force update
-    actor.setDataValue('updatedAt', new Date())
-    await actor.save({ transaction: t })
-
-    if (actor.Account) {
-      await actor.save({ transaction: t })
-
-      actor.Account.set('name', result.name)
-      await actor.Account.save({ transaction: t })
-    } else if (actor.VideoChannel) {
-      await actor.save({ transaction: t })
-
-      actor.VideoChannel.set('name', result.name)
-      await actor.VideoChannel.save({ transaction: t })
-    }
-
-    return actor
-  })
+  actor.url = actor.url.href || actor.url.url
+  return actor
 }

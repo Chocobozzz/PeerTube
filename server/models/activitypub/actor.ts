@@ -389,7 +389,7 @@ export class ActorModel extends Model<ActorModel> {
           attribute: [],
           model: ActorFollowModel.unscoped(),
           required: true,
-          as: 'ActorFollowers',
+          as: 'ActorFollowing',
           where: {
             state: 'accepted',
             targetActorId: this.id

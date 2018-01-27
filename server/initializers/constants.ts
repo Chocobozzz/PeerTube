@@ -1,6 +1,6 @@
 import { IConfig } from 'config'
 import { dirname, join } from 'path'
-import { JobCategory, JobState, VideoRateType } from '../../shared/models'
+import { JobType, VideoRateType } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoPrivacy } from '../../shared/models/videos'
@@ -12,7 +12,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 175
+const LAST_MIGRATION_VERSION = 185
 
 // ---------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ const PAGINATION_COUNT_DEFAULT = 15
 const SORTABLE_COLUMNS = {
   USERS: [ 'id', 'username', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
-  JOBS: [ 'id', 'createdAt' ],
+  JOBS: [ 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],
@@ -61,23 +61,20 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
-const JOB_STATES: { [ id: string ]: JobState } = {
-  PENDING: 'pending',
-  PROCESSING: 'processing',
-  ERROR: 'error',
-  SUCCESS: 'success'
+const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
+  'activitypub-http-broadcast': 5,
+  'activitypub-http-unicast': 5,
+  'activitypub-http-fetcher': 5,
+  'video-file': 1
 }
-const JOB_CATEGORIES: { [ id: string ]: JobCategory } = {
-  TRANSCODING: 'transcoding',
-  ACTIVITYPUB_HTTP: 'activitypub-http'
+const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
+  'activitypub-http-broadcast': 1,
+  'activitypub-http-unicast': 5,
+  'activitypub-http-fetcher': 1,
+  'video-file': 1
 }
-// How many maximum jobs we fetch from the database per cycle
-const JOBS_FETCH_LIMIT_PER_CYCLE = {
-  transcoding: 10,
-  httpRequest: 20
-}
-// 1 minutes
-let JOBS_FETCHING_INTERVAL = 60000
+// 2 days
+const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2
 
 // 1 hour
 let SCHEDULER_INTERVAL = 60000 * 60
@@ -95,6 +92,11 @@ const CONFIG = {
     PORT: config.get<number>('database.port'),
     USERNAME: config.get<string>('database.username'),
     PASSWORD: config.get<string>('database.password')
+  },
+  REDIS: {
+    HOSTNAME: config.get<string>('redis.hostname'),
+    PORT: config.get<string>('redis.port'),
+    AUTH: config.get<string>('redis.auth')
   },
   STORAGE: {
     AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
@@ -194,6 +196,9 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_COMMENTS: {
     TEXT: { min: 2, max: 3000 }, // Length
     URL: { min: 3, max: 2000 } // Length
+  },
+  VIDEO_SHARE: {
+    URL: { min: 3, max: 2000 } // Length
   }
 }
 
@@ -284,7 +289,6 @@ const ACTIVITY_PUB = {
   PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 100,
-  MAX_HTTP_ATTEMPT: 5,
   URL_MIME_TYPES: {
     VIDEO: Object.keys(VIDEO_MIMETYPE_EXT),
     TORRENT: [ 'application/x-bittorrent' ],
@@ -358,7 +362,6 @@ const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 // Special constants for a test instance
 if (isTestInstance() === true) {
   ACTOR_FOLLOW_SCORE.BASE = 20
-  JOBS_FETCHING_INTERVAL = 1000
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
   STATIC_MAX_AGE = '0'
@@ -381,10 +384,8 @@ export {
   CONFIG,
   CONSTRAINTS_FIELDS,
   EMBED_SIZE,
-  JOB_STATES,
-  JOBS_FETCH_LIMIT_PER_CYCLE,
-  JOBS_FETCHING_INTERVAL,
-  JOB_CATEGORIES,
+  JOB_CONCURRENCY,
+  JOB_ATTEMPTS,
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   OPENGRAPH_AND_OEMBED_COMMENT,
@@ -408,7 +409,8 @@ export {
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
   AVATAR_MIMETYPE_EXT,
-  SCHEDULER_INTERVAL
+  SCHEDULER_INTERVAL,
+  JOB_COMPLETED_LIFETIME
 }
 
 // ---------------------------------------------------------------------------
