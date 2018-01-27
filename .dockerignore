@@ -1,4 +1,10 @@
-.git
 *.swp
-Dockerfile.*
-docker-compose.yml
+*.md
+.git
+.github
+config
+support/doc
+support/nginx
+support/systemd
+support/docker/*/Dockerfile.*
+support/docker/*/*.yml
