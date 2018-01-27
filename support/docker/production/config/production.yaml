@@ -44,7 +44,7 @@ admin:
 
 signup:
   enabled: false
-  limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  limit: -1
 
 user:
   # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).

@@ -30,6 +30,9 @@ signup:
   enabled:
     __name: "PEERTUBE_SIGNUP_ENABLED"
     __format: "json"
+  limit:
+    __name: "PEETUBE_SIGNUP_LIMIT"
+    __format: "json"
 
 transcoding:
   enabled:
