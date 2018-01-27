@@ -15,6 +15,12 @@ database:
   username: 'postgres'
   password: 'postgres'
 
+# Redis server for short time storage
+redis:
+  hostname: 'redis'
+  port: 6379
+  auth: null
+
 # From the project root directory
 storage:
   avatars: '../data/avatars/'

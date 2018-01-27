@@ -16,6 +16,13 @@ database:
   username: "PEERTUBE_DB_USERNAME"
   password: "PEERTUBE_DB_PASSWORD"
 
+redis:
+  hostname: "PEERTUBE_REDIS_HOSTNAME"
+  port:
+    __name: "PEERTUBE_REDIS_PORT"
+    __format: "json"
+  auth: "PEERTUBE_REDIS_AUTH"
+
 admin:
   email: "PEERTUBE_ADMIN_EMAIL"
 
