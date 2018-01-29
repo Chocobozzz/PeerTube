@@ -1,0 +1,40 @@
+webserver:
+  hostname: "PEERTUBE_HOSTNAME"
+  port:
+    __name: "PEERTUBE_PORT"
+    __format: "json"
+  https:
+    __name: "PEERTUBE_HTTPS"
+    __format: "json"
+
+database:
+  hostname: "PEERTUBE_DB_HOSTNAME"
+  port:
+    __name: "PEERTUBE_DB_PORT"
+    __format: "json"
+  suffix: "PEERTUBE_DB_SUFFIX"
+  username: "PEERTUBE_DB_USERNAME"
+  password: "PEERTUBE_DB_PASSWORD"
+
+redis:
+  hostname: "PEERTUBE_REDIS_HOSTNAME"
+  port:
+    __name: "PEERTUBE_REDIS_PORT"
+    __format: "json"
+  auth: "PEERTUBE_REDIS_AUTH"
+
+admin:
+  email: "PEERTUBE_ADMIN_EMAIL"
+
+signup:
+  enabled:
+    __name: "PEERTUBE_SIGNUP_ENABLED"
+    __format: "json"
+  limit:
+    __name: "PEETUBE_SIGNUP_LIMIT"
+    __format: "json"
+
+transcoding:
+  enabled:
+    __name: "PEERTUBE_TRANSCODING_ENABLED"
+    __format: "json"

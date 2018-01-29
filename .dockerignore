@@ -1,0 +1,10 @@
+*.swp
+*.md
+.git
+.github
+config
+support/doc
+support/nginx
+support/systemd
+support/docker/*/Dockerfile.*
+support/docker/*/*.yml
