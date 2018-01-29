@@ -42,6 +42,14 @@ $control-bar-height: 34px;
       border: 0;
       padding: 0
     }
+
+    .vjs-icon-placeholder::before {
+      transition: text-shadow 0.3s;
+    }
+
+    &:hover .vjs-icon-placeholder::before {
+      text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    }
   }
 
   &.vjs-has-started .vjs-big-play-button {
