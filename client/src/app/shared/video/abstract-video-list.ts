@@ -10,7 +10,7 @@ import { Video } from './video.model'
 export abstract class AbstractVideoList implements OnInit {
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 25,
+    itemsPerPage: 10,
     totalItems: null
   }
   sort: SortField = '-createdAt'
@@ -26,6 +26,9 @@ export abstract class AbstractVideoList implements OnInit {
   protected abstract currentRoute: string
 
   abstract titlePage: string
+
+  protected otherParams = {}
+
   private loadedPages: { [ id: number ]: boolean } = {}
 
   abstract getVideosObservable (): Observable<{ videos: Video[], totalVideos: number}>
@@ -119,7 +122,7 @@ export abstract class AbstractVideoList implements OnInit {
       page: this.pagination.currentPage
     }
 
-    return params
+    return Object.assign(params, this.otherParams)
   }
 
   protected loadRouteParams (routeParams: { [ key: string ]: any }) {
