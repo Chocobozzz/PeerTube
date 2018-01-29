@@ -59,7 +59,10 @@ export class RestExtractor {
         } else if (err.error.error) {
           errorMessage = err.error.error
         }
+      } else if (err.status === 413) {
+        errorMessage = 'Request is too large for the server. Please contact you administrator if you want to increase the limit size.'
       }
+
       errorMessage = errorMessage ? errorMessage : 'Unknown error.'
       console.error(`Backend returned code ${err.status}, body was: ${errorMessage}`)
     } else {
