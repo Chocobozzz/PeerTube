@@ -25,8 +25,9 @@ function activityPubContextify <T> (data: T) {
   })
 }
 
-function activityPubCollection (results: any[]) {
+function activityPubCollection (url: string, results: any[]) {
   return {
+    id: url,
     type: 'OrderedCollection',
     totalItems: results.length,
     orderedItems: results

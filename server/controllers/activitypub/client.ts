@@ -36,9 +36,25 @@ activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub(asyncMiddleware(videosGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoController))
 )
+activityPubClientRouter.get('/videos/watch/:id/announces',
+  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoAnnouncesController))
+)
 activityPubClientRouter.get('/videos/watch/:id/announces/:accountId',
   executeIfActivityPub(asyncMiddleware(videosShareValidator)),
   executeIfActivityPub(asyncMiddleware(videoAnnounceController))
+)
+activityPubClientRouter.get('/videos/watch/:id/likes',
+  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoLikesController))
+)
+activityPubClientRouter.get('/videos/watch/:id/dislikes',
+  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoDislikesController))
+)
+activityPubClientRouter.get('/videos/watch/:id/comments',
+  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoCommentsController))
 )
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
   executeIfActivityPub(asyncMiddleware(videoCommentGetValidator)),
@@ -103,6 +119,46 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
   const object = await buildVideoAnnounceToFollowers(share.Actor, share, res.locals.video, undefined)
 
   return res.json(activityPubContextify(object))
+}
+
+async function videoAnnouncesController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const video: VideoModel = res.locals.video
+
+  // We need more attributes
+  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
+  const object = videoAll.toAnnouncesActivityPubObject()
+
+  return res.json(activityPubContextify(object))
+}
+
+async function videoLikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const video: VideoModel = res.locals.video
+
+  // We need more attributes
+  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
+  const { likesObject } = videoAll.toRatesActivityPubObjects()
+
+  return res.json(activityPubContextify(likesObject))
+}
+
+async function videoDislikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const video: VideoModel = res.locals.video
+
+  // We need more attributes
+  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
+  const { dislikesObject } = videoAll.toRatesActivityPubObjects()
+
+  return res.json(activityPubContextify(dislikesObject))
+}
+
+async function videoCommentsController (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const video: VideoModel = res.locals.video
+
+  // We need more attributes
+  const videoAll = await VideoModel.loadAndPopulateAll(video.id)
+  const commentsObject = videoAll.toCommentsActivityPubObject()
+
+  return res.json(activityPubContextify(commentsObject))
 }
 
 async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {

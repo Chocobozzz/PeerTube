@@ -58,6 +58,12 @@ import {
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
 } from '../../initializers'
+import {
+  getVideoCommentsActivityPubUrl,
+  getVideoDislikesActivityPubUrl,
+  getVideoLikesActivityPubUrl,
+  getVideoSharesActivityPubUrl
+} from '../../lib/activitypub'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
@@ -958,30 +964,19 @@ export class VideoModel extends Model<VideoModel> {
         }
       }
 
-      likesObject = activityPubCollection(likes)
-      dislikesObject = activityPubCollection(dislikes)
+      const res = this.toRatesActivityPubObjects()
+      likesObject = res.likesObject
+      dislikesObject = res.dislikesObject
     }
 
     let sharesObject
     if (Array.isArray(this.VideoShares)) {
-      const shares: string[] = []
-
-      for (const videoShare of this.VideoShares) {
-        shares.push(videoShare.url)
-      }
-
-      sharesObject = activityPubCollection(shares)
+      sharesObject = this.toAnnouncesActivityPubObject()
     }
 
     let commentsObject
     if (Array.isArray(this.VideoComments)) {
-      const comments: string[] = []
-
-      for (const videoComment of this.VideoComments) {
-        comments.push(videoComment.url)
-      }
-
-      commentsObject = activityPubCollection(comments)
+      commentsObject = this.toCommentsActivityPubObject()
     }
 
     const url = []
@@ -1056,6 +1051,44 @@ export class VideoModel extends Model<VideoModel> {
         }
       ]
     }
+  }
+
+  toAnnouncesActivityPubObject () {
+    const shares: string[] = []
+
+    for (const videoShare of this.VideoShares) {
+      shares.push(videoShare.url)
+    }
+
+    return activityPubCollection(getVideoSharesActivityPubUrl(this), shares)
+  }
+
+  toCommentsActivityPubObject () {
+    const comments: string[] = []
+
+    for (const videoComment of this.VideoComments) {
+      comments.push(videoComment.url)
+    }
+
+    return activityPubCollection(getVideoCommentsActivityPubUrl(this), comments)
+  }
+
+  toRatesActivityPubObjects () {
+    const likes: string[] = []
+    const dislikes: string[] = []
+
+    for (const rate of this.AccountVideoRates) {
+      if (rate.type === 'like') {
+        likes.push(rate.Account.Actor.url)
+      } else if (rate.type === 'dislike') {
+        dislikes.push(rate.Account.Actor.url)
+      }
+    }
+
+    const likesObject = activityPubCollection(getVideoLikesActivityPubUrl(this), likes)
+    const dislikesObject = activityPubCollection(getVideoDislikesActivityPubUrl(this), dislikes)
+
+    return { likesObject, dislikesObject }
   }
 
   getTruncatedDescription () {
