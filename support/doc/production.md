@@ -280,6 +280,20 @@ $ cd /var/www/peertube/versions && \
     sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
+Install node dependencies:
+
+```
+$ cd /var/www/peertube/versions/peertube-${VERSION} && \
+    sudo -u peertube yarn install --production --pure-lockfile
+```
+
+Copy new configuration defaults values and update your configuration file:
+
+```
+$ sudo -u peertube cp /var/www/peertube/versions/peertube-${VERSION}/config/default.yaml /var/www/peertube/config/default.yaml
+$ diff /var/www/peertube/versions/peertube-${VERSION}/config//production.yaml.example /var/www/peertube/config/production.yaml
+```
+
 Change the link to point to the latest version:
 
 ```
@@ -288,19 +302,6 @@ $ cd /var/www/peertube && \
     sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 ```
 
-Install node dependencies:
-
-```
-$ cd /var/www/peertube/peertube-latest && \
-    sudo -u peertube yarn install --production --pure-lockfile
-```
-
-Copy new configuration defaults values and update your configuration file:
-
-```
-$ sudo -u peertube cp /var/www/peertube/peertube-latest/config/default.yaml /var/www/peertube/config/default.yaml
-$ diff /var/www/peertube/peertube-latest/config//production.yaml.example /var/www/peertube/config/production.yaml
-```
 
 Restart PeerTube:
 ```
