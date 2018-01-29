@@ -10,7 +10,7 @@ import { Video } from './video.model'
 export abstract class AbstractVideoList implements OnInit {
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 25,
     totalItems: null
   }
   sort: SortField = '-createdAt'
