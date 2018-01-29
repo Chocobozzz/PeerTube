@@ -7,9 +7,9 @@
 
   <form role="form" (ngSubmit)="login()" [formGroup]="form">
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="username">Username or email address</label>
       <input
-        type="text" id="username" placeholder="Username" required
+        type="text" id="username" placeholder="Username or email address" required
         formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
       <div *ngIf="formErrors.username" class="form-error">

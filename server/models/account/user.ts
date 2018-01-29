@@ -121,17 +121,6 @@ export class UserModel extends Model<UserModel> {
     return this.count()
   }
 
-  static getByUsername (username: string) {
-    const query = {
-      where: {
-        username: username
-      },
-      include: [ { model: AccountModel, required: true } ]
-    }
-
-    return UserModel.findOne(query)
-  }
-
   static listForApi (start: number, count: number, sort: string) {
     const query = {
       offset: start,
@@ -172,7 +161,9 @@ export class UserModel extends Model<UserModel> {
     return UserModel.scope('withVideoChannel').findOne(query)
   }
 
-  static loadByUsernameOrEmail (username: string, email: string) {
+  static loadByUsernameOrEmail (username: string, email?: string) {
+    if (!email) email = username
+
     const query = {
       where: {
         [ Sequelize.Op.or ]: [ { username }, { email } ]
