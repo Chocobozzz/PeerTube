@@ -26,6 +26,7 @@ const loggerFormat = winston.format.printf((info) => {
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
+  if (info.message.stack !== undefined) info.message = info.message.stack
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 

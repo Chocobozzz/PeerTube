@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
+import { ResetPasswordModule } from '@app/reset-password'
 
-import { MetaModule, MetaLoader, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
+import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
+
+import { AccountModule } from './account'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
-
-import { AccountModule } from './account'
 import { CoreModule } from './core'
-import { LoginModule } from './login'
-import { SignupModule } from './signup'
-import { SharedModule } from './shared'
-import { VideosModule } from './videos'
-import { MenuComponent } from './menu'
 import { HeaderComponent } from './header'
+import { LoginModule } from './login'
+import { MenuComponent } from './menu'
+import { SharedModule } from './shared'
+import { SignupModule } from './signup'
+import { VideosModule } from './videos'
 
 export function metaFactory (): MetaLoader {
   return new MetaStaticLoader({
@@ -46,6 +47,7 @@ export function metaFactory (): MetaLoader {
     AccountModule,
     CoreModule,
     LoginModule,
+    ResetPasswordModule,
     SignupModule,
     SharedModule,
     VideosModule,

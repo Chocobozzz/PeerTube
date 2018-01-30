@@ -161,6 +161,16 @@ export class UserModel extends Model<UserModel> {
     return UserModel.scope('withVideoChannel').findOne(query)
   }
 
+  static loadByEmail (email: string) {
+    const query = {
+      where: {
+        email
+      }
+    }
+
+    return UserModel.findOne(query)
+  }
+
   static loadByUsernameOrEmail (username: string, email?: string) {
     if (!email) email = username
 

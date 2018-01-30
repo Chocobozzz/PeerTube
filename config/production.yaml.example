@@ -20,6 +20,15 @@ redis:
   port: 6379
   auth: null
 
+smtp:
+  hostname: null
+  port: 465
+  username: null
+  password: null
+  tls: true
+  ca_file: null # Used for self signed certificates
+  from_address: 'admin@example.com'
+
 # From the project root directory
 storage:
   avatars: '/var/www/peertube/storage/avatars/'

@@ -3,7 +3,8 @@ export type JobState = 'active' | 'complete' | 'failed' | 'inactive' | 'delayed'
 export type JobType = 'activitypub-http-unicast' |
   'activitypub-http-broadcast' |
   'activitypub-http-fetcher' |
-  'video-file'
+  'video-file' |
+  'email'
 
 export interface Job {
   id: number

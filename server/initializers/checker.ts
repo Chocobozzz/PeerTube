@@ -22,7 +22,8 @@ function checkMissedConfig () {
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
     'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews', 'storage.torrents', 'storage.cache', 'log.level',
-    'cache.previews.size', 'admin.email', 'signup.enabled', 'signup.limit', 'transcoding.enabled', 'transcoding.threads', 'user.video_quota'
+    'cache.previews.size', 'admin.email', 'signup.enabled', 'signup.limit', 'transcoding.enabled', 'transcoding.threads',
+    'user.video_quota', 'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address'
   ]
   const miss: string[] = []
 

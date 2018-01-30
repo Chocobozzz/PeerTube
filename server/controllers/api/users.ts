@@ -6,17 +6,23 @@ import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRat
 import { unlinkPromise } from '../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
+import { createReqFiles, generateRandomString, getFormattedObjects } from '../../helpers/utils'
 import { AVATAR_MIMETYPE_EXT, AVATARS_SIZE, CONFIG, sequelizeTypescript } from '../../initializers'
 import { updateActorAvatarInstance } from '../../lib/activitypub'
 import { sendUpdateUser } from '../../lib/activitypub/send'
+import { Emailer } from '../../lib/emailer'
+import { EmailPayload } from '../../lib/job-queue/handlers/email'
+import { Redis } from '../../lib/redis'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
   asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setDefaultSort,
   setDefaultPagination, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
   usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator
 } from '../../middlewares'
-import { usersUpdateMyAvatarValidator, videosSortValidator } from '../../middlewares/validators'
+import {
+  usersAskResetPasswordValidator, usersResetPasswordValidator, usersUpdateMyAvatarValidator,
+  videosSortValidator
+} from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { UserModel } from '../../models/account/user'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
@@ -104,6 +110,16 @@ usersRouter.delete('/:id',
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersRemoveValidator),
   asyncMiddleware(removeUser)
+)
+
+usersRouter.post('/ask-reset-password',
+  asyncMiddleware(usersAskResetPasswordValidator),
+  asyncMiddleware(askResetUserPassword)
+)
+
+usersRouter.post('/:id/reset-password',
+  asyncMiddleware(usersResetPasswordValidator),
+  asyncMiddleware(resetUserPassword)
 )
 
 usersRouter.post('/token', token, success)
@@ -305,6 +321,25 @@ async function updateUser (req: express.Request, res: express.Response, next: ex
   // Don't need to send this update to followers, these attributes are not propagated
 
   return res.sendStatus(204)
+}
+
+async function askResetUserPassword (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = res.locals.user as UserModel
+
+  const verificationString = await Redis.Instance.setResetPasswordVerificationString(user.id)
+  const url = CONFIG.WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
+  await Emailer.Instance.addForgetPasswordEmailJob(user.email, url)
+
+  return res.status(204).end()
+}
+
+async function resetUserPassword (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const user = res.locals.user as UserModel
+  user.password = req.body.password
+
+  await user.save()
+
+  return res.status(204).end()
 }
 
 function success (req: express.Request, res: express.Response, next: express.NextFunction) {
