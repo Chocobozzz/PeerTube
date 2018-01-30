@@ -1,6 +1,6 @@
 import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
-import { makePostUploadRequest, makePutBodyRequest } from '../'
+import { makePostBodyRequest, makePostUploadRequest, makePutBodyRequest } from '../'
 
 import { UserRole } from '../../../../shared/index'
 
@@ -196,6 +196,28 @@ function updateUser (options: {
   })
 }
 
+function askResetPassword (url: string, email: string) {
+  const path = '/api/v1/users/ask-reset-password'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    fields: { email },
+    statusCodeExpected: 204
+  })
+}
+
+function resetPassword (url: string, userId: number, verificationString: string, password: string, statusCodeExpected = 204) {
+  const path = '/api/v1/users/' + userId + '/reset-password'
+
+  return makePostBodyRequest({
+    url,
+    path,
+    fields: { password, verificationString },
+    statusCodeExpected
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -210,5 +232,7 @@ export {
   updateUser,
   updateMyUser,
   getUserInformation,
+  askResetPassword,
+  resetPassword,
   updateMyAvatar
 }

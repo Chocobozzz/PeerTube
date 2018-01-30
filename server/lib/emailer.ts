@@ -29,15 +29,21 @@ class Emailer {
         }
       }
 
+      let auth
+      if (CONFIG.SMTP.USERNAME && CONFIG.SMTP.PASSWORD) {
+        auth = {
+          user: CONFIG.SMTP.USERNAME,
+          pass: CONFIG.SMTP.PASSWORD
+        }
+      }
+
       this.transporter = createTransport({
         host: CONFIG.SMTP.HOSTNAME,
         port: CONFIG.SMTP.PORT,
         secure: CONFIG.SMTP.TLS,
+        ignoreTLS: isTestInstance(),
         tls,
-        auth: {
-          user: CONFIG.SMTP.USERNAME,
-          pass: CONFIG.SMTP.PASSWORD
-        }
+        auth
       })
     } else {
       if (!isTestInstance()) {

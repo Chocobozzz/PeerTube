@@ -8,6 +8,14 @@ database:
   hostname: 'localhost'
   port: 5432
 
+smtp:
+  hostname: null
+  port: 1025
+  tls: false
+  from_address: 'test@localhost'
+  username: null
+  password: null
+
 signup:
   enabled: true
 

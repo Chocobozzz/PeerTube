@@ -6,21 +6,35 @@ import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRat
 import { unlinkPromise } from '../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { createReqFiles, generateRandomString, getFormattedObjects } from '../../helpers/utils'
+import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
 import { AVATAR_MIMETYPE_EXT, AVATARS_SIZE, CONFIG, sequelizeTypescript } from '../../initializers'
 import { updateActorAvatarInstance } from '../../lib/activitypub'
 import { sendUpdateUser } from '../../lib/activitypub/send'
 import { Emailer } from '../../lib/emailer'
-import { EmailPayload } from '../../lib/job-queue/handlers/email'
 import { Redis } from '../../lib/redis'
 import { createUserAccountAndChannel } from '../../lib/user'
 import {
-  asyncMiddleware, authenticate, ensureUserHasRight, ensureUserRegistrationAllowed, paginationValidator, setDefaultSort,
-  setDefaultPagination, token, usersAddValidator, usersGetValidator, usersRegisterValidator, usersRemoveValidator, usersSortValidator,
-  usersUpdateMeValidator, usersUpdateValidator, usersVideoRatingValidator
+  asyncMiddleware,
+  authenticate,
+  ensureUserHasRight,
+  ensureUserRegistrationAllowed,
+  paginationValidator,
+  setDefaultPagination,
+  setDefaultSort,
+  token,
+  usersAddValidator,
+  usersGetValidator,
+  usersRegisterValidator,
+  usersRemoveValidator,
+  usersSortValidator,
+  usersUpdateMeValidator,
+  usersUpdateValidator,
+  usersVideoRatingValidator
 } from '../../middlewares'
 import {
-  usersAskResetPasswordValidator, usersResetPasswordValidator, usersUpdateMyAvatarValidator,
+  usersAskResetPasswordValidator,
+  usersResetPasswordValidator,
+  usersUpdateMyAvatarValidator,
   videosSortValidator
 } from '../../middlewares/validators'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'

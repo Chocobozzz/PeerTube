@@ -541,6 +541,28 @@ describe('Test users API validators', function () {
     })
   })
 
+  describe('When asking a password reset', function () {
+    const path = '/api/v1/users/ask-reset-password'
+
+    it('Should fail with a missing email', async function () {
+      const fields = {}
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an invalid email', async function () {
+      const fields = { email: 'hello' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should success with the correct params', async function () {
+      const fields = { email: 'admin@example.com' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 204 })
+    })
+  })
+
   after(async function () {
     killallServers([ server, serverWithRegistrationDisabled ])
 

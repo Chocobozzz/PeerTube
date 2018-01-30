@@ -210,7 +210,7 @@ const usersResetPasswordValidator = [
       return res
         .status(403)
         .send({ error: 'Invalid verification string.' })
-        .end
+        .end()
     }
 
     return next()
