@@ -72,7 +72,7 @@ class JobQueue {
         .create(obj.type, obj.payload)
         .priority(priority)
         .attempts(JOB_ATTEMPTS[obj.type])
-        .backoff({ type: 'exponential' })
+        .backoff({ delay: 60 * 1000, type: 'exponential' })
         .save(err => {
           if (err) return rej(err)
 
