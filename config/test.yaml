@@ -12,7 +12,7 @@ smtp:
   hostname: null
   port: 1025
   tls: false
-  from_address: 'test@localhost'
+  from_address: 'test-admin@localhost'
   username: null
   password: null
 
