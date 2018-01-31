@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { NavigationEnd, Router } from '@angular/router'
+import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { isInMobileView } from '@app/shared/misc/utils'
 
@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe(
       e => {
         // User clicked on a link in the menu, change the page
-        if (e instanceof NavigationEnd && isInMobileView()) {
+        if (e instanceof GuardsCheckStart && isInMobileView()) {
           this.isMenuDisplayed = false
         }
       }

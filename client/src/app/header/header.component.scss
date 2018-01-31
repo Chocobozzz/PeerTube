@@ -37,6 +37,10 @@
 
   margin-right: 25px;
 
+  @media screen and (max-width: 800px) {
+    margin-right: 0;
+  }
+
   .icon.icon-upload {
     @include icon(22px);
 
