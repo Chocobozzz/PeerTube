@@ -29,6 +29,10 @@ export class AppComponent implements OnInit {
     private serverService: ServerService
   ) {}
 
+  get serverVersion () {
+    return this.serverService.getConfig().serverVersion
+  }
+
   ngOnInit () {
     this.authService.loadClientCredentials()
 

@@ -16,6 +16,7 @@ export class ServerService {
   videoLanguagesLoaded = new ReplaySubject<boolean>(1)
 
   private config: ServerConfig = {
+    serverVersion: 'Unknown',
     signup: {
       allowed: false
     },

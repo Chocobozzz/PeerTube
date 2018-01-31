@@ -8,6 +8,7 @@ import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlew
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { omit } from 'lodash'
 
+const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
 
 configRouter.get('/',
@@ -38,6 +39,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
    .map(r => parseInt(r, 10))
 
   const json: ServerConfig = {
+    serverVersion: packageJSON.version,
     signup: {
       allowed
     },

@@ -1,4 +1,5 @@
 export interface ServerConfig {
+  serverVersion: string,
   signup: {
     allowed: boolean
   }
