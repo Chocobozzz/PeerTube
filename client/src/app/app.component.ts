@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { NavigationEnd, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 
 @Component({
@@ -48,6 +48,15 @@ export class AppComponent implements OnInit {
     if (window.innerWidth < 600) {
       this.isMenuDisplayed = false
     }
+
+    this.router.events.subscribe(
+      e => {
+        // User clicked on a link in the menu, change the page
+        if (e instanceof NavigationEnd && window.innerWidth < 600) {
+          this.isMenuDisplayed = false
+        }
+      }
+    )
   }
 
   toggleMenu () {
