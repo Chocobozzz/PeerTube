@@ -5,9 +5,8 @@ import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
 import { ResultList, VideoAbuse } from '../../../../../shared'
-import { RestExtractor, RestPagination, RestService } from '../rest'
-import { Utils } from '../utils'
 import { environment } from '../../../environments/environment'
+import { RestExtractor, RestPagination, RestService } from '../rest'
 
 @Injectable()
 export class VideoAbuseService {
@@ -27,7 +26,6 @@ export class VideoAbuseService {
 
     return this.authHttp.get<ResultList<VideoAbuse>>(url, { params })
                         .map(res => this.restExtractor.convertResultListDateToHuman(res))
-                        .map(res => this.restExtractor.applyToResultListData(res, this.formatVideoAbuse.bind(this)))
                         .catch(res => this.restExtractor.handleError(res))
   }
 
@@ -41,11 +39,4 @@ export class VideoAbuseService {
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
   }
-
-  private formatVideoAbuse (videoAbuse: VideoAbuse) {
-    return Object.assign(videoAbuse, {
-      createdAt: Utils.dateToHuman(videoAbuse.createdAt)
-    })
-  }
-
 }

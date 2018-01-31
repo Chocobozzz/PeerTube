@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs/Observable'
 import { HttpErrorResponse } from '@angular/common/http'
-
-import { Utils } from '../utils'
+import { Injectable } from '@angular/core'
+import { dateToHuman } from '@app/shared/misc/utils'
+import { Observable } from 'rxjs/Observable'
 import { ResultList } from '../../../../../shared'
 
 @Injectable()
@@ -16,7 +15,7 @@ export class RestExtractor {
     const data: T[] = result.data
     const newData: T[] = []
 
-    data.forEach(d => newData.push(fun.call(this, d, additionalArgs)))
+    data.forEach(d => newData.push(fun.apply(this, [ d ].concat(additionalArgs))))
 
     return {
       total: result.total,
@@ -29,12 +28,9 @@ export class RestExtractor {
   }
 
   convertDateToHuman (target: object, fieldsToConvert: string[]) {
-    const source = {}
-    fieldsToConvert.forEach(field => {
-      source[field] = Utils.dateToHuman(target[field])
-    })
+    fieldsToConvert.forEach(field => target[field] = dateToHuman(target[field]))
 
-    return Object.assign(target, source)
+    return target
   }
 
   handleError (err: HttpErrorResponse) {

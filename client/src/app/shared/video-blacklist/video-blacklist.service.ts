@@ -7,7 +7,6 @@ import { Observable } from 'rxjs/Observable'
 import { BlacklistedVideo, ResultList } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
-import { Utils } from '../utils'
 
 @Injectable()
 export class VideoBlacklistService {
@@ -25,7 +24,6 @@ export class VideoBlacklistService {
 
     return this.authHttp.get<ResultList<BlacklistedVideo>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
                         .map(res => this.restExtractor.convertResultListDateToHuman(res))
-                        .map(res => this.restExtractor.applyToResultListData(res, this.formatBlacklistedVideo.bind(this)))
                         .catch(res => this.restExtractor.handleError(res))
   }
 
@@ -39,11 +37,5 @@ export class VideoBlacklistService {
     return this.authHttp.post(VideoBlacklistService.BASE_VIDEOS_URL + videoId + '/blacklist', {})
                .map(this.restExtractor.extractDataBool)
                .catch(res => this.restExtractor.handleError(res))
-  }
-
-  private formatBlacklistedVideo (blacklistedVideo: BlacklistedVideo) {
-    return Object.assign(blacklistedVideo, {
-      createdAt: Utils.dateToHuman(blacklistedVideo.createdAt)
-    })
   }
 }
