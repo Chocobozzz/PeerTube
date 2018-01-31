@@ -25,7 +25,7 @@ export class JobService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + '/' + state, { params })
-      .map(res => this.restExtractor.convertResultListDateToHuman(res))
+      .map(res => this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'updatedAt' ]))
       .map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData))
       .catch(err => this.restExtractor.handleError(err))
   }

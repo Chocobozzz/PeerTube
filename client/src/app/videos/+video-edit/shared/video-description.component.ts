@@ -2,6 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import 'rxjs/add/operator/debounceTime'
 import 'rxjs/add/operator/distinctUntilChanged'
+import { isInMobileView } from '@app/shared/misc/utils'
 import { Subject } from 'rxjs/Subject'
 import { MarkdownService } from '../../shared'
 import truncate from 'lodash-es/truncate'
@@ -57,6 +58,10 @@ export class VideoDescriptionComponent implements ControlValueAccessor, OnInit {
     this.propagateChange(this.description)
 
     this.descriptionChanged.next(this.description)
+  }
+
+  arePreviewsDisplayed () {
+    return isInMobileView() === false
   }
 
   private updateDescriptionPreviews () {

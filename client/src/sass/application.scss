@@ -312,7 +312,7 @@ p-datatable {
     .tab-link {
       display: flex !important;
       align-items: center;
-      height: 30px !important;
+      min-height: 30px !important;
       padding: 0 15px;
     }
 
@@ -373,8 +373,8 @@ table {
 
     &, &.expanded {
       .margin-content {
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-left: 15px;
+        margin-right: 15px;
       }
 
       .sub-menu {
