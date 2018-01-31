@@ -132,6 +132,13 @@ menu {
 
           background-image: url('../../assets/images/menu/administration.svg');
         }
+
+        &.icon-about  {
+          width: 23px;
+          height: 23px;
+
+          background-image: url('../../assets/images/menu/about.svg');
+        }
       }
     }
   }

@@ -3,7 +3,7 @@ import { Validators } from '@angular/forms'
 export const INSTANCE_NAME = {
   VALIDATORS: [ Validators.required ],
   MESSAGES: {
-    'required': 'Instance name is required.',
+    'required': 'Instance name is required.'
   }
 }
 

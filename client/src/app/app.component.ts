@@ -34,6 +34,10 @@ export class AppComponent implements OnInit {
     return this.serverService.getConfig().serverVersion
   }
 
+  get instanceName () {
+    return this.serverService.getConfig().instance.name
+  }
+
   ngOnInit () {
     this.authService.loadClientCredentials()
 

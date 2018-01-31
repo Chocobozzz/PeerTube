@@ -2,7 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { deleteCustomConfig, killallServers, reRunServer } from '../../utils'
+import { About } from '../../../../shared/models/config/about.model'
+import { deleteCustomConfig, getAbout, killallServers, reRunServer } from '../../utils'
 const expect = chai.expect
 
 import {
@@ -108,6 +109,7 @@ describe('Test config', function () {
     expect(data.instance.name).to.equal('PeerTube updated')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
+    expect(data.cache.previews.size).to.equal(2)
     expect(data.signup.enabled).to.be.false
     expect(data.signup.limit).to.equal(5)
     expect(data.admin.email).to.equal('superadmin1@example.com')
@@ -131,6 +133,9 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
+    expect(data.instance.name).to.equal('PeerTube updated')
+    expect(data.instance.description).to.equal('my super description')
+    expect(data.instance.terms).to.equal('my super terms')
     expect(data.cache.previews.size).to.equal(2)
     expect(data.signup.enabled).to.be.false
     expect(data.signup.limit).to.equal(5)
@@ -143,6 +148,15 @@ describe('Test config', function () {
     expect(data.transcoding.resolutions['480p']).to.be.true
     expect(data.transcoding.resolutions['720p']).to.be.false
     expect(data.transcoding.resolutions['1080p']).to.be.false
+  })
+
+  it('Should fetch the about information', async function () {
+    const res = await getAbout(server.url)
+    const data: About = res.body
+
+    expect(data.instance.name).to.equal('PeerTube updated')
+    expect(data.instance.description).to.equal('my super description')
+    expect(data.instance.terms).to.equal('my super terms')
   })
 
   it('Should remove the custom configuration', async function () {

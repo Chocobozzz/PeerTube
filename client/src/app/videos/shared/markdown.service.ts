@@ -7,12 +7,13 @@ export class MarkdownService {
   private markdownIt: MarkdownIt.MarkdownIt
 
   constructor () {
-    this.markdownIt = new MarkdownIt('zero', { linkify: true })
+    this.markdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
       .enable('linkify')
       .enable('autolink')
       .enable('emphasis')
       .enable('link')
       .enable('newline')
+      .enable('list')
 
     this.setTargetToLinks()
   }

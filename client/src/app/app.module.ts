@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
+import { AboutModule } from '@app/about'
 import { ResetPasswordModule } from '@app/reset-password'
 
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
@@ -51,6 +52,7 @@ export function metaFactory (): MetaLoader {
     SignupModule,
     SharedModule,
     VideosModule,
+    AboutModule,
 
     MetaModule.forRoot({
       provide: MetaLoader,

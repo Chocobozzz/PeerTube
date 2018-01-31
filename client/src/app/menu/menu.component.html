@@ -45,12 +45,17 @@
     </a>
   </div>
 
-  <div *ngIf="userHasAdminAccess" class="panel-block">
+  <div class="panel-block">
     <div class="block-title">More</div>
 
-    <a [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
+    <a *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
       <span class="icon icon-administration"></span>
       Administration
+    </a>
+
+    <a routerLink="/about" routerLinkActive="active">
+      <span class="icon icon-about"></span>
+      About
     </a>
   </div>
 </menu>

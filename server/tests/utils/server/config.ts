@@ -1,15 +1,24 @@
-import * as request from 'supertest'
 import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../'
 import { CustomConfig } from '../../../../shared/models/config/custom-config.model'
 
 function getConfig (url: string) {
   const path = '/api/v1/config'
 
-  return request(url)
-          .get(path)
-          .set('Accept', 'application/json')
-          .expect(200)
-          .expect('Content-Type', /json/)
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: 200
+  })
+}
+
+function getAbout (url: string) {
+  const path = '/api/v1/config/about'
+
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: 200
+  })
 }
 
 function getCustomConfig (url: string, token: string, statusCodeExpected = 200) {
@@ -52,5 +61,6 @@ export {
   getConfig,
   getCustomConfig,
   updateCustomConfig,
+  getAbout,
   deleteCustomConfig
 }
