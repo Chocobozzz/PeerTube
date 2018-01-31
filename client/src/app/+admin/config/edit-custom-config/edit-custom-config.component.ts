@@ -4,7 +4,13 @@ import { Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { ServerService } from '@app/core/server/server.service'
 import { FormReactive, USER_VIDEO_QUOTA } from '@app/shared'
-import { ADMIN_EMAIL, CACHE_PREVIEWS_SIZE, SIGNUP_LIMIT, TRANSCODING_THREADS } from '@app/shared/forms/form-validators/custom-config'
+import {
+  ADMIN_EMAIL,
+  CACHE_PREVIEWS_SIZE,
+  INSTANCE_NAME,
+  SIGNUP_LIMIT,
+  TRANSCODING_THREADS
+} from '@app/shared/forms/form-validators/custom-config'
 import { NotificationsService } from 'angular2-notifications'
 import { CustomConfig } from '../../../../../../shared/models/config/custom-config.model'
 
@@ -36,6 +42,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   form: FormGroup
   formErrors = {
+    instanceName: '',
+    instanceDescription: '',
+    instanceTerms: '',
     cachePreviewsSize: '',
     signupLimit: '',
     adminEmail: '',
@@ -43,6 +52,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     transcodingThreads: ''
   }
   validationMessages = {
+    instanceName: INSTANCE_NAME.MESSAGES,
     cachePreviewsSize: CACHE_PREVIEWS_SIZE.MESSAGES,
     signupLimit: SIGNUP_LIMIT.MESSAGES,
     adminEmail: ADMIN_EMAIL.MESSAGES,
@@ -65,6 +75,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   buildForm () {
     const formGroupData = {
+      instanceName: [ '', INSTANCE_NAME.VALIDATORS ],
+      instanceDescription: [ '' ],
+      instanceTerms: [ '' ],
       cachePreviewsSize: [ '', CACHE_PREVIEWS_SIZE.VALIDATORS ],
       signupEnabled: [ ],
       signupLimit: [ '', SIGNUP_LIMIT.VALIDATORS ],
@@ -109,6 +122,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   formValidated () {
     const data = {
+      instance: {
+        name: this.form.value['instanceName'],
+        description: this.form.value['instanceDescription'],
+        terms: this.form.value['instanceTerms']
+      },
       cache: {
         previews: {
           size: this.form.value['cachePreviewsSize']
@@ -146,6 +164,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           this.serverService.loadConfig()
 
           this.updateForm()
+
+          this.notificationsService.success('Success', 'Configuration updated.')
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -154,6 +174,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   private updateForm () {
     const data = {
+      instanceName: this.customConfig.instance.name,
+      instanceDescription: this.customConfig.instance.description,
+      instanceTerms: this.customConfig.instance.terms,
       cachePreviewsSize: this.customConfig.cache.previews.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,

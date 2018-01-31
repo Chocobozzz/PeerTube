@@ -154,6 +154,11 @@ const CONFIG = {
     PREVIEWS: {
       get SIZE () { return config.get<number>('cache.previews.size') }
     }
+  },
+  INSTANCE: {
+    get NAME () { return config.get<string>('instance.name') },
+    get DESCRIPTION () { return config.get<string>('instance.description') },
+    get TERMS () { return config.get<string>('instance.terms') }
   }
 }
 

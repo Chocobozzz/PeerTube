@@ -2,6 +2,41 @@
 
 <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
 
+  <div class="inner-form-title">Instance</div>
+
+  <div class="form-group">
+    <label for="instanceName">Name</label>
+    <input
+        type="text" id="instanceName"
+        formControlName="instanceName" [ngClass]="{ 'input-error': formErrors['instanceName'] }"
+    >
+    <div *ngIf="formErrors.instanceName" class="form-error">
+      {{ formErrors.instanceName }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="instanceDescription">Description (markdown)</label>
+    <my-markdown-textarea
+        id="instanceDescription" formControlName="instanceDescription" textareaWidth="500px" [previewColumn]="true"
+        [classes]="{ 'input-error': formErrors['instanceDescription'] }"
+    ></my-markdown-textarea>
+    <div *ngIf="formErrors.instanceDescription" class="form-error">
+      {{ formErrors.instanceDescription }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="instanceTerms">Terms (markdown)</label>
+    <my-markdown-textarea
+        id="instanceTerms" formControlName="instanceTerms" textareaWidth="500px" [previewColumn]="true"
+        [ngClass]="{ 'input-error': formErrors['instanceTerms'] }"
+    ></my-markdown-textarea>
+    <div *ngIf="formErrors.instanceTerms" class="form-error">
+      {{ formErrors.instanceTerms }}
+    </div>
+  </div>
+
   <div class="inner-form-title">Cache</div>
 
   <div class="form-group">

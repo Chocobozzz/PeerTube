@@ -373,7 +373,7 @@ async function completeVideoCheck (
   expect(dateIsValid(video.createdAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
 
-  const res = await getVideo(url, video.id)
+  const res = await getVideo(url, video.uuid)
   const videoDetails = res.body
 
   expect(videoDetails.files).to.have.lengthOf(attributes.files.length)

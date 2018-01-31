@@ -69,3 +69,8 @@ transcoding:
     480p: true
     720p: true
     1080p: true
+
+instance:
+  name: 'PeerTube'
+  description: '' # Support markdown
+  terms: '' # Support markdown

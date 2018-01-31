@@ -105,6 +105,11 @@ export {
 
 function customConfig (): CustomConfig {
   return {
+    instance: {
+      name: CONFIG.INSTANCE.NAME,
+      description: CONFIG.INSTANCE.DESCRIPTION,
+      terms: CONFIG.INSTANCE.TERMS
+    },
     cache: {
       previews: {
         size: CONFIG.CACHE.PREVIEWS.SIZE

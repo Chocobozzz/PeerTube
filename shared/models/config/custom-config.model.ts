@@ -1,4 +1,10 @@
 export interface CustomConfig {
+  instance: {
+    name: string
+    description: string
+    terms: string
+  }
+
   cache: {
     previews: {
       size: number

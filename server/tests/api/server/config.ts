@@ -49,6 +49,9 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
+    expect(data.instance.name).to.equal('PeerTube')
+    expect(data.instance.description).to.be.empty
+    expect(data.instance.terms).to.be.empty
     expect(data.cache.previews.size).to.equal(1)
     expect(data.signup.enabled).to.be.true
     expect(data.signup.limit).to.equal(4)
@@ -65,6 +68,11 @@ describe('Test config', function () {
 
   it('Should update the customized configuration', async function () {
     const newCustomConfig = {
+      instance: {
+        name: 'PeerTube updated',
+        description: 'my super description',
+        terms: 'my super terms'
+      },
       cache: {
         previews: {
           size: 2
@@ -97,7 +105,9 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
-    expect(data.cache.previews.size).to.equal(2)
+    expect(data.instance.name).to.equal('PeerTube updated')
+    expect(data.instance.description).to.equal('my super description')
+    expect(data.instance.terms).to.equal('my super terms')
     expect(data.signup.enabled).to.be.false
     expect(data.signup.limit).to.equal(5)
     expect(data.admin.email).to.equal('superadmin1@example.com')
