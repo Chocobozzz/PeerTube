@@ -360,6 +360,17 @@ table {
   }
 }
 
+@media screen and (max-width: 900px) {
+  .main-col {
+    &, &.expanded {
+      .margin-content {
+        margin-left: 50px;
+        margin-right: 50px;
+      }
+    }
+  }
+}
+
 // On small screen, menu is absolute
 @media screen and (max-width: 600px) {
   .title-menu-left {
