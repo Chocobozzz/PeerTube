@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { askResetPassword, createUser, resetPassword, runServer, userLogin, wait } from '../../utils'
+import { askResetPassword, createUser, reportVideoAbuse, resetPassword, runServer, uploadVideo, userLogin, wait } from '../../utils'
 import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../utils/index'
 import { mockSmtpServer } from '../../utils/miscs/email'
 
@@ -11,6 +11,7 @@ const expect = chai.expect
 describe('Test emails', function () {
   let server: ServerInfo
   let userId: number
+  let videoUUID: string
   let verificationString: string
   const emails: object[] = []
   const user = {
@@ -35,8 +36,18 @@ describe('Test emails', function () {
     await wait(5000)
     await setAccessTokensToServers([ server ])
 
-    const res = await createUser(server.url, server.accessToken, user.username, user.password)
-    userId = res.body.user.id
+    {
+      const res = await createUser(server.url, server.accessToken, user.username, user.password)
+      userId = res.body.user.id
+    }
+
+    {
+      const attributes = {
+        name: 'my super name'
+      }
+      const res = await uploadVideo(server.url, server.accessToken, attributes)
+      videoUUID = res.body.video.uuid
+    }
   })
 
   describe('When resetting user password', function () {
@@ -80,6 +91,25 @@ describe('Test emails', function () {
       user.password = 'super_password2'
 
       await userLogin(server, user)
+    })
+  })
+
+  describe('When creating a video abuse', function () {
+    it('Should send the notification email', async function () {
+      this.timeout(10000)
+
+      const reason = 'my super bad reason'
+      await reportVideoAbuse(server.url, server.accessToken, videoUUID, reason)
+
+      await wait(3000)
+      expect(emails).to.have.lengthOf(2)
+
+      const email = emails[1]
+
+      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['to'][0]['address']).equal('admin1@example.com')
+      expect(email['subject']).contains('abuse')
+      expect(email['text']).contains(videoUUID)
     })
   })
 

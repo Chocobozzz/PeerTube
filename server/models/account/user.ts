@@ -4,7 +4,7 @@ import {
   Scopes, Table, UpdatedAt
 } from 'sequelize-typescript'
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
-import { User } from '../../../shared/models/users'
+import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
   isUserVideoQuotaValid
@@ -135,6 +135,27 @@ export class UserModel extends Model<UserModel> {
           total: count
         }
       })
+  }
+
+  static listEmailsWithRight (right: UserRight) {
+    const roles = Object.keys(USER_ROLE_LABELS)
+      .map(k => parseInt(k, 10) as UserRole)
+      .filter(role => hasUserRight(role, right))
+
+    console.log(roles)
+
+    const query = {
+      attribute: [ 'email' ],
+      where: {
+        role: {
+          [Sequelize.Op.in]: roles
+        }
+      }
+    }
+
+    return UserModel.unscoped()
+      .findAll(query)
+      .then(u => u.map(u => u.email))
   }
 
   static loadById (id: number) {

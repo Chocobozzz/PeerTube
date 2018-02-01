@@ -1,7 +1,10 @@
 import { createTransport, Transporter } from 'nodemailer'
+import { UserRight } from '../../shared/models/users'
 import { isTestInstance } from '../helpers/core-utils'
 import { logger } from '../helpers/logger'
 import { CONFIG } from '../initializers'
+import { UserModel } from '../models/account/user'
+import { VideoModel } from '../models/video/video'
 import { JobQueue } from './job-queue'
 import { EmailPayload } from './job-queue/handlers/email'
 import { readFileSync } from 'fs'
@@ -76,6 +79,24 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to: [ to ],
       subject: 'Reset your PeerTube password',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  async addVideoAbuseReport (videoId: number) {
+    const video = await VideoModel.load(videoId)
+
+    const text = `Hi,\n\n` +
+      `Your instance received an abuse for video the following video ${video.url}\n\n` +
+      `Cheers,\n` +
+      `PeerTube.`
+
+    const to = await UserModel.listEmailsWithRight(UserRight.MANAGE_VIDEO_ABUSES)
+    const emailPayload: EmailPayload = {
+      to,
+      subject: '[PeerTube] Received a video abuse',
       text
     }
 
