@@ -490,7 +490,7 @@ export class VideoModel extends Model<VideoModel> {
       },
       include: [
         {
-          attributes: [ 'id' ],
+          attributes: [ 'id', 'url' ],
           model: VideoShareModel.unscoped(),
           required: false,
           where: {
