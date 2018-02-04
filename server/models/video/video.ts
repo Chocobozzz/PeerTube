@@ -486,7 +486,11 @@ export class VideoModel extends Model<VideoModel> {
       where: {
         id: {
           [Sequelize.Op.in]: Sequelize.literal('(' + rawQuery + ')')
-        }
+        },
+        [Sequelize.Op.or]: [
+          { privacy: VideoPrivacy.PUBLIC },
+          { privacy: VideoPrivacy.UNLISTED }
+        ]
       },
       include: [
         {
