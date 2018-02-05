@@ -19,6 +19,8 @@
   },
   "exclude": [
     "node_modules",
+    "dist",
+    "storage",
     "client",
     "test1",
     "test2",

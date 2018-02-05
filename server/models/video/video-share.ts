@@ -1,7 +1,10 @@
 import * as Sequelize from 'sequelize'
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
+import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 
@@ -40,10 +43,20 @@ enum ScopeNames {
     },
     {
       fields: [ 'videoId' ]
+    },
+    {
+      fields: [ 'url' ],
+      unique: true
     }
   ]
 })
 export class VideoShareModel extends Model<VideoShareModel> {
+
+  @AllowNull(false)
+  @Is('VideoShareUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_SHARE.URL.max))
+  url: string
+
   @CreatedAt
   createdAt: Date
 

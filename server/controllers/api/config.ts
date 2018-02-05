@@ -1,18 +1,22 @@
 import * as express from 'express'
+import { omit } from 'lodash'
 import { ServerConfig, UserRight } from '../../../shared'
+import { About } from '../../../shared/models/config/about.model'
 import { CustomConfig } from '../../../shared/models/config/custom-config.model'
 import { unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
 import { isSignupAllowed } from '../../helpers/utils'
 import { CONFIG, CONSTRAINTS_FIELDS, reloadConfig } from '../../initializers'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
-import { omit } from 'lodash'
 
+const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
 
+configRouter.get('/about', getAbout)
 configRouter.get('/',
   asyncMiddleware(getConfig)
 )
+
 configRouter.get('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
@@ -38,6 +42,10 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
    .map(r => parseInt(r, 10))
 
   const json: ServerConfig = {
+    instance: {
+      name: CONFIG.INSTANCE.NAME
+    },
+    serverVersion: packageJSON.version,
     signup: {
       allowed
     },
@@ -60,6 +68,18 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
   }
 
   return res.json(json)
+}
+
+function getAbout (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const about: About = {
+    instance: {
+      name: CONFIG.INSTANCE.NAME,
+      description: CONFIG.INSTANCE.DESCRIPTION,
+      terms: CONFIG.INSTANCE.TERMS
+    }
+  }
+
+  return res.json(about).end()
 }
 
 async function getCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -103,6 +123,11 @@ export {
 
 function customConfig (): CustomConfig {
   return {
+    instance: {
+      name: CONFIG.INSTANCE.NAME,
+      description: CONFIG.INSTANCE.DESCRIPTION,
+      terms: CONFIG.INSTANCE.TERMS
+    },
     cache: {
       previews: {
         size: CONFIG.CACHE.PREVIEWS.SIZE

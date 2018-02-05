@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
+import { isInMobileView } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-app',
@@ -29,6 +30,14 @@ export class AppComponent implements OnInit {
     private serverService: ServerService
   ) {}
 
+  get serverVersion () {
+    return this.serverService.getConfig().serverVersion
+  }
+
+  get instanceName () {
+    return this.serverService.getConfig().instance.name
+  }
+
   ngOnInit () {
     this.authService.loadClientCredentials()
 
@@ -45,9 +54,18 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoPrivacies()
 
     // Do not display menu on small screens
-    if (window.innerWidth < 600) {
+    if (isInMobileView()) {
       this.isMenuDisplayed = false
     }
+
+    this.router.events.subscribe(
+      e => {
+        // User clicked on a link in the menu, change the page
+        if (e instanceof GuardsCheckStart && isInMobileView()) {
+          this.isMenuDisplayed = false
+        }
+      }
+    )
   }
 
   toggleMenu () {

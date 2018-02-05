@@ -7,7 +7,7 @@
 /test6/
 /storage/
 /config/production.yaml
-/config/local*.json
+/config/local*
 /ffmpeg/
 /*.sublime-project
 /*.sublime-workspace

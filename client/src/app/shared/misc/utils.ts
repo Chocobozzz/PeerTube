@@ -1,5 +1,6 @@
 // Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 
+import { DatePipe } from '@angular/common'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../../core/auth'
 
@@ -49,9 +50,20 @@ function getAbsoluteAPIUrl () {
   return absoluteAPIUrl
 }
 
+const datePipe = new DatePipe('en')
+function dateToHuman (date: string) {
+  return datePipe.transform(date, 'medium')
+}
+
+function isInMobileView () {
+  return window.innerWidth < 600
+}
+
 export {
   viewportHeight,
   getParameterByName,
   populateAsyncUserVideoChannels,
-  getAbsoluteAPIUrl
+  getAbsoluteAPIUrl,
+  dateToHuman,
+  isInMobileView
 }

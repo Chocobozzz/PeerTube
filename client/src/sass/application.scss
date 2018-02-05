@@ -19,7 +19,7 @@ $FontPathSourceSansPro: '../../node_modules/npm-font-source-sans-pro/fonts';
 }
 
 body {
-  font-family: 'Source Sans Pro';
+  font-family: 'Source Sans Pro', sans-serif;
   font-weight: $font-regular;
   color: #000;
 }
@@ -312,7 +312,7 @@ p-datatable {
     .tab-link {
       display: flex !important;
       align-items: center;
-      height: 30px !important;
+      min-height: 30px !important;
       padding: 0 15px;
     }
 
@@ -360,10 +360,25 @@ table {
   }
 }
 
+@media screen and (max-width: 900px) {
+  .main-col {
+    &, &.expanded {
+      .margin-content {
+        margin-left: 50px;
+        margin-right: 50px;
+      }
+
+      .sub-menu {
+        padding-left: 50px;
+      }
+    }
+  }
+}
+
 // On small screen, menu is absolute
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
   .title-menu-left {
-    width: 150px !important;
+    width: 100% !important;
     position: absolute !important;
     z-index: 10000;
   }
@@ -373,12 +388,12 @@ table {
 
     &, &.expanded {
       .margin-content {
-        margin-left: 10px;
-        margin-right: 10px;
+        margin-left: 15px;
+        margin-right: 15px;
       }
 
       .sub-menu {
-        padding-left: 10px;
+        padding-left: 15px;
         margin-bottom: 10px;
       }
 
@@ -386,5 +401,9 @@ table {
         width: 100% !important;
       }
     }
+  }
+
+  bs-dropdown-container {
+    z-index: 10000;
   }
 }

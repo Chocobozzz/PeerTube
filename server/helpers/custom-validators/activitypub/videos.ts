@@ -52,7 +52,7 @@ function isVideoTorrentObjectValid (video: any) {
     (!video.licence || isRemoteIdentifierValid(video.licence)) &&
     (!video.language || isRemoteIdentifierValid(video.language)) &&
     isVideoViewsValid(video.views) &&
-    isBooleanValid(video.nsfw) &&
+    isBooleanValid(video.sensitive) &&
     isBooleanValid(video.commentsEnabled) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&

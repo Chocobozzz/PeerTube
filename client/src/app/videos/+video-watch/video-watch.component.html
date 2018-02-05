@@ -9,89 +9,91 @@
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
     <div class="video-info">
-      <div class="video-info-name-actions">
-        <div class="video-info-name">{{ video.name }}</div>
+      <div class="video-info-first-row">
+        <div>
+          <div class="video-info-name">{{ video.name }}</div>
 
-        <div class="video-info-actions">
-          <div
-            *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
-            class="action-button action-button-like"
-          >
-            <span class="icon icon-like" title="Like this video" ></span>
+          <div class="video-info-date-views">
+            {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
           </div>
 
-          <div
-            *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
-            class="action-button action-button-dislike"
-          >
-            <span class="icon icon-dislike" title="Dislike this video"></span>
+          <div class="video-info-channel">
+            {{ video.channel.displayName }}
+            <!-- Here will be the subscribe button -->
           </div>
 
-          <div (click)="showShareModal()" class="action-button">
-            <span class="icon icon-share"></span>
-            Share
+          <div class="video-info-by">
+            By {{ video.by }}
+            <img [src]="getAvatarPath()" alt="Account avatar" />
           </div>
+        </div>
 
-          <div class="action-more" dropdown dropup="true" placement="right">
-            <div class="action-button" dropdownToggle>
-              <span class="icon icon-more"></span>
+        <div class="video-actions-rates">
+          <div class="video-actions">
+            <div
+                *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
+                class="action-button action-button-like"
+            >
+              <span class="icon icon-like" title="Like this video" ></span>
             </div>
 
-            <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
-              <li role="menuitem">
-                <a class="dropdown-item" title="Download the video" href="#" (click)="showDownloadModal($event)">
-                  <span class="icon icon-download"></span> Download
-                </a>
-              </li>
+            <div
+                *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
+                class="action-button action-button-dislike"
+            >
+              <span class="icon icon-dislike" title="Dislike this video"></span>
+            </div>
 
-              <li *ngIf="isUserLoggedIn()" role="menuitem">
-                <a class="dropdown-item" title="Report this video" href="#" (click)="showReportModal($event)">
-                  <span class="icon icon-alert"></span> Report
-                </a>
-              </li>
+            <div (click)="showShareModal()" class="action-button">
+              <span class="icon icon-share"></span>
+              Share
+            </div>
 
-              <li *ngIf="isVideoBlacklistable()" role="menuitem">
-                <a class="dropdown-item" title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
-                  <span class="icon icon-blacklist"></span> Blacklist
-                </a>
-              </li>
+            <div class="action-more" dropdown dropup="true" placement="right">
+              <div class="action-button" dropdownToggle>
+                <span class="icon icon-more"></span>
+              </div>
 
-              <li *ngIf="isVideoUpdatable()" role="menuitem">
-                <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.uuid ]">
-                  <span class="icon icon-edit"></span> Update
-                </a>
-              </li>
+              <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
+                <li role="menuitem">
+                  <a class="dropdown-item" title="Download the video" href="#" (click)="showDownloadModal($event)">
+                    <span class="icon icon-download"></span> Download
+                  </a>
+                </li>
 
-              <li *ngIf="isVideoRemovable()" role="menuitem">
-                <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
-                  <span class="icon icon-blacklist"></span> Delete
-                </a>
-              </li>
-            </ul>
+                <li *ngIf="isUserLoggedIn()" role="menuitem">
+                  <a class="dropdown-item" title="Report this video" href="#" (click)="showReportModal($event)">
+                    <span class="icon icon-alert"></span> Report
+                  </a>
+                </li>
+
+                <li *ngIf="isVideoBlacklistable()" role="menuitem">
+                  <a class="dropdown-item" title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
+                    <span class="icon icon-blacklist"></span> Blacklist
+                  </a>
+                </li>
+
+                <li *ngIf="isVideoUpdatable()" role="menuitem">
+                  <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/edit', video.uuid ]">
+                    <span class="icon icon-edit"></span> Update
+                  </a>
+                </li>
+
+                <li *ngIf="isVideoRemovable()" role="menuitem">
+                  <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
+                    <span class="icon icon-blacklist"></span> Delete
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+              class="video-info-likes-dislikes-bar"
+              *ngIf="video.likes !== 0 || video.dislikes !== 0"  [tooltip]="likesBarTooltipText">
+            <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
           </div>
         </div>
-      </div>
-
-      <div class="video-info-date-views-bar">
-        <div class="video-info-date-views">
-          {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
-        </div>
-
-        <div
-          class="video-info-likes-dislikes-bar"
-          *ngIf="video.likes !== 0 || video.dislikes !== 0"  [tooltip]="likesBarTooltipText">
-          <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
-        </div>
-      </div>
-
-      <div class="video-info-channel">
-        {{ video.channel.displayName }}
-        <!-- Here will be the subscribe button -->
-      </div>
-
-      <div class="video-info-by">
-        By {{ video.by }}
-        <img [src]="getAvatarPath()" alt="Account avatar" />
       </div>
 
       <div class="video-info-description">

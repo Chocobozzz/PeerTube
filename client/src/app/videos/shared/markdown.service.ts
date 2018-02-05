@@ -7,13 +7,25 @@ export class MarkdownService {
   private markdownIt: MarkdownIt.MarkdownIt
 
   constructor () {
-    this.markdownIt = new MarkdownIt('zero', { linkify: true })
+    this.markdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
       .enable('linkify')
       .enable('autolink')
       .enable('emphasis')
       .enable('link')
       .enable('newline')
+      .enable('list')
 
+    this.setTargetToLinks()
+  }
+
+  markdownToHTML (markdown: string) {
+    const html = this.markdownIt.render(markdown)
+
+    // Avoid linkify truncated links
+    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...(<\/p>)?$/mi, '$1...')
+  }
+
+  private setTargetToLinks () {
     // Snippet from markdown-it documentation: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
     const defaultRender = this.markdownIt.renderer.rules.link_open || function (tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options)
@@ -32,12 +44,5 @@ export class MarkdownService {
       // pass token to default renderer.
       return defaultRender(tokens, idx, options, env, self)
     }
-  }
-
-  markdownToHTML (markdown: string) {
-    const html = this.markdownIt.render(markdown)
-
-    // Avoid linkify truncated links
-    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...(<\/p>)?$/mi, '$1...')
   }
 }

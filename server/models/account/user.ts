@@ -4,7 +4,7 @@ import {
   Scopes, Table, UpdatedAt
 } from 'sequelize-typescript'
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
-import { User } from '../../../shared/models/users'
+import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
   isUserVideoQuotaValid
@@ -121,17 +121,6 @@ export class UserModel extends Model<UserModel> {
     return this.count()
   }
 
-  static getByUsername (username: string) {
-    const query = {
-      where: {
-        username: username
-      },
-      include: [ { model: AccountModel, required: true } ]
-    }
-
-    return UserModel.findOne(query)
-  }
-
   static listForApi (start: number, count: number, sort: string) {
     const query = {
       offset: start,
@@ -146,6 +135,27 @@ export class UserModel extends Model<UserModel> {
           total: count
         }
       })
+  }
+
+  static listEmailsWithRight (right: UserRight) {
+    const roles = Object.keys(USER_ROLE_LABELS)
+      .map(k => parseInt(k, 10) as UserRole)
+      .filter(role => hasUserRight(role, right))
+
+    console.log(roles)
+
+    const query = {
+      attribute: [ 'email' ],
+      where: {
+        role: {
+          [Sequelize.Op.in]: roles
+        }
+      }
+    }
+
+    return UserModel.unscoped()
+      .findAll(query)
+      .then(u => u.map(u => u.email))
   }
 
   static loadById (id: number) {
@@ -172,7 +182,19 @@ export class UserModel extends Model<UserModel> {
     return UserModel.scope('withVideoChannel').findOne(query)
   }
 
-  static loadByUsernameOrEmail (username: string, email: string) {
+  static loadByEmail (email: string) {
+    const query = {
+      where: {
+        email
+      }
+    }
+
+    return UserModel.findOne(query)
+  }
+
+  static loadByUsernameOrEmail (username: string, email?: string) {
+    if (!email) email = username
+
     const query = {
       where: {
         [ Sequelize.Op.or ]: [ { username }, { email } ]

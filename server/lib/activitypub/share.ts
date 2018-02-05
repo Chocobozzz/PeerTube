@@ -4,28 +4,36 @@ import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
 import { sendVideoAnnounceToFollowers } from './send'
+import { getAnnounceActivityPubUrl } from './url'
 
 async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
   const serverActor = await getServerActor()
 
-  const serverShare = VideoShareModel.create({
+  const serverShareUrl = getAnnounceActivityPubUrl(video.url, serverActor)
+  const serverSharePromise = VideoShareModel.create({
     actorId: serverActor.id,
-    videoId: video.id
+    videoId: video.id,
+    url: serverShareUrl
   }, { transaction: t })
 
-  const videoChannelShare = VideoShareModel.create({
+  const videoChannelShareUrl = getAnnounceActivityPubUrl(video.url, video.VideoChannel.Actor)
+  const videoChannelSharePromise = VideoShareModel.create({
     actorId: video.VideoChannel.actorId,
-    videoId: video.id
+    videoId: video.id,
+    url: videoChannelShareUrl
   }, { transaction: t })
 
-  await Promise.all([
-    serverShare,
-    videoChannelShare
+  const [ serverShare, videoChannelShare ] = await Promise.all([
+    serverSharePromise,
+    videoChannelSharePromise
   ])
 
-  return sendVideoAnnounceToFollowers(serverActor, video, t)
+  return Promise.all([
+    sendVideoAnnounceToFollowers(serverActor, videoChannelShare, video, t),
+    sendVideoAnnounceToFollowers(serverActor, serverShare, video, t)
+  ])
 }
 
 export {

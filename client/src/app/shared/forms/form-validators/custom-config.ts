@@ -1,5 +1,12 @@
 import { Validators } from '@angular/forms'
 
+export const INSTANCE_NAME = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    'required': 'Instance name is required.'
+  }
+}
+
 export const CACHE_PREVIEWS_SIZE = {
   VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
   MESSAGES: {

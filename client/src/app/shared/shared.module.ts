@@ -3,10 +3,13 @@ import { HttpClientModule } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
+import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
+import { MarkdownService } from '@app/videos/shared'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
+import { TabsModule } from 'ngx-bootstrap/tabs'
 import { InfiniteScrollModule } from 'ngx-infinite-scroll'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
@@ -40,7 +43,8 @@ import { VideoService } from './video/video.service'
 
     PrimeSharedModule,
     InfiniteScrollModule,
-    NgPipesModule
+    NgPipesModule,
+    TabsModule.forRoot()
   ],
 
   declarations: [
@@ -50,7 +54,8 @@ import { VideoService } from './video/video.service'
     DeleteButtonComponent,
     EditButtonComponent,
     NumberFormatterPipe,
-    FromNowPipe
+    FromNowPipe,
+    MarkdownTextareaComponent
   ],
 
   exports: [
@@ -74,6 +79,7 @@ import { VideoService } from './video/video.service'
     VideoMiniatureComponent,
     DeleteButtonComponent,
     EditButtonComponent,
+    MarkdownTextareaComponent,
 
     NumberFormatterPipe,
     FromNowPipe
@@ -86,7 +92,8 @@ import { VideoService } from './video/video.service'
     VideoAbuseService,
     VideoBlacklistService,
     UserService,
-    VideoService
+    VideoService,
+    MarkdownService
   ]
 })
 export class SharedModule { }

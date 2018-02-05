@@ -39,112 +39,20 @@
     flex-grow: 1;
     margin-right: 28px;
 
-    .video-info-name-actions {
+    .video-info-first-row {
       display: flex;
-      align-items: center;
+
+      & > div {
+        flex-grow: 1;
+      }
 
       .video-info-name {
         margin-right: 30px;
+        height: 40px; // Align with the action buttons
         font-size: 27px;
         font-weight: $font-semibold;
         flex-grow: 1;
       }
-
-      .video-info-actions {
-        min-width: 215px;
-        display: flex;
-        justify-content: end;
-
-        .action-button:not(:first-child), .action-more {
-          margin-left: 10px;
-        }
-
-        .action-button {
-          @include peertube-button;
-          @include grey-button;
-
-          font-size: 15px;
-          font-weight: $font-semibold;
-          display: inline-block;
-          padding: 0 10px 0 10px;
-
-          .icon {
-            @include icon(21px);
-
-            position: relative;
-            top: -2px;
-
-            &.icon-like {
-              background-image: url('../../../assets/images/video/like-grey.svg');
-            }
-
-            &.icon-dislike {
-              background-image: url('../../../assets/images/video/dislike-grey.svg');
-            }
-
-            &.icon-share {
-              background-image: url('../../../assets/images/video/share.svg');
-            }
-
-            &.icon-more {
-              background-image: url('../../../assets/images/video/more.svg');
-              top: -1px;
-            }
-          }
-
-          &.action-button-like.activated {
-            background-color: #39CC0B;
-
-            .icon-like {
-              background-image: url('../../../assets/images/video/like-white.svg');
-            }
-          }
-
-          &.action-button-dislike.activated {
-            background-color: #FF0000;
-
-            .icon-dislike {
-              background-image: url('../../../assets/images/video/dislike-white.svg');
-            }
-          }
-        }
-
-        .action-more {
-          display: inline-block;
-
-          .dropdown-menu .dropdown-item {
-            padding: 6px 24px;
-
-            .icon {
-              @include icon(24px);
-
-              margin-right: 10px;
-              position: relative;
-              top: -1px;
-
-              &.icon-download {
-                background-image: url('../../../assets/images/video/download-black.svg');
-              }
-
-              &.icon-edit {
-                background-image: url('../../../assets/images/global/edit-black.svg');
-              }
-
-              &.icon-alert {
-                background-image: url('../../../assets/images/video/alert.svg');
-              }
-
-              &.icon-blacklist {
-                background-image: url('../../../assets/images/video/blacklist.svg');
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .video-info-date-views-bar {
-      display: flex;
 
       .video-info-date-views {
         font-size: 16px;
@@ -152,33 +60,132 @@
         flex-grow: 1;
       }
 
-      .video-info-likes-dislikes-bar {
-        height: 5px;
-        width: 186px;
-        background-color: #E5E5E5;
-        margin-top: 25px;
+      .video-info-channel {
+        font-weight: $font-semibold;
+        font-size: 15px;
+      }
 
-        .likes-bar {
-          height: 100%;
-          background-color: #39CC0B;
+      .video-info-by {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+
+        img {
+          @include avatar(18px);
+
+          margin-left: 7px;
         }
       }
-    }
 
-    .video-info-channel {
-      font-weight: $font-semibold;
-      font-size: 15px;
-    }
+      .video-actions-rates {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
 
-    .video-info-by {
-      display: flex;
-      align-items: center;
-      font-size: 13px;
+        .video-actions {
+          height: 40px; // Align with the title
+          min-width: 215px;
+          display: flex;
+          align-items: center;
 
-      img {
-        @include avatar(18px);
+          .action-button:not(:first-child), .action-more {
+            margin-left: 10px;
+          }
 
-        margin-left: 7px;
+          .action-button {
+            @include peertube-button;
+            @include grey-button;
+
+            font-size: 15px;
+            font-weight: $font-semibold;
+            display: inline-block;
+            padding: 0 10px 0 10px;
+
+            .icon {
+              @include icon(21px);
+
+              position: relative;
+              top: -2px;
+
+              &.icon-like {
+                background-image: url('../../../assets/images/video/like-grey.svg');
+              }
+
+              &.icon-dislike {
+                background-image: url('../../../assets/images/video/dislike-grey.svg');
+              }
+
+              &.icon-share {
+                background-image: url('../../../assets/images/video/share.svg');
+              }
+
+              &.icon-more {
+                background-image: url('../../../assets/images/video/more.svg');
+                top: -1px;
+              }
+            }
+
+            &.action-button-like.activated {
+              background-color: #39CC0B;
+
+              .icon-like {
+                background-image: url('../../../assets/images/video/like-white.svg');
+              }
+            }
+
+            &.action-button-dislike.activated {
+              background-color: #FF0000;
+
+              .icon-dislike {
+                background-image: url('../../../assets/images/video/dislike-white.svg');
+              }
+            }
+          }
+
+          .action-more {
+            display: inline-block;
+
+            .dropdown-menu .dropdown-item {
+              padding: 6px 24px;
+
+              .icon {
+                @include icon(24px);
+
+                margin-right: 10px;
+                position: relative;
+                top: -1px;
+
+                &.icon-download {
+                  background-image: url('../../../assets/images/video/download-black.svg');
+                }
+
+                &.icon-edit {
+                  background-image: url('../../../assets/images/global/edit-black.svg');
+                }
+
+                &.icon-alert {
+                  background-image: url('../../../assets/images/video/alert.svg');
+                }
+
+                &.icon-blacklist {
+                  background-image: url('../../../assets/images/video/blacklist.svg');
+                }
+              }
+            }
+          }
+        }
+
+        .video-info-likes-dislikes-bar {
+          height: 5px;
+          width: 186px;
+          background-color: #E5E5E5;
+          margin-top: 25px;
+
+          .likes-bar {
+            height: 100%;
+            background-color: #39CC0B;
+          }
+        }
       }
     }
 
@@ -203,18 +210,16 @@
       }
     }
 
-    .video-attributes {
-      .video-attribute {
-        font-size: 13px;
-        display: block;
-        margin-bottom: 12px;
+    .video-attributes .video-attribute {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 12px;
 
-        .video-attribute-label {
-          width: 86px;
-          display: inline-block;
-          color: #585858;
-          font-weight: $font-bold;
-        }
+      .video-attribute-label {
+        width: 86px;
+        display: inline-block;
+        color: #585858;
+        font-weight: $font-bold;
       }
     }
   }
@@ -246,14 +251,21 @@
     .video-info {
       margin-right: 0;
 
-      .video-info-name-actions {
-        align-items: left;
+      .video-info-first-row {
         flex-direction: column;
         margin-bottom: 30px;
+
+        .video-actions-rates {
+          margin-top: 20px;
+          align-items: left;
+
+          .video-info-likes-dislikes-bar {
+            margin-top: 10px;
+          }
+        }
       }
 
-      .video-info-date-views-bar {
-        align-items: left;
+      .video-info-date-views {
         flex-direction: column;
         margin-bottom: 30px;
 
@@ -261,12 +273,27 @@
           margin-top: 0;
         }
       }
+
+      .video-attributes .video-attribute {
+        margin-bottom: 5px;
+      }
     }
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
   .video-bottom {
     margin: 20px 0 0 0;
+
+    .video-info {
+
+      .video-info-first-row {
+
+        .video-info-name {
+          font-size: 20px;
+          height: auto;
+        }
+      }
+    }
   }
 }

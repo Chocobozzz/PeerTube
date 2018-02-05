@@ -14,6 +14,11 @@ describe('Test config API validators', function () {
   let server: ServerInfo
   let userAccessToken: string
   const updateParams: CustomConfig = {
+    instance: {
+      name: 'PeerTube updated',
+      description: 'my super description',
+      terms: 'my super terms'
+    },
     cache: {
       previews: {
         size: 2

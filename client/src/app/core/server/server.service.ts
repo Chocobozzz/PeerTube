@@ -3,12 +3,14 @@ import { Injectable } from '@angular/core'
 import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
+import { About } from '../../../../../shared/models/config/about.model'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class ServerService {
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
   videoPrivaciesLoaded = new ReplaySubject<boolean>(1)
   videoCategoriesLoaded = new ReplaySubject<boolean>(1)
@@ -16,6 +18,10 @@ export class ServerService {
   videoLanguagesLoaded = new ReplaySubject<boolean>(1)
 
   private config: ServerConfig = {
+    instance: {
+      name: 'PeerTube'
+    },
+    serverVersion: 'Unknown',
     signup: {
       allowed: false
     },
@@ -39,11 +45,14 @@ export class ServerService {
   private videoLanguages: Array<{ id: number, label: string }> = []
   private videoPrivacies: Array<{ id: number, label: string }> = []
 
-  constructor (private http: HttpClient) {}
+  constructor (private http: HttpClient) {
+    this.loadConfigLocally()
+  }
 
   loadConfig () {
     this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
-             .subscribe(data => this.config = data)
+      .do(this.saveConfigLocally)
+      .subscribe(data => this.config = data)
   }
 
   loadVideoCategories () {
@@ -82,6 +91,10 @@ export class ServerService {
     return this.videoPrivacies
   }
 
+  getAbout () {
+    return this.http.get<About>(ServerService.BASE_CONFIG_URL + '/about')
+  }
+
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
     hashToPopulate: { id: number, label: string }[],
@@ -99,5 +112,22 @@ export class ServerService {
 
          notifier.next(true)
        })
+  }
+
+  private saveConfigLocally (config: ServerConfig) {
+    localStorage.setItem(ServerService.CONFIG_LOCAL_STORAGE_KEY, JSON.stringify(config))
+  }
+
+  private loadConfigLocally () {
+    const configString = localStorage.getItem(ServerService.CONFIG_LOCAL_STORAGE_KEY)
+
+    if (configString) {
+      try {
+        const parsed = JSON.parse(configString)
+        Object.assign(this.config, parsed)
+      } catch (err) {
+        console.error('Cannot parse config saved in local storage.', err)
+      }
+    }
   }
 }

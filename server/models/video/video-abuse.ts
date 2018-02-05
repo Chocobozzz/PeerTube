@@ -1,7 +1,8 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AfterCreate, AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
 import { isVideoAbuseReasonValid } from '../../helpers/custom-validators/videos'
 import { CONFIG } from '../../initializers'
+import { Emailer } from '../../lib/emailer'
 import { AccountModel } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -53,6 +54,11 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     onDelete: 'cascade'
   })
   Video: VideoModel
+
+  @AfterCreate
+  static sendEmailNotification (instance: VideoAbuseModel) {
+    return Emailer.Instance.addVideoAbuseReport(instance.videoId)
+  }
 
   static listForApi (start: number, count: number, sort: string) {
     const query = {

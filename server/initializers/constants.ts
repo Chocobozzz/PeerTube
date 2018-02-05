@@ -12,7 +12,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 180
+const LAST_MIGRATION_VERSION = 190
 
 // ---------------------------------------------------------------------------
 
@@ -65,13 +65,15 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 5,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
-  'video-file': 1
+  'video-file': 1,
+  'email': 5
 }
 const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
-  'video-file': 1
+  'video-file': 1,
+  'email': 5
 }
 // 2 days
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2
@@ -95,8 +97,17 @@ const CONFIG = {
   },
   REDIS: {
     HOSTNAME: config.get<string>('redis.hostname'),
-    PORT: config.get<string>('redis.port'),
+    PORT: config.get<number>('redis.port'),
     AUTH: config.get<string>('redis.auth')
+  },
+  SMTP: {
+    HOSTNAME: config.get<string>('smtp.hostname'),
+    PORT: config.get<number>('smtp.port'),
+    USERNAME: config.get<string>('smtp.username'),
+    PASSWORD: config.get<string>('smtp.password'),
+    TLS: config.get<boolean>('smtp.tls'),
+    CA_FILE: config.get<string>('smtp.ca_file'),
+    FROM_ADDRESS: config.get<string>('smtp.from_address')
   },
   STORAGE: {
     AVATARS_DIR: buildPath(config.get<string>('storage.avatars')),
@@ -143,6 +154,11 @@ const CONFIG = {
     PREVIEWS: {
       get SIZE () { return config.get<number>('cache.previews.size') }
     }
+  },
+  INSTANCE: {
+    get NAME () { return config.get<string>('instance.name') },
+    get DESCRIPTION () { return config.get<string>('instance.description') },
+    get TERMS () { return config.get<string>('instance.terms') }
   }
 }
 
@@ -195,6 +211,9 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_COMMENTS: {
     TEXT: { min: 2, max: 3000 }, // Length
+    URL: { min: 3, max: 2000 } // Length
+  },
+  VIDEO_SHARE: {
     URL: { min: 3, max: 2000 } // Length
   }
 }
@@ -308,6 +327,8 @@ const PRIVATE_RSA_KEY_SIZE = 2048
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
 
+const USER_PASSWORD_RESET_LIFETIME = 60000 * 5 // 5 minutes
+
 // ---------------------------------------------------------------------------
 
 // Express static paths (router)
@@ -405,6 +426,7 @@ export {
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
+  USER_PASSWORD_RESET_LIFETIME,
   AVATAR_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
   JOB_COMPLETED_LIFETIME

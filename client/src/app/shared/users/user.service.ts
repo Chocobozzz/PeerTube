@@ -5,7 +5,6 @@ import 'rxjs/add/operator/map'
 import { UserCreate, UserUpdateMe } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
-import { User } from './user.model'
 
 @Injectable()
 export class UserService {
@@ -52,6 +51,26 @@ export class UserService {
     const url = UserService.BASE_USERS_URL + '/me/video-quota-used'
 
     return this.authHttp.get(url)
+      .catch(res => this.restExtractor.handleError(res))
+  }
+
+  askResetPassword (email: string) {
+    const url = UserService.BASE_USERS_URL + '/ask-reset-password'
+
+    return this.authHttp.post(url, { email })
+      .map(this.restExtractor.extractDataBool)
+      .catch(res => this.restExtractor.handleError(res))
+  }
+
+  resetPassword (userId: number, verificationString: string, password: string) {
+    const url = `${UserService.BASE_USERS_URL}/${userId}/reset-password`
+    const body = {
+      verificationString,
+      password
+    }
+
+    return this.authHttp.post(url, body)
+      .map(this.restExtractor.extractDataBool)
       .catch(res => this.restExtractor.handleError(res))
   }
 }

@@ -132,61 +132,12 @@ menu {
 
           background-image: url('../../assets/images/menu/administration.svg');
         }
-      }
-    }
-  }
-}
 
-@media screen and (max-width: 800px) {
-  menu {
-    .logged-in-block {
-      padding-left: 10px;
+        &.icon-about  {
+          width: 23px;
+          height: 23px;
 
-      img {
-        display: none;
-      }
-
-      .logged-in-info {
-        .logged-in-username {
-          font-size: 14px;
-        }
-
-        .logged-in-email {
-          font-size: 11px;
-          max-width: 120px;
-        }
-      }
-
-      .logged-in-more {
-        margin-right: 5px;
-
-        .login-button, .create-account-button {
-          font-weight: $font-semibold;
-          font-size: 15px;
-          height: $button-height;
-          line-height: $button-height;
-          width: 190px;
-        }
-      }
-    }
-
-    .button-block {
-      margin: 20px 10px 25px 10px;
-
-      .login-button, .create-account-button {
-        font-size: 13px;
-      }
-    }
-
-    .panel-block {
-      margin-bottom: 30px;
-      margin-left: 10px;
-
-      a {
-        font-size: 14px;
-
-        .icon {
-          margin-right: 10px;
+          background-image: url('../../assets/images/menu/about.svg');
         }
       }
     }

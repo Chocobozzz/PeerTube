@@ -7,7 +7,8 @@ export enum UserRole {
   USER = 2
 }
 
-export const USER_ROLE_LABELS = {
+// TODO: use UserRole for key once https://github.com/Microsoft/TypeScript/issues/13042 is fixed
+export const USER_ROLE_LABELS: { [ id: number ]: string } = {
   [UserRole.USER]: 'User',
   [UserRole.MODERATOR]: 'Moderator',
   [UserRole.ADMINISTRATOR]: 'Administrator'

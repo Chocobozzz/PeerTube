@@ -1,20 +1,17 @@
-import * as Bluebird from 'bluebird'
 import { ActivityCreate, VideoTorrentObject } from '../../../../shared'
 import { DislikeObject, VideoAbuseObject, ViewObject } from '../../../../shared/models/activitypub/objects'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
-import { VideoRateType } from '../../../../shared/models/videos'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
 import { forwardActivity, getActorsInvolvedInVideo } from '../send/misc'
-import { addVideoComments, resolveThread } from '../video-comments'
-import { addVideoShares, getOrCreateAccountAndVideoAndChannel } from '../videos'
+import { resolveThread } from '../video-comments'
+import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object
@@ -53,55 +50,7 @@ async function processCreateVideo (
 
   const { video } = await getOrCreateAccountAndVideoAndChannel(videoToCreateData, actor)
 
-  // Process outside the transaction because we could fetch remote data
-  if (videoToCreateData.likes && Array.isArray(videoToCreateData.likes.orderedItems)) {
-    logger.info('Adding likes of video %s.', video.uuid)
-    await createRates(videoToCreateData.likes.orderedItems, video, 'like')
-  }
-
-  if (videoToCreateData.dislikes && Array.isArray(videoToCreateData.dislikes.orderedItems)) {
-    logger.info('Adding dislikes of video %s.', video.uuid)
-    await createRates(videoToCreateData.dislikes.orderedItems, video, 'dislike')
-  }
-
-  if (videoToCreateData.shares && Array.isArray(videoToCreateData.shares.orderedItems)) {
-    logger.info('Adding shares of video %s.', video.uuid)
-    await addVideoShares(video, videoToCreateData.shares.orderedItems)
-  }
-
-  if (videoToCreateData.comments && Array.isArray(videoToCreateData.comments.orderedItems)) {
-    logger.info('Adding comments of video %s.', video.uuid)
-    await addVideoComments(video, videoToCreateData.comments.orderedItems)
-  }
-
   return video
-}
-
-async function createRates (actorUrls: string[], video: VideoModel, rate: VideoRateType) {
-  let rateCounts = 0
-  const tasks: Bluebird<number>[] = []
-
-  for (const actorUrl of actorUrls) {
-    const actor = await getOrCreateActorAndServerAndModel(actorUrl)
-    const p = AccountVideoRateModel
-      .create({
-        videoId: video.id,
-        accountId: actor.Account.id,
-        type: rate
-      })
-      .then(() => rateCounts += 1)
-
-    tasks.push(p)
-  }
-
-  await Promise.all(tasks)
-
-  logger.info('Adding %d %s to video %s.', rateCounts, rate, video.uuid)
-
-  // This is "likes" and "dislikes"
-  await video.increment(rate + 's', { by: rateCounts })
-
-  return
 }
 
 async function processCreateDislike (byActor: ActorModel, activity: ActivityCreate) {

@@ -7,9 +7,9 @@
 
   <form role="form" (ngSubmit)="login()" [formGroup]="form">
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="username">User</label>
       <input
-        type="text" id="username" placeholder="Username" required
+        type="text" id="username" placeholder="Username or email address" required
         formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
       <div *ngIf="formErrors.username" class="form-error">
@@ -19,10 +19,13 @@
 
     <div class="form-group">
       <label for="password">Password</label>
-      <input
-        type="password" name="password" id="password" placeholder="Password" required
-        formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
-      >
+      <div>
+        <input
+          type="password" name="password" id="password" placeholder="Password" required
+          formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+        >
+        <div class="forgot-password-button" (click)="openForgotPasswordModal()">I forgot my password</div>
+      </div>
       <div *ngIf="formErrors.password" class="form-error">
         {{ formErrors.password }}
       </div>
@@ -30,4 +33,37 @@
 
     <input type="submit" value="Login" [disabled]="!form.valid">
   </form>
+</div>
+
+<div bsModal #forgotPasswordModal="bs-modal" (onShown)="onForgotPasswordModalShown()" class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <span class="close" aria-hidden="true" (click)="hideForgotPasswordModal()"></span>
+        <h4 class="modal-title">Forgot your password</h4>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="forgot-password-email">Email</label>
+          <input
+            type="email" id="forgot-password-email" placeholder="Email address" required
+            [(ngModel)]="forgotPasswordEmail" #forgotPasswordEmailInput
+          >
+        </div>
+
+        <div class="form-group inputs">
+          <span class="action-button action-button-cancel" (click)="hideForgotPasswordModal()">
+            Cancel
+          </span>
+
+          <input
+            type="submit" value="Send me an email to reset my password" class="action-button-submit"
+            (click)="askResetPassword()" [disabled]="!forgotPasswordEmailInput.validity.valid"
+          >
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

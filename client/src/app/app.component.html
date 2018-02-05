@@ -6,7 +6,7 @@
 
       <a id="peertube-title" [routerLink]="['/videos/list']" title="Homepage">
         <span class="icon icon-logo"></span>
-        PeerTube
+        {{ instanceName }}
       </a>
     </div>
 
@@ -27,7 +27,7 @@
       </div>
 
       <footer class="row">
-        <a href="https://github.com/Chocobozzz/PeerTube" title="PeerTube on Github">PeerTube</a> -
+        <a href="https://github.com/Chocobozzz/PeerTube" title="PeerTube on Github">PeerTube v{{ serverVersion }}</a> -
         <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" title="PeerTube licence">CopyLeft 2015-2017</a>
       </footer>
     </div>

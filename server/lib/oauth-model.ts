@@ -25,10 +25,10 @@ function getRefreshToken (refreshToken: string) {
   return OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
 }
 
-async function getUser (username: string, password: string) {
-  logger.debug('Getting User (username: ' + username + ', password: ******).')
+async function getUser (usernameOrEmail: string, password: string) {
+  logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
-  const user = await UserModel.getByUsername(username)
+  const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
   if (!user) return null
 
   const passwordMatch = await user.isPasswordMatch(password)

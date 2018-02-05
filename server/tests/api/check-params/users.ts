@@ -523,7 +523,7 @@ describe('Test users API validators', function () {
     })
 
     it('Should fail with a registered user having too many video', async function () {
-      this.timeout(10000)
+      this.timeout(15000)
 
       const user = {
         username: 'user3',
@@ -538,6 +538,28 @@ describe('Test users API validators', function () {
       await uploadVideo(server.url, userAccessToken, videoAttributes)
       await uploadVideo(server.url, userAccessToken, videoAttributes)
       await uploadVideo(server.url, userAccessToken, videoAttributes, 403)
+    })
+  })
+
+  describe('When asking a password reset', function () {
+    const path = '/api/v1/users/ask-reset-password'
+
+    it('Should fail with a missing email', async function () {
+      const fields = {}
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an invalid email', async function () {
+      const fields = { email: 'hello' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should success with the correct params', async function () {
+      const fields = { email: 'admin@example.com' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 204 })
     })
   })
 

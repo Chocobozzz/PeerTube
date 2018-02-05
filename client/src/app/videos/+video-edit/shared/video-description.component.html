@@ -1,9 +1,0 @@
-<textarea
-  [(ngModel)]="description" (ngModelChange)="onModelChange()"
-  id="description" name="description">
-</textarea>
-
-<tabset #staticTabs class="previews">
-  <tab heading="Truncated description preview" [innerHTML]="truncatedDescriptionHTML"></tab>
-  <tab heading="Complete description preview" [innerHTML]="descriptionHTML"></tab>
-</tabset>

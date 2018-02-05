@@ -2,25 +2,34 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import 'rxjs/add/operator/debounceTime'
 import 'rxjs/add/operator/distinctUntilChanged'
+import { isInMobileView } from '@app/shared/misc/utils'
+import { MarkdownService } from '@app/videos/shared'
 import { Subject } from 'rxjs/Subject'
-import { MarkdownService } from '../../shared'
 import truncate from 'lodash-es/truncate'
 
 @Component({
-  selector: 'my-video-description',
-  templateUrl: './video-description.component.html',
-  styleUrls: [ './video-description.component.scss' ],
+  selector: 'my-markdown-textarea',
+  templateUrl: './markdown-textarea.component.html',
+  styleUrls: [ './markdown-textarea.component.scss' ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => VideoDescriptionComponent),
+      useExisting: forwardRef(() => MarkdownTextareaComponent),
       multi: true
     }
   ]
 })
 
-export class VideoDescriptionComponent implements ControlValueAccessor, OnInit {
+export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() description = ''
+  @Input() classes: string[] = []
+  @Input() textareaWidth = '100%'
+  @Input() textareaHeight = '150px'
+  @Input() previewColumn = false
+  @Input() truncate: number
+
+  textareaMarginRight = '0'
+  flexDirection = 'column'
   truncatedDescriptionHTML = ''
   descriptionHTML = ''
 
@@ -35,6 +44,11 @@ export class VideoDescriptionComponent implements ControlValueAccessor, OnInit {
       .subscribe(() => this.updateDescriptionPreviews())
 
     this.descriptionChanged.next(this.description)
+
+    if (this.previewColumn) {
+      this.flexDirection = 'row'
+      this.textareaMarginRight = '15px'
+    }
   }
 
   propagateChange = (_: any) => { /* empty */ }
@@ -59,10 +73,14 @@ export class VideoDescriptionComponent implements ControlValueAccessor, OnInit {
     this.descriptionChanged.next(this.description)
   }
 
-  private updateDescriptionPreviews () {
-    if (!this.description) return
+  arePreviewsDisplayed () {
+    return isInMobileView() === false
+  }
 
-    this.truncatedDescriptionHTML = this.markdownService.markdownToHTML(truncate(this.description, { length: 250 }))
+  private updateDescriptionPreviews () {
+    if (this.description === null || this.description === undefined) return
+
+    this.truncatedDescriptionHTML = this.markdownService.markdownToHTML(truncate(this.description, { length: this.truncate }))
     this.descriptionHTML = this.markdownService.markdownToHTML(this.description)
   }
 }

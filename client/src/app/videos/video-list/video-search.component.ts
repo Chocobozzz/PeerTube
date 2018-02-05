@@ -16,7 +16,9 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
   currentRoute = '/videos/search'
   loadOnInit = false
 
-  private search = ''
+  protected otherParams = {
+    search: ''
+  }
   private subActivatedRoute: Subscription
 
   constructor (protected router: Router,
@@ -32,7 +34,10 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
 
     this.subActivatedRoute = this.route.queryParams.subscribe(
       queryParams => {
-        this.search = queryParams['search']
+        const querySearch = queryParams['search']
+        if (!querySearch || this.otherParams.search === querySearch) return
+
+        this.otherParams.search = querySearch
         this.reloadVideos()
       },
 
@@ -47,6 +52,6 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
   }
 
   getVideosObservable () {
-    return this.videoService.searchVideos(this.search, this.pagination, this.sort)
+    return this.videoService.searchVideos(this.otherParams.search, this.pagination, this.sort)
   }
 }

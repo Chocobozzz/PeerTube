@@ -1,15 +1,23 @@
+import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import 'express-validator'
 import { body, param } from 'express-validator/check'
+import { omit } from 'lodash'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isAvatarFile, isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
+  isAvatarFile,
+  isUserAutoPlayVideoValid,
+  isUserDisplayNSFWValid,
+  isUserPasswordValid,
+  isUserRoleValid,
+  isUserUsernameValid,
   isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { isSignupAllowed } from '../../helpers/utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
 
@@ -21,7 +29,7 @@ const usersAddValidator = [
   body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersAdd parameters', { parameters: req.body })
+    logger.debug('Checking usersAdd parameters', { parameters: omit(req.body, 'password') })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
@@ -36,7 +44,7 @@ const usersRegisterValidator = [
   body('email').isEmail().withMessage('Should have a valid email'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersRegister parameters', { parameters: req.body })
+    logger.debug('Checking usersRegister parameters', { parameters: omit(req.body, 'password') })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserNameOrEmailDoesNotAlreadyExist(req.body.username, req.body.email, res)) return
@@ -96,7 +104,7 @@ const usersUpdateMeValidator = [
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     // TODO: Add old password verification
-    logger.debug('Checking usersUpdateMe parameters', { parameters: req.body })
+    logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
 
     if (areValidationErrors(req, res)) return
 
@@ -131,7 +139,7 @@ const usersGetValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking usersGet parameters', { parameters: req.body })
+    logger.debug('Checking usersGet parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
     if (!await checkUserIdExist(req.params.id, res)) return
@@ -166,6 +174,49 @@ const ensureUserRegistrationAllowed = [
   }
 ]
 
+const usersAskResetPasswordValidator = [
+  body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersAskResetPassword parameters', { parameters: req.body })
+
+    if (areValidationErrors(req, res)) return
+    const exists = await checkUserEmailExist(req.body.email, res, false)
+    if (!exists) {
+      logger.debug('User with email %s does not exist (asking reset password).', req.body.email)
+      // Do not leak our emails
+      return res.status(204).end()
+    }
+
+    return next()
+  }
+]
+
+const usersResetPasswordValidator = [
+  param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  body('verificationString').not().isEmpty().withMessage('Should have a valid verification string'),
+  body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersResetPassword parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await checkUserIdExist(req.params.id, res)) return
+
+    const user = res.locals.user as UserModel
+    const redisVerificationString = await Redis.Instance.getResetPasswordLink(user.id)
+
+    if (redisVerificationString !== req.body.verificationString) {
+      return res
+        .status(403)
+        .send({ error: 'Invalid verification string.' })
+        .end()
+    }
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -177,24 +228,19 @@ export {
   usersVideoRatingValidator,
   ensureUserRegistrationAllowed,
   usersGetValidator,
-  usersUpdateMyAvatarValidator
+  usersUpdateMyAvatarValidator,
+  usersAskResetPasswordValidator,
+  usersResetPasswordValidator
 }
 
 // ---------------------------------------------------------------------------
 
-async function checkUserIdExist (id: number, res: express.Response) {
-  const user = await UserModel.loadById(id)
+function checkUserIdExist (id: number, res: express.Response) {
+  return checkUserExist(() => UserModel.loadById(id), res)
+}
 
-  if (!user) {
-    res.status(404)
-              .send({ error: 'User not found' })
-              .end()
-
-    return false
-  }
-
-  res.locals.user = user
-  return true
+function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {
+  return checkUserExist(() => UserModel.loadByEmail(email), res, abortResponse)
 }
 
 async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email: string, res: express.Response) {
@@ -206,6 +252,24 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
               .end()
     return false
   }
+
+  return true
+}
+
+async function checkUserExist (finder: () => Bluebird<UserModel>, res: express.Response, abortResponse = true) {
+  const user = await finder()
+
+  if (!user) {
+    if (abortResponse === true) {
+      res.status(404)
+        .send({ error: 'User not found' })
+        .end()
+    }
+
+    return false
+  }
+
+  res.locals.user = user
 
   return true
 }

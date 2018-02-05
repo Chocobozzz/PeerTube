@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
-import { isBooleanValid, isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoAbuseReasonValid, isVideoCategoryValid, isVideoDescriptionValid, isVideoExist, isVideoFile, isVideoLanguageValid,
   isVideoLicenceValid, isVideoNameValid, isVideoPrivacyValid, isVideoRatingTypeValid, isVideoTagsValid
@@ -134,9 +134,18 @@ const videosGetValidator = [
 
     const video = res.locals.video
 
-    // Video is not private, anyone can access it
-    if (video.privacy !== VideoPrivacy.PRIVATE) return next()
+    // Video is public, anyone can access it
+    if (video.privacy === VideoPrivacy.PUBLIC) return next()
 
+    // Video is unlisted, check we used the uuid to fetch it
+    if (video.privacy === VideoPrivacy.UNLISTED) {
+      if (isUUIDValid(req.params.id)) return next()
+
+      // Don't leak this unlisted video
+      return res.status(404).end()
+    }
+
+    // Video is private, check the user
     authenticate(req, res, () => {
       if (video.VideoChannel.Account.userId !== res.locals.oauth.token.User.id) {
         return res.status(403)

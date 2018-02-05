@@ -53,9 +53,11 @@ migrate()
 
 // ----------- PeerTube modules -----------
 import { installApplication } from './server/initializers'
+import { Emailer } from './server/lib/emailer'
 import { JobQueue } from './server/lib/job-queue'
 import { VideosPreviewCache } from './server/lib/cache'
 import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
+import { Redis } from './server/lib/redis'
 import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
 
@@ -169,10 +171,20 @@ function onDatabaseInitDone () {
     .then(() => {
       // ----------- Make the server listening -----------
       server.listen(port, () => {
+        // Emailer initialization and then job queue initialization
+        Emailer.Instance.init()
+        Emailer.Instance.checkConnectionOrDie()
+          .then(() => JobQueue.Instance.init())
+
+        // Caches initializations
         VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
+
+        // Enable Schedulers
         BadActorFollowScheduler.Instance.enable()
         RemoveOldJobsScheduler.Instance.enable()
-        JobQueue.Instance.init()
+
+        // Redis initialization
+        Redis.Instance.init()
 
         logger.info('Server listening on port %d', port)
         logger.info('Web server: %s', CONFIG.WEBSERVER.URL)

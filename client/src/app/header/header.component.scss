@@ -10,7 +10,7 @@
     color: #000;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     width: calc(100% - 150px);
   }
 
@@ -36,6 +36,10 @@
   @include orange-button;
 
   margin-right: 25px;
+
+  @media screen and (max-width: 800px) {
+    margin-right: 0;
+  }
 
   .icon.icon-upload {
     @include icon(22px);

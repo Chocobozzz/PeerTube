@@ -206,6 +206,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     this.videoService.updateVideo(video)
       .subscribe(
         () => {
+          this.isUploadingVideo = false
           this.notificationsService.success('Success', 'Video published.')
           this.router.navigate([ '/videos/watch', video.uuid ])
         },

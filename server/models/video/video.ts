@@ -5,8 +5,26 @@ import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy, AllowNull, BeforeDestroy, BelongsTo, BelongsToMany, Column, CreatedAt, DataType, Default, ForeignKey, HasMany,
-  IFindOptions, Is, IsInt, IsUUID, Min, Model, Scopes, Table, UpdatedAt
+  AfterDestroy,
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  BelongsToMany,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  HasMany,
+  IFindOptions,
+  Is,
+  IsInt,
+  IsUUID,
+  Min,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -16,17 +34,36 @@ import { createTorrentPromise, renamePromise, statPromise, unlinkPromise, writeF
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoCategoryValid, isVideoDescriptionValid, isVideoDurationValid, isVideoLanguageValid, isVideoLicenceValid, isVideoNameValid,
+  isVideoCategoryValid,
+  isVideoDescriptionValid,
+  isVideoDurationValid,
+  isVideoLanguageValid,
+  isVideoLicenceValid,
+  isVideoNameValid,
   isVideoPrivacyValid
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
-  API_VERSION, CONFIG, CONSTRAINTS_FIELDS, PREVIEWS_SIZE, REMOTE_SCHEME, STATIC_PATHS, THUMBNAILS_SIZE, VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES
+  API_VERSION,
+  CONFIG,
+  CONSTRAINTS_FIELDS,
+  PREVIEWS_SIZE,
+  REMOTE_SCHEME,
+  STATIC_PATHS,
+  THUMBNAILS_SIZE,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PRIVACIES
 } from '../../initializers'
-import { getAnnounceActivityPubUrl } from '../../lib/activitypub'
+import {
+  getVideoCommentsActivityPubUrl,
+  getVideoDislikesActivityPubUrl,
+  getVideoLikesActivityPubUrl,
+  getVideoSharesActivityPubUrl
+} from '../../lib/activitypub'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
@@ -449,11 +486,15 @@ export class VideoModel extends Model<VideoModel> {
       where: {
         id: {
           [Sequelize.Op.in]: Sequelize.literal('(' + rawQuery + ')')
-        }
+        },
+        [Sequelize.Op.or]: [
+          { privacy: VideoPrivacy.PUBLIC },
+          { privacy: VideoPrivacy.UNLISTED }
+        ]
       },
       include: [
         {
-          attributes: [ 'id' ],
+          attributes: [ 'id', 'url' ],
           model: VideoShareModel.unscoped(),
           required: false,
           where: {
@@ -927,31 +968,19 @@ export class VideoModel extends Model<VideoModel> {
         }
       }
 
-      likesObject = activityPubCollection(likes)
-      dislikesObject = activityPubCollection(dislikes)
+      const res = this.toRatesActivityPubObjects()
+      likesObject = res.likesObject
+      dislikesObject = res.dislikesObject
     }
 
     let sharesObject
     if (Array.isArray(this.VideoShares)) {
-      const shares: string[] = []
-
-      for (const videoShare of this.VideoShares) {
-        const shareUrl = getAnnounceActivityPubUrl(this.url, videoShare.Actor)
-        shares.push(shareUrl)
-      }
-
-      sharesObject = activityPubCollection(shares)
+      sharesObject = this.toAnnouncesActivityPubObject()
     }
 
     let commentsObject
     if (Array.isArray(this.VideoComments)) {
-      const comments: string[] = []
-
-      for (const videoComment of this.VideoComments) {
-        comments.push(videoComment.url)
-      }
-
-      commentsObject = activityPubCollection(comments)
+      commentsObject = this.toCommentsActivityPubObject()
     }
 
     const url = []
@@ -997,7 +1026,7 @@ export class VideoModel extends Model<VideoModel> {
       licence,
       language,
       views: this.views,
-      nsfw: this.nsfw,
+      sensitive: this.nsfw,
       commentsEnabled: this.commentsEnabled,
       published: this.createdAt.toISOString(),
       updated: this.updatedAt.toISOString(),
@@ -1026,6 +1055,44 @@ export class VideoModel extends Model<VideoModel> {
         }
       ]
     }
+  }
+
+  toAnnouncesActivityPubObject () {
+    const shares: string[] = []
+
+    for (const videoShare of this.VideoShares) {
+      shares.push(videoShare.url)
+    }
+
+    return activityPubCollection(getVideoSharesActivityPubUrl(this), shares)
+  }
+
+  toCommentsActivityPubObject () {
+    const comments: string[] = []
+
+    for (const videoComment of this.VideoComments) {
+      comments.push(videoComment.url)
+    }
+
+    return activityPubCollection(getVideoCommentsActivityPubUrl(this), comments)
+  }
+
+  toRatesActivityPubObjects () {
+    const likes: string[] = []
+    const dislikes: string[] = []
+
+    for (const rate of this.AccountVideoRates) {
+      if (rate.type === 'like') {
+        likes.push(rate.Account.Actor.url)
+      } else if (rate.type === 'dislike') {
+        dislikes.push(rate.Account.Actor.url)
+      }
+    }
+
+    const likesObject = activityPubCollection(getVideoLikesActivityPubUrl(this), likes)
+    const dislikesObject = activityPubCollection(getVideoDislikesActivityPubUrl(this), dislikes)
+
+    return { likesObject, dislikesObject }
   }
 
   getTruncatedDescription () {

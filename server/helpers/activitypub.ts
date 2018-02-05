@@ -15,18 +15,37 @@ function activityPubContextify <T> (data: T) {
         'uuid': 'http://schema.org/identifier',
         'category': 'http://schema.org/category',
         'licence': 'http://schema.org/license',
-        'nsfw': 'as:sensitive',
+        'sensitive': 'as:sensitive',
         'language': 'http://schema.org/inLanguage',
         'views': 'http://schema.org/Number',
         'size': 'http://schema.org/Number',
         'commentsEnabled': 'http://schema.org/Boolean'
+      },
+      {
+        likes: {
+          '@id': 'as:likes',
+          '@type': '@id'
+        },
+        dislikes: {
+          '@id': 'as:dislikes',
+          '@type': '@id'
+        },
+        shares: {
+          '@id': 'as:shares',
+          '@type': '@id'
+        },
+        comments: {
+          '@id': 'as:comments',
+          '@type': '@id'
+        }
       }
     ]
   })
 }
 
-function activityPubCollection (results: any[]) {
+function activityPubCollection (url: string, results: any[]) {
   return {
+    id: url,
     type: 'OrderedCollection',
     totalItems: results.length,
     orderedItems: results

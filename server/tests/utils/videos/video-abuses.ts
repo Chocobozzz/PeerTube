@@ -1,6 +1,6 @@
 import * as request from 'supertest'
 
-function reportVideoAbuse (url: string, token: string, videoId: number, reason: string, specialStatus = 204) {
+function reportVideoAbuse (url: string, token: string, videoId: number | string, reason: string, specialStatus = 204) {
   const path = '/api/v1/videos/' + videoId + '/abuse'
 
   return request(url)
