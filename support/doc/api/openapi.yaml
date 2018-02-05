@@ -18,6 +18,21 @@ paths:
           required: true
           type: string
           description: 'The id of the account'
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -59,6 +74,27 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: state
+          in: path
+          required: true
+          type: string
+          description: 'The id of the account'
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: count
+          in: query
+          required: false
+          type: number
+          description: ''
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -91,6 +127,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -106,6 +158,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -154,6 +222,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -289,6 +373,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -339,6 +439,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -414,6 +530,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -536,6 +668,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -601,6 +749,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -616,6 +780,22 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
@@ -728,6 +908,21 @@ paths:
           required: true
           type: string
           description: 'The video id '
+        - name: start
+          in: query
+          required: false
+          type: number
+          description: 'starting page'
+        - name: stop
+          in: query
+          required: false
+          type: number
+          description: 'stoping page'
+        - name: sort
+          in: query
+          required: false
+          type: number
+          description: 'sorting'
       responses:
         '200':
           description: successful operation
