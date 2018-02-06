@@ -21,6 +21,16 @@ redis:
   port: 6379
   auth: null
 
+# SMTP server to send emails
+smtp:
+  hostname: null
+  port: 465
+  username: null
+  password: null
+  tls: true
+  ca_file: null # Used for self signed certificates
+  from_address: 'admin@example.com'
+
 # From the project root directory
 storage:
   avatars: '../data/avatars/'
@@ -62,3 +72,9 @@ transcoding:
     480p: true
     720p: true
     1080p: true
+
+# Instance settings
+instance:
+  name: 'PeerTube'
+  description: '' # Support markdown
+  terms: '' # Support markdown
