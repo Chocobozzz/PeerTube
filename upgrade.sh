@@ -7,6 +7,9 @@
 # $ ./upgrade.sh
 ############
 
+# Stcict mode 
+set -e
+
 # Backup database
 SQL_BACKUP_PATH="/var/www/peertube/backup/sql-peertube_prod-$(date -Im).bak" 
 mkdir -p ~/backup
