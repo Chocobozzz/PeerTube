@@ -83,7 +83,7 @@ class JobQueue {
 
   listForApi (state: JobState, start: number, count: number, sort: string) {
     return new Promise<kue.Job[]>((res, rej) => {
-      kue.Job.rangeByState(state, start, start + count, sort, (err, jobs) => {
+      kue.Job.rangeByState(state, start, start + count - 1, sort, (err, jobs) => {
         if (err) return rej(err)
 
         return res(jobs)
