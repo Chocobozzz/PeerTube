@@ -217,9 +217,14 @@ class PeerTubePlugin extends Plugin {
   private playerElement: HTMLVideoElement
   private videoFiles: VideoFile[]
   private torrent: WebTorrent.Torrent
+  private autoplay = false
 
   constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
+
+    // Fix canplay event on google chrome by disabling default videojs autoplay
+    this.autoplay = this.player.options_.autoplay
+    this.player.options_.autoplay = false
 
     this.videoFiles = options.videoFiles
 
@@ -281,6 +286,7 @@ class PeerTubePlugin extends Plugin {
 
         this.renderer = renderer
         if (!this.player.paused()) this.player.play().then(done)
+        else done()
       })
     })
 
@@ -349,18 +355,12 @@ class PeerTubePlugin extends Plugin {
     const webTorrentButton = new WebTorrentButton(this.player)
     controlBar.webTorrent = controlBar.el().insertBefore(webTorrentButton.el(), controlBar.progressControl.el())
 
-    if (this.player.options_.autoplay === true) {
-      this.updateVideoFile()
+    if (this.autoplay === true) {
+      this.updateVideoFile(undefined, () => this.player.play())
     } else {
       this.player.one('play', () => {
-        // On firefox, we need to wait to load the video before playing
-        if (navigator.userAgent.toLowerCase().indexOf('firefox') !== -1) {
-          this.player.pause()
-          this.updateVideoFile(undefined, () => this.player.play())
-          return
-        }
-
-        this.updateVideoFile(undefined)
+        this.player.pause()
+        this.updateVideoFile(undefined, () => this.player.play())
       })
     }
   }
