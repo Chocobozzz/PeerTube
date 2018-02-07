@@ -19,6 +19,9 @@ services:
   - postgresql
   - redis-server
 
+env:
+  - DOCKER_IMAGE=tedomum/peertube
+
 install:
   - CC=gcc-4.9 CXX=g++-4.9 yarn install
 
@@ -55,3 +58,12 @@ after_failure:
   - cat test4/logs/all-logs.log
   - cat test5/logs/all-logs.log
   - cat test6/logs/all-logs.log
+
+before_deploy:
+  - docker login -u "$DOCKER_USER" -p "$DOCKER_PASSWORD"
+  - TAG=`echo $TRAVIS_BRANCH | sed 's,^master$,latest,'`
+  - docker build -t "${IMAGE_NAME}:$TAG" .
+
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:$TAG"
