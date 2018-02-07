@@ -70,7 +70,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
       .subscribe(
-        data => this.otherVideos = data.videos,
+        data => {
+          this.otherVideos = data.videos
+          this.updateOtherVideosDisplayed()
+        },
+
         err => console.error(err)
       )
 
@@ -290,9 +294,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private onVideoFetched (video: VideoDetails) {
     this.video = video
 
-    if (this.otherVideos.length > 0) {
-      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
-    }
+    this.updateOtherVideosDisplayed()
 
     let observable
     if (this.video.isVideoNSFWForUser(this.user)) {
@@ -400,6 +402,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.video.likes += likesToIncrement
     this.video.dislikes += dislikesToIncrement
+  }
+
+  private updateOtherVideosDisplayed () {
+    if (this.otherVideos.length > 0) {
+      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
+    }
   }
 
   private setOpenGraphTags () {
