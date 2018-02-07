@@ -42,7 +42,7 @@
     .video-info-first-row {
       display: flex;
 
-      & > div {
+      & div:first-child {
         flex-grow: 1;
       }
 
