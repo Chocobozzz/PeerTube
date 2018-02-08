@@ -7,11 +7,21 @@
     {
       "root": "src",
       "outDir": "dist",
-      "deployUrl": "client/",
       "assets": [
-        { "glob": "**/*", "input": "./assets/images", "output": "./client/assets/images" },
-        { "input": "./manifest.json", "output": "./client/manifest.json" }
+        {
+          "glob": "**/*",
+          "input": "./assets/images",
+          "output": "./client/assets/images",
+          "allowOutsideOutDir": false
+        },
+                {
+          "glob": "",
+          "input": "./manifest.json",
+          "output": "./manifest.json",
+          "allowOutsideOutDir": false
+        }
       ],
+      "deployUrl": "client/",
       "index": "index.html",
       "main": "main.ts",
       "polyfills": "polyfills.ts",
@@ -19,6 +29,7 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
+      "serviceWorker": true,
       "styles": [
         "sass/application.scss"
       ],
@@ -32,8 +43,7 @@
       "environments": {
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
-      },
-      "serviceWorker": true
+      }
     }
   ],
   "e2e": {

@@ -42,5 +42,5 @@
   ],
   "name": "PeerTube",
   "short_name": "PeerTube",
-  "start_url": "/videos/recently-added"
+  "start_url": "."
 }

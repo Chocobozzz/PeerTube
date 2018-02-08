@@ -5,3 +5,27 @@
     text-align: left;
   }
 }
+
+@media screen and (max-width: 400px) and (min-resolution: 1.5dppx) {
+  .videos {
+    text-align: center;
+
+    /deep/ .video-miniature {
+      padding-right: 0;
+      height: 215px;
+      width: 100%;
+
+      .video-miniature-information {
+        width: 100%;
+      }
+
+      /deep/ .video-thumbnail {
+        width: 100%;
+
+        img {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
