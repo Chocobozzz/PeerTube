@@ -63,7 +63,7 @@
       }
 
       .cls-6 {
-        fill: #fff;
+        fill: rgba(255, 255, 255, 0);
       }
     </style>
   </defs>
@@ -111,7 +111,7 @@
            d="M 0,0 V 10.667 L 8,5.333 Z"
            transform="rotate(180,24,40)"
            inkscape:connector-curvature="0"
-           style="fill:#ffffff" />
+           style="fill:rgba(255,255,255,0)" />
       </g>
     </g>
   </g>
