@@ -405,7 +405,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private updateOtherVideosDisplayed () {
-    if (this.otherVideos.length > 0) {
+    if (this.video && this.otherVideos && this.otherVideos.length > 0) {
       this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
     }
   }
