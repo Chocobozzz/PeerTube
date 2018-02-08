@@ -9,7 +9,8 @@
       "outDir": "dist",
       "deployUrl": "client/",
       "assets": [
-        { "glob": "**/*", "input": "./assets/images", "output": "./client/assets/images" }
+        { "glob": "**/*", "input": "./assets/images", "output": "./client/assets/images" },
+        { "input": "./manifest.json", "output": "./client/manifest.json" }
       ],
       "index": "index.html",
       "main": "main.ts",
