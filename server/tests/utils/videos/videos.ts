@@ -249,8 +249,6 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .set('Accept', 'application/json')
               .set('Authorization', 'Bearer ' + accessToken)
               .field('name', attributes.name)
-              .field('category', attributes.category.toString())
-              .field('licence', attributes.licence.toString())
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
               .field('description', attributes.description)
@@ -259,6 +257,12 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
 
   if (attributes.language !== undefined) {
     req.field('language', attributes.language.toString())
+  }
+  if (attributes.category !== undefined) {
+    req.field('category', attributes.category.toString())
+  }
+  if (attributes.licence !== undefined) {
+    req.field('licence', attributes.licence.toString())
   }
 
   for (let i = 0; i < attributes.tags.length; i++) {

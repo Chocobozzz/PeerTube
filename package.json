@@ -135,7 +135,8 @@
     "supertest": "^3.0.0",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^7.0.0",
-    "webtorrent": "^0.98.0"
+    "webtorrent": "^0.98.0",
+    "youtube-dl": "^1.12.2"
   },
   "scripty": {
     "silent": true

@@ -2,8 +2,8 @@ import * as program from 'commander'
 import * as Promise from 'bluebird'
 import { isAbsolute, join } from 'path'
 
-import { readdirPromise } from '../../../helpers/core-utils'
-import { execCLI } from '../../utils'
+import { readdirPromise } from '../helpers/core-utils'
+import { execCLI } from '../tests/utils/index'
 
 program
   .option('-u, --url <url>', 'Server url')

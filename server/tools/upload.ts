@@ -5,7 +5,7 @@ import { promisify } from 'util'
 
 const accessPromise = promisify(access)
 
-import { uploadVideo } from '../../utils'
+import { uploadVideo } from '../tests/utils/index'
 
 program
   .option('-u, --url <url>', 'Server url')
