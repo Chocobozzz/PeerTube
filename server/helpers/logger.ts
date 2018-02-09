@@ -31,7 +31,7 @@ const loggerFormat = winston.format.printf((info) => {
 })
 
 const timestampFormatter = winston.format.timestamp({
-  format: 'YYYY-MM-dd HH:mm:ss.SSS'
+  format: 'YYYY-MM-DD hh:mm:ss.SSS'
 })
 const labelFormatter = winston.format.label({
   label
