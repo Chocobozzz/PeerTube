@@ -55,8 +55,12 @@ function dateToHuman (date: string) {
   return datePipe.transform(date, 'medium')
 }
 
-function isInMobileView () {
+function isInSmallView () {
   return window.innerWidth < 600
+}
+
+function isInMobileView () {
+  return window.innerWidth < 500
 }
 
 export {
@@ -65,5 +69,6 @@ export {
   populateAsyncUserVideoChannels,
   getAbsoluteAPIUrl,
   dateToHuman,
+  isInSmallView,
   isInMobileView
 }

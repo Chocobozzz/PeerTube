@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core'
+import { isInMobileView } from '@app/shared/misc/utils'
 import { Video } from './video.model'
 
 @Component({
@@ -9,4 +10,14 @@ import { Video } from './video.model'
 export class VideoThumbnailComponent {
   @Input() video: Video
   @Input() nsfw = false
+
+  getImageUrl () {
+    if (!this.video) return ''
+
+    if (isInMobileView()) {
+      return this.video.previewUrl
+    }
+
+    return this.video.thumbnailUrl
+  }
 }

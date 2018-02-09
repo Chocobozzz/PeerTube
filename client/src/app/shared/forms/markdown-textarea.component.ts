@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import 'rxjs/add/operator/debounceTime'
 import 'rxjs/add/operator/distinctUntilChanged'
-import { isInMobileView } from '@app/shared/misc/utils'
+import { isInSmallView } from '@app/shared/misc/utils'
 import { MarkdownService } from '@app/videos/shared'
 import { Subject } from 'rxjs/Subject'
 import truncate from 'lodash-es/truncate'
@@ -74,7 +74,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   }
 
   arePreviewsDisplayed () {
-    return isInMobileView() === false
+    return isInSmallView() === false
   }
 
   private updateDescriptionPreviews () {

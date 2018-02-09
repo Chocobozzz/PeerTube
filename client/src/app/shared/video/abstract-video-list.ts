@@ -1,5 +1,6 @@
 import { OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { isInMobileView, isInSmallView } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
 import { AuthService } from '../../core/auth'
@@ -41,6 +42,10 @@ export abstract class AbstractVideoList implements OnInit {
     // Subscribe to route changes
     const routeParams = this.route.snapshot.params
     this.loadRouteParams(routeParams)
+
+    if (isInMobileView()) {
+      this.pagination.itemsPerPage = 5
+    }
 
     if (this.loadOnInit === true) this.loadMoreVideos('after')
   }

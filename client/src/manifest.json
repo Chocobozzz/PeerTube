@@ -1,5 +1,5 @@
 {
-  "background_color": "gray",
+  "background_color": "white",
   "description": "A federated video streaming platform using P2P",
   "display": "fullscreen",
   "orientation": "portrait",
