@@ -51,8 +51,8 @@ describe('Test config', function () {
     const data = res.body
 
     expect(data.instance.name).to.equal('PeerTube')
-    expect(data.instance.description).to.be.empty
-    expect(data.instance.terms).to.be.empty
+    expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
+    expect(data.instance.terms).to.equal('No terms for now.')
     expect(data.cache.previews.size).to.equal(1)
     expect(data.signup.enabled).to.be.true
     expect(data.signup.limit).to.equal(4)
