@@ -104,11 +104,11 @@ const trackerServer = new TrackerServer({
 })
 
 trackerServer.on('error', function (err) {
-  logger.error(err)
+  logger.error('Error in websocket tracker.', err)
 })
 
 trackerServer.on('warning', function (err) {
-  logger.error(err)
+  logger.error('Warning in websocket tracker.', err)
 })
 
 const server = http.createServer(app)
@@ -116,7 +116,6 @@ const wss = new WebSocketServer({ server: server, path: '/tracker/socket' })
 wss.on('connection', function (ws) {
   trackerServer.onWebSocketConnection(ws)
 })
-wss.on('error', err => logger.error('Error in websocket server.', err))
 
 const onHttpRequest = trackerServer.onHttpRequest.bind(trackerServer)
 app.get('/tracker/announce', (req, res) => onHttpRequest(req, res, { action: 'announce' }))
