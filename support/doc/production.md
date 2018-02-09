@@ -5,6 +5,8 @@
 
 ## Installation
 
+**Please don't install PeerTube for production on a small device behind a low bandwidth connection because it could slow down the fediverse.**
+
 ### Dependencies
 
 Follow the steps of the [dependencies guide](dependencies.md).
