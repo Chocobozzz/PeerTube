@@ -72,5 +72,5 @@ transcoding:
 
 instance:
   name: 'PeerTube'
-  description: '' # Support markdown
-  terms: '' # Support markdown
+  description: 'Welcome to this PeerTube instance!' # Support markdown
+  terms: 'No terms for now.' # Support markdown
