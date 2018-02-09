@@ -24,11 +24,11 @@ unzip -o peertube-${VERSION}.zip
 rm -f peertube-${VERSION}.zip
 
 # Upgrade Scripts
-cd ~/versions/peertube-${VERSION}
+rm -rf ~/peertube-latest
+ln -s ~/versions/peertube-${VERSION} ~/peertube-latest
+cd  ~/peertube-latest
 yarn install --production --pure-lockfile 
-cp ~/versions/peertube-${VERSION}/config/default.yaml ~/config/default.yaml
-diff ~/versions/peertube-${VERSION}/config/production.yaml.example ~/config/production.yaml 
-rm -f ~/peertube-latest
-ln -s ~/versions/peertube-${VERSION} ~/peertube-latest 
+cp  ~/peertube-latest/config/default.yaml ~/config/default.yaml
+diff  ~/peertube-latest/config/production.yaml.example ~/config/production.yaml 
 
 exit 0
