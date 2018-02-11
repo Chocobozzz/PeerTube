@@ -70,6 +70,8 @@ configuration.
 
 ### Webserver
 
+We only provide official configuration files for Nginx.
+
 Copy the nginx configuration template:
 
 ```
@@ -83,9 +85,7 @@ It should correspond to the paths of your storage directories (set in the config
 $ sudo vim /etc/nginx/sites-available/peertube
 ```
 
-If you want to set https with Let's Encrypt please follow the steps of [this guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04).
-
-An example of the nginx configuration could be:
+Your Mileage May Vary, but what follows is an example of configuration for nginx with a certificate made via `certbot` ([other utilities exist](https://letsencrypt.org/docs/client-options/)):
 
 ```
 server {
@@ -104,11 +104,28 @@ server {
   listen [::]:443 ssl http2;
   server_name peertube.example.com;
 
-  # For example with Let's Encrypt
+  # For example with Let's Encrypt (you need a certificate to run https)
   ssl_certificate      /etc/letsencrypt/live/peertube.example.com/fullchain.pem;
   ssl_certificate_key  /etc/letsencrypt/live/peertube.example.com/privkey.pem;
-  ssl_trusted_certificate /etc/letsencrypt/live/peertube.example.com/chain.pem;
-
+  
+  # Security hardening (as of 11/02/2018)
+  ssl_protocols TLSv1.3, TLSv1.2;# TLSv1.3 requires nginx >= 1.13.0 else use only TLSv1.2
+  ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
+  ssl_prefer_server_ciphers on;
+  ssl_ecdh_curve secp384r1; # Requires nginx >= 1.1.0
+  ssl_session_timeout  10m;
+  ssl_session_cache shared:SSL:10m;
+  ssl_session_tickets off; # Requires nginx >= 1.5.9
+  ssl_stapling on; # Requires nginx >= 1.3.7
+  ssl_stapling_verify on; # Requires nginx => 1.3.7
+  resolver $DNS-IP-1 $DNS-IP-2 valid=300s;
+  resolver_timeout 5s;
+  add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+  add_header X-Frame-Options DENY;
+  add_header X-Content-Type-Options nosniff;
+  add_header X-XSS-Protection "1; mode=block";
+  add_header X-Robots-Tag none;
+  
   access_log /var/log/nginx/peertube.example.com.access.log;
   error_log /var/log/nginx/peertube.example.com.error.log;
 
@@ -136,7 +153,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
     # For the video upload
-    client_max_body_size 8G;
+    client_max_body_size 2G;
     proxy_connect_timeout       600;
     proxy_send_timeout          600;
     proxy_read_timeout          600;
@@ -145,6 +162,9 @@ server {
 
   # Bypass PeerTube webseed route for better performances
   location /static/webseed {
+    # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
+    limit_rate 800k;
+    
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
@@ -182,6 +202,17 @@ server {
 }
 ```
 
+To generate the certificate for your domain as required to make https work, you have two alternatives (note that the second command modifies itself the Nginx configuration to point the concerned server blocks to its certificate):
+
+```
+$ sudo certbot --authenticator standalone certonly -d peertube.example.com && nginx -t && systemctl reload nginx
+```
+
+```
+$ sudo certbot --authenticator standalone --installer nginx --post-hook "nginx -t && systemctl reload nginx"
+```
+
+Remember your certificate will expire in 90 days, and thus needs renewal.
 
 Activate the configuration file:
 
@@ -192,7 +223,7 @@ $ sudo systemctl reload nginx
 
 ### Systemd
 
-Copy the nginx configuration template:
+Copy the SystemD configuration template:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
