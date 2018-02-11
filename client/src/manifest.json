@@ -1,8 +1,9 @@
 {
   "background_color": "white",
+  "theme_color": "black",
   "description": "A federated video streaming platform using P2P",
-  "display": "fullscreen",
-  "orientation": "portrait",
+  "display": "standalone",
+  "orientation": "any",
   "icons": [
     {
       "src": "/client/assets/images/icons/icon-36x36.png",
