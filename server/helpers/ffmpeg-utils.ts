@@ -13,6 +13,17 @@ function getVideoFileHeight (path: string) {
   })
 }
 
+function getVideoFileStreams (path: string) {
+  return new Promise<any>((res, rej) => {
+    ffmpeg.ffprobe(path, (err, metadata) => {
+      if (err) return rej(err)
+
+      const videoStream = metadata.streams.find(s => s.codec_type === 'video')
+      return res(videoStream)
+    })
+  })
+}
+
 function getDurationFromVideoFile (path: string) {
   return new Promise<number>((res, rej) => {
     ffmpeg.ffprobe(path, (err, metadata) => {
@@ -72,6 +83,7 @@ function transcode (options: TranscodeOptions) {
 
 export {
   getVideoFileHeight,
+  getVideoFileStreams,
   getDurationFromVideoFile,
   generateImageFromVideoFile,
   transcode

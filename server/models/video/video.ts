@@ -42,7 +42,7 @@ import {
   isVideoNameValid,
   isVideoPrivacyValid
 } from '../../helpers/custom-validators/videos'
-import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
+import { generateImageFromVideoFile, getVideoFileHeight, getVideoFileStreams, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
@@ -781,9 +781,20 @@ export class VideoModel extends Model<VideoModel> {
     return this.remote === false
   }
 
-  createPreview (videoFile: VideoFileModel) {
-    const imageSize = PREVIEWS_SIZE.width + 'x' + PREVIEWS_SIZE.height
+  createPreview (videoFile: VideoFileModel, videoRatio: number) {
+    const previewRatio = PREVIEWS_SIZE.width / PREVIEWS_SIZE.height
+    let previewHeight: number = PREVIEWS_SIZE.height
+    let previewWidth: number = PREVIEWS_SIZE.width
 
+    if(previewRatio >= videoRatio){
+      //on change la largeur (width)
+      previewWidth = Math.round(previewHeight * videoRatio)
+    }else if (previewRatio < videoRatio){
+      //on change la hauteur (height)
+      previewHeight = Math.round(previewWidth / videoRatio)
+    }
+
+    const imageSize = previewWidth + 'x' + previewHeight
     return generateImageFromVideoFile(
       this.getVideoFilePath(videoFile),
       CONFIG.STORAGE.PREVIEWS_DIR,
@@ -792,8 +803,20 @@ export class VideoModel extends Model<VideoModel> {
     )
   }
 
-  createThumbnail (videoFile: VideoFileModel) {
-    const imageSize = THUMBNAILS_SIZE.width + 'x' + THUMBNAILS_SIZE.height
+  createThumbnail (videoFile: VideoFileModel, videoRatio: number) {
+    const thumbnailRatio = THUMBNAILS_SIZE.width / THUMBNAILS_SIZE.height
+    let thumbnailHeight: number = THUMBNAILS_SIZE.height
+    let thumbnailWidth: number = THUMBNAILS_SIZE.width
+
+    if(thumbnailRatio >= videoRatio){
+      //on change la largeur (width)
+      thumbnailWidth = Math.round(thumbnailHeight * videoRatio)
+    }else if (thumbnailRatio < videoRatio){
+      //on change la hauteur (height)
+      thumbnailHeight = Math.round(thumbnailWidth / videoRatio)
+    }
+
+    const imageSize = thumbnailWidth + 'x' + thumbnailHeight
 
     return generateImageFromVideoFile(
       this.getVideoFilePath(videoFile),
@@ -1180,6 +1203,12 @@ export class VideoModel extends Model<VideoModel> {
     const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
 
     return getVideoFileHeight(originalFilePath)
+  }
+
+  getOriginalFileStreams () {
+    const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
+
+    return getVideoFileStreams(originalFilePath)
   }
 
   getDescriptionPath () {

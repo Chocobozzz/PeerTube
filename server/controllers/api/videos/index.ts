@@ -3,7 +3,7 @@ import { extname, join } from 'path'
 import { VideoCreate, VideoPrivacy, VideoUpdate } from '../../../../shared'
 import { renamePromise } from '../../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
-import { getVideoFileHeight } from '../../../helpers/ffmpeg-utils'
+import { getVideoFileHeight, getVideoFileStreams } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { createReqFiles, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
 import {
@@ -151,7 +151,10 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   video.url = getVideoActivityPubUrl(video)
 
   const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
-  const videoFileHeight = await getVideoFileHeight(videoFilePath)
+  //const videoFileHeight = await getVideoFileHeight(videoFilePath)
+  const videoFileStreams = await getVideoFileStreams(videoFilePath)
+  const videoFileHeight = videoFileStreams.height
+  const videoFileRatio = videoFileStreams.width / videoFileHeight
 
   const videoFileData = {
     extname: extname(videoPhysicalFile.filename),
@@ -171,8 +174,8 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
 
   tasks.push(
     video.createTorrentAndSetInfoHash(videoFile),
-    video.createThumbnail(videoFile),
-    video.createPreview(videoFile)
+    video.createThumbnail(videoFile, videoFileRatio),
+    video.createPreview(videoFile, videoFileRatio)
   )
   await Promise.all(tasks)
 
