@@ -20,7 +20,8 @@ if (
   !program['password'] ||
   !program['youtubeUrl']
 ) {
-  throw new Error('All arguments are required.')
+  console.error('All arguments are required.')
+  process.exit(-1)
 }
 
 run().catch(err => console.error(err))

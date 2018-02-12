@@ -251,10 +251,12 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .field('name', attributes.name)
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
-              .field('description', attributes.description)
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
 
+  if (attributes.description !== undefined) {
+    req.field('description', attributes.description)
+  }
   if (attributes.language !== undefined) {
     req.field('language', attributes.language.toString())
   }
