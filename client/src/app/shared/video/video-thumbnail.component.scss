@@ -6,6 +6,9 @@
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  width: $video-thumbnail-width;
+  height: $video-thumbnail-height;
+  background-color: #ececec;
 
   &:hover {
     text-decoration: none !important;
