@@ -32,7 +32,7 @@ class JobQueue {
 
   private constructor () {}
 
-  init () {
+  async init () {
     // Already initialized
     if (this.initialized === true) return
     this.initialized = true
@@ -53,6 +53,8 @@ class JobQueue {
       process.exit(-1)
     })
     this.jobQueue.watchStuckJobs(5000)
+
+    await this.reactiveStuckJobs()
 
     for (const handlerName of Object.keys(handlers)) {
       this.jobQueue.process(handlerName, JOB_CONCURRENCY[handlerName], async (job, done) => {
@@ -115,6 +117,31 @@ class JobQueue {
         }
       }
     })
+  }
+
+  private reactiveStuckJobs () {
+    const promises: Promise<any>[] = []
+
+    this.jobQueue.active((err, ids) => {
+      if (err) throw err
+
+      for (const id of ids) {
+        kue.Job.get(id, (err, job) => {
+          if (err) throw err
+
+          const p = new Promise((res, rej) => {
+            job.inactive(err => {
+              if (err) return rej(err)
+              return res()
+            })
+          })
+
+          promises.push(p)
+        })
+      }
+    })
+
+    return Promise.all(promises)
   }
 
   static get Instance () {
