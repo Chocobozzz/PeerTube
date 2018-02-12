@@ -11,7 +11,7 @@ program
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
-  .option('-y, --youtube-url <directory>', 'Youtube URL')
+  .option('-y, --youtube-url <youtubeUrl>', 'Youtube URL')
   .parse(process.argv)
 
 if (
@@ -45,6 +45,9 @@ async function run () {
   youtubeDL.getInfo(program['youtubeUrl'], [ '-j', '--flat-playlist' ], async (err, info) => {
     if (err) throw err
 
+    // Normalize utf8 fields
+    info = info.map(i => normalizeObject(i))
+
     const videos = info.map(i => {
       return { url: 'https://www.youtube.com/watch?v=' + i.id, name: i.title }
     })
@@ -60,52 +63,35 @@ async function run () {
   })
 }
 
-function processVideo (videoUrlName: { name: string, url: string }) {
+function processVideo (video: { name: string, url: string }) {
   return new Promise(async res => {
-    const result = await searchVideo(program['url'], videoUrlName.name)
+    const result = await searchVideo(program['url'], video.name)
+
+    console.log('############################################################\n')
+
     if (result.body.total !== 0) {
-      console.log('Video "%s" already exist, don\'t reupload it.\n', videoUrlName.name)
+      console.log('Video "%s" already exists, don\'t reupload it.\n', video.name)
       return res()
     }
 
-    const video = youtubeDL(videoUrlName.url)
-    let videoInfo
-    let videoPath: string
+    const path = join(__dirname, new Date().getTime() + '.mp4')
 
-    video.on('error', err => console.error(err))
+    console.log('Downloading video "%s"...', video.name)
 
-    let size = 0
-    video.on('info', info => {
-      videoInfo = info
-      size = info.size
+    youtubeDL.exec(video.url, [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]', '-o', path ], {}, async (err, output) => {
+      if (err) return console.error(err)
 
-      videoPath = join(__dirname, size + '.mp4')
-      console.log('Creating "%s" of video "%s".', videoPath, videoInfo.title)
+      console.log(output.join('\n'))
 
-      video.pipe(createWriteStream(videoPath))
-    })
+      youtubeDL.getInfo(video.url, async (err, videoInfo) => {
+        if (err) return console.error(err)
 
-    let pos = 0
-    video.on('data', chunk => {
-      pos += chunk.length
-      // `size` should not be 0 here.
-      if (size) {
-        const percent = (pos / size * 100).toFixed(2)
-        writeWaitingPercent(percent)
-      }
-    })
+        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path)
 
-    video.on('end', async () => {
-      await uploadVideoOnPeerTube(videoInfo, videoPath)
-
-      return res()
+        return res()
+      })
     })
   })
-}
-
-function writeWaitingPercent (p: string) {
-  cursorTo(process.stdout, 0)
-  process.stdout.write(`waiting ... ${p}%`)
 }
 
 async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string) {
@@ -152,4 +138,23 @@ function getLicence (licence: string) {
   if (licence.indexOf('Creative Commons Attribution licence') !== -1) return 1
 
   return undefined
+}
+
+function normalizeObject (obj: any) {
+  const newObj: any = {}
+
+  for (const key of Object.keys(obj)) {
+    // Deprecated key
+    if (key === 'resolution') continue
+
+    const value = obj[key]
+
+    if (typeof value === 'string') {
+      newObj[key] = value.normalize()
+    } else {
+      newObj[key] = value
+    }
+  }
+
+  return newObj
 }
