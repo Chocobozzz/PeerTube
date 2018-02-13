@@ -1,6 +1,6 @@
 import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
-import { makePostBodyRequest, makePostUploadRequest, makePutBodyRequest } from '../'
+import { makePostBodyRequest, makeUploadRequest, makePutBodyRequest } from '../'
 
 import { UserRole } from '../../../../shared/index'
 
@@ -162,7 +162,7 @@ function updateMyAvatar (options: {
     filePath = join(__dirname, '..', '..', 'api', 'fixtures', options.fixture)
   }
 
-  return makePostUploadRequest({
+  return makeUploadRequest({
     url: options.url,
     path,
     token: options.accessToken,

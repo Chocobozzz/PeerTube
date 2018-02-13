@@ -182,6 +182,12 @@ const CONSTRAINTS_FIELDS = {
     NAME: { min: 3, max: 120 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 3000 }, // Length
+    IMAGE: {
+      EXTNAME: [ '.jpg', '.jpeg' ],
+      FILE_SIZE: {
+        max: 2 * 1024 * 1024 // 2MB
+      }
+    },
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 1 }, // Number
@@ -285,7 +291,7 @@ const VIDEO_MIMETYPE_EXT = {
   'video/mp4': '.mp4'
 }
 
-const AVATAR_MIMETYPE_EXT = {
+const IMAGE_MIMETYPE_EXT = {
   'image/png': '.png',
   'image/jpg': '.jpg',
   'image/jpeg': '.jpg'
@@ -427,7 +433,7 @@ export {
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
   USER_PASSWORD_RESET_LIFETIME,
-  AVATAR_MIMETYPE_EXT,
+  IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
   JOB_COMPLETED_LIFETIME
 }

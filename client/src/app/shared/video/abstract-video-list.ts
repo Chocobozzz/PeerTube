@@ -1,4 +1,4 @@
-import { ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core'
+import { ElementRef, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { isInMobileView } from '@app/shared/misc/utils'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'

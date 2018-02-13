@@ -12,7 +12,7 @@ import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { AVATAR_MIMETYPE_EXT, CONFIG, sequelizeTypescript } from '../../initializers'
+import { IMAGE_MIMETYPE_EXT, CONFIG, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -147,10 +147,10 @@ async function fetchActorTotalItems (url: string) {
 
 async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
   if (
-    actorJSON.icon && actorJSON.icon.type === 'Image' && AVATAR_MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
+    actorJSON.icon && actorJSON.icon.type === 'Image' && IMAGE_MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
     isActivityPubUrlValid(actorJSON.icon.url)
   ) {
-    const extension = AVATAR_MIMETYPE_EXT[actorJSON.icon.mediaType]
+    const extension = IMAGE_MIMETYPE_EXT[actorJSON.icon.mediaType]
 
     const avatarName = uuidv4() + extension
     const destPath = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)

@@ -7,7 +7,7 @@ import { join } from 'path'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
   createUser, flushTests, getMyUserInformation, getVideo, getVideosList, immutableAssign, killallServers, makeDeleteRequest,
-  makeGetRequest, makePostUploadRequest, makePutBodyRequest, removeVideo, runServer, ServerInfo, setAccessTokensToServers, userLogin
+  makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, runServer, ServerInfo, setAccessTokensToServers, userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
 
@@ -111,91 +111,91 @@ describe('Test videos API validator', function () {
     it('Should fail with nothing', async function () {
       const fields = {}
       const attaches = {}
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without name', async function () {
       const fields = omit(baseCorrectParams, 'name')
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a long name', async function () {
       const fields = immutableAssign(baseCorrectParams, { name: 'super'.repeat(65) })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad category', async function () {
       const fields = immutableAssign(baseCorrectParams, { category: 125 })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad licence', async function () {
       const fields = immutableAssign(baseCorrectParams, { licence: 125 })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad language', async function () {
       const fields = immutableAssign(baseCorrectParams, { language: 125 })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without nsfw attribute', async function () {
       const fields = omit(baseCorrectParams, 'nsfw')
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad nsfw attribute', async function () {
       const fields = immutableAssign(baseCorrectParams, { nsfw: 2 })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without commentsEnabled attribute', async function () {
       const fields = omit(baseCorrectParams, 'commentsEnabled')
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad commentsEnabled attribute', async function () {
       const fields = immutableAssign(baseCorrectParams, { commentsEnabled: 2 })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a long description', async function () {
       const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(1500) })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without a channel', async function () {
       const fields = omit(baseCorrectParams, 'channelId')
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a bad channel', async function () {
       const fields = immutableAssign(baseCorrectParams, { channelId: 545454 })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with another user channel', async function () {
@@ -212,34 +212,34 @@ describe('Test videos API validator', function () {
       const fields = immutableAssign(baseCorrectParams, { channelId: customChannelId })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with too many tags', async function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a tag length too low', async function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 't' ] })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a tag length too big', async function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] })
       const attaches = baseCorrectAttaches
 
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without an input file', async function () {
       const fields = baseCorrectParams
       const attaches = {}
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail without an incorrect input file', async function () {
@@ -247,7 +247,47 @@ describe('Test videos API validator', function () {
       const attaches = {
         'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
       }
-      await makePostUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with an incorrect thumbnail file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar.png'),
+        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+      }
+
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with a big thumbnail file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar-big.png'),
+        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+      }
+
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with an incorrect preview file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'previewfile': join(__dirname, '..', 'fixtures', 'avatar.png'),
+        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+      }
+
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with a big preview file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'previewfile': join(__dirname, '..', 'fixtures', 'avatar-big.png'),
+        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+      }
+
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
     it('Should succeed with the correct parameters', async function () {
@@ -257,7 +297,7 @@ describe('Test videos API validator', function () {
 
       {
         const attaches = baseCorrectAttaches
-        await makePostUploadRequest({
+        await makeUploadRequest({
           url: server.url,
           path: path + '/upload',
           token: server.accessToken,
@@ -272,7 +312,7 @@ describe('Test videos API validator', function () {
           videofile: join(__dirname, '..', 'fixtures', 'video_short.mp4')
         })
 
-        await makePostUploadRequest({
+        await makeUploadRequest({
           url: server.url,
           path: path + '/upload',
           token: server.accessToken,
@@ -287,7 +327,7 @@ describe('Test videos API validator', function () {
           videofile: join(__dirname, '..', 'fixtures', 'video_short.ogv')
         })
 
-        await makePostUploadRequest({
+        await makeUploadRequest({
           url: server.url,
           path: path + '/upload',
           token: server.accessToken,
@@ -398,6 +438,70 @@ describe('Test videos API validator', function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'my_super_tag_too_long_long_long_long_long_long' ] })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an incorrect thumbnail file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar.png')
+      }
+
+      await makeUploadRequest({
+        url: server.url,
+        method: 'PUT',
+        path: path + videoId,
+        token: server.accessToken,
+        fields,
+        attaches
+      })
+    })
+
+    it('Should fail with a big thumbnail file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar-big.png')
+      }
+
+      await makeUploadRequest({
+        url: server.url,
+        method: 'PUT',
+        path: path + videoId,
+        token: server.accessToken,
+        fields,
+        attaches
+      })
+    })
+
+    it('Should fail with an incorrect preview file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'previewfile': join(__dirname, '..', 'fixtures', 'avatar.png')
+      }
+
+      await makeUploadRequest({
+        url: server.url,
+        method: 'PUT',
+        path: path + videoId,
+        token: server.accessToken,
+        fields,
+        attaches
+      })
+    })
+
+    it('Should fail with a big preview file', async function () {
+      const fields = baseCorrectParams
+      const attaches = {
+        'previewfile': join(__dirname, '..', 'fixtures', 'avatar-big.png')
+      }
+
+      await makeUploadRequest({
+        url: server.url,
+        method: 'PUT',
+        path: path + videoId,
+        token: server.accessToken,
+        fields,
+        attaches
+      })
     })
 
     it('Should fail with a video of another user')

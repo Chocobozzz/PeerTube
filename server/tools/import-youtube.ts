@@ -1,7 +1,5 @@
 import * as program from 'commander'
-import { createWriteStream } from 'fs'
 import { join } from 'path'
-import { cursorTo } from 'readline'
 import * as youtubeDL from 'youtube-dl'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { unlinkPromise } from '../helpers/core-utils'

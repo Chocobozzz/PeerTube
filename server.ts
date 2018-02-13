@@ -158,7 +158,7 @@ app.use(function (req, res, next) {
 })
 
 app.use(function (err, req, res, next) {
-  logger.error(err, err)
+  logger.error('Error in controller.', { error: err.stack || err.message || err })
   res.sendStatus(err.status || 500)
 })
 

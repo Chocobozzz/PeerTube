@@ -137,7 +137,9 @@ describe('Test multiple servers', function () {
         nsfw: true,
         description: 'my super description for server 2',
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
-        fixture: 'video_short2.webm'
+        fixture: 'video_short2.webm',
+        thumbnailfile: 'thumbnail.jpg',
+        previewfile: 'preview.jpg'
       }
       await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
 
@@ -184,7 +186,9 @@ describe('Test multiple servers', function () {
               resolution: 720,
               size: 710000
             }
-          ]
+          ],
+          thumbnailfile: 'thumbnail',
+          previewfile: 'preview'
         }
 
         const res = await getVideosList(server.url)
@@ -521,7 +525,9 @@ describe('Test multiple servers', function () {
         language: 13,
         nsfw: true,
         description: 'my super description updated',
-        tags: [ 'tag_up_1', 'tag_up_2' ]
+        tags: [ 'tag_up_1', 'tag_up_2' ],
+        thumbnailfile: 'thumbnail.jpg',
+        previewfile: 'preview.jpg'
       }
 
       await updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, attributes)
@@ -565,7 +571,9 @@ describe('Test multiple servers', function () {
               resolution: 720,
               size: 292677
             }
-          ]
+          ],
+          thumbnailfile: 'thumbnail',
+          previewfile: 'preview'
         }
         await completeVideoCheck(server.url, videoUpdated, checkAttributes)
       }

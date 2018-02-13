@@ -4,18 +4,36 @@ import { VideoCreate, VideoPrivacy, VideoUpdate } from '../../../../shared'
 import { renamePromise } from '../../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { getVideoFileHeight } from '../../../helpers/ffmpeg-utils'
+import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
 import { createReqFiles, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
 import {
-  CONFIG, sequelizeTypescript, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_MIMETYPE_EXT,
+  CONFIG,
+  IMAGE_MIMETYPE_EXT,
+  PREVIEWS_SIZE,
+  sequelizeTypescript,
+  THUMBNAILS_SIZE,
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
 } from '../../../initializers'
 import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import {
-  asyncMiddleware, authenticate, paginationValidator, setDefaultSort, setDefaultPagination, videosAddValidator, videosGetValidator,
-  videosRemoveValidator, videosSearchValidator, videosSortValidator, videosUpdateValidator
+  asyncMiddleware,
+  authenticate,
+  paginationValidator,
+  setDefaultPagination,
+  setDefaultSort,
+  videosAddValidator,
+  videosGetValidator,
+  videosRemoveValidator,
+  videosSearchValidator,
+  videosSortValidator,
+  videosUpdateValidator
 } from '../../../middlewares'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
@@ -28,7 +46,23 @@ import { rateVideoRouter } from './rate'
 
 const videosRouter = express.Router()
 
-const reqVideoFile = createReqFiles('videofile', CONFIG.STORAGE.VIDEOS_DIR, VIDEO_MIMETYPE_EXT)
+const reqVideoFileAdd = createReqFiles(
+  [ 'videofile', 'thumbnailfile', 'previewfile' ],
+  Object.assign({}, VIDEO_MIMETYPE_EXT, IMAGE_MIMETYPE_EXT),
+  {
+    videofile: CONFIG.STORAGE.VIDEOS_DIR,
+    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
+    previewfile: CONFIG.STORAGE.PREVIEWS_DIR
+  }
+)
+const reqVideoFileUpdate = createReqFiles(
+  [ 'thumbnailfile', 'previewfile' ],
+  IMAGE_MIMETYPE_EXT,
+  {
+    thumbnailfile: CONFIG.STORAGE.THUMBNAILS_DIR,
+    previewfile: CONFIG.STORAGE.PREVIEWS_DIR
+  }
+)
 
 videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
@@ -58,12 +92,13 @@ videosRouter.get('/search',
 )
 videosRouter.put('/:id',
   authenticate,
+  reqVideoFileUpdate,
   asyncMiddleware(videosUpdateValidator),
   asyncMiddleware(updateVideoRetryWrapper)
 )
 videosRouter.post('/upload',
   authenticate,
-  reqVideoFile,
+  reqVideoFileAdd,
   asyncMiddleware(videosAddValidator),
   asyncMiddleware(addVideoRetryWrapper)
 )
@@ -150,8 +185,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video)
 
-  const videoFilePath = join(CONFIG.STORAGE.VIDEOS_DIR, videoPhysicalFile.filename)
-  const videoFileHeight = await getVideoFileHeight(videoFilePath)
+  const videoFileHeight = await getVideoFileHeight(videoPhysicalFile.path)
 
   const videoFileData = {
     extname: extname(videoPhysicalFile.filename),
@@ -160,21 +194,28 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   }
   const videoFile = new VideoFileModel(videoFileData)
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
-  const source = join(videoDir, videoPhysicalFile.filename)
   const destination = join(videoDir, video.getVideoFilename(videoFile))
+  await renamePromise(videoPhysicalFile.path, destination)
 
-  await renamePromise(source, destination)
-  // This is important in case if there is another attempt in the retry process
-  videoPhysicalFile.filename = video.getVideoFilename(videoFile)
+  // Process thumbnail or create it from the video
+  const thumbnailField = req.files['thumbnailfile']
+  if (thumbnailField) {
+    const thumbnailPhysicalFile = thumbnailField[0]
+    await processImage(thumbnailPhysicalFile, join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getThumbnailName()), THUMBNAILS_SIZE)
+  } else {
+    await video.createThumbnail(videoFile)
+  }
 
-  const tasks = []
+  // Process preview or create it from the video
+  const previewField = req.files['previewfile']
+  if (previewField) {
+    const previewPhysicalFile = previewField[0]
+    await processImage(previewPhysicalFile, join(CONFIG.STORAGE.PREVIEWS_DIR, video.getPreviewName()), PREVIEWS_SIZE)
+  } else {
+    await video.createPreview(videoFile)
+  }
 
-  tasks.push(
-    video.createTorrentAndSetInfoHash(videoFile),
-    video.createThumbnail(videoFile),
-    video.createPreview(videoFile)
-  )
-  await Promise.all(tasks)
+  await video.createTorrentAndSetInfoHash(videoFile)
 
   const videoCreated = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
@@ -236,6 +277,18 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const videoFieldsSave = videoInstance.toJSON()
   const videoInfoToUpdate: VideoUpdate = req.body
   const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
+
+  // Process thumbnail or create it from the video
+  if (req.files && req.files['thumbnailfile']) {
+    const thumbnailPhysicalFile = req.files['thumbnailfile'][0]
+    await processImage(thumbnailPhysicalFile, join(CONFIG.STORAGE.THUMBNAILS_DIR, videoInstance.getThumbnailName()), THUMBNAILS_SIZE)
+  }
+
+  // Process preview or create it from the video
+  if (req.files && req.files['previewfile']) {
+    const previewPhysicalFile = req.files['previewfile'][0]
+    await processImage(previewPhysicalFile, join(CONFIG.STORAGE.PREVIEWS_DIR, videoInstance.getPreviewName()), PREVIEWS_SIZE)
+  }
 
   try {
     await sequelizeTypescript.transaction(async t => {
