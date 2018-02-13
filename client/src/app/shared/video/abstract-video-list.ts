@@ -1,6 +1,7 @@
-import { OnInit } from '@angular/core'
+import { ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { isInMobileView, isInSmallView } from '@app/shared/misc/utils'
+import { isInMobileView } from '@app/shared/misc/utils'
+import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
 import { AuthService } from '../../core/auth'
@@ -9,30 +10,35 @@ import { SortField } from './sort-field.type'
 import { Video } from './video.model'
 
 export abstract class AbstractVideoList implements OnInit {
+  private static LINES_PER_PAGE = 3
+
+  @ViewChild('videoElement') videosElement: ElementRef
+  @ViewChild(InfiniteScrollerDirective) infiniteScroller: InfiniteScrollerDirective
+
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 25,
+    itemsPerPage: 10,
     totalItems: null
   }
   sort: SortField = '-createdAt'
   defaultSort: SortField = '-createdAt'
-  videos: Video[] = []
   loadOnInit = true
+  pageHeight: number
+  videoWidth = 215
+  videoHeight = 230
+  videoPages: Video[][]
 
   protected abstract notificationsService: NotificationsService
   protected abstract authService: AuthService
   protected abstract router: Router
   protected abstract route: ActivatedRoute
-
   protected abstract currentRoute: string
-
   abstract titlePage: string
 
-  protected otherParams = {}
+  protected loadedPages: { [ id: number ]: Video[] } = {}
+  protected otherRouteParams = {}
 
-  private loadedPages: { [ id: number ]: boolean } = {}
-
-  abstract getVideosObservable (): Observable<{ videos: Video[], totalVideos: number}>
+  abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number}>
 
   get user () {
     return this.authService.getUser()
@@ -45,15 +51,26 @@ export abstract class AbstractVideoList implements OnInit {
 
     if (isInMobileView()) {
       this.pagination.itemsPerPage = 5
+      this.videoWidth = -1
     }
 
-    if (this.loadOnInit === true) this.loadMoreVideos('after')
+    if (this.videoWidth !== -1) {
+      const videosWidth = this.videosElement.nativeElement.offsetWidth
+      this.pagination.itemsPerPage = Math.floor(videosWidth / this.videoWidth) * AbstractVideoList.LINES_PER_PAGE
+    }
+
+    // Video takes all the width
+    if (this.videoWidth === -1) {
+      this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
+    } else {
+      this.pageHeight = this.videoHeight * AbstractVideoList.LINES_PER_PAGE
+    }
+
+    if (this.loadOnInit === true) this.loadMoreVideos(this.pagination.currentPage)
   }
 
   onNearOfTop () {
-    if (this.pagination.currentPage > 1) {
-      this.previousPage()
-    }
+    this.previousPage()
   }
 
   onNearOfBottom () {
@@ -62,16 +79,20 @@ export abstract class AbstractVideoList implements OnInit {
     }
   }
 
-  reloadVideos () {
-    this.videos = []
-    this.loadedPages = {}
-    this.loadMoreVideos('before')
+  onPageChanged (page: number) {
+    this.pagination.currentPage = page
+    this.setNewRouteParams()
   }
 
-  loadMoreVideos (where: 'before' | 'after') {
-    if (this.loadedPages[this.pagination.currentPage] === true) return
+  reloadVideos () {
+    this.loadedPages = {}
+    this.loadMoreVideos(this.pagination.currentPage)
+  }
 
-    const observable = this.getVideosObservable()
+  loadMoreVideos (page: number) {
+    if (this.loadedPages[page] !== undefined) return
+
+    const observable = this.getVideosObservable(page)
 
     observable.subscribe(
       ({ videos, totalVideos }) => {
@@ -82,13 +103,14 @@ export abstract class AbstractVideoList implements OnInit {
           return this.reloadVideos()
         }
 
-        this.loadedPages[this.pagination.currentPage] = true
+        this.loadedPages[page] = videos
+        this.buildVideoPages()
         this.pagination.totalItems = totalVideos
 
-        if (where === 'before') {
-          this.videos = videos.concat(this.videos)
-        } else {
-          this.videos = this.videos.concat(videos)
+        // Initialize infinite scroller now we loaded the first page
+        if (Object.keys(this.loadedPages).length === 1) {
+          // Wait elements creation
+          setTimeout(() => this.infiniteScroller.initialize(), 500)
         }
       },
       error => this.notificationsService.error('Error', error.message)
@@ -107,17 +129,15 @@ export abstract class AbstractVideoList implements OnInit {
   }
 
   protected previousPage () {
-    this.pagination.currentPage--
+    const min = this.minPageLoaded()
 
-    this.setNewRouteParams()
-    this.loadMoreVideos('before')
+    if (min > 1) {
+      this.loadMoreVideos(min - 1)
+    }
   }
 
   protected nextPage () {
-    this.pagination.currentPage++
-
-    this.setNewRouteParams()
-    this.loadMoreVideos('after')
+    this.loadMoreVideos(this.maxPageLoaded() + 1)
   }
 
   protected buildRouteParams () {
@@ -127,7 +147,7 @@ export abstract class AbstractVideoList implements OnInit {
       page: this.pagination.currentPage
     }
 
-    return Object.assign(params, this.otherParams)
+    return Object.assign(params, this.otherRouteParams)
   }
 
   protected loadRouteParams (routeParams: { [ key: string ]: any }) {
@@ -143,5 +163,17 @@ export abstract class AbstractVideoList implements OnInit {
   protected setNewRouteParams () {
     const routeParams = this.buildRouteParams()
     this.router.navigate([ this.currentRoute, routeParams ])
+  }
+
+  protected buildVideoPages () {
+    this.videoPages = Object.values(this.loadedPages)
+  }
+
+  private minPageLoaded () {
+    return Math.min(...Object.keys(this.loadedPages).map(e => parseInt(e, 10)))
+  }
+
+  private maxPageLoaded () {
+    return Math.max(...Object.keys(this.loadedPages).map(e => parseInt(e, 10)))
   }
 }

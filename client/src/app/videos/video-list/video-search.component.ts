@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { Subscription } from 'rxjs/Subscription'
 import { AuthService } from '../../core/auth'
@@ -16,7 +17,7 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
   currentRoute = '/videos/search'
   loadOnInit = false
 
-  protected otherParams = {
+  protected otherRouteParams = {
     search: ''
   }
   private subActivatedRoute: Subscription
@@ -35,9 +36,9 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
     this.subActivatedRoute = this.route.queryParams.subscribe(
       queryParams => {
         const querySearch = queryParams['search']
-        if (!querySearch || this.otherParams.search === querySearch) return
+        if (!querySearch || this.otherRouteParams.search === querySearch) return
 
-        this.otherParams.search = querySearch
+        this.otherRouteParams.search = querySearch
         this.reloadVideos()
       },
 
@@ -51,7 +52,8 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
     }
   }
 
-  getVideosObservable () {
-    return this.videoService.searchVideos(this.otherParams.search, this.pagination, this.sort)
+  getVideosObservable (page: number) {
+    const newPagination = immutableAssign(this.pagination, { currentPage: page })
+    return this.videoService.searchVideos(this.otherRouteParams.search, newPagination, this.sort)
   }
 }

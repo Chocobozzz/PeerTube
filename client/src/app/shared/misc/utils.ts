@@ -55,6 +55,10 @@ function dateToHuman (date: string) {
   return datePipe.transform(date, 'medium')
 }
 
+function immutableAssign <A, B> (target: A, source: B) {
+  return Object.assign({}, target, source)
+}
+
 function isInSmallView () {
   return window.innerWidth < 600
 }
@@ -70,5 +74,6 @@ export {
   getAbsoluteAPIUrl,
   dateToHuman,
   isInSmallView,
-  isInMobileView
+  isInMobileView,
+  immutableAssign
 }
