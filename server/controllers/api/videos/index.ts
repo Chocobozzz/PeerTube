@@ -199,6 +199,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   await renamePromise(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
   videoPhysicalFile.filename = video.getVideoFilename(videoFile)
+  videoPhysicalFile.path = destination
 
   // Process thumbnail or create it from the video
   const thumbnailField = req.files['thumbnailfile']
