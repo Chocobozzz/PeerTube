@@ -7,7 +7,7 @@ import 'videojs-dock/dist/videojs-dock.es.js'
 import { VideoDetails } from '../../../../shared'
 
 function getVideoUrl (id: string) {
-  return window.location.origin + '/api/v1/videos/' + videoId
+  return window.location.origin + '/api/v1/videos/' + id
 }
 
 async function loadVideoInfo (videoId: string): Promise<VideoDetails> {

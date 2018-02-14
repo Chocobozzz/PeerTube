@@ -641,8 +641,7 @@ describe('Test multiple servers', function () {
         const res = await getVideo(server.url, videoUUID)
         const video = res.body
 
-        const test = await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
-        expect(test).to.equal(true)
+        await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
       }
     })
   })

@@ -1,10 +1,12 @@
 /* tslint:disable:no-unused-expression */
 
+import * as chai from 'chai'
 import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
 import { readFileBufferPromise } from '../../../helpers/core-utils'
 
+const expect = chai.expect
 let webtorrent = new WebTorrent()
 
 function immutableAssign <T, U> (target: T, source: U) {
@@ -48,7 +50,8 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
     const minLength = body.length - ((20 * body.length) / 100)
     const maxLength = body.length + ((20 * body.length) / 100)
 
-    return data.length > minLength && data.length < maxLength
+    expect(data.length).to.be.above(minLength)
+    expect(data.length).to.be.below(maxLength)
   } else {
     console.log('Do not test images. Enable it by setting NODE_TEST_IMAGE env variable.')
     return true

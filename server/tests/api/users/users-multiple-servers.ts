@@ -65,8 +65,7 @@ describe('Test users with multiple servers', function () {
     const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
     user = res.body
 
-    const test = await testImage(servers[0].url, 'avatar2-resized', user.account.avatar.path, '.png')
-    expect(test).to.equal(true)
+    await testImage(servers[0].url, 'avatar2-resized', user.account.avatar.path, '.png')
 
     await wait(5000)
   })
@@ -83,8 +82,7 @@ describe('Test users with multiple servers', function () {
       expect(rootServer1Get.name).to.equal('root')
       expect(rootServer1Get.host).to.equal('localhost:9001')
 
-      const test = await testImage(server.url, 'avatar2-resized', rootServer1Get.avatar.path, '.png')
-      expect(test).to.equal(true)
+      await testImage(server.url, 'avatar2-resized', rootServer1Get.avatar.path, '.png')
     }
   })
 

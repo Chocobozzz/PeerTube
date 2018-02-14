@@ -341,9 +341,7 @@ describe('Test a single server', function () {
 
     for (const video of videos) {
       const videoName = video.name.replace(' name', '')
-      const test = await testImage(server.url, videoName, video.thumbnailPath)
-
-      expect(test).to.equal(true)
+      await testImage(server.url, videoName, video.thumbnailPath)
     }
   })
 

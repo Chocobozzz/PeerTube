@@ -445,13 +445,11 @@ async function completeVideoCheck (
     expect(file.size).to.be.above(minSize).and.below(maxSize)
 
     {
-      const test = await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
-      expect(test).to.equal(true)
+      await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
     }
 
     if (attributes.previewfile) {
-      const test = await testImage(url, attributes.previewfile, videoDetails.previewPath)
-      expect(test).to.equal(true)
+      await testImage(url, attributes.previewfile, videoDetails.previewPath)
     }
 
     const torrent = await webtorrentAdd(magnetUri, true)

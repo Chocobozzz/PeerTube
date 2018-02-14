@@ -359,8 +359,7 @@ describe('Test users', function () {
     const res = await getMyUserInformation(server.url, accessTokenUser)
     const user = res.body
 
-    const test = await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
-    expect(test).to.equal(true)
+    await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
   })
 
   it('Should be able to update another user', async function () {
