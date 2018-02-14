@@ -6,9 +6,9 @@ import '../../assets/player/peertube-videojs-plugin'
 import 'videojs-dock/dist/videojs-dock.es.js'
 import { VideoDetails } from '../../../../shared'
 
-async function loadVideoInfo (videoId: string) {
+async function loadVideoInfo (videoId: string): Promise<VideoDetails> {
   const response = await fetch(window.location.origin + '/api/v1/videos/' + videoId)
-  return response.json();
+  return response.json()
 }
 
 const urlParts = window.location.href.split('/')
@@ -42,6 +42,4 @@ loadVideoInfo(videoId)
       })
     })
   })
-  .catch(err => {
-    console.error(err);
-  })
+  .catch(err => console.error(err))
