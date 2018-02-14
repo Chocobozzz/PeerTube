@@ -289,19 +289,17 @@ $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/conf
 ```
 
 ## Upgrade
-#### Auto
 
-Via the bash Script :
+#### Auto (minor versions only)
 
 ```
-$ su - peertube
-$ cd scripts && ./upgrade.sh
-$ exit
-$ systemctl restart peertube
-$ systemctl status peertube
+$ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube ./upgrade.sh
+$ diff /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
+$ sudo systemctl restart peertube && sudo journalctl -fu peertube
 ```
 
-#### Manuel
+#### Manually
+
 Make a SQL backup
 
 ```
@@ -336,7 +334,7 @@ Copy new configuration defaults values and update your configuration file:
 
 ```
 $ sudo -u peertube cp /var/www/peertube/versions/peertube-${VERSION}/config/default.yaml /var/www/peertube/config/default.yaml
-$ diff /var/www/peertube/versions/peertube-${VERSION}/config//production.yaml.example /var/www/peertube/config/production.yaml
+$ diff /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
 ```
 
 Change the link to point to the latest version:
