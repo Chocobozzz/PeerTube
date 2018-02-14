@@ -3,7 +3,7 @@
 import { expect } from 'chai'
 import { existsSync, readFile } from 'fs'
 import * as parseTorrent from 'parse-torrent'
-import { extname, isAbsolute, join } from 'path'
+import { extname, join } from 'path'
 import * as request from 'supertest'
 import {
   buildAbsoluteFixturePath,

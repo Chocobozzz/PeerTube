@@ -3,6 +3,7 @@ import { join } from 'path'
 import * as youtubeDL from 'youtube-dl'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { unlinkPromise } from '../helpers/core-utils'
+import { doRequestAndSaveToFile } from '../helpers/requests'
 import { getClient, getVideoCategories, login, searchVideo, uploadVideo } from '../tests/utils'
 
 program
@@ -98,6 +99,16 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string) {
   const licence = getLicence(videoInfo.license)
   const language = 13
 
+  let thumbnailfile
+  if (videoInfo.thumbnail) {
+    thumbnailfile = join(__dirname, 'thumbnail.jpg')
+
+    await doRequestAndSaveToFile({
+      method: 'GET',
+      uri: videoInfo.thumbnail
+    }, thumbnailfile)
+  }
+
   const videoAttributes = {
     name: videoInfo.title,
     category,
@@ -108,12 +119,18 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string) {
     description: videoInfo.description,
     tags: videoInfo.tags.slice(0, 5),
     privacy: VideoPrivacy.PUBLIC,
-    fixture: videoPath
+    fixture: videoPath,
+    thumbnailfile
   }
 
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)
   await uploadVideo(program['url'], accessToken, videoAttributes)
+
   await unlinkPromise(videoPath)
+  if (thumbnailfile) {
+    await unlinkPromise(thumbnailfile)
+  }
+
   console.log('Uploaded video "%s"!\n', videoAttributes.name)
 }
 
