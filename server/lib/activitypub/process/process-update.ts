@@ -11,7 +11,10 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { TagModel } from '../../../models/video/tag'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
-import { getOrCreateAccountAndVideoAndChannel, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from '../videos'
+import {
+  generateThumbnailFromUrl, getOrCreateAccountAndVideoAndChannel, videoActivityObjectToDBAttributes,
+  videoFileActivityUrlToDBAttributes
+} from '../videos'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
@@ -81,6 +84,10 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       videoInstance.set('privacy', videoData.privacy)
 
       await videoInstance.save(sequelizeOptions)
+
+      // Don't block on request
+      generateThumbnailFromUrl(videoInstance, videoAttributesToUpdate.icon)
+        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoAttributesToUpdate.id, err))
 
       // Remove old video files
       const videoFileDestroyTasks: Bluebird<void>[] = []

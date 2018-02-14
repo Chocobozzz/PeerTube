@@ -195,7 +195,10 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
   const videoFile = new VideoFileModel(videoFileData)
   const videoDir = CONFIG.STORAGE.VIDEOS_DIR
   const destination = join(videoDir, video.getVideoFilename(videoFile))
+
   await renamePromise(videoPhysicalFile.path, destination)
+  // This is important in case if there is another attempt in the retry process
+  videoPhysicalFile.filename = video.getVideoFilename(videoFile)
 
   // Process thumbnail or create it from the video
   const thumbnailField = req.files['thumbnailfile']

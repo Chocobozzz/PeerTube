@@ -21,7 +21,7 @@ function keysExcluder (key, value) {
   return excludedKeys[key] === true ? undefined : value
 }
 
-const loggerFormat = winston.format.printf((info) => {
+const loggerFormat = winston.format.printf(info => {
   let additionalInfos = JSON.stringify(info, keysExcluder, 2)
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos

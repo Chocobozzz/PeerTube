@@ -158,8 +158,13 @@ app.use(function (req, res, next) {
 })
 
 app.use(function (err, req, res, next) {
-  logger.error('Error in controller.', { error: err.stack || err.message || err })
-  res.sendStatus(err.status || 500)
+  let error = 'Unknown error.'
+  if (err) {
+    error = err.stack || err.message || err
+  }
+
+  logger.error('Error in controller.', { error })
+  return res.status(err.status || 500).end()
 })
 
 // ----------- Run -----------
