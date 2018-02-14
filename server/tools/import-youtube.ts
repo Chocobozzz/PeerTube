@@ -120,7 +120,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string) {
     tags: videoInfo.tags.slice(0, 5),
     privacy: VideoPrivacy.PUBLIC,
     fixture: videoPath,
-    thumbnailfile
+    thumbnailfile,
+    previewfile: thumbnailfile
   }
 
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)

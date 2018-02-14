@@ -329,7 +329,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               peertube: {
                 videoFiles: this.video.files,
                 playerElement: this.playerElement,
-                peerTubeLink: false
+                peerTubeLink: false,
+                videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid)
               },
               hotkeys: {
                 enableVolumeScroll: false
@@ -349,7 +350,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             })
           })
         } else {
-          this.player.peertube().setVideoFiles(this.video.files)
+          this.player.peertube().setVideoFiles(this.video.files, this.videoService.getVideoViewUrl(this.video.uuid))
         }
 
         this.setVideoDescriptionHTML()
@@ -357,8 +358,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         this.setOpenGraphTags()
         this.checkUserRating()
-
-        this.prepareViewAdd()
       }
     )
   }
@@ -429,19 +428,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.setTag('og:url', window.location.href)
     this.metaService.setTag('url', window.location.href)
-  }
-
-  private prepareViewAdd () {
-    // After 30 seconds (or 3/4 of the video), increment add a view
-    let viewTimeoutSeconds = 30
-    if (this.video.duration < viewTimeoutSeconds) viewTimeoutSeconds = (this.video.duration * 3) / 4
-
-    setTimeout(() => {
-      this.videoService
-        .viewVideo(this.video.uuid)
-        .subscribe()
-
-    }, viewTimeoutSeconds * 1000)
   }
 
   private isAutoplay () {

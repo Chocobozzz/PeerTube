@@ -6,8 +6,12 @@ import '../../assets/player/peertube-videojs-plugin'
 import 'videojs-dock/dist/videojs-dock.es.js'
 import { VideoDetails } from '../../../../shared'
 
+function getVideoUrl (id: string) {
+  return window.location.origin + '/api/v1/videos/' + videoId
+}
+
 async function loadVideoInfo (videoId: string): Promise<VideoDetails> {
-  const response = await fetch(window.location.origin + '/api/v1/videos/' + videoId)
+  const response = await fetch(getVideoUrl(videoId))
   return response.json()
 }
 
@@ -27,7 +31,8 @@ loadVideoInfo(videoId)
         peertube: {
           videoFiles: videoInfo.files,
           playerElement: videoElement,
-          peerTubeLink: true
+          peerTubeLink: true,
+          videoViewUrl: getVideoUrl(videoId) + '/views'
         },
         hotkeys: {
           enableVolumeScroll: false

@@ -1,5 +1,6 @@
 // Big thanks to: https://github.com/kmoskwiak/videojs-resolution-switcher
 
+import { VideoService } from '@app/shared/video/video.service'
 import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
@@ -23,6 +24,7 @@ type PeertubePluginOptions = {
   videoFiles: VideoFile[]
   playerElement: HTMLVideoElement
   peerTubeLink: boolean
+  videoViewUrl: string
 }
 
 // https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
@@ -218,6 +220,8 @@ class PeerTubePlugin extends Plugin {
   private videoFiles: VideoFile[]
   private torrent: WebTorrent.Torrent
   private autoplay = false
+  private videoViewUrl: string
+  private videoViewInterval
 
   constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
@@ -227,6 +231,7 @@ class PeerTubePlugin extends Plugin {
     this.player.options_.autoplay = false
 
     this.videoFiles = options.videoFiles
+    this.videoViewUrl = options.videoViewUrl
 
     // Hack to "simulate" src link in video.js >= 6
     // Without this, we can't play the video after pausing it
@@ -240,6 +245,7 @@ class PeerTubePlugin extends Plugin {
     this.player.ready(() => {
       this.initializePlayer(options)
       this.runTorrentInfoScheduler()
+      this.prepareRunViewAdd()
     })
   }
 
@@ -334,9 +340,12 @@ class PeerTubePlugin extends Plugin {
     }
   }
 
-  setVideoFiles (files: VideoFile[]) {
+  setVideoFiles (files: VideoFile[], videoViewUrl: string) {
+    this.videoViewUrl = videoViewUrl
     this.videoFiles = files
 
+    // Re run view add for the new video
+    this.prepareRunViewAdd()
     this.updateVideoFile(undefined, () => this.player.play())
   }
 
@@ -375,6 +384,48 @@ class PeerTubePlugin extends Plugin {
         })
       }
     }, 1000)
+  }
+
+  private prepareRunViewAdd () {
+    if (this.player.readyState() < 1) {
+      return this.player.one('loadedmetadata', () => this.runViewAdd())
+    }
+
+    this.runViewAdd()
+  }
+
+  private runViewAdd () {
+    this.clearVideoViewInterval()
+
+    // After 30 seconds (or 3/4 of the video), add a view to the video
+    let minSecondsToView = 30
+
+    const duration = this.player.duration()
+    if (duration < minSecondsToView) minSecondsToView = (duration * 3) / 4
+
+    let secondsViewed = 0
+    this.videoViewInterval = setInterval(() => {
+      if (this.player && !this.player.paused()) {
+        secondsViewed += 1
+
+        if (secondsViewed > minSecondsToView) {
+          this.clearVideoViewInterval()
+
+          this.addViewToVideo().catch(err => console.error(err))
+        }
+      }
+    }, 1000)
+  }
+
+  private clearVideoViewInterval () {
+    if (this.videoViewInterval !== undefined) {
+      clearInterval(this.videoViewInterval)
+      this.videoViewInterval = undefined
+    }
+  }
+
+  private addViewToVideo () {
+    return fetch(this.videoViewUrl, { method: 'POST' })
   }
 
   private handleError (err: Error | string) {

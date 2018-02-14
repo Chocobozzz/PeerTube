@@ -29,6 +29,10 @@ export class VideoService {
     private restService: RestService
   ) {}
 
+  getVideoViewUrl (uuid: string) {
+    return VideoService.BASE_VIDEO_URL + uuid + '/views'
+  }
+
   getVideo (uuid: string): Observable<VideoDetails> {
     return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
                         .map(videoHash => new VideoDetails(videoHash))
@@ -36,7 +40,7 @@ export class VideoService {
   }
 
   viewVideo (uuid: string): Observable<VideoDetails> {
-    return this.authHttp.post(VideoService.BASE_VIDEO_URL + uuid + '/views', {})
+    return this.authHttp.post(this.getVideoViewUrl(uuid), {})
       .map(this.restExtractor.extractDataBool)
       .catch(this.restExtractor.handleError)
   }

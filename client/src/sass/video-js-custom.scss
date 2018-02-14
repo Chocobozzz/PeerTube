@@ -24,19 +24,22 @@ $control-bar-height: 34px;
 
   .vjs-big-play-button {
     outline: 0;
-    font-size: 8em;
+    font-size: 7em;
 
-    $big-play-width: 3em;
-    $big-play-height: 1.5em;
+    $big-play-width: 1.5em;
+    $big-play-height: 1em;
 
     border: 0;
     border-radius: 0.3em;
 
     left: 50%;
     top: 50%;
+    width: $big-play-width;
+    height: $big-play-height;
+    line-height: $big-play-height;
     margin-left: -($big-play-width / 2);
     margin-top: -($big-play-height / 2);
-    background-color: transparent !important;
+    transition: opacity 0.5s;
 
     &::-moz-focus-inner {
       border: 0;
@@ -47,8 +50,12 @@ $control-bar-height: 34px;
       transition: text-shadow 0.3s;
     }
 
-    &:hover .vjs-icon-placeholder::before {
-      text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    &:hover {
+      opacity: 0.9;
+
+      .vjs-icon-placeholder::before {
+        text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
+      }
     }
   }
 
