@@ -32,7 +32,8 @@ loadVideoInfo(videoId)
           videoFiles: videoInfo.files,
           playerElement: videoElement,
           peerTubeLink: true,
-          videoViewUrl: getVideoUrl(videoId) + '/views'
+          videoViewUrl: getVideoUrl(videoId) + '/views',
+          videoDuration: videoInfo.duration
         },
         hotkeys: {
           enableVolumeScroll: false

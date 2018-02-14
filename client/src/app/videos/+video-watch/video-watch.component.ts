@@ -330,7 +330,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                 videoFiles: this.video.files,
                 playerElement: this.playerElement,
                 peerTubeLink: false,
-                videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid)
+                videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
+                videoDuration: this.video.duration
               },
               hotkeys: {
                 enableVolumeScroll: false
@@ -350,7 +351,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             })
           })
         } else {
-          this.player.peertube().setVideoFiles(this.video.files, this.videoService.getVideoViewUrl(this.video.uuid))
+          const videoViewUrl = this.videoService.getVideoViewUrl(this.video.uuid)
+          this.player.peertube().setVideoFiles(this.video.files, videoViewUrl, this.video.duration)
         }
 
         this.setVideoDescriptionHTML()

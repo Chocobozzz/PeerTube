@@ -25,6 +25,7 @@ type PeertubePluginOptions = {
   playerElement: HTMLVideoElement
   peerTubeLink: boolean
   videoViewUrl: string
+  videoDuration: number
 }
 
 // https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
@@ -221,7 +222,9 @@ class PeerTubePlugin extends Plugin {
   private torrent: WebTorrent.Torrent
   private autoplay = false
   private videoViewUrl: string
+  private videoDuration: number
   private videoViewInterval
+  private torrentInfoInterval
 
   constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
@@ -232,6 +235,7 @@ class PeerTubePlugin extends Plugin {
 
     this.videoFiles = options.videoFiles
     this.videoViewUrl = options.videoViewUrl
+    this.videoDuration = options.videoDuration
 
     // Hack to "simulate" src link in video.js >= 6
     // Without this, we can't play the video after pausing it
@@ -245,11 +249,14 @@ class PeerTubePlugin extends Plugin {
     this.player.ready(() => {
       this.initializePlayer(options)
       this.runTorrentInfoScheduler()
-      this.prepareRunViewAdd()
+      this.runViewAdd()
     })
   }
 
   dispose () {
+    clearInterval(this.videoViewInterval)
+    clearInterval(this.torrentInfoInterval)
+
     // Don't need to destroy renderer, video player will be destroyed
     this.flushVideoFile(this.currentVideoFile, false)
   }
@@ -291,8 +298,14 @@ class PeerTubePlugin extends Plugin {
         if (err) return this.handleError(err)
 
         this.renderer = renderer
-        if (!this.player.paused()) this.player.play().then(done)
-        else done()
+        if (!this.player.paused()) {
+          const playPromise = this.player.play()
+          if (playPromise !== undefined) return playPromise.then(done)
+
+          return done()
+        }
+
+        return done()
       })
     })
 
@@ -340,12 +353,13 @@ class PeerTubePlugin extends Plugin {
     }
   }
 
-  setVideoFiles (files: VideoFile[], videoViewUrl: string) {
+  setVideoFiles (files: VideoFile[], videoViewUrl: string, videoDuration: number) {
     this.videoViewUrl = videoViewUrl
+    this.videoDuration = videoDuration
     this.videoFiles = files
 
     // Re run view add for the new video
-    this.prepareRunViewAdd()
+    this.runViewAdd()
     this.updateVideoFile(undefined, () => this.player.play())
   }
 
@@ -375,7 +389,7 @@ class PeerTubePlugin extends Plugin {
   }
 
   private runTorrentInfoScheduler () {
-    setInterval(() => {
+    this.torrentInfoInterval = setInterval(() => {
       if (this.torrent !== undefined) {
         this.trigger('torrentInfo', {
           downloadSpeed: this.torrent.downloadSpeed,
@@ -386,22 +400,13 @@ class PeerTubePlugin extends Plugin {
     }, 1000)
   }
 
-  private prepareRunViewAdd () {
-    if (this.player.readyState() < 1) {
-      return this.player.one('loadedmetadata', () => this.runViewAdd())
-    }
-
-    this.runViewAdd()
-  }
-
   private runViewAdd () {
     this.clearVideoViewInterval()
 
     // After 30 seconds (or 3/4 of the video), add a view to the video
     let minSecondsToView = 30
 
-    const duration = this.player.duration()
-    if (duration < minSecondsToView) minSecondsToView = (duration * 3) / 4
+    if (this.videoDuration < minSecondsToView) minSecondsToView = (this.videoDuration * 3) / 4
 
     let secondsViewed = 0
     this.videoViewInterval = setInterval(() => {
