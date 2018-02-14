@@ -39,7 +39,7 @@ storage:
   cache: 'storage/cache/'
 
 log:
-  level: 'debug' # debug/info/warning/error
+  level: 'info' # debug/info/warning/error
 
 cache:
   previews:
