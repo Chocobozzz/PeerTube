@@ -258,7 +258,19 @@ $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/conf
 ```
 
 ## Upgrade
+#### Auto
 
+Via the bash Script :
+
+```
+$ su - peertube
+$ cd scripts && ./upgrade.sh
+$ exit
+$ systemctl restart peertube
+$ systemctl status peertube
+```
+
+#### Manuel
 Make a SQL backup
 
 ```
