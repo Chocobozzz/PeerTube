@@ -4,6 +4,7 @@ import * as youtubeDL from 'youtube-dl'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { unlinkPromise } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
+import { CONSTRAINTS_FIELDS } from '../initializers'
 import { getClient, getVideoCategories, login, searchVideo, uploadVideo } from '../tests/utils'
 
 program
@@ -11,6 +12,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-y, --youtube-url <youtubeUrl>', 'Youtube URL')
+  .option('-l, --language <languageCode>', 'Language code')
   .parse(process.argv)
 
 if (
@@ -26,6 +28,10 @@ if (
 run().catch(err => console.error(err))
 
 let accessToken: string
+const processOptions = {
+  cwd: __dirname,
+  maxBuffer: Infinity
+}
 
 async function run () {
   const res = await getClient(program['url'])
@@ -42,7 +48,8 @@ async function run () {
   const res2 = await login(program['url'], client, user)
   accessToken = res2.body.access_token
 
-  youtubeDL.getInfo(program['youtubeUrl'], [ '-j', '--flat-playlist' ], async (err, info) => {
+  const options = [ '-j', '--flat-playlist' ]
+  youtubeDL.getInfo(program['youtubeUrl'], options, processOptions, async (err, info) => {
     if (err) throw err
 
     // Normalize utf8 fields
@@ -55,7 +62,7 @@ async function run () {
     console.log('Will download and upload %d videos.\n', videos.length)
 
     for (const video of videos) {
-      await processVideo(video)
+      await processVideo(video, program['languageCode'])
     }
 
     console.log('I\'m finished!')
@@ -63,7 +70,7 @@ async function run () {
   })
 }
 
-function processVideo (video: { name: string, url: string }) {
+function processVideo (video: { name: string, url: string }, languageCode: number) {
   return new Promise(async res => {
     const result = await searchVideo(program['url'], video.name)
 
@@ -78,15 +85,16 @@ function processVideo (video: { name: string, url: string }) {
 
     console.log('Downloading video "%s"...', video.name)
 
-    youtubeDL.exec(video.url, [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]', '-o', path ], {}, async (err, output) => {
+    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]', '-o', path ]
+    youtubeDL.exec(video.url, options, processOptions, async (err, output) => {
       if (err) return console.error(err)
 
       console.log(output.join('\n'))
 
-      youtubeDL.getInfo(video.url, async (err, videoInfo) => {
+      youtubeDL.getInfo(video.url, undefined, processOptions, async (err, videoInfo) => {
         if (err) return console.error(err)
 
-        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path)
+        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
 
         return res()
       })
@@ -94,10 +102,13 @@ function processVideo (video: { name: string, url: string }) {
   })
 }
 
-async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string) {
+async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, language?: number) {
   const category = await getCategory(videoInfo.categories)
   const licence = getLicence(videoInfo.license)
-  const language = 13
+  let tags = []
+  if (Array.isArray(videoInfo.tags)) {
+    tags = videoInfo.tags.filter(t => t.length < CONSTRAINTS_FIELDS.VIDEOS.TAG.max).slice(0, 5)
+  }
 
   let thumbnailfile
   if (videoInfo.thumbnail) {
@@ -117,7 +128,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string) {
     nsfw: false,
     commentsEnabled: true,
     description: videoInfo.description,
-    tags: videoInfo.tags.slice(0, 5),
+    tags,
     privacy: VideoPrivacy.PUBLIC,
     fixture: videoPath,
     thumbnailfile,
