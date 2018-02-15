@@ -20,6 +20,7 @@ program
   .option('-d, --video-description <description>', 'Video description')
   .option('-t, --tags <tags>', 'Video tags', list)
   .option('-b, --thumbnail <thumbnailPath>', 'Thumbnail path')
+  .option('-v, --preview <previewPath>', 'Preview path')
   .option('-f, --file <file>', 'Video absolute file path')
   .parse(process.argv)
 
@@ -74,7 +75,8 @@ async function run () {
     tags: program['tags'],
     commentsEnabled: program['commentsEnabled'],
     fixture: program['file'],
-    thumbnailfile: program['thumbnailPath']
+    thumbnailfile: program['thumbnailPath'],
+    previewfile: program['previewPath']
   }
 
   await uploadVideo(program['url'], accessToken, videoAttributes)

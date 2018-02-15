@@ -3,7 +3,7 @@ import * as sharp from 'sharp'
 import { unlinkPromise } from './core-utils'
 
 async function processImage (
-  physicalFile: Express.Multer.File,
+  physicalFile: { path: string },
   destination: string,
   newSize: { width: number, height: number }
 ) {

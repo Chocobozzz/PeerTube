@@ -62,7 +62,7 @@ async function run () {
     console.log('Will download and upload %d videos.\n', videos.length)
 
     for (const video of videos) {
-      await processVideo(video, program['languageCode'])
+      await processVideo(video, program['language'])
     }
 
     console.log('I\'m finished!')
@@ -107,7 +107,10 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
   const licence = getLicence(videoInfo.license)
   let tags = []
   if (Array.isArray(videoInfo.tags)) {
-    tags = videoInfo.tags.filter(t => t.length < CONSTRAINTS_FIELDS.VIDEOS.TAG.max).slice(0, 5)
+    tags = videoInfo.tags
+      .filter(t => t.length < CONSTRAINTS_FIELDS.VIDEOS.TAG.max)
+      .map(t => t.normalize())
+      .slice(0, 5)
   }
 
   let thumbnailfile
