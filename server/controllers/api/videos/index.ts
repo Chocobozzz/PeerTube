@@ -178,6 +178,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
     commentsEnabled: videoInfo.commentsEnabled,
     nsfw: videoInfo.nsfw,
     description: videoInfo.description,
+    support: videoInfo.support,
     privacy: videoInfo.privacy,
     duration: videoPhysicalFile['duration'], // duration was added by a previous middleware
     channelId: res.locals.videoChannel.id
@@ -306,6 +307,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
       if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', parseInt(videoInfoToUpdate.privacy.toString(), 10))
+      if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
       if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
 

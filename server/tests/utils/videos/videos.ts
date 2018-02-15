@@ -248,6 +248,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     channelId: defaultChannelId,
     nsfw: true,
     description: 'my super description',
+    support: 'my super support text',
     tags: [ 'tag' ],
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
@@ -277,15 +278,15 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.field('licence', attributes.licence.toString())
   }
 
+  for (let i = 0; i < attributes.tags.length; i++) {
+    req.field('tags[' + i + ']', attributes.tags[i])
+  }
+
   if (attributes.thumbnailfile !== undefined) {
     req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
   }
   if (attributes.previewfile !== undefined) {
     req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
-  }
-
-  for (let i = 0; i < attributes.tags.length; i++) {
-    req.field('tags[' + i + ']', attributes.tags[i])
   }
 
   return req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
@@ -366,6 +367,7 @@ async function completeVideoCheck (
     nsfw: boolean
     commentsEnabled: boolean
     description: string
+    support: string
     host: string
     account: string
     isLocal: boolean,

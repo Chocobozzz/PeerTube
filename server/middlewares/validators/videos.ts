@@ -14,7 +14,7 @@ import {
   isVideoLicenceValid,
   isVideoNameValid,
   isVideoPrivacyValid,
-  isVideoRatingTypeValid,
+  isVideoRatingTypeValid, isVideoSupportValid,
   isVideoTagsValid
 } from '../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
@@ -46,6 +46,7 @@ const videosAddValidator = [
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw').custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('support').optional().custom(isVideoSupportValid).withMessage('Should have a valid support text'),
   body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
   body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
@@ -116,6 +117,7 @@ const videosUpdateValidator = [
   body('nsfw').optional().custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
   body('privacy').optional().custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('support').optional().custom(isVideoSupportValid).withMessage('Should have a valid support text'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
   body('commentsEnabled').optional().custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
 

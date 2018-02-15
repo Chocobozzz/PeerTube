@@ -5,6 +5,7 @@ import { logger } from '../../../helpers/logger'
 import { getFormattedObjects, resetSequelizeInstance } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { setAsyncActorKeys } from '../../../lib/activitypub'
+import { sendUpdateActor } from '../../../lib/activitypub/send'
 import { createVideoChannel } from '../../../lib/video-channel'
 import {
   asyncMiddleware, authenticate, listVideoAccountChannelsValidator, paginationValidator, setDefaultSort, setDefaultPagination,
@@ -80,23 +81,28 @@ async function addVideoChannelRetryWrapper (req: express.Request, res: express.R
     errorMessage: 'Cannot insert the video video channel with many retries.'
   }
 
-  await retryTransactionWrapper(addVideoChannel, options)
-
-  // TODO : include Location of the new video channel -> 201
-  return res.type('json').status(204).end()
+  const videoChannel = await retryTransactionWrapper(addVideoChannel, options)
+  return res.json({
+    videoChannel: {
+      id: videoChannel.id
+    }
+  }).end()
 }
 
 async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
   const account: AccountModel = res.locals.oauth.token.User.Account
 
-  const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
+  const videoChannelCreated: VideoChannelModel = await sequelizeTypescript.transaction(async t => {
     return createVideoChannel(videoChannelInfo, account, t)
   })
 
   setAsyncActorKeys(videoChannelCreated.Actor)
+    .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, err))
 
   logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
+
+  return videoChannelCreated
 }
 
 async function updateVideoChannelRetryWrapper (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -123,11 +129,10 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
 
       if (videoChannelInfoToUpdate.name !== undefined) videoChannelInstance.set('name', videoChannelInfoToUpdate.name)
       if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.set('description', videoChannelInfoToUpdate.description)
+      if (videoChannelInfoToUpdate.support !== undefined) videoChannelInstance.set('support', videoChannelInfoToUpdate.support)
 
-      await videoChannelInstance.save(sequelizeOptions)
-
-      // TODO
-      // await sendUpdateVideoChannel(videoChannelInstanceUpdated, t)
+      const videoChannelInstanceUpdated = await videoChannelInstance.save(sequelizeOptions)
+      await sendUpdateActor(videoChannelInstanceUpdated, t)
     })
 
     logger.info('Video channel with name %s and uuid %s updated.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)

@@ -12,7 +12,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 190
+const LAST_MIGRATION_VERSION = 195
 
 // ---------------------------------------------------------------------------
 
@@ -168,6 +168,7 @@ const CONSTRAINTS_FIELDS = {
   USERS: {
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
+    DESCRIPTION: { min: 3, max: 250 }, // Length
     VIDEO_QUOTA: { min: -1 }
   },
   VIDEO_ABUSES: {
@@ -176,12 +177,14 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
+    SUPPORT: { min: 3, max: 300 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
-    DESCRIPTION: { min: 3, max: 3000 }, // Length
+    DESCRIPTION: { min: 3, max: 10000 }, // Length
+    SUPPORT: { min: 3, max: 300 }, // Length
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {

@@ -83,6 +83,11 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     description = videoObject.content
   }
 
+  let support = null
+  if (videoObject.support) {
+    support = videoObject.support
+  }
+
   return {
     name: videoObject.name,
     uuid: videoObject.uuid,
@@ -91,6 +96,7 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     licence,
     language,
     description,
+    support,
     nsfw: videoObject.sensitive,
     commentsEnabled: videoObject.commentsEnabled,
     channelId: videoChannel.id,

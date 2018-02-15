@@ -9,7 +9,7 @@ import { logger } from '../../helpers/logger'
 import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
 import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
 import { updateActorAvatarInstance } from '../../lib/activitypub'
-import { sendUpdateUser } from '../../lib/activitypub/send'
+import { sendUpdateActor } from '../../lib/activitypub/send'
 import { Emailer } from '../../lib/emailer'
 import { Redis } from '../../lib/redis'
 import { createUserAccountAndChannel } from '../../lib/user'
@@ -270,15 +270,21 @@ async function removeUser (req: express.Request, res: express.Response, next: ex
 async function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdateMe = req.body
 
-  const user = res.locals.oauth.token.user
+  const user: UserModel = res.locals.oauth.token.user
 
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
   if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
-  await user.save()
-  await sendUpdateUser(user, undefined)
+  await sequelizeTypescript.transaction(async t => {
+    await user.save({ transaction: t })
+
+    if (body.description !== undefined) user.Account.description = body.description
+    await user.Account.save({ transaction: t })
+
+    await sendUpdateActor(user.Account, t)
+  })
 
   return res.sendStatus(204)
 }
@@ -297,7 +303,7 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
     const updatedActor = await updateActorAvatarInstance(actor, avatarName, t)
     await updatedActor.save({ transaction: t })
 
-    await sendUpdateUser(user, t)
+    await sendUpdateActor(user.Account, t)
 
     return updatedActor.Avatar
   })

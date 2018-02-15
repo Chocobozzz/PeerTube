@@ -255,6 +255,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: 'super token', fields, statusCodeExpected: 401 })
     })
 
+    it('Should fail with a too long description', async function () {
+      const fields = {
+        description: 'super'.repeat(60)
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should succeed with the correct params', async function () {
       const fields = {
         password: 'my super password',

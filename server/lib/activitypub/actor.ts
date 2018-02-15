@@ -225,12 +225,10 @@ function saveActorAndServerAndModelIfNotExist (
     })
 
     if (actorCreated.type === 'Person' || actorCreated.type === 'Application') {
-      const account = await saveAccount(actorCreated, result, t)
-      actorCreated.Account = account
+      actorCreated.Account = await saveAccount(actorCreated, result, t)
       actorCreated.Account.Actor = actorCreated
     } else if (actorCreated.type === 'Group') { // Video channel
-      const videoChannel = await saveVideoChannel(actorCreated, result, ownerActor, t)
-      actorCreated.VideoChannel = videoChannel
+      actorCreated.VideoChannel = await saveVideoChannel(actorCreated, result, ownerActor, t)
       actorCreated.VideoChannel.Actor = actorCreated
     }
 
@@ -242,6 +240,7 @@ type FetchRemoteActorResult = {
   actor: ActorModel
   name: string
   summary: string
+  support?: string
   avatarName?: string
   attributedTo: ActivityPubAttributedTo[]
 }
@@ -290,6 +289,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
     name,
     avatarName,
     summary: actorJSON.summary,
+    support: actorJSON.support,
     attributedTo: actorJSON.attributedTo
   }
 }
@@ -298,6 +298,7 @@ async function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t
   const [ accountCreated ] = await AccountModel.findOrCreate({
     defaults: {
       name: result.name,
+      description: result.summary,
       actorId: actor.id
     },
     where: {
@@ -314,6 +315,7 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
     defaults: {
       name: result.name,
       description: result.summary,
+      support: result.support,
       actorId: actor.id,
       accountId: ownerActor.Account.id
     },
@@ -352,11 +354,14 @@ async function refreshActorIfNeeded (actor: ActorModel) {
         await actor.save({ transaction: t })
 
         actor.Account.set('name', result.name)
+        actor.Account.set('description', result.summary)
         await actor.Account.save({ transaction: t })
       } else if (actor.VideoChannel) {
         await actor.save({ transaction: t })
 
         actor.VideoChannel.set('name', result.name)
+        actor.VideoChannel.set('description', result.summary)
+        actor.VideoChannel.set('support', result.support)
         await actor.VideoChannel.save({ transaction: t })
       }
 

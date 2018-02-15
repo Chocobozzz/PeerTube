@@ -42,6 +42,10 @@ function isVideoDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION))
 }
 
+function isVideoSupportValid (value: string) {
+  return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.SUPPORT))
+}
+
 function isVideoNameValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
 }
@@ -140,5 +144,6 @@ export {
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
   isVideoExist,
-  isVideoImage
+  isVideoImage,
+  isVideoSupportValid
 }

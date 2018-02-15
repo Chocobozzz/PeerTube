@@ -16,6 +16,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   const videoChannelData = {
     name: videoChannelInfo.name,
     description: videoChannelInfo.description,
+    support: videoChannelInfo.support,
     accountId: account.id,
     actorId: actorInstanceCreated.id
   }

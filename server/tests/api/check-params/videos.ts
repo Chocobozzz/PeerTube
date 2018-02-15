@@ -102,6 +102,7 @@ describe('Test videos API validator', function () {
         nsfw: false,
         commentsEnabled: true,
         description: 'my super description',
+        support: 'my super support text',
         tags: [ 'tag1', 'tag2' ],
         privacy: VideoPrivacy.PUBLIC,
         channelId
@@ -178,7 +179,14 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(1500) })
+      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(2500) })
+      const attaches = baseCorrectAttaches
+
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+    })
+
+    it('Should fail with a long support text', async function () {
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(70) })
       const attaches = baseCorrectAttaches
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -417,7 +425,13 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long description', async function () {
-      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(1500) })
+      const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(2500) })
+
+      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a long support text', async function () {
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(70) })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })

@@ -1,4 +1,5 @@
 export interface VideoChannelUpdate {
   name: string
-  description: string
+  description?: string
+  support?: string
 }

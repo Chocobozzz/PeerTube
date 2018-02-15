@@ -172,6 +172,7 @@ describe('Test users', function () {
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.roleLabel).to.equal('User')
     expect(user.id).to.be.a('number')
+    expect(user.account.description).to.be.null
   })
 
   it('Should be able to upload a video with this user', async function () {
@@ -315,6 +316,7 @@ describe('Test users', function () {
     expect(user.displayNSFW).to.be.ok
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.id).to.be.a('number')
+    expect(user.account.description).to.be.null
   })
 
   it('Should be able to change the autoPlayVideo attribute', async function () {
@@ -345,6 +347,7 @@ describe('Test users', function () {
     expect(user.displayNSFW).to.be.ok
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.id).to.be.a('number')
+    expect(user.account.description).to.be.null
   })
 
   it('Should be able to update my avatar', async function () {
@@ -360,6 +363,24 @@ describe('Test users', function () {
     const user = res.body
 
     await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
+  })
+
+  it('Should be able to update my description', async function () {
+    await updateMyUser({
+      url: server.url,
+      accessToken: accessTokenUser,
+      description: 'my super description updated'
+    })
+
+    const res = await getMyUserInformation(server.url, accessTokenUser)
+    const user = res.body
+
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('updated@example.com')
+    expect(user.displayNSFW).to.be.ok
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.id).to.be.a('number')
+    expect(user.account.description).to.equal('my super description updated')
   })
 
   it('Should be able to update another user', async function () {

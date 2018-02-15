@@ -280,6 +280,7 @@ describe('Test follows', function () {
         language: 3,
         nsfw: true,
         description: 'my super description',
+        support: 'my super support text',
         host: 'localhost:9003',
         account: 'root',
         isLocal,
