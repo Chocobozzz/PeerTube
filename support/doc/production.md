@@ -85,139 +85,24 @@ It should correspond to the paths of your storage directories (set in the config
 $ sudo vim /etc/nginx/sites-available/peertube
 ```
 
-Your Mileage May Vary, but what follows is an example of configuration for nginx with a certificate made via `certbot` ([other utilities exist](https://letsencrypt.org/docs/client-options/)):
-
-```
-server {
-  listen 80;
-  listen [::]:80;
-  server_name peertube.example.com;
-
-  access_log /var/log/nginx/peertube.example.com.access.log;
-  error_log /var/log/nginx/peertube.example.com.error.log;
-
-  rewrite ^ https://$server_name$request_uri? permanent;
-}
-
-server {
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
-  server_name peertube.example.com;
-
-  # For example with Let's Encrypt (you need a certificate to run https)
-  ssl_certificate      /etc/letsencrypt/live/peertube.example.com/fullchain.pem;
-  ssl_certificate_key  /etc/letsencrypt/live/peertube.example.com/privkey.pem;
-  
-  # Security hardening (as of 11/02/2018)
-  ssl_protocols TLSv1.3, TLSv1.2;# TLSv1.3 requires nginx >= 1.13.0 else use only TLSv1.2
-  ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
-  ssl_prefer_server_ciphers on;
-  ssl_ecdh_curve secp384r1; # Requires nginx >= 1.1.0
-  ssl_session_timeout  10m;
-  ssl_session_cache shared:SSL:10m;
-  ssl_session_tickets off; # Requires nginx >= 1.5.9
-  ssl_stapling on; # Requires nginx >= 1.3.7
-  ssl_stapling_verify on; # Requires nginx => 1.3.7
-  resolver $DNS-IP-1 $DNS-IP-2 valid=300s;
-  resolver_timeout 5s;
-  add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
-  add_header X-Frame-Options DENY;
-  add_header X-Content-Type-Options nosniff;
-  add_header X-XSS-Protection "1; mode=block";
-  add_header X-Robots-Tag none;
-  
-  access_log /var/log/nginx/peertube.example.com.access.log;
-  error_log /var/log/nginx/peertube.example.com.error.log;
-
-  location ^~ '/.well-known/acme-challenge' {
-    default_type "text/plain";
-    root /var/www/certbot;
-  }
-
-  location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
-    add_header Cache-Control "public, max-age=31536000, immutable";
-
-    alias /var/www/peertube/peertube-latest/client/dist/$1;
-  }
-
-  location ~ ^/static/(thumbnails|avatars)/(.*)$ {
-    add_header Cache-Control "public, max-age=31536000, immutable";
-
-    alias /var/www/peertube/storage/$1/$2;
-  }
-
-  location / {
-    proxy_pass http://localhost:9000;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-    # For the video upload
-    client_max_body_size 2G;
-    proxy_connect_timeout       600;
-    proxy_send_timeout          600;
-    proxy_read_timeout          600;
-    send_timeout                600;
-  }
-
-  # Bypass PeerTube webseed route for better performances
-  location /static/webseed {
-    # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
-    limit_rate 800k;
-    
-    if ($request_method = 'OPTIONS') {
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-      add_header 'Access-Control-Max-Age' 1728000;
-      add_header 'Content-Type' 'text/plain charset=UTF-8';
-      add_header 'Content-Length' 0;
-      return 204;
-    }
-
-    if ($request_method = 'GET') {
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-
-      # Don't spam access log file with byte range requests
-      access_log off;
-    }
-
-    alias /var/www/peertube/storage/videos;
-  }
-
-  # Websocket tracker
-  location /tracker/socket {
-    # Peers send a message to the tracker every 15 minutes
-    # Don't close the websocket before this time
-    proxy_read_timeout 1200s;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_http_version 1.1;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-    proxy_pass http://localhost:9000;
-  }
-}
-```
-
-To generate the certificate for your domain as required to make https work, you have two alternatives (note that the second command modifies itself the Nginx configuration to point the concerned server blocks to its certificate):
-
-```
-$ sudo certbot --authenticator standalone certonly -d peertube.example.com && nginx -t && systemctl reload nginx
-```
-
-```
-$ sudo certbot --authenticator standalone --installer nginx --post-hook "nginx -t && systemctl reload nginx"
-```
-
-Remember your certificate will expire in 90 days, and thus needs renewal.
-
 Activate the configuration file:
 
 ```
 $ sudo ln -s /etc/nginx/sites-available/peertube /etc/nginx/sites-enabled/peertube
+```
+
+To generate the certificate for your domain as required to make https work you can use [Let's Encrypt](https://letsencrypt.org/):
+
+```
+$ sudo systemctl stop nginx
+$ sudo certbot --authenticator standalone --installer nginx --post-hook "systemctl start nginx"
+```
+
+Remember your certificate will expire in 90 days, and thus needs renewal.
+
+Now you have the certificates you can reload nginx:
+
+```
 $ sudo systemctl reload nginx
 ```
 
@@ -233,30 +118,6 @@ Update the service file:
 
 ```
 $ sudo vim /etc/systemd/system/peertube.service
-```
-
-It should look like this:
-
-```
-[Unit]
-Description=PeerTube daemon
-After=network.target
-
-[Service]
-Type=simple
-Environment=NODE_ENV=production
-Environment=NODE_CONFIG_DIR=/var/www/peertube/config
-User=peertube
-Group=peertube
-ExecStart=/usr/bin/npm start
-WorkingDirectory=/var/www/peertube/peertube-latest
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=peertube
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
 ```
 
 
