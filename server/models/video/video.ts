@@ -68,6 +68,7 @@ import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
+import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
@@ -174,6 +175,10 @@ enum ScopeNames {
                   {
                     attributes: [ 'host' ],
                     model: () => ServerModel.unscoped(),
+                    required: false
+                  },
+                  {
+                    model: () => AvatarModel.unscoped(),
                     required: false
                   }
                 ]

@@ -1,5 +1,13 @@
 # Changelog
 
+
+## v0.0.25-alpha
+
+### Bug fixes
+
+ * Fix avatars on video watch page
+
+
 ## v0.0.24-alpha
 
 ### Features
