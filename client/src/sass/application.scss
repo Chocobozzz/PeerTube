@@ -299,34 +299,45 @@ p-datatable {
   }
 }
 
-.nav {
-  font-size: 16px !important;
-  border: none !important;
-
-  .nav-item .nav-link {
-    margin-right: 30px;
-    padding: 0;
-    border-radius: 3px;
+tabset:not(.bootstrap) {
+  .nav {
+    font-size: 16px !important;
     border: none !important;
 
-    .tab-link {
-      display: flex !important;
-      align-items: center;
-      min-height: 30px !important;
-      padding: 0 15px;
-    }
+    .nav-item .nav-link {
+      margin-right: 30px;
+      padding: 0;
+      border-radius: 3px;
+      border: none !important;
 
+      .tab-link {
+        display: flex !important;
+        align-items: center;
+        min-height: 30px !important;
+        padding: 0 15px;
+      }
+
+      &, & a {
+        color: #000 !important;
+        @include disable-default-a-behaviour;
+      }
+
+      &.active, &:hover {
+        background-color: #F0F0F0;
+      }
+
+      &.active {
+        font-weight: $font-semibold !important;
+      }
+    }
+  }
+}
+
+tabset.bootstrap {
+  .nav-item .nav-link {
     &, & a {
-      color: #000 !important;
+      color: #000;
       @include disable-default-a-behaviour;
-    }
-
-    &.active, &:hover {
-      background-color: #F0F0F0;
-    }
-
-    &.active {
-      font-weight: $font-semibold !important;
     }
   }
 }

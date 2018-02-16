@@ -11,4 +11,6 @@ export interface VideoUpdate {
   tags?: string[]
   commentsEnabled?: boolean
   nsfw?: boolean
+  thumbnailfile?: Blob
+  previewfile?: Blob
 }

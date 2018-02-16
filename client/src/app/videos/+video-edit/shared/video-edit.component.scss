@@ -47,6 +47,18 @@
   .label-tags + span {
     font-size: 15px;
   }
+
+  .root-tabset /deep/ > .nav {
+    margin-left: 15px;
+    margin-bottom: 15px;
+
+    .nav-link {
+      display: flex !important;
+      align-items: center;
+      height: 30px !important;
+      padding: 0 15px !important;
+    }
+  }
 }
 
 .submit-container {

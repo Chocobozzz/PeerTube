@@ -12,6 +12,10 @@ export class VideoEdit {
   commentsEnabled: boolean
   channel: number
   privacy: VideoPrivacy
+  thumbnailfile?: any
+  previewfile?: any
+  thumbnailUrl: string
+  previewUrl: string
   uuid?: string
   id?: number
 
@@ -29,6 +33,8 @@ export class VideoEdit {
       this.commentsEnabled = videoDetails.commentsEnabled
       this.channel = videoDetails.channel.id
       this.privacy = videoDetails.privacy
+      this.thumbnailUrl = videoDetails.thumbnailUrl
+      this.previewUrl = videoDetails.previewUrl
     }
   }
 

@@ -35,6 +35,10 @@ export class ServerService {
       }
     },
     video: {
+      image: {
+        size: { max: 0 },
+        extensions: []
+      },
       file: {
         extensions: []
       }

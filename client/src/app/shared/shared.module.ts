@@ -40,10 +40,10 @@ import { VideoService } from './video/video.service'
 
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
+    TabsModule.forRoot(),
 
     PrimeSharedModule,
-    NgPipesModule,
-    TabsModule.forRoot()
+    NgPipesModule
   ],
 
   declarations: [
@@ -69,6 +69,7 @@ import { VideoService } from './video/video.service'
 
     BsDropdownModule,
     ModalModule,
+    TabsModule,
     PrimeSharedModule,
     BytesPipe,
     KeysPipe,

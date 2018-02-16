@@ -67,6 +67,27 @@ function isInMobileView () {
   return window.innerWidth < 500
 }
 
+// Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34
+function objectToFormData (obj: any, form?: FormData, namespace?: string) {
+  let fd = form || new FormData()
+  let formKey
+
+  for (let key of Object.keys(obj)) {
+    if (namespace) formKey = `${namespace}[${key}]`
+    else formKey = key
+
+    if (obj[key] === undefined) continue
+
+    if (typeof obj[ key ] === 'object' && !(obj[ key ] instanceof File)) {
+      objectToFormData(obj[ key ], fd, key)
+    } else {
+      fd.append(formKey, obj[ key ])
+    }
+  }
+
+  return fd
+}
+
 export {
   viewportHeight,
   getParameterByName,
@@ -75,5 +96,6 @@ export {
   dateToHuman,
   isInSmallView,
   isInMobileView,
-  immutableAssign
+  immutableAssign,
+  objectToFormData
 }

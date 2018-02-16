@@ -48,11 +48,10 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.buildForm()
 
     this.serverService.videoPrivaciesLoaded
-      .subscribe(
-        () => this.videoPrivacies = this.serverService.getVideoPrivacies()
-      )
+      .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
+      .catch(err => console.error('Cannot populate async user video channels.', err))
 
     const uuid: string = this.route.snapshot.params['uuid']
     this.videoService.getVideo(uuid)
@@ -116,5 +115,26 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
   private hydrateFormFromVideo () {
     this.form.patchValue(this.video.toJSON())
+
+    const objects = [
+      {
+        url: 'thumbnailUrl',
+        name: 'thumbnailfile'
+      },
+      {
+        url: 'previewUrl',
+        name: 'previewfile'
+      }
+    ]
+
+    for (const obj of objects) {
+      fetch(this.video[obj.url])
+        .then(response => response.blob())
+        .then(data => {
+          this.form.patchValue({
+            [ obj.name ]: data
+          })
+        })
+    }
   }
 }

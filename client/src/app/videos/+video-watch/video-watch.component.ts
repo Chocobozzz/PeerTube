@@ -211,6 +211,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return Account.GET_ACCOUNT_AVATAR_URL(this.video.account)
   }
 
+  getVideoPoster () {
+    if (!this.video) return ''
+
+    return this.video.previewUrl
+  }
+
   getVideoTags () {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
