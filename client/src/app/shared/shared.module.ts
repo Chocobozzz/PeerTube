@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { MarkdownService } from '@app/videos/shared'
-import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
@@ -36,8 +35,6 @@ import { VideoService } from './video/video.service'
     RouterModule,
     HttpClientModule,
 
-    LoadingBarHttpClientModule,
-
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
     TabsModule.forRoot(),
@@ -64,8 +61,6 @@ import { VideoService } from './video/video.service'
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,
-
-    LoadingBarHttpClientModule,
 
     BsDropdownModule,
     ModalModule,

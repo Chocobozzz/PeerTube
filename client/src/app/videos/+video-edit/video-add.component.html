@@ -50,7 +50,10 @@
     <div class="submit-container">
       <div *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
 
-      <div class="submit-button" (click)="updateSecondStep()" [ngClass]="{ disabled: !form.valid || videoUploaded !== true }">
+      <div class="submit-button"
+         (click)="updateSecondStep()"
+         [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true || videoUploaded !== true }"
+      >
         <span class="icon icon-validate"></span>
         <input type="button" value="Publish" />
       </div>

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from '@app/shared'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
+import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { Subscription } from 'rxjs/Subscription'
@@ -28,6 +29,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   @ViewChild('videofileInput') videofileInput
 
   isUploadingVideo = false
+  isUpdatingVideo = false
   videoUploaded = false
   videoUploadObservable: Subscription = null
   videoUploadPercents = 0
@@ -53,7 +55,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private loadingBar: LoadingBarService
   ) {
     super()
   }
@@ -203,15 +206,21 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     video.id = this.videoUploadedIds.id
     video.uuid = this.videoUploadedIds.uuid
 
+    this.isUpdatingVideo = true
+    this.loadingBar.start()
     this.videoService.updateVideo(video)
       .subscribe(
         () => {
+          this.isUpdatingVideo = false
           this.isUploadingVideo = false
+          this.loadingBar.complete()
+
           this.notificationsService.success('Success', 'Video published.')
           this.router.navigate([ '/videos/watch', video.uuid ])
         },
 
         err => {
+          this.isUpdatingVideo = false
           this.notificationsService.error('Error', err.message)
           console.error(err)
         }

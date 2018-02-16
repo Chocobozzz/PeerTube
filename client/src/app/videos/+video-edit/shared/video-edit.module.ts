@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core'
-import { VideoImageComponent } from '@app/videos/+video-edit/shared/video-image.component'
+import { VideoImageComponent } from './video-image.component'
 import { TabsModule } from 'ngx-bootstrap/tabs'
 import { TagInputModule } from 'ngx-chips'
 import { SharedModule } from '../../../shared'

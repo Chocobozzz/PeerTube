@@ -184,7 +184,7 @@
     tree-kill "^1.0.0"
     webpack-sources "^1.1.0"
 
-"@ngx-loading-bar/core@1.1.1":
+"@ngx-loading-bar/core@1.1.1", "@ngx-loading-bar/core@^1.1.1":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@ngx-loading-bar/core/-/core-1.1.1.tgz#bcfc8e968f121ca431b4926dfd3465739f7076cd"
   dependencies:
