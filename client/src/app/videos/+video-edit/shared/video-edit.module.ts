@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core'
-import { VideoImageComponent } from './video-image.component'
 import { TabsModule } from 'ngx-bootstrap/tabs'
 import { TagInputModule } from 'ngx-chips'
-import { SharedModule } from '../../../shared'
+import { SharedModule } from '../../../shared/'
 import { VideoEditComponent } from './video-edit.component'
+import { VideoImageComponent } from './video-image.component'
 
 @NgModule({
   imports: [
