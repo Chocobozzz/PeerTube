@@ -76,7 +76,7 @@ function processVideo (video: { name: string, url: string }, languageCode: numbe
 
     console.log('############################################################\n')
 
-    if (result.body.total !== 0) {
+    if (result.body.data.find(v => v.name === video.name)) {
       console.log('Video "%s" already exists, don\'t reupload it.\n', video.name)
       return res()
     }
