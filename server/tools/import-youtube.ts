@@ -48,7 +48,7 @@ async function run () {
   const res2 = await login(program['url'], client, user)
   accessToken = res2.body.access_token
 
-  const options = [ '-j', '--flat-playlist' ]
+  const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
   youtubeDL.getInfo(program['youtubeUrl'], options, processOptions, async (err, info) => {
     if (err) throw err
 
