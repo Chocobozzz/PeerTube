@@ -33,7 +33,7 @@ zip_name="peertube-$version.zip"
 
 changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "$version" | sed '1{/^$/d}')
 
-echo "Changelog will be:\n"
+echo -e "Changelog will be:\n"
 echo "$changelog"
 echo
 
