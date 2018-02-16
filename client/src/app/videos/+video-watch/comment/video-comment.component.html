@@ -2,6 +2,7 @@
   <img [src]="getAvatarUrl(comment.account)" alt="Avatar" />
 
   <div class="comment">
+    <span class="marked-comment" *ngIf="comment.marked">Marked comment</span>
     <div class="comment-account-date">
       <a target="_blank" [href]="comment.account.url" class="comment-account">{{ comment.by }}</a>
       <div class="comment-date">{{ comment.createdAt | myFromNow }}</div>
@@ -9,6 +10,7 @@
     <div class="comment-html" [innerHTML]="sanitizedCommentHTML"></div>
 
     <div class="comment-actions">
+      <a [href]="getCommentUrl(comment.id)" class="comment-action-link">Link</a>
       <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply">Reply</div>
       <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete">Delete</div>
     </div>

@@ -13,8 +13,8 @@ export class VideoComment implements VideoCommentServerModel {
   updatedAt: Date | string
   account: AccountInterface
   totalReplies: number
-
   by: string
+  marked = false
 
   constructor (hash: VideoCommentServerModel) {
     this.id = hash.id
