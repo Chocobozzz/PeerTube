@@ -23,6 +23,18 @@ redis:
     __format: "json"
   auth: "PEERTUBE_REDIS_AUTH"
 
+smtp:
+  hostname: "PEERTUBE_SMTP_HOSTNAME"
+  port:
+    __name: "PEERTUBE_SMTP_PORT"
+    __format: "json"
+  username: "PEERTUBE_SMTP_USERNAME"
+  password: "PEERTUBE_SMTP_PASSWORD"
+  tls:
+    __name: "PEERTUBE_SMTP_TLS"
+    __format: "json"
+  form_address: "PEERTUBE_ADMIN_EMAIL"
+
 admin:
   email: "PEERTUBE_ADMIN_EMAIL"
 
@@ -38,3 +50,8 @@ transcoding:
   enabled:
     __name: "PEERTUBE_TRANSCODING_ENABLED"
     __format: "json"
+
+instance:
+  name: "PEERTUBE_INSTANCE_NAME"
+  description: "PEERTUBE_INSTANCE_DESCRIPTION"
+  terms: "PEERTUBE_INSTANCE_TERMS"

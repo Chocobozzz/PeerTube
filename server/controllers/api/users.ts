@@ -1,15 +1,15 @@
 import * as express from 'express'
+import 'multer'
 import { extname, join } from 'path'
-import * as sharp from 'sharp'
 import * as uuidv4 from 'uuid/v4'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
-import { unlinkPromise } from '../../helpers/core-utils'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
+import { processImage } from '../../helpers/image-utils'
 import { logger } from '../../helpers/logger'
 import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
-import { AVATAR_MIMETYPE_EXT, AVATARS_SIZE, CONFIG, sequelizeTypescript } from '../../initializers'
+import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
 import { updateActorAvatarInstance } from '../../lib/activitypub'
-import { sendUpdateUser } from '../../lib/activitypub/send'
+import { sendUpdateActor } from '../../lib/activitypub/send'
 import { Emailer } from '../../lib/emailer'
 import { Redis } from '../../lib/redis'
 import { createUserAccountAndChannel } from '../../lib/user'
@@ -42,7 +42,7 @@ import { UserModel } from '../../models/account/user'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { VideoModel } from '../../models/video/video'
 
-const reqAvatarFile = createReqFiles('avatarfile', CONFIG.STORAGE.AVATARS_DIR, AVATAR_MIMETYPE_EXT)
+const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 
 const usersRouter = express.Router()
 
@@ -270,15 +270,21 @@ async function removeUser (req: express.Request, res: express.Response, next: ex
 async function updateMe (req: express.Request, res: express.Response, next: express.NextFunction) {
   const body: UserUpdateMe = req.body
 
-  const user = res.locals.oauth.token.user
+  const user: UserModel = res.locals.oauth.token.user
 
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
   if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
-  await user.save()
-  await sendUpdateUser(user, undefined)
+  await sequelizeTypescript.transaction(async t => {
+    await user.save({ transaction: t })
+
+    if (body.description !== undefined) user.Account.description = body.description
+    await user.Account.save({ transaction: t })
+
+    await sendUpdateActor(user.Account, t)
+  })
 
   return res.sendStatus(204)
 }
@@ -288,23 +294,16 @@ async function updateMyAvatar (req: express.Request, res: express.Response, next
   const user = res.locals.oauth.token.user
   const actor = user.Account.Actor
 
-  const avatarDir = CONFIG.STORAGE.AVATARS_DIR
-  const source = join(avatarDir, avatarPhysicalFile.filename)
   const extension = extname(avatarPhysicalFile.filename)
   const avatarName = uuidv4() + extension
-  const destination = join(avatarDir, avatarName)
-
-  await sharp(source)
-    .resize(AVATARS_SIZE.width, AVATARS_SIZE.height)
-    .toFile(destination)
-
-  await unlinkPromise(source)
+  const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)
+  await processImage(avatarPhysicalFile, destination, AVATARS_SIZE)
 
   const avatar = await sequelizeTypescript.transaction(async t => {
     const updatedActor = await updateActorAvatarInstance(actor, avatarName, t)
     await updatedActor.save({ transaction: t })
 
-    await sendUpdateUser(user, t)
+    await sendUpdateActor(user.Account, t)
 
     return updatedActor.Avatar
   })

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { immutableAssign } from '@app/shared/misc/utils'
+import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/concatAll'
@@ -19,7 +21,9 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
   titlePage = 'My videos'
   currentRoute = '/account/videos'
   checkedVideos: { [ id: number ]: boolean } = {}
-  pagination = {
+  videoHeight = 155
+  videoWidth = -1
+  pagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 10,
     totalItems: null
@@ -46,8 +50,10 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
     return Object.keys(this.checkedVideos).some(k => this.checkedVideos[k] === true)
   }
 
-  getVideosObservable () {
-    return this.videoService.getMyVideos(this.pagination, this.sort)
+  getVideosObservable (page: number) {
+    const newPagination = immutableAssign(this.pagination, { currentPage: page })
+
+    return this.videoService.getMyVideos(newPagination, this.sort)
   }
 
   deleteSelectedVideos () {
@@ -71,9 +77,12 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
         Observable.from(observables)
           .concatAll()
           .subscribe(
-            res => this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`),
+            res => {
+              this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`)
+              this.buildVideoPages()
+            },
 
-          err => this.notificationsService.error('Error', err.message)
+            err => this.notificationsService.error('Error', err.message)
           )
       }
     )
@@ -89,6 +98,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
             status => {
               this.notificationsService.success('Success', `Video ${video.name} deleted.`)
               this.spliceVideosById(video.id)
+              this.buildVideoPages()
             },
 
             error => this.notificationsService.error('Error', error.message)
@@ -98,7 +108,14 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
   }
 
   private spliceVideosById (id: number) {
-    const index = this.videos.findIndex(v => v.id === id)
-    this.videos.splice(index, 1)
+    for (const key of Object.keys(this.loadedPages)) {
+      const videos = this.loadedPages[key]
+      const index = videos.findIndex(v => v.id === id)
+
+      if (index !== -1) {
+        videos.splice(index, 1)
+        return
+      }
+    }
   }
 }

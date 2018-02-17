@@ -1,9 +1,9 @@
-import * as validator from 'validator'
 import 'express-validator'
-
-import { exists, isArray } from './misc'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import * as validator from 'validator'
 import { UserRole } from '../../../shared'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
+
+import { exists, isFileValid } from './misc'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 
@@ -19,6 +19,10 @@ function isUserUsernameValid (value: string) {
   const max = USERS_CONSTRAINTS_FIELDS.USERNAME.max
   const min = USERS_CONSTRAINTS_FIELDS.USERNAME.min
   return exists(value) && validator.matches(value, new RegExp(`^[a-z0-9._]{${min},${max}}$`))
+}
+
+function isUserDescriptionValid (value: string) {
+  return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.DESCRIPTION))
 }
 
 function isBoolean (value: any) {
@@ -37,20 +41,12 @@ function isUserRoleValid (value: any) {
   return exists(value) && validator.isInt('' + value) && UserRole[value] !== undefined
 }
 
+const avatarMimeTypes = CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
+  .map(v => v.replace('.', ''))
+  .join('|')
+const avatarMimeTypesRegex = `image/(${avatarMimeTypes})`
 function isAvatarFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  // Should have files
-  if (!files) return false
-  if (isArray(files)) return false
-
-  // Should have videofile file
-  const avatarfile = files['avatarfile']
-  if (!avatarfile || avatarfile.length === 0) return false
-
-  // The file should exist
-  const file = avatarfile[0]
-  if (!file || !file.originalname) return false
-
-  return new RegExp('^image/(png|jpeg)$', 'i').test(file.mimetype)
+  return isFileValid(files, avatarMimeTypesRegex, 'avatarfile')
 }
 
 // ---------------------------------------------------------------------------
@@ -62,5 +58,6 @@ export {
   isUserUsernameValid,
   isUserDisplayNSFWValid,
   isUserAutoPlayVideoValid,
+  isUserDescriptionValid,
   isAvatarFile
 }

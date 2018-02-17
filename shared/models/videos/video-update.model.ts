@@ -6,8 +6,11 @@ export interface VideoUpdate {
   licence?: number
   language?: number
   description?: string
+  support?: string
   privacy?: VideoPrivacy
   tags?: string[]
   commentsEnabled?: boolean
   nsfw?: boolean
+  thumbnailfile?: Blob
+  previewfile?: Blob
 }

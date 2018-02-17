@@ -1,4 +1,5 @@
 import * as request from 'supertest'
+import { buildAbsoluteFixturePath } from '../'
 
 function makeGetRequest (options: {
   url: string,
@@ -40,8 +41,9 @@ function makeDeleteRequest (options: {
     .expect(options.statusCodeExpected)
 }
 
-function makePostUploadRequest (options: {
+function makeUploadRequest (options: {
   url: string,
+  method?: 'POST' | 'PUT',
   path: string,
   token: string,
   fields: { [ fieldName: string ]: any },
@@ -50,9 +52,14 @@ function makePostUploadRequest (options: {
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
 
-  const req = request(options.url)
-                .post(options.path)
-                .set('Accept', 'application/json')
+  let req: request.Test
+  if (options.method === 'PUT') {
+    req = request(options.url).put(options.path)
+  } else {
+    req = request(options.url).post(options.path)
+  }
+
+  req.set('Accept', 'application/json')
 
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
 
@@ -70,7 +77,7 @@ function makePostUploadRequest (options: {
 
   Object.keys(options.attaches).forEach(attach => {
     const value = options.attaches[attach]
-    req.attach(attach, value)
+    req.attach(attach, buildAbsoluteFixturePath(value))
   })
 
   return req.expect(options.statusCodeExpected)
@@ -119,7 +126,7 @@ function makePutBodyRequest (options: {
 
 export {
   makeGetRequest,
-  makePostUploadRequest,
+  makeUploadRequest,
   makePostBodyRequest,
   makePutBodyRequest,
   makeDeleteRequest

@@ -5,7 +5,7 @@
     id="description" name="description">
   </textarea>
 
-  <tabset *ngIf="arePreviewsDisplayed()" #staticTabs class="previews">
+  <tabset *ngIf="arePreviewsDisplayed()" class="previews">
     <tab *ngIf="truncate !== undefined" heading="Truncated description preview" [innerHTML]="truncatedDescriptionHTML"></tab>
     <tab heading="Complete description preview" [innerHTML]="descriptionHTML"></tab>
   </tabset>

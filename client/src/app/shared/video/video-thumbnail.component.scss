@@ -6,14 +6,22 @@
   position: relative;
   border-radius: 4px;
   overflow: hidden;
+  width: $video-thumbnail-width;
+  height: $video-thumbnail-height;
+  background-color: #ececec;
 
   &:hover {
     text-decoration: none !important;
   }
 
-  img.blur-filter {
-    filter: blur(5px);
-    transform : scale(1.03);
+  img {
+    width: $video-thumbnail-width;
+    height: $video-thumbnail-height;
+
+    &.blur-filter {
+      filter: blur(5px);
+      transform : scale(1.03);
+    }
   }
 
   .video-thumbnail-overlay {

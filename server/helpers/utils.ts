@@ -27,10 +27,14 @@ function badRequest (req: express.Request, res: express.Response, next: express.
   return res.type('json').status(400).end()
 }
 
-function createReqFiles (fieldName: string, storageDir: string, mimeTypes: { [ id: string ]: string }) {
+function createReqFiles (
+  fieldNames: string[],
+  mimeTypes: { [ id: string ]: string },
+  destinations: { [ fieldName: string ]: string }
+) {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, storageDir)
+      cb(null, destinations[file.fieldname])
     },
 
     filename: async (req, file, cb) => {
@@ -48,7 +52,15 @@ function createReqFiles (fieldName: string, storageDir: string, mimeTypes: { [ i
     }
   })
 
-  return multer({ storage }).fields([{ name: fieldName, maxCount: 1 }])
+  const fields = []
+  for (const fieldName of fieldNames) {
+    fields.push({
+      name: fieldName,
+      maxCount: 1
+    })
+  }
+
+  return multer({ storage }).fields(fields)
 }
 
 async function generateRandomString (size: number) {

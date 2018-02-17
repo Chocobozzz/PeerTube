@@ -70,7 +70,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
       .subscribe(
-        data => this.otherVideos = data.videos,
+        data => {
+          this.otherVideos = data.videos
+          this.updateOtherVideosDisplayed()
+        },
+
         err => console.error(err)
       )
 
@@ -207,6 +211,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return Account.GET_ACCOUNT_AVATAR_URL(this.video.account)
   }
 
+  getVideoPoster () {
+    if (!this.video) return ''
+
+    return this.video.previewUrl
+  }
+
   getVideoTags () {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
@@ -290,9 +300,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private onVideoFetched (video: VideoDetails) {
     this.video = video
 
-    if (this.otherVideos.length > 0) {
-      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
-    }
+    this.updateOtherVideosDisplayed()
 
     let observable
     if (this.video.isVideoNSFWForUser(this.user)) {
@@ -327,7 +335,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               peertube: {
                 videoFiles: this.video.files,
                 playerElement: this.playerElement,
-                peerTubeLink: false
+                peerTubeLink: false,
+                videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
+                videoDuration: this.video.duration
               },
               hotkeys: {
                 enableVolumeScroll: false
@@ -347,7 +357,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             })
           })
         } else {
-          this.player.peertube().setVideoFiles(this.video.files)
+          const videoViewUrl = this.videoService.getVideoViewUrl(this.video.uuid)
+          this.player.peertube().setVideoFiles(this.video.files, videoViewUrl, this.video.duration)
         }
 
         this.setVideoDescriptionHTML()
@@ -355,8 +366,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         this.setOpenGraphTags()
         this.checkUserRating()
-
-        this.prepareViewAdd()
       }
     )
   }
@@ -402,6 +411,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.video.dislikes += dislikesToIncrement
   }
 
+  private updateOtherVideosDisplayed () {
+    if (this.video && this.otherVideos && this.otherVideos.length > 0) {
+      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
+    }
+  }
+
   private setOpenGraphTags () {
     this.metaService.setTitle(this.video.name)
 
@@ -421,19 +436,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.setTag('og:url', window.location.href)
     this.metaService.setTag('url', window.location.href)
-  }
-
-  private prepareViewAdd () {
-    // After 30 seconds (or 3/4 of the video), increment add a view
-    let viewTimeoutSeconds = 30
-    if (this.video.duration < viewTimeoutSeconds) viewTimeoutSeconds = (this.video.duration * 3) / 4
-
-    setTimeout(() => {
-      this.videoService
-        .viewVideo(this.video.uuid)
-        .subscribe()
-
-    }, viewTimeoutSeconds * 1000)
   }
 
   private isAutoplay () {

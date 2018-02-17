@@ -1,6 +1,6 @@
 {
   "name": "peertube-client",
-  "version": "0.0.20-alpha",
+  "version": "0.0.24-alpha",
   "private": true,
   "licence": "GPLv3",
   "author": {
@@ -20,10 +20,12 @@
     "webpack-bundle-analyzer": "webpack-bundle-analyzer"
   },
   "license": "GPLv3",
-  "dependencies": {},
+  "resolutions": {
+    "copy-webpack-plugin": "4.3.0"
+  },
   "devDependencies": {
     "@angular/animations": "~5.2.2",
-    "@angular/cli": "^1.6.0",
+    "@angular/cli": "1.6.7",
     "@angular/common": "~5.2.2",
     "@angular/compiler": "~5.2.2",
     "@angular/compiler-cli": "~5.2.2",
@@ -34,7 +36,9 @@
     "@angular/platform-browser": "~5.2.2",
     "@angular/platform-browser-dynamic": "~5.2.2",
     "@angular/router": "~5.2.2",
+    "@angular/service-worker": "^5.2.4",
     "@angularclass/hmr": "^2.1.3",
+    "@ngx-loading-bar/core": "^1.1.1",
     "@ngx-loading-bar/http-client": "^1.0.0-rc.1",
     "@ngx-meta/core": "^5.0.0",
     "@types/core-js": "^0.9.28",
@@ -58,7 +62,6 @@
     "ngx-bootstrap": "2.0.2",
     "ngx-chips": "1.6.3",
     "ngx-clipboard": "9.0.1",
-    "ngx-infinite-scroll": "0.7.2",
     "ngx-pipes": "^2.0.5",
     "node-sass": "^4.1.1",
     "npm-font-source-sans-pro": "^1.0.2",
@@ -74,7 +77,7 @@
     "standard": "^10.0.0",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^7.0.0",
-    "typescript": "^2.6.2",
+    "typescript": "2.6",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "video.js": "^6.2.0",
     "videojs-dock": "^2.0.2",

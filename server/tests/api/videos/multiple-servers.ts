@@ -70,6 +70,7 @@ describe('Test multiple servers', function () {
         language: 9,
         nsfw: true,
         description: 'my super description for server 1',
+        support: 'my super support text for server 1',
         tags: [ 'tag1p1', 'tag2p1' ],
         channelId: videoChannelId,
         fixture: 'video_short1.webm'
@@ -88,6 +89,7 @@ describe('Test multiple servers', function () {
           language: 9,
           nsfw: true,
           description: 'my super description for server 1',
+          support: 'my super support text for server 1',
           host: 'localhost:9001',
           account: 'root',
           isLocal,
@@ -136,8 +138,11 @@ describe('Test multiple servers', function () {
         language: 11,
         nsfw: true,
         description: 'my super description for server 2',
+        support: 'my super support text for server 2',
         tags: [ 'tag1p2', 'tag2p2', 'tag3p2' ],
-        fixture: 'video_short2.webm'
+        fixture: 'video_short2.webm',
+        thumbnailfile: 'thumbnail.jpg',
+        previewfile: 'preview.jpg'
       }
       await uploadVideo(servers[1].url, userAccessToken, videoAttributes)
 
@@ -154,6 +159,7 @@ describe('Test multiple servers', function () {
           language: 11,
           nsfw: true,
           description: 'my super description for server 2',
+          support: 'my super support text for server 2',
           host: 'localhost:9002',
           account: 'user1',
           isLocal,
@@ -184,7 +190,9 @@ describe('Test multiple servers', function () {
               resolution: 720,
               size: 710000
             }
-          ]
+          ],
+          thumbnailfile: 'thumbnail',
+          previewfile: 'preview'
         }
 
         const res = await getVideosList(server.url)
@@ -207,6 +215,7 @@ describe('Test multiple servers', function () {
         language: 11,
         nsfw: true,
         description: 'my super description for server 3',
+        support: 'my super support text for server 3',
         tags: [ 'tag1p3' ],
         fixture: 'video_short3.webm'
       }
@@ -219,6 +228,7 @@ describe('Test multiple servers', function () {
         language: 12,
         nsfw: false,
         description: 'my super description for server 3-2',
+        support: 'my super support text for server 3-2',
         tags: [ 'tag2p3', 'tag3p3', 'tag4p3' ],
         fixture: 'video_short.webm'
       }
@@ -253,6 +263,7 @@ describe('Test multiple servers', function () {
           language: 11,
           nsfw: true,
           description: 'my super description for server 3',
+          support: 'my super support text for server 3',
           host: 'localhost:9003',
           account: 'root',
           isLocal,
@@ -282,6 +293,7 @@ describe('Test multiple servers', function () {
           language: 12,
           nsfw: false,
           description: 'my super description for server 3-2',
+          support: 'my super support text for server 3-2',
           host: 'localhost:9003',
           account: 'root',
           commentsEnabled: true,
@@ -521,7 +533,10 @@ describe('Test multiple servers', function () {
         language: 13,
         nsfw: true,
         description: 'my super description updated',
-        tags: [ 'tag_up_1', 'tag_up_2' ]
+        support: 'my super support text updated',
+        tags: [ 'tag_up_1', 'tag_up_2' ],
+        thumbnailfile: 'thumbnail.jpg',
+        previewfile: 'preview.jpg'
       }
 
       await updateVideo(servers[2].url, servers[2].accessToken, toRemove[0].id, attributes)
@@ -547,6 +562,7 @@ describe('Test multiple servers', function () {
           language: 13,
           nsfw: true,
           description: 'my super description updated',
+          support: 'my super support text updated',
           host: 'localhost:9003',
           account: 'root',
           isLocal,
@@ -565,7 +581,9 @@ describe('Test multiple servers', function () {
               resolution: 720,
               size: 292677
             }
-          ]
+          ],
+          thumbnailfile: 'thumbnail',
+          previewfile: 'preview'
         }
         await completeVideoCheck(server.url, videoUpdated, checkAttributes)
       }
@@ -633,8 +651,7 @@ describe('Test multiple servers', function () {
         const res = await getVideo(server.url, videoUUID)
         const video = res.body
 
-        const test = await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
-        expect(test).to.equal(true)
+        await testImage(server.url, 'video_short1-preview.webm', video.previewPath)
       }
     })
   })
@@ -834,6 +851,7 @@ describe('Test multiple servers', function () {
           language: null,
           nsfw: false,
           description: null,
+          support: null,
           host: 'localhost:9002',
           account: 'root',
           isLocal,

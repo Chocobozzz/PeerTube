@@ -2,14 +2,31 @@ import { values } from 'lodash'
 import { extname } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, DefaultScope, ForeignKey, HasMany, HasOne, Is, IsUUID, Model, Scopes,
-  Table, UpdatedAt
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DefaultScope,
+  ForeignKey,
+  HasMany,
+  HasOne,
+  Is,
+  IsUUID,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { ActivityPubActorType } from '../../../shared/models/activitypub'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { activityPubContextify } from '../../helpers/activitypub'
 import {
-  isActorFollowersCountValid, isActorFollowingCountValid, isActorPreferredUsernameValid, isActorPrivateKeyValid,
+  isActorFollowersCountValid,
+  isActorFollowingCountValid,
+  isActorPreferredUsernameValid,
+  isActorPrivateKeyValid,
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'

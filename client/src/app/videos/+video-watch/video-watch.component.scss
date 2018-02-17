@@ -42,13 +42,13 @@
     .video-info-first-row {
       display: flex;
 
-      & > div {
+      & > div:first-child {
         flex-grow: 1;
       }
 
       .video-info-name {
         margin-right: 30px;
-        height: 40px; // Align with the action buttons
+        min-height: 40px; // Align with the action buttons
         font-size: 27px;
         font-weight: $font-semibold;
         flex-grow: 1;
@@ -80,11 +80,10 @@
       .video-actions-rates {
         display: flex;
         flex-direction: column;
-        align-items: end;
+        align-items: flex-end;
 
         .video-actions {
           height: 40px; // Align with the title
-          min-width: 215px;
           display: flex;
           align-items: center;
 
@@ -123,6 +122,10 @@
                 background-image: url('../../../assets/images/video/more.svg');
                 top: -1px;
               }
+            }
+
+            &.action-button-share {
+              width: 82px;
             }
 
             &.action-button-like.activated {

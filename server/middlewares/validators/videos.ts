@@ -4,8 +4,18 @@ import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
 import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoAbuseReasonValid, isVideoCategoryValid, isVideoDescriptionValid, isVideoExist, isVideoFile, isVideoLanguageValid,
-  isVideoLicenceValid, isVideoNameValid, isVideoPrivacyValid, isVideoRatingTypeValid, isVideoTagsValid
+  isVideoAbuseReasonValid,
+  isVideoCategoryValid,
+  isVideoDescriptionValid,
+  isVideoExist,
+  isVideoFile,
+  isVideoImage,
+  isVideoLanguageValid,
+  isVideoLicenceValid,
+  isVideoNameValid,
+  isVideoPrivacyValid,
+  isVideoRatingTypeValid, isVideoSupportValid,
+  isVideoTagsValid
 } from '../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
@@ -22,12 +32,21 @@ const videosAddValidator = [
     'This file is not supported. Please, make sure it is of the following type : '
     + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
   ),
+  body('thumbnailfile').custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
+    'This thumbnail file is not supported. Please, make sure it is of the following type : '
+    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+  ),
+  body('previewfile').custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
+    'This preview file is not supported. Please, make sure it is of the following type : '
+    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+  ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
   body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw').custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('support').optional().custom(isVideoSupportValid).withMessage('Should have a valid support text'),
   body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
   body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
@@ -37,6 +56,7 @@ const videosAddValidator = [
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
 
     if (areValidationErrors(req, res)) return
+    if (areErrorsInVideoImageFiles(req, res)) return
 
     const videoFile: Express.Multer.File = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
@@ -82,6 +102,14 @@ const videosAddValidator = [
 
 const videosUpdateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  body('thumbnailfile').custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
+    'This thumbnail file is not supported. Please, make sure it is of the following type : '
+    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+  ),
+  body('previewfile').custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
+    'This preview file is not supported. Please, make sure it is of the following type : '
+    + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+  ),
   body('name').optional().custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
   body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
@@ -89,6 +117,7 @@ const videosUpdateValidator = [
   body('nsfw').optional().custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
   body('privacy').optional().custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('support').optional().custom(isVideoSupportValid).withMessage('Should have a valid support text'),
   body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
   body('commentsEnabled').optional().custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
 
@@ -96,6 +125,7 @@ const videosUpdateValidator = [
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
+    if (areErrorsInVideoImageFiles(req, res)) return
     if (!await isVideoExist(req.params.id, res)) return
 
     const video = res.locals.video
@@ -273,4 +303,23 @@ function checkUserCanDeleteVideo (user: UserModel, video: VideoModel, res: expre
   }
 
   return true
+}
+
+function areErrorsInVideoImageFiles (req: express.Request, res: express.Response) {
+  // Files are optional
+  if (!req.files) return false
+
+  for (const imageField of [ 'thumbnail', 'preview' ]) {
+    if (!req.files[ imageField ]) continue
+
+    const imageFile = req.files[ imageField ][ 0 ] as Express.Multer.File
+    if (imageFile.size > CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max) {
+      res.status(400)
+        .send({ error: `The size of the ${imageField} is too big (>${CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max}).` })
+        .end()
+      return true
+    }
+  }
+
+  return false
 }

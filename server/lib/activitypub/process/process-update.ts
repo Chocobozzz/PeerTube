@@ -9,17 +9,24 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { TagModel } from '../../../models/video/tag'
+import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
-import { getOrCreateAccountAndVideoAndChannel, videoActivityObjectToDBAttributes, videoFileActivityUrlToDBAttributes } from '../videos'
+import {
+  generateThumbnailFromUrl,
+  getOrCreateAccountAndVideoAndChannel,
+  videoActivityObjectToDBAttributes,
+  videoFileActivityUrlToDBAttributes
+} from '../videos'
 
 async function processUpdateActivity (activity: ActivityUpdate) {
   const actor = await getOrCreateActorAndServerAndModel(activity.actor)
+  const objectType = activity.object.type
 
-  if (activity.object.type === 'Video') {
+  if (objectType === 'Video') {
     return processUpdateVideo(actor, activity)
-  } else if (activity.object.type === 'Person') {
-    return processUpdateAccount(actor, activity)
+  } else if (objectType === 'Person' || objectType === 'Application' || objectType === 'Group') {
+    return processUpdateActor(actor, activity)
   }
 
   return
@@ -72,6 +79,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       videoInstance.set('licence', videoData.licence)
       videoInstance.set('language', videoData.language)
       videoInstance.set('description', videoData.description)
+      videoInstance.set('support', videoData.support)
       videoInstance.set('nsfw', videoData.nsfw)
       videoInstance.set('commentsEnabled', videoData.commentsEnabled)
       videoInstance.set('duration', videoData.duration)
@@ -81,6 +89,10 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
       videoInstance.set('privacy', videoData.privacy)
 
       await videoInstance.save(sequelizeOptions)
+
+      // Don't block on request
+      generateThumbnailFromUrl(videoInstance, videoAttributesToUpdate.icon)
+        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoAttributesToUpdate.id, err))
 
       // Remove old video files
       const videoFileDestroyTasks: Bluebird<void>[] = []
@@ -110,33 +122,36 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
   }
 }
 
-function processUpdateAccount (actor: ActorModel, activity: ActivityUpdate) {
+function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) {
   const options = {
     arguments: [ actor, activity ],
-    errorMessage: 'Cannot update the remote account with many retries'
+    errorMessage: 'Cannot update the remote actor with many retries'
   }
 
-  return retryTransactionWrapper(updateRemoteAccount, options)
+  return retryTransactionWrapper(updateRemoteActor, options)
 }
 
-async function updateRemoteAccount (actor: ActorModel, activity: ActivityUpdate) {
-  const accountAttributesToUpdate = activity.object as ActivityPubActor
+async function updateRemoteActor (actor: ActorModel, activity: ActivityUpdate) {
+  const actorAttributesToUpdate = activity.object as ActivityPubActor
 
-  logger.debug('Updating remote account "%s".', accountAttributesToUpdate.uuid)
-  let accountInstance: AccountModel
+  logger.debug('Updating remote account "%s".', actorAttributesToUpdate.uuid)
+  let accountOrChannelInstance: AccountModel | VideoChannelModel
   let actorFieldsSave: object
-  let accountFieldsSave: object
+  let accountOrChannelFieldsSave: object
 
   // Fetch icon?
-  const avatarName = await fetchAvatarIfExists(accountAttributesToUpdate)
+  const avatarName = await fetchAvatarIfExists(actorAttributesToUpdate)
 
   try {
     await sequelizeTypescript.transaction(async t => {
       actorFieldsSave = actor.toJSON()
-      accountInstance = actor.Account
-      accountFieldsSave = actor.Account.toJSON()
 
-      await updateActorInstance(actor, accountAttributesToUpdate)
+      if (actorAttributesToUpdate.type === 'Group') accountOrChannelInstance = actor.VideoChannel
+      else accountOrChannelInstance = actor.Account
+
+      accountOrChannelFieldsSave = accountOrChannelInstance.toJSON()
+
+      await updateActorInstance(actor, actorAttributesToUpdate)
 
       if (avatarName !== undefined) {
         await updateActorAvatarInstance(actor, avatarName, t)
@@ -144,18 +159,20 @@ async function updateRemoteAccount (actor: ActorModel, activity: ActivityUpdate)
 
       await actor.save({ transaction: t })
 
-      actor.Account.set('name', accountAttributesToUpdate.name || accountAttributesToUpdate.preferredUsername)
-      await actor.Account.save({ transaction: t })
+      accountOrChannelInstance.set('name', actorAttributesToUpdate.name || actorAttributesToUpdate.preferredUsername)
+      accountOrChannelInstance.set('description', actorAttributesToUpdate.summary)
+      accountOrChannelInstance.set('support', actorAttributesToUpdate.support)
+      await accountOrChannelInstance.save({ transaction: t })
     })
 
-    logger.info('Remote account with uuid %s updated', accountAttributesToUpdate.uuid)
+    logger.info('Remote account with uuid %s updated', actorAttributesToUpdate.uuid)
   } catch (err) {
     if (actor !== undefined && actorFieldsSave !== undefined) {
       resetSequelizeInstance(actor, actorFieldsSave)
     }
 
-    if (accountInstance !== undefined && accountFieldsSave !== undefined) {
-      resetSequelizeInstance(accountInstance, accountFieldsSave)
+    if (accountOrChannelInstance !== undefined && accountOrChannelFieldsSave !== undefined) {
+      resetSequelizeInstance(accountOrChannelInstance, accountOrChannelFieldsSave)
     }
 
     // This is just a debug because we will retry the insert

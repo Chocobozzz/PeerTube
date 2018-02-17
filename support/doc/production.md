@@ -5,6 +5,8 @@
 
 ## Installation
 
+**Please don't install PeerTube for production on a small device behind a low bandwidth connection because it could slow down the fediverse.**
+
 ### Dependencies
 
 Follow the steps of the [dependencies guide](dependencies.md).
@@ -68,6 +70,8 @@ configuration.
 
 ### Webserver
 
+We only provide official configuration files for Nginx.
+
 Copy the nginx configuration template:
 
 ```
@@ -81,116 +85,30 @@ It should correspond to the paths of your storage directories (set in the config
 $ sudo vim /etc/nginx/sites-available/peertube
 ```
 
-If you want to set https with Let's Encrypt please follow the steps of [this guide](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04).
-
-An example of the nginx configuration could be:
-
-```
-server {
-  listen 80;
-  listen [::]:80;
-  server_name peertube.example.com;
-
-  access_log /var/log/nginx/peertube.example.com.access.log;
-  error_log /var/log/nginx/peertube.example.com.error.log;
-
-  rewrite ^ https://$server_name$request_uri? permanent;
-}
-
-server {
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
-  server_name peertube.example.com;
-
-  # For example with Let's Encrypt
-  ssl_certificate      /etc/letsencrypt/live/peertube.example.com/fullchain.pem;
-  ssl_certificate_key  /etc/letsencrypt/live/peertube.example.com/privkey.pem;
-  ssl_trusted_certificate /etc/letsencrypt/live/peertube.example.com/chain.pem;
-
-  access_log /var/log/nginx/peertube.example.com.access.log;
-  error_log /var/log/nginx/peertube.example.com.error.log;
-
-  location ^~ '/.well-known/acme-challenge' {
-    default_type "text/plain";
-    root /var/www/certbot;
-  }
-
-  location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
-    add_header Cache-Control "public, max-age=31536000, immutable";
-
-    alias /var/www/peertube/peertube-latest/client/dist/$1;
-  }
-
-  location ~ ^/static/(thumbnails|avatars)/(.*)$ {
-    add_header Cache-Control "public, max-age=31536000, immutable";
-
-    alias /var/www/peertube/storage/$1/$2;
-  }
-
-  location / {
-    proxy_pass http://localhost:9000;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-    # For the video upload
-    client_max_body_size 8G;
-    proxy_connect_timeout       600;
-    proxy_send_timeout          600;
-    proxy_read_timeout          600;
-    send_timeout                600;
-  }
-
-  # Bypass PeerTube webseed route for better performances
-  location /static/webseed {
-    if ($request_method = 'OPTIONS') {
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-      add_header 'Access-Control-Max-Age' 1728000;
-      add_header 'Content-Type' 'text/plain charset=UTF-8';
-      add_header 'Content-Length' 0;
-      return 204;
-    }
-
-    if ($request_method = 'GET') {
-      add_header 'Access-Control-Allow-Origin' '*';
-      add_header 'Access-Control-Allow-Methods' 'GET, OPTIONS';
-      add_header 'Access-Control-Allow-Headers' 'Range,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
-
-      # Don't spam access log file with byte range requests
-      access_log off;
-    }
-
-    alias /var/www/peertube/storage/videos;
-  }
-
-  # Websocket tracker
-  location /tracker/socket {
-    # Peers send a message to the tracker every 15 minutes
-    # Don't close the websocket before this time
-    proxy_read_timeout 1200s;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_http_version 1.1;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-    proxy_pass http://localhost:9000;
-  }
-}
-```
-
-
 Activate the configuration file:
 
 ```
 $ sudo ln -s /etc/nginx/sites-available/peertube /etc/nginx/sites-enabled/peertube
+```
+
+To generate the certificate for your domain as required to make https work you can use [Let's Encrypt](https://letsencrypt.org/):
+
+```
+$ sudo systemctl stop nginx
+$ sudo certbot --authenticator standalone --installer nginx --post-hook "systemctl start nginx"
+```
+
+Remember your certificate will expire in 90 days, and thus needs renewal.
+
+Now you have the certificates you can reload nginx:
+
+```
 $ sudo systemctl reload nginx
 ```
 
 ### Systemd
 
-Copy the nginx configuration template:
+Copy the SystemD configuration template:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
@@ -200,30 +118,6 @@ Update the service file:
 
 ```
 $ sudo vim /etc/systemd/system/peertube.service
-```
-
-It should look like this:
-
-```
-[Unit]
-Description=PeerTube daemon
-After=network.target
-
-[Service]
-Type=simple
-Environment=NODE_ENV=production
-Environment=NODE_CONFIG_DIR=/var/www/peertube/config
-User=peertube
-Group=peertube
-ExecStart=/usr/bin/npm start
-WorkingDirectory=/var/www/peertube/peertube-latest
-StandardOutput=syslog
-StandardError=syslog
-SyslogIdentifier=peertube
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
 ```
 
 
@@ -256,6 +150,16 @@ $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/conf
 ```
 
 ## Upgrade
+
+#### Auto (minor versions only)
+
+```
+$ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube ./upgrade.sh
+$ diff /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
+$ sudo systemctl restart peertube && sudo journalctl -fu peertube
+```
+
+#### Manually
 
 Make a SQL backup
 
@@ -291,7 +195,7 @@ Copy new configuration defaults values and update your configuration file:
 
 ```
 $ sudo -u peertube cp /var/www/peertube/versions/peertube-${VERSION}/config/default.yaml /var/www/peertube/config/default.yaml
-$ diff /var/www/peertube/versions/peertube-${VERSION}/config//production.yaml.example /var/www/peertube/config/production.yaml
+$ diff /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
 ```
 
 Change the link to point to the latest version:
@@ -316,6 +220,6 @@ Change `peertube-latest` destination to the previous version and restore your SQ
 $ OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
     cd /var/www/peertube && rm ./peertube-latest && \
     sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
-    pg_restore -U peertube -c -d peertube_prod "$SQL_BACKUP_PATH"
+    pg_restore -U peertube -W -h localhost -c -d peertube_prod "$SQL_BACKUP_PATH"
     sudo systemctl restart peertube
 ```

@@ -5,3 +5,34 @@
     text-align: left;
   }
 }
+
+@media screen and (max-width: 500px) {
+  .videos {
+    text-align: center;
+
+    /deep/ .video-miniature {
+      padding-right: 0;
+      height: auto;
+      width: 100%;
+      margin-bottom: 20px;
+
+      .video-miniature-information {
+        width: 100% !important;
+
+        span {
+          width: 100%;
+        }
+      }
+
+      /deep/ .video-thumbnail {
+        width: 100%;
+        height: auto;
+
+        img {
+          width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+}

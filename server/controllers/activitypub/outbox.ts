@@ -1,5 +1,6 @@
 import * as express from 'express'
 import { Activity } from '../../../shared/models/activitypub/activity'
+import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB } from '../../initializers/constants'
@@ -43,12 +44,12 @@ async function outboxController (req: express.Request, res: express.Response, ne
 
   for (const video of data.data) {
     const byActor = video.VideoChannel.Account.Actor
-    const createActivityAudience = buildAudience(followersMatrix[byActor.id])
+    const createActivityAudience = buildAudience(followersMatrix[byActor.id], video.privacy === VideoPrivacy.PUBLIC)
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
       const videoShare = video.VideoShares[0]
-      const announceAudience = buildAudience(followersMatrix[actor.id])
+      const announceAudience = buildAudience(followersMatrix[actor.id], video.privacy === VideoPrivacy.PUBLIC)
       const announceActivity = await announceActivityData(videoShare.url, actor, video.url, undefined, announceAudience)
 
       activities.push(announceActivity)

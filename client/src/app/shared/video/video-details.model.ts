@@ -18,6 +18,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   languageLabel: string
   language: number
   description: string
+  support: string
   duration: number
   durationLabel: string
   id: number

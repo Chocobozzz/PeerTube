@@ -18,6 +18,7 @@ import { SortField } from './sort-field.type'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
+import { objectToFormData } from '@app/shared/misc/utils'
 
 @Injectable()
 export class VideoService {
@@ -29,6 +30,10 @@ export class VideoService {
     private restService: RestService
   ) {}
 
+  getVideoViewUrl (uuid: string) {
+    return VideoService.BASE_VIDEO_URL + uuid + '/views'
+  }
+
   getVideo (uuid: string): Observable<VideoDetails> {
     return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
                         .map(videoHash => new VideoDetails(videoHash))
@@ -36,16 +41,16 @@ export class VideoService {
   }
 
   viewVideo (uuid: string): Observable<VideoDetails> {
-    return this.authHttp.post(VideoService.BASE_VIDEO_URL + uuid + '/views', {})
+    return this.authHttp.post(this.getVideoViewUrl(uuid), {})
       .map(this.restExtractor.extractDataBool)
       .catch(this.restExtractor.handleError)
   }
 
   updateVideo (video: VideoEdit) {
-    const language = video.language || null
-    const licence = video.licence || null
-    const category = video.category || null
-    const description = video.description || null
+    const language = video.language || undefined
+    const licence = video.licence || undefined
+    const category = video.category || undefined
+    const description = video.description || undefined
 
     const body: VideoUpdate = {
       name: video.name,
@@ -56,10 +61,14 @@ export class VideoService {
       privacy: video.privacy,
       tags: video.tags,
       nsfw: video.nsfw,
-      commentsEnabled: video.commentsEnabled
+      commentsEnabled: video.commentsEnabled,
+      thumbnailfile: video.thumbnailfile,
+      previewfile: video.previewfile
     }
 
-    return this.authHttp.put(VideoService.BASE_VIDEO_URL + video.id, body)
+    const data = objectToFormData(body)
+
+    return this.authHttp.put(VideoService.BASE_VIDEO_URL + video.id, data)
                         .map(this.restExtractor.extractDataBool)
                         .catch(this.restExtractor.handleError)
   }

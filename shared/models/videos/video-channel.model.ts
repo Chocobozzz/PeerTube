@@ -4,6 +4,7 @@ import { Video } from './video.model'
 export interface VideoChannel extends Actor {
   displayName: string
   description: string
+  support: string
   isLocal: boolean
   owner?: {
     name: string

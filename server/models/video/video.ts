@@ -40,7 +40,7 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
-  isVideoPrivacyValid
+  isVideoPrivacyValid, isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
@@ -68,6 +68,7 @@ import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
+import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
@@ -174,6 +175,10 @@ enum ScopeNames {
                   {
                     attributes: [ 'host' ],
                     model: () => ServerModel.unscoped(),
+                    required: false
+                  },
+                  {
+                    model: () => AvatarModel.unscoped(),
                     required: false
                   }
                 ]
@@ -298,6 +303,12 @@ export class VideoModel extends Model<VideoModel> {
   @Is('VideoDescription', value => throwIfNotValid(value, isVideoDescriptionValid, 'description'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max))
   description: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('VideoSupport', value => throwIfNotValid(value, isVideoSupportValid, 'support'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.SUPPORT.max))
+  support: string
 
   @AllowNull(false)
   @Is('VideoDuration', value => throwIfNotValid(value, isVideoDurationValid, 'duration'))
@@ -841,7 +852,7 @@ export class VideoModel extends Model<VideoModel> {
     return join(STATIC_PATHS.PREVIEWS, this.getPreviewName())
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (): Video {
     let serverHost
 
     if (this.VideoChannel.Account.Actor.Server) {
@@ -875,10 +886,10 @@ export class VideoModel extends Model<VideoModel> {
       embedPath: this.getEmbedPath(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
-    } as Video
+    }
   }
 
-  toFormattedDetailsJSON () {
+  toFormattedDetailsJSON (): VideoDetails {
     const formattedJson = this.toFormattedJSON()
 
     // Maybe our server is not up to date and there are new privacy settings since our version
@@ -888,6 +899,7 @@ export class VideoModel extends Model<VideoModel> {
     const detailsJson = {
       privacyLabel,
       privacy: this.privacy,
+      support: this.support,
       descriptionPath: this.getDescriptionPath(),
       channel: this.VideoChannel.toFormattedJSON(),
       account: this.VideoChannel.Account.toFormattedJSON(),
@@ -917,7 +929,7 @@ export class VideoModel extends Model<VideoModel> {
         return -1
       })
 
-    return Object.assign(formattedJson, detailsJson) as VideoDetails
+    return Object.assign(formattedJson, detailsJson)
   }
 
   toActivityPubObject (): VideoTorrentObject {
@@ -957,17 +969,6 @@ export class VideoModel extends Model<VideoModel> {
     let dislikesObject
 
     if (Array.isArray(this.AccountVideoRates)) {
-      const likes: string[] = []
-      const dislikes: string[] = []
-
-      for (const rate of this.AccountVideoRates) {
-        if (rate.type === 'like') {
-          likes.push(rate.Account.Actor.url)
-        } else if (rate.type === 'dislike') {
-          dislikes.push(rate.Account.Actor.url)
-        }
-      }
-
       const res = this.toRatesActivityPubObjects()
       likesObject = res.likesObject
       dislikesObject = res.dislikesObject
@@ -1032,6 +1033,7 @@ export class VideoModel extends Model<VideoModel> {
       updated: this.updatedAt.toISOString(),
       mediaType: 'text/markdown',
       content: this.getTruncatedDescription(),
+      support: this.support,
       icon: {
         type: 'Image',
         url: this.getThumbnailUrl(baseUrlHttp),

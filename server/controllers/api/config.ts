@@ -61,6 +61,12 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       }
     },
     video: {
+      image: {
+        extensions: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME,
+        size: {
+          max: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max
+        }
+      },
       file: {
         extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
       }

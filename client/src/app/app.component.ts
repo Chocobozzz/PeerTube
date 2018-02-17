@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
-import { isInMobileView } from '@app/shared/misc/utils'
+import { isInSmallView } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-app',
@@ -54,14 +54,14 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoPrivacies()
 
     // Do not display menu on small screens
-    if (isInMobileView()) {
+    if (isInSmallView()) {
       this.isMenuDisplayed = false
     }
 
     this.router.events.subscribe(
       e => {
         // User clicked on a link in the menu, change the page
-        if (e instanceof GuardsCheckStart && isInMobileView()) {
+        if (e instanceof GuardsCheckStart && isInSmallView()) {
           this.isMenuDisplayed = false
         }
       }

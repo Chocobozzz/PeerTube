@@ -16,6 +16,10 @@ function isVideoChannelNameValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.NAME)
 }
 
+function isVideoChannelSupportValid (value: string) {
+  return value === null || (exists(value) && validator.isLength(value, VIDEO_CHANNELS_CONSTRAINTS_FIELDS.SUPPORT))
+}
+
 async function isVideoChannelExist (id: string, res: express.Response) {
   let videoChannel: VideoChannelModel
   if (validator.isInt(id)) {
@@ -41,5 +45,6 @@ async function isVideoChannelExist (id: string, res: express.Response) {
 export {
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
+  isVideoChannelSupportValid,
   isVideoChannelExist
 }

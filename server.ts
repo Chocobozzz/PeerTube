@@ -104,11 +104,11 @@ const trackerServer = new TrackerServer({
 })
 
 trackerServer.on('error', function (err) {
-  logger.error(err)
+  logger.error('Error in websocket tracker.', err)
 })
 
 trackerServer.on('warning', function (err) {
-  logger.error(err)
+  logger.error('Warning in websocket tracker.', err)
 })
 
 const server = http.createServer(app)
@@ -158,8 +158,13 @@ app.use(function (req, res, next) {
 })
 
 app.use(function (err, req, res, next) {
-  logger.error(err, err)
-  res.sendStatus(err.status || 500)
+  let error = 'Unknown error.'
+  if (err) {
+    error = err.stack || err.message || err
+  }
+
+  logger.error('Error in controller.', { error })
+  return res.status(err.status || 500).end()
 })
 
 // ----------- Run -----------

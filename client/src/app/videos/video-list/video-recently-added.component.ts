@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -28,7 +29,9 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
     super.ngOnInit()
   }
 
-  getVideosObservable () {
-    return this.videoService.getVideos(this.pagination, this.sort)
+  getVideosObservable (page: number) {
+    const newPagination = immutableAssign(this.pagination, { currentPage: page })
+
+    return this.videoService.getVideos(newPagination, this.sort)
   }
 }

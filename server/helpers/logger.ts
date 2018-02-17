@@ -21,12 +21,12 @@ function keysExcluder (key, value) {
   return excludedKeys[key] === true ? undefined : value
 }
 
-const loggerFormat = winston.format.printf((info) => {
+const loggerFormat = winston.format.printf(info => {
   let additionalInfos = JSON.stringify(info, keysExcluder, 2)
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
-  if (info.message.stack !== undefined) info.message = info.message.stack
+  if (info.message && info.message.stack !== undefined) info.message = info.message.stack
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 

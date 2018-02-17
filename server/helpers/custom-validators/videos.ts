@@ -8,12 +8,12 @@ import {
   CONSTRAINTS_FIELDS,
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
+  VIDEO_LICENCES, VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES
 } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
-import { exists, isArray } from './misc'
+import { exists, isArray, isFileValid } from './misc'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
@@ -42,6 +42,10 @@ function isVideoDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.DESCRIPTION))
 }
 
+function isVideoSupportValid (value: string) {
+  return value === null || (exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.SUPPORT))
+}
+
 function isVideoNameValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.NAME)
 }
@@ -68,20 +72,18 @@ function isVideoRatingTypeValid (value: string) {
   return value === 'none' || values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
 }
 
+const videoFileTypes = Object.keys(VIDEO_MIMETYPE_EXT).map(m => `(${m})`)
+const videoFileTypesRegex = videoFileTypes.join('|')
 function isVideoFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
-  // Should have files
-  if (!files) return false
-  if (isArray(files)) return false
+  return isFileValid(files, videoFileTypesRegex, 'videofile')
+}
 
-  // Should have videofile file
-  const videofile = files['videofile']
-  if (!videofile || videofile.length === 0) return false
-
-  // The file should exist
-  const file = videofile[0]
-  if (!file || !file.originalname) return false
-
-  return new RegExp('^video/(webm|mp4|ogg)$', 'i').test(file.mimetype)
+const videoImageTypes = CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME
+  .map(v => v.replace('.', ''))
+  .join('|')
+const videoImageTypesRegex = `image/(${videoImageTypes})`
+function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[], field: string) {
+  return isFileValid(files, videoImageTypesRegex, field, true)
 }
 
 function isVideoPrivacyValid (value: string) {
@@ -141,5 +143,7 @@ export {
   isVideoPrivacyValid,
   isVideoFileResolutionValid,
   isVideoFileSizeValid,
-  isVideoExist
+  isVideoExist,
+  isVideoImage,
+  isVideoSupportValid
 }

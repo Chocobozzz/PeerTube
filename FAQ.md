@@ -37,3 +37,16 @@ If you already have followers, you can't.
 
 If you don't have any followers, update your configuration and run
 `NODE_ENV=production npm run update-host` to update the torrent files (they contain your domain name).
+
+
+## Should I have a big server to run PeerTube?
+
+Not really. For instance, the demonstration server [https://peertube.cpy.re](https://peertube.cpy.re) has 2 vCore and 2GB of RAM and consumes on average:
+ * **CPU** -> nginx ~ 20%, peertube ~ 10%,   postgres ~ 1%, redis ~ 3%
+ * **RAM** -> nginx ~ 6MB, peertube ~ 120MB, postgres ~ 10MB, redis ~ 5MB
+ 
+So you would need:
+ * **CPU** 1 core if you don't enable transcoding, 2 at least if you enable it
+ * **RAM** 1GB
+ * **Storage** Completely depends on how many videos your users will upload
+

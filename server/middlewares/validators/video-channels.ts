@@ -5,7 +5,7 @@ import { isAccountIdExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid, isVideoChannelExist,
-  isVideoChannelNameValid
+  isVideoChannelNameValid, isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
 import { UserModel } from '../../models/account/user'
@@ -27,7 +27,8 @@ const listVideoAccountChannelsValidator = [
 
 const videoChannelsAddValidator = [
   body('name').custom(isVideoChannelNameValid).withMessage('Should have a valid name'),
-  body('description').custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
+  body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
+  body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsAdd parameters', { parameters: req.body })
@@ -42,6 +43,7 @@ const videoChannelsUpdateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('name').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
+  body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })

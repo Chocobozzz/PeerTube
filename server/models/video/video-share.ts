@@ -1,4 +1,5 @@
 import * as Sequelize from 'sequelize'
+import * as Bluebird from 'bluebird'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
@@ -115,7 +116,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
       .then(res => res.map(r => r.Actor))
   }
 
-  static loadActorsByVideoOwner (actorOwnerId: number, t: Sequelize.Transaction) {
+  static loadActorsByVideoOwner (actorOwnerId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
     const query = {
       attributes: [],
       include: [
@@ -150,6 +151,31 @@ export class VideoShareModel extends Model<VideoShareModel> {
     }
 
     return VideoShareModel.scope(ScopeNames.FULL).findAll(query)
+      .then(res => res.map(r => r.Actor))
+  }
+
+  static loadActorsByVideoChannel (videoChannelId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
+    const query = {
+      attributes: [],
+      include: [
+        {
+          model: ActorModel,
+          required: true
+        },
+        {
+          attributes: [],
+          model: VideoModel,
+          required: true,
+          where: {
+            channelId: videoChannelId
+          }
+        }
+      ],
+      transaction: t
+    }
+
+    return VideoShareModel.scope(ScopeNames.FULL)
+      .findAll(query)
       .then(res => res.map(r => r.Actor))
   }
 }

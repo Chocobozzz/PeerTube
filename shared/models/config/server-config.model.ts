@@ -23,6 +23,12 @@ export interface ServerConfig {
   }
 
   video: {
+    image: {
+      size: {
+        max: number
+      }
+      extensions: string[]
+    },
     file: {
       extensions: string[]
     }

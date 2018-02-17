@@ -1,44 +1,44 @@
 <div *ngIf="pagination.totalItems === 0">No results.</div>
 
 <div
-  class="videos"
-  infiniteScroll
-  [infiniteScrollDistance]="0.5"
-  [infiniteScrollUpDistance]="1.5"
-  (scrolled)="onNearOfBottom()"
-  (scrolledUp)="onNearOfTop()"
+  myInfiniteScroller
+  [pageHeight]="pageHeight"
+  (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
+  class="videos" #videoElement
 >
-  <div class="video" *ngFor="let video of videos; let i = index">
-    <div class="checkbox-container">
-      <input [id]="'video-check-' + i" type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
-      <label [for]="'video-check-' + i"></label>
-    </div>
-
-    <my-video-thumbnail [video]="video"></my-video-thumbnail>
-
-    <div class="video-info">
-      <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
-      <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
-    </div>
-
-    <!-- Display only once -->
-    <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0">
-      <div class="action-selection-mode-child">
-        <span class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
-          Cancel
-        </span>
-
-        <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
-          <span class="icon icon-delete-white"></span>
-          Delete
-        </span>
+  <div *ngFor="let videos of videoPages; let i = index" class="videos-page">
+    <div class="video" *ngFor="let video of videos; let j = index">
+      <div class="checkbox-container">
+        <input [id]="'video-check-' + video.id" type="checkbox" [(ngModel)]="checkedVideos[video.id]" />
+        <label [for]="'video-check-' + video.id"></label>
       </div>
-    </div>
 
-    <div class="video-buttons" *ngIf="isInSelectionMode() === false">
-      <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
+      <my-video-thumbnail [video]="video"></my-video-thumbnail>
 
-      <my-edit-button [routerLink]="[ '/videos', 'edit', video.uuid ]"></my-edit-button>
+      <div class="video-info">
+        <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
+        <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+      </div>
+
+      <!-- Display only once -->
+      <div class="action-selection-mode" *ngIf="isInSelectionMode() === true && i === 0 && j === 0">
+        <div class="action-selection-mode-child">
+          <span class="action-button action-button-cancel-selection" (click)="abortSelectionMode()">
+            Cancel
+          </span>
+
+          <span class="action-button action-button-delete-selection" (click)="deleteSelectedVideos()">
+            <span class="icon icon-delete-white"></span>
+            Delete
+          </span>
+        </div>
+      </div>
+
+      <div class="video-buttons" *ngIf="isInSelectionMode() === false">
+        <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
+
+        <my-edit-button [routerLink]="[ '/videos', 'edit', video.uuid ]"></my-edit-button>
+      </div>
     </div>
   </div>
 </div>

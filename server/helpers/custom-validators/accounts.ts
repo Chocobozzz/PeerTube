@@ -3,10 +3,14 @@ import { Response } from 'express'
 import 'express-validator'
 import * as validator from 'validator'
 import { AccountModel } from '../../models/account/account'
-import { isUserUsernameValid } from './users'
+import { isUserDescriptionValid, isUserUsernameValid } from './users'
 
 function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
+}
+
+function isAccountDescriptionValid (value: string) {
+  return isUserDescriptionValid(value)
 }
 
 function isAccountIdExist (id: number | string, res: Response) {
@@ -48,5 +52,6 @@ async function isAccountExist (p: Bluebird<AccountModel>, res: Response) {
 export {
   isAccountIdExist,
   isLocalAccountNameExist,
+  isAccountDescriptionValid,
   isAccountNameValid
 }

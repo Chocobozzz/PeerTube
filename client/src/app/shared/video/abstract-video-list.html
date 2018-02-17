@@ -6,17 +6,17 @@
   <div *ngIf="pagination.totalItems === 0">No results.</div>
 
   <div
-    class="videos"
-    infiniteScroll
-    [infiniteScrollUpDistance]="1.5"
-    [infiniteScrollDistance]="0.5"
-    (scrolled)="onNearOfBottom()"
-    (scrolledUp)="onNearOfTop()"
+    myInfiniteScroller
+    [pageHeight]="pageHeight"
+    (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
+    class="videos" #videoElement
   >
-    <my-video-miniature
-      class="ng-animate"
-      *ngFor="let video of videos" [video]="video" [user]="user"
-    >
-    </my-video-miniature>
+    <div *ngFor="let videos of videoPages" class="videos-page">
+      <my-video-miniature
+        class="ng-animate"
+        *ngFor="let video of videos" [video]="video" [user]="user"
+      >
+      </my-video-miniature>
+    </div>
   </div>
 </div>

@@ -31,6 +31,11 @@ export const VIDEO_LANGUAGE = {
   MESSAGES: {}
 }
 
+export const VIDEO_IMAGE = {
+  VALIDATORS: [ ],
+  MESSAGES: {}
+}
+
 export const VIDEO_CHANNEL = {
   VALIDATORS: [ Validators.required ],
   MESSAGES: {

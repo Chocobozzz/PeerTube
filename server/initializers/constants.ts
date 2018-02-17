@@ -12,7 +12,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 190
+const LAST_MIGRATION_VERSION = 195
 
 // ---------------------------------------------------------------------------
 
@@ -168,6 +168,7 @@ const CONSTRAINTS_FIELDS = {
   USERS: {
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
+    DESCRIPTION: { min: 3, max: 250 }, // Length
     VIDEO_QUOTA: { min: -1 }
   },
   VIDEO_ABUSES: {
@@ -176,12 +177,20 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
+    SUPPORT: { min: 3, max: 300 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
-    DESCRIPTION: { min: 3, max: 3000 }, // Length
+    DESCRIPTION: { min: 3, max: 10000 }, // Length
+    SUPPORT: { min: 3, max: 300 }, // Length
+    IMAGE: {
+      EXTNAME: [ '.jpg', '.jpeg' ],
+      FILE_SIZE: {
+        max: 2 * 1024 * 1024 // 2MB
+      }
+    },
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 1 }, // Number
@@ -285,7 +294,7 @@ const VIDEO_MIMETYPE_EXT = {
   'video/mp4': '.mp4'
 }
 
-const AVATAR_MIMETYPE_EXT = {
+const IMAGE_MIMETYPE_EXT = {
   'image/png': '.png',
   'image/jpg': '.jpg',
   'image/jpeg': '.jpg'
@@ -427,7 +436,7 @@ export {
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
   USER_PASSWORD_RESET_LIFETIME,
-  AVATAR_MIMETYPE_EXT,
+  IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
   JOB_COMPLETED_LIFETIME
 }

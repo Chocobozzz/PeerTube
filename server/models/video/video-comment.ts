@@ -188,6 +188,27 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       }) as AccountModel
     }
 
+    if (!instance.Video) {
+      instance.Video = await instance.$get('Video', {
+        include: [
+          {
+            model: VideoChannelModel,
+            include: [
+              {
+                model: AccountModel,
+                include: [
+                  {
+                    model: ActorModel
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        transaction: options.transaction
+      }) as VideoModel
+    }
+
     if (instance.isOwned()) {
       await sendDeleteVideoComment(instance, options.transaction)
     }

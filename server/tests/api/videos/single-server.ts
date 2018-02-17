@@ -26,6 +26,7 @@ describe('Test a single server', function () {
     language: 3,
     nsfw: true,
     description: 'my super description',
+    support: 'my super support text',
     host: 'localhost:9001',
     account: 'root',
     isLocal: true,
@@ -54,6 +55,7 @@ describe('Test a single server', function () {
     language: 5,
     nsfw: false,
     description: 'my super description updated',
+    support: 'my super support text updated',
     host: 'localhost:9001',
     account: 'root',
     isLocal: true,
@@ -341,9 +343,7 @@ describe('Test a single server', function () {
 
     for (const video of videos) {
       const videoName = video.name.replace(' name', '')
-      const test = await testImage(server.url, videoName, video.thumbnailPath)
-
-      expect(test).to.equal(true)
+      await testImage(server.url, videoName, video.thumbnailPath)
     }
   })
 

@@ -16,6 +16,9 @@ smtp:
   username: null
   password: null
 
+log:
+  level: 'debug'
+
 signup:
   enabled: true
 

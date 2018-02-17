@@ -3,9 +3,18 @@
 import { expect } from 'chai'
 import { existsSync, readFile } from 'fs'
 import * as parseTorrent from 'parse-torrent'
-import { extname, isAbsolute, join } from 'path'
+import { extname, join } from 'path'
 import * as request from 'supertest'
-import { getMyUserInformation, makeGetRequest, root, ServerInfo, testImage } from '../'
+import {
+  buildAbsoluteFixturePath,
+  getMyUserInformation,
+  makeGetRequest,
+  makePutBodyRequest,
+  makeUploadRequest,
+  root,
+  ServerInfo,
+  testImage
+} from '../'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { readdirPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
@@ -23,6 +32,8 @@ type VideoAttributes = {
   channelId?: number
   privacy?: VideoPrivacy
   fixture?: string
+  thumbnailfile?: string
+  previewfile?: string
 }
 
 function getVideoCategories (url: string) {
@@ -228,8 +239,8 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     defaultChannelId = res.body.videoChannels[0].id
   } catch (e) { /* empty */ }
 
-  // Default attributes
-  let attributes = {
+  // Override default attributes
+  const attributes = Object.assign({
     name: 'my super video',
     category: 5,
     licence: 4,
@@ -237,46 +248,52 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     channelId: defaultChannelId,
     nsfw: true,
     description: 'my super description',
+    support: 'my super support text',
     tags: [ 'tag' ],
     privacy: VideoPrivacy.PUBLIC,
     commentsEnabled: true,
     fixture: 'video_short.webm'
-  }
-  attributes = Object.assign(attributes, videoAttributesArg)
+  }, videoAttributesArg)
 
   const req = request(url)
               .post(path)
               .set('Accept', 'application/json')
               .set('Authorization', 'Bearer ' + accessToken)
               .field('name', attributes.name)
-              .field('category', attributes.category.toString())
-              .field('licence', attributes.licence.toString())
               .field('nsfw', JSON.stringify(attributes.nsfw))
               .field('commentsEnabled', JSON.stringify(attributes.commentsEnabled))
-              .field('description', attributes.description)
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
 
+  if (attributes.description !== undefined) {
+    req.field('description', attributes.description)
+  }
   if (attributes.language !== undefined) {
     req.field('language', attributes.language.toString())
+  }
+  if (attributes.category !== undefined) {
+    req.field('category', attributes.category.toString())
+  }
+  if (attributes.licence !== undefined) {
+    req.field('licence', attributes.licence.toString())
   }
 
   for (let i = 0; i < attributes.tags.length; i++) {
     req.field('tags[' + i + ']', attributes.tags[i])
   }
 
-  let filePath = ''
-  if (isAbsolute(attributes.fixture)) {
-    filePath = attributes.fixture
-  } else {
-    filePath = join(__dirname, '..', '..', 'api', 'fixtures', attributes.fixture)
+  if (attributes.thumbnailfile !== undefined) {
+    req.attach('thumbnailfile', buildAbsoluteFixturePath(attributes.thumbnailfile))
+  }
+  if (attributes.previewfile !== undefined) {
+    req.attach('previewfile', buildAbsoluteFixturePath(attributes.previewfile))
   }
 
-  return req.attach('videofile', filePath)
+  return req.attach('videofile', buildAbsoluteFixturePath(attributes.fixture))
             .expect(specialStatus)
 }
 
-function updateVideo (url: string, accessToken: string, id: number | string, attributes: VideoAttributes, specialStatus = 204) {
+function updateVideo (url: string, accessToken: string, id: number | string, attributes: VideoAttributes, statusCodeExpected = 204) {
   const path = '/api/v1/videos/' + id
   const body = {}
 
@@ -290,12 +307,30 @@ function updateVideo (url: string, accessToken: string, id: number | string, att
   if (attributes.tags) body['tags'] = attributes.tags
   if (attributes.privacy) body['privacy'] = attributes.privacy
 
-  return request(url)
-          .put(path)
-          .send(body)
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + accessToken)
-          .expect(specialStatus)
+  // Upload request
+  if (attributes.thumbnailfile || attributes.previewfile) {
+    const attaches: any = {}
+    if (attributes.thumbnailfile) attaches.thumbnailfile = attributes.thumbnailfile
+    if (attributes.previewfile) attaches.previewfile = attributes.previewfile
+
+    return makeUploadRequest({
+      url,
+      method: 'PUT',
+      path,
+      token: accessToken,
+      fields: body,
+      attaches,
+      statusCodeExpected
+    })
+  }
+
+  return makePutBodyRequest({
+    url,
+    path,
+    fields: body,
+    token: accessToken,
+    statusCodeExpected
+  })
 }
 
 function rateVideo (url: string, accessToken: string, id: number, rating: string, specialStatus = 204) {
@@ -332,6 +367,7 @@ async function completeVideoCheck (
     nsfw: boolean
     commentsEnabled: boolean
     description: string
+    support: string
     host: string
     account: string
     isLocal: boolean,
@@ -349,7 +385,9 @@ async function completeVideoCheck (
     files: {
       resolution: number
       size: number
-    }[]
+    }[],
+    thumbnailfile?: string
+    previewfile?: string
   }
 ) {
   if (!attributes.likes) attributes.likes = 0
@@ -408,8 +446,13 @@ async function completeVideoCheck (
     const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
     expect(file.size).to.be.above(minSize).and.below(maxSize)
 
-    const test = await testImage(url, attributes.fixture, videoDetails.thumbnailPath)
-    expect(test).to.equal(true)
+    {
+      await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
+    }
+
+    if (attributes.previewfile) {
+      await testImage(url, attributes.previewfile, videoDetails.previewPath)
+    }
 
     const torrent = await webtorrentAdd(magnetUri, true)
     expect(torrent.files).to.be.an('array')

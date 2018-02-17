@@ -1,8 +1,9 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { HttpModule } from '@angular/http'
 import { RouterModule } from '@angular/router'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { LoadingBarModule } from '@ngx-loading-bar/core'
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 
 import { SimpleNotificationsModule } from 'angular2-notifications'
 import { ModalModule } from 'ngx-bootstrap/modal'
@@ -16,12 +17,14 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule,
     RouterModule,
     BrowserAnimationsModule,
 
     ModalModule,
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+
+    LoadingBarHttpClientModule,
+    LoadingBarModule.forRoot()
   ],
 
   declarations: [
@@ -30,6 +33,8 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
 
   exports: [
     SimpleNotificationsModule,
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
 
     ConfirmComponent
   ],

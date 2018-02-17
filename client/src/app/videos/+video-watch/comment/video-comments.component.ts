@@ -160,11 +160,8 @@ export class VideoCommentsComponent implements OnChanges {
       this.threadComments = {}
       this.threadLoading = {}
       this.inReplyToCommentId = undefined
-      this.componentPagination = {
-        currentPage: 1,
-        itemsPerPage: 10,
-        totalItems: null
-      }
+      this.componentPagination.currentPage = 1
+      this.componentPagination.totalItems = null
 
       this.loadMoreComments()
     }
