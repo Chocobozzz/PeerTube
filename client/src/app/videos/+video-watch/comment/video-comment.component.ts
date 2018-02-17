@@ -86,8 +86,4 @@ export class VideoCommentComponent implements OnInit {
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
       )
   }
-
-  getCommentUrl (commentId) {
-    return '/videos/watch/' + this.video.uuid + '?markedcomment=' + commentId
-  }
 }

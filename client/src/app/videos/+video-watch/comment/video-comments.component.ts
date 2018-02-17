@@ -178,11 +178,11 @@ export class VideoCommentsComponent implements OnChanges {
       this.componentPagination.currentPage = 1
       this.componentPagination.totalItems = null
 
-      // Find marked comment in GET params
-      this.activatedRoute.queryParams.forEach(
-        value => {
-          if (value.markedcomment) {
-            this.markedCommentID = Number(value.markedcomment)
+      // Find marked comment in params
+      this.activatedRoute.params.subscribe(
+        params => {
+          if (params['commentId']) {
+            this.markedCommentID = +params['commentId']
           }
         }
       )
