@@ -32,6 +32,13 @@
       }
     }
 
+    .marked-comment {
+      background-color: #F5F5F5;
+      padding-left: 3px;
+      padding-right: 3px;
+      font-size: 12px;
+    }
+
     .comment-html {
       a {
         @include disable-default-a-behaviour;

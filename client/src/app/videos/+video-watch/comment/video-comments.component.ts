@@ -9,6 +9,7 @@ import { SortField } from '../../../shared/video/sort-field.type'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'my-video-comments',
@@ -29,12 +30,14 @@ export class VideoCommentsComponent implements OnChanges {
   inReplyToCommentId: number
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
+  markedCommentID: number
 
   constructor (
     private authService: AuthService,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private videoCommentService: VideoCommentService
+    private videoCommentService: VideoCommentService,
+    private activatedRoute: ActivatedRoute
   ) {}
 
   ngOnChanges (changes: SimpleChanges) {
@@ -63,6 +66,18 @@ export class VideoCommentsComponent implements OnChanges {
         res => {
           this.comments = this.comments.concat(res.comments)
           this.componentPagination.totalItems = res.totalComments
+
+          if (this.markedCommentID) {
+            // If there is a marked comment, retrieve it separately as it may not be on this page, filter to prevent duplicate
+            this.comments = this.comments.filter(value => value.id !== this.markedCommentID)
+            this.videoCommentService.getVideoThreadComments(this.video.id, this.markedCommentID).subscribe(
+              res => {
+                let comment = new VideoComment(res.comment)
+                comment.marked = true
+                this.comments.unshift(comment) // Insert marked comment at the beginning
+              }
+            )
+          }
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -162,6 +177,15 @@ export class VideoCommentsComponent implements OnChanges {
       this.inReplyToCommentId = undefined
       this.componentPagination.currentPage = 1
       this.componentPagination.totalItems = null
+
+      // Find marked comment in params
+      this.activatedRoute.params.subscribe(
+        params => {
+          if (params['commentId']) {
+            this.markedCommentID = +params['commentId']
+          }
+        }
+      )
 
       this.loadMoreComments()
     }

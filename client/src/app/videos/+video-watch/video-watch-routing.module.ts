@@ -10,6 +10,11 @@ const videoWatchRoutes: Routes = [
     path: '',
     component: VideoWatchComponent,
     canActivate: [ MetaGuard ]
+  },
+  {
+    path: 'comment/:commentId',
+    component: VideoWatchComponent,
+    canActivate: [ MetaGuard ]
   }
 ]
 
