@@ -104,7 +104,7 @@ function getCodec (name: string) {
     '.mkv': 'video/webm; codecs="avc1.640029, mp4a.40.5"',
     '.mp3': 'audio/mpeg',
     '.mp4': 'video/mp4; codecs="avc1.640029, mp4a.40.5"',
-    '.webm': 'video/webm; codecs="vorbis, vp8"'
+    '.webm': 'video/webm; codecs="opus, vorbis, vp8"'
   }[ext]
 }
 
