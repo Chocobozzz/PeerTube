@@ -125,7 +125,7 @@ export class UserModel extends Model<UserModel> {
     const query = {
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getSort(sort)
     }
 
     return UserModel.findAndCountAll(query)

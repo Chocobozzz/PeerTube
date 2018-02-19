@@ -197,7 +197,7 @@ export class AccountModel extends Model<AccountModel> {
     const query = {
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getSort(sort)
     }
 
     return AccountModel.findAndCountAll(query)

@@ -637,7 +637,7 @@ export class VideoModel extends Model<VideoModel> {
     const query = {
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getSort(sort)
     }
 
     const serverActor = await getServerActor()
