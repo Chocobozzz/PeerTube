@@ -493,7 +493,7 @@ export class VideoModel extends Model<VideoModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort('createdAt'), [ 'Tags', 'name', 'ASC' ] ],
+      order: getSort('createdAt', [ 'Tags', 'name', 'ASC' ]),
       where: {
         id: {
           [Sequelize.Op.in]: Sequelize.literal('(' + rawQuery + ')')
@@ -607,7 +607,7 @@ export class VideoModel extends Model<VideoModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       include: [
         {
           model: VideoChannelModel,
@@ -637,7 +637,7 @@ export class VideoModel extends Model<VideoModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ]
+      order: getSort(sort),
     }
 
     const serverActor = await getServerActor()
@@ -656,7 +656,7 @@ export class VideoModel extends Model<VideoModel> {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       where: {
         name: {
           [Sequelize.Op.iLike]: '%' + value + '%'

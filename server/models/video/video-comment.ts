@@ -268,7 +268,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       where: {
         videoId,
         inReplyToCommentId: null

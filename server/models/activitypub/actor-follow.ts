@@ -215,7 +215,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       include: [
         {
           model: ActorModel,
@@ -248,7 +248,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       include: [
         {
           model: ActorModel,

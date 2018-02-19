@@ -151,7 +151,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ]
+      order: getSort(sort)
     }
 
     return VideoChannelModel
@@ -164,7 +164,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   static listByAccount (accountId: number) {
     const query = {
-      order: [ getSort('createdAt') ],
+      order: getSort('createdAt'),
       include: [
         {
           model: AccountModel,
