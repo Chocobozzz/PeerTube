@@ -51,7 +51,7 @@ node dist/server/tools/import-youtube.js -u "PEERTUBE_URL" -U "PEERTUBE_USER" --
  - PEERTUBE_URL : the full URL of your peertube server where you want to import, eg: https://peertube.cpy.re/
  - PEERTUBE_USER : your peertube account where videos will be uploaded
  - PEERTUBE_PASSWORD : password of your peertube account
- - YOUTUBE_USER_URL : the youtube channel you want to import. Supports Youtube channel (eg https://www.youtube.com/channel/channel_id) or Youtube user (eg: https://www.youtube.com/c/UserName or https://www.youtube.com/user/UserName)
+ - YOUTUBE_URL : the youtube channel you want to import. Supports Youtube channel (eg https://www.youtube.com/channel/ChannelId) or Youtube user (eg: https://www.youtube.com/c/UserName or https://www.youtube.com/user/UserName)
 
  The script will get all public videos from Youtube, download them, then upload to Peertube.  
  Already downloaded videos will not be uploaded twice, so you can run and re-run the script in case of crash, disconnection, ... without problem.
