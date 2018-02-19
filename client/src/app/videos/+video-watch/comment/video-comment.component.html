@@ -2,10 +2,11 @@
   <img [src]="getAvatarUrl(comment.account)" alt="Avatar" />
 
   <div class="comment">
-    <span class="marked-comment" *ngIf="comment.marked">Marked comment</span>
+    <div *ngIf="highlightedComment === true" class="highlighted-comment">Highlighted comment</div>
+
     <div class="comment-account-date">
       <a target="_blank" [href]="comment.account.url" class="comment-account">{{ comment.by }}</a>
-      <a [routerLink]="['/videos/watch', video.uuid, 'comment', comment.id]" class="comment-date">{{ comment.createdAt | myFromNow }}</a>
+      <a [routerLink]="['/videos/watch', video.uuid, { 'commentId': comment.id }]" class="comment-date">{{ comment.createdAt | myFromNow }}</a>
     </div>
     <div class="comment-html" [innerHTML]="sanitizedCommentHTML"></div>
 

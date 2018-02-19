@@ -15,6 +15,17 @@
   .comment {
     flex-grow: 1;
 
+    .highlighted-comment {
+      display: inline-block;
+      background-color: #F5F5F5;
+      color: #3d3d3d;
+      padding: 0 5px;
+      font-size: 13px;
+      margin-bottom: 5px;
+      font-weight: $font-semibold;
+      border-radius: 3px;
+    }
+
     .comment-account-date {
       display: flex;
       margin-bottom: 4px;
@@ -30,13 +41,6 @@
         color: #585858;
         margin-left: 10px;
       }
-    }
-
-    .marked-comment {
-      background-color: #F5F5F5;
-      padding-left: 3px;
-      padding-right: 3px;
-      font-size: 12px;
     }
 
     .comment-html {

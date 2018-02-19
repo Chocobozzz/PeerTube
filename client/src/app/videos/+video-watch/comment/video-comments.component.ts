@@ -1,7 +1,9 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 import { ConfirmService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoComment as VideoCommentInterface, VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
+import { Subscription } from 'rxjs/Subscription'
+import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
@@ -9,18 +11,18 @@ import { SortField } from '../../../shared/video/sort-field.type'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
-import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'my-video-comments',
   templateUrl: './video-comments.component.html',
   styleUrls: ['./video-comments.component.scss']
 })
-export class VideoCommentsComponent implements OnChanges {
+export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() video: VideoDetails
   @Input() user: User
 
   comments: VideoComment[] = []
+  highlightedComment: VideoComment
   sort: SortField = '-createdAt'
   componentPagination: ComponentPagination = {
     currentPage: 1,
@@ -30,7 +32,8 @@ export class VideoCommentsComponent implements OnChanges {
   inReplyToCommentId: number
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
-  markedCommentID: number
+
+  private sub: Subscription
 
   constructor (
     private authService: AuthService,
@@ -40,20 +43,38 @@ export class VideoCommentsComponent implements OnChanges {
     private activatedRoute: ActivatedRoute
   ) {}
 
+  ngOnInit () {
+    // Find highlighted comment in params
+    this.sub = this.activatedRoute.params.subscribe(
+      params => {
+        if (params['commentId']) {
+          const highlightedCommentId = +params['commentId']
+          this.processHighlightedComment(highlightedCommentId)
+        }
+      }
+    )
+  }
+
   ngOnChanges (changes: SimpleChanges) {
     if (changes['video']) {
-      this.loadVideoComments()
+      this.resetVideo()
     }
   }
 
-  viewReplies (comment: VideoCommentInterface) {
-    this.threadLoading[comment.id] = true
+  ngOnDestroy () {
+    if (this.sub) this.sub.unsubscribe()
+  }
 
-    this.videoCommentService.getVideoThreadComments(this.video.id, comment.id)
+  viewReplies (commentId: number, highlightComment = false) {
+    this.threadLoading[commentId] = true
+
+    this.videoCommentService.getVideoThreadComments(this.video.id, commentId)
       .subscribe(
         res => {
-          this.threadComments[comment.id] = res
-          this.threadLoading[comment.id] = false
+          this.threadComments[commentId] = res
+          this.threadLoading[commentId] = false
+
+          if (highlightComment) this.highlightedComment = new VideoComment(res.comment)
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -66,18 +87,6 @@ export class VideoCommentsComponent implements OnChanges {
         res => {
           this.comments = this.comments.concat(res.comments)
           this.componentPagination.totalItems = res.totalComments
-
-          if (this.markedCommentID) {
-            // If there is a marked comment, retrieve it separately as it may not be on this page, filter to prevent duplicate
-            this.comments = this.comments.filter(value => value.id !== this.markedCommentID)
-            this.videoCommentService.getVideoThreadComments(this.video.id, this.markedCommentID).subscribe(
-              res => {
-                let comment = new VideoComment(res.comment)
-                comment.marked = true
-                this.comments.unshift(comment) // Insert marked comment at the beginning
-              }
-            )
-          }
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -97,7 +106,7 @@ export class VideoCommentsComponent implements OnChanges {
   }
 
   onThreadCreated (commentTree: VideoCommentThreadTree) {
-    this.viewReplies(commentTree.comment)
+    this.viewReplies(commentTree.comment.id)
   }
 
   onWantedToDelete (commentToDelete: VideoComment) {
@@ -168,9 +177,10 @@ export class VideoCommentsComponent implements OnChanges {
     }
   }
 
-  private loadVideoComments () {
+  private resetVideo () {
     if (this.video.commentsEnabled === true) {
       // Reset all our fields
+      this.highlightedComment = null
       this.comments = []
       this.threadComments = {}
       this.threadLoading = {}
@@ -178,16 +188,14 @@ export class VideoCommentsComponent implements OnChanges {
       this.componentPagination.currentPage = 1
       this.componentPagination.totalItems = null
 
-      // Find marked comment in params
-      this.activatedRoute.params.subscribe(
-        params => {
-          if (params['commentId']) {
-            this.markedCommentID = +params['commentId']
-          }
-        }
-      )
-
       this.loadMoreComments()
     }
+  }
+
+  private processHighlightedComment (highlightedCommentId: number) {
+    this.highlightedComment = this.comments.find(c => c.id === highlightedCommentId)
+
+    const highlightComment = true
+    this.viewReplies(highlightedCommentId, highlightComment)
   }
 }

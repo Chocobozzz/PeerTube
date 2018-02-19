@@ -4,7 +4,7 @@
 
     <div class="form-group">
       <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
-                (keyup.control.enter)="formValidated()" (keyup.meta.enter)="formValidated()" #textarea>
+                (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
 
       </textarea>
       <div *ngIf="formErrors.text" class="form-error">

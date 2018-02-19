@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+#highlighted-comment {
+  margin-bottom: 25px;
+}
+
 .view-replies {
   font-weight: $font-semibold;
   font-size: 15px;

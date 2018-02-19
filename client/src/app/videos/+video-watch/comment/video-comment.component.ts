@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
 import * as sanitizeHtml from 'sanitize-html'
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { UserRight } from '../../../../../../shared/models/users'
@@ -13,12 +13,13 @@ import { VideoComment } from './video-comment.model'
   templateUrl: './video-comment.component.html',
   styleUrls: ['./video-comment.component.scss']
 })
-export class VideoCommentComponent implements OnInit {
+export class VideoCommentComponent implements OnInit, OnChanges {
   @Input() video: Video
   @Input() comment: VideoComment
   @Input() parentComments: VideoComment[] = []
   @Input() commentTree: VideoCommentThreadTree
   @Input() inReplyToCommentId: number
+  @Input() highlightedComment = false
 
   @Output() wantedToDelete = new EventEmitter<VideoComment>()
   @Output() wantedToReply = new EventEmitter<VideoComment>()
@@ -35,11 +36,11 @@ export class VideoCommentComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
-      allowedTags: [ 'p', 'span' ]
-    })
+    this.init()
+  }
 
-    this.newParentComments = this.parentComments.concat([ this.comment ])
+  ngOnChanges () {
+    this.init()
   }
 
   onCommentReplyCreated (createdComment: VideoComment) {
@@ -85,5 +86,13 @@ export class VideoCommentComponent implements OnInit {
         this.user.account.id === this.comment.account.id ||
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
       )
+  }
+
+  private init () {
+    this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
+      allowedTags: [ 'p', 'span' ]
+    })
+
+    this.newParentComments = this.parentComments.concat([ this.comment ])
   }
 }

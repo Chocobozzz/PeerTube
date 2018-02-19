@@ -3,6 +3,10 @@
 
 ## v0.0.25-alpha
 
+### Features
+
+ * Add ability to link a specific comment 
+
 ### Bug fixes
 
  * Fix avatars on video watch page

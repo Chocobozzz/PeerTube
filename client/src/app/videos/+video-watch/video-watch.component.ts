@@ -83,7 +83,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.player.pause()
       }
 
-      let uuid = routeParams['uuid']
+      const uuid = routeParams['uuid']
+      // Video did not changed
+      if (this.video && this.video.uuid === uuid) return
+
       this.videoService.getVideo(uuid).subscribe(
         video => this.onVideoFetched(video),
 

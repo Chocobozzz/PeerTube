@@ -69,6 +69,13 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     }
   }
 
+  onValidKey () {
+    this.onValueChanged()
+    if (!this.form.valid) return
+
+    this.formValidated()
+  }
+
   formValidated () {
     const commentCreate: VideoCommentCreate = this.form.value
     let obs: Observable<any>
