@@ -52,10 +52,16 @@ async function run () {
   youtubeDL.getInfo(program['youtubeUrl'], options, processOptions, async (err, info) => {
     if (err) throw err
 
-    // Normalize utf8 fields
-    info = info.map(i => normalizeObject(i))
+    let infoArray: any[]
 
-    const videos = info.map(i => {
+    // Normalize utf8 fields
+    if (Array.isArray(info) === true) {
+      infoArray = info.map(i => normalizeObject(i))
+    } else {
+      infoArray = [ normalizeObject(info) ]
+    }
+
+    const videos = infoArray.map(i => {
       return { url: 'https://www.youtube.com/watch?v=' + i.id, name: i.title }
     })
 

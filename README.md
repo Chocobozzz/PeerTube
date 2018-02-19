@@ -147,11 +147,11 @@ See the [docker guide](/support/doc/docker.md)
 
 See the [production guide](/support/doc/production.md).
 
-## Contributing
+## Contributing/Test
 
 See the [contributing
 guide](/.github/CONTRIBUTING.md)
-to see how to contribute to PeerTube. Spoiler alert: you don't need to be a
+to see how to test or contribute to PeerTube. Spoiler alert: you don't need to be a
 coder to help!
 
 ## API REST documentation
@@ -160,6 +160,10 @@ For now only on Github:
 
  * HTML version: [/support/doc/api/html/index.html](/support/doc/api/html/index.html)
  * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
+
+## Tools
+
+ * [YouTube import](/support/doc/import-youtube.md)
 
 ## Architecture
 
