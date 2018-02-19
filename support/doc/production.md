@@ -202,7 +202,7 @@ Change the link to point to the latest version:
 
 ```
 $ cd /var/www/peertube && \
-    sudo rm ./peertube-latest && \
+    sudo unlink ./peertube-latest && \
     sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 ```
 
@@ -218,7 +218,7 @@ Change `peertube-latest` destination to the previous version and restore your SQ
 
 ```
 $ OLD_VERSION="v0.42.42" && SQL_BACKUP_PATH="backup/sql-peertube_prod-2018-01-19T10:18+01:00.bak" && \
-    cd /var/www/peertube && rm ./peertube-latest && \
+    cd /var/www/peertube && unlink ./peertube-latest && \
     sudo -u peertube ln -s "versions/peertube-$OLD_VERSION" peertube-latest && \
     pg_restore -U peertube -W -h localhost -c -d peertube_prod "$SQL_BACKUP_PATH"
     sudo systemctl restart peertube
