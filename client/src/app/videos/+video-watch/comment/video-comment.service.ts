@@ -1,12 +1,14 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { lineFeedToHtml } from '@app/shared/misc/utils'
+import { MarkdownService } from '@app/videos/shared'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/map'
-import { immutableAssign, lineFeedToHtml } from '@app/shared/misc/utils'
 import { Observable } from 'rxjs/Observable'
 import { ResultList } from '../../../../../../shared/models'
 import {
-  VideoComment as VideoCommentServerModel, VideoCommentCreate,
+  VideoComment as VideoCommentServerModel,
+  VideoCommentCreate,
   VideoCommentThreadTree
 } from '../../../../../../shared/models/videos/video-comment.model'
 import { environment } from '../../../../environments/environment'

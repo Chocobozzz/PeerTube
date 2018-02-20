@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
-import { VideoCommentCreate, VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
+import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
 import { FormReactive } from '../../../shared'
 import { VIDEO_COMMENT_TEXT } from '../../../shared/forms/form-validators/video-comment'
 import { User } from '../../../shared/users'

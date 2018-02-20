@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
+import { MarkdownService } from '@app/videos/shared'
 import * as sanitizeHtml from 'sanitize-html'
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { UserRight } from '../../../../../../shared/models/users'
@@ -29,7 +30,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   sanitizedCommentHTML = ''
   newParentComments = []
 
-  constructor (private authService: AuthService) {}
+  constructor (
+    private authService: AuthService,
+    private markdownService: MarkdownService
+  ) {}
 
   get user () {
     return this.authService.getUser()
@@ -90,8 +94,12 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   private init () {
     this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
-      allowedTags: [ 'p', 'span', 'br' ]
+      allowedTags: [ 'a', 'p', 'span', 'br' ],
+      allowedSchemes: [ 'http', 'https' ]
     })
+
+    // Convert possible markdown to html
+    this.sanitizedCommentHTML = this.markdownService.linkify(this.comment.text)
 
     this.newParentComments = this.parentComments.concat([ this.comment ])
   }
