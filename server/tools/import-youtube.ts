@@ -52,31 +52,25 @@ async function run () {
   youtubeDL.getInfo(program['youtubeUrl'], options, processOptions, async (err, info) => {
     if (err) throw err
 
-    let infoArray: any[]
-
     // Normalize utf8 fields
-    if (Array.isArray(info) === true) {
-      infoArray = info.map(i => normalizeObject(i))
-    } else {
-      infoArray = [ normalizeObject(info) ]
-    }
+    info = info.map(i => normalizeObject(i))
 
-    const videos = infoArray.map(i => {
+    const videos = info.map(i => {
       return { url: 'https://www.youtube.com/watch?v=' + i.id, name: i.title }
     })
 
     console.log('Will download and upload %d videos.\n', videos.length)
 
     for (const video of videos) {
-      await processVideo(video, program['language'])
+      await processVideo(video, program['language'], client, user)
     }
 
-    console.log('I\'m finished!')
+    console.log('I have finished!')
     process.exit(0)
   })
 }
 
-function processVideo (video: { name: string, url: string }, languageCode: number) {
+function processVideo (video: { name: string, url: string }, languageCode: number, client: { id: string, secret: string }, user: { username: string, password: string }) {
   return new Promise(async res => {
     const result = await searchVideo(program['url'], video.name)
 
@@ -100,7 +94,7 @@ function processVideo (video: { name: string, url: string }, languageCode: numbe
       youtubeDL.getInfo(video.url, undefined, processOptions, async (err, videoInfo) => {
         if (err) return console.error(err)
 
-        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
+        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, client, user, languageCode)
 
         return res()
       })
@@ -108,7 +102,7 @@ function processVideo (video: { name: string, url: string }, languageCode: numbe
   })
 }
 
-async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, language?: number) {
+async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, client: { id: string, secret: string }, user: { username: string, password: string }, language?: number) {
   const category = await getCategory(videoInfo.categories)
   const licence = getLicence(videoInfo.license)
   let tags = []
@@ -145,7 +139,17 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
   }
 
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)
-  await uploadVideo(program['url'], accessToken, videoAttributes)
+  try {
+    await uploadVideo(program['url'], accessToken, videoAttributes)
+  }
+  catch (err) {
+    if ((err.message).search("401")) {
+      console.log("Get 401 Unauthorized, token may have expired, renewing token and retry.")
+      const res2 = await login(program['url'], client, user)
+      accessToken = res2.body.access_token
+      await uploadVideo(program['url'], accessToken, videoAttributes)
+    }
+  }
 
   await unlinkPromise(videoPath)
   if (thumbnailfile) {
