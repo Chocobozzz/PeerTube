@@ -148,7 +148,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
   try {
     await uploadVideo(program['url'], accessToken, videoAttributes)
   } catch (err) {
-    if (err.message.indexOf('401')) {
+    if (err.message.indexOf('401') !== -1) {
       console.log('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
       const res = await login(program['url'], client, user)
