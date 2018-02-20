@@ -90,7 +90,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   private init () {
     this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
-      allowedTags: [ 'p', 'span' ]
+      allowedTags: [ 'p', 'span', 'br' ]
     })
 
     this.newParentComments = this.parentComments.concat([ this.comment ])
