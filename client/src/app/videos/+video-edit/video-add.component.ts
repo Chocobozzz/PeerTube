@@ -37,6 +37,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     id: 0,
     uuid: ''
   }
+  videoFileName: string
 
   form: FormGroup
   formErrors: { [ id: string ]: string } = {}
@@ -146,6 +147,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
       this.notificationsService.error('Error', msg)
       return
     }
+
+    this.videoFileName = videofile.name
 
     const name = videofile.name.replace(/\.[^/.]+$/, '')
     const privacy = this.firstStepPrivacyId.toString()
