@@ -60,7 +60,7 @@ export class ServerService {
   }
 
   loadVideoCategories () {
-    return this.loadVideoAttributeEnum('categories', this.videoCategories, this.videoCategoriesLoaded)
+    return this.loadVideoAttributeEnum('categories', this.videoCategories, this.videoCategoriesLoaded, true)
   }
 
   loadVideoLicences () {
@@ -68,7 +68,7 @@ export class ServerService {
   }
 
   loadVideoLanguages () {
-    return this.loadVideoAttributeEnum('languages', this.videoLanguages, this.videoLanguagesLoaded)
+    return this.loadVideoAttributeEnum('languages', this.videoLanguages, this.videoLanguagesLoaded, true)
   }
 
   loadVideoPrivacies () {
@@ -102,7 +102,8 @@ export class ServerService {
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
     hashToPopulate: { id: number, label: string }[],
-    notifier: ReplaySubject<boolean>
+    notifier: ReplaySubject<boolean>,
+    sort = false
   ) {
     return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
        .subscribe(data => {
@@ -113,6 +114,14 @@ export class ServerService {
                    label: data[dataKey]
                  })
                })
+
+         if (sort === true) {
+           hashToPopulate.sort((a, b) => {
+             if (a.label < b.label) return -1
+             if (a.label === b.label) return 0
+             return 1
+           })
+         }
 
          notifier.next(true)
        })
