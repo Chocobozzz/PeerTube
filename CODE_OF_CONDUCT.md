@@ -17,6 +17,7 @@ In order to create an open and welcoming environment, we as contributors and mai
 * ethnicity
 * religion
 * sexual identity and orientation
+* etc.
 
 ## Our standards
 
@@ -43,6 +44,7 @@ You should not:
 * harass others, in public or private
 * publish others' private information, such as a physical or electronic address, without explicit permission
 * engage in any other conduct which could reasonably be considered inappropriate in a professional setting
+* etc.
 
 ## Our responsibilities
 
