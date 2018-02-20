@@ -4,33 +4,51 @@ import * as MarkdownIt from 'markdown-it'
 
 @Injectable()
 export class MarkdownService {
-  private markdownIt: MarkdownIt.MarkdownIt
+  private textMarkdownIt: MarkdownIt.MarkdownIt
   private linkifier: MarkdownIt.MarkdownIt
+  private enhancedMarkdownIt: MarkdownIt.MarkdownIt
 
   constructor () {
-    this.markdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
+    this.textMarkdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
       .enable('linkify')
       .enable('autolink')
       .enable('emphasis')
       .enable('link')
       .enable('newline')
       .enable('list')
-    this.setTargetToLinks(this.markdownIt)
+    this.setTargetToLinks(this.textMarkdownIt)
+
+    this.enhancedMarkdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
+      .enable('linkify')
+      .enable('autolink')
+      .enable('emphasis')
+      .enable('link')
+      .enable('newline')
+      .enable('list')
+      .enable('image')
+    this.setTargetToLinks(this.enhancedMarkdownIt)
 
     this.linkifier = new MarkdownIt('zero', { linkify: true })
       .enable('linkify')
     this.setTargetToLinks(this.linkifier)
   }
 
-  markdownToHTML (markdown: string) {
-    const html = this.markdownIt.render(markdown)
+  textMarkdownToHTML (markdown: string) {
+    const html = this.textMarkdownIt.render(markdown)
 
-    // Avoid linkify truncated links
-    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...(<\/p>)?$/mi, '$1...')
+    return this.avoidTruncatedLinks(html)
+  }
+
+  enhancedMarkdownToHTML (markdown: string) {
+    const html = this.enhancedMarkdownIt.render(markdown)
+
+    return this.avoidTruncatedLinks(html)
   }
 
   linkify (text: string) {
-    return this.linkifier.render(text)
+    const html = this.linkifier.render(text)
+
+    return this.avoidTruncatedLinks(html)
   }
 
   private setTargetToLinks (markdownIt: MarkdownIt.MarkdownIt) {
@@ -52,5 +70,9 @@ export class MarkdownService {
       // pass token to default renderer.
       return defaultRender(tokens, idx, options, env, self)
     }
+  }
+
+  private avoidTruncatedLinks (html) {
+    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...(<\/p>)?$/mi, '$1...')
   }
 }

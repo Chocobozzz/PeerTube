@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { VIDEO_IMAGE } from '@app/shared'
+import { VIDEO_IMAGE, VIDEO_SUPPORT } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/forkJoin'
 import { ServerService } from '../../../core/server'
@@ -60,6 +60,7 @@ export class VideoEditComponent implements OnInit {
     this.formErrors['description'] = ''
     this.formErrors['thumbnailfile'] = ''
     this.formErrors['previewfile'] = ''
+    this.formErrors['support'] = ''
 
     this.validationMessages['name'] = VIDEO_NAME.MESSAGES
     this.validationMessages['privacy'] = VIDEO_PRIVACY.MESSAGES
@@ -70,6 +71,7 @@ export class VideoEditComponent implements OnInit {
     this.validationMessages['description'] = VIDEO_DESCRIPTION.MESSAGES
     this.validationMessages['thumbnailfile'] = VIDEO_IMAGE.MESSAGES
     this.validationMessages['previewfile'] = VIDEO_IMAGE.MESSAGES
+    this.validationMessages['support'] = VIDEO_SUPPORT.MESSAGES
 
     this.form.addControl('name', new FormControl('', VIDEO_NAME.VALIDATORS))
     this.form.addControl('privacy', new FormControl('', VIDEO_PRIVACY.VALIDATORS))
@@ -83,6 +85,7 @@ export class VideoEditComponent implements OnInit {
     this.form.addControl('tags', new FormControl(''))
     this.form.addControl('thumbnailfile', new FormControl(''))
     this.form.addControl('previewfile', new FormControl(''))
+    this.form.addControl('support', new FormControl(''))
   }
 
   ngOnInit () {

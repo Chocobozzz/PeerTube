@@ -44,10 +44,10 @@ export const VIDEO_CHANNEL = {
 }
 
 export const VIDEO_DESCRIPTION = {
-  VALIDATORS: [ Validators.minLength(3), Validators.maxLength(3000) ],
+  VALIDATORS: [ Validators.minLength(3), Validators.maxLength(10000) ],
   MESSAGES: {
     'minlength': 'Video description must be at least 3 characters long.',
-    'maxlength': 'Video description cannot be more than 3000 characters long.'
+    'maxlength': 'Video description cannot be more than 10000 characters long.'
   }
 }
 
@@ -56,5 +56,13 @@ export const VIDEO_TAGS = {
   MESSAGES: {
     'minlength': 'A tag should be more than 2 characters long.',
     'maxlength': 'A tag should be less than 30 characters long.'
+  }
+}
+
+export const VIDEO_SUPPORT = {
+  VALIDATORS: [ Validators.minLength(3), Validators.maxLength(300) ],
+  MESSAGES: {
+    'minlength': 'Video support must be at least 3 characters long.',
+    'maxlength': 'Video support cannot be more than 300 characters long.'
   }
 }

@@ -12,6 +12,7 @@ export class VideoEdit {
   commentsEnabled: boolean
   channel: number
   privacy: VideoPrivacy
+  support: string
   thumbnailfile?: any
   previewfile?: any
   thumbnailUrl: string
@@ -33,6 +34,7 @@ export class VideoEdit {
       this.commentsEnabled = videoDetails.commentsEnabled
       this.channel = videoDetails.channel.id
       this.privacy = videoDetails.privacy
+      this.support = videoDetails.support
       this.thumbnailUrl = videoDetails.thumbnailUrl
       this.previewUrl = videoDetails.previewUrl
     }
@@ -50,6 +52,7 @@ export class VideoEdit {
       licence: this.licence,
       language: this.language,
       description: this.description,
+      support: this.support,
       name: this.name,
       tags: this.tags,
       nsfw: this.nsfw,

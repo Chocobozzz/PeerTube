@@ -24,6 +24,10 @@ body {
   color: #000;
 }
 
+strong {
+  font-weight: $font-semibold;
+}
+
 input.readonly {
   /* Force blank on readonly inputs */
   background-color: #fff !important;

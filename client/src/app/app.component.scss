@@ -49,7 +49,6 @@
 
     #peertube-title {
       @include disable-default-a-behaviour;
-      width: 100%;
       font-size: 20px;
       font-weight: $font-bold;
       color: inherit !important;
@@ -78,6 +77,10 @@
       #peertube-title {
         display: none;
       }
+    }
+
+    @media screen and (max-width: 350px) {
+      flex: auto;
     }
   }
 

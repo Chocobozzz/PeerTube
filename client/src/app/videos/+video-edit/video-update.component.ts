@@ -61,8 +61,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
       .switchMap(video => {
         return this.videoService
           .loadCompleteDescription(video.descriptionPath)
-          .do(description => video.description = description)
-          .map(() => video)
+          .map(description => Object.assign(video,  { description }))
       })
       .subscribe(
         video => {

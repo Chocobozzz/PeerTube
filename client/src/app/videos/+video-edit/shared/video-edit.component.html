@@ -111,7 +111,7 @@
     </tab>
 
     <tab heading="Advanced settings">
-      <div class="col-md-12">
+      <div class="col-md-12 advanced-settings">
         <div class="form-group">
           <my-video-image
             inputLabel="Upload thumbnail" inputName="thumbnailfile" formControlName="thumbnailfile"
@@ -124,6 +124,17 @@
             inputLabel="Upload preview" inputName="previewfile" formControlName="previewfile"
             previewWidth="360px" previewHeight="200px"
           ></my-video-image>
+        </div>
+
+        <div class="form-group">
+          <label for="support">Support (markdown)</label>
+          <my-markdown-textarea
+              id="support" formControlName="support" textareaWidth="500px" [previewColumn]="true" markdownType="enhanced"
+              [classes]="{ 'input-error': formErrors['support'] }"
+          ></my-markdown-textarea>
+          <div *ngIf="formErrors.support" class="form-error">
+            {{ formErrors.support }}
+          </div>
         </div>
       </div>
     </tab>

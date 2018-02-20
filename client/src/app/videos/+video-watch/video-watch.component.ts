@@ -1,5 +1,6 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
@@ -28,6 +29,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
+  @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
 
   otherVideosDisplayed: Video[] = []
 
@@ -189,6 +191,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoReportModal.show()
   }
 
+  showSupportModal () {
+    this.videoSupportModal.show()
+  }
+
   showShareModal () {
     this.videoShareModal.show()
   }
@@ -264,7 +270,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       return
     }
 
-    this.videoHTMLDescription = this.markdownService.markdownToHTML(this.video.description)
+    this.videoHTMLDescription = this.markdownService.textMarkdownToHTML(this.video.description)
   }
 
   private setVideoLikesBarTooltipText () {

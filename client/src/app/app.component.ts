@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
+import { GuardsCheckStart, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { isInSmallView } from '@app/shared/misc/utils'
 

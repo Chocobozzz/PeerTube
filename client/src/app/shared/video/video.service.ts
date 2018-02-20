@@ -62,6 +62,7 @@ export class VideoService {
       tags: video.tags,
       nsfw: video.nsfw,
       commentsEnabled: video.commentsEnabled,
+      support: video.support,
       thumbnailfile: video.thumbnailfile,
       previewfile: video.previewfile
     }

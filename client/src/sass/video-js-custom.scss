@@ -24,7 +24,7 @@ $control-bar-height: 34px;
 
   .vjs-big-play-button {
     outline: 0;
-    font-size: 7em;
+    font-size: 6em;
 
     $big-play-width: 1.5em;
     $big-play-height: 1em;
@@ -340,7 +340,7 @@ $control-bar-height: 34px;
 
   @media screen and (max-width: 550px) {
     .vjs-big-play-button {
-      font-size: 6.5em;
+      font-size: 5em;
     }
 
     .vjs-webtorrent {
@@ -358,7 +358,7 @@ $control-bar-height: 34px;
     }
 
     .vjs-big-play-button {
-      font-size: 5em;
+      font-size: 4em;
     }
 
     .vjs-volume-control {

@@ -10,7 +10,7 @@
 
 ```
 $ sudo apt update
-$ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server
+$ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server git
 ```
 
 ## Arch Linux
@@ -18,7 +18,7 @@ $ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server
   1. Run:
 
 ```
-$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis
+$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git
 ```
 
 ## CentOS 7
@@ -36,7 +36,7 @@ $ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis
 $ sudo yum update
 $ sudo yum install epel-release
 $ sudo yum update
-$ sudo yum install nginx postgresql postgresql-server openssl gcc make redis
+$ sudo yum install nginx postgresql postgresql-server openssl gcc make redis git
 ```
 
 ## Other distributions

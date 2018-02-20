@@ -99,6 +99,7 @@
             font-weight: $font-semibold;
             display: inline-block;
             padding: 0 10px 0 10px;
+            white-space: nowrap;
 
             .icon {
               @include icon(21px);
@@ -112,6 +113,10 @@
 
               &.icon-dislike {
                 background-image: url('../../../assets/images/video/dislike-grey.svg');
+              }
+
+              &.icon-support {
+                background-image: url('../../../assets/images/video/heart.svg');
               }
 
               &.icon-share {
@@ -249,11 +254,7 @@
 }
 
 
-@media screen and (max-width: 1300px) {
-  .other-videos {
-    display: none;
-  }
-
+@media screen and (max-width: 1600px) {
   .video-bottom {
     .video-info {
       margin-right: 0;
@@ -288,6 +289,12 @@
   }
 }
 
+@media screen and (max-width: 1200px) {
+  .other-videos {
+    display: none;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .video-bottom {
     margin: 20px 0 0 0;
@@ -302,5 +309,11 @@
         }
       }
     }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .video-bottom  .action-button .icon-text {
+    display: none !important;
   }
 }
