@@ -44,6 +44,8 @@
     }
 
     .comment-html {
+      word-break: break-all;
+
       a {
         @include disable-default-a-behaviour;
 
