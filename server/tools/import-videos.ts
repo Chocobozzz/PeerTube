@@ -114,7 +114,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
   let tags = []
   if (Array.isArray(videoInfo.tags)) {
     tags = videoInfo.tags
-      .filter(t => t.length < CONSTRAINTS_FIELDS.VIDEOS.TAG.max)
+      .filter(t => t.length < CONSTRAINTS_FIELDS.VIDEOS.TAG.max && t.length > CONSTRAINTS_FIELDS.VIDEOS.TAG.min)
       .map(t => t.normalize())
       .slice(0, 5)
   }
@@ -134,7 +134,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
     category,
     licence,
     language,
-    nsfw: false,
+    nsfw: isNSFW(videoInfo),
     commentsEnabled: true,
     description: videoInfo.description,
     tags,
@@ -227,9 +227,18 @@ function fetchObject (info: any) {
 }
 
 function buildUrl (info: any) {
+  const webpageUrl = info.webpage_url as string
+  if (webpageUrl && webpageUrl.match(/^https?:\/\//)) return webpageUrl
+
   const url = info.url as string
-  if (url && url.match(/^https?:\/\//)) return info.url
+  if (url && url.match(/^https?:\/\//)) return url
 
   // It seems youtube-dl does not return the video url
   return 'https://www.youtube.com/watch?v=' + info.id
+}
+
+function isNSFW (info: any) {
+  if (info.age_limit && info.age_limit >= 16) return true
+
+  return false
 }
