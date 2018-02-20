@@ -163,7 +163,7 @@ For now only on Github:
 
 ## Tools
 
- * [YouTube import](/support/doc/import-youtube.md)
+ * [Import videos (YouTube, Dailymotion, Vimeo...)](/support/doc/import-videos.md)
 
 ## Architecture
 

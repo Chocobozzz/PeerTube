@@ -11,15 +11,16 @@ program
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
-  .option('-y, --youtube-url <youtubeUrl>', 'Youtube URL')
+  .option('-t, --target-url <targetUrl>', 'Video target URL')
   .option('-l, --language <languageCode>', 'Language code')
+  .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
 if (
   !program['url'] ||
   !program['username'] ||
   !program['password'] ||
-  !program['youtubeUrl']
+  !program['targetUrl']
 ) {
   console.error('All arguments are required.')
   process.exit(-1)
@@ -28,6 +29,13 @@ if (
 run().catch(err => console.error(err))
 
 let accessToken: string
+let client: { id: string, secret: string }
+
+const user = {
+  username: program['username'],
+  password: program['password']
+}
+
 const processOptions = {
   cwd: __dirname,
   maxBuffer: Infinity
@@ -35,74 +43,72 @@ const processOptions = {
 
 async function run () {
   const res = await getClient(program['url'])
-  const client = {
+  client = {
     id: res.body.client_id,
     secret: res.body.client_secret
-  }
-
-  const user = {
-    username: program['username'],
-    password: program['password']
   }
 
   const res2 = await login(program['url'], client, user)
   accessToken = res2.body.access_token
 
   const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
-  youtubeDL.getInfo(program['youtubeUrl'], options, processOptions, async (err, info) => {
+  youtubeDL.getInfo(program['targetUrl'], options, processOptions, async (err, info) => {
     if (err) throw err
 
+    let infoArray: any[]
+
     // Normalize utf8 fields
-    info = info.map(i => normalizeObject(i))
+    if (Array.isArray(info) === true) {
+      infoArray = info.map(i => normalizeObject(i))
+    } else {
+      infoArray = [ normalizeObject(info) ]
+    }
+    console.log('Will download and upload %d videos.\n', infoArray.length)
 
-    const videos = info.map(i => {
-      return { url: 'https://www.youtube.com/watch?v=' + i.id, name: i.title }
-    })
-
-    console.log('Will download and upload %d videos.\n', videos.length)
-
-    for (const video of videos) {
-      await processVideo(video, program['language'], client, user)
+    for (const info of infoArray) {
+      await processVideo(info, program['language'])
     }
 
-    console.log('I have finished!')
+    // https://www.youtube.com/watch?v=2Upx39TBc1s
+    console.log('I\'m finished!')
     process.exit(0)
   })
 }
 
-function processVideo (video: { name: string, url: string }, languageCode: number, client: { id: string, secret: string }, user: { username: string, password: string }) {
+function processVideo (info: any, languageCode: number) {
   return new Promise(async res => {
-    const result = await searchVideo(program['url'], video.name)
+    if (program['verbose']) console.log('Fetching object.', info)
+
+    const videoInfo = await fetchObject(info)
+    if (program['verbose']) console.log('Fetched object.', videoInfo)
+
+    const result = await searchVideo(program['url'], videoInfo.title)
 
     console.log('############################################################\n')
 
-    if (result.body.data.find(v => v.name === video.name)) {
-      console.log('Video "%s" already exists, don\'t reupload it.\n', video.name)
+    if (result.body.data.find(v => v.name === videoInfo.title)) {
+      console.log('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
       return res()
     }
 
     const path = join(__dirname, new Date().getTime() + '.mp4')
 
-    console.log('Downloading video "%s"...', video.name)
+    console.log('Downloading video "%s"...', videoInfo.title)
 
-    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]', '-o', path ]
-    youtubeDL.exec(video.url, options, processOptions, async (err, output) => {
+    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
+    youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
       if (err) return console.error(err)
 
       console.log(output.join('\n'))
 
-      youtubeDL.getInfo(video.url, undefined, processOptions, async (err, videoInfo) => {
-        if (err) return console.error(err)
+      await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
 
-        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, client, user, languageCode)
-
-        return res()
-      })
+      return res()
     })
   })
 }
 
-async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, client: { id: string, secret: string }, user: { username: string, password: string }, language?: number) {
+async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, language?: number) {
   const category = await getCategory(videoInfo.categories)
   const licence = getLicence(videoInfo.license)
   let tags = []
@@ -141,13 +147,16 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, client:
   console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)
   try {
     await uploadVideo(program['url'], accessToken, videoAttributes)
-  }
-  catch (err) {
-    if ((err.message).search("401")) {
-      console.log("Get 401 Unauthorized, token may have expired, renewing token and retry.")
-      const res2 = await login(program['url'], client, user)
-      accessToken = res2.body.access_token
+  } catch (err) {
+    if (err.message.indexOf('401')) {
+      console.log('Got 401 Unauthorized, token may have expired, renewing token and retry.')
+
+      const res = await login(program['url'], client, user)
+      accessToken = res.body.access_token
+
       await uploadVideo(program['url'], accessToken, videoAttributes)
+    } else {
+      throw err
     }
   }
 
@@ -160,6 +169,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, client:
 }
 
 async function getCategory (categories: string[]) {
+  if (!categories) return undefined
+
   const categoryString = categories[0]
 
   if (categoryString === 'News & Politics') return 11
@@ -176,6 +187,8 @@ async function getCategory (categories: string[]) {
 }
 
 function getLicence (licence: string) {
+  if (!licence) return undefined
+
   if (licence.indexOf('Creative Commons Attribution licence') !== -1) return 1
 
   return undefined
@@ -198,4 +211,25 @@ function normalizeObject (obj: any) {
   }
 
   return newObj
+}
+
+function fetchObject (info: any) {
+  const url = buildUrl(info)
+
+  return new Promise<any>(async (res, rej) => {
+    youtubeDL.getInfo(url, undefined, processOptions, async (err, videoInfo) => {
+      if (err) return rej(err)
+
+      const videoInfoWithUrl = Object.assign(videoInfo, { url })
+      return res(normalizeObject(videoInfoWithUrl))
+    })
+  })
+}
+
+function buildUrl (info: any) {
+  const url = info.url as string
+  if (url && url.match(/^https?:\/\//)) return info.url
+
+  // It seems youtube-dl does not return the video url
+  return 'https://www.youtube.com/watch?v=' + info.id
 }

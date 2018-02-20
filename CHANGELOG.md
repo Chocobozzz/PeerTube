@@ -1,6 +1,23 @@
 # Changelog
 
 
+## v0.0.26-alpha
+
+### BREAKING CHANGES
+
+ * Renamed script `import-youtube.js` to `import-videos.js`
+ * Renamed `import-video.js` argument `youtube-url` to `target-url`
+
+### Features
+
+ * Add "Support" attribute/button on videos
+ * Add ability to import from all [supported sites](https://rg3.github.io/youtube-dl/supportedsites.html) of youtube-dl
+
+### Bug fixes
+
+ * Fix custom instance name overflow
+
+
 ## v0.0.25-alpha
 
 ### Features

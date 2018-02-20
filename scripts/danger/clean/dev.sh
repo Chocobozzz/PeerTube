@@ -4,5 +4,5 @@ read -p "This will remove all directories and SQL tables. Are you sure? (y/*) " 
 echo
 
 if [[ "$REPLY" =~ ^[Yy]$ ]]; then
-  NODE_ENV=test npm run ts-node "./scripts/danger/clean/cleaner"
+  NODE_ENV=test npm run ts-node -- --type-check "./scripts/danger/clean/cleaner"
 fi
