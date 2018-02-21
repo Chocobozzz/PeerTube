@@ -57,7 +57,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       this.threadCreated.emit(this.commentTree)
     }
 
-    this.commentTree.children.push({
+    this.commentTree.children.unshift({
       comment: createdComment,
       children: []
     })

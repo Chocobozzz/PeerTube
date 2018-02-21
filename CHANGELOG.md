@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.0.27-alpha
+
+### Bug fixes
+
+ * Fix comment reply highlighting
+
 
 ## v0.0.26-alpha
 
