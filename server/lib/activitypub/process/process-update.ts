@@ -71,7 +71,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
         throw new Error('Account ' + actor.url + ' does not own video channel ' + videoChannel.Actor.url)
       }
 
-      const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoAttributesToUpdate, activity.to, activity.cc)
+      const videoData = await videoActivityObjectToDBAttributes(videoChannel, videoAttributesToUpdate, activity.to)
       videoInstance.set('name', videoData.name)
       videoInstance.set('uuid', videoData.uuid)
       videoInstance.set('url', videoData.url)
