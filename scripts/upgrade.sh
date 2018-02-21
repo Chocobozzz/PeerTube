@@ -22,6 +22,8 @@ ln -s /var/www/peertube/versions/peertube-${VERSION} /var/www/peertube/peertube-
 cd  /var/www/peertube/peertube-latest
 yarn install --production --pure-lockfile 
 cp /var/www/peertube/peertube-latest/config/default.yaml /var/www/peertube/config/default.yaml
+
+echo "Updating Configuration File..."
 diff /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
 
 exit 0
