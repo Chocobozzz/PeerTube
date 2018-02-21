@@ -155,7 +155,6 @@ $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/conf
 
 ```
 $ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube ./upgrade.sh
-$ diff /var/www/peertube/versions/peertube-${VERSION}/config/production.yaml.example /var/www/peertube/config/production.yaml
 $ sudo systemctl restart peertube && sudo journalctl -fu peertube
 ```
 
