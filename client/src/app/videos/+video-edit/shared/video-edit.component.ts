@@ -85,7 +85,7 @@ export class VideoEditComponent implements OnInit {
     this.form.addControl('tags', new FormControl(''))
     this.form.addControl('thumbnailfile', new FormControl(''))
     this.form.addControl('previewfile', new FormControl(''))
-    this.form.addControl('support', new FormControl(''))
+    this.form.addControl('support', new FormControl('', VIDEO_SUPPORT.VALIDATORS))
   }
 
   ngOnInit () {
