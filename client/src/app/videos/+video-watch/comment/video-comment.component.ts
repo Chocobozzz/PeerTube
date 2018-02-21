@@ -100,7 +100,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       allowedTags: [ 'a', 'p', 'span', 'br' ],
       allowedSchemes: [ 'http', 'https' ],
       allowedAttributes: {
-        'a': [ 'href', 'class' ]
+        'a': [ 'href', 'class', 'target' ]
       },
       transformTags: {
         a: (tagName, attribs) => {
