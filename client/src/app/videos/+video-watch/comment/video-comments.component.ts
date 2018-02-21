@@ -22,7 +22,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() user: User
 
   comments: VideoComment[] = []
-  highlightedComment: VideoComment
+  highlightedThread: VideoComment
   sort: SortField = '-createdAt'
   componentPagination: ComponentPagination = {
     currentPage: 1,
@@ -47,9 +47,9 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     // Find highlighted comment in params
     this.sub = this.activatedRoute.params.subscribe(
       params => {
-        if (params['commentId']) {
-          const highlightedCommentId = +params['commentId']
-          this.processHighlightedComment(highlightedCommentId)
+        if (params['threadId']) {
+          const highlightedThreadId = +params['threadId']
+          this.processHighlightedThread(highlightedThreadId)
         }
       }
     )
@@ -65,7 +65,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     if (this.sub) this.sub.unsubscribe()
   }
 
-  viewReplies (commentId: number, highlightComment = false) {
+  viewReplies (commentId: number, highlightThread = false) {
     this.threadLoading[commentId] = true
 
     this.videoCommentService.getVideoThreadComments(this.video.id, commentId)
@@ -74,7 +74,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           this.threadComments[commentId] = res
           this.threadLoading[commentId] = false
 
-          if (highlightComment) this.highlightedComment = new VideoComment(res.comment)
+          if (highlightThread) this.highlightedThread = new VideoComment(res.comment)
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -180,7 +180,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   private resetVideo () {
     if (this.video.commentsEnabled === true) {
       // Reset all our fields
-      this.highlightedComment = null
+      this.highlightedThread = null
       this.comments = []
       this.threadComments = {}
       this.threadLoading = {}
@@ -192,10 +192,10 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private processHighlightedComment (highlightedCommentId: number) {
-    this.highlightedComment = this.comments.find(c => c.id === highlightedCommentId)
+  private processHighlightedThread (highlightedThreadId: number) {
+    this.highlightedThread = this.comments.find(c => c.id === highlightedThreadId)
 
-    const highlightComment = true
-    this.viewReplies(highlightedCommentId, highlightComment)
+    const highlightThread = true
+    this.viewReplies(highlightedThreadId, highlightThread)
   }
 }

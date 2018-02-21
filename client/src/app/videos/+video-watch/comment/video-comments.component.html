@@ -19,12 +19,12 @@
       [autoLoading]="true"
       (nearOfBottom)="onNearOfBottom()"
     >
-      <div *ngIf="highlightedComment" id="highlighted-comment">
+      <div *ngIf="highlightedThread" id="highlighted-comment">
         <my-video-comment
-            [comment]="highlightedComment"
+            [comment]="highlightedThread"
             [video]="video"
             [inReplyToCommentId]="inReplyToCommentId"
-            [commentTree]="threadComments[highlightedComment.id]"
+            [commentTree]="threadComments[highlightedThread.id]"
             [highlightedComment]="true"
             (wantedToReply)="onWantedToReply($event)"
             (wantedToDelete)="onWantedToDelete($event)"
@@ -35,7 +35,7 @@
 
       <div *ngFor="let comment of comments">
         <my-video-comment
-          *ngIf="!highlightedComment || comment.id !== highlightedComment.id"
+          *ngIf="!highlightedThread || comment.id !== highlightedThread.id"
           [comment]="comment"
           [video]="video"
           [inReplyToCommentId]="inReplyToCommentId"
