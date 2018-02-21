@@ -157,7 +157,6 @@ export class AccountModel extends Model<AccountModel> {
   static loadLocalByName (name: string) {
     const query = {
       where: {
-        name,
         [ Sequelize.Op.or ]: [
           {
             userId: {
@@ -170,7 +169,41 @@ export class AccountModel extends Model<AccountModel> {
             }
           }
         ]
-      }
+      },
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            preferredUsername: name
+          }
+        }
+      ]
+    }
+
+    return AccountModel.findOne(query)
+  }
+
+  static loadLocalByNameAndHost (name: string, host: string) {
+    const query = {
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            preferredUsername: name
+          },
+          include: [
+            {
+              model: ServerModel,
+              required: true,
+              where: {
+                host
+              }
+            }
+          ]
+        }
+      ]
     }
 
     return AccountModel.findOne(query)

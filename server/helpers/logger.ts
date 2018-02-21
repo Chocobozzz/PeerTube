@@ -59,7 +59,7 @@ const logger = new winston.createLogger({
       )
     }),
     new winston.transports.Console({
-      handleExcegiptions: true,
+      handleExceptions: true,
       humanReadableUnhandledException: true,
       format: winston.format.combine(
         timestampFormatter,

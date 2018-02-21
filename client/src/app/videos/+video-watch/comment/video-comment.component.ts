@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { MarkdownService } from '@app/videos/shared'
+import { LinkifierService } from '@app/videos/+video-watch/comment/linkifier.service'
 import * as sanitizeHtml from 'sanitize-html'
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { UserRight } from '../../../../../../shared/models/users'
@@ -31,8 +31,8 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   newParentComments = []
 
   constructor (
-    private authService: AuthService,
-    private markdownService: MarkdownService
+    private linkifierService: LinkifierService,
+    private authService: AuthService
   ) {}
 
   get user () {
@@ -93,13 +93,26 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   private init () {
-    this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
-      allowedTags: [ 'a', 'p', 'span', 'br' ],
-      allowedSchemes: [ 'http', 'https' ]
-    })
-
     // Convert possible markdown to html
-    this.sanitizedCommentHTML = this.markdownService.linkify(this.comment.text)
+    const html = this.linkifierService.linkify(this.comment.text)
+
+    this.sanitizedCommentHTML = sanitizeHtml(html, {
+      allowedTags: [ 'a', 'p', 'span', 'br' ],
+      allowedSchemes: [ 'http', 'https' ],
+      allowedAttributes: {
+        'a': [ 'href', 'class' ]
+      },
+      transformTags: {
+        a: (tagName, attribs) => {
+          return {
+            tagName,
+            attribs: Object.assign(attribs, {
+              target: '_blank'
+            })
+          }
+        }
+      }
+    })
 
     this.newParentComments = this.parentComments.concat([ this.comment ])
   }

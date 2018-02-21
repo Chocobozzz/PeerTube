@@ -57,6 +57,7 @@
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "html-webpack-plugin": "^2.19.0",
+    "linkifyjs": "^2.1.5",
     "lodash-es": "^4.17.4",
     "markdown-it": "^8.4.0",
     "ngx-bootstrap": "2.0.2",

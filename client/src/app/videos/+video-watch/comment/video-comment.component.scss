@@ -46,10 +46,15 @@
     .comment-html {
       word-break: break-all;
 
-      a {
+      /deep/ a {
         @include disable-default-a-behaviour;
 
         color: #000;
+
+        // Semi bold mentions
+        &:not(.linkified-url) {
+          font-weight: $font-semibold;
+        }
       }
     }
 
