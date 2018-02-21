@@ -154,7 +154,7 @@ $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/conf
 #### Auto (minor versions only)
 
 ```
-$ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube sh upgrade.sh
+$ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube ./upgrade.sh
 $ sudo systemctl restart peertube && sudo journalctl -fu peertube
 ```
 
