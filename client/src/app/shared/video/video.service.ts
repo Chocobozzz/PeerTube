@@ -51,18 +51,19 @@ export class VideoService {
     const licence = video.licence || undefined
     const category = video.category || undefined
     const description = video.description || undefined
+    const support = video.support || undefined
 
     const body: VideoUpdate = {
       name: video.name,
       category,
       licence,
       language,
+      support,
       description,
       privacy: video.privacy,
       tags: video.tags,
       nsfw: video.nsfw,
       commentsEnabled: video.commentsEnabled,
-      support: video.support,
       thumbnailfile: video.thumbnailfile,
       previewfile: video.previewfile
     }

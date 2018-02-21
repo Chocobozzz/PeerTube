@@ -44,7 +44,7 @@
               <span class="icon icon-dislike" title="Dislike this video"></span>
             </div>
 
-            <div (click)="showSupportModal()" class="action-button action-button-support">
+            <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
               <span class="icon icon-support"></span>
               <span class="icon-text">Support</span>
             </div>
