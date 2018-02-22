@@ -13,8 +13,9 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "lint": "standard && tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
+    "lint": "tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts'",
     "webpack": "webpack",
+    "tslint": "tslint",
     "ng": "ng",
     "postinstall": "npm rebuild node-sass",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer"
@@ -75,7 +76,6 @@
     "sanitize-html": "^1.16.3",
     "sass-loader": "^6.0.3",
     "sass-resources-loader": "^1.2.1",
-    "standard": "^10.0.0",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^7.0.0",
     "typescript": "2.6",
