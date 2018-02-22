@@ -1,0 +1,33 @@
+@import '_variables';
+@import '_mixins';
+
+.help-tooltip-button {
+  @include icon(17px);
+
+  position: relative;
+  top: -2px;
+  background-image: url('../../../assets/images/global/help.svg');
+  background-color: #fff;
+  border: none;
+}
+
+/deep/ {
+  .help-tooltip {
+    opacity: 1 !important;
+
+    .tooltip-inner {
+      text-align: left;
+      padding: 10px;
+
+      font-size: 13px;
+      font-family: $main-fonts;
+      background-color: #fff;
+      color: #000;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+  }
+}

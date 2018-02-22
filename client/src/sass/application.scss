@@ -19,7 +19,7 @@ $FontPathSourceSansPro: '../../node_modules/npm-font-source-sans-pro/fonts';
 }
 
 body {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: $main-fonts;
   font-weight: $font-regular;
   color: #000;
 }

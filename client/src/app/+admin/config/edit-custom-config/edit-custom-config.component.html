@@ -1,6 +1,6 @@
 <div class="admin-sub-title">Update PeerTube configuration</div>
 
-<form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+<form role="form" [formGroup]="form">
 
   <div class="inner-form-title">Instance</div>
 
@@ -16,7 +16,7 @@
   </div>
 
   <div class="form-group">
-    <label for="instanceDescription">Description (markdown)</label>
+    <label for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
     <my-markdown-textarea
         id="instanceDescription" formControlName="instanceDescription" textareaWidth="500px" [previewColumn]="true"
         [classes]="{ 'input-error': formErrors['instanceDescription'] }"
@@ -27,7 +27,7 @@
   </div>
 
   <div class="form-group">
-    <label for="instanceTerms">Terms (markdown)</label>
+    <label for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
     <my-markdown-textarea
         id="instanceTerms" formControlName="instanceTerms" textareaWidth="500px" [previewColumn]="true"
         [ngClass]="{ 'input-error': formErrors['instanceTerms'] }"
@@ -152,5 +152,5 @@
     </div>
   </div>
 
-  <input type="submit" value="Update configuration" [disabled]="!form.valid">
+  <input (click)="formValidated()" type="submit" value="Update configuration" [disabled]="!form.valid">
 </form>

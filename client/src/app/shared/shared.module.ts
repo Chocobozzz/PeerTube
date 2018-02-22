@@ -4,12 +4,14 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
+import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { MarkdownService } from '@app/videos/shared'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
 import { TabsModule } from 'ngx-bootstrap/tabs'
+import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
@@ -38,6 +40,7 @@ import { VideoService } from './video/video.service'
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
     TabsModule.forRoot(),
+    TooltipModule.forRoot(),
 
     PrimeSharedModule,
     NgPipesModule
@@ -52,7 +55,8 @@ import { VideoService } from './video/video.service'
     NumberFormatterPipe,
     FromNowPipe,
     MarkdownTextareaComponent,
-    InfiniteScrollerDirective
+    InfiniteScrollerDirective,
+    HelpComponent
   ],
 
   exports: [
@@ -65,6 +69,7 @@ import { VideoService } from './video/video.service'
     BsDropdownModule,
     ModalModule,
     TabsModule,
+    TooltipModule,
     PrimeSharedModule,
     BytesPipe,
     KeysPipe,
@@ -76,6 +81,7 @@ import { VideoService } from './video/video.service'
     EditButtonComponent,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
+    HelpComponent,
 
     NumberFormatterPipe,
     FromNowPipe

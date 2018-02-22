@@ -20,7 +20,7 @@
         </div>
 
         <div class="form-group">
-          <label for="description">Description</label>
+          <label for="description">Description</label> <my-help helpType="markdownText"></my-help>
           <my-markdown-textarea truncate="250" formControlName="description"></my-markdown-textarea>
 
           <div *ngIf="formErrors.description" class="form-error">
@@ -127,7 +127,7 @@
         </div>
 
         <div class="form-group">
-          <label for="support">Support (markdown)</label>
+          <label for="support">Support</label><my-help helpType="markdownEnhanced"></my-help>
           <my-markdown-textarea
               id="support" formControlName="support" textareaWidth="500px" [previewColumn]="true" markdownType="enhanced"
               [classes]="{ 'input-error': formErrors['support'] }"
