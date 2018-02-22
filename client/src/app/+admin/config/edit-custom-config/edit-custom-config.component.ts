@@ -49,7 +49,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     signupLimit: '',
     adminEmail: '',
     userVideoQuota: '',
-    transcodingThreads: ''
+    transcodingThreads: '',
+    customizationJavascript: '',
+    customizationCSS: ''
   }
   validationMessages = {
     instanceName: INSTANCE_NAME.MESSAGES,
@@ -84,7 +86,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       adminEmail: [ '', ADMIN_EMAIL.VALIDATORS ],
       userVideoQuota: [ '', USER_VIDEO_QUOTA.VALIDATORS ],
       transcodingThreads: [ '', TRANSCODING_THREADS.VALIDATORS ],
-      transcodingEnabled: [ ]
+      transcodingEnabled: [ ],
+      customizationJavascript: [ '' ],
+      customizationCSS: [ '' ]
     }
 
     for (const resolution of this.resolutions) {
@@ -125,7 +129,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instance: {
         name: this.form.value['instanceName'],
         description: this.form.value['instanceDescription'],
-        terms: this.form.value['instanceTerms']
+        terms: this.form.value['instanceTerms'],
+        customizations: {
+          javascript: this.form.value['customizationJavascript'],
+          css: this.form.value['customizationCSS']
+        }
       },
       cache: {
         previews: {
@@ -183,7 +191,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       adminEmail: this.customConfig.admin.email,
       userVideoQuota: this.customConfig.user.videoQuota,
       transcodingThreads: this.customConfig.transcoding.threads,
-      transcodingEnabled: this.customConfig.transcoding.enabled
+      transcodingEnabled: this.customConfig.transcoding.enabled,
+      customizationJavascript: this.customConfig.instance.customizations.javascript,
+      customizationCSS: this.customConfig.instance.customizations.css
     }
 
     for (const resolution of this.resolutions) {

@@ -74,3 +74,6 @@ instance:
   name: 'PeerTube'
   description: '' # Support markdown
   terms: '' # Support markdown
+  customizations:
+    javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
+    css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime

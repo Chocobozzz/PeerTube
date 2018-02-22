@@ -2,7 +2,11 @@ export interface ServerConfig {
   serverVersion: string
 
   instance: {
-    name: string
+    name: string;
+    customizations: {
+      javascript: string
+      css: string
+    }
   }
 
   signup: {

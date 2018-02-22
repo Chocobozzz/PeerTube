@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { GuardsCheckStart, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { isInSmallView } from '@app/shared/misc/utils'
@@ -24,10 +25,13 @@ export class AppComponent implements OnInit {
 
   isMenuDisplayed = true
 
+  customCSS: SafeHtml
+
   constructor (
     private router: Router,
     private authService: AuthService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private domSanitizer: DomSanitizer
   ) {}
 
   get serverVersion () {
@@ -66,6 +70,26 @@ export class AppComponent implements OnInit {
         }
       }
     )
+
+    this.serverService.configLoaded
+      .subscribe(() => {
+        const config = this.serverService.getConfig()
+
+        // We test customCSS in case or the admin removed the css
+        if (this.customCSS || config.instance.customizations.css) {
+          const styleTag = '<style>' + config.instance.customizations.css + '</style>'
+          this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
+        }
+
+        if (config.instance.customizations.javascript) {
+          try {
+            // tslint:disable:no-eval
+            eval(config.instance.customizations.javascript)
+          } catch (err) {
+            console.error('Cannot eval custom JavaScript.', err)
+          }
+        }
+      })
   }
 
   toggleMenu () {

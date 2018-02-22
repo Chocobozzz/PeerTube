@@ -158,7 +158,11 @@ const CONFIG = {
   INSTANCE: {
     get NAME () { return config.get<string>('instance.name') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
-    get TERMS () { return config.get<string>('instance.terms') }
+    get TERMS () { return config.get<string>('instance.terms') },
+    CUSTOMIZATIONS: {
+      get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
+      get CSS () { return config.get<string>('instance.customizations.css') }
+    }
   }
 }
 

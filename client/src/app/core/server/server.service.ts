@@ -12,6 +12,7 @@ export class ServerService {
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
+  configLoaded = new ReplaySubject<boolean>(1)
   videoPrivaciesLoaded = new ReplaySubject<boolean>(1)
   videoCategoriesLoaded = new ReplaySubject<boolean>(1)
   videoLicencesLoaded = new ReplaySubject<boolean>(1)
@@ -19,7 +20,11 @@ export class ServerService {
 
   private config: ServerConfig = {
     instance: {
-      name: 'PeerTube'
+      name: 'PeerTube',
+      customizations: {
+        javascript: '',
+        css: ''
+      }
     },
     serverVersion: 'Unknown',
     signup: {
@@ -56,7 +61,11 @@ export class ServerService {
   loadConfig () {
     this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
       .do(this.saveConfigLocally)
-      .subscribe(data => this.config = data)
+      .subscribe(data => {
+        this.config = data
+
+        this.configLoaded.next(true)
+      })
   }
 
   loadVideoCategories () {

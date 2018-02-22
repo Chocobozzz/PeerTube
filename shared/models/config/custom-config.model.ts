@@ -3,6 +3,10 @@ export interface CustomConfig {
     name: string
     description: string
     terms: string
+    customizations: {
+      javascript?: string
+      css?: string
+    }
   }
 
   cache: {

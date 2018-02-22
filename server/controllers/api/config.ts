@@ -43,7 +43,11 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
 
   const json: ServerConfig = {
     instance: {
-      name: CONFIG.INSTANCE.NAME
+      name: CONFIG.INSTANCE.NAME,
+      customizations: {
+        javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
+        css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
+      }
     },
     serverVersion: packageJSON.version,
     signup: {
@@ -132,7 +136,11 @@ function customConfig (): CustomConfig {
     instance: {
       name: CONFIG.INSTANCE.NAME,
       description: CONFIG.INSTANCE.DESCRIPTION,
-      terms: CONFIG.INSTANCE.TERMS
+      terms: CONFIG.INSTANCE.TERMS,
+      customizations: {
+        css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
+        javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
+      }
     },
     cache: {
       previews: {

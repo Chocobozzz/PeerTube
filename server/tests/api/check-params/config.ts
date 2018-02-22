@@ -17,7 +17,11 @@ describe('Test config API validators', function () {
     instance: {
       name: 'PeerTube updated',
       description: 'my super description',
-      terms: 'my super terms'
+      terms: 'my super terms',
+      customizations: {
+        javascript: 'alert("coucou")',
+        css: 'body { background-color: red; }'
+      }
     },
     cache: {
       previews: {

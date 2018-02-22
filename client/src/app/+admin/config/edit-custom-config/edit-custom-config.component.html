@@ -128,5 +128,29 @@
     </div>
   </ng-template>
 
+  <div class="inner-form-title">Customizations</div>
+
+  <div class="form-group">
+    <label for="customizationJavascript">JavaScript</label>
+    <textarea
+        id="customizationJavascript" formControlName="customizationJavascript"
+        [ngClass]="{ 'input-error': formErrors['customizationJavascript'] }"
+    ></textarea>
+    <div *ngIf="formErrors.customizationJavascript" class="form-error">
+      {{ formErrors.customizationJavascript }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="customizationCSS">CSS</label>
+    <textarea
+        id="customizationCSS" formControlName="customizationCSS"
+        [ngClass]="{ 'input-error': formErrors['customizationCSS'] }"
+    ></textarea>
+    <div *ngIf="formErrors.customizationCSS" class="form-error">
+      {{ formErrors.customizationCSS }}
+    </div>
+  </div>
+
   <input type="submit" value="Update configuration" [disabled]="!form.valid">
 </form>
