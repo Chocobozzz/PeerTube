@@ -12,6 +12,19 @@ if (environment.production) {
 
 const bootstrap = () => platformBrowserDynamic()
   .bootstrapModule(AppModule)
+  .then(bootstrapModule => {
+    // TODO: Remove when https://github.com/angular/angular-cli/issues/8779 is fixed?
+    if ('serviceWorker' in navigator && environment.production) {
+      navigator.serviceWorker.register('/ngsw-worker.js')
+        .catch(err => console.error('Cannot register service worker.', err))
+    }
+
+    return bootstrapModule
+  })
+  .catch(err => {
+    console.error(err)
+    return null
+  })
 
 if (environment.hmr) {
   if (module[ 'hot' ]) {

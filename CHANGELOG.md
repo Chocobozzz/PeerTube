@@ -2,6 +2,10 @@
 
 ## v0.0.27-alpha
 
+### Features
+
+ * Add ability for admin to inject custom JavaScript/CSS
+
 ### Bug fixes
 
  * Fix comment reply highlighting

@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
-import { ServiceWorkerModule } from '@angular/service-worker'
 import { AboutModule } from '@app/about'
 import { ResetPasswordModule } from '@app/reset-password'
 
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
-import { environment } from '../environments/environment'
 
 import { AccountModule } from './account'
 
@@ -60,9 +58,7 @@ export function metaFactory (): MetaLoader {
     MetaModule.forRoot({
       provide: MetaLoader,
       useFactory: (metaFactory)
-    }),
-
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+    })
   ],
   providers: [ ]
 })

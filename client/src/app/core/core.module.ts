@@ -1,7 +1,7 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
+import { NgModule, Optional, SkipSelf } from '@angular/core'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouterModule } from '@angular/router'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 
@@ -9,10 +9,10 @@ import { SimpleNotificationsModule } from 'angular2-notifications'
 import { ModalModule } from 'ngx-bootstrap/modal'
 
 import { AuthService } from './auth'
-import { LoginGuard, UserRightGuard } from './routing'
-import { ServerService } from './server'
 import { ConfirmComponent, ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
+import { LoginGuard, UserRightGuard } from './routing'
+import { ServerService } from './server'
 
 @NgModule({
   imports: [
