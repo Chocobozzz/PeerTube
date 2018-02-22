@@ -133,8 +133,14 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   }
 
   uploadFirstStep () {
-    const videofile = this.videofileInput.nativeElement.files[0]
+    const videofile = this.videofileInput.nativeElement.files[0] as File
     if (!videofile) return
+
+    // Cannot upload videos > 4GB for now
+    if (videofile.size > 4 * 1024 * 1024 * 1024) {
+      this.notificationsService.error('Error', 'We are sorry but PeerTube cannot handle videos > 4GB')
+      return
+    }
 
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
