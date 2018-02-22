@@ -14,12 +14,7 @@
           "output": "./client/assets/images",
           "allowOutsideOutDir": false
         },
-                {
-          "glob": "",
-          "input": "./manifest.json",
-          "output": "./manifest.json",
-          "allowOutsideOutDir": false
-        }
+        "./manifest.json"
       ],
       "deployUrl": "client/",
       "index": "index.html",

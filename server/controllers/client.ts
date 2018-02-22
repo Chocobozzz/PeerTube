@@ -12,6 +12,7 @@ const clientsRouter = express.Router()
 const distPath = join(root(), 'client', 'dist')
 const assetsImagesPath = join(root(), 'client', 'dist', 'client', 'assets', 'images')
 const manifestPath = join(root(), 'client', 'dist', 'manifest.json')
+const serviceWorkerPath = join(root(), 'client', 'dist', 'ngsw-worker.js')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const indexPath = join(distPath, 'index.html')
 
@@ -27,6 +28,7 @@ clientsRouter.use('/videos/embed', (req: express.Request, res: express.Response,
 
 // Static HTML/CSS/JS client files
 clientsRouter.use('/manifest.json', express.static(manifestPath, { maxAge: STATIC_MAX_AGE }))
+clientsRouter.use('/ngsw-worker.js', express.static(serviceWorkerPath, { maxAge: STATIC_MAX_AGE }))
 clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
 clientsRouter.use('/client/assets/images', express.static(assetsImagesPath, { maxAge: STATIC_MAX_AGE }))
 

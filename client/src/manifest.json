@@ -1,6 +1,6 @@
 {
-  "background_color": "white",
-  "theme_color": "black",
+  "background_color": "#fff",
+  "theme_color": "#fff",
   "description": "A federated video streaming platform using P2P",
   "display": "standalone",
   "orientation": "any",
