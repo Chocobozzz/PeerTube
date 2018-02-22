@@ -59,14 +59,6 @@ function immutableAssign <A, B> (target: A, source: B) {
   return Object.assign({}, target, source)
 }
 
-function isInSmallView () {
-  return window.innerWidth < 600
-}
-
-function isInMobileView () {
-  return window.innerWidth < 500
-}
-
 // Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34
 function objectToFormData (obj: any, form?: FormData, namespace?: string) {
   let fd = form || new FormData()
@@ -92,6 +84,18 @@ function lineFeedToHtml (obj: object, keyToNormalize: string) {
   return immutableAssign(obj, {
     [keyToNormalize]: obj[keyToNormalize].replace(/\r?\n|\r/g, '<br />')
   })
+}
+
+// Try to cache a little bit window.innerWidth
+let windowInnerWidth = window.innerWidth
+setInterval(() => windowInnerWidth = window.innerWidth, 500)
+
+function isInSmallView () {
+  return windowInnerWidth < 600
+}
+
+function isInMobileView () {
+  return windowInnerWidth < 500
 }
 
 export {

@@ -5,6 +5,7 @@ import 'rxjs/add/operator/distinctUntilChanged'
 import 'rxjs/add/operator/filter'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/startWith'
+import 'rxjs/add/operator/throttleTime'
 import { fromEvent } from 'rxjs/observable/fromEvent'
 
 @Directive({
@@ -37,6 +38,7 @@ export class InfiniteScrollerDirective implements OnInit {
   initialize () {
     const scrollObservable = fromEvent(window, 'scroll')
       .startWith(true)
+      .throttleTime(200)
       .map(() => ({ current: window.scrollY, maximumScroll: document.body.clientHeight - window.innerHeight }))
 
     // Scroll Down
@@ -49,7 +51,6 @@ export class InfiniteScrollerDirective implements OnInit {
         return res
       })
       .filter(({ current, maximumScroll }) => maximumScroll <= 0 || (current / maximumScroll) > this.decimalLimit)
-      .debounceTime(200)
       .distinct()
       .subscribe(() => this.nearOfBottom.emit())
 
@@ -65,13 +66,11 @@ export class InfiniteScrollerDirective implements OnInit {
       .filter(({ current, maximumScroll }) => {
         return current !== 0 && (1 - (current / maximumScroll)) > this.decimalLimit
       })
-      .debounceTime(200)
       .distinct()
       .subscribe(() => this.nearOfTop.emit())
 
     // Page change
     scrollObservable
-      .debounceTime(500)
       .distinct()
       .map(({ current }) => Math.max(1, Math.round((current + InfiniteScrollerDirective.PAGE_VIEW_TOP_MARGIN) / this.pageHeight)))
       .distinctUntilChanged()
