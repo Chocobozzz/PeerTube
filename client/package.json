@@ -21,12 +21,9 @@
     "webpack-bundle-analyzer": "webpack-bundle-analyzer"
   },
   "license": "GPLv3",
-  "resolutions": {
-    "copy-webpack-plugin": "4.3.0"
-  },
   "devDependencies": {
     "@angular/animations": "~5.2.2",
-    "@angular/cli": "1.6.7",
+    "@angular/cli": "1.7.1",
     "@angular/common": "~5.2.2",
     "@angular/compiler": "~5.2.2",
     "@angular/compiler-cli": "~5.2.2",
@@ -62,8 +59,8 @@
     "lodash-es": "^4.17.4",
     "markdown-it": "^8.4.0",
     "ngx-bootstrap": "2.0.2",
-    "ngx-chips": "1.6.3",
-    "ngx-clipboard": "9.0.1",
+    "ngx-chips": "1.6.4",
+    "ngx-clipboard": "10.0.0",
     "ngx-pipes": "^2.0.5",
     "node-sass": "^4.1.1",
     "npm-font-source-sans-pro": "^1.0.2",
@@ -78,7 +75,7 @@
     "sass-resources-loader": "^1.2.1",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^7.0.0",
-    "typescript": "2.6",
+    "typescript": "2.7.2",
     "uglifyjs-webpack-plugin": "^1.1.2",
     "video.js": "^6.2.0",
     "videojs-dock": "^2.0.2",
