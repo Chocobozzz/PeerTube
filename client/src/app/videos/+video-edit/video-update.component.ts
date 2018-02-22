@@ -53,9 +53,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.serverService.videoPrivaciesLoaded
       .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
 
-    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-      .catch(err => console.error('Cannot populate async user video channels.', err))
-
     const uuid: string = this.route.snapshot.params['uuid']
     this.videoService.getVideo(uuid)
       .switchMap(video => {
@@ -66,6 +63,13 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
       .subscribe(
         video => {
           this.video = new VideoEdit(video)
+
+          this.userVideoChannels = [
+            {
+              id: video.channel.id,
+              label: video.channel.displayName
+            }
+          ]
 
           // We cannot set private a video that was not private
           if (video.privacy !== VideoPrivacy.PRIVATE) {

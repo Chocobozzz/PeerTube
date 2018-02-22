@@ -16,7 +16,9 @@ const expect = chai.expect
 describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
   let server: ServerInfo
+  let userAccessToken = ''
   let channelId: number
+  let videoId
 
   // ---------------------------------------------------------------
 
@@ -28,6 +30,11 @@ describe('Test videos API validator', function () {
     server = await runServer(1)
 
     await setAccessTokensToServers([ server ])
+
+    const username = 'user1'
+    const password = 'my super password'
+    await createUser(server.url, server.accessToken, username, password)
+    userAccessToken = await userLogin(server, { username, password })
 
     const res = await getMyUserInformation(server.url, server.accessToken)
     channelId = res.body.videoChannels[0].id
@@ -359,11 +366,10 @@ describe('Test videos API validator', function () {
       privacy: VideoPrivacy.PUBLIC,
       tags: [ 'tag1', 'tag2' ]
     }
-    let videoId
 
     before(async function () {
       const res = await getVideosList(server.url)
-      videoId = res.body.data[0].id
+      videoId = res.body.data[0].uuid
     })
 
     it('Should fail with nothing', async function () {
@@ -518,7 +524,11 @@ describe('Test videos API validator', function () {
       })
     })
 
-    it('Should fail with a video of another user')
+    it('Should fail with a video of another user without the appropriate right', async function () {
+      const fields = baseCorrectParams
+
+      await makePutBodyRequest({ url: server.url, path: path + videoId, token: userAccessToken, fields, statusCodeExpected: 403 })
+    })
 
     it('Should fail with a video of another server')
 
@@ -549,7 +559,9 @@ describe('Test videos API validator', function () {
       await getVideo(server.url, '4da6fde3-88f7-4d16-b119-108df5630b06', 404)
     })
 
-    it('Should succeed with the correct parameters')
+    it('Should succeed with the correct parameters', async function () {
+      await getVideo(server.url, videoId)
+    })
   })
 
   describe('When rating a video', function () {
@@ -618,11 +630,15 @@ describe('Test videos API validator', function () {
       await removeVideo(server.url, server.accessToken, '4da6fde3-88f7-4d16-b119-108df5630b06', 404)
     })
 
-    it('Should fail with a video of another user')
+    it('Should fail with a video of another user without the appropriate right', async function () {
+      await removeVideo(server.url, userAccessToken, videoId, 403)
+    })
 
     it('Should fail with a video of another server')
 
-    it('Should succeed with the correct parameters')
+    it('Should succeed with the correct parameters', async function () {
+      await removeVideo(server.url, server.accessToken, videoId)
+    })
   })
 
   after(async function () {

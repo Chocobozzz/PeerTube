@@ -130,18 +130,8 @@ const videosUpdateValidator = [
 
     const video = res.locals.video
 
-    // We need to make additional checks
-    if (video.isOwned() === false) {
-      return res.status(403)
-                .json({ error: 'Cannot update video of another server' })
-                .end()
-    }
-
-    if (video.VideoChannel.Account.userId !== res.locals.oauth.token.User.id) {
-      return res.status(403)
-                .json({ error: 'Cannot update video of another user' })
-                .end()
-    }
+    // Check if the user who did the request is able to update the video
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
 
     if (video.privacy !== VideoPrivacy.PRIVATE && req.body.privacy === VideoPrivacy.PRIVATE) {
       return res.status(409)
@@ -198,7 +188,7 @@ const videosRemoveValidator = [
     if (!await isVideoExist(req.params.id, res)) return
 
     // Check if the user who did the request is able to delete the video
-    if (!checkUserCanDeleteVideo(res.locals.oauth.token.User, res.locals.video, res)) return
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.REMOVE_ANY_VIDEO, res)) return
 
     return next()
   }
@@ -282,7 +272,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserCanDeleteVideo (user: UserModel, video: VideoModel, res: express.Response) {
+function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: UserRight, res: express.Response) {
   // Retrieve the user who did the request
   if (video.isOwned() === false) {
     res.status(403)
@@ -295,7 +285,7 @@ function checkUserCanDeleteVideo (user: UserModel, video: VideoModel, res: expre
   // The user can delete it if he has the right
   // Or if s/he is the video's account
   const account = video.VideoChannel.Account
-  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO) === false && account.userId !== user.id) {
+  if (user.hasRight(right) === false && account.userId !== user.id) {
     res.status(403)
               .json({ error: 'Cannot remove video of another user' })
               .end()

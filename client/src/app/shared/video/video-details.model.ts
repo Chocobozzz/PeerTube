@@ -88,6 +88,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   isUpdatableBy (user: AuthUser) {
-    return user && this.isLocal === true && user.username === this.accountName
+    return user && this.isLocal === true && (this.accountName === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
 }
