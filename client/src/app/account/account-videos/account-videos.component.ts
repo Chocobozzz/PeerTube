@@ -56,55 +56,49 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
     return this.videoService.getMyVideos(newPagination, this.sort)
   }
 
-  deleteSelectedVideos () {
+  async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.keys(this.checkedVideos)
       .filter(k => this.checkedVideos[k] === true)
       .map(k => parseInt(k, 10))
 
-    this.confirmService.confirm(`Do you really want to delete ${toDeleteVideosIds.length} videos?`, 'Delete').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm(`Do you really want to delete ${toDeleteVideosIds.length} videos?`, 'Delete')
+    if (res === false) return
 
-        const observables: Observable<any>[] = []
-        for (const videoId of toDeleteVideosIds) {
-          const o = this.videoService
-            .removeVideo(videoId)
-            .do(() => this.spliceVideosById(videoId))
+    const observables: Observable<any>[] = []
+    for (const videoId of toDeleteVideosIds) {
+      const o = this.videoService
+        .removeVideo(videoId)
+        .do(() => this.spliceVideosById(videoId))
 
-          observables.push(o)
-        }
+      observables.push(o)
+    }
 
-        Observable.from(observables)
-          .concatAll()
-          .subscribe(
-            res => {
-              this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`)
-              this.buildVideoPages()
-            },
+    Observable.from(observables)
+      .concatAll()
+      .subscribe(
+        res => {
+          this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`)
+          this.buildVideoPages()
+        },
 
-            err => this.notificationsService.error('Error', err.message)
-          )
-      }
-    )
+        err => this.notificationsService.error('Error', err.message)
+      )
   }
 
-  deleteVideo (video: Video) {
-    this.confirmService.confirm(`Do you really want to delete ${video.name}?`, 'Delete').subscribe(
-      res => {
-        if (res === false) return
+  async deleteVideo (video: Video) {
+    const res = await this.confirmService.confirm(`Do you really want to delete ${video.name}?`, 'Delete')
+    if (res === false) return
 
-        this.videoService.removeVideo(video.id)
-          .subscribe(
-            status => {
-              this.notificationsService.success('Success', `Video ${video.name} deleted.`)
-              this.spliceVideosById(video.id)
-              this.buildVideoPages()
-            },
+    this.videoService.removeVideo(video.id)
+      .subscribe(
+        status => {
+          this.notificationsService.success('Success', `Video ${video.name} deleted.`)
+          this.spliceVideosById(video.id)
+          this.buildVideoPages()
+        },
 
-            error => this.notificationsService.error('Error', error.message)
-          )
-      }
-    )
+        error => this.notificationsService.error('Error', error.message)
+      )
   }
 
   private spliceVideosById (id: number) {

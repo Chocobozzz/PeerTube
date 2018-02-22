@@ -43,7 +43,7 @@ export class FollowingAddComponent {
     }
   }
 
-  addFollowing () {
+  async addFollowing () {
     this.error = ''
 
     const hosts = this.getNotEmptyHosts()
@@ -57,20 +57,17 @@ export class FollowingAddComponent {
     }
 
     const confirmMessage = 'If you confirm, you will send a follow request to:<br /> - ' + hosts.join('<br /> - ')
-    this.confirmService.confirm(confirmMessage, 'Follow new server(s)').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm(confirmMessage, 'Follow new server(s)')
+    if (res === false) return
 
-        this.followService.follow(hosts).subscribe(
-          status => {
-            this.notificationsService.success('Success', 'Follow request(s) sent!')
+    this.followService.follow(hosts).subscribe(
+      () => {
+        this.notificationsService.success('Success', 'Follow request(s) sent!')
 
-            setTimeout(() => this.router.navigate([ '/admin/follows/following-list' ]), 500)
-          },
+        setTimeout(() => this.router.navigate([ '/admin/follows/following-list' ]), 500)
+      },
 
-          err => this.notificationsService.error('Error', err.message)
-        )
-      }
+      err => this.notificationsService.error('Error', err.message)
     )
   }
 

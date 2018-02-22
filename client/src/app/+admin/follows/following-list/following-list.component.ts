@@ -25,20 +25,17 @@ export class FollowingListComponent extends RestTable {
     super()
   }
 
-  removeFollowing (follow: AccountFollow) {
-    this.confirmService.confirm(`Do you really want to unfollow ${follow.following.host}?`, 'Unfollow').subscribe(
-      res => {
-        if (res === false) return
+  async removeFollowing (follow: AccountFollow) {
+    const res = await this.confirmService.confirm(`Do you really want to unfollow ${follow.following.host}?`, 'Unfollow')
+    if (res === false) return
 
-        this.followService.unfollow(follow).subscribe(
-          () => {
-            this.notificationsService.success('Success', `You are not following ${follow.following.host} anymore.`)
-            this.loadData()
-          },
+    this.followService.unfollow(follow).subscribe(
+      () => {
+        this.notificationsService.success('Success', `You are not following ${follow.following.host} anymore.`)
+        this.loadData()
+      },
 
-          err => this.notificationsService.error('Error', err.message)
-        )
-      }
+      err => this.notificationsService.error('Error', err.message)
     )
   }
 

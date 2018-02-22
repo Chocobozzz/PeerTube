@@ -130,24 +130,21 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
   }
 
-  blacklistVideo (event: Event) {
+  async blacklistVideo (event: Event) {
     event.preventDefault()
 
-    this.confirmService.confirm('Do you really want to blacklist this video?', 'Blacklist').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm('Do you really want to blacklist this video?', 'Blacklist')
+    if (res === false) return
 
-        this.videoBlacklistService.blacklistVideo(this.video.id)
-                                  .subscribe(
-                                    status => {
-                                      this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
-                                      this.router.navigate(['/videos/list'])
-                                    },
+    this.videoBlacklistService.blacklistVideo(this.video.id)
+                              .subscribe(
+                                status => {
+                                  this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
+                                  this.router.navigate(['/videos/list'])
+                                },
 
-                                    error => this.notificationsService.error('Error', error.message)
-                                  )
-      }
-    )
+                                error => this.notificationsService.error('Error', error.message)
+                              )
   }
 
   showMoreDescription () {
@@ -236,26 +233,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.isRemovableBy(this.authService.getUser())
   }
 
-  removeVideo (event: Event) {
+  async removeVideo (event: Event) {
     event.preventDefault()
 
-    this.confirmService.confirm('Do you really want to delete this video?', 'Delete')
+    const res = await this.confirmService.confirm('Do you really want to delete this video?', 'Delete')
+    if (res === false) return
+
+    this.videoService.removeVideo(this.video.id)
       .subscribe(
-        res => {
-          if (res === false) return
+        status => {
+          this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
 
-          this.videoService.removeVideo(this.video.id)
-            .subscribe(
-              status => {
-                this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
+          // Go back to the video-list.
+          this.router.navigate([ '/videos/list' ])
+        },
 
-                // Go back to the video-list.
-                this.router.navigate([ '/videos/list' ])
-              },
-
-              error => this.notificationsService.error('Error', error.message)
-            )
-        }
+        error => this.notificationsService.error('Error', error.message)
       )
   }
 

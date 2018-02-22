@@ -4,21 +4,20 @@ import { ModalDirective } from 'ngx-bootstrap/modal'
 
 import { ConfirmService } from './confirm.service'
 
-export interface ConfigChangedEvent {
-  columns: { [id: string]: { isDisplayed: boolean } }
-  config: { resultsPerPage: number }
-}
-
 @Component({
   selector: 'my-confirm',
   templateUrl: './confirm.component.html',
-  styles: [ '.button { padding: 0 13px; }' ]
+  styleUrls: [ './confirm.component.scss' ]
 })
 export class ConfirmComponent implements OnInit {
   @ViewChild('confirmModal') confirmModal: ModalDirective
 
   title = ''
   message = ''
+  expectedInputValue = ''
+  inputLabel = ''
+
+  inputValue = ''
 
   constructor (private confirmService: ConfirmService) {
     // Empty
@@ -31,9 +30,12 @@ export class ConfirmComponent implements OnInit {
     }
 
     this.confirmService.showConfirm.subscribe(
-      ({ title, message }) => {
+      ({ title, message, expectedInputValue, inputLabel }) => {
         this.title = title
         this.message = message
+
+        this.inputLabel = inputLabel
+        this.expectedInputValue = expectedInputValue
 
         this.showModal()
       }
@@ -50,6 +52,13 @@ export class ConfirmComponent implements OnInit {
   cancel () {
     this.confirmService.confirmResponse.next(false)
     this.hideModal()
+  }
+
+  isConfirmationDisabled () {
+    // No input validation
+    if (!this.inputLabel || !this.expectedInputValue) return false
+
+    return this.expectedInputValue !== this.inputValue
   }
 
   showModal () {

@@ -8,12 +8,7 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        {
-          "glob": "**/*",
-          "input": "./assets/images",
-          "output": "./client/assets/images",
-          "allowOutsideOutDir": false
-        },
+        "./assets/images",
         "./manifest.json"
       ],
       "deployUrl": "client/",

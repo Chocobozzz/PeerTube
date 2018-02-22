@@ -109,38 +109,35 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.viewReplies(commentTree.comment.id)
   }
 
-  onWantedToDelete (commentToDelete: VideoComment) {
+  async onWantedToDelete (commentToDelete: VideoComment) {
     let message = 'Do you really want to delete this comment?'
     if (commentToDelete.totalReplies !== 0) message += `${commentToDelete.totalReplies} would be deleted too.`
 
-    this.confirmService.confirm(message, 'Delete').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm(message, 'Delete')
+    if (res === false) return
 
-        this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
-          .subscribe(
-            () => {
-              // Delete the comment in the tree
-              if (commentToDelete.inReplyToCommentId) {
-                const thread = this.threadComments[commentToDelete.threadId]
-                if (!thread) {
-                  console.error(`Cannot find thread ${commentToDelete.threadId} of the comment to delete ${commentToDelete.id}`)
-                  return
-                }
+    this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
+      .subscribe(
+        () => {
+          // Delete the comment in the tree
+          if (commentToDelete.inReplyToCommentId) {
+            const thread = this.threadComments[commentToDelete.threadId]
+            if (!thread) {
+              console.error(`Cannot find thread ${commentToDelete.threadId} of the comment to delete ${commentToDelete.id}`)
+              return
+            }
 
-                this.deleteLocalCommentThread(thread, commentToDelete)
-                return
-              }
+            this.deleteLocalCommentThread(thread, commentToDelete)
+            return
+          }
 
-              // Delete the thread
-              this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
-              this.componentPagination.totalItems--
-            },
+          // Delete the thread
+          this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
+          this.componentPagination.totalItems--
+        },
 
-            err => this.notificationsService.error('Error', err.message)
-          )
-      }
-    )
+        err => this.notificationsService.error('Error', err.message)
+      )
   }
 
   isUserLoggedIn () {

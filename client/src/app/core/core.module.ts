@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule, Optional, SkipSelf } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
@@ -18,6 +19,7 @@ import { ServerService } from './server'
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     BrowserAnimationsModule,
 
     ModalModule,

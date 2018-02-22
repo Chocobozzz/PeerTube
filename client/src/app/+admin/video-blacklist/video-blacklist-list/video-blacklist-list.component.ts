@@ -31,22 +31,19 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
     this.loadData()
   }
 
-  removeVideoFromBlacklist (entry: BlacklistedVideo) {
+  async removeVideoFromBlacklist (entry: BlacklistedVideo) {
     const confirmMessage = 'Do you really want to remove this video from the blacklist ? It will be available again in the video list.'
 
-    this.confirmService.confirm(confirmMessage, 'Remove').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm(confirmMessage, 'Remove')
+    if (res === false) return
 
-        this.videoBlacklistService.removeVideoFromBlacklist(entry.videoId).subscribe(
-          status => {
-            this.notificationsService.success('Success', `Video ${entry.name} removed from the blacklist.`)
-            this.loadData()
-          },
+    this.videoBlacklistService.removeVideoFromBlacklist(entry.videoId).subscribe(
+      () => {
+        this.notificationsService.success('Success', `Video ${entry.name} removed from the blacklist.`)
+        this.loadData()
+      },
 
-          err => this.notificationsService.error('Error', err.message)
-        )
-      }
+      err => this.notificationsService.error('Error', err.message)
     )
   }
 
