@@ -18,7 +18,7 @@ const activityPubValidator = [
     const remoteActor = res.locals.signature.actor as ActorModel
     if (serverActor.id === remoteActor.id) {
       logger.error('Receiving request in INBOX by ourselves!', req.body)
-      return res.sendStatus(409)
+      return res.status(409).end()
     }
 
     return next()

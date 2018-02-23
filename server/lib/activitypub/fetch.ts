@@ -8,7 +8,7 @@ async function addFetchOutboxJob (actor: ActorModel) {
   const serverActor = await getServerActor()
   if (serverActor.id === actor.id) {
     logger.error('Cannot fetch our own outbox!')
-    return
+    return undefined
   }
 
   const payload = {
