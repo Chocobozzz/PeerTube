@@ -106,6 +106,10 @@ async function followRetry (req: express.Request, res: express.Response, next: e
 }
 
 function follow (fromActor: ActorModel, targetActor: ActorModel) {
+  if (fromActor.id === targetActor.id) {
+    throw new Error('Follower is the same than target actor.')
+  }
+
   return sequelizeTypescript.transaction(async t => {
     const [ actorFollow ] = await ActorFollowModel.findOrCreate({
       where: {
