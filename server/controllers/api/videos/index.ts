@@ -22,6 +22,7 @@ import {
 import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
+import { Redis } from '../../../lib/redis'
 import {
   asyncMiddleware,
   authenticate,
@@ -352,7 +353,16 @@ function getVideo (req: express.Request, res: express.Response) {
 async function viewVideo (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.video
 
+  const ip = req.ip
+  const exists = await Redis.Instance.isViewExists(ip, videoInstance.uuid)
+  if (exists) {
+    logger.debug('View for ip %s and video %s already exists.', ip, videoInstance.uuid)
+    return res.status(204).end()
+  }
+
   await videoInstance.increment('views')
+  await Redis.Instance.setView(ip, videoInstance.uuid)
+
   const serverAccount = await getServerActor()
 
   if (videoInstance.isOwned()) {

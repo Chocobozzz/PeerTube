@@ -421,15 +421,22 @@ describe('Test multiple servers', function () {
     })
 
     it('Should view multiple videos on owned servers', async function () {
-      this.timeout(10000)
+      this.timeout(15000)
 
       const tasks: Promise<any>[] = []
-      tasks.push(viewVideo(servers[2].url, localVideosServer3[0]))
-      tasks.push(viewVideo(servers[2].url, localVideosServer3[0]))
-      tasks.push(viewVideo(servers[2].url, localVideosServer3[0]))
-      tasks.push(viewVideo(servers[2].url, localVideosServer3[1]))
+      await viewVideo(servers[2].url, localVideosServer3[0])
+      await viewVideo(servers[2].url, localVideosServer3[0])
+      await viewVideo(servers[2].url, localVideosServer3[0])
+      await viewVideo(servers[2].url, localVideosServer3[1])
 
       await Promise.all(tasks)
+      await wait(1500)
+
+      await viewVideo(servers[2].url, localVideosServer3[0])
+
+      await wait(1500)
+
+      await viewVideo(servers[2].url, localVideosServer3[0])
 
       await wait(5000)
 

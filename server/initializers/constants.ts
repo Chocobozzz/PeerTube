@@ -231,6 +231,8 @@ const CONSTRAINTS_FIELDS = {
   }
 }
 
+let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
+
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
   DISLIKE: 'dislike'
@@ -400,6 +402,7 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
   SCHEDULER_INTERVAL = 10000
+  VIDEO_VIEW_LIFETIME = 1000 // 1 second
 }
 
 updateWebserverConfig()
@@ -442,7 +445,8 @@ export {
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
-  JOB_COMPLETED_LIFETIME
+  JOB_COMPLETED_LIFETIME,
+  VIDEO_VIEW_LIFETIME
 }
 
 // ---------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 import { createClient, RedisClient } from 'redis'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
-import { CONFIG, USER_PASSWORD_RESET_LIFETIME } from '../initializers'
+import { CONFIG, USER_PASSWORD_RESET_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
 
 class Redis {
 
@@ -46,6 +46,14 @@ class Redis {
     return this.getValue(this.generateResetPasswordKey(userId))
   }
 
+  setView (ip: string, videoUUID: string) {
+    return this.setValue(this.buildViewKey(ip, videoUUID), '1', VIDEO_VIEW_LIFETIME)
+  }
+
+  async isViewExists (ip: string, videoUUID: string) {
+    return this.exists(this.buildViewKey(ip, videoUUID))
+  }
+
   private getValue (key: string) {
     return new Promise<string>((res, rej) => {
       this.client.get(this.prefix + key, (err, value) => {
@@ -68,8 +76,22 @@ class Redis {
     })
   }
 
+  private exists (key: string) {
+    return new Promise<boolean>((res, rej) => {
+      this.client.exists(this.prefix + key, (err, existsNumber) => {
+        if (err) return rej(err)
+
+        return res(existsNumber === 1)
+      })
+    })
+  }
+
   private generateResetPasswordKey (userId: number) {
     return 'reset-password-' + userId
+  }
+
+  private buildViewKey (ip: string, videoUUID: string) {
+    return videoUUID + '-' + ip
   }
 
   static get Instance () {
