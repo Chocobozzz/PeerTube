@@ -4,28 +4,22 @@ import * as MarkdownIt from 'markdown-it'
 
 @Injectable()
 export class MarkdownService {
+  static TEXT_RULES = [
+    'linkify',
+    'autolink',
+    'emphasis',
+    'link',
+    'newline',
+    'list'
+  ]
+  static ENHANCED_RULES = MarkdownService.TEXT_RULES.concat([ 'image' ])
+
   private textMarkdownIt: MarkdownIt.MarkdownIt
   private enhancedMarkdownIt: MarkdownIt.MarkdownIt
 
   constructor () {
-    this.textMarkdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
-      .enable('linkify')
-      .enable('autolink')
-      .enable('emphasis')
-      .enable('link')
-      .enable('newline')
-      .enable('list')
-    this.setTargetToLinks(this.textMarkdownIt)
-
-    this.enhancedMarkdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
-      .enable('linkify')
-      .enable('autolink')
-      .enable('emphasis')
-      .enable('link')
-      .enable('newline')
-      .enable('list')
-      .enable('image')
-    this.setTargetToLinks(this.enhancedMarkdownIt)
+    this.textMarkdownIt = this.createMarkdownIt(MarkdownService.TEXT_RULES)
+    this.enhancedMarkdownIt = this.createMarkdownIt(MarkdownService.ENHANCED_RULES)
   }
 
   textMarkdownToHTML (markdown: string) {
@@ -38,6 +32,18 @@ export class MarkdownService {
     const html = this.enhancedMarkdownIt.render(markdown)
 
     return this.avoidTruncatedLinks(html)
+  }
+
+  private createMarkdownIt (rules: string[]) {
+    const markdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
+
+    for (let rule of rules) {
+      markdownIt.enable(rule)
+    }
+
+    this.setTargetToLinks(markdownIt)
+
+    return markdownIt
   }
 
   private setTargetToLinks (markdownIt: MarkdownIt.MarkdownIt) {

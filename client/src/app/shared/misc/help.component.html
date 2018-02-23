@@ -12,4 +12,7 @@
   </ng-template>
 </ng-template>
 
-<button class="help-tooltip-button" containerClass="help-tooltip" [tooltipHtml]="tooltipTemplate" triggers="focus"></button>
+<button
+  class="help-tooltip-button" containerClass="help-tooltip" title="Click to get help"
+  #tooltipDirective="bs-tooltip" [tooltip]="tooltipTemplate" triggers="click"
+></button>

@@ -20,7 +20,8 @@
         </div>
 
         <div class="form-group">
-          <label for="description">Description</label> <my-help helpType="markdownText"></my-help>
+          <label for="description">Description</label>
+          <my-help helpType="markdownText" preHtml="Video descriptions are truncated by default and require manual action to expand them."></my-help>
           <my-markdown-textarea truncate="250" formControlName="description"></my-markdown-textarea>
 
           <div *ngIf="formErrors.description" class="form-error">
@@ -127,7 +128,8 @@
         </div>
 
         <div class="form-group">
-          <label for="support">Support</label><my-help helpType="markdownEnhanced"></my-help>
+          <label for="support">Support</label>
+          <my-help helpType="markdownEnhanced" preHtml="Short text to tell to people how they can support you (membership platform...)."></my-help>
           <my-markdown-textarea
               id="support" formControlName="support" textareaWidth="500px" [previewColumn]="true" markdownType="enhanced"
               [classes]="{ 'input-error': formErrors['support'] }"
