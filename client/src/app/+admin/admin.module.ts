@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core'
 import { ConfigComponent, EditCustomConfigComponent } from '@app/+admin/config'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { TabsModule } from 'ngx-bootstrap/tabs'
-import { DataTableModule } from 'primeng/components/datatable/datatable'
+import { TableModule } from 'primeng/table'
 import { SharedModule } from '../shared'
 import { AdminRoutingModule } from './admin-routing.module'
 import { AdminComponent } from './admin.component'
@@ -19,7 +19,7 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
   imports: [
     AdminRoutingModule,
     TabsModule.forRoot(),
-    DataTableModule,
+    TableModule,
     SharedModule
   ],
 

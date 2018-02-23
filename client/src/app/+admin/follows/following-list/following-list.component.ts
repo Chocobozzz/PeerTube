@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
 import { AccountFollow } from '../../../../../../shared/models/actors/follow.model'
@@ -10,7 +10,7 @@ import { FollowService } from '../shared'
   selector: 'my-followers-list',
   templateUrl: './following-list.component.html'
 })
-export class FollowingListComponent extends RestTable {
+export class FollowingListComponent extends RestTable implements OnInit {
   following: AccountFollow[] = []
   totalRecords = 0
   rowsPerPage = 10
@@ -23,6 +23,10 @@ export class FollowingListComponent extends RestTable {
     private followService: FollowService
   ) {
     super()
+  }
+
+  ngOnInit () {
+    this.loadSort()
   }
 
   async removeFollowing (follow: AccountFollow) {

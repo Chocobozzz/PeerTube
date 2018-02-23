@@ -15,7 +15,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   videoAbuses: VideoAbuse[] = []
   totalRecords = 0
   rowsPerPage = 10
-  sort: SortMeta = { field: 'id', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
@@ -26,11 +26,11 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadData()
+    this.loadSort()
   }
 
-  getRouterVideoLink (videoId: number) {
-    return [ '/videos', videoId ]
+  getRouterVideoLink (videoUUID: string) {
+    return [ '/videos', videoUUID ]
   }
 
   protected loadData () {

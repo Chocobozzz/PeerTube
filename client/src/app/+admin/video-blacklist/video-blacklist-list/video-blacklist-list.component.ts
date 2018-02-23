@@ -16,7 +16,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   blacklist: BlacklistedVideo[] = []
   totalRecords = 0
   rowsPerPage = 10
-  sort: SortMeta = { field: 'id', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
@@ -28,13 +28,13 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadData()
+    this.loadSort()
   }
 
   async removeVideoFromBlacklist (entry: BlacklistedVideo) {
-    const confirmMessage = 'Do you really want to remove this video from the blacklist ? It will be available again in the video list.'
+    const confirmMessage = 'Do you really want to remove this video from the blacklist ? It will be available again in the videos list.'
 
-    const res = await this.confirmService.confirm(confirmMessage, 'Remove')
+    const res = await this.confirmService.confirm(confirmMessage, 'Unblacklist')
     if (res === false) return
 
     this.videoBlacklistService.removeVideoFromBlacklist(entry.videoId).subscribe(

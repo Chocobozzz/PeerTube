@@ -5,6 +5,7 @@
 ### Features
 
  * Add ability for admin to inject custom JavaScript/CSS
+ * Add help tooltip on some fields
 
 ### Bug fixes
 
