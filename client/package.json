@@ -38,6 +38,7 @@
     "@angularclass/hmr": "^2.1.3",
     "@ngx-loading-bar/core": "^1.1.1",
     "@ngx-loading-bar/http-client": "^1.0.0-rc.1",
+    "@ngx-loading-bar/router": "^1.2.0",
     "@ngx-meta/core": "^5.0.0",
     "@types/core-js": "^0.9.28",
     "@types/lodash-es": "^4.17.0",

@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { LoadingBarModule } from '@ngx-loading-bar/core'
 import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 
 import { SimpleNotificationsModule } from 'angular2-notifications'
 import { ModalModule } from 'ngx-bootstrap/modal'
@@ -26,6 +27,7 @@ import { ServerService } from './server'
     SimpleNotificationsModule.forRoot(),
 
     LoadingBarHttpClientModule,
+    LoadingBarRouterModule,
     LoadingBarModule.forRoot()
   ],
 
