@@ -2,10 +2,13 @@
 
 import * as chai from 'chai'
 import 'mocha'
+import { VideoDetails } from '../../../../shared/models/videos'
+import { getVideoFileFPS } from '../../../helpers/ffmpeg-utils'
 import {
-  flushAndRunMultipleServers, flushTests, getVideo, getVideosList, killallServers, ServerInfo, setAccessTokensToServers, uploadVideo,
+  flushAndRunMultipleServers, flushTests, getVideo, getVideosList, killallServers, root, ServerInfo, setAccessTokensToServers, uploadVideo,
   wait, webtorrentAdd
 } from '../../utils'
+import { join } from 'path'
 
 const expect = chai.expect
 
@@ -76,6 +79,34 @@ describe('Test video transcoding', function () {
     expect(torrent.files).to.be.an('array')
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).match(/\.mp4$/)
+  })
+
+  it('Should transcode to 30 FPS', async function () {
+    this.timeout(60000)
+
+    const videoAttributes = {
+      name: 'my super 30fps name for server 2',
+      description: 'my super 30fps description for server 2',
+      fixture: 'video_60fps_short.mp4'
+    }
+    await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+
+    await wait(20000)
+
+    const res = await getVideosList(servers[1].url)
+
+    const video = res.body.data[0]
+    const res2 = await getVideo(servers[1].url, video.id)
+    const videoDetails: VideoDetails = res2.body
+
+    expect(videoDetails.files).to.have.lengthOf(1)
+
+    for (const resolution of [ '240' ]) {
+      const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+      const fps = await getVideoFileFPS(path)
+
+      expect(fps).to.be.below(31)
+    }
   })
 
   after(async function () {

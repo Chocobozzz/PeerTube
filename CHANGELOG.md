@@ -1,5 +1,18 @@
 # Changelog
 
+## v0.0.28-alpha
+
+### BREAKING CHANGES
+
+ * Enable original file transcoding by default in configuration
+ * Disable transcoding in other definitions in configuration
+
+### Features
+
+ * Fallback to HTTP if video cannot be loaded
+ * Limit to 30 FPS in transcoding
+
+
 ## v0.0.27-alpha
 
 ### Features
