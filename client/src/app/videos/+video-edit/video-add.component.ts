@@ -164,7 +164,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     const formData = new FormData()
     formData.append('name', name)
-    // Put the video "private" -> we wait he validates the second step
+    // Put the video "private" -> we are waiting the user validation of the second step
     formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
     formData.append('commentsEnabled', '' + commentsEnabled)
