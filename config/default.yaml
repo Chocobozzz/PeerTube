@@ -61,14 +61,14 @@ user:
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
 # Uses a lot of CPU and increases storage!
 transcoding:
-  enabled: false
+  enabled: true
   threads: 2
   resolutions: # Only created if the original video has a higher resolution
-    240p: true
-    360p: true
-    480p: true
-    720p: true
-    1080p: true
+    240p: false
+    360p: false
+    480p: false
+    720p: false
+    1080p: false
 
 instance:
   name: 'PeerTube'

@@ -61,14 +61,14 @@ user:
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # Uses a lot of CPU!
 transcoding:
-  enabled: false
+  enabled: true
   threads: 2
   resolutions: # Only created if the original video has a higher resolution
-    240p: true
-    360p: true
-    480p: true
-    720p: true
-    1080p: true
+    240p: false
+    360p: false
+    480p: false
+    720p: false
+    1080p: false
 
 instance:
   name: 'PeerTube'
