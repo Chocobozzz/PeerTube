@@ -1,8 +1,8 @@
 // Thanks: https://github.com/feross/render-media
 // TODO: use render-media once https://github.com/feross/render-media/issues/32 is fixed
 
-import { extname } from 'path'
 import * as MediaElementWrapper from 'mediasource'
+import { extname } from 'path'
 import * as videostream from 'videostream'
 
 const VIDEOSTREAM_EXTS = [
@@ -27,7 +27,7 @@ function renderVideo (
   return renderMedia(file, elem, opts, callback)
 }
 
-function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, callback: (err: Error, renderer: any) => void) {
+function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, callback: (err: Error, renderer?: any) => void) {
   const extension = extname(file.name).toLowerCase()
   let preparedElem = undefined
   let currentTime = 0
@@ -41,18 +41,33 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
 
   function useVideostream () {
     prepareElem()
-    preparedElem.addEventListener('error', fallbackToMediaSource)
+    preparedElem.addEventListener('error', function onError () {
+      preparedElem.removeEventListener('error', onError)
+
+      return fallbackToMediaSource()
+    })
     preparedElem.addEventListener('loadstart', onLoadStart)
     return videostream(file, preparedElem)
   }
 
-  function useMediaSource () {
+  function useMediaSource (useVP9 = false) {
+    const codecs = getCodec(file.name, useVP9)
+
     prepareElem()
-    preparedElem.addEventListener('error', callback)
+    preparedElem.addEventListener('error', function onError(err) {
+      // Try with vp9 before returning an error
+      if (codecs.indexOf('vp8') !== -1) {
+        preparedElem.removeEventListener('error', onError)
+
+        return fallbackToMediaSource(true)
+      }
+
+      return callback(err)
+    })
     preparedElem.addEventListener('loadstart', onLoadStart)
 
     const wrapper = new MediaElementWrapper(preparedElem)
-    const writable = wrapper.createWriteStream(getCodec(file.name))
+    const writable = wrapper.createWriteStream(codecs)
     file.createReadStream().pipe(writable)
 
     if (currentTime) preparedElem.currentTime = currentTime
@@ -60,10 +75,11 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
     return wrapper
   }
 
-  function fallbackToMediaSource () {
-    preparedElem.removeEventListener('error', fallbackToMediaSource)
+  function fallbackToMediaSource (useVP9 = false) {
+    if (useVP9 === true) console.log('Falling back to media source with VP9 enabled.')
+    else console.log('Falling back to media source..')
 
-    useMediaSource()
+    useMediaSource(useVP9)
   }
 
   function prepareElem () {
@@ -96,16 +112,19 @@ function validateFile (file) {
   }
 }
 
-function getCodec (name: string) {
+function getCodec (name: string, useVP9 = false) {
   const ext = extname(name).toLowerCase()
-  return {
-    '.m4a': 'audio/mp4; codecs="mp4a.40.5"',
-    '.m4v': 'video/mp4; codecs="avc1.640029, mp4a.40.5"',
-    '.mkv': 'video/webm; codecs="avc1.640029, mp4a.40.5"',
-    '.mp3': 'audio/mpeg',
-    '.mp4': 'video/mp4; codecs="avc1.640029, mp4a.40.5"',
-    '.webm': 'video/webm; codecs="opus, vorbis, vp8"'
-  }[ext]
+  if (ext === '.mp4') {
+    return 'video/mp4; codecs="avc1.640029, mp4a.40.5"'
+  }
+
+  if (ext === '.webm') {
+    if (useVP9 === true) return 'video/webm; codecs="vp9, opus"'
+
+    return 'video/webm; codecs="vp8, vorbis"'
+  }
+
+  return undefined
 }
 
 export {

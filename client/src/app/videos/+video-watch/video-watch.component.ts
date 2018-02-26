@@ -272,6 +272,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private handleError (err: any) {
     const errorMessage: string = typeof err === 'string' ? err : err.message
+    if (!errorMessage) return
+
     let message = ''
 
     if (errorMessage.indexOf('http error') !== -1) {
@@ -353,9 +355,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           this.zone.runOutsideAngular(() => {
             videojs(this.playerElement, videojsOptions, function () {
               self.player = this
-              this.on('customError', (event, data) => {
-                self.handleError(data.err)
-              })
+              this.on('customError', (event, data) => self.handleError(data.err))
             })
           })
         } else {

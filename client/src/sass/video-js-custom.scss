@@ -154,17 +154,17 @@ $control-bar-height: 34px;
       }
     }
 
-    .vjs-webtorrent {
+    .vjs-peertube {
       width: 100%;
       line-height: $control-bar-height;
       text-align: right;
       padding-right: 60px;
 
-      .vjs-webtorrent-displayed {
+      .vjs-peertube-displayed {
         display: block;
       }
 
-      .vjs-webtorrent-hidden {
+      .vjs-peertube-hidden {
         display: none;
       }
 
@@ -424,3 +424,20 @@ $control-bar-height: 34px;
   }
 }
 
+// Error display disabled
+.vjs-error:not(.vjs-error-display-enabled) {
+  .vjs-error-display {
+    display: none;
+  }
+
+  .vjs-loading-spinner {
+    display: block;
+  }
+}
+
+// Error display enabled
+.vjs-error.vjs-error-display-enabled {
+  .vjs-error-display {
+    display: block;
+  }
+}

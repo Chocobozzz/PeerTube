@@ -1,6 +1,5 @@
 // Big thanks to: https://github.com/kmoskwiak/videojs-resolution-switcher
 
-import { VideoService } from '@app/shared/video/video.service'
 import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
@@ -147,12 +146,12 @@ Button.registerComponent('PeerTubeLinkButton', PeertubeLinkButton)
 class WebTorrentButton extends Button {
   createEl () {
     const div = document.createElement('div')
-    const subDiv = document.createElement('div')
-    div.appendChild(subDiv)
+    const subDivWebtorrent = document.createElement('div')
+    div.appendChild(subDivWebtorrent)
 
     const downloadIcon = document.createElement('span')
     downloadIcon.classList.add('icon', 'icon-download')
-    subDiv.appendChild(downloadIcon)
+    subDivWebtorrent.appendChild(downloadIcon)
 
     const downloadSpeedText = document.createElement('span')
     downloadSpeedText.classList.add('download-speed-text')
@@ -161,11 +160,11 @@ class WebTorrentButton extends Button {
     const downloadSpeedUnit = document.createElement('span')
     downloadSpeedText.appendChild(downloadSpeedNumber)
     downloadSpeedText.appendChild(downloadSpeedUnit)
-    subDiv.appendChild(downloadSpeedText)
+    subDivWebtorrent.appendChild(downloadSpeedText)
 
     const uploadIcon = document.createElement('span')
     uploadIcon.classList.add('icon', 'icon-upload')
-    subDiv.appendChild(uploadIcon)
+    subDivWebtorrent.appendChild(uploadIcon)
 
     const uploadSpeedText = document.createElement('span')
     uploadSpeedText.classList.add('upload-speed-text')
@@ -174,34 +173,56 @@ class WebTorrentButton extends Button {
     const uploadSpeedUnit = document.createElement('span')
     uploadSpeedText.appendChild(uploadSpeedNumber)
     uploadSpeedText.appendChild(uploadSpeedUnit)
-    subDiv.appendChild(uploadSpeedText)
+    subDivWebtorrent.appendChild(uploadSpeedText)
 
     const peersText = document.createElement('span')
-    peersText.textContent = ' peers'
     peersText.classList.add('peers-text')
     const peersNumber = document.createElement('span')
     peersNumber.classList.add('peers-number')
-    subDiv.appendChild(peersNumber)
-    subDiv.appendChild(peersText)
+    subDivWebtorrent.appendChild(peersNumber)
+    subDivWebtorrent.appendChild(peersText)
 
-    div.className = 'vjs-webtorrent'
+    div.className = 'vjs-peertube'
     // Hide the stats before we get the info
-    subDiv.className = 'vjs-webtorrent-hidden'
+    subDivWebtorrent.className = 'vjs-peertube-hidden'
+
+    const subDivHttp = document.createElement('div')
+    subDivHttp.className = 'vjs-peertube-hidden'
+    const subDivHttpText = document.createElement('span')
+    subDivHttpText.classList.add('peers-number')
+    subDivHttpText.textContent = 'HTTP'
+    const subDivFallbackText = document.createElement('span')
+    subDivFallbackText.classList.add('peers-text')
+    subDivFallbackText.textContent = ' fallback'
+
+    subDivHttp.appendChild(subDivHttpText)
+    subDivHttp.appendChild(subDivFallbackText)
+    div.appendChild(subDivHttp)
 
     this.player_.peertube().on('torrentInfo', (event, data) => {
+      // We are in HTTP fallback
+      if (!data) {
+        subDivHttp.className = 'vjs-peertube-displayed'
+        subDivWebtorrent.className = 'vjs-peertube-hidden'
+
+        return
+      }
+
       const downloadSpeed = bytes(data.downloadSpeed)
       const uploadSpeed = bytes(data.uploadSpeed)
       const numPeers = data.numPeers
 
-      downloadSpeedNumber.textContent = downloadSpeed[0]
-      downloadSpeedUnit.textContent = ' ' + downloadSpeed[1]
+      downloadSpeedNumber.textContent = downloadSpeed[ 0 ]
+      downloadSpeedUnit.textContent = ' ' + downloadSpeed[ 1 ]
 
-      uploadSpeedNumber.textContent = uploadSpeed[0]
-      uploadSpeedUnit.textContent = ' ' + uploadSpeed[1]
+      uploadSpeedNumber.textContent = uploadSpeed[ 0 ]
+      uploadSpeedUnit.textContent = ' ' + uploadSpeed[ 1 ]
 
       peersNumber.textContent = numPeers
+      peersText.textContent = ' peers'
 
-      subDiv.className = 'vjs-webtorrent-displayed'
+      subDivHttp.className = 'vjs-peertube-hidden'
+      subDivWebtorrent.className = 'vjs-peertube-displayed'
     })
 
     return div
@@ -225,6 +246,7 @@ class PeerTubePlugin extends Plugin {
   private videoDuration: number
   private videoViewInterval
   private torrentInfoInterval
+  private savePlayerSrcFunction: Function
 
   constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
@@ -237,12 +259,11 @@ class PeerTubePlugin extends Plugin {
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
 
+    this.savePlayerSrcFunction = this.player.src
     // Hack to "simulate" src link in video.js >= 6
     // Without this, we can't play the video after pausing it
     // https://github.com/videojs/video.js/blob/master/src/js/player.js#L1633
-    this.player.src = function () {
-      return true
-    }
+    this.player.src = () => true
 
     this.playerElement = options.playerElement
 
@@ -284,6 +305,10 @@ class PeerTubePlugin extends Plugin {
       return
     }
 
+    // Do not display error to user because we will have multiple fallbacks
+    this.disableErrorDisplay()
+    this.player.src = () => true
+
     const previousVideoFile = this.currentVideoFile
     this.currentVideoFile = videoFile
 
@@ -295,7 +320,7 @@ class PeerTubePlugin extends Plugin {
 
       const options = { autoplay: true, controls: true }
       renderVideo(torrent.files[0], this.playerElement, options,(err, renderer) => {
-        if (err) return this.handleError(err)
+        if (err) return this.fallbackToHttp()
 
         this.renderer = renderer
         if (!this.player.paused()) {
@@ -347,7 +372,8 @@ class PeerTubePlugin extends Plugin {
 
   flushVideoFile (videoFile: VideoFile, destroyRenderer = true) {
     if (videoFile !== undefined && webtorrent.get(videoFile.magnetUri)) {
-      if (destroyRenderer === true) this.renderer.destroy()
+      if (destroyRenderer === true && this.renderer && this.renderer.destroy) this.renderer.destroy()
+
       webtorrent.remove(videoFile.magnetUri)
       console.log('Removed ' + videoFile.magnetUri)
     }
@@ -390,13 +416,17 @@ class PeerTubePlugin extends Plugin {
 
   private runTorrentInfoScheduler () {
     this.torrentInfoInterval = setInterval(() => {
-      if (this.torrent !== undefined) {
-        this.trigger('torrentInfo', {
-          downloadSpeed: this.torrent.downloadSpeed,
-          numPeers: this.torrent.numPeers,
-          uploadSpeed: this.torrent.uploadSpeed
-        })
-      }
+      // Not initialized yet
+      if (this.torrent === undefined) return
+
+      // Http fallback
+      if (this.torrent === null) return this.trigger('torrentInfo', false)
+
+      return this.trigger('torrentInfo', {
+        downloadSpeed: this.torrent.downloadSpeed,
+        numPeers: this.torrent.numPeers,
+        uploadSpeed: this.torrent.uploadSpeed
+      })
     }, 1000)
   }
 
@@ -433,8 +463,29 @@ class PeerTubePlugin extends Plugin {
     return fetch(this.videoViewUrl, { method: 'POST' })
   }
 
+  private fallbackToHttp () {
+    this.flushVideoFile(this.currentVideoFile, true)
+    this.torrent = null
+
+    // Enable error display now this is our last fallback
+    this.player.one('error', () => this.enableErrorDisplay())
+
+    const httpUrl = this.currentVideoFile.fileUrl
+    this.player.src = this.savePlayerSrcFunction
+    this.player.src(httpUrl)
+    this.player.play()
+  }
+
   private handleError (err: Error | string) {
     return this.player.trigger('customError', { err })
+  }
+
+  private enableErrorDisplay () {
+    this.player.addClass('vjs-error-display-enabled')
+  }
+
+  private disableErrorDisplay () {
+    this.player.removeClass('vjs-error-display-enabled')
   }
 }
 videojsUntyped.registerPlugin('peertube', PeerTubePlugin)
