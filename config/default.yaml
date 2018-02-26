@@ -62,7 +62,7 @@ user:
 # Uses a lot of CPU and increases storage!
 transcoding:
   enabled: true
-  threads: 2
+  threads: 1
   resolutions: # Only created if the original video has a higher resolution
     240p: false
     360p: false
