@@ -11,7 +11,8 @@ import { JobQueue } from '../job-queue'
 
 export type VideoFilePayload = {
   videoUUID: string
-  resolution?: VideoResolution
+  resolution?: VideoResolution,
+  isPortraitMode?: boolean
 }
 
 async function processVideoFile (job: kue.Job) {
@@ -27,7 +28,7 @@ async function processVideoFile (job: kue.Job) {
 
   // Transcoding in other resolution
   if (payload.resolution) {
-    await video.transcodeOriginalVideofile(payload.resolution)
+    await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode)
     await onVideoFileTranscoderSuccess(video)
   } else {
     await video.optimizeOriginalVideofile()
@@ -66,12 +67,12 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
     await shareVideoByServerAndChannel(video, undefined)
   }
 
-  const originalFileHeight = await videoDatabase.getOriginalFileHeight()
+  const { videoFileResolution } = await videoDatabase.getOriginalFileResolution()
 
   // Create transcoding jobs if there are enabled resolutions
-  const resolutionsEnabled = computeResolutionsToTranscode(originalFileHeight)
+  const resolutionsEnabled = computeResolutionsToTranscode(videoFileResolution)
   logger.info(
-    'Resolutions computed for video %s and origin file height of %d.', videoDatabase.uuid, originalFileHeight,
+    'Resolutions computed for video %s and origin file height of %d.', videoDatabase.uuid, videoFileResolution,
     { resolutions: resolutionsEnabled }
   )
 

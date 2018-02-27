@@ -42,7 +42,7 @@ import {
   isVideoNameValid,
   isVideoPrivacyValid, isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
-import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
+import { generateImageFromVideoFile, getVideoFileResolution, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
@@ -1140,7 +1140,7 @@ export class VideoModel extends Model<VideoModel> {
     }
   }
 
-  transcodeOriginalVideofile = async function (resolution: VideoResolution) {
+  transcodeOriginalVideofile = async function (resolution: VideoResolution, isPortraitMode: boolean) {
     const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
     const extname = '.mp4'
 
@@ -1158,7 +1158,8 @@ export class VideoModel extends Model<VideoModel> {
     const transcodeOptions = {
       inputPath: videoInputPath,
       outputPath: videoOutputPath,
-      resolution
+      resolution,
+      isPortraitMode
     }
 
     await transcode(transcodeOptions)
@@ -1174,10 +1175,10 @@ export class VideoModel extends Model<VideoModel> {
     this.VideoFiles.push(newVideoFile)
   }
 
-  getOriginalFileHeight () {
+  getOriginalFileResolution () {
     const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
 
-    return getVideoFileHeight(originalFilePath)
+    return getVideoFileResolution(originalFilePath)
   }
 
   getDescriptionPath () {

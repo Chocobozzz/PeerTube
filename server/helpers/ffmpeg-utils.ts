@@ -6,9 +6,13 @@ import { unlinkPromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 
-async function getVideoFileHeight (path: string) {
+async function getVideoFileResolution (path: string) {
   const videoStream = await getVideoFileStream(path)
-  return videoStream.height
+
+  return {
+    videoFileResolution: Math.min(videoStream.height, videoStream.width),
+    isPortraitMode: videoStream.height > videoStream.width
+  }
 }
 
 async function getVideoFileFPS (path: string) {
@@ -74,6 +78,7 @@ type TranscodeOptions = {
   inputPath: string
   outputPath: string
   resolution?: VideoResolution
+  isPortraitMode?: boolean
 }
 
 function transcode (options: TranscodeOptions) {
@@ -90,7 +95,8 @@ function transcode (options: TranscodeOptions) {
     if (fps > MAX_VIDEO_TRANSCODING_FPS) command = command.withFPS(MAX_VIDEO_TRANSCODING_FPS)
 
     if (options.resolution !== undefined) {
-      const size = `?x${options.resolution}` // '?x720' for example
+      // '?x720' or '720x?' for example
+      const size = options.isPortraitMode === true ? `${options.resolution}x?` : `?x${options.resolution}`
       command = command.size(size)
     }
 
@@ -103,7 +109,7 @@ function transcode (options: TranscodeOptions) {
 // ---------------------------------------------------------------------------
 
 export {
-  getVideoFileHeight,
+  getVideoFileResolution,
   getDurationFromVideoFile,
   generateImageFromVideoFile,
   transcode,
