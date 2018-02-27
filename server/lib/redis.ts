@@ -59,8 +59,6 @@ class Redis {
       this.client.sort(jobsPrefix + ':jobs:' + state, 'by', mode, order, 'LIMIT', offset.toString(), count.toString(), (err, values) => {
         if (err) return rej(err)
 
-
-
         return res(values)
       })
     })

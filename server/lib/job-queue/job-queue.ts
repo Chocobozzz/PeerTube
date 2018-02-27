@@ -1,5 +1,5 @@
 import * as kue from 'kue'
-import { JobType, JobState } from '../../../shared/models'
+import { JobState, JobType } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY } from '../../initializers'
 import { Redis } from '../redis'
@@ -87,7 +87,7 @@ class JobQueue {
     })
   }
 
-  async listForApi (state: JobState, start: number, count: number, sort: 'ASC' | 'DESC') {
+  async listForApi (state: JobState, start: number, count: number, sort: 'ASC' | 'DESC'): Promise<kue.Job[]> {
     const jobStrings = await Redis.Instance.listJobs(this.jobRedisPrefix, state, 'alpha', sort, start, count)
 
     const jobPromises = jobStrings
@@ -149,7 +149,7 @@ class JobQueue {
   }
 
   private getJob (id: number) {
-    return new Promise((res, rej) => {
+    return new Promise<kue.Job>((res, rej) => {
       kue.Job.get(id, (err, job) => {
         if (err) return rej(err)
 
