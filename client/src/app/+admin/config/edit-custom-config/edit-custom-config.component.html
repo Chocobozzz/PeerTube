@@ -132,6 +132,7 @@
 
   <div class="form-group">
     <label for="customizationJavascript">JavaScript</label>
+    <my-help helpType="custom" customHtml="Write directly JavaScript code.<br />Example: console.log('my instance is amazing');"></my-help>
     <textarea
         id="customizationJavascript" formControlName="customizationJavascript"
         [ngClass]="{ 'input-error': formErrors['customizationJavascript'] }"
@@ -143,6 +144,7 @@
 
   <div class="form-group">
     <label for="customizationCSS">CSS</label>
+    <my-help helpType="custom" customHtml="Write directly CSS code.<br />Example: body { background-color: red; }"></my-help>
     <textarea
         id="customizationCSS" formControlName="customizationCSS"
         [ngClass]="{ 'input-error': formErrors['customizationCSS'] }"
