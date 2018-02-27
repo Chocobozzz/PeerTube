@@ -793,24 +793,20 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   createPreview (videoFile: VideoFileModel) {
-    const imageSize = PREVIEWS_SIZE.width + 'x' + PREVIEWS_SIZE.height
-
     return generateImageFromVideoFile(
       this.getVideoFilePath(videoFile),
       CONFIG.STORAGE.PREVIEWS_DIR,
       this.getPreviewName(),
-      imageSize
+      PREVIEWS_SIZE
     )
   }
 
   createThumbnail (videoFile: VideoFileModel) {
-    const imageSize = THUMBNAILS_SIZE.width + 'x' + THUMBNAILS_SIZE.height
-
     return generateImageFromVideoFile(
       this.getVideoFilePath(videoFile),
       CONFIG.STORAGE.THUMBNAILS_DIR,
       this.getThumbnailName(),
-      imageSize
+      THUMBNAILS_SIZE
     )
   }
 

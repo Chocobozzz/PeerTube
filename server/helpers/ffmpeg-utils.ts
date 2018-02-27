@@ -1,6 +1,8 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { VideoResolution } from '../../shared/models/videos'
 import { CONFIG, MAX_VIDEO_TRANSCODING_FPS } from '../initializers'
+import { processImage } from './image-utils'
+import { join } from 'path'
 
 async function getVideoFileHeight (path: string) {
   const videoStream = await getVideoFileStream(path)
@@ -34,23 +36,25 @@ function getDurationFromVideoFile (path: string) {
   })
 }
 
-function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: string) {
+async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
+  const pendingImageName = 'pending-' + imageName
+
   const options = {
-    filename: imageName,
+    filename: pendingImageName,
     count: 1,
     folder
   }
 
-  if (size !== undefined) {
-    options['size'] = size
-  }
-
-  return new Promise<string>((res, rej) => {
+  await new Promise<string>((res, rej) => {
     ffmpeg(fromPath)
       .on('error', rej)
       .on('end', () => res(imageName))
       .thumbnail(options)
   })
+
+  const pendingImagePath = join(folder, pendingImageName)
+  const destination = join(folder, imageName)
+  await processImage({ path: pendingImagePath }, destination, size)
 }
 
 type TranscodeOptions = {
