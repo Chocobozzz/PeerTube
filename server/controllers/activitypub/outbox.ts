@@ -3,6 +3,7 @@ import { Activity } from '../../../shared/models/activitypub/activity'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
+import { logger } from '../../helpers/logger'
 import { ACTIVITY_PUB } from '../../initializers/constants'
 import { announceActivityData, createActivityData } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/send/misc'
@@ -65,7 +66,10 @@ async function outboxController (req: express.Request, res: express.Response, ne
     data: activities,
     total: data.total
   }
-  const json = activityPubCollectionPagination(account.Actor.url + '/outbox', page, newResult)
+  const actorOutboxUrl = account.Actor.url + '/outbox'
+  const json = activityPubCollectionPagination(actorOutboxUrl, page, newResult)
+
+  logger.info('Receiving outbox request for %s.', actorOutboxUrl)
 
   return res.json(json).end()
 }
