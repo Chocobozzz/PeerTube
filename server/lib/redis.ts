@@ -54,6 +54,18 @@ class Redis {
     return this.exists(this.buildViewKey(ip, videoUUID))
   }
 
+  listJobs (jobsPrefix: string, state: string, mode: 'alpha', order: 'ASC' | 'DESC', offset: number, count: number) {
+    return new Promise<string[]>((res, rej) => {
+      this.client.sort(jobsPrefix + ':jobs:' + state, 'by', mode, order, 'LIMIT', offset.toString(), count.toString(), (err, values) => {
+        if (err) return rej(err)
+
+
+
+        return res(values)
+      })
+    })
+  }
+
   private getValue (key: string) {
     return new Promise<string>((res, rej) => {
       this.client.get(this.prefix + key, (err, value) => {
