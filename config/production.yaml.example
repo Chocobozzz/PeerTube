@@ -45,7 +45,7 @@ log:
 
 ###############################################################################
 #
-# From this point, all the following keys can be overrode by the web interface
+# From this point, all the following keys can be overriden by the web interface
 # (local-production.json file). If you need to change some values, prefer to
 # use the web interface because the configuration will be automatically
 # reloaded without any need to restart PeerTube.
