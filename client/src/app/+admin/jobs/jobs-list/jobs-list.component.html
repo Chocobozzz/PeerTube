@@ -44,6 +44,11 @@
         <pre>{{ job.data }}</pre>
       </td>
     </tr>
+    <tr class="job-error" *ngIf="job.error">
+      <td colspan="6">
+        <pre>{{ job.error }}</pre>
+      </td>
+    </tr>
   </ng-template>
 </p-table>
 
