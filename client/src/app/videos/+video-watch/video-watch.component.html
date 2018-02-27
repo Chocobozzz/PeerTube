@@ -104,7 +104,7 @@
       <div class="video-info-description">
         <div class="video-info-description-html" [innerHTML]="videoHTMLDescription"></div>
 
-        <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length === 250" (click)="showMoreDescription()">
+        <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
           Show more
           <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-down"></span>
           <my-loader class="description-loading" [loading]="descriptionLoading"></my-loader>
