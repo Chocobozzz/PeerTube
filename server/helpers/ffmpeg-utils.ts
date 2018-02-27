@@ -1,8 +1,10 @@
 import * as ffmpeg from 'fluent-ffmpeg'
+import { join } from 'path'
 import { VideoResolution } from '../../shared/models/videos'
 import { CONFIG, MAX_VIDEO_TRANSCODING_FPS } from '../initializers'
+import { unlinkPromise } from './core-utils'
 import { processImage } from './image-utils'
-import { join } from 'path'
+import { logger } from './logger'
 
 async function getVideoFileHeight (path: string) {
   const videoStream = await getVideoFileStream(path)
@@ -45,16 +47,27 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
     folder
   }
 
-  await new Promise<string>((res, rej) => {
-    ffmpeg(fromPath)
-      .on('error', rej)
-      .on('end', () => res(imageName))
-      .thumbnail(options)
-  })
-
   const pendingImagePath = join(folder, pendingImageName)
-  const destination = join(folder, imageName)
-  await processImage({ path: pendingImagePath }, destination, size)
+
+  try {
+    await new Promise<string>((res, rej) => {
+      ffmpeg(fromPath)
+        .on('error', rej)
+        .on('end', () => res(imageName))
+        .thumbnail(options)
+    })
+
+    const destination = join(folder, imageName)
+    await processImage({ path: pendingImagePath }, destination, size)
+  } catch (err) {
+    logger.error('Cannot generate image from video %s.', fromPath, err)
+
+    try {
+      await unlinkPromise(pendingImagePath)
+    } catch (err) {
+      logger.debug('Cannot remove pending image path after generation error.', err)
+    }
+  }
 }
 
 type TranscodeOptions = {
