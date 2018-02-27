@@ -42,6 +42,19 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
 
+
+###############################################################################
+#
+# From this point, all the following keys can be overrode by the web interface
+# (local-production.json file). If you need to change some values, prefer to
+# use the web interface because the configuration will be automatically
+# reloaded without any need to restart PeerTube.
+#
+# /!\ If you already have a local-production.json file, the modification of the
+# following keys will have no effect /!\.
+#
+###############################################################################
+
 cache:
   previews:
     size: 100 # Max number of previews you want to cache

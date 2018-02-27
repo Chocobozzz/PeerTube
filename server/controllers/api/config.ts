@@ -114,6 +114,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   // Need to change the videoQuota key a little bit
   const toUpdateJSON = omit(toUpdate, 'videoQuota')
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
+  delete toUpdate.user.videoQuota
 
   await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON))
 
