@@ -116,6 +116,8 @@ BitTorrent) inside the web browser, as of today.
 - [X] Video privacy settings (public, unlisted or private)
 - [X] Signaling a video to the admin origin PeerTube instance
 - [X] Federated videos comments
+- [X] Update video thumbnails
+- [X] Support video uploader button
 - [ ] Video imports (URL, Torrent, YouTube...)
 - [ ] Advanced search
 - [ ] Subtitles

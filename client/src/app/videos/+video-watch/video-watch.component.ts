@@ -411,6 +411,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.video.likes += likesToIncrement
     this.video.dislikes += dislikesToIncrement
+    this.video.buildLikeAndDislikePercents()
+
+    this.setVideoLikesBarTooltipText()
   }
 
   private updateOtherVideosDisplayed () {
