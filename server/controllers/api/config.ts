@@ -116,7 +116,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
   delete toUpdate.user.videoQuota
 
-  await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON))
+  await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON, undefined, 2))
 
   reloadConfig()
 
