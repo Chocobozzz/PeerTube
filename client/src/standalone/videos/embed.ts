@@ -44,7 +44,8 @@ loadVideoInfo(videoId)
       const player = this
 
       player.dock({
-        title: videoInfo.name
+        title: videoInfo.name,
+        description: 'Use P2P, other may know you are watching that video.'
       })
     })
   })

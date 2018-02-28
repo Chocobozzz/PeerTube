@@ -1,4 +1,4 @@
-// Thanks: https://github.com/zanechua/videojs-sublime-inspired-skin
+@charset "utf-8";// Thanks: https://github.com/zanechua/videojs-sublime-inspired-skin
 $primary-foreground-color: #fff;
 $primary-background-color: #000;
 $font-size: 13px;
@@ -7,6 +7,28 @@ $control-bar-height: 34px;
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
   color: $primary-foreground-color;
+
+  .vjs-dock-text {
+    padding-right: 10px;
+  }
+
+  .vjs-dock-description {
+    font-size: 11px;
+
+    &:before, &:after {
+      display: inline-block;
+      content: '\1F308';
+    }
+
+    &:before {
+      margin-right: 4px;
+    }
+
+    &:after {
+      margin-left: 4px;
+      transform: scale(-1, 1);
+    }
+  }
 
   .vjs-button > .vjs-icon-placeholder::before {
     line-height: $control-bar-height;
@@ -354,7 +376,11 @@ $control-bar-height: 34px;
 
   @media screen and (max-width: 300px) {
     .vjs-dock-text {
-      font-size: 1em;
+      font-size: 13px;
+    }
+
+    .vjs-dock-description {
+      font-size: 9px;
     }
 
     .vjs-big-play-button {
