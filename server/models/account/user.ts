@@ -13,6 +13,7 @@ import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
+import { VideoCommentModel } from '../video/video-comment'
 import { AccountModel } from './account'
 
 @DefaultScope({
@@ -224,6 +225,14 @@ export class UserModel extends Model<UserModel> {
 
         return parseInt(total, 10)
       })
+  }
+
+  static async getStats () {
+    const totalUsers = await UserModel.count()
+
+    return {
+      totalUsers
+    }
   }
 
   hasRight (right: UserRight) {

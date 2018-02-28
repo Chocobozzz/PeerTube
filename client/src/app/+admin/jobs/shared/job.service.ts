@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map'
 import { Observable } from 'rxjs/Observable'
 import { ResultList } from '../../../../../../shared'
 import { JobState } from '../../../../../../shared/models'
-import { Job } from '../../../../../../shared/models/job.model'
+import { Job } from '../../../../../../shared/models/server/job.model'
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../../../shared'
 

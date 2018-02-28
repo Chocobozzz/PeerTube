@@ -761,6 +761,29 @@ export class VideoModel extends Model<VideoModel> {
       .findOne(options)
   }
 
+  static async getStats () {
+    const totalLocalVideos = await VideoModel.count({
+      where: {
+        remote: false
+      }
+    })
+    const totalVideos = await VideoModel.count()
+
+    let totalLocalVideoViews = await VideoModel.sum('views', {
+      where: {
+        remote: false
+      }
+    })
+    // Sequelize could return null...
+    if (!totalLocalVideoViews) totalLocalVideoViews = 0
+
+    return {
+      totalLocalVideos,
+      totalLocalVideoViews,
+      totalVideos
+    }
+  }
+
   getOriginalFile () {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 

@@ -21,7 +21,7 @@
           </span>
 
           <input
-            type="submit" value="Confirm" class="action-button-submit" [disabled]="isConfirmationDisabled()"
+            type="submit" [value]="confirmButtonText" class="action-button-submit" [disabled]="isConfirmationDisabled()"
             (click)="confirm()"
           >
         </div>

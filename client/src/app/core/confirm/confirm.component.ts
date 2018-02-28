@@ -18,6 +18,7 @@ export class ConfirmComponent implements OnInit {
   inputLabel = ''
 
   inputValue = ''
+  confirmButtonText = ''
 
   constructor (private confirmService: ConfirmService) {
     // Empty
@@ -30,12 +31,14 @@ export class ConfirmComponent implements OnInit {
     }
 
     this.confirmService.showConfirm.subscribe(
-      ({ title, message, expectedInputValue, inputLabel }) => {
+      ({ title, message, expectedInputValue, inputLabel, confirmButtonText }) => {
         this.title = title
         this.message = message
 
         this.inputLabel = inputLabel
         this.expectedInputValue = expectedInputValue
+
+        this.confirmButtonText = confirmButtonText || 'Confirm'
 
         this.showModal()
       }

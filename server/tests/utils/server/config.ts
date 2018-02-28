@@ -1,5 +1,5 @@
 import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../'
-import { CustomConfig } from '../../../../shared/models/config/custom-config.model'
+import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 function getConfig (url: string) {
   const path = '/api/v1/config'

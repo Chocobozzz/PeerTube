@@ -18,7 +18,7 @@
   <ng-template pTemplate="body" let-videoAbuse>
     <tr>
       <td>{{ videoAbuse.reason }}</td>
-      <td>{{ videoAbuse.reporterServerHost + '@' + videoAbuse.reporterUsername }}</td>
+      <td>{{ videoAbuse.reporterUsername + '@' + videoAbuse.reporterServerHost }}</td>
       <td>{{ videoAbuse.createdAt }}</td>
       <td>
         <a [routerLink]="getRouterVideoLink(videoAbuse.videoUUID)" title="Go to the video">{{ videoAbuse.videoName }}</a>

@@ -2,8 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { About } from '../../../../shared/models/config/about.model'
-import { CustomConfig } from '../../../../shared/models/config/custom-config.model'
+import { About } from '../../../../shared/models/server/about.model'
+import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import { deleteCustomConfig, getAbout, killallServers, reRunServer } from '../../utils'
 const expect = chai.expect
 

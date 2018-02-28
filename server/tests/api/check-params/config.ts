@@ -2,7 +2,7 @@
 
 import { omit } from 'lodash'
 import 'mocha'
-import { CustomConfig } from '../../../../shared/models/config/custom-config.model'
+import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 import {
   createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, runServer, ServerInfo,
