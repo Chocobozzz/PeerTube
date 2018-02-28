@@ -335,6 +335,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           const videojsOptions = {
             controls: true,
             autoplay: this.isAutoplay(),
+            playbackRates: [0.5, 1, 1.25, 1.5, 2],
             plugins: {
               peertube: {
                 videoFiles: this.video.files,

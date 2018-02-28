@@ -158,7 +158,6 @@ $control-bar-height: 34px;
       width: 100%;
       line-height: $control-bar-height;
       text-align: right;
-      padding-right: 60px;
 
       .vjs-peertube-displayed {
         display: block;
@@ -195,6 +194,12 @@ $control-bar-height: 34px;
           background-image: url('../assets/player/images/arrow-up.svg');
         }
       }
+    }
+
+    .vjs-playback-rate {
+      font-size: 10px;
+      margin-right: 60px;
+      margin-top: 2px;
     }
 
     .vjs-mute-control {
@@ -300,7 +305,6 @@ $control-bar-height: 34px;
     }
 
     .vjs-menu-button-popup {
-      font-size: 13px;
       font-weight: $font-semibold;
       width: 50px;
 
