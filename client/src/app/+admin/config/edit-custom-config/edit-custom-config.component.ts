@@ -13,7 +13,7 @@ import {
   TRANSCODING_THREADS
 } from '@app/shared/forms/form-validators/custom-config'
 import { NotificationsService } from 'angular2-notifications'
-import { CustomConfig } from '../../../../../../shared/models/config/custom-config.model'
+import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
 
 @Component({
   selector: 'my-edit-custom-config',

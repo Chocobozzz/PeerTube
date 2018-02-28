@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { CustomConfig } from '../../../../../../shared/models/config/custom-config.model'
+import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestService } from '../../../shared'
 

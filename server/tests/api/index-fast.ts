@@ -1,5 +1,5 @@
 // Order of the tests we want to execute
-import './server/config'
+import './server/stats'
 import './check-params'
 import './users/users'
 import './videos/single-server'
@@ -10,3 +10,4 @@ import './videos/video-description'
 import './videos/video-privacy'
 import './videos/services'
 import './server/email'
+import './server/config'

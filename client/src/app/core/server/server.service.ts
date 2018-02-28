@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
-import { About } from '../../../../../shared/models/config/about.model'
+import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
 
 @Injectable()

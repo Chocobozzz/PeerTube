@@ -326,6 +326,32 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findAll(query)
   }
 
+  static async getStats () {
+    const totalLocalVideoComments = await VideoCommentModel.count({
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          include: [
+            {
+              model: ActorModel,
+              required: true,
+              where: {
+                serverId: null
+              }
+            }
+          ]
+        }
+      ]
+    })
+    const totalVideoComments = await VideoCommentModel.count()
+
+    return {
+      totalLocalVideoComments,
+      totalVideoComments
+    }
+  }
+
   getThreadId (): number {
     return this.originCommentId || this.id
   }
