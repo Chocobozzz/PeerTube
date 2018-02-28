@@ -10,8 +10,9 @@
     width: 888px;
     height: 500px;
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 600px) {
       height: auto;
+      max-height: calc(100vh - #{$header-height});
     }
 
     // VideoJS create an inner video player

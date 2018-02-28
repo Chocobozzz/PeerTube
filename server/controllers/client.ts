@@ -100,11 +100,12 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
     '@type': 'VideoObject',
     name: videoNameEscaped,
     description: videoDescriptionEscaped,
+    thumbnailUrl: previewUrl,
+    uploadDate: video.createdAt.toISOString(),
     duration: video.getActivityStreamDuration(),
-    thumbnailURL: previewUrl,
-    contentURL: videoUrl,
-    embedURL: embedUrl,
-    uploadDate: video.createdAt
+    contentUrl: videoUrl,
+    embedUrl: embedUrl,
+    interactionCount: video.views
   }
 
   let tagsString = ''
@@ -123,6 +124,9 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
 
   // Schema.org
   tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
+
+  // SEO
+  tagsString += `<link rel="canonical" href="${videoUrl}" />`
 
   return htmlStringPage.replace(OPENGRAPH_AND_OEMBED_COMMENT, tagsString)
 }
