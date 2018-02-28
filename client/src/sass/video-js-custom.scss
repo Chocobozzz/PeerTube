@@ -343,10 +343,10 @@ $control-bar-height: 34px;
       font-size: 5em;
     }
 
-    .vjs-webtorrent {
+    .vjs-peertube {
       padding: 0 !important;
 
-      .vjs-webtorrent-displayed {
+      .vjs-peertube-displayed {
         display: none !important;
       }
     }
@@ -354,7 +354,7 @@ $control-bar-height: 34px;
 
   @media screen and (max-width: 300px) {
     .vjs-dock-text {
-      font-size: 1.5em;
+      font-size: 1em;
     }
 
     .vjs-big-play-button {
