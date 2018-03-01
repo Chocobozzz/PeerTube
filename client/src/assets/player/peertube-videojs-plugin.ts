@@ -307,7 +307,9 @@ class PeerTubePlugin extends Plugin {
 
     // Do not display error to user because we will have multiple fallbacks
     this.disableErrorDisplay()
+
     this.player.src = () => true
+    this.player.playbackRate(1)
 
     const previousVideoFile = this.currentVideoFile
     this.currentVideoFile = videoFile
