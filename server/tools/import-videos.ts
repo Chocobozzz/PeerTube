@@ -137,6 +137,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
     nsfw: isNSFW(videoInfo),
     commentsEnabled: true,
     description: videoInfo.description,
+    support: undefined,
     tags,
     privacy: VideoPrivacy.PUBLIC,
     fixture: videoPath,
