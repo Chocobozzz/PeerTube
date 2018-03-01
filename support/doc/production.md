@@ -95,7 +95,10 @@ To generate the certificate for your domain as required to make https work you c
 
 ```
 $ sudo systemctl stop nginx
+$ sudo vim /etc/nginx/sites-available/peertube # Comment ssl_certificate and ssl_certificate_key lines
 $ sudo certbot --authenticator standalone --installer nginx --post-hook "systemctl start nginx"
+$ sudo vim /etc/nginx/sites-available/peertube # Uncomment ssl_certificate and ssl_certificate_key lines
+$ sudo systemctl reload nginx
 ```
 
 Remember your certificate will expire in 90 days, and thus needs renewal.
