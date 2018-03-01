@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.0.30-alpha
+
+### Features
+
+ * Add messages about privacy and P2P
+ * Add stats route
+ * Add playback setting
+
+
 ## v0.0.29-alpha
 
 ### BREAKING CHANGES
