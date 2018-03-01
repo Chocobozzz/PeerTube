@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { GuardsCheckStart, Router } from '@angular/router'
-import { AuthService, ServerService } from '@app/core'
+import { AuthService, RedirectService, ServerService } from '@app/core'
 import { isInSmallView } from '@app/shared/misc/utils'
 
 @Component({
@@ -31,7 +31,8 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private serverService: ServerService,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private redirectService: RedirectService
   ) {}
 
   get serverVersion () {
@@ -43,6 +44,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit () {
+    if (this.router.url === '/') {
+      this.redirectService.redirectToHomepage()
+    }
+
     this.authService.loadClientCredentials()
 
     if (this.authService.isLoggedIn()) {

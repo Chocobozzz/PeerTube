@@ -46,6 +46,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     instanceName: '',
     instanceDescription: '',
     instanceTerms: '',
+    instanceDefaultClientRoute: '',
     cachePreviewsSize: '',
     signupLimit: '',
     adminEmail: '',
@@ -85,6 +86,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceName: [ '', INSTANCE_NAME.VALIDATORS ],
       instanceDescription: [ '' ],
       instanceTerms: [ '' ],
+      instanceDefaultClientRoute: [ '' ],
       cachePreviewsSize: [ '', CACHE_PREVIEWS_SIZE.VALIDATORS ],
       signupEnabled: [ ],
       signupLimit: [ '', SIGNUP_LIMIT.VALIDATORS ],
@@ -153,11 +155,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       if (confirmRes === false) return
     }
 
-    const data = {
+    const data: CustomConfig = {
       instance: {
         name: this.form.value['instanceName'],
         description: this.form.value['instanceDescription'],
         terms: this.form.value['instanceTerms'],
+        defaultClientRoute: this.form.value['instanceDefaultClientRoute'],
         customizations: {
           javascript: this.form.value['customizationJavascript'],
           css: this.form.value['customizationCSS']
@@ -213,6 +216,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceName: this.customConfig.instance.name,
       instanceDescription: this.customConfig.instance.description,
       instanceTerms: this.customConfig.instance.terms,
+      instanceDefaultClientRoute: this.customConfig.instance.defaultClientRoute,
       cachePreviewsSize: this.customConfig.cache.previews.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,

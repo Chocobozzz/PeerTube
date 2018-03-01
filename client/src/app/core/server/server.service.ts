@@ -21,6 +21,7 @@ export class ServerService {
   private config: ServerConfig = {
     instance: {
       name: 'PeerTube',
+      defaultClientRoute: '',
       customizations: {
         javascript: '',
         css: ''

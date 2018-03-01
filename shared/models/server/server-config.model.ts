@@ -2,7 +2,8 @@ export interface ServerConfig {
   serverVersion: string
 
   instance: {
-    name: string;
+    name: string
+    defaultClientRoute: string
     customizations: {
       javascript: string
       css: string

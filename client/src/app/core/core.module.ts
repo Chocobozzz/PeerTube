@@ -13,7 +13,7 @@ import { ModalModule } from 'ngx-bootstrap/modal'
 import { AuthService } from './auth'
 import { ConfirmComponent, ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
-import { LoginGuard, UserRightGuard } from './routing'
+import { LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
 
 @NgModule({
@@ -48,7 +48,8 @@ import { ServerService } from './server'
     ConfirmService,
     ServerService,
     LoginGuard,
-    UserRightGuard
+    UserRightGuard,
+    RedirectService
   ]
 })
 export class CoreModule {

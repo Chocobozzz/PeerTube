@@ -1,9 +1,9 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { RedirectService } from '@app/core/routing/redirect.service'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
@@ -64,7 +64,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private notificationsService: NotificationsService,
     private markdownService: MarkdownService,
-    private zone: NgZone
+    private zone: NgZone,
+    private redirectService: RedirectService
   ) {}
 
   get user () {
@@ -142,7 +143,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                               .subscribe(
                                 status => {
                                   this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
-                                  this.router.navigate(['/videos/list'])
+                                  this.redirectService.redirectToHomepage()
                                 },
 
                                 error => this.notificationsService.error('Error', error.message)
@@ -247,7 +248,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
 
           // Go back to the video-list.
-          this.router.navigate([ '/videos/list' ])
+          this.redirectService.redirectToHomepage()
         },
 
         error => this.notificationsService.error('Error', error.message)
@@ -313,7 +314,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         'This video contains mature or explicit content. Are you sure you want to watch it?',
         'Mature or explicit content'
       )
-      if (res === false) return this.router.navigate([ '/videos/list' ])
+      if (res === false) return this.redirectService.redirectToHomepage()
     }
 
     if (!this.hasAlreadyAcceptedPrivacyConcern()) {
@@ -323,7 +324,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         'Privacy concern',
         'I accept!'
       )
-      if (res === false) return this.router.navigate([ '/videos/list' ])
+      if (res === false) return this.redirectService.redirectToHomepage()
     }
 
     this.acceptedPrivacyConcern()

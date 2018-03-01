@@ -18,6 +18,7 @@ describe('Test config API validators', function () {
       name: 'PeerTube updated',
       description: 'my super description',
       terms: 'my super terms',
+      defaultClientRoute: '/videos/recently-added',
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
