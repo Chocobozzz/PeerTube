@@ -220,8 +220,12 @@ $control-bar-height: 34px;
 
     .vjs-playback-rate {
       font-size: 10px;
-      margin-right: 60px;
-      margin-top: 2px;
+      margin-right: 48px;
+
+      .vjs-playback-rate-value {
+        font-size: 13px;
+        line-height: $control-bar-height;
+      }
     }
 
     .vjs-mute-control {
@@ -367,6 +371,10 @@ $control-bar-height: 34px;
   @media screen and (max-width: 550px) {
     .vjs-big-play-button {
       font-size: 5em;
+    }
+
+    .vjs-playback-rate {
+      display: none;
     }
 
     .vjs-peertube {

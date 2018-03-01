@@ -1,19 +1,36 @@
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull, BeforeCreate, BeforeUpdate, Column, CreatedAt, DataType, Default, DefaultScope, HasMany, HasOne, Is, IsEmail, Model,
-  Scopes, Table, UpdatedAt
+  AllowNull,
+  BeforeCreate,
+  BeforeUpdate,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  DefaultScope,
+  HasMany,
+  HasOne,
+  Is,
+  IsEmail,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
 import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
-  isUserAutoPlayVideoValid, isUserDisplayNSFWValid, isUserPasswordValid, isUserRoleValid, isUserUsernameValid,
+  isUserAutoPlayVideoValid,
+  isUserDisplayNSFWValid,
+  isUserPasswordValid,
+  isUserRoleValid,
+  isUserUsernameValid,
   isUserVideoQuotaValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
-import { VideoCommentModel } from '../video/video-comment'
 import { AccountModel } from './account'
 
 @DefaultScope({
