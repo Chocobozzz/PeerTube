@@ -1,4 +1,6 @@
-@charset "utf-8";// Thanks: https://github.com/zanechua/videojs-sublime-inspired-skin
+@import '_variables';
+@import '_mixins';
+
 $primary-foreground-color: #fff;
 $primary-background-color: #000;
 $font-size: 13px;
@@ -139,7 +141,8 @@ $control-bar-height: 34px;
     }
 
     .vjs-play-control {
-      outline: 0;
+      @include disable-outline;
+
       font-size: $font-size;
       padding: 0 17px;
       margin-right: 5px;
@@ -220,16 +223,24 @@ $control-bar-height: 34px;
 
     .vjs-playback-rate {
       font-size: 10px;
-      margin-right: 50px;
+      width: 37px !important;
 
       .vjs-playback-rate-value {
         font-size: 13px;
         line-height: $control-bar-height;
       }
+
+      .vjs-menu .vjs-menu-content {
+        width: 37px !important;
+      }
     }
 
     .vjs-mute-control {
-      outline: 0;
+      @include disable-outline;
+
+      line-height: $control-bar-height;
+      padding: 0;
+      width: 30px;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -250,12 +261,9 @@ $control-bar-height: 34px;
       }
     }
 
-    .vjs-volume-menu-button,
-    .vjs-volume-panel {
-      width: 6em;
-      position: absolute;
-      right: 0;
-      margin-right: 65px;
+    .vjs-volume-control {
+      width: 30px;
+      margin: 0;
     }
 
     .vjs-volume-bar {
@@ -313,8 +321,9 @@ $control-bar-height: 34px;
     }
 
     .vjs-fullscreen-control {
+      @include disable-outline;
+
       width: 37px;
-      outline: 0;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -339,7 +348,7 @@ $control-bar-height: 34px;
         line-height: $control-bar-height;
         position: absolute;
         top: 0;
-        left: 4px;
+        left: 0;
         width: 100%;
         height: 100%;
         text-align: center;
@@ -348,16 +357,16 @@ $control-bar-height: 34px;
       }
 
       .vjs-resolution-button {
-        outline: 0 !important;
+        @include disable-outline;
       }
 
       .vjs-menu {
         top: 20px;
+        left: 0;
 
         .vjs-menu-content {
           width: 50px;
-          left: 50%; /* Center the menu, in it's parent */
-          margin-left: -21px;
+          bottom: 20px;
         }
 
         li {

@@ -7,6 +7,15 @@
   }
 }
 
+@mixin disable-outline {
+  outline: none;
+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0
+  }
+}
+
 @mixin peertube-input-text($width) {
   display: inline-block;
   height: $button-height;

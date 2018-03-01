@@ -26,23 +26,19 @@ html, body {
   }
 
   .vjs-peertube-link {
+    @include disable-outline;
+
     color: #fff;
     text-decoration: none;
     font-size: $font-size;
     line-height: $control-bar-height;
     transition: all .4s;
     font-weight: $font-semibold;
-    margin-right: 3px;
-    padding: 0 5px;
+    padding-right: 5px;
   }
 
   .vjs-peertube-link:hover {
     text-shadow: 0 0 1em #fff;
-  }
-
-  // Fix volume panel because we added a new component (PeerTube link)
-  .vjs-volume-panel {
-    margin-right: 137px !important;
   }
 
   @media screen and (max-width: 350px) {
@@ -57,7 +53,6 @@ html, body {
 
     .vjs-volume-panel {
       width: 26px !important;
-      margin-right: 140px !important;
     }
 
     .vjs-peertube-link {

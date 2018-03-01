@@ -346,13 +346,35 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           peertube: {
             videoFiles: this.video.files,
             playerElement: this.playerElement,
-            peerTubeLink: false,
             videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
             videoDuration: this.video.duration
           },
           hotkeys: {
             enableVolumeScroll: false
           }
+        },
+        controlBar: {
+          children: [
+            'playToggle',
+            'currentTimeDisplay',
+            'timeDivider',
+            'durationDisplay',
+            'liveDisplay',
+
+            'flexibleWidthSpacer',
+            'progressControl',
+
+            'webTorrentButton',
+
+            'playbackRateMenuButton',
+
+            'muteToggle',
+            'volumeControl',
+
+            'resolutionMenuButton',
+
+            'fullscreenToggle'
+          ]
         }
       }
 
