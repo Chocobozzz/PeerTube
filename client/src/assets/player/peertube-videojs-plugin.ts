@@ -111,10 +111,6 @@ class ResolutionMenuButton extends MenuButton {
   buildCSSClass () {
     return super.buildCSSClass() + ' vjs-resolution-button'
   }
-
-  dispose () {
-    this.parentNode.removeChild(this)
-  }
 }
 MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton)
 
@@ -134,10 +130,6 @@ class PeerTubeLinkButton extends Button {
 
   handleClick () {
     this.player_.pause()
-  }
-
-  dispose () {
-    this.parentNode.removeChild(this)
   }
 }
 Button.registerComponent('PeerTubeLinkButton', PeerTubeLinkButton)
@@ -225,10 +217,6 @@ class WebTorrentButton extends Button {
     })
 
     return div
-  }
-
-  dispose () {
-    this.parentNode.removeChild(this)
   }
 }
 Button.registerComponent('WebTorrentButton', WebTorrentButton)
