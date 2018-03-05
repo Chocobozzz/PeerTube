@@ -76,7 +76,8 @@ async function run () {
     commentsEnabled: program['commentsEnabled'],
     fixture: program['file'],
     thumbnailfile: program['thumbnailPath'],
-    previewfile: program['previewPath']
+    previewfile: program['previewPath'],
+    support: undefined
   }
 
   await uploadVideo(program['url'], accessToken, videoAttributes)
