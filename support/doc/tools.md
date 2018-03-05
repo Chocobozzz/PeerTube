@@ -1,21 +1,20 @@
-# Import videos guide
-
-You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
-Be sure you own the videos or have the author's authorization to do so.
+# CLI tools guide
 
  - [Installation](#installation)
  - [Usage](#usage)
+   - [import-videos.js](#import-videos.js)
+   - [upload.js](#upload)
 
 ## Installation
 
 ## Prerequisites
 
 You need at least 512MB RAM to run the script.  
-Importation can be launched directly from a PeerTube server (in this case you already have dependencies installed :+1:) or from a separate server, even a dekstop PC.  
+Scripts can be launched directly from a PeerTube server (in this case you already have dependencies installed :+1:) or from a separate server, even a dekstop PC.  
 
 ### Dependencies
 
- * [PeerTube dependencies](dependencies.md)
+Install the [PeerTube dependencies](dependencies.md).
 
 ### Installation
 
@@ -38,10 +37,13 @@ cd ${CLONE}
 npm run build:server
 ```
 
+## Tools 
 
-## Usage
+### import-videos.js
 
-You are now ready to run the script : 
+You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
+Be sure you own the videos or have the author's authorization to do so.
+
 
 ```
 cd ${CLONE}
@@ -61,3 +63,12 @@ node dist/server/tools/import-videos.js -u "PEERTUBE_URL" -U "PEERTUBE_USER" --p
 
  The script will get all public videos from Youtube, download them and upload to PeerTube.  
  Already downloaded videos will not be uploaded twice, so you can run and re-run the script in case of crash, disconnection...
+
+### upload.js
+
+You can use this script to import videos directly from the CLI.
+
+```
+cd ${CLONE}
+node dist/server/tools/upload.js --help
+```
