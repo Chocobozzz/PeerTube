@@ -18,7 +18,7 @@ $ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server git
   1. Run:
 
 ```
-$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git
+$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
 ```
 
 ## CentOS 7
