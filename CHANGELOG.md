@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0-alpha.4
+
+### Features
+
+ * Add iOS support
+
+
 ## v1.0.0-alpha.1
 
 ### Features
