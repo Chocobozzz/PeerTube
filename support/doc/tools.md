@@ -2,8 +2,8 @@
 
  - [Installation](#installation)
  - [Usage](#usage)
-   - [import-videos.js](#import-videos.js)
-   - [upload.js](#upload)
+   - [import-videos.js](#import-videosjs)
+   - [upload.js](#uploadjs)
 
 ## Installation
 
