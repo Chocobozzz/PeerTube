@@ -33,10 +33,14 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
   let currentTime = 0
   let renderer
 
-  if (VIDEOSTREAM_EXTS.indexOf(extension) >= 0) {
-    renderer = useVideostream()
-  } else {
-    renderer = useMediaSource()
+  try {
+    if (VIDEOSTREAM_EXTS.indexOf(extension) >= 0) {
+      renderer = useVideostream()
+    } else {
+      renderer = useMediaSource()
+    }
+  } catch (err) {
+    return callback(err)
   }
 
   function useVideostream () {
