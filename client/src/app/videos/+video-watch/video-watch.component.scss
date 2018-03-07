@@ -254,6 +254,59 @@
   }
 }
 
+// If the view is not expanded, take into account the menu
+.privacy-concerns {
+  width: calc(100% - #{$menu-width});
+}
+
+:host-context(.expanded) {
+  .privacy-concerns {
+    width: 100%;
+  }
+}
+
+.privacy-concerns {
+  position: fixed;
+  bottom: 0;
+
+  padding: 5px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+
+  .privacy-concerns-text {
+    margin: 0 5px;
+  }
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: $orange-color;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .privacy-concerns-okay {
+    background-color: $orange-color;
+    padding: 5px 8px 5px 7px;
+    margin-left: auto;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: $font-semibold;
+
+    &:hover {
+      background-color: #000;
+    }
+  }
+}
+
 
 @media screen and (max-width: 1600px) {
   .video-bottom {
@@ -294,6 +347,15 @@
   .other-videos {
     display: none;
   }
+
+  .privacy-concerns {
+    font-size: 12px;
+    padding: 2px 5px;
+
+    .privacy-concerns-text {
+      margin: 0;
+    }
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -309,6 +371,14 @@
           height: auto;
         }
       }
+    }
+  }
+
+  .privacy-concerns {
+    width: 100%;
+
+    strong {
+      display: none;
     }
   }
 }
