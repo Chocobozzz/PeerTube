@@ -125,7 +125,7 @@ export abstract class AbstractVideoList implements OnInit {
     if (!this.pagination.totalItems) return true
 
     const maxPage = this.pagination.totalItems / this.pagination.itemsPerPage
-    return maxPage > this.pagination.currentPage
+    return maxPage > this.maxPageLoaded()
   }
 
   protected previousPage () {
