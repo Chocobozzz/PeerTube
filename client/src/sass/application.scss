@@ -24,6 +24,14 @@ body {
   color: #000;
 }
 
+#incompatible-browser {
+  display: none;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: 45%;
+}
+
 strong {
   font-weight: $font-semibold;
 }

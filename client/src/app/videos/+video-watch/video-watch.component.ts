@@ -49,8 +49,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   shortVideoDescription: string
   videoHTMLDescription = ''
   likesBarTooltipText = ''
+  hasAlreadyAcceptedPrivacyConcern = false
 
-  private hasAlreadyAcceptedPrivacyConcern = false
   private otherVideos: Video[] = []
   private paramsSub: Subscription
 
@@ -258,6 +258,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         error => this.notificationsService.error('Error', error.message)
       )
+  }
+
+  acceptedPrivacyConcern () {
+    localStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
+    this.hasAlreadyAcceptedPrivacyConcern = true
   }
 
   private updateVideoDescription (description: string) {
@@ -469,10 +474,5 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Be sure the autoPlay is set to false
     return this.user.autoPlayVideo !== false
-  }
-
-  private acceptedPrivacyConcern () {
-    localStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
-    this.hasAlreadyAcceptedPrivacyConcern = true
   }
 }

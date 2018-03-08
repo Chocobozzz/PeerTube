@@ -34,6 +34,21 @@
       </p>
     </noscript>
 
+    <div id="incompatible-browser" class="alert alert-danger" style="display: none">
+      <p>We are sorry but it seems that PeerTube is not compatible with your web browser.</p>
+      <p>Please try with the latest version of <a href="https://www.mozilla.org" target="_blank">Mozilla Firefox</a>.</p>
+      <p>If you think this is a mistake, do not hesitate <a href="https://github.com/Chocobozzz/PeerTube/issues/new" target="_blank">to report it</a>.</p>
+    </div>
+
+    <script type="text/javascript">
+      window.onerror = function () {
+        var elem = document.getElementById('incompatible-browser')
+        if (elem.className.indexOf('browser-ok') === -1) {
+          elem.style.display = 'block'
+        }
+      }
+    </script>
+
     <my-app>
     </my-app>
 

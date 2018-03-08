@@ -20,11 +20,14 @@ const bootstrap = () => platformBrowserDynamic()
     //     .catch(err => console.error('Cannot register service worker.', err))
     // }
 
-    navigator.serviceWorker.getRegistrations().then(registrations => {
-      for (const registration of registrations) {
-        registration.unregister()
-      }
-    })
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.getRegistrations()
+        .then(registrations => {
+          for (const registration of registrations) {
+            registration.unregister()
+          }
+        })
+    }
 
     return bootstrapModule
   })
