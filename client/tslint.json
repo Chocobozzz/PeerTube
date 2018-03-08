@@ -6,7 +6,7 @@
     "eofline": true,
     "max-line-length": [true, 140],
     "no-floating-promises": false,
-    "no-unused-variable": false, // Bug, wait TypeScript 2.4
+    "no-unused-variable": false, // Memory issues
     "member-ordering": [true,
       "public-before-private",
       "static-before-instance",

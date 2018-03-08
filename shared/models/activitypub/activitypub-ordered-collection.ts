@@ -1,5 +1,3 @@
-import { Activity } from './activity'
-
 export interface ActivityPubOrderedCollection<T> {
   '@context': string[]
   type: 'OrderedCollection' | 'OrderedCollectionPage'

@@ -25,5 +25,5 @@ elif [ "$1" = "lint" ]; then
     npm run lint || exit -1
 
     cd .. || exit -1
-    npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" || exit -1
+    npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts" || exit -1
 fi
