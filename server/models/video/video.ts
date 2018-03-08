@@ -1138,10 +1138,10 @@ export class VideoModel extends Model<VideoModel> {
       outputPath: videoOutputPath
     }
 
-    try {
-      // Could be very long!
-      await transcode(transcodeOptions)
+    // Could be very long!
+    await transcode(transcodeOptions)
 
+    try {
       await unlinkPromise(videoInputPath)
 
       // Important to do this before getVideoFilename() to take in account the new file extension
