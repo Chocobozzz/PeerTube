@@ -23,7 +23,6 @@ export class JobsListComponent extends RestTable implements OnInit {
   rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-  scrollHeight = ''
 
   constructor (
     private notificationsService: NotificationsService,
@@ -34,9 +33,6 @@ export class JobsListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    // 380 -> headers + footer...
-    this.scrollHeight = (viewportHeight() - 380) + 'px'
-
     this.loadJobState()
     this.loadSort()
   }

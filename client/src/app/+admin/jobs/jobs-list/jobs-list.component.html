@@ -10,7 +10,7 @@
 
 <p-table
   [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="id"
-  sortField="createdAt" (onLazyLoad)="loadLazy($event)"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
 >
   <ng-template pTemplate="header">
     <tr>
