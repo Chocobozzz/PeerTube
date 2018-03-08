@@ -37,7 +37,7 @@ const jsonLoggerFormat = winston.format.printf(info => {
 })
 
 const timestampFormatter = winston.format.timestamp({
-  format: 'YYYY-MM-dd HH:mm:ss.SSS'
+  format: 'YYYY-MM-DD HH:mm:ss.SSS'
 })
 const labelFormatter = winston.format.label({
   label
@@ -52,7 +52,7 @@ const logger = new winston.createLogger({
       maxsize: 5242880,
       maxFiles: 5,
       format: winston.format.combine(
-        timestampFormatter,
+        winston.format.timestamp(),
         labelFormatter,
         winston.format.splat(),
         jsonLoggerFormat

@@ -21,7 +21,7 @@ const loggerFormat = winston.format.printf((info) => {
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
-  return `[${info.label}] ${new Date(info.timestamp).toISOString()} ${info.level}: ${info.message}${additionalInfos}`
+  return `[${info.label}] ${toTimeFormat(info.timestamp)} ${info.level}: ${info.message}${additionalInfos}`
 })
 
 const logger = new winston.createLogger({
@@ -61,3 +61,11 @@ rl.on('line', line => {
 
   logLevels[log.level](log)
 })
+
+function toTimeFormat (time: string) {
+  const timestamp = Date.parse(time)
+
+  if (isNaN(timestamp) === true) return 'Unknown date'
+
+  return new Date(timestamp).toISOString()
+}
