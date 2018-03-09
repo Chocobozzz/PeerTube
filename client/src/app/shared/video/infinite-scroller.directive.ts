@@ -38,12 +38,13 @@ export class InfiniteScrollerDirective implements OnInit {
 
   initialize () {
     // Emit the last value
-    const throttleOptions = { leading: false, trailing: true }
+    const throttleOptions = { leading: true, trailing: true }
 
     const scrollObservable = fromEvent(window, 'scroll')
       .startWith(true)
       .throttleTime(200, undefined, throttleOptions)
       .map(() => ({ current: window.scrollY, maximumScroll: document.body.clientHeight - window.innerHeight }))
+      .distinctUntilChanged((o1, o2) => o1.current === o2.current)
       .share()
 
     // Scroll Down
