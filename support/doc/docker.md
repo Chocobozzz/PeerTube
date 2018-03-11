@@ -11,6 +11,7 @@ though any HTTP reverse proxy is compatible.
 Example for running a peertube server locally:
 
 ```bash
+wget https://framagit.org/chocobozzz/PeerTube/raw/develop/support/docker/production/docker-compose.yml
 sudo \
   PEERTUBE_HOSTNAME=peertube.lvh.me \
   PEERTUBE_ADMIN_EMAIL=test@example.com \
