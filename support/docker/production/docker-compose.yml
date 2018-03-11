@@ -1,35 +1,40 @@
-version: "3.3"
+version: "3.1"
 
 services:
   peertube:
 
     build: .
-    image: peertube:stretch
+    image: tedomum/peertube
     environment:
-      PEERTUBE_HOSTNAME: my.domain.tld
+      PEERTUBE_HOSTNAME: "my.domain.tld"
       PEERTUBE_PORT: 443
-      PEERTUBE_HTTPS: true
-      PEERTUBE_ADMIN_EMAIL: admin@domain.tld
-      PEERTUBE_DB_USERNAME: user
-      PEERTUBE_DB_PASSWORD: password
-      PEERTUBE_SIGNUP_ENABLED: true
-      PEERTUBE_TRANSCODING_ENABLED: true
+      PEERTUBE_HTTPS: "true"
+      PEERTUBE_ADMIN_EMAIL: "admin@domain.tld"
+      PEERTUBE_DB_USERNAME: "user"
+      PEERTUBE_DB_PASSWORD: "password"
+      PEERTUBE_SIGNUP_ENABLED: "true"
+      PEERTUBE_TRANSCODING_ENABLED: "true"
     # Traefik labels are suggested as an example for people using Traefik,
     # remove them if you are using another reverse proxy.
     labels:
       traefik.enable: "true"
-      traefik.frontend.rule: "Host:${PEERTUBE_HOSTNAME}"
+      traefik.frontend.rule: "Host:my.domain.tld"
       traefik.port: "9000"
     volumes:
       - ./data:/usr/src/app/data
     depends_on:
       - db
 
+  redis:
+    image: redis:latest
+    volumes:
+      - ./redis:/data
+
   db:
     image: postgres:10
     environment:
-      POSTGRES_USERNAME: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: peertube_prod
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "peertube"
     volumes:
       - ./db:/var/lib/postgresql/data
