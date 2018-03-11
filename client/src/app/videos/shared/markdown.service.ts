@@ -4,34 +4,55 @@ import * as MarkdownIt from 'markdown-it'
 
 @Injectable()
 export class MarkdownService {
-  private markdownIt: MarkdownIt.MarkdownIt
+  static TEXT_RULES = [
+    'linkify',
+    'autolink',
+    'emphasis',
+    'link',
+    'newline',
+    'list'
+  ]
+  static ENHANCED_RULES = MarkdownService.TEXT_RULES.concat([ 'image' ])
+
+  private textMarkdownIt: MarkdownIt.MarkdownIt
+  private enhancedMarkdownIt: MarkdownIt.MarkdownIt
 
   constructor () {
-    this.markdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
-      .enable('linkify')
-      .enable('autolink')
-      .enable('emphasis')
-      .enable('link')
-      .enable('newline')
-      .enable('list')
-
-    this.setTargetToLinks()
+    this.textMarkdownIt = this.createMarkdownIt(MarkdownService.TEXT_RULES)
+    this.enhancedMarkdownIt = this.createMarkdownIt(MarkdownService.ENHANCED_RULES)
   }
 
-  markdownToHTML (markdown: string) {
-    const html = this.markdownIt.render(markdown)
+  textMarkdownToHTML (markdown: string) {
+    const html = this.textMarkdownIt.render(markdown)
 
-    // Avoid linkify truncated links
-    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...(<\/p>)?$/mi, '$1...')
+    return this.avoidTruncatedLinks(html)
   }
 
-  private setTargetToLinks () {
+  enhancedMarkdownToHTML (markdown: string) {
+    const html = this.enhancedMarkdownIt.render(markdown)
+
+    return this.avoidTruncatedLinks(html)
+  }
+
+  private createMarkdownIt (rules: string[]) {
+    const markdownIt = new MarkdownIt('zero', { linkify: true, breaks: true })
+
+    for (let rule of rules) {
+      markdownIt.enable(rule)
+    }
+
+    this.setTargetToLinks(markdownIt)
+
+    return markdownIt
+  }
+
+  private setTargetToLinks (markdownIt: MarkdownIt.MarkdownIt) {
     // Snippet from markdown-it documentation: https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md#renderer
-    const defaultRender = this.markdownIt.renderer.rules.link_open || function (tokens, idx, options, env, self) {
+    const defaultRender = markdownIt.renderer.rules.link_open || function (tokens, idx, options, env, self) {
       return self.renderToken(tokens, idx, options)
     }
 
-    this.markdownIt.renderer.rules.link_open = function (tokens, idx, options, env, self) {
+    markdownIt.renderer.rules.link_open = function (tokens, idx, options, env, self) {
       // If you are sure other plugins can't add `target` - drop check below
       const aIndex = tokens[idx].attrIndex('target')
 
@@ -44,5 +65,9 @@ export class MarkdownService {
       // pass token to default renderer.
       return defaultRender(tokens, idx, options, env, self)
     }
+  }
+
+  private avoidTruncatedLinks (html) {
+    return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...(<\/p>)?$/mi, '$1...')
   }
 }

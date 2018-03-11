@@ -1,10 +1,12 @@
 /* tslint:disable:no-unused-expression */
 
-import { join } from 'path'
+import * as chai from 'chai'
+import { isAbsolute, join } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
 import { readFileBufferPromise } from '../../../helpers/core-utils'
 
+const expect = chai.expect
 let webtorrent = new WebTorrent()
 
 function immutableAssign <T, U> (target: T, source: U) {
@@ -45,14 +47,23 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
     const body = res.body
 
     const data = await readFileBufferPromise(join(__dirname, '..', '..', 'api', 'fixtures', imageName + extension))
-    const minLength = body.length - ((50 * body.length) / 100)
-    const maxLength = body.length + ((50 * body.length) / 100)
+    const minLength = body.length - ((20 * body.length) / 100)
+    const maxLength = body.length + ((20 * body.length) / 100)
 
-    return data.length > minLength && data.length < maxLength
+    expect(data.length).to.be.above(minLength)
+    expect(data.length).to.be.below(maxLength)
   } else {
     console.log('Do not test images. Enable it by setting NODE_TEST_IMAGE env variable.')
     return true
   }
+}
+
+function buildAbsoluteFixturePath (path: string) {
+  if (isAbsolute(path)) {
+    return path
+  }
+
+  return join(__dirname, '..', '..', 'api', 'fixtures', path)
 }
 
 // ---------------------------------------------------------------------------
@@ -63,5 +74,6 @@ export {
   webtorrentAdd,
   immutableAssign,
   testImage,
+  buildAbsoluteFixturePath,
   root
 }

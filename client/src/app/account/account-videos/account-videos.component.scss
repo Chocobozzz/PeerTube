@@ -45,14 +45,11 @@
   display: flex;
   min-height: 130px;
   padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #C6C6C6;
 
   &:first-child {
     margin-top: 47px;
-  }
-
-  &:not(:last-child) {
-    margin-bottom: 20px;
-    border-bottom: 1px solid #C6C6C6;
   }
 
   .checkbox-container {

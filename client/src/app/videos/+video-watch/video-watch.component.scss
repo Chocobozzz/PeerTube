@@ -10,8 +10,9 @@
     width: 888px;
     height: 500px;
 
-    @media screen and (max-width: 800px) {
+    @media screen and (max-width: 600px) {
       height: auto;
+      max-height: calc(100vh - #{$header-height});
     }
 
     // VideoJS create an inner video player
@@ -42,13 +43,13 @@
     .video-info-first-row {
       display: flex;
 
-      & > div {
+      & > div:first-child {
         flex-grow: 1;
       }
 
       .video-info-name {
         margin-right: 30px;
-        height: 40px; // Align with the action buttons
+        min-height: 40px; // Align with the action buttons
         font-size: 27px;
         font-weight: $font-semibold;
         flex-grow: 1;
@@ -80,11 +81,10 @@
       .video-actions-rates {
         display: flex;
         flex-direction: column;
-        align-items: end;
+        align-items: flex-end;
 
         .video-actions {
           height: 40px; // Align with the title
-          min-width: 215px;
           display: flex;
           align-items: center;
 
@@ -100,6 +100,7 @@
             font-weight: $font-semibold;
             display: inline-block;
             padding: 0 10px 0 10px;
+            white-space: nowrap;
 
             .icon {
               @include icon(21px);
@@ -115,6 +116,10 @@
                 background-image: url('../../../assets/images/video/dislike-grey.svg');
               }
 
+              &.icon-support {
+                background-image: url('../../../assets/images/video/heart.svg');
+              }
+
               &.icon-share {
                 background-image: url('../../../assets/images/video/share.svg');
               }
@@ -123,6 +128,10 @@
                 background-image: url('../../../assets/images/video/more.svg');
                 top: -1px;
               }
+            }
+
+            &.action-button-share {
+              width: 82px;
             }
 
             &.action-button-like.activated {
@@ -193,6 +202,10 @@
       margin: 20px 0;
       font-size: 15px;
 
+      .video-info-description-html {
+        word-break: break-all;
+      }
+
       .description-loading {
         display: inline-block;
       }
@@ -241,12 +254,61 @@
   }
 }
 
+// If the view is not expanded, take into account the menu
+.privacy-concerns {
+  width: calc(100% - #{$menu-width});
+}
 
-@media screen and (max-width: 1300px) {
-  .other-videos {
-    display: none;
+:host-context(.expanded) {
+  .privacy-concerns {
+    width: 100%;
+  }
+}
+
+.privacy-concerns {
+  position: fixed;
+  bottom: 0;
+
+  padding: 5px 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: #fff;
+
+  .privacy-concerns-text {
+    margin: 0 5px;
   }
 
+  a {
+    @include disable-default-a-behaviour;
+
+    color: $orange-color;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  .privacy-concerns-okay {
+    background-color: $orange-color;
+    padding: 5px 8px 5px 7px;
+    margin-left: auto;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: $font-semibold;
+
+    &:hover {
+      background-color: #000;
+    }
+  }
+}
+
+
+@media screen and (max-width: 1600px) {
   .video-bottom {
     .video-info {
       margin-right: 0;
@@ -281,6 +343,21 @@
   }
 }
 
+@media screen and (max-width: 1200px) {
+  .other-videos {
+    display: none;
+  }
+
+  .privacy-concerns {
+    font-size: 12px;
+    padding: 2px 5px;
+
+    .privacy-concerns-text {
+      margin: 0;
+    }
+  }
+}
+
 @media screen and (max-width: 600px) {
   .video-bottom {
     margin: 20px 0 0 0;
@@ -295,5 +372,19 @@
         }
       }
     }
+  }
+
+  .privacy-concerns {
+    width: 100%;
+
+    strong {
+      display: none;
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .video-bottom  .action-button .icon-text {
+    display: none !important;
   }
 }

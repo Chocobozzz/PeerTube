@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
+import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/forkJoin'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
@@ -21,6 +22,7 @@ import { VideoService } from '../../shared/video/video.service'
 export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
+  isUpdatingVideo = false
   form: FormGroup
   formErrors: { [ id: string ]: string } = {}
   validationMessages: ValidatorMessage = {}
@@ -34,7 +36,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private serverService: ServerService,
     private videoService: VideoService,
-    private authService: AuthService
+    private authService: AuthService,
+    private loadingBar: LoadingBarService
   ) {
     super()
   }
@@ -48,23 +51,25 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.buildForm()
 
     this.serverService.videoPrivaciesLoaded
-      .subscribe(
-        () => this.videoPrivacies = this.serverService.getVideoPrivacies()
-      )
-
-    populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
+      .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
 
     const uuid: string = this.route.snapshot.params['uuid']
     this.videoService.getVideo(uuid)
       .switchMap(video => {
         return this.videoService
           .loadCompleteDescription(video.descriptionPath)
-          .do(description => video.description = description)
-          .map(() => video)
+          .map(description => Object.assign(video, { description }))
       })
       .subscribe(
         video => {
           this.video = new VideoEdit(video)
+
+          this.userVideoChannels = [
+            {
+              id: video.channel.id,
+              label: video.channel.displayName
+            }
+          ]
 
           // We cannot set private a video that was not private
           if (video.privacy !== VideoPrivacy.PRIVATE) {
@@ -99,14 +104,19 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
     this.video.patch(this.form.value)
 
+    this.loadingBar.start()
+    this.isUpdatingVideo = true
     this.videoService.updateVideo(this.video)
                      .subscribe(
                        () => {
+                         this.isUpdatingVideo = false
+                         this.loadingBar.complete()
                          this.notificationsService.success('Success', 'Video updated.')
                          this.router.navigate([ '/videos/watch', this.video.uuid ])
                        },
 
                        err => {
+                         this.isUpdatingVideo = false
                          this.notificationsService.error('Error', err.message)
                          console.error(err)
                        }
@@ -116,5 +126,26 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
   private hydrateFormFromVideo () {
     this.form.patchValue(this.video.toJSON())
+
+    const objects = [
+      {
+        url: 'thumbnailUrl',
+        name: 'thumbnailfile'
+      },
+      {
+        url: 'previewUrl',
+        name: 'previewfile'
+      }
+    ]
+
+    for (const obj of objects) {
+      fetch(this.video[obj.url])
+        .then(response => response.blob())
+        .then(data => {
+          this.form.patchValue({
+            [ obj.name ]: data
+          })
+        })
+    }
   }
 }

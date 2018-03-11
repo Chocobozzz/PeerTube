@@ -56,11 +56,8 @@ function generateThumbnailFromUrl (video: VideoModel, icon: ActivityIconObject) 
 
 async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelModel,
                                                   videoObject: VideoTorrentObject,
-                                                  to: string[] = [],
-                                                  cc: string[] = []) {
-  let privacy = VideoPrivacy.PRIVATE
-  if (to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1) privacy = VideoPrivacy.PUBLIC
-  else if (cc.indexOf(ACTIVITY_PUB.PUBLIC) !== -1) privacy = VideoPrivacy.UNLISTED
+                                                  to: string[] = []) {
+  const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
 
   const duration = videoObject.duration.replace(/[^\d]+/, '')
   let language = null
@@ -78,10 +75,8 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     licence = parseInt(videoObject.licence.identifier, 10)
   }
 
-  let description = null
-  if (videoObject.content) {
-    description = videoObject.content
-  }
+  const description = videoObject.content || null
+  const support = videoObject.support || null
 
   return {
     name: videoObject.name,
@@ -91,6 +86,7 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
     licence,
     language,
     description,
+    support,
     nsfw: videoObject.sensitive,
     commentsEnabled: videoObject.commentsEnabled,
     channelId: videoChannel.id,
@@ -151,7 +147,7 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
     const videoFromDatabase = await VideoModel.loadByUUIDOrURLAndPopulateAccount(videoObject.uuid, videoObject.id, t)
     if (videoFromDatabase) return videoFromDatabase
 
-    const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to, videoObject.cc)
+    const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
     const video = VideoModel.build(videoData)
 
     // Don't block on request

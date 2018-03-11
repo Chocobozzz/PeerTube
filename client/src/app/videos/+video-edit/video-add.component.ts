@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from '@app/shared'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
+import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
 import { BytesPipe } from 'ngx-pipes'
 import { Subscription } from 'rxjs/Subscription'
@@ -28,6 +29,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   @ViewChild('videofileInput') videofileInput
 
   isUploadingVideo = false
+  isUpdatingVideo = false
   videoUploaded = false
   videoUploadObservable: Subscription = null
   videoUploadPercents = 0
@@ -35,6 +37,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     id: 0,
     uuid: ''
   }
+  videoFileName: string
 
   form: FormGroup
   formErrors: { [ id: string ]: string } = {}
@@ -53,7 +56,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private loadingBar: LoadingBarService
   ) {
     super()
   }
@@ -129,8 +133,14 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   }
 
   uploadFirstStep () {
-    const videofile = this.videofileInput.nativeElement.files[0]
+    const videofile = this.videofileInput.nativeElement.files[0] as File
     if (!videofile) return
+
+    // Cannot upload videos > 4GB for now
+    if (videofile.size > 4 * 1024 * 1024 * 1024) {
+      this.notificationsService.error('Error', 'We are sorry but PeerTube cannot handle videos > 4GB')
+      return
+    }
 
     const videoQuota = this.authService.getUser().videoQuota
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
@@ -144,6 +154,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
       return
     }
 
+    this.videoFileName = videofile.name
+
     const name = videofile.name.replace(/\.[^/.]+$/, '')
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
@@ -152,7 +164,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     const formData = new FormData()
     formData.append('name', name)
-    // Put the video "private" -> we wait he validates the second step
+    // Put the video "private" -> we are waiting the user validation of the second step
     formData.append('privacy', VideoPrivacy.PRIVATE.toString())
     formData.append('nsfw', '' + nsfw)
     formData.append('commentsEnabled', '' + commentsEnabled)
@@ -203,15 +215,21 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     video.id = this.videoUploadedIds.id
     video.uuid = this.videoUploadedIds.uuid
 
+    this.isUpdatingVideo = true
+    this.loadingBar.start()
     this.videoService.updateVideo(video)
       .subscribe(
         () => {
+          this.isUpdatingVideo = false
           this.isUploadingVideo = false
+          this.loadingBar.complete()
+
           this.notificationsService.success('Success', 'Video published.')
           this.router.navigate([ '/videos/watch', video.uuid ])
         },
 
         err => {
+          this.isUpdatingVideo = false
           this.notificationsService.error('Error', err.message)
           console.error(err)
         }

@@ -1,10 +1,10 @@
-import { Component } from '@angular/core'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { Component, OnInit } from '@angular/core'
 
 import { NotificationsService } from 'angular2-notifications'
+import { SortMeta } from 'primeng/components/common/sortmeta'
 
 import { ConfirmService } from '../../../core'
-import { RestTable, RestPagination, User } from '../../../shared'
+import { RestPagination, RestTable, User } from '../../../shared'
 import { UserService } from '../shared'
 
 @Component({
@@ -12,11 +12,11 @@ import { UserService } from '../shared'
   templateUrl: './user-list.component.html',
   styleUrls: [ './user-list.component.scss' ]
 })
-export class UserListComponent extends RestTable {
+export class UserListComponent extends RestTable implements OnInit {
   users: User[] = []
   totalRecords = 0
   rowsPerPage = 10
-  sort: SortMeta = { field: 'id', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (
@@ -27,25 +27,26 @@ export class UserListComponent extends RestTable {
     super()
   }
 
-  removeUser (user: User) {
+  ngOnInit () {
+    this.loadSort()
+  }
+
+  async removeUser (user: User) {
     if (user.username === 'root') {
       this.notificationsService.error('Error', 'You cannot delete root.')
       return
     }
 
-    this.confirmService.confirm('Do you really want to delete this user?', 'Delete').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm('Do you really want to delete this user?', 'Delete')
+    if (res === false) return
 
-        this.userService.removeUser(user).subscribe(
-          () => {
-            this.notificationsService.success('Success', `User ${user.username} deleted.`)
-            this.loadData()
-          },
+    this.userService.removeUser(user).subscribe(
+      () => {
+        this.notificationsService.success('Success', `User ${user.username} deleted.`)
+        this.loadData()
+      },
 
-          err => this.notificationsService.error('Error', err.message)
-        )
-      }
+      err => this.notificationsService.error('Error', err.message)
     )
   }
 

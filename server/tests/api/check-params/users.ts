@@ -7,7 +7,7 @@ import { UserRole } from '../../../../shared'
 
 import {
   createUser, flushTests, getMyUserInformation, getMyUserVideoRating, getUsersList, immutableAssign, killallServers, makeGetRequest,
-  makePostBodyRequest, makePostUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
+  makePostBodyRequest, makeUploadRequest, makePutBodyRequest, registerUser, removeUser, runServer, ServerInfo, setAccessTokensToServers,
   updateUser, uploadVideo, userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
@@ -255,6 +255,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: 'super token', fields, statusCodeExpected: 401 })
     })
 
+    it('Should fail with a too long description', async function () {
+      const fields = {
+        description: 'super'.repeat(60)
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should succeed with the correct params', async function () {
       const fields = {
         password: 'my super password',
@@ -273,7 +281,7 @@ describe('Test users API validators', function () {
       const attaches = {
         'avatarfile': join(__dirname, '..', 'fixtures', 'video_short.mp4')
       }
-      await makePostUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
     it('Should fail with a big file', async function () {
@@ -281,7 +289,7 @@ describe('Test users API validators', function () {
       const attaches = {
         'avatarfile': join(__dirname, '..', 'fixtures', 'avatar-big.png')
       }
-      await makePostUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/me/avatar/pick', token: server.accessToken, fields, attaches })
     })
 
     it('Should succeed with the correct params', async function () {
@@ -289,7 +297,7 @@ describe('Test users API validators', function () {
       const attaches = {
         'avatarfile': join(__dirname, '..', 'fixtures', 'avatar.png')
       }
-      await makePostUploadRequest({
+      await makeUploadRequest({
         url: server.url,
         path: path + '/me/avatar/pick',
         token: server.accessToken,

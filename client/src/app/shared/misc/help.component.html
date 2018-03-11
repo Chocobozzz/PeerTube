@@ -1,0 +1,18 @@
+<ng-template #tooltipTemplate>
+  <ng-template [ngIf]="preHtml">
+    <p [innerHTML]="preHtml"></p>
+    <br />
+  </ng-template>
+
+  <p [innerHTML]="mainHtml"></p>
+
+  <ng-template [ngIf]="postHtml">
+    <br />
+    <p [innerHTML]="postHtml"></p>
+  </ng-template>
+</ng-template>
+
+<button
+  class="help-tooltip-button" containerClass="help-tooltip" title="Click to get help"
+  #tooltipDirective="bs-tooltip" [tooltip]="tooltipTemplate" triggers="click"
+></button>

@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
-import { VideoCommentCreate, VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
+import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
 import { FormReactive } from '../../../shared'
 import { VIDEO_COMMENT_TEXT } from '../../../shared/forms/form-validators/video-comment'
 import { User } from '../../../shared/users'
@@ -59,14 +59,21 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
     if (this.parentComment) {
       const mentions = this.parentComments
-        .filter(c => c.account.id !== this.user.account.id)
-        .map(c => '@' + c.account.name)
+        .filter(c => c.account.id !== this.user.account.id) // Don't add mention of ourselves
+        .map(c => c.by)
 
       const mentionsSet = new Set(mentions)
       const mentionsText = Array.from(mentionsSet).join(' ') + ' '
 
       this.form.patchValue({ text: mentionsText })
     }
+  }
+
+  onValidKey () {
+    this.onValueChanged()
+    if (!this.form.valid) return
+
+    this.formValidated()
   }
 
   formValidated () {

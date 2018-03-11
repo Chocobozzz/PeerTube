@@ -4,13 +4,14 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
+import { HelpComponent } from '@app/shared/misc/help.component'
+import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { MarkdownService } from '@app/videos/shared'
-import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
 import { TabsModule } from 'ngx-bootstrap/tabs'
-import { InfiniteScrollModule } from 'ngx-infinite-scroll'
+import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
 
@@ -36,15 +37,13 @@ import { VideoService } from './video/video.service'
     RouterModule,
     HttpClientModule,
 
-    LoadingBarHttpClientModule,
-
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
+    TabsModule.forRoot(),
+    TooltipModule.forRoot(),
 
     PrimeSharedModule,
-    InfiniteScrollModule,
-    NgPipesModule,
-    TabsModule.forRoot()
+    NgPipesModule
   ],
 
   declarations: [
@@ -55,7 +54,9 @@ import { VideoService } from './video/video.service'
     EditButtonComponent,
     NumberFormatterPipe,
     FromNowPipe,
-    MarkdownTextareaComponent
+    MarkdownTextareaComponent,
+    InfiniteScrollerDirective,
+    HelpComponent
   ],
 
   exports: [
@@ -65,12 +66,11 @@ import { VideoService } from './video/video.service'
     RouterModule,
     HttpClientModule,
 
-    LoadingBarHttpClientModule,
-
     BsDropdownModule,
     ModalModule,
+    TabsModule,
+    TooltipModule,
     PrimeSharedModule,
-    InfiniteScrollModule,
     BytesPipe,
     KeysPipe,
 
@@ -80,6 +80,8 @@ import { VideoService } from './video/video.service'
     DeleteButtonComponent,
     EditButtonComponent,
     MarkdownTextareaComponent,
+    InfiniteScrollerDirective,
+    HelpComponent,
 
     NumberFormatterPipe,
     FromNowPipe

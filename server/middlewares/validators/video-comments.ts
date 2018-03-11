@@ -43,7 +43,7 @@ const addVideoCommentThreadValidator = [
   body('text').custom(isValidVideoCommentText).not().isEmpty().withMessage('Should have a valid comment text'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addVideoCommentThread parameters.', { parameters: req.params })
+    logger.debug('Checking addVideoCommentThread parameters.', { parameters: req.params, body: req.body })
 
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.videoId, res)) return
@@ -59,7 +59,7 @@ const addVideoCommentReplyValidator = [
   body('text').custom(isValidVideoCommentText).not().isEmpty().withMessage('Should have a valid comment text'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking addVideoCommentReply parameters.', { parameters: req.params })
+    logger.debug('Checking addVideoCommentReply parameters.', { parameters: req.params, body: req.body })
 
     if (areValidationErrors(req, res)) return
     if (!await isVideoExist(req.params.videoId, res)) return

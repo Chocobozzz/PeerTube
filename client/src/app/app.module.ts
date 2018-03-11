@@ -24,7 +24,8 @@ export function metaFactory (): MetaLoader {
     applicationName: 'PeerTube',
     defaults: {
       title: 'PeerTube',
-      description: 'PeerTube, a decentralized video streaming platform using P2P (BitTorrent) directly in the web browser'
+      description: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
+                   'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular. '
     }
   })
 }

@@ -1,4 +1,6 @@
-// Thanks: https://github.com/zanechua/videojs-sublime-inspired-skin
+@import '_variables';
+@import '_mixins';
+
 $primary-foreground-color: #fff;
 $primary-background-color: #000;
 $font-size: 13px;
@@ -7,6 +9,28 @@ $control-bar-height: 34px;
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
   color: $primary-foreground-color;
+
+  .vjs-dock-text {
+    padding-right: 10px;
+  }
+
+  .vjs-dock-description {
+    font-size: 11px;
+
+    &:before, &:after {
+      display: inline-block;
+      content: '\1F308';
+    }
+
+    &:before {
+      margin-right: 4px;
+    }
+
+    &:after {
+      margin-left: 4px;
+      transform: scale(-1, 1);
+    }
+  }
 
   .vjs-button > .vjs-icon-placeholder::before {
     line-height: $control-bar-height;
@@ -24,19 +48,22 @@ $control-bar-height: 34px;
 
   .vjs-big-play-button {
     outline: 0;
-    font-size: 8em;
+    font-size: 6em;
 
-    $big-play-width: 3em;
-    $big-play-height: 1.5em;
+    $big-play-width: 1.5em;
+    $big-play-height: 1em;
 
     border: 0;
     border-radius: 0.3em;
 
     left: 50%;
     top: 50%;
+    width: $big-play-width;
+    height: $big-play-height;
+    line-height: $big-play-height;
     margin-left: -($big-play-width / 2);
     margin-top: -($big-play-height / 2);
-    background-color: transparent !important;
+    transition: opacity 0.5s;
 
     &::-moz-focus-inner {
       border: 0;
@@ -47,8 +74,12 @@ $control-bar-height: 34px;
       transition: text-shadow 0.3s;
     }
 
-    &:hover .vjs-icon-placeholder::before {
-      text-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+    &:hover {
+      opacity: 0.9;
+
+      .vjs-icon-placeholder::before {
+        text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
+      }
     }
   }
 
@@ -110,7 +141,8 @@ $control-bar-height: 34px;
     }
 
     .vjs-play-control {
-      outline: 0;
+      @include disable-outline;
+
       font-size: $font-size;
       padding: 0 17px;
       margin-right: 5px;
@@ -147,17 +179,16 @@ $control-bar-height: 34px;
       }
     }
 
-    .vjs-webtorrent {
+    .vjs-peertube {
       width: 100%;
       line-height: $control-bar-height;
       text-align: right;
-      padding-right: 60px;
 
-      .vjs-webtorrent-displayed {
+      .vjs-peertube-displayed {
         display: block;
       }
 
-      .vjs-webtorrent-hidden {
+      .vjs-peertube-hidden {
         display: none;
       }
 
@@ -190,8 +221,26 @@ $control-bar-height: 34px;
       }
     }
 
+    .vjs-playback-rate {
+      font-size: 10px;
+      width: 37px !important;
+
+      .vjs-playback-rate-value {
+        font-size: 13px;
+        line-height: $control-bar-height;
+      }
+
+      .vjs-menu .vjs-menu-content {
+        width: 37px !important;
+      }
+    }
+
     .vjs-mute-control {
-      outline: 0;
+      @include disable-outline;
+
+      line-height: $control-bar-height;
+      padding: 0;
+      width: 30px;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -212,12 +261,9 @@ $control-bar-height: 34px;
       }
     }
 
-    .vjs-volume-menu-button,
-    .vjs-volume-panel {
-      width: 6em;
-      position: absolute;
-      right: 0;
-      margin-right: 65px;
+    .vjs-volume-control {
+      width: 30px;
+      margin: 0;
     }
 
     .vjs-volume-bar {
@@ -275,8 +321,9 @@ $control-bar-height: 34px;
     }
 
     .vjs-fullscreen-control {
+      @include disable-outline;
+
       width: 37px;
-      outline: 0;
 
       .vjs-icon-placeholder {
         display: inline-block;
@@ -293,7 +340,6 @@ $control-bar-height: 34px;
     }
 
     .vjs-menu-button-popup {
-      font-size: 13px;
       font-weight: $font-semibold;
       width: 50px;
 
@@ -302,7 +348,7 @@ $control-bar-height: 34px;
         line-height: $control-bar-height;
         position: absolute;
         top: 0;
-        left: 4px;
+        left: 0;
         width: 100%;
         height: 100%;
         text-align: center;
@@ -311,16 +357,16 @@ $control-bar-height: 34px;
       }
 
       .vjs-resolution-button {
-        outline: 0 !important;
+        @include disable-outline;
       }
 
       .vjs-menu {
         top: 20px;
+        left: 0;
 
         .vjs-menu-content {
           width: 50px;
-          left: 50%; /* Center the menu, in it's parent */
-          margin-left: -21px;
+          bottom: 20px;
         }
 
         li {
@@ -333,13 +379,17 @@ $control-bar-height: 34px;
 
   @media screen and (max-width: 550px) {
     .vjs-big-play-button {
-      font-size: 6.5em;
+      font-size: 5em;
     }
 
-    .vjs-webtorrent {
+    .vjs-playback-rate {
+      display: none;
+    }
+
+    .vjs-peertube {
       padding: 0 !important;
 
-      .vjs-webtorrent-displayed {
+      .vjs-peertube-displayed {
         display: none !important;
       }
     }
@@ -347,11 +397,15 @@ $control-bar-height: 34px;
 
   @media screen and (max-width: 300px) {
     .vjs-dock-text {
-      font-size: 1.5em;
+      font-size: 13px;
+    }
+
+    .vjs-dock-description {
+      font-size: 9px;
     }
 
     .vjs-big-play-button {
-      font-size: 5em;
+      font-size: 4em;
     }
 
     .vjs-volume-control {
@@ -417,3 +471,20 @@ $control-bar-height: 34px;
   }
 }
 
+// Error display disabled
+.vjs-error:not(.vjs-error-display-enabled) {
+  .vjs-error-display {
+    display: none;
+  }
+
+  .vjs-loading-spinner {
+    display: block;
+  }
+}
+
+// Error display enabled
+.vjs-error.vjs-error-display-enabled {
+  .vjs-error-display {
+    display: block;
+  }
+}

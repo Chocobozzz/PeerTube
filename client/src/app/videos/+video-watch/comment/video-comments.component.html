@@ -15,13 +15,27 @@
 
     <div
       class="comment-threads"
-      infiniteScroll
-      [infiniteScrollUpDistance]="1.5"
-      [infiniteScrollDistance]="0.5"
-      (scrolled)="onNearOfBottom()"
+      myInfiniteScroller
+      [autoLoading]="true"
+      (nearOfBottom)="onNearOfBottom()"
     >
+      <div *ngIf="highlightedThread" id="highlighted-comment">
+        <my-video-comment
+            [comment]="highlightedThread"
+            [video]="video"
+            [inReplyToCommentId]="inReplyToCommentId"
+            [commentTree]="threadComments[highlightedThread.id]"
+            [highlightedComment]="true"
+            (wantedToReply)="onWantedToReply($event)"
+            (wantedToDelete)="onWantedToDelete($event)"
+            (threadCreated)="onThreadCreated($event)"
+            (resetReply)="onResetReply()"
+        ></my-video-comment>
+      </div>
+
       <div *ngFor="let comment of comments">
         <my-video-comment
+          *ngIf="!highlightedThread || comment.id !== highlightedThread.id"
           [comment]="comment"
           [video]="video"
           [inReplyToCommentId]="inReplyToCommentId"
@@ -32,7 +46,7 @@
           (resetReply)="onResetReply()"
         ></my-video-comment>
 
-        <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment)" class="view-replies">
+        <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies">
           View all {{ comment.totalReplies }} replies
 
           <span *ngIf="!threadLoading[comment.id]" class="glyphicon glyphicon-menu-down"></span>

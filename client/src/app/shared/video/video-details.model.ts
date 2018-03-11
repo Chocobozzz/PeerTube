@@ -18,6 +18,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   languageLabel: string
   language: number
   description: string
+  support: string
   duration: number
   durationLabel: string
   id: number
@@ -56,10 +57,10 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.channel = hash.channel
     this.account = hash.account
     this.tags = hash.tags
+    this.support = hash.support
     this.commentsEnabled = hash.commentsEnabled
 
-    this.likesPercent = (this.likes / (this.likes + this.dislikes)) * 100
-    this.dislikesPercent = (this.dislikes / (this.likes + this.dislikes)) * 100
+    this.buildLikeAndDislikePercents()
   }
 
   getAppropriateMagnetUri (actualDownloadSpeed = 0) {
@@ -86,6 +87,11 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   }
 
   isUpdatableBy (user: AuthUser) {
-    return user && this.isLocal === true && user.username === this.accountName
+    return user && this.isLocal === true && (this.accountName === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
+  }
+
+  buildLikeAndDislikePercents () {
+    this.likesPercent = (this.likes / (this.likes + this.dislikes)) * 100
+    this.dislikesPercent = (this.dislikes / (this.likes + this.dislikes)) * 100
   }
 }

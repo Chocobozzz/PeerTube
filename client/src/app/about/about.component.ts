@@ -27,8 +27,8 @@ export class AboutComponent implements OnInit {
     this.serverService.getAbout()
       .subscribe(
         res => {
-          this.descriptionHTML = this.markdownService.markdownToHTML(res.instance.description)
-          this.termsHTML = this.markdownService.markdownToHTML(res.instance.terms)
+          this.descriptionHTML = this.markdownService.textMarkdownToHTML(res.instance.description)
+          this.termsHTML = this.markdownService.textMarkdownToHTML(res.instance.terms)
         },
 
         err => this.notificationsService.error('Error', err)

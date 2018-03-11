@@ -1,9 +1,13 @@
 import {
   AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Is, Model, Scopes, Table,
-  UpdatedAt
+  UpdatedAt, Default
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
-import { isVideoChannelDescriptionValid, isVideoChannelNameValid } from '../../helpers/custom-validators/video-channels'
+import { VideoChannel } from '../../../shared/models/videos'
+import {
+  isVideoChannelDescriptionValid, isVideoChannelNameValid,
+  isVideoChannelSupportValid
+} from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
@@ -67,9 +71,16 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   name: string
 
   @AllowNull(true)
+  @Default(null)
   @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description'))
   @Column
   description: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support'))
+  @Column
+  support: string
 
   @CreatedAt
   createdAt: Date
@@ -140,7 +151,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ]
+      order: getSort(sort)
     }
 
     return VideoChannelModel
@@ -153,7 +164,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   static listByAccount (accountId: number) {
     const query = {
-      order: [ getSort('createdAt') ],
+      order: getSort('createdAt'),
       include: [
         {
           model: AccountModel,
@@ -221,12 +232,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findById(id, options)
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (): VideoChannel {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
       displayName: this.name,
       description: this.description,
+      support: this.support,
       isLocal: this.Actor.isOwned(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
@@ -240,6 +252,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return Object.assign(obj, {
       summary: this.description,
+      support: this.support,
       attributedTo: [
         {
           type: 'Person' as 'Person',

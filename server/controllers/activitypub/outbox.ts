@@ -1,7 +1,9 @@
 import * as express from 'express'
 import { Activity } from '../../../shared/models/activitypub/activity'
+import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
+import { logger } from '../../helpers/logger'
 import { ACTIVITY_PUB } from '../../initializers/constants'
 import { announceActivityData, createActivityData } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/send/misc'
@@ -43,12 +45,12 @@ async function outboxController (req: express.Request, res: express.Response, ne
 
   for (const video of data.data) {
     const byActor = video.VideoChannel.Account.Actor
-    const createActivityAudience = buildAudience(followersMatrix[byActor.id])
+    const createActivityAudience = buildAudience(followersMatrix[byActor.id], video.privacy === VideoPrivacy.PUBLIC)
 
     // This is a shared video
     if (video.VideoShares !== undefined && video.VideoShares.length !== 0) {
       const videoShare = video.VideoShares[0]
-      const announceAudience = buildAudience(followersMatrix[actor.id])
+      const announceAudience = buildAudience(followersMatrix[actor.id], video.privacy === VideoPrivacy.PUBLIC)
       const announceActivity = await announceActivityData(videoShare.url, actor, video.url, undefined, announceAudience)
 
       activities.push(announceActivity)
@@ -64,7 +66,10 @@ async function outboxController (req: express.Request, res: express.Response, ne
     data: activities,
     total: data.total
   }
-  const json = activityPubCollectionPagination(account.Actor.url + '/outbox', page, newResult)
+  const actorOutboxUrl = account.Actor.url + '/outbox'
+  const json = activityPubCollectionPagination(actorOutboxUrl, page, newResult)
+
+  logger.info('Receiving outbox request for %s.', actorOutboxUrl)
 
   return res.json(json).end()
 }

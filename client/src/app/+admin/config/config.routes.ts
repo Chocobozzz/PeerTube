@@ -23,7 +23,7 @@ export const ConfigRoutes: Routes = [
         component: EditCustomConfigComponent,
         data: {
           meta: {
-            title: 'Following list'
+            title: 'Edit custom configuration'
           }
         }
       }

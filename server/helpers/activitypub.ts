@@ -19,7 +19,8 @@ function activityPubContextify <T> (data: T) {
         'language': 'http://schema.org/inLanguage',
         'views': 'http://schema.org/Number',
         'size': 'http://schema.org/Number',
-        'commentsEnabled': 'http://schema.org/Boolean'
+        'commentsEnabled': 'http://schema.org/Boolean',
+        'support': 'http://schema.org/Text'
       },
       {
         likes: {

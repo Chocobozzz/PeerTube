@@ -8,6 +8,7 @@ export class Account implements ServerAccount {
   url: string
   name: string
   displayName: string
+  description: string
   host: string
   followingCount: number
   followersCount: number

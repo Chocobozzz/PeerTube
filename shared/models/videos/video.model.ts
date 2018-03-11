@@ -41,6 +41,7 @@ export interface VideoDetails extends Video {
   privacy: VideoPrivacy
   privacyLabel: string
   descriptionPath: string
+  support: string
   channel: VideoChannel
   tags: string[]
   files: VideoFile[]

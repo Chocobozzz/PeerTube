@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
-import { About } from '../../../../../shared/models/config/about.model'
+import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -12,6 +12,7 @@ export class ServerService {
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
+  configLoaded = new ReplaySubject<boolean>(1)
   videoPrivaciesLoaded = new ReplaySubject<boolean>(1)
   videoCategoriesLoaded = new ReplaySubject<boolean>(1)
   videoLicencesLoaded = new ReplaySubject<boolean>(1)
@@ -19,7 +20,12 @@ export class ServerService {
 
   private config: ServerConfig = {
     instance: {
-      name: 'PeerTube'
+      name: 'PeerTube',
+      defaultClientRoute: '',
+      customizations: {
+        javascript: '',
+        css: ''
+      }
     },
     serverVersion: 'Unknown',
     signup: {
@@ -35,6 +41,10 @@ export class ServerService {
       }
     },
     video: {
+      image: {
+        size: { max: 0 },
+        extensions: []
+      },
       file: {
         extensions: []
       }
@@ -52,11 +62,15 @@ export class ServerService {
   loadConfig () {
     this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
       .do(this.saveConfigLocally)
-      .subscribe(data => this.config = data)
+      .subscribe(data => {
+        this.config = data
+
+        this.configLoaded.next(true)
+      })
   }
 
   loadVideoCategories () {
-    return this.loadVideoAttributeEnum('categories', this.videoCategories, this.videoCategoriesLoaded)
+    return this.loadVideoAttributeEnum('categories', this.videoCategories, this.videoCategoriesLoaded, true)
   }
 
   loadVideoLicences () {
@@ -64,7 +78,7 @@ export class ServerService {
   }
 
   loadVideoLanguages () {
-    return this.loadVideoAttributeEnum('languages', this.videoLanguages, this.videoLanguagesLoaded)
+    return this.loadVideoAttributeEnum('languages', this.videoLanguages, this.videoLanguagesLoaded, true)
   }
 
   loadVideoPrivacies () {
@@ -98,7 +112,8 @@ export class ServerService {
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
     hashToPopulate: { id: number, label: string }[],
-    notifier: ReplaySubject<boolean>
+    notifier: ReplaySubject<boolean>,
+    sort = false
   ) {
     return this.http.get(ServerService.BASE_VIDEO_URL + attributeName)
        .subscribe(data => {
@@ -109,6 +124,14 @@ export class ServerService {
                    label: data[dataKey]
                  })
                })
+
+         if (sort === true) {
+           hashToPopulate.sort((a, b) => {
+             if (a.label < b.label) return -1
+             if (a.label === b.label) return 0
+             return 1
+           })
+         }
 
          notifier.next(true)
        })

@@ -188,6 +188,27 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       }) as AccountModel
     }
 
+    if (!instance.Video) {
+      instance.Video = await instance.$get('Video', {
+        include: [
+          {
+            model: VideoChannelModel,
+            include: [
+              {
+                model: AccountModel,
+                include: [
+                  {
+                    model: ActorModel
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        transaction: options.transaction
+      }) as VideoModel
+    }
+
     if (instance.isOwned()) {
       await sendDeleteVideoComment(instance, options.transaction)
     }
@@ -247,7 +268,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       where: {
         videoId,
         inReplyToCommentId: null
@@ -303,6 +324,32 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel
       .scope([ ScopeNames.WITH_ACCOUNT ])
       .findAll(query)
+  }
+
+  static async getStats () {
+    const totalLocalVideoComments = await VideoCommentModel.count({
+      include: [
+        {
+          model: AccountModel,
+          required: true,
+          include: [
+            {
+              model: ActorModel,
+              required: true,
+              where: {
+                serverId: null
+              }
+            }
+          ]
+        }
+      ]
+    })
+    const totalVideoComments = await VideoCommentModel.count()
+
+    return {
+      totalLocalVideoComments,
+      totalVideoComments
+    }
   }
 
   getThreadId (): number {

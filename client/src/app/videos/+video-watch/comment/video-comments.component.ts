@@ -1,7 +1,9 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
 import { ConfirmService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
-import { VideoComment as VideoCommentInterface, VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
+import { Subscription } from 'rxjs/Subscription'
+import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
@@ -15,11 +17,12 @@ import { VideoCommentService } from './video-comment.service'
   templateUrl: './video-comments.component.html',
   styleUrls: ['./video-comments.component.scss']
 })
-export class VideoCommentsComponent implements OnChanges {
+export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @Input() video: VideoDetails
   @Input() user: User
 
   comments: VideoComment[] = []
+  highlightedThread: VideoComment
   sort: SortField = '-createdAt'
   componentPagination: ComponentPagination = {
     currentPage: 1,
@@ -30,27 +33,48 @@ export class VideoCommentsComponent implements OnChanges {
   threadComments: { [ id: number ]: VideoCommentThreadTree } = {}
   threadLoading: { [ id: number ]: boolean } = {}
 
+  private sub: Subscription
+
   constructor (
     private authService: AuthService,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private videoCommentService: VideoCommentService
+    private videoCommentService: VideoCommentService,
+    private activatedRoute: ActivatedRoute
   ) {}
+
+  ngOnInit () {
+    // Find highlighted comment in params
+    this.sub = this.activatedRoute.params.subscribe(
+      params => {
+        if (params['threadId']) {
+          const highlightedThreadId = +params['threadId']
+          this.processHighlightedThread(highlightedThreadId)
+        }
+      }
+    )
+  }
 
   ngOnChanges (changes: SimpleChanges) {
     if (changes['video']) {
-      this.loadVideoComments()
+      this.resetVideo()
     }
   }
 
-  viewReplies (comment: VideoCommentInterface) {
-    this.threadLoading[comment.id] = true
+  ngOnDestroy () {
+    if (this.sub) this.sub.unsubscribe()
+  }
 
-    this.videoCommentService.getVideoThreadComments(this.video.id, comment.id)
+  viewReplies (commentId: number, highlightThread = false) {
+    this.threadLoading[commentId] = true
+
+    this.videoCommentService.getVideoThreadComments(this.video.id, commentId)
       .subscribe(
         res => {
-          this.threadComments[comment.id] = res
-          this.threadLoading[comment.id] = false
+          this.threadComments[commentId] = res
+          this.threadLoading[commentId] = false
+
+          if (highlightThread) this.highlightedThread = new VideoComment(res.comment)
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -82,41 +106,38 @@ export class VideoCommentsComponent implements OnChanges {
   }
 
   onThreadCreated (commentTree: VideoCommentThreadTree) {
-    this.viewReplies(commentTree.comment)
+    this.viewReplies(commentTree.comment.id)
   }
 
-  onWantedToDelete (commentToDelete: VideoComment) {
+  async onWantedToDelete (commentToDelete: VideoComment) {
     let message = 'Do you really want to delete this comment?'
     if (commentToDelete.totalReplies !== 0) message += `${commentToDelete.totalReplies} would be deleted too.`
 
-    this.confirmService.confirm(message, 'Delete').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm(message, 'Delete')
+    if (res === false) return
 
-        this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
-          .subscribe(
-            () => {
-              // Delete the comment in the tree
-              if (commentToDelete.inReplyToCommentId) {
-                const thread = this.threadComments[commentToDelete.threadId]
-                if (!thread) {
-                  console.error(`Cannot find thread ${commentToDelete.threadId} of the comment to delete ${commentToDelete.id}`)
-                  return
-                }
+    this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
+      .subscribe(
+        () => {
+          // Delete the comment in the tree
+          if (commentToDelete.inReplyToCommentId) {
+            const thread = this.threadComments[commentToDelete.threadId]
+            if (!thread) {
+              console.error(`Cannot find thread ${commentToDelete.threadId} of the comment to delete ${commentToDelete.id}`)
+              return
+            }
 
-                this.deleteLocalCommentThread(thread, commentToDelete)
-                return
-              }
+            this.deleteLocalCommentThread(thread, commentToDelete)
+            return
+          }
 
-              // Delete the thread
-              this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
-              this.componentPagination.totalItems--
-            },
+          // Delete the thread
+          this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
+          this.componentPagination.totalItems--
+        },
 
-            err => this.notificationsService.error('Error', err.message)
-          )
-      }
-    )
+        err => this.notificationsService.error('Error', err.message)
+      )
   }
 
   isUserLoggedIn () {
@@ -153,20 +174,25 @@ export class VideoCommentsComponent implements OnChanges {
     }
   }
 
-  private loadVideoComments () {
+  private resetVideo () {
     if (this.video.commentsEnabled === true) {
       // Reset all our fields
+      this.highlightedThread = null
       this.comments = []
       this.threadComments = {}
       this.threadLoading = {}
       this.inReplyToCommentId = undefined
-      this.componentPagination = {
-        currentPage: 1,
-        itemsPerPage: 10,
-        totalItems: null
-      }
+      this.componentPagination.currentPage = 1
+      this.componentPagination.totalItems = null
 
       this.loadMoreComments()
     }
+  }
+
+  private processHighlightedThread (highlightedThreadId: number) {
+    this.highlightedThread = this.comments.find(c => c.id === highlightedThreadId)
+
+    const highlightThread = true
+    this.viewReplies(highlightedThreadId, highlightThread)
   }
 }

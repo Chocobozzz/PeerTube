@@ -1,0 +1,17 @@
+@import '_variables';
+@import '_mixins';
+
+.button {
+  padding: 0 13px;
+}
+
+input[type=text] {
+  @include peertube-input-text(100%);
+  display: block;
+}
+
+.form-group {
+  margin: 20px 0;
+}
+
+

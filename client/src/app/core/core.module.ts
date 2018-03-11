@@ -1,27 +1,34 @@
-import { NgModule, Optional, SkipSelf } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { HttpModule } from '@angular/http'
-import { RouterModule } from '@angular/router'
+import { NgModule, Optional, SkipSelf } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouterModule } from '@angular/router'
+import { LoadingBarModule } from '@ngx-loading-bar/core'
+import { LoadingBarHttpClientModule } from '@ngx-loading-bar/http-client'
+import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 
 import { SimpleNotificationsModule } from 'angular2-notifications'
 import { ModalModule } from 'ngx-bootstrap/modal'
 
 import { AuthService } from './auth'
-import { LoginGuard, UserRightGuard } from './routing'
-import { ServerService } from './server'
 import { ConfirmComponent, ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
+import { LoginGuard, RedirectService, UserRightGuard } from './routing'
+import { ServerService } from './server'
 
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule,
     RouterModule,
+    FormsModule,
     BrowserAnimationsModule,
 
     ModalModule,
-    SimpleNotificationsModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+
+    LoadingBarHttpClientModule,
+    LoadingBarRouterModule,
+    LoadingBarModule.forRoot()
   ],
 
   declarations: [
@@ -30,6 +37,8 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
 
   exports: [
     SimpleNotificationsModule,
+    LoadingBarHttpClientModule,
+    LoadingBarModule,
 
     ConfirmComponent
   ],
@@ -39,7 +48,8 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
     ConfirmService,
     ServerService,
     LoginGuard,
-    UserRightGuard
+    UserRightGuard,
+    RedirectService
   ]
 })
 export class CoreModule {

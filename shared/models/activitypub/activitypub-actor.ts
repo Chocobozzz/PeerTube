@@ -19,6 +19,7 @@ export interface ActivityPubActor {
   summary: string
   attributedTo: ActivityPubAttributedTo[]
 
+  support?: string
   uuid: string
   publicKey: {
     id: string
@@ -26,11 +27,9 @@ export interface ActivityPubActor {
     publicKeyPem: string
   }
 
-  // Not used
   icon: {
     type: 'Image'
     mediaType: 'image/png'
     url: string
   }
-  // liked: string
 }

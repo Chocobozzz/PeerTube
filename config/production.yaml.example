@@ -40,7 +40,20 @@ storage:
   cache: '/var/www/peertube/storage/cache/'
 
 log:
-  level: 'debug' # debug/info/warning/error
+  level: 'info' # debug/info/warning/error
+
+
+###############################################################################
+#
+# From this point, all the following keys can be overriden by the web interface
+# (local-production.json file). If you need to change some values, prefer to
+# use the web interface because the configuration will be automatically
+# reloaded without any need to restart PeerTube.
+#
+# /!\ If you already have a local-production.json file, the modification of the
+# following keys will have no effect /!\.
+#
+###############################################################################
 
 cache:
   previews:
@@ -61,16 +74,20 @@ user:
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # Uses a lot of CPU!
 transcoding:
-  enabled: false
-  threads: 2
+  enabled: true
+  threads: 1
   resolutions: # Only created if the original video has a higher resolution
-    240p: true
-    360p: true
-    480p: true
-    720p: true
-    1080p: true
+    240p: false
+    360p: false
+    480p: false
+    720p: false
+    1080p: false
 
 instance:
   name: 'PeerTube'
   description: '' # Support markdown
   terms: '' # Support markdown
+  default_client_route: '/videos/trending'
+  customizations:
+    javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
+    css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime

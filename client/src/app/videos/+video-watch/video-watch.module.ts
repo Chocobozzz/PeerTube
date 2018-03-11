@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core'
+import { LinkifierService } from '@app/videos/+video-watch/comment/linkifier.service'
+import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { ClipboardModule } from 'ngx-clipboard'
 import { SharedModule } from '../../shared'
@@ -29,6 +31,7 @@ import { VideoWatchComponent } from './video-watch.component'
     VideoDownloadComponent,
     VideoShareComponent,
     VideoReportComponent,
+    VideoSupportComponent,
     VideoCommentsComponent,
     VideoCommentAddComponent,
     VideoCommentComponent
@@ -40,6 +43,7 @@ import { VideoWatchComponent } from './video-watch.component'
 
   providers: [
     MarkdownService,
+    LinkifierService,
     VideoCommentService
   ]
 })

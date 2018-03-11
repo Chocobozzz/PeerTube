@@ -13,7 +13,6 @@ export class VideoComment implements VideoCommentServerModel {
   updatedAt: Date | string
   account: AccountInterface
   totalReplies: number
-
   by: string
 
   constructor (hash: VideoCommentServerModel) {

@@ -1,16 +1,28 @@
 import * as Sequelize from 'sequelize'
 import {
-  AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Model, Table,
+  AllowNull,
+  BeforeDestroy,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  Default,
+  DefaultScope,
+  ForeignKey,
+  HasMany,
+  Is,
+  Model,
+  Table,
   UpdatedAt
 } from 'sequelize-typescript'
 import { Account } from '../../../shared/models/actors'
+import { isAccountDescriptionValid } from '../../helpers/custom-validators/accounts'
 import { logger } from '../../helpers/logger'
 import { sendDeleteActor } from '../../lib/activitypub/send'
 import { ActorModel } from '../activitypub/actor'
 import { ApplicationModel } from '../application/application'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { getSort } from '../utils'
+import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
@@ -41,6 +53,12 @@ export class AccountModel extends Model<AccountModel> {
   @AllowNull(false)
   @Column
   name: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('AccountDescription', value => throwIfNotValid(value, isAccountDescriptionValid, 'description'))
+  @Column
+  description: string
 
   @CreatedAt
   createdAt: Date
@@ -139,7 +157,6 @@ export class AccountModel extends Model<AccountModel> {
   static loadLocalByName (name: string) {
     const query = {
       where: {
-        name,
         [ Sequelize.Op.or ]: [
           {
             userId: {
@@ -152,7 +169,41 @@ export class AccountModel extends Model<AccountModel> {
             }
           }
         ]
-      }
+      },
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            preferredUsername: name
+          }
+        }
+      ]
+    }
+
+    return AccountModel.findOne(query)
+  }
+
+  static loadLocalByNameAndHost (name: string, host: string) {
+    const query = {
+      include: [
+        {
+          model: ActorModel,
+          required: true,
+          where: {
+            preferredUsername: name
+          },
+          include: [
+            {
+              model: ServerModel,
+              required: true,
+              where: {
+                host
+              }
+            }
+          ]
+        }
+      ]
     }
 
     return AccountModel.findOne(query)
@@ -179,7 +230,7 @@ export class AccountModel extends Model<AccountModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ]
+      order: getSort(sort)
     }
 
     return AccountModel.findAndCountAll(query)
@@ -196,6 +247,7 @@ export class AccountModel extends Model<AccountModel> {
     const account = {
       id: this.id,
       displayName: this.name,
+      description: this.description,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
@@ -204,7 +256,11 @@ export class AccountModel extends Model<AccountModel> {
   }
 
   toActivityPubObject () {
-    return this.Actor.toActivityPubObject(this.name, 'Account')
+    const obj = this.Actor.toActivityPubObject(this.name, 'Account')
+
+    return Object.assign(obj, {
+      summary: this.description
+    })
   }
 
   isOwned () {

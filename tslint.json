@@ -7,6 +7,7 @@
     "indent": ["spaces"],
     "ter-indent": [true, 2],
     "max-line-length": [true, 140],
+    "no-unused-variable": false, // Memory issues
     "no-floating-promises": false
   }
 }

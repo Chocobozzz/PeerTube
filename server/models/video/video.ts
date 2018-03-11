@@ -40,9 +40,9 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
-  isVideoPrivacyValid
+  isVideoPrivacyValid, isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
-import { generateImageFromVideoFile, getVideoFileHeight, transcode } from '../../helpers/ffmpeg-utils'
+import { generateImageFromVideoFile, getVideoFileResolution, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import {
@@ -68,6 +68,7 @@ import { sendDeleteVideo } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
+import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
 import { getSort, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
@@ -174,6 +175,10 @@ enum ScopeNames {
                   {
                     attributes: [ 'host' ],
                     model: () => ServerModel.unscoped(),
+                    required: false
+                  },
+                  {
+                    model: () => AvatarModel.unscoped(),
                     required: false
                   }
                 ]
@@ -298,6 +303,12 @@ export class VideoModel extends Model<VideoModel> {
   @Is('VideoDescription', value => throwIfNotValid(value, isVideoDescriptionValid, 'description'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max))
   description: string
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('VideoSupport', value => throwIfNotValid(value, isVideoSupportValid, 'support'))
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.SUPPORT.max))
+  support: string
 
   @AllowNull(false)
   @Is('VideoDuration', value => throwIfNotValid(value, isVideoDurationValid, 'duration'))
@@ -482,7 +493,7 @@ export class VideoModel extends Model<VideoModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort('createdAt'), [ 'Tags', 'name', 'ASC' ] ],
+      order: getSort('createdAt', [ 'Tags', 'name', 'ASC' ]),
       where: {
         id: {
           [Sequelize.Op.in]: Sequelize.literal('(' + rawQuery + ')')
@@ -596,7 +607,7 @@ export class VideoModel extends Model<VideoModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       include: [
         {
           model: VideoChannelModel,
@@ -626,7 +637,7 @@ export class VideoModel extends Model<VideoModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ]
+      order: getSort(sort)
     }
 
     const serverActor = await getServerActor()
@@ -645,7 +656,7 @@ export class VideoModel extends Model<VideoModel> {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       where: {
         name: {
           [Sequelize.Op.iLike]: '%' + value + '%'
@@ -750,6 +761,29 @@ export class VideoModel extends Model<VideoModel> {
       .findOne(options)
   }
 
+  static async getStats () {
+    const totalLocalVideos = await VideoModel.count({
+      where: {
+        remote: false
+      }
+    })
+    const totalVideos = await VideoModel.count()
+
+    let totalLocalVideoViews = await VideoModel.sum('views', {
+      where: {
+        remote: false
+      }
+    })
+    // Sequelize could return null...
+    if (!totalLocalVideoViews) totalLocalVideoViews = 0
+
+    return {
+      totalLocalVideos,
+      totalLocalVideoViews,
+      totalVideos
+    }
+  }
+
   getOriginalFile () {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
@@ -782,24 +816,20 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   createPreview (videoFile: VideoFileModel) {
-    const imageSize = PREVIEWS_SIZE.width + 'x' + PREVIEWS_SIZE.height
-
     return generateImageFromVideoFile(
       this.getVideoFilePath(videoFile),
       CONFIG.STORAGE.PREVIEWS_DIR,
       this.getPreviewName(),
-      imageSize
+      PREVIEWS_SIZE
     )
   }
 
   createThumbnail (videoFile: VideoFileModel) {
-    const imageSize = THUMBNAILS_SIZE.width + 'x' + THUMBNAILS_SIZE.height
-
     return generateImageFromVideoFile(
       this.getVideoFilePath(videoFile),
       CONFIG.STORAGE.THUMBNAILS_DIR,
       this.getThumbnailName(),
-      imageSize
+      THUMBNAILS_SIZE
     )
   }
 
@@ -841,7 +871,7 @@ export class VideoModel extends Model<VideoModel> {
     return join(STATIC_PATHS.PREVIEWS, this.getPreviewName())
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (): Video {
     let serverHost
 
     if (this.VideoChannel.Account.Actor.Server) {
@@ -875,10 +905,10 @@ export class VideoModel extends Model<VideoModel> {
       embedPath: this.getEmbedPath(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
-    } as Video
+    }
   }
 
-  toFormattedDetailsJSON () {
+  toFormattedDetailsJSON (): VideoDetails {
     const formattedJson = this.toFormattedJSON()
 
     // Maybe our server is not up to date and there are new privacy settings since our version
@@ -888,6 +918,7 @@ export class VideoModel extends Model<VideoModel> {
     const detailsJson = {
       privacyLabel,
       privacy: this.privacy,
+      support: this.support,
       descriptionPath: this.getDescriptionPath(),
       channel: this.VideoChannel.toFormattedJSON(),
       account: this.VideoChannel.Account.toFormattedJSON(),
@@ -917,7 +948,7 @@ export class VideoModel extends Model<VideoModel> {
         return -1
       })
 
-    return Object.assign(formattedJson, detailsJson) as VideoDetails
+    return Object.assign(formattedJson, detailsJson)
   }
 
   toActivityPubObject (): VideoTorrentObject {
@@ -957,17 +988,6 @@ export class VideoModel extends Model<VideoModel> {
     let dislikesObject
 
     if (Array.isArray(this.AccountVideoRates)) {
-      const likes: string[] = []
-      const dislikes: string[] = []
-
-      for (const rate of this.AccountVideoRates) {
-        if (rate.type === 'like') {
-          likes.push(rate.Account.Actor.url)
-        } else if (rate.type === 'dislike') {
-          dislikes.push(rate.Account.Actor.url)
-        }
-      }
-
       const res = this.toRatesActivityPubObjects()
       likesObject = res.likesObject
       dislikesObject = res.dislikesObject
@@ -1032,6 +1052,7 @@ export class VideoModel extends Model<VideoModel> {
       updated: this.updatedAt.toISOString(),
       mediaType: 'text/markdown',
       content: this.getTruncatedDescription(),
+      support: this.support,
       icon: {
         type: 'Image',
         url: this.getThumbnailUrl(baseUrlHttp),
@@ -1117,10 +1138,10 @@ export class VideoModel extends Model<VideoModel> {
       outputPath: videoOutputPath
     }
 
-    try {
-      // Could be very long!
-      await transcode(transcodeOptions)
+    // Could be very long!
+    await transcode(transcodeOptions)
 
+    try {
       await unlinkPromise(videoInputPath)
 
       // Important to do this before getVideoFilename() to take in account the new file extension
@@ -1142,7 +1163,7 @@ export class VideoModel extends Model<VideoModel> {
     }
   }
 
-  transcodeOriginalVideofile = async function (resolution: VideoResolution) {
+  transcodeOriginalVideofile = async function (resolution: VideoResolution, isPortraitMode: boolean) {
     const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
     const extname = '.mp4'
 
@@ -1160,7 +1181,8 @@ export class VideoModel extends Model<VideoModel> {
     const transcodeOptions = {
       inputPath: videoInputPath,
       outputPath: videoOutputPath,
-      resolution
+      resolution,
+      isPortraitMode
     }
 
     await transcode(transcodeOptions)
@@ -1176,10 +1198,10 @@ export class VideoModel extends Model<VideoModel> {
     this.VideoFiles.push(newVideoFile)
   }
 
-  getOriginalFileHeight () {
+  getOriginalFileResolution () {
     const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
 
-    return getVideoFileHeight(originalFilePath)
+    return getVideoFileResolution(originalFilePath)
   }
 
   getDescriptionPath () {

@@ -31,6 +31,19 @@ version="v$1"
 directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
 
+changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "$version" | sed '1{/^$/d}')
+
+echo -e "Changelog will be:\n"
+echo "$changelog"
+echo
+
+read -p "Are you sure to release? " -n 1 -r
+echo
+if [[ ! $REPLY =~ ^[Yy]$ ]]
+then
+  [[ "$0" = "$BASH_SOURCE" ]] && exit 0
+fi
+
 cd ./client || exit -1
 npm version --no-git-tag-version --no-commit-hooks $1 || exit -1
 
@@ -60,7 +73,7 @@ cd "PeerTube" || exit -1
 
 git push origin --tag
 
-github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version"
+github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
 github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
 
 git push origin develop

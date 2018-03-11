@@ -2,7 +2,7 @@ import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import 'rxjs/add/operator/debounceTime'
 import 'rxjs/add/operator/distinctUntilChanged'
-import { isInMobileView } from '@app/shared/misc/utils'
+import { isInSmallView } from '@app/shared/misc/utils'
 import { MarkdownService } from '@app/videos/shared'
 import { Subject } from 'rxjs/Subject'
 import truncate from 'lodash-es/truncate'
@@ -21,29 +21,30 @@ import truncate from 'lodash-es/truncate'
 })
 
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
-  @Input() description = ''
+  @Input() content = ''
   @Input() classes: string[] = []
   @Input() textareaWidth = '100%'
   @Input() textareaHeight = '150px'
   @Input() previewColumn = false
   @Input() truncate: number
+  @Input() markdownType: 'text' | 'enhanced' = 'text'
 
   textareaMarginRight = '0'
   flexDirection = 'column'
-  truncatedDescriptionHTML = ''
-  descriptionHTML = ''
+  truncatedPreviewHTML = ''
+  previewHTML = ''
 
-  private descriptionChanged = new Subject<string>()
+  private contentChanged = new Subject<string>()
 
   constructor (private markdownService: MarkdownService) {}
 
   ngOnInit () {
-    this.descriptionChanged
+    this.contentChanged
       .debounceTime(150)
       .distinctUntilChanged()
-      .subscribe(() => this.updateDescriptionPreviews())
+      .subscribe(() => this.updatePreviews())
 
-    this.descriptionChanged.next(this.description)
+    this.contentChanged.next(this.content)
 
     if (this.previewColumn) {
       this.flexDirection = 'row'
@@ -54,9 +55,9 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   propagateChange = (_: any) => { /* empty */ }
 
   writeValue (description: string) {
-    this.description = description
+    this.content = description
 
-    this.descriptionChanged.next(this.description)
+    this.contentChanged.next(this.content)
   }
 
   registerOnChange (fn: (_: any) => void) {
@@ -68,19 +69,25 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   }
 
   onModelChange () {
-    this.propagateChange(this.description)
+    this.propagateChange(this.content)
 
-    this.descriptionChanged.next(this.description)
+    this.contentChanged.next(this.content)
   }
 
   arePreviewsDisplayed () {
-    return isInMobileView() === false
+    return isInSmallView() === false
   }
 
-  private updateDescriptionPreviews () {
-    if (this.description === null || this.description === undefined) return
+  private updatePreviews () {
+    if (this.content === null || this.content === undefined) return
 
-    this.truncatedDescriptionHTML = this.markdownService.markdownToHTML(truncate(this.description, { length: this.truncate }))
-    this.descriptionHTML = this.markdownService.markdownToHTML(this.description)
+    this.truncatedPreviewHTML = this.markdownRender(truncate(this.content, { length: this.truncate }))
+    this.previewHTML = this.markdownRender(this.content)
+  }
+
+  private markdownRender (text: string) {
+    if (this.markdownType === 'text') return this.markdownService.textMarkdownToHTML(text)
+
+    return this.markdownService.enhancedMarkdownToHTML(text)
   }
 }

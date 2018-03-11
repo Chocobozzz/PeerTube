@@ -3,7 +3,7 @@ import * as program from 'commander'
 import {
   getClient,
   serverLogin
-} from '../../utils'
+} from '../tests/utils/index'
 
 program
   .option('-u, --url <url>', 'Server url')

@@ -3,7 +3,7 @@ import { join } from 'path'
 
 import { readdirPromise, renamePromise } from '../../helpers/core-utils'
 import { CONFIG } from '../../initializers/constants'
-import { getVideoFileHeight } from '../../helpers/ffmpeg-utils'
+import { getVideoFileResolution } from '../../helpers/ffmpeg-utils'
 
 function up (utils: {
   transaction: Sequelize.Transaction,
@@ -27,7 +27,7 @@ function up (utils: {
         const uuid = matches[1]
         const ext = matches[2]
 
-        const p = getVideoFileHeight(join(videoFileDir, videoFile))
+        const p = getVideoFileResolution(join(videoFileDir, videoFile))
           .then(height => {
             const oldTorrentName = uuid + '.torrent'
             const newTorrentName = uuid + '-' + height + '.torrent'

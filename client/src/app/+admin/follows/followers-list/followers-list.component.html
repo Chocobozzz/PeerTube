@@ -1,11 +1,26 @@
-<p-dataTable
-    [value]="followers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-    sortField="createdAt" (onLazyLoad)="loadLazy($event)"
+<p-table
+  [value]="followers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
 >
-  <p-column field="id" header="ID" [style]="{ width: '60px' }"></p-column>
-  <p-column field="score" header="Score"></p-column>
-  <p-column field="follower.name" header="Name"></p-column>
-  <p-column field="follower.host" header="Host"></p-column>
-  <p-column field="state" header="State"></p-column>
-  <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
-</p-dataTable>
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="width: 60px">ID</th>
+      <th>Score</th>
+      <th>Name</th>
+      <th>Host</th>
+      <th>State</th>
+      <th pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-follow>
+    <tr>
+      <td>{{ follow.id }}</td>
+      <td>{{ follow.score }}</td>
+      <td>{{ follow.follower.name }}</td>
+      <td>{{ follow.follower.host }}</td>
+      <td>{{ follow.state }}</td>
+      <td>{{ follow.createdAt }}</td>
+    </tr>
+  </ng-template>
+</p-table>

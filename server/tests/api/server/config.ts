@@ -2,7 +2,8 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { About } from '../../../../shared/models/config/about.model'
+import { About } from '../../../../shared/models/server/about.model'
+import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 import { deleteCustomConfig, getAbout, killallServers, reRunServer } from '../../utils'
 const expect = chai.expect
 
@@ -48,11 +49,14 @@ describe('Test config', function () {
 
   it('Should get the customized configuration', async function () {
     const res = await getCustomConfig(server.url, server.accessToken)
-    const data = res.body
+    const data = res.body as CustomConfig
 
     expect(data.instance.name).to.equal('PeerTube')
-    expect(data.instance.description).to.be.empty
-    expect(data.instance.terms).to.be.empty
+    expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
+    expect(data.instance.terms).to.equal('No terms for now.')
+    expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
+    expect(data.instance.customizations.css).to.be.empty
+    expect(data.instance.customizations.javascript).to.be.empty
     expect(data.cache.previews.size).to.equal(1)
     expect(data.signup.enabled).to.be.true
     expect(data.signup.limit).to.equal(4)
@@ -72,7 +76,12 @@ describe('Test config', function () {
       instance: {
         name: 'PeerTube updated',
         description: 'my super description',
-        terms: 'my super terms'
+        terms: 'my super terms',
+        defaultClientRoute: '/videos/recently-added',
+        customizations: {
+          javascript: 'alert("coucou")',
+          css: 'body { background-color: red; }'
+        }
       },
       cache: {
         previews: {
@@ -109,6 +118,9 @@ describe('Test config', function () {
     expect(data.instance.name).to.equal('PeerTube updated')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
+    expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
+    expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
+    expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
     expect(data.cache.previews.size).to.equal(2)
     expect(data.signup.enabled).to.be.false
     expect(data.signup.limit).to.equal(5)
@@ -136,6 +148,9 @@ describe('Test config', function () {
     expect(data.instance.name).to.equal('PeerTube updated')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
+    expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
+    expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
+    expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
     expect(data.cache.previews.size).to.equal(2)
     expect(data.signup.enabled).to.be.false
     expect(data.signup.limit).to.equal(5)
@@ -167,6 +182,12 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
+    expect(data.instance.name).to.equal('PeerTube')
+    expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
+    expect(data.instance.terms).to.equal('No terms for now.')
+    expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
+    expect(data.instance.customizations.css).to.be.empty
+    expect(data.instance.customizations.javascript).to.be.empty
     expect(data.cache.previews.size).to.equal(1)
     expect(data.signup.enabled).to.be.true
     expect(data.signup.limit).to.equal(4)

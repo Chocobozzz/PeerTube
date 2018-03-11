@@ -1,7 +1,7 @@
 <div class="row">
   <!-- We need the video container for videojs so we just hide it -->
   <div [hidden]="videoNotFound" id="video-container">
-     <video id="video-element" class="video-js vjs-peertube-skin"></video>
+     <video [poster]="getVideoPoster()" id="video-element" class="video-js vjs-peertube-skin"></video>
   </div>
 
   <div *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
@@ -44,9 +44,14 @@
               <span class="icon icon-dislike" title="Dislike this video"></span>
             </div>
 
-            <div (click)="showShareModal()" class="action-button">
+            <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
+              <span class="icon icon-support"></span>
+              <span class="icon-text">Support</span>
+            </div>
+
+            <div (click)="showShareModal()" class="action-button action-button-share">
               <span class="icon icon-share"></span>
-              Share
+              <span class="icon-text">Share</span>
             </div>
 
             <div class="action-more" dropdown dropup="true" placement="right">
@@ -99,7 +104,7 @@
       <div class="video-info-description">
         <div class="video-info-description-html" [innerHTML]="videoHTMLDescription"></div>
 
-        <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length === 250" (click)="showMoreDescription()">
+        <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
           Show more
           <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-down"></span>
           <my-loader class="description-loading" [loading]="descriptionLoading"></my-loader>
@@ -172,9 +177,23 @@
       </div>
     </div>
   </div>
+
+
+  <div class="privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">
+    <strong>Friendly Reminder:</strong>
+    <div class="privacy-concerns-text">
+      The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be accessed publicly.
+      <a title="Get more information" target="_blank" href="/about#p2p-privacy">More information</a>
+    </div>
+
+    <div class="privacy-concerns-okay" (click)="acceptedPrivacyConcern()">
+      OK
+    </div>
+  </div>
 </div>
 
 <ng-template [ngIf]="video !== null">
+  <my-video-support #videoSupportModal [video]="video"></my-video-support>
   <my-video-share #videoShareModal [video]="video"></my-video-share>
   <my-video-download #videoDownloadModal [video]="video"></my-video-download>
   <my-video-report #videoReportModal [video]="video"></my-video-report>

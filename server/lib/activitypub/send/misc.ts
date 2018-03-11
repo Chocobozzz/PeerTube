@@ -153,8 +153,8 @@ function buildAudience (followerInboxUrls: string[], isPublic = true) {
     to = [ ACTIVITY_PUB.PUBLIC ]
     cc = followerInboxUrls
   } else { // Unlisted
-    to = followerInboxUrls
-    cc = [ ACTIVITY_PUB.PUBLIC ]
+    to = [ ]
+    cc = [ ]
   }
 
   return { to, cc }

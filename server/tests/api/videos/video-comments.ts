@@ -83,8 +83,7 @@ describe('Test video comments', function () {
     expect(comment.account.name).to.equal('root')
     expect(comment.account.host).to.equal('localhost:9001')
 
-    const test = await testImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
-    expect(test).to.equal(true)
+    await testImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
 
     expect(comment.totalReplies).to.equal(0)
     expect(dateIsValid(comment.createdAt as string)).to.be.true

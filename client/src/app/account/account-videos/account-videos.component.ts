@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { immutableAssign } from '@app/shared/misc/utils'
+import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/concatAll'
@@ -19,7 +21,9 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
   titlePage = 'My videos'
   currentRoute = '/account/videos'
   checkedVideos: { [ id: number ]: boolean } = {}
-  pagination = {
+  videoHeight = 155
+  videoWidth = -1
+  pagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 10,
     totalItems: null
@@ -46,59 +50,66 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
     return Object.keys(this.checkedVideos).some(k => this.checkedVideos[k] === true)
   }
 
-  getVideosObservable () {
-    return this.videoService.getMyVideos(this.pagination, this.sort)
+  getVideosObservable (page: number) {
+    const newPagination = immutableAssign(this.pagination, { currentPage: page })
+
+    return this.videoService.getMyVideos(newPagination, this.sort)
   }
 
-  deleteSelectedVideos () {
+  async deleteSelectedVideos () {
     const toDeleteVideosIds = Object.keys(this.checkedVideos)
       .filter(k => this.checkedVideos[k] === true)
       .map(k => parseInt(k, 10))
 
-    this.confirmService.confirm(`Do you really want to delete ${toDeleteVideosIds.length} videos?`, 'Delete').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm(`Do you really want to delete ${toDeleteVideosIds.length} videos?`, 'Delete')
+    if (res === false) return
 
-        const observables: Observable<any>[] = []
-        for (const videoId of toDeleteVideosIds) {
-          const o = this.videoService
-            .removeVideo(videoId)
-            .do(() => this.spliceVideosById(videoId))
+    const observables: Observable<any>[] = []
+    for (const videoId of toDeleteVideosIds) {
+      const o = this.videoService
+        .removeVideo(videoId)
+        .do(() => this.spliceVideosById(videoId))
 
-          observables.push(o)
-        }
+      observables.push(o)
+    }
 
-        Observable.from(observables)
-          .concatAll()
-          .subscribe(
-            res => this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`),
+    Observable.from(observables)
+      .concatAll()
+      .subscribe(
+        res => {
+          this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`)
+          this.buildVideoPages()
+        },
 
-          err => this.notificationsService.error('Error', err.message)
-          )
-      }
-    )
+        err => this.notificationsService.error('Error', err.message)
+      )
   }
 
-  deleteVideo (video: Video) {
-    this.confirmService.confirm(`Do you really want to delete ${video.name}?`, 'Delete').subscribe(
-      res => {
-        if (res === false) return
+  async deleteVideo (video: Video) {
+    const res = await this.confirmService.confirm(`Do you really want to delete ${video.name}?`, 'Delete')
+    if (res === false) return
 
-        this.videoService.removeVideo(video.id)
-          .subscribe(
-            status => {
-              this.notificationsService.success('Success', `Video ${video.name} deleted.`)
-              this.spliceVideosById(video.id)
-            },
+    this.videoService.removeVideo(video.id)
+      .subscribe(
+        status => {
+          this.notificationsService.success('Success', `Video ${video.name} deleted.`)
+          this.spliceVideosById(video.id)
+          this.buildVideoPages()
+        },
 
-            error => this.notificationsService.error('Error', error.message)
-          )
-      }
-    )
+        error => this.notificationsService.error('Error', error.message)
+      )
   }
 
   private spliceVideosById (id: number) {
-    const index = this.videos.findIndex(v => v.id === id)
-    this.videos.splice(index, 1)
+    for (const key of Object.keys(this.loadedPages)) {
+      const videos = this.loadedPages[key]
+      const index = videos.findIndex(v => v.id === id)
+
+      if (index !== -1) {
+        videos.splice(index, 1)
+        return
+      }
+    }
   }
 }

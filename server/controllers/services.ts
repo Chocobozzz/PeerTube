@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { CONFIG, EMBED_SIZE, PREVIEWS_SIZE } from '../initializers'
 import { asyncMiddleware, oembedValidator } from '../middlewares'
+import { accountsNameWithHostGetValidator } from '../middlewares/validators'
 import { VideoModel } from '../models/video/video'
 
 const servicesRouter = express.Router()
@@ -8,6 +9,10 @@ const servicesRouter = express.Router()
 servicesRouter.use('/oembed',
   asyncMiddleware(oembedValidator),
   generateOEmbed
+)
+servicesRouter.use('/redirect/accounts/:nameWithHost',
+  asyncMiddleware(accountsNameWithHostGetValidator),
+  redirectToAccountUrl
 )
 
 // ---------------------------------------------------------------------------
@@ -61,4 +66,8 @@ function generateOEmbed (req: express.Request, res: express.Response, next: expr
   }
 
   return res.json(json)
+}
+
+function redirectToAccountUrl (req: express.Request, res: express.Response, next: express.NextFunction) {
+  return res.redirect(res.locals.account.Actor.url)
 }

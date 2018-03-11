@@ -3,6 +3,7 @@ import * as request from 'supertest'
 type VideoChannelAttributes = {
   name?: string
   description?: string
+  support?: string
 }
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {
@@ -30,13 +31,14 @@ function getAccountVideoChannelsList (url: string, accountId: number | string, s
     .expect('Content-Type', /json/)
 }
 
-function addVideoChannel (url: string, token: string, videoChannelAttributesArg: VideoChannelAttributes, expectedStatus = 204) {
+function addVideoChannel (url: string, token: string, videoChannelAttributesArg: VideoChannelAttributes, expectedStatus = 200) {
   const path = '/api/v1/videos/channels'
 
   // Default attributes
   let attributes = {
     name: 'my super video channel',
-    description: 'my super channel description'
+    description: 'my super channel description',
+    support: 'my super channel support'
   }
   attributes = Object.assign(attributes, videoChannelAttributesArg)
 
@@ -54,6 +56,7 @@ function updateVideoChannel (url: string, token: string, channelId: number, attr
 
   if (attributes.name) body['name'] = attributes.name
   if (attributes.description) body['description'] = attributes.description
+  if (attributes.support) body['support'] = attributes.support
 
   return request(url)
     .put(path)

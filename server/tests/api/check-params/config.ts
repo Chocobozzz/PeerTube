@@ -2,7 +2,7 @@
 
 import { omit } from 'lodash'
 import 'mocha'
-import { CustomConfig } from '../../../../shared/models/config/custom-config.model'
+import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 import {
   createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, runServer, ServerInfo,
@@ -17,7 +17,12 @@ describe('Test config API validators', function () {
     instance: {
       name: 'PeerTube updated',
       description: 'my super description',
-      terms: 'my super terms'
+      terms: 'my super terms',
+      defaultClientRoute: '/videos/recently-added',
+      customizations: {
+        javascript: 'alert("coucou")',
+        css: 'body { background-color: red; }'
+      }
     },
     cache: {
       previews: {

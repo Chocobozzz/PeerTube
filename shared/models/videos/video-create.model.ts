@@ -5,6 +5,7 @@ export interface VideoCreate {
   licence?: number
   language?: number
   description?: string
+  support?: string
   channelId: number
   nsfw: boolean
   name: string

@@ -64,7 +64,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       include: [
         {
           model: AccountModel,

@@ -1,7 +1,8 @@
 import * as kue from 'kue'
-import { JobType, JobState } from '../../../shared/models'
+import { JobState, JobType } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY } from '../../initializers'
+import { Redis } from '../redis'
 import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
@@ -29,16 +30,19 @@ class JobQueue {
 
   private jobQueue: kue.Queue
   private initialized = false
+  private jobRedisPrefix: string
 
   private constructor () {}
 
-  init () {
+  async init () {
     // Already initialized
     if (this.initialized === true) return
     this.initialized = true
 
+    this.jobRedisPrefix = 'q-' + CONFIG.WEBSERVER.HOST
+
     this.jobQueue = kue.createQueue({
-      prefix: 'q-' + CONFIG.WEBSERVER.HOST,
+      prefix: this.jobRedisPrefix,
       redis: {
         host: CONFIG.REDIS.HOSTNAME,
         port: CONFIG.REDIS.PORT,
@@ -53,6 +57,8 @@ class JobQueue {
       process.exit(-1)
     })
     this.jobQueue.watchStuckJobs(5000)
+
+    await this.reactiveStuckJobs()
 
     for (const handlerName of Object.keys(handlers)) {
       this.jobQueue.process(handlerName, JOB_CONCURRENCY[handlerName], async (job, done) => {
@@ -81,14 +87,14 @@ class JobQueue {
     })
   }
 
-  listForApi (state: JobState, start: number, count: number, sort: string) {
-    return new Promise<kue.Job[]>((res, rej) => {
-      kue.Job.rangeByState(state, start, count, sort, (err, jobs) => {
-        if (err) return rej(err)
+  async listForApi (state: JobState, start: number, count: number, sort: 'ASC' | 'DESC'): Promise<kue.Job[]> {
+    const jobStrings = await Redis.Instance.listJobs(this.jobRedisPrefix, state, 'alpha', sort, start, count)
 
-        return res(jobs)
-      })
-    })
+    const jobPromises = jobStrings
+      .map(s => s.split('|'))
+      .map(([ , jobId ]) => this.getJob(parseInt(jobId, 10)))
+
+    return Promise.all(jobPromises)
   }
 
   count (state: JobState) {
@@ -114,6 +120,41 @@ class JobQueue {
           job.remove()
         }
       }
+    })
+  }
+
+  private reactiveStuckJobs () {
+    const promises: Promise<any>[] = []
+
+    this.jobQueue.active((err, ids) => {
+      if (err) throw err
+
+      for (const id of ids) {
+        kue.Job.get(id, (err, job) => {
+          if (err) throw err
+
+          const p = new Promise((res, rej) => {
+            job.inactive(err => {
+              if (err) return rej(err)
+              return res()
+            })
+          })
+
+          promises.push(p)
+        })
+      }
+    })
+
+    return Promise.all(promises)
+  }
+
+  private getJob (id: number) {
+    return new Promise<kue.Job>((res, rej) => {
+      kue.Job.get(id, (err, job) => {
+        if (err) return rej(err)
+
+        return res(job)
+      })
     })
   }
 

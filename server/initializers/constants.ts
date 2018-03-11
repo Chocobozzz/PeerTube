@@ -12,7 +12,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 190
+const LAST_MIGRATION_VERSION = 195
 
 // ---------------------------------------------------------------------------
 
@@ -158,7 +158,12 @@ const CONFIG = {
   INSTANCE: {
     get NAME () { return config.get<string>('instance.name') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
-    get TERMS () { return config.get<string>('instance.terms') }
+    get TERMS () { return config.get<string>('instance.terms') },
+    get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
+    CUSTOMIZATIONS: {
+      get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
+      get CSS () { return config.get<string>('instance.customizations.css') }
+    }
   }
 }
 
@@ -168,6 +173,7 @@ const CONSTRAINTS_FIELDS = {
   USERS: {
     USERNAME: { min: 3, max: 20 }, // Length
     PASSWORD: { min: 6, max: 255 }, // Length
+    DESCRIPTION: { min: 3, max: 250 }, // Length
     VIDEO_QUOTA: { min: -1 }
   },
   VIDEO_ABUSES: {
@@ -176,12 +182,20 @@ const CONSTRAINTS_FIELDS = {
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 250 }, // Length
+    SUPPORT: { min: 3, max: 300 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
-    DESCRIPTION: { min: 3, max: 3000 }, // Length
+    DESCRIPTION: { min: 3, max: 10000 }, // Length
+    SUPPORT: { min: 3, max: 300 }, // Length
+    IMAGE: {
+      EXTNAME: [ '.jpg', '.jpeg' ],
+      FILE_SIZE: {
+        max: 2 * 1024 * 1024 // 2MB
+      }
+    },
     EXTNAME: [ '.mp4', '.ogv', '.webm' ],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 1 }, // Number
@@ -217,6 +231,9 @@ const CONSTRAINTS_FIELDS = {
     URL: { min: 3, max: 2000 } // Length
   }
 }
+
+let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
+const MAX_VIDEO_TRANSCODING_FPS = 30
 
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
@@ -285,7 +302,7 @@ const VIDEO_MIMETYPE_EXT = {
   'video/mp4': '.mp4'
 }
 
-const AVATAR_MIMETYPE_EXT = {
+const IMAGE_MIMETYPE_EXT = {
   'image/png': '.png',
   'image/jpg': '.jpg',
   'image/jpeg': '.jpg'
@@ -387,6 +404,7 @@ if (isTestInstance() === true) {
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
   CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max = 100 * 1024 // 100KB
   SCHEDULER_INTERVAL = 10000
+  VIDEO_VIEW_LIFETIME = 1000 // 1 second
 }
 
 updateWebserverConfig()
@@ -426,10 +444,12 @@ export {
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
+  MAX_VIDEO_TRANSCODING_FPS,
   USER_PASSWORD_RESET_LIFETIME,
-  AVATAR_MIMETYPE_EXT,
+  IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
-  JOB_COMPLETED_LIFETIME
+  JOB_COMPLETED_LIFETIME,
+  VIDEO_VIEW_LIFETIME
 }
 
 // ---------------------------------------------------------------------------

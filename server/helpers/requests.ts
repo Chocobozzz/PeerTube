@@ -17,11 +17,13 @@ function doRequest (
 }
 
 function doRequestAndSaveToFile (requestOptions: request.CoreOptions & request.UriOptions, destPath: string) {
-  return new Bluebird<request.RequestResponse>((res, rej) => {
+  return new Bluebird<void>((res, rej) => {
+    const file = createWriteStream(destPath)
+    file.on('finish', () => res())
+
     request(requestOptions)
-      .on('response', response => res(response as request.RequestResponse))
       .on('error', err => rej(err))
-      .pipe(createWriteStream(destPath))
+      .pipe(file)
   })
 }
 

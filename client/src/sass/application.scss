@@ -19,9 +19,21 @@ $FontPathSourceSansPro: '../../node_modules/npm-font-source-sans-pro/fonts';
 }
 
 body {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: $main-fonts;
   font-weight: $font-regular;
   color: #000;
+}
+
+#incompatible-browser {
+  display: none;
+  text-align: center;
+  position: absolute;
+  width: 100%;
+  top: 45%;
+}
+
+strong {
+  font-weight: $font-semibold;
 }
 
 input.readonly {
@@ -127,20 +139,8 @@ label {
 }
 
 // ngprime data table customizations
-p-datatable {
+p-table {
   font-size: 15px !important;
-
-  .ui-datatable-scrollable-header {
-    background-color: #fff !important;
-  }
-
-  .ui-widget-content {
-    border: none !important;
-  }
-
-  .ui-datatable-virtual-table {
-    border-top: none !important;
-  }
 
   td {
     border: 1px solid #E5E5E5 !important;
@@ -153,23 +153,33 @@ p-datatable {
   tr {
     background-color: #fff !important;
     height: 46px;
+  }
 
-    &:hover {
-      background-color: #f0f0f0 !important;
-    }
+  .ui-table-tbody {
+    tr {
+      &:hover {
+        background-color: #f0f0f0 !important;
+      }
 
-    &:not(:hover) {
-      .action-cell * {
-        display: none !important;
+      &:not(:hover) {
+        .action-cell * {
+          display: none !important;
+        }
+      }
+
+      &:first-child td {
+        border-top: none !important;
+      }
+
+      &:last-child td {
+        border-bottom: none !important;
       }
     }
 
-    &:first-child td {
-      border-top: none !important;
-    }
-
-    &:last-child td {
-      border-bottom: none !important;
+    .expander {
+      cursor: pointer;
+      position: relative;
+      top: 1px;
     }
   }
 
@@ -191,7 +201,7 @@ p-datatable {
       }
     }
 
-    &.ui-state-active {
+    &.ui-state-highlight {
       background-color: #fff !important;
 
       .fa {
@@ -299,34 +309,45 @@ p-datatable {
   }
 }
 
-.nav {
-  font-size: 16px !important;
-  border: none !important;
-
-  .nav-item .nav-link {
-    margin-right: 30px;
-    padding: 0;
-    border-radius: 3px;
+tabset:not(.bootstrap) {
+  .nav {
+    font-size: 16px !important;
     border: none !important;
 
-    .tab-link {
-      display: flex !important;
-      align-items: center;
-      min-height: 30px !important;
-      padding: 0 15px;
-    }
+    .nav-item .nav-link {
+      margin-right: 30px;
+      padding: 0;
+      border-radius: 3px;
+      border: none !important;
 
+      .tab-link {
+        display: flex !important;
+        align-items: center;
+        min-height: 30px !important;
+        padding: 0 15px;
+      }
+
+      &, & a {
+        color: #000 !important;
+        @include disable-default-a-behaviour;
+      }
+
+      &.active, &:hover {
+        background-color: #F0F0F0;
+      }
+
+      &.active {
+        font-weight: $font-semibold !important;
+      }
+    }
+  }
+}
+
+tabset.bootstrap {
+  .nav-item .nav-link {
     &, & a {
-      color: #000 !important;
+      color: #000;
       @include disable-default-a-behaviour;
-    }
-
-    &.active, &:hover {
-      background-color: #F0F0F0;
-    }
-
-    &.active {
-      font-weight: $font-semibold !important;
     }
   }
 }

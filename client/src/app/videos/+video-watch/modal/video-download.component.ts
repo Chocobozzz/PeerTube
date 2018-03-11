@@ -13,7 +13,7 @@ export class VideoDownloadComponent implements OnInit {
   @ViewChild('modal') modal: ModalDirective
 
   downloadType: 'direct' | 'torrent' = 'torrent'
-  resolution = -1
+  resolution: number | string = -1
 
   constructor () {
     // empty
@@ -32,6 +32,9 @@ export class VideoDownloadComponent implements OnInit {
   }
 
   download () {
+    // HTML select send us a string, so convert it to a number
+    this.resolution = parseInt(this.resolution.toString(), 10)
+
     const file = this.video.files.find(f => f.resolution === this.resolution)
     if (!file) {
       console.error('Could not find file with resolution %d.', this.resolution)

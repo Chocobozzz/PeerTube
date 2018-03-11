@@ -2,18 +2,27 @@
   <div class="admin-sub-title">Video abuses list</div>
 </div>
 
-<p-dataTable
-    [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-    sortField="id" (onLazyLoad)="loadLazy($event)"
+<p-table
+  [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
 >
-  <p-column field="id" header="ID" [sortable]="true" [style]="{ width: '60px' }"></p-column>
-  <p-column field="reason" header="Reason"></p-column>
-  <p-column field="reporterServerHost" header="Reporter server host"></p-column>
-  <p-column field="reporterUsername" header="Reporter username"></p-column>
-  <p-column field="createdAt" header="Created date" [sortable]="true"></p-column>
-  <p-column header="Video">
-    <ng-template pTemplate="body" let-videoAbuse="rowData">
-      <a [routerLink]="getRouterVideoLink(videoAbuse.videoId)" title="Go to the video">{{ videoAbuse.videoName }}</a>
-    </ng-template>
-  </p-column>
-</p-dataTable>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Reason</th>
+      <th>Reporter</th>
+      <th pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th>Video</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-videoAbuse>
+    <tr>
+      <td>{{ videoAbuse.reason }}</td>
+      <td>{{ videoAbuse.reporterUsername + '@' + videoAbuse.reporterServerHost }}</td>
+      <td>{{ videoAbuse.createdAt }}</td>
+      <td>
+        <a [routerLink]="getRouterVideoLink(videoAbuse.videoUUID)" title="Go to the video">{{ videoAbuse.videoName }}</a>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

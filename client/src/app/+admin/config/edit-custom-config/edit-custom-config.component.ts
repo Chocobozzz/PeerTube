@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { ConfirmService } from '@app/core'
 import { ServerService } from '@app/core/server/server.service'
 import { FormReactive, USER_VIDEO_QUOTA } from '@app/shared'
 import {
@@ -12,7 +13,7 @@ import {
   TRANSCODING_THREADS
 } from '@app/shared/forms/form-validators/custom-config'
 import { NotificationsService } from 'angular2-notifications'
-import { CustomConfig } from '../../../../../../shared/models/config/custom-config.model'
+import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -45,11 +46,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     instanceName: '',
     instanceDescription: '',
     instanceTerms: '',
+    instanceDefaultClientRoute: '',
     cachePreviewsSize: '',
     signupLimit: '',
     adminEmail: '',
     userVideoQuota: '',
-    transcodingThreads: ''
+    transcodingThreads: '',
+    customizationJavascript: '',
+    customizationCSS: ''
   }
   validationMessages = {
     instanceName: INSTANCE_NAME.MESSAGES,
@@ -59,12 +63,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     userVideoQuota: USER_VIDEO_QUOTA.MESSAGES
   }
 
+  private oldCustomJavascript: string
+  private oldCustomCSS: string
+
   constructor (
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,
     private configService: ConfigService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private confirmService: ConfirmService
   ) {
     super()
   }
@@ -78,13 +86,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceName: [ '', INSTANCE_NAME.VALIDATORS ],
       instanceDescription: [ '' ],
       instanceTerms: [ '' ],
+      instanceDefaultClientRoute: [ '' ],
       cachePreviewsSize: [ '', CACHE_PREVIEWS_SIZE.VALIDATORS ],
       signupEnabled: [ ],
       signupLimit: [ '', SIGNUP_LIMIT.VALIDATORS ],
       adminEmail: [ '', ADMIN_EMAIL.VALIDATORS ],
       userVideoQuota: [ '', USER_VIDEO_QUOTA.VALIDATORS ],
       transcodingThreads: [ '', TRANSCODING_THREADS.VALIDATORS ],
-      transcodingEnabled: [ ]
+      transcodingEnabled: [ ],
+      customizationJavascript: [ '' ],
+      customizationCSS: [ '' ]
     }
 
     for (const resolution of this.resolutions) {
@@ -105,6 +116,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         res => {
           this.customConfig = res
 
+          this.oldCustomCSS = this.customConfig.instance.customizations.css
+          this.oldCustomJavascript = this.customConfig.instance.customizations.javascript
+
           this.updateForm()
         },
 
@@ -120,12 +134,37 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     return this.form.value['signupEnabled'] === true
   }
 
-  formValidated () {
-    const data = {
+  async formValidated () {
+    const newCustomizationJavascript = this.form.value['customizationJavascript']
+    const newCustomizationCSS = this.form.value['customizationCSS']
+
+    const customizations = []
+    if (newCustomizationJavascript && newCustomizationJavascript !== this.oldCustomJavascript) customizations.push('JavaScript')
+    if (newCustomizationCSS && newCustomizationCSS !== this.oldCustomCSS) customizations.push('CSS')
+
+    if (customizations.length !== 0) {
+      const customizationsText = customizations.join('/')
+
+      const message = `You set custom ${customizationsText}. ` +
+        'This could lead to security issues or bugs if you do not understand it. ' +
+        'Are you sure you want to update the configuration?'
+      const label = `Please type "I understand the ${customizationsText} I set" to confirm.`
+      const expectedInputValue = `I understand the ${customizationsText} I set`
+
+      const confirmRes = await this.confirmService.confirmWithInput(message, label, expectedInputValue)
+      if (confirmRes === false) return
+    }
+
+    const data: CustomConfig = {
       instance: {
         name: this.form.value['instanceName'],
         description: this.form.value['instanceDescription'],
-        terms: this.form.value['instanceTerms']
+        terms: this.form.value['instanceTerms'],
+        defaultClientRoute: this.form.value['instanceDefaultClientRoute'],
+        customizations: {
+          javascript: this.form.value['customizationJavascript'],
+          css: this.form.value['customizationCSS']
+        }
       },
       cache: {
         previews: {
@@ -177,13 +216,16 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceName: this.customConfig.instance.name,
       instanceDescription: this.customConfig.instance.description,
       instanceTerms: this.customConfig.instance.terms,
+      instanceDefaultClientRoute: this.customConfig.instance.defaultClientRoute,
       cachePreviewsSize: this.customConfig.cache.previews.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,
       adminEmail: this.customConfig.admin.email,
       userVideoQuota: this.customConfig.user.videoQuota,
       transcodingThreads: this.customConfig.transcoding.threads,
-      transcodingEnabled: this.customConfig.transcoding.enabled
+      transcodingEnabled: this.customConfig.transcoding.enabled,
+      customizationJavascript: this.customConfig.instance.customizations.javascript,
+      customizationCSS: this.customConfig.instance.customizations.css
     }
 
     for (const resolution of this.resolutions) {

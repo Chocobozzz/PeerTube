@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
+import { LinkifierService } from '@app/videos/+video-watch/comment/linkifier.service'
 import * as sanitizeHtml from 'sanitize-html'
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { UserRight } from '../../../../../../shared/models/users'
@@ -13,12 +14,13 @@ import { VideoComment } from './video-comment.model'
   templateUrl: './video-comment.component.html',
   styleUrls: ['./video-comment.component.scss']
 })
-export class VideoCommentComponent implements OnInit {
+export class VideoCommentComponent implements OnInit, OnChanges {
   @Input() video: Video
   @Input() comment: VideoComment
   @Input() parentComments: VideoComment[] = []
   @Input() commentTree: VideoCommentThreadTree
   @Input() inReplyToCommentId: number
+  @Input() highlightedComment = false
 
   @Output() wantedToDelete = new EventEmitter<VideoComment>()
   @Output() wantedToReply = new EventEmitter<VideoComment>()
@@ -28,18 +30,21 @@ export class VideoCommentComponent implements OnInit {
   sanitizedCommentHTML = ''
   newParentComments = []
 
-  constructor (private authService: AuthService) {}
+  constructor (
+    private linkifierService: LinkifierService,
+    private authService: AuthService
+  ) {}
 
   get user () {
     return this.authService.getUser()
   }
 
   ngOnInit () {
-    this.sanitizedCommentHTML = sanitizeHtml(this.comment.text, {
-      allowedTags: [ 'p', 'span' ]
-    })
+    this.init()
+  }
 
-    this.newParentComments = this.parentComments.concat([ this.comment ])
+  ngOnChanges () {
+    this.init()
   }
 
   onCommentReplyCreated (createdComment: VideoComment) {
@@ -52,7 +57,7 @@ export class VideoCommentComponent implements OnInit {
       this.threadCreated.emit(this.commentTree)
     }
 
-    this.commentTree.children.push({
+    this.commentTree.children.unshift({
       comment: createdComment,
       children: []
     })
@@ -85,5 +90,30 @@ export class VideoCommentComponent implements OnInit {
         this.user.account.id === this.comment.account.id ||
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
       )
+  }
+
+  private init () {
+    // Convert possible markdown to html
+    const html = this.linkifierService.linkify(this.comment.text)
+
+    this.sanitizedCommentHTML = sanitizeHtml(html, {
+      allowedTags: [ 'a', 'p', 'span', 'br' ],
+      allowedSchemes: [ 'http', 'https' ],
+      allowedAttributes: {
+        'a': [ 'href', 'class', 'target' ]
+      },
+      transformTags: {
+        a: (tagName, attribs) => {
+          return {
+            tagName,
+            attribs: Object.assign(attribs, {
+              target: '_blank'
+            })
+          }
+        }
+      }
+    })
+
+    this.newParentComments = this.parentComments.concat([ this.comment ])
   }
 }

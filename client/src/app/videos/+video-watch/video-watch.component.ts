@@ -1,8 +1,9 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { RedirectService } from '@app/core/routing/redirect.service'
+import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
-import { Observable } from 'rxjs/Observable'
 import { Subscription } from 'rxjs/Subscription'
 import * as videojs from 'video.js'
 import 'videojs-hotkeys'
@@ -25,9 +26,12 @@ import { VideoShareComponent } from './modal/video-share.component'
   styleUrls: [ './video-watch.component.scss' ]
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
+  private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
+
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
+  @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
 
   otherVideosDisplayed: Video[] = []
 
@@ -45,6 +49,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   shortVideoDescription: string
   videoHTMLDescription = ''
   likesBarTooltipText = ''
+  hasAlreadyAcceptedPrivacyConcern = false
 
   private otherVideos: Video[] = []
   private paramsSub: Subscription
@@ -60,7 +65,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private notificationsService: NotificationsService,
     private markdownService: MarkdownService,
-    private zone: NgZone
+    private zone: NgZone,
+    private redirectService: RedirectService
   ) {}
 
   get user () {
@@ -68,9 +74,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
+    if (localStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true') {
+      this.hasAlreadyAcceptedPrivacyConcern = true
+    }
+
     this.videoService.getVideos({ currentPage: 1, itemsPerPage: 5 }, '-createdAt')
       .subscribe(
-        data => this.otherVideos = data.videos,
+        data => {
+          this.otherVideos = data.videos
+          this.updateOtherVideosDisplayed()
+        },
+
         err => console.error(err)
       )
 
@@ -79,7 +93,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.player.pause()
       }
 
-      let uuid = routeParams['uuid']
+      const uuid = routeParams['uuid']
+      // Video did not changed
+      if (this.video && this.video.uuid === uuid) return
+
       this.videoService.getVideo(uuid).subscribe(
         video => this.onVideoFetched(video),
 
@@ -121,24 +138,21 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
   }
 
-  blacklistVideo (event: Event) {
+  async blacklistVideo (event: Event) {
     event.preventDefault()
 
-    this.confirmService.confirm('Do you really want to blacklist this video?', 'Blacklist').subscribe(
-      res => {
-        if (res === false) return
+    const res = await this.confirmService.confirm('Do you really want to blacklist this video?', 'Blacklist')
+    if (res === false) return
 
-        this.videoBlacklistService.blacklistVideo(this.video.id)
-                                  .subscribe(
-                                    status => {
-                                      this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
-                                      this.router.navigate(['/videos/list'])
-                                    },
+    this.videoBlacklistService.blacklistVideo(this.video.id)
+                              .subscribe(
+                                status => {
+                                  this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
+                                  this.redirectService.redirectToHomepage()
+                                },
 
-                                    error => this.notificationsService.error('Error', error.message)
-                                  )
-      }
-    )
+                                error => this.notificationsService.error('Error', error.message)
+                              )
   }
 
   showMoreDescription () {
@@ -182,6 +196,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.videoReportModal.show()
   }
 
+  showSupportModal () {
+    this.videoSupportModal.show()
+  }
+
   showShareModal () {
     this.videoShareModal.show()
   }
@@ -207,6 +225,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return Account.GET_ACCOUNT_AVATAR_URL(this.video.account)
   }
 
+  getVideoPoster () {
+    if (!this.video) return ''
+
+    return this.video.previewUrl
+  }
+
   getVideoTags () {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
@@ -217,27 +241,28 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.isRemovableBy(this.authService.getUser())
   }
 
-  removeVideo (event: Event) {
+  async removeVideo (event: Event) {
     event.preventDefault()
 
-    this.confirmService.confirm('Do you really want to delete this video?', 'Delete')
+    const res = await this.confirmService.confirm('Do you really want to delete this video?', 'Delete')
+    if (res === false) return
+
+    this.videoService.removeVideo(this.video.id)
       .subscribe(
-        res => {
-          if (res === false) return
+        status => {
+          this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
 
-          this.videoService.removeVideo(this.video.id)
-            .subscribe(
-              status => {
-                this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
+          // Go back to the video-list.
+          this.redirectService.redirectToHomepage()
+        },
 
-                // Go back to the video-list.
-                this.router.navigate([ '/videos/list' ])
-              },
-
-              error => this.notificationsService.error('Error', error.message)
-            )
-        }
+        error => this.notificationsService.error('Error', error.message)
       )
+  }
+
+  acceptedPrivacyConcern () {
+    localStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
+    this.hasAlreadyAcceptedPrivacyConcern = true
   }
 
   private updateVideoDescription (description: string) {
@@ -251,7 +276,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       return
     }
 
-    this.videoHTMLDescription = this.markdownService.markdownToHTML(this.video.description)
+    this.videoHTMLDescription = this.markdownService.textMarkdownToHTML(this.video.description)
   }
 
   private setVideoLikesBarTooltipText () {
@@ -260,6 +285,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private handleError (err: any) {
     const errorMessage: string = typeof err === 'string' ? err : err.message
+    if (!errorMessage) return
+
     let message = ''
 
     if (errorMessage.indexOf('http error') !== -1) {
@@ -287,78 +314,87 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                       )
   }
 
-  private onVideoFetched (video: VideoDetails) {
+  private async onVideoFetched (video: VideoDetails) {
     this.video = video
 
-    if (this.otherVideos.length > 0) {
-      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
-    }
+    this.updateOtherVideosDisplayed()
 
-    let observable
     if (this.video.isVideoNSFWForUser(this.user)) {
-      observable = this.confirmService.confirm(
+      const res = await this.confirmService.confirm(
         'This video contains mature or explicit content. Are you sure you want to watch it?',
         'Mature or explicit content'
       )
-    } else {
-      observable = Observable.of(true)
+      if (res === false) return this.redirectService.redirectToHomepage()
     }
 
-    observable.subscribe(
-      res => {
-        if (res === false) {
+    // Player was already loaded
+    if (this.videoPlayerLoaded !== true) {
+      this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
 
-          return this.router.navigate([ '/videos/list' ])
-        }
-
-        // Player was already loaded
-        if (this.videoPlayerLoaded !== true) {
-          this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
-
-          // If autoplay is true, we don't really need a poster
-          if (this.isAutoplay() === false) {
-            this.playerElement.poster = this.video.previewUrl
-          }
-
-          const videojsOptions = {
-            controls: true,
-            autoplay: this.isAutoplay(),
-            plugins: {
-              peertube: {
-                videoFiles: this.video.files,
-                playerElement: this.playerElement,
-                peerTubeLink: false
-              },
-              hotkeys: {
-                enableVolumeScroll: false
-              }
-            }
-          }
-
-          this.videoPlayerLoaded = true
-
-          const self = this
-          this.zone.runOutsideAngular(() => {
-            videojs(this.playerElement, videojsOptions, function () {
-              self.player = this
-              this.on('customError', (event, data) => {
-                self.handleError(data.err)
-              })
-            })
-          })
-        } else {
-          this.player.peertube().setVideoFiles(this.video.files)
-        }
-
-        this.setVideoDescriptionHTML()
-        this.setVideoLikesBarTooltipText()
-
-        this.setOpenGraphTags()
-        this.checkUserRating()
-
-        this.prepareViewAdd()
+      // If autoplay is true, we don't really need a poster
+      if (this.isAutoplay() === false) {
+        this.playerElement.poster = this.video.previewUrl
       }
-    )
+
+      const videojsOptions = {
+        controls: true,
+        autoplay: this.isAutoplay(),
+        playbackRates: [ 0.5, 1, 1.5, 2 ],
+        plugins: {
+          peertube: {
+            videoFiles: this.video.files,
+            playerElement: this.playerElement,
+            videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
+            videoDuration: this.video.duration
+          },
+          hotkeys: {
+            enableVolumeScroll: false
+          }
+        },
+        controlBar: {
+          children: [
+            'playToggle',
+            'currentTimeDisplay',
+            'timeDivider',
+            'durationDisplay',
+            'liveDisplay',
+
+            'flexibleWidthSpacer',
+            'progressControl',
+
+            'webTorrentButton',
+
+            'playbackRateMenuButton',
+
+            'muteToggle',
+            'volumeControl',
+
+            'resolutionMenuButton',
+
+            'fullscreenToggle'
+          ]
+        }
+      }
+
+      this.videoPlayerLoaded = true
+
+      const self = this
+      this.zone.runOutsideAngular(() => {
+        videojs(this.playerElement, videojsOptions, function () {
+          self.player = this
+          this.on('customError', (event, data) => self.handleError(data.err))
+        })
+      })
+    } else {
+      const videoViewUrl = this.videoService.getVideoViewUrl(this.video.uuid)
+      this.player.peertube().setVideoFiles(this.video.files, videoViewUrl, this.video.duration)
+    }
+
+    this.setVideoDescriptionHTML()
+    this.setVideoLikesBarTooltipText()
+
+    this.setOpenGraphTags()
+    this.checkUserRating()
   }
 
   private setRating (nextRating) {
@@ -400,6 +436,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.video.likes += likesToIncrement
     this.video.dislikes += dislikesToIncrement
+
+    this.video.buildLikeAndDislikePercents()
+    this.setVideoLikesBarTooltipText()
+  }
+
+  private updateOtherVideosDisplayed () {
+    if (this.video && this.otherVideos && this.otherVideos.length > 0) {
+      this.otherVideosDisplayed = this.otherVideos.filter(v => v.uuid !== this.video.uuid)
+    }
   }
 
   private setOpenGraphTags () {
@@ -421,19 +466,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.metaService.setTag('og:url', window.location.href)
     this.metaService.setTag('url', window.location.href)
-  }
-
-  private prepareViewAdd () {
-    // After 30 seconds (or 3/4 of the video), increment add a view
-    let viewTimeoutSeconds = 30
-    if (this.video.duration < viewTimeoutSeconds) viewTimeoutSeconds = (this.video.duration * 3) / 4
-
-    setTimeout(() => {
-      this.videoService
-        .viewVideo(this.video.uuid)
-        .subscribe()
-
-    }, viewTimeoutSeconds * 1000)
   }
 
   private isAutoplay () {

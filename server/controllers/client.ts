@@ -10,7 +10,7 @@ import { VideoModel } from '../models/video/video'
 const clientsRouter = express.Router()
 
 const distPath = join(root(), 'client', 'dist')
-const assetsImagesPath = join(root(), 'client', 'dist', 'client', 'assets', 'images')
+const assetsImagesPath = join(root(), 'client', 'dist', 'assets', 'images')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const indexPath = join(distPath, 'index.html')
 
@@ -25,6 +25,17 @@ clientsRouter.use('/videos/embed', (req: express.Request, res: express.Response,
 })
 
 // Static HTML/CSS/JS client files
+
+const staticClientFiles = [
+  'manifest.json',
+  'ngsw-worker.js',
+  'ngsw.json'
+]
+for (const staticClientFile of staticClientFiles) {
+  const path = join(root(), 'client', 'dist', staticClientFile)
+  clientsRouter.use('/' + staticClientFile, express.static(path, { maxAge: STATIC_MAX_AGE }))
+}
+
 clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
 clientsRouter.use('/client/assets/images', express.static(assetsImagesPath, { maxAge: STATIC_MAX_AGE }))
 
@@ -89,11 +100,12 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
     '@type': 'VideoObject',
     name: videoNameEscaped,
     description: videoDescriptionEscaped,
+    thumbnailUrl: previewUrl,
+    uploadDate: video.createdAt.toISOString(),
     duration: video.getActivityStreamDuration(),
-    thumbnailURL: previewUrl,
-    contentURL: videoUrl,
-    embedURL: embedUrl,
-    uploadDate: video.createdAt
+    contentUrl: videoUrl,
+    embedUrl: embedUrl,
+    interactionCount: video.views
   }
 
   let tagsString = ''
@@ -112,6 +124,9 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
 
   // Schema.org
   tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
+
+  // SEO
+  tagsString += `<link rel="canonical" href="${videoUrl}" />`
 
   return htmlStringPage.replace(OPENGRAPH_AND_OEMBED_COMMENT, tagsString)
 }

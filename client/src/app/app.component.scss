@@ -31,11 +31,12 @@
   display: flex;
 
   .top-left-block {
-    width: $menu-width;
     z-index: 1001;
     height: $header-height;
     display: flex;
     align-items: center;
+    flex: 1;
+    min-width: 0;
 
     .icon {
       @include icon(22px);
@@ -47,13 +48,20 @@
     }
 
     #peertube-title {
+      @include disable-default-a-behaviour;
       font-size: 20px;
       font-weight: $font-bold;
       color: inherit !important;
       display: flex;
       align-items: center;
+      overflow: hidden;
 
-      @include disable-default-a-behaviour;
+      .instance-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+      }
 
       .icon.icon-logo {
         display: inline-block;
@@ -70,14 +78,18 @@
         display: none;
       }
     }
+
+    @media screen and (max-width: 350px) {
+      flex: auto;
+    }
   }
 
   .header-right {
     height: $header-height;
     display: flex;
     align-items: center;
-    flex-grow: 1;
     justify-content: flex-end;
+    white-space: nowrap;
   }
 }
 

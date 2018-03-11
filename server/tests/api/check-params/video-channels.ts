@@ -62,7 +62,8 @@ describe('Test videos API validator', function () {
   describe('When adding a video channel', function () {
     const baseCorrectParams = {
       name: 'hello',
-      description: 'super description'
+      description: 'super description',
+      support: 'super support text'
     }
 
     it('Should fail with a non authenticated user', async function () {
@@ -89,13 +90,18 @@ describe('Test videos API validator', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
+    it('Should fail with a long support text', async function () {
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(70) })
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
     it('Should succeed with the correct parameters', async function () {
       await makePostBodyRequest({
         url: server.url,
         path,
         token: server.accessToken,
         fields: baseCorrectParams,
-        statusCodeExpected: 204
+        statusCodeExpected: 200
       })
     })
   })
@@ -140,6 +146,11 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a long description', async function () {
       const fields = immutableAssign(baseCorrectParams, { description: 'super'.repeat(60) })
+      await makePutBodyRequest({ url: server.url, path: path + '/' + videoChannelId, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a long support text', async function () {
+      const fields = immutableAssign(baseCorrectParams, { support: 'super'.repeat(70) })
       await makePutBodyRequest({ url: server.url, path: path + '/' + videoChannelId, token: server.accessToken, fields })
     })
 

@@ -1,6 +1,7 @@
 <div class="margin-content">
   <div class="title-page title-page-single">
-    Upload your video
+    <ng-template [ngIf]="!videoFileName">Upload your video</ng-template>
+    <ng-template [ngIf]="videoFileName">Upload {{ videoFileName }}</ng-template>
   </div>
 
   <div *ngIf="!isUploadingVideo" class="upload-video-container">
@@ -50,7 +51,10 @@
     <div class="submit-container">
       <div *ngIf="videoUploaded === false" class="message-submit">Publish will be available when upload is finished</div>
 
-      <div class="submit-button" (click)="updateSecondStep()" [ngClass]="{ disabled: !form.valid || videoUploaded !== true }">
+      <div class="submit-button"
+         (click)="updateSecondStep()"
+         [ngClass]="{ disabled: !form.valid || isUpdatingVideo === true || videoUploaded !== true }"
+      >
         <span class="icon icon-validate"></span>
         <input type="button" value="Publish" />
       </div>

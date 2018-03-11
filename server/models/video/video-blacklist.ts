@@ -36,7 +36,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     const query = {
       offset: start,
       limit: count,
-      order: [ getSortOnModel(sort.sortModel, sort.sortValue) ],
+      order: getSortOnModel(sort.sortModel, sort.sortValue),
       include: [ { model: VideoModel } ]
     }
 

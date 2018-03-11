@@ -29,3 +29,9 @@ input[type=submit] {
   margin-top: 30px;
   margin-bottom: 10px;
 }
+
+textarea {
+  @include peertube-textarea(500px, 150px);
+
+  display: block;
+}

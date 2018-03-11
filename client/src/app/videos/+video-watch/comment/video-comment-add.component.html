@@ -3,7 +3,8 @@
     <img [src]="getUserAvatarUrl()" alt="Avatar" />
 
     <div class="form-group">
-      <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }" #textarea>
+      <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
+                (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
 
       </textarea>
       <div *ngIf="formErrors.text" class="form-error">

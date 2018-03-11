@@ -5,6 +5,12 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 
 const customConfigUpdateValidator = [
+  body('instance.name').exists().withMessage('Should have a valid instance name'),
+  body('instance.description').exists().withMessage('Should have a valid instance description'),
+  body('instance.terms').exists().withMessage('Should have a valid instance terms'),
+  body('instance.defaultClientRoute').exists().withMessage('Should have a valid instance default client route'),
+  body('instance.customizations.css').exists().withMessage('Should have a valid instance CSS customization'),
+  body('instance.customizations.javascript').exists().withMessage('Should have a valid instance JavaScript customization'),
   body('cache.previews.size').isInt().withMessage('Should have a valid previews size'),
   body('signup.enabled').isBoolean().withMessage('Should have a valid signup enabled boolean'),
   body('signup.limit').isInt().withMessage('Should have a valid signup limit'),

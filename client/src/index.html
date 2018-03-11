@@ -7,6 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="PeerTube, a decentralized video streaming platform using P2P (BitTorrent) directly in the web browser" />
 
+    <meta name="theme-color" content="#fff" />
+
+    <!-- Web Manifest file -->
+    <link rel="manifest" href="/manifest.json">
+
     <!-- The following comment is used by the server to prerender OpenGraph and oEmbed tags -->
     <!-- open graph and oembed tags -->
     <!-- Do not remove it! -->
@@ -28,6 +33,21 @@
       There might be numerous reasons you refuse to use JavaScript. If it has just to do with security (or lack thereof) of JavaScript-based webapps, then depending on your threat menace you might want to go through the code running on the node you are trying to access, and look for security audits.
       </p>
     </noscript>
+
+    <div id="incompatible-browser" class="alert alert-danger" style="display: none">
+      <p>We are sorry but it seems that PeerTube is not compatible with your web browser.</p>
+      <p>Please try with the latest version of <a href="https://www.mozilla.org" target="_blank">Mozilla Firefox</a>.</p>
+      <p>If you think this is a mistake, do not hesitate <a href="https://github.com/Chocobozzz/PeerTube/issues/new" target="_blank">to report it</a>.</p>
+    </div>
+
+    <script type="text/javascript">
+      window.onerror = function () {
+        var elem = document.getElementById('incompatible-browser')
+        if (elem.className.indexOf('browser-ok') === -1) {
+          elem.style.display = 'block'
+        }
+      }
+    </script>
 
     <my-app>
     </my-app>

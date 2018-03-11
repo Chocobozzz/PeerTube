@@ -36,6 +36,7 @@ describe('Test handle downs', function () {
     nsfw: true,
     privacy: VideoPrivacy.PUBLIC,
     description: 'my super description for server 1',
+    support: 'my super support text for server 1',
     tags: [ 'tag1p1', 'tag2p1' ],
     fixture: 'video_short1.webm'
   }
@@ -51,6 +52,7 @@ describe('Test handle downs', function () {
     language: 9,
     nsfw: true,
     description: 'my super description for server 1',
+    support: 'my super support text for server 1',
     host: 'localhost:9001',
     account: 'root',
     isLocal: false,

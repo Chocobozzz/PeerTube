@@ -1,6 +1,6 @@
 <div class="admin-sub-title">Update PeerTube configuration</div>
 
-<form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+<form role="form" [formGroup]="form">
 
   <div class="inner-form-title">Instance</div>
 
@@ -16,7 +16,7 @@
   </div>
 
   <div class="form-group">
-    <label for="instanceDescription">Description (markdown)</label>
+    <label for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
     <my-markdown-textarea
         id="instanceDescription" formControlName="instanceDescription" textareaWidth="500px" [previewColumn]="true"
         [classes]="{ 'input-error': formErrors['instanceDescription'] }"
@@ -27,13 +27,23 @@
   </div>
 
   <div class="form-group">
-    <label for="instanceTerms">Terms (markdown)</label>
+    <label for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
     <my-markdown-textarea
         id="instanceTerms" formControlName="instanceTerms" textareaWidth="500px" [previewColumn]="true"
         [ngClass]="{ 'input-error': formErrors['instanceTerms'] }"
     ></my-markdown-textarea>
     <div *ngIf="formErrors.instanceTerms" class="form-error">
       {{ formErrors.instanceTerms }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="instanceDefaultClientRoute">Default client route</label>
+    <div class="peertube-select-container">
+      <select id="instanceDefaultClientRoute" formControlName="instanceDefaultClientRoute">
+        <option value="/videos/trending">Videos Trending</option>
+        <option value="/videos/recently-added">Videos Recently Added</option>
+      </select>
     </div>
   </div>
 
@@ -128,5 +138,31 @@
     </div>
   </ng-template>
 
-  <input type="submit" value="Update configuration" [disabled]="!form.valid">
+  <div class="inner-form-title">Customizations</div>
+
+  <div class="form-group">
+    <label for="customizationJavascript">JavaScript</label>
+    <my-help helpType="custom" customHtml="Write directly JavaScript code.<br />Example: console.log('my instance is amazing');"></my-help>
+    <textarea
+        id="customizationJavascript" formControlName="customizationJavascript"
+        [ngClass]="{ 'input-error': formErrors['customizationJavascript'] }"
+    ></textarea>
+    <div *ngIf="formErrors.customizationJavascript" class="form-error">
+      {{ formErrors.customizationJavascript }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="customizationCSS">CSS</label>
+    <my-help helpType="custom" customHtml="Write directly CSS code.<br />Example: body { background-color: red; }"></my-help>
+    <textarea
+        id="customizationCSS" formControlName="customizationCSS"
+        [ngClass]="{ 'input-error': formErrors['customizationCSS'] }"
+    ></textarea>
+    <div *ngIf="formErrors.customizationCSS" class="form-error">
+      {{ formErrors.customizationCSS }}
+    </div>
+  </div>
+
+  <input (click)="formValidated()" type="submit" value="Update configuration" [disabled]="!form.valid">
 </form>

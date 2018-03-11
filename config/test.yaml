@@ -16,9 +16,18 @@ smtp:
   username: null
   password: null
 
+log:
+  level: 'debug'
+
 signup:
   enabled: true
 
 transcoding:
   enabled: true
   threads: 2
+  resolutions:
+    240p: true
+    360p: true
+    480p: true
+    720p: true
+    1080p: true

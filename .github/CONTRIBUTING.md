@@ -33,7 +33,7 @@ Some hints:
 
 ## Develop
 
-Don't hesitate to talk about features you want to develop by creating an issue
+Don't hesitate to talk about features you want to develop by creating/commenting an issue
 before you start working on them :).
 
 ### Prerequisites

@@ -8,6 +8,7 @@ import {
 import { FollowState } from '../../../shared/models/actors'
 import { AccountFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
+import { getServerActor } from '../../helpers/utils'
 import { ACTOR_FOLLOW_SCORE } from '../../initializers'
 import { FOLLOW_STATES } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
@@ -182,40 +183,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByFollowerInbox (url: string, t?: Sequelize.Transaction) {
-    const query = {
-      where: {
-        state: 'accepted'
-      },
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          as: 'ActorFollower',
-          where: {
-            [Sequelize.Op.or]: [
-              {
-                inboxUrl: url
-              },
-              {
-                sharedInboxUrl: url
-              }
-            ]
-          }
-        }
-      ],
-      transaction: t
-    } as any // FIXME: typings does not work
-
-    return ActorFollowModel.findOne(query)
-  }
-
   static listFollowingForApi (id: number, start: number, count: number, sort: string) {
     const query = {
       distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       include: [
         {
           model: ActorModel,
@@ -248,7 +221,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: [ getSort(sort) ],
+      order: getSort(sort),
       include: [
         {
           model: ActorModel,
@@ -294,6 +267,27 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
   static listAcceptedFollowingUrlsForApi (actorIds: number[], t: Sequelize.Transaction, start?: number, count?: number) {
     return ActorFollowModel.createListAcceptedFollowForApiQuery('following', actorIds, t, start, count)
+  }
+
+  static async getStats () {
+    const serverActor = await getServerActor()
+
+    const totalInstanceFollowing = await ActorFollowModel.count({
+      where: {
+        actorId: serverActor.id
+      }
+    })
+
+    const totalInstanceFollowers = await ActorFollowModel.count({
+      where: {
+        targetActorId: serverActor.id
+      }
+    })
+
+    return {
+      totalInstanceFollowing,
+      totalInstanceFollowers
+    }
   }
 
   private static async createListAcceptedFollowForApiQuery (

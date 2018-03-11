@@ -14,14 +14,15 @@ import { RestExtractor } from '../../../shared/rest/rest-extractor.service'
   styleUrls: [ './jobs-list.component.scss' ]
 })
 export class JobsListComponent extends RestTable implements OnInit {
+  private static JOB_STATE_LOCAL_STORAGE_STATE = 'jobs-list-state'
+
   jobState: JobState = 'inactive'
   jobStates: JobState[] = [ 'active', 'complete', 'failed', 'inactive', 'delayed' ]
   jobs: Job[] = []
-  totalRecords = 0
-  rowsPerPage = 20
+  totalRecords: number
+  rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-  scrollHeight = ''
 
   constructor (
     private notificationsService: NotificationsService,
@@ -32,12 +33,13 @@ export class JobsListComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    // 270 -> headers + footer...
-    this.scrollHeight = (viewportHeight() - 380) + 'px'
+    this.loadJobState()
+    this.loadSort()
   }
 
   onJobStateChanged () {
     this.loadData()
+    this.saveJobState()
   }
 
   protected loadData () {
@@ -51,5 +53,15 @@ export class JobsListComponent extends RestTable implements OnInit {
 
         err => this.notificationsService.error('Error', err.message)
       )
+  }
+
+  private loadJobState () {
+    const result = localStorage.getItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE)
+
+    if (result) this.jobState = result as JobState
+  }
+
+  private saveJobState () {
+    localStorage.setItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE, this.jobState)
   }
 }

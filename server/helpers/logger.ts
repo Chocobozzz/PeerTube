@@ -21,17 +21,23 @@ function keysExcluder (key, value) {
   return excludedKeys[key] === true ? undefined : value
 }
 
-const loggerFormat = winston.format.printf((info) => {
+const consoleLoggerFormat = winston.format.printf(info => {
   let additionalInfos = JSON.stringify(info, keysExcluder, 2)
   if (additionalInfos === '{}') additionalInfos = ''
   else additionalInfos = ' ' + additionalInfos
 
-  if (info.message.stack !== undefined) info.message = info.message.stack
+  if (info.message && info.message.stack !== undefined) info.message = info.message.stack
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
+const jsonLoggerFormat = winston.format.printf(info => {
+  if (info.message && info.message.stack !== undefined) info.message = info.message.stack
+
+  return JSON.stringify(info)
+})
+
 const timestampFormatter = winston.format.timestamp({
-  format: 'YYYY-MM-dd HH:mm:ss.SSS'
+  format: 'YYYY-MM-DD HH:mm:ss.SSS'
 })
 const labelFormatter = winston.format.label({
   label
@@ -46,10 +52,10 @@ const logger = new winston.createLogger({
       maxsize: 5242880,
       maxFiles: 5,
       format: winston.format.combine(
-        timestampFormatter,
+        winston.format.timestamp(),
         labelFormatter,
         winston.format.splat(),
-        winston.format.json()
+        jsonLoggerFormat
       )
     }),
     new winston.transports.Console({
@@ -60,7 +66,7 @@ const logger = new winston.createLogger({
         winston.format.splat(),
         labelFormatter,
         winston.format.colorize(),
-        loggerFormat
+        consoleLoggerFormat
       )
     })
   ],
@@ -72,6 +78,6 @@ const logger = new winston.createLogger({
 export {
   timestampFormatter,
   labelFormatter,
-  loggerFormat,
+  consoleLoggerFormat,
   logger
 }

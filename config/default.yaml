@@ -39,7 +39,7 @@ storage:
   cache: 'storage/cache/'
 
 log:
-  level: 'debug' # debug/info/warning/error
+  level: 'info' # debug/info/warning/error
 
 cache:
   previews:
@@ -61,16 +61,20 @@ user:
 # In addition, if some resolutions are enabled the mp4 video file will be transcoded to these new resolutions.
 # Uses a lot of CPU and increases storage!
 transcoding:
-  enabled: false
-  threads: 2
+  enabled: true
+  threads: 1
   resolutions: # Only created if the original video has a higher resolution
-    240p: true
-    360p: true
-    480p: true
-    720p: true
-    1080p: true
+    240p: false
+    360p: false
+    480p: false
+    720p: false
+    1080p: false
 
 instance:
   name: 'PeerTube'
-  description: '' # Support markdown
-  terms: '' # Support markdown
+  description: 'Welcome to this PeerTube instance!' # Support markdown
+  terms: 'No terms for now.' # Support markdown
+  default_client_route: '/videos/trending'
+  customizations:
+    javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
+    css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime

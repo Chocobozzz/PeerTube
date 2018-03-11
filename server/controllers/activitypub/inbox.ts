@@ -12,7 +12,7 @@ const inboxRouter = express.Router()
 inboxRouter.post('/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
-  activityPubValidator,
+  asyncMiddleware(activityPubValidator),
   asyncMiddleware(inboxController)
 )
 
@@ -20,7 +20,7 @@ inboxRouter.post('/accounts/:name/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
   localAccountValidator,
-  activityPubValidator,
+  asyncMiddleware(activityPubValidator),
   asyncMiddleware(inboxController)
 )
 
@@ -55,6 +55,8 @@ async function inboxController (req: express.Request, res: express.Response, nex
   } else if (res.locals.videoChannel) {
     specificActor = res.locals.videoChannel
   }
+
+  logger.info('Receiving inbox requests for %d activities by %s.', activities.length, res.locals.signature.actor)
 
   await processActivities(activities, res.locals.signature.actor, specificActor)
 

@@ -14,11 +14,11 @@
 /dist
 /.idea
 /PeerTube.iml
-peertube.zip
 /profiling/
 /*.zip
-thumbnails/
-torrents/
-videos/
-previews/
-logs/
+/thumbnails/
+/torrents/
+/videos/
+/previews/
+/logs/
+/server/tools/import-mediacore.ts

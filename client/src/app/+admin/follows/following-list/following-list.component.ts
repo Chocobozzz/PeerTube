@@ -1,4 +1,4 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
 import { AccountFollow } from '../../../../../../shared/models/actors/follow.model'
@@ -10,7 +10,7 @@ import { FollowService } from '../shared'
   selector: 'my-followers-list',
   templateUrl: './following-list.component.html'
 })
-export class FollowingListComponent extends RestTable {
+export class FollowingListComponent extends RestTable implements OnInit {
   following: AccountFollow[] = []
   totalRecords = 0
   rowsPerPage = 10
@@ -25,20 +25,21 @@ export class FollowingListComponent extends RestTable {
     super()
   }
 
-  removeFollowing (follow: AccountFollow) {
-    this.confirmService.confirm(`Do you really want to unfollow ${follow.following.host}?`, 'Unfollow').subscribe(
-      res => {
-        if (res === false) return
+  ngOnInit () {
+    this.loadSort()
+  }
 
-        this.followService.unfollow(follow).subscribe(
-          () => {
-            this.notificationsService.success('Success', `You are not following ${follow.following.host} anymore.`)
-            this.loadData()
-          },
+  async removeFollowing (follow: AccountFollow) {
+    const res = await this.confirmService.confirm(`Do you really want to unfollow ${follow.following.host}?`, 'Unfollow')
+    if (res === false) return
 
-          err => this.notificationsService.error('Error', err.message)
-        )
-      }
+    this.followService.unfollow(follow).subscribe(
+      () => {
+        this.notificationsService.success('Success', `You are not following ${follow.following.host} anymore.`)
+        this.loadData()
+      },
+
+      err => this.notificationsService.error('Error', err.message)
     )
   }
 

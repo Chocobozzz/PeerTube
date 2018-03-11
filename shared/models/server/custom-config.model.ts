@@ -3,6 +3,11 @@ export interface CustomConfig {
     name: string
     description: string
     terms: string
+    defaultClientRoute: string
+    customizations: {
+      javascript?: string
+      css?: string
+    }
   }
 
   cache: {

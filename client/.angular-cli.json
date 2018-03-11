@@ -7,10 +7,11 @@
     {
       "root": "src",
       "outDir": "dist",
-      "deployUrl": "client/",
       "assets": [
-        { "glob": "**/*", "input": "./assets/images", "output": "./client/assets/images" }
+        "./assets/images",
+        "./manifest.json"
       ],
+      "deployUrl": "client/",
       "index": "index.html",
       "main": "main.ts",
       "polyfills": "polyfills.ts",
@@ -18,6 +19,7 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
+      "serviceWorker": true,
       "styles": [
         "sass/application.scss"
       ],

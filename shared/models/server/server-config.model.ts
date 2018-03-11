@@ -3,6 +3,11 @@ export interface ServerConfig {
 
   instance: {
     name: string
+    defaultClientRoute: string
+    customizations: {
+      javascript: string
+      css: string
+    }
   }
 
   signup: {
@@ -23,6 +28,12 @@ export interface ServerConfig {
   }
 
   video: {
+    image: {
+      size: {
+        max: number
+      }
+      extensions: string[]
+    },
     file: {
       extensions: string[]
     }

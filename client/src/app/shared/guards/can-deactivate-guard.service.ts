@@ -15,7 +15,7 @@ export class CanDeactivateGuard implements CanDeactivate<CanComponentDeactivate>
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState: RouterStateSnapshot
-  ): Observable<boolean> | boolean {
+  ) {
     const result = component.canDeactivate()
     const text = result.text || 'All unsaved data will be lost, are you sure you want to leave this page?'
 

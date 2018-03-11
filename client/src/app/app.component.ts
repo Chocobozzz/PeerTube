@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
-import { AuthService, ServerService } from '@app/core'
-import { isInMobileView } from '@app/shared/misc/utils'
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { GuardsCheckStart, Router } from '@angular/router'
+import { AuthService, RedirectService, ServerService } from '@app/core'
+import { isInSmallView } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-app',
@@ -24,10 +25,14 @@ export class AppComponent implements OnInit {
 
   isMenuDisplayed = true
 
+  customCSS: SafeHtml
+
   constructor (
     private router: Router,
     private authService: AuthService,
-    private serverService: ServerService
+    private serverService: ServerService,
+    private domSanitizer: DomSanitizer,
+    private redirectService: RedirectService
   ) {}
 
   get serverVersion () {
@@ -39,6 +44,13 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit () {
+    document.getElementById('incompatible-browser').className += ' browser-ok'
+
+    const pathname = window.location.pathname
+    if (!pathname || pathname === '/') {
+      this.redirectService.redirectToHomepage()
+    }
+
     this.authService.loadClientCredentials()
 
     if (this.authService.isLoggedIn()) {
@@ -54,18 +66,38 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoPrivacies()
 
     // Do not display menu on small screens
-    if (isInMobileView()) {
+    if (isInSmallView()) {
       this.isMenuDisplayed = false
     }
 
     this.router.events.subscribe(
       e => {
         // User clicked on a link in the menu, change the page
-        if (e instanceof GuardsCheckStart && isInMobileView()) {
+        if (e instanceof GuardsCheckStart && isInSmallView()) {
           this.isMenuDisplayed = false
         }
       }
     )
+
+    this.serverService.configLoaded
+      .subscribe(() => {
+        const config = this.serverService.getConfig()
+
+        // We test customCSS in case or the admin removed the css
+        if (this.customCSS || config.instance.customizations.css) {
+          const styleTag = '<style>' + config.instance.customizations.css + '</style>'
+          this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
+        }
+
+        if (config.instance.customizations.javascript) {
+          try {
+            // tslint:disable:no-eval
+            eval(config.instance.customizations.javascript)
+          } catch (err) {
+            console.error('Cannot eval custom JavaScript.', err)
+          }
+        }
+      })
   }
 
   toggleMenu () {
