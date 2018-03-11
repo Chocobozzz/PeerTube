@@ -4,7 +4,7 @@ services:
   peertube:
 
     build: .
-    image: tedomum/peertube
+    image: peertube:stretch
     environment:
       PEERTUBE_HOSTNAME: "my.domain.tld"
       PEERTUBE_PORT: 443
