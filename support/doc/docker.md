@@ -8,15 +8,15 @@ For this example configuration, you should also run a reverse proxy. The example
 Docker Compose file provides example labels for the Traefik load balancer,
 though any HTTP reverse proxy is compatible.
 
-Example for running a peertube server locally:
+Example for running a PeerTube server locally:
 
 ```bash
-wget https://framagit.org/chocobozzz/PeerTube/raw/develop/support/docker/production/docker-compose.yml
-sudo \
-  PEERTUBE_HOSTNAME=peertube.lvh.me \
-  PEERTUBE_ADMIN_EMAIL=test@example.com \
-  PEERTUBE_TRANSCODING_ENABLED=true \
-  docker-compose up app
+$ wget https://github.com/chocobozzz/PeerTube/raw/develop/support/docker/production/docker-compose.yml
+$ sudo \
+    PEERTUBE_HOSTNAME=peertube.lvh.me \
+    PEERTUBE_ADMIN_EMAIL=test@example.com \
+    PEERTUBE_TRANSCODING_ENABLED=true \
+    docker-compose up app
 ```
 
 (Get the initial root user password from the program output.)
