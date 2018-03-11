@@ -12,11 +12,14 @@ RUN bash -c 'yarn install --pure-lockfile && npm run build'
 
 # Configure the application
 RUN addgroup -g 991 peertube \
- && adduser -D -u 991 -G peertube -h /data peertube
+ && adduser -D -u 991 -G peertube -h /data peertube \
+ && mkdir /config \
+ && cp /app/support/docker/production/config/* /config/ \
+ && cp /app/config/default.yaml /config/
 USER peertube
 
 ENV NODE_ENV production
-ENV NODE_CONFIG_DIR /app/support/docker/production/config/
+ENV NODE_CONFIG_DIR /config
 
 # Run the application
 CMD ["npm", "start"]
