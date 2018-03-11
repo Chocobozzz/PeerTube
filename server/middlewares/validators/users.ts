@@ -250,7 +250,7 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
 
   if (user) {
     res.status(409)
-              .send({ error: 'User with this username of email already exists.' })
+              .send({ error: 'User with this username or email already exists.' })
               .end()
     return false
   }
