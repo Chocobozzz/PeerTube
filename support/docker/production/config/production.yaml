@@ -1,6 +1,3 @@
-listen:
-  port: 9000
-
 # Correspond to your reverse proxy "listen" configuration
 webserver:
   https: true
@@ -10,26 +7,11 @@ webserver:
 # Your database name will be "peertube"+database.suffix
 database:
   hostname: 'db'
-  port: 5432
   suffix: ''
-  username: 'postgres'
-  password: 'postgres'
 
 # Redis server for short time storage
 redis:
   hostname: 'redis'
-  port: 6379
-  auth: null
-
-# SMTP server to send emails
-smtp:
-  hostname: null
-  port: 465
-  username: null
-  password: null
-  tls: true
-  ca_file: null # Used for self signed certificates
-  from_address: 'admin@example.com'
 
 # From the project root directory
 storage:
@@ -42,39 +24,15 @@ storage:
   torrents: '../data/torrents/'
   cache: '../data/cache/'
 
-log:
-  level: 'info' # debug/info/warning/error
-
 cache:
   previews:
     size: 100 # Max number of previews you want to cache
 
-admin:
-  email: undefined
-
 signup:
-  enabled: false
   limit: -1
-
-user:
-  # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).
-  # -1 == unlimited
-  video_quota: -1
 
 # If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
 # Uses a lot of CPU!
 transcoding:
   enabled: false
-  threads: 2
-  resolutions: # Only created if the original video has a higher resolution
-    240p: true
-    360p: true
-    480p: true
-    720p: true
-    1080p: true
 
-# Instance settings
-instance:
-  name: 'PeerTube'
-  description: '' # Support markdown
-  terms: '' # Support markdown
