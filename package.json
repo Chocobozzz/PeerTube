@@ -3,7 +3,7 @@
   "description": "Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.",
   "version": "1.0.0-alpha.6",
   "private": true,
-  "licence": "GPLv3",
+  "licence": "AGPLv3",
   "engines": {
     "node": ">=8.x"
   },
