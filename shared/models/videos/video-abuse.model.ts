@@ -1,10 +1,14 @@
+import { Account } from '../actors'
+
 export interface VideoAbuse {
   id: number
   reason: string
-  reporterUsername: string
-  reporterServerHost: string
-  videoId: number
-  videoUUID: string
-  videoName: string
+  reporterAccount: Account
+  video: {
+    id: number
+    name: string
+    uuid: string
+    url: string
+  }
   createdAt: Date
 }

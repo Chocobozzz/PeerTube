@@ -1094,16 +1094,13 @@ definitions:
         type: number
       reason:
         type: string
-      reporterUsername:
-        type: string
-      reporterServerHost:
-        type: string
-      videoId:
-        type: number
-      videoUUID:
-        type: string
-      videoName:
-        type: string
+      reporterAccount:
+        $ref: "#/definitions/Account"
+      video:
+        id: number
+        name: string
+        uuid: string
+        url: string
       createdAt:
         type: string
   VideoBlacklist:

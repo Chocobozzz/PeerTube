@@ -1,5 +1,30 @@
 # Changelog
 
+## v1.0.0-alpha.7
+
+### BREAKING CHANGES
+
+ * Update videos list/search API response:
+   * Removed `accountName` field
+   * Removed `serverHost` field
+   * Added `account.name` field
+   * Added `account.displayName` field
+   * Added `account.host` field
+   * Added `account.url` field
+   * Added `account.avatar` field
+ * Update video abuses API response:
+   * Removed `reporterUsername` field
+   * Removed `reporterServerHost` field
+   * Removed `videoId` field
+   * Removed `videoUUID` field
+   * Removed `videoName` field
+   * Added `reporterAccount` field
+   * Added `video.id` field
+   * Added `video.name` field
+   * Added `video.uuid` field
+   * Added `video.url` field
+
+
 ## v1.0.0-alpha.4
 
 ### Features

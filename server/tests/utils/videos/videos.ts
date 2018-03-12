@@ -420,7 +420,8 @@ async function completeVideoCheck (
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
   expect(videoDetails.privacy).to.deep.equal(attributes.privacy)
   expect(videoDetails.privacyLabel).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
-  expect(videoDetails.account.name).to.equal(attributes.account)
+  expect(videoDetails.account.name).to.equal(attributes.account.name)
+  expect(videoDetails.account.host).to.equal(attributes.account.host)
   expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
 
   expect(videoDetails.channel.displayName).to.equal(attributes.channel.name)
