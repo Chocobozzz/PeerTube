@@ -156,7 +156,16 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     this.videoFileName = videofile.name
 
-    const name = videofile.name.replace(/\.[^/.]+$/, '')
+    const nameWithoutExtension = videofile.name.replace(/\.[^/.]+$/, '')
+    let name: string
+
+    // If the name of the file is very small, keep the extension
+    if (nameWithoutExtension.length < 3) {
+      name = videofile.name
+    } else {
+      name = nameWithoutExtension
+    }
+
     const privacy = this.firstStepPrivacyId.toString()
     const nsfw = false
     const commentsEnabled = true
