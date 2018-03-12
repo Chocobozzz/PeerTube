@@ -1,4 +1,5 @@
 import { Account } from '../actors'
+import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 
@@ -14,7 +15,6 @@ export interface VideoFile {
 export interface Video {
   id: number
   uuid: string
-  accountName: string
   createdAt: Date | string
   updatedAt: Date | string
   categoryLabel: string
@@ -27,7 +27,6 @@ export interface Video {
   duration: number
   isLocal: boolean
   name: string
-  serverHost: string
   thumbnailPath: string
   previewPath: string
   embedPath: string
@@ -35,6 +34,14 @@ export interface Video {
   likes: number
   dislikes: number
   nsfw: boolean
+
+  account: {
+    name: string
+    displayName: string
+    url: string
+    host: string
+    avatar: Avatar
+  }
 }
 
 export interface VideoDetails extends Video {

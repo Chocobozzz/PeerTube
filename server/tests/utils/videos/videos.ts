@@ -368,8 +368,10 @@ async function completeVideoCheck (
     commentsEnabled: boolean
     description: string
     support: string
-    host: string
-    account: string
+    account: {
+      name: string
+      host: string
+    }
     isLocal: boolean,
     tags: string[],
     privacy: number,
@@ -402,8 +404,8 @@ async function completeVideoCheck (
   expect(video.languageLabel).to.equal(VIDEO_LANGUAGES[attributes.language] || 'Unknown')
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
-  expect(video.serverHost).to.equal(attributes.host)
-  expect(video.accountName).to.equal(attributes.account)
+  expect(video.account.host).to.equal(attributes.account.host)
+  expect(video.account.name).to.equal(attributes.account.name)
   expect(video.likes).to.equal(attributes.likes)
   expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
@@ -433,12 +435,12 @@ async function completeVideoCheck (
 
     let extension = extname(attributes.fixture)
     // Transcoding enabled on server 2, extension will always be .mp4
-    if (attributes.host === 'localhost:9002') extension = '.mp4'
+    if (attributes.account.host === 'localhost:9002') extension = '.mp4'
 
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`http://${attributes.host}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
-    expect(file.fileUrl).to.equal(`http://${attributes.host}/static/webseed/${videoDetails.uuid}-${file.resolution}${extension}`)
+    expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
+    expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution}${extension}`)
     expect(file.resolution).to.equal(attributeFile.resolution)
     expect(file.resolutionLabel).to.equal(attributeFile.resolution + 'p')
 

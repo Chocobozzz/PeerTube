@@ -1,6 +1,6 @@
 [Unit]
 Description=PeerTube daemon
-After=network.target
+After=network.target postgresql.service
 
 [Service]
 Type=simple

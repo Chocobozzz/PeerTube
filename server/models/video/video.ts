@@ -40,7 +40,8 @@ import {
   isVideoLanguageValid,
   isVideoLicenceValid,
   isVideoNameValid,
-  isVideoPrivacyValid, isVideoSupportValid
+  isVideoPrivacyValid,
+  isVideoSupportValid
 } from '../../helpers/custom-validators/videos'
 import { generateImageFromVideoFile, getVideoFileResolution, transcode } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
@@ -125,13 +126,18 @@ enum ScopeNames {
             required: true,
             include: [
               {
-                attributes: [ 'serverId' ],
+                attributes: [ 'preferredUsername', 'url', 'serverId' ],
                 model: ActorModel.unscoped(),
                 required: true,
                 include: [
                   {
                     attributes: [ 'host' ],
-                    model: ServerModel.unscoped()
+                    model: ServerModel.unscoped(),
+                    required: false
+                  },
+                  {
+                    model: AvatarModel.unscoped(),
+                    required: false
                   }
                 ]
               }
@@ -872,14 +878,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   toFormattedJSON (): Video {
-    let serverHost
-
-    if (this.VideoChannel.Account.Actor.Server) {
-      serverHost = this.VideoChannel.Account.Actor.Server.host
-    } else {
-      // It means it's our video
-      serverHost = CONFIG.WEBSERVER.HOST
-    }
+    const formattedAccount = this.VideoChannel.Account.toFormattedJSON()
 
     return {
       id: this.id,
@@ -893,9 +892,7 @@ export class VideoModel extends Model<VideoModel> {
       languageLabel: this.getLanguageLabel(),
       nsfw: this.nsfw,
       description: this.getTruncatedDescription(),
-      serverHost,
       isLocal: this.isOwned(),
-      accountName: this.VideoChannel.Account.name,
       duration: this.duration,
       views: this.views,
       likes: this.likes,
@@ -904,7 +901,14 @@ export class VideoModel extends Model<VideoModel> {
       previewPath: this.getPreviewPath(),
       embedPath: this.getEmbedPath(),
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      account: {
+        name: formattedAccount.name,
+        displayName: formattedAccount.displayName,
+        url: formattedAccount.url,
+        host: formattedAccount.host,
+        avatar: formattedAccount.avatar
+      }
     }
   }
 

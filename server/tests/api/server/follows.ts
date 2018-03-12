@@ -281,8 +281,10 @@ describe('Test follows', function () {
         nsfw: true,
         description: 'my super description',
         support: 'my super support text',
-        host: 'localhost:9003',
-        account: 'root',
+        account: {
+          name: 'root',
+          host: 'localhost:9003'
+        },
         isLocal,
         commentsEnabled: true,
         duration: 5,

@@ -1043,8 +1043,6 @@ definitions:
         type: number
       uuid:
         type: string
-      accountName:
-        type: string
       createdAt:
         type: string
       updatedAt:
@@ -1069,8 +1067,6 @@ definitions:
         type: boolean
       name:
         type: string
-      serverHost:
-        type: string
       thumbnailPath:
         type: string
       previewPath:
@@ -1085,6 +1081,13 @@ definitions:
         type: number
       nsfw:
         type: boolean
+      account:
+        name: string
+        displayName: string
+        url: string
+        host: string
+        avatar:
+          $ref: "#/definitions/Avatar"
   VideoAbuse:
     properties:
       id:

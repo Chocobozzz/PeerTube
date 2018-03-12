@@ -8,13 +8,35 @@ import { VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 
 import {
-  addVideoChannel, checkVideoFilesWereRemoved, completeVideoCheck, createUser, dateIsValid, doubleFollow, flushAndRunMultipleServers,
-  flushTests, getVideo,
-  getVideoChannelsList, getVideosList, killallServers, rateVideo, removeVideo, ServerInfo, setAccessTokensToServers, testImage,
-  updateVideo, uploadVideo, userLogin, viewVideo, wait, webtorrentAdd
+  addVideoChannel,
+  checkVideoFilesWereRemoved,
+  completeVideoCheck,
+  createUser,
+  dateIsValid,
+  doubleFollow,
+  flushAndRunMultipleServers,
+  flushTests,
+  getVideo,
+  getVideoChannelsList,
+  getVideosList,
+  killallServers,
+  rateVideo,
+  removeVideo,
+  ServerInfo,
+  setAccessTokensToServers,
+  testImage,
+  updateVideo,
+  uploadVideo,
+  userLogin,
+  viewVideo,
+  wait,
+  webtorrentAdd
 } from '../../utils'
 import {
-  addVideoCommentReply, addVideoCommentThread, deleteVideoComment, getVideoCommentThreads,
+  addVideoCommentReply,
+  addVideoCommentThread,
+  deleteVideoComment,
+  getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
 
@@ -90,8 +112,10 @@ describe('Test multiple servers', function () {
           nsfw: true,
           description: 'my super description for server 1',
           support: 'my super support text for server 1',
-          host: 'localhost:9001',
-          account: 'root',
+          account: {
+            name: 'root',
+            host: 'localhost:9001'
+          },
           isLocal,
           duration: 10,
           tags: [ 'tag1p1', 'tag2p1' ],
@@ -160,8 +184,10 @@ describe('Test multiple servers', function () {
           nsfw: true,
           description: 'my super description for server 2',
           support: 'my super support text for server 2',
-          host: 'localhost:9002',
-          account: 'user1',
+          account: {
+            name: 'user1',
+            host: 'localhost:9002'
+          },
           isLocal,
           commentsEnabled: true,
           duration: 5,
@@ -264,8 +290,10 @@ describe('Test multiple servers', function () {
           nsfw: true,
           description: 'my super description for server 3',
           support: 'my super support text for server 3',
-          host: 'localhost:9003',
-          account: 'root',
+          account: {
+            name: 'root',
+            host: 'localhost:9003'
+          },
           isLocal,
           duration: 5,
           commentsEnabled: true,
@@ -294,8 +322,10 @@ describe('Test multiple servers', function () {
           nsfw: false,
           description: 'my super description for server 3-2',
           support: 'my super support text for server 3-2',
-          host: 'localhost:9003',
-          account: 'root',
+          account: {
+            name: 'root',
+            host: 'localhost:9003'
+          },
           commentsEnabled: true,
           isLocal,
           duration: 5,
@@ -570,8 +600,10 @@ describe('Test multiple servers', function () {
           nsfw: true,
           description: 'my super description updated',
           support: 'my super support text updated',
-          host: 'localhost:9003',
-          account: 'root',
+          account: {
+            name: 'root',
+            host: 'localhost:9003'
+          },
           isLocal,
           duration: 5,
           commentsEnabled: true,
@@ -648,7 +680,10 @@ describe('Test multiple servers', function () {
         expect(baseVideo.licence).to.equal(video.licence)
         expect(baseVideo.category).to.equal(video.category)
         expect(baseVideo.nsfw).to.equal(video.nsfw)
-        expect(baseVideo.accountName).to.equal(video.accountName)
+        expect(baseVideo.account.name).to.equal(video.account.name)
+        expect(baseVideo.account.displayName).to.equal(video.account.displayName)
+        expect(baseVideo.account.url).to.equal(video.account.url)
+        expect(baseVideo.account.host).to.equal(video.account.host)
         expect(baseVideo.tags).to.deep.equal(video.tags)
       }
     })
@@ -859,8 +894,10 @@ describe('Test multiple servers', function () {
           nsfw: false,
           description: null,
           support: null,
-          host: 'localhost:9002',
-          account: 'root',
+          account: {
+            name: 'root',
+            host: 'localhost:9002'
+          },
           isLocal,
           duration: 5,
           commentsEnabled: true,

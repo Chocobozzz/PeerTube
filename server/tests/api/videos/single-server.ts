@@ -27,8 +27,10 @@ describe('Test a single server', function () {
     nsfw: true,
     description: 'my super description',
     support: 'my super support text',
-    host: 'localhost:9001',
-    account: 'root',
+    account: {
+      name: 'root',
+      host: 'localhost:9001'
+    },
     isLocal: true,
     duration: 5,
     tags: [ 'tag1', 'tag2', 'tag3' ],
@@ -56,8 +58,10 @@ describe('Test a single server', function () {
     nsfw: false,
     description: 'my super description updated',
     support: 'my super support text updated',
-    host: 'localhost:9001',
-    account: 'root',
+    account: {
+      name: 'root',
+      host: 'localhost:9001'
+    },
     isLocal: true,
     tags: [ 'tagup1', 'tagup2' ],
     privacy: VideoPrivacy.PUBLIC,
@@ -205,32 +209,6 @@ describe('Test a single server', function () {
   })
 
   // Not implemented yet
-  // it('Should search the video by serverHost', async function () {
-  //     const res = await   videosUtils.searchVideo(server.url, '9001', 'host')
-
-  //     expect(res.body.total).to.equal(1)
-  //     expect(res.body.data).to.be.an('array')
-  //     expect(res.body.data.length).to.equal(1)
-
-  //     const video = res.body.data[0]
-  //     expect(video.name).to.equal('my super name')
-  //     expect(video.description).to.equal('my super description')
-  //     expect(video.serverHost).to.equal('localhost:9001')
-  //     expect(video.author).to.equal('root')
-  //     expect(video.isLocal).to.be.true
-  //     expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
-  //     expect(dateIsValid(video.createdAt)).to.be.true
-  //     expect(dateIsValid(video.updatedAt)).to.be.true
-
-  //     const test = await testVideoImage(server.url, 'video_short.webm', video.thumbnailPath)
-  //       expect(test).to.equal(true)
-
-  //       done()
-  //     })
-  //   })
-  // })
-
-  // Not implemented yet
   // it('Should search the video by tag', async function () {
   //   const res = await searchVideo(server.url, 'tag1')
   //
@@ -248,8 +226,8 @@ describe('Test a single server', function () {
   //   expect(video.languageLabel).to.equal('Mandarin')
   //   expect(video.nsfw).to.be.ok
   //   expect(video.description).to.equal('my super description')
-  //   expect(video.serverHost).to.equal('localhost:9001')
-  //   expect(video.accountName).to.equal('root')
+  //   expect(video.account.name).to.equal('root')
+  //   expect(video.account.host).to.equal('localhost:9001')
   //   expect(video.isLocal).to.be.true
   //   expect(video.tags).to.deep.equal([ 'tag1', 'tag2', 'tag3' ])
   //   expect(dateIsValid(video.createdAt)).to.be.true

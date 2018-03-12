@@ -1,10 +1,10 @@
 import { Account } from '@app/shared/account/account.model'
 import { User } from '../'
 import { Video as VideoServerModel } from '../../../../../shared'
+import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 
 export class Video implements VideoServerModel {
-  accountName: string
   by: string
   createdAt: Date
   updatedAt: Date
@@ -32,7 +32,14 @@ export class Video implements VideoServerModel {
   likes: number
   dislikes: number
   nsfw: boolean
-  account: Account
+
+  account: {
+    name: string
+    displayName: string
+    url: string
+    host: string
+    avatar: Avatar
+  }
 
   private static createDurationString (duration: number) {
     const minutes = Math.floor(duration / 60)
@@ -46,7 +53,6 @@ export class Video implements VideoServerModel {
   constructor (hash: VideoServerModel) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
-    this.accountName = hash.accountName
     this.createdAt = new Date(hash.createdAt.toString())
     this.categoryLabel = hash.categoryLabel
     this.category = hash.category
@@ -61,7 +67,6 @@ export class Video implements VideoServerModel {
     this.uuid = hash.uuid
     this.isLocal = hash.isLocal
     this.name = hash.name
-    this.serverHost = hash.serverHost
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
     this.previewPath = hash.previewPath
@@ -72,8 +77,9 @@ export class Video implements VideoServerModel {
     this.likes = hash.likes
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
+    this.account = hash.account
 
-    this.by = Account.CREATE_BY_STRING(hash.accountName, hash.serverHost)
+    this.by = Account.CREATE_BY_STRING(hash.account.name, hash.account.host)
   }
 
   isVideoNSFWForUser (user: User) {

@@ -24,7 +24,9 @@ interface ServerInfo {
     id: number
     uuid: string
     name: string
-    accountName: string
+    account: {
+      name: string
+    }
   }
 
   remoteVideo?: {
