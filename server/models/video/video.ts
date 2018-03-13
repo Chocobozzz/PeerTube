@@ -29,6 +29,7 @@ import {
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../shared/models/videos'
+import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { activityPubCollection } from '../../helpers/activitypub'
 import { createTorrentPromise, renamePromise, statPromise, unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
@@ -91,7 +92,7 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number) => ({
+  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, filter?: VideoFilter) => ({
     where: {
       id: {
         [Sequelize.Op.notIn]: Sequelize.literal(
@@ -129,6 +130,7 @@ enum ScopeNames {
                 attributes: [ 'preferredUsername', 'url', 'serverId' ],
                 model: ActorModel.unscoped(),
                 required: true,
+                where: VideoModel.buildActorWhereWithFilter(filter),
                 include: [
                   {
                     attributes: [ 'host' ],
@@ -639,7 +641,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static async listForApi (start: number, count: number, sort: string) {
+  static async listForApi (start: number, count: number, sort: string, filter?: VideoFilter) {
     const query = {
       offset: start,
       limit: count,
@@ -648,7 +650,7 @@ export class VideoModel extends Model<VideoModel> {
 
     const serverActor = await getServerActor()
 
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id ] })
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, filter ] })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {
@@ -788,6 +790,16 @@ export class VideoModel extends Model<VideoModel> {
       totalLocalVideoViews,
       totalVideos
     }
+  }
+
+  private static buildActorWhereWithFilter (filter?: VideoFilter) {
+    if (filter && filter === 'local') {
+      return {
+        serverId: null
+      }
+    }
+
+    return {}
   }
 
   getOriginalFile () {

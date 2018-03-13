@@ -126,6 +126,14 @@ menu {
           background-image: url('../../assets/images/menu/recently-added.svg');
         }
 
+        &.icon-videos-local {
+          width: 23px;
+          height: 23px;
+          position: relative;
+          top: -1px;
+          background-image: url('../../assets/images/menu/home.svg');
+        }
+
         &.icon-administration {
           width: 23px;
           height: 23px;

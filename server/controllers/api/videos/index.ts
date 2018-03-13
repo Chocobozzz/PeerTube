@@ -388,7 +388,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.filter)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

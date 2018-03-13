@@ -24,6 +24,11 @@
    * Added `video.uuid` field
    * Added `video.url` field
 
+### Features
+
+  * Add "Local" in menu that lists only local videos
+
+
 
 ## v1.0.0-alpha.4
 

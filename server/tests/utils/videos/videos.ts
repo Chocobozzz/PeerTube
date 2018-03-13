@@ -123,6 +123,17 @@ function getVideosList (url: string) {
           .expect('Content-Type', /json/)
 }
 
+function getLocalVideos (url: string) {
+  const path = '/api/v1/videos'
+
+  return request(url)
+    .get(path)
+    .query({ sort: 'name', filter: 'local' })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+}
+
 function getMyVideos (url: string, accessToken: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/users/me/videos'
 
@@ -487,6 +498,7 @@ export {
   rateVideo,
   viewVideo,
   parseTorrentVideo,
+  getLocalVideos,
   completeVideoCheck,
   checkVideoFilesWereRemoved
 }

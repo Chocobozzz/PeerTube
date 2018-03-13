@@ -15,7 +15,7 @@ import {
   dateIsValid,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
+  flushTests, getLocalVideos,
   getVideo,
   getVideoChannelsList,
   getVideosList,
@@ -346,6 +346,36 @@ describe('Test multiple servers', function () {
         }
         await completeVideoCheck(server.url, video2, checkAttributesVideo2)
       }
+    })
+  })
+
+  describe('It should list local videos', function () {
+    it('Should list only local videos on server 1', async function () {
+      const { body } = await getLocalVideos(servers[0].url)
+
+      expect(body.total).to.equal(1)
+      expect(body.data).to.be.an('array')
+      expect(body.data.length).to.equal(1)
+      expect(body.data[0].name).to.equal('my super name for server 1')
+    })
+
+    it('Should list only local videos on server 2', async function () {
+      const { body } = await getLocalVideos(servers[1].url)
+
+      expect(body.total).to.equal(1)
+      expect(body.data).to.be.an('array')
+      expect(body.data.length).to.equal(1)
+      expect(body.data[0].name).to.equal('my super name for server 2')
+    })
+
+    it('Should list only local videos on server 3', async function () {
+      const { body } = await getLocalVideos(servers[2].url)
+
+      expect(body.total).to.equal(2)
+      expect(body.data).to.be.an('array')
+      expect(body.data.length).to.equal(2)
+      expect(body.data[0].name).to.equal('my super name for server 3')
+      expect(body.data[1].name).to.equal('my super name for server 3-2')
     })
   })
 
