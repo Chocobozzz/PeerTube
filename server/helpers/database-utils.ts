@@ -36,7 +36,7 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
-function updateInstanceWithAnother <T> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
+function updateInstanceWithAnother <T extends Model<T>> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
   const obj = baseInstance.toJSON()
 
   for (const key of Object.keys(obj)) {
