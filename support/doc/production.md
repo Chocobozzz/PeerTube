@@ -5,7 +5,7 @@
 
 ## Installation
 
-**Please don't install PeerTube for production on a small device behind a low bandwidth connection because it could slow down the fediverse.**
+**Please don't install PeerTube for production on a small device behind a low bandwidth connection (example: a Raspberry PI behind your ADSL link) because it could slow down the fediverse.**
 
 ### Dependencies
 
