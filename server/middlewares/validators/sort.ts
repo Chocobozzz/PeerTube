@@ -1,8 +1,5 @@
-import * as express from 'express'
-import { query } from 'express-validator/check'
-import { logger } from '../../helpers/logger'
 import { SORTABLE_COLUMNS } from '../../initializers'
-import { areValidationErrors } from './utils'
+import { checkSort, createSortableColumns } from './utils'
 
 // Initialize constants here for better performances
 const SORTABLE_USERS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.USERS)
@@ -40,26 +37,4 @@ export {
   followingSortValidator,
   jobsSortValidator,
   videoCommentThreadsSortValidator
-}
-
-// ---------------------------------------------------------------------------
-
-function checkSort (sortableColumns: string[]) {
-  return [
-    query('sort').optional().isIn(sortableColumns).withMessage('Should have correct sortable column'),
-
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      logger.debug('Checking sort parameters', { parameters: req.query })
-
-      if (areValidationErrors(req, res)) return
-
-      return next()
-    }
-  ]
-}
-
-function createSortableColumns (sortableColumns: string[]) {
-  const sortableColumnDesc = sortableColumns.map(sortableColumn => '-' + sortableColumn)
-
-  return sortableColumns.concat(sortableColumnDesc)
 }

@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { validationResult } from 'express-validator/check'
+import { query, validationResult } from 'express-validator/check'
 import { logger } from '../../helpers/logger'
 
 function areValidationErrors (req: express.Request, res: express.Response) {
@@ -15,8 +15,30 @@ function areValidationErrors (req: express.Request, res: express.Response) {
   return false
 }
 
+function checkSort (sortableColumns: string[]) {
+  return [
+    query('sort').optional().isIn(sortableColumns).withMessage('Should have correct sortable column'),
+
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      logger.debug('Checking sort parameters', { parameters: req.query })
+
+      if (areValidationErrors(req, res)) return
+
+      return next()
+    }
+  ]
+}
+
+function createSortableColumns (sortableColumns: string[]) {
+  const sortableColumnDesc = sortableColumns.map(sortableColumn => '-' + sortableColumn)
+
+  return sortableColumns.concat(sortableColumnDesc)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  areValidationErrors
+  areValidationErrors,
+  checkSort,
+  createSortableColumns
 }
