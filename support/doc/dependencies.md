@@ -1,19 +1,21 @@
 # Dependencies
 
 ## Debian / Ubuntu and derivatives
-  1. Install basic utility programs needed for the installation
+  1. On a fresh Debian, as root user, install basic utility programs needed for the installation
  
 ```
-$ sudo apt-get install curl sudo unzip vim
+$ apt-get install curl sudo unzip vim
 ```
+     
+  2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
 
-  2. Install certbot (choose instructions for nginx and your distribution) :
+  3. Install certbot (choose instructions for nginx and your distribution) :
      [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-  3. Install NodeJS 8.x (current LTS):
+  4. Install NodeJS 8.x (current LTS):
      [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
-  4. Install yarn:
+  5. Install yarn:
      [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
-  5. Run:
+  6. Run:
 
 ```
 $ sudo apt update
