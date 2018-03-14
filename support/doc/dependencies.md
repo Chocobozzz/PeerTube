@@ -21,6 +21,7 @@
 $ sudo apt update
 $ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server git
 $ ffmpeg -version # Should be >= 3.x 
+$ g++ -v # Should be >= 5.x
 ```
 
 ## Arch Linux
