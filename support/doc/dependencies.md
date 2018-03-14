@@ -2,11 +2,11 @@
 
 ## Debian / Ubuntu and derivatives
   1. On a fresh Debian/Ubuntu, as root user, install basic utility programs needed for the installation
- 
+
 ```
 # apt-get install curl sudo unzip vim
 ```
-     
+
   2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
 
   3. Install certbot (choose instructions for nginx and your distribution) :
@@ -20,8 +20,15 @@
 ```
 $ sudo apt update
 $ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server git
-$ ffmpeg -version # Should be >= 3.x 
+$ ffmpeg -version # Should be >= 3.x
 $ g++ -v # Should be >= 5.x
+```
+
+if you still have a 2.x ffmpeg version on ubuntu-server :
+```
+$ sudo add-apt-repository ppa:jonathonf/ffmpeg-3
+$ sudo apt-get update
+$ sudo apt install ffmpeg
 ```
 
 ## Arch Linux
@@ -53,4 +60,3 @@ $ sudo yum install nginx postgresql postgresql-server openssl gcc make redis git
 ## Other distributions
 
 Feel free to update this file in a pull request!
-
