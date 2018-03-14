@@ -139,7 +139,7 @@ BitTorrent) inside the web browser, as of today.
   * **NodeJS >= 8.x**
   * yarn
   * OpenSSL (cli)
-  * FFmpeg
+  * **FFmpeg >= 3.x**
 
 ## Run using Docker
 

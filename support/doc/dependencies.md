@@ -1,10 +1,10 @@
 # Dependencies
 
 ## Debian / Ubuntu and derivatives
-  1. On a fresh Debian, as root user, install basic utility programs needed for the installation
+  1. On a fresh Debian/Ubuntu, as root user, install basic utility programs needed for the installation
  
 ```
-$ apt-get install curl sudo unzip vim
+# apt-get install curl sudo unzip vim
 ```
      
   2. It would be wise to disable root access and to continue this tutorial with a user with sudoers group access
@@ -20,6 +20,7 @@ $ apt-get install curl sudo unzip vim
 ```
 $ sudo apt update
 $ sudo apt install nginx ffmpeg postgresql openssl g++ make redis-server git
+$ ffmpeg -version # Should be >= 3.x 
 ```
 
 ## Arch Linux

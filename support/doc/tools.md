@@ -9,8 +9,8 @@
 
 ## Prerequisites
 
-You need at least 512MB RAM to run the script.  
-Scripts can be launched directly from a PeerTube server (in this case you already have dependencies installed :+1:) or from a separate server, even a dekstop PC.  
+You need at least 512MB RAM to run the script.
+Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
 
 ### Dependencies
 
@@ -18,7 +18,7 @@ Install the [PeerTube dependencies](dependencies.md).
 
 ### Installation
 
-Clone the PeerTube repo to get the latest version:
+Clone the PeerTube repo to get the latest version (even if you are on your PeerTube server):
 
 ```
 git clone https://github.com/Chocobozzz/PeerTube.git
