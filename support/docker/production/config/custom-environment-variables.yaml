@@ -33,7 +33,7 @@ smtp:
   tls:
     __name: "PEERTUBE_SMTP_TLS"
     __format: "json"
-  form_address: "PEERTUBE_ADMIN_EMAIL"
+  from_address: "PEERTUBE_SMTP_FROM"
 
 admin:
   email: "PEERTUBE_ADMIN_EMAIL"
