@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.0-alpha.8
+
+### Features
+
+ * Add ability to set a short instance description 
+
+
 ## v1.0.0-alpha.7
 
 ### BREAKING CHANGES
