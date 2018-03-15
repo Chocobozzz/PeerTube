@@ -39,7 +39,7 @@ async function processActivityPubHttpBroadcast (job: kue.Job) {
     }
   }
 
-  return ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes(goodUrls, badUrls, undefined)
+  return ActorFollowModel.updateActorFollowsScore(goodUrls, badUrls, undefined)
 }
 
 // ---------------------------------------------------------------------------

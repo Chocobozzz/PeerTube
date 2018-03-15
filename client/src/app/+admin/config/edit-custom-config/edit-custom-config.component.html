@@ -16,6 +16,17 @@
   </div>
 
   <div class="form-group">
+    <label for="instanceShortDescription">Short description</label>
+    <textarea
+        id="instanceShortDescription" formControlName="instanceShortDescription"
+        [ngClass]="{ 'input-error': formErrors['instanceShortDescription'] }"
+    ></textarea>
+    <div *ngIf="formErrors.instanceShortDescription" class="form-error">
+      {{ formErrors.instanceShortDescription }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
     <my-markdown-textarea
         id="instanceDescription" formControlName="instanceDescription" textareaWidth="500px" [previewColumn]="true"

@@ -157,6 +157,7 @@ const CONFIG = {
   },
   INSTANCE: {
     get NAME () { return config.get<string>('instance.name') },
+    get SHORT_DESCRIPTION () { return config.get<string>('instance.short_description') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },

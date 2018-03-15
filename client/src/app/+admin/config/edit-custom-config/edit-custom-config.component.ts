@@ -8,7 +8,7 @@ import { FormReactive, USER_VIDEO_QUOTA } from '@app/shared'
 import {
   ADMIN_EMAIL,
   CACHE_PREVIEWS_SIZE,
-  INSTANCE_NAME,
+  INSTANCE_NAME, INSTANCE_SHORT_DESCRIPTION,
   SIGNUP_LIMIT,
   TRANSCODING_THREADS
 } from '@app/shared/forms/form-validators/custom-config'
@@ -44,6 +44,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   form: FormGroup
   formErrors = {
     instanceName: '',
+    instanceShortDescription: '',
     instanceDescription: '',
     instanceTerms: '',
     instanceDefaultClientRoute: '',
@@ -56,6 +57,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     customizationCSS: ''
   }
   validationMessages = {
+    instanceShortDescription: INSTANCE_SHORT_DESCRIPTION.MESSAGES,
     instanceName: INSTANCE_NAME.MESSAGES,
     cachePreviewsSize: CACHE_PREVIEWS_SIZE.MESSAGES,
     signupLimit: SIGNUP_LIMIT.MESSAGES,
@@ -84,6 +86,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   buildForm () {
     const formGroupData = {
       instanceName: [ '', INSTANCE_NAME.VALIDATORS ],
+      instanceShortDescription: [ '', INSTANCE_SHORT_DESCRIPTION.VALIDATORS ],
       instanceDescription: [ '' ],
       instanceTerms: [ '' ],
       instanceDefaultClientRoute: [ '' ],
@@ -158,6 +161,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     const data: CustomConfig = {
       instance: {
         name: this.form.value['instanceName'],
+        shortDescription: this.form.value['instanceShortDescription'],
         description: this.form.value['instanceDescription'],
         terms: this.form.value['instanceTerms'],
         defaultClientRoute: this.form.value['instanceDefaultClientRoute'],
@@ -214,6 +218,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   private updateForm () {
     const data = {
       instanceName: this.customConfig.instance.name,
+      instanceShortDescription: this.customConfig.instance.shortDescription,
       instanceDescription: this.customConfig.instance.description,
       instanceTerms: this.customConfig.instance.terms,
       instanceDefaultClientRoute: this.customConfig.instance.defaultClientRoute,

@@ -44,6 +44,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
   const json: ServerConfig = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
+      shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
@@ -85,6 +86,7 @@ function getAbout (req: express.Request, res: express.Response, next: express.Ne
   const about: About = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
+      shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS
     }
@@ -116,8 +118,10 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   const toUpdateJSON = omit(toUpdate, 'videoQuota')
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
   toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
+  toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
   delete toUpdate.user.videoQuota
   delete toUpdate.instance.defaultClientRoute
+  delete toUpdate.instance.shortDescription
 
   await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON, undefined, 2))
 
@@ -139,6 +143,7 @@ function customConfig (): CustomConfig {
   return {
     instance: {
       name: CONFIG.INSTANCE.NAME,
+      shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,

@@ -34,4 +34,8 @@ textarea {
   @include peertube-textarea(500px, 150px);
 
   display: block;
+
+  &#instanceShortDescription {
+    height: 100px;
+  }
 }

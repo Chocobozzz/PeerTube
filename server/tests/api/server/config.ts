@@ -52,6 +52,10 @@ describe('Test config', function () {
     const data = res.body as CustomConfig
 
     expect(data.instance.name).to.equal('PeerTube')
+    expect(data.instance.shortDescription).to.equal(
+      'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
+      'with WebTorrent and Angular.'
+    )
     expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
     expect(data.instance.terms).to.equal('No terms for now.')
     expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
@@ -75,6 +79,7 @@ describe('Test config', function () {
     const newCustomConfig = {
       instance: {
         name: 'PeerTube updated',
+        shortDescription: 'my short description',
         description: 'my super description',
         terms: 'my super terms',
         defaultClientRoute: '/videos/recently-added',
@@ -116,6 +121,7 @@ describe('Test config', function () {
     const data = res.body
 
     expect(data.instance.name).to.equal('PeerTube updated')
+    expect(data.instance.shortDescription).to.equal('my short description')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
     expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
@@ -146,6 +152,7 @@ describe('Test config', function () {
     const data = res.body
 
     expect(data.instance.name).to.equal('PeerTube updated')
+    expect(data.instance.shortDescription).to.equal('my short description')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
     expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
@@ -170,6 +177,7 @@ describe('Test config', function () {
     const data: About = res.body
 
     expect(data.instance.name).to.equal('PeerTube updated')
+    expect(data.instance.shortDescription).to.equal('my short description')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
   })
@@ -183,6 +191,10 @@ describe('Test config', function () {
     const data = res.body
 
     expect(data.instance.name).to.equal('PeerTube')
+    expect(data.instance.shortDescription).to.equal(
+      'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
+      'with WebTorrent and Angular.'
+    )
     expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
     expect(data.instance.terms).to.equal('No terms for now.')
     expect(data.instance.defaultClientRoute).to.equal('/videos/trending')

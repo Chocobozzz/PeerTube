@@ -111,7 +111,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static updateActorFollowsScoreAndRemoveBadOnes (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction) {
+  static updateActorFollowsScore (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction) {
     if (goodInboxes.length === 0 && badInboxes.length === 0) return
 
     logger.info('Updating %d good actor follows and %d bad actor follows scores.', goodInboxes.length, badInboxes.length)
