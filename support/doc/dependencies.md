@@ -24,7 +24,7 @@ $ ffmpeg -version # Should be >= 3.x
 $ g++ -v # Should be >= 5.x
 ```
 
-if you still have a 2.x ffmpeg version on ubuntu-server :
+If you still have a 2.x version of FFmpeg on Ubuntu:
 ```
 $ sudo add-apt-repository ppa:jonathonf/ffmpeg-3
 $ sudo apt-get update
