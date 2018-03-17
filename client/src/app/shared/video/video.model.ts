@@ -48,8 +48,9 @@ export class Video implements VideoServerModel {
 
     const minutesPadding = minutes >= 10 ? '' : '0'
     const secondsPadding = seconds >= 10 ? '' : '0'
+    const displayedHours = hours > 0 ? hours.toString() + ':' : ''
 
-    return hours > 0 ? hours.toString() + ':' : '' + minutesPadding +
+    return displayedHours + minutesPadding +
         minutes.toString() + ':' + secondsPadding + seconds.toString()
   }
 
