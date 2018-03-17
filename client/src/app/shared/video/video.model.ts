@@ -42,12 +42,16 @@ export class Video implements VideoServerModel {
   }
 
   private static createDurationString (duration: number) {
-    const minutes = Math.floor(duration / 60)
+    const hours = Math.floor(duration / 3600)
+    const minutes = Math.floor(duration % 3600 / 60)
     const seconds = duration % 60
+
     const minutesPadding = minutes >= 10 ? '' : '0'
     const secondsPadding = seconds >= 10 ? '' : '0'
+    const hoursPadding = hours >= 10 ? '' : '0'
 
-    return minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
+    return hoursPadding + hours.toString() + ':' + minutesPadding +
+        minutes.toString() + ':' + secondsPadding + seconds.toString()
   }
 
   constructor (hash: VideoServerModel) {
