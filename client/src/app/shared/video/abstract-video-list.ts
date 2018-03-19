@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { isInMobileView } from '@app/shared/misc/utils'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { NotificationsService } from 'angular2-notifications'
+import 'rxjs/add/operator/debounceTime'
 import { Observable } from 'rxjs/Observable'
 import { fromEvent } from 'rxjs/observable/fromEvent'
 import { AuthService } from '../../core/auth'
@@ -25,9 +26,9 @@ export abstract class AbstractVideoList implements OnInit {
   defaultSort: SortField = '-createdAt'
   loadOnInit = true
   pageHeight: number
-  videoWidth = 215
-  videoHeight = 230
-  videoPages: Video[][]
+  videoWidth: number
+  videoHeight: number
+  videoPages: Video[][] = []
 
   protected abstract notificationsService: NotificationsService
   protected abstract authService: AuthService
@@ -174,23 +175,27 @@ export abstract class AbstractVideoList implements OnInit {
       this.videoWidth = -1
       this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
     } else {
+      this.videoWidth = 215
+      this.videoHeight = 230
+
       const videosWidth = this.videosElement.nativeElement.offsetWidth
       this.pagination.itemsPerPage = Math.floor(videosWidth / this.videoWidth) * AbstractVideoList.LINES_PER_PAGE
       this.pageHeight = this.videoHeight * AbstractVideoList.LINES_PER_PAGE
     }
 
     // Rebuild pages because maybe we modified the number of items per page
-    let videos: Video[] = []
-    Object.values(this.loadedPages)
-      .forEach(videosPage => videos = videos.concat(videosPage))
+    const videos = [].concat(...this.videoPages)
     this.loadedPages = {}
 
-    for (let i = 1; (i * this.pagination.itemsPerPage) <= videos.length; i++) {
-      this.loadedPages[i] = videos.slice((i - 1) * this.pagination.itemsPerPage, this.pagination.itemsPerPage * i)
+    let i = 1
+    // Don't include the last page if it not complete
+    while (videos.length >= this.pagination.itemsPerPage && i < 10000) { // 10000 -> Hard limit in case of infinite loop
+      this.loadedPages[i] = videos.splice(0, this.pagination.itemsPerPage)
+      i++
     }
 
     this.buildVideoPages()
 
-    console.log('Re calculated pages after a resize!')
+    console.log('Rebuilt pages with %s elements per page.', this.pagination.itemsPerPage)
   }
 }
