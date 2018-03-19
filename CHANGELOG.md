@@ -4,7 +4,7 @@
 
 ### BREAKING CHANGES
 
-* Update videos list/search/get API response:
+ * Update videos list/search/get API response:
    * Removed `resolution` field
    * Removed `resolutionLabel` field
    * Removed `category` field
@@ -25,6 +25,10 @@
    * Added `language.label` field
    * Added `privacy.id` field
    * Added `privacy.label` field
+
+### Bug fixes
+
+ * Fix video_share_url duplicate key on failed transcoding job
 
 
 ## v1.0.0-alpha.8
@@ -60,8 +64,7 @@
 
 ### Features
 
-  * Add "Local" in menu that lists only local videos
-
+ * Add "Local" in menu that lists only local videos
 
 
 ## v1.0.0-alpha.4

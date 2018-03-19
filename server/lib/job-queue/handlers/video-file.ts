@@ -63,8 +63,10 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
 
   if (video.privacy !== VideoPrivacy.PRIVATE) {
     // Now we'll add the video's meta data to our followers
-    await sendCreateVideo(video, undefined)
-    await shareVideoByServerAndChannel(video, undefined)
+    await sequelizeTypescript.transaction(async t => {
+      await sendCreateVideo(video, t)
+      await shareVideoByServerAndChannel(video, t)
+    })
   }
 
   const { videoFileResolution } = await videoDatabase.getOriginalFileResolution()
@@ -77,27 +79,21 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
   )
 
   if (resolutionsEnabled.length !== 0) {
-    try {
-      await sequelizeTypescript.transaction(async t => {
-        const tasks: Promise<any>[] = []
+    const tasks: Promise<any>[] = []
 
-        for (const resolution of resolutionsEnabled) {
-          const dataInput = {
-            videoUUID: videoDatabase.uuid,
-            resolution
-          }
+    for (const resolution of resolutionsEnabled) {
+      const dataInput = {
+        videoUUID: videoDatabase.uuid,
+        resolution
+      }
 
-          const p = JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
-          tasks.push(p)
-        }
-
-        await Promise.all(tasks)
-      })
-
-      logger.info('Transcoding jobs created for uuid %s.', videoDatabase.uuid, { resolutionsEnabled })
-    } catch (err) {
-      logger.warn('Cannot transcode the video.', err)
+      const p = JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })
+      tasks.push(p)
     }
+
+    await Promise.all(tasks)
+
+    logger.info('Transcoding jobs created for uuid %s.', videoDatabase.uuid, { resolutionsEnabled })
   } else {
     logger.info('No transcoding jobs created for video %s (no resolutions enabled).')
     return undefined

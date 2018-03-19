@@ -56,7 +56,7 @@ async function inboxController (req: express.Request, res: express.Response, nex
     specificActor = res.locals.videoChannel
   }
 
-  logger.info('Receiving inbox requests for %d activities by %s.', activities.length, res.locals.signature.actor)
+  logger.info('Receiving inbox requests for %d activities by %s.', activities.length, res.locals.signature.actor.url)
 
   await processActivities(activities, res.locals.signature.actor, specificActor)
 
