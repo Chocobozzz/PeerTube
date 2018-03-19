@@ -990,8 +990,8 @@ export class VideoModel extends Model<VideoModel> {
         }
       })
       .sort((a, b) => {
-        if (a.resolution < b.resolution) return 1
-        if (a.resolution === b.resolution) return 0
+        if (a.resolution.id < b.resolution.id) return 1
+        if (a.resolution.id === b.resolution.id) return 0
         return -1
       })
 
