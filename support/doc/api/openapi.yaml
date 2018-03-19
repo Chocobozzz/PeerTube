@@ -69,7 +69,7 @@ paths:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/ServerConfig' 
+            $ref: '#/definitions/ServerConfig'
   /jobs:
     get:
       tags:
@@ -105,7 +105,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Job' 
+              $ref: '#/definitions/Job'
   '/server/following/{host}':
     delete:
       tags:
@@ -1037,6 +1037,12 @@ paths:
         '204':
           description: successful operation
 definitions:
+  VideoConstant:
+    properties:
+      id:
+        type: number
+      label:
+        type: string
   Video:
     properties:
       id:
@@ -1047,18 +1053,12 @@ definitions:
         type: string
       updatedAt:
         type: string
-      categoryLabel:
-        type: string
       category:
-        type: number
-      licenceLabel:
-        type: string
+        $ref: "#/definitions/VideoConstant"
       licence:
-        type: number
-      languageLabel:
-        type: string
+        $ref: "#/definitions/VideoConstant"
       language:
-        type: number
+        $ref: "#/definitions/VideoConstant"
       description:
         type: string
       duration:
@@ -1139,14 +1139,14 @@ definitions:
         type: boolean
       owner:
         type: object
-        properties: 
-          name: 
+        properties:
+          name:
             type: string
-          uuid: 
+          uuid:
             type: string
       videos:
         type: array
-        items: 
+        items:
           $ref: "#/definitions/Video"
   VideoComment:
     properties:
@@ -1228,7 +1228,7 @@ definitions:
         type: boolean
       role:
         type: string
-        enum: [User, Moderator, Administrator] 
+        enum: [User, Moderator, Administrator]
       videoQuota:
         type: number
       createdAt:
@@ -1241,7 +1241,7 @@ definitions:
           $ref: "#/definitions/VideoChannel"
   ServerConfig:
     properties:
-      signup: 
+      signup:
         type: object
         properties:
           allowed:
@@ -1264,7 +1264,7 @@ definitions:
                 properties:
                   max:
                     type: number
-          extensions: 
+          extensions:
             type: array
             items:
               type: string
@@ -1273,8 +1273,8 @@ definitions:
         properties:
           file:
             type: object
-            properties: 
-              extensions: 
+            properties:
+              extensions:
                 type: array
                 items:
                   type: string

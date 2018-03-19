@@ -442,7 +442,7 @@ async function completeVideoCheck (
   expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
 
   for (const attributeFile of attributes.files) {
-    const file = videoDetails.files.find(f => f.resolution === attributeFile.resolution)
+    const file = videoDetails.files.find(f => f.resolution.id === attributeFile.resolution)
     expect(file).not.to.be.undefined
 
     let extension = extname(attributes.fixture)
@@ -451,8 +451,8 @@ async function completeVideoCheck (
 
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
-    expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution}${extension}`)
+    expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
+    expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
     expect(file.resolution.id).to.equal(attributeFile.resolution)
     expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
 

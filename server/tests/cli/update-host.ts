@@ -2,6 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
+import { VideoDetails } from '../../../shared/models/videos'
 const expect = chai.expect
 
 import {
@@ -59,7 +60,7 @@ describe('Test update host scripts', function () {
 
     for (const video of videos) {
       const res2 = await getVideo(server.url, video.id)
-      const videoDetails = res2.body
+      const videoDetails: VideoDetails = res2.body
 
       expect(videoDetails.files).to.have.lengthOf(4)
 
@@ -67,7 +68,7 @@ describe('Test update host scripts', function () {
         expect(file.magnetUri).to.contain('localhost%3A9002%2Ftracker%2Fsocket')
         expect(file.magnetUri).to.contain('localhost%3A9002%2Fstatic%2Fwebseed%2F')
 
-        const torrent = await parseTorrentVideo(server, videoDetails.uuid, file.resolution)
+        const torrent = await parseTorrentVideo(server, videoDetails.uuid, file.resolution.id)
         const announceWS = torrent.announce.find(a => a === 'ws://localhost:9002/tracker/socket')
         expect(announceWS).to.not.be.undefined
 

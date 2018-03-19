@@ -452,7 +452,7 @@ describe('Test multiple servers', function () {
       const res2 = await getVideo(servers[0].url, video.id)
       const videoDetails = res2.body
 
-      const file = videoDetails.files.find(f => f.resolution === 360)
+      const file = videoDetails.files.find(f => f.resolution.id === 360)
       expect(file).not.to.be.undefined
 
       const torrent = await webtorrentAdd(file.magnetUri)
@@ -705,10 +705,9 @@ describe('Test multiple servers', function () {
 
         expect(baseVideo.name).to.equal(video.name)
         expect(baseVideo.uuid).to.equal(video.uuid)
-        expect(baseVideo.category).to.equal(video.category)
-        expect(baseVideo.language).to.equal(video.language)
-        expect(baseVideo.licence).to.equal(video.licence)
-        expect(baseVideo.category).to.equal(video.category)
+        expect(baseVideo.category.id).to.equal(video.category.id)
+        expect(baseVideo.language.id).to.equal(video.language.id)
+        expect(baseVideo.licence.id).to.equal(video.licence.id)
         expect(baseVideo.nsfw).to.equal(video.nsfw)
         expect(baseVideo.account.name).to.equal(video.account.name)
         expect(baseVideo.account.displayName).to.equal(video.account.displayName)

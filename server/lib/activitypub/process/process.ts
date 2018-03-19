@@ -40,6 +40,7 @@ async function processActivities (activities: Activity[], signatureActor?: Actor
     try {
       await activityProcessor(activity, inboxActor)
     } catch (err) {
+      logger.warn(err.stack)
       logger.warn('Cannot process activity %s.', activity.type, err)
     }
   }

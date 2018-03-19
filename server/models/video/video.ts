@@ -1010,7 +1010,7 @@ export class VideoModel extends Model<VideoModel> {
     let language
     if (this.language) {
       language = {
-        id: this.language + '',
+        identifier: this.language + '',
         name: VideoModel.getLanguageLabel(this.language)
       }
     }
