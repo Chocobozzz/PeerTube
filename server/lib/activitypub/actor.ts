@@ -12,12 +12,13 @@ import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { IMAGE_MIMETYPE_EXT, CONFIG, sequelizeTypescript } from '../../initializers'
+import { IMAGE_MIMETYPE_EXT, CONFIG, sequelizeTypescript, CONSTRAINTS_FIELDS } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
+import { truncate } from 'lodash'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys (actor: ActorModel) {
@@ -166,6 +167,24 @@ async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
   return undefined
 }
 
+function normalizeActor (actor: any) {
+  if (!actor) return
+
+  if (!actor.url || typeof actor.url !== 'string') {
+    actor.url = actor.url.href || actor.url.url
+  }
+
+  if (actor.summary && typeof actor.summary === 'string') {
+    actor.summary = truncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
+
+    if (actor.summary.length < CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min) {
+      actor.summary = null
+    }
+  }
+
+  return
+}
+
 export {
   getOrCreateActorAndServerAndModel,
   buildActorInstance,
@@ -173,7 +192,8 @@ export {
   fetchActorTotalItems,
   fetchAvatarIfExists,
   updateActorInstance,
-  updateActorAvatarInstance
+  updateActorAvatarInstance,
+  normalizeActor
 }
 
 // ---------------------------------------------------------------------------
@@ -255,7 +275,9 @@ async function fetchRemoteActor (actorUrl: string): Promise<FetchRemoteActorResu
   logger.info('Fetching remote actor %s.', actorUrl)
 
   const requestResult = await doRequest(options)
-  const actorJSON: ActivityPubActor = normalizeActor(requestResult.body)
+  normalizeActor(requestResult.body)
+
+  const actorJSON: ActivityPubActor = requestResult.body
 
   if (isActorObjectValid(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON: actorJSON })
@@ -371,11 +393,4 @@ async function refreshActorIfNeeded (actor: ActorModel) {
     logger.warn('Cannot refresh actor.', err)
     return actor
   }
-}
-
-function normalizeActor (actor: any) {
-  if (actor && actor.url && typeof actor.url === 'string') return actor
-
-  actor.url = actor.url.href || actor.url.url
-  return actor
 }

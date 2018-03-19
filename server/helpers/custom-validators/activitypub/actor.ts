@@ -1,5 +1,6 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
+import { normalizeActor } from '../../../lib/activitypub'
 import { exists } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 
@@ -52,6 +53,7 @@ function isActorObjectValid (actor: any) {
     isActorPublicKeyObjectValid(actor.publicKey) &&
     isActorEndpointsObjectValid(actor.endpoints) &&
     setValidAttributedTo(actor) &&
+
     // If this is not an account, it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
     (actor.type === 'Person' || actor.attributedTo.length !== 0)
@@ -83,6 +85,8 @@ function isActorRejectActivityValid (activity: any) {
 }
 
 function isActorUpdateActivityValid (activity: any) {
+  normalizeActor(activity.object)
+
   return isBaseActivityValid(activity, 'Update') &&
     isActorObjectValid(activity.object)
 }
