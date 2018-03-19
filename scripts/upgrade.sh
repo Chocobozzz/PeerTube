@@ -4,7 +4,7 @@
 set -e
 
 # Backup database
-SQL_BACKUP_PATH="/var/www/peertube/backup/sql-peertube_prod-$(date +\"%Y%m%d-%h%m\").bak" 
+SQL_BACKUP_PATH="/var/www/peertube/backup/sql-peertube_prod-$(date +\"%Y%m%d-%H%M\").bak" 
 mkdir -p /var/www/peertube/backup
 pg_dump -U peertube -W -h localhost -F c peertube_prod -f "$SQL_BACKUP_PATH" 
 
