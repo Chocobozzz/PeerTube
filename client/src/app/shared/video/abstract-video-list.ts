@@ -4,6 +4,7 @@ import { isInMobileView } from '@app/shared/misc/utils'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs/Observable'
+import { fromEvent } from 'rxjs/observable/fromEvent'
 import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
 import { SortField } from './sort-field.type'
@@ -49,23 +50,11 @@ export abstract class AbstractVideoList implements OnInit {
     const routeParams = this.route.snapshot.params
     this.loadRouteParams(routeParams)
 
-    if (isInMobileView()) {
-      this.pagination.itemsPerPage = 5
-      this.videoWidth = -1
-    }
+    fromEvent(window, 'resize')
+      .debounceTime(500)
+      .subscribe(() => this.calcPageSizes())
 
-    if (this.videoWidth !== -1) {
-      const videosWidth = this.videosElement.nativeElement.offsetWidth
-      this.pagination.itemsPerPage = Math.floor(videosWidth / this.videoWidth) * AbstractVideoList.LINES_PER_PAGE
-    }
-
-    // Video takes all the width
-    if (this.videoWidth === -1) {
-      this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
-    } else {
-      this.pageHeight = this.videoHeight * AbstractVideoList.LINES_PER_PAGE
-    }
-
+    this.calcPageSizes()
     if (this.loadOnInit === true) this.loadMoreVideos(this.pagination.currentPage)
   }
 
@@ -175,5 +164,33 @@ export abstract class AbstractVideoList implements OnInit {
 
   private maxPageLoaded () {
     return Math.max(...Object.keys(this.loadedPages).map(e => parseInt(e, 10)))
+  }
+
+  private calcPageSizes () {
+    if (isInMobileView()) {
+      this.pagination.itemsPerPage = 5
+
+      // Video takes all the width
+      this.videoWidth = -1
+      this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
+    } else {
+      const videosWidth = this.videosElement.nativeElement.offsetWidth
+      this.pagination.itemsPerPage = Math.floor(videosWidth / this.videoWidth) * AbstractVideoList.LINES_PER_PAGE
+      this.pageHeight = this.videoHeight * AbstractVideoList.LINES_PER_PAGE
+    }
+
+    // Rebuild pages because maybe we modified the number of items per page
+    let videos: Video[] = []
+    Object.values(this.loadedPages)
+      .forEach(videosPage => videos = videos.concat(videosPage))
+    this.loadedPages = {}
+
+    for (let i = 1; (i * this.pagination.itemsPerPage) <= videos.length; i++) {
+      this.loadedPages[i] = videos.slice((i - 1) * this.pagination.itemsPerPage, this.pagination.itemsPerPage * i)
+    }
+
+    this.buildVideoPages()
+
+    console.log('Re calculated pages after a resize!')
   }
 }
