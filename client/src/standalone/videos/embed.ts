@@ -66,7 +66,7 @@ loadVideoInfo(videoId)
 
       player.dock({
         title: videoInfo.name,
-        description: 'Use P2P, other may know you are watching that video.'
+        description: 'Uses P2P, others may know you are watching this video.'
       })
     })
   })
