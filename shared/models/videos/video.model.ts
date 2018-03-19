@@ -3,10 +3,14 @@ import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 
+export interface VideoConstant <T> {
+  id: number
+  label: string
+}
+
 export interface VideoFile {
   magnetUri: string
-  resolution: number
-  resolutionLabel: string
+  resolution: VideoConstant<number>
   size: number // Bytes
   torrentUrl: string
   fileUrl: string
@@ -17,12 +21,9 @@ export interface Video {
   uuid: string
   createdAt: Date | string
   updatedAt: Date | string
-  categoryLabel: string
-  category: number
-  licenceLabel: string
-  licence: number
-  languageLabel: string
-  language: number
+  category: VideoConstant<number>
+  licence: VideoConstant<number>
+  language: VideoConstant<number>
   description: string
   duration: number
   isLocal: boolean
@@ -45,8 +46,7 @@ export interface Video {
 }
 
 export interface VideoDetails extends Video {
-  privacy: VideoPrivacy
-  privacyLabel: string
+  privacy: VideoConstant<VideoPrivacy>
   descriptionPath: string
   support: string
   channel: VideoChannel

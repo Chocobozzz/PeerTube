@@ -802,6 +802,27 @@ export class VideoModel extends Model<VideoModel> {
     return {}
   }
 
+  private static getCategoryLabel (id: number) {
+    let categoryLabel = VIDEO_CATEGORIES[id]
+    if (!categoryLabel) categoryLabel = 'Misc'
+
+    return categoryLabel
+  }
+
+  private static getLicenceLabel (id: number) {
+    let licenceLabel = VIDEO_LICENCES[id]
+    if (!licenceLabel) licenceLabel = 'Unknown'
+
+    return licenceLabel
+  }
+
+  private static getLanguageLabel (id: number) {
+    let languageLabel = VIDEO_LANGUAGES[id]
+    if (!languageLabel) languageLabel = 'Unknown'
+
+    return languageLabel
+  }
+
   getOriginalFile () {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
@@ -896,12 +917,18 @@ export class VideoModel extends Model<VideoModel> {
       id: this.id,
       uuid: this.uuid,
       name: this.name,
-      category: this.category,
-      categoryLabel: this.getCategoryLabel(),
-      licence: this.licence,
-      licenceLabel: this.getLicenceLabel(),
-      language: this.language,
-      languageLabel: this.getLanguageLabel(),
+      category: {
+        id: this.category,
+        label: VideoModel.getCategoryLabel(this.category)
+      },
+      licence: {
+        id: this.licence,
+        label: VideoModel.getLicenceLabel(this.licence)
+      },
+      language: {
+        id: this.language,
+        label: VideoModel.getLanguageLabel(this.language)
+      },
       nsfw: this.nsfw,
       description: this.getTruncatedDescription(),
       isLocal: this.isOwned(),
@@ -932,8 +959,10 @@ export class VideoModel extends Model<VideoModel> {
     if (!privacyLabel) privacyLabel = 'Unknown'
 
     const detailsJson = {
-      privacyLabel,
-      privacy: this.privacy,
+      privacy: {
+        id: this.privacy,
+        label: privacyLabel
+      },
       support: this.support,
       descriptionPath: this.getDescriptionPath(),
       channel: this.VideoChannel.toFormattedJSON(),
@@ -950,8 +979,10 @@ export class VideoModel extends Model<VideoModel> {
         let resolutionLabel = videoFile.resolution + 'p'
 
         return {
-          resolution: videoFile.resolution,
-          resolutionLabel,
+          resolution: {
+            id: videoFile.resolution,
+            label: resolutionLabel
+          },
           magnetUri: this.generateMagnetUri(videoFile, baseUrlHttp, baseUrlWs),
           size: videoFile.size,
           torrentUrl: this.getTorrentUrl(videoFile, baseUrlHttp),
@@ -979,8 +1010,8 @@ export class VideoModel extends Model<VideoModel> {
     let language
     if (this.language) {
       language = {
-        identifier: this.language + '',
-        name: this.getLanguageLabel()
+        id: this.language + '',
+        name: VideoModel.getLanguageLabel(this.language)
       }
     }
 
@@ -988,7 +1019,7 @@ export class VideoModel extends Model<VideoModel> {
     if (this.category) {
       category = {
         identifier: this.category + '',
-        name: this.getCategoryLabel()
+        name: VideoModel.getCategoryLabel(this.category)
       }
     }
 
@@ -996,7 +1027,7 @@ export class VideoModel extends Model<VideoModel> {
     if (this.licence) {
       licence = {
         identifier: this.licence + '',
-        name: this.getLicenceLabel()
+        name: VideoModel.getLicenceLabel(this.licence)
       }
     }
 
@@ -1222,27 +1253,6 @@ export class VideoModel extends Model<VideoModel> {
 
   getDescriptionPath () {
     return `/api/${API_VERSION}/videos/${this.uuid}/description`
-  }
-
-  getCategoryLabel () {
-    let categoryLabel = VIDEO_CATEGORIES[this.category]
-    if (!categoryLabel) categoryLabel = 'Misc'
-
-    return categoryLabel
-  }
-
-  getLicenceLabel () {
-    let licenceLabel = VIDEO_LICENCES[this.licence]
-    if (!licenceLabel) licenceLabel = 'Unknown'
-
-    return licenceLabel
-  }
-
-  getLanguageLabel () {
-    let languageLabel = VIDEO_LANGUAGES[this.language]
-    if (!languageLabel) languageLabel = 'Unknown'
-
-    return languageLabel
   }
 
   removeThumbnail () {

@@ -26,8 +26,12 @@ function isVideoLicenceValid (value: number) {
   return value === null || VIDEO_LICENCES[value] !== undefined
 }
 
+function areVideoLanguagesValid (value: number[]) {
+  return value === null || (isArray(value) && value.every(v => isVideoLanguageValid(v)))
+}
+
 function isVideoLanguageValid (value: number) {
-  return value === null || VIDEO_LANGUAGES[value] !== undefined
+  return VIDEO_LANGUAGES[value] !== undefined
 }
 
 function isVideoDurationValid (value: string) {
@@ -133,6 +137,7 @@ export {
   isVideoDescriptionValid,
   isVideoFileInfoHashValid,
   isVideoNameValid,
+  areVideoLanguagesValid,
   isVideoTagsValid,
   isVideoAbuseReasonValid,
   isVideoFile,
