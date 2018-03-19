@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
@@ -12,7 +12,7 @@ import { VideoService } from '../../shared/video/video.service'
   styleUrls: [ '../../shared/video/abstract-video-list.scss' ],
   templateUrl: '../../shared/video/abstract-video-list.html'
 })
-export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit {
+export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Recently added'
   currentRoute = '/videos/recently-added'
   sort: SortField = '-createdAt'
@@ -27,6 +27,10 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
 
   ngOnInit () {
     super.ngOnInit()
+  }
+
+  ngOnDestroy () {
+    super.ngOnDestroy()
   }
 
   getVideosObservable (page: number) {

@@ -47,9 +47,9 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
   }
 
   ngOnDestroy () {
-    if (this.subActivatedRoute) {
-      this.subActivatedRoute.unsubscribe()
-    }
+    super.ngOnDestroy()
+
+    if (this.subActivatedRoute) this.subActivatedRoute.unsubscribe()
   }
 
   getVideosObservable (page: number) {

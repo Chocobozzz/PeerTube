@@ -1,18 +1,19 @@
-import { Directive, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Directive, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import 'rxjs/add/operator/debounceTime'
 import 'rxjs/add/operator/distinct'
 import 'rxjs/add/operator/distinctUntilChanged'
 import 'rxjs/add/operator/filter'
 import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/share'
 import 'rxjs/add/operator/startWith'
 import 'rxjs/add/operator/throttleTime'
 import { fromEvent } from 'rxjs/observable/fromEvent'
-import 'rxjs/add/operator/share'
+import { Subscription } from 'rxjs/Subscription'
 
 @Directive({
   selector: '[myInfiniteScroller]'
 })
-export class InfiniteScrollerDirective implements OnInit {
+export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   private static PAGE_VIEW_TOP_MARGIN = 500
 
   @Input() containerHeight: number
@@ -27,6 +28,9 @@ export class InfiniteScrollerDirective implements OnInit {
   private decimalLimit = 0
   private lastCurrentBottom = -1
   private lastCurrentTop = 0
+  private scrollDownSub: Subscription
+  private scrollUpSub: Subscription
+  private pageChangeSub: Subscription
 
   constructor () {
     this.decimalLimit = this.percentLimit / 100
@@ -34,6 +38,12 @@ export class InfiniteScrollerDirective implements OnInit {
 
   ngOnInit () {
     if (this.autoLoading === true) return this.initialize()
+  }
+
+  ngOnDestroy () {
+    if (this.scrollDownSub) this.scrollDownSub.unsubscribe()
+    if (this.scrollUpSub) this.scrollUpSub.unsubscribe()
+    if (this.pageChangeSub) this.pageChangeSub.unsubscribe()
   }
 
   initialize () {
@@ -48,7 +58,7 @@ export class InfiniteScrollerDirective implements OnInit {
       .share()
 
     // Scroll Down
-    scrollObservable
+    this.scrollDownSub = scrollObservable
       // Check we scroll down
       .filter(({ current }) => {
         const res = this.lastCurrentBottom < current
@@ -60,7 +70,7 @@ export class InfiniteScrollerDirective implements OnInit {
       .subscribe(() => this.nearOfBottom.emit())
 
     // Scroll up
-    scrollObservable
+    this.scrollUpSub = scrollObservable
       // Check we scroll up
       .filter(({ current }) => {
         const res = this.lastCurrentTop > current
@@ -74,7 +84,7 @@ export class InfiniteScrollerDirective implements OnInit {
       .subscribe(() => this.nearOfTop.emit())
 
     // Page change
-    scrollObservable
+    this.pageChangeSub = scrollObservable
       .distinct()
       .map(({ current }) => this.calculateCurrentPage(current))
       .distinctUntilChanged()
