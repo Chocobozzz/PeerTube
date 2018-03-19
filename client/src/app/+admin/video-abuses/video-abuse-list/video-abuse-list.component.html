@@ -19,13 +19,13 @@
     <tr>
       <td>{{ videoAbuse.reason }}</td>
       <td>
-        <a [href]="videoAbuse.reporterAccount.url" title="Go to the account" target="_blank">
+        <a [href]="videoAbuse.reporterAccount.url" title="Go to the account" target="_blank" rel="noopener noreferrer">
           {{ createByString(videoAbuse.reporterAccount) }}
         </a>
       </td>
       <td>{{ videoAbuse.createdAt }}</td>
       <td>
-        <a [href]="videoAbuse.video.url" title="Go to the video" target="_blank">
+        <a [href]="videoAbuse.video.url" title="Go to the video" target="_blank" rel="noopener noreferrer">
           {{ videoAbuse.video.name }}
         </a>
       </td>

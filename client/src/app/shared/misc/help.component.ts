@@ -46,7 +46,8 @@ export class HelpComponent implements OnInit {
   }
 
   private formatMarkdownSupport (rules: string[]) {
-    return '<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank">Markdown</a> compatible that supports:' +
+    return '<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> ' +
+      'compatible that supports:' +
       this.createMarkdownList(rules)
   }
 
