@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.0.0-alpha.9
+
+### BREAKING CHANGES
+
+* Update videos list/search/get API response:
+   * Removed `resolution` field
+   * Removed `resolutionLabel` field
+   * Removed `category` field
+   * Removed `categoryLabel` field
+   * Removed `licence` field
+   * Removed `licenceLabel` field
+   * Removed `language` field
+   * Removed `languageLabel` field
+   * Removed `privacy` field
+   * Removed `privacyLabel` field
+   * Added `resolution.id` field
+   * Added `resolution.label` field
+   * Added `category.id` field
+   * Added `category.label` field
+   * Added `licence.id` field
+   * Added `licence.label` field
+   * Added `language.id` field
+   * Added `language.label` field
+   * Added `privacy.id` field
+   * Added `privacy.label` field
+
+
 ## v1.0.0-alpha.8
 
 ### Features

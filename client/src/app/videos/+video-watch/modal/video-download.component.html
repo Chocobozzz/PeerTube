@@ -9,8 +9,8 @@
 
       <div class="modal-body">
         <div class="peertube-select-container">
-          <select [(ngModel)]="resolution">
-            <option *ngFor="let file of video.files" [value]="file.resolution">{{ file.resolutionLabel }}</option>
+          <select [(ngModel)]="resolutionId">
+            <option *ngFor="let file of video.files" [value]="file.resolution.id">{{ file.resolution.label }}</option>
           </select>
         </div>
 

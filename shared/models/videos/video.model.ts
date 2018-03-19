@@ -1,3 +1,4 @@
+import { VideoResolution } from '../../index'
 import { Account } from '../actors'
 import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './video-channel.model'
@@ -10,7 +11,7 @@ export interface VideoConstant <T> {
 
 export interface VideoFile {
   magnetUri: string
-  resolution: VideoConstant<number>
+  resolution: VideoConstant<VideoResolution>
   size: number // Bytes
   torrentUrl: string
   fileUrl: string

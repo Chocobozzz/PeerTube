@@ -2,6 +2,7 @@
 
 import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
+import { VideoConstant, VideoResolution } from '../../../../shared/models/videos'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 
@@ -52,8 +53,8 @@ class ResolutionMenuItem extends MenuItem {
     options.selectable = true
     super(player, options)
 
-    const currentResolution = this.player_.peertube().getCurrentResolution()
-    this.selected(this.options_.id === currentResolution)
+    const currentResolutionId = this.player_.peertube().getCurrentResolutionId()
+    this.selected(this.options_.id === currentResolutionId)
   }
 
   handleClick (event) {
@@ -89,10 +90,10 @@ class ResolutionMenuButton extends MenuButton {
       menuItems.push(new ResolutionMenuItem(
         this.player_,
         {
-          id: videoFile.resolution,
-          label: videoFile.resolutionLabel,
+          id: videoFile.resolution.id,
+          label: videoFile.resolution.label,
           src: videoFile.magnetUri,
-          selected: videoFile.resolution === this.currentSelection
+          selected: videoFile.resolution.id === this.currentSelectionId
         })
       )
     }
@@ -269,12 +270,12 @@ class PeerTubePlugin extends Plugin {
     this.flushVideoFile(this.currentVideoFile, false)
   }
 
-  getCurrentResolution () {
-    return this.currentVideoFile ? this.currentVideoFile.resolution : -1
+  getCurrentResolutionId () {
+    return this.currentVideoFile ? this.currentVideoFile.resolution.id : -1
   }
 
   getCurrentResolutionLabel () {
-    return this.currentVideoFile ? this.currentVideoFile.resolutionLabel : ''
+    return this.currentVideoFile ? this.currentVideoFile.resolution.label : ''
   }
 
   updateVideoFile (videoFile?: VideoFile, done?: () => void) {
@@ -339,7 +340,7 @@ class PeerTubePlugin extends Plugin {
     this.trigger('videoFileUpdate')
   }
 
-  updateResolution (resolution) {
+  updateResolution (resolutionId: number) {
     // Remember player state
     const currentTime = this.player.currentTime()
     const isPaused = this.player.paused()
@@ -352,7 +353,7 @@ class PeerTubePlugin extends Plugin {
       this.player.bigPlayButton.hide()
     }
 
-    const newVideoFile = this.videoFiles.find(f => f.resolution === resolution)
+    const newVideoFile = this.videoFiles.find(f => f.resolution.id === resolutionId)
     this.updateVideoFile(newVideoFile, () => {
       this.player.currentTime(currentTime)
       this.player.handleTechSeeked_()
