@@ -109,9 +109,9 @@ Now you have the certificates you can reload nginx:
 $ sudo systemctl reload nginx
 ```
 
-### Systemd
+### systemd
 
-Copy the SystemD configuration template:
+If your OS uses systemd, copy the configuration template:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
@@ -136,7 +136,7 @@ If you want to start PeerTube on boot:
 $ sudo systemctl enable peertube
 ```
 
-### Run
+Run:
 
 ```
 $ sudo systemctl start peertube
@@ -145,7 +145,7 @@ $ sudo journalctl -feu peertube
 
 ### FreeBSD
 
-Copy the startup script and update rc.conf:
+If you're using FreeBSD, copy the startup script and update rc.conf:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/
@@ -153,7 +153,7 @@ $ sudo chmod +x /usr/local/etc/rc.d/peertube
 $ sudo echo peertube_enable="YES" >> /etc/rc.conf
 ```
 
-#### Run
+Run:
 
 ```
 $ sudo service peertube start
