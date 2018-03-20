@@ -143,6 +143,22 @@ $ sudo systemctl start peertube
 $ sudo journalctl -feu peertube
 ```
 
+### FreeBSD
+
+Copy the startup script and update rc.conf:
+
+```
+$ sudo cp /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/
+$ sudo chmod +x /usr/local/etc/rc.d/peertube
+$ sudo echo peertube_enable="YES" >> /etc/rc.conf
+```
+
+#### Run
+
+```
+$ sudo service peertube start
+```
+
 ### Administrator
 
 The administrator password is automatically generated and can be found in the
