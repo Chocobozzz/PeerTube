@@ -102,9 +102,13 @@ function transcode (options: TranscodeOptions) {
       command = command.size(size)
     }
 
-    command.on('error', rej)
-           .on('end', res)
-           .run()
+    command
+      .on('error', (err, stdout, stderr) => {
+        logger.error('Error in transcoding job.', { stdout, stderr })
+        return rej(err)
+      })
+      .on('end', res)
+      .run()
   })
 }
 
