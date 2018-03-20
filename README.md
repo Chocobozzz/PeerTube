@@ -71,8 +71,6 @@ Want to see it in action?
    * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
      to see what the "decentralization feature" looks like
 
-*Currently PeerTube is still in alpha (we plan to release a beta in march). Demonstration servers do not support public registration. If you really want to test PeerTube before the public release, here is a list of PeerTube servers: https://github.com/Chocobozzz/PeerTube/wiki#other-peertube-servers.*
-
 ## Why
 
 We can't build a FOSS video streaming alternatives to YouTube, Dailymotion,
@@ -85,51 +83,6 @@ enough because one video could become famous and overload the server.  It's the
 reason why we need to use a P2P protocol to limit the server load.  Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus
 BitTorrent) inside the web browser, as of today.
-
-## Features
-
-- [X] Angular frontend
-- [X] Join the fediverse
-  - [X] Follow other instances
-  - [X] Unfollow an instance
-  - [X] Get for the followers/following list
-- [X] Upload a video
-  - [X] Seed the video
-  - [X] Send the meta data with ActivityPub to followers
-- [X] Remove the video
-- [X] List the videos
-- [X] View the video in an HTML5 player with WebTorrent
-- [X] Admin panel
-- [X] OpenGraph tags
-- [X] OEmbed
-- [X] Update video
-- [X] Federated videos view counter
-- [X] Federated videos likes/dislikes
-- [X] Transcoding to different definitions
-- [X] Download file/torrent
-- [X] User video bytes quota
-- [X] User video channels
-- [X] NSFW warnings/settings
-- [X] Video description in markdown
-- [X] User roles (administrator, moderator)
-- [X] User registration
-- [X] Video privacy settings (public, unlisted or private)
-- [X] Signaling a video to the admin origin PeerTube instance
-- [X] Federated videos comments
-- [X] Update video thumbnails
-- [X] Support video uploader button
-- [ ] Video imports (URL, Torrent, YouTube...)
-- [ ] Advanced search
-- [ ] Subtitles
-- [ ] User playlist
-- [ ] User subscriptions (by tags, author...)
-- [ ] Add "DDOS" security
-
-
-## Front compatibility
-
-  * Firefox
-  * Chrome/Chromium
 
 ## Dependencies
 

@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: PeerTube
-  version: 1.0.0-alpha
+  version: 1.0.0-beta
   description: Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.
 host: peertube.example.com
 basePath: '/api/v1'

@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.0-beta.1
+
+Nothing new here, but PeerTube is stable enough for being in beta now. 
+
+
 ## v1.0.0-alpha.9
 
 ### BREAKING CHANGES
