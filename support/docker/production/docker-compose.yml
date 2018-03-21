@@ -36,7 +36,7 @@ services:
     restart: "always"
 
   postgres:
-    image: postgres:10
+    image: postgres:10-alpine
     environment:
       POSTGRES_USER: postgres_user
       POSTGRES_PASSWORD: postgres_password
@@ -46,7 +46,7 @@ services:
     restart: "always"
 
   redis:
-    image: redis
+    image: redis:alpine
     volumes:
       - ./redis:/data
     restart: "always"
