@@ -15,7 +15,7 @@ import { Video } from './video.model'
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
   private static LINES_PER_PAGE = 3
 
-  @ViewChild('videoElement') videosElement: ElementRef
+  @ViewChild('videosElement') videosElement: ElementRef
   @ViewChild(InfiniteScrollerDirective) infiniteScroller: InfiniteScrollerDirective
 
   pagination: ComponentPagination = {
@@ -183,6 +183,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
       // Video takes all the width
       this.videoWidth = -1
+      // Same ratios than base width/height
+      this.videoHeight = this.videosElement.nativeElement.offsetWidth * (this.baseVideoHeight / this.baseVideoWidth)
       this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
     } else {
       this.videoWidth = this.baseVideoWidth
