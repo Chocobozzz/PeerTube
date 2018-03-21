@@ -1,9 +1,8 @@
 <!-- If you report a bug please fill the form -->
 
-* **PeerTube version or commit:**
+* **PeerTube version or URL:**
 * **Browser name/version:**
 * **NodeJS version:**
-* **PostgreSQL version:**
 
 
 * **What is the expected behaviour?**
