@@ -68,6 +68,8 @@ $ cd /var/www/peertube && sudo -u peertube cp peertube-latest/config/production.
 Then edit the `config/production.yaml` file according to your webserver
 configuration.
 
+**PeerTube does not support webserver host change**. Keep in mind your domain name is definitive after your first PeerTube start.
+
 ### Webserver
 
 We only provide official configuration files for Nginx.
