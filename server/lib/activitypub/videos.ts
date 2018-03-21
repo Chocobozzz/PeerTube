@@ -187,7 +187,7 @@ async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentOb
     }
 
     videoObject = await fetchRemoteVideo(videoObject)
-    if (!videoObject) throw new Error('Cannot fetch remote video')
+    if (!videoObject) throw new Error('Cannot fetch remote video (maybe invalid...)')
   }
 
   if (!actor) {

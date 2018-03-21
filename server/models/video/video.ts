@@ -1166,10 +1166,19 @@ export class VideoModel extends Model<VideoModel> {
   getTruncatedDescription () {
     if (!this.description) return null
 
-    const options = {
-      length: CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max
-    }
+    const maxLength = CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max
 
+    const options = {
+      length: maxLength
+    }
+    const truncatedDescription = truncate(this.description, options)
+
+    // The truncated string is okay, we can return it
+    if (truncatedDescription.length <= maxLength) return truncatedDescription
+
+    // Lodash takes into account all UTF characters, whereas String.prototype.length does not: some characters have a length of 2
+    // We always use the .length so we need to truncate more if needed
+    options.length -= maxLength - truncatedDescription.length
     return truncate(this.description, options)
   }
 
