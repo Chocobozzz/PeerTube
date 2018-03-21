@@ -43,6 +43,10 @@ export class AppComponent implements OnInit {
     return this.serverService.getConfig().instance.name
   }
 
+  get defaultRoute () {
+    return RedirectService.DEFAULT_ROUTE
+  }
+
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
 
