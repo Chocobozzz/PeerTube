@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
       .subscribe(() => {
         const config = this.serverService.getConfig()
 
-        // We test customCSS in case or the admin removed the css
+        // We test customCSS if the admin removed the css
         if (this.customCSS || config.instance.customizations.css) {
           const styleTag = '<style>' + config.instance.customizations.css + '</style>'
           this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)

@@ -45,7 +45,7 @@ to install the dependencies.
 Then clone the sources and install node modules:
 
 ```
-$ git clone -b master https://github.com/Chocobozzz/PeerTube
+$ git clone https://github.com/Chocobozzz/PeerTube
 $ cd PeerTube
 $ yarn install --pure-lockfile
 ```
