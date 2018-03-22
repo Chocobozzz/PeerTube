@@ -6,6 +6,7 @@ import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB, CONFIG } from '../../initializers'
 import { buildVideoAnnounceToFollowers } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/send/misc'
+import { createActivityData } from '../../lib/activitypub/send/send-create'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'
 import { videoCommentGetValidator } from '../../middlewares/validators/video-comments'
@@ -36,6 +37,10 @@ activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub(asyncMiddleware(videosGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoController))
 )
+activityPubClientRouter.get('/videos/watch/:id/activity',
+  executeIfActivityPub(asyncMiddleware(videosGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoController))
+)
 activityPubClientRouter.get('/videos/watch/:id/announces',
   executeIfActivityPub(asyncMiddleware(videosGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoAnnouncesController))
@@ -57,6 +62,10 @@ activityPubClientRouter.get('/videos/watch/:id/comments',
   executeIfActivityPub(asyncMiddleware(videoCommentsController))
 )
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
+  executeIfActivityPub(asyncMiddleware(videoCommentGetValidator)),
+  executeIfActivityPub(asyncMiddleware(videoCommentController))
+)
+activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity',
   executeIfActivityPub(asyncMiddleware(videoCommentGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoCommentController))
 )
@@ -110,6 +119,11 @@ async function videoController (req: express.Request, res: express.Response, nex
   const videoAll = await VideoModel.loadAndPopulateAll(video.id)
   const audience = await getAudience(video.VideoChannel.Account.Actor, undefined, video.privacy === VideoPrivacy.PUBLIC)
   const videoObject = audiencify(videoAll.toActivityPubObject(), audience)
+
+  if (req.path.endsWith('/activity')) {
+    const data = await createActivityData(video.url, video.VideoChannel.Account.Actor, videoObject, undefined, audience)
+    return res.json(activityPubContextify(data))
+  }
 
   return res.json(activityPubContextify(videoObject))
 }
@@ -189,6 +203,11 @@ async function videoCommentController (req: express.Request, res: express.Respon
   const audience = await getAudience(videoComment.Account.Actor, undefined, isPublic)
 
   const videoCommentObject = audiencify(videoComment.toActivityPubObject(threadParentComments), audience)
+
+  if (req.path.endsWith('/activity')) {
+    const data = await createActivityData(videoComment.url, videoComment.Account.Actor, videoCommentObject, undefined, audience)
+    return res.json(activityPubContextify(data))
+  }
 
   return res.json(activityPubContextify(videoCommentObject))
 }
