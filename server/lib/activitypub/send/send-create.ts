@@ -145,7 +145,7 @@ async function createActivityData (
 
   return audiencify({
     type: 'Create',
-    id: url,
+    id: url + '/activity',
     actor: byActor.url,
     object: audiencify(object, audience)
   }, audience)
