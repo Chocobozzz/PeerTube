@@ -11,6 +11,7 @@
 
 You need at least 512MB RAM to run the script.
 Scripts can be launched directly from a PeerTube server, or from a separate server, even a desktop PC.
+You need to follow all the following steps even if you are on a PeerTube server.
 
 ### Dependencies
 
@@ -21,20 +22,20 @@ Install the [PeerTube dependencies](dependencies.md).
 Clone the PeerTube repo to get the latest version (even if you are on your PeerTube server):
 
 ```
-git clone https://github.com/Chocobozzz/PeerTube.git
-CLONE="$(pwd)/PeerTube"
+$ git clone https://github.com/Chocobozzz/PeerTube.git
+$ CLONE="$(pwd)/PeerTube"
 ```
 
 Run ``yarn install``
 ```
-cd ${CLONE}
-yarn install
+$ cd ${CLONE}
+$ yarn install
 ```
 
 Build server tools:
 ```
-cd ${CLONE}
-npm run build:server
+$ cd ${CLONE}
+$ npm run build:server
 ```
 
 ## Tools 
@@ -46,8 +47,8 @@ Be sure you own the videos or have the author's authorization to do so.
 
 
 ```
-cd ${CLONE}
-node dist/server/tools/import-videos.js -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD" -t "TARGET_URL"
+$ cd ${CLONE}
+$ node dist/server/tools/import-videos.js -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD" -t "TARGET_URL"
 ```
 
  * PEERTUBE_URL : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re/
@@ -69,6 +70,6 @@ node dist/server/tools/import-videos.js -u "PEERTUBE_URL" -U "PEERTUBE_USER" --p
 You can use this script to import videos directly from the CLI.
 
 ```
-cd ${CLONE}
-node dist/server/tools/upload.js --help
+$ cd ${CLONE}
+$ node dist/server/tools/upload.js --help
 ```

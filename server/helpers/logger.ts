@@ -73,11 +73,39 @@ const logger = new winston.createLogger({
   exitOnError: true
 })
 
+function bunyanLogFactory (level: string) {
+  return function () {
+    let meta = null
+    let args = [].concat(arguments)
+
+    if (arguments[ 0 ] instanceof Error) {
+      meta = arguments[ 0 ].toString()
+      args = Array.prototype.slice.call(arguments, 1)
+      args.push(meta)
+    } else if (typeof (args[ 0 ]) !== 'string') {
+      meta = arguments[ 0 ]
+      args = Array.prototype.slice.call(arguments, 1)
+      args.push(meta)
+    }
+
+    logger[ level ].apply(logger, args)
+  }
+}
+const bunyanLogger = {
+  trace: bunyanLogFactory('debug'),
+  debug: bunyanLogFactory('debug'),
+  info: bunyanLogFactory('info'),
+  warn: bunyanLogFactory('warn'),
+  error: bunyanLogFactory('error'),
+  fatal: bunyanLogFactory('error')
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   timestampFormatter,
   labelFormatter,
   consoleLoggerFormat,
-  logger
+  logger,
+  bunyanLogger
 }
