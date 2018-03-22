@@ -106,6 +106,7 @@ const CONFIG = {
     USERNAME: config.get<string>('smtp.username'),
     PASSWORD: config.get<string>('smtp.password'),
     TLS: config.get<boolean>('smtp.tls'),
+    DISABLE_STARTTLS: config.get<boolean>('smtp.disable_starttls'),
     CA_FILE: config.get<string>('smtp.ca_file'),
     FROM_ADDRESS: config.get<string>('smtp.from_address')
   },

@@ -28,6 +28,7 @@ smtp:
   username: null
   password: null
   tls: true
+  disable_starttls: false
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 

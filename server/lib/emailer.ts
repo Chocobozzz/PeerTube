@@ -46,7 +46,7 @@ class Emailer {
         secure: CONFIG.SMTP.TLS,
         debug: CONFIG.LOG.LEVEL === 'debug',
         logger: bunyanLogger as any,
-        ignoreTLS: isTestInstance() || CONFIG.SMTP.HOSTNAME === 'localhost' || CONFIG.SMTP.HOSTNAME === '127.0.0.1',
+        ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
         tls,
         auth
       })
