@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { AboutModule } from '@app/about'
+import { ServerService } from '@app/core'
 import { ResetPasswordModule } from '@app/reset-password'
 
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
@@ -17,15 +18,14 @@ import { SharedModule } from './shared'
 import { SignupModule } from './signup'
 import { VideosModule } from './videos'
 
-export function metaFactory (): MetaLoader {
+export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
     pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
     pageTitleSeparator: ' - ',
-    applicationName: 'PeerTube',
+    get applicationName () { return serverService.getConfig().instance.name },
     defaults: {
-      title: 'PeerTube',
-      description: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
-                   'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular. '
+      get title () { return serverService.getConfig().instance.name },
+      get description () { return serverService.getConfig().instance.shortDescription }
     }
   })
 }
@@ -57,7 +57,8 @@ export function metaFactory (): MetaLoader {
 
     MetaModule.forRoot({
       provide: MetaLoader,
-      useFactory: (metaFactory)
+      useFactory: (metaFactory),
+      deps: [ ServerService ]
     })
   ],
   providers: [ ]

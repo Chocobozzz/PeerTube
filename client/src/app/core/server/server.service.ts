@@ -21,7 +21,8 @@ export class ServerService {
   private config: ServerConfig = {
     instance: {
       name: 'PeerTube',
-      shortDescription: '',
+      shortDescription: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
+                        'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.',
       defaultClientRoute: '',
       customizations: {
         javascript: '',
