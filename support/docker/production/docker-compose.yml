@@ -29,7 +29,7 @@ services:
       traefik.frontend.rule: "Host:${PEERTUBE_HOSTNAME}"
       traefik.port: "9000"
     volumes:
-      - ./data:/usr/src/app/data
+      - ./data:/data
     depends_on:
       - postgres
       - redis
