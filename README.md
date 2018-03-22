@@ -60,6 +60,12 @@ donating to them](https://soutenir.framasoft.org/en/).**
   </a>
 </p>
 
+<p align="center">
+  <strong><a title="Website" target="_blank" href="https://joinpeertube.org">Website</a> |
+  <a title="Instances list" target="_blank" href="https://instances.joinpeertube.org">Instances list</a>
+  </strong>
+</p>
+
 ## Demonstration
 
 Want to see it in action?
@@ -70,6 +76,8 @@ Want to see it in action?
      * [peertube3.cpy.re](http://peertube3.cpy.re)
    * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
      to see what the "decentralization feature" looks like
+   * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) to see
+   the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon)
 
 ## Why
 
