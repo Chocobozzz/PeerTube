@@ -10,8 +10,9 @@
 - [If a client requests each chunk of a video through HTTP, will the server be overloaded?](#if-a-client-requests-each-chunk-of-a-video-through-http-will-the-server-be-overloaded)
 - [Will an index of all the videos of servers you follow be too large for small servers?](#will-an-index-of-all-the-videos-of-servers-you-follow-be-too-large-for-small-servers)
 - [What codecs can I use for the videos I want to upload?](#what-codecs-can-i-use-for-the-videos-i-want-to-upload)
-- [I want to change my host, how can I do that?](#i-want-to-change-my-host-how-can-i-do-that)
+- [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
+- [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
 - [Are you going to use the Steem blockchain?](#are-you-going-to-use-the-steem-blockchain)
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
@@ -49,9 +50,10 @@ We think it is acceptable for a video platform.
 WEBM, MP4 or OGV videos.
 
 
-## I want to change my host, how can I do that?
+## I want to change my domain name, how can I do that?
 
 You can't. You'll need to re install an instance and reupload your videos.
+
 
 ## Should I have a big server to run PeerTube?
 
@@ -63,6 +65,13 @@ So you would need:
  * **CPU** 1 core if you don't enable transcoding, 2 at least if you enable it
  * **RAM** 1GB
  * **Storage** Completely depends on how many videos your users will upload
+
+
+## Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?
+
+Yes you can, but you won't be able to send data to users that watch the video in their web browser.
+The reason is they connects to peers through WebRTC whereas your BitTorrent client uses classic TCP/UDP.
+We hope to see compatibility with WebRTC in popular BitTorrent client in the future. See this issue for more information: https://github.com/webtorrent/webtorrent/issues/369
 
 
 ## Are you going to use the Steem blockchain?
