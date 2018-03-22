@@ -113,7 +113,7 @@ coder to help!
 
 For now only on Github:
 
- * HTML version: [/support/doc/api/html/index.html](/support/doc/api/html/index.html)
+ * HTML version: [/support/doc/api/html/index.html](https://htmlpreview.github.io/?https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/html/index.html)
  * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
 
 ## Tools
