@@ -1,5 +1,6 @@
 import { ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub'
 import { DislikeObject } from '../../../../shared/models/activitypub/objects'
+import { getActorUrl } from '../../../helpers/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
@@ -13,12 +14,14 @@ import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 async function processUndoActivity (activity: ActivityUndo) {
   const activityToUndo = activity.object
 
+  const actorUrl = getActorUrl(activity.actor)
+
   if (activityToUndo.type === 'Like') {
-    return processUndoLike(activity.actor, activity)
+    return processUndoLike(actorUrl, activity)
   } else if (activityToUndo.type === 'Create' && activityToUndo.object.type === 'Dislike') {
-    return processUndoDislike(activity.actor, activity)
+    return processUndoDislike(actorUrl, activity)
   } else if (activityToUndo.type === 'Follow') {
-    return processUndoFollow(activity.actor, activityToUndo)
+    return processUndoFollow(actorUrl, activityToUndo)
   }
 
   logger.warn('Unknown activity object type %s -> %s when undo activity.', activityToUndo.type, { activity: activity.id })

@@ -24,7 +24,7 @@ function isBaseActivityValid (activity: any, type: string) {
   return (activity['@context'] === undefined || Array.isArray(activity['@context'])) &&
     activity.type === type &&
     isActivityPubUrlValid(activity.id) &&
-    isActivityPubUrlValid(activity.actor) &&
+    (isActivityPubUrlValid(activity.actor) || isActivityPubUrlValid(activity.actor.id)) &&
     (
       activity.to === undefined ||
       (Array.isArray(activity.to) && activity.to.every(t => isActivityPubUrlValid(t)))

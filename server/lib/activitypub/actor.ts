@@ -5,6 +5,7 @@ import * as url from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
+import { getActorUrl } from '../../helpers/activitypub'
 import { isActorObjectValid } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
@@ -34,7 +35,9 @@ function setAsyncActorKeys (actor: ActorModel) {
     })
 }
 
-async function getOrCreateActorAndServerAndModel (actorUrl: string, recurseIfNeeded = true) {
+async function getOrCreateActorAndServerAndModel (activityActor: string | ActivityPubActor, recurseIfNeeded = true) {
+  const actorUrl = getActorUrl(activityActor)
+
   let actor = await ActorModel.loadByUrl(actorUrl)
 
   // We don't have this actor in our database, fetch it on remote

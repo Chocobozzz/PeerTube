@@ -1,5 +1,5 @@
 import { ResultList } from '../../shared/models'
-import { Activity } from '../../shared/models/activitypub'
+import { Activity, ActivityPubActor } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB } from '../initializers'
 import { ActorModel } from '../models/activitypub/actor'
 import { signObject } from './peertube-crypto'
@@ -98,9 +98,16 @@ function buildSignedActivity (byActor: ActorModel, data: Object) {
   return signObject(byActor, activity) as Promise<Activity>
 }
 
+function getActorUrl (activityActor: string | ActivityPubActor) {
+  if (typeof activityActor === 'string') return activityActor
+
+  return activityActor.id
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  getActorUrl,
   activityPubContextify,
   activityPubCollectionPagination,
   activityPubCollection,

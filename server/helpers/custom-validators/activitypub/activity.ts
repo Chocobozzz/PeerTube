@@ -26,7 +26,7 @@ function isRootActivityValid (activity: any) {
     ) ||
     (
       isActivityPubUrlValid(activity.id) &&
-      isActivityPubUrlValid(activity.actor)
+      (isActivityPubUrlValid(activity.actor) || isActivityPubUrlValid(activity.actor.id))
     )
 }
 

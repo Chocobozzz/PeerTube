@@ -22,7 +22,7 @@ export interface BaseActivity {
   id: string
   to?: string[]
   cc?: string[]
-  actor: string
+  actor: string | ActivityPubActor
   type: ActivityType
   signature?: ActivityPubSignature
 }
