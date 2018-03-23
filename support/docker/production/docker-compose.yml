@@ -4,8 +4,8 @@ services:
 
   peertube:
     build:
-      context: ../../../
-      dockerfile: ./support/docker/production/Dockerfile.stretch
+      context: .
+      dockerfile: ./Dockerfile.stretch
     image: peertube:stretch
     environment:
       PEERTUBE_HOSTNAME: my.domain.tld
@@ -18,7 +18,7 @@ services:
       PEERTUBE_SIGNUP_ENABLED: "true"
       PEERTUBE_TRANSCODING_ENABLED: "true"
       PEERTUBE_REDIS_HOSTNAME: redis
-      PEERTUBE_SMTP_HOSTNAME: mail.domain.tld
+      PEERTUBE_SMTP_HOSTNAME: null
       PEERTUBE_SMTP_PORT: 25
       PEERTUBE_SMTP_FROM: noreply@peertube.domain.tld
       PEERTUBE_SMTP_TLS: "true"

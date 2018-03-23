@@ -15,11 +15,13 @@ database:
   username: 'peertube'
   password: 'peertube'
 
+# Redis server for short time storage
 redis:
   hostname: 'localhost'
   port: 6379
   auth: null
 
+# SMTP server to send emails
 smtp:
   hostname: null
   port: 465
@@ -84,6 +86,7 @@ transcoding:
     720p: false
     1080p: false
 
+# Instance settings
 instance:
   name: 'PeerTube'
   short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'

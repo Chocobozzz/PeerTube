@@ -5,10 +5,9 @@ RUN apt-get update \
  && apt-get -y install ffmpeg \
  && rm /var/lib/apt/lists/* -fR
 
-# Install the application
-WORKDIR /app
+RUN git clone -b master https://github.com/Chocobozzz/PeerTube /app
 
-COPY . ./
+WORKDIR /app
 RUN yarn install --pure-lockfile && npm run build
 
 # Configure the application
@@ -16,6 +15,7 @@ RUN groupadd -g 991 peertube \
  && useradd -u 991 -g peertube -d /data -m peertube
 USER peertube
 
+RUN cp /app/config/default.yaml /app/support/docker/production/config/default.yaml
 ENV NODE_ENV production
 ENV NODE_CONFIG_DIR /app/support/docker/production/config
 
