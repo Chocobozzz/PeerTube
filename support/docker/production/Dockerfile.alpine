@@ -4,19 +4,25 @@ FROM node:8-alpine
 RUN apk add --no-cache ffmpeg openssl bash make g++ git \
  && apk add --no-cache --repository https://dl-3.alpinelinux.org/alpine/edge/testing/ vips-dev fftw-dev
 
-RUN git clone -b master https://github.com/Chocobozzz/PeerTube /app
-
-WORKDIR /app
-RUN bash -c 'yarn install --pure-lockfile && npm run build'
-
-# Configure the application
+# Add peertube user
 RUN addgroup -g 991 peertube \
- && adduser -D -u 991 -G peertube -h /data peertube
-USER peertube
+    && adduser -D -u 991 -G peertube peertube
 
+# Download the latest version
+RUN git clone https://github.com/Chocobozzz/PeerTube /app \
+    && chown -R peertube:peertube /app
+
+# Install PeerTube
+USER peertube
+WORKDIR /app
+
+RUN yarn install --pure-lockfile \
+    && npm run build
+
+# Configure PeerTube
 RUN cp /app/config/default.yaml /app/support/docker/production/config/default.yaml
 ENV NODE_ENV production
-ENV NODE_CONFIG_DIR /app/support/docker/production/config/
+ENV NODE_CONFIG_DIR /app/support/docker/production/config
 
 # Run the application
 CMD ["npm", "start"]
