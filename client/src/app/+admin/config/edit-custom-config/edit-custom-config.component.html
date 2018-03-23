@@ -57,6 +57,9 @@
         <option value="/videos/local">Local videos</option>
       </select>
     </div>
+    <div *ngIf="formErrors.instanceDefaultClientRoute" class="form-error">
+      {{ formErrors.instanceDefaultClientRoute }}
+    </div>
   </div>
 
   <div class="inner-form-title">Cache</div>
@@ -116,6 +119,9 @@
         </option>
       </select>
     </div>
+    <div *ngIf="formErrors.userVideoQuota" class="form-error">
+      {{ formErrors.userVideoQuota }}
+    </div>
   </div>
 
   <div class="inner-form-title">Transcoding</div>
@@ -137,6 +143,9 @@
             {{ transcodingThreadOption.label }}
           </option>
         </select>
+      </div>
+      <div *ngIf="formErrors.transcodingThreads" class="form-error">
+        {{ formErrors.transcodingThreads }}
       </div>
     </div>
 
