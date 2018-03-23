@@ -126,7 +126,7 @@ function getOriginVideoCommentAudience (
 
 function getObjectFollowersAudience (actorsInvolvedInObject: ActorModel[]) {
   return {
-    to: actorsInvolvedInObject.map(a => a.followersUrl),
+    to: [ ACTIVITY_PUB.PUBLIC ].concat(actorsInvolvedInObject.map(a => a.followersUrl)),
     cc: []
   }
 }
