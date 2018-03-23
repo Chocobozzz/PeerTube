@@ -177,7 +177,9 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
 
 async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentObject | string, actor?: ActorModel) {
   if (typeof videoObject === 'string') {
-    const videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoObject)
+    const videoUrl = videoObject
+
+    const videoFromDatabase = await VideoModel.loadByUrlAndPopulateAccount(videoUrl)
     if (videoFromDatabase) {
       return {
         video: videoFromDatabase,
@@ -186,8 +188,8 @@ async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentOb
       }
     }
 
-    videoObject = await fetchRemoteVideo(videoObject)
-    if (!videoObject) throw new Error('Cannot fetch remote video (maybe invalid...)')
+    videoObject = await fetchRemoteVideo(videoUrl)
+    if (!videoObject) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
   }
 
   if (!actor) {
@@ -268,9 +270,12 @@ async function addVideoShares (instance: VideoModel, shareUrls: string[]) {
       json: true,
       activityPub: true
     })
-    const actorUrl = body.actor
-    if (!actorUrl) continue
+    if (!body || !body.actor) {
+      logger.warn('Cannot add remote share with url: %s, skipping...', shareUrl)
+      continue
+    }
 
+    const actorUrl = body.actor
     const actor = await getOrCreateActorAndServerAndModel(actorUrl)
 
     const entry = {
