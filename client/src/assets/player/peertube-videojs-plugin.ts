@@ -44,7 +44,24 @@ function bytes (value) {
 
 // videojs typings don't have some method we need
 const videojsUntyped = videojs as any
-const webtorrent = new WebTorrent({ dht: false })
+const webtorrent = new WebTorrent({
+  tracker: {
+    rtcConfig: {
+      iceServers: [
+        {
+          urls: 'stun:stun.stunprotocol.org'
+        },
+        {
+          urls: 'stun:stun.framasoft.org'
+        },
+        {
+          urls: 'stun:stun.l.google.com:19302'
+        }
+      ]
+    }
+  },
+  dht: false
+})
 
 const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
 class ResolutionMenuItem extends MenuItem {
