@@ -50,6 +50,18 @@ balancer, although any HTTP reverse proxy will work fine. See the example
 Nginx configuration `support/nginx/peertube` file to get an idea of
 recommendations and requirements to run PeerTube the most efficiently.
 
+When starting the containers for the first time, you will get permissions errors for the data volume, like this one:
+
+```
+Error: EACCES: permission denied, mkdir '/data/logs'
+```
+
+The peertube user inside the container has a UID and GID of 991 so you have to change the folder's owner, in the case you're using `./data`:
+
+```
+chown -R 991:991 data/
+```
+
 **Important**: note that you'll get the initial `root` user password from the
 program output, so check out your logs to find them.
 
