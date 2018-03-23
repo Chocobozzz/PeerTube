@@ -53,9 +53,6 @@ const webtorrent = new WebTorrent({
         },
         {
           urls: 'stun:stun.framasoft.org'
-        },
-        {
-          urls: 'stun:stun.l.google.com:19302'
         }
       ]
     }
