@@ -22,10 +22,15 @@ export const USER_EMAIL = {
   }
 }
 export const USER_PASSWORD = {
-  VALIDATORS: [ Validators.required, Validators.minLength(6) ],
+  VALIDATORS: [
+    Validators.required,
+    Validators.minLength(6),
+    Validators.maxLength(255)
+  ],
   MESSAGES: {
     'required': 'Password is required.',
-    'minlength': 'Password must be at least 6 characters long.'
+    'minlength': 'Password must be at least 6 characters long.',
+    'maxlength': 'Password cannot be more than 255 characters long.'
   }
 }
 export const USER_VIDEO_QUOTA = {
