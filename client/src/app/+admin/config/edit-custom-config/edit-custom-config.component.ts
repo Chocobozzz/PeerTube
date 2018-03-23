@@ -123,6 +123,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           this.oldCustomJavascript = this.customConfig.instance.customizations.javascript
 
           this.updateForm()
+          // Force form validation
+          this.forceCheck()
         },
 
         err => this.notificationsService.error('Error', err.message)
