@@ -302,9 +302,16 @@ class PeerTubePlugin extends Plugin {
     const previousVideoFile = this.currentVideoFile
     this.currentVideoFile = videoFile
 
-    console.log('Adding ' + videoFile.magnetUri + '.')
-    this.torrent = webtorrent.add(videoFile.magnetUri, torrent => {
-      console.log('Added ' + videoFile.magnetUri + '.')
+    this.addTorrent(this.currentVideoFile.magnetUri, previousVideoFile, done)
+
+    this.trigger('videoFileUpdate')
+  }
+
+  addTorrent (magnetOrTorrentUrl: string, previousVideoFile: VideoFile, done: Function) {
+    console.log('Adding ' + magnetOrTorrentUrl + '.')
+
+    this.torrent = webtorrent.add(magnetOrTorrentUrl, torrent => {
+      console.log('Added ' + magnetOrTorrentUrl + '.')
 
       this.flushVideoFile(previousVideoFile)
 
@@ -325,19 +332,25 @@ class PeerTubePlugin extends Plugin {
     })
 
     this.torrent.on('error', err => this.handleError(err))
+
     this.torrent.on('warning', (err: any) => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
       if (err.message.indexOf('Unsupported tracker protocol') !== -1) return
+
       // Users don't care about issues with WebRTC, but developers do so log it in the console
       if (err.message.indexOf('Ice connection failed') !== -1) {
         console.error(err)
         return
       }
 
+      // Magnet hash is not up to date with the torrent file, add directly the torrent file
+      if (err.message.indexOf('incorrect info hash') !== -1) {
+        console.error('Incorrect info hash detected, falling back to torrent file.')
+        return this.addTorrent(this.torrent['xs'], previousVideoFile, done)
+      }
+
       return this.handleError(err)
     })
-
-    this.trigger('videoFileUpdate')
   }
 
   updateResolution (resolutionId: number) {
