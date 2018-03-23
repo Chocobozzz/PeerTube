@@ -13,17 +13,9 @@ async function migrate () {
 
   let actualVersion: number = null
 
-  // Search in "Applications" or "application" tables
-  try {
-    const [ rows ] = await sequelizeTypescript.query('SELECT "migrationVersion" FROM "Applications"')
-    if (rows && rows[ 0 ] && rows[ 0 ].migrationVersion) {
-      actualVersion = rows[ 0 ].migrationVersion
-    }
-  } catch {
-    const [ rows ] = await sequelizeTypescript.query('SELECT "migrationVersion" FROM "application"')
-    if (rows && rows[0] && rows[0].migrationVersion) {
-      actualVersion = rows[0].migrationVersion
-    }
+  const [ rows ] = await sequelizeTypescript.query('SELECT "migrationVersion" FROM "application"')
+  if (rows && rows[0] && rows[0].migrationVersion) {
+    actualVersion = rows[0].migrationVersion
   }
 
   if (actualVersion === null) {
