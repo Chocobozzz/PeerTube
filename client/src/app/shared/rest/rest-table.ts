@@ -1,3 +1,4 @@
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 
@@ -15,7 +16,7 @@ export abstract class RestTable {
   protected abstract loadData (): void
 
   loadSort () {
-    const result = localStorage.getItem(this.sortLocalStorageKey)
+    const result = peertubeLocalStorage.getItem(this.sortLocalStorageKey)
 
     if (result) {
       try {
@@ -42,7 +43,7 @@ export abstract class RestTable {
   }
 
   saveSort () {
-    localStorage.setItem(this.sortLocalStorageKey, JSON.stringify(this.sort))
+    peertubeLocalStorage.setItem(this.sortLocalStorageKey, JSON.stringify(this.sort))
   }
 
 }

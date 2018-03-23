@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/primeng'
 import { Job } from '../../../../../../shared/index'
 import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'
-import { viewportHeight } from '../../../shared/misc/utils'
-import { JobService } from '../shared'
 import { RestExtractor } from '../../../shared/rest/rest-extractor.service'
+import { JobService } from '../shared'
 
 @Component({
   selector: 'my-jobs-list',
@@ -56,12 +56,12 @@ export class JobsListComponent extends RestTable implements OnInit {
   }
 
   private loadJobState () {
-    const result = localStorage.getItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE)
+    const result = peertubeLocalStorage.getItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE)
 
     if (result) this.jobState = result as JobState
   }
 
   private saveJobState () {
-    localStorage.setItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE, this.jobState)
+    peertubeLocalStorage.setItem(JobsListComponent.JOB_STATE_LOCAL_STORAGE_STATE, this.jobState)
   }
 }

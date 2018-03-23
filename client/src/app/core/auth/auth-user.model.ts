@@ -1,7 +1,8 @@
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 // Do not use the barrel (dependency loop)
 import { hasUserRight, UserRole } from '../../../../../shared/models/users/user-role'
 import { User, UserConstructorHash } from '../../shared/users/user.model'
-import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 
 export type TokenOptions = {
   accessToken: string
@@ -22,9 +23,9 @@ class Tokens {
   tokenType: string
 
   static load () {
-    const accessTokenLocalStorage = localStorage.getItem(this.KEYS.ACCESS_TOKEN)
-    const refreshTokenLocalStorage = localStorage.getItem(this.KEYS.REFRESH_TOKEN)
-    const tokenTypeLocalStorage = localStorage.getItem(this.KEYS.TOKEN_TYPE)
+    const accessTokenLocalStorage = peertubeLocalStorage.getItem(this.KEYS.ACCESS_TOKEN)
+    const refreshTokenLocalStorage = peertubeLocalStorage.getItem(this.KEYS.REFRESH_TOKEN)
+    const tokenTypeLocalStorage = peertubeLocalStorage.getItem(this.KEYS.TOKEN_TYPE)
 
     if (accessTokenLocalStorage && refreshTokenLocalStorage && tokenTypeLocalStorage) {
       return new Tokens({
@@ -38,9 +39,9 @@ class Tokens {
   }
 
   static flush () {
-    localStorage.removeItem(this.KEYS.ACCESS_TOKEN)
-    localStorage.removeItem(this.KEYS.REFRESH_TOKEN)
-    localStorage.removeItem(this.KEYS.TOKEN_TYPE)
+    peertubeLocalStorage.removeItem(this.KEYS.ACCESS_TOKEN)
+    peertubeLocalStorage.removeItem(this.KEYS.REFRESH_TOKEN)
+    peertubeLocalStorage.removeItem(this.KEYS.TOKEN_TYPE)
   }
 
   constructor (hash?: TokenOptions) {
@@ -57,9 +58,9 @@ class Tokens {
   }
 
   save () {
-    localStorage.setItem(Tokens.KEYS.ACCESS_TOKEN, this.accessToken)
-    localStorage.setItem(Tokens.KEYS.REFRESH_TOKEN, this.refreshToken)
-    localStorage.setItem(Tokens.KEYS.TOKEN_TYPE, this.tokenType)
+    peertubeLocalStorage.setItem(Tokens.KEYS.ACCESS_TOKEN, this.accessToken)
+    peertubeLocalStorage.setItem(Tokens.KEYS.REFRESH_TOKEN, this.refreshToken)
+    peertubeLocalStorage.setItem(Tokens.KEYS.TOKEN_TYPE, this.tokenType)
   }
 }
 
@@ -76,16 +77,16 @@ export class AuthUser extends User {
   tokens: Tokens
 
   static load () {
-    const usernameLocalStorage = localStorage.getItem(this.KEYS.USERNAME)
+    const usernameLocalStorage = peertubeLocalStorage.getItem(this.KEYS.USERNAME)
     if (usernameLocalStorage) {
       return new AuthUser(
         {
-          id: parseInt(localStorage.getItem(this.KEYS.ID), 10),
-          username: localStorage.getItem(this.KEYS.USERNAME),
-          email: localStorage.getItem(this.KEYS.EMAIL),
-          role: parseInt(localStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
-          displayNSFW: localStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true',
-          autoPlayVideo: localStorage.getItem(this.KEYS.AUTO_PLAY_VIDEO) === 'true'
+          id: parseInt(peertubeLocalStorage.getItem(this.KEYS.ID), 10),
+          username: peertubeLocalStorage.getItem(this.KEYS.USERNAME),
+          email: peertubeLocalStorage.getItem(this.KEYS.EMAIL),
+          role: parseInt(peertubeLocalStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
+          displayNSFW: peertubeLocalStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true',
+          autoPlayVideo: peertubeLocalStorage.getItem(this.KEYS.AUTO_PLAY_VIDEO) === 'true'
         },
         Tokens.load()
       )
@@ -95,12 +96,12 @@ export class AuthUser extends User {
   }
 
   static flush () {
-    localStorage.removeItem(this.KEYS.USERNAME)
-    localStorage.removeItem(this.KEYS.ID)
-    localStorage.removeItem(this.KEYS.ROLE)
-    localStorage.removeItem(this.KEYS.DISPLAY_NSFW)
-    localStorage.removeItem(this.KEYS.AUTO_PLAY_VIDEO)
-    localStorage.removeItem(this.KEYS.EMAIL)
+    peertubeLocalStorage.removeItem(this.KEYS.USERNAME)
+    peertubeLocalStorage.removeItem(this.KEYS.ID)
+    peertubeLocalStorage.removeItem(this.KEYS.ROLE)
+    peertubeLocalStorage.removeItem(this.KEYS.DISPLAY_NSFW)
+    peertubeLocalStorage.removeItem(this.KEYS.AUTO_PLAY_VIDEO)
+    peertubeLocalStorage.removeItem(this.KEYS.EMAIL)
     Tokens.flush()
   }
 
@@ -131,12 +132,12 @@ export class AuthUser extends User {
   }
 
   save () {
-    localStorage.setItem(AuthUser.KEYS.ID, this.id.toString())
-    localStorage.setItem(AuthUser.KEYS.USERNAME, this.username)
-    localStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
-    localStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
-    localStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW))
-    localStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
+    peertubeLocalStorage.setItem(AuthUser.KEYS.ID, this.id.toString())
+    peertubeLocalStorage.setItem(AuthUser.KEYS.USERNAME, this.username)
+    peertubeLocalStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
+    peertubeLocalStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
+    peertubeLocalStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW))
+    peertubeLocalStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
     this.tokens.save()
   }
 }

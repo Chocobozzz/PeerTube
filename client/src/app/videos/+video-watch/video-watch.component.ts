@@ -1,6 +1,7 @@
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { NotificationsService } from 'angular2-notifications'
@@ -75,7 +76,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    if (WebTorrent.WEBRTC_SUPPORT === false || localStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true') {
+    if (
+      WebTorrent.WEBRTC_SUPPORT === false ||
+      peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
+    ) {
       this.hasAlreadyAcceptedPrivacyConcern = true
     }
 
@@ -262,7 +266,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   acceptedPrivacyConcern () {
-    localStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
+    peertubeLocalStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
     this.hasAlreadyAcceptedPrivacyConcern = true
   }
 

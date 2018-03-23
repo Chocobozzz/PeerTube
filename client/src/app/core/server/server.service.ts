@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
@@ -140,11 +141,11 @@ export class ServerService {
   }
 
   private saveConfigLocally (config: ServerConfig) {
-    localStorage.setItem(ServerService.CONFIG_LOCAL_STORAGE_KEY, JSON.stringify(config))
+    peertubeLocalStorage.setItem(ServerService.CONFIG_LOCAL_STORAGE_KEY, JSON.stringify(config))
   }
 
   private loadConfigLocally () {
-    const configString = localStorage.getItem(ServerService.CONFIG_LOCAL_STORAGE_KEY)
+    const configString = peertubeLocalStorage.getItem(ServerService.CONFIG_LOCAL_STORAGE_KEY)
 
     if (configString) {
       try {
