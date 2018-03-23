@@ -50,7 +50,6 @@ balancer, although any HTTP reverse proxy will work fine. See the example
 Nginx configuration `support/nginx/peertube` file to get an idea of
 recommendations and requirements to run PeerTube the most efficiently.
 
-
 When starting the containers for the first time, you will get permissions errors for the data volume, like this one:
 
 ```
