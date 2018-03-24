@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+
+set -eu
 
 if [ $# -eq 0 ]; then
     echo "Need test suite argument."
@@ -21,9 +23,9 @@ elif [ "$1" = "api-slow" ]; then
     npm run build:server
     mocha --timeout 5000 --exit --require ts-node/register/type-check --bail server/tests/api/index-slow.ts
 elif [ "$1" = "lint" ]; then
-    cd client || exit -1
-    npm run lint || exit -1
+    ( cd client
+      npm run lint
+    )
 
-    cd .. || exit -1
-    npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts" || exit -1
+    npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
 fi

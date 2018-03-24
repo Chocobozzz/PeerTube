@@ -1,5 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
-cd client || exit -1
+set -eu
+
+cd client
 
 npm run webpack-bundle-analyzer ./dist/stats.json
