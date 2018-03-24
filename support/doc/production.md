@@ -51,7 +51,11 @@ $ sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/down
 $ sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
-Install Peertube
+Install Peertube. If you're using CentOS7, do not forget to activate the devtoolset-6 software collection:
+```
+$ scl enable devtool-6 bash
+```
+And after that, follow the step as usual. Do not forget to exit the environment after installing Peertube.
 ```
 $ cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 $ cd ./peertube-latest && sudo -H -u peertube yarn install --production --pure-lockfile
