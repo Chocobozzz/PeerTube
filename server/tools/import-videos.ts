@@ -53,7 +53,10 @@ async function run () {
 
   const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
   youtubeDL.getInfo(program['targetUrl'], options, processOptions, async (err, info) => {
-    if (err) throw err
+    if (err) {
+      console.log(err.message);
+      process.exit(1);
+    }
 
     let infoArray: any[]
 
@@ -157,7 +160,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
 
       await uploadVideo(program['url'], accessToken, videoAttributes)
     } else {
-      throw err
+      console.log(err.message);
+      process.exit(1);
     }
   }
 
