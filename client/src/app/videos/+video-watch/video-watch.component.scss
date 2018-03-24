@@ -203,7 +203,9 @@
       font-size: 15px;
 
       .video-info-description-html {
-        word-break: break-all;
+        word-break: normal;
+		word-wrap: normal;
+		text-align: justify;
       }
 
       .description-loading {
@@ -238,6 +240,8 @@
   }
 
   .other-videos {
+	padding-left: 1em;
+
     .title-page {
       margin-top: 0;
     }
