@@ -226,7 +226,7 @@ const CONSTRAINTS_FIELDS = {
     COUNT: { min: 0 }
   },
   VIDEO_COMMENTS: {
-    TEXT: { min: 2, max: 3000 }, // Length
+    TEXT: { min: 1, max: 3000 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_SHARE: {

@@ -46,15 +46,19 @@ $ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip pyth
   2. Install yarn:
      [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
   3. Install or compile ffmpeg:
-     * Install - [https://www.webfoobar.com/index.php/node/17](https://www.webfoobar.com/index.php/node/17)
+     * Install - [https://linoxide.com/linux-how-to/install-ffmpeg-centos-7/](https://linoxide.com/linux-how-to/install-ffmpeg-centos-7/)
      * Compile - [https://gist.github.com/mustafaturan/7053900#file-latest-ffmpeg-centos6-sh](https://gist.github.com/mustafaturan/7053900#file-latest-ffmpeg-centos6-sh)
   4. Run:
 
 ```
 $ sudo yum update
-$ sudo yum install epel-release
+$ sudo yum install epel-release centos-release-scl
 $ sudo yum update
-$ sudo yum install nginx postgresql postgresql-server openssl gcc make redis git
+$ sudo yum install nginx postgresql postgresql-server openssl gcc-c++ make redis git devtoolset-6
+```
+
+  5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-6.
+$ sudo scl devtoolset-6 bash
 ```
 
 ## Other distributions
