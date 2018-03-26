@@ -93,14 +93,14 @@ async function followRetry (req: express.Request, res: express.Response, next: e
 
         return retryTransactionWrapper(follow, options)
       })
-      .catch(err => logger.warn('Cannot follow server %s.', sanitizedHost, err))
+      .catch(err => logger.warn('Cannot follow server %s.', sanitizedHost, { err }))
 
     tasks.push(p)
   }
 
   // Don't make the client wait the tasks
   Promise.all(tasks)
-    .catch(err => logger.error('Error in follow.', err))
+    .catch(err => logger.error('Error in follow.', { err }))
 
   return res.status(204).end()
 }
@@ -144,7 +144,7 @@ async function removeFollow (req: express.Request, res: express.Response, next: 
   // This could be long so don't wait this task
   const following = follow.ActorFollowing
   following.destroy()
-    .catch(err => logger.error('Cannot destroy actor that we do not follow anymore %s.', following.url, err))
+    .catch(err => logger.error('Cannot destroy actor that we do not follow anymore %s.', following.url, { err }))
 
   return res.status(204).end()
 }

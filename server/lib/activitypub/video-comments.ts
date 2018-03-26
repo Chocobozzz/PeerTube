@@ -111,7 +111,7 @@ async function resolveThread (url: string, comments: VideoCommentModel[] = []) {
 
     return { video, parents: comments }
   } catch (err) {
-    logger.debug('Cannot get or create account and video and channel for reply %s, fetch comment', url, err)
+    logger.debug('Cannot get or create account and video and channel for reply %s, fetch comment', url, { err })
 
     if (comments.length > ACTIVITY_PUB.MAX_RECURSION_COMMENTS) {
       throw new Error('Recursion limit reached when resolving a thread')

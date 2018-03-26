@@ -35,7 +35,7 @@ function isSignatureVerified (fromActor: ActorModel, signedDocument: object) {
 
   return jsig.promises.verify(signedDocument, options)
     .catch(err => {
-      logger.error('Cannot check signature.', err)
+      logger.error('Cannot check signature.', { err })
       return false
     })
 }

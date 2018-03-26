@@ -19,7 +19,7 @@ async function installApplication () {
     await createOAuthClientIfNotExist()
     await createOAuthAdminIfNotExist()
   } catch (err) {
-    logger.error('Cannot install application.', err)
+    logger.error('Cannot install application.', { err })
     process.exit(-1)
   }
 }

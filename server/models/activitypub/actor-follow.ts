@@ -118,12 +118,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
     if (goodInboxes.length !== 0) {
       ActorFollowModel.incrementScores(goodInboxes, ACTOR_FOLLOW_SCORE.BONUS, t)
-        .catch(err => logger.error('Cannot increment scores of good actor follows.', err))
+        .catch(err => logger.error('Cannot increment scores of good actor follows.', { err }))
     }
 
     if (badInboxes.length !== 0) {
       ActorFollowModel.incrementScores(badInboxes, ACTOR_FOLLOW_SCORE.PENALTY, t)
-        .catch(err => logger.error('Cannot decrement scores of bad actor follows.', err))
+        .catch(err => logger.error('Cannot decrement scores of bad actor follows.', { err }))
     }
   }
 

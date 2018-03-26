@@ -98,7 +98,7 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
   })
 
   setAsyncActorKeys(videoChannelCreated.Actor)
-    .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, err))
+    .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, { err }))
 
   logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
 
@@ -137,7 +137,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
 
     logger.info('Video channel with name %s and uuid %s updated.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
   } catch (err) {
-    logger.debug('Cannot update the video channel.', err)
+    logger.debug('Cannot update the video channel.', { err })
 
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed

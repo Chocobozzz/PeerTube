@@ -27,13 +27,21 @@ const app = express()
 // ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkConfig } from './server/initializers/checker'
 
+// Do not use barrels because we don't want to load all modules here (we need to initialize database first)
+import { logger } from './server/helpers/logger'
+import { ACCEPT_HEADERS, API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
+
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
-  throw new Error('Your configuration files miss keys: ' + missed)
+  logger.error('Your configuration files miss keys: ' + missed)
+  process.exit(-1)
 }
 
-import { ACCEPT_HEADERS, API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
 checkFFmpeg(CONFIG)
+  .catch(err => {
+    logger.error('Error in ffmpeg check.', { err })
+    process.exit(-1)
+  })
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
@@ -41,8 +49,6 @@ if (errorMessage !== null) {
 }
 
 // ----------- Database -----------
-// Do not use barrels because we don't want to load all modules here (we need to initialize database first)
-import { logger } from './server/helpers/logger'
 
 // Initialize database and models
 import { initDatabaseModels } from './server/initializers/database'

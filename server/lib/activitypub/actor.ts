@@ -30,7 +30,7 @@ function setAsyncActorKeys (actor: ActorModel) {
       return actor.save()
     })
     .catch(err => {
-      logger.error('Cannot set public/private keys of actor %d.', actor.uuid, err)
+      logger.error('Cannot set public/private keys of actor %d.', actor.uuid, { err })
       return actor
     })
 }
@@ -117,7 +117,7 @@ async function updateActorAvatarInstance (actorInstance: ActorModel, avatarName:
       try {
         await actorInstance.Avatar.destroy({ transaction: t })
       } catch (err) {
-        logger.error('Cannot remove old avatar of actor %s.', actorInstance.url, err)
+        logger.error('Cannot remove old avatar of actor %s.', actorInstance.url, { err })
       }
     }
 
@@ -144,7 +144,7 @@ async function fetchActorTotalItems (url: string) {
     const { body } = await doRequest(options)
     return body.totalItems ? body.totalItems : 0
   } catch (err) {
-    logger.warn('Cannot fetch remote actor count %s.', url, err)
+    logger.warn('Cannot fetch remote actor count %s.', url, { err })
     return 0
   }
 }
@@ -393,7 +393,7 @@ async function refreshActorIfNeeded (actor: ActorModel) {
       return actor
     })
   } catch (err) {
-    logger.warn('Cannot refresh actor.', err)
+    logger.warn('Cannot refresh actor.', { err })
     return actor
   }
 }

@@ -119,7 +119,7 @@ class Emailer {
   }
 
   private dieOnConnectionFailure (err?: Error) {
-    logger.error('Failed to connect to SMTP %s:%d.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT, err)
+    logger.error('Failed to connect to SMTP %s:%d.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT, { err })
     process.exit(-1)
   }
 

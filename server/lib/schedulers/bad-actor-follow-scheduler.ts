@@ -17,7 +17,7 @@ export class BadActorFollowScheduler extends AbstractScheduler {
     try {
       await ActorFollowModel.removeBadActorFollows()
     } catch (err) {
-      logger.error('Error in bad actor follows scheduler.', err)
+      logger.error('Error in bad actor follows scheduler.', { err })
     }
   }
 

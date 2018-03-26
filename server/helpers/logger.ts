@@ -18,7 +18,11 @@ const excludedKeys = {
   label: true
 }
 function keysExcluder (key, value) {
-  return excludedKeys[key] === true ? undefined : value
+  if (excludedKeys[key] === true) return undefined
+
+  if (key === 'err') return value.stack
+
+  return value
 }
 
 const consoleLoggerFormat = winston.format.printf(info => {
@@ -30,8 +34,14 @@ const consoleLoggerFormat = winston.format.printf(info => {
   return `[${info.label}] ${info.timestamp} ${info.level}: ${info.message}${additionalInfos}`
 })
 
-const jsonLoggerFormat = winston.format.printf(info => {
-  if (info.message && info.message.stack !== undefined) info.message = info.message.stack
+const jsonLoggerFormat = winston.format.printf(infoArg => {
+  let info = infoArg.err
+    ? Object.assign({}, infoArg, { err: infoArg.err.stack })
+    : infoArg
+
+  if (infoArg.message && infoArg.message.stack !== undefined) {
+    info = Object.assign({}, info, { message: infoArg.message.stack })
+  }
 
   return JSON.stringify(info)
 })

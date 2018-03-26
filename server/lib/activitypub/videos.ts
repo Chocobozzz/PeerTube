@@ -152,7 +152,7 @@ async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: 
 
     // Don't block on request
     generateThumbnailFromUrl(video, videoObject.icon)
-      .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, err))
+      .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err }))
 
     const videoCreated = await video.save(sequelizeOptions)
 

@@ -473,7 +473,7 @@ export class VideoModel extends Model<VideoModel> {
 
     return Promise.all(tasks)
       .catch(err => {
-        logger.error('Some errors when removing files of video %s in after destroy hook.', instance.uuid, err)
+        logger.error('Some errors when removing files of video %s in after destroy hook.', instance.uuid, { err })
       })
   }
 
@@ -1213,7 +1213,7 @@ export class VideoModel extends Model<VideoModel> {
 
     } catch (err) {
       // Auto destruction...
-      this.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', err))
+      this.destroy().catch(err => logger.error('Cannot destruct video after transcoding failure.', { err }))
 
       throw err
     }
