@@ -35,7 +35,11 @@ if (
   !program['videoName'] ||
   !program['file']
 ) {
-  console.error('Url, username, password, name and input file are required.')
+  if (!program['url']) console.error('--url field is required.')
+  if (!program['username']) console.error('--username field is required.')
+  if (!program['password']) console.error('--password field is required.')
+  if (!program['videoName']) console.error('--video-name field is required.')
+  if (!program['file']) console.error('--file field is required.')
   process.exit(-1)
 }
 
