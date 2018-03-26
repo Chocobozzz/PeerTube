@@ -6,6 +6,7 @@ import { unlinkPromise } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers'
 import { getClient, getVideoCategories, login, searchVideo, uploadVideo } from '../tests/utils'
+import { truncate } from 'lodash'
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -133,7 +134,11 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
   }
 
   const videoAttributes = {
-    name: videoInfo.title,
+    name: truncate(videoInfo.title, {
+      'length': CONSTRAINTS_FIELDS.VIDEOS.NAME.max,
+      'separator': /,? +/,
+      'omission': ' […]'
+    }),
     category,
     licence,
     language,
