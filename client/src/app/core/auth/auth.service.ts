@@ -112,17 +112,17 @@ export class AuthService {
 
   login (username: string, password: string) {
     // Form url encoded
-    const body = new HttpParams().set('client_id', this.clientId)
-                                 .set('client_secret', this.clientSecret)
-                                 .set('response_type', 'code')
-                                 .set('grant_type', 'password')
-                                 .set('scope', 'upload')
-                                 .set('username', username)
-                                 .set('password', password)
+    const body = new URLSearchParams()
+    body.set('client_id', this.clientId)
+    body.set('client_secret', this.clientSecret)
+    body.set('response_type', 'code')
+    body.set('grant_type', 'password')
+    body.set('scope', 'upload')
+    body.set('username', username)
+    body.set('password', password)
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-
-    return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, body, { headers })
+    return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, body.toString(), { headers })
                     .map(res => Object.assign(res, { username }))
                     .flatMap(res => this.mergeUserInformation(res))
                     .map(res => this.handleLogin(res))
