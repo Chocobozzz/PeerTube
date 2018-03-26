@@ -27,6 +27,7 @@ loadVideoInfo(videoId)
     const videojsOptions = {
       controls: true,
       autoplay: false,
+      inactivityTimeout: 500,
       plugins: {
         peertube: {
           videoFiles: videoInfo.files,
