@@ -378,8 +378,16 @@ $control-bar-height: 34px;
   }
 
   @media screen and (max-width: 550px) {
+    .vjs-dock-text {
+      font-size: 14px;
+    }
+
+    .vjs-dock-description {
+      font-size: 9px;
+    }
+
     .vjs-big-play-button {
-      font-size: 5em;
+      font-size: 4.5em;
     }
 
     .vjs-playback-rate {
@@ -398,10 +406,6 @@ $control-bar-height: 34px;
   @media screen and (max-width: 300px) {
     .vjs-dock-text {
       font-size: 13px;
-    }
-
-    .vjs-dock-description {
-      font-size: 9px;
     }
 
     .vjs-big-play-button {
