@@ -270,7 +270,7 @@ class PeerTubePlugin extends Plugin {
     this.playerElement = options.playerElement
 
     this.player.ready(() => {
-      this.initializePlayer(options)
+      this.initializePlayer()
       this.runTorrentInfoScheduler()
       this.runViewAdd()
     })
@@ -331,9 +331,10 @@ class PeerTubePlugin extends Plugin {
 
       const options = { autoplay: true, controls: true }
       renderVideo(torrent.files[0], this.playerElement, options,(err, renderer) => {
+        this.renderer = renderer
+
         if (err) return this.fallbackToHttp()
 
-        this.renderer = renderer
         if (!this.player.paused()) {
           const playPromise = this.player.play()
           if (playPromise !== undefined) return playPromise.then(done)
@@ -406,7 +407,7 @@ class PeerTubePlugin extends Plugin {
     this.updateVideoFile(undefined, () => this.player.play())
   }
 
-  private initializePlayer (options: PeertubePluginOptions) {
+  private initializePlayer () {
     if (this.autoplay === true) {
       this.updateVideoFile(undefined, () => this.player.play())
     } else {
