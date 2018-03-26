@@ -1,4 +1,6 @@
-<!-- If you report a bug please fill the form -->
+<!-- If you have a question, please read the FAQ.md first -->
+
+<!-- If you report a bug, please fill the form -->
 
 * **PeerTube version or URL:**
 * **Browser name/version:**
