@@ -314,7 +314,7 @@
 @media screen and (max-width: 1600px) {
   .video-bottom {
     .video-info {
-      margin-right: 0;
+      margin-right: 20px;
 
       .video-info-first-row {
         flex-direction: column;
@@ -346,7 +346,7 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1400px) {
   .other-videos {
     display: none;
   }
