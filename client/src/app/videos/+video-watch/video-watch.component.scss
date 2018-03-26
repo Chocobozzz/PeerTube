@@ -38,7 +38,9 @@
 
   .video-info {
     flex-grow: 1;
-    margin-right: 28px;
+    margin-right: 40px;
+    // Set min width for flex item
+    min-width: 1px;
 
     .video-info-first-row {
       display: flex;
@@ -203,9 +205,8 @@
       font-size: 15px;
 
       .video-info-description-html {
-        word-break: normal;
-		word-wrap: normal;
-		text-align: justify;
+        word-wrap: break-word;
+        text-align: justify;
       }
 
       .description-loading {
@@ -240,8 +241,6 @@
   }
 
   .other-videos {
-	padding-left: 1em;
-
     .title-page {
       margin-top: 0;
     }
