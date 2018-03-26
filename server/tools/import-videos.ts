@@ -1,3 +1,6 @@
+// FIXME: https://github.com/nodejs/node/pull/16853
+require('tls').DEFAULT_ECDH_CURVE = 'auto'
+
 import * as program from 'commander'
 import { join } from 'path'
 import * as youtubeDL from 'youtube-dl'
@@ -144,7 +147,7 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
     language,
     nsfw: isNSFW(videoInfo),
     commentsEnabled: true,
-    description: videoInfo.description,
+    description: videoInfo.description || undefined,
     support: undefined,
     tags,
     privacy: VideoPrivacy.PUBLIC,
