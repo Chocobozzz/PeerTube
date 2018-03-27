@@ -23,7 +23,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   checkedVideos: { [ id: number ]: boolean } = {}
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 5,
     totalItems: null
   }
 

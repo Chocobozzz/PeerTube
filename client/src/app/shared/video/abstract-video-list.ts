@@ -162,7 +162,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   protected setNewRouteParams () {
     const routeParams = this.buildRouteParams()
-    this.router.navigate([ this.currentRoute ],  { queryParams: routeParams })
+    this.router.navigate([ this.currentRoute ], { queryParams: routeParams })
   }
 
   protected buildVideoPages () {
