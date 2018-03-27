@@ -67,25 +67,21 @@ $ sudo scl devtoolset-6 bash
 On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail:
 
   1. edit `/etc/pkg/FreeBSD.conf` to use latest instead quaterly (installation was tested with the latest repository), as root:
-
 ```
 # ee /etc/pkg/FreeBSD.conf
 ```
 
      change this line (11):
-
 ```
   url: "pkg+http://pkg.FreeBSD.org/${ABI}/quaterly",
 ```
 
      to:
-
 ```
   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
 ```
 
   2. bootsrap pkg, initialize db and install peertube's dependencies, always as root (sudo not yet installed):
-
 ```
 # pkg
 # pkg update
@@ -93,25 +89,21 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 ```
 
   3. Allow users in the wheel group (hope you don't forgot to add your user on wheel group!) to use sudo
-
 ```
 # visudo
 ```
 
      Uncomment the line 90
-
 ```
 %wheel ALL=(ALL) ALL
 ```
 
   4. Enable nginx, redis, postgresql services and initialize database
-
 ```
 # ee /etc/rc.conf
 ```
 
      Add the following lines
-
 ```
 postgresql_enable="YES"
 redis_enable="YES"
@@ -119,7 +111,6 @@ nginx_enable="YES"
 ```
 
 	 Initialize database and start services
-
 ```
 # service postgresql initdb
 # service postgresql start
