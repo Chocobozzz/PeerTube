@@ -94,22 +94,21 @@ export {
 function accountController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
 
-  return res.json(activityPubContextify(account.toActivityPubObject()))
-    .end()
+  return activityPubResponse(activityPubContextify(account.toActivityPubObject()), res)
 }
 
 async function accountFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
   const activityPubResult = await actorFollowers(req, account.Actor)
 
-  return res.json(activityPubContextify(activityPubResult))
+  return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function accountFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
   const activityPubResult = await actorFollowing(req, account.Actor)
 
-  return res.json(activityPubContextify(activityPubResult))
+  return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function videoController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -122,17 +121,17 @@ async function videoController (req: express.Request, res: express.Response, nex
 
   if (req.path.endsWith('/activity')) {
     const data = await createActivityData(video.url, video.VideoChannel.Account.Actor, videoObject, undefined, audience)
-    return res.json(activityPubContextify(data))
+    return activityPubResponse(activityPubContextify(data), res)
   }
 
-  return res.json(activityPubContextify(videoObject))
+  return activityPubResponse(activityPubContextify(videoObject), res)
 }
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const share = res.locals.videoShare as VideoShareModel
   const object = await buildVideoAnnounce(share.Actor, share, res.locals.video, undefined)
 
-  return res.json(activityPubContextify(object))
+  return activityPubResponse(activityPubContextify(object), res)
 }
 
 async function videoAnnouncesController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -142,7 +141,7 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
   const videoAll = await VideoModel.loadAndPopulateAll(video.id)
   const object = videoAll.toAnnouncesActivityPubObject()
 
-  return res.json(activityPubContextify(object))
+  return activityPubResponse(activityPubContextify(object), res)
 }
 
 async function videoLikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -152,7 +151,7 @@ async function videoLikesController (req: express.Request, res: express.Response
   const videoAll = await VideoModel.loadAndPopulateAll(video.id)
   const { likesObject } = videoAll.toRatesActivityPubObjects()
 
-  return res.json(activityPubContextify(likesObject))
+  return activityPubResponse(activityPubContextify(likesObject), res)
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -162,7 +161,7 @@ async function videoDislikesController (req: express.Request, res: express.Respo
   const videoAll = await VideoModel.loadAndPopulateAll(video.id)
   const { dislikesObject } = videoAll.toRatesActivityPubObjects()
 
-  return res.json(activityPubContextify(dislikesObject))
+  return activityPubResponse(activityPubContextify(dislikesObject), res)
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -172,27 +171,27 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   const videoAll = await VideoModel.loadAndPopulateAll(video.id)
   const commentsObject = videoAll.toCommentsActivityPubObject()
 
-  return res.json(activityPubContextify(commentsObject))
+  return activityPubResponse(activityPubContextify(commentsObject), res)
 }
 
 async function videoChannelController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
 
-  return res.json(activityPubContextify(videoChannel.toActivityPubObject()))
+  return activityPubResponse(activityPubContextify(videoChannel.toActivityPubObject()), res)
 }
 
 async function videoChannelFollowersController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
   const activityPubResult = await actorFollowers(req, videoChannel.Actor)
 
-  return res.json(activityPubContextify(activityPubResult))
+  return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function videoChannelFollowingController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const videoChannel: VideoChannelModel = res.locals.videoChannel
   const activityPubResult = await actorFollowing(req, videoChannel.Actor)
 
-  return res.json(activityPubContextify(activityPubResult))
+  return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
 async function videoCommentController (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -206,10 +205,10 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
   if (req.path.endsWith('/activity')) {
     const data = await createActivityData(videoComment.url, videoComment.Account.Actor, videoCommentObject, undefined, audience)
-    return res.json(activityPubContextify(data))
+    return activityPubResponse(activityPubContextify(data), res)
   }
 
-  return res.json(activityPubContextify(videoCommentObject))
+  return activityPubResponse(activityPubContextify(videoCommentObject), res)
 }
 
 // ---------------------------------------------------------------------------
@@ -228,4 +227,10 @@ async function actorFollowers (req: express.Request, actor: ActorModel) {
 
   const result = await ActorFollowModel.listAcceptedFollowerUrlsForApi([ actor.id ], undefined, start, count)
   return activityPubCollectionPagination(CONFIG.WEBSERVER.URL + req.url, page, result)
+}
+
+function activityPubResponse (data: any, res: express.Response) {
+  return res.type('application/activity+json; charset=utf-8')
+    .json(data)
+    .end()
 }
