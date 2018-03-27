@@ -1,5 +1,7 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
-cd client || exit -1
+set -eu
+
+cd client
 
 npm run ng -- server --hmr --host 0.0.0.0 --disable-host-check --port 3000

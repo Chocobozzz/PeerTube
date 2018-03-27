@@ -1,4 +1,6 @@
-#!/usr/bin/env sh
+#!/bin/sh
+
+set -eu
 
 for i in $(seq 1 6); do
   dropdb "peertube_test$i"
