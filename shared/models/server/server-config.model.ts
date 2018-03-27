@@ -39,4 +39,8 @@ export interface ServerConfig {
       extensions: string[]
     }
   }
+
+  user: {
+    videoQuota: number
+  }
 }
