@@ -27,6 +27,10 @@ export class AboutComponent implements OnInit {
     return this.serverService.getConfig().user.videoQuota
   }
 
+  get isSignupAllowed () {
+    return this.serverService.getConfig().signup.allowed
+  }
+
   ngOnInit () {
     this.serverService.getAbout()
       .subscribe(
