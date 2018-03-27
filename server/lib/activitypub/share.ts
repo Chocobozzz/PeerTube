@@ -3,7 +3,7 @@ import { VideoPrivacy } from '../../../shared/models/videos'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
-import { sendVideoAnnounceToFollowers } from './send'
+import { sendVideoAnnounce } from './send'
 import { getAnnounceActivityPubUrl } from './url'
 
 async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
@@ -23,7 +23,7 @@ async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) 
     },
     transaction: t
   }).then(([ serverShare, created ]) => {
-    if (created) return sendVideoAnnounceToFollowers(serverActor, serverShare, video, t)
+    if (created) return sendVideoAnnounce(serverActor, serverShare, video, t)
 
     return undefined
   })
@@ -40,7 +40,7 @@ async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) 
     },
     transaction: t
   }).then(([ videoChannelShare, created ]) => {
-    if (created) return sendVideoAnnounceToFollowers(serverActor, videoChannelShare, video, t)
+    if (created) return sendVideoAnnounce(serverActor, videoChannelShare, video, t)
 
     return undefined
   })

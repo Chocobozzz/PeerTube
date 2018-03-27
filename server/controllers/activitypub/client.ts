@@ -4,7 +4,7 @@ import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB, CONFIG } from '../../initializers'
-import { buildVideoAnnounceToFollowers } from '../../lib/activitypub/send'
+import { buildVideoAnnounce } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/send/misc'
 import { createActivityData } from '../../lib/activitypub/send/send-create'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
@@ -130,7 +130,7 @@ async function videoController (req: express.Request, res: express.Response, nex
 
 async function videoAnnounceController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const share = res.locals.videoShare as VideoShareModel
-  const object = await buildVideoAnnounceToFollowers(share.Actor, share, res.locals.video, undefined)
+  const object = await buildVideoAnnounce(share.Actor, share, res.locals.video, undefined)
 
   return res.json(activityPubContextify(object))
 }

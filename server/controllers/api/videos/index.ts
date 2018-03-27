@@ -20,7 +20,7 @@ import {
   VIDEO_PRIVACIES
 } from '../../../initializers'
 import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
-import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
+import { sendCreateVideo, sendCreateView, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
@@ -365,11 +365,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
 
   const serverAccount = await getServerActor()
 
-  if (videoInstance.isOwned()) {
-    await sendCreateViewToVideoFollowers(serverAccount, videoInstance, undefined)
-  } else {
-    await sendCreateViewToOrigin(serverAccount, videoInstance, undefined)
-  }
+  await sendCreateView(serverAccount, videoInstance, undefined)
 
   return res.status(204).end()
 }
