@@ -1,6 +1,6 @@
 <div *ngIf="customCSS" [innerHTML]="customCSS"></div>
 
-<div>
+<div [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
   <div class="header">
 
     <div class="top-left-block" [ngClass]="{ 'border-bottom': isMenuDisplayed === false }">

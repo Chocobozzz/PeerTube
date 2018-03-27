@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
 
     this.authService.loadClientCredentials()
 
-    if (this.authService.isLoggedIn()) {
+    if (this.isUserLoggedIn()) {
       // The service will automatically redirect to the login page if the token is not valid anymore
       this.authService.refreshUserInformation()
     }
@@ -102,6 +102,10 @@ export class AppComponent implements OnInit {
           }
         }
       })
+  }
+
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
   }
 
   toggleMenu () {

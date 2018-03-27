@@ -22,7 +22,7 @@
       User registration is allowed and
 
       <ng-template [ngIf]="userVideoQuota !== -1">
-        this instance provides a baseline quota of {{ userVideoQuota | bytes }} space for the videos of its users.
+        this instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
       </ng-template>
 
       <ng-template [ngIf]="userVideoQuota === -1">
