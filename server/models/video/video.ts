@@ -1114,12 +1114,12 @@ export class VideoModel extends Model<VideoModel> {
       comments: commentsObject,
       attributedTo: [
         {
-          type: 'Group',
-          id: this.VideoChannel.Actor.url
-        },
-        {
           type: 'Person',
           id: this.VideoChannel.Account.Actor.url
+        },
+        {
+          type: 'Group',
+          id: this.VideoChannel.Actor.url
         }
       ]
     }
