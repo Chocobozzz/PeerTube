@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.0.0-beta.2
+
+### Features
+
+ * More logging in SMTP module
+ * Add option to disable starttls in SMTP module
+ * Update STUN servers (using framasoft.org and stunprotocol.org now)
+ * Min comment length is 1 now (useful for emoji...)
+ * Better embed video player in small screens
+ * Reduce display time of title/description/control bar in embed on inactivity
+ * Add sign languages for videos attribute
+ * Add autoplay parameter for embed
+ * Videos search on account username and host too
+ * Redirect to homepage on empty search
+
+### Bug fixes
+
+ * Fix mentions in comment replies
+ * Logo/Title redirects to the default route
+ * Fix bad federation with videos with special utf characters in description
+ * Fix pagination on mobile
+ * Use instance name for page titles
+ * Fix bad id for Create activities (ActivityPub)
+ * Handle inner actors instead of just handling actor ids (ActivityPub)
+ * Fallback to torrent file if infohash is incorrect
+ * Fix admin config errors display/validation
+ * Add public to Announces (ActivityPub)
+ * Fix inability to run client when cookies are disabled
+ * Fix words breaking in videos description
+ * Graceful exit when import videos script fails
+ * Fix import videos with long names
+ * Fix login with a password containing special characters
+ * Fix player error flickering with an unsupported video format
+ * Fix comment delete federation
+ * Fix communication of a PeerTube instance and Mastodon
+ * Fix custom configuration with number values
+
 ## v1.0.0-beta.1
 
 Nothing new here, but PeerTube is stable enough for being in beta now. 
