@@ -91,21 +91,26 @@ menu {
     font-weight: $font-bold; // Bold
     font-size: 13px;
     margin-bottom: 25px;
+    margin-left: 26px;
   }
 
   .panel-block {
     margin-bottom: 45px;
-    margin-left: 26px;
 
     a {
       display: flex;
+      align-items: center;
+      padding-left: 26px;
       color: $menu-color;
       cursor: pointer;
-      height: 22px;
-      line-height: 22px;
+      height: 40px;
       font-size: 16px;
-      margin-bottom: 15px;
+      transition: background-color .1s ease-in-out;
       @include disable-default-a-behaviour;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
 
       .icon {
         @include icon(22px);
