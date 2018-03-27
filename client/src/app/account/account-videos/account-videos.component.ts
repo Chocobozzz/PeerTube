@@ -106,6 +106,11 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
       )
   }
 
+  protected buildVideoHeight () {
+    // In account videos, the video height is fixed
+    return this.baseVideoHeight
+  }
+
   private spliceVideosById (id: number) {
     for (const key of Object.keys(this.loadedPages)) {
       const videos = this.loadedPages[key]

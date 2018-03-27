@@ -169,6 +169,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     this.videoPages = Object.values(this.loadedPages)
   }
 
+  protected buildVideoHeight () {
+    // Same ratios than base width/height
+    return this.videosElement.nativeElement.offsetWidth * (this.baseVideoHeight / this.baseVideoWidth)
+  }
+
   private minPageLoaded () {
     return Math.min(...Object.keys(this.loadedPages).map(e => parseInt(e, 10)))
   }
@@ -183,8 +188,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
       // Video takes all the width
       this.videoWidth = -1
-      // Same ratios than base width/height
-      this.videoHeight = this.videosElement.nativeElement.offsetWidth * (this.baseVideoHeight / this.baseVideoWidth)
+      this.videoHeight = this.buildVideoHeight()
       this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
     } else {
       this.videoWidth = this.baseVideoWidth
