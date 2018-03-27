@@ -96,7 +96,7 @@ function getOriginVideoAudience (video: VideoModel, actorsInvolvedInVideo: Actor
   }
 }
 
-function getOriginVideoCommentAudience (
+function getVideoCommentAudience (
   videoComment: VideoCommentModel,
   threadParentComments: VideoCommentModel[],
   actorsInvolvedInVideo: ActorModel[],
@@ -160,7 +160,7 @@ function buildAudience (followerInboxUrls: string[], isPublic = true) {
   return { to, cc }
 }
 
-function audiencify (object: any, audience: ActivityAudience) {
+function audiencify <T> (object: T, audience: ActivityAudience) {
   return Object.assign(object, audience)
 }
 
@@ -192,7 +192,7 @@ export {
   getObjectFollowersAudience,
   forwardActivity,
   audiencify,
-  getOriginVideoCommentAudience,
+  getVideoCommentAudience,
   computeUris,
   broadcastToActors
 }

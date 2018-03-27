@@ -15,7 +15,7 @@ import {
   getAudience,
   getObjectFollowersAudience,
   getOriginVideoAudience,
-  getOriginVideoCommentAudience,
+  getVideoCommentAudience,
   unicastTo
 } from './misc'
 
@@ -47,7 +47,7 @@ async function sendCreateVideoCommentToOrigin (comment: VideoCommentModel, t: Tr
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, t)
   actorsInvolvedInComment.push(byActor)
-  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment)
+  const audience = getVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment)
 
   const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
 
@@ -70,7 +70,7 @@ async function sendCreateVideoCommentToVideoFollowers (comment: VideoCommentMode
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(comment.Video, t)
   actorsInvolvedInComment.push(byActor)
 
-  const audience = getOriginVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment)
+  const audience = getVideoCommentAudience(comment, threadParentComments, actorsInvolvedInComment, true)
   const data = await createActivityData(comment.url, byActor, commentObject, t, audience)
 
   // This was a reply, send it to the parent actors
@@ -144,7 +144,7 @@ async function createActivityData (
   }
 
   return audiencify({
-    type: 'Create',
+    type: 'Create' as 'Create',
     id: url + '/activity',
     actor: byActor.url,
     object: audiencify(object, audience)

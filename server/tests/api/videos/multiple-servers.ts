@@ -728,6 +728,8 @@ describe('Test multiple servers', function () {
   })
 
   describe('Should comment these videos', function () {
+    let childOfFirstChild: VideoCommentThreadTree
+
     it('Should add comment (threads and replies)', async function () {
       this.timeout(25000)
 
@@ -821,7 +823,7 @@ describe('Test multiple servers', function () {
         expect(firstChild.comment.account.host).equal('localhost:9002')
         expect(firstChild.children).to.have.lengthOf(1)
 
-        const childOfFirstChild = firstChild.children[0]
+        childOfFirstChild = firstChild.children[0]
         expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
         expect(childOfFirstChild.comment.account.name).equal('root')
         expect(childOfFirstChild.comment.account.host).equal('localhost:9003')
@@ -832,6 +834,33 @@ describe('Test multiple servers', function () {
         expect(secondChild.comment.account.name).equal('root')
         expect(secondChild.comment.account.host).equal('localhost:9003')
         expect(secondChild.children).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should delete a reply', async function () {
+      this.timeout(10000)
+
+      await deleteVideoComment(servers[2].url, servers[2].accessToken, videoUUID, childOfFirstChild.comment.id)
+
+      await wait(5000)
+    })
+
+    it('Should not have this comment anymore', async function () {
+      for (const server of servers) {
+        const res1 = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+        const threadId = res1.body.data.find(c => c.text === 'my super first comment').id
+
+        const res2 = await getVideoThreadComments(server.url, videoUUID, threadId)
+
+        const tree: VideoCommentThreadTree = res2.body
+        expect(tree.comment.text).equal('my super first comment')
+
+        const firstChild = tree.children[0]
+        expect(firstChild.comment.text).to.equal('my super answer to thread 1')
+        expect(firstChild.children).to.have.lengthOf(0)
+
+        const secondChild = tree.children[1]
+        expect(secondChild.comment.text).to.equal('my second answer to thread 1')
       }
     })
 

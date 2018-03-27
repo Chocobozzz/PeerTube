@@ -108,7 +108,7 @@ async function undoActivityData (
   }
 
   return audiencify({
-    type: 'Undo',
+    type: 'Undo' as 'Undo',
     id: url,
     actor: byActor.url,
     object

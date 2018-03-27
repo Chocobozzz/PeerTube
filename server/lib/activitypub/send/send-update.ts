@@ -67,7 +67,7 @@ async function updateActivityData (
   }
 
   return audiencify({
-    type: 'Update',
+    type: 'Update' as 'Update',
     id: url,
     actor: byActor.url,
     object: audiencify(object, audience)

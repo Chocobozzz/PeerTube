@@ -46,7 +46,7 @@ async function likeActivityData (
   }
 
   return audiencify({
-    type: 'Like',
+    type: 'Like' as 'Like',
     id: url,
     actor: byActor.url,
     object: video.url
