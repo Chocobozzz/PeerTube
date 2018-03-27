@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { RedirectService } from '@app/core'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { Subscription } from 'rxjs/Subscription'
@@ -26,7 +27,9 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
                protected route: ActivatedRoute,
                protected notificationsService: NotificationsService,
                protected authService: AuthService,
-               private videoService: VideoService) {
+               private videoService: VideoService,
+               private redirectService: RedirectService
+  ) {
     super()
   }
 
@@ -36,7 +39,8 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
     this.subActivatedRoute = this.route.queryParams.subscribe(
       queryParams => {
         const querySearch = queryParams['search']
-        if (!querySearch || this.otherRouteParams.search === querySearch) return
+        if (!querySearch) return this.redirectService.redirectToHomepage()
+        if (this.otherRouteParams.search === querySearch) return
 
         this.otherRouteParams.search = querySearch
         this.reloadVideos()

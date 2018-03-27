@@ -19,8 +19,6 @@ export class HeaderComponent implements OnInit {
   }
 
   doSearch () {
-    if (!this.searchValue) return
-
     this.router.navigate([ '/videos', 'search' ], {
       queryParams: { search: this.searchValue }
     })
