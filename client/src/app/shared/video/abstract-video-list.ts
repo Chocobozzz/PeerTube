@@ -13,7 +13,7 @@ import { SortField } from './sort-field.type'
 import { Video } from './video.model'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
-  private static LINES_PER_PAGE = 3
+  private static LINES_PER_PAGE = 4
 
   @ViewChild('videosElement') videosElement: ElementRef
   @ViewChild(InfiniteScrollerDirective) infiniteScroller: InfiniteScrollerDirective
