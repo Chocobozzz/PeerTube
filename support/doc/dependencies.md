@@ -72,13 +72,13 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 # ee /etc/pkg/FreeBSD.conf
 ```
 
-    change this line (11):
+     change this line (11):
 
 ```
   url: "pkg+http://pkg.FreeBSD.org/${ABI}/quaterly",
 ```
 
-    to:
+     to:
 
 ```
   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
@@ -98,7 +98,7 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 # visudo
 ```
 
-    Uncomment the line 90
+     Uncomment the line 90
 
 ```
 %wheel ALL=(ALL) ALL
@@ -110,7 +110,7 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 # ee /etc/rc.conf
 ```
 
-    Add the following lines
+     Add the following lines
 
 ```
 postgresql_enable="YES"
@@ -118,7 +118,7 @@ redis_enable="YES"
 nginx_enable="YES"
 ```
 
-	Initialize database and start services
+	 Initialize database and start services
 
 ```
 # service postgresql initdb
