@@ -1,7 +1,7 @@
 # Production guide
 
   * [Installation](#installation)
-  * [Upgrade](#upgrade) 
+  * [Upgrade](#upgrade)
 
 ## Installation
 
@@ -23,6 +23,14 @@ Set its password:
 ```
 $ sudo passwd peertube
 ```
+
+**On FreeBSD**
+
+```
+$ sudo pw useradd -n peertube -d /var/www/peertube -s /usr/local/bin/bash -m
+$ sudo passwd peertube
+```
+or use `adduser` to create it interactively.
 
 ### Database
 
@@ -113,6 +121,13 @@ Now you have the certificates you can reload nginx:
 
 ```
 $ sudo systemctl reload nginx
+```
+
+**FreeBSD**
+On FreeBSD you can use [Dehydrated](https://dehydrated.io/) `security/dehydrated` for [Let's Encrypt](https://letsencrypt.org/)
+
+```
+$ sudo pkg install dehydrated
 ```
 
 ### systemd
@@ -238,7 +253,7 @@ Restart PeerTube:
 $ sudo systemctl restart peertube
 ```
 
-### Things went wrong? 
+### Things went wrong?
 
 Change `peertube-latest` destination to the previous version and restore your SQL backup:
 
