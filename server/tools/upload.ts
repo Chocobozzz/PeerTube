@@ -12,6 +12,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-n, --video-name <name>', 'Video name')
+  .option('-P, --privacy <privacy number>', 'Privacy')
   .option('-N, --nsfw', 'Video is Not Safe For Work')
   .option('-c, --category <category number>', 'Category number')
   .option('-m, --comments-enabled', 'Enable comments')
@@ -81,6 +82,7 @@ async function run () {
     fixture: program['file'],
     thumbnailfile: program['thumbnailPath'],
     previewfile: program['previewPath'],
+    privacy: program['privacy'],
     support: undefined
   }
 
