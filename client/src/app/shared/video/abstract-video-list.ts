@@ -54,7 +54,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   ngOnInit () {
     // Subscribe to route changes
-    const routeParams = this.route.snapshot.params
+    const routeParams = this.route.snapshot.queryParams
     this.loadRouteParams(routeParams)
 
     this.resizeSubscription = fromEvent(window, 'resize')
@@ -162,7 +162,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   protected setNewRouteParams () {
     const routeParams = this.buildRouteParams()
-    this.router.navigate([ this.currentRoute, routeParams ])
+    this.router.navigate([ this.currentRoute ],  { queryParams: routeParams })
   }
 
   protected buildVideoPages () {

@@ -39,6 +39,7 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
     this.subActivatedRoute = this.route.queryParams.subscribe(
       queryParams => {
         const querySearch = queryParams['search']
+
         if (!querySearch) return this.redirectService.redirectToHomepage()
         if (this.otherRouteParams.search === querySearch) return
 
