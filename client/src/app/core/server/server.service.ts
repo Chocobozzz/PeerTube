@@ -5,6 +5,7 @@ import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
+import { ServerStats } from '../../../../../shared/models/server/server-stats.model'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -51,6 +52,9 @@ export class ServerService {
       file: {
         extensions: []
       }
+    },
+    user: {
+      videoQuota: -1
     }
   }
   private videoCategories: Array<{ id: number, label: string }> = []

@@ -13,6 +13,14 @@
     <div class="section-title">Terms</div>
 
     <div [innerHTML]="termsHTML"></div>
+
+    <div *ngIf="userVideoQuota !== -1;else noQuota">
+      This instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
+    </div>
+    
+    <ng-template #noQuota>
+      This instance provides unlimited space for the videos of its users.
+    </ng-template>
   </div>
 
   <div id="p2p-privacy">

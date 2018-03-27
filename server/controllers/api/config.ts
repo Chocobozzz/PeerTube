@@ -76,6 +76,9 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       file: {
         extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
       }
+    },
+    user: {
+      videoQuota: CONFIG.USER.VIDEO_QUOTA
     }
   }
 
