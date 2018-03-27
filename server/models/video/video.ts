@@ -203,7 +203,7 @@ enum ScopeNames {
   [ScopeNames.WITH_FILES]: {
     include: [
       {
-        model: () => VideoFileModel,
+        model: () => VideoFileModel.unscoped(),
         required: true
       }
     ]
@@ -211,8 +211,7 @@ enum ScopeNames {
   [ScopeNames.WITH_SHARES]: {
     include: [
       {
-        model: () => VideoShareModel,
-        include: [ () => ActorModel ]
+        model: () => VideoShareModel.unscoped()
       }
     ]
   },
@@ -220,14 +219,25 @@ enum ScopeNames {
     include: [
       {
         model: () => AccountVideoRateModel,
-        include: [ () => AccountModel ]
+        include: [
+          {
+            model: () => AccountModel.unscoped(),
+            required: true,
+            include: [
+              {
+                attributes: [ 'url' ],
+                model: () => ActorModel.unscoped()
+              }
+            ]
+          }
+        ]
       }
     ]
   },
   [ScopeNames.WITH_COMMENTS]: {
     include: [
       {
-        model: () => VideoCommentModel
+        model: () => VideoCommentModel.unscoped()
       }
     ]
   }
