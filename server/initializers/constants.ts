@@ -292,7 +292,22 @@ const VIDEO_LANGUAGES = {
   11: 'German',
   12: 'Korean',
   13: 'French',
-  14: 'Italian'
+  14: 'Italian',
+  1000: 'Sign Language',
+  1001: 'American Sign Language',
+  1002: 'Arab Sign Language',
+  1003: 'British Sign Language',
+  1004: 'Brazilian Sign Language',
+  1005: 'Chinese Sign Language',
+  1006: 'Czech Sign Language',
+  1007: 'Danish Sign Language',
+  1008: 'French Sign Language',
+  1009: 'German Sign Language',
+  1010: 'Indo-Pakistani Sign Language',
+  1011: 'Japanese Sign Language',
+  1012: 'South African Sign Language',
+  1013: 'Swedish Sign Language',
+  1014: 'Russian Sign Language'
 }
 
 const VIDEO_PRIVACIES = {
