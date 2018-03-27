@@ -676,9 +676,23 @@ export class VideoModel extends Model<VideoModel> {
       limit: count,
       order: getSort(sort),
       where: {
-        name: {
-          [Sequelize.Op.iLike]: '%' + value + '%'
-        }
+        [Sequelize.Op.or]: [
+          {
+            name: {
+              [ Sequelize.Op.iLike ]: '%' + value + '%'
+            }
+          },
+          {
+            preferredUsername: Sequelize.where(Sequelize.col('preferredUsername'), {
+              [ Sequelize.Op.iLike ]: '%' + value + '%'
+            })
+          },
+          {
+            host: Sequelize.where(Sequelize.col('host'), {
+              [ Sequelize.Op.iLike ]: '%' + value + '%'
+            })
+          }
+        ]
       }
     }
 
