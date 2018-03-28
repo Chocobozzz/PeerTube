@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { map, maxBy, truncate } from 'lodash'
+import { map, maxBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
@@ -31,7 +31,10 @@ import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { activityPubCollection } from '../../helpers/activitypub'
-import { createTorrentPromise, renamePromise, statPromise, unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
+import {
+  createTorrentPromise, peertubeTruncate, renamePromise, statPromise, unlinkPromise,
+  writeFilePromise
+} from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
@@ -1191,19 +1194,7 @@ export class VideoModel extends Model<VideoModel> {
     if (!this.description) return null
 
     const maxLength = CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max
-
-    const options = {
-      length: maxLength
-    }
-    const truncatedDescription = truncate(this.description, options)
-
-    // The truncated string is okay, we can return it
-    if (truncatedDescription.length <= maxLength) return truncatedDescription
-
-    // Lodash takes into account all UTF characters, whereas String.prototype.length does not: some characters have a length of 2
-    // We always use the .length so we need to truncate more if needed
-    options.length -= maxLength - truncatedDescription.length
-    return truncate(this.description, options)
+    return peertubeTruncate(this.description, maxLength)
   }
 
   optimizeOriginalVideofile = async function () {
