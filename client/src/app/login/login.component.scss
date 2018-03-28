@@ -1,9 +1,15 @@
 @import '_variables';
 @import '_mixins';
 
+label {
+  display: block;
+}
+
 input:not([type=submit]) {
   @include peertube-input-text(340px);
-  display: block;
+  display: inline-block;
+  margin-right: 5px;
+
 }
 
 input[type=submit] {
@@ -11,12 +17,13 @@ input[type=submit] {
   @include orange-button;
 }
 
-input[type=password] {
-  display: inline-block;
-  margin-right: 5px;
-}
-
 .forgot-password-button {
   display: inline-block;
   cursor: pointer;
+}
+
+.create-an-account {
+  @include disable-default-a-behaviour;
+
+  color: #000;
 }
