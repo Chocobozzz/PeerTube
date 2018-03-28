@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.stretch
-    image: peertube:stretch
+    image: chocobozzz/peertube:stretch
     environment:
       PEERTUBE_HOSTNAME: my.domain.tld
       PEERTUBE_PORT: 443

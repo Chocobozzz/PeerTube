@@ -57,7 +57,7 @@ function isVideoTorrentObjectValid (video: any) {
     isBooleanValid(video.commentsEnabled) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
-    setTruncatedContent(video) &&
+    setRemoteVideoTruncatedContent(video) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     isRemoteVideoIconValid(video.icon) &&
     setValidRemoteVideoUrls(video) &&
@@ -113,7 +113,7 @@ function setValidRemoteVideoUrls (video: any) {
   return true
 }
 
-function setTruncatedContent (video: any) {
+function setRemoteVideoTruncatedContent (video: any) {
   if (video.content) {
     video.content = peertubeTruncate(video.content, CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max)
   }
