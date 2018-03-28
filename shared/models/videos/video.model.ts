@@ -22,6 +22,7 @@ export interface Video {
   uuid: string
   createdAt: Date | string
   updatedAt: Date | string
+  publishedAt: Date | string
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<number>
