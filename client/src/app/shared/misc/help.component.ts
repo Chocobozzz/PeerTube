@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild, OnChanges } from '@angular/core'
 import { MarkdownService } from '@app/videos/shared'
 import { TooltipDirective } from 'ngx-bootstrap/tooltip'
 
@@ -8,7 +8,7 @@ import { TooltipDirective } from 'ngx-bootstrap/tooltip'
   templateUrl: './help.component.html'
 })
 
-export class HelpComponent implements OnInit {
+export class HelpComponent implements OnInit, OnChanges {
   @ViewChild('tooltipDirective') tooltipDirective: TooltipDirective
   @Input() preHtml = ''
   @Input() postHtml = ''
@@ -20,6 +20,23 @@ export class HelpComponent implements OnInit {
   constructor (private elementRef: ElementRef) { }
 
   ngOnInit () {
+    this.init()
+  }
+
+  ngOnChanges () {
+    this.init()
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  public onClick (targetElement) {
+    const clickedInside = this.elementRef.nativeElement.contains(targetElement)
+
+    if (this.tooltipDirective.isOpen && !clickedInside) {
+      this.tooltipDirective.hide()
+    }
+  }
+
+  private init () {
     if (this.helpType === 'custom') {
       this.mainHtml = this.customHtml
       return
@@ -33,15 +50,6 @@ export class HelpComponent implements OnInit {
     if (this.helpType === 'markdownEnhanced') {
       this.mainHtml = this.formatMarkdownSupport(MarkdownService.ENHANCED_RULES)
       return
-    }
-  }
-
-  @HostListener('document:click', ['$event.target'])
-  public onClick (targetElement) {
-    const clickedInside = this.elementRef.nativeElement.contains(targetElement)
-
-    if (this.tooltipDirective.isOpen && !clickedInside) {
-      this.tooltipDirective.hide()
     }
   }
 

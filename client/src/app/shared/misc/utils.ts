@@ -17,10 +17,6 @@ function getParameterByName (name: string, url: string) {
   return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
-function viewportHeight () {
-  return Math.max(document.documentElement.clientHeight, window.innerHeight || 0)
-}
-
 function populateAsyncUserVideoChannels (authService: AuthService, channel: any[]) {
   return new Promise(res => {
     authService.userInformationLoaded
@@ -99,7 +95,6 @@ function isInMobileView () {
 }
 
 export {
-  viewportHeight,
   getParameterByName,
   populateAsyncUserVideoChannels,
   getAbsoluteAPIUrl,
