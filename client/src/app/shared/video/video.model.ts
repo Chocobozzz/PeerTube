@@ -9,6 +9,7 @@ export class Video implements VideoServerModel {
   by: string
   createdAt: Date
   updatedAt: Date
+  publishedAt: Date
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<number>
@@ -56,6 +57,7 @@ export class Video implements VideoServerModel {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.createdAt = new Date(hash.createdAt.toString())
+    this.publishedAt = new Date(hash.publishedAt.toString())
     this.category = hash.category
     this.licence = hash.licence
     this.language = hash.language

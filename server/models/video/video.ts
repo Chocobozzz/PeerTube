@@ -376,6 +376,11 @@ export class VideoModel extends Model<VideoModel> {
   @UpdatedAt
   updatedAt: Date
 
+  @AllowNull(false)
+  @Default(Sequelize.NOW)
+  @Column
+  publishedAt: Date
+
   @ForeignKey(() => VideoChannelModel)
   @Column
   channelId: number
@@ -968,6 +973,7 @@ export class VideoModel extends Model<VideoModel> {
       embedPath: this.getEmbedPath(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      publishedAt: this.publishedAt,
       account: {
         name: formattedAccount.name,
         displayName: formattedAccount.displayName,
@@ -1122,7 +1128,7 @@ export class VideoModel extends Model<VideoModel> {
       views: this.views,
       sensitive: this.nsfw,
       commentsEnabled: this.commentsEnabled,
-      published: this.createdAt.toISOString(),
+      published: this.publishedAt.toISOString(),
       updated: this.updatedAt.toISOString(),
       mediaType: 'text/markdown',
       content: this.getTruncatedDescription(),

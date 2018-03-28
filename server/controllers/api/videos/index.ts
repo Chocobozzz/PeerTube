@@ -307,10 +307,17 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
-      if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', parseInt(videoInfoToUpdate.privacy.toString(), 10))
       if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
       if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
+      if (videoInfoToUpdate.privacy !== undefined) {
+        const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
+        videoInstance.set('privacy', newPrivacy)
+
+        if (wasPrivateVideo === true && newPrivacy !== VideoPrivacy.PRIVATE) {
+          videoInstance.set('publishedAt', new Date())
+        }
+      }
 
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
 
