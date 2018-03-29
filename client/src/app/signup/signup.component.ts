@@ -101,7 +101,7 @@ export class SignupComponent extends FormReactive implements OnInit {
     const lines = [
       SignupComponent.getApproximateTime(fullHdSeconds) + ' of full HD videos',
       SignupComponent.getApproximateTime(hdSeconds) + ' of HD videos',
-      SignupComponent.getApproximateTime(normalSeconds) + ' of normal quality videos'
+      SignupComponent.getApproximateTime(normalSeconds) + ' of average quality videos'
     ]
 
     this.quotaHelpIndication = lines.join('<br />')

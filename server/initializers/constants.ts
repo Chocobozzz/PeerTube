@@ -127,6 +127,7 @@ const CONFIG = {
     URL: '',
     HOST: ''
   },
+  TRUST_PROXY: config.get<string[]>('trust_proxy'),
   LOG: {
     LEVEL: config.get<string>('log.level')
   },
@@ -231,6 +232,13 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_SHARE: {
     URL: { min: 3, max: 2000 } // Length
+  }
+}
+
+const RATES_LIMIT = {
+  LOGIN: {
+    WINDOW_MS: 5 * 60 * 1000, // 5 minutes
+    MAX: 10 // 10 attempts
   }
 }
 
@@ -468,6 +476,7 @@ export {
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
+  RATES_LIMIT,
   JOB_COMPLETED_LIFETIME,
   VIDEO_VIEW_LIFETIME
 }

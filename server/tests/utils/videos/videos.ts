@@ -85,13 +85,18 @@ function getVideo (url: string, id: number | string, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
-function viewVideo (url: string, id: number | string, expectedStatus = 204) {
+function viewVideo (url: string, id: number | string, expectedStatus = 204, xForwardedFor?: string) {
   const path = '/api/v1/videos/' + id + '/views'
 
-  return request(url)
+  const req = request(url)
     .post(path)
     .set('Accept', 'application/json')
-    .expect(expectedStatus)
+
+  if (xForwardedFor) {
+    req.set('X-Forwarded-For', xForwardedFor)
+  }
+
+  return req.expect(expectedStatus)
 }
 
 function getVideoWithToken (url: string, token: string, id: number | string, expectedStatus = 200) {

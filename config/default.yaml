@@ -6,6 +6,12 @@ webserver:
   hostname: 'localhost'
   port: 9000
 
+# Proxies to trust to get real client IP
+# If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
+# If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)
+trust_proxy:
+  - 'loopback'
+
 # Your database name will be "peertube"+database.suffix
 database:
   hostname: 'localhost'

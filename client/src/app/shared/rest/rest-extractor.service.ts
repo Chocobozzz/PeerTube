@@ -42,25 +42,33 @@ export class RestExtractor {
       console.error('An error occurred:', errorMessage)
     } else if (err.status !== undefined) {
       // A server-side error occurred.
-      if (err.error) {
-        if (err.error.errors) {
-          const errors = err.error.errors
-          const errorsArray: string[] = []
+      if (err.error && err.error.errors) {
+        const errors = err.error.errors
+        const errorsArray: string[] = []
 
-          Object.keys(errors).forEach(key => {
-            errorsArray.push(errors[key].msg)
-          })
+        Object.keys(errors).forEach(key => {
+          errorsArray.push(errors[key].msg)
+        })
 
-          errorMessage = errorsArray.join('. ')
-        } else if (err.error.error) {
-          errorMessage = err.error.error
-        }
+        errorMessage = errorsArray.join('. ')
+      } else if (err.error && err.error.error) {
+        errorMessage = err.error.error
       } else if (err.status === 413) {
         errorMessage = 'Request is too large for the server. Please contact you administrator if you want to increase the limit size.'
+      } else if (err.status === 429) {
+        const secondsLeft = err.headers.get('retry-after')
+        if (secondsLeft) {
+          const minutesLeft = Math.floor(parseInt(secondsLeft, 10) / 60)
+          errorMessage = 'Too many attempts, please try again after ' + minutesLeft + ' minutes.'
+        } else {
+          errorMessage = 'Too many attempts, please try again later.'
+        }
+      } else if (err.status === 500) {
+        errorMessage = 'Server error. Please retry later.'
       }
 
       errorMessage = errorMessage ? errorMessage : 'Unknown error.'
-      console.error(`Backend returned code ${err.status}, body was: ${errorMessage}`)
+      console.error(`Backend returned code ${err.status}, errorMessage is: ${errorMessage}`)
     } else {
       errorMessage = err
     }

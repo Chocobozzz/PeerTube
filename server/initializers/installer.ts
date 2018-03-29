@@ -112,7 +112,7 @@ async function createOAuthAdminIfNotExist () {
     // Our password is weak so do not validate it
     validatePassword = false
   } else {
-    password = passwordGenerator(8, true)
+    password = passwordGenerator(16, true)
   }
 
   const userData = {

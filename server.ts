@@ -48,6 +48,9 @@ if (errorMessage !== null) {
   throw new Error(errorMessage)
 }
 
+// Trust our proxy (IP forwarding...)
+app.set('trust proxy', CONFIG.TRUST_PROXY)
+
 // ----------- Database -----------
 
 // Initialize database and models
@@ -81,6 +84,7 @@ if (isTestInstance()) {
     ) {
       return (cors({
         origin: 'http://localhost:3000',
+        exposedHeaders: 'Retry-After',
         credentials: true
       }))(req, res, next)
     }
