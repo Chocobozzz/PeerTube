@@ -134,8 +134,6 @@ async function createApplicationIfNotExist () {
   // Nothing to do, application already exist
   if (exist === true) return undefined
 
-  logger.info('Creating Application table.')
-
   logger.info('Creating application account.')
 
   const application = await ApplicationModel.create({

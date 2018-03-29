@@ -4,6 +4,21 @@
 
 ### Features
 
+ * Add hover background color in menu
+ * Add info about the initial user quota in the registration form
+ * Add link to register in the login form
+ * Prevent brute force login attack
+
+### Bug fixes
+
+ * Fix bad federation with videos with special utf characters in description (again)
+ * Fix views system behind a reverse proxy
+
+
+## v1.0.0-beta.2
+
+### Features
+
  * More logging in SMTP module
  * Add option to disable starttls in SMTP module
  * Update STUN servers (using framasoft.org and stunprotocol.org now)
@@ -36,6 +51,7 @@
  * Fix comment delete federation
  * Fix communication of a PeerTube instance and Mastodon
  * Fix custom configuration with number values
+
 
 ## v1.0.0-beta.1
 
