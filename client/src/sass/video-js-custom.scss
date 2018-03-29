@@ -1,7 +1,7 @@
 @import '_variables';
 @import '_mixins';
 
-$primary-foreground-color: #fff;
+$primary-foreground-color: #eee;
 $primary-foreground-opacity: 0.9;
 $primary-foreground-opacity-hover: 1;
 $primary-background-color: #000;
@@ -13,7 +13,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
-  color: $primary-foreground-color;
+  color: #fff;
 
   .vjs-dock-text {
     padding-right: 10px;
@@ -109,8 +109,14 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     }
   }
 
-  .vjs-play-progress .vjs-time-tooltip {
-    display: none;
+  .vjs-play-progress {
+    &::before:hover {
+      top: -0.372em;
+    }
+
+    .vjs-time-tooltip {
+      display: none;
+    }
   }
 
   .vjs-load-progress {
@@ -128,6 +134,28 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
   .vjs-control-bar {
     height: $control-bar-height;
+
+    .vjs-progress-control,
+    .vjs-play-control,
+    .vjs-playback-rate,
+    .vjs-mute-control,
+    .vjs-volume-control,
+    .vjs-resolution-control,
+    .vjs-fullscreen-control
+    {
+      opacity: $primary-foreground-opacity;
+      transition: opacity .1s;
+
+      &:hover {
+        opacity: $primary-foreground-opacity-hover;
+      }
+    }
+
+    .vjs-current-time,
+    .vjs-duration,
+    .vjs-peertube {
+      color: $primary-foreground-color;
+    }
 
     .vjs-progress-control {
       bottom: 34px;
@@ -169,7 +197,6 @@ $slider-bg-color: lighten($primary-background-color, 33%);
         font-size: $font-size;
         display: inline-block;
         padding: 0;
-
         .vjs-duration-display {
           line-height: calc(#{$control-bar-height} + 1px);
         }
