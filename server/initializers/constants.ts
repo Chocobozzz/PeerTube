@@ -238,7 +238,7 @@ const CONSTRAINTS_FIELDS = {
 const RATES_LIMIT = {
   LOGIN: {
     WINDOW_MS: 5 * 60 * 1000, // 5 minutes
-    MAX: 10 // 10 attempts
+    MAX: 15 // 15 attempts
   }
 }
 

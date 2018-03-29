@@ -70,7 +70,8 @@ export class AuthService {
 
                  if (error.status === 403) {
                    errorMessage = `Cannot retrieve OAuth Client credentials: ${error.text}. \n`
-                   errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
+                   errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), ' +
+                     'in particular the "webserver" section.'
                  }
 
                  // We put a bigger timeout
