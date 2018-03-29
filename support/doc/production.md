@@ -195,6 +195,8 @@ Now you can subscribe to the mailing list for PeerTube administrators: https://f
 
 #### Auto (minor versions only)
 
+The password it asks is PeerTube's database user password.
+
 ```
 $ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube ./upgrade.sh
 $ sudo systemctl restart peertube && sudo journalctl -fu peertube
