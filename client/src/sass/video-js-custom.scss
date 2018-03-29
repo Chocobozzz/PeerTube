@@ -2,9 +2,14 @@
 @import '_mixins';
 
 $primary-foreground-color: #fff;
+$primary-foreground-opacity: 0.9;
+$primary-foreground-opacity-hover: 1;
 $primary-background-color: #000;
+
 $font-size: 13px;
 $control-bar-height: 34px;
+
+$slider-bg-color: lighten($primary-background-color, 33%);
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
@@ -36,8 +41,6 @@ $control-bar-height: 34px;
     line-height: $control-bar-height;
   }
 
-  .vjs-mouse-display:before,
-  .vjs-play-progress:before,
   .vjs-volume-level:before {
     content: ''; /* Remove Circle From Progress Bar */
   }
@@ -96,28 +99,26 @@ $control-bar-height: 34px;
     background-color: rgba($primary-background-color, 0.5);
   }
 
-  $slider-bg-color: lighten($primary-background-color, 33%);
-
   .vjs-slider {
     background-color: rgba(255, 255, 255, .3);
     border-radius: 2px;
     height: 5px;
+
+    .vjs-slider-bar {
+      background: $primary-foreground-color;
+    }
   }
 
-  /* The slider bar color is used for the progress bar and the volume bar
-     (the first two can be removed after a fix that's coming) */
-  .vjs-volume-level,
-  .vjs-play-progress,
-  .vjs-slider-bar {
-    background: $primary-foreground-color;
+  .vjs-play-progress .vjs-time-tooltip {
+    display: none;
   }
 
   .vjs-load-progress {
     background: rgba($slider-bg-color, 0.5);
-  }
 
-  .vjs-load-progress div {
-    background: rgba($slider-bg-color, 0.75);
+    div {
+      background: rgba($slider-bg-color, 0.75);
+    }
   }
 
   .vjs-poster {
