@@ -4,6 +4,7 @@ set -eu
 
 shutdown() {
   # Get our process group id
+  # shellcheck disable=SC2009
   PGID=$(ps -o pgid= $$ | grep -o "[0-9]*")
 
   # Kill it in a new new process group
@@ -32,10 +33,11 @@ fi
 version="v$1"
 directory_name="peertube-$version"
 zip_name="peertube-$version.zip"
+tar_name="peertube-$version.tar.xz"
 
 changelog=$(awk -v version="$version" '/## v/ { printit = $2 == version }; printit;' CHANGELOG.md | grep -v "$version" | sed '1{/^$/d}')
 
-printf "Changelog will be:\n%s\n" "$changelog"
+printf "Changelog will be:\\n%s\\n" "$changelog"
 
 read -p "Are you sure to release? " -n 1 -r
 echo
@@ -44,7 +46,8 @@ then
   exit 0
 fi
 
-( cd client
+( 
+  cd client
   npm version --no-git-tag-version --no-commit-hooks "$1"
 )
 
@@ -56,31 +59,47 @@ git tag -s -a "$version" -m "$version"
 npm run build
 rm "./client/dist/stats.json"
 
-cd ..
+# Creating the archives
+(
+  cd ..
+  ln -s "PeerTube" "$directory_name"
+  zip -r "PeerTube/$zip_name" "$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
+                              "$directory_name/LICENSE" "$directory_name/README.md" \
+                              "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
+                              "$directory_name/client/package.json" "$directory_name/config" \
+                              "$directory_name/dist" "$directory_name/package.json" \
+                              "$directory_name/scripts" "$directory_name/support" \
+                              "$directory_name/tsconfig.json" "$directory_name/yarn.lock"
+  gpg --armor --detach-sign -u 583A612D890159BE "PeerTube/$zip_name"
+  tar cfJ "PeerTube/$tar_name" "$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
+                              "$directory_name/LICENSE" "$directory_name/README.md" \
+                              "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
+                              "$directory_name/client/package.json" "$directory_name/config" \
+                              "$directory_name/dist" "$directory_name/package.json" \
+                              "$directory_name/scripts" "$directory_name/support" \
+                              "$directory_name/tsconfig.json" "$directory_name/yarn.lock"
+  gpg --armor --detach-sign -u 583A612D890159BE "PeerTube/$tar_name"
 
-ln -s "PeerTube" "$directory_name"
-zip -r "PeerTube/$zip_name" "$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
-                            "$directory_name/LICENSE" "$directory_name/README.md" \
-                            "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
-                            "$directory_name/client/package.json" "$directory_name/config" \
-                            "$directory_name/dist" "$directory_name/package.json" \
-                            "$directory_name/scripts" "$directory_name/support" \
-                            "$directory_name/tsconfig.json" "$directory_name/yarn.lock"
+  rm "$directory_name"
+)
 
-rm "$directory_name"
+# Creating the release on GitHub, with the created archives
+(
+  cd "PeerTube"
 
-cd "PeerTube"
+  git push origin --tag
 
-git push origin --tag
+  github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
+  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
+  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name.asc" --file "$zip_name.asc"
+  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name" --file "$tar_name"
+  github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$tar_name.asc" --file "$tar_name.asc"
 
-github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
-github-release upload --user chocobozzz --repo peertube --tag "$version" --name "$zip_name" --file "$zip_name"
+  git push origin develop
 
-git push origin develop
-
-# Update master branch
-git checkout master
-git rebase develop
-git push origin master
-git checkout develop
-
+  # Update master branch
+  git checkout master
+  git rebase develop
+  git push origin master
+  git checkout develop
+)
