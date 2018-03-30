@@ -81,7 +81,7 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
   url: "pkg+http://pkg.FreeBSD.org/${ABI}/latest",
 ```
 
-  2. bootsrap pkg, initialize db and install peertube's dependencies, always as root (sudo not yet installed):
+  2. bootstrap pkg, initialize db and install peertube's dependencies, always as root (sudo not yet installed):
 ```
 # pkg
 # pkg update
