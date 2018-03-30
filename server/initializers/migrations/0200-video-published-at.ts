@@ -9,7 +9,7 @@ async function up (utils: {
   {
     const data = {
       type: Sequelize.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: Sequelize.NOW
     }
     await utils.queryInterface.addColumn('video', 'publishedAt', data)
@@ -18,6 +18,16 @@ async function up (utils: {
   {
     const query = 'UPDATE video SET "publishedAt" = video."createdAt"'
     await utils.sequelize.query(query)
+  }
+
+  // Sequelize does not alter the column with NOW as default value
+  {
+    const data = {
+      type: Sequelize.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.NOW
+    }
+    await utils.queryInterface.changeColumn('video', 'publishedAt', data)
   }
 
 }
