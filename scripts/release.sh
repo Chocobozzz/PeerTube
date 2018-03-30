@@ -61,25 +61,27 @@ rm "./client/dist/stats.json"
 
 # Creating the archives
 (
+  # local variables
+  directories_to_archive = ("$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
+                            "$directory_name/LICENSE" "$directory_name/README.md" \
+                            "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
+                            "$directory_name/client/package.json" "$directory_name/config" \
+                            "$directory_name/dist" "$directory_name/package.json" \
+                            "$directory_name/scripts" "$directory_name/support" \
+                            "$directory_name/tsconfig.json" "$directory_name/yarn.lock")
+  maintainer_pubkey = "583A612D890159BE"
+
+  # temporary setup
   cd ..
   ln -s "PeerTube" "$directory_name"
-  zip -r "PeerTube/$zip_name" "$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
-                              "$directory_name/LICENSE" "$directory_name/README.md" \
-                              "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
-                              "$directory_name/client/package.json" "$directory_name/config" \
-                              "$directory_name/dist" "$directory_name/package.json" \
-                              "$directory_name/scripts" "$directory_name/support" \
-                              "$directory_name/tsconfig.json" "$directory_name/yarn.lock"
-  gpg --armor --detach-sign -u 583A612D890159BE "PeerTube/$zip_name"
-  tar cfJ "PeerTube/$tar_name" "$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
-                              "$directory_name/LICENSE" "$directory_name/README.md" \
-                              "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
-                              "$directory_name/client/package.json" "$directory_name/config" \
-                              "$directory_name/dist" "$directory_name/package.json" \
-                              "$directory_name/scripts" "$directory_name/support" \
-                              "$directory_name/tsconfig.json" "$directory_name/yarn.lock"
-  gpg --armor --detach-sign -u 583A612D890159BE "PeerTube/$tar_name"
 
+  # archive creation + signing
+  zip -r "PeerTube/$zip_name" "${directories_to_archive[@]}"
+  gpg --armor --detach-sign -u $maintainer_pubkey "PeerTube/$zip_name"
+  XZ_OPT=-e9 tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
+  gpg --armor --detach-sign -u $maintainer_pubkey "PeerTube/$tar_name"
+
+  # temporary setup destruction
   rm "$directory_name"
 )
 
