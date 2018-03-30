@@ -1,7 +1,7 @@
 @import '_variables';
 @import '_mixins';
 
-$primary-foreground-color: #eee;
+$primary-foreground-color: #fff;
 $primary-foreground-opacity: 0.9;
 $primary-foreground-opacity-hover: 1;
 $primary-background-color: #000;
@@ -11,9 +11,12 @@ $control-bar-height: 34px;
 
 $slider-bg-color: lighten($primary-background-color, 33%);
 
+$setting-transition-duration: 0.15s;
+$setting-transition-easing: ease-out;
+
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
-  color: #fff;
+  color: $primary-foreground-color;
 
   .vjs-dock-text {
     padding-right: 10px;
@@ -22,16 +25,16 @@ $slider-bg-color: lighten($primary-background-color, 33%);
   .vjs-dock-description {
     font-size: 11px;
 
-    &:before, &:after {
+    &::before, &::after {
       display: inline-block;
       content: '\1F308';
     }
 
-    &:before {
+    &::before {
       margin-right: 4px;
     }
 
-    &:after {
+    &::after {
       margin-left: 4px;
       transform: scale(-1, 1);
     }
@@ -41,7 +44,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     line-height: $control-bar-height;
   }
 
-  .vjs-volume-level:before {
+  .vjs-volume-level::before {
     content: ''; /* Remove Circle From Progress Bar */
   }
 
@@ -95,7 +98,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
   .vjs-control-bar,
   .vjs-big-play-button,
-  .vjs-menu-button .vjs-menu-content {
+  .vjs-settings-dialog {
     background-color: rgba($primary-background-color, 0.5);
   }
 
@@ -110,8 +113,13 @@ $slider-bg-color: lighten($primary-background-color, 33%);
   }
 
   .vjs-play-progress {
-    &::before:hover {
-      top: -0.372em;
+
+    &::before {
+      top: -0.3em;
+
+      &:hover {
+        top: -0.372em;
+      }
     }
 
     .vjs-time-tooltip {
@@ -141,8 +149,11 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     .vjs-mute-control,
     .vjs-volume-control,
     .vjs-resolution-control,
-    .vjs-fullscreen-control
+    .vjs-fullscreen-control,
+    .vjs-peertube-link,
+    .vjs-settings
     {
+      color: $primary-foreground-color !important;
       opacity: $primary-foreground-opacity;
       transition: opacity .1s;
 
@@ -155,6 +166,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     .vjs-duration,
     .vjs-peertube {
       color: $primary-foreground-color;
+      opacity: $primary-foreground-opacity;
     }
 
     .vjs-progress-control {
@@ -172,6 +184,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     .vjs-play-control {
       @include disable-outline;
 
+      cursor: pointer;
       font-size: $font-size;
       padding: 0 17px;
       margin-right: 5px;
@@ -291,7 +304,7 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 
     .vjs-volume-control {
       width: 30px;
-      margin: 0;
+      margin: 0 5px 0 0;
     }
 
     .vjs-volume-bar {
@@ -348,6 +361,16 @@ $slider-bg-color: lighten($primary-background-color, 33%);
       }
     }
 
+    .vjs-peertube-link {
+      @include disable-outline;
+      @include disable-default-a-behaviour;
+
+      text-decoration: none;
+      line-height: $control-bar-height;
+      font-weight: $font-semibold;
+      padding: 0 5px;
+    }
+
     .vjs-fullscreen-control {
       @include disable-outline;
 
@@ -370,19 +393,6 @@ $slider-bg-color: lighten($primary-background-color, 33%);
     .vjs-menu-button-popup {
       font-weight: $font-semibold;
       width: 50px;
-
-      // Thanks: https://github.com/kmoskwiak/videojs-resolution-switcher/pull/92/files
-      .vjs-resolution-button-label {
-        line-height: $control-bar-height;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        box-sizing: inherit;
-        text-align: center;
-      }
 
       .vjs-resolution-button {
         @include disable-outline;
@@ -451,6 +461,35 @@ $slider-bg-color: lighten($primary-background-color, 33%);
   }
 }
 
+// Play/pause animations
+.vjs-has-started .vjs-play-control {
+  &.vjs-playing {
+    animation: remove-pause-button 0.25s ease;
+  }
+
+  &.vjs-paused {
+    animation: add-play-button 0.25s ease;
+  }
+
+  @keyframes remove-pause-button {
+    0% {
+      transform: rotate(90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes add-play-button {
+    0% {
+      transform: rotate(-90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+}
+
 // Thanks: https://projects.lukehaas.me/css-loaders/
 .vjs-loading-spinner {
   left: 50%;
@@ -463,11 +502,11 @@ $slider-bg-color: lighten($primary-background-color, 33%);
   overflow: hidden;
   visibility: hidden;
 
-  &:before {
+  &::before {
     animation: none !important;
   }
 
-  &:after {
+  &::after {
     border-radius: 50%;
     width: 6em;
     height: 6em;
@@ -518,5 +557,171 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 .vjs-error.vjs-error-display-enabled {
   .vjs-error-display {
     display: block;
+  }
+}
+
+
+/* Sass for videojs-settings-menu */
+
+.video-js {
+
+  .vjs-settings {
+    @include disable-outline;
+
+    cursor: pointer;
+    width: 37px;
+
+    .vjs-icon-placeholder {
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      vertical-align: middle;
+      background: url('../assets/player/images/settings.svg') no-repeat;
+      background-size: contain;
+
+      &::before {
+        content: '';
+      }
+    }
+  }
+
+  .vjs-settings-sub-menu-title {
+    width: 4em;
+    text-transform: initial;
+  }
+
+  .vjs-settings-dialog {
+    position: absolute;
+    right: .5em;
+    bottom: 3.5em;
+    color: $primary-foreground-color;
+    opacity: $primary-foreground-opacity;
+    margin: 0 auto;
+    font-size: $font-size !important;
+
+    width: auto;
+    overflow: hidden;
+
+    transition: width $setting-transition-duration $setting-transition-easing,  height $setting-transition-duration $setting-transition-easing;
+
+    .vjs-settings-sub-menu-value,
+    .vjs-settings-sub-menu-title {
+      display: table-cell;
+      padding: 0 5px;
+    }
+
+    .vjs-settings-sub-menu-title {
+      text-align: left;
+      font-weight: $font-semibold;
+    }
+
+    .vjs-settings-sub-menu-value {
+      width: 100%;
+      text-align: right;
+    }
+
+    .vjs-settings-panel {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-radius: 1px;
+    }
+
+    .vjs-settings-panel-child {
+      display: flex;
+
+      align-items: flex-end;
+      white-space: nowrap;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+
+      > .vjs-menu {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      > .vjs-menu,
+      > .vjs-settings-sub-menu {
+        transition: all $setting-transition-duration $setting-transition-easing;
+
+        .vjs-menu-item {
+
+          &:first-child {
+            margin-top: 5px;
+          }
+
+          &:last-child {
+            margin-bottom: 5px;
+          }
+        }
+
+        li {
+          font-size: 1em;
+          text-transform: initial;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+
+      > .vjs-menu {
+        .vjs-menu-item {
+          padding: 8px 16px;
+        }
+
+        .vjs-settings-sub-menu-value::after {
+          @include chevron-right(9px, 2px);
+
+          margin-left: 5px;
+        }
+      }
+
+      > .vjs-settings-sub-menu {
+        width: 80px;
+
+        .vjs-menu-item {
+          outline: 0;
+          font-weight: $font-semibold;
+
+          padding: 5px 8px;
+          text-align: right;
+
+          &.vjs-back-button {
+            background-color: inherit;
+            padding: 8px 8px 13px 8px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid grey;
+
+            &::before {
+              @include chevron-left(9px, 2px);
+
+              margin-right: 5px;
+            }
+          }
+
+          &.vjs-selected {
+            background-color: inherit;
+            color: inherit;
+            position: relative;
+
+            &::before {
+              @include icon(15px);
+
+              position: absolute;
+              left: 8px;
+              content: ' ';
+              margin-top: 1px;
+              background-image: url('../assets/player/images/tick.svg');
+            }
+          }
+        }
+      }
+    }
   }
 }

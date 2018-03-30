@@ -1,10 +1,9 @@
 import './embed.scss'
 
 import * as videojs from 'video.js'
-import 'videojs-hotkeys'
-import '../../assets/player/peertube-videojs-plugin'
-import 'videojs-dock/dist/videojs-dock.es.js'
+
 import { VideoDetails } from '../../../../shared'
+import { getVideojsOptions } from '../../assets/player/peertube-player'
 
 function getVideoUrl (id: string) {
   return window.location.origin + '/api/v1/videos/' + id
@@ -20,9 +19,10 @@ const videoId = urlParts[urlParts.length - 1]
 
 loadVideoInfo(videoId)
   .then(videoInfo => {
-    const videoElement = document.getElementById('video-container') as HTMLVideoElement
-    const previewUrl = window.location.origin + videoInfo.previewPath
-    videoElement.poster = previewUrl
+    const videoContainerId = 'video-container'
+
+    const videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
+    videoElement.poster = window.location.origin + videoInfo.previewPath
 
     let autoplay = false
 
@@ -33,45 +33,17 @@ loadVideoInfo(videoId)
       console.error('Cannot get params from URL.', err)
     }
 
-    const videojsOptions = {
-      controls: true,
+    const videojsOptions = getVideojsOptions({
       autoplay,
-      inactivityTimeout: 500,
-      plugins: {
-        peertube: {
-          videoFiles: videoInfo.files,
-          playerElement: videoElement,
-          videoViewUrl: getVideoUrl(videoId) + '/views',
-          videoDuration: videoInfo.duration
-        },
-        hotkeys: {
-          enableVolumeScroll: false
-        }
-      },
-      controlBar: {
-        children: [
-          'playToggle',
-          'currentTimeDisplay',
-          'timeDivider',
-          'durationDisplay',
-          'liveDisplay',
-
-          'flexibleWidthSpacer',
-          'progressControl',
-
-          'webTorrentButton',
-
-          'muteToggle',
-          'volumeControl',
-
-          'resolutionMenuButton',
-          'peerTubeLinkButton',
-
-          'fullscreenToggle'
-        ]
-      }
-    }
-    videojs('video-container', videojsOptions, function () {
+      inactivityTimeout: 1500,
+      videoViewUrl: getVideoUrl(videoId) + '/views',
+      playerElement: videoElement,
+      videoFiles: videoInfo.files,
+      videoDuration: videoInfo.duration,
+      enableHotkeys: true,
+      peertubeLink: true
+    })
+    videojs(videoContainerId, videojsOptions, function () {
       const player = this
 
       player.dock({

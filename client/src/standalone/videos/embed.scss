@@ -14,8 +14,6 @@ html, body {
   margin: 0;
 }
 
-
-
 .video-js.vjs-peertube-skin {
   width: 100%;
   height: 100%;
@@ -23,22 +21,6 @@ html, body {
 
   .vjs-poster {
     background-size: 100% auto;
-  }
-
-  .vjs-peertube-link {
-    @include disable-outline;
-
-    color: #fff;
-    text-decoration: none;
-    font-size: $font-size;
-    line-height: $control-bar-height;
-    transition: all .4s;
-    font-weight: $font-semibold;
-    padding-right: 5px;
-  }
-
-  .vjs-peertube-link:hover {
-    text-shadow: 0 0 1em #fff;
   }
 
   @media screen and (max-width: 350px) {

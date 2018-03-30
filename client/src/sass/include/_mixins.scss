@@ -279,3 +279,27 @@
   width: $size;
   height: $size;
 }
+
+@mixin chevron ($size, $border-width) {
+  border-style: solid;
+  border-width: $border-width $border-width 0 0;
+  content: '';
+  display: inline-block;
+  transform: rotate(-45deg);
+  height: $size;
+  width: $size;
+}
+
+@mixin chevron-right ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  left: 0;
+  transform: rotate(45deg);
+}
+
+@mixin chevron-left ($size, $border-width) {
+  @include chevron($size, $border-width);
+
+  left: 0.25em;
+  transform: rotate(-135deg);
+}

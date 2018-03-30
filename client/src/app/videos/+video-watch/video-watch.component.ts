@@ -21,6 +21,7 @@ import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
+import { getVideojsOptions } from '../../../assets/player/peertube-player'
 
 @Component({
   selector: 'my-video-watch',
@@ -341,45 +342,16 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.playerElement.poster = this.video.previewUrl
       }
 
-      const videojsOptions = {
-        controls: true,
+      const videojsOptions = getVideojsOptions({
         autoplay: this.isAutoplay(),
-        playbackRates: [ 0.5, 1, 1.5, 2 ],
-        plugins: {
-          peertube: {
-            videoFiles: this.video.files,
-            playerElement: this.playerElement,
-            videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
-            videoDuration: this.video.duration
-          },
-          hotkeys: {
-            enableVolumeScroll: false
-          }
-        },
-        controlBar: {
-          children: [
-            'playToggle',
-            'currentTimeDisplay',
-            'timeDivider',
-            'durationDisplay',
-            'liveDisplay',
-
-            'flexibleWidthSpacer',
-            'progressControl',
-
-            'webTorrentButton',
-
-            'playbackRateMenuButton',
-
-            'muteToggle',
-            'volumeControl',
-
-            'resolutionMenuButton',
-
-            'fullscreenToggle'
-          ]
-        }
-      }
+        inactivityTimeout: 4000,
+        videoFiles: this.video.files,
+        playerElement: this.playerElement,
+        videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
+        videoDuration: this.video.duration,
+        enableHotkeys: true,
+        peertubeLink: false
+      })
 
       this.videoPlayerLoaded = true
 

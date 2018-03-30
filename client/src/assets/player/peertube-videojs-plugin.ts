@@ -1,49 +1,11 @@
-// Big thanks to: https://github.com/kmoskwiak/videojs-resolution-switcher
-
 import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
-import { VideoConstant, VideoResolution } from '../../../../shared/models/videos'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
+import './settings-menu-button'
+import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import { getStoredMute, getStoredVolume, saveMuteInStore, saveVolumeInStore } from './utils'
 
-declare module 'video.js' {
-  interface Player {
-    peertube (): PeerTubePlugin
-  }
-}
-
-interface VideoJSComponentInterface {
-  _player: videojs.Player
-
-  new (player: videojs.Player, options?: any)
-
-  registerComponent (name: string, obj: any)
-}
-
-type PeertubePluginOptions = {
-  videoFiles: VideoFile[]
-  playerElement: HTMLVideoElement
-  videoViewUrl: string
-  videoDuration: number
-}
-
-// https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
-// Don't import all Angular stuff, just copy the code with shame
-const dictionaryBytes: Array<{max: number, type: string}> = [
-  { max: 1024, type: 'B' },
-  { max: 1048576, type: 'KB' },
-  { max: 1073741824, type: 'MB' },
-  { max: 1.0995116e12, type: 'GB' }
-]
-function bytes (value) {
-  const format = dictionaryBytes.find(d => value < d.max) || dictionaryBytes[dictionaryBytes.length - 1]
-  const calc = Math.floor(value / (format.max / 1024)).toString()
-
-  return [ calc, format.type ]
-}
-
-// videojs typings don't have some method we need
-const videojsUntyped = videojs as any
 const webtorrent = new WebTorrent({
   tracker: {
     rtcConfig: {
@@ -60,199 +22,19 @@ const webtorrent = new WebTorrent({
   dht: false
 })
 
-const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
-class ResolutionMenuItem extends MenuItem {
-
-  constructor (player: videojs.Player, options) {
-    options.selectable = true
-    super(player, options)
-
-    const currentResolutionId = this.player_.peertube().getCurrentResolutionId()
-    this.selected(this.options_.id === currentResolutionId)
-  }
-
-  handleClick (event) {
-    super.handleClick(event)
-
-    this.player_.peertube().updateResolution(this.options_.id)
-  }
-}
-MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem)
-
-const MenuButton: VideoJSComponentInterface = videojsUntyped.getComponent('MenuButton')
-class ResolutionMenuButton extends MenuButton {
-  label: HTMLElement
-
-  constructor (player: videojs.Player, options) {
-    options.label = 'Quality'
-    super(player, options)
-
-    this.label = document.createElement('span')
-
-    this.el().setAttribute('aria-label', 'Quality')
-    this.controlText('Quality')
-
-    videojsUntyped.dom.addClass(this.label, 'vjs-resolution-button-label')
-    this.el().appendChild(this.label)
-
-    player.peertube().on('videoFileUpdate', () => this.update())
-  }
-
-  createItems () {
-    const menuItems = []
-    for (const videoFile of this.player_.peertube().videoFiles) {
-      menuItems.push(new ResolutionMenuItem(
-        this.player_,
-        {
-          id: videoFile.resolution.id,
-          label: videoFile.resolution.label,
-          src: videoFile.magnetUri,
-          selected: videoFile.resolution.id === this.currentSelectionId
-        })
-      )
-    }
-
-    return menuItems
-  }
-
-  update () {
-    if (!this.label) return
-
-    this.label.innerHTML = this.player_.peertube().getCurrentResolutionLabel()
-    this.hide()
-    return super.update()
-  }
-
-  buildCSSClass () {
-    return super.buildCSSClass() + ' vjs-resolution-button'
-  }
-
-  buildWrapperCSSClass () {
-    return 'vjs-resolution-control ' + super.buildWrapperCSSClass()
-  }
-}
-MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton)
-
-const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
-class PeerTubeLinkButton extends Button {
-
-  createEl () {
-    const link = document.createElement('a')
-    link.href = window.location.href.replace('embed', 'watch')
-    link.innerHTML = 'PeerTube'
-    link.title = 'Go to the video page'
-    link.className = 'vjs-peertube-link'
-    link.target = '_blank'
-
-    return link
-  }
-
-  handleClick () {
-    this.player_.pause()
-  }
-}
-Button.registerComponent('PeerTubeLinkButton', PeerTubeLinkButton)
-
-class WebTorrentButton extends Button {
-  createEl () {
-    const div = document.createElement('div')
-    const subDivWebtorrent = document.createElement('div')
-    div.appendChild(subDivWebtorrent)
-
-    const downloadIcon = document.createElement('span')
-    downloadIcon.classList.add('icon', 'icon-download')
-    subDivWebtorrent.appendChild(downloadIcon)
-
-    const downloadSpeedText = document.createElement('span')
-    downloadSpeedText.classList.add('download-speed-text')
-    const downloadSpeedNumber = document.createElement('span')
-    downloadSpeedNumber.classList.add('download-speed-number')
-    const downloadSpeedUnit = document.createElement('span')
-    downloadSpeedText.appendChild(downloadSpeedNumber)
-    downloadSpeedText.appendChild(downloadSpeedUnit)
-    subDivWebtorrent.appendChild(downloadSpeedText)
-
-    const uploadIcon = document.createElement('span')
-    uploadIcon.classList.add('icon', 'icon-upload')
-    subDivWebtorrent.appendChild(uploadIcon)
-
-    const uploadSpeedText = document.createElement('span')
-    uploadSpeedText.classList.add('upload-speed-text')
-    const uploadSpeedNumber = document.createElement('span')
-    uploadSpeedNumber.classList.add('upload-speed-number')
-    const uploadSpeedUnit = document.createElement('span')
-    uploadSpeedText.appendChild(uploadSpeedNumber)
-    uploadSpeedText.appendChild(uploadSpeedUnit)
-    subDivWebtorrent.appendChild(uploadSpeedText)
-
-    const peersText = document.createElement('span')
-    peersText.classList.add('peers-text')
-    const peersNumber = document.createElement('span')
-    peersNumber.classList.add('peers-number')
-    subDivWebtorrent.appendChild(peersNumber)
-    subDivWebtorrent.appendChild(peersText)
-
-    div.className = 'vjs-peertube'
-    // Hide the stats before we get the info
-    subDivWebtorrent.className = 'vjs-peertube-hidden'
-
-    const subDivHttp = document.createElement('div')
-    subDivHttp.className = 'vjs-peertube-hidden'
-    const subDivHttpText = document.createElement('span')
-    subDivHttpText.classList.add('peers-number')
-    subDivHttpText.textContent = 'HTTP'
-    const subDivFallbackText = document.createElement('span')
-    subDivFallbackText.classList.add('peers-text')
-    subDivFallbackText.textContent = ' fallback'
-
-    subDivHttp.appendChild(subDivHttpText)
-    subDivHttp.appendChild(subDivFallbackText)
-    div.appendChild(subDivHttp)
-
-    this.player_.peertube().on('torrentInfo', (event, data) => {
-      // We are in HTTP fallback
-      if (!data) {
-        subDivHttp.className = 'vjs-peertube-displayed'
-        subDivWebtorrent.className = 'vjs-peertube-hidden'
-
-        return
-      }
-
-      const downloadSpeed = bytes(data.downloadSpeed)
-      const uploadSpeed = bytes(data.uploadSpeed)
-      const numPeers = data.numPeers
-
-      downloadSpeedNumber.textContent = downloadSpeed[ 0 ]
-      downloadSpeedUnit.textContent = ' ' + downloadSpeed[ 1 ]
-
-      uploadSpeedNumber.textContent = uploadSpeed[ 0 ]
-      uploadSpeedUnit.textContent = ' ' + uploadSpeed[ 1 ]
-
-      peersNumber.textContent = numPeers
-      peersText.textContent = ' peers'
-
-      subDivHttp.className = 'vjs-peertube-hidden'
-      subDivWebtorrent.className = 'vjs-peertube-displayed'
-    })
-
-    return div
-  }
-}
-Button.registerComponent('WebTorrentButton', WebTorrentButton)
-
 const Plugin: VideoJSComponentInterface = videojsUntyped.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
+  private readonly playerElement: HTMLVideoElement
+  private readonly autoplay: boolean = false
+  private readonly savePlayerSrcFunction: Function
   private player: any
   private currentVideoFile: VideoFile
-  private playerElement: HTMLVideoElement
   private videoFiles: VideoFile[]
   private torrent: WebTorrent.Torrent
-  private autoplay = false
   private videoViewUrl: string
   private videoDuration: number
   private videoViewInterval
   private torrentInfoInterval
-  private savePlayerSrcFunction: Function
 
   constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
@@ -274,9 +56,19 @@ class PeerTubePlugin extends Plugin {
     this.playerElement = options.playerElement
 
     this.player.ready(() => {
+      const volume = getStoredVolume()
+      if (volume !== undefined) this.player.volume(volume)
+      const muted = getStoredMute()
+      if (muted !== undefined) this.player.muted(muted)
+
       this.initializePlayer()
       this.runTorrentInfoScheduler()
       this.runViewAdd()
+    })
+
+    this.player.on('volumechange', () => {
+      saveVolumeInStore(this.player.volume())
+      saveMuteInStore(this.player.muted())
     })
   }
 
@@ -311,16 +103,19 @@ class PeerTubePlugin extends Plugin {
       return
     }
 
-    // Do not display error to user because we will have multiple fallbacks
+    // Do not display error to user because we will have multiple fallback
     this.disableErrorDisplay()
 
     this.player.src = () => true
-    this.player.playbackRate(1)
+    const oldPlaybackRate = this.player.playbackRate()
 
     const previousVideoFile = this.currentVideoFile
     this.currentVideoFile = videoFile
 
-    this.addTorrent(this.currentVideoFile.magnetUri, previousVideoFile, done)
+    this.addTorrent(this.currentVideoFile.magnetUri, previousVideoFile, () => {
+      this.player.playbackRate(oldPlaybackRate)
+      return done()
+    })
 
     this.trigger('videoFileUpdate')
   }
@@ -337,7 +132,7 @@ class PeerTubePlugin extends Plugin {
       renderVideo(torrent.files[0], this.playerElement, options,(err, renderer) => {
         this.renderer = renderer
 
-        if (err) return this.fallbackToHttp()
+        if (err) return this.fallbackToHttp(done)
 
         if (!this.player.paused()) {
           const playPromise = this.player.play()
@@ -414,13 +209,17 @@ class PeerTubePlugin extends Plugin {
   private initializePlayer () {
     this.initSmoothProgressBar()
 
+    this.alterInactivity()
+
     if (this.autoplay === true) {
       this.updateVideoFile(undefined, () => this.player.play())
     } else {
-      this.player.one('play', () => {
-        this.player.pause()
-        this.updateVideoFile(undefined, () => this.player.play())
-      })
+      // Proxify first play
+      const oldPlay = this.player.play.bind(this.player)
+      this.player.play = () => {
+        this.updateVideoFile(undefined, () => oldPlay)
+        this.player.play = oldPlay
+      }
     }
   }
 
@@ -473,7 +272,7 @@ class PeerTubePlugin extends Plugin {
     return fetch(this.videoViewUrl, { method: 'POST' })
   }
 
-  private fallbackToHttp () {
+  private fallbackToHttp (done: Function) {
     this.flushVideoFile(this.currentVideoFile, true)
     this.torrent = null
 
@@ -484,6 +283,8 @@ class PeerTubePlugin extends Plugin {
     this.player.src = this.savePlayerSrcFunction
     this.player.src(httpUrl)
     this.player.play()
+
+    return done()
   }
 
   private handleError (err: Error | string) {
@@ -496,6 +297,25 @@ class PeerTubePlugin extends Plugin {
 
   private disableErrorDisplay () {
     this.player.removeClass('vjs-error-display-enabled')
+  }
+
+  private alterInactivity () {
+    let saveInactivityTimeout: number
+
+    const disableInactivity = () => {
+      saveInactivityTimeout = this.player.options_.inactivityTimeout
+      this.player.options_.inactivityTimeout = 0
+    }
+    const enableInactivity = () => {
+      // this.player.options_.inactivityTimeout = saveInactivityTimeout
+    }
+
+    const settingsDialog = this.player.children_.find(c => c.name_ === 'SettingsDialog')
+
+    this.player.controlBar.on('mouseenter', () => disableInactivity())
+    settingsDialog.on('mouseenter', () => disableInactivity())
+    this.player.controlBar.on('mouseleave', () => enableInactivity())
+    settingsDialog.on('mouseleave', () => enableInactivity())
   }
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
@@ -520,4 +340,6 @@ class PeerTubePlugin extends Plugin {
     }
   }
 }
+
 videojsUntyped.registerPlugin('peertube', PeerTubePlugin)
+export { PeerTubePlugin }
