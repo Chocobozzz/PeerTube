@@ -1,70 +1,32 @@
-<h1 align="center">
-  PeerTube
-</h1>
+# PeerTube
 
-<h4 align="center">
 Federated (ActivityPub) video streaming platform using P2P (BitTorrent)
 directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
-</h4>
 
 **PeerTube is sponsored by [Framasoft](https://framatube.org/#en), a non-profit
 that promotes, spreads and develops free culture in general, and free-libre
 software in particular. If you want to support this project, please [consider
 donating to them](https://soutenir.framasoft.org/en/).**
 
-<p align="center">
-  <strong>Client</strong>
+### Client
 
-  <br />
+[![Dependency Status](https://david-dm.org/Chocobozzz/PeerTube.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client)
+[![devDependency Status](https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client)](https://david-dm.org/Chocobozzz/PeerTube?path=client&type=dev)
 
-  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client">
-    <img src="https://david-dm.org/Chocobozzz/PeerTube.svg?path=client" alt="Dependency Status" />
-  </a>
+### Server
 
-  <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client&type=dev">
-    <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
-  </a>
-</p>
+[![Build Status](https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=develop)](https://travis-ci.org/Chocobozzz/PeerTube)
+[![Dependencies Status](https://david-dm.org/Chocobozzz/PeerTube.svg)](https://david-dm.org/Chocobozzz/PeerTube)
+[![devDependency Status](https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg)](https://david-dm.org/Chocobozzz/PeerTube?type=dev)
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![PeerTube Freenode IRC](https://img.shields.io/badge/%23peertube-on%20freenode-brightgreen.svg)](https://kiwiirc.com/client/irc.freenode.net/#peertube)
 
-<p align="center">
-  <strong>Server</strong>
+### Screenshot
 
-  <br />
+[![Screenshot](https://lutim.cpy.re/mRdBAdeD.png)](https://peertube.cpy.re)
 
-  <a href="https://travis-ci.org/Chocobozzz/PeerTube">
-    <img src="https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=develop" alt="Build Status" />
-  </a>
-
-  <a href="https://david-dm.org/Chocobozzz/PeerTube">
-    <img src="https://david-dm.org/Chocobozzz/PeerTube.svg" alt="Dependencies Status" />
-  </a>
-
-  <a href="https://david-dm.org/Chocobozzz/PeerTube?type=dev">
-    <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg" alt="devDependency Status" />
-  </a>
-
-  <a href="http://standardjs.com/">
-    <img src="https://img.shields.io/badge/code%20style-standard-brightgreen.svg" alt="JavaScript Style Guide" />
-  </a>
-
-  <a href="https://kiwiirc.com/client/irc.freenode.net/#peertube">
-    <img src="https://img.shields.io/badge/%23peertube-on%20freenode-brightgreen.svg" alt="PeerTube Freenode IRC" />
-  </a>
-</p>
-
-<br />
-
-<p align="center">
-  <a href="https://peertube.cpy.re">
-    <img src="https://lutim.cpy.re/mRdBAdeD.png" alt="screenshot" />
-  </a>
-</p>
-
-<p align="center">
-  <strong><a title="Website" target="_blank" href="https://joinpeertube.org">Website</a> |
-  <a title="Instances list" target="_blank" href="https://instances.joinpeertube.org">Instances list</a>
-  </strong>
-</p>
+### Join
+[**Website**](https://joinpeertube.org) | [**Instances list**](https://instances.joinpeertube.org)
 
 ## Demonstration
 
@@ -153,15 +115,12 @@ See [ARCHITECTURE.md](/ARCHITECTURE.md) for a more detailed explanation.
 
 Here are some simple schemes:
 
-<p align="center">
+![Decentralized](https://lutim.cpy.re/6Qut3ure.png)
 
-<img src="https://lutim.cpy.re/6Qut3ure.png" alt="Decentralized" />
+![Watch a video](https://lutim.cpy.re/NvRAcv6U.png)
 
-<img src="https://lutim.cpy.re/NvRAcv6U.png" alt="Watch a video" />
+![Watch a P2P video](https://lutim.cpy.re/pqKm3Q5S.png)
 
-<img src="https://lutim.cpy.re/pqKm3Q5S.png" alt="Watch a P2P video" />
-
-</p>
 
 ## License
 
