@@ -73,10 +73,13 @@ async function run () {
     console.log('Will download and upload %d videos.\n', infoArray.length)
 
     for (const info of infoArray) {
-      await processVideo(info, program['language'])
+      try {
+        await processVideo(info, program['language'])
+      } catch (err) {
+        console.log(err.message)
+      }
     }
 
-    // https://www.youtube.com/watch?v=2Upx39TBc1s
     console.log('I\'m finished!')
     process.exit(0)
   })
@@ -103,15 +106,21 @@ function processVideo (info: any, languageCode: number) {
     console.log('Downloading video "%s"...', videoInfo.title)
 
     const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
-    youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
-      if (err) return console.error(err)
+    try {
+      youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
+        if (err) {
+          console.error(err)
+          return res()
+        }
 
-      console.log(output.join('\n'))
-
-      await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
-
-      return res()
-    })
+        console.log(output.join('\n'))
+        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
+        return res()
+      })
+    } catch (err) {
+        console.log(err.message)
+        return res()
+      }
   })
 }
 
@@ -255,3 +264,4 @@ function isNSFW (info: any) {
 
   return false
 }
+
