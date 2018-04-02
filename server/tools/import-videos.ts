@@ -73,11 +73,7 @@ async function run () {
     console.log('Will download and upload %d videos.\n', infoArray.length)
 
     for (const info of infoArray) {
-      try {
-        await processVideo(info, program['language'])
-      } catch (err) {
-        console.log(err.message)
-      }
+      await processVideo(info, program['language'])
     }
 
     console.log('I\'m finished!')
@@ -118,9 +114,9 @@ function processVideo (info: any, languageCode: number) {
         return res()
       })
     } catch (err) {
-        console.log(err.message)
-        return res()
-      }
+      console.log(err.message)
+      return res()
+    }
   })
 }
 
@@ -264,4 +260,3 @@ function isNSFW (info: any) {
 
   return false
 }
-
