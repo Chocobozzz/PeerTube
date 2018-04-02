@@ -76,7 +76,6 @@ async function run () {
       await processVideo(info, program['language'])
     }
 
-    // https://www.youtube.com/watch?v=2Upx39TBc1s
     console.log('I\'m finished!')
     process.exit(0)
   })
@@ -103,15 +102,21 @@ function processVideo (info: any, languageCode: number) {
     console.log('Downloading video "%s"...', videoInfo.title)
 
     const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
-    youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
-      if (err) return console.error(err)
+    try {
+      youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
+        if (err) {
+          console.error(err)
+          return res()
+        }
 
-      console.log(output.join('\n'))
-
-      await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
-
+        console.log(output.join('\n'))
+        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
+        return res()
+      })
+    } catch (err) {
+      console.log(err.message)
       return res()
-    })
+    }
   })
 }
 
