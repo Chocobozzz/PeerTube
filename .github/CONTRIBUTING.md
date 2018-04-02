@@ -63,6 +63,23 @@ Enter password for new role: peertube
 
 In dev mode, administrator username is **root** and password is **test**.
 
+#### macOS
+
+For macOS, in order to create a new database called `peertube_dev` and a postgres user called `peertube`:
+
+* make sure you are running the services `posgresql` and `redis`
+
+   ```
+   brew services run postgresql
+   brew services run redis
+   ``` 
+* Initialize the database and the user:
+
+   ```
+   createuser -P peertube
+   createdb -O peertube peertube_dev
+   ```
+
 ### Server side
 
 You can find a documentation of the server code/architecture [here](/support/doc/development/server/code.md).

@@ -118,6 +118,19 @@ nginx_enable="YES"
 # service nginx start
 ```
 
+## macOS
+* Add the packages:
+
+	```
+	brew install ffmpeg nginx postgresql openssl gcc make redis git yarn
+	```
+* Run the services:
+
+   ```
+   brew services run postgresql
+   brew services run redis
+   ```
+   
 ## Other distributions
 
 Feel free to update this file in a pull request!
