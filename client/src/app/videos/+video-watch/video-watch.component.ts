@@ -56,6 +56,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private otherVideos: Video[] = []
   private paramsSub: Subscription
+  private videojsInstance: videojs.Player
 
   constructor (
     private elementRef: ElementRef,
@@ -333,35 +334,39 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.redirectService.redirectToHomepage()
     }
 
-    // Player was already loaded
-    if (this.videoPlayerLoaded !== true) {
-      this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
-
-      const videojsOptions = getVideojsOptions({
-        autoplay: this.isAutoplay(),
-        inactivityTimeout: 4000,
-        videoFiles: this.video.files,
-        playerElement: this.playerElement,
-        videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
-        videoDuration: this.video.duration,
-        enableHotkeys: true,
-        peertubeLink: false,
-        poster: this.video.previewUrl
-      })
-
-      this.videoPlayerLoaded = true
-
-      const self = this
-      this.zone.runOutsideAngular(() => {
-        videojs(this.playerElement, videojsOptions, function () {
-          self.player = this
-          this.on('customError', (event, data) => self.handleError(data.err))
-        })
-      })
-    } else {
-      const videoViewUrl = this.videoService.getVideoViewUrl(this.video.uuid)
-      this.player.peertube().setVideoFiles(this.video.files, videoViewUrl, this.video.duration)
+    // Player was already loaded, remove old videojs
+    if (this.videojsInstance) {
+      this.videojsInstance.dispose()
+      this.videojsInstance = undefined
     }
+
+    // Build video element, because videojs remove it on dispose
+    const playerElementWrapper = this.elementRef.nativeElement.querySelector('#video-element-wrapper')
+    this.playerElement = document.createElement('video')
+    this.playerElement.className = 'video-js vjs-peertube-skin'
+    playerElementWrapper.appendChild(this.playerElement)
+
+    const videojsOptions = getVideojsOptions({
+      autoplay: this.isAutoplay(),
+      inactivityTimeout: 4000,
+      videoFiles: this.video.files,
+      playerElement: this.playerElement,
+      videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
+      videoDuration: this.video.duration,
+      enableHotkeys: true,
+      peertubeLink: false,
+      poster: this.video.previewUrl
+    })
+
+    this.videoPlayerLoaded = true
+
+    const self = this
+    this.zone.runOutsideAngular(() => {
+      self.videojsInstance = videojs(this.playerElement, videojsOptions, function () {
+        self.player = this
+        this.on('customError', (event, data) => self.handleError(data.err))
+      })
+    })
 
     this.setVideoDescriptionHTML()
     this.setVideoLikesBarTooltipText()

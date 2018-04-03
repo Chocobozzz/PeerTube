@@ -35,8 +35,7 @@ class ResolutionMenuButton extends MenuButton {
   }
 
   createMenu () {
-    const menu = new Menu(this.player())
-
+    const menu = new Menu(this.player_)
     for (const videoFile of this.player_.peertube().videoFiles) {
       menu.addChild(new ResolutionMenuItem(
         this.player_,

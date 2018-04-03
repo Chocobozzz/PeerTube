@@ -6,7 +6,7 @@
   display: flex;
   justify-content: center;
 
-  #video-element {
+  /deep/ .video-js {
     width: 888px;
     height: 500px;
 

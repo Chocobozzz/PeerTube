@@ -13,7 +13,7 @@ class ResolutionMenuItem extends MenuItem {
     this.label = options.label
     this.id = options.id
 
-    player.peertube().on('videoFileUpdate', () => this.update())
+    player.peertube().on('videoFileUpdate', () => this.updateSelection())
   }
 
   handleClick (event) {
@@ -22,7 +22,7 @@ class ResolutionMenuItem extends MenuItem {
     this.player_.peertube().updateResolution(this.id)
   }
 
-  update () {
+  updateSelection () {
     this.selected(this.player_.peertube().getCurrentResolutionId() === this.id)
   }
 }

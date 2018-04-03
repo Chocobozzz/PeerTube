@@ -33,7 +33,7 @@ class SettingsButton extends Button {
     this.buildMenu()
     this.bindEvents()
 
-    // Prepare dialog
+    // Prepare the dialog
     this.player().one('play', () => this.hideDialog())
   }
 

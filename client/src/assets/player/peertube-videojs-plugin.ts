@@ -215,7 +215,7 @@ class PeerTubePlugin extends Plugin {
       this.player.posterImage.hide()
       this.updateVideoFile(undefined, () => this.player.play())
     } else {
-      // Proxify first play
+      // Proxy first play
       const oldPlay = this.player.play.bind(this.player)
       this.player.play = () => {
         this.updateVideoFile(undefined, () => oldPlay)
@@ -308,7 +308,7 @@ class PeerTubePlugin extends Plugin {
       this.player.options_.inactivityTimeout = 0
     }
     const enableInactivity = () => {
-      // this.player.options_.inactivityTimeout = saveInactivityTimeout
+      this.player.options_.inactivityTimeout = saveInactivityTimeout
     }
 
     const settingsDialog = this.player.children_.find(c => c.name_ === 'SettingsDialog')

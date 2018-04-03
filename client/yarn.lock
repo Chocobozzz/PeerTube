@@ -7041,9 +7041,9 @@ video.js@^5.19.2:
     videojs-vtt.js "0.12.6"
     xhr "2.2.2"
 
-video.js@^6.2.0:
-  version "6.6.3"
-  resolved "https://registry.yarnpkg.com/video.js/-/video.js-6.6.3.tgz#6ebf8ca607c95961bf07f0ecbe15f4b30c232d1e"
+video.js@^6.7.3:
+  version "6.7.3"
+  resolved "https://registry.yarnpkg.com/video.js/-/video.js-6.7.3.tgz#616ab015a74bb1bc8b092e9b4b8022519756f7c0"
   dependencies:
     babel-runtime "^6.9.2"
     global "4.3.2"
@@ -7051,7 +7051,7 @@ video.js@^6.2.0:
     tsml "1.0.1"
     videojs-font "2.1.0"
     videojs-ie8 "1.1.2"
-    videojs-vtt.js "0.12.4"
+    videojs-vtt.js "0.12.5"
     xhr "2.4.0"
 
 videojs-dock@^2.0.2:
@@ -7069,9 +7069,9 @@ videojs-font@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/videojs-font/-/videojs-font-2.1.0.tgz#a25930a67f6c9cfbf2bb88dacb8c6b451f093379"
 
-videojs-hotkeys@^0.2.20:
-  version "0.2.20"
-  resolved "https://registry.yarnpkg.com/videojs-hotkeys/-/videojs-hotkeys-0.2.20.tgz#1dce9d42c29da392cf1742b89ba292c6706c8973"
+videojs-hotkeys@^0.2.21:
+  version "0.2.21"
+  resolved "https://registry.yarnpkg.com/videojs-hotkeys/-/videojs-hotkeys-0.2.21.tgz#aa0a0a8484e8a8311ff9f4ba82d0934348566bad"
 
 videojs-ie8@1.1.2:
   version "1.1.2"
@@ -7083,9 +7083,9 @@ videojs-swf@5.4.1:
   version "5.4.1"
   resolved "https://registry.yarnpkg.com/videojs-swf/-/videojs-swf-5.4.1.tgz#2077ef71c749f2c7823ef49babae4dd2acb08f87"
 
-videojs-vtt.js@0.12.4:
-  version "0.12.4"
-  resolved "https://registry.yarnpkg.com/videojs-vtt.js/-/videojs-vtt.js-0.12.4.tgz#38f2499e31efb3fa93590ddad4cb663275a4b161"
+videojs-vtt.js@0.12.5:
+  version "0.12.5"
+  resolved "https://registry.yarnpkg.com/videojs-vtt.js/-/videojs-vtt.js-0.12.5.tgz#32852732741c8b4e7a4314caa2cd93646a9c2d40"
   dependencies:
     global "^4.3.1"
 
