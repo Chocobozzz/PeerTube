@@ -56,11 +56,11 @@ $setting-transition-easing: ease-out;
     outline: 0;
     font-size: 6em;
 
-    $big-play-width: 1.5em;
-    $big-play-height: 1em;
+    $big-play-width: 1.2em;
+    $big-play-height: 1.2em;
 
     border: 0;
-    border-radius: 0.3em;
+    border-radius: 100%;
 
     left: 50%;
     top: 50%;
@@ -77,14 +77,14 @@ $setting-transition-easing: ease-out;
     }
 
     .vjs-icon-placeholder::before {
-      transition: text-shadow 0.3s;
+      transition: font-size 0.5s, opacity 0.5s;
     }
 
     &:hover {
-      opacity: 0.9;
+      opacity: 0.8;
 
       .vjs-icon-placeholder::before {
-        text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
+        font-size: 110%;
       }
     }
   }
@@ -92,8 +92,28 @@ $setting-transition-easing: ease-out;
   &.vjs-has-started .vjs-big-play-button {
     display: block;
     visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s;
+
+    &, &::before {
+      opacity: 0;
+      transition: visibility 0.1s, opacity 0.1s;
+    }
+  }
+
+  &.vjs-has-started video {
+    background-color: #000;
+    animation: fade-black-on-play 0.5s linear;
+
+    @keyframes fade-black-on-play {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
   }
 
   .vjs-control-bar,
@@ -650,6 +670,10 @@ $setting-transition-easing: ease-out;
         transition: all $setting-transition-duration $setting-transition-easing;
 
         .vjs-menu-item {
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
 
           &:first-child {
             margin-top: 5px;

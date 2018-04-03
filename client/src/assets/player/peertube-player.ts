@@ -20,10 +20,12 @@ function getVideojsOptions (options: {
   videoFiles: VideoFile[],
   enableHotkeys: boolean,
   inactivityTimeout: number,
-  peertubeLink: boolean
+  peertubeLink: boolean,
+  poster: string
 }) {
   const videojsOptions = {
     controls: true,
+    poster: options.poster,
     autoplay: options.autoplay,
     inactivityTimeout: options.inactivityTimeout,
     playbackRates: [ 0.5, 1, 1.5, 2 ],

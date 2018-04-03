@@ -22,8 +22,6 @@ loadVideoInfo(videoId)
     const videoContainerId = 'video-container'
 
     const videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
-    videoElement.poster = window.location.origin + videoInfo.previewPath
-
     let autoplay = false
 
     try {
@@ -41,7 +39,8 @@ loadVideoInfo(videoId)
       videoFiles: videoInfo.files,
       videoDuration: videoInfo.duration,
       enableHotkeys: true,
-      peertubeLink: true
+      peertubeLink: true,
+      poster: window.location.origin + videoInfo.previewPath
     })
     videojs(videoContainerId, videojsOptions, function () {
       const player = this

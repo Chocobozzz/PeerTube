@@ -337,11 +337,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.videoPlayerLoaded !== true) {
       this.playerElement = this.elementRef.nativeElement.querySelector('#video-element')
 
-      // If autoplay is true, we don't really need a poster
-      if (this.isAutoplay() === false) {
-        this.playerElement.poster = this.video.previewUrl
-      }
-
       const videojsOptions = getVideojsOptions({
         autoplay: this.isAutoplay(),
         inactivityTimeout: 4000,
@@ -350,7 +345,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
         videoDuration: this.video.duration,
         enableHotkeys: true,
-        peertubeLink: false
+        peertubeLink: false,
+        poster: this.video.previewUrl
       })
 
       this.videoPlayerLoaded = true

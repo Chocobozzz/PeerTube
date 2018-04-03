@@ -212,6 +212,7 @@ class PeerTubePlugin extends Plugin {
     this.alterInactivity()
 
     if (this.autoplay === true) {
+      this.player.posterImage.hide()
       this.updateVideoFile(undefined, () => this.player.play())
     } else {
       // Proxify first play
