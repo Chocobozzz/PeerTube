@@ -75,7 +75,7 @@ $ npm run dev:server
 
 Then, the server will listen on `localhost:9000`. When server source files
 change, these are automatically recompiled and the server will automatically
-restart. Server is in `TEST` mode so it will run requests between instances more quickly.
+restart.
 
 ### Client side
 
@@ -93,14 +93,35 @@ The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
 Client files are automatically compiled on change, and the web browser will
 reload them automatically thanks to hot module replacement.
 
-### Test federation
+### Client and server side
+
+The API will listen on `localhost:9000` and the frontend on `localhost:3000`.
+File changes are automatically recompiled, injected in the web browser (no need to refresh manually)
+and the web server is automatically restarted.
+
+```
+$ npm run dev
+```
+
+### Federation
 
 This will run 3 nodes:
 
 ```
+$ npm run build
 $ npm run clean:server:test
 $ npm run play
 ```
 
 Then you will get access to the three nodes at `http://localhost:900{1,2,3}`
 with the `root` as username and `test{1,2,3}` for the password.
+
+
+### Unit tests
+
+To run unit tests, you need to build the application first:
+
+```
+$ npm run build
+$ npm test
+```
