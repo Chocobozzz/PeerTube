@@ -43,7 +43,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
   video: VideoDetails = null
-  videoPlayerLoaded = false
   videoNotFound = false
   descriptionLoading = false
 
@@ -56,7 +55,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private otherVideos: Video[] = []
   private paramsSub: Subscription
-  private videojsInstance: videojs.Player
 
   constructor (
     private elementRef: ElementRef,
@@ -96,7 +94,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       )
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
-      if (this.videoPlayerLoaded) {
+      if (this.player) {
         this.player.pause()
       }
 
@@ -116,10 +114,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy () {
-    // Remove player if it exists
-    if (this.videoPlayerLoaded === true) {
-      videojs(this.playerElement).dispose()
-    }
+    this.flushPlayer()
 
     // Unsubscribe subscriptions
     this.paramsSub.unsubscribe()
@@ -334,11 +329,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (res === false) return this.redirectService.redirectToHomepage()
     }
 
-    // Player was already loaded, remove old videojs
-    if (this.videojsInstance) {
-      this.videojsInstance.dispose()
-      this.videojsInstance = undefined
-    }
+    // Flush old player if needed
+    this.flushPlayer()
 
     // Build video element, because videojs remove it on dispose
     const playerElementWrapper = this.elementRef.nativeElement.querySelector('#video-element-wrapper')
@@ -348,7 +340,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     const videojsOptions = getVideojsOptions({
       autoplay: this.isAutoplay(),
-      inactivityTimeout: 4000,
+      inactivityTimeout: 2500,
       videoFiles: this.video.files,
       playerElement: this.playerElement,
       videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
@@ -358,11 +350,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       poster: this.video.previewUrl
     })
 
-    this.videoPlayerLoaded = true
-
     const self = this
     this.zone.runOutsideAngular(() => {
-      self.videojsInstance = videojs(this.playerElement, videojsOptions, function () {
+      videojs(this.playerElement, videojsOptions, function () {
         self.player = this
         this.on('customError', (event, data) => self.handleError(data.err))
       })
@@ -452,5 +442,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     // Be sure the autoPlay is set to false
     return this.user.autoPlayVideo !== false
+  }
+
+  private flushPlayer () {
+    // Remove player if it exists
+    if (this.player) {
+      this.player.dispose()
+      this.player = undefined
+    }
   }
 }
