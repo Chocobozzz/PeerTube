@@ -474,9 +474,12 @@ $setting-transition-easing: ease-out;
       display: none !important;
     }
 
-    .vjs-volume-panel {
-      width: 26px !important;
-      margin-right: 83px !important;
+    .vjs-peertube-link {
+      padding: 0 !important;
+    }
+
+    .vjs-settings {
+      width: 33px;
     }
   }
 }
