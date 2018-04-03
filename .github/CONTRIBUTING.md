@@ -105,11 +105,22 @@ $ npm run dev
 
 ### Federation
 
-This will run 3 nodes:
+Create the tests database if they do not exist:
+
+```
+$ sudo -u postgres createdb -O peertube peertube_test{1,2,3}
+```
+
+Build the application and flush the old tests data:
 
 ```
 $ npm run build
 $ npm run clean:server:test
+```
+
+This will run 3 nodes:
+
+```
 $ npm run play
 ```
 
@@ -119,7 +130,13 @@ with the `root` as username and `test{1,2,3}` for the password.
 
 ### Unit tests
 
-To run unit tests, you need to build the application first:
+Create the tests database if they do not exist:
+
+```
+$ sudo -u postgres createdb -O peertube peertube_test{1,2,3}
+```
+
+Build the application and run the unit/integration tests:
 
 ```
 $ npm run build
