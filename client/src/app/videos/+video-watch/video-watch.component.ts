@@ -38,7 +38,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   otherVideosDisplayed: Video[] = []
 
-  error = false
   player: videojs.Player
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
@@ -318,6 +317,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private async onVideoFetched (video: VideoDetails) {
     this.video = video
+
+    // Re init attributes
+    this.descriptionLoading = false
+    this.completeDescriptionShown = false
 
     this.updateOtherVideosDisplayed()
 
