@@ -427,6 +427,7 @@ async function completeVideoCheck (
   expect(video.isLocal).to.equal(attributes.isLocal)
   expect(video.duration).to.equal(attributes.duration)
   expect(dateIsValid(video.createdAt)).to.be.true
+  expect(dateIsValid(video.publishedAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
 
   const res = await getVideo(url, video.uuid)

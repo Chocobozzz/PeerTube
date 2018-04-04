@@ -22,9 +22,10 @@ const expect = chai.expect
 
 describe('Test video privacy', function () {
   let servers: ServerInfo[] = []
-  let privateVideoId
-  let privateVideoUUID
-  let unlistedVideoUUID
+  let privateVideoId: number
+  let privateVideoUUID: string
+  let unlistedVideoUUID: string
+  let now: number
 
   before(async function () {
     this.timeout(50000)
@@ -133,6 +134,7 @@ describe('Test video privacy', function () {
       privacy: VideoPrivacy.PUBLIC
     }
 
+    now = Date.now()
     await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, attribute)
 
     await wait(5000)
@@ -145,6 +147,7 @@ describe('Test video privacy', function () {
       expect(res.body.total).to.equal(1)
       expect(res.body.data).to.have.lengthOf(1)
       expect(res.body.data[0].name).to.equal('super video public')
+      expect(new Date(res.body.data[0].publishedAt).getTime()).to.be.at.least(now)
     }
   })
 
