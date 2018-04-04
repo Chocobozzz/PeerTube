@@ -60,6 +60,8 @@ class Emailer {
   async checkConnectionOrDie () {
     if (!this.transporter) return
 
+    logger.info('Testing SMTP server...')
+
     try {
       const success = await this.transporter.verify()
       if (success !== true) this.dieOnConnectionFailure()

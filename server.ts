@@ -58,7 +58,11 @@ import { initDatabaseModels } from './server/initializers/database'
 import { migrate } from './server/initializers/migrator'
 migrate()
   .then(() => initDatabaseModels(false))
-  .then(() => onDatabaseInitDone())
+  .then(() => startApplication())
+  .catch(err => {
+    logger.error('Cannot start application.', { err })
+    process.exit(-1)
+  })
 
 // ----------- PeerTube modules -----------
 import { installApplication } from './server/initializers'
@@ -179,30 +183,29 @@ app.use(function (err, req, res, next) {
 
 // ----------- Run -----------
 
-function onDatabaseInitDone () {
+async function startApplication () {
   const port = CONFIG.LISTEN.PORT
 
-  installApplication()
-    .then(() => {
-      // ----------- Make the server listening -----------
-      server.listen(port, () => {
-        // Emailer initialization and then job queue initialization
-        Emailer.Instance.init()
-        Emailer.Instance.checkConnectionOrDie()
-          .then(() => JobQueue.Instance.init())
+  await installApplication()
 
-        // Caches initializations
-        VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
+  // Email initialization
+  Emailer.Instance.init()
+  await Emailer.Instance.checkConnectionOrDie()
 
-        // Enable Schedulers
-        BadActorFollowScheduler.Instance.enable()
-        RemoveOldJobsScheduler.Instance.enable()
+  await JobQueue.Instance.init()
 
-        // Redis initialization
-        Redis.Instance.init()
+  // Caches initializations
+  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
 
-        logger.info('Server listening on port %d', port)
-        logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
-      })
-    })
+  // Enable Schedulers
+  BadActorFollowScheduler.Instance.enable()
+  RemoveOldJobsScheduler.Instance.enable()
+
+  // Redis initialization
+  Redis.Instance.init()
+
+  // Make server listening
+  server.listen(port)
+  logger.info('Server listening on port %d', port)
+  logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
 }
