@@ -16,7 +16,10 @@ function isVideoCommentObjectValid (comment: any) {
     isDateValid(comment.published) &&
     isActivityPubUrlValid(comment.url) &&
     isArray(comment.to) &&
-    comment.to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 // Only accept public comments
+    (
+      comment.to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ||
+      comment.cc.indexOf(ACTIVITY_PUB.PUBLIC) !== -1
+    ) // Only accept public comments
 }
 
 function isVideoCommentDeleteActivityValid (activity: any) {
