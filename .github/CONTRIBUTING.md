@@ -105,10 +105,12 @@ $ npm run dev
 
 ### Federation
 
-Create the tests database if they do not exist:
+Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
+Then, we can create the databases (if they don't already exist):
 
 ```
-$ sudo -u postgres createdb -O peertube peertube_test{1,2,3}
+$ sudo -u postgres createuser you_username --createdb
+$ createdb -O peertube peertube_test{1,2,3}
 ```
 
 Build the application and flush the old tests data:
@@ -130,10 +132,12 @@ with the `root` as username and `test{1,2,3}` for the password.
 
 ### Unit tests
 
-Create the tests database if they do not exist:
+Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
+Then, we can create the databases (if they don't already exist):
 
 ```
-$ sudo -u postgres createdb -O peertube peertube_test{1,2,3}
+$ sudo -u postgres createuser you_username --createdb
+$ createdb -O peertube peertube_test{1,2,3}
 ```
 
 Build the application and run the unit/integration tests:
