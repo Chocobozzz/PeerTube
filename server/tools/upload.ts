@@ -4,6 +4,7 @@ import { isAbsolute } from 'path'
 import { promisify } from 'util'
 import { getClient, login } from '../tests/utils'
 import { uploadVideo } from '../tests/utils/index'
+import { VideoPrivacy } from '../../shared/models/videos'
 
 const accessPromise = promisify(access)
 
@@ -27,6 +28,7 @@ program
 
 if (!program['tags']) program['tags'] = []
 if (!program['nsfw']) program['nsfw'] = false
+if (!program['privacy']) program['privacy'] = VideoPrivacy.PUBLIC
 if (!program['commentsEnabled']) program['commentsEnabled'] = false
 
 if (

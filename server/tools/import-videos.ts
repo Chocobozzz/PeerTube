@@ -76,6 +76,7 @@ async function run () {
       await processVideo(info, program['language'])
     }
 
+    // https://www.youtube.com/watch?v=2Upx39TBc1s
     console.log('I\'m finished!')
     process.exit(0)
   })
