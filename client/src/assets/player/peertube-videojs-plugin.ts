@@ -44,19 +44,23 @@ class PeerTubePlugin extends Plugin {
     INFO_SCHEDULER: 1000, // Don't change this
     AUTO_QUALITY_SCHEDULER: 3000, // Check quality every 3 seconds
     AUTO_QUALITY_THRESHOLD_PERCENT: 30, // Bandwidth should be 30% more important than a resolution bitrate to change to it
-    AUTO_QUALITY_OBSERVATION_TIME: 10000, // Wait 10 seconds before potentially changing the definition
-    AUTO_QUALITY_UPPER_RESOLUTION_DELAY: 5000, // Buffer upper resolution during 5 seconds
+    AUTO_QUALITY_OBSERVATION_TIME: 10000, // Wait 10 seconds after having change the resolution before another check
+    AUTO_QUALITY_HIGHER_RESOLUTION_DELAY: 5000, // Buffering higher resolution during 5 seconds
     BANDWIDTH_AVERAGE_NUMBER_OF_VALUES: 5 // Last 5 seconds to build average bandwidth
   }
 
   private player: any
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
+  private autoResolution = true
+  private isAutoResolutionObservation = false
+
   private videoViewInterval
   private torrentInfoInterval
   private autoQualityInterval
-  private autoResolution = true
-  private isAutoResolutionObservation = false
+  private addTorrentDelay
+  private qualityObservationTimer
+  private runAutoQualitySchedulerTimer
 
   private downloadSpeeds: number[] = []
 
@@ -91,7 +95,9 @@ class PeerTubePlugin extends Plugin {
 
       this.player.one('play', () => {
         // Don't run immediately scheduler, wait some seconds the TCP connections are maid
-        setTimeout(() => this.runAutoQualityScheduler(), this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
+        this.runAutoQualitySchedulerTimer = setTimeout(() => {
+          this.runAutoQualityScheduler()
+        }, this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
       })
     })
 
@@ -102,6 +108,10 @@ class PeerTubePlugin extends Plugin {
   }
 
   dispose () {
+    clearTimeout(this.addTorrentDelay)
+    clearTimeout(this.qualityObservationTimer)
+    clearTimeout(this.runAutoQualitySchedulerTimer)
+
     clearInterval(this.videoViewInterval)
     clearInterval(this.torrentInfoInterval)
     clearInterval(this.autoQualityInterval)
@@ -167,7 +177,7 @@ class PeerTubePlugin extends Plugin {
         oldTorrent.removePeer(oldTorrent['ws'])
       }
 
-      setTimeout(() => {
+      this.addTorrentDelay = setTimeout(() => {
         this.flushVideoFile(previousVideoFile)
 
         const options = { autoplay: true, controls: true }
@@ -265,7 +275,7 @@ class PeerTubePlugin extends Plugin {
       const fileBitrate = (f.size / this.videoDuration)
       let threshold = fileBitrate
 
-      // If this is for a higher resolution, or an initial load -> add a upper margin
+      // If this is for a higher resolution or an initial load: add a margin
       if (!this.currentVideoFile || f.resolution.id > this.currentVideoFile.resolution.id) {
         threshold += ((fileBitrate * this.CONSTANTS.AUTO_QUALITY_THRESHOLD_PERCENT) / 100)
       }
@@ -313,6 +323,7 @@ class PeerTubePlugin extends Plugin {
 
   private runAutoQualityScheduler () {
     this.autoQualityInterval = setInterval(() => {
+
       // Not initialized or in HTTP fallback
       if (this.torrent === undefined || this.torrent === null) return
       if (this.isAutoResolutionOn() === false) return
@@ -326,10 +337,10 @@ class PeerTubePlugin extends Plugin {
       if (this.isPlayerWaiting() && file.resolution.id < this.currentVideoFile.resolution.id) {
         console.log('Downgrading automatically the resolution to: %s', file.resolution.label)
         changeResolution = true
-      } else if (file.resolution.id > this.currentVideoFile.resolution.id) { // Greater resolution
+      } else if (file.resolution.id > this.currentVideoFile.resolution.id) { // Higher resolution
         console.log('Upgrading automatically the resolution to: %s', file.resolution.label)
         changeResolution = true
-        changeResolutionDelay = this.CONSTANTS.AUTO_QUALITY_UPPER_RESOLUTION_DELAY
+        changeResolutionDelay = this.CONSTANTS.AUTO_QUALITY_HIGHER_RESOLUTION_DELAY
       }
 
       if (changeResolution === true) {
@@ -337,13 +348,16 @@ class PeerTubePlugin extends Plugin {
 
         // Wait some seconds in observation of our new resolution
         this.isAutoResolutionObservation = true
-        setTimeout(() => this.isAutoResolutionObservation = false, this.CONSTANTS.AUTO_QUALITY_OBSERVATION_TIME)
+
+        this.qualityObservationTimer = setTimeout(() => {
+          this.isAutoResolutionObservation = false
+        }, this.CONSTANTS.AUTO_QUALITY_OBSERVATION_TIME)
       }
     }, this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
   }
 
   private isPlayerWaiting () {
-    return this.player.hasClass('vjs-waiting')
+    return this.player && this.player.hasClass('vjs-waiting')
   }
 
   private runTorrentInfoScheduler () {
