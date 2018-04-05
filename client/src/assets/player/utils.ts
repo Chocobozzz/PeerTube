@@ -36,6 +36,18 @@ function getStoredMute () {
   return undefined
 }
 
+function getAverageBandwidth () {
+  const value = getLocalStorage('average-bandwidth')
+  if (value !== null && value !== undefined) {
+    const valueNumber = parseInt(value, 10)
+    if (isNaN(valueNumber)) return undefined
+
+    return valueNumber
+  }
+
+  return undefined
+}
+
 function saveVolumeInStore (value: number) {
   return setLocalStorage('volume', value.toString())
 }
@@ -44,10 +56,16 @@ function saveMuteInStore (value: boolean) {
   return setLocalStorage('mute', value.toString())
 }
 
+function saveAverageBandwidth (value: number) {
+  return setLocalStorage('average-bandwidth', value.toString())
+}
+
 export {
   toTitleCase,
   getStoredVolume,
   saveVolumeInStore,
+  saveAverageBandwidth,
+  getAverageBandwidth,
   saveMuteInStore,
   getStoredMute,
   bytes

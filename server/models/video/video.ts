@@ -28,7 +28,7 @@ import {
 } from 'sequelize-typescript'
 import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
-import { Video, VideoDetails } from '../../../shared/models/videos'
+import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { activityPubCollection } from '../../helpers/activitypub'
 import {
@@ -1020,7 +1020,7 @@ export class VideoModel extends Model<VideoModel> {
           size: videoFile.size,
           torrentUrl: this.getTorrentUrl(videoFile, baseUrlHttp),
           fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp)
-        }
+        } as VideoFile
       })
       .sort((a, b) => {
         if (a.resolution.id < b.resolution.id) return 1

@@ -22,7 +22,7 @@ class ResolutionMenuButton extends MenuButton {
 
     this.labelEl_ = videojsUntyped.dom.createEl('div', {
       className: 'vjs-resolution-value',
-      innerHTML: this.player_.peertube().getCurrentResolutionLabel()
+      innerHTML: this.buildLabelHTML()
     })
 
     el.appendChild(this.labelEl_)
@@ -47,13 +47,22 @@ class ResolutionMenuButton extends MenuButton {
       )
     }
 
+    menu.addChild(new ResolutionMenuItem(
+      this.player_,
+      {
+        id: -1,
+        label: 'Auto',
+        src: null
+      }
+    ))
+
     return menu
   }
 
   updateLabel () {
     if (!this.labelEl_) return
 
-    this.labelEl_.innerHTML = this.player_.peertube().getCurrentResolutionLabel()
+    this.labelEl_.innerHTML = this.buildLabelHTML()
   }
 
   buildCSSClass () {
@@ -62,6 +71,10 @@ class ResolutionMenuButton extends MenuButton {
 
   buildWrapperCSSClass () {
     return 'vjs-resolution-control ' + super.buildWrapperCSSClass()
+  }
+
+  private buildLabelHTML () {
+    return this.player_.peertube().getCurrentResolutionLabel()
   }
 }
 MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton)

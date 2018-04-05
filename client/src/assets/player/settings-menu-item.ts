@@ -241,21 +241,14 @@ class SettingsMenuItem extends MenuItem {
           continue
         }
 
-        switch (subMenu) {
-          case 'SubtitlesButton':
-          case 'CaptionsButton':
-            // subtitlesButton entering default check twice and overwriting
-            // selected label in main manu
-            if (subMenuItem.hasClass('vjs-selected')) {
-              this.settingsSubMenuValueEl_.innerHTML = subMenuItem.options_.label
-            }
+        if (subMenuItem.hasClass('vjs-selected')) {
+          // Prefer to use the function
+          if (typeof subMenuItem.getLabel === 'function') {
+            this.settingsSubMenuValueEl_.innerHTML = subMenuItem.getLabel()
             break
+          }
 
-          default:
-            // Set submenu value based on what item is selected
-            if (subMenuItem.options_.selected || subMenuItem.hasClass('vjs-selected')) {
-              this.settingsSubMenuValueEl_.innerHTML = subMenuItem.options_.label
-            }
+          this.settingsSubMenuValueEl_.innerHTML = subMenuItem.options_.label
         }
       }
     }

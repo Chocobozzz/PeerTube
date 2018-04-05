@@ -641,6 +641,11 @@ $setting-transition-easing: ease-out;
     .vjs-settings-sub-menu-value {
       width: 100%;
       text-align: right;
+
+      small {
+        font-size: 0.85em;
+        opacity: 0.8;
+      }
     }
 
     .vjs-settings-panel {
