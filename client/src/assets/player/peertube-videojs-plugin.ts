@@ -36,6 +36,7 @@ class PeerTubePlugin extends Plugin {
   private readonly playerElement: HTMLVideoElement
 
   private readonly autoplay: boolean = false
+  private readonly startTime: number = 0
   private readonly savePlayerSrcFunction: Function
   private readonly videoFiles: VideoFile[]
   private readonly videoViewUrl: string
@@ -71,6 +72,7 @@ class PeerTubePlugin extends Plugin {
     this.autoplay = this.player.options_.autoplay
     this.player.options_.autoplay = false
 
+    this.startTime = options.startTime
     this.videoFiles = options.videoFiles
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
@@ -94,7 +96,7 @@ class PeerTubePlugin extends Plugin {
       this.runViewAdd()
 
       this.player.one('play', () => {
-        // Don't run immediately scheduler, wait some seconds the TCP connections are maid
+        // Don't run immediately scheduler, wait some seconds the TCP connections are made
         this.runAutoQualitySchedulerTimer = setTimeout(() => {
           this.runAutoQualityScheduler()
         }, this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
@@ -234,10 +236,7 @@ class PeerTubePlugin extends Plugin {
     }
 
     const newVideoFile = this.videoFiles.find(f => f.resolution.id === resolutionId)
-    this.updateVideoFile(newVideoFile, delay, () => {
-      this.player.currentTime(currentTime)
-      this.player.handleTechSeeked_()
-    })
+    this.updateVideoFile(newVideoFile, delay, () => this.seek(currentTime))
   }
 
   flushVideoFile (videoFile: VideoFile, destroyRenderer = true) {
@@ -261,6 +260,11 @@ class PeerTubePlugin extends Plugin {
   disableAutoResolution () {
     this.autoResolution = false
     this.trigger('autoResolutionUpdate')
+  }
+
+  private seek (time: number) {
+    this.player.currentTime(time)
+    this.player.handleTechSeeked_()
   }
 
   private getAppropriateFile (averageDownloadSpeed?: number): VideoFile {
@@ -310,12 +314,18 @@ class PeerTubePlugin extends Plugin {
 
     if (this.autoplay === true) {
       this.player.posterImage.hide()
-      this.updateVideoFile(undefined, 0, () => this.player.play())
+      this.updateVideoFile(undefined, 0, () => {
+        this.seek(this.startTime)
+        this.player.play()
+      })
     } else {
       // Proxy first play
       const oldPlay = this.player.play.bind(this.player)
       this.player.play = () => {
-        this.updateVideoFile(undefined, 0, () => oldPlay)
+        this.updateVideoFile(undefined, 0, () => {
+          this.seek(this.startTime)
+          oldPlay()
+        })
         this.player.play = oldPlay
       }
     }

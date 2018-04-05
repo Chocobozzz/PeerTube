@@ -21,7 +21,8 @@ function getVideojsOptions (options: {
   enableHotkeys: boolean,
   inactivityTimeout: number,
   peertubeLink: boolean,
-  poster: string
+  poster: string,
+  startTime: number
 }) {
   const videojsOptions = {
     controls: true,
@@ -34,7 +35,8 @@ function getVideojsOptions (options: {
         videoFiles: options.videoFiles,
         playerElement: options.playerElement,
         videoViewUrl: options.videoViewUrl,
-        videoDuration: options.videoDuration
+        videoDuration: options.videoDuration,
+        startTime: options.startTime
       }
     },
     controlBar: {

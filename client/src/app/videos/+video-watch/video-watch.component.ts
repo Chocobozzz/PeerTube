@@ -102,7 +102,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (this.video && this.video.uuid === uuid) return
 
       this.videoService.getVideo(uuid).subscribe(
-        video => this.onVideoFetched(video),
+        video => {
+          const startTime = this.route.snapshot.queryParams.start
+          this.onVideoFetched(video, startTime)
+            .catch(err => this.handleError(err))
+        },
 
         error => {
           this.videoNotFound = true
@@ -315,7 +319,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                       )
   }
 
-  private async onVideoFetched (video: VideoDetails) {
+  private async onVideoFetched (video: VideoDetails, startTime = 0) {
     this.video = video
 
     // Re init attributes
@@ -350,7 +354,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       videoDuration: this.video.duration,
       enableHotkeys: true,
       peertubeLink: false,
-      poster: this.video.previewUrl
+      poster: this.video.previewUrl,
+      startTime
     })
 
     const self = this

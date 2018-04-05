@@ -23,10 +23,15 @@ loadVideoInfo(videoId)
 
     const videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
     let autoplay = false
+    let startTime = 0
 
     try {
       let params = new URL(window.location.toString()).searchParams
       autoplay = params.has('autoplay') && (params.get('autoplay') === '1' || params.get('autoplay') === 'true')
+
+      const startTimeParamString = params.get('start')
+      const startTimeParamNumber = parseInt(startTimeParamString, 10)
+      if (isNaN(startTimeParamNumber) === false) startTime = startTimeParamNumber
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
@@ -40,7 +45,8 @@ loadVideoInfo(videoId)
       videoDuration: videoInfo.duration,
       enableHotkeys: true,
       peertubeLink: true,
-      poster: window.location.origin + videoInfo.previewPath
+      poster: window.location.origin + videoInfo.previewPath,
+      startTime
     })
     videojs(videoContainerId, videojsOptions, function () {
       const player = this

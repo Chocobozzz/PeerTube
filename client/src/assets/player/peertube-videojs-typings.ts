@@ -21,6 +21,7 @@ type PeertubePluginOptions = {
   playerElement: HTMLVideoElement
   videoViewUrl: string
   videoDuration: number
+  startTime: number
 }
 
 // videojs typings don't have some method we need
