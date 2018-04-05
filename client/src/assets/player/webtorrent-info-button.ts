@@ -62,7 +62,7 @@ class WebtorrentInfoButton extends Button {
     })
     const subDivFallbackText = videojsUntyped.dom.createEl('span', {
       className: 'peers-text',
-      textContent: 'fallback'
+      textContent: ' fallback'
     })
 
     subDivHttp.appendChild(subDivHttpText)

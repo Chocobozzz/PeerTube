@@ -313,7 +313,8 @@ class PeerTubePlugin extends Plugin {
 
   private runAutoQualityScheduler () {
     this.autoQualityInterval = setInterval(() => {
-      if (this.torrent === undefined) return
+      // Not initialized or in HTTP fallback
+      if (this.torrent === undefined || this.torrent === null) return
       if (this.isAutoResolutionOn() === false) return
       if (this.isAutoResolutionObservation === true) return
 
