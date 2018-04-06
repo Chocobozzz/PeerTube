@@ -5713,9 +5713,9 @@ spdx-license-ids@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/spdx-license-ids/-/spdx-license-ids-3.0.0.tgz#7a7cd28470cc6d3a1cfe6d66886f6bc430d3ac87"
 
-spectacle-docs@^0.9.13:
-  version "0.9.13"
-  resolved "https://registry.yarnpkg.com/spectacle-docs/-/spectacle-docs-0.9.13.tgz#48cc29de3a69d41f1dfda582b876d4d8affc085e"
+spectacle-docs@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/spectacle-docs/-/spectacle-docs-1.0.2.tgz#b84d47bca9fa1f3e12ebc9d917d527936b47fca1"
   dependencies:
     bluebird "^3.4.7"
     cheerio "^0.19.0"
