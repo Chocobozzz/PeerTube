@@ -224,6 +224,7 @@
           </section>
           <h5>Schema Definitions</h5>
           <a href="#definition-VideoConstant"> VideoConstant </a>
+          <a href="#definition-VideoPrivacy"> VideoPrivacy </a>
           <a href="#definition-Video"> Video </a>
           <a href="#definition-VideoAbuse"> VideoAbuse </a>
           <a href="#definition-VideoBlacklist"> VideoBlacklist </a>
@@ -1223,7 +1224,8 @@
                       </div>
                     </div>
                     <div class="prop-value columns small-6">
-                      <!-- <div class="swagger-request-description"> -->undefined
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>User to create</p>
                       <!-- </div> -->
                     </div>
                   </div>
@@ -1431,6 +1433,7 @@
             <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;category&quot;</span>: {
               <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -1444,6 +1447,7 @@
               <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
               <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
             },
+            <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -1454,7 +1458,18 @@
             <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+            <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+            <span class="hljs-attr">&quot;account&quot;</span>: {
+              <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;avatar&quot;</span>: {
+                <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+                <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+                <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+              }
+            }
           }
         ]
       }
@@ -1638,6 +1653,7 @@
           <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;category&quot;</span>: {
             <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -1651,6 +1667,7 @@
             <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
           },
+          <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -1661,7 +1678,18 @@
           <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+          <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+          <span class="hljs-attr">&quot;account&quot;</span>: {
+            <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;avatar&quot;</span>: {
+              <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+            }
+          }
         }
       ]
     }
@@ -1852,6 +1880,7 @@
             <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;category&quot;</span>: {
               <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -1865,6 +1894,7 @@
               <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
               <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
             },
+            <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
             <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -1875,7 +1905,18 @@
             <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+            <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+            <span class="hljs-attr">&quot;account&quot;</span>: {
+              <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;avatar&quot;</span>: {
+                <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+                <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+                <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+              }
+            }
           }
         ]
       }
@@ -2197,6 +2238,7 @@
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;category&quot;</span>: {
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -2210,6 +2252,7 @@
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
     },
+    <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -2220,7 +2263,18 @@
     <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+    <span class="hljs-attr">&quot;account&quot;</span>: {
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;avatar&quot;</span>: {
+        <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+      }
+    }
   }
 ]
 </code></pre>
@@ -2489,6 +2543,7 @@
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;category&quot;</span>: {
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -2502,6 +2557,7 @@
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
     },
+    <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -2512,7 +2568,18 @@
     <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+    <span class="hljs-attr">&quot;account&quot;</span>: {
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;avatar&quot;</span>: {
+        <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+      }
+    }
   }
 ]
 </code></pre>
@@ -2836,6 +2903,7 @@
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;category&quot;</span>: {
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -2849,6 +2917,7 @@
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
     },
+    <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -2859,7 +2928,18 @@
     <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+    <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+    <span class="hljs-attr">&quot;account&quot;</span>: {
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;avatar&quot;</span>: {
+        <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+      }
+    }
   }
 ]
 </code></pre>
@@ -2892,7 +2972,7 @@
                       <span class="json-property-required"></span>
                     </div>
                     <div class="prop-value">
-                      <p>The video id </p>
+                      <p>The video id</p>
                     </div>
                   </div>
                   <div class="prop-row prop-inner">
@@ -2905,6 +2985,239 @@
                   <div class="prop-row prop-inner">
                     <div class="prop-name param-label">in</div>
                     <div class="prop-value">path</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">thumbnailfile</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video thumbnail file</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">file</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">previewfile</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video preview file</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">file</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">category</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video category</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">number</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">licence</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video licence</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">number</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">language</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video language</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">number</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">description</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video description</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">support</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Text describing how to support the video uploader</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">nsfw</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Whether or not this video contains sensitive content</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">boolean</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">name</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video name</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">tags</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video tags</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string[]</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">commentsEnabled</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Enable or disable comments for this video</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">boolean</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">privacy</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video privacy</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-enum" title="Possible values">
+                        <span class="json-property-enum-item">Public</span>,
+                        <span class="json-property-enum-item">Unlisted</span>,
+                        <span class="json-property-enum-item">Private</span>
+                      </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
                   </div>
                 </section>
               </div>
@@ -2941,6 +3254,7 @@
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;category&quot;</span>: {
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -2954,6 +3268,7 @@
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
   },
+  <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -2964,7 +3279,18 @@
   <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;account&quot;</span>: {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;avatar&quot;</span>: {
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    }
+  }
 }
 </code></pre>
                   <!-- </div> -->
@@ -3045,6 +3371,7 @@
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;category&quot;</span>: {
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -3058,6 +3385,7 @@
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
   },
+  <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -3068,7 +3396,18 @@
   <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;account&quot;</span>: {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;avatar&quot;</span>: {
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    }
+  }
 }
 </code></pre>
                   <!-- </div> -->
@@ -3293,15 +3632,274 @@
                   <div class="prop-row prop-group">
                     <div class="prop-name">
                       <div class="prop-title">videofile</div>
+                      <span class="json-property-required"></span>
                     </div>
                     <div class="prop-value">
-                      <p>The file to upload.</p>
+                      <p>Video file</p>
                     </div>
                   </div>
                   <div class="prop-row prop-inner">
                     <div class="prop-name param-label">type</div>
                     <div class="prop-value">
                       <span class="json-property-type">file</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">thumbnailfile</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video thumbnail file</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">file</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">previewfile</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video preview file</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">file</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">category</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video category</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">number</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">licence</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video licence</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">number</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">language</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video language</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">number</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">description</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video description</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">support</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Text describing how to support the video uploader</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">channelId</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>Channel id that will contain this video</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">number</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">nsfw</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>Whether or not this video contains sensitive content</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">boolean</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">name</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video name</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">tags</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video tags</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string[]</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">commentsEnabled</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>Enable or disable comments for this video</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">boolean</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">in</div>
+                    <div class="prop-value">formData</div>
+                  </div>
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">privacy</div>
+                      <span class="json-property-required"></span>
+                    </div>
+                    <div class="prop-value">
+                      <p>Video privacy</p>
+                    </div>
+                  </div>
+                  <div class="prop-row prop-inner">
+                    <div class="prop-name param-label">type</div>
+                    <div class="prop-value">
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-enum" title="Possible values">
+                        <span class="json-property-enum-item">Public</span>,
+                        <span class="json-property-enum-item">Unlisted</span>,
+                        <span class="json-property-enum-item">Private</span>
+                      </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </div>
                   </div>
@@ -3341,8 +3939,10 @@
                     <span>(200 OK)</span>
                   </h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-  <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  <span class="hljs-attr">&quot;video&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  }
 }
 </code></pre>
                   <!-- </div> -->
@@ -3477,6 +4077,12 @@
         <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
       }
+    },
+    <span class="hljs-attr">&quot;video&quot;</span>: {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
     },
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
   }
@@ -3923,6 +4529,7 @@
         <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;category&quot;</span>: {
           <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -3936,6 +4543,7 @@
           <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
         },
+        <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -3946,7 +4554,18 @@
         <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+        <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+        <span class="hljs-attr">&quot;account&quot;</span>: {
+          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;avatar&quot;</span>: {
+            <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+          }
+        }
       }
     ]
   }
@@ -4107,6 +4726,7 @@
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;category&quot;</span>: {
         <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -4120,6 +4740,7 @@
         <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
       },
+      <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -4130,7 +4751,18 @@
       <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+      <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+      <span class="hljs-attr">&quot;account&quot;</span>: {
+        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;avatar&quot;</span>: {
+          <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+        }
+      }
     }
   ]
 }
@@ -4375,6 +5007,7 @@
         <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;category&quot;</span>: {
           <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -4388,6 +5021,7 @@
           <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
         },
+        <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -4398,7 +5032,18 @@
         <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+        <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+        <span class="hljs-attr">&quot;account&quot;</span>: {
+          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;avatar&quot;</span>: {
+            <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+          }
+        }
       }
     ]
   }
@@ -5178,6 +5823,31 @@
               </div>
             </div>
           </div>
+          <div id="definition-VideoPrivacy" class="definition panel" data-traverse-target="definition-VideoPrivacy">
+            <h2 class="panel-title">
+              <a name="/definitions/VideoPrivacy"></a>VideoPrivacy: string
+              <!-- <span class="json-property-type"><span class="json-property-type">string</span>  <span class="json-property-enum" title="Possible values">
+                      <span class="json-property-enum-item">Public</span>,
+                      <span class="json-property-enum-item">Unlisted</span>,
+                      <span class="json-property-enum-item">Private</span>
+                </span>
+              <span class="json-property-range" title="Value limits"></span>
+              
+              
+              </span> -->
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <span class="json-property-type">string</span>
+                <span class="json-property-enum" title="Possible values">
+                  <span class="json-property-enum-item">Public</span>,
+                  <span class="json-property-enum-item">Unlisted</span>,
+                  <span class="json-property-enum-item">Private</span>
+                </span>
+                <span class="json-property-range" title="Value limits"></span>
+              </div>
+            </div>
+          </div>
           <div id="definition-Video" class="definition panel" data-traverse-target="definition-Video">
             <h2 class="panel-title">
               <a name="/definitions/Video"></a>Video:
@@ -5203,6 +5873,11 @@
                     </dt>
                     <dt data-property-name="createdAt">
                       <span class="json-property-name">createdAt:</span>
+                      <span class="json-property-type">string</span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="publishedAt">
+                      <span class="json-property-name">publishedAt:</span>
                       <span class="json-property-type">string</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
@@ -5234,6 +5909,15 @@
                       <span class="json-property-type">
                         <span class="">
                           <a class="json-schema-ref" href="#/definitions/VideoConstant">VideoConstant</a>
+                        </span>
+                      </span>
+                      <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt data-property-name="privacy">
+                      <span class="json-property-name">privacy:</span>
+                      <span class="json-property-type">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/VideoPrivacy">VideoPrivacy</a>
                         </span>
                       </span>
                       <span class="json-property-range" title="Value limits"></span>
@@ -5308,6 +5992,7 @@
   <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;category&quot;</span>: {
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -5321,6 +6006,7 @@
     <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
   },
+  <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -5331,7 +6017,18 @@
   <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
   <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;account&quot;</span>: {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;avatar&quot;</span>: {
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    }
+  }
 }
 </code></pre>
                   <!-- </div> -->
@@ -5406,6 +6103,12 @@
       <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
     }
+  },
+  <span class="hljs-attr">&quot;video&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
   },
   <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
 }
@@ -5575,6 +6278,7 @@
       <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;category&quot;</span>: {
         <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -5588,6 +6292,7 @@
         <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
       },
+      <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -5598,7 +6303,18 @@
       <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+      <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+      <span class="hljs-attr">&quot;account&quot;</span>: {
+        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;avatar&quot;</span>: {
+          <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+        }
+      }
     }
   ]
 }
@@ -6172,6 +6888,7 @@
           <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+          <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;category&quot;</span>: {
             <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
@@ -6185,6 +6902,7 @@
             <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
             <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
           },
+          <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
           <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
@@ -6195,7 +6913,18 @@
           <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>
+          <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+          <span class="hljs-attr">&quot;account&quot;</span>: {
+            <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+            <span class="hljs-attr">&quot;avatar&quot;</span>: {
+              <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+              <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+            }
+          }
         }
       ]
     }
@@ -6521,14 +7250,9 @@
               <div class="doc-copy">
                 <section class="json-schema-properties">
                   <dl>
-                    <dt data-property-name="id">
-                      <span class="json-property-name">id:</span>
-                      <span class="json-property-type">number</span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dt data-property-name="uuid">
-                      <span class="json-property-name">uuid:</span>
-                      <span class="json-property-type">string</span>
+                    <dt data-property-name="video">
+                      <span class="json-property-name">video:</span>
+                      <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                   </dl>
@@ -6538,8 +7262,10 @@
                 <section>
                   <h5>Example</h5>
                   <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
-  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-  <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  <span class="hljs-attr">&quot;video&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  }
 }
 </code></pre>
                   <!-- </div> -->
