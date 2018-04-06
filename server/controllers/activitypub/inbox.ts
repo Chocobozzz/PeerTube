@@ -19,7 +19,7 @@ inboxRouter.post('/inbox',
 inboxRouter.post('/accounts/:name/inbox',
   signatureValidator,
   asyncMiddleware(checkSignature),
-  localAccountValidator,
+  asyncMiddleware(localAccountValidator),
   asyncMiddleware(activityPubValidator),
   asyncMiddleware(inboxController)
 )
@@ -35,6 +35,8 @@ export {
 async function inboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const rootActivity: RootActivity = req.body
   let activities: Activity[] = []
+
+  console.log(rootActivity)
 
   if ([ 'Collection', 'CollectionPage' ].indexOf(rootActivity.type) !== -1) {
     activities = (rootActivity as ActivityPubCollection).items

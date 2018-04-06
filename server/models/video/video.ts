@@ -1000,7 +1000,7 @@ export class VideoModel extends Model<VideoModel> {
       descriptionPath: this.getDescriptionPath(),
       channel: this.VideoChannel.toFormattedJSON(),
       account: this.VideoChannel.Account.toFormattedJSON(),
-      tags: map<TagModel, string>(this.Tags, 'name'),
+      tags: map(this.Tags, 'name'),
       commentsEnabled: this.commentsEnabled,
       files: []
     }
