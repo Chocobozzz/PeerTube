@@ -16,8 +16,7 @@ function retryTransactionWrapper <T> (
         .catch(err => callback(err))
   })
   .catch(err => {
-    console.error(err)
-    logger.error(options.errorMessage, err)
+    logger.error(options.errorMessage, { err })
     throw err
   })
 }
@@ -36,7 +35,7 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
   })
 }
 
-function updateInstanceWithAnother <T> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
+function updateInstanceWithAnother <T extends Model<T>> (instanceToUpdate: Model<T>, baseInstance: Model<T>) {
   const obj = baseInstance.toJSON()
 
   for (const key of Object.keys(obj)) {

@@ -44,7 +44,7 @@ function createReqFiles (
       try {
         randomString = await generateRandomString(16)
       } catch (err) {
-        logger.error('Cannot generate random string for file name.', err)
+        logger.error('Cannot generate random string for file name.', { err })
         randomString = 'fake-random-string'
       }
 

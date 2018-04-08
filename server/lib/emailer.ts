@@ -1,7 +1,7 @@
 import { createTransport, Transporter } from 'nodemailer'
 import { UserRight } from '../../shared/models/users'
 import { isTestInstance } from '../helpers/core-utils'
-import { logger } from '../helpers/logger'
+import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG } from '../initializers'
 import { UserModel } from '../models/account/user'
 import { VideoModel } from '../models/video/video'
@@ -44,7 +44,9 @@ class Emailer {
         host: CONFIG.SMTP.HOSTNAME,
         port: CONFIG.SMTP.PORT,
         secure: CONFIG.SMTP.TLS,
-        ignoreTLS: isTestInstance(),
+        debug: CONFIG.LOG.LEVEL === 'debug',
+        logger: bunyanLogger as any,
+        ignoreTLS: CONFIG.SMTP.DISABLE_STARTTLS,
         tls,
         auth
       })
@@ -57,6 +59,8 @@ class Emailer {
 
   async checkConnectionOrDie () {
     if (!this.transporter) return
+
+    logger.info('Testing SMTP server...')
 
     try {
       const success = await this.transporter.verify()
@@ -117,7 +121,7 @@ class Emailer {
   }
 
   private dieOnConnectionFailure (err?: Error) {
-    logger.error('Failed to connect to SMTP %s:%d.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT, err)
+    logger.error('Failed to connect to SMTP %s:%d.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT, { err })
     process.exit(-1)
   }
 

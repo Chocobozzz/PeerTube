@@ -1,19 +1,27 @@
 version: "3.1"
 
 services:
-  peertube:
 
-    build: .
-    image: peertube:stretch
+  peertube:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.stretch
+    image: chocobozzz/peertube:production-stretch
     environment:
       PEERTUBE_HOSTNAME: "my.domain.tld"
       PEERTUBE_PORT: 443
       PEERTUBE_HTTPS: "true"
-      PEERTUBE_ADMIN_EMAIL: "admin@domain.tld"
-      PEERTUBE_DB_USERNAME: "user"
-      PEERTUBE_DB_PASSWORD: "password"
+      PEERTUBE_ADMIN_EMAIL: admin@domain.tld
+      PEERTUBE_DB_HOSTNAME: postgres
+      PEERTUBE_DB_USERNAME: postgres_user
+      PEERTUBE_DB_PASSWORD: postgres_password
       PEERTUBE_SIGNUP_ENABLED: "true"
       PEERTUBE_TRANSCODING_ENABLED: "true"
+      PEERTUBE_REDIS_HOSTNAME: redis
+      PEERTUBE_SMTP_HOSTNAME: null
+      PEERTUBE_SMTP_PORT: 25
+      PEERTUBE_SMTP_FROM: noreply@peertube.domain.tld
+      PEERTUBE_SMTP_TLS: "true"
     # Traefik labels are suggested as an example for people using Traefik,
     # remove them if you are using another reverse proxy.
     labels:
@@ -21,20 +29,24 @@ services:
       traefik.frontend.rule: "Host:my.domain.tld"
       traefik.port: "9000"
     volumes:
-      - ./data:/usr/src/app/data
+      - ./data:/data
     depends_on:
-      - db
+      - postgres
+      - redis
+    restart: "always"
 
-  redis:
-    image: redis:latest
-    volumes:
-      - ./redis:/data
-
-  db:
-    image: postgres:10
+  postgres:
+    image: postgres:10-alpine
     environment:
-      POSTGRES_USER: "user"
-      POSTGRES_PASSWORD: "password"
-      POSTGRES_DB: "peertube"
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: peertube
     volumes:
       - ./db:/var/lib/postgresql/data
+    restart: "always"
+
+  redis:
+    image: redis:4-alpine
+    volumes:
+      - ./redis:/data
+    restart: "always"

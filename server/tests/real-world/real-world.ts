@@ -327,7 +327,7 @@ function areDifferences (videos1: Video[], videos2: Video[]) {
             return `Video ${video1.uuid} has missing video file ${videoFile1.magnetUri}.`
           }
 
-          if (videoFile1.size !== videoFile2.size || videoFile1.resolutionLabel !== videoFile2.resolutionLabel) {
+          if (videoFile1.size !== videoFile2.size || videoFile1.resolution.label !== videoFile2.resolution.label) {
             return `Video ${video1.uuid} has different video file ${videoFile1.magnetUri}.`
           }
         })

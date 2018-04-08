@@ -8,6 +8,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
+import { forwardActivity } from '../send/misc'
 
 async function processDeleteActivity (activity: ActivityDelete) {
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
@@ -33,7 +34,7 @@ async function processDeleteActivity (activity: ActivityDelete) {
   {
     const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(objectUrl)
     if (videoCommentInstance) {
-      return processDeleteVideoComment(actor, videoCommentInstance)
+      return processDeleteVideoComment(actor, videoCommentInstance, activity)
     }
   }
 
@@ -116,20 +117,26 @@ async function deleteRemoteVideoChannel (videoChannelToRemove: VideoChannelModel
   logger.info('Remote video channel with uuid %s removed.', videoChannelToRemove.Actor.uuid)
 }
 
-async function processDeleteVideoComment (actor: ActorModel, videoComment: VideoCommentModel) {
+async function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
   const options = {
-    arguments: [ actor, videoComment ],
+    arguments: [ byActor, videoComment, activity ],
     errorMessage: 'Cannot remove the remote video comment with many retries.'
   }
 
   await retryTransactionWrapper(deleteRemoteVideoComment, options)
 }
 
-function deleteRemoteVideoComment (actor: ActorModel, videoComment: VideoCommentModel) {
+function deleteRemoteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {
     await videoComment.destroy({ transaction: t })
+
+    if (videoComment.Video.isOwned()) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byActor ]
+      await forwardActivity(activity, t, exceptions)
+    }
 
     logger.info('Remote video comment %s removed.', videoComment.url)
   })

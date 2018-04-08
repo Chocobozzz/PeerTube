@@ -27,29 +27,42 @@ const app = express()
 // ----------- Core checker -----------
 import { checkMissedConfig, checkFFmpeg, checkConfig } from './server/initializers/checker'
 
+// Do not use barrels because we don't want to load all modules here (we need to initialize database first)
+import { logger } from './server/helpers/logger'
+import { ACCEPT_HEADERS, API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
+
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
-  throw new Error('Your configuration files miss keys: ' + missed)
+  logger.error('Your configuration files miss keys: ' + missed)
+  process.exit(-1)
 }
 
-import { ACCEPT_HEADERS, API_VERSION, CONFIG, STATIC_PATHS } from './server/initializers/constants'
 checkFFmpeg(CONFIG)
+  .catch(err => {
+    logger.error('Error in ffmpeg check.', { err })
+    process.exit(-1)
+  })
 
 const errorMessage = checkConfig()
 if (errorMessage !== null) {
   throw new Error(errorMessage)
 }
 
+// Trust our proxy (IP forwarding...)
+app.set('trust proxy', CONFIG.TRUST_PROXY)
+
 // ----------- Database -----------
-// Do not use barrels because we don't want to load all modules here (we need to initialize database first)
-import { logger } from './server/helpers/logger'
 
 // Initialize database and models
 import { initDatabaseModels } from './server/initializers/database'
 import { migrate } from './server/initializers/migrator'
 migrate()
   .then(() => initDatabaseModels(false))
-  .then(() => onDatabaseInitDone())
+  .then(() => startApplication())
+  .catch(err => {
+    logger.error('Cannot start application.', { err })
+    process.exit(-1)
+  })
 
 // ----------- PeerTube modules -----------
 import { installApplication } from './server/initializers'
@@ -75,6 +88,7 @@ if (isTestInstance()) {
     ) {
       return (cors({
         origin: 'http://localhost:3000',
+        exposedHeaders: 'Retry-After',
         credentials: true
       }))(req, res, next)
     }
@@ -88,11 +102,11 @@ app.use(morgan('combined', {
   stream: { write: logger.info.bind(logger) }
 }))
 // For body requests
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json({
   type: [ 'application/json', 'application/*+json' ],
   limit: '500kb'
 }))
-app.use(bodyParser.urlencoded({ extended: false }))
 
 // ----------- Tracker -----------
 
@@ -169,30 +183,29 @@ app.use(function (err, req, res, next) {
 
 // ----------- Run -----------
 
-function onDatabaseInitDone () {
+async function startApplication () {
   const port = CONFIG.LISTEN.PORT
 
-  installApplication()
-    .then(() => {
-      // ----------- Make the server listening -----------
-      server.listen(port, () => {
-        // Emailer initialization and then job queue initialization
-        Emailer.Instance.init()
-        Emailer.Instance.checkConnectionOrDie()
-          .then(() => JobQueue.Instance.init())
+  await installApplication()
 
-        // Caches initializations
-        VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
+  // Email initialization
+  Emailer.Instance.init()
+  await Emailer.Instance.checkConnectionOrDie()
 
-        // Enable Schedulers
-        BadActorFollowScheduler.Instance.enable()
-        RemoveOldJobsScheduler.Instance.enable()
+  await JobQueue.Instance.init()
 
-        // Redis initialization
-        Redis.Instance.init()
+  // Caches initializations
+  VideosPreviewCache.Instance.init(CONFIG.CACHE.PREVIEWS.SIZE)
 
-        logger.info('Server listening on port %d', port)
-        logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
-      })
-    })
+  // Enable Schedulers
+  BadActorFollowScheduler.Instance.enable()
+  RemoveOldJobsScheduler.Instance.enable()
+
+  // Redis initialization
+  Redis.Instance.init()
+
+  // Make server listening
+  server.listen(port)
+  logger.info('Server listening on port %d', port)
+  logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
 }

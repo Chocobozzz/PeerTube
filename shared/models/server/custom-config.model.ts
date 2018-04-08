@@ -1,6 +1,7 @@
 export interface CustomConfig {
   instance: {
     name: string
+    shortDescription: string
     description: string
     terms: string
     defaultClientRoute: string

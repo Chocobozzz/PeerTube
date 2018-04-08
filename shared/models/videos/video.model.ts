@@ -1,11 +1,17 @@
+import { VideoResolution } from '../../index'
 import { Account } from '../actors'
+import { Avatar } from '../avatars/avatar.model'
 import { VideoChannel } from './video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 
+export interface VideoConstant <T> {
+  id: number
+  label: string
+}
+
 export interface VideoFile {
   magnetUri: string
-  resolution: number
-  resolutionLabel: string
+  resolution: VideoConstant<VideoResolution>
   size: number // Bytes
   torrentUrl: string
   fileUrl: string
@@ -14,20 +20,16 @@ export interface VideoFile {
 export interface Video {
   id: number
   uuid: string
-  accountName: string
   createdAt: Date | string
   updatedAt: Date | string
-  categoryLabel: string
-  category: number
-  licenceLabel: string
-  licence: number
-  languageLabel: string
-  language: number
+  publishedAt: Date | string
+  category: VideoConstant<number>
+  licence: VideoConstant<number>
+  language: VideoConstant<number>
   description: string
   duration: number
   isLocal: boolean
   name: string
-  serverHost: string
   thumbnailPath: string
   previewPath: string
   embedPath: string
@@ -35,11 +37,18 @@ export interface Video {
   likes: number
   dislikes: number
   nsfw: boolean
+
+  account: {
+    name: string
+    displayName: string
+    url: string
+    host: string
+    avatar: Avatar
+  }
 }
 
 export interface VideoDetails extends Video {
-  privacy: VideoPrivacy
-  privacyLabel: string
+  privacy: VideoConstant<VideoPrivacy>
   descriptionPath: string
   support: string
   channel: VideoChannel

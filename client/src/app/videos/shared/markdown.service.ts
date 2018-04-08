@@ -52,18 +52,19 @@ export class MarkdownService {
       return self.renderToken(tokens, idx, options)
     }
 
-    markdownIt.renderer.rules.link_open = function (tokens, idx, options, env, self) {
-      // If you are sure other plugins can't add `target` - drop check below
-      const aIndex = tokens[idx].attrIndex('target')
+    markdownIt.renderer.rules.link_open = function (tokens, index, options, env, self) {
+      const token = tokens[index]
 
-      if (aIndex < 0) {
-        tokens[idx].attrPush(['target', '_blank']) // add new attribute
-      } else {
-        tokens[idx].attrs[aIndex][1] = '_blank'    // replace value of existing attr
-      }
+      const targetIndex = token.attrIndex('target')
+      if (targetIndex < 0) token.attrPush([ 'target', '_blank' ])
+      else token.attrs[targetIndex][1] = '_blank'
+
+      const relIndex = token.attrIndex('rel')
+      if (relIndex < 0) token.attrPush([ 'rel', 'noopener noreferrer' ])
+      else token.attrs[relIndex][1] = 'noopener noreferrer'
 
       // pass token to default renderer.
-      return defaultRender(tokens, idx, options, env, self)
+      return defaultRender(tokens, index, options, env, self)
     }
   }
 

@@ -43,6 +43,10 @@ export class AppComponent implements OnInit {
     return this.serverService.getConfig().instance.name
   }
 
+  get defaultRoute () {
+    return RedirectService.DEFAULT_ROUTE
+  }
+
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
 
@@ -53,7 +57,7 @@ export class AppComponent implements OnInit {
 
     this.authService.loadClientCredentials()
 
-    if (this.authService.isLoggedIn()) {
+    if (this.isUserLoggedIn()) {
       // The service will automatically redirect to the login page if the token is not valid anymore
       this.authService.refreshUserInformation()
     }
@@ -83,7 +87,7 @@ export class AppComponent implements OnInit {
       .subscribe(() => {
         const config = this.serverService.getConfig()
 
-        // We test customCSS in case or the admin removed the css
+        // We test customCSS if the admin removed the css
         if (this.customCSS || config.instance.customizations.css) {
           const styleTag = '<style>' + config.instance.customizations.css + '</style>'
           this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
@@ -98,6 +102,10 @@ export class AppComponent implements OnInit {
           }
         }
       })
+  }
+
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
   }
 
   toggleMenu () {

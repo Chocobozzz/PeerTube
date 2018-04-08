@@ -4,6 +4,7 @@ import { isAbsolute } from 'path'
 import { promisify } from 'util'
 import { getClient, login } from '../tests/utils'
 import { uploadVideo } from '../tests/utils/index'
+import { VideoPrivacy } from '../../shared/models/videos'
 
 const accessPromise = promisify(access)
 
@@ -12,6 +13,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-n, --video-name <name>', 'Video name')
+  .option('-P, --privacy <privacy number>', 'Privacy')
   .option('-N, --nsfw', 'Video is Not Safe For Work')
   .option('-c, --category <category number>', 'Category number')
   .option('-m, --comments-enabled', 'Enable comments')
@@ -26,6 +28,7 @@ program
 
 if (!program['tags']) program['tags'] = []
 if (!program['nsfw']) program['nsfw'] = false
+if (!program['privacy']) program['privacy'] = VideoPrivacy.PUBLIC
 if (!program['commentsEnabled']) program['commentsEnabled'] = false
 
 if (
@@ -35,7 +38,11 @@ if (
   !program['videoName'] ||
   !program['file']
 ) {
-  console.error('Url, username, password, name and input file are required.')
+  if (!program['url']) console.error('--url field is required.')
+  if (!program['username']) console.error('--username field is required.')
+  if (!program['password']) console.error('--password field is required.')
+  if (!program['videoName']) console.error('--video-name field is required.')
+  if (!program['file']) console.error('--file field is required.')
   process.exit(-1)
 }
 
@@ -77,6 +84,7 @@ async function run () {
     fixture: program['file'],
     thumbnailfile: program['thumbnailPath'],
     previewfile: program['previewPath'],
+    privacy: program['privacy'],
     support: undefined
   }
 

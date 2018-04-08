@@ -1,4 +1,6 @@
-#!/usr/bin/env sh
+#!/bin/sh
+
+set -eu
 
 printf "############# PeerTube help #############\n\n"
 printf "npm run ...\n"

@@ -111,19 +111,19 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static updateActorFollowsScoreAndRemoveBadOnes (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction) {
+  static updateActorFollowsScore (goodInboxes: string[], badInboxes: string[], t: Sequelize.Transaction) {
     if (goodInboxes.length === 0 && badInboxes.length === 0) return
 
     logger.info('Updating %d good actor follows and %d bad actor follows scores.', goodInboxes.length, badInboxes.length)
 
     if (goodInboxes.length !== 0) {
       ActorFollowModel.incrementScores(goodInboxes, ACTOR_FOLLOW_SCORE.BONUS, t)
-        .catch(err => logger.error('Cannot increment scores of good actor follows.', err))
+        .catch(err => logger.error('Cannot increment scores of good actor follows.', { err }))
     }
 
     if (badInboxes.length !== 0) {
       ActorFollowModel.incrementScores(badInboxes, ACTOR_FOLLOW_SCORE.PENALTY, t)
-        .catch(err => logger.error('Cannot decrement scores of bad actor follows.', err))
+        .catch(err => logger.error('Cannot decrement scores of bad actor follows.', { err }))
     }
   }
 

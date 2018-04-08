@@ -4,6 +4,20 @@
     Create an account
   </div>
 
+  <div class="initial-user-quota">
+    <span class="initial-user-quota-label">Initial video quota:</span>
+
+    <span *ngIf="initialUserVideoQuota !== -1">
+      {{ initialUserVideoQuota | bytes: 0 }}
+
+      <my-help helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
+    </span>
+
+    <ng-template [ngIf]="initialUserVideoQuota === -1">
+      Unlimited
+    </ng-template>
+  </div>
+
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <form role="form" (ngSubmit)="signup()" [formGroup]="form">

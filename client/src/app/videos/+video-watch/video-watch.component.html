@@ -1,7 +1,6 @@
 <div class="row">
   <!-- We need the video container for videojs so we just hide it -->
-  <div [hidden]="videoNotFound" id="video-container">
-     <video [poster]="getVideoPoster()" id="video-element" class="video-js vjs-peertube-skin"></video>
+  <div [hidden]="videoNotFound" id="video-element-wrapper">
   </div>
 
   <div *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
@@ -14,7 +13,7 @@
           <div class="video-info-name">{{ video.name }}</div>
 
           <div class="video-info-date-views">
-            {{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
+            {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
           </div>
 
           <div class="video-info-channel">
@@ -122,7 +121,7 @@
             Privacy
           </span>
           <span class="video-attribute-value">
-            {{ video.privacyLabel }}
+            {{ video.privacy.label }}
           </span>
         </div>
 
@@ -131,7 +130,7 @@
             Category
           </span>
           <span class="video-attribute-value">
-            {{ video.categoryLabel }}
+            {{ video.category.label }}
           </span>
         </div>
 
@@ -140,7 +139,7 @@
             Licence
           </span>
           <span class="video-attribute-value">
-            {{ video.licenceLabel }}
+            {{ video.licence.label }}
           </span>
         </div>
 
@@ -149,7 +148,7 @@
             Language
           </span>
           <span class="video-attribute-value">
-            {{ video.languageLabel }}
+            {{ video.language.label }}
           </span>
         </div>
 
@@ -183,7 +182,7 @@
     <strong>Friendly Reminder:</strong>
     <div class="privacy-concerns-text">
       The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be accessed publicly.
-      <a title="Get more information" target="_blank" href="/about#p2p-privacy">More information</a>
+      <a title="Get more information" target="_blank" rel="noopener noreferrer" href="/about#p2p-privacy">More information</a>
     </div>
 
     <div class="privacy-concerns-okay" (click)="acceptedPrivacyConcern()">

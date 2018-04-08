@@ -16,6 +16,7 @@ describe('Test config API validators', function () {
   const updateParams: CustomConfig = {
     instance: {
       name: 'PeerTube updated',
+      shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
       defaultClientRoute: '/videos/recently-added',

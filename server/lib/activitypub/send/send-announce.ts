@@ -5,7 +5,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { broadcastToFollowers, getActorsInvolvedInVideo, getAudience, getObjectFollowersAudience } from './misc'
 
-async function buildVideoAnnounceToFollowers (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
+async function buildVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
   const announcedObject = video.url
 
   const accountsToForwardView = await getActorsInvolvedInVideo(video, t)
@@ -13,8 +13,8 @@ async function buildVideoAnnounceToFollowers (byActor: ActorModel, videoShare: V
   return announceActivityData(videoShare.url, byActor, announcedObject, t, audience)
 }
 
-async function sendVideoAnnounceToFollowers (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
-  const data = await buildVideoAnnounceToFollowers(byActor, videoShare, video, t)
+async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
+  const data = await buildVideoAnnounce(byActor, videoShare, video, t)
 
   return broadcastToFollowers(data, byActor, [ byActor ], t)
 }
@@ -43,7 +43,7 @@ async function announceActivityData (
 // ---------------------------------------------------------------------------
 
 export {
-  sendVideoAnnounceToFollowers,
+  sendVideoAnnounce,
   announceActivityData,
-  buildVideoAnnounceToFollowers
+  buildVideoAnnounce
 }

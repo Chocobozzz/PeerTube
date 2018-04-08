@@ -7,6 +7,7 @@ import { Video as VideoServerModel, VideoDetails as VideoDetailsServerModel } fr
 import { ResultList } from '../../../../../shared/models/result-list.model'
 import { UserVideoRateUpdate } from '../../../../../shared/models/videos/user-video-rate-update.model'
 import { UserVideoRate } from '../../../../../shared/models/videos/user-video-rate.model'
+import { VideoFilter } from '../../../../../shared/models/videos/video-query.type'
 import { VideoRateType } from '../../../../../shared/models/videos/video-rate.type'
 import { VideoUpdate } from '../../../../../shared/models/videos/video-update.model'
 import { environment } from '../../../environments/environment'
@@ -94,11 +95,19 @@ export class VideoService {
       .catch((res) => this.restExtractor.handleError(res))
   }
 
-  getVideos (videoPagination: ComponentPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
+  getVideos (
+    videoPagination: ComponentPagination,
+    sort: SortField,
+    filter?: VideoFilter
+  ): Observable<{ videos: Video[], totalVideos: number}> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (filter) {
+      params = params.set('filter', filter)
+    }
 
     return this.authHttp
       .get(VideoService.BASE_VIDEO_URL, { params })

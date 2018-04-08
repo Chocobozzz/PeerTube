@@ -7,11 +7,26 @@
 
   <form role="form" (ngSubmit)="login()" [formGroup]="form">
     <div class="form-group">
-      <label for="username">User</label>
-      <input
-        type="text" id="username" placeholder="Username or email address" required
-        formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
-      >
+      <div>
+        <label for="username">User</label>
+        <input
+          type="text" id="username" placeholder="Username or email address" required tabindex="1"
+          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+        >
+        <a *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
+          or create an account
+        </a>
+
+        <a *ngIf="signupAllowed === false" href="https://joinpeertube.org/en/#getting-started" target="_blank" class="create-an-account">
+          or create an account on another instance
+        </a>
+
+        <my-help
+          *ngIf="signupAllowed === false" helpType="custom"
+          customHtml="User registration is not allowed on this instance, but you can register on many others!"
+        ></my-help>
+      </div>
+
       <div *ngIf="formErrors.username" class="form-error">
         {{ formErrors.username }}
       </div>
@@ -21,7 +36,7 @@
       <label for="password">Password</label>
       <div>
         <input
-          type="password" name="password" id="password" placeholder="Password" required
+          type="password" name="password" id="password" placeholder="Password" required tabindex="2"
           formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
         >
         <div class="forgot-password-button" (click)="openForgotPasswordModal()">I forgot my password</div>

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
+import { VideoLocalComponent } from '@app/videos/video-list/video-local.component'
 import { MetaGuard } from '@ngx-meta/core'
 import { VideoSearchComponent } from './video-list'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
@@ -32,6 +33,15 @@ const videosRoutes: Routes = [
         data: {
           meta: {
             title: 'Recently added videos'
+          }
+        }
+      },
+      {
+        path: 'local',
+        component: VideoLocalComponent,
+        data: {
+          meta: {
+            title: 'Local videos'
           }
         }
       },

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core'
-
+import { Account } from '@app/shared/account/account.model'
 import { NotificationsService } from 'angular2-notifications'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-
-import { RestTable, RestPagination, VideoAbuseService } from '../../../shared'
 import { VideoAbuse } from '../../../../../../shared'
+
+import { RestPagination, RestTable, VideoAbuseService } from '../../../shared'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -29,8 +29,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     this.loadSort()
   }
 
-  getRouterVideoLink (videoUUID: string) {
-    return [ '/videos', videoUUID ]
+  createByString (account: Account) {
+    return Account.CREATE_BY_STRING(account.name, account.host)
   }
 
   protected loadData () {

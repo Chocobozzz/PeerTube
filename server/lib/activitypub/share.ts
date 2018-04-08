@@ -3,7 +3,7 @@ import { VideoPrivacy } from '../../../shared/models/videos'
 import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
-import { sendVideoAnnounceToFollowers } from './send'
+import { sendVideoAnnounce } from './send'
 import { getAnnounceActivityPubUrl } from './url'
 
 async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
@@ -12,27 +12,42 @@ async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) 
   const serverActor = await getServerActor()
 
   const serverShareUrl = getAnnounceActivityPubUrl(video.url, serverActor)
-  const serverSharePromise = VideoShareModel.create({
-    actorId: serverActor.id,
-    videoId: video.id,
-    url: serverShareUrl
-  }, { transaction: t })
+  const serverSharePromise = VideoShareModel.findOrCreate({
+    defaults: {
+      actorId: serverActor.id,
+      videoId: video.id,
+      url: serverShareUrl
+    },
+    where: {
+      url: serverShareUrl
+    },
+    transaction: t
+  }).then(([ serverShare, created ]) => {
+    if (created) return sendVideoAnnounce(serverActor, serverShare, video, t)
+
+    return undefined
+  })
 
   const videoChannelShareUrl = getAnnounceActivityPubUrl(video.url, video.VideoChannel.Actor)
-  const videoChannelSharePromise = VideoShareModel.create({
-    actorId: video.VideoChannel.actorId,
-    videoId: video.id,
-    url: videoChannelShareUrl
-  }, { transaction: t })
+  const videoChannelSharePromise = VideoShareModel.findOrCreate({
+    defaults: {
+      actorId: video.VideoChannel.actorId,
+      videoId: video.id,
+      url: videoChannelShareUrl
+    },
+    where: {
+      url: videoChannelShareUrl
+    },
+    transaction: t
+  }).then(([ videoChannelShare, created ]) => {
+    if (created) return sendVideoAnnounce(serverActor, videoChannelShare, video, t)
 
-  const [ serverShare, videoChannelShare ] = await Promise.all([
-    serverSharePromise,
-    videoChannelSharePromise
-  ])
+    return undefined
+  })
 
   return Promise.all([
-    sendVideoAnnounceToFollowers(serverActor, videoChannelShare, video, t),
-    sendVideoAnnounceToFollowers(serverActor, serverShare, video, t)
+    serverSharePromise,
+    videoChannelSharePromise
   ])
 }
 

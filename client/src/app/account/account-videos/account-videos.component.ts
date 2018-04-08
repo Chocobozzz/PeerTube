@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
@@ -17,17 +17,18 @@ import { VideoService } from '../../shared/video/video.service'
   templateUrl: './account-videos.component.html',
   styleUrls: [ './account-videos.component.scss' ]
 })
-export class AccountVideosComponent extends AbstractVideoList implements OnInit {
+export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'My videos'
   currentRoute = '/account/videos'
   checkedVideos: { [ id: number ]: boolean } = {}
-  videoHeight = 155
-  videoWidth = -1
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 5,
     totalItems: null
   }
+
+  protected baseVideoWidth = -1
+  protected baseVideoHeight = 155
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,
@@ -40,6 +41,10 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
 
   ngOnInit () {
     super.ngOnInit()
+  }
+
+  ngOnDestroy () {
+    super.ngOnDestroy()
   }
 
   abortSelectionMode () {
@@ -99,6 +104,11 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit 
 
         error => this.notificationsService.error('Error', error.message)
       )
+  }
+
+  protected buildVideoHeight () {
+    // In account videos, the video height is fixed
+    return this.baseVideoHeight
   }
 
   private spliceVideosById (id: number) {

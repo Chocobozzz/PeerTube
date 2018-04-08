@@ -85,13 +85,18 @@ function getVideo (url: string, id: number | string, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
-function viewVideo (url: string, id: number | string, expectedStatus = 204) {
+function viewVideo (url: string, id: number | string, expectedStatus = 204, xForwardedFor?: string) {
   const path = '/api/v1/videos/' + id + '/views'
 
-  return request(url)
+  const req = request(url)
     .post(path)
     .set('Accept', 'application/json')
-    .expect(expectedStatus)
+
+  if (xForwardedFor) {
+    req.set('X-Forwarded-For', xForwardedFor)
+  }
+
+  return req.expect(expectedStatus)
 }
 
 function getVideoWithToken (url: string, token: string, id: number | string, expectedStatus = 200) {
@@ -121,6 +126,17 @@ function getVideosList (url: string) {
           .set('Accept', 'application/json')
           .expect(200)
           .expect('Content-Type', /json/)
+}
+
+function getLocalVideos (url: string) {
+  const path = '/api/v1/videos'
+
+  return request(url)
+    .get(path)
+    .query({ sort: 'name', filter: 'local' })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
 }
 
 function getMyVideos (url: string, accessToken: string, start: number, count: number, sort?: string) {
@@ -368,8 +384,10 @@ async function completeVideoCheck (
     commentsEnabled: boolean
     description: string
     support: string
-    host: string
-    account: string
+    account: {
+      name: string
+      host: string
+    }
     isLocal: boolean,
     tags: string[],
     privacy: number,
@@ -394,21 +412,22 @@ async function completeVideoCheck (
   if (!attributes.dislikes) attributes.dislikes = 0
 
   expect(video.name).to.equal(attributes.name)
-  expect(video.category).to.equal(attributes.category)
-  expect(video.categoryLabel).to.equal(VIDEO_CATEGORIES[attributes.category] || 'Misc')
-  expect(video.licence).to.equal(attributes.licence)
-  expect(video.licenceLabel).to.equal(VIDEO_LICENCES[attributes.licence] || 'Unknown')
-  expect(video.language).to.equal(attributes.language)
-  expect(video.languageLabel).to.equal(VIDEO_LANGUAGES[attributes.language] || 'Unknown')
+  expect(video.category.id).to.equal(attributes.category)
+  expect(video.category.label).to.equal(VIDEO_CATEGORIES[attributes.category] || 'Misc')
+  expect(video.licence.id).to.equal(attributes.licence)
+  expect(video.licence.label).to.equal(VIDEO_LICENCES[attributes.licence] || 'Unknown')
+  expect(video.language.id).to.equal(attributes.language)
+  expect(video.language.label).to.equal(VIDEO_LANGUAGES[attributes.language] || 'Unknown')
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
-  expect(video.serverHost).to.equal(attributes.host)
-  expect(video.accountName).to.equal(attributes.account)
+  expect(video.account.host).to.equal(attributes.account.host)
+  expect(video.account.name).to.equal(attributes.account.name)
   expect(video.likes).to.equal(attributes.likes)
   expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
   expect(video.duration).to.equal(attributes.duration)
   expect(dateIsValid(video.createdAt)).to.be.true
+  expect(dateIsValid(video.publishedAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
 
   const res = await getVideo(url, video.uuid)
@@ -416,9 +435,10 @@ async function completeVideoCheck (
 
   expect(videoDetails.files).to.have.lengthOf(attributes.files.length)
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
-  expect(videoDetails.privacy).to.deep.equal(attributes.privacy)
-  expect(videoDetails.privacyLabel).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
-  expect(videoDetails.account.name).to.equal(attributes.account)
+  expect(videoDetails.privacy.id).to.deep.equal(attributes.privacy)
+  expect(videoDetails.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
+  expect(videoDetails.account.name).to.equal(attributes.account.name)
+  expect(videoDetails.account.host).to.equal(attributes.account.host)
   expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
 
   expect(videoDetails.channel.displayName).to.equal(attributes.channel.name)
@@ -428,19 +448,19 @@ async function completeVideoCheck (
   expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
 
   for (const attributeFile of attributes.files) {
-    const file = videoDetails.files.find(f => f.resolution === attributeFile.resolution)
+    const file = videoDetails.files.find(f => f.resolution.id === attributeFile.resolution)
     expect(file).not.to.be.undefined
 
     let extension = extname(attributes.fixture)
     // Transcoding enabled on server 2, extension will always be .mp4
-    if (attributes.host === 'localhost:9002') extension = '.mp4'
+    if (attributes.account.host === 'localhost:9002') extension = '.mp4'
 
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
-    expect(file.torrentUrl).to.equal(`http://${attributes.host}/static/torrents/${videoDetails.uuid}-${file.resolution}.torrent`)
-    expect(file.fileUrl).to.equal(`http://${attributes.host}/static/webseed/${videoDetails.uuid}-${file.resolution}${extension}`)
-    expect(file.resolution).to.equal(attributeFile.resolution)
-    expect(file.resolutionLabel).to.equal(attributeFile.resolution + 'p')
+    expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
+    expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
+    expect(file.resolution.id).to.equal(attributeFile.resolution)
+    expect(file.resolution.label).to.equal(attributeFile.resolution + 'p')
 
     const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
     const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
@@ -484,6 +504,7 @@ export {
   rateVideo,
   viewVideo,
   parseTorrentVideo,
+  getLocalVideos,
   completeVideoCheck,
   checkVideoFilesWereRemoved
 }

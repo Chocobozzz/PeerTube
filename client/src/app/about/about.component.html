@@ -15,6 +15,26 @@
     <div [innerHTML]="termsHTML"></div>
   </div>
 
+  <div class="signup">
+    <div class="section-title">Signup</div>
+
+    <div *ngIf="isSignupAllowed">
+      User registration is allowed and
+
+      <ng-template [ngIf]="userVideoQuota !== -1">
+        this instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
+      </ng-template>
+
+      <ng-template [ngIf]="userVideoQuota === -1">
+        this instance provides unlimited space for the videos of its users.
+      </ng-template>
+    </div>
+
+    <div *ngIf="isSignupAllowed === false">
+      User registration is currently not allowed.
+    </div>
+  </div>
+
   <div id="p2p-privacy">
     <div class="section-title">P2P & Privacy</div>
 

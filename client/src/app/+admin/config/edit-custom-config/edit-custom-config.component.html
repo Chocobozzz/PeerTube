@@ -16,6 +16,17 @@
   </div>
 
   <div class="form-group">
+    <label for="instanceShortDescription">Short description</label>
+    <textarea
+        id="instanceShortDescription" formControlName="instanceShortDescription"
+        [ngClass]="{ 'input-error': formErrors['instanceShortDescription'] }"
+    ></textarea>
+    <div *ngIf="formErrors.instanceShortDescription" class="form-error">
+      {{ formErrors.instanceShortDescription }}
+    </div>
+  </div>
+
+  <div class="form-group">
     <label for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
     <my-markdown-textarea
         id="instanceDescription" formControlName="instanceDescription" textareaWidth="500px" [previewColumn]="true"
@@ -43,7 +54,11 @@
       <select id="instanceDefaultClientRoute" formControlName="instanceDefaultClientRoute">
         <option value="/videos/trending">Videos Trending</option>
         <option value="/videos/recently-added">Videos Recently Added</option>
+        <option value="/videos/local">Local videos</option>
       </select>
+    </div>
+    <div *ngIf="formErrors.instanceDefaultClientRoute" class="form-error">
+      {{ formErrors.instanceDefaultClientRoute }}
     </div>
   </div>
 
@@ -104,6 +119,9 @@
         </option>
       </select>
     </div>
+    <div *ngIf="formErrors.userVideoQuota" class="form-error">
+      {{ formErrors.userVideoQuota }}
+    </div>
   </div>
 
   <div class="inner-form-title">Transcoding</div>
@@ -126,6 +144,9 @@
           </option>
         </select>
       </div>
+      <div *ngIf="formErrors.transcodingThreads" class="form-error">
+        {{ formErrors.transcodingThreads }}
+      </div>
     </div>
 
     <div class="form-group" *ngFor="let resolution of resolutions">
@@ -142,7 +163,7 @@
 
   <div class="form-group">
     <label for="customizationJavascript">JavaScript</label>
-    <my-help helpType="custom" customHtml="Write directly JavaScript code.<br />Example: console.log('my instance is amazing');"></my-help>
+    <my-help helpType="custom" customHtml="Write directly JavaScript code.<br />Example: <pre>console.log('my instance is amazing');</pre>"></my-help>
     <textarea
         id="customizationJavascript" formControlName="customizationJavascript"
         [ngClass]="{ 'input-error': formErrors['customizationJavascript'] }"
@@ -154,7 +175,24 @@
 
   <div class="form-group">
     <label for="customizationCSS">CSS</label>
-    <my-help helpType="custom" customHtml="Write directly CSS code.<br />Example: body { background-color: red; }"></my-help>
+    <my-help
+        helpType="custom"
+        customHtml="
+          Write directly CSS code. Example:<br />
+          <pre>
+body {
+  background-color: red;
+}
+          </pre>
+
+          Prepend with <em>#custom-css</em> to override styles. Example:
+          <pre>
+#custom-css .logged-in-email {
+  color: red;
+}
+          </pre>
+        "
+    ></my-help>
     <textarea
         id="customizationCSS" formControlName="customizationCSS"
         [ngClass]="{ 'input-error': formErrors['customizationCSS'] }"

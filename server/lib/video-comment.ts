@@ -5,7 +5,7 @@ import { AccountModel } from '../models/account/account'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { getVideoCommentActivityPubUrl } from './activitypub'
-import { sendCreateVideoCommentToOrigin, sendCreateVideoCommentToVideoFollowers } from './activitypub/send'
+import { sendCreateVideoComment } from './activitypub/send'
 
 async function createVideoComment (obj: {
   text: string,
@@ -37,11 +37,7 @@ async function createVideoComment (obj: {
   savedComment.Video = obj.video
   savedComment.Account = obj.account
 
-  if (savedComment.Video.isOwned()) {
-    await sendCreateVideoCommentToVideoFollowers(savedComment, t)
-  } else {
-    await sendCreateVideoCommentToOrigin(savedComment, t)
-  }
+  await sendCreateVideoComment(savedComment, t)
 
   return savedComment
 }

@@ -22,18 +22,13 @@ initDatabaseModels(true)
     console.log('Updating torrent files.')
     return VideoModel.list()
   })
-  .then(videos => {
-    const tasks: Promise<any>[] = []
-
-    videos.forEach(video => {
-      console.log('Updating video ' + video.uuid)
-
-      video.VideoFiles.forEach(file => {
-        tasks.push(video.createTorrentAndSetInfoHash(file))
-      })
-    })
-
-    return Promise.all(tasks)
+  .then(async videos => {
+    for (const video of videos) {
+      for (const file of video.VideoFiles) {
+        await video.createTorrentAndSetInfoHash(file)
+        console.log('Updated video ' + video.uuid)
+      }
+    }
   })
   .then(() => {
     process.exit(0)

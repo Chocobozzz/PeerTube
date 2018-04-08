@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/bin/sh
 
-npm run build:server || exit -1
-npm run travis -- lint || exit -1
+set -eu
+
+npm run build:server
+npm run travis -- lint
 
 mocha --exit --require ts-node/register/type-check --bail server/tests/index.ts

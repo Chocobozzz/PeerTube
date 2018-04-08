@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: PeerTube
-  version: 1.0.0-alpha
+  version: 1.0.0-beta
   description: Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.
 host: peertube.example.com
 basePath: '/api/v1'
@@ -31,7 +31,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -69,7 +69,7 @@ paths:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/ServerConfig' 
+            $ref: '#/definitions/ServerConfig'
   /jobs:
     get:
       tags:
@@ -105,7 +105,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Job' 
+              $ref: '#/definitions/Job'
   '/server/following/{host}':
     delete:
       tags:
@@ -141,7 +141,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -172,7 +172,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -212,6 +212,7 @@ paths:
         - in: body
           name: body
           required: true
+          description: 'User to create'
           schema:
             $ref: '#/definitions/AddUser'
       responses:
@@ -236,7 +237,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -387,7 +388,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -453,7 +454,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -544,7 +545,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -562,7 +563,7 @@ paths:
       tags:
         - Video
       consumes:
-        - application/json
+        - multipart/form-data
       produces:
         - application/json
       parameters:
@@ -570,7 +571,56 @@ paths:
           in: path
           required: true
           type: string
-          description: 'The video id '
+          description: 'The video id'
+        - name: thumbnailfile
+          in: formData
+          type: file
+          description: 'Video thumbnail file'
+        - name: previewfile
+          in: formData
+          type: file
+          description: 'Video preview file'
+        - name: category
+          in: formData
+          type: number
+          description: 'Video category'
+        - name: licence
+          in: formData
+          type: number
+          description: 'Video licence'
+        - name: language
+          in: formData
+          type: number
+          description: 'Video language'
+        - name: description
+          in: formData
+          type: string
+          description: 'Video description'
+        - name: support
+          in: formData
+          type: string
+          description: 'Text describing how to support the video uploader'
+        - name: nsfw
+          in: formData
+          type: boolean
+          description: 'Whether or not this video contains sensitive content'
+        - name: name
+          in: formData
+          type: string
+          description: 'Video name'
+        - name: tags
+          in: formData
+          type: string[]
+          description: 'Video tags'
+        - name: commentsEnabled
+          in: formData
+          type: boolean
+          description: 'Enable or disable comments for this video'
+        - name: privacy
+          in: formData
+          type: string
+          enum: [Public, Unlisted]
+          description: 'Video privacy'
       responses:
         '200':
           description: successful operation
@@ -655,10 +705,70 @@ paths:
       produces:
         - application/json
       parameters:
-        - in: formData
-          name: videofile
+        - name: videofile
+          in: formData
           type: file
-          description: The file to upload.
+          required: true
+          description: 'Video file'
+        - name: thumbnailfile
+          in: formData
+          type: file
+          required: true
+          description: 'Video thumbnail file'
+        - name: previewfile
+          in: formData
+          type: file
+          required: true
+          description: 'Video preview file'
+        - name: category
+          in: formData
+          type: number
+          description: 'Video category'
+        - name: licence
+          in: formData
+          type: number
+          description: 'Video licence'
+        - name: language
+          in: formData
+          type: number
+          description: 'Video language'
+        - name: description
+          in: formData
+          type: string
+          description: 'Video description'
+        - name: support
+          in: formData
+          type: string
+          description: 'Text describing how to support the video uploader'
+        - name: channelId
+          in: formData
+          required: true
+          type: number
+          description: 'Channel id that will contain this video'
+        - name: nsfw
+          in: formData
+          required: true
+          type: boolean
+          description: 'Whether or not this video contains sensitive content'
+        - name: name
+          in: formData
+          required: true
+          type: string
+          description: 'Video name'
+        - name: tags
+          in: formData
+          type: string[]
+          description: 'Video tags'
+        - name: commentsEnabled
+          in: formData
+          type: boolean
+          description: 'Enable or disable comments for this video'
+        - name: privacy
+          in: formData
+          required: true
+          type: string
+          enum: [Public, Unlisted, Private]
+          description: 'Video privacy'
       responses:
         '200':
           description: successful operation
@@ -682,7 +792,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -763,7 +873,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -794,7 +904,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -921,7 +1031,7 @@ paths:
           in: query
           required: false
           type: number
-          description: 'stoping page'
+          description: 'stopping page'
         - name: sort
           in: query
           required: false
@@ -1037,30 +1147,35 @@ paths:
         '204':
           description: successful operation
 definitions:
+  VideoConstant:
+    properties:
+      id:
+        type: number
+      label:
+        type: string
+  VideoPrivacy:
+    type: string
+    enum: [Public, Unlisted, Private]
   Video:
     properties:
       id:
         type: number
       uuid:
         type: string
-      accountName:
-        type: string
       createdAt:
+        type: string
+      publishedAt:
         type: string
       updatedAt:
         type: string
-      categoryLabel:
-        type: string
       category:
-        type: number
-      licenceLabel:
-        type: string
+        $ref: "#/definitions/VideoConstant"
       licence:
-        type: number
-      languageLabel:
-        type: string
+        $ref: "#/definitions/VideoConstant"
       language:
-        type: number
+        $ref: "#/definitions/VideoConstant"
+      privacy:
+        $ref: "#/definitions/VideoPrivacy"
       description:
         type: string
       duration:
@@ -1068,8 +1183,6 @@ definitions:
       isLocal:
         type: boolean
       name:
-        type: string
-      serverHost:
         type: string
       thumbnailPath:
         type: string
@@ -1085,22 +1198,38 @@ definitions:
         type: number
       nsfw:
         type: boolean
+      account:
+        type: object
+        properties:
+          name:
+            type: string
+          displayName:
+            type: string
+          url:
+            type: string
+          host:
+            type: string
+          avatar:
+            $ref: "#/definitions/Avatar"
   VideoAbuse:
     properties:
       id:
         type: number
       reason:
         type: string
-      reporterUsername:
-        type: string
-      reporterServerHost:
-        type: string
-      videoId:
-        type: number
-      videoUUID:
-        type: string
-      videoName:
-        type: string
+      reporterAccount:
+        $ref: "#/definitions/Account"
+      video:
+        type: object
+        properties:
+          id:
+            type: number
+          name:
+            type: string
+          uuid:
+            type: string
+          url:
+            type: string
       createdAt:
         type: string
   VideoBlacklist:
@@ -1139,14 +1268,14 @@ definitions:
         type: boolean
       owner:
         type: object
-        properties: 
-          name: 
+        properties:
+          name:
             type: string
-          uuid: 
+          uuid:
             type: string
       videos:
         type: array
-        items: 
+        items:
           $ref: "#/definitions/Video"
   VideoComment:
     properties:
@@ -1228,7 +1357,7 @@ definitions:
         type: boolean
       role:
         type: string
-        enum: [User, Moderator, Administrator] 
+        enum: [User, Moderator, Administrator]
       videoQuota:
         type: number
       createdAt:
@@ -1241,7 +1370,7 @@ definitions:
           $ref: "#/definitions/VideoChannel"
   ServerConfig:
     properties:
-      signup: 
+      signup:
         type: object
         properties:
           allowed:
@@ -1264,7 +1393,7 @@ definitions:
                 properties:
                   max:
                     type: number
-          extensions: 
+          extensions:
             type: array
             items:
               type: string
@@ -1273,8 +1402,8 @@ definitions:
         properties:
           file:
             type: object
-            properties: 
-              extensions: 
+            properties:
+              extensions:
                 type: array
                 items:
                   type: string
@@ -1314,7 +1443,7 @@ definitions:
       updatedAt:
         type: string
 
-#Api responses
+# Api responses
   AddUserResponse:
     properties:
       id:
@@ -1323,10 +1452,13 @@ definitions:
         type: string
   VideoUploadResponse:
     properties:
-      id:
-        type: number
-      uuid:
-        type: string
+      video:
+        type: object
+        properties:
+          id:
+            type: number
+          uuid:
+            type: string
   CommentThreadResponse:
     properties:
       total:
@@ -1340,7 +1472,7 @@ definitions:
       comment:
         $ref: "#/definitions/VideoComment"
 
-#request bodies
+# Request bodies
   AddUser:
     properties:
       username:

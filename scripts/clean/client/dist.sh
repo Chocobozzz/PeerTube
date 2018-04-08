@@ -1,4 +1,6 @@
-#!/usr/bin/env sh
+#!/bin/sh
 
-cd client || exit -1
+set -eu
+
+cd client
 rm -rf compiled/ dist/ dll/

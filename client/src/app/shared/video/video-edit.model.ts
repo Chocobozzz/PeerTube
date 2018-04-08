@@ -24,16 +24,16 @@ export class VideoEdit {
     if (videoDetails) {
       this.id = videoDetails.id
       this.uuid = videoDetails.uuid
-      this.category = videoDetails.category
-      this.licence = videoDetails.licence
-      this.language = videoDetails.language
+      this.category = videoDetails.category.id
+      this.licence = videoDetails.licence.id
+      this.language = videoDetails.language.id
       this.description = videoDetails.description
       this.name = videoDetails.name
       this.tags = videoDetails.tags
       this.nsfw = videoDetails.nsfw
       this.commentsEnabled = videoDetails.commentsEnabled
       this.channel = videoDetails.channel.id
-      this.privacy = videoDetails.privacy
+      this.privacy = videoDetails.privacy.id
       this.support = videoDetails.support
       this.thumbnailUrl = videoDetails.thumbnailUrl
       this.previewUrl = videoDetails.previewUrl

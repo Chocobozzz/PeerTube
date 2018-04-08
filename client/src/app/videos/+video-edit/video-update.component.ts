@@ -72,7 +72,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           ]
 
           // We cannot set private a video that was not private
-          if (video.privacy !== VideoPrivacy.PRIVATE) {
+          if (video.privacy.id !== VideoPrivacy.PRIVATE) {
             const newVideoPrivacies = []
             for (const p of this.videoPrivacies) {
               if (p.id !== VideoPrivacy.PRIVATE) newVideoPrivacies.push(p)

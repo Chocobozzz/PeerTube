@@ -1,9 +1,10 @@
-<!-- If you report a bug please fill the form -->
+<!-- If you have a question, please read the FAQ.md first -->
 
-* **PeerTube version or commit:**
+<!-- If you report a bug, please fill the form -->
+
+* **PeerTube version or URL:**
 * **Browser name/version:**
 * **NodeJS version:**
-* **PostgreSQL version:**
 
 
 * **What is the expected behaviour?**

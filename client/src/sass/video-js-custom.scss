@@ -2,9 +2,17 @@
 @import '_mixins';
 
 $primary-foreground-color: #fff;
+$primary-foreground-opacity: 0.9;
+$primary-foreground-opacity-hover: 1;
 $primary-background-color: #000;
+
 $font-size: 13px;
 $control-bar-height: 34px;
+
+$slider-bg-color: lighten($primary-background-color, 33%);
+
+$setting-transition-duration: 0.15s;
+$setting-transition-easing: ease-out;
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
@@ -17,16 +25,16 @@ $control-bar-height: 34px;
   .vjs-dock-description {
     font-size: 11px;
 
-    &:before, &:after {
+    &::before, &::after {
       display: inline-block;
       content: '\1F308';
     }
 
-    &:before {
+    &::before {
       margin-right: 4px;
     }
 
-    &:after {
+    &::after {
       margin-left: 4px;
       transform: scale(-1, 1);
     }
@@ -36,9 +44,7 @@ $control-bar-height: 34px;
     line-height: $control-bar-height;
   }
 
-  .vjs-mouse-display:before,
-  .vjs-play-progress:before,
-  .vjs-volume-level:before {
+  .vjs-volume-level::before {
     content: ''; /* Remove Circle From Progress Bar */
   }
 
@@ -50,11 +56,11 @@ $control-bar-height: 34px;
     outline: 0;
     font-size: 6em;
 
-    $big-play-width: 1.5em;
-    $big-play-height: 1em;
+    $big-play-width: 1.2em;
+    $big-play-height: 1.2em;
 
     border: 0;
-    border-radius: 0.3em;
+    border-radius: 100%;
 
     left: 50%;
     top: 50%;
@@ -71,14 +77,14 @@ $control-bar-height: 34px;
     }
 
     .vjs-icon-placeholder::before {
-      transition: text-shadow 0.3s;
+      transition: font-size 0.2s, opacity 0.2s;
     }
 
     &:hover {
-      opacity: 0.9;
+      opacity: 0.8;
 
       .vjs-icon-placeholder::before {
-        text-shadow: 0 0 1px rgba(255, 255, 255, 0.8);
+        font-size: 110%;
       }
     }
   }
@@ -86,38 +92,67 @@ $control-bar-height: 34px;
   &.vjs-has-started .vjs-big-play-button {
     display: block;
     visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s;
+
+    &, &::before {
+      opacity: 0;
+      transition: visibility 0.1s, opacity 0.1s;
+    }
+  }
+
+  &.vjs-has-started video {
+    background-color: #000;
+    animation: fade-black-on-play 0.5s linear;
+
+    @keyframes fade-black-on-play {
+      0% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
   }
 
   .vjs-control-bar,
   .vjs-big-play-button,
-  .vjs-menu-button .vjs-menu-content {
+  .vjs-settings-dialog {
     background-color: rgba($primary-background-color, 0.5);
   }
-
-  $slider-bg-color: lighten($primary-background-color, 33%);
 
   .vjs-slider {
     background-color: rgba(255, 255, 255, .3);
     border-radius: 2px;
     height: 5px;
+
+    .vjs-slider-bar {
+      background: $primary-foreground-color;
+    }
   }
 
-  /* The slider bar color is used for the progress bar and the volume bar
-     (the first two can be removed after a fix that's coming) */
-  .vjs-volume-level,
-  .vjs-play-progress,
-  .vjs-slider-bar {
-    background: $primary-foreground-color;
+  .vjs-play-progress {
+
+    &::before {
+      top: -0.3em;
+
+      &:hover {
+        top: -0.372em;
+      }
+    }
+
+    .vjs-time-tooltip {
+      display: none;
+    }
   }
 
   .vjs-load-progress {
     background: rgba($slider-bg-color, 0.5);
-  }
 
-  .vjs-load-progress div {
-    background: rgba($slider-bg-color, 0.75);
+    div {
+      background: rgba($slider-bg-color, 0.75);
+    }
   }
 
   .vjs-poster {
@@ -127,6 +162,32 @@ $control-bar-height: 34px;
 
   .vjs-control-bar {
     height: $control-bar-height;
+
+    .vjs-progress-control,
+    .vjs-play-control,
+    .vjs-playback-rate,
+    .vjs-mute-control,
+    .vjs-volume-control,
+    .vjs-resolution-control,
+    .vjs-fullscreen-control,
+    .vjs-peertube-link,
+    .vjs-settings
+    {
+      color: $primary-foreground-color !important;
+      opacity: $primary-foreground-opacity;
+      transition: opacity .1s;
+
+      &:hover {
+        opacity: $primary-foreground-opacity-hover;
+      }
+    }
+
+    .vjs-current-time,
+    .vjs-duration,
+    .vjs-peertube {
+      color: $primary-foreground-color;
+      opacity: $primary-foreground-opacity;
+    }
 
     .vjs-progress-control {
       bottom: 34px;
@@ -143,6 +204,7 @@ $control-bar-height: 34px;
     .vjs-play-control {
       @include disable-outline;
 
+      cursor: pointer;
       font-size: $font-size;
       padding: 0 17px;
       margin-right: 5px;
@@ -168,7 +230,6 @@ $control-bar-height: 34px;
         font-size: $font-size;
         display: inline-block;
         padding: 0;
-
         .vjs-duration-display {
           line-height: calc(#{$control-bar-height} + 1px);
         }
@@ -263,7 +324,7 @@ $control-bar-height: 34px;
 
     .vjs-volume-control {
       width: 30px;
-      margin: 0;
+      margin: 0 5px 0 0;
     }
 
     .vjs-volume-bar {
@@ -320,6 +381,16 @@ $control-bar-height: 34px;
       }
     }
 
+    .vjs-peertube-link {
+      @include disable-outline;
+      @include disable-default-a-behaviour;
+
+      text-decoration: none;
+      line-height: $control-bar-height;
+      font-weight: $font-semibold;
+      padding: 0 5px;
+    }
+
     .vjs-fullscreen-control {
       @include disable-outline;
 
@@ -343,19 +414,6 @@ $control-bar-height: 34px;
       font-weight: $font-semibold;
       width: 50px;
 
-      // Thanks: https://github.com/kmoskwiak/videojs-resolution-switcher/pull/92/files
-      .vjs-resolution-button-label {
-        line-height: $control-bar-height;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        box-sizing: inherit;
-        text-align: center;
-      }
-
       .vjs-resolution-button {
         @include disable-outline;
       }
@@ -377,9 +435,17 @@ $control-bar-height: 34px;
     }
   }
 
-  @media screen and (max-width: 550px) {
+  @media screen and (max-width: 570px) {
+    .vjs-dock-text {
+      font-size: 14px;
+    }
+
+    .vjs-dock-description {
+      font-size: 9px;
+    }
+
     .vjs-big-play-button {
-      font-size: 5em;
+      font-size: 4.5em;
     }
 
     .vjs-playback-rate {
@@ -400,21 +466,49 @@ $control-bar-height: 34px;
       font-size: 13px;
     }
 
-    .vjs-dock-description {
-      font-size: 9px;
-    }
-
     .vjs-big-play-button {
-      font-size: 4em;
+      font-size: 3em;
     }
 
     .vjs-volume-control {
       display: none !important;
     }
 
-    .vjs-volume-panel {
-      width: 26px !important;
-      margin-right: 83px !important;
+    .vjs-peertube-link {
+      padding: 0 !important;
+    }
+
+    .vjs-settings {
+      width: 33px;
+    }
+  }
+}
+
+// Play/pause animations
+.vjs-has-started .vjs-play-control {
+  &.vjs-playing {
+    animation: remove-pause-button 0.25s ease;
+  }
+
+  &.vjs-paused {
+    animation: add-play-button 0.25s ease;
+  }
+
+  @keyframes remove-pause-button {
+    0% {
+      transform: rotate(90deg);
+    }
+    100% {
+      transform: rotate(0deg);
+    }
+  }
+
+  @keyframes add-play-button {
+    0% {
+      transform: rotate(-90deg);
+    }
+    100% {
+      transform: rotate(0deg);
     }
   }
 }
@@ -431,11 +525,11 @@ $control-bar-height: 34px;
   overflow: hidden;
   visibility: hidden;
 
-  &:before {
+  &::before {
     animation: none !important;
   }
 
-  &:after {
+  &::after {
     border-radius: 50%;
     width: 6em;
     height: 6em;
@@ -486,5 +580,180 @@ $control-bar-height: 34px;
 .vjs-error.vjs-error-display-enabled {
   .vjs-error-display {
     display: block;
+  }
+}
+
+
+/* Sass for videojs-settings-menu */
+
+.video-js {
+
+  .vjs-settings {
+    @include disable-outline;
+
+    cursor: pointer;
+    width: 37px;
+
+    .vjs-icon-placeholder {
+      display: inline-block;
+      width: 17px;
+      height: 17px;
+      vertical-align: middle;
+      background: url('../assets/player/images/settings.svg') no-repeat;
+      background-size: contain;
+
+      &::before {
+        content: '';
+      }
+    }
+  }
+
+  .vjs-settings-sub-menu-title {
+    width: 4em;
+    text-transform: initial;
+  }
+
+  .vjs-settings-dialog {
+    position: absolute;
+    right: .5em;
+    bottom: 3.5em;
+    color: $primary-foreground-color;
+    opacity: $primary-foreground-opacity;
+    margin: 0 auto;
+    font-size: $font-size !important;
+
+    width: auto;
+    overflow: hidden;
+
+    transition: width $setting-transition-duration $setting-transition-easing,  height $setting-transition-duration $setting-transition-easing;
+
+    .vjs-settings-sub-menu-value,
+    .vjs-settings-sub-menu-title {
+      display: table-cell;
+      padding: 0 5px;
+    }
+
+    .vjs-settings-sub-menu-title {
+      text-align: left;
+      font-weight: $font-semibold;
+    }
+
+    .vjs-settings-sub-menu-value {
+      width: 100%;
+      text-align: right;
+
+      small {
+        font-size: 0.85em;
+        opacity: 0.8;
+      }
+    }
+
+    .vjs-settings-panel {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border-radius: 1px;
+    }
+
+    .vjs-settings-panel-child {
+      display: flex;
+
+      align-items: flex-end;
+      white-space: nowrap;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+
+      > .vjs-menu {
+        flex: 1;
+        min-width: 200px;
+      }
+
+      > .vjs-menu,
+      > .vjs-settings-sub-menu {
+        transition: all $setting-transition-duration $setting-transition-easing;
+
+        .vjs-menu-item {
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+
+          &:first-child {
+            margin-top: 5px;
+          }
+
+          &:last-child {
+            margin-bottom: 5px;
+          }
+        }
+
+        li {
+          font-size: 1em;
+          text-transform: initial;
+
+          &:hover {
+            cursor: pointer;
+          }
+        }
+      }
+
+      > .vjs-menu {
+        .vjs-menu-item {
+          padding: 8px 16px;
+        }
+
+        .vjs-settings-sub-menu-value::after {
+          @include chevron-right(9px, 2px);
+
+          margin-left: 5px;
+        }
+      }
+
+      > .vjs-settings-sub-menu {
+        width: 80px;
+
+        .vjs-menu-item {
+          outline: 0;
+          font-weight: $font-semibold;
+
+          padding: 5px 8px;
+          text-align: right;
+
+          &.vjs-back-button {
+            background-color: inherit;
+            padding: 8px 8px 13px 8px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid grey;
+
+            &::before {
+              @include chevron-left(9px, 2px);
+
+              margin-right: 5px;
+            }
+          }
+
+          &.vjs-selected {
+            background-color: inherit;
+            color: inherit;
+            position: relative;
+
+            &::before {
+              @include icon(15px);
+
+              position: absolute;
+              left: 8px;
+              content: ' ';
+              margin-top: 1px;
+              background-image: url('../assets/player/images/tick.svg');
+            }
+          }
+        }
+      }
+    }
   }
 }

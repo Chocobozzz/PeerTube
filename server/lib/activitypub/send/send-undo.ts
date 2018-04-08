@@ -30,68 +30,55 @@ async function sendUndoFollow (actorFollow: ActorFollowModel, t: Transaction) {
   return unicastTo(data, me, following.inboxUrl)
 }
 
-async function sendUndoLikeToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
+async function sendUndoLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const likeUrl = getVideoLikeActivityPubUrl(byActor, video)
   const undoUrl = getUndoActivityPubUrl(likeUrl)
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-  const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
   const object = await likeActivityData(likeUrl, byActor, video, t)
-  const data = await undoActivityData(undoUrl, byActor, object, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-}
+  // Send to origin
+  if (video.isOwned() === false) {
+    const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
+    const data = await undoActivityData(undoUrl, byActor, object, t, audience)
 
-async function sendUndoLikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  const likeUrl = getVideoLikeActivityPubUrl(byActor, video)
-  const undoUrl = getUndoActivityPubUrl(likeUrl)
+    return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+  }
 
-  const toActorsFollowers = await getActorsInvolvedInVideo(video, t)
-  const audience = getObjectFollowersAudience(toActorsFollowers)
-  const object = await likeActivityData(likeUrl, byActor, video, t)
+  const audience = getObjectFollowersAudience(actorsInvolvedInVideo)
   const data = await undoActivityData(undoUrl, byActor, object, t, audience)
 
   const followersException = [ byActor ]
-  return broadcastToFollowers(data, byActor, toActorsFollowers, t, followersException)
+  return broadcastToFollowers(data, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
-async function sendUndoDislikeToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
+async function sendUndoDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const dislikeUrl = getVideoDislikeActivityPubUrl(byActor, video)
   const undoUrl = getUndoActivityPubUrl(dislikeUrl)
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-  const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
   const dislikeActivity = createDislikeActivityData(byActor, video)
   const object = await createActivityData(undoUrl, byActor, dislikeActivity, t)
 
-  const data = await undoActivityData(undoUrl, byActor, object, t, audience)
+  if (video.isOwned() === false) {
+    const audience = getOriginVideoAudience(video, actorsInvolvedInVideo)
+    const data = await undoActivityData(undoUrl, byActor, object, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-}
-
-async function sendUndoDislikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  const dislikeUrl = getVideoDislikeActivityPubUrl(byActor, video)
-  const undoUrl = getUndoActivityPubUrl(dislikeUrl)
-
-  const dislikeActivity = createDislikeActivityData(byActor, video)
-  const object = await createActivityData(undoUrl, byActor, dislikeActivity, t)
+    return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+  }
 
   const data = await undoActivityData(undoUrl, byActor, object, t)
 
-  const toActorsFollowers = await getActorsInvolvedInVideo(video, t)
-
   const followersException = [ byActor ]
-  return broadcastToFollowers(data, byActor, toActorsFollowers, t, followersException)
+  return broadcastToFollowers(data, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   sendUndoFollow,
-  sendUndoLikeToOrigin,
-  sendUndoLikeToVideoFollowers,
-  sendUndoDislikeToOrigin,
-  sendUndoDislikeToVideoFollowers
+  sendUndoLike,
+  sendUndoDislike
 }
 
 // ---------------------------------------------------------------------------
@@ -108,7 +95,7 @@ async function undoActivityData (
   }
 
   return audiencify({
-    type: 'Undo',
+    type: 'Undo' as 'Undo',
     id: url,
     actor: byActor.url,
     object

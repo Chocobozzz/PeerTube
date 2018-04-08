@@ -3,6 +3,7 @@ export interface ServerConfig {
 
   instance: {
     name: string
+    shortDescription: string
     defaultClientRoute: string
     customizations: {
       javascript: string
@@ -37,5 +38,9 @@ export interface ServerConfig {
     file: {
       extensions: string[]
     }
+  }
+
+  user: {
+    videoQuota: number
   }
 }

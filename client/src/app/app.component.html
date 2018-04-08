@@ -1,12 +1,12 @@
 <div *ngIf="customCSS" [innerHTML]="customCSS"></div>
 
-<div>
+<div [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
   <div class="header">
 
     <div class="top-left-block" [ngClass]="{ 'border-bottom': isMenuDisplayed === false }">
       <span class="icon icon-menu" (click)="toggleMenu()"></span>
 
-      <a id="peertube-title" [routerLink]="['/videos/list']" title="Homepage">
+      <a id="peertube-title" [routerLink]="defaultRoute" title="Homepage">
         <span class="icon icon-logo"></span>
         <span class="instance-name">{{ instanceName }}</span>
       </a>
@@ -29,8 +29,8 @@
       </div>
 
       <footer class="row">
-        <a href="https://github.com/Chocobozzz/PeerTube" title="PeerTube on Github">PeerTube v{{ serverVersion }}</a> -
-        <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" title="PeerTube licence">CopyLeft 2015-2018</a>
+        <a href="https://joinpeertube.org" title="PeerTube website" target="_blank" rel="noopener noreferrer">PeerTube v{{ serverVersion }}</a> -
+        <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" title="PeerTube license" target="_blank" rel="noopener noreferrer">CopyLeft 2015-2018</a>
       </footer>
     </div>
   </div>

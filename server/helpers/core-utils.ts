@@ -12,6 +12,7 @@ import { isAbsolute, join } from 'path'
 import * as pem from 'pem'
 import * as rimraf from 'rimraf'
 import { URL } from 'url'
+import { truncate } from 'lodash'
 
 function sanitizeUrl (url: string) {
   const urlObject = new URL(url)
@@ -76,6 +77,22 @@ function buildPath (path: string) {
   if (isAbsolute(path)) return path
 
   return join(root(), path)
+}
+
+// Consistent with .length, lodash truncate function is not
+function peertubeTruncate (str: string, maxLength: number) {
+  const options = {
+    length: maxLength
+  }
+  const truncatedStr = truncate(str, options)
+
+  // The truncated string is okay, we can return it
+  if (truncatedStr.length <= maxLength) return truncatedStr
+
+  // Lodash takes into account all UTF characters, whereas String.prototype.length does not: some characters have a length of 2
+  // We always use the .length so we need to truncate more if needed
+  options.length -= truncatedStr.length - maxLength
+  return truncate(str, options)
 }
 
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
@@ -145,6 +162,7 @@ export {
   sanitizeUrl,
   sanitizeHost,
   buildPath,
+  peertubeTruncate,
 
   promisify0,
   promisify1,

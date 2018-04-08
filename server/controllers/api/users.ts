@@ -2,12 +2,13 @@ import * as express from 'express'
 import 'multer'
 import { extname, join } from 'path'
 import * as uuidv4 from 'uuid/v4'
+import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../shared'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { processImage } from '../../helpers/image-utils'
 import { logger } from '../../helpers/logger'
 import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
-import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
+import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, RATES_LIMIT, sequelizeTypescript } from '../../initializers'
 import { updateActorAvatarInstance } from '../../lib/activitypub'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { Emailer } from '../../lib/emailer'
@@ -43,6 +44,11 @@ import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { VideoModel } from '../../models/video/video'
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
+const loginRateLimiter = new RateLimit({
+  windowMs: RATES_LIMIT.LOGIN.WINDOW_MS,
+  max: RATES_LIMIT.LOGIN.MAX,
+  delayMs: 0
+})
 
 const usersRouter = express.Router()
 
@@ -136,7 +142,11 @@ usersRouter.post('/:id/reset-password',
   asyncMiddleware(resetUserPassword)
 )
 
-usersRouter.post('/token', token, success)
+usersRouter.post('/token',
+  loginRateLimiter,
+  token,
+  success
+)
 // TODO: Once https://github.com/oauthjs/node-oauth2-server/pull/289 is merged, implement revoke token route
 
 // ---------------------------------------------------------------------------

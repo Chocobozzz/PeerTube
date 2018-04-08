@@ -107,7 +107,8 @@ export class VideoCommentComponent implements OnInit, OnChanges {
           return {
             tagName,
             attribs: Object.assign(attribs, {
-              target: '_blank'
+              target: '_blank',
+              rel: 'noopener noreferrer'
             })
           }
         }

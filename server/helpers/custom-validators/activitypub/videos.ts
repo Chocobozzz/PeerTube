@@ -1,5 +1,6 @@
 import * as validator from 'validator'
-import { ACTIVITY_PUB } from '../../../initializers'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers'
+import { peertubeTruncate } from '../../core-utils'
 import { exists, isBooleanValid, isDateValid, isUUIDValid } from '../misc'
 import {
   isVideoAbuseReasonValid,
@@ -56,6 +57,7 @@ function isVideoTorrentObjectValid (video: any) {
     isBooleanValid(video.commentsEnabled) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
+    setRemoteVideoTruncatedContent(video) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     isRemoteVideoIconValid(video.icon) &&
     setValidRemoteVideoUrls(video) &&
@@ -107,6 +109,14 @@ function setValidRemoteVideoUrls (video: any) {
   if (Array.isArray(video.url) === false) return false
 
   video.url = video.url.filter(u => isRemoteVideoUrlValid(u))
+
+  return true
+}
+
+function setRemoteVideoTruncatedContent (video: any) {
+  if (video.content) {
+    video.content = peertubeTruncate(video.content, CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max)
+  }
 
   return true
 }

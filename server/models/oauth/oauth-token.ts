@@ -125,7 +125,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
         } as OAuthTokenInfo
       })
       .catch(err => {
-        logger.info('getRefreshToken error.', err)
+        logger.info('getRefreshToken error.', { err })
         throw err
       })
   }

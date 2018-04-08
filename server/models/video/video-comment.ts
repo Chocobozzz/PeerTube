@@ -307,15 +307,15 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const query = {
       order: [ [ 'createdAt', order ] ],
       where: {
-        [ Sequelize.Op.or ]: [
-          { id: comment.getThreadId() },
-          { originCommentId: comment.getThreadId() }
-        ],
         id: {
+          [ Sequelize.Op.in ]: Sequelize.literal('(' +
+            'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
+            'SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ' + comment.id + ' UNION ' +
+            'SELECT p.id, p."inReplyToCommentId" from "videoComment" p ' +
+            'INNER JOIN children c ON c."inReplyToCommentId" = p.id) ' +
+            'SELECT id FROM children' +
+          ')'),
           [ Sequelize.Op.ne ]: comment.id
-        },
-        createdAt: {
-          [ Sequelize.Op.lt ]: comment.createdAt
         }
       },
       transaction: t

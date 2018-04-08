@@ -60,7 +60,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     if (this.parentComment) {
       const mentions = this.parentComments
         .filter(c => c.account.id !== this.user.account.id) // Don't add mention of ourselves
-        .map(c => c.by)
+        .map(c => '@' + c.by)
 
       const mentionsSet = new Set(mentions)
       const mentionsText = Array.from(mentionsSet).join(' ') + ' '

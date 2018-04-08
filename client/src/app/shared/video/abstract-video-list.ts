@@ -1,18 +1,21 @@
-import { ElementRef, OnInit, ViewChild } from '@angular/core'
+import { ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { isInMobileView } from '@app/shared/misc/utils'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { NotificationsService } from 'angular2-notifications'
+import 'rxjs/add/operator/debounceTime'
 import { Observable } from 'rxjs/Observable'
+import { fromEvent } from 'rxjs/observable/fromEvent'
+import { Subscription } from 'rxjs/Subscription'
 import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
 import { SortField } from './sort-field.type'
 import { Video } from './video.model'
 
-export abstract class AbstractVideoList implements OnInit {
-  private static LINES_PER_PAGE = 3
+export abstract class AbstractVideoList implements OnInit, OnDestroy {
+  private static LINES_PER_PAGE = 4
 
-  @ViewChild('videoElement') videosElement: ElementRef
+  @ViewChild('videosElement') videosElement: ElementRef
   @ViewChild(InfiniteScrollerDirective) infiniteScroller: InfiniteScrollerDirective
 
   pagination: ComponentPagination = {
@@ -24,9 +27,12 @@ export abstract class AbstractVideoList implements OnInit {
   defaultSort: SortField = '-createdAt'
   loadOnInit = true
   pageHeight: number
-  videoWidth = 215
-  videoHeight = 230
-  videoPages: Video[][]
+  videoWidth: number
+  videoHeight: number
+  videoPages: Video[][] = []
+
+  protected baseVideoWidth = 215
+  protected baseVideoHeight = 230
 
   protected abstract notificationsService: NotificationsService
   protected abstract authService: AuthService
@@ -38,6 +44,8 @@ export abstract class AbstractVideoList implements OnInit {
   protected loadedPages: { [ id: number ]: Video[] } = {}
   protected otherRouteParams = {}
 
+  private resizeSubscription: Subscription
+
   abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number}>
 
   get user () {
@@ -46,27 +54,19 @@ export abstract class AbstractVideoList implements OnInit {
 
   ngOnInit () {
     // Subscribe to route changes
-    const routeParams = this.route.snapshot.params
+    const routeParams = this.route.snapshot.queryParams
     this.loadRouteParams(routeParams)
 
-    if (isInMobileView()) {
-      this.pagination.itemsPerPage = 5
-      this.videoWidth = -1
-    }
+    this.resizeSubscription = fromEvent(window, 'resize')
+      .debounceTime(500)
+      .subscribe(() => this.calcPageSizes())
 
-    if (this.videoWidth !== -1) {
-      const videosWidth = this.videosElement.nativeElement.offsetWidth
-      this.pagination.itemsPerPage = Math.floor(videosWidth / this.videoWidth) * AbstractVideoList.LINES_PER_PAGE
-    }
-
-    // Video takes all the width
-    if (this.videoWidth === -1) {
-      this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
-    } else {
-      this.pageHeight = this.videoHeight * AbstractVideoList.LINES_PER_PAGE
-    }
-
+    this.calcPageSizes()
     if (this.loadOnInit === true) this.loadMoreVideos(this.pagination.currentPage)
+  }
+
+  ngOnDestroy () {
+    if (this.resizeSubscription) this.resizeSubscription.unsubscribe()
   }
 
   onNearOfTop () {
@@ -162,11 +162,16 @@ export abstract class AbstractVideoList implements OnInit {
 
   protected setNewRouteParams () {
     const routeParams = this.buildRouteParams()
-    this.router.navigate([ this.currentRoute, routeParams ])
+    this.router.navigate([ this.currentRoute ], { queryParams: routeParams })
   }
 
   protected buildVideoPages () {
     this.videoPages = Object.values(this.loadedPages)
+  }
+
+  protected buildVideoHeight () {
+    // Same ratios than base width/height
+    return this.videosElement.nativeElement.offsetWidth * (this.baseVideoHeight / this.baseVideoWidth)
   }
 
   private minPageLoaded () {
@@ -175,5 +180,43 @@ export abstract class AbstractVideoList implements OnInit {
 
   private maxPageLoaded () {
     return Math.max(...Object.keys(this.loadedPages).map(e => parseInt(e, 10)))
+  }
+
+  private calcPageSizes () {
+    if (isInMobileView() || this.baseVideoWidth === -1) {
+      this.pagination.itemsPerPage = 5
+
+      // Video takes all the width
+      this.videoWidth = -1
+      this.videoHeight = this.buildVideoHeight()
+      this.pageHeight = this.pagination.itemsPerPage * this.videoHeight
+    } else {
+      this.videoWidth = this.baseVideoWidth
+      this.videoHeight = this.baseVideoHeight
+
+      const videosWidth = this.videosElement.nativeElement.offsetWidth
+      this.pagination.itemsPerPage = Math.floor(videosWidth / this.videoWidth) * AbstractVideoList.LINES_PER_PAGE
+      this.pageHeight = this.videoHeight * AbstractVideoList.LINES_PER_PAGE
+    }
+
+    // Rebuild pages because maybe we modified the number of items per page
+    const videos = [].concat(...this.videoPages)
+    this.loadedPages = {}
+
+    let i = 1
+    // Don't include the last page if it not complete
+    while (videos.length >= this.pagination.itemsPerPage && i < 10000) { // 10000 -> Hard limit in case of infinite loop
+      this.loadedPages[i] = videos.splice(0, this.pagination.itemsPerPage)
+      i++
+    }
+
+    // Re fetch the last page
+    if (videos.length !== 0) {
+      this.loadMoreVideos(i)
+    } else {
+      this.buildVideoPages()
+    }
+
+    console.log('Rebuilt pages with %s elements per page.', this.pagination.itemsPerPage)
   }
 }

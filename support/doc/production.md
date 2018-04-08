@@ -1,11 +1,11 @@
 # Production guide
 
   * [Installation](#installation)
-  * [Upgrade](#upgrade) 
+  * [Upgrade](#upgrade)
 
 ## Installation
 
-**Please don't install PeerTube for production on a small device behind a low bandwidth connection because it could slow down the fediverse.**
+**Please don't install PeerTube for production on a small device behind a low bandwidth connection (example: a Raspberry PI behind your ADSL link) because it could slow down the fediverse.**
 
 ### Dependencies
 
@@ -23,6 +23,14 @@ Set its password:
 ```
 $ sudo passwd peertube
 ```
+
+**On FreeBSD**
+
+```
+$ sudo pw useradd -n peertube -d /var/www/peertube -s /usr/local/bin/bash -m
+$ sudo passwd peertube
+```
+or use `adduser` to create it interactively.
 
 ### Database
 
@@ -51,7 +59,11 @@ $ sudo -u peertube wget -q "https://github.com/Chocobozzz/PeerTube/releases/down
 $ sudo -u peertube unzip peertube-${VERSION}.zip && sudo -u peertube rm peertube-${VERSION}.zip
 ```
 
-Install Peertube
+Install Peertube. If you're using CentOS7, do not forget to activate the devtoolset-6 software collection:
+```
+$ scl enable devtool-6 bash
+```
+And after that, follow the step as usual. Do not forget to exit the environment after installing Peertube.
 ```
 $ cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 $ cd ./peertube-latest && sudo -H -u peertube yarn install --production --pure-lockfile
@@ -67,6 +79,8 @@ $ cd /var/www/peertube && sudo -u peertube cp peertube-latest/config/production.
 
 Then edit the `config/production.yaml` file according to your webserver
 configuration.
+
+**PeerTube does not support webserver host change**. Keep in mind your domain name is definitive after your first PeerTube start.
 
 ### Webserver
 
@@ -109,9 +123,16 @@ Now you have the certificates you can reload nginx:
 $ sudo systemctl reload nginx
 ```
 
-### Systemd
+**FreeBSD**
+On FreeBSD you can use [Dehydrated](https://dehydrated.io/) `security/dehydrated` for [Let's Encrypt](https://letsencrypt.org/)
 
-Copy the SystemD configuration template:
+```
+$ sudo pkg install dehydrated
+```
+
+### systemd
+
+If your OS uses systemd, copy the configuration template:
 
 ```
 $ sudo cp /var/www/peertube/peertube-latest/support/systemd/peertube.service /etc/systemd/system/
@@ -136,11 +157,27 @@ If you want to start PeerTube on boot:
 $ sudo systemctl enable peertube
 ```
 
-### Run
+Run:
 
 ```
 $ sudo systemctl start peertube
 $ sudo journalctl -feu peertube
+```
+
+### FreeBSD
+
+If you're using FreeBSD, copy the startup script and update rc.conf:
+
+```
+$ sudo cp /var/www/peertube/peertube-latest/support/freebsd/peertube /usr/local/etc/rc.d/
+$ sudo chmod +x /usr/local/etc/rc.d/peertube
+$ sudo echo peertube_enable="YES" >> /etc/rc.conf
+```
+
+Run:
+
+```
+$ sudo service peertube start
 ```
 
 ### Administrator
@@ -152,9 +189,18 @@ logs. You can set another password with:
 $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
 ```
 
+### What now?
+
+Now your instance is up you can:
+ 
+ * Subscribe to the mailing list for PeerTube administrators: https://framalistes.org/sympa/subscribe/peertube-admin
+ * Add you instance to the public PeerTube instances index if you want to: https://instances.peertu.be/
+
 ## Upgrade
 
 #### Auto (minor versions only)
+
+The password it asks is PeerTube's database user password.
 
 ```
 $ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube ./upgrade.sh
@@ -214,7 +260,7 @@ Restart PeerTube:
 $ sudo systemctl restart peertube
 ```
 
-### Things went wrong? 
+### Things went wrong?
 
 Change `peertube-latest` destination to the previous version and restore your SQL backup:
 

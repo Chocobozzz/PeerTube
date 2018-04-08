@@ -60,6 +60,12 @@ donating to them](https://soutenir.framasoft.org/en/).**
   </a>
 </p>
 
+<p align="center">
+  <strong><a title="Website" target="_blank" href="https://joinpeertube.org">Website</a> |
+  <a title="Instances list" target="_blank" href="https://instances.joinpeertube.org">Instances list</a>
+  </strong>
+</p>
+
 ## Demonstration
 
 Want to see it in action?
@@ -70,8 +76,8 @@ Want to see it in action?
      * [peertube3.cpy.re](http://peertube3.cpy.re)
    * [Video](https://peertube.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504)
      to see what the "decentralization feature" looks like
-
-*Currently PeerTube is still in alpha (we plan to release a beta in march). Demonstration servers do not support public registration. If you really want to test PeerTube before the public release, here is a list of PeerTube servers: https://github.com/Chocobozzz/PeerTube/wiki#other-peertube-servers.*
+   * [Video](https://peertube.cpy.re/videos/watch/da2b08d4-a242-4170-b32a-4ec8cbdca701) to see
+   the communication between PeerTube and [Mastodon](https://github.com/tootsuite/mastodon)
 
 ## Why
 
@@ -86,51 +92,6 @@ reason why we need to use a P2P protocol to limit the server load.  Thanks to
 [WebTorrent](https://github.com/feross/webtorrent), we can make P2P (thus
 BitTorrent) inside the web browser, as of today.
 
-## Features
-
-- [X] Angular frontend
-- [X] Join the fediverse
-  - [X] Follow other instances
-  - [X] Unfollow an instance
-  - [X] Get for the followers/following list
-- [X] Upload a video
-  - [X] Seed the video
-  - [X] Send the meta data with ActivityPub to followers
-- [X] Remove the video
-- [X] List the videos
-- [X] View the video in an HTML5 player with WebTorrent
-- [X] Admin panel
-- [X] OpenGraph tags
-- [X] OEmbed
-- [X] Update video
-- [X] Federated videos view counter
-- [X] Federated videos likes/dislikes
-- [X] Transcoding to different definitions
-- [X] Download file/torrent
-- [X] User video bytes quota
-- [X] User video channels
-- [X] NSFW warnings/settings
-- [X] Video description in markdown
-- [X] User roles (administrator, moderator)
-- [X] User registration
-- [X] Video privacy settings (public, unlisted or private)
-- [X] Signaling a video to the admin origin PeerTube instance
-- [X] Federated videos comments
-- [X] Update video thumbnails
-- [X] Support video uploader button
-- [ ] Video imports (URL, Torrent, YouTube...)
-- [ ] Advanced search
-- [ ] Subtitles
-- [ ] User playlist
-- [ ] User subscriptions (by tags, author...)
-- [ ] Add "DDOS" security
-
-
-## Front compatibility
-
-  * Firefox
-  * Chrome/Chromium
-
 ## Dependencies
 
   * nginx
@@ -139,7 +100,7 @@ BitTorrent) inside the web browser, as of today.
   * **NodeJS >= 8.x**
   * yarn
   * OpenSSL (cli)
-  * FFmpeg
+  * **FFmpeg >= 3.x**
 
 ## Run using Docker
 
@@ -160,7 +121,7 @@ coder to help!
 
 For now only on Github:
 
- * HTML version: [/support/doc/api/html/index.html](/support/doc/api/html/index.html)
+ * HTML version: [/support/doc/api/html/index.html](https://htmlpreview.github.io/?https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/html/index.html)
  * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
 
 ## Tools
@@ -201,3 +162,20 @@ Here are some simple schemes:
 <img src="https://lutim.cpy.re/pqKm3Q5S.png" alt="Watch a P2P video" />
 
 </p>
+
+## License
+
+Copyright (C) 2018 PeerTube Contributors
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

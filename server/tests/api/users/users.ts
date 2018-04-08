@@ -94,7 +94,7 @@ describe('Test users', function () {
     const res = await getVideosList(server.url)
     const video = res.body.data[ 0 ]
 
-    expect(video.accountName).to.equal('root')
+    expect(video.account.name).to.equal('root')
     videoId = video.id
   })
 
@@ -432,7 +432,7 @@ describe('Test users', function () {
     expect(res.body.total).to.equal(1)
 
     const video = res.body.data[ 0 ]
-    expect(video.accountName).to.equal('root')
+    expect(video.account.name).to.equal('root')
   })
 
   it('Should register a new user', async function () {

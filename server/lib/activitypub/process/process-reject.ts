@@ -1,4 +1,5 @@
 import { ActivityReject } from '../../../../shared/models/activitypub/activity'
+import { getActorUrl } from '../../../helpers/activitypub'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
@@ -6,7 +7,8 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 async function processRejectActivity (activity: ActivityReject, inboxActor?: ActorModel) {
   if (inboxActor === undefined) throw new Error('Need to reject on explicit inbox.')
 
-  const targetActor = await ActorModel.loadByUrl(activity.actor)
+  const actorUrl = getActorUrl(activity.actor)
+  const targetActor = await ActorModel.loadByUrl(actorUrl)
 
   return processReject(inboxActor, targetActor)
 }

@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router'
+import { RedirectService, ServerService } from '@app/core'
 import { UserService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
 import { ModalDirective } from 'ngx-bootstrap/modal'
@@ -34,14 +35,18 @@ export class LoginComponent extends FormReactive implements OnInit {
   }
   forgotPasswordEmail = ''
 
-  constructor (
-    private authService: AuthService,
-    private userService: UserService,
-    private notificationsService: NotificationsService,
-    private formBuilder: FormBuilder,
-    private router: Router
-  ) {
+  constructor (private authService: AuthService,
+               private userService: UserService,
+               private serverService: ServerService,
+               private redirectService: RedirectService,
+               private notificationsService: NotificationsService,
+               private formBuilder: FormBuilder,
+               private router: Router) {
     super()
+  }
+
+  get signupAllowed () {
+    return this.serverService.getConfig().signup.allowed === true
   }
 
   buildForm () {
@@ -62,11 +67,12 @@ export class LoginComponent extends FormReactive implements OnInit {
 
     const { username, password } = this.form.value
 
-    this.authService.login(username, password).subscribe(
-      () => this.router.navigate(['/videos/list']),
+    this.authService.login(username, password)
+      .subscribe(
+        () => this.redirectService.redirectToHomepage(),
 
-      err => this.error = err.message
-    )
+        err => this.error = err.message
+      )
   }
 
   askResetPassword () {

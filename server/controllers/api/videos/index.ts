@@ -20,7 +20,7 @@ import {
   VIDEO_PRIVACIES
 } from '../../../initializers'
 import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
-import { sendCreateVideo, sendCreateViewToOrigin, sendCreateViewToVideoFollowers, sendUpdateVideo } from '../../../lib/activitypub/send'
+import { sendCreateVideo, sendCreateView, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
@@ -307,10 +307,17 @@ async function updateVideo (req: express.Request, res: express.Response) {
       if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
       if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
       if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
-      if (videoInfoToUpdate.privacy !== undefined) videoInstance.set('privacy', parseInt(videoInfoToUpdate.privacy.toString(), 10))
       if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
       if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
       if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
+      if (videoInfoToUpdate.privacy !== undefined) {
+        const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
+        videoInstance.set('privacy', newPrivacy)
+
+        if (wasPrivateVideo === true && newPrivacy !== VideoPrivacy.PRIVATE) {
+          videoInstance.set('publishedAt', new Date())
+        }
+      }
 
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
 
@@ -365,11 +372,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
 
   const serverAccount = await getServerActor()
 
-  if (videoInstance.isOwned()) {
-    await sendCreateViewToVideoFollowers(serverAccount, videoInstance, undefined)
-  } else {
-    await sendCreateViewToOrigin(serverAccount, videoInstance, undefined)
-  }
+  await sendCreateView(serverAccount, videoInstance, undefined)
 
   return res.status(204).end()
 }
@@ -388,7 +391,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.filter)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

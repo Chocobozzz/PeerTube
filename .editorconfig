@@ -1,0 +1,21 @@
+; This file is for unifying the coding style for different editors and IDEs.
+; More information at http://editorconfig.org to setup your IDE if need be.
+
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[{client,server,shared}/**.{ts,json,js}]
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false

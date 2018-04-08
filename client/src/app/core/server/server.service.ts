@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
+import { ServerStats } from '../../../../../shared/models/server/server-stats.model'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -21,6 +23,8 @@ export class ServerService {
   private config: ServerConfig = {
     instance: {
       name: 'PeerTube',
+      shortDescription: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
+                        'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.',
       defaultClientRoute: '',
       customizations: {
         javascript: '',
@@ -48,6 +52,9 @@ export class ServerService {
       file: {
         extensions: []
       }
+    },
+    user: {
+      videoQuota: -1
     }
   }
   private videoCategories: Array<{ id: number, label: string }> = []
@@ -138,11 +145,11 @@ export class ServerService {
   }
 
   private saveConfigLocally (config: ServerConfig) {
-    localStorage.setItem(ServerService.CONFIG_LOCAL_STORAGE_KEY, JSON.stringify(config))
+    peertubeLocalStorage.setItem(ServerService.CONFIG_LOCAL_STORAGE_KEY, JSON.stringify(config))
   }
 
   private loadConfigLocally () {
-    const configString = localStorage.getItem(ServerService.CONFIG_LOCAL_STORAGE_KEY)
+    const configString = peertubeLocalStorage.getItem(ServerService.CONFIG_LOCAL_STORAGE_KEY)
 
     if (configString) {
       try {

@@ -69,7 +69,7 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
 
     return res.sendStatus(204)
   } catch (err) {
-    logger.error('Some error while removing video %s from blacklist.', res.locals.video.uuid, err)
+    logger.error('Some error while removing video %s from blacklist.', res.locals.video.uuid, { err })
     throw err
   }
 }

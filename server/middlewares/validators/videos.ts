@@ -86,7 +86,7 @@ const videosAddValidator = [
     try {
       duration = await getDurationFromVideoFile(videoFile.path)
     } catch (err) {
-      logger.error('Invalid input file in videosAddValidator.', err)
+      logger.error('Invalid input file in videosAddValidator.', { err })
       res.status(400)
          .json({ error: 'Invalid input file.' })
          .end()

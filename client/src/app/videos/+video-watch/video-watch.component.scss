@@ -1,12 +1,12 @@
 @import '_variables';
 @import '_mixins';
 
-#video-container {
+#video-element-wrapper {
   background-color: #000;
   display: flex;
   justify-content: center;
 
-  #video-element {
+  /deep/ .video-js {
     width: 888px;
     height: 500px;
 
@@ -38,7 +38,9 @@
 
   .video-info {
     flex-grow: 1;
-    margin-right: 28px;
+    margin-right: 40px;
+    // Set min width for flex item
+    min-width: 1px;
 
     .video-info-first-row {
       display: flex;
@@ -203,7 +205,8 @@
       font-size: 15px;
 
       .video-info-description-html {
-        word-break: break-all;
+        word-wrap: break-word;
+        text-align: justify;
       }
 
       .description-loading {
@@ -311,7 +314,7 @@
 @media screen and (max-width: 1600px) {
   .video-bottom {
     .video-info {
-      margin-right: 0;
+      margin-right: 20px;
 
       .video-info-first-row {
         flex-direction: column;
@@ -343,7 +346,7 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1300px) {
   .other-videos {
     display: none;
   }

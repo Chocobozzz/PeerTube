@@ -20,11 +20,15 @@ function checkConfig () {
 function checkMissedConfig () {
   const required = [ 'listen.port',
     'webserver.https', 'webserver.hostname', 'webserver.port',
+    'trust_proxy',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
-    'storage.videos', 'storage.logs', 'storage.thumbnails', 'storage.previews', 'storage.torrents', 'storage.cache', 'log.level',
+    'redis.hostname', 'redis.port', 'redis.auth',
+    'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
+    'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
+    'log.level',
+    'user.video_quota',
     'cache.previews.size', 'admin.email', 'signup.enabled', 'signup.limit', 'transcoding.enabled', 'transcoding.threads',
-    'user.video_quota', 'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
-    'instance.name', 'instance.description', 'instance.terms'
+    'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route'
   ]
   const miss: string[] = []
 

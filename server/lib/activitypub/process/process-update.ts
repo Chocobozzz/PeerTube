@@ -92,7 +92,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
 
       // Don't block on request
       generateThumbnailFromUrl(videoInstance, videoAttributesToUpdate.icon)
-        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoAttributesToUpdate.id, err))
+        .catch(err => logger.warn('Cannot generate thumbnail of %s.', videoAttributesToUpdate.id, { err }))
 
       // Remove old video files
       const videoFileDestroyTasks: Bluebird<void>[] = []
@@ -117,7 +117,7 @@ async function updateRemoteVideo (actor: ActorModel, activity: ActivityUpdate) {
     }
 
     // This is just a debug because we will retry the insert
-    logger.debug('Cannot update the remote video.', err)
+    logger.debug('Cannot update the remote video.', { err })
     throw err
   }
 }
@@ -176,7 +176,7 @@ async function updateRemoteActor (actor: ActorModel, activity: ActivityUpdate) {
     }
 
     // This is just a debug because we will retry the insert
-    logger.debug('Cannot update the remote account.', err)
+    logger.debug('Cannot update the remote account.', { err })
     throw err
   }
 }

@@ -12,7 +12,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 195
+const LAST_MIGRATION_VERSION = 200
 
 // ---------------------------------------------------------------------------
 
@@ -106,6 +106,7 @@ const CONFIG = {
     USERNAME: config.get<string>('smtp.username'),
     PASSWORD: config.get<string>('smtp.password'),
     TLS: config.get<boolean>('smtp.tls'),
+    DISABLE_STARTTLS: config.get<boolean>('smtp.disable_starttls'),
     CA_FILE: config.get<string>('smtp.ca_file'),
     FROM_ADDRESS: config.get<string>('smtp.from_address')
   },
@@ -126,6 +127,7 @@ const CONFIG = {
     URL: '',
     HOST: ''
   },
+  TRUST_PROXY: config.get<string[]>('trust_proxy'),
   LOG: {
     LEVEL: config.get<string>('log.level')
   },
@@ -157,6 +159,7 @@ const CONFIG = {
   },
   INSTANCE: {
     get NAME () { return config.get<string>('instance.name') },
+    get SHORT_DESCRIPTION () { return config.get<string>('instance.short_description') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
@@ -224,7 +227,7 @@ const CONSTRAINTS_FIELDS = {
     COUNT: { min: 0 }
   },
   VIDEO_COMMENTS: {
-    TEXT: { min: 2, max: 3000 }, // Length
+    TEXT: { min: 1, max: 3000 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEO_SHARE: {
@@ -232,8 +235,18 @@ const CONSTRAINTS_FIELDS = {
   }
 }
 
+const RATES_LIMIT = {
+  LOGIN: {
+    WINDOW_MS: 5 * 60 * 1000, // 5 minutes
+    MAX: 15 // 15 attempts
+  }
+}
+
 let VIDEO_VIEW_LIFETIME = 60000 * 60 // 1 hour
-const MAX_VIDEO_TRANSCODING_FPS = 30
+const VIDEO_TRANSCODING_FPS = {
+  MIN: 10,
+  MAX: 30
+}
 
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
@@ -287,7 +300,22 @@ const VIDEO_LANGUAGES = {
   11: 'German',
   12: 'Korean',
   13: 'French',
-  14: 'Italian'
+  14: 'Italian',
+  1000: 'Sign Language',
+  1001: 'American Sign Language',
+  1002: 'Arab Sign Language',
+  1003: 'British Sign Language',
+  1004: 'Brazilian Sign Language',
+  1005: 'Chinese Sign Language',
+  1006: 'Czech Sign Language',
+  1007: 'Danish Sign Language',
+  1008: 'French Sign Language',
+  1009: 'German Sign Language',
+  1010: 'Indo-Pakistani Sign Language',
+  1011: 'Japanese Sign Language',
+  1012: 'South African Sign Language',
+  1013: 'Swedish Sign Language',
+  1014: 'Russian Sign Language'
 }
 
 const VIDEO_PRIVACIES = {
@@ -444,10 +472,11 @@ export {
   VIDEO_LICENCES,
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
-  MAX_VIDEO_TRANSCODING_FPS,
+  VIDEO_TRANSCODING_FPS,
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
+  RATES_LIMIT,
   JOB_COMPLETED_LIFETIME,
   VIDEO_VIEW_LIFETIME
 }

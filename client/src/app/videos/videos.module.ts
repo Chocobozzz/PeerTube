@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { VideoLocalComponent } from '@app/videos/video-list/video-local.component'
 import { SharedModule } from '../shared'
 import { VideoSearchComponent } from './video-list'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
@@ -17,6 +18,7 @@ import { VideosComponent } from './videos.component'
 
     VideoTrendingComponent,
     VideoRecentlyAddedComponent,
+    VideoLocalComponent,
     VideoSearchComponent
   ],
 

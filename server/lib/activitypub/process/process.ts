@@ -1,4 +1,5 @@
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
+import { getActorUrl } from '../../../helpers/activitypub'
 import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { processAcceptActivity } from './process-accept'
@@ -25,9 +26,11 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, inboxActor?
 
 async function processActivities (activities: Activity[], signatureActor?: ActorModel, inboxActor?: ActorModel) {
   for (const activity of activities) {
+    const actorUrl = getActorUrl(activity.actor)
+
     // When we fetch remote data, we don't have signature
-    if (signatureActor && activity.actor !== signatureActor.url) {
-      logger.warn('Signature mismatch between %s and %s.', activity.actor, signatureActor.url)
+    if (signatureActor && actorUrl !== signatureActor.url) {
+      logger.warn('Signature mismatch between %s and %s.', actorUrl, signatureActor.url)
       continue
     }
 
@@ -40,7 +43,7 @@ async function processActivities (activities: Activity[], signatureActor?: Actor
     try {
       await activityProcessor(activity, inboxActor)
     } catch (err) {
-      logger.warn('Cannot process activity %s.', activity.type, err)
+      logger.warn('Cannot process activity %s.', activity.type, { err })
     }
   }
 }

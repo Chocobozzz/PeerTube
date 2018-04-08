@@ -1,3 +1,6 @@
+// FIXME: https://github.com/nodejs/node/pull/16853
+require('tls').DEFAULT_ECDH_CURVE = 'auto'
+
 import * as program from 'commander'
 import { join } from 'path'
 import * as youtubeDL from 'youtube-dl'
@@ -6,6 +9,7 @@ import { unlinkPromise } from '../helpers/core-utils'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers'
 import { getClient, getVideoCategories, login, searchVideo, uploadVideo } from '../tests/utils'
+import { truncate } from 'lodash'
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -53,7 +57,10 @@ async function run () {
 
   const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
   youtubeDL.getInfo(program['targetUrl'], options, processOptions, async (err, info) => {
-    if (err) throw err
+    if (err) {
+      console.log(err.message)
+      process.exit(1)
+    }
 
     let infoArray: any[]
 
@@ -96,15 +103,21 @@ function processVideo (info: any, languageCode: number) {
     console.log('Downloading video "%s"...', videoInfo.title)
 
     const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
-    youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
-      if (err) return console.error(err)
+    try {
+      youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
+        if (err) {
+          console.error(err)
+          return res()
+        }
 
-      console.log(output.join('\n'))
-
-      await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
-
+        console.log(output.join('\n'))
+        await uploadVideoOnPeerTube(normalizeObject(videoInfo), path, languageCode)
+        return res()
+      })
+    } catch (err) {
+      console.log(err.message)
       return res()
-    })
+    }
   })
 }
 
@@ -130,13 +143,17 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
   }
 
   const videoAttributes = {
-    name: videoInfo.title,
+    name: truncate(videoInfo.title, {
+      'length': CONSTRAINTS_FIELDS.VIDEOS.NAME.max,
+      'separator': /,? +/,
+      'omission': ' […]'
+    }),
     category,
     licence,
     language,
     nsfw: isNSFW(videoInfo),
     commentsEnabled: true,
-    description: videoInfo.description,
+    description: videoInfo.description || undefined,
     support: undefined,
     tags,
     privacy: VideoPrivacy.PUBLIC,
@@ -157,7 +174,8 @@ async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, languag
 
       await uploadVideo(program['url'], accessToken, videoAttributes)
     } else {
-      throw err
+      console.log(err.message)
+      process.exit(1)
     }
   }
 

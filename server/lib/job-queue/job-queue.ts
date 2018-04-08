@@ -53,7 +53,7 @@ class JobQueue {
     this.jobQueue.setMaxListeners(15)
 
     this.jobQueue.on('error', err => {
-      logger.error('Error in job queue.', err)
+      logger.error('Error in job queue.', { err })
       process.exit(-1)
     })
     this.jobQueue.watchStuckJobs(5000)
@@ -111,7 +111,7 @@ class JobQueue {
     const now = new Date().getTime()
     kue.Job.rangeByState('complete', 0, -1, 'asc', (err, jobs) => {
       if (err) {
-        logger.error('Cannot get jobs when removing old jobs.', err)
+        logger.error('Cannot get jobs when removing old jobs.', { err })
         return
       }
 

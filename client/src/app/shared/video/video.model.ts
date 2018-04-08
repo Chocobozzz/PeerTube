@@ -1,19 +1,18 @@
 import { Account } from '@app/shared/account/account.model'
 import { User } from '../'
 import { Video as VideoServerModel } from '../../../../../shared'
+import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
+import { VideoConstant } from '../../../../../shared/models/videos/video.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 
 export class Video implements VideoServerModel {
-  accountName: string
   by: string
   createdAt: Date
   updatedAt: Date
-  categoryLabel: string
-  category: number
-  licenceLabel: string
-  licence: number
-  languageLabel: string
-  language: number
+  publishedAt: Date
+  category: VideoConstant<number>
+  licence: VideoConstant<number>
+  language: VideoConstant<number>
   description: string
   duration: number
   durationLabel: string
@@ -32,27 +31,35 @@ export class Video implements VideoServerModel {
   likes: number
   dislikes: number
   nsfw: boolean
-  account: Account
+
+  account: {
+    name: string
+    displayName: string
+    url: string
+    host: string
+    avatar: Avatar
+  }
 
   private static createDurationString (duration: number) {
-    const minutes = Math.floor(duration / 60)
+    const hours = Math.floor(duration / 3600)
+    const minutes = Math.floor(duration % 3600 / 60)
     const seconds = duration % 60
+
     const minutesPadding = minutes >= 10 ? '' : '0'
     const secondsPadding = seconds >= 10 ? '' : '0'
+    const displayedHours = hours > 0 ? hours.toString() + ':' : ''
 
-    return minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
+    return displayedHours + minutesPadding +
+        minutes.toString() + ':' + secondsPadding + seconds.toString()
   }
 
   constructor (hash: VideoServerModel) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
-    this.accountName = hash.accountName
     this.createdAt = new Date(hash.createdAt.toString())
-    this.categoryLabel = hash.categoryLabel
+    this.publishedAt = new Date(hash.publishedAt.toString())
     this.category = hash.category
-    this.licenceLabel = hash.licenceLabel
     this.licence = hash.licence
-    this.languageLabel = hash.languageLabel
     this.language = hash.language
     this.description = hash.description
     this.duration = hash.duration
@@ -61,7 +68,6 @@ export class Video implements VideoServerModel {
     this.uuid = hash.uuid
     this.isLocal = hash.isLocal
     this.name = hash.name
-    this.serverHost = hash.serverHost
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
     this.previewPath = hash.previewPath
@@ -72,8 +78,9 @@ export class Video implements VideoServerModel {
     this.likes = hash.likes
     this.dislikes = hash.dislikes
     this.nsfw = hash.nsfw
+    this.account = hash.account
 
-    this.by = Account.CREATE_BY_STRING(hash.accountName, hash.serverHost)
+    this.by = Account.CREATE_BY_STRING(hash.account.name, hash.account.host)
   }
 
   isVideoNSFWForUser (user: User) {

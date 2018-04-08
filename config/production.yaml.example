@@ -7,6 +7,12 @@ webserver:
   hostname: 'example.com'
   port: 443
 
+# Proxies to trust to get real client IP
+# If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
+# If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)
+trust_proxy:
+  - 'loopback'
+
 # Your database name will be "peertube"+database.suffix
 database:
   hostname: 'localhost'
@@ -15,17 +21,20 @@ database:
   username: 'peertube'
   password: 'peertube'
 
+# Redis server for short time storage
 redis:
   hostname: 'localhost'
   port: 6379
   auth: null
 
+# SMTP server to send emails
 smtp:
   hostname: null
   port: 465
   username: null
   password: null
   tls: true
+  disable_starttls: false
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
@@ -45,7 +54,7 @@ log:
 
 ###############################################################################
 #
-# From this point, all the following keys can be overriden by the web interface
+# From this point, all the following keys can be overridden by the web interface
 # (local-production.json file). If you need to change some values, prefer to
 # use the web interface because the configuration will be automatically
 # reloaded without any need to restart PeerTube.
@@ -83,8 +92,10 @@ transcoding:
     720p: false
     1080p: false
 
+# Instance settings
 instance:
   name: 'PeerTube'
+  short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
   description: '' # Support markdown
   terms: '' # Support markdown
   default_client_route: '/videos/trending'

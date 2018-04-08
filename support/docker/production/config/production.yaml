@@ -4,6 +4,14 @@ webserver:
   hostname: undefined
   port: 443
 
+# Proxies to trust to get real client IP
+# If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
+# If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)
+trust_proxy:
+  - 'loopback'
+  - 'linklocal'
+  - 'uniquelocal'
+
 # Your database name will be "peertube"+database.suffix
 database:
   hostname: 'db'
@@ -12,11 +20,12 @@ database:
 # Redis server for short time storage
 redis:
   hostname: 'redis'
+  port: 6379
+  auth: null
 
 # From the project root directory
 storage:
   avatars: '../data/avatars/'
-  certs: '../data/certs/'
   videos: '../data/videos/'
   logs: '../data/logs/'
   previews: '../data/previews/'
@@ -24,15 +33,8 @@ storage:
   torrents: '../data/torrents/'
   cache: '../data/cache/'
 
-cache:
-  previews:
-    size: 100 # Max number of previews you want to cache
+log:
+  level: 'info' # debug/info/warning/error
 
-signup:
-  limit: -1
-
-# If enabled, the video will be transcoded to mp4 (x264) with "faststart" flag
-# Uses a lot of CPU!
-transcoding:
-  enabled: false
-
+admin:
+  email: null

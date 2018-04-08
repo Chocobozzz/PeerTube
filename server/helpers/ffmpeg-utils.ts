@@ -1,7 +1,7 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { join } from 'path'
 import { VideoResolution } from '../../shared/models/videos'
-import { CONFIG, MAX_VIDEO_TRANSCODING_FPS } from '../initializers'
+import { CONFIG, VIDEO_TRANSCODING_FPS } from '../initializers'
 import { unlinkPromise } from './core-utils'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -64,12 +64,12 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
     const destination = join(folder, imageName)
     await processImage({ path: pendingImagePath }, destination, size)
   } catch (err) {
-    logger.error('Cannot generate image from video %s.', fromPath, err)
+    logger.error('Cannot generate image from video %s.', fromPath, { err })
 
     try {
       await unlinkPromise(pendingImagePath)
     } catch (err) {
-      logger.debug('Cannot remove pending image path after generation error.', err)
+      logger.debug('Cannot remove pending image path after generation error.', { err })
     }
   }
 }
@@ -92,7 +92,9 @@ function transcode (options: TranscodeOptions) {
                     .outputOption('-movflags faststart')
                     // .outputOption('-crf 18')
 
-    if (fps > MAX_VIDEO_TRANSCODING_FPS) command = command.withFPS(MAX_VIDEO_TRANSCODING_FPS)
+    // Our player has some FPS limits
+    if (fps > VIDEO_TRANSCODING_FPS.MAX) command = command.withFPS(VIDEO_TRANSCODING_FPS.MAX)
+    else if (fps < VIDEO_TRANSCODING_FPS.MIN) command = command.withFPS(VIDEO_TRANSCODING_FPS.MIN)
 
     if (options.resolution !== undefined) {
       // '?x720' or '720x?' for example
@@ -100,9 +102,13 @@ function transcode (options: TranscodeOptions) {
       command = command.size(size)
     }
 
-    command.on('error', rej)
-           .on('end', res)
-           .run()
+    command
+      .on('error', (err, stdout, stderr) => {
+        logger.error('Error in transcoding job.', { stdout, stderr })
+        return rej(err)
+      })
+      .on('end', res)
+      .run()
   })
 }
 

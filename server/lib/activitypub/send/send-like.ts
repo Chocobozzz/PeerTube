@@ -13,20 +13,20 @@ import {
   unicastTo
 } from './misc'
 
-async function sendLikeToOrigin (byActor: ActorModel, video: VideoModel, t: Transaction) {
+async function sendLike (byActor: ActorModel, video: VideoModel, t: Transaction) {
   const url = getVideoLikeActivityPubUrl(byActor, video)
 
   const accountsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
-  const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
-  const data = await likeActivityData(url, byActor, video, t, audience)
 
-  return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
-}
+  // Send to origin
+  if (video.isOwned() === false) {
+    const audience = getOriginVideoAudience(video, accountsInvolvedInVideo)
+    const data = await likeActivityData(url, byActor, video, t, audience)
 
-async function sendLikeToVideoFollowers (byActor: ActorModel, video: VideoModel, t: Transaction) {
-  const url = getVideoLikeActivityPubUrl(byActor, video)
+    return unicastTo(data, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+  }
 
-  const accountsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
+  // Send to followers
   const audience = getObjectFollowersAudience(accountsInvolvedInVideo)
   const data = await likeActivityData(url, byActor, video, t, audience)
 
@@ -46,7 +46,7 @@ async function likeActivityData (
   }
 
   return audiencify({
-    type: 'Like',
+    type: 'Like' as 'Like',
     id: url,
     actor: byActor.url,
     object: video.url
@@ -56,7 +56,6 @@ async function likeActivityData (
 // ---------------------------------------------------------------------------
 
 export {
-  sendLikeToOrigin,
-  sendLikeToVideoFollowers,
+  sendLike,
   likeActivityData
 }

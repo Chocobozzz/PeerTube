@@ -58,13 +58,11 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
     const codecs = getCodec(file.name, useVP9)
 
     prepareElem()
-    preparedElem.addEventListener('error', function onError(err) {
-      // Try with vp9 before returning an error
-      if (codecs.indexOf('vp8') !== -1) {
-        preparedElem.removeEventListener('error', onError)
+    preparedElem.addEventListener('error', function onError (err) {
+      preparedElem.removeEventListener('error', onError)
 
-        return fallbackToMediaSource(true)
-      }
+      // Try with vp9 before returning an error
+      if (codecs.indexOf('vp8') !== -1) return fallbackToMediaSource(true)
 
       return callback(err)
     })

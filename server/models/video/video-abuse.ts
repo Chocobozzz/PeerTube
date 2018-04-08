@@ -1,7 +1,7 @@
 import { AfterCreate, AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
+import { VideoAbuse } from '../../../shared/models/videos'
 import { isVideoAbuseReasonValid } from '../../helpers/custom-validators/videos'
-import { CONFIG } from '../../initializers'
 import { Emailer } from '../../lib/emailer'
 import { AccountModel } from '../account/account'
 import { getSort, throwIfNotValid } from '../utils'
@@ -83,24 +83,17 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       })
   }
 
-  toFormattedJSON () {
-    let reporterServerHost
-
-    if (this.Account.Actor.Server) {
-      reporterServerHost = this.Account.Actor.Server.host
-    } else {
-      // It means it's our video
-      reporterServerHost = CONFIG.WEBSERVER.HOST
-    }
-
+  toFormattedJSON (): VideoAbuse {
     return {
       id: this.id,
       reason: this.reason,
-      reporterUsername: this.Account.name,
-      reporterServerHost,
-      videoId: this.Video.id,
-      videoUUID: this.Video.uuid,
-      videoName: this.Video.name,
+      reporterAccount: this.Account.toFormattedJSON(),
+      video: {
+        id: this.Video.id,
+        uuid: this.Video.uuid,
+        url: this.Video.url,
+        name: this.Video.name
+      },
       createdAt: this.createdAt
     }
   }

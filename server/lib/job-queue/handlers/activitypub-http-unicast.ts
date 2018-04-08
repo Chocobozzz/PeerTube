@@ -28,9 +28,9 @@ async function processActivityPubHttpUnicast (job: kue.Job) {
 
   try {
     await doRequest(options)
-    ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([ uri ], [], undefined)
+    ActorFollowModel.updateActorFollowsScore([ uri ], [], undefined)
   } catch (err) {
-    ActorFollowModel.updateActorFollowsScoreAndRemoveBadOnes([], [ uri ], undefined)
+    ActorFollowModel.updateActorFollowsScore([], [ uri ], undefined)
 
     throw err
   }

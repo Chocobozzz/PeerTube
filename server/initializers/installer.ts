@@ -19,7 +19,7 @@ async function installApplication () {
     await createOAuthClientIfNotExist()
     await createOAuthAdminIfNotExist()
   } catch (err) {
-    logger.error('Cannot install application.', err)
+    logger.error('Cannot install application.', { err })
     process.exit(-1)
   }
 }
@@ -112,7 +112,7 @@ async function createOAuthAdminIfNotExist () {
     // Our password is weak so do not validate it
     validatePassword = false
   } else {
-    password = passwordGenerator(8, true)
+    password = passwordGenerator(16, true)
   }
 
   const userData = {
@@ -133,8 +133,6 @@ async function createApplicationIfNotExist () {
   const exist = await applicationExist()
   // Nothing to do, application already exist
   if (exist === true) return undefined
-
-  logger.info('Creating Application table.')
 
   logger.info('Creating application account.')
 

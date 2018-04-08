@@ -53,8 +53,10 @@ describe('Test handle downs', function () {
     nsfw: true,
     description: 'my super description for server 1',
     support: 'my super support text for server 1',
-    host: 'localhost:9001',
-    account: 'root',
+    account: {
+      name: 'root',
+      host: 'localhost:9001'
+    },
     isLocal: false,
     duration: 10,
     tags: [ 'tag1p1', 'tag2p1' ],

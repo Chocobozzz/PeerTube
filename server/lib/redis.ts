@@ -23,7 +23,7 @@ class Redis {
     })
 
     this.client.on('error', err => {
-      logger.error('Error in Redis client.', err)
+      logger.error('Error in Redis client.', { err })
       process.exit(-1)
     })
 

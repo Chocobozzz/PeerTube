@@ -1,239 +1,69 @@
-// Big thanks to: https://github.com/kmoskwiak/videojs-resolution-switcher
-
 import * as videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
+import './settings-menu-button'
+import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import {
+  getAverageBandwidth,
+  getStoredMute,
+  getStoredVolume,
+  saveAverageBandwidth,
+  saveMuteInStore,
+  saveVolumeInStore
+} from './utils'
+import minBy from 'lodash-es/minBy'
+import maxBy from 'lodash-es/maxBy'
 
-declare module 'video.js' {
-  interface Player {
-    peertube (): PeerTubePlugin
-  }
-}
-
-interface VideoJSComponentInterface {
-  _player: videojs.Player
-
-  new (player: videojs.Player, options?: any)
-
-  registerComponent (name: string, obj: any)
-}
-
-type PeertubePluginOptions = {
-  videoFiles: VideoFile[]
-  playerElement: HTMLVideoElement
-  videoViewUrl: string
-  videoDuration: number
-}
-
-// https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
-// Don't import all Angular stuff, just copy the code with shame
-const dictionaryBytes: Array<{max: number, type: string}> = [
-  { max: 1024, type: 'B' },
-  { max: 1048576, type: 'KB' },
-  { max: 1073741824, type: 'MB' },
-  { max: 1.0995116e12, type: 'GB' }
-]
-function bytes (value) {
-  const format = dictionaryBytes.find(d => value < d.max) || dictionaryBytes[dictionaryBytes.length - 1]
-  const calc = Math.floor(value / (format.max / 1024)).toString()
-
-  return [ calc, format.type ]
-}
-
-// videojs typings don't have some method we need
-const videojsUntyped = videojs as any
-const webtorrent = new WebTorrent({ dht: false })
-
-const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
-class ResolutionMenuItem extends MenuItem {
-
-  constructor (player: videojs.Player, options) {
-    options.selectable = true
-    super(player, options)
-
-    const currentResolution = this.player_.peertube().getCurrentResolution()
-    this.selected(this.options_.id === currentResolution)
-  }
-
-  handleClick (event) {
-    super.handleClick(event)
-
-    this.player_.peertube().updateResolution(this.options_.id)
-  }
-}
-MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem)
-
-const MenuButton: VideoJSComponentInterface = videojsUntyped.getComponent('MenuButton')
-class ResolutionMenuButton extends MenuButton {
-  label: HTMLElement
-
-  constructor (player: videojs.Player, options) {
-    options.label = 'Quality'
-    super(player, options)
-
-    this.label = document.createElement('span')
-
-    this.el().setAttribute('aria-label', 'Quality')
-    this.controlText('Quality')
-
-    videojsUntyped.dom.addClass(this.label, 'vjs-resolution-button-label')
-    this.el().appendChild(this.label)
-
-    player.peertube().on('videoFileUpdate', () => this.update())
-  }
-
-  createItems () {
-    const menuItems = []
-    for (const videoFile of this.player_.peertube().videoFiles) {
-      menuItems.push(new ResolutionMenuItem(
-        this.player_,
+const webtorrent = new WebTorrent({
+  tracker: {
+    rtcConfig: {
+      iceServers: [
         {
-          id: videoFile.resolution,
-          label: videoFile.resolutionLabel,
-          src: videoFile.magnetUri,
-          selected: videoFile.resolution === this.currentSelection
-        })
-      )
+          urls: 'stun:stun.stunprotocol.org'
+        },
+        {
+          urls: 'stun:stun.framasoft.org'
+        }
+      ]
     }
-
-    return menuItems
-  }
-
-  update () {
-    if (!this.label) return
-
-    this.label.innerHTML = this.player_.peertube().getCurrentResolutionLabel()
-    this.hide()
-    return super.update()
-  }
-
-  buildCSSClass () {
-    return super.buildCSSClass() + ' vjs-resolution-button'
-  }
-}
-MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton)
-
-const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
-class PeerTubeLinkButton extends Button {
-
-  createEl () {
-    const link = document.createElement('a')
-    link.href = window.location.href.replace('embed', 'watch')
-    link.innerHTML = 'PeerTube'
-    link.title = 'Go to the video page'
-    link.className = 'vjs-peertube-link'
-    link.target = '_blank'
-
-    return link
-  }
-
-  handleClick () {
-    this.player_.pause()
-  }
-}
-Button.registerComponent('PeerTubeLinkButton', PeerTubeLinkButton)
-
-class WebTorrentButton extends Button {
-  createEl () {
-    const div = document.createElement('div')
-    const subDivWebtorrent = document.createElement('div')
-    div.appendChild(subDivWebtorrent)
-
-    const downloadIcon = document.createElement('span')
-    downloadIcon.classList.add('icon', 'icon-download')
-    subDivWebtorrent.appendChild(downloadIcon)
-
-    const downloadSpeedText = document.createElement('span')
-    downloadSpeedText.classList.add('download-speed-text')
-    const downloadSpeedNumber = document.createElement('span')
-    downloadSpeedNumber.classList.add('download-speed-number')
-    const downloadSpeedUnit = document.createElement('span')
-    downloadSpeedText.appendChild(downloadSpeedNumber)
-    downloadSpeedText.appendChild(downloadSpeedUnit)
-    subDivWebtorrent.appendChild(downloadSpeedText)
-
-    const uploadIcon = document.createElement('span')
-    uploadIcon.classList.add('icon', 'icon-upload')
-    subDivWebtorrent.appendChild(uploadIcon)
-
-    const uploadSpeedText = document.createElement('span')
-    uploadSpeedText.classList.add('upload-speed-text')
-    const uploadSpeedNumber = document.createElement('span')
-    uploadSpeedNumber.classList.add('upload-speed-number')
-    const uploadSpeedUnit = document.createElement('span')
-    uploadSpeedText.appendChild(uploadSpeedNumber)
-    uploadSpeedText.appendChild(uploadSpeedUnit)
-    subDivWebtorrent.appendChild(uploadSpeedText)
-
-    const peersText = document.createElement('span')
-    peersText.classList.add('peers-text')
-    const peersNumber = document.createElement('span')
-    peersNumber.classList.add('peers-number')
-    subDivWebtorrent.appendChild(peersNumber)
-    subDivWebtorrent.appendChild(peersText)
-
-    div.className = 'vjs-peertube'
-    // Hide the stats before we get the info
-    subDivWebtorrent.className = 'vjs-peertube-hidden'
-
-    const subDivHttp = document.createElement('div')
-    subDivHttp.className = 'vjs-peertube-hidden'
-    const subDivHttpText = document.createElement('span')
-    subDivHttpText.classList.add('peers-number')
-    subDivHttpText.textContent = 'HTTP'
-    const subDivFallbackText = document.createElement('span')
-    subDivFallbackText.classList.add('peers-text')
-    subDivFallbackText.textContent = ' fallback'
-
-    subDivHttp.appendChild(subDivHttpText)
-    subDivHttp.appendChild(subDivFallbackText)
-    div.appendChild(subDivHttp)
-
-    this.player_.peertube().on('torrentInfo', (event, data) => {
-      // We are in HTTP fallback
-      if (!data) {
-        subDivHttp.className = 'vjs-peertube-displayed'
-        subDivWebtorrent.className = 'vjs-peertube-hidden'
-
-        return
-      }
-
-      const downloadSpeed = bytes(data.downloadSpeed)
-      const uploadSpeed = bytes(data.uploadSpeed)
-      const numPeers = data.numPeers
-
-      downloadSpeedNumber.textContent = downloadSpeed[ 0 ]
-      downloadSpeedUnit.textContent = ' ' + downloadSpeed[ 1 ]
-
-      uploadSpeedNumber.textContent = uploadSpeed[ 0 ]
-      uploadSpeedUnit.textContent = ' ' + uploadSpeed[ 1 ]
-
-      peersNumber.textContent = numPeers
-      peersText.textContent = ' peers'
-
-      subDivHttp.className = 'vjs-peertube-hidden'
-      subDivWebtorrent.className = 'vjs-peertube-displayed'
-    })
-
-    return div
-  }
-}
-Button.registerComponent('WebTorrentButton', WebTorrentButton)
+  },
+  dht: false
+})
 
 const Plugin: VideoJSComponentInterface = videojsUntyped.getPlugin('plugin')
 class PeerTubePlugin extends Plugin {
+  private readonly playerElement: HTMLVideoElement
+
+  private readonly autoplay: boolean = false
+  private readonly startTime: number = 0
+  private readonly savePlayerSrcFunction: Function
+  private readonly videoFiles: VideoFile[]
+  private readonly videoViewUrl: string
+  private readonly videoDuration: number
+  private readonly CONSTANTS = {
+    INFO_SCHEDULER: 1000, // Don't change this
+    AUTO_QUALITY_SCHEDULER: 3000, // Check quality every 3 seconds
+    AUTO_QUALITY_THRESHOLD_PERCENT: 30, // Bandwidth should be 30% more important than a resolution bitrate to change to it
+    AUTO_QUALITY_OBSERVATION_TIME: 10000, // Wait 10 seconds after having change the resolution before another check
+    AUTO_QUALITY_HIGHER_RESOLUTION_DELAY: 5000, // Buffering higher resolution during 5 seconds
+    BANDWIDTH_AVERAGE_NUMBER_OF_VALUES: 5 // Last 5 seconds to build average bandwidth
+  }
+
   private player: any
   private currentVideoFile: VideoFile
-  private playerElement: HTMLVideoElement
-  private videoFiles: VideoFile[]
   private torrent: WebTorrent.Torrent
-  private autoplay = false
-  private videoViewUrl: string
-  private videoDuration: number
+  private autoResolution = true
+  private isAutoResolutionObservation = false
+
   private videoViewInterval
   private torrentInfoInterval
-  private savePlayerSrcFunction: Function
+  private autoQualityInterval
+  private addTorrentDelay
+  private qualityObservationTimer
+  private runAutoQualitySchedulerTimer
+
+  private downloadSpeeds: number[] = []
 
   constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
@@ -242,6 +72,7 @@ class PeerTubePlugin extends Plugin {
     this.autoplay = this.player.options_.autoplay
     this.player.options_.autoplay = false
 
+    this.startTime = options.startTime
     this.videoFiles = options.videoFiles
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
@@ -255,36 +86,61 @@ class PeerTubePlugin extends Plugin {
     this.playerElement = options.playerElement
 
     this.player.ready(() => {
-      this.initializePlayer(options)
+      const volume = getStoredVolume()
+      if (volume !== undefined) this.player.volume(volume)
+      const muted = getStoredMute()
+      if (muted !== undefined) this.player.muted(muted)
+
+      this.initializePlayer()
       this.runTorrentInfoScheduler()
       this.runViewAdd()
+
+      this.player.one('play', () => {
+        // Don't run immediately scheduler, wait some seconds the TCP connections are made
+        this.runAutoQualitySchedulerTimer = setTimeout(() => {
+          this.runAutoQualityScheduler()
+        }, this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
+      })
+    })
+
+    this.player.on('volumechange', () => {
+      saveVolumeInStore(this.player.volume())
+      saveMuteInStore(this.player.muted())
     })
   }
 
   dispose () {
+    clearTimeout(this.addTorrentDelay)
+    clearTimeout(this.qualityObservationTimer)
+    clearTimeout(this.runAutoQualitySchedulerTimer)
+
     clearInterval(this.videoViewInterval)
     clearInterval(this.torrentInfoInterval)
+    clearInterval(this.autoQualityInterval)
 
     // Don't need to destroy renderer, video player will be destroyed
     this.flushVideoFile(this.currentVideoFile, false)
   }
 
-  getCurrentResolution () {
-    return this.currentVideoFile ? this.currentVideoFile.resolution : -1
+  getCurrentResolutionId () {
+    return this.currentVideoFile ? this.currentVideoFile.resolution.id : -1
   }
 
   getCurrentResolutionLabel () {
-    return this.currentVideoFile ? this.currentVideoFile.resolutionLabel : ''
+    return this.currentVideoFile ? this.currentVideoFile.resolution.label : ''
   }
 
-  updateVideoFile (videoFile?: VideoFile, done?: () => void) {
+  updateVideoFile (videoFile?: VideoFile, delay = 0, done?: () => void) {
     if (done === undefined) {
       done = () => { /* empty */ }
     }
 
-    // Pick the first one
+    // Automatically choose the adapted video file
     if (videoFile === undefined) {
-      videoFile = this.videoFiles[0]
+      const savedAverageBandwidth = getAverageBandwidth()
+      videoFile = savedAverageBandwidth
+        ? this.getAppropriateFile(savedAverageBandwidth)
+        : this.videoFiles[0]
     }
 
     // Don't add the same video file once again
@@ -292,54 +148,81 @@ class PeerTubePlugin extends Plugin {
       return
     }
 
-    // Do not display error to user because we will have multiple fallbacks
+    // Do not display error to user because we will have multiple fallback
     this.disableErrorDisplay()
 
     this.player.src = () => true
-    this.player.playbackRate(1)
+    const oldPlaybackRate = this.player.playbackRate()
 
     const previousVideoFile = this.currentVideoFile
     this.currentVideoFile = videoFile
 
-    console.log('Adding ' + videoFile.magnetUri + '.')
-    this.torrent = webtorrent.add(videoFile.magnetUri, torrent => {
-      console.log('Added ' + videoFile.magnetUri + '.')
+    this.addTorrent(this.currentVideoFile.magnetUri, previousVideoFile, delay, () => {
+      this.player.playbackRate(oldPlaybackRate)
+      return done()
+    })
 
-      this.flushVideoFile(previousVideoFile)
+    this.trigger('videoFileUpdate')
+  }
 
-      const options = { autoplay: true, controls: true }
-      renderVideo(torrent.files[0], this.playerElement, options,(err, renderer) => {
-        if (err) return this.fallbackToHttp()
+  addTorrent (magnetOrTorrentUrl: string, previousVideoFile: VideoFile, delay = 0, done: Function) {
+    console.log('Adding ' + magnetOrTorrentUrl + '.')
 
-        this.renderer = renderer
-        if (!this.player.paused()) {
-          const playPromise = this.player.play()
-          if (playPromise !== undefined) return playPromise.then(done)
+    const oldTorrent = this.torrent
+    this.torrent = webtorrent.add(magnetOrTorrentUrl, torrent => {
+      console.log('Added ' + magnetOrTorrentUrl + '.')
+
+      // Pause the old torrent
+      if (oldTorrent) {
+        oldTorrent.pause()
+        // Pause does not remove actual peers (in particular the webseed peer)
+        oldTorrent.removePeer(oldTorrent['ws'])
+      }
+
+      this.addTorrentDelay = setTimeout(() => {
+        this.flushVideoFile(previousVideoFile)
+
+        const options = { autoplay: true, controls: true }
+        renderVideo(torrent.files[0], this.playerElement, options,(err, renderer) => {
+          this.renderer = renderer
+
+          if (err) return this.fallbackToHttp(done)
+
+          if (!this.player.paused()) {
+            const playPromise = this.player.play()
+            if (playPromise !== undefined) return playPromise.then(done)
+
+            return done()
+          }
 
           return done()
-        }
-
-        return done()
-      })
+        })
+      }, delay)
     })
 
     this.torrent.on('error', err => this.handleError(err))
+
     this.torrent.on('warning', (err: any) => {
       // We don't support HTTP tracker but we don't care -> we use the web socket tracker
       if (err.message.indexOf('Unsupported tracker protocol') !== -1) return
+
       // Users don't care about issues with WebRTC, but developers do so log it in the console
       if (err.message.indexOf('Ice connection failed') !== -1) {
         console.error(err)
         return
       }
 
+      // Magnet hash is not up to date with the torrent file, add directly the torrent file
+      if (err.message.indexOf('incorrect info hash') !== -1) {
+        console.error('Incorrect info hash detected, falling back to torrent file.')
+        return this.addTorrent(this.torrent['xs'], previousVideoFile, 0, done)
+      }
+
       return this.handleError(err)
     })
-
-    this.trigger('videoFileUpdate')
   }
 
-  updateResolution (resolution) {
+  updateResolution (resolutionId: number, delay = 0) {
     // Remember player state
     const currentTime = this.player.currentTime()
     const isPaused = this.player.paused()
@@ -352,11 +235,8 @@ class PeerTubePlugin extends Plugin {
       this.player.bigPlayButton.hide()
     }
 
-    const newVideoFile = this.videoFiles.find(f => f.resolution === resolution)
-    this.updateVideoFile(newVideoFile, () => {
-      this.player.currentTime(currentTime)
-      this.player.handleTechSeeked_()
-    })
+    const newVideoFile = this.videoFiles.find(f => f.resolution.id === resolutionId)
+    this.updateVideoFile(newVideoFile, delay, () => this.seek(currentTime))
   }
 
   flushVideoFile (videoFile: VideoFile, destroyRenderer = true) {
@@ -368,25 +248,126 @@ class PeerTubePlugin extends Plugin {
     }
   }
 
-  setVideoFiles (files: VideoFile[], videoViewUrl: string, videoDuration: number) {
-    this.videoViewUrl = videoViewUrl
-    this.videoDuration = videoDuration
-    this.videoFiles = files
-
-    // Re run view add for the new video
-    this.runViewAdd()
-    this.updateVideoFile(undefined, () => this.player.play())
+  isAutoResolutionOn () {
+    return this.autoResolution
   }
 
-  private initializePlayer (options: PeertubePluginOptions) {
+  enableAutoResolution () {
+    this.autoResolution = true
+    this.trigger('autoResolutionUpdate')
+  }
+
+  disableAutoResolution () {
+    this.autoResolution = false
+    this.trigger('autoResolutionUpdate')
+  }
+
+  private seek (time: number) {
+    this.player.currentTime(time)
+    this.player.handleTechSeeked_()
+  }
+
+  private getAppropriateFile (averageDownloadSpeed?: number): VideoFile {
+    if (this.videoFiles === undefined || this.videoFiles.length === 0) return undefined
+    if (this.videoFiles.length === 1) return this.videoFiles[0]
+    if (this.torrent && this.torrent.progress === 1) return this.currentVideoFile
+
+    if (!averageDownloadSpeed) averageDownloadSpeed = this.getActualDownloadSpeed()
+
+    // Filter videos we can play according to our bandwidth
+    const filteredFiles = this.videoFiles.filter(f => {
+      const fileBitrate = (f.size / this.videoDuration)
+      let threshold = fileBitrate
+
+      // If this is for a higher resolution or an initial load: add a margin
+      if (!this.currentVideoFile || f.resolution.id > this.currentVideoFile.resolution.id) {
+        threshold += ((fileBitrate * this.CONSTANTS.AUTO_QUALITY_THRESHOLD_PERCENT) / 100)
+      }
+
+      return averageDownloadSpeed > threshold
+    })
+
+    // If the download speed is too bad, return the lowest resolution we have
+    if (filteredFiles.length === 0) return minBy(this.videoFiles, 'resolution.id')
+
+    return maxBy(filteredFiles, 'resolution.id')
+  }
+
+  private getActualDownloadSpeed () {
+    const start = Math.max(this.downloadSpeeds.length - this.CONSTANTS.BANDWIDTH_AVERAGE_NUMBER_OF_VALUES, 0)
+    const lastDownloadSpeeds = this.downloadSpeeds.slice(start, this.downloadSpeeds.length)
+    if (lastDownloadSpeeds.length === 0) return -1
+
+    const sum = lastDownloadSpeeds.reduce((a, b) => a + b)
+    const averageBandwidth = Math.round(sum / lastDownloadSpeeds.length)
+
+    // Save the average bandwidth for future use
+    saveAverageBandwidth(averageBandwidth)
+
+    return averageBandwidth
+  }
+
+  private initializePlayer () {
+    this.initSmoothProgressBar()
+
+    this.alterInactivity()
+
     if (this.autoplay === true) {
-      this.updateVideoFile(undefined, () => this.player.play())
-    } else {
-      this.player.one('play', () => {
-        this.player.pause()
-        this.updateVideoFile(undefined, () => this.player.play())
+      this.player.posterImage.hide()
+      this.updateVideoFile(undefined, 0, () => {
+        this.seek(this.startTime)
+        this.player.play()
       })
+    } else {
+      // Proxy first play
+      const oldPlay = this.player.play.bind(this.player)
+      this.player.play = () => {
+        this.updateVideoFile(undefined, 0, () => {
+          this.seek(this.startTime)
+          oldPlay()
+        })
+        this.player.play = oldPlay
+      }
     }
+  }
+
+  private runAutoQualityScheduler () {
+    this.autoQualityInterval = setInterval(() => {
+
+      // Not initialized or in HTTP fallback
+      if (this.torrent === undefined || this.torrent === null) return
+      if (this.isAutoResolutionOn() === false) return
+      if (this.isAutoResolutionObservation === true) return
+
+      const file = this.getAppropriateFile()
+      let changeResolution = false
+      let changeResolutionDelay = 0
+
+      // Lower resolution
+      if (this.isPlayerWaiting() && file.resolution.id < this.currentVideoFile.resolution.id) {
+        console.log('Downgrading automatically the resolution to: %s', file.resolution.label)
+        changeResolution = true
+      } else if (file.resolution.id > this.currentVideoFile.resolution.id) { // Higher resolution
+        console.log('Upgrading automatically the resolution to: %s', file.resolution.label)
+        changeResolution = true
+        changeResolutionDelay = this.CONSTANTS.AUTO_QUALITY_HIGHER_RESOLUTION_DELAY
+      }
+
+      if (changeResolution === true) {
+        this.updateResolution(file.resolution.id, changeResolutionDelay)
+
+        // Wait some seconds in observation of our new resolution
+        this.isAutoResolutionObservation = true
+
+        this.qualityObservationTimer = setTimeout(() => {
+          this.isAutoResolutionObservation = false
+        }, this.CONSTANTS.AUTO_QUALITY_OBSERVATION_TIME)
+      }
+    }, this.CONSTANTS.AUTO_QUALITY_SCHEDULER)
+  }
+
+  private isPlayerWaiting () {
+    return this.player && this.player.hasClass('vjs-waiting')
   }
 
   private runTorrentInfoScheduler () {
@@ -397,12 +378,15 @@ class PeerTubePlugin extends Plugin {
       // Http fallback
       if (this.torrent === null) return this.trigger('torrentInfo', false)
 
+      // webtorrent.downloadSpeed because we need to take into account the potential old torrent too
+      if (webtorrent.downloadSpeed !== 0) this.downloadSpeeds.push(webtorrent.downloadSpeed)
+
       return this.trigger('torrentInfo', {
         downloadSpeed: this.torrent.downloadSpeed,
         numPeers: this.torrent.numPeers,
         uploadSpeed: this.torrent.uploadSpeed
       })
-    }, 1000)
+    }, this.CONSTANTS.INFO_SCHEDULER)
   }
 
   private runViewAdd () {
@@ -438,7 +422,7 @@ class PeerTubePlugin extends Plugin {
     return fetch(this.videoViewUrl, { method: 'POST' })
   }
 
-  private fallbackToHttp () {
+  private fallbackToHttp (done: Function) {
     this.flushVideoFile(this.currentVideoFile, true)
     this.torrent = null
 
@@ -449,6 +433,8 @@ class PeerTubePlugin extends Plugin {
     this.player.src = this.savePlayerSrcFunction
     this.player.src(httpUrl)
     this.player.play()
+
+    return done()
   }
 
   private handleError (err: Error | string) {
@@ -462,5 +448,48 @@ class PeerTubePlugin extends Plugin {
   private disableErrorDisplay () {
     this.player.removeClass('vjs-error-display-enabled')
   }
+
+  private alterInactivity () {
+    let saveInactivityTimeout: number
+
+    const disableInactivity = () => {
+      saveInactivityTimeout = this.player.options_.inactivityTimeout
+      this.player.options_.inactivityTimeout = 0
+    }
+    const enableInactivity = () => {
+      this.player.options_.inactivityTimeout = saveInactivityTimeout
+    }
+
+    const settingsDialog = this.player.children_.find(c => c.name_ === 'SettingsDialog')
+
+    this.player.controlBar.on('mouseenter', () => disableInactivity())
+    settingsDialog.on('mouseenter', () => disableInactivity())
+    this.player.controlBar.on('mouseleave', () => enableInactivity())
+    settingsDialog.on('mouseleave', () => enableInactivity())
+  }
+
+  // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
+  private initSmoothProgressBar () {
+    const SeekBar = videojsUntyped.getComponent('SeekBar')
+    SeekBar.prototype.getPercent = function getPercent () {
+      // Allows for smooth scrubbing, when player can't keep up.
+      // const time = (this.player_.scrubbing()) ?
+      //   this.player_.getCache().currentTime :
+      //   this.player_.currentTime()
+      const time = this.player_.currentTime()
+      const percent = time / this.player_.duration()
+      return percent >= 1 ? 1 : percent
+    }
+    SeekBar.prototype.handleMouseMove = function handleMouseMove (event) {
+      let newTime = this.calculateDistance(event) * this.player_.duration()
+      if (newTime === this.player_.duration()) {
+        newTime = newTime - 0.1
+      }
+      this.player_.currentTime(newTime)
+      this.update()
+    }
+  }
 }
+
 videojsUntyped.registerPlugin('peertube', PeerTubePlugin)
+export { PeerTubePlugin }

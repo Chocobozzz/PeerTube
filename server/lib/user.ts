@@ -47,8 +47,7 @@ async function createLocalAccountWithoutKeys (
     name,
     userId,
     applicationId,
-    actorId: actorInstanceCreated.id,
-    serverId: null // It is our server
+    actorId: actorInstanceCreated.id
   })
 
   const accountInstanceCreated = await accountInstance.save({ transaction: t })

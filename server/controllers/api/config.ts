@@ -44,6 +44,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
   const json: ServerConfig = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
+      shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
@@ -75,6 +76,9 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       file: {
         extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
       }
+    },
+    user: {
+      videoQuota: CONFIG.USER.VIDEO_QUOTA
     }
   }
 
@@ -85,6 +89,7 @@ function getAbout (req: express.Request, res: express.Response, next: express.Ne
   const about: About = {
     instance: {
       name: CONFIG.INSTANCE.NAME,
+      shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS
     }
@@ -112,12 +117,17 @@ async function deleteCustomConfig (req: express.Request, res: express.Response, 
 async function updateCustomConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   const toUpdate: CustomConfig = req.body
 
-  // Need to change the videoQuota key a little bit
-  const toUpdateJSON = omit(toUpdate, 'videoQuota')
+  // Force number conversion
+  toUpdate.cache.previews.size = parseInt('' + toUpdate.cache.previews.size, 10)
+  toUpdate.signup.limit = parseInt('' + toUpdate.signup.limit, 10)
+  toUpdate.user.videoQuota = parseInt('' + toUpdate.user.videoQuota, 10)
+  toUpdate.transcoding.threads = parseInt('' + toUpdate.transcoding.threads, 10)
+
+  // camelCase to snake_case key
+  const toUpdateJSON = omit(toUpdate, 'user.videoQuota', 'instance.defaultClientRoute', 'instance.shortDescription')
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
   toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
-  delete toUpdate.user.videoQuota
-  delete toUpdate.instance.defaultClientRoute
+  toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
 
   await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON, undefined, 2))
 
@@ -139,6 +149,7 @@ function customConfig (): CustomConfig {
   return {
     instance: {
       name: CONFIG.INSTANCE.NAME,
+      shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,

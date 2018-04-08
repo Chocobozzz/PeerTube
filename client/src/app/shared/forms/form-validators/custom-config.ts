@@ -7,6 +7,13 @@ export const INSTANCE_NAME = {
   }
 }
 
+export const INSTANCE_SHORT_DESCRIPTION = {
+  VALIDATORS: [ Validators.max(250) ],
+  MESSAGES: {
+    'max': 'Short description should not be longer than 250 characters.'
+  }
+}
+
 export const CACHE_PREVIEWS_SIZE = {
   VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
   MESSAGES: {

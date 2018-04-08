@@ -23,6 +23,14 @@ export class AboutComponent implements OnInit {
     return this.serverService.getConfig().instance.name
   }
 
+  get userVideoQuota () {
+    return this.serverService.getConfig().user.videoQuota
+  }
+
+  get isSignupAllowed () {
+    return this.serverService.getConfig().signup.allowed
+  }
+
   ngOnInit () {
     this.serverService.getAbout()
       .subscribe(
@@ -31,7 +39,7 @@ export class AboutComponent implements OnInit {
           this.termsHTML = this.markdownService.textMarkdownToHTML(res.instance.terms)
         },
 
-        err => this.notificationsService.error('Error', err)
+        err => this.notificationsService.error('Error getting about from server', err)
       )
   }
 

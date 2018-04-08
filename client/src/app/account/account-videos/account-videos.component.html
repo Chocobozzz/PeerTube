@@ -4,7 +4,7 @@
   myInfiniteScroller
   [pageHeight]="pageHeight"
   (nearOfTop)="onNearOfTop()" (nearOfBottom)="onNearOfBottom()" (pageChanged)="onPageChanged($event)"
-  class="videos" #videoElement
+  class="videos" #videosElement
 >
   <div *ngFor="let videos of videoPages; let i = index" class="videos-page">
     <div class="video" *ngFor="let video of videos; let j = index">

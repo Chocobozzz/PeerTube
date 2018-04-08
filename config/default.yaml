@@ -6,6 +6,12 @@ webserver:
   hostname: 'localhost'
   port: 9000
 
+# Proxies to trust to get real client IP
+# If you run PeerTube just behind a local proxy (nginx), keep 'loopback'
+# If you run PeerTube behind a remote proxy, add the proxy IP address (or subnet)
+trust_proxy:
+  - 'loopback'
+
 # Your database name will be "peertube"+database.suffix
 database:
   hostname: 'localhost'
@@ -25,6 +31,7 @@ smtp:
   username: null
   password: null
   tls: true
+  disable_starttls: false
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
@@ -72,6 +79,7 @@ transcoding:
 
 instance:
   name: 'PeerTube'
+  short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
   description: 'Welcome to this PeerTube instance!' # Support markdown
   terms: 'No terms for now.' # Support markdown
   default_client_route: '/videos/trending'
