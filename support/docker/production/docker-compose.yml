@@ -3,10 +3,7 @@ version: "3.1"
 services:
 
   peertube:
-    build:
-      context: .
-      dockerfile: ./Dockerfile.stretch
-    image: chocobozzz/peertube:production-stretch
+    image: chocobozzz/peertube:production
     environment:
       PEERTUBE_HOSTNAME: "my.domain.tld"
       PEERTUBE_PORT: 443
