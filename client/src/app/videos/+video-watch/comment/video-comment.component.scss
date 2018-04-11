@@ -46,7 +46,7 @@
     .comment-html {
       word-wrap: initial;
       word-break: normal;
-	  text-align: justify;
+      text-align: justify;
 
       /deep/ a {
         @include disable-default-a-behaviour;
