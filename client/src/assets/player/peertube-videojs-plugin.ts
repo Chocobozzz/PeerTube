@@ -322,11 +322,10 @@ class PeerTubePlugin extends Plugin {
       // Proxy first play
       const oldPlay = this.player.play.bind(this.player)
       this.player.play = () => {
-        this.updateVideoFile(undefined, 0, () => {
-          this.seek(this.startTime)
-          oldPlay()
-        })
+        this.player.addClass('vjs-has-big-play-button-clicked')
         this.player.play = oldPlay
+
+        this.updateVideoFile(undefined, 0, () => this.seek(this.startTime))
       }
     }
   }

@@ -1,6 +1,13 @@
 @import '_variables';
 @import '_mixins';
 
+@mixin big-play-button-triangle-size($triangle-size) {
+  width: $triangle-size;
+  height: $triangle-size;
+  top: calc(50% - #{$triangle-size / 2});
+  left: calc(53% - #{($triangle-size / 2)});
+}
+
 $primary-foreground-color: #fff;
 $primary-foreground-opacity: 0.9;
 $primary-foreground-opacity-hover: 1;
@@ -59,7 +66,7 @@ $setting-transition-easing: ease-out;
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
 
-    border: 0;
+    border: 6px solid #fff;
     border-radius: 100%;
 
     left: 50%;
@@ -69,7 +76,7 @@ $setting-transition-easing: ease-out;
     line-height: $big-play-height;
     margin-left: -($big-play-width / 2);
     margin-top: -($big-play-height / 2);
-    transition: opacity 0.5s;
+    transition: 0.4s opacity;
 
     &::-moz-focus-inner {
       border: 0;
@@ -77,41 +84,33 @@ $setting-transition-easing: ease-out;
     }
 
     .vjs-icon-placeholder::before {
-      transition: font-size 0.2s, opacity 0.2s;
+      @include big-play-button-triangle-size(45px);
+
+      content: '';
+      background-image: url('../assets/player/images/big-play-button.svg');
     }
 
     &:hover {
       opacity: 0.8;
-
-      .vjs-icon-placeholder::before {
-        font-size: 110%;
-      }
     }
   }
 
-  &.vjs-has-started .vjs-big-play-button {
-    display: block;
-    visibility: hidden;
+  // Small effect when we click on the play button
+  &.vjs-has-big-play-button-clicked {
 
-    &, &::before {
-      opacity: 0;
-      transition: visibility 0.1s, opacity 0.1s;
-    }
-  }
+    .vjs-big-play-button, .vjs-poster {
+      display: block;
+      visibility: hidden;
 
-  &.vjs-has-started video {
-    background-color: #000;
-    animation: fade-black-on-play 0.5s linear;
-
-    @keyframes fade-black-on-play {
-      0% {
-        opacity: 1;
-      }
-      50% {
+      &.vjs-big-play-button, &.vjs-big-play-button::before {
         opacity: 0;
+        transition: visibility 0.2s, opacity 0.2s;
       }
-      100% {
-        opacity: 1;
+
+      &.vjs-poster, &.vjs-poster::before {
+        opacity: 0;
+        transition: visibility 0.3s, opacity 0.3s;
+        transition-delay: 0.05s;
       }
     }
   }
@@ -446,6 +445,11 @@ $setting-transition-easing: ease-out;
 
     .vjs-big-play-button {
       font-size: 4.5em;
+      border-width: 4.5px;
+
+      .vjs-icon-placeholder::before {
+        @include big-play-button-triangle-size(27px);
+      }
     }
 
     .vjs-playback-rate {
@@ -468,6 +472,11 @@ $setting-transition-easing: ease-out;
 
     .vjs-big-play-button {
       font-size: 3em;
+      border-width: 3px;
+
+      .vjs-icon-placeholder::before {
+        @include big-play-button-triangle-size(20px);
+      }
     }
 
     .vjs-volume-control {
