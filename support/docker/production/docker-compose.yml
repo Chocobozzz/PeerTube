@@ -1,14 +1,11 @@
-version: "3.3"
+version: "3.1"
 
 services:
 
   peertube:
-    build:
-      context: .
-      dockerfile: ./Dockerfile.stretch
-    image: chocobozzz/peertube:production-stretch
+    image: chocobozzz/peertube:production
     environment:
-      PEERTUBE_HOSTNAME: my.domain.tld
+      PEERTUBE_HOSTNAME: "my.domain.tld"
       PEERTUBE_PORT: 443
       PEERTUBE_HTTPS: "true"
       PEERTUBE_ADMIN_EMAIL: admin@domain.tld
@@ -26,7 +23,7 @@ services:
     # remove them if you are using another reverse proxy.
     labels:
       traefik.enable: "true"
-      traefik.frontend.rule: "Host:${PEERTUBE_HOSTNAME}"
+      traefik.frontend.rule: "Host:my.domain.tld"
       traefik.port: "9000"
     volumes:
       - ./data:/data

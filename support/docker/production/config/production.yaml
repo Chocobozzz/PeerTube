@@ -1,6 +1,3 @@
-listen:
-  port: 9000
-
 # Correspond to your reverse proxy "listen" configuration
 webserver:
   https: true
@@ -18,10 +15,7 @@ trust_proxy:
 # Your database name will be "peertube"+database.suffix
 database:
   hostname: 'db'
-  port: 5432
   suffix: ''
-  username: 'postgres'
-  password: 'postgres'
 
 # Redis server for short time storage
 redis:
