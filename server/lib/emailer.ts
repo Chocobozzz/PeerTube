@@ -75,7 +75,7 @@ class Emailer {
   addForgetPasswordEmailJob (to: string, resetPasswordUrl: string) {
     const text = `Hi dear user,\n\n` +
       `It seems you forgot your password on ${CONFIG.WEBSERVER.HOST}! ` +
-      `Please follow this link to reset it: ${resetPasswordUrl}.\n\n` +
+      `Please follow this link to reset it: ${resetPasswordUrl}\n\n` +
       `If you are not the person who initiated this request, please ignore this email.\n\n` +
       `Cheers,\n` +
       `PeerTube.`
