@@ -8,7 +8,7 @@ if [ "${1#-}" != "$1" ] || [ "${1%.conf}" != "$1" ]; then
 fi
 
 # allow the container to be started with `--user`
-if [ "$1" = 'npm' -a "$(id -u)" != '0' ]; then
+if [ "$1" = 'npm' -a "$(id -u)" = '0' ]; then
     chown -R peertube:peertube /data
     exec gosu peertube "$0" "$@"
 fi
