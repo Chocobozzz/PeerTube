@@ -49,9 +49,8 @@ RUN set -ex; \
 
 # Install PeerTube
 WORKDIR /app
-RUN chown peertube:peertube /app
-
-COPY --chown=peertube:peertube . ./
+COPY . ./
+RUN chown -R peertube:peertube /app
 
 USER peertube
 
