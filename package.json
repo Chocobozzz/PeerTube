@@ -81,6 +81,7 @@
     "parse-torrent": "^5.8.0",
     "password-generator": "^2.0.2",
     "pem": "^1.12.3",
+    "pfeed": "^1.1.5",
     "pg": "^7.4.1",
     "pg-hstore": "^2.3.2",
     "redis": "^2.8.0",

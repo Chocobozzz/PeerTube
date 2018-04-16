@@ -1,0 +1,19 @@
+@import '_mixins';
+
+.video-feed {
+  a {
+    @include disable-default-a-behaviour;
+
+    color: black;
+  }
+
+  .icon {
+    @include icon(12px);
+
+    &.icon-syndication {
+      position: relative;
+      top: -2px;
+      background-image: url('../../../assets/images/global/syndication.svg');
+    }
+  }
+}

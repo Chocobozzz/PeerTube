@@ -246,7 +246,7 @@ export class AccountModel extends Model<AccountModel> {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
-      displayName: this.name,
+      displayName: this.getDisplayName(),
       description: this.description,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
@@ -265,5 +265,9 @@ export class AccountModel extends Model<AccountModel> {
 
   isOwned () {
     return this.Actor.isOwned()
+  }
+
+  getDisplayName () {
+    return this.name
   }
 }

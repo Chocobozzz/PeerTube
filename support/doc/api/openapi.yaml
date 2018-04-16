@@ -78,6 +78,38 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/ServerConfig'
+  /feeds/videos.{format}:
+    get:
+      tags:
+        - Feeds
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: format
+          in: path
+          required: true
+          type: string
+          enum: ['xml', 'atom' 'json']
+          default: 'xml'
+          description: 'The format expected (xml defaults to RSS 2.0, atom to ATOM 1.0 and json to JSON FEED 1.0'
+        - name: accountId
+          in: query
+          required: false
+          type: number
+          description: 'The id of the local account to filter to (beware, users IDs and not actors IDs which will return empty feeds'
+        - name: accountName
+          in: query
+          required: false
+          type: string
+          description: 'The name of the local account to filter to'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+            application/xml:
   /jobs:
     get:
       security:

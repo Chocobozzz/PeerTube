@@ -10,6 +10,7 @@ import { MarkdownService } from '@app/videos/shared'
 
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown'
 import { ModalModule } from 'ngx-bootstrap/modal'
+import { PopoverModule } from 'ngx-bootstrap/popover'
 import { TabsModule } from 'ngx-bootstrap/tabs'
 import { TooltipModule } from 'ngx-bootstrap/tooltip'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
@@ -21,11 +22,13 @@ import { EditButtonComponent } from './misc/edit-button.component'
 import { FromNowPipe } from './misc/from-now.pipe'
 import { LoaderComponent } from './misc/loader.component'
 import { NumberFormatterPipe } from './misc/number-formatter.pipe'
+import { ObjectLengthPipe } from './misc/object-length.pipe'
 import { RestExtractor, RestService } from './rest'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
 import { VideoBlacklistService } from './video-blacklist'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
+import { VideoFeedComponent } from './video/video-feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
 
@@ -39,6 +42,7 @@ import { VideoService } from './video/video.service'
 
     BsDropdownModule.forRoot(),
     ModalModule.forRoot(),
+    PopoverModule.forRoot(),
     TabsModule.forRoot(),
     TooltipModule.forRoot(),
 
@@ -50,9 +54,11 @@ import { VideoService } from './video/video.service'
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    VideoFeedComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     NumberFormatterPipe,
+    ObjectLengthPipe,
     FromNowPipe,
     MarkdownTextareaComponent,
     InfiniteScrollerDirective,
@@ -68,6 +74,7 @@ import { VideoService } from './video/video.service'
 
     BsDropdownModule,
     ModalModule,
+    PopoverModule,
     TabsModule,
     TooltipModule,
     PrimeSharedModule,
@@ -77,6 +84,7 @@ import { VideoService } from './video/video.service'
     LoaderComponent,
     VideoThumbnailComponent,
     VideoMiniatureComponent,
+    VideoFeedComponent,
     DeleteButtonComponent,
     EditButtonComponent,
     MarkdownTextareaComponent,
@@ -84,6 +92,7 @@ import { VideoService } from './video/video.service'
     HelpComponent,
 
     NumberFormatterPipe,
+    ObjectLengthPipe,
     FromNowPipe
   ],
 

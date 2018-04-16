@@ -1,0 +1,14 @@
+<div class="video-feed">
+  <span *ngIf="(syndicationItems | myObjectLength) >= 1" class="icon icon-syndication" 
+    [popover]="feedsList"
+    placement="bottom"
+    [outsideClick]="true">
+  </span>
+
+  <ng-template #feedsList>
+    <div *ngFor="let key of syndicationItems | keys">
+      <a [href]="syndicationItems[key]">{{ key }}</a>
+    </div>
+  </ng-template>
+</div>
+  

@@ -95,14 +95,15 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, filter?: VideoFilter) => ({
-    where: {
-      id: {
-        [Sequelize.Op.notIn]: Sequelize.literal(
-          '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
-        ),
-        [ Sequelize.Op.in ]: Sequelize.literal(
-          '(' +
+  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, filter?: VideoFilter, withFiles?: boolean) => {
+    const query: IFindOptions<VideoModel> = {
+      where: {
+        id: {
+          [Sequelize.Op.notIn]: Sequelize.literal(
+            '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
+          ),
+          [ Sequelize.Op.in ]: Sequelize.literal(
+            '(' +
             'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
             'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
             'WHERE "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
@@ -113,45 +114,55 @@ enum ScopeNames {
             'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
             'LEFT JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
             'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
-          ')'
-        )
+            ')'
+          )
+        },
+        privacy: VideoPrivacy.PUBLIC
       },
-      privacy: VideoPrivacy.PUBLIC
-    },
-    include: [
-      {
-        attributes: [ 'name', 'description' ],
-        model: VideoChannelModel.unscoped(),
-        required: true,
-        include: [
-          {
-            attributes: [ 'name' ],
-            model: AccountModel.unscoped(),
-            required: true,
-            include: [
-              {
-                attributes: [ 'preferredUsername', 'url', 'serverId' ],
-                model: ActorModel.unscoped(),
-                required: true,
-                where: VideoModel.buildActorWhereWithFilter(filter),
-                include: [
-                  {
-                    attributes: [ 'host' ],
-                    model: ServerModel.unscoped(),
-                    required: false
-                  },
-                  {
-                    model: AvatarModel.unscoped(),
-                    required: false
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }),
+      include: [
+        {
+          attributes: [ 'name', 'description' ],
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'name' ],
+              model: AccountModel.unscoped(),
+              required: true,
+              include: [
+                {
+                  attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+                  model: ActorModel.unscoped(),
+                  required: true,
+                  where: VideoModel.buildActorWhereWithFilter(filter),
+                  include: [
+                    {
+                      attributes: [ 'host' ],
+                      model: ServerModel.unscoped(),
+                      required: false
+                    },
+                    {
+                      model: AvatarModel.unscoped(),
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    if (withFiles === true) {
+      query.include.push({
+        model: VideoFileModel.unscoped(),
+        required: true
+      })
+    }
+
+    return query
+  },
   [ScopeNames.WITH_ACCOUNT_DETAILS]: {
     include: [
       {
@@ -629,8 +640,8 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listUserVideosForApi (userId: number, start: number, count: number, sort: string) {
-    const query = {
+  static listUserVideosForApi (userId: number, start: number, count: number, sort: string, withFiles = false) {
+    const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
       order: getSort(sort),
@@ -651,6 +662,13 @@ export class VideoModel extends Model<VideoModel> {
       ]
     }
 
+    if (withFiles === true) {
+      query.include.push({
+        model: VideoFileModel.unscoped(),
+        required: true
+      })
+    }
+
     return VideoModel.findAndCountAll(query).then(({ rows, count }) => {
       return {
         data: rows,
@@ -659,7 +677,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static async listForApi (start: number, count: number, sort: string, filter?: VideoFilter) {
+  static async listForApi (start: number, count: number, sort: string, filter?: VideoFilter, withFiles = false) {
     const query = {
       offset: start,
       limit: count,
@@ -668,7 +686,7 @@ export class VideoModel extends Model<VideoModel> {
 
     const serverActor = await getServerActor()
 
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, filter ] })
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, filter, withFiles ] })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {
@@ -707,7 +725,8 @@ export class VideoModel extends Model<VideoModel> {
     const serverActor = await getServerActor()
 
     return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id ] })
-      .findAndCountAll(query).then(({ rows, count }) => {
+      .findAndCountAll(query)
+      .then(({ rows, count }) => {
         return {
           data: rows,
           total: count
@@ -1006,29 +1025,34 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     // Format and sort video files
-    const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
-    detailsJson.files = this.VideoFiles
-      .map(videoFile => {
-        let resolutionLabel = videoFile.resolution + 'p'
-
-        return {
-          resolution: {
-            id: videoFile.resolution,
-            label: resolutionLabel
-          },
-          magnetUri: this.generateMagnetUri(videoFile, baseUrlHttp, baseUrlWs),
-          size: videoFile.size,
-          torrentUrl: this.getTorrentUrl(videoFile, baseUrlHttp),
-          fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp)
-        } as VideoFile
-      })
-      .sort((a, b) => {
-        if (a.resolution.id < b.resolution.id) return 1
-        if (a.resolution.id === b.resolution.id) return 0
-        return -1
-      })
+    detailsJson.files = this.getFormattedVideoFilesJSON()
 
     return Object.assign(formattedJson, detailsJson)
+  }
+
+  getFormattedVideoFilesJSON (): VideoFile[] {
+    const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
+
+    return this.VideoFiles
+        .map(videoFile => {
+          let resolutionLabel = videoFile.resolution + 'p'
+
+          return {
+            resolution: {
+              id: videoFile.resolution,
+              label: resolutionLabel
+            },
+            magnetUri: this.generateMagnetUri(videoFile, baseUrlHttp, baseUrlWs),
+            size: videoFile.size,
+            torrentUrl: this.getTorrentUrl(videoFile, baseUrlHttp),
+            fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp)
+          } as VideoFile
+        })
+        .sort((a, b) => {
+          if (a.resolution.id < b.resolution.id) return 1
+          if (a.resolution.id === b.resolution.id) return 0
+          return -1
+        })
   }
 
   toActivityPubObject (): VideoTorrentObject {

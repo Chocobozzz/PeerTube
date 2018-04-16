@@ -69,7 +69,15 @@ import { installApplication } from './server/initializers'
 import { Emailer } from './server/lib/emailer'
 import { JobQueue } from './server/lib/job-queue'
 import { VideosPreviewCache } from './server/lib/cache'
-import { apiRouter, clientsRouter, staticRouter, servicesRouter, webfingerRouter, activityPubRouter } from './server/controllers'
+import {
+  activityPubRouter,
+  apiRouter,
+  clientsRouter,
+  feedsRouter,
+  staticRouter,
+  servicesRouter,
+  webfingerRouter
+} from './server/controllers'
 import { Redis } from './server/lib/redis'
 import { BadActorFollowScheduler } from './server/lib/schedulers/bad-actor-follow-scheduler'
 import { RemoveOldJobsScheduler } from './server/lib/schedulers/remove-old-jobs-scheduler'
@@ -144,8 +152,9 @@ app.use(apiRoute, apiRouter)
 // Services (oembed...)
 app.use('/services', servicesRouter)
 
-app.use('/', webfingerRouter)
 app.use('/', activityPubRouter)
+app.use('/', feedsRouter)
+app.use('/', webfingerRouter)
 
 // Client files
 app.use('/', clientsRouter)

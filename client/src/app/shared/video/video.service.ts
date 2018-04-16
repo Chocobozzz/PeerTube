@@ -8,6 +8,7 @@ import { ResultList } from '../../../../../shared/models/result-list.model'
 import { UserVideoRateUpdate } from '../../../../../shared/models/videos/user-video-rate-update.model'
 import { UserVideoRate } from '../../../../../shared/models/videos/user-video-rate.model'
 import { VideoFilter } from '../../../../../shared/models/videos/video-query.type'
+import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
 import { VideoRateType } from '../../../../../shared/models/videos/video-rate.type'
 import { VideoUpdate } from '../../../../../shared/models/videos/video-update.model'
 import { environment } from '../../../environments/environment'
@@ -24,6 +25,7 @@ import { objectToFormData } from '@app/shared/misc/utils'
 @Injectable()
 export class VideoService {
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
+  private static BASE_FEEDS_URL = environment.apiUrl + '/feeds/videos.'
 
   constructor (
     private authHttp: HttpClient,
@@ -113,6 +115,47 @@ export class VideoService {
       .get(VideoService.BASE_VIDEO_URL, { params })
       .map(this.extractVideos)
       .catch((res) => this.restExtractor.handleError(res))
+  }
+
+  baseFeed () {
+    const feed = {}
+
+    for (let item in FeedFormat) {
+      feed[FeedFormat[item]] = VideoService.BASE_FEEDS_URL + item.toLowerCase()
+    }
+
+    return feed
+  }
+
+  getFeed (
+    filter?: VideoFilter
+  ) {
+    let params = this.restService.addRestGetParams(new HttpParams())
+    const feed = this.baseFeed()
+
+    if (filter) {
+      params = params.set('filter', filter)
+    }
+    for (let item in feed) {
+      feed[item] = feed[item] + ((params.toString().length === 0) ? '' : '?') + params.toString()
+    }
+
+    return feed
+  }
+
+  getAccountFeed (
+    accountId: number,
+    host?: string
+  ) {
+    let params = this.restService.addRestGetParams(new HttpParams())
+    const feed = this.baseFeed()
+
+    params = params.set('accountId', accountId.toString())
+    for (let item in feed) {
+      feed[item] = feed[item] + ((params.toString().length === 0) ? '' : '?') + params.toString()
+    }
+
+    return feed
   }
 
   searchVideos (

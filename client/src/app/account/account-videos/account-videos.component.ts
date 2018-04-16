@@ -27,6 +27,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     totalItems: null
   }
 
+  syndicationItems = {}
+
   protected baseVideoWidth = -1
   protected baseVideoHeight = 155
 
@@ -59,6 +61,10 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
     return this.videoService.getMyVideos(newPagination, this.sort)
+  }
+
+  generateSyndicationList () {
+    throw new Error('Method not implemented.')
   }
 
   async deleteSelectedVideos () {
