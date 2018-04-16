@@ -88,6 +88,8 @@ usersRouter.get('/',
 )
 
 usersRouter.get('/:id',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersGetValidator),
   getUser
 )

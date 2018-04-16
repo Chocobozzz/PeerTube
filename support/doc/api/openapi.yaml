@@ -4,6 +4,14 @@ info:
   version: 1.0.0-beta
   description: Federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.
 host: peertube.example.com
+securityDefinitions:
+  OAuth2:
+    description: 'In the header: *Authorization: Bearer mytoken*'
+    type: oauth2
+    flow: password
+    # Not implemented yet
+    # authorizationUrl: https://example.com/oauth/authorize
+    tokenUrl: https://peertube.example.com/api/v1/users/token
 basePath: '/api/v1'
 schemes:
   - https
@@ -72,6 +80,8 @@ paths:
             $ref: '#/definitions/ServerConfig'
   /jobs:
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - Job
       consumes:
@@ -108,6 +118,8 @@ paths:
               $ref: '#/definitions/Job'
   '/server/following/{host}':
     delete:
+      security:
+        - OAuth2: [ ]
       tags:
         - ServerFollowing
       consumes:
@@ -186,6 +198,8 @@ paths:
             items:
               $ref: '#/definitions/Follow'
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - ServerFollowing
       consumes:
@@ -202,6 +216,8 @@ paths:
           description: successful operation
   /users:
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -221,6 +237,8 @@ paths:
           schema:
             $ref: '#/definitions/AddUserResponse'
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -252,6 +270,8 @@ paths:
               $ref: '#/definitions/User'
   '/users/{id}':
     delete:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -268,6 +288,8 @@ paths:
         '204':
           description: successful operation
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -286,6 +308,8 @@ paths:
           schema:
             $ref: '#/definitions/User'
     put:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -308,6 +332,8 @@ paths:
           description: successful operation
   /users/me:
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -322,6 +348,8 @@ paths:
             items:
               $ref: '#/definitions/User'
     put:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -339,6 +367,8 @@ paths:
           description: successful operation
   /users/me/video-quota-used:
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -353,6 +383,8 @@ paths:
             type: number
   '/users/me/videos/{videoId}/rating':
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -372,6 +404,8 @@ paths:
             $ref: '#/definitions/GetMeVideoRating'
   /users/me/videos:
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -420,6 +454,8 @@ paths:
           description: successful operation
   /users/me/avatar/pick:
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - User
       consumes:
@@ -560,6 +596,8 @@ paths:
               $ref: '#/definitions/Video'
   "/videos/{id}":
     put:
+      security:
+        - OAuth2: [ ]
       tags:
         - Video
       consumes:
@@ -645,6 +683,8 @@ paths:
           schema:
             $ref: '#/definitions/Video'
     delete:
+      security:
+        - OAuth2: [ ]
       tags:
         - Video
       consumes:
@@ -698,6 +738,8 @@ paths:
           description: successful operation
   /videos/upload:
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - Video
       consumes:
@@ -776,6 +818,8 @@ paths:
             $ref: '#/definitions/VideoUploadResponse'
   /videos/abuse:
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoAbuse
       consumes:
@@ -807,6 +851,8 @@ paths:
               $ref: '#/definitions/VideoAbuse'
   "/videos/{id}/abuse":
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoAbuse
       consumes:
@@ -824,6 +870,8 @@ paths:
           description: successful operation
   "/videos/{videoId}/blacklist":
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoBlacklist
       consumes:
@@ -840,6 +888,8 @@ paths:
         '204':
           description: successful operation
     delete:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoBlacklist
       consumes:
@@ -857,6 +907,8 @@ paths:
           description: successful operation
   /videos/blacklist:
     get:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoBlacklist
       consumes:
@@ -918,6 +970,8 @@ paths:
             items:
               $ref: '#/definitions/VideoChannel'
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoChannel
       consumes:
@@ -952,6 +1006,8 @@ paths:
           schema:
             $ref: '#/definitions/VideoChannel'
     put:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoChannel
       consumes:
@@ -972,6 +1028,8 @@ paths:
         '204':
           description: successful operation
     delete:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoChannel
       consumes:
@@ -1043,6 +1101,8 @@ paths:
           schema:
             $ref: '#/definitions/CommentThreadResponse'
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoComment
       consumes:
@@ -1086,6 +1146,8 @@ paths:
             $ref: '#/definitions/VideoCommentThreadTree'
   "/videos/{videoId}/comments/{commentId}":
     post:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoComment
       consumes:
@@ -1109,6 +1171,8 @@ paths:
           schema:
             $ref: '#/definitions/CommentThreadPostResponse'
     delete:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoComment
       consumes:
@@ -1131,6 +1195,8 @@ paths:
           description: successful operation
   "/videos/{id}/rate":
     put:
+      security:
+        - OAuth2: [ ]
       tags:
         - VideoRate
       consumes:

@@ -2213,7 +2213,9 @@ table {
   width: 100%;
   margin-bottom: 1rem;
   border-radius: 0; }
-  thead, tbody, tfoot {
+  thead,
+  tbody,
+  tfoot {
     border: 1px solid #f1f1f1;
     background-color: #fefefe; }
   caption {
@@ -2225,13 +2227,18 @@ table {
   tfoot {
     background: #f1f1f1;
     color: #23241f; }
-  thead tr, tfoot tr {
+  thead tr,
+  tfoot tr {
     background: transparent; }
-  thead th, thead td, tfoot th, tfoot td {
+  thead th,
+  thead td,
+  tfoot th,
+  tfoot td {
     padding: 0.5263157895rem 0.6578947368rem 0.6578947368rem;
     font-weight: bold;
     text-align: left; }
-  tbody th, tbody td {
+  tbody th,
+  tbody td {
     padding: 0.5263157895rem 0.6578947368rem 0.6578947368rem; }
   tbody tr:nth-child(even) {
     border-bottom: 0;

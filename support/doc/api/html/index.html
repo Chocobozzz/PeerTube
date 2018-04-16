@@ -19,6 +19,7 @@
         <nav id="nav" role="navigation">
           <h5>Topics</h5>
           <a href="#introduction">Introduction</a>
+          <a href="#authentication">Authentication</a>
           <h5>Operations</h5>
           <section>
             <a href="#tag-Accounts">Accounts</a>
@@ -275,6 +276,43 @@
                   <h5>Version:
                     <span>1.0.0-beta</span>
                   </h5>
+                </section>
+              </div>
+            </div>
+          </div>
+          <!-- <h1 id="security" data-traverse-target="security">Security</h1> -->
+          <h1 id="authentication" data-traverse-target="authentication">Authentication</h1>
+          <div id="security-definition-OAuth2" class="panel">
+            <div class="doc-row">
+              <div class="doc-copy">
+                <h3 class="security-definition-title">
+                  <span class="security-name">OAuth2</span>
+                  <span class="swagger-security-definition-oauth2"></span>
+                </h3>
+                <section class="security-definition-description">
+                  <p>In the header:
+                    <em>Authorization: Bearer mytoken</em>
+                  </p>
+                </section>
+                <section class="swagger-security-definition-properties">
+                  <div class="prop-row security-definition-property">
+                    <div class="prop-name">
+                      <div class="prop-title security-definition-property-name">type</div>
+                    </div>
+                    <div class="prop-value security-definition-property-type"> oauth2 </div>
+                  </div>
+                  <div class="prop-row security-definition-property">
+                    <div class="prop-name">
+                      <div class="prop-title security-definition-property-name">flow</div>
+                    </div>
+                    <div class="prop-value security-definition-property-type"> password </div>
+                  </div>
+                  <div class="prop-row security-definition-property">
+                    <div class="prop-name">
+                      <div class="prop-title security-definition-property-name">tokenUrl</div>
+                    </div>
+                    <div class="prop-value security-definition-property-type"> https://peertube.example.com/api/v1/users/token </div>
+                  </div>
                 </section>
               </div>
             </div>
@@ -697,6 +735,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <h1 id="tag-ServerFollowing" class="swagger-summary-tag" data-traverse-target="tag-ServerFollowing">ServerFollowing</h1>
           <div id="operation--server-following--host--delete" class="operation panel" data-traverse-target="operation--server-following--host--delete">
@@ -752,6 +812,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>
@@ -1150,6 +1232,28 @@
                 </h5>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <h1 id="tag-User" class="swagger-summary-tag" data-traverse-target="tag-User">User</h1>
           <div id="operation--users-post" class="operation panel" data-traverse-target="operation--users-post">
@@ -1237,6 +1341,28 @@
 }
 </code></pre>
                   <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </section>
               </div>
             </div>
@@ -1429,6 +1555,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--users--id--delete" class="operation panel" data-traverse-target="operation--users--id--delete">
             <!-- <section class="operation-tags row"> -->
@@ -1483,6 +1631,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>
@@ -1636,6 +1806,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--users--id--put" class="operation panel" data-traverse-target="operation--users--id--put">
             <!-- <section class="operation-tags row"> -->
@@ -1721,6 +1913,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>
@@ -1870,6 +2084,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--users-me-put" class="operation panel" data-traverse-target="operation--users-me-put">
             <!-- <section class="operation-tags row"> -->
@@ -1941,6 +2177,28 @@
                 </h5>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--users-me-video-quota-used-get" class="operation panel" data-traverse-target="operation--users-me-video-quota-used-get">
             <!-- <section class="operation-tags row"> -->
@@ -1994,6 +2252,28 @@
                   <!-- <div class="hljs"> --><pre><code class="hljs lang-json"><span class="hljs-string">&quot;number&quot;</span>
 </code></pre>
                   <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </section>
               </div>
             </div>
@@ -2067,6 +2347,28 @@
 }
 </code></pre>
                   <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </section>
               </div>
             </div>
@@ -2219,6 +2521,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--users-register-post" class="operation panel" data-traverse-target="operation--users-register-post">
             <!-- <section class="operation-tags row"> -->
@@ -2359,6 +2683,28 @@
 }
 </code></pre>
                   <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </section>
               </div>
             </div>
@@ -3164,6 +3510,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--videos--id--get" class="operation panel" data-traverse-target="operation--videos--id--get">
             <!-- <section class="operation-tags row"> -->
@@ -3329,6 +3697,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>
@@ -3715,6 +4105,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <h1 id="tag-VideoAbuse" class="swagger-summary-tag" data-traverse-target="tag-VideoAbuse">VideoAbuse</h1>
           <div id="operation--videos-abuse-get" class="operation panel" data-traverse-target="operation--videos-abuse-get">
@@ -3851,6 +4263,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--videos--id--abuse-post" class="operation panel" data-traverse-target="operation--videos--id--abuse-post">
             <!-- <section class="operation-tags row"> -->
@@ -3905,6 +4339,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>
@@ -3964,6 +4420,28 @@
                 </h5>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--videos--videoId--blacklist-delete" class="operation panel" data-traverse-target="operation--videos--videoId--blacklist-delete">
             <!-- <section class="operation-tags row"> -->
@@ -4018,6 +4496,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>
@@ -4138,6 +4638,28 @@
 ]
 </code></pre>
                   <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </section>
               </div>
             </div>
@@ -4371,6 +4893,28 @@
                 </h5>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--videos-channels--id--get" class="operation panel" data-traverse-target="operation--videos-channels--id--get">
             <!-- <section class="operation-tags row"> -->
@@ -4578,6 +5122,28 @@
                 </h5>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--videos-channels--id--delete" class="operation panel" data-traverse-target="operation--videos-channels--id--delete">
             <!-- <section class="operation-tags row"> -->
@@ -4632,6 +5198,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>
@@ -5010,6 +5598,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--videos--videoId--comment-threads--threadId--get" class="operation panel" data-traverse-target="operation--videos--videoId--comment-threads--threadId--get">
             <!-- <section class="operation-tags row"> -->
@@ -5299,6 +5909,28 @@
                 </section>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <div id="operation--videos--videoId--comments--commentId--delete" class="operation panel" data-traverse-target="operation--videos--videoId--comments--commentId--delete">
             <!-- <section class="operation-tags row"> -->
@@ -5369,6 +6001,28 @@
                 </h5>
               </div>
             </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
           </div>
           <h1 id="tag-VideoRate" class="swagger-summary-tag" data-traverse-target="tag-VideoRate">VideoRate</h1>
           <div id="operation--videos--id--rate-put" class="operation panel" data-traverse-target="operation--videos--id--rate-put">
@@ -5424,6 +6078,28 @@
                 <h5>Response Content-Types:
                   <span>application/json</span>
                 </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
               </div>
             </div>
           </div>

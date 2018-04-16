@@ -308,6 +308,26 @@ describe('Test users API validators', function () {
     })
   })
 
+  describe('When getting a user', function () {
+    before(async function () {
+      const res = await getUsersList(server.url, server.accessToken)
+
+      userId = res.body.data[1].id
+    })
+
+    it('Should fail with an non authenticated user', async function () {
+      await makeGetRequest({ url: server.url, path: path + userId, token: 'super token', statusCodeExpected: 401 })
+    })
+
+    it('Should fail with a non admin user', async function () {
+      await makeGetRequest({ url: server.url, path, token: userAccessToken, statusCodeExpected: 403 })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url: server.url, path: path + userId, token: server.accessToken, statusCodeExpected: 200 })
+    })
+  })
+
   describe('When updating a user', function () {
 
     before(async function () {
