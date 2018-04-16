@@ -18,7 +18,7 @@ function checkConfig () {
 
 // Check the config files
 function checkMissedConfig () {
-  const required = [ 'listen.port',
+  const required = [ 'listen.port', 'listen.hostname',
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'trust_proxy',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',

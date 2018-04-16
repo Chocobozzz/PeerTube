@@ -86,7 +86,8 @@ let SCHEDULER_INTERVAL = 60000 * 60
 const CONFIG = {
   CUSTOM_FILE: getLocalConfigFilePath(),
   LISTEN: {
-    PORT: config.get<number>('listen.port')
+    PORT: config.get<number>('listen.port'),
+    HOSTNAME: config.get<string>('listen.hostname')
   },
   DATABASE: {
     DBNAME: 'peertube' + config.get<string>('database.suffix'),
