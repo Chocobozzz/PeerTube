@@ -28,6 +28,9 @@ services:
       traefik.enable: "true"
       traefik.frontend.rule: "Host:${PEERTUBE_HOSTNAME}"
       traefik.port: "9000"
+    # If you don't want to use a reverse proxy (not suitable for production!)
+    # ports:
+      # - "80:9000"
     volumes:
       - ./data:/data
     depends_on:

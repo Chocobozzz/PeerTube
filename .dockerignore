@@ -2,9 +2,11 @@
 *.md
 .git
 .github
-config
 support/doc
 support/nginx
 support/systemd
 support/docker/*/Dockerfile.*
 support/docker/*/*.yml
+storage
+node_modules
+client/node_modules
