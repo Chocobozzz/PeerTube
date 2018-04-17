@@ -119,7 +119,9 @@ coder to help!
 
 ## API REST documentation
 
-For now only on Github:
+Quick Start: [/support/doc/api/quickstart.md](/support/doc/api/quickstart.md)
+
+Endpoints documentation:
 
  * HTML version: [/support/doc/api/html/index.html](https://htmlpreview.github.io/?https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/html/index.html)
  * Swagger/OpenAPI schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
