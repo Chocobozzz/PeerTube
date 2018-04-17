@@ -423,6 +423,13 @@ const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 
 // ---------------------------------------------------------------------------
 
+const FEEDS = {
+  COUNT: 20,
+  CACHE_LIFETIME: 1000 * 60 * 15 // 15 minutes
+}
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   ACTOR_FOLLOW_SCORE.BASE = 20
@@ -462,6 +469,7 @@ export {
   SERVER_ACTOR_NAME,
   PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,
+  FEEDS,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   ACTIVITY_PUB,

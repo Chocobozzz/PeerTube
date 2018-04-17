@@ -1,16 +1,11 @@
 import * as express from 'express'
-import { CONFIG } from '../initializers'
-import {
-  asyncMiddleware,
-  feedsValidator,
-  setDefaultPagination,
-  setDefaultSort,
-  videosSortValidator
-} from '../middlewares'
+import { CONFIG, FEEDS } from '../initializers/constants'
+import { asyncMiddleware, feedsValidator, setDefaultSort, videosSortValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
 import { ResultList } from '../../shared/models'
 import { AccountModel } from '../models/account/account'
+import { cacheRoute } from '../middlewares/cache'
 
 const feedsRouter = express.Router()
 
@@ -18,6 +13,7 @@ feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
   setDefaultSort,
   asyncMiddleware(feedsValidator),
+  asyncMiddleware(cacheRoute),
   asyncMiddleware(generateFeed)
 )
 
@@ -31,8 +27,7 @@ export {
 
 async function generateFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
   let feed = initFeed()
-  const paginationStart = 0
-  const paginationCount = 20
+  const start = 0
 
   let resultList: ResultList<VideoModel>
   const account: AccountModel = res.locals.account
@@ -40,15 +35,15 @@ async function generateFeed (req: express.Request, res: express.Response, next: 
   if (account) {
     resultList = await VideoModel.listAccountVideosForApi(
       account.id,
-      paginationStart,
-      paginationCount,
+      start,
+      FEEDS.COUNT,
       req.query.sort,
       true
     )
   } else {
     resultList = await VideoModel.listForApi(
-      paginationStart,
-      paginationCount,
+      start,
+      FEEDS.COUNT,
       req.query.sort,
       req.query.filter,
       true
