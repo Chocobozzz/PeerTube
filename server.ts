@@ -194,6 +194,7 @@ app.use(function (err, req, res, next) {
 
 async function startApplication () {
   const port = CONFIG.LISTEN.PORT
+  const hostname = CONFIG.LISTEN.HOSTNAME
 
   await installApplication()
 
@@ -214,7 +215,7 @@ async function startApplication () {
   Redis.Instance.init()
 
   // Make server listening
-  server.listen(port)
-  logger.info('Server listening on port %d', port)
+  server.listen(port, hostname)
+  logger.info('Server listening on %s:%d', hostname, port)
   logger.info('Web server: %s', CONFIG.WEBSERVER.URL)
 }
