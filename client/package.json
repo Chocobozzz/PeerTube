@@ -47,7 +47,7 @@
     "@types/sanitize-html": "^1.14.0",
     "@types/video.js": "6.2.4",
     "@types/webtorrent": "^0.98.4",
-    "angular2-notifications": "^0.9.6",
+    "angular2-notifications": "^1.0.0",
     "awesome-typescript-loader": "5.0.0",
     "bootstrap-sass": "^3.3.7",
     "codelyzer": "^4.0.2",

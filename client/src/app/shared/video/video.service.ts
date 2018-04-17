@@ -117,45 +117,53 @@ export class VideoService {
       .catch((res) => this.restExtractor.handleError(res))
   }
 
-  baseFeed () {
-    const feed = {}
+  buildBaseFeedUrls () {
+    const feeds = [
+      {
+        label: 'rss 2.0',
+        url: VideoService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
+      },
+      {
+        label: 'atom 1.0',
+        url: VideoService.BASE_FEEDS_URL + FeedFormat.ATOM.toLowerCase()
+      },
+      {
+        label: 'json 1.0',
+        url: VideoService.BASE_FEEDS_URL + FeedFormat.JSON.toLowerCase()
+      }
+    ]
 
-    for (let item in FeedFormat) {
-      feed[FeedFormat[item]] = VideoService.BASE_FEEDS_URL + item.toLowerCase()
-    }
-
-    return feed
+    return feeds
   }
 
-  getFeed (
-    filter?: VideoFilter
-  ) {
+  getVideoFeedUrls (filter?: VideoFilter) {
     let params = this.restService.addRestGetParams(new HttpParams())
-    const feed = this.baseFeed()
+    const feeds = this.buildBaseFeedUrls()
 
-    if (filter) {
-      params = params.set('filter', filter)
-    }
-    for (let item in feed) {
-      feed[item] = feed[item] + ((params.toString().length === 0) ? '' : '?') + params.toString()
+    if (filter) params = params.set('filter', filter)
+
+    if (params.keys().length !== 0) {
+      for (let item of feeds) {
+        item.url += `?${params.toString()}`
+      }
     }
 
-    return feed
+    return feeds
   }
 
-  getAccountFeed (
-    accountId: number,
-    host?: string
-  ) {
+  getAccountFeedUrls (accountId: number) {
     let params = this.restService.addRestGetParams(new HttpParams())
-    const feed = this.baseFeed()
+    const feeds = this.buildBaseFeedUrls()
 
     params = params.set('accountId', accountId.toString())
-    for (let item in feed) {
-      feed[item] = feed[item] + ((params.toString().length === 0) ? '' : '?') + params.toString()
+
+    if (params.keys().length !== 0) {
+      for (let item of feeds) {
+        item.url += `?${params.toString()}`
+      }
     }
 
-    return feed
+    return feeds
   }
 
   searchVideos (

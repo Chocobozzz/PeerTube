@@ -29,6 +29,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
 
   ngOnInit () {
     super.ngOnInit()
+
     this.generateSyndicationList()
   }
 
@@ -43,9 +44,6 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   }
 
   generateSyndicationList () {
-    const feeds = this.videoService.getFeed('local')
-    this.syndicationItems['rss 2.0'] = feeds[FeedFormat.RSS]
-    this.syndicationItems['atom 1.0'] = feeds[FeedFormat.ATOM]
-    this.syndicationItems['json 1.0'] = feeds[FeedFormat.JSON]
+    this.syndicationItems = this.videoService.getVideoFeedUrls()
   }
 }

@@ -27,8 +27,6 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     totalItems: null
   }
 
-  syndicationItems = {}
-
   protected baseVideoWidth = -1
   protected baseVideoHeight = 155
 
@@ -43,6 +41,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
   ngOnInit () {
     super.ngOnInit()
+
+    // this.generateSyndicationList()
   }
 
   ngOnDestroy () {
