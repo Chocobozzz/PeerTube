@@ -73,6 +73,11 @@
         align-items: center;
         font-size: 13px;
 
+        a {
+          color: black;
+          display: inline-block;
+        }
+
         img {
           @include avatar(18px);
 

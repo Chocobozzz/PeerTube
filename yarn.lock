@@ -4585,7 +4585,7 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
 
-pfeed@^1.1.2:
+pfeed@^1.1.5:
   version "1.1.5"
   resolved "https://registry.yarnpkg.com/pfeed/-/pfeed-1.1.5.tgz#6d0ab54209c60b45de03a15efaab7be867a3f71a"
   dependencies:
@@ -5408,9 +5408,9 @@ send@0.16.2:
     range-parser "~1.2.0"
     statuses "~1.4.0"
 
-sequelize-typescript@^0.6.1:
-  version "0.6.3"
-  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-0.6.3.tgz#567ef7d12193c16aac7ee85e5d321e8980fb817d"
+sequelize-typescript@0.6.4-beta.0:
+  version "0.6.4-beta.0"
+  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-0.6.4-beta.0.tgz#c36e4bfc030dd59b1211967ecace243601b2242e"
   dependencies:
     "@types/bluebird" "3.5.18"
     "@types/node" "6.0.41"

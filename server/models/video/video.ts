@@ -696,7 +696,7 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static async searchAndPopulateAccountAndServerAndTags (value: string, start: number, count: number, sort: string) {
+  static async searchAndPopulateAccountAndServer (value: string, start: number, count: number, sort: string) {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,

@@ -22,8 +22,11 @@
           </div>
 
           <div class="video-info-by">
-            By {{ video.by }}
-            <img [src]="getAvatarPath()" alt="Account avatar" />
+            <a [routerLink]="[ '/videos', 'search' ]" [queryParams]="{ search: video.account.name }" title="Search videos of this account">
+              By {{ video.by }}
+              <img [src]="getAvatarPath()" alt="Account avatar" />
+            </a>
+
             <my-video-feed [syndicationItems]="syndicationItems"></my-video-feed>
           </div>
         </div>

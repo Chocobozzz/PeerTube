@@ -418,7 +418,7 @@ async function removeVideo (req: express.Request, res: express.Response) {
 }
 
 async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoModel.searchAndPopulateAccountAndServerAndTags(
+  const resultList = await VideoModel.searchAndPopulateAccountAndServer(
     req.query.search,
     req.query.start,
     req.query.count,

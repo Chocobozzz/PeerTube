@@ -7,7 +7,6 @@ import { Subscription } from 'rxjs/Subscription'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
-import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
 
 @Component({
   selector: 'my-videos-search',
@@ -64,6 +63,6 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
   }
 
   generateSyndicationList () {
-    throw new Error('Method not implemented.')
+    throw new Error('Search does not support syndication.')
   }
 }
