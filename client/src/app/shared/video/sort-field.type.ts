@@ -1,4 +1,4 @@
-export type SortField = 'name' | '-name'
+export type VideoSortField = 'name' | '-name'
                       | 'duration' | '-duration'
                       | 'createdAt' | '-createdAt'
                       | 'views' | '-views'

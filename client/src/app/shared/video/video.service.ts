@@ -16,7 +16,7 @@ import { ComponentPagination } from '../rest/component-pagination.model'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { RestService } from '../rest/rest.service'
 import { UserService } from '../users/user.service'
-import { SortField } from './sort-field.type'
+import { VideoSortField } from './sort-field.type'
 import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
@@ -86,7 +86,7 @@ export class VideoService {
       .catch(this.restExtractor.handleError)
   }
 
-  getMyVideos (videoPagination: ComponentPagination, sort: SortField): Observable<{ videos: Video[], totalVideos: number}> {
+  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number}> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -99,7 +99,7 @@ export class VideoService {
 
   getVideos (
     videoPagination: ComponentPagination,
-    sort: SortField,
+    sort: VideoSortField,
     filter?: VideoFilter
   ): Observable<{ videos: Video[], totalVideos: number}> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
@@ -117,7 +117,7 @@ export class VideoService {
       .catch((res) => this.restExtractor.handleError(res))
   }
 
-  buildBaseFeedUrls () {
+  buildBaseFeedUrls (params: HttpParams) {
     const feeds = [
       {
         label: 'rss 2.0',
@@ -133,43 +133,34 @@ export class VideoService {
       }
     ]
 
-    return feeds
-  }
-
-  getVideoFeedUrls (filter?: VideoFilter) {
-    let params = this.restService.addRestGetParams(new HttpParams())
-    const feeds = this.buildBaseFeedUrls()
-
-    if (filter) params = params.set('filter', filter)
-
-    if (params.keys().length !== 0) {
-      for (let item of feeds) {
-        item.url += `?${params.toString()}`
+    if (params && params.keys().length !== 0) {
+      for (const feed of feeds) {
+        feed.url += '?' + params.toString()
       }
     }
 
     return feeds
+  }
+
+  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter) {
+    let params = this.restService.addRestGetParams(new HttpParams(), undefined, sort)
+
+    if (filter) params = params.set('filter', filter)
+
+    return this.buildBaseFeedUrls(params)
   }
 
   getAccountFeedUrls (accountId: number) {
     let params = this.restService.addRestGetParams(new HttpParams())
-    const feeds = this.buildBaseFeedUrls()
-
     params = params.set('accountId', accountId.toString())
 
-    if (params.keys().length !== 0) {
-      for (let item of feeds) {
-        item.url += `?${params.toString()}`
-      }
-    }
-
-    return feeds
+    return this.buildBaseFeedUrls(params)
   }
 
   searchVideos (
     search: string,
     videoPagination: ComponentPagination,
-    sort: SortField
+    sort: VideoSortField
   ): Observable<{ videos: Video[], totalVideos: number}> {
     const url = VideoService.BASE_VIDEO_URL + 'search'
 

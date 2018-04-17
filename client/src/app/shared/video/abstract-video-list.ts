@@ -9,7 +9,7 @@ import { fromEvent } from 'rxjs/observable/fromEvent'
 import { Subscription } from 'rxjs/Subscription'
 import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
-import { SortField } from './sort-field.type'
+import { VideoSortField } from './sort-field.type'
 import { Video } from './video.model'
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy {
@@ -23,8 +23,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     itemsPerPage: 10,
     totalItems: null
   }
-  sort: SortField = '-createdAt'
-  defaultSort: SortField = '-createdAt'
+  sort: VideoSortField = '-createdAt'
+  defaultSort: VideoSortField = '-createdAt'
   syndicationItems = []
 
   loadOnInit = true
@@ -154,7 +154,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   }
 
   protected loadRouteParams (routeParams: { [ key: string ]: any }) {
-    this.sort = routeParams['sort'] as SortField || this.defaultSort
+    this.sort = routeParams['sort'] as VideoSortField || this.defaultSort
 
     if (routeParams['page'] !== undefined) {
       this.pagination.currentPage = parseInt(routeParams['page'], 10)

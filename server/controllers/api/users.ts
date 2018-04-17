@@ -161,7 +161,7 @@ export {
 
 async function getUserVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.oauth.token.User as UserModel
-  const resultList = await VideoModel.listUserVideosForApi(user.id ,req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoModel.listAccountVideosForApi(user.Account.id ,req.query.start, req.query.count, req.query.sort)
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

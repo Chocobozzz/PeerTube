@@ -14,7 +14,7 @@ import {
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestService } from '../../../shared/rest'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
-import { SortField } from '../../../shared/video/sort-field.type'
+import { VideoSortField } from '../../../shared/video/sort-field.type'
 import { VideoComment } from './video-comment.model'
 
 @Injectable()
@@ -48,7 +48,7 @@ export class VideoCommentService {
   getVideoCommentThreads (
     videoId: number | string,
     componentPagination: ComponentPagination,
-    sort: SortField
+    sort: VideoSortField
   ): Observable<{ comments: VideoComment[], totalComments: number}> {
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 

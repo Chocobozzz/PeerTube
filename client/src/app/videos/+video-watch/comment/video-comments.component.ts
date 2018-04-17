@@ -7,7 +7,7 @@ import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/v
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
-import { SortField } from '../../../shared/video/sort-field.type'
+import { VideoSortField } from '../../../shared/video/sort-field.type'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
@@ -23,7 +23,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   comments: VideoComment[] = []
   highlightedThread: VideoComment
-  sort: SortField = '-createdAt'
+  sort: VideoSortField = '-createdAt'
   componentPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 10,

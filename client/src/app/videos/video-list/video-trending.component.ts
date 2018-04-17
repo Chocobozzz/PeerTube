@@ -4,7 +4,7 @@ import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
-import { SortField } from '../../shared/video/sort-field.type'
+import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
 
 @Component({
@@ -15,7 +15,7 @@ import { VideoService } from '../../shared/video/video.service'
 export class VideoTrendingComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Trending'
   currentRoute = '/videos/trending'
-  defaultSort: SortField = '-views'
+  defaultSort: VideoSortField = '-views'
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,
@@ -41,6 +41,6 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   }
 
   generateSyndicationList () {
-    this.syndicationItems = this.videoService.getVideoFeedUrls()
+    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort)
   }
 }

@@ -1,6 +1,12 @@
 import * as express from 'express'
 import { CONFIG } from '../initializers'
-import { asyncMiddleware, feedsValidator } from '../middlewares'
+import {
+  asyncMiddleware,
+  feedsValidator,
+  setDefaultPagination,
+  setDefaultSort,
+  videosSortValidator
+} from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
 import { ResultList } from '../../shared/models'
@@ -9,6 +15,8 @@ import { AccountModel } from '../models/account/account'
 const feedsRouter = express.Router()
 
 feedsRouter.get('/feeds/videos.:format',
+  videosSortValidator,
+  setDefaultSort,
   asyncMiddleware(feedsValidator),
   asyncMiddleware(generateFeed)
 )
@@ -23,26 +31,25 @@ export {
 
 async function generateFeed (req: express.Request, res: express.Response, next: express.NextFunction) {
   let feed = initFeed()
-  let feedStart = 0
-  let feedCount = 10
-  let feedSort = '-createdAt'
+  const paginationStart = 0
+  const paginationCount = 20
 
   let resultList: ResultList<VideoModel>
   const account: AccountModel = res.locals.account
 
   if (account) {
-    resultList = await VideoModel.listUserVideosForApi(
+    resultList = await VideoModel.listAccountVideosForApi(
       account.id,
-      feedStart,
-      feedCount,
-      feedSort,
+      paginationStart,
+      paginationCount,
+      req.query.sort,
       true
     )
   } else {
     resultList = await VideoModel.listForApi(
-      feedStart,
-      feedCount,
-      feedSort,
+      paginationStart,
+      paginationCount,
+      req.query.sort,
       req.query.filter,
       true
     )
@@ -100,7 +107,7 @@ function initFeed () {
       rss: `${webserverUrl}/feeds/videos.xml`
     },
     author: {
-      name: 'instance admin of ' + CONFIG.INSTANCE.NAME,
+      name: 'Instance admin of ' + CONFIG.INSTANCE.NAME,
       email: CONFIG.ADMIN.EMAIL,
       link: `${webserverUrl}/about`
     }

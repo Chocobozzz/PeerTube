@@ -4,10 +4,8 @@ import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
-import { SortField } from '../../shared/video/sort-field.type'
+import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
-import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
-import * as url from 'url'
 
 @Component({
   selector: 'my-videos-recently-added',
@@ -17,7 +15,7 @@ import * as url from 'url'
 export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Recently added'
   currentRoute = '/videos/recently-added'
-  sort: SortField = '-createdAt'
+  sort: VideoSortField = '-createdAt'
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,
@@ -44,6 +42,6 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   }
 
   generateSyndicationList () {
-    this.syndicationItems = this.videoService.getVideoFeedUrls()
+    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort)
   }
 }

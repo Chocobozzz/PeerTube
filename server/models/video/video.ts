@@ -640,7 +640,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listUserVideosForApi (userId: number, start: number, count: number, sort: string, withFiles = false) {
+  static listAccountVideosForApi (accountId: number, start: number, count: number, sort: string, withFiles = false) {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
@@ -653,7 +653,7 @@ export class VideoModel extends Model<VideoModel> {
             {
               model: AccountModel,
               where: {
-                userId
+                id: accountId
               },
               required: true
             }

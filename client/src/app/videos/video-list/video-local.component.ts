@@ -3,12 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
-import { PopoverModule } from 'ngx-bootstrap/popover'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
-import { SortField } from '../../shared/video/sort-field.type'
+import { VideoSortField } from '../../shared/video/sort-field.type'
 import { VideoService } from '../../shared/video/video.service'
-import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
-import * as url from 'url'
+import { VideoFilter } from '../../../../../shared/models/videos/video-query.type'
 
 @Component({
   selector: 'my-videos-local',
@@ -18,7 +16,8 @@ import * as url from 'url'
 export class VideoLocalComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Local videos'
   currentRoute = '/videos/local'
-  sort = '-createdAt' as SortField
+  sort = '-createdAt' as VideoSortField
+  filter: VideoFilter = 'local'
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,
@@ -41,10 +40,10 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideos(newPagination, this.sort, 'local')
+    return this.videoService.getVideos(newPagination, this.sort, this.filter)
   }
 
   generateSyndicationList () {
-    this.syndicationItems = this.videoService.getVideoFeedUrls('local')
+    this.syndicationItems = this.videoService.getVideoFeedUrls(this.sort, this.filter)
   }
 }
