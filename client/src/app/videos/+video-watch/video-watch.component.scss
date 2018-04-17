@@ -215,7 +215,8 @@
       font-size: 15px;
 
       .video-info-description-html {
-        word-wrap: break-word;
+        word-break: normal;
+        word-wrap: normal;
         text-align: justify;
       }
 
@@ -251,6 +252,8 @@
   }
 
   .other-videos {
+    padding-left: 1em;
+	
     .title-page {
       margin-top: 0;
     }
