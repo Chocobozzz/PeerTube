@@ -85,6 +85,8 @@ class PeerTubePlugin extends Plugin {
 
     this.playerElement = options.playerElement
 
+    if (this.autoplay === true) this.player.addClass('vjs-has-autoplay')
+
     this.player.ready(() => {
       const volume = getStoredVolume()
       if (volume !== undefined) this.player.volume(volume)
@@ -314,10 +316,8 @@ class PeerTubePlugin extends Plugin {
 
     if (this.autoplay === true) {
       this.player.posterImage.hide()
-      this.updateVideoFile(undefined, 0, () => {
-        this.seek(this.startTime)
-        this.player.play()
-      })
+
+      this.updateVideoFile(undefined, 0, () => this.seek(this.startTime))
     } else {
       // Proxy first play
       const oldPlay = this.player.play.bind(this.player)

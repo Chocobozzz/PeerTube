@@ -115,6 +115,13 @@ $setting-transition-easing: ease-out;
     }
   }
 
+  // Hide the big play button on autoplay
+  &.vjs-has-autoplay {
+    .vjs-big-play-button {
+      display: none !important;
+    }
+  }
+
   .vjs-control-bar,
   .vjs-big-play-button,
   .vjs-settings-dialog {
