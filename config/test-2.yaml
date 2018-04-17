@@ -1,5 +1,4 @@
 listen:
-  hostname: ''
   port: 9002
 
 webserver:
