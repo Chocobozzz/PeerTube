@@ -19,8 +19,8 @@
   font-size: 13px;
 }
 
-.comment-html {
-  word-wrap: normal;
-  word-break: normal;
-  text-align: justify;
+@media screen and (max-width: 600px) {
+  .view-replies {
+    margin-left: 46px;
+  }
 }

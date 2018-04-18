@@ -14,6 +14,8 @@
 
   .comment {
     flex-grow: 1;
+    // Fix word-wrap with flex
+    min-width: 1px;
 
     .highlighted-comment {
       display: inline-block;
@@ -44,8 +46,8 @@
     }
 
     .comment-html {
-      word-wrap: initial;
       word-break: normal;
+      word-wrap: break-word;
       text-align: justify;
 
       /deep/ a {
@@ -74,5 +76,28 @@
         }
       }
     }
+  }
+}
+
+// Decrease the space of child comments on small screens
+@media screen and (max-width: 1600px) {
+  .children {
+    margin-left: -20px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .children {
+    margin-left: -30px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .children {
+    margin-left: -40px;
+  }
+
+  .root-comment {
+    img { margin-right: 10px; }
   }
 }
