@@ -68,9 +68,7 @@ class PeerTubePlugin extends Plugin {
   constructor (player: videojs.Player, options: PeertubePluginOptions) {
     super(player, options)
 
-    // Fix canplay event on google chrome by disabling default videojs autoplay
-    this.autoplay = this.player.options_.autoplay
-    this.player.options_.autoplay = false
+    this.autoplay = options.autoplay
 
     this.startTime = options.startTime
     this.videoFiles = options.videoFiles
@@ -190,12 +188,7 @@ class PeerTubePlugin extends Plugin {
 
           if (err) return this.fallbackToHttp(done)
 
-          if (!this.player.paused()) {
-            const playPromise = this.player.play()
-            if (playPromise !== undefined) return playPromise.then(done)
-
-            return done()
-          }
+          if (!this.player.paused()) return this.tryToPlay(done)
 
           return done()
         })
@@ -264,6 +257,25 @@ class PeerTubePlugin extends Plugin {
     this.trigger('autoResolutionUpdate')
   }
 
+  private tryToPlay (done?: Function) {
+    if (!done) done = function () { /* empty */ }
+
+    const playPromise = this.player.play()
+    if (playPromise !== undefined) {
+      return playPromise.then(done)
+                        .catch(err => {
+                          console.error(err)
+                          this.player.pause()
+                          this.player.posterImage.show()
+                          this.player.removeClass('vjs-has-autoplay')
+
+                          return done()
+                        })
+    }
+
+    return done()
+  }
+
   private seek (time: number) {
     this.player.currentTime(time)
     this.player.handleTechSeeked_()
@@ -317,7 +329,10 @@ class PeerTubePlugin extends Plugin {
     if (this.autoplay === true) {
       this.player.posterImage.hide()
 
-      this.updateVideoFile(undefined, 0, () => this.seek(this.startTime))
+      this.updateVideoFile(undefined, 0, () => {
+        this.seek(this.startTime)
+        this.tryToPlay()
+      })
     } else {
       // Proxy first play
       const oldPlay = this.player.play.bind(this.player)

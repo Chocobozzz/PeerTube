@@ -27,11 +27,12 @@ function getVideojsOptions (options: {
   const videojsOptions = {
     controls: true,
     poster: options.poster,
-    autoplay: options.autoplay,
+    autoplay: false,
     inactivityTimeout: options.inactivityTimeout,
     playbackRates: [ 0.5, 1, 1.5, 2 ],
     plugins: {
       peertube: {
+        autoplay: options.autoplay, // Use peertube plugin autoplay because we get the file by webtorrent
         videoFiles: options.videoFiles,
         playerElement: options.playerElement,
         videoViewUrl: options.videoViewUrl,
