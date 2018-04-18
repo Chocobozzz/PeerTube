@@ -65,6 +65,7 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 5,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
+  'activitypub-follow': 5,
   'video-file': 1,
   'email': 5
 }
@@ -72,6 +73,7 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
+  'activitypub-follow': 3,
   'video-file': 1,
   'email': 5
 }
