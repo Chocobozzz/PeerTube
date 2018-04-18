@@ -14,7 +14,9 @@
       "es2017"
     ],
     "types": [
-      "node"
+      "node",
+      "chai-xml",
+      "chai-json-schema"
     ]
   },
   "exclude": [
