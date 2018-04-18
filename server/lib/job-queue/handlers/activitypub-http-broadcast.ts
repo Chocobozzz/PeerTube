@@ -1,8 +1,10 @@
 import * as kue from 'kue'
+import * as Bluebird from 'bluebird'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
+import { BROADCAST_CONCURRENCY } from '../../../initializers'
 
 export type ActivitypubHttpBroadcastPayload = {
   uris: string[]
@@ -28,16 +30,11 @@ async function processActivityPubHttpBroadcast (job: kue.Job) {
   const badUrls: string[] = []
   const goodUrls: string[] = []
 
-  for (const uri of payload.uris) {
-    options.uri = uri
-
-    try {
-      await doRequest(options)
-      goodUrls.push(uri)
-    } catch (err) {
-      badUrls.push(uri)
-    }
-  }
+  await Bluebird.map(payload.uris, uri => {
+    return doRequest(Object.assign({}, options, { uri }))
+      .then(() => goodUrls.push(uri))
+      .catch(() => badUrls.push(uri))
+  }, { concurrency: BROADCAST_CONCURRENCY })
 
   return ActorFollowModel.updateActorFollowsScore(goodUrls, badUrls, undefined)
 }
