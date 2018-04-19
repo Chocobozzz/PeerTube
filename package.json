@@ -47,6 +47,7 @@
     "nodemon": "nodemon",
     "ts-node": "ts-node",
     "tslint": "tslint",
+    "mocha": "mocha",
     "travis": "scripty",
     "release": "scripty",
     "client-report": "scripty"
