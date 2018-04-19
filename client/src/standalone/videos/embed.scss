@@ -4,6 +4,16 @@
 @import '~videojs-dock/dist/videojs-dock.css';
 @import '../../sass/video-js-custom.scss';
 
+[hidden] {
+  display: none !important;
+}
+
+body {
+  font-family: $main-fonts;
+  font-weight: $font-regular;
+  color: #000;
+}
+
 video {
   width: 99%;
 }
@@ -43,3 +53,38 @@ html, body {
     }
   }
 }
+
+#error-block {
+  display: none;
+
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #141313;
+  width: 100%;
+  height: 100%;
+  color: white;
+  box-sizing: border-box;
+  font-family: sans-serif;
+
+  #error-title {
+    font-size: 45px;
+    margin-bottom: 5px;
+  }
+
+  #error-content {
+    font-size: 24px;
+  }
+}
+
+@media screen and (max-width: 300px) {
+  #error-block {
+    font-size: 36px;
+
+    #error-content {
+      font-size: 14px;
+    }
+  }
+}
+
