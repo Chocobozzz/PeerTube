@@ -12,6 +12,7 @@ export class HelpComponent implements OnInit, OnChanges {
   @Input() postHtml = ''
   @Input() customHtml = ''
   @Input() helpType: 'custom' | 'markdownText' | 'markdownEnhanced' = 'custom'
+  @Input() tooltipPlacement = 'right'
 
   mainHtml = ''
 
