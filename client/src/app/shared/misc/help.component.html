@@ -13,6 +13,9 @@
 </ng-template>
 
 <span
-  class="help-tooltip-button" containerClass="help-tooltip" title="Click to get help"
-  #tooltipDirective="bs-tooltip" [tooltip]="tooltipTemplate" triggers="click"
+  class="help-tooltip-button"
+  title="Get help"
+  [popover]="tooltipTemplate"
+  [placement]="tooltipPlacement"
+  [outsideClick]="true"
 ></span>

@@ -1,11 +1,15 @@
 <form role="form" (ngSubmit)="updateDetails()" [formGroup]="form">
   <div class="form-group">
-    <input
-      type="checkbox" id="displayNSFW"
-      formControlName="displayNSFW"
-    >
-    <label for="displayNSFW"></label>
-    <label for="displayNSFW">Display videos that contain mature or explicit content</label>
+    <label for="nsfwPolicy">Default policy on videos containing sensitive content</label>
+    <my-help helpType="custom" customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."></my-help>
+
+    <div class="peertube-select-container">
+      <select id="nsfwPolicy" formControlName="nsfwPolicy">
+        <option value="do_not_list">Do not list</option>
+        <option value="blur">Blur thumbnails</option>
+        <option value="display">Display</option>
+      </select>
+    </div>
   </div>
 
   <div class="form-group">

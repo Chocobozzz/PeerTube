@@ -29,7 +29,7 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
 
   buildForm () {
     this.form = this.formBuilder.group({
-      displayNSFW: [ this.user.displayNSFW ],
+      nsfwPolicy: [ this.user.nsfwPolicy ],
       autoPlayVideo: [ this.user.autoPlayVideo ]
     })
 
@@ -41,10 +41,10 @@ export class AccountDetailsComponent extends FormReactive implements OnInit {
   }
 
   updateDetails () {
-    const displayNSFW = this.form.value['displayNSFW']
+    const nsfwPolicy = this.form.value['nsfwPolicy']
     const autoPlayVideo = this.form.value['autoPlayVideo']
     const details: UserUpdateMe = {
-      displayNSFW,
+      nsfwPolicy,
       autoPlayVideo
     }
 

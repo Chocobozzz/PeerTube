@@ -62,6 +62,22 @@
     </div>
   </div>
 
+  <div class="form-group">
+    <label for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
+    <my-help helpType="custom" customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."></my-help>
+
+    <div class="peertube-select-container">
+      <select id="instanceDefaultNSFWPolicy" formControlName="instanceDefaultNSFWPolicy">
+        <option value="do_not_list">Do not list</option>
+        <option value="blur">Blur thumbnails</option>
+        <option value="display">Display</option>
+      </select>
+    </div>
+    <div *ngIf="formErrors.instanceDefaultNSFWPolicy" class="form-error">
+      {{ formErrors.instanceDefaultNSFWPolicy }}
+    </div>
+  </div>
+
   <div class="inner-form-title">Cache</div>
 
   <div class="form-group">

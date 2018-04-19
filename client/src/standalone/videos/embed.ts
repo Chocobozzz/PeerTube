@@ -9,19 +9,53 @@ function getVideoUrl (id: string) {
   return window.location.origin + '/api/v1/videos/' + id
 }
 
-async function loadVideoInfo (videoId: string): Promise<VideoDetails> {
-  const response = await fetch(getVideoUrl(videoId))
-  return response.json()
+function loadVideoInfo (videoId: string): Promise<Response> {
+  return fetch(getVideoUrl(videoId))
+}
+
+function removeElement (element: HTMLElement) {
+  element.parentElement.removeChild(element)
+}
+
+function displayError (videoElement: HTMLVideoElement, text: string) {
+  // Remove video element
+  removeElement(videoElement)
+
+  document.title = 'Sorry - ' + text
+
+  const errorBlock = document.getElementById('error-block')
+  errorBlock.style.display = 'flex'
+
+  const errorText = document.getElementById('error-content')
+  errorText.innerHTML = text
+}
+
+function videoNotFound (videoElement: HTMLVideoElement) {
+  const text = 'This video does not exist.'
+  displayError(videoElement, text)
+}
+
+function videoFetchError (videoElement: HTMLVideoElement) {
+  const text = 'We cannot fetch the video. Please try again later.'
+  displayError(videoElement, text)
 }
 
 const urlParts = window.location.href.split('/')
 const videoId = urlParts[urlParts.length - 1]
 
 loadVideoInfo(videoId)
-  .then(videoInfo => {
+  .then(async response => {
     const videoContainerId = 'video-container'
-
     const videoElement = document.getElementById(videoContainerId) as HTMLVideoElement
+
+    if (!response.ok) {
+      if (response.status === 404) return videoNotFound(videoElement)
+
+      return videoFetchError(videoElement)
+    }
+
+    const videoInfo: VideoDetails = await response.json()
+
     let autoplay = false
     let startTime = 0
 

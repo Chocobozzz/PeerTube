@@ -1,3 +1,5 @@
+import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+
 export interface CustomConfig {
   instance: {
     name: string
@@ -5,6 +7,7 @@ export interface CustomConfig {
     description: string
     terms: string
     defaultClientRoute: string
+    defaultNSFWPolicy: NSFWPolicyType
     customizations: {
       javascript?: string
       css?: string

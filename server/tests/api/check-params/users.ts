@@ -231,9 +231,9 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
-    it('Should fail with an invalid display NSFW attribute', async function () {
+    it('Should fail with an invalid NSFW policy attribute', async function () {
       const fields = {
-        displayNSFW: -1
+        nsfwPolicy: 'hello'
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
@@ -266,7 +266,7 @@ describe('Test users API validators', function () {
     it('Should succeed with the correct params', async function () {
       const fields = {
         password: 'my super password',
-        displayNSFW: true,
+        nsfwPolicy: 'blur',
         autoPlayVideo: false,
         email: 'super_email@example.com'
       }

@@ -1,17 +1,9 @@
-import {
-  UserRight,
-  VideoChannel,
-  VideoDetails as VideoDetailsServerModel,
-  VideoFile,
-  VideoPrivacy
-} from '../../../../../shared'
+import { UserRight, VideoChannel, VideoDetails as VideoDetailsServerModel, VideoFile } from '../../../../../shared'
 import { Account } from '../../../../../shared/models/actors'
-import { VideoConstant } from '../../../../../shared/models/videos/video.model'
 import { AuthUser } from '../../core'
 import { Video } from '../../shared/video/video.model'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
-  privacy: VideoConstant<VideoPrivacy>
   descriptionPath: string
   support: string
   channel: VideoChannel
@@ -26,7 +18,6 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   constructor (hash: VideoDetailsServerModel) {
     super(hash)
 
-    this.privacy = hash.privacy
     this.descriptionPath = hash.descriptionPath
     this.files = hash.files
     this.channel = hash.channel

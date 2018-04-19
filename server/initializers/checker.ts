@@ -5,12 +5,12 @@ import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 
 // Some checks on configuration files
+// Return an error message, or null if everything is okay
 function checkConfig () {
-  if (config.has('webserver.host')) {
-    let errorMessage = '`host` config key was renamed to `hostname` but it seems you still have a `host` key in your configuration files!'
-    errorMessage += ' Please ensure to rename your `host` configuration to `hostname`.'
+  const defaultNSFWPolicy = config.get<string>('instance.default_nsfw_policy')
 
-    return errorMessage
+  if ([ 'do_not_list', 'blur', 'display' ].indexOf(defaultNSFWPolicy) === -1) {
+    return 'NSFW policy setting should be "do_not_list" or "blur" or "display" instead of ' + defaultNSFWPolicy
   }
 
   return null
@@ -28,7 +28,8 @@ function checkMissedConfig () {
     'log.level',
     'user.video_quota',
     'cache.previews.size', 'admin.email', 'signup.enabled', 'signup.limit', 'transcoding.enabled', 'transcoding.threads',
-    'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route'
+    'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
+    'instance.default_nsfw_policy'
   ]
   const miss: string[] = []
 

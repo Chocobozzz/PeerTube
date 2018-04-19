@@ -1,9 +1,10 @@
 import { Account } from '@app/shared/account/account.model'
 import { User } from '../'
-import { Video as VideoServerModel } from '../../../../../shared'
+import { Video as VideoServerModel, VideoPrivacy } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
+import { ServerConfig } from '../../../../../shared/models'
 
 export class Video implements VideoServerModel {
   by: string
@@ -13,6 +14,7 @@ export class Video implements VideoServerModel {
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<number>
+  privacy: VideoConstant<VideoPrivacy>
   description: string
   duration: number
   durationLabel: string
@@ -61,6 +63,7 @@ export class Video implements VideoServerModel {
     this.category = hash.category
     this.licence = hash.licence
     this.language = hash.language
+    this.privacy = hash.privacy
     this.description = hash.description
     this.duration = hash.duration
     this.durationLabel = Video.createDurationString(hash.duration)
@@ -83,8 +86,14 @@ export class Video implements VideoServerModel {
     this.by = Account.CREATE_BY_STRING(hash.account.name, hash.account.host)
   }
 
-  isVideoNSFWForUser (user: User) {
-    // If the video is NSFW and the user is not logged in, or the user does not want to display NSFW videos...
-    return (this.nsfw && (!user || user.displayNSFW === false))
+  isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {
+    // Video is not NSFW, skip
+    if (this.nsfw === false) return false
+
+    // Return user setting if logged in
+    if (user) return user.nsfwPolicy !== 'display'
+
+    // Return default instance config
+    return serverConfig.instance.defaultNSFWPolicy !== 'display'
   }
 }

@@ -26,6 +26,7 @@ export interface Video {
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<number>
+  privacy: VideoConstant<VideoPrivacy>
   description: string
   duration: number
   isLocal: boolean
@@ -48,7 +49,6 @@ export interface Video {
 }
 
 export interface VideoDetails extends Video {
-  privacy: VideoConstant<VideoPrivacy>
   descriptionPath: string
   support: string
   channel: VideoChannel

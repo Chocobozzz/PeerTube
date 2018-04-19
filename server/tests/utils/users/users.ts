@@ -3,6 +3,7 @@ import * as request from 'supertest'
 import { makePostBodyRequest, makeUploadRequest, makePutBodyRequest } from '../'
 
 import { UserRole } from '../../../../shared/index'
+import { NSFWPolicyType } from '../../../../shared/models/videos/nsfw-policy.type'
 
 function createUser (
   url: string,
@@ -128,7 +129,7 @@ function updateMyUser (options: {
   url: string
   accessToken: string,
   newPassword?: string,
-  displayNSFW?: boolean,
+  nsfwPolicy?: NSFWPolicyType,
   email?: string,
   autoPlayVideo?: boolean
   description?: string
@@ -137,7 +138,7 @@ function updateMyUser (options: {
 
   const toSend = {}
   if (options.newPassword !== undefined && options.newPassword !== null) toSend['password'] = options.newPassword
-  if (options.displayNSFW !== undefined && options.displayNSFW !== null) toSend['displayNSFW'] = options.displayNSFW
+  if (options.nsfwPolicy !== undefined && options.nsfwPolicy !== null) toSend['nsfwPolicy'] = options.nsfwPolicy
   if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend['autoPlayVideo'] = options.autoPlayVideo
   if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
   if (options.description !== undefined && options.description !== null) toSend['description'] = options.description

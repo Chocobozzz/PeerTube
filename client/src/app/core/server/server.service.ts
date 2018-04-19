@@ -5,7 +5,6 @@ import 'rxjs/add/operator/do'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
-import { ServerStats } from '../../../../../shared/models/server/server-stats.model'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -26,6 +25,7 @@ export class ServerService {
       shortDescription: 'PeerTube, a federated (ActivityPub) video streaming platform  ' +
                         'using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.',
       defaultClientRoute: '',
+      defaultNSFWPolicy: 'do_not_list' as 'do_not_list',
       customizations: {
         javascript: '',
         css: ''

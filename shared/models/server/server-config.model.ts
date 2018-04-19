@@ -1,3 +1,5 @@
+import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+
 export interface ServerConfig {
   serverVersion: string
 
@@ -5,6 +7,7 @@ export interface ServerConfig {
     name: string
     shortDescription: string
     defaultClientRoute: string
+    defaultNSFWPolicy: NSFWPolicyType
     customizations: {
       javascript: string
       css: string

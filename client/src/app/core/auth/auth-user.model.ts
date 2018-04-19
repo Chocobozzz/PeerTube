@@ -3,6 +3,7 @@ import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 // Do not use the barrel (dependency loop)
 import { hasUserRight, UserRole } from '../../../../../shared/models/users/user-role'
 import { User, UserConstructorHash } from '../../shared/users/user.model'
+import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 
 export type TokenOptions = {
   accessToken: string
@@ -70,7 +71,7 @@ export class AuthUser extends User {
     ROLE: 'role',
     EMAIL: 'email',
     USERNAME: 'username',
-    DISPLAY_NSFW: 'display_nsfw',
+    NSFW_POLICY: 'nsfw_policy',
     AUTO_PLAY_VIDEO: 'auto_play_video'
   }
 
@@ -85,7 +86,7 @@ export class AuthUser extends User {
           username: peertubeLocalStorage.getItem(this.KEYS.USERNAME),
           email: peertubeLocalStorage.getItem(this.KEYS.EMAIL),
           role: parseInt(peertubeLocalStorage.getItem(this.KEYS.ROLE), 10) as UserRole,
-          displayNSFW: peertubeLocalStorage.getItem(this.KEYS.DISPLAY_NSFW) === 'true',
+          nsfwPolicy: peertubeLocalStorage.getItem(this.KEYS.NSFW_POLICY) as NSFWPolicyType,
           autoPlayVideo: peertubeLocalStorage.getItem(this.KEYS.AUTO_PLAY_VIDEO) === 'true'
         },
         Tokens.load()
@@ -99,7 +100,7 @@ export class AuthUser extends User {
     peertubeLocalStorage.removeItem(this.KEYS.USERNAME)
     peertubeLocalStorage.removeItem(this.KEYS.ID)
     peertubeLocalStorage.removeItem(this.KEYS.ROLE)
-    peertubeLocalStorage.removeItem(this.KEYS.DISPLAY_NSFW)
+    peertubeLocalStorage.removeItem(this.KEYS.NSFW_POLICY)
     peertubeLocalStorage.removeItem(this.KEYS.AUTO_PLAY_VIDEO)
     peertubeLocalStorage.removeItem(this.KEYS.EMAIL)
     Tokens.flush()
@@ -136,7 +137,7 @@ export class AuthUser extends User {
     peertubeLocalStorage.setItem(AuthUser.KEYS.USERNAME, this.username)
     peertubeLocalStorage.setItem(AuthUser.KEYS.EMAIL, this.email)
     peertubeLocalStorage.setItem(AuthUser.KEYS.ROLE, this.role.toString())
-    peertubeLocalStorage.setItem(AuthUser.KEYS.DISPLAY_NSFW, JSON.stringify(this.displayNSFW))
+    peertubeLocalStorage.setItem(AuthUser.KEYS.NSFW_POLICY, this.nsfwPolicy.toString())
     peertubeLocalStorage.setItem(AuthUser.KEYS.AUTO_PLAY_VIDEO, JSON.stringify(this.autoPlayVideo))
     this.tokens.save()
   }

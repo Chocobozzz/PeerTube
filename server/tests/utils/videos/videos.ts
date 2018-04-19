@@ -128,6 +128,18 @@ function getVideosList (url: string) {
           .expect('Content-Type', /json/)
 }
 
+function getVideosListWithToken (url: string, token: string) {
+  const path = '/api/v1/videos'
+
+  return request(url)
+    .get(path)
+    .set('Authorization', 'Bearer ' + token)
+    .query({ sort: 'name' })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+}
+
 function getLocalVideos (url: string) {
   const path = '/api/v1/videos'
 
@@ -200,6 +212,18 @@ function searchVideo (url: string, search: string) {
 
   return req.expect(200)
     .expect('Content-Type', /json/)
+}
+
+function searchVideoWithToken (url: string, search: string, token: string) {
+  const path = '/api/v1/videos'
+  const req = request(url)
+    .get(path + '/search')
+    .set('Authorization', 'Bearer ' + token)
+    .query({ search })
+    .set('Accept', 'application/json')
+
+  return req.expect(200)
+            .expect('Content-Type', /json/)
 }
 
 function searchVideoWithPagination (url: string, search: string, start: number, count: number, sort?: string) {
@@ -418,6 +442,8 @@ async function completeVideoCheck (
   expect(video.licence.label).to.equal(VIDEO_LICENCES[attributes.licence] || 'Unknown')
   expect(video.language.id).to.equal(attributes.language)
   expect(video.language.label).to.equal(VIDEO_LANGUAGES[attributes.language] || 'Unknown')
+  expect(video.privacy.id).to.deep.equal(attributes.privacy)
+  expect(video.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
   expect(video.account.host).to.equal(attributes.account.host)
@@ -435,8 +461,6 @@ async function completeVideoCheck (
 
   expect(videoDetails.files).to.have.lengthOf(attributes.files.length)
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
-  expect(videoDetails.privacy.id).to.deep.equal(attributes.privacy)
-  expect(videoDetails.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(videoDetails.account.name).to.equal(attributes.account.name)
   expect(videoDetails.account.host).to.equal(attributes.account.host)
   expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
@@ -490,6 +514,7 @@ export {
   getVideoPrivacies,
   getVideoLanguages,
   getMyVideos,
+  searchVideoWithToken,
   getVideo,
   getVideoWithToken,
   getVideosList,
@@ -499,6 +524,7 @@ export {
   searchVideo,
   searchVideoWithPagination,
   searchVideoWithSort,
+  getVideosListWithToken,
   uploadVideo,
   updateVideo,
   rateVideo,

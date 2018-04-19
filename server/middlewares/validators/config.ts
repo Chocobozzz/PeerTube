@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body } from 'express-validator/check'
-import { isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
+import { isUserNSFWPolicyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 
@@ -9,6 +9,7 @@ const customConfigUpdateValidator = [
   body('instance.description').exists().withMessage('Should have a valid instance description'),
   body('instance.terms').exists().withMessage('Should have a valid instance terms'),
   body('instance.defaultClientRoute').exists().withMessage('Should have a valid instance default client route'),
+  body('instance.defaultNSFWPolicy').custom(isUserNSFWPolicyValid).withMessage('Should have a valid NSFW policy'),
   body('instance.customizations.css').exists().withMessage('Should have a valid instance CSS customization'),
   body('instance.customizations.javascript').exists().withMessage('Should have a valid instance JavaScript customization'),
   body('cache.previews.size').isInt().withMessage('Should have a valid previews size'),

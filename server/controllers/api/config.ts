@@ -46,6 +46,7 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
       name: CONFIG.INSTANCE.NAME,
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
+      defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
@@ -128,6 +129,7 @@ async function updateCustomConfig (req: express.Request, res: express.Response, 
   toUpdateJSON.user['video_quota'] = toUpdate.user.videoQuota
   toUpdateJSON.instance['default_client_route'] = toUpdate.instance.defaultClientRoute
   toUpdateJSON.instance['short_description'] = toUpdate.instance.shortDescription
+  toUpdateJSON.instance['default_nsfw_policy'] = toUpdate.instance.defaultNSFWPolicy
 
   await writeFilePromise(CONFIG.CUSTOM_FILE, JSON.stringify(toUpdateJSON, undefined, 2))
 
@@ -153,6 +155,7 @@ function customConfig (): CustomConfig {
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
+      defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
       customizations: {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT

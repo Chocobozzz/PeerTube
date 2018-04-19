@@ -59,6 +59,7 @@ describe('Test config', function () {
     expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
     expect(data.instance.terms).to.equal('No terms for now.')
     expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
+    expect(data.instance.defaultNSFWPolicy).to.equal('display')
     expect(data.instance.customizations.css).to.be.empty
     expect(data.instance.customizations.javascript).to.be.empty
     expect(data.cache.previews.size).to.equal(1)
@@ -83,6 +84,7 @@ describe('Test config', function () {
         description: 'my super description',
         terms: 'my super terms',
         defaultClientRoute: '/videos/recently-added',
+        defaultNSFWPolicy: 'blur' as 'blur',
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
@@ -125,6 +127,7 @@ describe('Test config', function () {
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
     expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
+    expect(data.instance.defaultNSFWPolicy).to.equal('blur')
     expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
     expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
     expect(data.cache.previews.size).to.equal(2)
@@ -156,6 +159,7 @@ describe('Test config', function () {
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
     expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
+    expect(data.instance.defaultNSFWPolicy).to.equal('blur')
     expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
     expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
     expect(data.cache.previews.size).to.equal(2)
@@ -198,6 +202,7 @@ describe('Test config', function () {
     expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
     expect(data.instance.terms).to.equal('No terms for now.')
     expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
+    expect(data.instance.defaultNSFWPolicy).to.equal('display')
     expect(data.instance.customizations.css).to.be.empty
     expect(data.instance.customizations.javascript).to.be.empty
     expect(data.cache.previews.size).to.equal(1)

@@ -146,3 +146,9 @@ Build the application and run the unit/integration tests:
 $ npm run build
 $ npm test
 ```
+
+If you just want to run 1 test:
+
+```
+$ npm run mocha -- --exit --require ts-node/register/type-check --bail server/tests/api/index.ts
+```

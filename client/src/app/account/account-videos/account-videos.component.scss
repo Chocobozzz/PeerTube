@@ -79,8 +79,12 @@
       font-weight: $font-semibold;
     }
 
-    .video-info-date-views {
+    .video-info-date-views, .video-info-private {
       font-size: 13px;
+
+      &.video-info-private {
+        font-weight: $font-semibold;
+      }
     }
   }
 

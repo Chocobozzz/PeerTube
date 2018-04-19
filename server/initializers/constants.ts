@@ -6,13 +6,14 @@ import { FollowState } from '../../shared/models/actors'
 import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 200
+const LAST_MIGRATION_VERSION = 205
 
 // ---------------------------------------------------------------------------
 
@@ -167,6 +168,7 @@ const CONFIG = {
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
+    get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
     CUSTOMIZATIONS: {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }
@@ -378,6 +380,12 @@ const BCRYPT_SALT_SIZE = 10
 
 const USER_PASSWORD_RESET_LIFETIME = 60000 * 5 // 5 minutes
 
+const NSFW_POLICY_TYPES: { [ id: string]: NSFWPolicyType } = {
+  DO_NOT_LIST: 'do_not_list',
+  BLUR: 'blur',
+  DISPLAY: 'display'
+}
+
 // ---------------------------------------------------------------------------
 
 // Express static paths (router)
@@ -474,6 +482,7 @@ export {
   PRIVATE_RSA_KEY_SIZE,
   SORTABLE_COLUMNS,
   FEEDS,
+  NSFW_POLICY_TYPES,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   ACTIVITY_PUB,
