@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { User } from '../users'
 import { Video } from './video.model'
+import { ServerService } from '@app/core'
 
 @Component({
   selector: 'my-video-miniature',
@@ -11,7 +12,9 @@ export class VideoMiniatureComponent {
   @Input() user: User
   @Input() video: Video
 
-  isVideoNSFWForThisUser () {
-    return this.video.isVideoNSFWForUser(this.user)
+  constructor (private serverService: ServerService) { }
+
+  isVideoBlur () {
+    return this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
   }
 }

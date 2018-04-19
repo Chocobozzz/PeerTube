@@ -48,6 +48,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     instanceDescription: '',
     instanceTerms: '',
     instanceDefaultClientRoute: '',
+    instanceDefaultNSFWPolicy: '',
     cachePreviewsSize: '',
     signupLimit: '',
     adminEmail: '',
@@ -90,6 +91,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceDescription: [ '' ],
       instanceTerms: [ '' ],
       instanceDefaultClientRoute: [ '' ],
+      instanceDefaultNSFWPolicy: [ '' ],
       cachePreviewsSize: [ '', CACHE_PREVIEWS_SIZE.VALIDATORS ],
       signupEnabled: [ ],
       signupLimit: [ '', SIGNUP_LIMIT.VALIDATORS ],
@@ -167,6 +169,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         description: this.form.value['instanceDescription'],
         terms: this.form.value['instanceTerms'],
         defaultClientRoute: this.form.value['instanceDefaultClientRoute'],
+        defaultNSFWPolicy: this.form.value['instanceDefaultNSFWPolicy'],
         customizations: {
           javascript: this.form.value['customizationJavascript'],
           css: this.form.value['customizationCSS']
@@ -224,6 +227,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceDescription: this.customConfig.instance.description,
       instanceTerms: this.customConfig.instance.terms,
       instanceDefaultClientRoute: this.customConfig.instance.defaultClientRoute,
+      instanceDefaultNSFWPolicy: this.customConfig.instance.defaultNSFWPolicy,
       cachePreviewsSize: this.customConfig.cache.previews.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,

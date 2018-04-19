@@ -6,6 +6,7 @@ import * as Feed from 'pfeed'
 import { ResultList } from '../../shared/models'
 import { AccountModel } from '../models/account/account'
 import { cacheRoute } from '../middlewares/cache'
+import { VideoSortField } from '../../client/src/app/shared/video/sort-field.type'
 
 const feedsRouter = express.Router()
 
@@ -31,20 +32,22 @@ async function generateFeed (req: express.Request, res: express.Response, next: 
 
   let resultList: ResultList<VideoModel>
   const account: AccountModel = res.locals.account
+  const hideNSFW = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
 
   if (account) {
     resultList = await VideoModel.listAccountVideosForApi(
       account.id,
       start,
       FEEDS.COUNT,
-      req.query.sort,
-      true
+      req.query.sort as VideoSortField,
+      hideNSFW
     )
   } else {
     resultList = await VideoModel.listForApi(
       start,
       FEEDS.COUNT,
-      req.query.sort,
+      req.query.sort as VideoSortField,
+      hideNSFW,
       req.query.filter,
       true
     )

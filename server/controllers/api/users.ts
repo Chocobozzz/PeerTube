@@ -42,6 +42,7 @@ import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { UserModel } from '../../models/account/user'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { VideoModel } from '../../models/video/video'
+import { VideoSortField } from '../../../client/src/app/shared/video/sort-field.type'
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 const loginRateLimiter = new RateLimit({
@@ -161,7 +162,13 @@ export {
 
 async function getUserVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const user = res.locals.oauth.token.User as UserModel
-  const resultList = await VideoModel.listAccountVideosForApi(user.Account.id ,req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoModel.listAccountVideosForApi(
+    user.Account.id,
+    req.query.start as number,
+    req.query.count as number,
+    req.query.sort as VideoSortField,
+    false // Display my NSFW videos
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -188,7 +195,7 @@ async function createUser (req: express.Request) {
     username: body.username,
     password: body.password,
     email: body.email,
-    displayNSFW: false,
+    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
     autoPlayVideo: true,
     role: body.role,
     videoQuota: body.videoQuota
@@ -219,7 +226,7 @@ async function registerUser (req: express.Request) {
     username: body.username,
     password: body.password,
     email: body.email,
-    displayNSFW: false,
+    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
     autoPlayVideo: true,
     role: UserRole.USER,
     videoQuota: CONFIG.USER.VIDEO_QUOTA
@@ -286,7 +293,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
 
   if (body.password !== undefined) user.password = body.password
   if (body.email !== undefined) user.email = body.email
-  if (body.displayNSFW !== undefined) user.displayNSFW = body.displayNSFW
+  if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
 
   await sequelizeTypescript.transaction(async t => {

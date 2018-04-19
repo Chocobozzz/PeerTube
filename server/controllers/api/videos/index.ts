@@ -19,13 +19,18 @@ import {
   VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
 } from '../../../initializers'
-import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
+import {
+  fetchRemoteVideoDescription,
+  getVideoActivityPubUrl,
+  shareVideoByServerAndChannel
+} from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateView, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
   asyncMiddleware,
   authenticate,
+  optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
@@ -44,6 +49,9 @@ import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
 import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
+import { User } from '../../../../shared/models/users'
+import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
+import { VideoSortField } from '../../../../client/src/app/shared/video/sort-field.type'
 
 const videosRouter = express.Router()
 
@@ -81,6 +89,7 @@ videosRouter.get('/',
   videosSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  optionalAuthenticate,
   asyncMiddleware(listVideos)
 )
 videosRouter.get('/search',
@@ -89,6 +98,7 @@ videosRouter.get('/search',
   videosSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  optionalAuthenticate,
   asyncMiddleware(searchVideos)
 )
 videosRouter.put('/:id',
@@ -391,7 +401,13 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.filter)
+  const resultList = await VideoModel.listForApi(
+    req.query.start as number,
+    req.query.count as number,
+    req.query.sort as VideoSortField,
+    isNSFWHidden(res),
+    req.query.filter as VideoFilter
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -419,11 +435,21 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
 async function searchVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const resultList = await VideoModel.searchAndPopulateAccountAndServer(
-    req.query.search,
-    req.query.start,
-    req.query.count,
-    req.query.sort
+    req.query.search as string,
+    req.query.start as number,
+    req.query.count as number,
+    req.query.sort as VideoSortField,
+    isNSFWHidden(res)
   )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
+}
+
+function isNSFWHidden (res: express.Response) {
+  if (res.locals.oauth) {
+    const user: User = res.locals.oauth.token.User
+    if (user) return user.nsfwPolicy === 'do_not_list'
+  }
+
+  return CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
 }

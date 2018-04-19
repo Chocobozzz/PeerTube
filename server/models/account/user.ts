@@ -21,7 +21,7 @@ import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isUserAutoPlayVideoValid,
-  isUserDisplayNSFWValid,
+  isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
@@ -32,6 +32,9 @@ import { OAuthTokenModel } from '../oauth/oauth-token'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
+import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
+import { values } from 'lodash'
+import { NSFW_POLICY_TYPES } from '../../initializers'
 
 @DefaultScope({
   include: [
@@ -83,10 +86,9 @@ export class UserModel extends Model<UserModel> {
   email: string
 
   @AllowNull(false)
-  @Default(false)
-  @Is('UserDisplayNSFW', value => throwIfNotValid(value, isUserDisplayNSFWValid, 'display NSFW boolean'))
-  @Column
-  displayNSFW: boolean
+  @Is('UserNSFWPolicy', value => throwIfNotValid(value, isUserNSFWPolicyValid, 'NSFW policy'))
+  @Column(DataType.ENUM(values(NSFW_POLICY_TYPES)))
+  nsfwPolicy: NSFWPolicyType
 
   @AllowNull(false)
   @Default(true)
@@ -265,7 +267,7 @@ export class UserModel extends Model<UserModel> {
       id: this.id,
       username: this.username,
       email: this.email,
-      displayNSFW: this.displayNSFW,
+      nsfwPolicy: this.nsfwPolicy,
       autoPlayVideo: this.autoPlayVideo,
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],

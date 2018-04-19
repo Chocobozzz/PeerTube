@@ -32,3 +32,6 @@ transcoding:
     480p: true
     720p: true
     1080p: true
+
+instance:
+  default_nsfw_policy: 'display'

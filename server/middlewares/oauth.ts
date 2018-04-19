@@ -2,6 +2,7 @@ import * as express from 'express'
 import * as OAuthServer from 'express-oauth-server'
 import 'express-validator'
 import { OAUTH_LIFETIME } from '../initializers'
+import { logger } from '../helpers/logger'
 
 const oAuthServer = new OAuthServer({
   useErrorHandler: true,
@@ -13,6 +14,8 @@ const oAuthServer = new OAuthServer({
 function authenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
   oAuthServer.authenticate()(req, res, err => {
     if (err) {
+      logger.warn('Cannot authenticate.', { err })
+
       return res.status(err.status)
         .json({
           error: 'Token is invalid.',
@@ -23,6 +26,12 @@ function authenticate (req: express.Request, res: express.Response, next: expres
 
     return next()
   })
+}
+
+function optionalAuthenticate (req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (req.header('authorization')) return authenticate(req, res, next)
+
+  return next()
 }
 
 function token (req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -44,5 +53,6 @@ function token (req: express.Request, res: express.Response, next: express.NextF
 
 export {
   authenticate,
+  optionalAuthenticate,
   token
 }

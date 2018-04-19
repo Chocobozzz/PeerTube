@@ -1,5 +1,6 @@
 import { hasUserRight, User as UserServerModel, UserRight, UserRole, VideoChannel } from '../../../../../shared'
 import { Account } from '../account/account.model'
+import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 
 export type UserConstructorHash = {
   id: number,
@@ -7,7 +8,7 @@ export type UserConstructorHash = {
   email: string,
   role: UserRole,
   videoQuota?: number,
-  displayNSFW?: boolean,
+  nsfwPolicy?: NSFWPolicyType,
   autoPlayVideo?: boolean,
   createdAt?: Date,
   account?: Account,
@@ -18,7 +19,7 @@ export class User implements UserServerModel {
   username: string
   email: string
   role: UserRole
-  displayNSFW: boolean
+  nsfwPolicy: NSFWPolicyType
   autoPlayVideo: boolean
   videoQuota: number
   account: Account
@@ -40,8 +41,8 @@ export class User implements UserServerModel {
       this.videoQuota = hash.videoQuota
     }
 
-    if (hash.displayNSFW !== undefined) {
-      this.displayNSFW = hash.displayNSFW
+    if (hash.nsfwPolicy !== undefined) {
+      this.nsfwPolicy = hash.nsfwPolicy
     }
 
     if (hash.autoPlayVideo !== undefined) {

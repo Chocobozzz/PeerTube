@@ -22,6 +22,7 @@ import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
 import { getVideojsOptions } from '../../../assets/player/peertube-player'
+import { ServerService } from '@app/core'
 
 @Component({
   selector: 'my-video-watch',
@@ -66,6 +67,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private metaService: MetaService,
     private authService: AuthService,
+    private serverService: ServerService,
     private notificationsService: NotificationsService,
     private markdownService: MarkdownService,
     private zone: NgZone,
@@ -335,7 +337,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.updateOtherVideosDisplayed()
 
-    if (this.video.isVideoNSFWForUser(this.user)) {
+    if (this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())) {
       const res = await this.confirmService.confirm(
         'This video contains mature or explicit content. Are you sure you want to watch it?',
         'Mature or explicit content'

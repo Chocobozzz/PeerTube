@@ -95,7 +95,7 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, filter?: VideoFilter, withFiles?: boolean) => {
+  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, hideNSFW: boolean, filter?: VideoFilter, withFiles?: boolean) => {
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
@@ -159,6 +159,11 @@ enum ScopeNames {
         model: VideoFileModel.unscoped(),
         required: true
       })
+    }
+
+    // Hide nsfw videos?
+    if (hideNSFW === true) {
+      query.where['nsfw'] = false
     }
 
     return query
@@ -640,7 +645,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listAccountVideosForApi (accountId: number, start: number, count: number, sort: string, withFiles = false) {
+  static listAccountVideosForApi (accountId: number, start: number, count: number, sort: string, hideNSFW: boolean, withFiles = false) {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
@@ -669,6 +674,12 @@ export class VideoModel extends Model<VideoModel> {
       })
     }
 
+    if (hideNSFW === true) {
+      query.where = {
+        nsfw: false
+      }
+    }
+
     return VideoModel.findAndCountAll(query).then(({ rows, count }) => {
       return {
         data: rows,
@@ -677,7 +688,7 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static async listForApi (start: number, count: number, sort: string, filter?: VideoFilter, withFiles = false) {
+  static async listForApi (start: number, count: number, sort: string, hideNSFW: boolean, filter?: VideoFilter, withFiles = false) {
     const query = {
       offset: start,
       limit: count,
@@ -685,8 +696,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const serverActor = await getServerActor()
-
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, filter, withFiles ] })
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, hideNSFW, filter, withFiles ] })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {
@@ -696,7 +706,7 @@ export class VideoModel extends Model<VideoModel> {
       })
   }
 
-  static async searchAndPopulateAccountAndServer (value: string, start: number, count: number, sort: string) {
+  static async searchAndPopulateAccountAndServer (value: string, start: number, count: number, sort: string, hideNSFW: boolean) {
     const query: IFindOptions<VideoModel> = {
       offset: start,
       limit: count,
@@ -724,7 +734,7 @@ export class VideoModel extends Model<VideoModel> {
 
     const serverActor = await getServerActor()
 
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id ] })
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, hideNSFW ] })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {

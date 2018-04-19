@@ -128,6 +128,18 @@ function getVideosList (url: string) {
           .expect('Content-Type', /json/)
 }
 
+function getVideosListWithToken (url: string, token: string) {
+  const path = '/api/v1/videos'
+
+  return request(url)
+    .get(path)
+    .set('Authorization', 'Bearer ' + token)
+    .query({ sort: 'name' })
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+}
+
 function getLocalVideos (url: string) {
   const path = '/api/v1/videos'
 
@@ -200,6 +212,18 @@ function searchVideo (url: string, search: string) {
 
   return req.expect(200)
     .expect('Content-Type', /json/)
+}
+
+function searchVideoWithToken (url: string, search: string, token: string) {
+  const path = '/api/v1/videos'
+  const req = request(url)
+    .get(path + '/search')
+    .set('Authorization', 'Bearer ' + token)
+    .query({ search })
+    .set('Accept', 'application/json')
+
+  return req.expect(200)
+            .expect('Content-Type', /json/)
 }
 
 function searchVideoWithPagination (url: string, search: string, start: number, count: number, sort?: string) {
@@ -490,6 +514,7 @@ export {
   getVideoPrivacies,
   getVideoLanguages,
   getMyVideos,
+  searchVideoWithToken,
   getVideo,
   getVideoWithToken,
   getVideosList,
@@ -499,6 +524,7 @@ export {
   searchVideo,
   searchVideoWithPagination,
   searchVideoWithSort,
+  getVideosListWithToken,
   uploadVideo,
   updateVideo,
   rateVideo,
