@@ -22,6 +22,7 @@ type PeertubePluginOptions = {
   videoViewUrl: string
   videoDuration: number
   startTime: number
+  autoplay: boolean
 }
 
 // videojs typings don't have some method we need

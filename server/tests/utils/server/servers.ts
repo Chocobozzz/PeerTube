@@ -88,7 +88,7 @@ function runServer (serverNumber: number, configOverride?: Object) {
 
   // These actions are async so we need to be sure that they have both been done
   const serverRunString = {
-    'Server listening on port': false
+    'Server listening': false
   }
   const key = 'Database peertube_test' + serverNumber + ' is ready'
   serverRunString[key] = false

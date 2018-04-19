@@ -1,20 +1,22 @@
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
-import { sanitizeHost } from '../../../helpers/core-utils'
-import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
-import { loadActorUrlOrGetFromWebfinger } from '../../../helpers/webfinger'
-import { REMOTE_SCHEME, sequelizeTypescript, SERVER_ACTOR_NAME } from '../../../initializers'
-import { getOrCreateActorAndServerAndModel } from '../../../lib/activitypub/actor'
-import { sendFollow, sendUndoFollow } from '../../../lib/activitypub/send'
+import { sequelizeTypescript } from '../../../initializers'
+import { sendUndoFollow } from '../../../lib/activitypub/send'
 import {
-  asyncMiddleware, authenticate, ensureUserHasRight, paginationValidator, removeFollowingValidator, setBodyHostsPort, setDefaultSort,
-  setDefaultPagination
+  asyncMiddleware,
+  authenticate,
+  ensureUserHasRight,
+  paginationValidator,
+  removeFollowingValidator,
+  setBodyHostsPort,
+  setDefaultPagination,
+  setDefaultSort
 } from '../../../middlewares'
 import { followersSortValidator, followingSortValidator, followValidator } from '../../../middlewares/validators'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { JobQueue } from '../../../lib/job-queue'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
@@ -30,7 +32,7 @@ serverFollowsRouter.post('/following',
   ensureUserHasRight(UserRight.MANAGE_SERVER_FOLLOW),
   followValidator,
   setBodyHostsPort,
-  asyncMiddleware(followRetry)
+  asyncMiddleware(followInstance)
 )
 
 serverFollowsRouter.delete('/following/:host',
@@ -70,65 +72,15 @@ async function listFollowers (req: express.Request, res: express.Response, next:
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function followRetry (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function followInstance (req: express.Request, res: express.Response, next: express.NextFunction) {
   const hosts = req.body.hosts as string[]
-  const fromActor = await getServerActor()
-
-  const tasks: Promise<any>[] = []
-  const actorName = SERVER_ACTOR_NAME
 
   for (const host of hosts) {
-    const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
-
-    // We process each host in a specific transaction
-    // First, we add the follow request in the database
-    // Then we send the follow request to other actor
-    const p = loadActorUrlOrGetFromWebfinger(actorName, sanitizedHost)
-      .then(actorUrl => getOrCreateActorAndServerAndModel(actorUrl))
-      .then(targetActor => {
-        const options = {
-          arguments: [ fromActor, targetActor ],
-          errorMessage: 'Cannot follow with many retries.'
-        }
-
-        return retryTransactionWrapper(follow, options)
-      })
-      .catch(err => logger.warn('Cannot follow server %s.', sanitizedHost, { err }))
-
-    tasks.push(p)
+    JobQueue.Instance.createJob({ type: 'activitypub-follow', payload: { host } })
+      .catch(err => logger.error('Cannot create follow job for %s.', host, err))
   }
-
-  // Don't make the client wait the tasks
-  Promise.all(tasks)
-    .catch(err => logger.error('Error in follow.', { err }))
 
   return res.status(204).end()
-}
-
-function follow (fromActor: ActorModel, targetActor: ActorModel) {
-  if (fromActor.id === targetActor.id) {
-    throw new Error('Follower is the same than target actor.')
-  }
-
-  return sequelizeTypescript.transaction(async t => {
-    const [ actorFollow ] = await ActorFollowModel.findOrCreate({
-      where: {
-        actorId: fromActor.id,
-        targetActorId: targetActor.id
-      },
-      defaults: {
-        state: 'pending',
-        actorId: fromActor.id,
-        targetActorId: targetActor.id
-      },
-      transaction: t
-    })
-    actorFollow.ActorFollowing = targetActor
-    actorFollow.ActorFollower = fromActor
-
-    // Send a notification to remote server
-    await sendFollow(actorFollow)
-  })
 }
 
 async function removeFollow (req: express.Request, res: express.Response, next: express.NextFunction) {

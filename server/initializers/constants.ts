@@ -65,6 +65,7 @@ const JOB_ATTEMPTS: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 5,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
+  'activitypub-follow': 5,
   'video-file': 1,
   'email': 5
 }
@@ -72,9 +73,11 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
+  'activitypub-follow': 3,
   'video-file': 1,
   'email': 5
 }
+const BROADCAST_CONCURRENCY = 5 // How many requests in parallel we do in activitypub-http-broadcast job
 // 2 days
 const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2
 
@@ -461,6 +464,7 @@ export {
   LAST_MIGRATION_VERSION,
   OAUTH_LIFETIME,
   OPENGRAPH_AND_OEMBED_COMMENT,
+  BROADCAST_CONCURRENCY,
   PAGINATION_COUNT_DEFAULT,
   ACTOR_FOLLOW_SCORE,
   PREVIEWS_SIZE,
