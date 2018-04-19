@@ -944,8 +944,10 @@ export class VideoModel extends Model<VideoModel> {
     return join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
   }
 
-  createTorrentAndSetInfoHash = async function (videoFile: VideoFileModel) {
+  async createTorrentAndSetInfoHash (videoFile: VideoFileModel) {
     const options = {
+      name: this.name + videoFile.extname,
+      createdBy: 'PeerTube',
       announceList: [
         [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ],
         [ CONFIG.WEBSERVER.URL + '/tracker/announce' ]
@@ -1240,7 +1242,7 @@ export class VideoModel extends Model<VideoModel> {
     return peertubeTruncate(this.description, maxLength)
   }
 
-  optimizeOriginalVideofile = async function () {
+  async optimizeOriginalVideofile () {
     const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
     const newExtname = '.mp4'
     const inputVideoFile = this.getOriginalFile()
@@ -1277,7 +1279,7 @@ export class VideoModel extends Model<VideoModel> {
     }
   }
 
-  transcodeOriginalVideofile = async function (resolution: VideoResolution, isPortraitMode: boolean) {
+  async transcodeOriginalVideofile (resolution: VideoResolution, isPortraitMode: boolean) {
     const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
     const extname = '.mp4'
 
