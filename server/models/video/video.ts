@@ -884,6 +884,13 @@ export class VideoModel extends Model<VideoModel> {
     return languageLabel
   }
 
+  private static getPrivacyLabel (id: number) {
+    let privacyLabel = VIDEO_PRIVACIES[id]
+    if (!privacyLabel) privacyLabel = 'Unknown'
+
+    return privacyLabel
+  }
+
   getOriginalFile () {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
@@ -990,6 +997,10 @@ export class VideoModel extends Model<VideoModel> {
         id: this.language,
         label: VideoModel.getLanguageLabel(this.language)
       },
+      privacy: {
+        id: this.privacy,
+        label: VideoModel.getPrivacyLabel(this.privacy)
+      },
       nsfw: this.nsfw,
       description: this.getTruncatedDescription(),
       isLocal: this.isOwned(),
@@ -1016,15 +1027,7 @@ export class VideoModel extends Model<VideoModel> {
   toFormattedDetailsJSON (): VideoDetails {
     const formattedJson = this.toFormattedJSON()
 
-    // Maybe our server is not up to date and there are new privacy settings since our version
-    let privacyLabel = VIDEO_PRIVACIES[this.privacy]
-    if (!privacyLabel) privacyLabel = 'Unknown'
-
     const detailsJson = {
-      privacy: {
-        id: this.privacy,
-        label: privacyLabel
-      },
       support: this.support,
       descriptionPath: this.getDescriptionPath(),
       channel: this.VideoChannel.toFormattedJSON(),

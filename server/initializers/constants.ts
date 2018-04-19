@@ -168,7 +168,7 @@ const CONFIG = {
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
-    get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
+    get NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
     CUSTOMIZATIONS: {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }

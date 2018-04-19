@@ -442,6 +442,8 @@ async function completeVideoCheck (
   expect(video.licence.label).to.equal(VIDEO_LICENCES[attributes.licence] || 'Unknown')
   expect(video.language.id).to.equal(attributes.language)
   expect(video.language.label).to.equal(VIDEO_LANGUAGES[attributes.language] || 'Unknown')
+  expect(video.privacy.id).to.deep.equal(attributes.privacy)
+  expect(video.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
   expect(video.account.host).to.equal(attributes.account.host)
@@ -459,8 +461,6 @@ async function completeVideoCheck (
 
   expect(videoDetails.files).to.have.lengthOf(attributes.files.length)
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
-  expect(videoDetails.privacy.id).to.deep.equal(attributes.privacy)
-  expect(videoDetails.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(videoDetails.account.name).to.equal(attributes.account.name)
   expect(videoDetails.account.host).to.equal(attributes.account.host)
   expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)

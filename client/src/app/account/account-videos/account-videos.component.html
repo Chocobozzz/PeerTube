@@ -18,6 +18,7 @@
       <div class="video-info">
         <a class="video-info-name" [routerLink]="['/videos/watch', video.uuid]" [attr.title]="video.name">{{ video.name }}</a>
         <span class="video-info-date-views">{{ video.createdAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
+        <div class="video-info-private">{{ video.privacy.label }}</div>
       </div>
 
       <!-- Display only once -->

@@ -1,6 +1,6 @@
 import { Account } from '@app/shared/account/account.model'
 import { User } from '../'
-import { Video as VideoServerModel } from '../../../../../shared'
+import { Video as VideoServerModel, VideoPrivacy } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
@@ -14,6 +14,7 @@ export class Video implements VideoServerModel {
   category: VideoConstant<number>
   licence: VideoConstant<number>
   language: VideoConstant<number>
+  privacy: VideoConstant<VideoPrivacy>
   description: string
   duration: number
   durationLabel: string
@@ -62,6 +63,7 @@ export class Video implements VideoServerModel {
     this.category = hash.category
     this.licence = hash.licence
     this.language = hash.language
+    this.privacy = hash.privacy
     this.description = hash.description
     this.duration = hash.duration
     this.durationLabel = Video.createDurationString(hash.duration)
