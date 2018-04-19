@@ -946,7 +946,8 @@ export class VideoModel extends Model<VideoModel> {
 
   async createTorrentAndSetInfoHash (videoFile: VideoFileModel) {
     const options = {
-      name: this.name + videoFile.extname,
+      // Keep the extname, it's used by the client to stream the file inside a web browser
+      name: `${this.name} ${videoFile.resolution}p${videoFile.extname}`,
       createdBy: 'PeerTube',
       announceList: [
         [ CONFIG.WEBSERVER.WS + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT + '/tracker/socket' ],
