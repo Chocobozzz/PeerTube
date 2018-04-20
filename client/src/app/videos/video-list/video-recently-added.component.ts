@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
@@ -19,6 +20,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,
+               protected location: Location,
                protected notificationsService: NotificationsService,
                protected authService: AuthService,
                private videoService: VideoService) {

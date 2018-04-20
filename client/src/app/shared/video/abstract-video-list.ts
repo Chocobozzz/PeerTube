@@ -1,5 +1,6 @@
 import { ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 import { isInMobileView } from '@app/shared/misc/utils'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { NotificationsService } from 'angular2-notifications'
@@ -40,6 +41,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   protected abstract authService: AuthService
   protected abstract router: Router
   protected abstract route: ActivatedRoute
+  protected abstract location: Location
   protected abstract currentRoute: string
   abstract titlePage: string
 
@@ -164,8 +166,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   }
 
   protected setNewRouteParams () {
-    const routeParams = this.buildRouteParams()
-    this.router.navigate([ this.currentRoute ], { queryParams: routeParams })
+    const paramsObject = this.buildRouteParams()
+
+    const queryParams = Object.keys(paramsObject).map(p => p + '=' + paramsObject[p]).join('&')
+    this.location.replaceState(this.currentRoute, queryParams)
   }
 
   protected buildVideoPages () {

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { immutableAssign } from '@app/shared/misc/utils'
+import { Location } from '@angular/common'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -23,6 +24,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
                protected route: ActivatedRoute,
                protected notificationsService: NotificationsService,
                protected authService: AuthService,
+               protected location: Location,
                private videoService: VideoService) {
     super()
   }

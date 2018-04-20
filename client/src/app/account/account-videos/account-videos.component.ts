@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { NotificationsService } from 'angular2-notifications'
@@ -35,6 +36,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
                protected authService: AuthService,
                protected notificationsService: NotificationsService,
                protected confirmService: ConfirmService,
+               protected location: Location,
                private videoService: VideoService) {
     super()
   }

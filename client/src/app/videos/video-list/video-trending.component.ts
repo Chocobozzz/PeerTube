@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../../core/auth'
@@ -21,6 +22,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
                protected route: ActivatedRoute,
                protected notificationsService: NotificationsService,
                protected authService: AuthService,
+               protected location: Location,
                private videoService: VideoService) {
     super()
   }

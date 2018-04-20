@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { Location } from '@angular/common'
 import { RedirectService } from '@app/core'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { NotificationsService } from 'angular2-notifications'
@@ -27,6 +28,7 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
                protected route: ActivatedRoute,
                protected notificationsService: NotificationsService,
                protected authService: AuthService,
+               protected location: Location,
                private videoService: VideoService,
                private redirectService: RedirectService
   ) {
