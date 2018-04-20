@@ -46,14 +46,7 @@
     }
 
     .comment-html {
-      word-break: normal;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      -webkit-hyphens: auto;
-      -ms-hyphens: auto;
-      -moz-hyphens: auto;
-      hyphens: auto;
-      text-align: justify;
+      @include peertube-word-wrap;
 
       /deep/ a {
         @include disable-default-a-behaviour;
