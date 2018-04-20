@@ -136,8 +136,8 @@ Create a PostgreSQL user **with the same name as your username** in order to avo
 Then, we can create the databases (if they don't already exist):
 
 ```
-$ sudo -u postgres createuser you_username --createdb
-$ createdb -O peertube peertube_test{1,2,3}
+$ sudo -u postgres createuser you_username --createdb --superuser
+$ createdb -O peertube peertube_test{1,2,3,4,5,6}
 ```
 
 Build the application and run the unit/integration tests:
