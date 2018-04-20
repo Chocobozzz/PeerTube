@@ -284,9 +284,11 @@ class PeerTubePlugin extends Plugin {
   private getAppropriateFile (averageDownloadSpeed?: number): VideoFile {
     if (this.videoFiles === undefined || this.videoFiles.length === 0) return undefined
     if (this.videoFiles.length === 1) return this.videoFiles[0]
-    if (this.torrent && this.torrent.progress === 1) return this.currentVideoFile
 
-    if (!averageDownloadSpeed) averageDownloadSpeed = this.getActualDownloadSpeed()
+    // Don't change the torrent is the play was ended
+    if (this.torrent && this.torrent.progress === 1 && this.player.ended()) return this.currentVideoFile
+
+    if (!averageDownloadSpeed) averageDownloadSpeed = this.getAndSaveActualDownloadSpeed()
 
     // Filter videos we can play according to our bandwidth
     const filteredFiles = this.videoFiles.filter(f => {
@@ -307,7 +309,7 @@ class PeerTubePlugin extends Plugin {
     return maxBy(filteredFiles, 'resolution.id')
   }
 
-  private getActualDownloadSpeed () {
+  private getAndSaveActualDownloadSpeed () {
     const start = Math.max(this.downloadSpeeds.length - this.CONSTANTS.BANDWIDTH_AVERAGE_NUMBER_OF_VALUES, 0)
     const lastDownloadSpeeds = this.downloadSpeeds.slice(start, this.downloadSpeeds.length)
     if (lastDownloadSpeeds.length === 0) return -1
