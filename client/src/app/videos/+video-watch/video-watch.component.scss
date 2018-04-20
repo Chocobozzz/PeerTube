@@ -216,7 +216,12 @@
 
       .video-info-description-html {
         word-break: normal;
-        word-wrap: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        -webkit-hyphens: auto;
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        hyphens: auto;
         text-align: justify;
       }
 
@@ -252,6 +257,8 @@
   }
 
   .other-videos {
+    padding-left: 1em;
+
     .title-page {
       margin-top: 0;
     }
