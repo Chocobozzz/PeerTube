@@ -441,6 +441,25 @@ $setting-transition-easing: ease-out;
     }
   }
 
+  @media screen and (max-width: 750px) {
+    .vjs-dock-text {
+      font-size: 16px;
+    }
+
+    .vjs-dock-description {
+      font-size: 10px;
+    }
+
+    .vjs-big-play-button {
+      font-size: 5em;
+      border-width: 5px;
+
+      .vjs-icon-placeholder::before {
+        @include big-play-button-triangle-size(32px);
+      }
+    }
+  }
+
   @media screen and (max-width: 570px) {
     .vjs-dock-text {
       font-size: 14px;
