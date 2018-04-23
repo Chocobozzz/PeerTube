@@ -7,11 +7,10 @@ import { FormReactive, User, UserService } from '../../../shared'
 
 @Component({
   selector: 'my-account-details',
-  templateUrl: './account-details.component.html',
-  styleUrls: [ './account-details.component.scss' ]
+  templateUrl: './my-account-details.component.html',
+  styleUrls: [ './my-account-details.component.scss' ]
 })
-
-export class AccountDetailsComponent extends FormReactive implements OnInit {
+export class MyAccountDetailsComponent extends FormReactive implements OnInit {
   @Input() user: User = null
 
   form: FormGroup

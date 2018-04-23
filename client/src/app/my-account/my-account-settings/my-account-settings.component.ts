@@ -8,10 +8,10 @@ import { UserService } from '../../shared/users'
 
 @Component({
   selector: 'my-account-settings',
-  templateUrl: './account-settings.component.html',
-  styleUrls: [ './account-settings.component.scss' ]
+  templateUrl: './my-account-settings.component.html',
+  styleUrls: [ './my-account-settings.component.scss' ]
 })
-export class AccountSettingsComponent implements OnInit {
+export class MyAccountSettingsComponent implements OnInit {
   @ViewChild('avatarfileInput') avatarfileInput
 
   user: User = null

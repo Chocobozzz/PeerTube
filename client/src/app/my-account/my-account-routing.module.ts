@@ -1,22 +1,20 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-
 import { MetaGuard } from '@ngx-meta/core'
-
 import { LoginGuard } from '../core'
-import { AccountComponent } from './account.component'
-import { AccountSettingsComponent } from './account-settings/account-settings.component'
-import { AccountVideosComponent } from './account-videos/account-videos.component'
+import { MyAccountComponent } from './my-account.component'
+import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
+import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
 
-const accountRoutes: Routes = [
+const myAccountRoutes: Routes = [
   {
-    path: 'account',
-    component: AccountComponent,
+    path: 'my-account',
+    component: MyAccountComponent,
     canActivateChild: [ MetaGuard, LoginGuard ],
     children: [
       {
         path: 'settings',
-        component: AccountSettingsComponent,
+        component: MyAccountSettingsComponent,
         data: {
           meta: {
             title: 'Account settings'
@@ -25,7 +23,7 @@ const accountRoutes: Routes = [
       },
       {
         path: 'videos',
-        component: AccountVideosComponent,
+        component: MyAccountVideosComponent,
         data: {
           meta: {
             title: 'Account videos'
@@ -37,7 +35,7 @@ const accountRoutes: Routes = [
 ]
 
 @NgModule({
-  imports: [ RouterModule.forChild(accountRoutes) ],
+  imports: [ RouterModule.forChild(myAccountRoutes) ],
   exports: [ RouterModule ]
 })
-export class AccountRoutingModule {}
+export class MyAccountRoutingModule {}

@@ -15,12 +15,12 @@ import { VideoService } from '../../shared/video/video.service'
 
 @Component({
   selector: 'my-account-videos',
-  templateUrl: './account-videos.component.html',
-  styleUrls: [ './account-videos.component.scss' ]
+  templateUrl: './my-account-videos.component.html',
+  styleUrls: [ './my-account-videos.component.scss' ]
 })
-export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
+export class MyAccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'My videos'
-  currentRoute = '/account/videos'
+  currentRoute = '/my-account/videos'
   checkedVideos: { [ id: number ]: boolean } = {}
   pagination: ComponentPagination = {
     currentPage: 1,

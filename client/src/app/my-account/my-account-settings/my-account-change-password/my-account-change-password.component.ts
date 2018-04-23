@@ -5,10 +5,10 @@ import { FormReactive, USER_PASSWORD, UserService } from '../../../shared'
 
 @Component({
   selector: 'my-account-change-password',
-  templateUrl: './account-change-password.component.html',
-  styleUrls: [ './account-change-password.component.scss' ]
+  templateUrl: './my-account-change-password.component.html',
+  styleUrls: [ './my-account-change-password.component.scss' ]
 })
-export class AccountChangePasswordComponent extends FormReactive implements OnInit {
+export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
   error: string = null
 
   form: FormGroup
