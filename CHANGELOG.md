@@ -6,21 +6,21 @@
 
  * Hide by default NSFW videos. Update the `instance.default_nsfw_policy` configuration to `blur` to keep the old behaviour
  * Use ISO 639 for language (*en*, *es*, *fr*...)
-  * Tools (`import-videos`...) need the language ISO639 code instead of a number
-  * API (`upload`, `update`, `list`...) need/return the language ISO639 code instead of a number
+   * Tools (`import-videos`...) need the language ISO639 code instead of a number
+   * API (`upload`, `update`, `list`...) need/return the language ISO639 code instead of a number
 
 ### Features
 
  * Add `publishedAt` attribute to videos
  * Improve player:
-  * Smooth progress bar
-  * Settings menu
-  * Automatic resolution (depending on the user bandwidth)
-  * Some animations/effects
-  * More reactive when clicking on play
-  * Handle autoplay blocking by some web browsers
-  * Better responsive
-  * Add ability to link a specific timestamp. Example: https://peertube2.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504?start=58
+   * Smooth progress bar
+   * Settings menu
+   * Automatic resolution (depending on the user bandwidth)
+   * Some animations/effects
+   * More reactive when clicking on play
+   * Handle autoplay blocking by some web browsers
+   * Better responsive
+   * Add ability to link a specific timestamp. Example: https://peertube2.cpy.re/videos/watch/f78a97f8-a142-4ce1-a5bd-154bf9386504?start=58
  * Add an id to the body to override current CSS (for custom CSS)
  * Add privacy argument to `upload.ts` script
  * RSS/Atom/JSON-feed for videos recently-added/trending/account
