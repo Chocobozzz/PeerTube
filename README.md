@@ -7,9 +7,9 @@ Federated (ActivityPub) video streaming platform using P2P (BitTorrent)
 directly in the web browser with <a href="https://github.com/feross/webtorrent">WebTorrent</a>.
 </h4>
 
-**PeerTube is sponsored by [Framasoft](https://framatube.org/#en), a non-profit
-that promotes, spreads and develops free culture in general, and free-libre
-software in particular. If you want to support this project, please [consider
+**PeerTube is developed by [Framasoft](https://framatube.org/#en), a non-profit
+that promotes and spreads free culture in general, and free-libre software in
+particular. If you want to support this project, please [consider
 donating to them](https://soutenir.framasoft.org/en/).**
 
 <p align="center">
