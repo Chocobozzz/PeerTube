@@ -322,8 +322,8 @@ export class VideoModel extends Model<VideoModel> {
   @AllowNull(true)
   @Default(null)
   @Is('VideoLanguage', value => throwIfNotValid(value, isVideoLanguageValid, 'language'))
-  @Column
-  language: number
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEOS.LANGUAGE.max))
+  language: string
 
   @AllowNull(false)
   @Is('VideoPrivacy', value => throwIfNotValid(value, isVideoPrivacyValid, 'privacy'))
@@ -877,8 +877,10 @@ export class VideoModel extends Model<VideoModel> {
     return licenceLabel
   }
 
-  private static getLanguageLabel (id: number) {
+  private static getLanguageLabel (id: string) {
     let languageLabel = VIDEO_LANGUAGES[id]
+    console.log(VIDEO_LANGUAGES)
+    console.log(id)
     if (!languageLabel) languageLabel = 'Unknown'
 
     return languageLabel
@@ -1083,7 +1085,7 @@ export class VideoModel extends Model<VideoModel> {
     let language
     if (this.language) {
       language = {
-        identifier: this.language + '',
+        identifier: this.language,
         name: VideoModel.getLanguageLabel(this.language)
       }
     }

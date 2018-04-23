@@ -6,6 +6,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject'
 import { ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
+import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 
 @Injectable()
 export class ServerService {
@@ -57,10 +58,10 @@ export class ServerService {
       videoQuota: -1
     }
   }
-  private videoCategories: Array<{ id: number, label: string }> = []
-  private videoLicences: Array<{ id: number, label: string }> = []
-  private videoLanguages: Array<{ id: number, label: string }> = []
-  private videoPrivacies: Array<{ id: number, label: string }> = []
+  private videoCategories: Array<VideoConstant<number>> = []
+  private videoLicences: Array<VideoConstant<number>> = []
+  private videoLanguages: Array<VideoConstant<string>> = []
+  private videoPrivacies: Array<VideoConstant<VideoPrivacy>> = []
 
   constructor (private http: HttpClient) {
     this.loadConfigLocally()
@@ -118,7 +119,7 @@ export class ServerService {
 
   private loadVideoAttributeEnum (
     attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
-    hashToPopulate: { id: number, label: string }[],
+    hashToPopulate: VideoConstant<number | string>[],
     notifier: ReplaySubject<boolean>,
     sort = false
   ) {
@@ -127,7 +128,7 @@ export class ServerService {
          Object.keys(data)
                .forEach(dataKey => {
                  hashToPopulate.push({
-                   id: parseInt(dataKey, 10),
+                   id: dataKey,
                    label: data[dataKey]
                  })
                })

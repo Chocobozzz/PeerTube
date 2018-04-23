@@ -28,7 +28,7 @@ function transactionRetryer <T> (func: (err: any, data: T) => any) {
 
       errorFilter: err => {
         const willRetry = (err.name === 'SequelizeDatabaseError')
-        logger.debug('Maybe retrying the transaction function.', { willRetry })
+        logger.debug('Maybe retrying the transaction function.', { willRetry, err })
         return willRetry
       }
     }, func, (err, data) => err ? rej(err) : res(data))

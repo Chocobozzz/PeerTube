@@ -58,19 +58,19 @@ async function videoActivityObjectToDBAttributes (videoChannel: VideoChannelMode
                                                   videoObject: VideoTorrentObject,
                                                   to: string[] = []) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
-
   const duration = videoObject.duration.replace(/[^\d]+/, '')
-  let language = null
+
+  let language: string = null
   if (videoObject.language) {
-    language = parseInt(videoObject.language.identifier, 10)
+    language = videoObject.language.identifier
   }
 
-  let category = null
+  let category: number = null
   if (videoObject.category) {
     category = parseInt(videoObject.category.identifier, 10)
   }
 
-  let licence = null
+  let licence: number = null
   if (videoObject.licence) {
     licence = parseInt(videoObject.licence.identifier, 10)
   }

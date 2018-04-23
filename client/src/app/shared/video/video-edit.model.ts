@@ -4,7 +4,7 @@ import { VideoPrivacy } from '../../../../../shared/models/videos/video-privacy.
 export class VideoEdit {
   category: number
   licence: number
-  language: number
+  language: string
   description: string
   name: string
   tags: string[]

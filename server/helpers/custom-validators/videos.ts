@@ -18,16 +18,17 @@ import { exists, isArray, isFileValid } from './misc'
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
-function isVideoCategoryValid (value: number) {
+function isVideoCategoryValid (value: any) {
   return value === null || VIDEO_CATEGORIES[value] !== undefined
 }
 
-function isVideoLicenceValid (value: number) {
+function isVideoLicenceValid (value: any) {
   return value === null || VIDEO_LICENCES[value] !== undefined
 }
 
-function isVideoLanguageValid (value: number) {
-  return value === null || VIDEO_LANGUAGES[value] !== undefined
+function isVideoLanguageValid (value: any) {
+  return value === null ||
+    (typeof value === 'string' && validator.isLength(value, VIDEOS_CONSTRAINTS_FIELDS.LANGUAGE))
 }
 
 function isVideoDurationValid (value: string) {

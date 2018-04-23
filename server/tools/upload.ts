@@ -18,7 +18,7 @@ program
   .option('-c, --category <category number>', 'Category number')
   .option('-m, --comments-enabled', 'Enable comments')
   .option('-l, --licence <licence number>', 'Licence number')
-  .option('-L, --language <language number>', 'Language number')
+  .option('-L, --language <language code>', 'Language ISO 639 code (fr or en...)')
   .option('-d, --video-description <description>', 'Video description')
   .option('-t, --tags <tags>', 'Video tags', list)
   .option('-b, --thumbnail <thumbnailPath>', 'Thumbnail path')

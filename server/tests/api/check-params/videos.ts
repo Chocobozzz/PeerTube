@@ -105,7 +105,7 @@ describe('Test videos API validator', function () {
         name: 'my super name',
         category: 5,
         licence: 1,
-        language: 6,
+        language: 'pt',
         nsfw: false,
         commentsEnabled: true,
         description: 'my super description',
@@ -151,7 +151,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a bad language', async function () {
-      const fields = immutableAssign(baseCorrectParams, { language: 125 })
+      const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
       const attaches = baseCorrectAttaches
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -359,7 +359,7 @@ describe('Test videos API validator', function () {
       name: 'my super name',
       category: 5,
       licence: 2,
-      language: 6,
+      language: 'pt',
       nsfw: false,
       commentsEnabled: false,
       description: 'my super description',
@@ -413,7 +413,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a bad language', async function () {
-      const fields = immutableAssign(baseCorrectParams, { language: 125 })
+      const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })

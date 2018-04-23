@@ -13,7 +13,7 @@ export class Video implements VideoServerModel {
   publishedAt: Date
   category: VideoConstant<number>
   licence: VideoConstant<number>
-  language: VideoConstant<number>
+  language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
   description: string
   duration: number

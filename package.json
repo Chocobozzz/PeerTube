@@ -69,6 +69,7 @@
     "express-rate-limit": "^2.11.0",
     "express-validator": "^5.0.0",
     "fluent-ffmpeg": "^2.1.0",
+    "iso-639-3": "^1.0.1",
     "js-yaml": "^3.5.4",
     "jsonld": "^1.0.1",
     "jsonld-signatures": "https://github.com/Chocobozzz/jsonld-signatures#rsa2017",

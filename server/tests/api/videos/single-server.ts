@@ -23,7 +23,7 @@ describe('Test a single server', function () {
     name: 'my super name',
     category: 2,
     licence: 6,
-    language: 3,
+    language: 'zh',
     nsfw: true,
     description: 'my super description',
     support: 'my super support text',
@@ -54,7 +54,7 @@ describe('Test a single server', function () {
     name: 'my super video updated',
     category: 4,
     licence: 2,
-    language: 5,
+    language: 'ar',
     nsfw: false,
     description: 'my super description updated',
     support: 'my super support text updated',
@@ -115,7 +115,7 @@ describe('Test a single server', function () {
     const languages = res.body
     expect(Object.keys(languages)).to.have.length.above(5)
 
-    expect(languages[3]).to.equal('Mandarin')
+    expect(languages['ru']).to.equal('Russian')
   })
 
   it('Should list video privacies', async function () {
@@ -222,8 +222,8 @@ describe('Test a single server', function () {
   //   expect(video.categoryLabel).to.equal('Films')
   //   expect(video.licence).to.equal(6)
   //   expect(video.licenceLabel).to.equal('Attribution - Non Commercial - No Derivatives')
-  //   expect(video.language).to.equal(3)
-  //   expect(video.languageLabel).to.equal('Mandarin')
+  //   expect(video.language).to.equal('zh')
+  //   expect(video.languageLabel).to.equal('Chinese')
   //   expect(video.nsfw).to.be.ok
   //   expect(video.description).to.equal('my super description')
   //   expect(video.account.name).to.equal('root')
@@ -292,7 +292,7 @@ describe('Test a single server', function () {
         description: video + ' description',
         category: 2,
         licence: 1,
-        language: 1,
+        language: 'en',
         nsfw: true,
         tags: [ 'tag1', 'tag2', 'tag3' ],
         fixture: video
@@ -458,7 +458,7 @@ describe('Test a single server', function () {
       name: 'my super video updated',
       category: 4,
       licence: 2,
-      language: 5,
+      language: 'ar',
       nsfw: false,
       description: 'my super description updated',
       commentsEnabled: false,

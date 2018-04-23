@@ -5,7 +5,7 @@ import { VideoChannel } from './video-channel.model'
 import { VideoPrivacy } from './video-privacy.enum'
 
 export interface VideoConstant <T> {
-  id: number
+  id: T
   label: string
 }
 
@@ -25,7 +25,7 @@ export interface Video {
   publishedAt: Date | string
   category: VideoConstant<number>
   licence: VideoConstant<number>
-  language: VideoConstant<number>
+  language: VideoConstant<string>
   privacy: VideoConstant<VideoPrivacy>
   description: string
   duration: number

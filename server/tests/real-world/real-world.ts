@@ -182,7 +182,7 @@ function upload (servers: ServerInfo[], numServer: number) {
     category: 4,
     nsfw: false,
     licence: 2,
-    language: 1,
+    language: 'en',
     description: Date.now() + ' description',
     tags: [ Date.now().toString().substring(0, 5) + 't1', Date.now().toString().substring(0, 5) + 't2' ],
     fixture: 'video_short1.webm'

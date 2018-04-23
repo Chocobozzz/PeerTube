@@ -49,9 +49,9 @@ function isVideoTorrentObjectValid (video: any) {
     isActivityPubVideoDurationValid(video.duration) &&
     isUUIDValid(video.uuid) &&
     setValidRemoteTags(video) &&
-    (!video.category || isRemoteIdentifierValid(video.category)) &&
-    (!video.licence || isRemoteIdentifierValid(video.licence)) &&
-    (!video.language || isRemoteIdentifierValid(video.language)) &&
+    (!video.category || isRemoteNumberIdentifierValid(video.category)) &&
+    (!video.licence || isRemoteNumberIdentifierValid(video.licence)) &&
+    (!video.language || isRemoteStringIdentifierValid(video.language)) &&
     isVideoViewsValid(video.views) &&
     isBooleanValid(video.sensitive) &&
     isBooleanValid(video.commentsEnabled) &&
@@ -72,6 +72,7 @@ export {
   isVideoTorrentCreateActivityValid,
   isVideoTorrentUpdateActivityValid,
   isVideoTorrentDeleteActivityValid,
+  isRemoteStringIdentifierValid,
   isVideoFlagValid,
   isVideoTorrentObjectValid
 }
@@ -89,8 +90,12 @@ function setValidRemoteTags (video: any) {
   return true
 }
 
-function isRemoteIdentifierValid (data: any) {
+function isRemoteNumberIdentifierValid (data: any) {
   return validator.isInt(data.identifier, { min: 0 })
+}
+
+function isRemoteStringIdentifierValid (data: any) {
+  return typeof data.identifier === 'string'
 }
 
 function isRemoteVideoContentValid (mediaType: string, content: string) {

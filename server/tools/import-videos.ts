@@ -16,7 +16,7 @@ program
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('-t, --target-url <targetUrl>', 'Video target URL')
-  .option('-l, --language <languageCode>', 'Language code')
+  .option('-l, --language <languageCode>', 'Language ISO 639 code (fr or en...)')
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
@@ -82,7 +82,7 @@ async function run () {
   })
 }
 
-function processVideo (info: any, languageCode: number) {
+function processVideo (info: any, languageCode: string) {
   return new Promise(async res => {
     if (program['verbose']) console.log('Fetching object.', info)
 
@@ -121,7 +121,7 @@ function processVideo (info: any, languageCode: number) {
   })
 }
 
-async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, language?: number) {
+async function uploadVideoOnPeerTube (videoInfo: any, videoPath: string, language?: string) {
   const category = await getCategory(videoInfo.categories)
   const licence = getLicence(videoInfo.license)
   let tags = []

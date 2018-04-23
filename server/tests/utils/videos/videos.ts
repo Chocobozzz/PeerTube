@@ -24,7 +24,7 @@ type VideoAttributes = {
   name?: string
   category?: number
   licence?: number
-  language?: number
+  language?: string
   nsfw?: boolean
   commentsEnabled?: boolean
   description?: string
@@ -284,7 +284,7 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     name: 'my super video',
     category: 5,
     licence: 4,
-    language: 3,
+    language: 'zh',
     channelId: defaultChannelId,
     nsfw: true,
     description: 'my super description',
@@ -403,7 +403,7 @@ async function completeVideoCheck (
     name: string
     category: number
     licence: number
-    language: number
+    language: string
     nsfw: boolean
     commentsEnabled: boolean
     description: string
@@ -437,11 +437,11 @@ async function completeVideoCheck (
 
   expect(video.name).to.equal(attributes.name)
   expect(video.category.id).to.equal(attributes.category)
-  expect(video.category.label).to.equal(VIDEO_CATEGORIES[attributes.category] || 'Misc')
+  expect(video.category.label).to.equal(attributes.category !== null ? VIDEO_CATEGORIES[attributes.category] : 'Misc')
   expect(video.licence.id).to.equal(attributes.licence)
-  expect(video.licence.label).to.equal(VIDEO_LICENCES[attributes.licence] || 'Unknown')
+  expect(video.licence.label).to.equal(attributes.licence !== null ? VIDEO_LICENCES[attributes.licence] : 'Unknown')
   expect(video.language.id).to.equal(attributes.language)
-  expect(video.language.label).to.equal(VIDEO_LANGUAGES[attributes.language] || 'Unknown')
+  expect(video.language.label).to.equal(attributes.language !== null ? VIDEO_LANGUAGES[attributes.language] : 'Unknown')
   expect(video.privacy.id).to.deep.equal(attributes.privacy)
   expect(video.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(video.nsfw).to.equal(attributes.nsfw)

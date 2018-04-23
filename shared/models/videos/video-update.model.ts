@@ -4,7 +4,7 @@ export interface VideoUpdate {
   name?: string
   category?: number
   licence?: number
-  language?: number
+  language?: string
   description?: string
   support?: string
   privacy?: VideoPrivacy

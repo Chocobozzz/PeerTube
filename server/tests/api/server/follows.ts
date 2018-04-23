@@ -277,7 +277,7 @@ describe('Test follows', function () {
         name: 'server3-4',
         category: 2,
         licence: 6,
-        language: 3,
+        language: 'zh',
         nsfw: true,
         description: 'my super description',
         support: 'my super support text',

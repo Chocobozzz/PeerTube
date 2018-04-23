@@ -13,7 +13,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 205
+const LAST_MIGRATION_VERSION = 210
 
 // ---------------------------------------------------------------------------
 
@@ -196,6 +196,7 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEOS: {
     NAME: { min: 3, max: 120 }, // Length
+    LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length
     SUPPORT: { min: 3, max: 300 }, // Length
@@ -291,38 +292,7 @@ const VIDEO_LICENCES = {
   7: 'Public Domain Dedication'
 }
 
-// See https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers#Nationalencyklopedin
-const VIDEO_LANGUAGES = {
-  1: 'English',
-  2: 'Spanish',
-  3: 'Mandarin',
-  4: 'Hindi',
-  5: 'Arabic',
-  6: 'Portuguese',
-  7: 'Bengali',
-  8: 'Russian',
-  9: 'Japanese',
-  10: 'Punjabi',
-  11: 'German',
-  12: 'Korean',
-  13: 'French',
-  14: 'Italian',
-  1000: 'Sign Language',
-  1001: 'American Sign Language',
-  1002: 'Arab Sign Language',
-  1003: 'British Sign Language',
-  1004: 'Brazilian Sign Language',
-  1005: 'Chinese Sign Language',
-  1006: 'Czech Sign Language',
-  1007: 'Danish Sign Language',
-  1008: 'French Sign Language',
-  1009: 'German Sign Language',
-  1010: 'Indo-Pakistani Sign Language',
-  1011: 'Japanese Sign Language',
-  1012: 'South African Sign Language',
-  1013: 'Swedish Sign Language',
-  1014: 'Russian Sign Language'
-}
+const VIDEO_LANGUAGES = buildLanguages()
 
 const VIDEO_PRIVACIES = {
   [VideoPrivacy.PUBLIC]: 'Public',
@@ -519,6 +489,40 @@ function getLocalConfigFilePath () {
 function updateWebserverConfig () {
   CONFIG.WEBSERVER.URL = sanitizeUrl(CONFIG.WEBSERVER.SCHEME + '://' + CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT)
   CONFIG.WEBSERVER.HOST = sanitizeHost(CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT, REMOTE_SCHEME.HTTP)
+}
+
+function buildLanguages () {
+  const iso639 = require('iso-639-3')
+
+  const languages: { [ id: string ]: string } = {}
+
+  const signLanguages = [
+    'sgn', // Sign languages (macro language)
+    'ase', // American
+    'sdl', // Arabian
+    'bfi', // British
+    'bzs', // Brazilian
+    'csl', // Chinese
+    'cse', // Czech
+    'dsl', // Danish
+    'fsl', // French
+    'gsg', // German
+    'pks', // Pakistan
+    'jsl', // Japanese
+    'sfs', // South African
+    'swl', // Swedish
+    'rsl' // Russian
+  ]
+
+  // Only add ISO639-1 languages and some sign languages (ISO639-3)
+  iso639
+    .filter(l => {
+      return (l.iso6391 !== null && l.type === 'living') ||
+        signLanguages.indexOf(l.iso6393) !== -1
+    })
+    .forEach(l => languages[l.iso6391 || l.iso6393] = l.name)
+
+  return languages
 }
 
 export function reloadConfig () {

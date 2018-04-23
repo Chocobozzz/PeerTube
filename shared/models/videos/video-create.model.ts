@@ -3,7 +3,7 @@ import { VideoPrivacy } from './video-privacy.enum'
 export interface VideoCreate {
   category?: number
   licence?: number
-  language?: number
+  language?: string
   description?: string
   support?: string
   channelId: number

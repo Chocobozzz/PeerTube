@@ -82,9 +82,9 @@ paths:
     get:
       tags:
         - Feeds
-      consumes:
-        - application/json
       produces:
+        - application/atom+xml
+        - application/rss+xml
         - application/json
       parameters:
         - name: format
@@ -107,9 +107,6 @@ paths:
       responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-            application/xml:
   /jobs:
     get:
       security:
@@ -660,7 +657,7 @@ paths:
           description: 'Video licence'
         - name: language
           in: formData
-          type: number
+          type: string
           description: 'Video language'
         - name: description
           in: formData
@@ -804,7 +801,7 @@ paths:
           description: 'Video licence'
         - name: language
           in: formData
-          type: number
+          type: string
           description: 'Video language'
         - name: description
           in: formData
@@ -1245,10 +1242,16 @@ paths:
         '204':
           description: successful operation
 definitions:
-  VideoConstant:
+  VideoConstantNumber:
     properties:
       id:
         type: number
+      label:
+        type: string
+  VideoConstantString:
+    properties:
+      id:
+        type: string
       label:
         type: string
   VideoPrivacy:
@@ -1267,11 +1270,11 @@ definitions:
       updatedAt:
         type: string
       category:
-        $ref: "#/definitions/VideoConstant"
+        $ref: "#/definitions/VideoConstantNumber"
       licence:
-        $ref: "#/definitions/VideoConstant"
+        $ref: "#/definitions/VideoConstantNumber"
       language:
-        $ref: "#/definitions/VideoConstant"
+        $ref: "#/definitions/VideoConstantString"
       privacy:
         $ref: "#/definitions/VideoPrivacy"
       description:
