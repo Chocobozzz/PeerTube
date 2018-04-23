@@ -40,7 +40,8 @@ async function generateFeed (req: express.Request, res: express.Response, next: 
       start,
       FEEDS.COUNT,
       req.query.sort as VideoSortField,
-      hideNSFW
+      hideNSFW,
+      true
     )
   } else {
     resultList = await VideoModel.listForApi(
