@@ -31,6 +31,7 @@ import { VideoMiniatureComponent } from './video/video-miniature.component'
 import { VideoFeedComponent } from './video/video-feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
+import { AccountService } from '@app/shared/account/account.service'
 
 @NgModule({
   imports: [
@@ -104,6 +105,7 @@ import { VideoService } from './video/video.service'
     VideoBlacklistService,
     UserService,
     VideoService,
+    AccountService,
     MarkdownService
   ]
 })

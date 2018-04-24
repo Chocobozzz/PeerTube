@@ -1,0 +1,23 @@
+<div *ngIf="account" class="row">
+  <div class="sub-menu">
+
+    <div class="account">
+      <img [src]="getAvatarUrl()" alt="Avatar" />
+
+      <div class="account-info">
+        <div class="account-display-name">{{ account.displayName }}</div>
+        <div class="account-followers">{{ account.followersCount }} subscribers</div>
+      </div>
+    </div>
+
+    <div class="links">
+      <a routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
+
+      <a routerLink="about" routerLinkActive="active" class="title-page">About</a>
+    </div>
+  </div>
+
+  <div class="margin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

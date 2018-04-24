@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: './+admin/admin.module#AdminModule'
+  },
+  {
+    path: 'account',
+    loadChildren: './+account/account.module#AccountModule'
   }
 ]
 

@@ -95,7 +95,33 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, hideNSFW: boolean, filter?: VideoFilter, withFiles?: boolean) => {
+  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, hideNSFW: boolean, filter?: VideoFilter, withFiles?: boolean, accountId?: number) => {
+    const accountInclude = {
+      attributes: [ 'name' ],
+      model: AccountModel.unscoped(),
+      required: true,
+      where: {},
+      include: [
+        {
+          attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          where: VideoModel.buildActorWhereWithFilter(filter),
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
@@ -125,30 +151,7 @@ enum ScopeNames {
           model: VideoChannelModel.unscoped(),
           required: true,
           include: [
-            {
-              attributes: [ 'name' ],
-              model: AccountModel.unscoped(),
-              required: true,
-              include: [
-                {
-                  attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
-                  model: ActorModel.unscoped(),
-                  required: true,
-                  where: VideoModel.buildActorWhereWithFilter(filter),
-                  include: [
-                    {
-                      attributes: [ 'host' ],
-                      model: ServerModel.unscoped(),
-                      required: false
-                    },
-                    {
-                      model: AvatarModel.unscoped(),
-                      required: false
-                    }
-                  ]
-                }
-              ]
-            }
+            accountInclude
           ]
         }
       ]
@@ -164,6 +167,12 @@ enum ScopeNames {
     // Hide nsfw videos?
     if (hideNSFW === true) {
       query.where['nsfw'] = false
+    }
+
+    if (accountId) {
+      accountInclude.where = {
+        id: accountId
+      }
     }
 
     return query
@@ -688,7 +697,15 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static async listForApi (start: number, count: number, sort: string, hideNSFW: boolean, filter?: VideoFilter, withFiles = false) {
+  static async listForApi (
+    start: number,
+    count: number,
+    sort: string,
+    hideNSFW: boolean,
+    filter?: VideoFilter,
+    withFiles = false,
+    accountId?: number
+  ) {
     const query = {
       offset: start,
       limit: count,
@@ -696,7 +713,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const serverActor = await getServerActor()
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, hideNSFW, filter, withFiles ] })
+    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, hideNSFW, filter, withFiles, accountId ] })
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {
@@ -879,8 +896,6 @@ export class VideoModel extends Model<VideoModel> {
 
   private static getLanguageLabel (id: string) {
     let languageLabel = VIDEO_LANGUAGES[id]
-    console.log(VIDEO_LANGUAGES)
-    console.log(id)
     if (!languageLabel) languageLabel = 'Unknown'
 
     return languageLabel

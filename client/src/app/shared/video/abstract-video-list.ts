@@ -29,6 +29,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   syndicationItems = []
 
   loadOnInit = true
+  marginContent = true
   pageHeight: number
   videoWidth: number
   videoHeight: number

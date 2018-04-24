@@ -1,5 +1,5 @@
-<div class="margin-content">
-  <div class="title-page title-page-single">
+<div [ngClass]="{ 'margin-content': marginContent }">
+  <div *ngIf="titlePage" class="title-page title-page-single">
     {{ titlePage }}
   </div>
   <my-video-feed [syndicationItems]="syndicationItems"></my-video-feed>

@@ -2,9 +2,9 @@ import * as express from 'express'
 import { query } from 'express-validator/check'
 import { isWebfingerResourceValid } from '../../helpers/custom-validators/webfinger'
 import { logger } from '../../helpers/logger'
-import { getHostWithPort } from '../../helpers/utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { areValidationErrors } from './utils'
+import { getHostWithPort } from '../../helpers/express-utils'
 
 const webfingerValidator = [
   query('resource').custom(isWebfingerResourceValid).withMessage('Should have a valid webfinger resource'),

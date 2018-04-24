@@ -314,3 +314,10 @@
   left: 0.25em;
   transform: rotate(-135deg);
 }
+
+@mixin in-content-small-title {
+  text-transform: uppercase;
+  color: $orange-color;
+  font-weight: $font-bold;
+  font-size: 13px;
+}

@@ -16,6 +16,21 @@ export class Account implements ServerAccount {
   updatedAt: Date
   avatar: Avatar
 
+  constructor (hash: ServerAccount) {
+    this.id = hash.id
+    this.uuid = hash.uuid
+    this.url = hash.url
+    this.name = hash.name
+    this.displayName = hash.displayName
+    this.description = hash.description
+    this.host = hash.host
+    this.followingCount = hash.followingCount
+    this.followersCount = hash.followersCount
+    this.createdAt = new Date(hash.createdAt.toString())
+    this.updatedAt = new Date(hash.updatedAt.toString())
+    this.avatar = hash.avatar
+  }
+
   static GET_ACCOUNT_AVATAR_URL (account: Account) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 

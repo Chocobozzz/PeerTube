@@ -7,7 +7,7 @@ import { UserCreate, UserRight, UserRole, UserUpdate, UserUpdateMe, UserVideoRat
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { processImage } from '../../helpers/image-utils'
 import { logger } from '../../helpers/logger'
-import { createReqFiles, getFormattedObjects } from '../../helpers/utils'
+import { getFormattedObjects } from '../../helpers/utils'
 import { AVATARS_SIZE, CONFIG, IMAGE_MIMETYPE_EXT, RATES_LIMIT, sequelizeTypescript } from '../../initializers'
 import { updateActorAvatarInstance } from '../../lib/activitypub'
 import { sendUpdateActor } from '../../lib/activitypub/send'
@@ -43,6 +43,7 @@ import { UserModel } from '../../models/account/user'
 import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { VideoModel } from '../../models/video/video'
 import { VideoSortField } from '../../../client/src/app/shared/video/sort-field.type'
+import { createReqFiles } from '../../helpers/express-utils'
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 const loginRateLimiter = new RateLimit({

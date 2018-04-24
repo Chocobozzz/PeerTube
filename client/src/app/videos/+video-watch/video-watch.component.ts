@@ -39,8 +39,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   otherVideosDisplayed: Video[] = []
 
-  syndicationItems = {}
-
   player: videojs.Player
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
@@ -110,7 +108,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           const startTime = this.route.snapshot.queryParams.start
           this.onVideoFetched(video, startTime)
             .catch(err => this.handleError(err))
-          this.generateSyndicationList()
         },
 
         error => {
@@ -245,10 +242,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
     return this.video.tags.join(', ')
-  }
-
-  generateSyndicationList () {
-    this.syndicationItems = this.videoService.getAccountFeedUrls(this.video.account.id)
   }
 
   isVideoRemovable () {

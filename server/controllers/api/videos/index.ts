@@ -6,7 +6,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { processImage } from '../../../helpers/image-utils'
 import { logger } from '../../../helpers/logger'
-import { createReqFiles, getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
+import { getFormattedObjects, getServerActor, resetSequelizeInstance } from '../../../helpers/utils'
 import {
   CONFIG,
   IMAGE_MIMETYPE_EXT,
@@ -19,11 +19,7 @@ import {
   VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
 } from '../../../initializers'
-import {
-  fetchRemoteVideoDescription,
-  getVideoActivityPubUrl,
-  shareVideoByServerAndChannel
-} from '../../../lib/activitypub'
+import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateView, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
@@ -49,9 +45,9 @@ import { blacklistRouter } from './blacklist'
 import { videoChannelRouter } from './channel'
 import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
-import { User } from '../../../../shared/models/users'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { VideoSortField } from '../../../../client/src/app/shared/video/sort-field.type'
+import { isNSFWHidden, createReqFiles } from '../../../helpers/express-utils'
 
 const videosRouter = express.Router()
 
@@ -443,13 +439,4 @@ async function searchVideos (req: express.Request, res: express.Response, next: 
   )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
-}
-
-function isNSFWHidden (res: express.Response) {
-  if (res.locals.oauth) {
-    const user: User = res.locals.oauth.token.User
-    if (user) return user.nsfwPolicy === 'do_not_list'
-  }
-
-  return CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
 }

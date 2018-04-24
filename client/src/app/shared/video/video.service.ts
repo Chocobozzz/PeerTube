@@ -21,6 +21,8 @@ import { VideoDetails } from './video-details.model'
 import { VideoEdit } from './video-edit.model'
 import { Video } from './video.model'
 import { objectToFormData } from '@app/shared/misc/utils'
+import { Account } from '@app/shared/account/account.model'
+import { AccountService } from '@app/shared/account/account.service'
 
 @Injectable()
 export class VideoService {
@@ -95,6 +97,22 @@ export class VideoService {
     return this.authHttp.get(UserService.BASE_USERS_URL + '/me/videos', { params })
       .map(this.extractVideos)
       .catch((res) => this.restExtractor.handleError(res))
+  }
+
+  getAccountVideos (
+    account: Account,
+    videoPagination: ComponentPagination,
+    sort: VideoSortField
+  ): Observable<{ videos: Video[], totalVideos: number}> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp
+               .get(AccountService.BASE_ACCOUNT_URL + account.id + '/videos', { params })
+               .map(this.extractVideos)
+               .catch((res) => this.restExtractor.handleError(res))
   }
 
   getVideos (

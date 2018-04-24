@@ -47,10 +47,8 @@
 }
 
 .account-title {
-  text-transform: uppercase;
-  color: $orange-color;
-  font-weight: $font-bold;
-  font-size: 13px;
+  @include in-content-small-title;
+
   margin-top: 55px;
   margin-bottom: 30px;
 }
