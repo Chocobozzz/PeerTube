@@ -5,6 +5,9 @@
 ### BREAKING CHANGES
 
  * Hide by default NSFW videos. Update the `instance.default_nsfw_policy` configuration to `blur` to keep the old behaviour
+ * Move video channels routes:
+   * `/videos/channels` routes to `/accounts/{accountId}/video-channels`
+   * `/videos/accounts/{accountId}/channels` route to `/accounts/{accountId}/video-channels`
  * PeerTube now listen on 127.0.0.1 by default
  * Use ISO 639 for language (*en*, *es*, *fr*...)
    * Tools (`import-videos`...) need the language ISO639 code instead of a number

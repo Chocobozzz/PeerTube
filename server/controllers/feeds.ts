@@ -33,15 +33,15 @@ async function generateFeed (req: express.Request, res: express.Response, next: 
   const account: AccountModel = res.locals.account
   const hideNSFW = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
 
-  const resultList = await VideoModel.listForApi(
+  const resultList = await VideoModel.listForApi({
     start,
-    FEEDS.COUNT,
-    req.query.sort as VideoSortField,
+    count: FEEDS.COUNT,
+    sort: req.query.sort,
     hideNSFW,
-    req.query.filter,
-    true,
-    account ? account.id : null
-  )
+    filter: req.query.filter,
+    withFiles: true,
+    accountId: account ? account.id : null
+  })
 
   // Adding video items to the feed, one at a time
   resultList.data.forEach(video => {

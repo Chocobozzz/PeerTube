@@ -16,7 +16,7 @@ const followValidator = [
     if (isTestInstance() === false && CONFIG.WEBSERVER.SCHEME === 'http') {
       return res.status(400)
         .json({
-          error: 'Cannot follow non HTTPS web server.'
+          error: 'Cannot follow on a non HTTPS web server.'
         })
         .end()
     }

@@ -95,7 +95,14 @@ enum ScopeNames {
 }
 
 @Scopes({
-  [ScopeNames.AVAILABLE_FOR_LIST]: (actorId: number, hideNSFW: boolean, filter?: VideoFilter, withFiles?: boolean, accountId?: number) => {
+  [ScopeNames.AVAILABLE_FOR_LIST]: (options: {
+    actorId: number,
+    hideNSFW: boolean,
+    filter?: VideoFilter,
+    withFiles?: boolean,
+    accountId?: number,
+    videoChannelId?: number
+  }) => {
     const accountInclude = {
       attributes: [ 'name' ],
       model: AccountModel.unscoped(),
@@ -106,7 +113,7 @@ enum ScopeNames {
           attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
-          where: VideoModel.buildActorWhereWithFilter(filter),
+          where: VideoModel.buildActorWhereWithFilter(options.filter),
           include: [
             {
               attributes: [ 'host' ],
@@ -122,6 +129,18 @@ enum ScopeNames {
       ]
     }
 
+    const videoChannelInclude = {
+      attributes: [ 'name', 'description' ],
+      model: VideoChannelModel.unscoped(),
+      required: true,
+      where: {},
+      include: [
+        accountInclude
+      ]
+    }
+
+    // Force actorId to be a number to avoid SQL injections
+    const actorIdNumber = parseInt(options.actorId.toString(), 10)
     const query: IFindOptions<VideoModel> = {
       where: {
         id: {
@@ -132,32 +151,23 @@ enum ScopeNames {
             '(' +
             'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
             'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-            'WHERE "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
+            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
             ' UNION ' +
             'SELECT "video"."id" AS "id" FROM "video" ' +
             'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
             'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
             'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
             'LEFT JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-            'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + parseInt(actorId.toString(), 10) +
+            'WHERE "actor"."serverId" IS NULL OR "actorFollow"."actorId" = ' + actorIdNumber +
             ')'
           )
         },
         privacy: VideoPrivacy.PUBLIC
       },
-      include: [
-        {
-          attributes: [ 'name', 'description' ],
-          model: VideoChannelModel.unscoped(),
-          required: true,
-          include: [
-            accountInclude
-          ]
-        }
-      ]
+      include: [ videoChannelInclude ]
     }
 
-    if (withFiles === true) {
+    if (options.withFiles === true) {
       query.include.push({
         model: VideoFileModel.unscoped(),
         required: true
@@ -165,13 +175,19 @@ enum ScopeNames {
     }
 
     // Hide nsfw videos?
-    if (hideNSFW === true) {
+    if (options.hideNSFW === true) {
       query.where['nsfw'] = false
     }
 
-    if (accountId) {
+    if (options.accountId) {
       accountInclude.where = {
-        id: accountId
+        id: options.accountId
+      }
+    }
+
+    if (options.videoChannelId) {
+      videoChannelInclude.where = {
+        id: options.videoChannelId
       }
     }
 
@@ -697,23 +713,37 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static async listForApi (
+  static async listForApi (options: {
     start: number,
     count: number,
     sort: string,
     hideNSFW: boolean,
+    withFiles: boolean,
     filter?: VideoFilter,
-    withFiles = false,
-    accountId?: number
-  ) {
+    accountId?: number,
+    videoChannelId?: number
+  }) {
     const query = {
-      offset: start,
-      limit: count,
-      order: getSort(sort)
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort)
     }
 
     const serverActor = await getServerActor()
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, hideNSFW, filter, withFiles, accountId ] })
+    const scopes = {
+      method: [
+        ScopeNames.AVAILABLE_FOR_LIST, {
+          actorId: serverActor.id,
+          hideNSFW: options.hideNSFW,
+          filter: options.filter,
+          withFiles: options.withFiles,
+          accountId: options.accountId,
+          videoChannelId: options.videoChannelId
+        }
+      ]
+    }
+
+    return VideoModel.scope(scopes)
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {
@@ -750,8 +780,16 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     const serverActor = await getServerActor()
+    const scopes = {
+      method: [
+        ScopeNames.AVAILABLE_FOR_LIST, {
+          actorId: serverActor.id,
+          hideNSFW
+        }
+      ]
+    }
 
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST, serverActor.id, hideNSFW ] })
+    return VideoModel.scope(scopes)
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return {

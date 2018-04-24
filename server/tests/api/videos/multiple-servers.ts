@@ -39,6 +39,7 @@ import {
   getVideoCommentThreads,
   getVideoThreadComments
 } from '../../utils/videos/video-comments'
+import { getAccountsList } from '../../utils/users/accounts'
 
 const expect = chai.expect
 
@@ -46,6 +47,7 @@ describe('Test multiple servers', function () {
   let servers: ServerInfo[] = []
   const toRemove = []
   let videoUUID = ''
+  let accountId: number
   let videoChannelId: number
 
   before(async function () {
@@ -56,13 +58,20 @@ describe('Test multiple servers', function () {
     // Get the access tokens
     await setAccessTokensToServers(servers)
 
-    const videoChannel = {
-      name: 'my channel',
-      description: 'super channel'
+    {
+      const res = await getAccountsList(servers[0].url)
+      accountId = res.body.data[0].id
     }
-    await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
-    const channelRes = await getVideoChannelsList(servers[0].url, 0, 1)
-    videoChannelId = channelRes.body.data[0].id
+
+    {
+      const videoChannel = {
+        name: 'my channel',
+        description: 'super channel'
+      }
+      await addVideoChannel(servers[ 0 ].url, servers[ 0 ].accessToken, accountId, videoChannel)
+      const channelRes = await getVideoChannelsList(servers[ 0 ].url, 0, 1)
+      videoChannelId = channelRes.body.data[ 0 ].id
+    }
 
     // Server 1 and server 2 follow each other
     await doubleFollow(servers[0], servers[1])

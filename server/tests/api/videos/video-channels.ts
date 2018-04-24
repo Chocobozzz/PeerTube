@@ -17,12 +17,14 @@ import {
   setAccessTokensToServers,
   updateVideoChannel
 } from '../../utils/index'
+import { getAccountsList } from '../../utils/users/accounts'
 
 const expect = chai.expect
 
 describe('Test video channels', function () {
   let servers: ServerInfo[]
   let userInfo: User
+  let accountId: number
   let videoChannelId: number
 
   before(async function () {
@@ -34,6 +36,11 @@ describe('Test video channels', function () {
 
     await setAccessTokensToServers(servers)
     await doubleFollow(servers[0], servers[1])
+
+    {
+      const res = await getAccountsList(servers[0].url)
+      accountId = res.body.data[0].id
+    }
 
     await wait(5000)
   })
@@ -54,7 +61,7 @@ describe('Test video channels', function () {
       description: 'super video channel description',
       support: 'super video channel support text'
     }
-    const res = await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
+    const res = await addVideoChannel(servers[0].url, servers[0].accessToken, accountId, videoChannel)
     videoChannelId = res.body.videoChannel.id
 
     // The channel is 1 is propagated to servers 2
@@ -120,7 +127,7 @@ describe('Test video channels', function () {
       support: 'video channel support text updated'
     }
 
-    await updateVideoChannel(servers[0].url, servers[0].accessToken, videoChannelId, videoChannelAttributes)
+    await updateVideoChannel(servers[0].url, servers[0].accessToken, accountId, videoChannelId, videoChannelAttributes)
 
     await wait(3000)
   })
@@ -139,7 +146,7 @@ describe('Test video channels', function () {
   })
 
   it('Should get video channel', async function () {
-    const res = await getVideoChannel(servers[0].url, videoChannelId)
+    const res = await getVideoChannel(servers[0].url, accountId, videoChannelId)
 
     const videoChannel = res.body
     expect(videoChannel.displayName).to.equal('video channel updated')
@@ -148,7 +155,7 @@ describe('Test video channels', function () {
   })
 
   it('Should delete video channel', async function () {
-    await deleteVideoChannel(servers[0].url, servers[0].accessToken, videoChannelId)
+    await deleteVideoChannel(servers[0].url, servers[0].accessToken, accountId, videoChannelId)
   })
 
   it('Should have video channel deleted', async function () {

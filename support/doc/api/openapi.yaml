@@ -91,7 +91,7 @@ paths:
           in: path
           required: true
           type: string
-          enum: ['xml', 'atom' 'json']
+          enum: [ 'xml', 'atom', 'json']
           default: 'xml'
           description: 'The format expected (xml defaults to RSS 2.0, atom to ATOM 1.0 and json to JSON FEED 1.0'
         - name: accountId
@@ -967,7 +967,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoBlacklist'
-  /videos/channels:
+  /video-channels:
     get:
       tags:
         - VideoChannel
@@ -998,83 +998,7 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoChannel'
-    post:
-      security:
-        - OAuth2: [ ]
-      tags:
-        - VideoChannel
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/VideoChannelInput'
-      responses:
-        '204':
-          description: successful operation
-  "/videos/channels/{id}":
-    get:
-      tags:
-        - VideoChannel
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            $ref: '#/definitions/VideoChannel'
-    put:
-      security:
-        - OAuth2: [ ]
-      tags:
-        - VideoChannel
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
-        - in: body
-          name: body
-          schema:
-            $ref: '#/definitions/VideoChannelInput'
-      responses:
-        '204':
-          description: successful operation
-    delete:
-      security:
-        - OAuth2: [ ]
-      tags:
-        - VideoChannel
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video id '
-      responses:
-        '204':
-          description: successful operation
-  /videos/accounts/{accountId}/channels:
+  /accounts/{accountId}/video-channels:
     get:
       tags:
         - VideoChannel
@@ -1095,6 +1019,102 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoChannel'
+    post:
+      security:
+        - OAuth2: [ ]
+      tags:
+        - VideoChannel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: 'The account id '
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/VideoChannelInput'
+      responses:
+        '204':
+          description: successful operation
+  "/account/{accountId}/video-channels/{id}":
+    get:
+      tags:
+        - VideoChannel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: 'The account id '
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The video channel id '
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/VideoChannel'
+    put:
+      security:
+        - OAuth2: [ ]
+      tags:
+        - VideoChannel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: 'The account id '
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The video channel id '
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/VideoChannelInput'
+      responses:
+        '204':
+          description: successful operation
+    delete:
+      security:
+        - OAuth2: [ ]
+      tags:
+        - VideoChannel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: 'The account id '
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The video channel id '
+      responses:
+        '204':
+          description: successful operation
   "/videos/{videoId}/comment-threads":
     get:
       tags:

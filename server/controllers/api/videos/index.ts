@@ -42,7 +42,6 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { abuseVideoRouter } from './abuse'
 import { blacklistRouter } from './blacklist'
-import { videoChannelRouter } from './channel'
 import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
@@ -72,7 +71,6 @@ const reqVideoFileUpdate = createReqFiles(
 videosRouter.use('/', abuseVideoRouter)
 videosRouter.use('/', blacklistRouter)
 videosRouter.use('/', rateVideoRouter)
-videosRouter.use('/', videoChannelRouter)
 videosRouter.use('/', videoCommentRouter)
 
 videosRouter.get('/categories', listVideoCategories)
@@ -397,13 +395,14 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const resultList = await VideoModel.listForApi(
-    req.query.start as number,
-    req.query.count as number,
-    req.query.sort as VideoSortField,
-    isNSFWHidden(res),
-    req.query.filter as VideoFilter
-  )
+  const resultList = await VideoModel.listForApi({
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    hideNSFW: isNSFWHidden(res),
+    filter: req.query.filter as VideoFilter,
+    withFiles: false
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
