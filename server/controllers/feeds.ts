@@ -3,10 +3,9 @@ import { CONFIG, FEEDS } from '../initializers/constants'
 import { asyncMiddleware, feedsValidator, setDefaultSort, videosSortValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
-import { ResultList } from '../../shared/models'
 import { AccountModel } from '../models/account/account'
 import { cacheRoute } from '../middlewares/cache'
-import { VideoSortField } from '../../client/src/app/shared/video/sort-field.type'
+import { VideoChannelModel } from '../models/video/video-channel'
 
 const feedsRouter = express.Router()
 
@@ -31,6 +30,7 @@ async function generateFeed (req: express.Request, res: express.Response, next: 
   const start = 0
 
   const account: AccountModel = res.locals.account
+  const videoChannel: VideoChannelModel = res.locals.videoChannel
   const hideNSFW = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
 
   const resultList = await VideoModel.listForApi({
@@ -40,7 +40,8 @@ async function generateFeed (req: express.Request, res: express.Response, next: 
     hideNSFW,
     filter: req.query.filter,
     withFiles: true,
-    accountId: account ? account.id : null
+    accountId: account ? account.id : null,
+    videoChannelId: videoChannel ? videoChannel.id : null
   })
 
   // Adding video items to the feed, one at a time
