@@ -34,11 +34,10 @@ function getAccountVideoChannelsList (url: string, accountId: number | string, s
 function addVideoChannel (
   url: string,
   token: string,
-  accountId: number | string,
   videoChannelAttributesArg: VideoChannelAttributes,
   expectedStatus = 200
 ) {
-  const path = '/api/v1/accounts/' + accountId + '/video-channels/'
+  const path = '/api/v1/video-channels/'
 
   // Default attributes
   let attributes = {
@@ -59,13 +58,12 @@ function addVideoChannel (
 function updateVideoChannel (
   url: string,
   token: string,
-  accountId: number | string,
   channelId: number | string,
   attributes: VideoChannelAttributes,
   expectedStatus = 204
 ) {
   const body = {}
-  const path = '/api/v1/accounts/' + accountId + '/video-channels/' + channelId
+  const path = '/api/v1/video-channels/' + channelId
 
   if (attributes.name) body['name'] = attributes.name
   if (attributes.description) body['description'] = attributes.description
@@ -79,8 +77,8 @@ function updateVideoChannel (
     .expect(expectedStatus)
 }
 
-function deleteVideoChannel (url: string, token: string, accountId: number | string, channelId: number | string, expectedStatus = 204) {
-  const path = '/api/v1/accounts/' + accountId + '/video-channels/' + channelId
+function deleteVideoChannel (url: string, token: string, channelId: number | string, expectedStatus = 204) {
+  const path = '/api/v1/video-channels/' + channelId
 
   return request(url)
     .delete(path)
@@ -89,8 +87,8 @@ function deleteVideoChannel (url: string, token: string, accountId: number | str
     .expect(expectedStatus)
 }
 
-function getVideoChannel (url: string, accountId: number | string, channelId: number | string) {
-  const path = '/api/v1/accounts/' + accountId + '/video-channels/' + channelId
+function getVideoChannel (url: string, channelId: number | string) {
+  const path = '/api/v1/video-channels/' + channelId
 
   return request(url)
     .get(path)

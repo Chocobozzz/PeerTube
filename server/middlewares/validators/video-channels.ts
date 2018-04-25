@@ -27,7 +27,6 @@ const listVideoAccountChannelsValidator = [
 ]
 
 const videoChannelsAddValidator = [
-  param('accountId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid account id'),
   body('name').custom(isVideoChannelNameValid).withMessage('Should have a valid name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
@@ -43,7 +42,6 @@ const videoChannelsAddValidator = [
 
 const videoChannelsUpdateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('accountId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid account id'),
   body('name').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
@@ -52,9 +50,7 @@ const videoChannelsUpdateValidator = [
     logger.debug('Checking videoChannelsUpdate parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isAccountIdExist(req.params.accountId, res)) return
     if (!await isVideoChannelExist(req.params.id, res)) return
-    if (!checkAccountOwnsVideoChannel(res.locals.account, res.locals.videoChannel, res)) return
 
     // We need to make additional checks
     if (res.locals.videoChannel.Actor.isOwned() === false) {
@@ -75,17 +71,13 @@ const videoChannelsUpdateValidator = [
 
 const videoChannelsRemoveValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('accountId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid account id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsRemove parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await isAccountIdExist(req.params.accountId, res)) return
     if (!await isVideoChannelExist(req.params.id, res)) return
 
-    if (!checkAccountOwnsVideoChannel(res.locals.account, res.locals.videoChannel, res)) return
-    // Check if the user who did the request is able to delete the video
     if (!checkUserCanDeleteVideoChannel(res.locals.oauth.token.User, res.locals.videoChannel, res)) return
     if (!await checkVideoChannelIsNotTheLastOne(res)) return
 
@@ -95,18 +87,13 @@ const videoChannelsRemoveValidator = [
 
 const videoChannelsGetValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  param('accountId').optional().custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid account id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoChannelsGet parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
 
-    // On some routes, accountId is optional (for example in the ActivityPub route)
-    if (req.params.accountId && !await isAccountIdExist(req.params.accountId, res)) return
     if (!await isVideoChannelExist(req.params.id, res)) return
-
-    if (res.locals.account && !checkAccountOwnsVideoChannel(res.locals.account, res.locals.videoChannel, res)) return
 
     return next()
   }
@@ -154,18 +141,6 @@ async function checkVideoChannelIsNotTheLastOne (res: express.Response) {
     res.status(409)
       .json({ error: 'Cannot remove the last channel of this user' })
       .end()
-
-    return false
-  }
-
-  return true
-}
-
-function checkAccountOwnsVideoChannel (account: AccountModel, videoChannel: VideoChannelModel, res: express.Response) {
-  if (videoChannel.Account.id !== account.id) {
-    res.status(400)
-              .json({ error: 'This account does not own this video channel' })
-              .end()
 
     return false
   }

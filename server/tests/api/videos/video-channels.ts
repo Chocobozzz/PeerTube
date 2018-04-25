@@ -63,7 +63,7 @@ describe('Test video channels', function () {
       description: 'super video channel description',
       support: 'super video channel support text'
     }
-    const res = await addVideoChannel(servers[0].url, servers[0].accessToken, accountUUID, videoChannel)
+    const res = await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
     videoChannelId = res.body.videoChannel.id
     videoChannelUUID = res.body.videoChannel.uuid
 
@@ -130,7 +130,7 @@ describe('Test video channels', function () {
       support: 'video channel support text updated'
     }
 
-    await updateVideoChannel(servers[0].url, servers[0].accessToken, accountUUID, videoChannelId, videoChannelAttributes)
+    await updateVideoChannel(servers[0].url, servers[0].accessToken, videoChannelId, videoChannelAttributes)
 
     await wait(3000)
   })
@@ -149,7 +149,7 @@ describe('Test video channels', function () {
   })
 
   it('Should get video channel', async function () {
-    const res = await getVideoChannel(servers[0].url, accountUUID, videoChannelId)
+    const res = await getVideoChannel(servers[0].url, videoChannelId)
 
     const videoChannel = res.body
     expect(videoChannel.displayName).to.equal('video channel updated')
@@ -161,7 +161,7 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     for (const server of servers) {
-      const res = await getVideoChannelVideos(server.url, server.accessToken, accountUUID, videoChannelUUID, 0, 5)
+      const res = await getVideoChannelVideos(server.url, server.accessToken, videoChannelUUID, 0, 5)
       expect(res.body.total).to.equal(1)
       expect(res.body.data).to.be.an('array')
       expect(res.body.data).to.have.lengthOf(1)
@@ -170,7 +170,7 @@ describe('Test video channels', function () {
   })
 
   it('Should delete video channel', async function () {
-    await deleteVideoChannel(servers[0].url, servers[0].accessToken, accountUUID, videoChannelId)
+    await deleteVideoChannel(servers[0].url, servers[0].accessToken, videoChannelId)
   })
 
   it('Should have video channel deleted', async function () {

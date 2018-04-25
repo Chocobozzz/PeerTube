@@ -1017,27 +1017,6 @@ paths:
             type: array
             items:
               $ref: '#/definitions/VideoChannel'
-  /accounts/{accountId}/video-channels:
-    get:
-      tags:
-        - VideoChannel
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - name: accountId
-          in: path
-          required: true
-          type: string
-          description: 'The account id '
-      responses:
-        '200':
-          description: successful operation
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/VideoChannel'
     post:
       security:
         - OAuth2: [ ]
@@ -1048,11 +1027,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: accountId
-          in: path
-          required: true
-          type: string
-          description: 'The account id '
         - in: body
           name: body
           schema:
@@ -1060,7 +1034,7 @@ paths:
       responses:
         '204':
           description: successful operation
-  "/account/{accountId}/video-channels/{id}":
+  "/video-channels/{id}":
     get:
       tags:
         - VideoChannel
@@ -1069,11 +1043,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: accountId
-          in: path
-          required: true
-          type: string
-          description: 'The account id '
         - name: id
           in: path
           required: true
@@ -1094,11 +1063,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: accountId
-          in: path
-          required: true
-          type: string
-          description: 'The account id '
         - name: id
           in: path
           required: true
@@ -1121,11 +1085,6 @@ paths:
       produces:
         - application/json
       parameters:
-        - name: accountId
-          in: path
-          required: true
-          type: string
-          description: 'The account id '
         - name: id
           in: path
           required: true
@@ -1134,7 +1093,26 @@ paths:
       responses:
         '204':
           description: successful operation
-  "/account/{accountId}/video-channels/{id}/videos":
+  "/video-channels/{id}/videos":
+    get:
+      tags:
+        - VideoChannel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The video channel id '
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Video'
+  /accounts/{accountId}/video-channels:
     get:
       tags:
         - VideoChannel
@@ -1148,16 +1126,13 @@ paths:
           required: true
           type: string
           description: 'The account id '
-        - name: id
-          in: path
-          required: true
-          type: string
-          description: 'The video channel id '
       responses:
         '200':
           description: successful operation
           schema:
-            $ref: '#/definitions/Video'
+            type: array
+            items:
+              $ref: '#/definitions/VideoChannel'
   "/videos/{videoId}/comment-threads":
     get:
       tags:

@@ -28,6 +28,9 @@
                 <a href="#operation--accounts--id--get"> GET /accounts/{id} </a>
               </li>
               <li>
+                <a href="#operation--accounts--id--videos-get"> GET /accounts/{id}/videos </a>
+              </li>
+              <li>
                 <a href="#operation--accounts-get"> GET /accounts </a>
               </li>
             </ul>
@@ -187,19 +190,22 @@
                 <a href="#operation--video-channels-get"> GET /video-channels </a>
               </li>
               <li>
+                <a href="#operation--video-channels-post"> POST /video-channels </a>
+              </li>
+              <li>
+                <a href="#operation--video-channels--id--get"> GET /video-channels/{id} </a>
+              </li>
+              <li>
+                <a href="#operation--video-channels--id--put"> PUT /video-channels/{id} </a>
+              </li>
+              <li>
+                <a href="#operation--video-channels--id--delete"> DELETE /video-channels/{id} </a>
+              </li>
+              <li>
+                <a href="#operation--video-channels--id--videos-get"> GET /video-channels/{id}/videos </a>
+              </li>
+              <li>
                 <a href="#operation--accounts--accountId--video-channels-get"> GET /accounts/{accountId}/video-channels </a>
-              </li>
-              <li>
-                <a href="#operation--accounts--accountId--video-channels-post"> POST /accounts/{accountId}/video-channels </a>
-              </li>
-              <li>
-                <a href="#operation--account--accountId--video-channels--id--get"> GET /account/{accountId}/video-channels/{id} </a>
-              </li>
-              <li>
-                <a href="#operation--account--accountId--video-channels--id--put"> PUT /account/{accountId}/video-channels/{id} </a>
-              </li>
-              <li>
-                <a href="#operation--account--accountId--video-channels--id--delete"> DELETE /account/{accountId}/video-channels/{id} </a>
               </li>
             </ul>
           </section>
@@ -444,6 +450,117 @@
     <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  }
+}
+</code></pre>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--accounts--id--videos-get" class="operation panel" data-traverse-target="operation--accounts--id--videos-get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-Accounts">Accounts</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/accounts/{id}/videos</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">id</div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>The id of the account</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                      <div class="prop-ref">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/Video">Video</a>
+                        </span>
+                      </div>
+                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;category&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  },
+  <span class="hljs-attr">&quot;licence&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  },
+  <span class="hljs-attr">&quot;language&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  },
+  <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;account&quot;</span>: {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;avatar&quot;</span>: {
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    }
   }
 }
 </code></pre>
@@ -1596,54 +1713,10 @@
         <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-        <span class="hljs-attr">&quot;owner&quot;</span>: {
-          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;videos&quot;</span>: [
-          {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;category&quot;</span>: {
-              <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-              <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            },
-            <span class="hljs-attr">&quot;licence&quot;</span>: {
-              <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-              <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            },
-            <span class="hljs-attr">&quot;language&quot;</span>: {
-              <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            },
-            <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-            <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-            <span class="hljs-attr">&quot;account&quot;</span>: {
-              <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;avatar&quot;</span>: {
-                <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-                <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-                <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-              }
-            }
-          }
-        ]
+        }
       }
     ]
   }
@@ -1848,54 +1921,10 @@
       <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-      <span class="hljs-attr">&quot;owner&quot;</span>: {
-        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;videos&quot;</span>: [
-        {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;category&quot;</span>: {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          },
-          <span class="hljs-attr">&quot;licence&quot;</span>: {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          },
-          <span class="hljs-attr">&quot;language&quot;</span>: {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          },
-          <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-          <span class="hljs-attr">&quot;account&quot;</span>: {
-            <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;avatar&quot;</span>: {
-              <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            }
-          }
-        }
-      ]
+      }
     }
   ]
 }
@@ -2125,54 +2154,10 @@
         <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
         <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-        <span class="hljs-attr">&quot;owner&quot;</span>: {
-          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+        <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
           <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;videos&quot;</span>: [
-          {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;category&quot;</span>: {
-              <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-              <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            },
-            <span class="hljs-attr">&quot;licence&quot;</span>: {
-              <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-              <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            },
-            <span class="hljs-attr">&quot;language&quot;</span>: {
-              <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            },
-            <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-            <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-            <span class="hljs-attr">&quot;account&quot;</span>: {
-              <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;avatar&quot;</span>: {
-                <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-                <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-                <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-              }
-            }
-          }
-        ]
+        }
       }
     ]
   }
@@ -4867,56 +4852,477 @@
     <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-    <span class="hljs-attr">&quot;owner&quot;</span>: {
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-    },
-    <span class="hljs-attr">&quot;videos&quot;</span>: [
-      {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;category&quot;</span>: {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;licence&quot;</span>: {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;language&quot;</span>: {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-        <span class="hljs-attr">&quot;account&quot;</span>: {
-          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;avatar&quot;</span>: {
-            <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          }
-        }
-      }
-    ]
+    }
   }
 ]
+</code></pre>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--video-channels-post" class="operation panel" data-traverse-target="operation--video-channels-post">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">POST</span>
+                <span class="operation-path">/video-channels</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-body">
+                  <div class="prop-row">
+                    <div class="prop-name">
+                      <div class="swagger-request-model">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/VideoChannelInput">VideoChannelInput</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value columns small-6">
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>undefined</p>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Request Content-Types:
+                    <span>application/json</span>
+                  </h5>
+                  <h5>Request Example</h5>
+                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+}
+</code></pre>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">204 No Content</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--video-channels--id--get" class="operation panel" data-traverse-target="operation--video-channels--id--get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/video-channels/{id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">id</div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>The video channel id </p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                      <div class="prop-ref">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/VideoChannel">VideoChannel</a>
+                        </span>
+                      </div>
+                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+  <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  }
+}
+</code></pre>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--video-channels--id--put" class="operation panel" data-traverse-target="operation--video-channels--id--put">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">PUT</span>
+                <span class="operation-path">/video-channels/{id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-body">
+                  <div class="prop-row">
+                    <div class="prop-name">
+                      <div class="swagger-request-model">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/VideoChannelInput">VideoChannelInput</a>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="prop-value columns small-6">
+                      <!-- <div class="swagger-request-description"> -->
+                      <p>undefined</p>
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </section>
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">id</div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>The video channel id </p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <section>
+                  <h5>Request Content-Types:
+                    <span>application/json</span>
+                  </h5>
+                  <h5>Request Example</h5>
+                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+}
+</code></pre>
+                  <!-- </div> -->
+                </section>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">204 No Content</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--video-channels--id--delete" class="operation panel" data-traverse-target="operation--video-channels--id--delete">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">DELETE</span>
+                <span class="operation-path">/video-channels/{id}</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">id</div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>The video channel id </p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">204 No Content</div>
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+              </div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-security">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="swagger-request-security-schema"></th>
+                        <th class="swagger-request-security-scopes"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a href="#security-definition-OAuth2">OAuth2</a>
+                        </td>
+                        <td> </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </div>
+            </div>
+          </div>
+          <div id="operation--video-channels--id--videos-get" class="operation panel" data-traverse-target="operation--video-channels--id--videos-get">
+            <!-- <section class="operation-tags row"> -->
+            <!-- <div class="doc-copy"> -->
+            <div class="operation-tags">
+              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
+              <!---->
+            </div>
+            <!-- </div> -->
+            <!-- </section> -->
+            <h2 class="operation-title">
+              <span class="operation-name">
+                <span class="operation-name">GET</span>
+                <span class="operation-path">/video-channels/{id}/videos</span>
+              </span>
+            </h2>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-request-params">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">id</div>
+                      <span class="json-property-required"></span>
+                      <div class="prop-subtitle"> in path </div>
+                      <div class="prop-subtitle">
+                        <span class="json-property-type">string</span>
+                        <span class="json-property-range" title="Value limits"></span>
+                      </div>
+                    </div>
+                    <div class="prop-value">
+                      <p>The video channel id </p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples"></div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-copy">
+                <section class="swagger-responses">
+                  <div class="prop-row prop-group">
+                    <div class="prop-name">
+                      <div class="prop-title">200 OK</div>
+                      <div class="prop-ref">
+                        <span class="">
+                          <a class="json-schema-ref" href="#/definitions/Video">Video</a>
+                        </span>
+                      </div>
+                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
+                    </div>
+                    <div class="prop-value">
+                      <p>successful operation</p>
+                    </div>
+                  </div>
+                </section>
+              </div>
+              <div class="doc-examples">
+                <h5>Response Content-Types:
+                  <span>application/json</span>
+                </h5>
+                <section>
+                  <h5>Response Example
+                    <span>(200 OK)</span>
+                  </h5>
+                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
+  <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;category&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  },
+  <span class="hljs-attr">&quot;licence&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+    <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  },
+  <span class="hljs-attr">&quot;language&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+  },
+  <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
+  <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
+  <span class="hljs-attr">&quot;account&quot;</span>: {
+    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;avatar&quot;</span>: {
+      <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
+    }
+  }
+}
 </code></pre>
                   <!-- </div> -->
                 </section>
@@ -5002,514 +5408,14 @@
     <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
     <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-    <span class="hljs-attr">&quot;owner&quot;</span>: {
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+    <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
       <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-    },
-    <span class="hljs-attr">&quot;videos&quot;</span>: [
-      {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;category&quot;</span>: {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;licence&quot;</span>: {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;language&quot;</span>: {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        },
-        <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-        <span class="hljs-attr">&quot;account&quot;</span>: {
-          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;avatar&quot;</span>: {
-            <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          }
-        }
-      }
-    ]
+    }
   }
 ]
 </code></pre>
                   <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--accounts--accountId--video-channels-post" class="operation panel" data-traverse-target="operation--accounts--accountId--video-channels-post">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-name">
-                <span class="operation-name">POST</span>
-                <span class="operation-path">/accounts/{accountId}/video-channels</span>
-              </span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-body">
-                  <div class="prop-row">
-                    <div class="prop-name">
-                      <div class="swagger-request-model">
-                        <span class="">
-                          <a class="json-schema-ref" href="#/definitions/VideoChannelInput">VideoChannelInput</a>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value columns small-6">
-                      <!-- <div class="swagger-request-description"> -->
-                      <p>undefined</p>
-                      <!-- </div> -->
-                    </div>
-                  </div>
-                </section>
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">accountId</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>The account id </p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <section>
-                  <h5>Request Content-Types:
-                    <span>application/json</span>
-                  </h5>
-                  <h5>Request Example</h5>
-                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-}
-</code></pre>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">204 No Content</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-security">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="swagger-request-security-schema"></th>
-                        <th class="swagger-request-security-scopes"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <a href="#security-definition-OAuth2">OAuth2</a>
-                        </td>
-                        <td> </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--account--accountId--video-channels--id--get" class="operation panel" data-traverse-target="operation--account--accountId--video-channels--id--get">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-name">
-                <span class="operation-name">GET</span>
-                <span class="operation-path">/account/{accountId}/video-channels/{id}</span>
-              </span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">accountId</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>The account id </p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">id</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>The video channel id </p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">200 OK</div>
-                      <div class="prop-ref">
-                        <span class="">
-                          <a class="json-schema-ref" href="#/definitions/VideoChannel">VideoChannel</a>
-                        </span>
-                      </div>
-                      <!-- <span class="swagger-global"></span> <span class="json-schema-reference"><a href=""></a></span> -->
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-                <section>
-                  <h5>Response Example
-                    <span>(200 OK)</span>
-                  </h5>
-                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
-  <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-  <span class="hljs-attr">&quot;owner&quot;</span>: {
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-    <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-  },
-  <span class="hljs-attr">&quot;videos&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;category&quot;</span>: {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;licence&quot;</span>: {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;language&quot;</span>: {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-      <span class="hljs-attr">&quot;account&quot;</span>: {
-        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;avatar&quot;</span>: {
-          <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        }
-      }
-    }
-  ]
-}
-</code></pre>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--account--accountId--video-channels--id--put" class="operation panel" data-traverse-target="operation--account--accountId--video-channels--id--put">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-name">
-                <span class="operation-name">PUT</span>
-                <span class="operation-path">/account/{accountId}/video-channels/{id}</span>
-              </span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-body">
-                  <div class="prop-row">
-                    <div class="prop-name">
-                      <div class="swagger-request-model">
-                        <span class="">
-                          <a class="json-schema-ref" href="#/definitions/VideoChannelInput">VideoChannelInput</a>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="prop-value columns small-6">
-                      <!-- <div class="swagger-request-description"> -->
-                      <p>undefined</p>
-                      <!-- </div> -->
-                    </div>
-                  </div>
-                </section>
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">accountId</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>The account id </p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">id</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>The video channel id </p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <section>
-                  <h5>Request Content-Types:
-                    <span>application/json</span>
-                  </h5>
-                  <h5>Request Example</h5>
-                  <!-- <div class="hljs"> --><pre><code class="hljs lang-json">{
-  <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-  <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-}
-</code></pre>
-                  <!-- </div> -->
-                </section>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">204 No Content</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-security">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="swagger-request-security-schema"></th>
-                        <th class="swagger-request-security-scopes"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <a href="#security-definition-OAuth2">OAuth2</a>
-                        </td>
-                        <td> </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </section>
-              </div>
-            </div>
-          </div>
-          <div id="operation--account--accountId--video-channels--id--delete" class="operation panel" data-traverse-target="operation--account--accountId--video-channels--id--delete">
-            <!-- <section class="operation-tags row"> -->
-            <!-- <div class="doc-copy"> -->
-            <div class="operation-tags">
-              <a class="label" href="#tag-VideoChannel">VideoChannel</a>
-              <!---->
-            </div>
-            <!-- </div> -->
-            <!-- </section> -->
-            <h2 class="operation-title">
-              <span class="operation-name">
-                <span class="operation-name">DELETE</span>
-                <span class="operation-path">/account/{accountId}/video-channels/{id}</span>
-              </span>
-            </h2>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-params">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">accountId</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>The account id </p>
-                    </div>
-                  </div>
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">id</div>
-                      <span class="json-property-required"></span>
-                      <div class="prop-subtitle"> in path </div>
-                      <div class="prop-subtitle">
-                        <span class="json-property-type">string</span>
-                        <span class="json-property-range" title="Value limits"></span>
-                      </div>
-                    </div>
-                    <div class="prop-value">
-                      <p>The video channel id </p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples"></div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-responses">
-                  <div class="prop-row prop-group">
-                    <div class="prop-name">
-                      <div class="prop-title">204 No Content</div>
-                    </div>
-                    <div class="prop-value">
-                      <p>successful operation</p>
-                    </div>
-                  </div>
-                </section>
-              </div>
-              <div class="doc-examples">
-                <h5>Response Content-Types:
-                  <span>application/json</span>
-                </h5>
-              </div>
-            </div>
-            <div class="doc-row">
-              <div class="doc-copy">
-                <section class="swagger-request-security">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th class="swagger-request-security-schema"></th>
-                        <th class="swagger-request-security-scopes"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <a href="#security-definition-OAuth2">OAuth2</a>
-                        </td>
-                        <td> </td>
-                      </tr>
-                    </tbody>
-                  </table>
                 </section>
               </div>
             </div>
@@ -6760,18 +6666,9 @@
                       <span class="json-property-type">boolean</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
-                    <dt data-property-name="owner">
-                      <span class="json-property-name">owner:</span>
+                    <dt data-property-name="ownerAccount">
+                      <span class="json-property-name">ownerAccount:</span>
                       <span class="json-property-type">object</span>
-                      <span class="json-property-range" title="Value limits"></span>
-                    </dt>
-                    <dt data-property-name="videos">
-                      <span class="json-property-name">videos:</span>
-                      <span class="json-property-type">
-                        <span class="json-schema-ref-array">
-                          <a class="json-schema-ref" href="#/definitions/Video">Video</a>
-                        </span>
-                      </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
                   </dl>
@@ -6784,54 +6681,10 @@
   <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
   <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-  <span class="hljs-attr">&quot;owner&quot;</span>: {
-    <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+  <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+    <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
     <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-  },
-  <span class="hljs-attr">&quot;videos&quot;</span>: [
-    {
-      <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;category&quot;</span>: {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;licence&quot;</span>: {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-        <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;language&quot;</span>: {
-        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-      <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-      <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-      <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-      <span class="hljs-attr">&quot;account&quot;</span>: {
-        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-        <span class="hljs-attr">&quot;avatar&quot;</span>: {
-          <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-        }
-      }
-    }
-  ]
+  }
 }
 </code></pre>
                   <!-- </div> -->
@@ -7394,54 +7247,10 @@
       <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
       <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-      <span class="hljs-attr">&quot;owner&quot;</span>: {
-        <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
+      <span class="hljs-attr">&quot;ownerAccount&quot;</span>: {
+        <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
         <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-      },
-      <span class="hljs-attr">&quot;videos&quot;</span>: [
-        {
-          <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;uuid&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;publishedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;category&quot;</span>: {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          },
-          <span class="hljs-attr">&quot;licence&quot;</span>: {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-            <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          },
-          <span class="hljs-attr">&quot;language&quot;</span>: {
-            <span class="hljs-attr">&quot;id&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;label&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-          },
-          <span class="hljs-attr">&quot;privacy&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;description&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;duration&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;isLocal&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-          <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;thumbnailPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;previewPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;embedPath&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-          <span class="hljs-attr">&quot;views&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;likes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;dislikes&quot;</span>: <span class="hljs-string">&quot;number&quot;</span>,
-          <span class="hljs-attr">&quot;nsfw&quot;</span>: <span class="hljs-string">&quot;boolean&quot;</span>,
-          <span class="hljs-attr">&quot;account&quot;</span>: {
-            <span class="hljs-attr">&quot;name&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;displayName&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;url&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;host&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-            <span class="hljs-attr">&quot;avatar&quot;</span>: {
-              <span class="hljs-attr">&quot;path&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>,
-              <span class="hljs-attr">&quot;updatedAt&quot;</span>: <span class="hljs-string">&quot;string&quot;</span>
-            }
-          }
-        }
-      ]
+      }
     }
   ]
 }

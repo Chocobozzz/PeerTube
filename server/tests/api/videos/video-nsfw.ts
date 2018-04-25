@@ -39,7 +39,7 @@ describe('Test video NSFW policy', function () {
             getVideosListWithToken(server.url, token),
             searchVideoWithToken(server.url, 'n', token),
             getAccountVideos(server.url, token, accountUUID, 0, 5),
-            getVideoChannelVideos(server.url, token, accountUUID, videoChannelUUID, 0, 5)
+            getVideoChannelVideos(server.url, token, videoChannelUUID, 0, 5)
           ])
         }
 
@@ -47,7 +47,7 @@ describe('Test video NSFW policy', function () {
           getVideosList(server.url),
           searchVideo(server.url, 'n'),
           getAccountVideos(server.url, undefined, accountUUID, 0, 5),
-          getVideoChannelVideos(server.url, undefined, accountUUID, videoChannelUUID, 0, 5)
+          getVideoChannelVideos(server.url, undefined, videoChannelUUID, 0, 5)
         ])
       })
   }
