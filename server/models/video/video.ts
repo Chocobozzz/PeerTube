@@ -430,7 +430,7 @@ export class VideoModel extends Model<VideoModel> {
     foreignKey: {
       allowNull: true
     },
-    onDelete: 'cascade'
+    hooks: true
   })
   VideoChannel: VideoChannelModel
 
@@ -510,9 +510,11 @@ export class VideoModel extends Model<VideoModel> {
     return undefined
   }
 
-  @AfterDestroy
+  @BeforeDestroy
   static async removeFilesAndSendDelete (instance: VideoModel) {
     const tasks: Promise<any>[] = []
+
+    logger.debug('Removing files of video %s.', instance.url)
 
     tasks.push(instance.removeThumbnail())
 
@@ -530,10 +532,13 @@ export class VideoModel extends Model<VideoModel> {
       })
     }
 
-    return Promise.all(tasks)
+    // Do not wait video deletion because we could be in a transaction
+    Promise.all(tasks)
       .catch(err => {
         logger.error('Some errors when removing files of video %s in after destroy hook.', instance.uuid, { err })
       })
+
+    return undefined
   }
 
   static list () {

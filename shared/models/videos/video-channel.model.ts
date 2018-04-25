@@ -6,9 +6,8 @@ export interface VideoChannel extends Actor {
   description: string
   support: string
   isLocal: boolean
-  owner?: {
-    name: string
+  ownerAccount?: {
+    id: number
     uuid: string
   }
-  videos?: Video[]
 }

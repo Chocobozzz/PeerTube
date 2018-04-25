@@ -126,7 +126,8 @@ async function addVideoChannelRetryWrapper (req: express.Request, res: express.R
   const videoChannel = await retryTransactionWrapper(addVideoChannel, options)
   return res.json({
     videoChannel: {
-      id: videoChannel.id
+      id: videoChannel.id,
+      uuid: videoChannel.Actor.uuid
     }
   }).end()
 }
@@ -232,7 +233,6 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
-
 
 async function listAccountVideos (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account

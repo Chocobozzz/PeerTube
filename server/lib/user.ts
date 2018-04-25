@@ -5,6 +5,7 @@ import { AccountModel } from '../models/account/account'
 import { UserModel } from '../models/account/user'
 import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
 import { createVideoChannel } from './video-channel'
+import { VideoChannelModel } from '../models/video/video-channel'
 
 async function createUserAccountAndChannel (userToCreate: UserModel, validateUser = true) {
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
@@ -28,7 +29,7 @@ async function createUserAccountAndChannel (userToCreate: UserModel, validateUse
   account.Actor = await setAsyncActorKeys(account.Actor)
   videoChannel.Actor = await setAsyncActorKeys(videoChannel.Actor)
 
-  return { user, account, videoChannel }
+  return { user, account, videoChannel } as { user: UserModel, account: AccountModel, videoChannel: VideoChannelModel }
 }
 
 async function createLocalAccountWithoutKeys (

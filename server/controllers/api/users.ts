@@ -185,7 +185,10 @@ async function createUserRetryWrapper (req: express.Request, res: express.Respon
   return res.json({
     user: {
       id: user.id,
-      uuid: account.uuid
+      account: {
+        id: account.id,
+        uuid: account.Actor.uuid
+      }
     }
   }).end()
 }

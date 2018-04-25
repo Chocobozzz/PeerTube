@@ -108,7 +108,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     foreignKey: {
       allowNull: false
     },
-    onDelete: 'CASCADE'
+    hooks: true
   })
   Account: AccountModel
 
@@ -234,17 +234,26 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
   toFormattedJSON (): VideoChannel {
     const actor = this.Actor.toFormattedJSON()
-    const account = {
+    const videoChannel = {
       id: this.id,
       displayName: this.name,
       description: this.description,
       support: this.support,
       isLocal: this.Actor.isOwned(),
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
+      ownerAccount: undefined,
+      videos: undefined
     }
 
-    return Object.assign(actor, account)
+    if (this.Account) {
+      videoChannel.ownerAccount = {
+        id: this.Account.id,
+        uuid: this.Account.Actor.uuid
+      }
+    }
+
+    return Object.assign(actor, videoChannel)
   }
 
   toActivityPubObject (): ActivityPubActor {

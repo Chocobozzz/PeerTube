@@ -3,7 +3,7 @@
 import * as chai from 'chai'
 import 'mocha'
 import { User } from '../../../../shared/index'
-import { doubleFollow, flushAndRunMultipleServers, uploadVideo, wait } from '../../utils'
+import { doubleFollow, flushAndRunMultipleServers, getVideoChannelVideos, uploadVideo, wait } from '../../utils'
 import {
   addVideoChannel,
   deleteVideoChannel,
@@ -24,8 +24,9 @@ const expect = chai.expect
 describe('Test video channels', function () {
   let servers: ServerInfo[]
   let userInfo: User
-  let accountId: number
+  let accountUUID: string
   let videoChannelId: number
+  let videoChannelUUID: string
 
   before(async function () {
     this.timeout(30000)
@@ -38,8 +39,9 @@ describe('Test video channels', function () {
     await doubleFollow(servers[0], servers[1])
 
     {
-      const res = await getAccountsList(servers[0].url)
-      accountId = res.body.data[0].id
+      const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
+      const user: User = res.body
+      accountUUID = user.account.uuid
     }
 
     await wait(5000)
@@ -61,11 +63,12 @@ describe('Test video channels', function () {
       description: 'super video channel description',
       support: 'super video channel support text'
     }
-    const res = await addVideoChannel(servers[0].url, servers[0].accessToken, accountId, videoChannel)
+    const res = await addVideoChannel(servers[0].url, servers[0].accessToken, accountUUID, videoChannel)
     videoChannelId = res.body.videoChannel.id
+    videoChannelUUID = res.body.videoChannel.uuid
 
     // The channel is 1 is propagated to servers 2
-    await uploadVideo(servers[0].url, servers[0].accessToken, { channelId: videoChannelId })
+    await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'my video name', channelId: videoChannelId })
 
     await wait(3000)
   })
@@ -127,7 +130,7 @@ describe('Test video channels', function () {
       support: 'video channel support text updated'
     }
 
-    await updateVideoChannel(servers[0].url, servers[0].accessToken, accountId, videoChannelId, videoChannelAttributes)
+    await updateVideoChannel(servers[0].url, servers[0].accessToken, accountUUID, videoChannelId, videoChannelAttributes)
 
     await wait(3000)
   })
@@ -146,7 +149,7 @@ describe('Test video channels', function () {
   })
 
   it('Should get video channel', async function () {
-    const res = await getVideoChannel(servers[0].url, accountId, videoChannelId)
+    const res = await getVideoChannel(servers[0].url, accountUUID, videoChannelId)
 
     const videoChannel = res.body
     expect(videoChannel.displayName).to.equal('video channel updated')
@@ -154,8 +157,20 @@ describe('Test video channels', function () {
     expect(videoChannel.support).to.equal('video channel support text updated')
   })
 
+  it('Should list the video channel videos', async function () {
+    this.timeout(10000)
+
+    for (const server of servers) {
+      const res = await getVideoChannelVideos(server.url, server.accessToken, accountUUID, videoChannelUUID, 0, 5)
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data).to.be.an('array')
+      expect(res.body.data).to.have.lengthOf(1)
+      expect(res.body.data[0].name).to.equal('my video name')
+    }
+  })
+
   it('Should delete video channel', async function () {
-    await deleteVideoChannel(servers[0].url, servers[0].accessToken, accountId, videoChannelId)
+    await deleteVideoChannel(servers[0].url, servers[0].accessToken, accountUUID, videoChannelId)
   })
 
   it('Should have video channel deleted', async function () {

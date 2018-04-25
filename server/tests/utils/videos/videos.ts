@@ -167,6 +167,46 @@ function getMyVideos (url: string, accessToken: string, start: number, count: nu
     .expect('Content-Type', /json/)
 }
 
+function getAccountVideos (url: string, accessToken: string, accountId: number | string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/accounts/' + accountId + '/videos'
+
+  return makeGetRequest({
+    url,
+    path,
+    query: {
+      start,
+      count,
+      sort
+    },
+    token: accessToken,
+    statusCodeExpected: 200
+  })
+}
+
+function getVideoChannelVideos (
+  url: string,
+  accessToken: string,
+  accountId: number | string,
+  videoChannelId: number | string,
+  start: number,
+  count: number,
+  sort?: string
+) {
+  const path = '/api/v1/accounts/' + accountId + '/video-channels/' + videoChannelId + '/videos'
+
+  return makeGetRequest({
+    url,
+    path,
+    query: {
+      start,
+      count,
+      sort
+    },
+    token: accessToken,
+    statusCodeExpected: 200
+  })
+}
+
 function getVideosListPagination (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/videos'
 
@@ -514,6 +554,8 @@ export {
   getVideoPrivacies,
   getVideoLanguages,
   getMyVideos,
+  getAccountVideos,
+  getVideoChannelVideos,
   searchVideoWithToken,
   getVideo,
   getVideoWithToken,

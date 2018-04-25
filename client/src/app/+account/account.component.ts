@@ -9,7 +9,7 @@ import { Account } from '@app/shared/account/account.model'
   styleUrls: [ './account.component.scss' ]
 })
 export class AccountComponent implements OnInit {
-  private account: Account
+  account: Account
 
   constructor (
     private route: ActivatedRoute,

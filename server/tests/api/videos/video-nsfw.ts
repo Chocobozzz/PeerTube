@@ -7,8 +7,9 @@ import { userLogin } from '../../utils/users/login'
 import { createUser } from '../../utils/users/users'
 import { getMyVideos } from '../../utils/videos/videos'
 import {
+  getAccountVideos,
   getConfig, getCustomConfig,
-  getMyUserInformation,
+  getMyUserInformation, getVideoChannelVideos,
   getVideosListWithToken,
   runServer,
   searchVideo,
@@ -17,6 +18,7 @@ import {
 } from '../../utils'
 import { ServerConfig } from '../../../../shared/models'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
+import { User } from '../../../../shared/models/users'
 
 const expect = chai.expect
 
@@ -24,6 +26,31 @@ describe('Test video NSFW policy', function () {
   let server: ServerInfo
   let userAccessToken: string
   let customConfig: CustomConfig
+
+  function getVideosFunctions (token?: string) {
+    return getMyUserInformation(server.url, server.accessToken)
+      .then(res => {
+        const user: User = res.body
+        const videoChannelUUID = user.videoChannels[0].uuid
+        const accountUUID = user.account.uuid
+
+        if (token) {
+          return Promise.all([
+            getVideosListWithToken(server.url, token),
+            searchVideoWithToken(server.url, 'n', token),
+            getAccountVideos(server.url, token, accountUUID, 0, 5),
+            getVideoChannelVideos(server.url, token, accountUUID, videoChannelUUID, 0, 5)
+          ])
+        }
+
+        return Promise.all([
+          getVideosList(server.url),
+          searchVideo(server.url, 'n'),
+          getAccountVideos(server.url, undefined, accountUUID, 0, 5),
+          getVideoChannelVideos(server.url, undefined, accountUUID, videoChannelUUID, 0, 5)
+        ])
+      })
+  }
 
   before(async function () {
     this.timeout(50000)
@@ -56,7 +83,7 @@ describe('Test video NSFW policy', function () {
       const serverConfig: ServerConfig = resConfig.body
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('display')
 
-      for (const res of [ await getVideosList(server.url), await searchVideo(server.url, 'n') ]) {
+      for (const res of await getVideosFunctions()) {
         expect(res.body.total).to.equal(2)
 
         const videos = res.body.data
@@ -74,7 +101,7 @@ describe('Test video NSFW policy', function () {
       const serverConfig: ServerConfig = resConfig.body
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('do_not_list')
 
-      for (const res of [ await getVideosList(server.url), await searchVideo(server.url, 'n') ]) {
+      for (const res of await getVideosFunctions()) {
         expect(res.body.total).to.equal(1)
 
         const videos = res.body.data
@@ -91,7 +118,7 @@ describe('Test video NSFW policy', function () {
       const serverConfig: ServerConfig = resConfig.body
       expect(serverConfig.instance.defaultNSFWPolicy).to.equal('blur')
 
-      for (const res of [ await getVideosList(server.url), await searchVideo(server.url, 'n') ]) {
+      for (const res of await getVideosFunctions()) {
         expect(res.body.total).to.equal(2)
 
         const videos = res.body.data
@@ -118,12 +145,7 @@ describe('Test video NSFW policy', function () {
     })
 
     it('Should display NSFW videos with blur user NSFW policy', async function () {
-      const results = [
-        await getVideosListWithToken(server.url, userAccessToken),
-        await searchVideoWithToken(server.url, 'n', userAccessToken)
-      ]
-
-      for (const res of results) {
+      for (const res of await getVideosFunctions(userAccessToken)) {
         expect(res.body.total).to.equal(2)
 
         const videos = res.body.data
@@ -140,12 +162,7 @@ describe('Test video NSFW policy', function () {
         nsfwPolicy: 'display'
       })
 
-      const results = [
-        await getVideosListWithToken(server.url, server.accessToken),
-        await searchVideoWithToken(server.url, 'n', server.accessToken)
-      ]
-
-      for (const res of results) {
+      for (const res of await getVideosFunctions(server.accessToken)) {
         expect(res.body.total).to.equal(2)
 
         const videos = res.body.data
@@ -162,11 +179,7 @@ describe('Test video NSFW policy', function () {
         nsfwPolicy: 'do_not_list'
       })
 
-      const results = [
-        await getVideosListWithToken(server.url, server.accessToken),
-        await searchVideoWithToken(server.url, 'n', server.accessToken)
-      ]
-      for (const res of results) {
+      for (const res of await getVideosFunctions(server.accessToken)) {
         expect(res.body.total).to.equal(1)
 
         const videos = res.body.data

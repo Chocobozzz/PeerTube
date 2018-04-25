@@ -18,7 +18,7 @@ import { AccountService } from '@app/shared/account/account.service'
   styleUrls: [ './account-about.component.scss' ]
 })
 export class AccountAboutComponent implements OnInit {
-  private account: Account
+  account: Account
 
   constructor (
     protected route: ActivatedRoute,

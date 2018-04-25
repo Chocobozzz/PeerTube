@@ -11,6 +11,7 @@ import { logger } from '../../helpers/logger'
 import { UserModel } from '../../models/account/user'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { areValidationErrors } from './utils'
+import { AccountModel } from '../../models/account/account'
 
 const listVideoAccountChannelsValidator = [
   param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
@@ -53,6 +54,7 @@ const videoChannelsUpdateValidator = [
     if (areValidationErrors(req, res)) return
     if (!await isAccountIdExist(req.params.accountId, res)) return
     if (!await isVideoChannelExist(req.params.id, res)) return
+    if (!checkAccountOwnsVideoChannel(res.locals.account, res.locals.videoChannel, res)) return
 
     // We need to make additional checks
     if (res.locals.videoChannel.Actor.isOwned() === false) {
@@ -82,6 +84,7 @@ const videoChannelsRemoveValidator = [
     if (!await isAccountIdExist(req.params.accountId, res)) return
     if (!await isVideoChannelExist(req.params.id, res)) return
 
+    if (!checkAccountOwnsVideoChannel(res.locals.account, res.locals.videoChannel, res)) return
     // Check if the user who did the request is able to delete the video
     if (!checkUserCanDeleteVideoChannel(res.locals.oauth.token.User, res.locals.videoChannel, res)) return
     if (!await checkVideoChannelIsNotTheLastOne(res)) return
@@ -98,9 +101,12 @@ const videoChannelsGetValidator = [
     logger.debug('Checking videoChannelsGet parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
+
     // On some routes, accountId is optional (for example in the ActivityPub route)
     if (req.params.accountId && !await isAccountIdExist(req.params.accountId, res)) return
     if (!await isVideoChannelExist(req.params.id, res)) return
+
+    if (res.locals.account && !checkAccountOwnsVideoChannel(res.locals.account, res.locals.videoChannel, res)) return
 
     return next()
   }
@@ -148,6 +154,18 @@ async function checkVideoChannelIsNotTheLastOne (res: express.Response) {
     res.status(409)
       .json({ error: 'Cannot remove the last channel of this user' })
       .end()
+
+    return false
+  }
+
+  return true
+}
+
+function checkAccountOwnsVideoChannel (account: AccountModel, videoChannel: VideoChannelModel, res: express.Response) {
+  if (videoChannel.Account.id !== account.id) {
+    res.status(400)
+              .json({ error: 'This account does not own this video channel' })
+              .end()
 
     return false
   }

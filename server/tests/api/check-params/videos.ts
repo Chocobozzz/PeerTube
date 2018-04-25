@@ -10,6 +10,7 @@ import {
   makeGetRequest, makeUploadRequest, makePutBodyRequest, removeVideo, runServer, ServerInfo, setAccessTokensToServers, userLogin
 } from '../../utils'
 import { checkBadCountPagination, checkBadSortPagination, checkBadStartPagination } from '../../utils/requests/check-api-params'
+import { getAccountsList } from '../../utils/users/accounts'
 
 const expect = chai.expect
 
@@ -17,7 +18,9 @@ describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
   let server: ServerInfo
   let userAccessToken = ''
+  let accountUUID: string
   let channelId: number
+  let channelUUID: string
   let videoId
 
   // ---------------------------------------------------------------
@@ -36,8 +39,12 @@ describe('Test videos API validator', function () {
     await createUser(server.url, server.accessToken, username, password)
     userAccessToken = await userLogin(server, { username, password })
 
-    const res = await getMyUserInformation(server.url, server.accessToken)
-    channelId = res.body.videoChannels[0].id
+    {
+      const res = await getMyUserInformation(server.url, server.accessToken)
+      channelId = res.body.videoChannels[ 0 ].id
+      channelUUID = res.body.videoChannels[ 0 ].uuid
+      accountUUID = res.body.account.uuid
+    }
   })
 
   describe('When listing a video', function () {
@@ -51,6 +58,10 @@ describe('Test videos API validator', function () {
 
     it('Should fail with an incorrect sort', async function () {
       await checkBadSortPagination(server.url, path)
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
     })
   })
 
@@ -75,6 +86,10 @@ describe('Test videos API validator', function () {
     it('Should fail with an incorrect sort', async function () {
       await checkBadSortPagination(server.url, join(path, 'search', 'test'))
     })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
+    })
   })
 
   describe('When listing my videos', function () {
@@ -90,6 +105,58 @@ describe('Test videos API validator', function () {
 
     it('Should fail with an incorrect sort', async function () {
       await checkBadSortPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({ url: server.url, token: server.accessToken, path, statusCodeExpected: 200 })
+    })
+  })
+
+  describe('When listing account videos', function () {
+    let path: string
+
+    before(async function () {
+      path = '/api/v1/accounts/' + accountUUID + '/videos'
+    })
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
+    })
+  })
+
+  describe('When listing video channel videos', function () {
+    let path: string
+
+    before(async function () {
+      path = '/api/v1/accounts/' + accountUUID + '/video-channels/' + channelUUID + '/videos'
+    })
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(server.url, path, server.accessToken)
+    })
+
+    it('Should success with the correct parameters', async function () {
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
     })
   })
 
@@ -112,7 +179,7 @@ describe('Test videos API validator', function () {
         support: 'my super support text',
         tags: [ 'tag1', 'tag2' ],
         privacy: VideoPrivacy.PUBLIC,
-        channelId
+        channelId: channelId
       }
     })
 

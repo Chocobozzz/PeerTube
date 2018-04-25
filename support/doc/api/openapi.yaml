@@ -50,6 +50,25 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/Account'
+  '/accounts/{id}/videos':
+    get:
+      tags:
+        - Accounts
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The id of the account'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Video'
   /accounts:
     get:
       tags:
@@ -1115,6 +1134,30 @@ paths:
       responses:
         '204':
           description: successful operation
+  "/account/{accountId}/video-channels/{id}/videos":
+    get:
+      tags:
+        - VideoChannel
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: 'The account id '
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: 'The video channel id '
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/Video'
   "/videos/{videoId}/comment-threads":
     get:
       tags:
@@ -1387,17 +1430,13 @@ definitions:
         type: string
       isLocal:
         type: boolean
-      owner:
+      ownerAccount:
         type: object
         properties:
-          name:
-            type: string
+          id:
+            type: number
           uuid:
             type: string
-      videos:
-        type: array
-        items:
-          $ref: "#/definitions/Video"
   VideoComment:
     properties:
       id:
