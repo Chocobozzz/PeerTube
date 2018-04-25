@@ -9,8 +9,12 @@ const routes: Routes = [
     loadChildren: './+admin/admin.module#AdminModule'
   },
   {
-    path: 'account',
-    loadChildren: './+account/account.module#AccountModule'
+    path: 'accounts',
+    loadChildren: './+accounts/accounts.module#AccountsModule'
+  },
+  {
+    path: 'video-channels',
+    loadChildren: './+video-channels/video-channels.module#VideoChannelsModule'
   }
 ]
 

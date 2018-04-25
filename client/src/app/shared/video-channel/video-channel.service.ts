@@ -9,16 +9,29 @@ import { VideoChannel as VideoChannelServer } from '../../../../../shared/models
 import { AccountService } from '../account/account.service'
 import { ResultList } from '../../../../../shared'
 import { VideoChannel } from './video-channel.model'
+import { ReplaySubject } from 'rxjs/ReplaySubject'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class VideoChannelService {
+  static BASE_VIDEO_CHANNEL_URL = environment.apiUrl + '/api/v1/video-channels/'
+
+  videoChannelLoaded = new ReplaySubject<VideoChannel>(1)
+
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService
   ) {}
 
-  getVideoChannels (accountId: number): Observable<ResultList<VideoChannel>> {
+  getVideoChannel (videoChannelUUID: string) {
+    return this.authHttp.get<VideoChannel>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannelUUID)
+               .map(videoChannelHash => new VideoChannel(videoChannelHash))
+               .do(videoChannel => this.videoChannelLoaded.next(videoChannel))
+               .catch((res) => this.restExtractor.handleError(res))
+  }
+
+  listAccountVideoChannels (accountId: number): Observable<ResultList<VideoChannel>> {
     return this.authHttp.get<ResultList<VideoChannelServer>>(AccountService.BASE_ACCOUNT_URL + accountId + '/video-channels')
                .map(res => this.extractVideoChannels(res))
                .catch((res) => this.restExtractor.handleError(res))

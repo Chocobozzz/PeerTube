@@ -140,7 +140,7 @@ describe('Test videos API validator', function () {
     let path: string
 
     before(async function () {
-      path = '/api/v1/accounts/' + accountUUID + '/video-channels/' + channelUUID + '/videos'
+      path = '/api/v1/video-channels/' + channelUUID + '/videos'
     })
 
     it('Should fail with a bad start pagination', async function () {

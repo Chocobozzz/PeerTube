@@ -4,11 +4,10 @@ import { AccountService } from '@app/shared/account/account.service'
 import { Account } from '@app/shared/account/account.model'
 
 @Component({
-  selector: 'my-account',
-  templateUrl: './account.component.html',
-  styleUrls: [ './account.component.scss' ]
+  templateUrl: './accounts.component.html',
+  styleUrls: [ './accounts.component.scss' ]
 })
-export class AccountComponent implements OnInit {
+export class AccountsComponent implements OnInit {
   account: Account
 
   constructor (

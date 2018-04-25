@@ -1,0 +1,23 @@
+<div *ngIf="videoChannel" class="row">
+  <div class="sub-menu">
+
+    <div class="actor">
+      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+
+      <div class="actor-info">
+        <div class="actor-display-name">{{ videoChannel.displayName }}</div>
+        <div class="actor-followers">{{ videoChannel.followersCount }} subscribers</div>
+      </div>
+    </div>
+
+    <div class="links">
+      <a routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
+
+      <a routerLink="about" routerLinkActive="active" class="title-page">About</a>
+    </div>
+  </div>
+
+  <div class="margin-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

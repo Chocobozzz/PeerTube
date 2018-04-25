@@ -23,6 +23,8 @@ import { Video } from './video.model'
 import { objectToFormData } from '@app/shared/misc/utils'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
+import { VideoChannel } from '../../../../../shared/models/videos'
+import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 
 @Injectable()
 export class VideoService {
@@ -115,6 +117,22 @@ export class VideoService {
                .catch((res) => this.restExtractor.handleError(res))
   }
 
+  getVideoChannelVideos (
+    videoChannel: VideoChannel,
+    videoPagination: ComponentPagination,
+    sort: VideoSortField
+  ): Observable<{ videos: Video[], totalVideos: number}> {
+    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination, sort)
+
+    return this.authHttp
+               .get(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.uuid + '/videos', { params })
+               .map(this.extractVideos)
+               .catch((res) => this.restExtractor.handleError(res))
+  }
+
   getVideos (
     videoPagination: ComponentPagination,
     sort: VideoSortField,
@@ -171,6 +189,13 @@ export class VideoService {
   getAccountFeedUrls (accountId: number) {
     let params = this.restService.addRestGetParams(new HttpParams())
     params = params.set('accountId', accountId.toString())
+
+    return this.buildBaseFeedUrls(params)
+  }
+
+  getVideoChannelFeedUrls (videoChannelId: number) {
+    let params = this.restService.addRestGetParams(new HttpParams())
+    params = params.set('videoChannelId', videoChannelId.toString())
 
     return this.buildBaseFeedUrls(params)
   }

@@ -26,7 +26,7 @@ export class AccountVideoChannelsComponent implements OnInit {
     // Parent get the account for us
     this.accountService.accountLoaded
         .do(account => this.account = account)
-        .flatMap(account => this.videoChannelService.getVideoChannels(account.id))
+        .flatMap(account => this.videoChannelService.listAccountVideoChannels(account.id))
         .map(res => res.data)
         .subscribe(videoChannels => this.videoChannels = videoChannels)
   }

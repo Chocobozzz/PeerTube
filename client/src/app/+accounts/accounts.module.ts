@@ -1,28 +1,28 @@
 import { NgModule } from '@angular/core'
 import { SharedModule } from '../shared'
-import { AccountRoutingModule } from './account-routing.module'
-import { AccountComponent } from './account.component'
+import { AccountsRoutingModule } from './accounts-routing.module'
+import { AccountsComponent } from './accounts.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
 import { AccountAboutComponent } from './account-about/account-about.component'
 import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
 
 @NgModule({
   imports: [
-    AccountRoutingModule,
+    AccountsRoutingModule,
     SharedModule
   ],
 
   declarations: [
-    AccountComponent,
+    AccountsComponent,
     AccountVideosComponent,
     AccountVideoChannelsComponent,
     AccountAboutComponent
   ],
 
   exports: [
-    AccountComponent
+    AccountsComponent
   ],
 
   providers: []
 })
-export class AccountModule { }
+export class AccountsModule { }
