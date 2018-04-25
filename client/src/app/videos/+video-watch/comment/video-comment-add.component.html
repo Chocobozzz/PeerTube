@@ -1,6 +1,6 @@
 <form novalidate [formGroup]="form" (ngSubmit)="formValidated()">
   <div class="avatar-and-textarea">
-    <img [src]="getUserAvatarUrl()" alt="Avatar" />
+    <img [src]="user.accountAvatarUrl" alt="Avatar" />
 
     <div class="form-group">
       <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"

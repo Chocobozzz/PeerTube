@@ -4,6 +4,7 @@ import { AccountRoutingModule } from './account-routing.module'
 import { AccountComponent } from './account.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
 import { AccountAboutComponent } from './account-about/account-about.component'
+import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { AccountAboutComponent } from './account-about/account-about.component'
   declarations: [
     AccountComponent,
     AccountVideosComponent,
+    AccountVideoChannelsComponent,
     AccountAboutComponent
   ],
 

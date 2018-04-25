@@ -32,6 +32,7 @@ import { VideoFeedComponent } from './video/video-feed.component'
 import { VideoThumbnailComponent } from './video/video-thumbnail.component'
 import { VideoService } from './video/video.service'
 import { AccountService } from '@app/shared/account/account.service'
+import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 
 @NgModule({
   imports: [
@@ -106,7 +107,8 @@ import { AccountService } from '@app/shared/account/account.service'
     UserService,
     VideoService,
     AccountService,
-    MarkdownService
+    MarkdownService,
+    VideoChannelService
   ]
 })
 export class SharedModule { }

@@ -1,7 +1,7 @@
 <menu>
   <div *ngIf="isLoggedIn" class="logged-in-block">
     <a routerLink="/account/settings">
-      <img [src]="getUserAvatarUrl()" alt="Avatar" />
+      <img [src]="user.accountAvatarUrl" alt="Avatar" />
     </a>
 
     <div class="logged-in-info">

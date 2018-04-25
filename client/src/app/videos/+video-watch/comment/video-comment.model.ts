@@ -1,6 +1,6 @@
-import { Account } from '@app/shared/account/account.model'
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { VideoComment as VideoCommentServerModel } from '../../../../../../shared/models/videos/video-comment.model'
+import { Actor } from '@app/shared/actor/actor.model'
 
 export class VideoComment implements VideoCommentServerModel {
   id: number
@@ -14,6 +14,7 @@ export class VideoComment implements VideoCommentServerModel {
   account: AccountInterface
   totalReplies: number
   by: string
+  accountAvatarUrl
 
   constructor (hash: VideoCommentServerModel) {
     this.id = hash.id
@@ -27,6 +28,7 @@ export class VideoComment implements VideoCommentServerModel {
     this.account = hash.account
     this.totalReplies = hash.totalReplies
 
-    this.by = Account.CREATE_BY_STRING(this.account.name, this.account.host)
+    this.by = Actor.CREATE_BY_STRING(this.account.name, this.account.host)
+    this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
   }
 }

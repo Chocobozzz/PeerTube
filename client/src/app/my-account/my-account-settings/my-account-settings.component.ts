@@ -42,10 +42,6 @@ export class MyAccountSettingsComponent implements OnInit {
       .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
   }
 
-  getAvatarUrl () {
-    return this.user.getAvatarUrl()
-  }
-
   changeAvatar () {
     const avatarfile = this.avatarfileInput.nativeElement.files[ 0 ]
 

@@ -2,7 +2,7 @@
   <div class="sub-menu">
 
     <div class="account">
-      <img [src]="getAvatarUrl()" alt="Avatar" />
+      <img [src]="account.avatarUrl" alt="Avatar" />
 
       <div class="account-info">
         <div class="account-display-name">{{ account.displayName }}</div>
@@ -12,6 +12,8 @@
 
     <div class="links">
       <a routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
+
+      <a routerLink="video-channels" routerLinkActive="active" class="title-page">Video channels</a>
 
       <a routerLink="about" routerLinkActive="active" class="title-page">About</a>
     </div>

@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
 import { LinkifierService } from '@app/videos/+video-watch/comment/linkifier.service'
 import * as sanitizeHtml from 'sanitize-html'
-import { Account as AccountInterface } from '../../../../../../shared/models/actors'
 import { UserRight } from '../../../../../../shared/models/users'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
-import { Account } from '../../../shared/account/account.model'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 
@@ -78,10 +76,6 @@ export class VideoCommentComponent implements OnInit, OnChanges {
 
   onResetReply () {
     this.resetReply.emit()
-  }
-
-  getAvatarUrl (account: AccountInterface) {
-    return Account.GET_ACCOUNT_AVATAR_URL(account)
   }
 
   isRemovableByUser () {

@@ -228,10 +228,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.isBlackistableBy(this.user)
   }
 
-  getAvatarPath () {
-    return Account.GET_ACCOUNT_AVATAR_URL(this.video.account)
-  }
-
   getVideoPoster () {
     if (!this.video) return ''
 

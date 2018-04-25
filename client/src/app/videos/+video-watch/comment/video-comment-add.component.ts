@@ -100,10 +100,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     return this.form.value['text']
   }
 
-  getUserAvatarUrl () {
-    return this.user.getAvatarUrl()
-  }
-
   private addCommentReply (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
       .addCommentReply(this.video.id, this.parentComment.id, commentCreate)

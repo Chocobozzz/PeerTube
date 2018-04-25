@@ -1,13 +1,14 @@
-import { Account } from '@app/shared/account/account.model'
 import { User } from '../'
 import { Video as VideoServerModel, VideoPrivacy } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 import { ServerConfig } from '../../../../../shared/models'
+import { Actor } from '@app/shared/actor/actor.model'
 
 export class Video implements VideoServerModel {
   by: string
+  accountAvatarUrl: string
   createdAt: Date
   updatedAt: Date
   publishedAt: Date
@@ -85,7 +86,8 @@ export class Video implements VideoServerModel {
     this.nsfw = hash.nsfw
     this.account = hash.account
 
-    this.by = Account.CREATE_BY_STRING(hash.account.name, hash.account.host)
+    this.by = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
+    this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

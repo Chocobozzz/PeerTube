@@ -24,7 +24,7 @@
           <div class="video-info-by">
             <a [routerLink]="[ '/account', video.account.id ]" title="Go the account page">
               <span>By {{ video.by }}</span>
-              <img [src]="getAvatarPath()" alt="Account avatar" />
+              <img [src]="video.accountAvatarUrl" alt="Account avatar" />
             </a>
           </div>
         </div>

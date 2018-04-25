@@ -1,5 +1,5 @@
 <div class="root-comment">
-  <img [src]="getAvatarUrl(comment.account)" alt="Avatar" />
+  <img [src]="comment.accountAvatarUrl" alt="Avatar" />
 
   <div class="comment">
     <div *ngIf="highlightedComment === true" class="highlighted-comment">Highlighted comment</div>

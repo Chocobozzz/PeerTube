@@ -1,0 +1,11 @@
+<div *ngIf="account" class="row">
+  <a
+    *ngFor="let videoChannel of videoChannels" [routerLink]="[ '/video-channels', videoChannel.uuid ]"
+    class="video-channel" title="See this video channel"
+  >
+    <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+
+    <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
+    <div class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
+  </a>
+</div>

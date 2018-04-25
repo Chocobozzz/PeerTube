@@ -22,8 +22,4 @@ export class AccountComponent implements OnInit {
     this.accountService.getAccount(accountId)
         .subscribe(account => this.account = account)
   }
-
-  getAvatarUrl () {
-    return Account.GET_ACCOUNT_AVATAR_URL(this.account)
-  }
 }
