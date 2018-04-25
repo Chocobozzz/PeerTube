@@ -36,6 +36,8 @@
  * Add video privacy information in *my videos page*
  * Use the video name for the torrent file name instead of the UUID
  * Handle errors in embed (video not found, server error...)
+ * Account view (videos uploaded by this account + video channel owned by this account + about pages)
+ * Video channel view (videos uploaded in this channel + about pages)
 
 ### Bug fixes
 
