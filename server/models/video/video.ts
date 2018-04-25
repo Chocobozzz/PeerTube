@@ -104,13 +104,13 @@ enum ScopeNames {
     videoChannelId?: number
   }) => {
     const accountInclude = {
-      attributes: [ 'name' ],
+      attributes: [ 'id', 'name' ],
       model: AccountModel.unscoped(),
       required: true,
       where: {},
       include: [
         {
-          attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
           where: VideoModel.buildActorWhereWithFilter(options.filter),
@@ -1078,6 +1078,8 @@ export class VideoModel extends Model<VideoModel> {
       updatedAt: this.updatedAt,
       publishedAt: this.publishedAt,
       account: {
+        id: formattedAccount.id,
+        uuid: formattedAccount.uuid,
         name: formattedAccount.name,
         displayName: formattedAccount.displayName,
         url: formattedAccount.url,

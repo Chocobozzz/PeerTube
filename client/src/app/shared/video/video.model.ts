@@ -35,6 +35,8 @@ export class Video implements VideoServerModel {
   nsfw: boolean
 
   account: {
+    id: number
+    uuid: string
     name: string
     displayName: string
     url: string

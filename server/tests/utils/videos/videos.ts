@@ -486,6 +486,8 @@ async function completeVideoCheck (
   expect(video.privacy.label).to.deep.equal(VIDEO_PRIVACIES[attributes.privacy])
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
+  expect(video.account.id).to.be.a('number')
+  expect(video.account.uuid).to.be.a('string')
   expect(video.account.host).to.equal(attributes.account.host)
   expect(video.account.name).to.equal(attributes.account.name)
   expect(video.likes).to.equal(attributes.likes)

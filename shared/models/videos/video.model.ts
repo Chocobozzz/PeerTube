@@ -40,6 +40,8 @@ export interface Video {
   nsfw: boolean
 
   account: {
+    id: number
+    uuid: string
     name: string
     displayName: string
     url: string

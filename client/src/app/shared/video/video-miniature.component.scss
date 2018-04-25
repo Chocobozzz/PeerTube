@@ -39,12 +39,18 @@
     }
 
     .video-miniature-account {
+      @include disable-default-a-behaviour;
+
       display: block;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       font-size: 13px;
       color: #585858;
+
+      &:hover {
+        color: #303030;
+      }
     }
   }
 }

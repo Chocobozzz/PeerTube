@@ -12,6 +12,6 @@
     </span>
 
     <span class="video-miniature-created-at-views">{{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views</span>
-    <span class="video-miniature-account">{{ video.by }}</span>
+    <a class="video-miniature-account" [routerLink]="[ '/account', video.account.id ]">{{ video.by }}</a>
   </div>
 </div>

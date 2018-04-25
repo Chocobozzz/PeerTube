@@ -68,14 +68,16 @@
         font-size: 15px;
       }
 
-      .video-info-by {
+      .video-info-by a {
+        @include disable-default-a-behaviour;
+
         display: flex;
         align-items: center;
         font-size: 13px;
+        color: #000;
 
-        a {
-          color: black;
-          display: inline-block;
+        span:hover {
+          opacity: 0.8;
         }
 
         img {
