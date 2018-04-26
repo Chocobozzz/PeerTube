@@ -59,7 +59,7 @@ describe('Test multiple servers', function () {
 
     {
       const videoChannel = {
-        name: 'my channel',
+        displayName: 'my channel',
         description: 'super channel'
       }
       await addVideoChannel(servers[ 0 ].url, servers[ 0 ].accessToken, videoChannel)

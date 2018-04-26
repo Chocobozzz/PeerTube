@@ -1,0 +1,30 @@
+<div class="video-channels-header">
+  <a class="create-button" routerLink="create">
+    <span class="icon icon-add"></span>
+    Create another video channel
+  </a>
+</div>
+
+<div class="video-channels">
+  <div *ngFor="let videoChannel of videoChannels" class="video-channel">
+    <a [routerLink]="[ '/video-channels', videoChannel.uuid ]">
+      <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+    </a>
+
+    <div class="video-channel-info">
+      <a [routerLink]="[ '/video-channels', videoChannel.uuid ]" class="video-channel-names" title="Go to the channel">
+        <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
+        <!-- Hide the name for now, because it's an UUID not very friendly -->
+        <!--<div class="video-channel-name">{{ videoChannel.name }}</div>-->
+      </a>
+
+      <div class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
+    </div>
+
+    <div class="video-channel-buttons">
+      <my-delete-button (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
+
+      <my-edit-button [routerLink]="[ 'update', videoChannel.uuid ]"></my-edit-button>
+    </div>
+  </div>
+</div>

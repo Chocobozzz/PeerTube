@@ -14,7 +14,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   const actorInstanceCreated = await actorInstance.save({ transaction: t })
 
   const videoChannelData = {
-    name: videoChannelInfo.name,
+    name: videoChannelInfo.displayName,
     description: videoChannelInfo.description,
     support: videoChannelInfo.support,
     accountId: account.id,

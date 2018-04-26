@@ -1,0 +1,34 @@
+import { Validators } from '@angular/forms'
+
+export const VIDEO_CHANNEL_DISPLAY_NAME = {
+  VALIDATORS: [
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(120)
+  ],
+  MESSAGES: {
+    'required': 'Display name is required.',
+    'minlength': 'Display name must be at least 3 characters long.',
+    'maxlength': 'Display name cannot be more than 120 characters long.'
+  }
+}
+export const VIDEO_CHANNEL_DESCRIPTION = {
+  VALIDATORS: [
+    Validators.minLength(3),
+    Validators.maxLength(250)
+  ],
+  MESSAGES: {
+    'minlength': 'Description must be at least 3 characters long.',
+    'maxlength': 'Description cannot be more than 250 characters long.'
+  }
+}
+export const VIDEO_CHANNEL_SUPPORT = {
+  VALIDATORS: [
+    Validators.minLength(3),
+    Validators.maxLength(300)
+  ],
+  MESSAGES: {
+    'minlength': 'Support text must be at least 3 characters long.',
+    'maxlength': 'Support text cannot be more than 300 characters long.'
+  }
+}

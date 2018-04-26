@@ -1,0 +1,42 @@
+<div class="form-sub-title" *ngIf="isCreation() === true">Create a video channel</div>
+<div class="form-sub-title" *ngIf="isCreation() === false">Update {{ videoChannel?.displayName }}</div>
+
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+<form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+  <div class="form-group">
+    <label for="display-name">Display name</label>
+    <input
+      type="text" id="display-name"
+      formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
+    >
+    <div *ngIf="formErrors.display-name" class="form-error">
+      {{ formErrors.display-name }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea
+      id="description" formControlName="description"
+      [ngClass]="{ 'input-error': formErrors['description'] }"
+    ></textarea>
+    <div *ngIf="formErrors.description" class="form-error">
+      {{ formErrors.description }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="support">Support</label>
+    <my-help helpType="markdownEnhanced" preHtml="Short text to tell people how they can support your channel (membership platform...)."></my-help>
+    <my-markdown-textarea
+        id="support" formControlName="support" textareaWidth="500px" [previewColumn]="true" markdownType="enhanced"
+        [classes]="{ 'input-error': formErrors['support'] }"
+    ></my-markdown-textarea>
+    <div *ngIf="formErrors.support" class="form-error">
+      {{ formErrors.support }}
+    </div>
+  </div>
+
+  <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+</form>

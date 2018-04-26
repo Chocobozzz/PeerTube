@@ -1,10 +1,5 @@
 import * as request from 'supertest'
-
-type VideoChannelAttributes = {
-  name?: string
-  description?: string
-  support?: string
-}
+import { VideoChannelCreate, VideoChannelUpdate } from '../../../../shared/models/videos'
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/video-channels'
@@ -34,14 +29,14 @@ function getAccountVideoChannelsList (url: string, accountId: number | string, s
 function addVideoChannel (
   url: string,
   token: string,
-  videoChannelAttributesArg: VideoChannelAttributes,
+  videoChannelAttributesArg: VideoChannelCreate,
   expectedStatus = 200
 ) {
   const path = '/api/v1/video-channels/'
 
   // Default attributes
   let attributes = {
-    name: 'my super video channel',
+    displayName: 'my super video channel',
     description: 'my super channel description',
     support: 'my super channel support'
   }
@@ -59,13 +54,13 @@ function updateVideoChannel (
   url: string,
   token: string,
   channelId: number | string,
-  attributes: VideoChannelAttributes,
+  attributes: VideoChannelUpdate,
   expectedStatus = 204
 ) {
   const body = {}
   const path = '/api/v1/video-channels/' + channelId
 
-  if (attributes.name) body['name'] = attributes.name
+  if (attributes.displayName) body['displayName'] = attributes.displayName
   if (attributes.description) body['description'] = attributes.description
   if (attributes.support) body['support'] = attributes.support
 

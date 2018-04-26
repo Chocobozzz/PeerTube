@@ -59,7 +59,7 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     const videoChannel = {
-      name: 'second video channel',
+      displayName: 'second video channel',
       description: 'super video channel description',
       support: 'super video channel support text'
     }
@@ -125,7 +125,7 @@ describe('Test video channels', function () {
     this.timeout(5000)
 
     const videoChannelAttributes = {
-      name: 'video channel updated',
+      displayName: 'video channel updated',
       description: 'video channel description updated',
       support: 'video channel support text updated'
     }

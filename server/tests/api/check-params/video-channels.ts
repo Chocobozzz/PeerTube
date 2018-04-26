@@ -25,7 +25,7 @@ import { User } from '../../../../shared/models/users'
 
 const expect = chai.expect
 
-describe('Test videos API validator', function () {
+describe('Test video channels API validator', function () {
   const videoChannelPath = '/api/v1/video-channels'
   let server: ServerInfo
   let accessTokenUser: string
@@ -85,7 +85,7 @@ describe('Test videos API validator', function () {
 
   describe('When adding a video channel', function () {
     const baseCorrectParams = {
-      name: 'hello',
+      displayName: 'hello',
       description: 'super description',
       support: 'super support text'
     }
@@ -105,13 +105,13 @@ describe('Test videos API validator', function () {
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
-    it('Should fail without name', async function () {
-      const fields = omit(baseCorrectParams, 'name')
+    it('Should fail without a name', async function () {
+      const fields = omit(baseCorrectParams, 'displayName')
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { name: 'super'.repeat(25) })
+      const fields = immutableAssign(baseCorrectParams, { displayName: 'super'.repeat(25) })
       await makePostBodyRequest({ url: server.url, path: videoChannelPath, token: server.accessToken, fields })
     })
 
@@ -138,7 +138,7 @@ describe('Test videos API validator', function () {
 
   describe('When updating a video channel', function () {
     const baseCorrectParams = {
-      name: 'hello',
+      displayName: 'hello',
       description: 'super description'
     }
     let path: string
@@ -168,7 +168,7 @@ describe('Test videos API validator', function () {
     })
 
     it('Should fail with a long name', async function () {
-      const fields = immutableAssign(baseCorrectParams, { name: 'super'.repeat(25) })
+      const fields = immutableAssign(baseCorrectParams, { displayName: 'super'.repeat(25) })
       await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 

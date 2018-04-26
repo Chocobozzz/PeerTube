@@ -2,13 +2,5 @@
 @import '_mixins';
 
 .add-button {
-  @include peertube-button-link;
-  @include orange-button;
-
-  .icon.icon-add {
-    @include icon(22px);
-
-    margin-right: 3px;
-    background-image: url('../../../../assets/images/admin/add.svg');
-  }
+  @include create-button;
 }

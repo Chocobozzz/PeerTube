@@ -1,0 +1,72 @@
+@import '_variables';
+@import '_mixins';
+
+.create-button {
+  @include create-button;
+}
+
+/deep/ .action-button {
+  &.action-button-delete {
+    margin-right: 10px;
+  }
+}
+
+.video-channel {
+  display: flex;
+  min-height: 130px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #C6C6C6;
+
+  img {
+    @include avatar(80px);
+
+    margin-right: 10px;
+  }
+
+  .video-channel-info {
+    flex-grow: 1;
+
+    a.video-channel-names {
+      @include disable-default-a-behaviour;
+
+      display: flex;
+      color: #000;
+
+      .video-channel-display-name {
+        font-weight: $font-semibold;
+        font-size: 18px;
+      }
+
+      .video-channel-name {
+        font-size: 14px;
+        color: #777272;
+      }
+    }
+  }
+
+  .video-channel-buttons {
+    min-width: 190px;
+  }
+}
+
+.video-channels-header {
+  text-align: right;
+  margin: 20px 0 50px;
+}
+
+@media screen and (max-width: 800px) {
+  .video-channel {
+    flex-direction: column;
+    height: auto;
+    text-align: center;
+
+    img {
+      margin-right: 0;
+    }
+
+    .video-channel-buttons {
+      margin-top: 10px;
+    }
+  }
+}

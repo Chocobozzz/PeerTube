@@ -43,8 +43,6 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
 
   ngOnInit () {
     super.ngOnInit()
-
-    // this.generateSyndicationList()
   }
 
   ngOnDestroy () {

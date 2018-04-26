@@ -2,11 +2,18 @@
 @import '_mixins';
 
 .form-sub-title {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
-input:not([type=submit]) {
+input[type=text] {
   @include peertube-input-text(340px);
+
+  display: block;
+}
+
+textarea {
+  @include peertube-textarea(500px, 150px);
+
   display: block;
 }
 
@@ -17,9 +24,4 @@ input:not([type=submit]) {
 input[type=submit] {
   @include peertube-button;
   @include orange-button;
-}
-
-.transcoding-information {
-  margin-top: 5px;
-  font-size: 11px;
 }

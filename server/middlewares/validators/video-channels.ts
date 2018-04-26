@@ -27,7 +27,7 @@ const listVideoAccountChannelsValidator = [
 ]
 
 const videoChannelsAddValidator = [
-  body('name').custom(isVideoChannelNameValid).withMessage('Should have a valid name'),
+  body('displayName').custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
 
@@ -42,7 +42,7 @@ const videoChannelsAddValidator = [
 
 const videoChannelsUpdateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
-  body('name').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid name'),
+  body('displayName').optional().custom(isVideoChannelNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isVideoChannelDescriptionValid).withMessage('Should have a valid description'),
   body('support').optional().custom(isVideoChannelSupportValid).withMessage('Should have a valid support text'),
 
