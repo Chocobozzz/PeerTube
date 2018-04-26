@@ -10,8 +10,8 @@
       type="text" id="display-name"
       formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
     >
-    <div *ngIf="formErrors.display-name" class="form-error">
-      {{ formErrors.display-name }}
+    <div *ngIf="formErrors['display-name']" class="form-error">
+      {{ formErrors['display-name'] }}
     </div>
   </div>
 

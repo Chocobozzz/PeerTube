@@ -13,7 +13,7 @@ import { User } from '@app/shared'
   templateUrl: './my-account-video-channels.component.html',
   styleUrls: [ './my-account-video-channels.component.scss' ]
 })
-export class MyAccountVideoChannelsComponent implements OnInit{
+export class MyAccountVideoChannelsComponent implements OnInit {
   videoChannels: VideoChannel[] = []
 
   private user: User
