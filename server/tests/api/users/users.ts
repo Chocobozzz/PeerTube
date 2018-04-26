@@ -172,6 +172,7 @@ describe('Test users', function () {
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.roleLabel).to.equal('User')
     expect(user.id).to.be.a('number')
+    expect(user.account.displayName).to.equal('user_1')
     expect(user.account.description).to.be.null
   })
 
@@ -316,6 +317,7 @@ describe('Test users', function () {
     expect(user.nsfwPolicy).to.equal('do_not_list')
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.id).to.be.a('number')
+    expect(user.account.displayName).to.equal('user_1')
     expect(user.account.description).to.be.null
   })
 
@@ -347,6 +349,7 @@ describe('Test users', function () {
     expect(user.nsfwPolicy).to.equal('do_not_list')
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.id).to.be.a('number')
+    expect(user.account.displayName).to.equal('user_1')
     expect(user.account.description).to.be.null
   })
 
@@ -365,6 +368,25 @@ describe('Test users', function () {
     await testImage(server.url, 'avatar-resized', user.account.avatar.path, '.png')
   })
 
+  it('Should be able to update my display name', async function () {
+    await updateMyUser({
+      url: server.url,
+      accessToken: accessTokenUser,
+      displayName: 'new display name'
+    })
+
+    const res = await getMyUserInformation(server.url, accessTokenUser)
+    const user = res.body
+
+    expect(user.username).to.equal('user_1')
+    expect(user.email).to.equal('updated@example.com')
+    expect(user.nsfwPolicy).to.equal('do_not_list')
+    expect(user.videoQuota).to.equal(2 * 1024 * 1024)
+    expect(user.id).to.be.a('number')
+    expect(user.account.displayName).to.equal('new display name')
+    expect(user.account.description).to.be.null
+  })
+
   it('Should be able to update my description', async function () {
     await updateMyUser({
       url: server.url,
@@ -380,6 +402,7 @@ describe('Test users', function () {
     expect(user.nsfwPolicy).to.equal('do_not_list')
     expect(user.videoQuota).to.equal(2 * 1024 * 1024)
     expect(user.id).to.be.a('number')
+    expect(user.account.displayName).to.equal('new display name')
     expect(user.account.description).to.equal('my super description updated')
   })
 

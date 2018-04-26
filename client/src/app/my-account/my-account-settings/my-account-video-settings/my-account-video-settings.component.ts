@@ -6,11 +6,11 @@ import { AuthService } from '../../../core'
 import { FormReactive, User, UserService } from '../../../shared'
 
 @Component({
-  selector: 'my-account-details',
-  templateUrl: './my-account-details.component.html',
-  styleUrls: [ './my-account-details.component.scss' ]
+  selector: 'my-account-video-settings',
+  templateUrl: './my-account-video-settings.component.html',
+  styleUrls: [ './my-account-video-settings.component.scss' ]
 })
-export class MyAccountDetailsComponent extends FormReactive implements OnInit {
+export class MyAccountVideoSettingsComponent extends FormReactive implements OnInit {
   @Input() user: User = null
 
   form: FormGroup
@@ -47,7 +47,7 @@ export class MyAccountDetailsComponent extends FormReactive implements OnInit {
       autoPlayVideo
     }
 
-    this.userService.updateMyDetails(details).subscribe(
+    this.userService.updateMyProfile(details).subscribe(
       () => {
         this.notificationsService.success('Success', 'Information updated.')
 

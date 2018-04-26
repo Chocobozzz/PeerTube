@@ -22,6 +22,10 @@ function isUserUsernameValid (value: string) {
   return exists(value) && validator.matches(value, new RegExp(`^[a-z0-9._]{${min},${max}}$`))
 }
 
+function isUserDisplayNameValid (value: string) {
+  return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.NAME))
+}
+
 function isUserDescriptionValid (value: string) {
   return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.DESCRIPTION))
 }
@@ -60,6 +64,7 @@ export {
   isUserUsernameValid,
   isUserNSFWPolicyValid,
   isUserAutoPlayVideoValid,
+  isUserDisplayNameValid,
   isUserDescriptionValid,
   isAvatarFile
 }

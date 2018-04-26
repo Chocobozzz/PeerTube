@@ -26,10 +26,10 @@ export class UserService {
                         .catch(res => this.restExtractor.handleError(res))
   }
 
-  updateMyDetails (details: UserUpdateMe) {
+  updateMyProfile (profile: UserUpdateMe) {
     const url = UserService.BASE_USERS_URL + 'me'
 
-    return this.authHttp.put(url, details)
+    return this.authHttp.put(url, profile)
                         .map(this.restExtractor.extractDataBool)
                         .catch(res => this.restExtractor.handleError(res))
   }

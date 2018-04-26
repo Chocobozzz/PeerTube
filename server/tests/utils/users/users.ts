@@ -132,6 +132,7 @@ function updateMyUser (options: {
   nsfwPolicy?: NSFWPolicyType,
   email?: string,
   autoPlayVideo?: boolean
+  displayName?: string,
   description?: string
 }) {
   const path = '/api/v1/users/me'
@@ -142,6 +143,7 @@ function updateMyUser (options: {
   if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend['autoPlayVideo'] = options.autoPlayVideo
   if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
   if (options.description !== undefined && options.description !== null) toSend['description'] = options.description
+  if (options.displayName !== undefined && options.displayName !== null) toSend['displayName'] = options.displayName
 
   return makePutBodyRequest({
     url: options.url,

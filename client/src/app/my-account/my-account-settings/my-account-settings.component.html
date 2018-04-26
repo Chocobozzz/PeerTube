@@ -17,8 +17,13 @@
   <span class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}
 </div>
 
-<div class="account-title">Account settings</div>
+<ng-template [ngIf]="user && user.account">
+  <div class="account-title">Profile</div>
+  <my-account-profile [user]="user"></my-account-profile>
+</ng-template>
+
+<div class="account-title">Password</div>
 <my-account-change-password></my-account-change-password>
 
 <div class="account-title">Video settings</div>
-<my-account-details [user]="user"></my-account-details>
+<my-account-video-settings [user]="user"></my-account-video-settings>

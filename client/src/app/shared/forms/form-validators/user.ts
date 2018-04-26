@@ -46,3 +46,27 @@ export const USER_ROLE = {
     'required': 'User role is required.'
   }
 }
+export const USER_DISPLAY_NAME = {
+  VALIDATORS: [
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(120)
+  ],
+  MESSAGES: {
+    'required': 'Display name is required.',
+    'minlength': 'Display name must be at least 3 characters long.',
+    'maxlength': 'Display name cannot be more than 120 characters long.'
+  }
+}
+export const USER_DESCRIPTION = {
+  VALIDATORS: [
+    Validators.required,
+    Validators.minLength(3),
+    Validators.maxLength(250)
+  ],
+  MESSAGES: {
+    'required': 'Display name is required.',
+    'minlength': 'Display name must be at least 3 characters long.',
+    'maxlength': 'Display name cannot be more than 250 characters long.'
+  }
+}

@@ -303,6 +303,7 @@ async function updateMe (req: express.Request, res: express.Response, next: expr
   await sequelizeTypescript.transaction(async t => {
     await user.save({ transaction: t })
 
+    if (body.displayName !== undefined) user.Account.name = body.displayName
     if (body.description !== undefined) user.Account.description = body.description
     await user.Account.save({ transaction: t })
 

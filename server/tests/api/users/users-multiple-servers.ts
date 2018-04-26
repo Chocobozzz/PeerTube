@@ -76,6 +76,22 @@ describe('Test users with multiple servers', function () {
     await wait(5000)
   })
 
+  it('Should be able to update my display name', async function () {
+    this.timeout(10000)
+
+    await updateMyUser({
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
+      displayName: 'my super display name'
+    })
+
+    const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
+    user = res.body
+    expect(user.account.displayName).to.equal('my super display name')
+
+    await wait(5000)
+  })
+
   it('Should be able to update my description', async function () {
     this.timeout(10000)
 
@@ -87,6 +103,7 @@ describe('Test users with multiple servers', function () {
 
     const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
     user = res.body
+    expect(user.account.displayName).to.equal('my super display name')
     expect(user.account.description).to.equal('my super description updated')
 
     await wait(5000)
@@ -111,7 +128,7 @@ describe('Test users with multiple servers', function () {
     await wait(5000)
   })
 
-  it('Should have updated my avatar and my description on other servers too', async function () {
+  it('Should have updated my profile on other servers too', async function () {
     for (const server of servers) {
       const resAccounts = await getAccountsList(server.url, '-createdAt')
 
@@ -122,6 +139,7 @@ describe('Test users with multiple servers', function () {
       const rootServer1Get = resAccount.body as Account
       expect(rootServer1Get.name).to.equal('root')
       expect(rootServer1Get.host).to.equal('localhost:9001')
+      expect(rootServer1Get.displayName).to.equal('my super display name')
       expect(rootServer1Get.description).to.equal('my super description updated')
 
       await testImage(server.url, 'avatar2-resized', rootServer1Get.avatar.path, '.png')

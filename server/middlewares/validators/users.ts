@@ -7,7 +7,7 @@ import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isAvatarFile,
   isUserAutoPlayVideoValid,
-  isUserDescriptionValid,
+  isUserDescriptionValid, isUserDisplayNameValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
@@ -98,6 +98,7 @@ const usersUpdateValidator = [
 ]
 
 const usersUpdateMeValidator = [
+  body('displayName').optional().custom(isUserDisplayNameValid).withMessage('Should have a valid display name'),
   body('description').optional().custom(isUserDescriptionValid).withMessage('Should have a valid description'),
   body('password').optional().custom(isUserPasswordValid).withMessage('Should have a valid password'),
   body('email').optional().isEmail().withMessage('Should have a valid email attribute'),
