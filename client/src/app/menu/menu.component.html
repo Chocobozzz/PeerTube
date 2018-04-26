@@ -14,6 +14,10 @@
 
       <ul *dropdownMenu class="dropdown-menu">
         <li>
+          <a i18n [routerLink]="[ '/accounts', user.account.id ]" class="dropdown-item" title="My profile">
+           My profile
+          </a>
+
           <a routerLink="/my-account/settings" class="dropdown-item" title="My settings">
             My settings
           </a>
