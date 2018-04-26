@@ -344,9 +344,22 @@
       flex-direction: column;
       justify-content: center;
 
-      .actor-display-name {
-        font-size: 23px;
-        font-weight: $font-bold;
+      .actor-names {
+        display: flex;
+        align-items: center;
+
+        .actor-display-name {
+          font-size: 23px;
+          font-weight: $font-bold;
+        }
+
+        .actor-name {
+          margin-left: 7px;
+          position: relative;
+          top: 3px;
+          font-size: 14px;
+          color: #777272;
+        }
       }
 
       .actor-followers {

@@ -11,9 +11,22 @@
   }
 
   .user-info {
-    .user-info-username {
-      font-size: 20px;
-      font-weight: $font-bold;
+    .user-info-names {
+      display: flex;
+      align-items: center;
+
+      .user-info-display-name {
+        font-size: 20px;
+        font-weight: $font-bold;
+      }
+
+      .user-info-username {
+        margin-left: 7px;
+        position: relative;
+        top: 2px;
+        font-size: 14px;
+        color: #777272;
+      }
     }
 
     .user-info-followers {

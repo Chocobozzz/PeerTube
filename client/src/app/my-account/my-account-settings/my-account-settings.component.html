@@ -2,7 +2,10 @@
   <img [src]="user.accountAvatarUrl" alt="Avatar" />
 
   <div class="user-info">
-    <div class="user-info-username">{{ user.username }}</div>
+    <div class="user-info-names">
+      <div class="user-info-display-name">{{ user.account.displayName }}</div>
+      <div class="user-info-username">{{ user.username }}</div>
+    </div>
     <div class="user-info-followers">{{ user.account?.followersCount }} subscribers</div>
   </div>
 </div>
