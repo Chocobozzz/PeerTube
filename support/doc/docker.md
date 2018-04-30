@@ -22,7 +22,7 @@ production, you can use a `docker-compose` setup.
 
 ```bash
 $ git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
-$ cd /tmp/peertube/support/docker/production
+$ cd /tmp/peertube
 ```
 
 Then tweak the `docker-compose.yml` file there according to your needs. Then
@@ -37,7 +37,7 @@ $ PEERTUBE_HOSTNAME=peertube.lvh.me \
   PEERTUBE_SMTP_HOST=mail.lvh.me \
   PEERTUBE_SMTP_PORT=1025 \
   PEERTUBE_SMTP_FROM=noreply@peertube.lvh.me \
-    docker-compose up
+    docker-compose -f support/docker/production/docker-compose.yml --project-directory . up
 ```
 
 Other environment variables are used in

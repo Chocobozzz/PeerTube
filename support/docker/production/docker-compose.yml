@@ -5,7 +5,7 @@ services:
   peertube:
     build:
       context: .
-      dockerfile: ./Dockerfile.stretch
+      dockerfile: ./support/docker/production/Dockerfile.stretch
     image: chocobozzz/peertube:production-stretch
     environment:
       PEERTUBE_HOSTNAME: my.domain.tld
