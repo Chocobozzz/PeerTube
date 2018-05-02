@@ -3,9 +3,10 @@ version: "3.3"
 services:
 
   peertube:
-    build:
-      context: .
-      dockerfile: ./Dockerfile.stretch
+    # If you don't want to use the official image and build one from sources
+    # build:
+      # context: .
+      # dockerfile: ./Dockerfile.stretch
     image: chocobozzz/peertube:production-stretch
     environment:
       PEERTUBE_HOSTNAME: my.domain.tld
