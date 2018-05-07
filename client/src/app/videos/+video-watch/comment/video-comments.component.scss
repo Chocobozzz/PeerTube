@@ -19,6 +19,14 @@
   font-size: 13px;
 }
 
+.title-block .title-page {
+  margin-right: 0;
+}
+
+my-help {
+  display: inline-block;
+}
+
 @media screen and (max-width: 600px) {
   .view-replies {
     margin-left: 46px;
