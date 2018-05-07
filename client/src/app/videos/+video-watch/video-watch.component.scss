@@ -66,6 +66,16 @@
       .video-info-channel {
         font-weight: $font-semibold;
         font-size: 15px;
+
+        a {
+          @include disable-default-a-behaviour;
+
+          color: #000;
+
+          &:hover {
+            opacity: 0.8;
+          }
+        }
       }
 
       .video-info-by a {

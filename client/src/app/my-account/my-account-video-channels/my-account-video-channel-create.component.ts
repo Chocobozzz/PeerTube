@@ -12,6 +12,7 @@ import {
   VIDEO_CHANNEL_SUPPORT
 } from '@app/shared/forms/form-validators/video-channel'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
+import { AuthService } from '@app/core'
 
 @Component({
   selector: 'my-account-video-channel-create',
@@ -34,6 +35,7 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
   }
 
   constructor (
+    private authService: AuthService,
     private notificationsService: NotificationsService,
     private router: Router,
     private formBuilder: FormBuilder,
@@ -68,6 +70,7 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
 
     this.videoChannelService.createVideoChannel(videoChannelCreate).subscribe(
       () => {
+        this.authService.refreshUserInformation()
         this.notificationsService.success('Success', `Video channel ${videoChannelCreate.displayName} created.`)
         this.router.navigate([ '/my-account', 'video-channels' ])
       },

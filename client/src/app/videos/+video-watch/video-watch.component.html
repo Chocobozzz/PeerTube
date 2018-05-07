@@ -17,7 +17,9 @@
           </div>
 
           <div class="video-info-channel">
-            {{ video.channel.displayName }}
+            <a [routerLink]="[ '/video-channels', video.channel.id ]" title="Go the channel page">
+              {{ video.channel.displayName }}
+            </a>
             <!-- Here will be the subscribe button -->
           </div>
 

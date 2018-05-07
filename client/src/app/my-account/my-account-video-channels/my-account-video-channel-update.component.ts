@@ -14,6 +14,7 @@ import {
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { Subscription } from 'rxjs/Subscription'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { AuthService } from '@app/core'
 
 @Component({
   selector: 'my-account-video-channel-update',
@@ -39,6 +40,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   private paramsSub: Subscription
 
   constructor (
+    private authService: AuthService,
     private notificationsService: NotificationsService,
     private router: Router,
     private route: ActivatedRoute,
@@ -96,6 +98,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
 
     this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.uuid, videoChannelUpdate).subscribe(
       () => {
+        this.authService.refreshUserInformation()
         this.notificationsService.success('Success', `Video channel ${videoChannelUpdate.displayName} updated.`)
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
