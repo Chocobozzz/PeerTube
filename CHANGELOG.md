@@ -38,6 +38,7 @@
  * Handle errors in embed (video not found, server error...)
  * Account view (videos uploaded by this account + video channel owned by this account + about pages)
  * Video channel view (videos uploaded in this channel + about pages)
+ * Video channel management (avatar update is still missing)
 
 ### Bug fixes
 
