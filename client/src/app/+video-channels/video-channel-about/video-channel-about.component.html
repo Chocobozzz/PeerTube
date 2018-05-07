@@ -1,12 +1,20 @@
 <div *ngIf="videoChannel" class="row">
   <div class="description col-md-6 col-sm-12">
-    <div class="small-title">Description</div>
-    <div class="content">{{ getVideoChannelDescription() }}</div>
+    <div class="block">
+      <div class="small-title">Description</div>
+      <div class="content">{{ getVideoChannelDescription() }}</div>
+    </div>
+
+    <div class="block" *ngIf="videoChannel.support">
+      <div class="small-title">Support this channel</div>
+      <div class="content">{{ videoChannel.support }}</div>
+    </div>
   </div>
 
   <div class="stats col-md-6 col-sm-12">
-    <div class="small-title">Stats</div>
-
-    <div class="content">Created {{ videoChannel.createdAt | date }}</div>
+    <div class="block">
+      <div class="small-title">Stats</div>
+      <div class="content">Created {{ videoChannel.createdAt | date }}</div>
+    </div>
   </div>
 </div>
