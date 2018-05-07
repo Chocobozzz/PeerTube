@@ -64,8 +64,8 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
     const body = this.form.value
     const videoChannelCreate: VideoChannelCreate = {
       displayName: body['display-name'],
-      description: body.description,
-      support: body.support
+      description: body.description || undefined,
+      support: body.support || undefined
     }
 
     this.videoChannelService.createVideoChannel(videoChannelCreate).subscribe(
@@ -84,6 +84,6 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
   }
 
   getFormButtonTitle () {
-    return 'Create this video channel'
+    return 'Create'
   }
 }

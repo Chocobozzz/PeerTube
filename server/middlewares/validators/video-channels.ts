@@ -4,14 +4,15 @@ import { UserRight } from '../../../shared'
 import { isAccountIdExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
-  isVideoChannelDescriptionValid, isVideoChannelExist,
-  isVideoChannelNameValid, isVideoChannelSupportValid
+  isVideoChannelDescriptionValid,
+  isVideoChannelExist,
+  isVideoChannelNameValid,
+  isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { logger } from '../../helpers/logger'
 import { UserModel } from '../../models/account/user'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { areValidationErrors } from './utils'
-import { AccountModel } from '../../models/account/account'
 
 const listVideoAccountChannelsValidator = [
   param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
