@@ -1,10 +1,10 @@
 webserver:
-  hostname: "PEERTUBE_HOSTNAME"
+  hostname: "PEERTUBE_WEBSERVER_HOSTNAME"
   port:
-    __name: "PEERTUBE_PORT"
+    __name: "PEERTUBE_WEBSERVER_PORT"
     __format: "json"
   https:
-    __name: "PEERTUBE_HTTPS"
+    __name: "PEERTUBE_WEBSERVER_HTTPS"
     __format: "json"
 
 database:

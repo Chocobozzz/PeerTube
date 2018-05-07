@@ -1,6 +1,13 @@
 #!/bin/sh
 set -e
 
+# Populate config directory
+if [ -z "$(ls -A /config)" ]; then
+    cp /app/support/docker/production/config/* /config
+    cp /app/config/default.yaml /config
+    chown -R peertube:peertube /config
+fi
+
 # first arg is `-f` or `--some-option`
 # or first arg is `something.conf`
 if [ "${1#-}" != "$1" ] || [ "${1%.conf}" != "$1" ]; then

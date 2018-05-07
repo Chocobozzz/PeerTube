@@ -57,14 +57,16 @@ USER peertube
 RUN yarn install --pure-lockfile \
     && npm run build
 
-# Configure PeerTube
-RUN cp /app/config/default.yaml /app/support/docker/production/config/default.yaml
-ENV NODE_ENV production
-ENV NODE_CONFIG_DIR /app/support/docker/production/config
-
 USER root
-RUN mkdir /data && chown peertube:peertube /data
+
+RUN mkdir /data /config
+RUN chown -R peertube:peertube /data /config
+
+ENV NODE_ENV production
+ENV NODE_CONFIG_DIR /config
+
 VOLUME /data
+VOLUME /config
 
 COPY ./support/docker/production/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]

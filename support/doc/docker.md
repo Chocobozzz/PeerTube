@@ -30,7 +30,7 @@ you can use the regular `up` command to set it up, with possible overrides of
 the environment variables:
 
 ```bash
-$ PEERTUBE_HOSTNAME=peertube.lvh.me \
+$ PEERTUBE_WEBSERVER_HOSTNAME=peertube.lvh.me \
   PEERTUBE_ADMIN_EMAIL=test@example.com \
   PEERTUBE_TRANSCODING_ENABLED=true \
   PEERTUBE_SIGNUP_ENABLED=true \

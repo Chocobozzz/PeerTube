@@ -9,9 +9,9 @@ services:
     #   dockerfile: ./support/docker/production/Dockerfile.stretch
     image: chocobozzz/peertube:production-stretch
     environment:
-      PEERTUBE_HOSTNAME: my.domain.tld
-      PEERTUBE_PORT: 443
-      PEERTUBE_HTTPS: "true"
+      PEERTUBE_WEBSERVER_HOSTNAME: my.domain.tld
+      PEERTUBE_WEBSERVER_PORT: 443
+      PEERTUBE_WEBSERVER_HTTPS: "true"
       PEERTUBE_ADMIN_EMAIL: admin@domain.tld
       PEERTUBE_DB_HOSTNAME: postgres
       PEERTUBE_DB_USERNAME: postgres_user
@@ -27,13 +27,14 @@ services:
     # remove them if you are using another reverse proxy.
     labels:
       traefik.enable: "true"
-      traefik.frontend.rule: "Host:${PEERTUBE_HOSTNAME}"
+      traefik.frontend.rule: "Host:${PEERTUBE_WEBSERVER_HOSTNAME}"
       traefik.port: "9000"
     # If you don't want to use a reverse proxy (not suitable for production!)
     # ports:
       # - "80:9000"
     volumes:
-      - ./data:/data
+      - ./docker-volume/data:/data
+      - ./docker-volume/config:/config
     depends_on:
       - postgres
       - redis
@@ -46,11 +47,11 @@ services:
       POSTGRES_PASSWORD: postgres_password
       POSTGRES_DB: peertube
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ./docker-volume/db:/var/lib/postgresql/data
     restart: "always"
 
   redis:
     image: redis:4-alpine
     volumes:
-      - ./redis:/data
+      - ./docker-volume/redis:/data
     restart: "always"
