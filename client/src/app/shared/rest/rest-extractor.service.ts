@@ -33,13 +33,15 @@ export class RestExtractor {
     return target
   }
 
-  handleError (err: HttpErrorResponse) {
+  handleError (err: any) {
     let errorMessage
 
     if (err.error instanceof Error) {
       // A client-side or network error occurred. Handle it accordingly.
       errorMessage = err.error.message
       console.error('An error occurred:', errorMessage)
+    } else if (typeof err.error === 'string') {
+      errorMessage = err.error
     } else if (err.status !== undefined) {
       // A server-side error occurred.
       if (err.error && err.error.errors) {

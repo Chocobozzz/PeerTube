@@ -39,6 +39,7 @@ export class AuthService {
   private clientSecret: string
   private loginChanged: Subject<AuthStatus>
   private user: AuthUser = null
+  private refreshingTokenObservable: Observable<any>
 
   constructor (
     private http: HttpClient,
@@ -144,6 +145,8 @@ export class AuthService {
   }
 
   refreshAccessToken () {
+    if (this.refreshingTokenObservable) return this.refreshingTokenObservable
+
     console.log('Refreshing token...')
 
     const refreshToken = this.getRefreshToken()
@@ -157,18 +160,23 @@ export class AuthService {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 
-    return this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
-                    .map(res => this.handleRefreshToken(res))
-                    .catch(err => {
-                      console.error(err)
-                      console.log('Cannot refresh token -> logout...')
-                      this.logout()
-                      this.router.navigate(['/login'])
+    this.refreshingTokenObservable = this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
+               .map(res => this.handleRefreshToken(res))
+               .do(() => this.refreshingTokenObservable = null)
+               .catch(err => {
+                 this.refreshingTokenObservable = null
 
-                      return Observable.throw({
-                        error: 'You need to reconnect.'
-                      })
-                    })
+                 console.error(err)
+                 console.log('Cannot refresh token -> logout...')
+                 this.logout()
+                 this.router.navigate([ '/login' ])
+
+                 return Observable.throw({
+                   error: 'You need to reconnect.'
+                 })
+               })
+
+    return this.refreshingTokenObservable
   }
 
   refreshUserInformation () {
