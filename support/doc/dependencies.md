@@ -36,7 +36,7 @@ $ sudo apt install ffmpeg
   1. Run:
 
 ```
-$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+$ sudo pacman -S nodejs-lts-carbon yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
 ```
 
 ## CentOS 7
