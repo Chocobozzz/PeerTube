@@ -55,3 +55,6 @@ instance:
   name: "PEERTUBE_INSTANCE_NAME"
   description: "PEERTUBE_INSTANCE_DESCRIPTION"
   terms: "PEERTUBE_INSTANCE_TERMS"
+  customizations:
+    css: "PEERTUBE_INSTANCE_CUSTOM_CSS"
+    javascript: "PEERTUBE_INSTANCE_CUSTOM_JS"
