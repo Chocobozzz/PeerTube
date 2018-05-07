@@ -1,6 +1,9 @@
 <div>
-  <div class="title-page title-page-single">
-    Comments
+  <div class="title-block">
+    <div class="title-page title-page-single">
+      Comments
+    </div>
+    <my-help *ngIf="video.commentsEnabled === true" helpType="custom" customHtml="You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.displayName}}@{{video.account.host}}</strong> and find back the video. Direct commenting capabilities are being worked on in <a href='https://github.com/Chocobozzz/PeerTube/issues/224'>#224</a>."></my-help>
   </div>
 
   <ng-template [ngIf]="video.commentsEnabled === true">
