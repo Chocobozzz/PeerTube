@@ -16,6 +16,8 @@
 /PeerTube.iml
 /profiling/
 /*.zip
+/*.tar.xz
+/*.asc
 /thumbnails/
 /torrents/
 /videos/
