@@ -46,7 +46,7 @@ then
   exit 0
 fi
 
-( 
+(
   cd client
   npm version --no-git-tag-version --no-commit-hooks "$1"
 )
@@ -62,14 +62,14 @@ rm "./client/dist/stats.json"
 # Creating the archives
 (
   # local variables
-  directories_to_archive = ("$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
-                            "$directory_name/LICENSE" "$directory_name/README.md" \
-                            "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
-                            "$directory_name/client/package.json" "$directory_name/config" \
-                            "$directory_name/dist" "$directory_name/package.json" \
-                            "$directory_name/scripts" "$directory_name/support" \
-                            "$directory_name/tsconfig.json" "$directory_name/yarn.lock")
-  maintainer_pubkey = "583A612D890159BE"
+  directories_to_archive=("$directory_name/CREDITS.md" "$directory_name/FAQ.md" \
+                          "$directory_name/LICENSE" "$directory_name/README.md" \
+                          "$directory_name/client/dist/" "$directory_name/client/yarn.lock" \
+                          "$directory_name/client/package.json" "$directory_name/config" \
+                          "$directory_name/dist" "$directory_name/package.json" \
+                          "$directory_name/scripts" "$directory_name/support" \
+                          "$directory_name/tsconfig.json" "$directory_name/yarn.lock")
+  maintainer_public_key="583A612D890159BE"
 
   # temporary setup
   cd ..
@@ -77,9 +77,9 @@ rm "./client/dist/stats.json"
 
   # archive creation + signing
   zip -r "PeerTube/$zip_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u $maintainer_pubkey "PeerTube/$zip_name"
+  gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$zip_name"
   XZ_OPT=-e9 tar cfJ "PeerTube/$tar_name" "${directories_to_archive[@]}"
-  gpg --armor --detach-sign -u $maintainer_pubkey "PeerTube/$tar_name"
+  gpg --armor --detach-sign -u "$maintainer_public_key" "PeerTube/$tar_name"
 
   # temporary setup destruction
   rm "$directory_name"
@@ -87,8 +87,6 @@ rm "./client/dist/stats.json"
 
 # Creating the release on GitHub, with the created archives
 (
-  cd "PeerTube"
-
   git push origin --tag
 
   github-release release --user chocobozzz --repo peertube --tag "$version" --name "$version" --description "$changelog"
