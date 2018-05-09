@@ -11,7 +11,7 @@ import { FollowingListComponent } from './follows/following-list/following-list.
 import { JobsComponent } from './jobs/job.component'
 import { JobsListComponent } from './jobs/jobs-list/jobs-list.component'
 import { JobService } from './jobs/shared/job.service'
-import { UserAddComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
+import { UserCreateComponent, UserListComponent, UsersComponent, UserService, UserUpdateComponent } from './users'
 import { VideoAbuseListComponent, VideoAbusesComponent } from './video-abuses'
 import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-blacklist'
 
@@ -32,7 +32,7 @@ import { VideoBlacklistComponent, VideoBlacklistListComponent } from './video-bl
     FollowingListComponent,
 
     UsersComponent,
-    UserAddComponent,
+    UserCreateComponent,
     UserUpdateComponent,
     UserListComponent,
 
