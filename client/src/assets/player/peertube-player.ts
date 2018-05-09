@@ -1,7 +1,7 @@
 import { VideoFile } from '../../../../shared/models/videos'
 
 import 'videojs-hotkeys'
-import 'videojs-dock/dist/videojs-dock.es.js'
+import 'videojs-dock'
 import './peertube-link-button'
 import './resolution-menu-button'
 import './settings-menu-button'
