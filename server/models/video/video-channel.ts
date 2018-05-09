@@ -1,6 +1,6 @@
 import {
   AllowNull, BeforeDestroy, BelongsTo, Column, CreatedAt, DefaultScope, ForeignKey, HasMany, Is, Model, Scopes, Table,
-  UpdatedAt, Default
+  UpdatedAt, Default, DataType
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel } from '../../../shared/models/videos'
@@ -14,6 +14,7 @@ import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
+import { CONSTRAINTS_FIELDS } from '../../initializers'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -73,13 +74,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   @AllowNull(true)
   @Default(null)
   @Is('VideoChannelDescription', value => throwIfNotValid(value, isVideoChannelDescriptionValid, 'description'))
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.DESCRIPTION.max))
   description: string
 
   @AllowNull(true)
   @Default(null)
   @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support'))
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   support: string
 
   @CreatedAt

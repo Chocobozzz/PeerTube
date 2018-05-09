@@ -15,20 +15,20 @@ export const VIDEO_CHANNEL_DISPLAY_NAME = {
 export const VIDEO_CHANNEL_DESCRIPTION = {
   VALIDATORS: [
     Validators.minLength(3),
-    Validators.maxLength(250)
+    Validators.maxLength(500)
   ],
   MESSAGES: {
     'minlength': 'Description must be at least 3 characters long.',
-    'maxlength': 'Description cannot be more than 250 characters long.'
+    'maxlength': 'Description cannot be more than 500 characters long.'
   }
 }
 export const VIDEO_CHANNEL_SUPPORT = {
   VALIDATORS: [
     Validators.minLength(3),
-    Validators.maxLength(300)
+    Validators.maxLength(500)
   ],
   MESSAGES: {
     'minlength': 'Support text must be at least 3 characters long.',
-    'maxlength': 'Support text cannot be more than 300 characters long.'
+    'maxlength': 'Support text cannot be more than 500 characters long.'
   }
 }
