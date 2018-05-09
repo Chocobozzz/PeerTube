@@ -39,7 +39,7 @@
     min-width: 0;
 
     .icon {
-      @include icon(22px);
+      @include icon(24px);
 
       &.icon-menu {
         background-image: url('../assets/images/header/menu.svg');
