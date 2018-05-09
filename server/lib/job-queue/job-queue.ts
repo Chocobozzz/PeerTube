@@ -1,7 +1,7 @@
 import * as kue from 'kue'
 import { JobState, JobType } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
-import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY } from '../../initializers'
+import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_REQUEST_TTL } from '../../initializers'
 import { Redis } from '../redis'
 import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
@@ -26,6 +26,13 @@ const handlers: { [ id in JobType ]: (job: kue.Job) => Promise<any>} = {
   'video-file': processVideoFile,
   'email': processEmail
 }
+
+const jobsWithTLL: JobType[] = [
+  'activitypub-http-broadcast',
+  'activitypub-http-unicast',
+  'activitypub-http-fetcher',
+  'activitypub-follow'
+]
 
 class JobQueue {
 
@@ -77,16 +84,21 @@ class JobQueue {
 
   createJob (obj: CreateJobArgument, priority = 'normal') {
     return new Promise((res, rej) => {
-      this.jobQueue
+      let job = this.jobQueue
         .create(obj.type, obj.payload)
         .priority(priority)
         .attempts(JOB_ATTEMPTS[obj.type])
         .backoff({ delay: 60 * 1000, type: 'exponential' })
-        .save(err => {
-          if (err) return rej(err)
 
-          return res()
-        })
+      if (jobsWithTLL.indexOf(obj.type) !== -1) {
+        job = job.ttl(JOB_REQUEST_TTL)
+      }
+
+      return job.save(err => {
+        if (err) return rej(err)
+
+        return res()
+      })
     })
   }
 

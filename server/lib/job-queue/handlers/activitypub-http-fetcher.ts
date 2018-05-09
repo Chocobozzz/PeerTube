@@ -1,7 +1,7 @@
 import * as kue from 'kue'
 import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
-import { ACTIVITY_PUB } from '../../../initializers'
+import { ACTIVITY_PUB, JOB_REQUEST_TIMEOUT } from '../../../initializers'
 import { processActivities } from '../../activitypub/process'
 import { ActivitypubHttpBroadcastPayload } from './activitypub-http-broadcast'
 
@@ -18,7 +18,8 @@ async function processActivityPubHttpFetcher (job: kue.Job) {
     method: 'GET',
     uri: '',
     json: true,
-    activityPub: true
+    activityPub: true,
+    timeout: JOB_REQUEST_TIMEOUT
   }
 
   for (const uri of payload.uris) {
