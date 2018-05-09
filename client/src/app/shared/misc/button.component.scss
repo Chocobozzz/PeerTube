@@ -28,3 +28,16 @@
     }
   }
 }
+
+// In a table, try to minimize the space taken by this button
+@media screen and (max-width: 1400px) {
+  :host-context(td) {
+    .action-button {
+      padding: 0 13px;
+    }
+
+    .button-label {
+      display: none;
+    }
+  }
+}
