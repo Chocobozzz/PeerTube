@@ -39,7 +39,7 @@ export const UsersRoutes: Routes = [
         }
       },
       {
-        path: ':id/update',
+        path: 'update/:id',
         component: UserUpdateComponent,
         data: {
           meta: {
