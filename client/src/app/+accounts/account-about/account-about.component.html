@@ -1,10 +1,10 @@
 <div *ngIf="account" class="row">
-  <div class="description col-md-6 col-sm-12">
+  <div class="block col-md-6 col-sm-12">
     <div class="small-title">Description</div>
     <div class="content">{{ getAccountDescription() }}</div>
   </div>
 
-  <div class="stats col-md-6 col-sm-12">
+  <div class="block col-md-6 col-sm-12">
     <div class="small-title">Stats</div>
 
     <div class="content">Joined {{ account.createdAt | date }}</div>
