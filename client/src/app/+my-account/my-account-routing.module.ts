@@ -5,13 +5,13 @@ import { LoginGuard } from '../core'
 import { MyAccountComponent } from './my-account.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
-import { MyAccountVideoChannelsComponent } from '@app/my-account/my-account-video-channels/my-account-video-channels.component'
-import { MyAccountVideoChannelCreateComponent } from '@app/my-account/my-account-video-channels/my-account-video-channel-create.component'
-import { MyAccountVideoChannelUpdateComponent } from '@app/my-account/my-account-video-channels/my-account-video-channel-update.component'
+import { MyAccountVideoChannelsComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channels.component'
+import { MyAccountVideoChannelCreateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-create.component'
+import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-update.component'
 
 const myAccountRoutes: Routes = [
   {
-    path: 'my-account',
+    path: '',
     component: MyAccountComponent,
     canActivateChild: [ MetaGuard, LoginGuard ],
     children: [
