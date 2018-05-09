@@ -231,22 +231,8 @@ describe('Test videos API validator', function () {
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
 
-    it('Should fail with a bad nsfw attribute', async function () {
-      const fields = immutableAssign(baseCorrectParams, { nsfw: 2 })
-      const attaches = baseCorrectAttaches
-
-      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
     it('Should fail without commentsEnabled attribute', async function () {
       const fields = omit(baseCorrectParams, 'commentsEnabled')
-      const attaches = baseCorrectAttaches
-
-      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
-    })
-
-    it('Should fail with a bad commentsEnabled attribute', async function () {
-      const fields = immutableAssign(baseCorrectParams, { commentsEnabled: 2 })
       const attaches = baseCorrectAttaches
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -481,18 +467,6 @@ describe('Test videos API validator', function () {
 
     it('Should fail with a bad language', async function () {
       const fields = immutableAssign(baseCorrectParams, { language: 'a'.repeat(15) })
-
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
-    })
-
-    it('Should fail with a bad nsfw attribute', async function () {
-      const fields = immutableAssign(baseCorrectParams, { nsfw: 2 })
-
-      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
-    })
-
-    it('Should fail with a bad commentsEnabled attribute', async function () {
-      const fields = immutableAssign(baseCorrectParams, { commentsEnabled: 2 })
 
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })

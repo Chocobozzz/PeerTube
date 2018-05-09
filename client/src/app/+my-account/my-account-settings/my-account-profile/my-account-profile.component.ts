@@ -47,7 +47,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
 
   updateMyProfile () {
     const displayName = this.form.value['display-name']
-    const description = this.form.value['description']
+    const description = this.form.value['description'] || null
 
     this.error = null
 

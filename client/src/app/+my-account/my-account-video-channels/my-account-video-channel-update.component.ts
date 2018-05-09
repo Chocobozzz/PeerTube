@@ -92,8 +92,8 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     const body = this.form.value
     const videoChannelUpdate: VideoChannelUpdate = {
       displayName: body['display-name'],
-      description: body.description || undefined,
-      support: body.support || undefined
+      description: body.description || null,
+      support: body.support || null
     }
 
     this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.uuid, videoChannelUpdate).subscribe(

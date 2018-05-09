@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
-import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntOrNull, toStringOrNull } from '../../helpers/custom-validators/misc'
 import {
   isVideoAbuseReasonValid,
   isVideoCategoryValid,
@@ -14,7 +14,8 @@ import {
   isVideoLicenceValid,
   isVideoNameValid,
   isVideoPrivacyValid,
-  isVideoRatingTypeValid, isVideoSupportValid,
+  isVideoRatingTypeValid,
+  isVideoSupportValid,
   isVideoTagsValid
 } from '../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../helpers/ffmpeg-utils'
@@ -41,16 +42,40 @@ const videosAddValidator = [
     + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
   ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
-  body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
-  body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
-  body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
-  body('nsfw').custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
-  body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
-  body('support').optional().custom(isVideoSupportValid).withMessage('Should have a valid support text'),
+  body('category')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoCategoryValid).withMessage('Should have a valid category'),
+  body('licence')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
+  body('language')
+    .optional()
+    .customSanitizer(toStringOrNull)
+    .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
+  body('nsfw')
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+  body('description')
+    .optional()
+    .customSanitizer(toStringOrNull)
+    .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('support')
+    .optional()
+    .customSanitizer(toStringOrNull)
+    .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
+  body('tags')
+    .optional()
+    .custom(isVideoTagsValid).withMessage('Should have correct tags'),
+  body('commentsEnabled')
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
+  body('privacy')
+    .optional()
+    .toInt()
+    .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
-  body('privacy').custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
-  body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
-  body('commentsEnabled').custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
@@ -110,16 +135,44 @@ const videosUpdateValidator = [
     'This preview file is not supported. Please, make sure it is of the following type : '
     + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
   ),
-  body('name').optional().custom(isVideoNameValid).withMessage('Should have a valid name'),
-  body('category').optional().custom(isVideoCategoryValid).withMessage('Should have a valid category'),
-  body('licence').optional().custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
-  body('language').optional().custom(isVideoLanguageValid).withMessage('Should have a valid language'),
-  body('nsfw').optional().custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
-  body('privacy').optional().custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
-  body('description').optional().custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
-  body('support').optional().custom(isVideoSupportValid).withMessage('Should have a valid support text'),
-  body('tags').optional().custom(isVideoTagsValid).withMessage('Should have correct tags'),
-  body('commentsEnabled').optional().custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
+  body('name')
+    .optional()
+    .custom(isVideoNameValid).withMessage('Should have a valid name'),
+  body('category')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoCategoryValid).withMessage('Should have a valid category'),
+  body('licence')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
+  body('language')
+    .optional()
+    .customSanitizer(toStringOrNull)
+    .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
+  body('nsfw')
+    .optional()
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
+  body('privacy')
+    .optional()
+    .toInt()
+    .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
+  body('description')
+    .optional()
+    .customSanitizer(toStringOrNull)
+    .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
+  body('support')
+    .optional()
+    .customSanitizer(toStringOrNull)
+    .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
+  body('tags')
+    .optional()
+    .custom(isVideoTagsValid).withMessage('Should have correct tags'),
+  body('commentsEnabled')
+    .optional()
+    .toBoolean()
+    .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
