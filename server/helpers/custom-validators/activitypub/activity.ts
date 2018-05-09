@@ -11,9 +11,9 @@ import { isUndoActivityValid } from './undo'
 import { isVideoCommentCreateActivityValid, isVideoCommentDeleteActivityValid } from './video-comments'
 import {
   isVideoFlagValid,
-  isVideoTorrentCreateActivityValid,
+  sanitizeAndCheckVideoTorrentCreateActivity,
   isVideoTorrentDeleteActivityValid,
-  isVideoTorrentUpdateActivityValid
+  sanitizeAndCheckVideoTorrentUpdateActivity
 } from './videos'
 import { isViewActivityValid } from './view'
 
@@ -62,13 +62,13 @@ export {
 function checkCreateActivity (activity: any) {
   return isViewActivityValid(activity) ||
     isDislikeActivityValid(activity) ||
-    isVideoTorrentCreateActivityValid(activity) ||
+    sanitizeAndCheckVideoTorrentCreateActivity(activity) ||
     isVideoFlagValid(activity) ||
     isVideoCommentCreateActivityValid(activity)
 }
 
 function checkUpdateActivity (activity: any) {
-  return isVideoTorrentUpdateActivityValid(activity) ||
+  return sanitizeAndCheckVideoTorrentUpdateActivity(activity) ||
     isActorUpdateActivityValid(activity)
 }
 
