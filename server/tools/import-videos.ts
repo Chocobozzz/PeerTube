@@ -10,6 +10,7 @@ import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers'
 import { getClient, getVideoCategories, login, searchVideo, uploadVideo } from '../tests/utils'
 import { truncate } from 'lodash'
+import * as prompt from 'prompt'
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -23,29 +24,54 @@ program
 if (
   !program['url'] ||
   !program['username'] ||
-  !program['password'] ||
   !program['targetUrl']
 ) {
   console.error('All arguments are required.')
   process.exit(-1)
 }
 
-run().catch(err => console.error(err))
-
-let accessToken: string
-let client: { id: string, secret: string }
-
 const user = {
   username: program['username'],
   password: program['password']
 }
 
+run().catch(err => console.error(err))
+
+let accessToken: string
+let client: { id: string, secret: string }
+  
 const processOptions = {
   cwd: __dirname,
   maxBuffer: Infinity
 }
 
+async function promptPassword () {
+  return new Promise ( resolve => {
+   prompt.start()
+   const schema = {
+     properties: {
+       password: {
+         hidden:true,
+         required:true
+       }
+     }
+   }
+   prompt.get(schema, function(err, result) {
+     if (err) {
+       console.log(err.message)
+     }
+     resolve(result.password)
+   })
+  })
+}
+
 async function run () {
+  if (
+    !user.password
+  ) {
+    user.password = await promptPassword();
+  }
+  
   const res = await getClient(program['url'])
   client = {
     id: res.body.client_id,
