@@ -111,6 +111,10 @@ label {
   &:hover, &:active, &:focus {
     color: #000;
   }
+
+  @media screen and (max-width: 500px) {
+    margin-right: 20px;
+  }
 }
 
 .admin-sub-header {

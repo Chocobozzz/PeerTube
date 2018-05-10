@@ -4,7 +4,7 @@ import { logger } from '../../../helpers/logger'
 import { doRequest } from '../../../helpers/requests'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
-import { BROADCAST_CONCURRENCY } from '../../../initializers'
+import { BROADCAST_CONCURRENCY, JOB_REQUEST_TIMEOUT } from '../../../initializers'
 
 export type ActivitypubHttpBroadcastPayload = {
   uris: string[]
@@ -24,7 +24,8 @@ async function processActivityPubHttpBroadcast (job: kue.Job) {
     method: 'POST',
     uri: '',
     json: body,
-    httpSignature: httpSignatureOptions
+    httpSignature: httpSignatureOptions,
+    timeout: JOB_REQUEST_TIMEOUT
   }
 
   const badUrls: string[] = []

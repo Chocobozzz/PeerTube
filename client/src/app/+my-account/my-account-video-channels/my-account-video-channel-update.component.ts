@@ -1,25 +1,27 @@
-import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { Component, OnInit, OnDestroy } from '@angular/core'
+import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/concatAll'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
 import { FormBuilder, FormGroup } from '@angular/forms'
-import { VideoChannelCreate } from '../../../../../shared/models/videos'
+import { VideoChannelUpdate } from '../../../../../shared/models/videos'
 import {
   VIDEO_CHANNEL_DESCRIPTION,
   VIDEO_CHANNEL_DISPLAY_NAME,
   VIDEO_CHANNEL_SUPPORT
 } from '@app/shared/forms/form-validators/video-channel'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
+import { Subscription } from 'rxjs/Subscription'
+import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { AuthService } from '@app/core'
 
 @Component({
-  selector: 'my-account-video-channel-create',
+  selector: 'my-account-video-channel-update',
   templateUrl: './my-account-video-channel-edit.component.html',
   styleUrls: [ './my-account-video-channel-edit.component.scss' ]
 })
-export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelEdit implements OnInit {
+export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelEdit implements OnInit, OnDestroy {
   error: string
 
   form: FormGroup
@@ -34,10 +36,14 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
     'support': VIDEO_CHANNEL_SUPPORT.MESSAGES
   }
 
+  private videoChannelToUpdate: VideoChannel
+  private paramsSub: Subscription
+
   constructor (
     private authService: AuthService,
     private notificationsService: NotificationsService,
     private router: Router,
+    private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private videoChannelService: VideoChannelService
   ) {
@@ -56,22 +62,44 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
 
   ngOnInit () {
     this.buildForm()
+
+    this.paramsSub = this.route.params.subscribe(routeParams => {
+      const videoChannelId = routeParams['videoChannelId']
+
+      this.videoChannelService.getVideoChannel(videoChannelId).subscribe(
+        videoChannelToUpdate => {
+          this.videoChannelToUpdate = videoChannelToUpdate
+
+          this.form.patchValue({
+            'display-name': videoChannelToUpdate.displayName,
+            description: videoChannelToUpdate.description,
+            support: videoChannelToUpdate.support
+          })
+        },
+
+        err => this.error = err.message
+      )
+    })
+  }
+
+  ngOnDestroy () {
+    if (this.paramsSub) this.paramsSub.unsubscribe()
   }
 
   formValidated () {
     this.error = undefined
 
     const body = this.form.value
-    const videoChannelCreate: VideoChannelCreate = {
+    const videoChannelUpdate: VideoChannelUpdate = {
       displayName: body['display-name'],
-      description: body.description || undefined,
-      support: body.support || undefined
+      description: body.description || null,
+      support: body.support || null
     }
 
-    this.videoChannelService.createVideoChannel(videoChannelCreate).subscribe(
+    this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.uuid, videoChannelUpdate).subscribe(
       () => {
         this.authService.refreshUserInformation()
-        this.notificationsService.success('Success', `Video channel ${videoChannelCreate.displayName} created.`)
+        this.notificationsService.success('Success', `Video channel ${videoChannelUpdate.displayName} updated.`)
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
 
@@ -80,10 +108,10 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
   }
 
   isCreation () {
-    return true
+    return false
   }
 
   getFormButtonTitle () {
-    return 'Create'
+    return 'Update'
   }
 }

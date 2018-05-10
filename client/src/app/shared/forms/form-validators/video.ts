@@ -60,9 +60,9 @@ export const VIDEO_TAGS = {
 }
 
 export const VIDEO_SUPPORT = {
-  VALIDATORS: [ Validators.minLength(3), Validators.maxLength(300) ],
+  VALIDATORS: [ Validators.minLength(3), Validators.maxLength(500) ],
   MESSAGES: {
     'minlength': 'Video support must be at least 3 characters long.',
-    'maxlength': 'Video support cannot be more than 300 characters long.'
+    'maxlength': 'Video support cannot be more than 500 characters long.'
   }
 }

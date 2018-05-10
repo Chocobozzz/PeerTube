@@ -6,8 +6,6 @@ import { ResetPasswordModule } from '@app/reset-password'
 
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
 
-import { MyAccountModule } from './my-account'
-
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { CoreModule } from './core'
@@ -46,7 +44,6 @@ export function metaFactory (serverService: ServerService): MetaLoader {
 
     AppRoutingModule,
 
-    MyAccountModule,
     CoreModule,
     LoginModule,
     ResetPasswordModule,

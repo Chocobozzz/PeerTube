@@ -13,7 +13,7 @@ let config: IConfig = require('config')
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 210
+const LAST_MIGRATION_VERSION = 215
 
 // ---------------------------------------------------------------------------
 
@@ -78,9 +78,10 @@ const JOB_CONCURRENCY: { [ id in JobType ]: number } = {
   'video-file': 1,
   'email': 5
 }
-const BROADCAST_CONCURRENCY = 5 // How many requests in parallel we do in activitypub-http-broadcast job
-// 2 days
-const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2
+const BROADCAST_CONCURRENCY = 10 // How many requests in parallel we do in activitypub-http-broadcast job
+const JOB_REQUEST_TIMEOUT = 3000 // 3 seconds
+const JOB_REQUEST_TTL = 60000 * 10 // 10 minutes
+const JOB_COMPLETED_LIFETIME = 60000 * 60 * 24 * 2 // 2 days
 
 // 1 hour
 let SCHEDULER_INTERVAL = 60000 * 60
@@ -191,8 +192,8 @@ const CONSTRAINTS_FIELDS = {
   },
   VIDEO_CHANNELS: {
     NAME: { min: 3, max: 120 }, // Length
-    DESCRIPTION: { min: 3, max: 250 }, // Length
-    SUPPORT: { min: 3, max: 300 }, // Length
+    DESCRIPTION: { min: 3, max: 500 }, // Length
+    SUPPORT: { min: 3, max: 500 }, // Length
     URL: { min: 3, max: 2000 } // Length
   },
   VIDEOS: {
@@ -200,7 +201,7 @@ const CONSTRAINTS_FIELDS = {
     LANGUAGE: { min: 1, max: 10 }, // Length
     TRUNCATED_DESCRIPTION: { min: 3, max: 250 }, // Length
     DESCRIPTION: { min: 3, max: 10000 }, // Length
-    SUPPORT: { min: 3, max: 300 }, // Length
+    SUPPORT: { min: 3, max: 500 }, // Length
     IMAGE: {
       EXTNAME: [ '.jpg', '.jpeg' ],
       FILE_SIZE: {
@@ -466,6 +467,8 @@ export {
   VIDEO_RATE_TYPES,
   VIDEO_MIMETYPE_EXT,
   VIDEO_TRANSCODING_FPS,
+  JOB_REQUEST_TIMEOUT,
+  JOB_REQUEST_TTL,
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,

@@ -60,13 +60,11 @@ export const USER_DISPLAY_NAME = {
 }
 export const USER_DESCRIPTION = {
   VALIDATORS: [
-    Validators.required,
     Validators.minLength(3),
     Validators.maxLength(250)
   ],
   MESSAGES: {
-    'required': 'Display name is required.',
-    'minlength': 'Display name must be at least 3 characters long.',
-    'maxlength': 'Display name cannot be more than 250 characters long.'
+    'minlength': 'Description must be at least 3 characters long.',
+    'maxlength': 'Description cannot be more than 250 characters long.'
   }
 }

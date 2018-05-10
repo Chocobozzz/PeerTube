@@ -25,8 +25,20 @@ function isIdOrUUIDValid (value: string) {
   return isIdValid(value) || isUUIDValid(value)
 }
 
-function isBooleanValid (value: string) {
+function isBooleanValid (value: any) {
   return typeof value === 'boolean' || (typeof value === 'string' && validator.isBoolean(value))
+}
+
+function toIntOrNull (value: string) {
+  if (value === 'null') return null
+
+  return validator.toInt(value)
+}
+
+function toStringOrNull (value: string) {
+  if (value === 'null') return null
+
+  return value
 }
 
 function isFileValid (
@@ -61,6 +73,8 @@ export {
   isUUIDValid,
   isIdOrUUIDValid,
   isDateValid,
+  toStringOrNull,
   isBooleanValid,
+  toIntOrNull,
   isFileValid
 }
