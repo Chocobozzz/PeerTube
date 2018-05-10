@@ -14,6 +14,13 @@ export interface CustomConfig {
     }
   }
 
+  services: {
+    twitter: {
+      username: string
+      whitelisted: boolean
+    }
+  }
+
   cache: {
     previews: {
       size: number

@@ -8,7 +8,7 @@ import { FormReactive, USER_VIDEO_QUOTA } from '@app/shared'
 import {
   ADMIN_EMAIL,
   CACHE_PREVIEWS_SIZE,
-  INSTANCE_NAME, INSTANCE_SHORT_DESCRIPTION,
+  INSTANCE_NAME, INSTANCE_SHORT_DESCRIPTION, SERVICES_TWITTER_USERNAME,
   SIGNUP_LIMIT,
   TRANSCODING_THREADS
 } from '@app/shared/forms/form-validators/custom-config'
@@ -49,6 +49,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     instanceTerms: '',
     instanceDefaultClientRoute: '',
     instanceDefaultNSFWPolicy: '',
+    servicesTwitterUsername: '',
     cachePreviewsSize: '',
     signupLimit: '',
     adminEmail: '',
@@ -60,6 +61,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   validationMessages = {
     instanceShortDescription: INSTANCE_SHORT_DESCRIPTION.MESSAGES,
     instanceName: INSTANCE_NAME.MESSAGES,
+    servicesTwitterUsername: SERVICES_TWITTER_USERNAME,
     cachePreviewsSize: CACHE_PREVIEWS_SIZE.MESSAGES,
     signupLimit: SIGNUP_LIMIT.MESSAGES,
     adminEmail: ADMIN_EMAIL.MESSAGES,
@@ -92,6 +94,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceTerms: [ '' ],
       instanceDefaultClientRoute: [ '' ],
       instanceDefaultNSFWPolicy: [ '' ],
+      servicesTwitterUsername: [ '', SERVICES_TWITTER_USERNAME.VALIDATORS ],
+      servicesTwitterWhitelisted: [ ],
       cachePreviewsSize: [ '', CACHE_PREVIEWS_SIZE.VALIDATORS ],
       signupEnabled: [ ],
       signupLimit: [ '', SIGNUP_LIMIT.VALIDATORS ],
@@ -175,6 +179,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           css: this.form.value['customizationCSS']
         }
       },
+      services: {
+        twitter: {
+          username: this.form.value['servicesTwitterUsername'],
+          whitelisted: this.form.value['servicesTwitterWhitelisted']
+        }
+      },
       cache: {
         previews: {
           size: this.form.value['cachePreviewsSize']
@@ -228,6 +238,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       instanceTerms: this.customConfig.instance.terms,
       instanceDefaultClientRoute: this.customConfig.instance.defaultClientRoute,
       instanceDefaultNSFWPolicy: this.customConfig.instance.defaultNSFWPolicy,
+      servicesTwitterUsername: this.customConfig.services.twitter.username,
+      servicesTwitterWhitelisted: this.customConfig.services.twitter.whitelisted,
       cachePreviewsSize: this.customConfig.cache.previews.size,
       signupEnabled: this.customConfig.signup.enabled,
       signupLimit: this.customConfig.signup.limit,

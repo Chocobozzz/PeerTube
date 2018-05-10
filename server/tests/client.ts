@@ -11,7 +11,7 @@ import {
   runServer,
   serverLogin,
   uploadVideo,
-  getVideosList
+  getVideosList, updateCustomConfig, getCustomConfig
 } from './utils'
 
 describe('Test a client controllers', function () {
@@ -71,6 +71,34 @@ describe('Test a client controllers', function () {
       `title="${server.video.name}" />`
 
     expect(res.text).to.contain(expectedLink)
+  })
+
+  it('Should have valid twitter card', async function () {
+    const res = await request(server.url)
+      .get('/videos/watch/' + server.video.uuid)
+      .set('Accept', 'text/html')
+      .expect(200)
+
+    expect(res.text).to.contain('<meta property="twitter:card" content="summary_large_image" />')
+    expect(res.text).to.contain('<meta property="twitter:site" content="@Chocobozzz" />')
+  })
+
+  it('Should have valid twitter card if Twitter is whitelisted', async function () {
+    const res1 = await getCustomConfig(server.url, server.accessToken)
+    const config = res1.body
+    config.services.twitter = {
+      username: '@Kuja',
+      whitelisted: true
+    }
+    await updateCustomConfig(server.url, server.accessToken, config)
+
+    const res = await request(server.url)
+      .get('/videos/watch/' + server.video.uuid)
+      .set('Accept', 'text/html')
+      .expect(200)
+
+    expect(res.text).to.contain('<meta property="twitter:card" content="player" />')
+    expect(res.text).to.contain('<meta property="twitter:site" content="@Kuja" />')
   })
 
   after(async function () {

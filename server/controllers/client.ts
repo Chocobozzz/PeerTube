@@ -77,8 +77,8 @@ function addOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
     'description': videoDescriptionEscaped,
     'image': previewUrl,
 
-    'twitter:card': 'summary_large_image',
-    'twitter:site': '@Chocobozzz',
+    'twitter:card': CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image',
+    'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
     'twitter:title': videoNameEscaped,
     'twitter:description': videoDescriptionEscaped,
     'twitter:image': previewUrl,

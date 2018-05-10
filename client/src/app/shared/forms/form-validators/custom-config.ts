@@ -14,6 +14,13 @@ export const INSTANCE_SHORT_DESCRIPTION = {
   }
 }
 
+export const SERVICES_TWITTER_USERNAME = {
+  VALIDATORS: [ Validators.required ],
+  MESSAGES: {
+    'required': 'Twitter username is required.'
+  }
+}
+
 export const CACHE_PREVIEWS_SIZE = {
   VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
   MESSAGES: {

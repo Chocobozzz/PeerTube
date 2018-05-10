@@ -26,6 +26,12 @@ describe('Test config API validators', function () {
         css: 'body { background-color: red; }'
       }
     },
+    services: {
+      twitter: {
+        username: '@MySuperUsername',
+        whitelisted: true
+      }
+    },
     cache: {
       previews: {
         size: 2

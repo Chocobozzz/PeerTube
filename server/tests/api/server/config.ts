@@ -62,6 +62,8 @@ describe('Test config', function () {
     expect(data.instance.defaultNSFWPolicy).to.equal('display')
     expect(data.instance.customizations.css).to.be.empty
     expect(data.instance.customizations.javascript).to.be.empty
+    expect(data.services.twitter.username).to.equal('@Chocobozzz')
+    expect(data.services.twitter.whitelisted).to.be.false
     expect(data.cache.previews.size).to.equal(1)
     expect(data.signup.enabled).to.be.true
     expect(data.signup.limit).to.equal(4)
@@ -88,6 +90,12 @@ describe('Test config', function () {
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
+        }
+      },
+      services: {
+        twitter: {
+          username: '@Kuja',
+          whitelisted: true
         }
       },
       cache: {
@@ -130,6 +138,8 @@ describe('Test config', function () {
     expect(data.instance.defaultNSFWPolicy).to.equal('blur')
     expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
     expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
+    expect(data.services.twitter.username).to.equal('@Kuja')
+    expect(data.services.twitter.whitelisted).to.be.true
     expect(data.cache.previews.size).to.equal(2)
     expect(data.signup.enabled).to.be.false
     expect(data.signup.limit).to.equal(5)
@@ -162,6 +172,8 @@ describe('Test config', function () {
     expect(data.instance.defaultNSFWPolicy).to.equal('blur')
     expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
     expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
+    expect(data.services.twitter.username).to.equal('@Kuja')
+    expect(data.services.twitter.whitelisted).to.be.true
     expect(data.cache.previews.size).to.equal(2)
     expect(data.signup.enabled).to.be.false
     expect(data.signup.limit).to.equal(5)
@@ -205,6 +217,8 @@ describe('Test config', function () {
     expect(data.instance.defaultNSFWPolicy).to.equal('display')
     expect(data.instance.customizations.css).to.be.empty
     expect(data.instance.customizations.javascript).to.be.empty
+    expect(data.services.twitter.username).to.equal('@Chocobozzz')
+    expect(data.services.twitter.whitelisted).to.be.false
     expect(data.cache.previews.size).to.equal(1)
     expect(data.signup.enabled).to.be.true
     expect(data.signup.limit).to.equal(4)
