@@ -39,29 +39,29 @@ run().catch(err => console.error(err))
 
 let accessToken: string
 let client: { id: string, secret: string }
-  
+
 const processOptions = {
   cwd: __dirname,
   maxBuffer: Infinity
 }
 
 async function promptPassword () {
-  return new Promise ( (res, rej) => {
-   prompt.start()
-   const schema = {
-     properties: {
-       password: {
-         hidden: true,
-         required: true
-       }
-     }
-   }
-   prompt.get(schema, function (err, result) {
-     if (err) {
-       return rej(err);
-     }
-     return res(result.password)
-   })
+  return new Promise((res, rej) => {
+    prompt.start()
+    const schema = {
+      properties: {
+        password: {
+          hidden: true,
+          required: true
+        }
+      }
+    }
+    prompt.get(schema, function (err, result) {
+      if (err) {
+        return rej(err)
+      }
+      return res(result.password)
+    })
   })
 }
 
@@ -69,7 +69,7 @@ async function run () {
   if (!user.password) {
     user.password = await promptPassword()
   }
-  
+
   const res = await getClient(program['url'])
   client = {
     id: res.body.client_id,
