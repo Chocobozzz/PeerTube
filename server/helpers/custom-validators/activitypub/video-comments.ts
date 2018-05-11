@@ -1,16 +1,19 @@
 import * as validator from 'validator'
-import { ACTIVITY_PUB } from '../../../initializers'
+import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers'
 import { exists, isArray, isDateValid } from '../misc'
 import { isActivityPubUrlValid, isBaseActivityValid } from './misc'
 
 function isVideoCommentCreateActivityValid (activity: any) {
   return isBaseActivityValid(activity, 'Create') &&
-    isVideoCommentObjectValid(activity.object)
+    sanitizeAndCheckVideoCommentObject(activity.object)
 }
 
-function isVideoCommentObjectValid (comment: any) {
-  return comment.type === 'Note' &&
-    isActivityPubUrlValid(comment.id) &&
+function sanitizeAndCheckVideoCommentObject (comment: any) {
+  if (comment.type !== 'Note') return false
+
+  normalizeComment(comment)
+
+  return isActivityPubUrlValid(comment.id) &&
     isCommentContentValid(comment.content) &&
     isActivityPubUrlValid(comment.inReplyTo) &&
     isDateValid(comment.published) &&
@@ -31,11 +34,21 @@ function isVideoCommentDeleteActivityValid (activity: any) {
 export {
   isVideoCommentCreateActivityValid,
   isVideoCommentDeleteActivityValid,
-  isVideoCommentObjectValid
+  sanitizeAndCheckVideoCommentObject
 }
 
 // ---------------------------------------------------------------------------
 
 function isCommentContentValid (content: any) {
   return exists(content) && validator.isLength('' + content, { min: 1 })
+}
+
+function normalizeComment (comment: any) {
+  if (!comment) return
+
+  if (!comment.url || typeof comment.url !== 'string') {
+    comment.url = comment.url.href || comment.url.url
+  }
+
+  return
 }

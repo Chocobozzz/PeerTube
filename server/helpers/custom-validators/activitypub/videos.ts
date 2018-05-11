@@ -43,13 +43,14 @@ function isActivityPubVideoDurationValid (value: string) {
 }
 
 function sanitizeAndCheckVideoTorrentObject (video: any) {
+  if (video.type !== 'Video') return false
+
   if (!setValidRemoteTags(video)) return false
   if (!setValidRemoteVideoUrls(video)) return false
   if (!setRemoteVideoTruncatedContent(video)) return false
   if (!setValidAttributedTo(video)) return false
 
-  return video.type === 'Video' &&
-    isActivityPubUrlValid(video.id) &&
+  return isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
     isActivityPubVideoDurationValid(video.duration) &&
     isUUIDValid(video.uuid) &&
