@@ -81,7 +81,7 @@ function initFeed () {
 
   return new Feed({
     title: CONFIG.INSTANCE.NAME,
-    description: CONFIG.INSTANCE.SHORT_DESCRIPTION,
+    description: CONFIG.INSTANCE.DESCRIPTION,
     // updated: TODO: somehowGetLatestUpdate, // optional, default = today
     id: webserverUrl,
     link: webserverUrl,
