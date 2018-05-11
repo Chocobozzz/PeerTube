@@ -46,30 +46,29 @@ const processOptions = {
 }
 
 async function promptPassword () {
-  return new Promise ( resolve => {
+  return new Promise ( res => {
    prompt.start()
    const schema = {
      properties: {
        password: {
-         hidden:true,
-         required:true
+         hidden: true,
+         required: true
        }
      }
    }
-   prompt.get(schema, function(err, result) {
+   prompt.get(schema, function (err, result) {
      if (err) {
        console.log(err.message)
+       return res();
      }
-     resolve(result.password)
+     return res(result.password)
    })
   })
 }
 
 async function run () {
-  if (
-    !user.password
-  ) {
-    user.password = await promptPassword();
+  if (!user.password) {
+    user.password = await promptPassword()
   }
   
   const res = await getClient(program['url'])
