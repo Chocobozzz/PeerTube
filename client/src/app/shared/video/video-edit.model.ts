@@ -10,7 +10,7 @@ export class VideoEdit {
   tags: string[]
   nsfw: boolean
   commentsEnabled: boolean
-  channel: number
+  channelId: number
   privacy: VideoPrivacy
   support: string
   thumbnailfile?: any
@@ -32,7 +32,7 @@ export class VideoEdit {
       this.tags = videoDetails.tags
       this.nsfw = videoDetails.nsfw
       this.commentsEnabled = videoDetails.commentsEnabled
-      this.channel = videoDetails.channel.id
+      this.channelId = videoDetails.channel.id
       this.privacy = videoDetails.privacy.id
       this.support = videoDetails.support
       this.thumbnailUrl = videoDetails.thumbnailUrl
@@ -57,7 +57,7 @@ export class VideoEdit {
       tags: this.tags,
       nsfw: this.nsfw,
       commentsEnabled: this.commentsEnabled,
-      channelId: this.channel,
+      channelId: this.channelId,
       privacy: this.privacy
     }
   }

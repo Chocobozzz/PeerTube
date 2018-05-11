@@ -48,6 +48,16 @@ export interface Video {
     host: string
     avatar: Avatar
   }
+
+  channel: {
+    id: number
+    uuid: string
+    name: string
+    displayName: string
+    url: string
+    host: string
+    avatar: Avatar
+  }
 }
 
 export interface VideoDetails extends Video {

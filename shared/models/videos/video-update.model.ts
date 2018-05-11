@@ -11,6 +11,7 @@ export interface VideoUpdate {
   tags?: string[]
   commentsEnabled?: boolean
   nsfw?: boolean
+  channelId?: number
   thumbnailfile?: Blob
   previewfile?: Blob
 }

@@ -1,4 +1,4 @@
-import { ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub'
+import { ActivityAnnounce, ActivityFollow, ActivityLike, ActivityUndo } from '../../../../shared/models/activitypub'
 import { DislikeObject } from '../../../../shared/models/activitypub/objects'
 import { getActorUrl } from '../../../helpers/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -10,6 +10,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { forwardActivity } from '../send/misc'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
+import { VideoShareModel } from '../../../models/video/video-share'
 
 async function processUndoActivity (activity: ActivityUndo) {
   const activityToUndo = activity.object
@@ -22,6 +23,8 @@ async function processUndoActivity (activity: ActivityUndo) {
     return processUndoDislike(actorUrl, activity)
   } else if (activityToUndo.type === 'Follow') {
     return processUndoFollow(actorUrl, activityToUndo)
+  } else if (activityToUndo.type === 'Announce') {
+    return processUndoAnnounce(actorUrl, activityToUndo)
   }
 
   logger.warn('Unknown activity object type %s -> %s when undo activity.', activityToUndo.type, { activity: activity.id })
@@ -119,6 +122,26 @@ function undoFollow (actorUrl: string, followActivity: ActivityFollow) {
     if (!actorFollow) throw new Error(`'Unknown actor follow ${follower.id} -> ${following.id}.`)
 
     await actorFollow.destroy({ transaction: t })
+
+    return undefined
+  })
+}
+
+function processUndoAnnounce (actorUrl: string, announceActivity: ActivityAnnounce) {
+  const options = {
+    arguments: [ actorUrl, announceActivity ],
+    errorMessage: 'Cannot undo announce with many retries.'
+  }
+
+  return retryTransactionWrapper(undoAnnounce, options)
+}
+
+function undoAnnounce (actorUrl: string, announceActivity: ActivityAnnounce) {
+  return sequelizeTypescript.transaction(async t => {
+    const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
+    if (!share) throw new Error(`'Unknown video share ${announceActivity.id}.`)
+
+    await share.destroy({ transaction: t })
 
     return undefined
   })

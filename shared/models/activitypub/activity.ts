@@ -64,7 +64,7 @@ export interface ActivityAnnounce extends BaseActivity {
 
 export interface ActivityUndo extends BaseActivity {
   type: 'Undo',
-  object: ActivityFollow | ActivityLike | ActivityCreate
+  object: ActivityFollow | ActivityLike | ActivityCreate | ActivityAnnounce
 }
 
 export interface ActivityLike extends BaseActivity {

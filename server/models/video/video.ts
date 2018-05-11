@@ -130,11 +130,27 @@ enum ScopeNames {
     }
 
     const videoChannelInclude = {
-      attributes: [ 'name', 'description' ],
+      attributes: [ 'name', 'description', 'id' ],
       model: VideoChannelModel.unscoped(),
       required: true,
       where: {},
       include: [
+        {
+          attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        },
         accountInclude
       ]
     }
@@ -771,12 +787,17 @@ export class VideoModel extends Model<VideoModel> {
             }
           },
           {
-            preferredUsername: Sequelize.where(Sequelize.col('preferredUsername'), {
+            preferredUsernameChannel: Sequelize.where(Sequelize.col('VideoChannel->Actor.preferredUsername'), {
               [ Sequelize.Op.iLike ]: '%' + value + '%'
             })
           },
           {
-            host: Sequelize.where(Sequelize.col('host'), {
+            preferredUsernameAccount: Sequelize.where(Sequelize.col('VideoChannel->Account->Actor.preferredUsername'), {
+              [ Sequelize.Op.iLike ]: '%' + value + '%'
+            })
+          },
+          {
+            host: Sequelize.where(Sequelize.col('VideoChannel->Account->Actor->Server.host'), {
               [ Sequelize.Op.iLike ]: '%' + value + '%'
             })
           }
@@ -1043,6 +1064,7 @@ export class VideoModel extends Model<VideoModel> {
 
   toFormattedJSON (): Video {
     const formattedAccount = this.VideoChannel.Account.toFormattedJSON()
+    const formattedVideoChannel = this.VideoChannel.toFormattedJSON()
 
     return {
       id: this.id,
@@ -1085,6 +1107,15 @@ export class VideoModel extends Model<VideoModel> {
         url: formattedAccount.url,
         host: formattedAccount.host,
         avatar: formattedAccount.avatar
+      },
+      channel: {
+        id: formattedVideoChannel.id,
+        uuid: formattedVideoChannel.uuid,
+        name: formattedVideoChannel.name,
+        displayName: formattedVideoChannel.displayName,
+        url: formattedVideoChannel.url,
+        host: formattedVideoChannel.host,
+        avatar: formattedVideoChannel.avatar
       }
     }
   }

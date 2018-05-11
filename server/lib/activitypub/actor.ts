@@ -353,7 +353,7 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
   return videoChannelCreated
 }
 
-async function refreshActorIfNeeded (actor: ActorModel) {
+async function refreshActorIfNeeded (actor: ActorModel): Promise<ActorModel> {
   if (!actor.isOutdated()) return actor
 
   try {

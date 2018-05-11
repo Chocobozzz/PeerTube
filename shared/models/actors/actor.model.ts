@@ -8,7 +8,7 @@ export interface Actor {
   host: string
   followingCount: number
   followersCount: number
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Date | string
+  updatedAt: Date | string
   avatar: Avatar
 }

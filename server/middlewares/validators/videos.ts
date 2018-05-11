@@ -6,6 +6,7 @@ import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntOrNull, t
 import {
   isVideoAbuseReasonValid,
   isVideoCategoryValid,
+  isVideoChannelOfAccountExist,
   isVideoDescriptionValid,
   isVideoExist,
   isVideoFile,
@@ -23,7 +24,6 @@ import { logger } from '../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../initializers'
 import { UserModel } from '../../models/account/user'
 import { VideoModel } from '../../models/video/video'
-import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoShareModel } from '../../models/video/video-share'
 import { authenticate } from '../oauth'
 import { areValidationErrors } from './utils'
@@ -75,7 +75,10 @@ const videosAddValidator = [
     .optional()
     .toInt()
     .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
-  body('channelId').custom(isIdValid).withMessage('Should have correct video channel id'),
+  body('channelId')
+    .toInt()
+    .custom(isIdValid)
+    .withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosAdd parameters', { parameters: req.body, files: req.files })
@@ -86,16 +89,7 @@ const videosAddValidator = [
     const videoFile: Express.Multer.File = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
-    const videoChannel = await VideoChannelModel.loadByIdAndAccount(req.body.channelId, user.Account.id)
-    if (!videoChannel) {
-      res.status(400)
-        .json({ error: 'Unknown video video channel for this account.' })
-        .end()
-
-      return
-    }
-
-    res.locals.videoChannel = videoChannel
+    if (!await isVideoChannelOfAccountExist(req.body.channelId, user.Account.id, res)) return
 
     const isAble = await user.isAbleToUploadVideo(videoFile)
     if (isAble === false) {
@@ -173,6 +167,10 @@ const videosUpdateValidator = [
     .optional()
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
+  body('channelId')
+    .optional()
+    .toInt()
+    .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videosUpdate parameters', { parameters: req.body })
@@ -184,13 +182,16 @@ const videosUpdateValidator = [
     const video = res.locals.video
 
     // Check if the user who did the request is able to update the video
-    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    const user = res.locals.oauth.token.User
+    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
 
     if (video.privacy !== VideoPrivacy.PRIVATE && req.body.privacy === VideoPrivacy.PRIVATE) {
       return res.status(409)
         .json({ error: 'Cannot set "private" a video that was not private anymore.' })
         .end()
     }
+
+    if (req.body.channelId && !await isVideoChannelOfAccountExist(req.body.channelId, user.Account.id, res)) return
 
     return next()
   }

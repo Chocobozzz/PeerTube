@@ -33,7 +33,7 @@
       <div class="col-md-4">
         <div class="form-group">
           <label>Channel</label>
-          <div class="peertube-select-disabled-container">
+          <div class="peertube-select-container">
             <select formControlName="channelId">
               <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
             </select>

@@ -220,7 +220,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     const video = new VideoEdit()
     video.patch(this.form.value)
-    video.channel = this.firstStepChannelId
+    video.channelId = this.firstStepChannelId
     video.id = this.videoUploadedIds.id
     video.uuid = this.videoUploadedIds.uuid
 

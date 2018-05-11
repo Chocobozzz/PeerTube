@@ -45,6 +45,16 @@ export class Video implements VideoServerModel {
     avatar: Avatar
   }
 
+  channel: {
+    id: number
+    uuid: string
+    name: string
+    displayName: string
+    url: string
+    host: string
+    avatar: Avatar
+  }
+
   private static createDurationString (duration: number) {
     const hours = Math.floor(duration / 3600)
     const minutes = Math.floor(duration % 3600 / 60)

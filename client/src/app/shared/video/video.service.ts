@@ -67,6 +67,7 @@ export class VideoService {
       language,
       support,
       description,
+      channelId: video.channelId,
       privacy: video.privacy,
       tags: video.tags,
       nsfw: video.nsfw,

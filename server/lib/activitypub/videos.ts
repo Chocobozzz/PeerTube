@@ -137,6 +137,13 @@ function videoFileActivityUrlToDBAttributes (videoCreated: VideoModel, videoObje
   return attributes
 }
 
+function getOrCreateVideoChannel (videoObject: VideoTorrentObject) {
+  const channel = videoObject.attributedTo.find(a => a.type === 'Group')
+  if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
+
+  return getOrCreateActorAndServerAndModel(channel.id)
+}
+
 async function getOrCreateVideo (videoObject: VideoTorrentObject, channelActor: ActorModel) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
@@ -199,10 +206,7 @@ async function getOrCreateAccountAndVideoAndChannel (videoObject: VideoTorrentOb
     actor = await getOrCreateActorAndServerAndModel(actorObj.id)
   }
 
-  const channel = videoObject.attributedTo.find(a => a.type === 'Group')
-  if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
-
-  const channelActor = await getOrCreateActorAndServerAndModel(channel.id)
+  const channelActor = await getOrCreateVideoChannel(videoObject)
 
   const options = {
     arguments: [ videoObject, channelActor ],
@@ -301,6 +305,7 @@ export {
   videoActivityObjectToDBAttributes,
   videoFileActivityUrlToDBAttributes,
   getOrCreateVideo,
+  getOrCreateVideoChannel,
   addVideoShares}
 
 // ---------------------------------------------------------------------------

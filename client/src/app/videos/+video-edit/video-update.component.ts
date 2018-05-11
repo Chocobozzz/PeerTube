@@ -9,9 +9,9 @@ import { ServerService } from '../../core'
 import { AuthService } from '../../core/auth'
 import { FormReactive } from '../../shared'
 import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
-import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
+import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-videos-update',
@@ -64,12 +64,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
         video => {
           this.video = new VideoEdit(video)
 
-          this.userVideoChannels = [
-            {
-              id: video.channel.id,
-              label: video.channel.displayName
-            }
-          ]
+          populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
+            .catch(err => console.error(err))
 
           // We cannot set private a video that was not private
           if (video.privacy.id !== VideoPrivacy.PRIVATE) {

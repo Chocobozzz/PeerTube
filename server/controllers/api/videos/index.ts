@@ -19,7 +19,12 @@ import {
   VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES
 } from '../../../initializers'
-import { fetchRemoteVideoDescription, getVideoActivityPubUrl, shareVideoByServerAndChannel } from '../../../lib/activitypub'
+import {
+  changeVideoChannelShare,
+  fetchRemoteVideoDescription,
+  getVideoActivityPubUrl,
+  shareVideoByServerAndChannel
+} from '../../../lib/activitypub'
 import { sendCreateVideo, sendCreateView, sendUpdateVideo } from '../../../lib/activitypub/send'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
@@ -305,6 +310,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const sequelizeOptions = {
         transaction: t
       }
+      const oldVideoChannel = videoInstance.VideoChannel
 
       if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
       if (videoInfoToUpdate.category !== undefined) videoInstance.set('category', videoInfoToUpdate.category)
@@ -325,17 +331,24 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
 
+      // Video tags update?
       if (videoInfoToUpdate.tags) {
         const tagInstances = await TagModel.findOrCreateTags(videoInfoToUpdate.tags, t)
 
-        await videoInstance.$set('Tags', tagInstances, sequelizeOptions)
-        videoInstance.Tags = tagInstances
+        await videoInstanceUpdated.$set('Tags', tagInstances, sequelizeOptions)
+        videoInstanceUpdated.Tags = tagInstances
+      }
+
+      // Video channel update?
+      if (res.locals.videoChannel && videoInstanceUpdated.channelId !== res.locals.videoChannel.id) {
+        await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel)
+        videoInstance.VideoChannel = res.locals.videoChannel
+
+        if (wasPrivateVideo === false) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
       }
 
       // Now we'll update the video's meta data to our friends
-      if (wasPrivateVideo === false) {
-        await sendUpdateVideo(videoInstanceUpdated, t)
-      }
+      if (wasPrivateVideo === false) await sendUpdateVideo(videoInstanceUpdated, t)
 
       // Video is not private anymore, send a create action to remote servers
       if (wasPrivateVideo === true && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE) {

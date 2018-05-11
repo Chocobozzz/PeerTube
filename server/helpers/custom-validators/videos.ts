@@ -14,6 +14,7 @@ import {
 } from '../../initializers'
 import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isFileValid } from './misc'
+import { VideoChannelModel } from '../../models/video/video-channel'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
@@ -124,6 +125,20 @@ async function isVideoExist (id: string, res: Response) {
   return true
 }
 
+async function isVideoChannelOfAccountExist (channelId: number, accountId: number, res: Response) {
+  const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, accountId)
+  if (!videoChannel) {
+    res.status(400)
+       .json({ error: 'Unknown video video channel for this account.' })
+       .end()
+
+    return false
+  }
+
+  res.locals.videoChannel = videoChannel
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -146,5 +161,6 @@ export {
   isVideoFileSizeValid,
   isVideoExist,
   isVideoImage,
+  isVideoChannelOfAccountExist,
   isVideoSupportValid
 }

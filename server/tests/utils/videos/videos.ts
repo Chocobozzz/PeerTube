@@ -15,7 +15,7 @@ import {
   ServerInfo,
   testImage
 } from '../'
-import { VideoPrivacy } from '../../../../shared/models/videos'
+import { VideoDetails, VideoPrivacy } from '../../../../shared/models/videos'
 import { readdirPromise } from '../../../helpers/core-utils'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../initializers'
 import { dateIsValid, webtorrentAdd } from '../index'
@@ -385,6 +385,7 @@ function updateVideo (url: string, accessToken: string, id: number | string, att
   if (attributes.description) body['description'] = attributes.description
   if (attributes.tags) body['tags'] = attributes.tags
   if (attributes.privacy) body['privacy'] = attributes.privacy
+  if (attributes.channelId) body['channelId'] = attributes.channelId
 
   // Upload request
   if (attributes.thumbnailfile || attributes.previewfile) {
@@ -489,6 +490,8 @@ async function completeVideoCheck (
   expect(video.account.uuid).to.be.a('string')
   expect(video.account.host).to.equal(attributes.account.host)
   expect(video.account.name).to.equal(attributes.account.name)
+  expect(video.channel.displayName).to.equal(attributes.channel.name)
+  expect(video.channel.name).to.have.lengthOf(36)
   expect(video.likes).to.equal(attributes.likes)
   expect(video.dislikes).to.equal(attributes.dislikes)
   expect(video.isLocal).to.equal(attributes.isLocal)
@@ -498,19 +501,19 @@ async function completeVideoCheck (
   expect(dateIsValid(video.updatedAt)).to.be.true
 
   const res = await getVideo(url, video.uuid)
-  const videoDetails = res.body
+  const videoDetails: VideoDetails = res.body
 
   expect(videoDetails.files).to.have.lengthOf(attributes.files.length)
   expect(videoDetails.tags).to.deep.equal(attributes.tags)
   expect(videoDetails.account.name).to.equal(attributes.account.name)
   expect(videoDetails.account.host).to.equal(attributes.account.host)
-  expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
-
   expect(videoDetails.channel.displayName).to.equal(attributes.channel.name)
   expect(videoDetails.channel.name).to.have.lengthOf(36)
+  expect(videoDetails.channel.host).to.equal(attributes.account.host)
   expect(videoDetails.channel.isLocal).to.equal(attributes.channel.isLocal)
-  expect(dateIsValid(videoDetails.channel.createdAt)).to.be.true
-  expect(dateIsValid(videoDetails.channel.updatedAt)).to.be.true
+  expect(dateIsValid(videoDetails.channel.createdAt.toString())).to.be.true
+  expect(dateIsValid(videoDetails.channel.updatedAt.toString())).to.be.true
+  expect(videoDetails.commentsEnabled).to.equal(attributes.commentsEnabled)
 
   for (const attributeFile of attributes.files) {
     const file = videoDetails.files.find(f => f.resolution.id === attributeFile.resolution)

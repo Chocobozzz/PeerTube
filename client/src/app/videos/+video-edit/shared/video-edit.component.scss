@@ -5,10 +5,6 @@
   @include peertube-select-container(auto);
 }
 
-.peertube-select-disabled-container {
-  @include peertube-select-disabled-container(auto);
-}
-
 .form-group-checkbox {
   my-help { margin-left: 5px }
 }
