@@ -483,6 +483,12 @@ describe('Test videos API validator', function () {
       await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
     })
 
+    it('Should fail with a bad channel', async function () {
+      const fields = immutableAssign(baseCorrectParams, { channelId: 545454 })
+
+      await makePutBodyRequest({ url: server.url, path: path + videoId, token: server.accessToken, fields })
+    })
+
     it('Should fail with too many tags', async function () {
       const fields = immutableAssign(baseCorrectParams, { tags: [ 'tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6' ] })
 
