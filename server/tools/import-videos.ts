@@ -46,7 +46,7 @@ const processOptions = {
 }
 
 async function promptPassword () {
-  return new Promise ( res => {
+  return new Promise ( (res, rej) => {
    prompt.start()
    const schema = {
      properties: {
@@ -58,8 +58,7 @@ async function promptPassword () {
    }
    prompt.get(schema, function (err, result) {
      if (err) {
-       console.log(err.message)
-       return res();
+       return rej(err);
      }
      return res(result.password)
    })
