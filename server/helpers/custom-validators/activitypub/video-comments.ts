@@ -46,7 +46,7 @@ function isCommentContentValid (content: any) {
 function normalizeComment (comment: any) {
   if (!comment) return
 
-  if (!comment.url || typeof comment.url !== 'string') {
+  if (typeof comment.url !== 'string') {
     comment.url = comment.url.href || comment.url.url
   }
 

@@ -306,7 +306,8 @@ export {
   videoFileActivityUrlToDBAttributes,
   getOrCreateVideo,
   getOrCreateVideoChannel,
-  addVideoShares}
+  addVideoShares
+}
 
 // ---------------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers'
-import { normalizeActor } from '../../../lib/activitypub'
 import { exists } from '../misc'
+import { truncate } from 'lodash'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
@@ -91,9 +91,28 @@ function isActorUpdateActivityValid (activity: any) {
     isActorObjectValid(activity.object)
 }
 
+function normalizeActor (actor: any) {
+  if (!actor) return
+
+  if (typeof actor.url !== 'string') {
+    actor.url = actor.url.href || actor.url.url
+  }
+
+  if (actor.summary && typeof actor.summary === 'string') {
+    actor.summary = truncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
+
+    if (actor.summary.length < CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min) {
+      actor.summary = null
+    }
+  }
+
+  return
+}
+
 // ---------------------------------------------------------------------------
 
 export {
+  normalizeActor,
   isActorEndpointsObjectValid,
   isActorPublicKeyObjectValid,
   isActorTypeValid,

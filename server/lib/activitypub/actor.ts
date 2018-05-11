@@ -6,20 +6,19 @@ import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
 import { getActorUrl } from '../../helpers/activitypub'
-import { isActorObjectValid } from '../../helpers/custom-validators/activitypub/actor'
+import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { IMAGE_MIMETYPE_EXT, CONFIG, sequelizeTypescript, CONSTRAINTS_FIELDS } from '../../initializers'
+import { CONFIG, IMAGE_MIMETYPE_EXT, sequelizeTypescript } from '../../initializers'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { truncate } from 'lodash'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys (actor: ActorModel) {
@@ -170,24 +169,6 @@ async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
   return undefined
 }
 
-function normalizeActor (actor: any) {
-  if (!actor) return
-
-  if (!actor.url || typeof actor.url !== 'string') {
-    actor.url = actor.url.href || actor.url.url
-  }
-
-  if (actor.summary && typeof actor.summary === 'string') {
-    actor.summary = truncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
-
-    if (actor.summary.length < CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min) {
-      actor.summary = null
-    }
-  }
-
-  return
-}
-
 export {
   getOrCreateActorAndServerAndModel,
   buildActorInstance,
@@ -195,8 +176,7 @@ export {
   fetchActorTotalItems,
   fetchAvatarIfExists,
   updateActorInstance,
-  updateActorAvatarInstance,
-  normalizeActor
+  updateActorAvatarInstance
 }
 
 // ---------------------------------------------------------------------------
