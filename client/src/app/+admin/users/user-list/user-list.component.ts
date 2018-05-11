@@ -51,7 +51,7 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   getRouterUserEditLink (user: User) {
-    return [ '/admin', 'users', user.id, 'update' ]
+    return [ '/admin', 'users', 'update', user.id ]
   }
 
   protected loadData () {

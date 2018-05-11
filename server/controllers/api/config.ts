@@ -161,6 +161,12 @@ function customConfig (): CustomConfig {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
       }
     },
+    services: {
+      twitter: {
+        username: CONFIG.SERVICES.TWITTER.USERNAME,
+        whitelisted: CONFIG.SERVICES.TWITTER.WHITELISTED
+      }
+    },
     cache: {
       previews: {
         size: CONFIG.CACHE.PREVIEWS.SIZE

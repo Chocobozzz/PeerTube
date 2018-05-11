@@ -64,7 +64,7 @@ const videosRoutes: Routes = [
         }
       },
       {
-        path: 'edit/:uuid',
+        path: 'update/:uuid',
         loadChildren: 'app/videos/+video-edit/video-update.module#VideoUpdateModule',
         data: {
           meta: {

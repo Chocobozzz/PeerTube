@@ -38,7 +38,7 @@
       <div class="video-buttons" *ngIf="isInSelectionMode() === false">
         <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
 
-        <my-edit-button [routerLink]="[ '/videos', 'edit', video.uuid ]"></my-edit-button>
+        <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
       </div>
     </div>
   </div>

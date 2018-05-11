@@ -12,14 +12,14 @@ import {
 } from '../videos'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 
-function isVideoTorrentCreateActivityValid (activity: any) {
+function sanitizeAndCheckVideoTorrentCreateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Create') &&
-    isVideoTorrentObjectValid(activity.object)
+    sanitizeAndCheckVideoTorrentObject(activity.object)
 }
 
-function isVideoTorrentUpdateActivityValid (activity: any) {
+function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
-    isVideoTorrentObjectValid(activity.object)
+    sanitizeAndCheckVideoTorrentObject(activity.object)
 }
 
 function isVideoTorrentDeleteActivityValid (activity: any) {
@@ -42,13 +42,17 @@ function isActivityPubVideoDurationValid (value: string) {
     isVideoDurationValid(value.replace(/[^0-9]+/g, ''))
 }
 
-function isVideoTorrentObjectValid (video: any) {
+function sanitizeAndCheckVideoTorrentObject (video: any) {
+  if (!setValidRemoteTags(video)) return false
+  if (!setValidRemoteVideoUrls(video)) return false
+  if (!setRemoteVideoTruncatedContent(video)) return false
+  if (!setValidAttributedTo(video)) return false
+
   return video.type === 'Video' &&
     isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
     isActivityPubVideoDurationValid(video.duration) &&
     isUUIDValid(video.uuid) &&
-    setValidRemoteTags(video) &&
     (!video.category || isRemoteNumberIdentifierValid(video.category)) &&
     (!video.licence || isRemoteNumberIdentifierValid(video.licence)) &&
     (!video.language || isRemoteStringIdentifierValid(video.language)) &&
@@ -57,24 +61,21 @@ function isVideoTorrentObjectValid (video: any) {
     isBooleanValid(video.commentsEnabled) &&
     isDateValid(video.published) &&
     isDateValid(video.updated) &&
-    setRemoteVideoTruncatedContent(video) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
     isRemoteVideoIconValid(video.icon) &&
-    setValidRemoteVideoUrls(video) &&
     video.url.length !== 0 &&
-    setValidAttributedTo(video) &&
     video.attributedTo.length !== 0
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoTorrentCreateActivityValid,
-  isVideoTorrentUpdateActivityValid,
+  sanitizeAndCheckVideoTorrentCreateActivity,
+  sanitizeAndCheckVideoTorrentUpdateActivity,
   isVideoTorrentDeleteActivityValid,
   isRemoteStringIdentifierValid,
   isVideoFlagValid,
-  isVideoTorrentObjectValid
+  sanitizeAndCheckVideoTorrentObject
 }
 
 // ---------------------------------------------------------------------------

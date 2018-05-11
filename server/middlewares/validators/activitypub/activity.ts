@@ -1,10 +1,8 @@
 import * as express from 'express'
-import { body } from 'express-validator/check'
 import { isRootActivityValid } from '../../../helpers/custom-validators/activitypub/activity'
 import { logger } from '../../../helpers/logger'
 import { getServerActor } from '../../../helpers/utils'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { areValidationErrors } from '../utils'
 
 async function activityPubValidator (req: express.Request, res: express.Response, next: express.NextFunction) {
   logger.debug('Checking activity pub parameters')

@@ -17,11 +17,11 @@ import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 
 @Component({
-  selector: 'my-user-add',
+  selector: 'my-user-create',
   templateUrl: './user-edit.component.html',
   styleUrls: [ './user-edit.component.scss' ]
 })
-export class UserAddComponent extends UserEdit implements OnInit {
+export class UserCreateComponent extends UserEdit implements OnInit {
   error: string
 
   form: FormGroup
@@ -89,6 +89,6 @@ export class UserAddComponent extends UserEdit implements OnInit {
   }
 
   getFormButtonTitle () {
-    return 'Add user'
+    return 'Create user'
   }
 }

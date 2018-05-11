@@ -5,7 +5,7 @@ import * as request from 'request'
 import { ActivityIconObject } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
-import { isVideoTorrentObjectValid } from '../../helpers/custom-validators/activitypub/videos'
+import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
@@ -317,7 +317,7 @@ async function fetchRemoteVideo (videoUrl: string): Promise<VideoTorrentObject> 
 
   const { body } = await doRequest(options)
 
-  if (isVideoTorrentObjectValid(body) === false) {
+  if (sanitizeAndCheckVideoTorrentObject(body) === false) {
     logger.debug('Remote video JSON is not valid.', { body })
     return undefined
   }

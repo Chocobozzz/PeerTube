@@ -21,6 +21,9 @@
     "webpack-bundle-analyzer": "webpack-bundle-analyzer"
   },
   "license": "GPLv3",
+  "resolutions": {
+    "videojs-dock/video.js": "^6"
+  },
   "devDependencies": {
     "@angular/animations": "~5.2.2",
     "@angular/cli": "1.7.4",
@@ -78,7 +81,7 @@
     "tslint-config-standard": "^7.0.0",
     "typescript": "2.8.1",
     "uglifyjs-webpack-plugin": "^1.1.2",
-    "video.js": "^6.7.3",
+    "video.js": "^6",
     "videojs-dock": "^2.0.2",
     "videojs-hotkeys": "^0.2.21",
     "webpack": "^4.5.0",

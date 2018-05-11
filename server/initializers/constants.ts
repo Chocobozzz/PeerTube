@@ -174,6 +174,12 @@ const CONFIG = {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }
     }
+  },
+  SERVICES: {
+    TWITTER: {
+      get USERNAME () { return config.get<string>('services.twitter.username') },
+      get WHITELISTED () { return config.get<boolean>('services.twitter.whitelisted') }
+    }
   }
 }
 

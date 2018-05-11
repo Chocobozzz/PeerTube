@@ -1,222 +1,259 @@
-<div class="form-sub-title">Update PeerTube configuration</div>
-
 <form role="form" [formGroup]="form">
 
-  <div class="inner-form-title">Instance</div>
+  <tabset class="root-tabset bootstrap">
 
-  <div class="form-group">
-    <label for="instanceName">Name</label>
-    <input
-        type="text" id="instanceName"
-        formControlName="instanceName" [ngClass]="{ 'input-error': formErrors['instanceName'] }"
-    >
-    <div *ngIf="formErrors.instanceName" class="form-error">
-      {{ formErrors.instanceName }}
-    </div>
-  </div>
+    <tab heading="Basic configuration">
 
-  <div class="form-group">
-    <label for="instanceShortDescription">Short description</label>
-    <textarea
-        id="instanceShortDescription" formControlName="instanceShortDescription"
-        [ngClass]="{ 'input-error': formErrors['instanceShortDescription'] }"
-    ></textarea>
-    <div *ngIf="formErrors.instanceShortDescription" class="form-error">
-      {{ formErrors.instanceShortDescription }}
-    </div>
-  </div>
+      <div class="inner-form-title">Instance</div>
 
-  <div class="form-group">
-    <label for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
-    <my-markdown-textarea
-        id="instanceDescription" formControlName="instanceDescription" textareaWidth="500px" [previewColumn]="true"
-        [classes]="{ 'input-error': formErrors['instanceDescription'] }"
-    ></my-markdown-textarea>
-    <div *ngIf="formErrors.instanceDescription" class="form-error">
-      {{ formErrors.instanceDescription }}
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
-    <my-markdown-textarea
-        id="instanceTerms" formControlName="instanceTerms" textareaWidth="500px" [previewColumn]="true"
-        [ngClass]="{ 'input-error': formErrors['instanceTerms'] }"
-    ></my-markdown-textarea>
-    <div *ngIf="formErrors.instanceTerms" class="form-error">
-      {{ formErrors.instanceTerms }}
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="instanceDefaultClientRoute">Default client route</label>
-    <div class="peertube-select-container">
-      <select id="instanceDefaultClientRoute" formControlName="instanceDefaultClientRoute">
-        <option value="/videos/trending">Videos Trending</option>
-        <option value="/videos/recently-added">Videos Recently Added</option>
-        <option value="/videos/local">Local videos</option>
-      </select>
-    </div>
-    <div *ngIf="formErrors.instanceDefaultClientRoute" class="form-error">
-      {{ formErrors.instanceDefaultClientRoute }}
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
-    <my-help helpType="custom" customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."></my-help>
-
-    <div class="peertube-select-container">
-      <select id="instanceDefaultNSFWPolicy" formControlName="instanceDefaultNSFWPolicy">
-        <option value="do_not_list">Do not list</option>
-        <option value="blur">Blur thumbnails</option>
-        <option value="display">Display</option>
-      </select>
-    </div>
-    <div *ngIf="formErrors.instanceDefaultNSFWPolicy" class="form-error">
-      {{ formErrors.instanceDefaultNSFWPolicy }}
-    </div>
-  </div>
-
-  <div class="inner-form-title">Cache</div>
-
-  <div class="form-group">
-    <label for="cachePreviewsSize">Preview cache size</label>
-    <input
-      type="text" id="cachePreviewsSize"
-      formControlName="cachePreviewsSize" [ngClass]="{ 'input-error': formErrors['cachePreviewsSize'] }"
-    >
-    <div *ngIf="formErrors.cachePreviewsSize" class="form-error">
-      {{ formErrors.cachePreviewsSize }}
-    </div>
-  </div>
-
-  <div class="inner-form-title">Signup</div>
-
-  <div class="form-group">
-    <input type="checkbox" id="signupEnabled" formControlName="signupEnabled">
-
-    <label for="signupEnabled"></label>
-    <label for="signupEnabled">Signup enabled</label>
-  </div>
-
-  <div *ngIf="isSignupEnabled()" class="form-group">
-    <label for="signupLimit">Signup limit</label>
-    <input
-        type="text" id="signupLimit"
-        formControlName="signupLimit" [ngClass]="{ 'input-error': formErrors['signupLimit'] }"
-    >
-    <div *ngIf="formErrors.signupLimit" class="form-error">
-      {{ formErrors.signupLimit }}
-    </div>
-  </div>
-
-  <div class="inner-form-title">Administrator</div>
-
-  <div class="form-group">
-    <label for="adminEmail">Admin email</label>
-    <input
-        type="text" id="adminEmail"
-        formControlName="adminEmail" [ngClass]="{ 'input-error': formErrors['adminEmail'] }"
-    >
-    <div *ngIf="formErrors.adminEmail" class="form-error">
-      {{ formErrors.adminEmail }}
-    </div>
-  </div>
-
-  <div class="inner-form-title">Users</div>
-
-  <div class="form-group">
-    <label for="userVideoQuota">User default video quota</label>
-    <div class="peertube-select-container">
-      <select id="userVideoQuota" formControlName="userVideoQuota">
-        <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
-          {{ videoQuotaOption.label }}
-        </option>
-      </select>
-    </div>
-    <div *ngIf="formErrors.userVideoQuota" class="form-error">
-      {{ formErrors.userVideoQuota }}
-    </div>
-  </div>
-
-  <div class="inner-form-title">Transcoding</div>
-
-  <div class="form-group">
-    <input type="checkbox" id="transcodingEnabled" formControlName="transcodingEnabled">
-
-    <label for="transcodingEnabled"></label>
-    <label for="transcodingEnabled">Transcoding enabled</label>
-  </div>
-
-  <ng-template [ngIf]="isTranscodingEnabled()">
-
-    <div class="form-group">
-      <label for="transcodingThreads">Transcoding threads</label>
-      <div class="peertube-select-container">
-        <select id="transcodingThreads" formControlName="transcodingThreads">
-          <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
-            {{ transcodingThreadOption.label }}
-          </option>
-        </select>
+      <div class="form-group">
+        <label for="instanceName">Name</label>
+        <input
+            type="text" id="instanceName"
+            formControlName="instanceName" [ngClass]="{ 'input-error': formErrors['instanceName'] }"
+        >
+        <div *ngIf="formErrors.instanceName" class="form-error">
+          {{ formErrors.instanceName }}
+        </div>
       </div>
-      <div *ngIf="formErrors.transcodingThreads" class="form-error">
-        {{ formErrors.transcodingThreads }}
+
+      <div class="form-group">
+        <label for="instanceShortDescription">Short description</label>
+        <textarea
+            id="instanceShortDescription" formControlName="instanceShortDescription"
+            [ngClass]="{ 'input-error': formErrors['instanceShortDescription'] }"
+        ></textarea>
+        <div *ngIf="formErrors.instanceShortDescription" class="form-error">
+          {{ formErrors.instanceShortDescription }}
+        </div>
       </div>
-    </div>
 
-    <div class="form-group" *ngFor="let resolution of resolutions">
-      <input
-        type="checkbox" [id]="getResolutionKey(resolution)"
-        [formControlName]="getResolutionKey(resolution)"
-      >
-      <label [for]="getResolutionKey(resolution)"></label>
-      <label [for]="getResolutionKey(resolution)">Resolution {{ resolution }} enabled</label>
-    </div>
-  </ng-template>
+      <div class="form-group">
+        <label for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
+        <my-markdown-textarea
+            id="instanceDescription" formControlName="instanceDescription" textareaWidth="500px" [previewColumn]="true"
+            [classes]="{ 'input-error': formErrors['instanceDescription'] }"
+        ></my-markdown-textarea>
+        <div *ngIf="formErrors.instanceDescription" class="form-error">
+          {{ formErrors.instanceDescription }}
+        </div>
+      </div>
 
-  <div class="inner-form-title">Customizations</div>
+      <div class="form-group">
+        <label for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
+        <my-markdown-textarea
+            id="instanceTerms" formControlName="instanceTerms" textareaWidth="500px" [previewColumn]="true"
+            [ngClass]="{ 'input-error': formErrors['instanceTerms'] }"
+        ></my-markdown-textarea>
+        <div *ngIf="formErrors.instanceTerms" class="form-error">
+          {{ formErrors.instanceTerms }}
+        </div>
+      </div>
 
-  <div class="form-group">
-    <label for="customizationJavascript">JavaScript</label>
-    <my-help helpType="custom" customHtml="Write directly JavaScript code.<br />Example: <pre>console.log('my instance is amazing');</pre>"></my-help>
-    <textarea
-        id="customizationJavascript" formControlName="customizationJavascript"
-        [ngClass]="{ 'input-error': formErrors['customizationJavascript'] }"
-    ></textarea>
-    <div *ngIf="formErrors.customizationJavascript" class="form-error">
-      {{ formErrors.customizationJavascript }}
-    </div>
-  </div>
+      <div class="form-group">
+        <label for="instanceDefaultClientRoute">Default client route</label>
+        <div class="peertube-select-container">
+          <select id="instanceDefaultClientRoute" formControlName="instanceDefaultClientRoute">
+            <option value="/videos/trending">Videos Trending</option>
+            <option value="/videos/recently-added">Videos Recently Added</option>
+            <option value="/videos/local">Local videos</option>
+          </select>
+        </div>
+        <div *ngIf="formErrors.instanceDefaultClientRoute" class="form-error">
+          {{ formErrors.instanceDefaultClientRoute }}
+        </div>
+      </div>
 
-  <div class="form-group">
-    <label for="customizationCSS">CSS</label>
-    <my-help
-        helpType="custom"
-        customHtml="
-          Write directly CSS code. Example:<br />
-          <pre>
-body {
-  background-color: red;
-}
-          </pre>
+      <div class="form-group">
+        <label for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
+        <my-help helpType="custom" customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."></my-help>
 
-          Prepend with <em>#custom-css</em> to override styles. Example:
-          <pre>
-#custom-css .logged-in-email {
-  color: red;
-}
-          </pre>
-        "
-    ></my-help>
-    <textarea
-        id="customizationCSS" formControlName="customizationCSS"
-        [ngClass]="{ 'input-error': formErrors['customizationCSS'] }"
-    ></textarea>
-    <div *ngIf="formErrors.customizationCSS" class="form-error">
-      {{ formErrors.customizationCSS }}
-    </div>
-  </div>
+        <div class="peertube-select-container">
+          <select id="instanceDefaultNSFWPolicy" formControlName="instanceDefaultNSFWPolicy">
+            <option value="do_not_list">Do not list</option>
+            <option value="blur">Blur thumbnails</option>
+            <option value="display">Display</option>
+          </select>
+        </div>
+        <div *ngIf="formErrors.instanceDefaultNSFWPolicy" class="form-error">
+          {{ formErrors.instanceDefaultNSFWPolicy }}
+        </div>
+      </div>
+
+      <div class="inner-form-title">Signup</div>
+
+      <div class="form-group">
+        <input type="checkbox" id="signupEnabled" formControlName="signupEnabled">
+
+        <label for="signupEnabled"></label>
+        <label for="signupEnabled">Signup enabled</label>
+      </div>
+
+      <div *ngIf="isSignupEnabled()" class="form-group">
+        <label for="signupLimit">Signup limit</label>
+        <input
+            type="text" id="signupLimit"
+            formControlName="signupLimit" [ngClass]="{ 'input-error': formErrors['signupLimit'] }"
+        >
+        <div *ngIf="formErrors.signupLimit" class="form-error">
+          {{ formErrors.signupLimit }}
+        </div>
+      </div>
+
+      <div class="inner-form-title">Administrator</div>
+
+      <div class="form-group">
+        <label for="adminEmail">Admin email</label>
+        <input
+            type="text" id="adminEmail"
+            formControlName="adminEmail" [ngClass]="{ 'input-error': formErrors['adminEmail'] }"
+        >
+        <div *ngIf="formErrors.adminEmail" class="form-error">
+          {{ formErrors.adminEmail }}
+        </div>
+      </div>
+
+      <div class="inner-form-title">Users</div>
+
+      <div class="form-group">
+        <label for="userVideoQuota">User default video quota</label>
+        <div class="peertube-select-container">
+          <select id="userVideoQuota" formControlName="userVideoQuota">
+            <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
+              {{ videoQuotaOption.label }}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="formErrors.userVideoQuota" class="form-error">
+          {{ formErrors.userVideoQuota }}
+        </div>
+      </div>
+    </tab>
+
+    <tab heading="Services">
+
+      <div class="inner-form-title">Twitter</div>
+
+      <div class="form-group">
+        <label for="signupLimit">Your Twitter username</label>
+        <my-help helpType="custom" customHtml="The Twitter @username the cards (created by PeerTube video shares) should be attributed to."></my-help>
+        <input
+            type="text" id="servicesTwitterUsername"
+            formControlName="servicesTwitterUsername" [ngClass]="{ 'input-error': formErrors['servicesTwitterUsername'] }"
+        >
+        <div *ngIf="formErrors.servicesTwitterUsername" class="form-error">
+          {{ formErrors.servicesTwitterUsername }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input type="checkbox" id="servicesTwitterWhitelisted" formControlName="servicesTwitterWhitelisted">
+
+        <label for="servicesTwitterWhitelisted"></label>
+        <label for="servicesTwitterWhitelisted">Instance whitelisted by Twitter</label>
+        <my-help helpType="custom" customHtml="If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
+If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
+Check this checkbox, save the configuration and test on <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a> to see if you instance is whitelisted."></my-help>
+
+      </div>
+    </tab>
+
+    <tab heading="Advanced configuration">
+
+      <div class="inner-form-title">Transcoding</div>
+
+      <div class="form-group">
+        <input type="checkbox" id="transcodingEnabled" formControlName="transcodingEnabled">
+
+        <label for="transcodingEnabled"></label>
+        <label for="transcodingEnabled">Transcoding enabled</label>
+      </div>
+
+      <ng-template [ngIf]="isTranscodingEnabled()">
+
+        <div class="form-group">
+          <label for="transcodingThreads">Transcoding threads</label>
+          <div class="peertube-select-container">
+            <select id="transcodingThreads" formControlName="transcodingThreads">
+              <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
+                {{ transcodingThreadOption.label }}
+              </option>
+            </select>
+          </div>
+          <div *ngIf="formErrors.transcodingThreads" class="form-error">
+            {{ formErrors.transcodingThreads }}
+          </div>
+        </div>
+
+        <div class="form-group" *ngFor="let resolution of resolutions">
+          <input
+              type="checkbox" [id]="getResolutionKey(resolution)"
+              [formControlName]="getResolutionKey(resolution)"
+          >
+          <label [for]="getResolutionKey(resolution)"></label>
+          <label [for]="getResolutionKey(resolution)">Resolution {{ resolution }} enabled</label>
+        </div>
+      </ng-template>
+
+      <div class="inner-form-title">Cache</div>
+
+      <div class="form-group">
+        <label for="cachePreviewsSize">Preview cache size</label>
+        <my-help helpType="custom" customHtml="Previews are not federated. We fetch them directly from the origin instance and cache them."></my-help>
+
+        <input
+            type="text" id="cachePreviewsSize"
+            formControlName="cachePreviewsSize" [ngClass]="{ 'input-error': formErrors['cachePreviewsSize'] }"
+        >
+        <div *ngIf="formErrors.cachePreviewsSize" class="form-error">
+          {{ formErrors.cachePreviewsSize }}
+        </div>
+      </div>
+
+      <div class="inner-form-title">Customizations</div>
+
+      <div class="form-group">
+        <label for="customizationJavascript">JavaScript</label>
+        <my-help helpType="custom" customHtml="Write directly JavaScript code.<br />Example: <pre>console.log('my instance is amazing');</pre>"></my-help>
+        <textarea
+            id="customizationJavascript" formControlName="customizationJavascript"
+            [ngClass]="{ 'input-error': formErrors['customizationJavascript'] }"
+        ></textarea>
+        <div *ngIf="formErrors.customizationJavascript" class="form-error">
+          {{ formErrors.customizationJavascript }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="customizationCSS">CSS</label>
+        <my-help
+            helpType="custom"
+            customHtml="
+              Write directly CSS code. Example:<br />
+              <pre>
+    body {
+      background-color: red;
+    }
+              </pre>
+
+              Prepend with <em>#custom-css</em> to override styles. Example:
+              <pre>
+    #custom-css .logged-in-email {
+      color: red;
+    }
+              </pre>
+            "
+        ></my-help>
+        <textarea
+            id="customizationCSS" formControlName="customizationCSS"
+            [ngClass]="{ 'input-error': formErrors['customizationCSS'] }"
+        ></textarea>
+        <div *ngIf="formErrors.customizationCSS" class="form-error">
+          {{ formErrors.customizationCSS }}
+        </div>
+      </div>
+    </tab>
+  </tabset>
 
   <input (click)="formValidated()" type="submit" value="Update configuration" [disabled]="!form.valid">
 </form>
