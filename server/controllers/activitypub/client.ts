@@ -3,7 +3,7 @@ import * as express from 'express'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { pageToStartAndCount } from '../../helpers/core-utils'
-import { ACTIVITY_PUB, CONFIG } from '../../initializers'
+import { ACTIVITY_PUB, CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
 import { buildVideoAnnounce } from '../../lib/activitypub/send'
 import { audiencify, getAudience } from '../../lib/activitypub/send/misc'
 import { createActivityData } from '../../lib/activitypub/send/send-create'
@@ -17,6 +17,7 @@ import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoShareModel } from '../../models/video/video-share'
+import { cacheRoute } from '../../middlewares/cache'
 
 const activityPubClientRouter = express.Router()
 
@@ -34,6 +35,7 @@ activityPubClientRouter.get('/accounts?/:name/following',
 )
 
 activityPubClientRouter.get('/videos/watch/:id',
+  executeIfActivityPub(asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS))),
   executeIfActivityPub(asyncMiddleware(videosGetValidator)),
   executeIfActivityPub(asyncMiddleware(videoController))
 )

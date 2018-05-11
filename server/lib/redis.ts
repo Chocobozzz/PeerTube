@@ -2,7 +2,7 @@ import * as express from 'express'
 import { createClient, RedisClient } from 'redis'
 import { logger } from '../helpers/logger'
 import { generateRandomString } from '../helpers/utils'
-import { CONFIG, FEEDS, USER_PASSWORD_RESET_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
+import { CONFIG, USER_PASSWORD_RESET_LIFETIME, VIDEO_VIEW_LIFETIME } from '../initializers'
 
 type CachedRoute = {
   body: string,
@@ -67,14 +67,14 @@ class Redis {
     return cached as CachedRoute
   }
 
-  setCachedRoute (req: express.Request, body: any, contentType?: string, statusCode?: number) {
+  setCachedRoute (req: express.Request, body: any, lifetime: number, contentType?: string, statusCode?: number) {
     const cached: CachedRoute = {
       body: body.toString(),
       contentType,
       statusCode: statusCode.toString()
     }
 
-    return this.setObject(this.buildCachedRouteKey(req), cached, FEEDS.CACHE_LIFETIME)
+    return this.setObject(this.buildCachedRouteKey(req), cached, lifetime)
   }
 
   listJobs (jobsPrefix: string, state: string, mode: 'alpha', order: 'ASC' | 'DESC', offset: number, count: number) {

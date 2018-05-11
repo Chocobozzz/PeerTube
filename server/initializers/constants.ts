@@ -42,6 +42,13 @@ const OAUTH_LIFETIME = {
   REFRESH_TOKEN: 1209600 // 2 weeks
 }
 
+const ROUTE_CACHE_LIFETIME = {
+  FEEDS: 1000 * 60 * 15, // 15 minutes
+  ACTIVITY_PUB: {
+    VIDEOS: 1000 * 5 // 5 seconds
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 // Number of points we add/remove after a successful/bad request
@@ -413,8 +420,7 @@ const OPENGRAPH_AND_OEMBED_COMMENT = '<!-- open graph and oembed tags -->'
 // ---------------------------------------------------------------------------
 
 const FEEDS = {
-  COUNT: 20,
-  CACHE_LIFETIME: 1000 * 60 * 15 // 15 minutes
+  COUNT: 20
 }
 
 // ---------------------------------------------------------------------------
@@ -458,6 +464,7 @@ export {
   FOLLOW_STATES,
   SERVER_ACTOR_NAME,
   PRIVATE_RSA_KEY_SIZE,
+  ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
   FEEDS,
   NSFW_POLICY_TYPES,

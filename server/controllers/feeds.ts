@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { CONFIG, FEEDS } from '../initializers/constants'
+import { CONFIG, FEEDS, ROUTE_CACHE_LIFETIME } from '../initializers/constants'
 import { asyncMiddleware, feedsValidator, setDefaultSort, videosSortValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
@@ -12,8 +12,8 @@ const feedsRouter = express.Router()
 feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
   setDefaultSort,
+  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
   asyncMiddleware(feedsValidator),
-  asyncMiddleware(cacheRoute),
   asyncMiddleware(generateFeed)
 )
 
