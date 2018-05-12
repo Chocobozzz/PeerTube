@@ -47,10 +47,24 @@
     "nodemon": "nodemon",
     "ts-node": "ts-node",
     "tslint": "tslint",
+    "sasslint": "sass-lint --verbose --no-exit",
+    "sasslint:fix": "sass-lint-auto-fix -c .sass-lint.yml --verbose",
     "mocha": "mocha",
     "travis": "scripty",
     "release": "scripty",
     "client-report": "scripty"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,css,md}": "precise-commits",
+    "*.scss": [
+      "sass-lint-auto-fix -c .sass-lint.yml --verbose",
+      "git add"
+    ]
   },
   "dependencies": {
     "async": "^2.0.0",
@@ -134,11 +148,17 @@
     "chai": "^4.1.1",
     "chai-json-schema": "^1.5.0",
     "chai-xml": "^0.3.2",
+    "husky": "^1.0.0-rc.4",
     "libxmljs": "^0.18.7",
+    "lint-staged": "^7.1.0",
     "maildev": "^1.0.0-rc3",
     "mocha": "^5.0.0",
     "nodemon": "^1.11.0",
+    "precise-commits": "^1.0.2",
+    "prettier": "1.12.1",
     "prompt": "^1.0.0",
+    "sass-lint": "^1.12.1",
+    "sass-lint-auto-fix": "^0.9.0",
     "source-map-support": "^0.5.0",
     "spectacle-docs": "^1.0.2",
     "supertest": "^3.0.0",
