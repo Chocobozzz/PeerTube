@@ -1,0 +1,25 @@
+files:
+  include: "**/*.s+(a|c)ss"
+  ignore: [
+    "node_modules/**/*.*",
+    "client/node_modules/**/*.*"
+  ]
+syntax:
+    include:
+      - scss
+      - sass
+rules:
+  property-sort-order: 0
+  attribute-quotes: 0
+  border-zero: 0
+  no-color-keywords: 0
+  no-css-comments: 0
+  no-important: 0
+  no-trailing-zero: 1
+  space-after-bang: 1
+  space-before-bang: 1
+  space-after-colon: 1
+  space-before-colon: 1
+  hex-length: 1
+  hex-notation: 0
+  indentation: 1
