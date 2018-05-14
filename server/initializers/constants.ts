@@ -109,8 +109,9 @@ const CONFIG = {
     PASSWORD: config.get<string>('database.password')
   },
   REDIS: {
-    HOSTNAME: config.get<string>('redis.hostname'),
-    PORT: config.get<number>('redis.port'),
+    get HOSTNAME () { try { return config.get<string>('redis.hostname') } catch { return null } },
+    get PORT () { try { return config.get<number>('redis.port') } catch { return null } },
+    get SOCKET () { try { return config.get<string>('redis.socket') } catch { return null } },
     AUTH: config.get<string>('redis.auth')
   },
   SMTP: {

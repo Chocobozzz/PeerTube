@@ -1,0 +1,13 @@
+diff --git a/node_modules/kue/lib/redis.js b/node_modules/kue/lib/redis.js
+index a77ff9b..161f64d 100755
+--- a/node_modules/kue/lib/redis.js
++++ b/node_modules/kue/lib/redis.js
+@@ -116,7 +116,7 @@ exports.createClientFactory = function( options ) {
+   if( options.redis.auth ) {
+     client.auth(options.redis.auth);
+   }
+-  if( db >= 0 ){
++  if( db !== null && db >= 0 ){
+     client.select(db);
+   }
+   return client;
