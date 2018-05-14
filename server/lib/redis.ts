@@ -24,11 +24,7 @@ class Redis {
     if (this.initialized === true) return
     this.initialized = true
 
-    this.client = createClient({
-      host: CONFIG.REDIS.HOSTNAME,
-      port: CONFIG.REDIS.PORT,
-      db: CONFIG.REDIS.DB
-    })
+    this.client = createClient(Redis.getRedisClient())
 
     this.client.on('error', err => {
       logger.error('Error in Redis client.', { err })
@@ -40,6 +36,16 @@ class Redis {
     }
 
     this.prefix = 'redis-' + CONFIG.WEBSERVER.HOST + '-'
+  }
+
+  static getRedisClient () {
+    return Object.assign({},
+      (CONFIG.REDIS.AUTH && CONFIG.REDIS.AUTH != null) ? { password: CONFIG.REDIS.AUTH } : {},
+      (CONFIG.REDIS.DB) ? { db: CONFIG.REDIS.DB } : {},
+      (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) ?
+      { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT } :
+      { path: CONFIG.REDIS.SOCKET }
+    )
   }
 
   async setResetPasswordVerificationString (userId: number) {
