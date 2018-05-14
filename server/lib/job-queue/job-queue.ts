@@ -53,11 +53,12 @@ class JobQueue {
 
     this.jobQueue = kue.createQueue({
       prefix: this.jobRedisPrefix,
-      redis: {
-        host: CONFIG.REDIS.HOSTNAME,
-        port: CONFIG.REDIS.PORT,
-        auth: CONFIG.REDIS.AUTH
-      }
+      redis: Object.assign({},
+        { auth: CONFIG.REDIS.AUTH },
+        (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) ?
+        { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT } :
+        { socket: CONFIG.REDIS.SOCKET }
+      )
     })
 
     this.jobQueue.setMaxListeners(20)

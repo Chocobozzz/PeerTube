@@ -24,10 +24,13 @@ class Redis {
     if (this.initialized === true) return
     this.initialized = true
 
-    this.client = createClient({
-      host: CONFIG.REDIS.HOSTNAME,
-      port: CONFIG.REDIS.PORT
-    })
+    this.client = createClient(
+      Object.assign({},
+        (CONFIG.REDIS.HOSTNAME && CONFIG.REDIS.PORT) ?
+        { host: CONFIG.REDIS.HOSTNAME, port: CONFIG.REDIS.PORT } :
+        { socket: CONFIG.REDIS.SOCKET }
+      )
+    )
 
     this.client.on('error', err => {
       logger.error('Error in Redis client.', { err })

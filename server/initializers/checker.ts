@@ -22,7 +22,7 @@ function checkMissedConfig () {
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'trust_proxy',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
-    'redis.hostname', 'redis.port', 'redis.auth',
+    'redis.auth',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
     'log.level',
@@ -32,11 +32,32 @@ function checkMissedConfig () {
     'instance.default_nsfw_policy',
     'services.twitter.username', 'services.twitter.whitelisted'
   ]
+  const requiredAlternatives = [
+    [ // set
+      ['redis.hostname', 'redis.port'], // alternative
+      ['redis.socket']
+    ]
+  ]
   const miss: string[] = []
 
   for (const key of required) {
     if (!config.has(key)) {
       miss.push(key)
+    }
+  }
+  for (const set of requiredAlternatives) {
+    let hasAlternative = false
+    for (const alternative of set) {
+      for (const key of alternative) {
+        if (!config.has(key)) {
+          break
+        }
+        hasAlternative = true
+      }
+      if (hasAlternative) break
+    }
+    if (!hasAlternative) {
+      set[0].forEach((key) => miss.push(key))
     }
   }
 
