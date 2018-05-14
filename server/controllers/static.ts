@@ -44,6 +44,12 @@ staticRouter.use(
   asyncMiddleware(getPreview)
 )
 
+// robots.txt service
+staticRouter.get('/robots.txt', (req: express.Request, res: express.Response) => {
+  res.type('text/plain')
+  return res.send(CONFIG.INSTANCE.ROBOTS)
+})
+
 // ---------------------------------------------------------------------------
 
 export {
