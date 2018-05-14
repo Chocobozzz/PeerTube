@@ -116,10 +116,11 @@ const CONFIG = {
     PASSWORD: config.get<string>('database.password')
   },
   REDIS: {
-    HOSTNAME: config.get<string>('redis.hostname'),
-    PORT: config.get<number>('redis.port'),
-    AUTH: config.get<string>('redis.auth'),
-    DB: config.get<number>('redis.db')
+    HOSTNAME: config.has('redis.hostname') ? config.get<string>('redis.hostname') : null,
+    PORT: config.has('redis.port') ? config.get<number>('redis.port') : null,
+    SOCKET: config.has('redis.socket') ? config.get<string>('redis.socket') : null,
+    AUTH: config.has('redis.auth') ? config.get<string>('redis.auth') : null,
+    DB: config.has('redis.db') ? config.get<number>('redis.db') : null
   },
   SMTP: {
     HOSTNAME: config.get<string>('smtp.hostname'),

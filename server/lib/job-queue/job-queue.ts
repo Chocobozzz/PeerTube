@@ -1,6 +1,7 @@
 import * as Bull from 'bull'
 import { JobState, JobType } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
+import { Redis } from '../redis'
 import { CONFIG, JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_REQUEST_TTL } from '../../initializers'
 import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
@@ -63,12 +64,7 @@ class JobQueue {
     this.jobRedisPrefix = 'bull-' + CONFIG.WEBSERVER.HOST
     const queueOptions = {
       prefix: this.jobRedisPrefix,
-      redis: {
-        host: CONFIG.REDIS.HOSTNAME,
-        port: CONFIG.REDIS.PORT,
-        auth: CONFIG.REDIS.AUTH,
-        db: CONFIG.REDIS.DB
-      }
+      redis: Redis.getRedisClient()
     }
 
     for (const handlerName of Object.keys(handlers)) {
