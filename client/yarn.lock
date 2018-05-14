@@ -1665,6 +1665,12 @@ cache-base@^1.0.1:
     union-value "^1.0.0"
     unset-value "^1.0.0"
 
+cache-chunk-store@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/cache-chunk-store/-/cache-chunk-store-2.0.0.tgz#65dd1d0dc730c301479c9bb209747f5d2f8c6c9a"
+  dependencies:
+    lru "^3.1.0"
+
 cache-loader@^1.2.0:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/cache-loader/-/cache-loader-1.2.2.tgz#6d5c38ded959a09cc5d58190ab5af6f73bd353f5"
@@ -2592,6 +2598,10 @@ detect-libc@^1.0.2, detect-libc@^1.0.3:
 detect-node@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/detect-node/-/detect-node-2.0.3.tgz#a2033c09cc8e158d37748fbde7507832bd6ce127"
+
+dexie@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/dexie/-/dexie-2.0.3.tgz#c32db3e8c7d43ac509379ad126f125c57a0e7c9c"
 
 diff@^3.2.0, diff@^3.3.1, diff@^3.5.0:
   version "3.5.0"

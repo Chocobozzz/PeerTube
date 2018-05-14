@@ -4,16 +4,11 @@ import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import {
-  getAverageBandwidth,
-  getStoredMute,
-  getStoredVolume,
-  saveAverageBandwidth,
-  saveMuteInStore,
-  saveVolumeInStore
-} from './utils'
+import { getAverageBandwidth, getStoredMute, getStoredVolume, saveAverageBandwidth, saveMuteInStore, saveVolumeInStore } from './utils'
 import minBy from 'lodash-es/minBy'
 import maxBy from 'lodash-es/maxBy'
+import * as CacheChunkStore from 'cache-chunk-store'
+import { PeertubeChunkStore } from './peertube-chunk-store'
 
 const webtorrent = new WebTorrent({
   tracker: {
@@ -169,7 +164,13 @@ class PeerTubePlugin extends Plugin {
     console.log('Adding ' + magnetOrTorrentUrl + '.')
 
     const oldTorrent = this.torrent
-    this.torrent = webtorrent.add(magnetOrTorrentUrl, torrent => {
+    const options = {
+      store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
+        max: 100
+      })
+    }
+
+    this.torrent = webtorrent.add(magnetOrTorrentUrl, options, torrent => {
       console.log('Added ' + magnetOrTorrentUrl + '.')
 
       // Pause the old torrent

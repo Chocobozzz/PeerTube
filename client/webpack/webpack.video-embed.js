@@ -136,8 +136,8 @@ module.exports = function () {
     ],
 
     performance: {
-      maxEntrypointSize: 600000, // 600kB
-      maxAssetSize: 600000
+      maxEntrypointSize: 700000, // 600kB
+      maxAssetSize: 700000
     },
 
     node: {
