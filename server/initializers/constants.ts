@@ -180,7 +180,8 @@ const CONFIG = {
     CUSTOMIZATIONS: {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }
-    }
+    },
+    get ROBOTS () { return config.get<string>('instance.robots') }
   },
   SERVICES: {
     TWITTER: {
