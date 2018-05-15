@@ -65,7 +65,7 @@
     "linkifyjs": "^2.1.5",
     "lodash-es": "^4.17.4",
     "markdown-it": "^8.4.0",
-    "ngx-bootstrap": "2.0.3",
+    "ngx-bootstrap": "2.0.5",
     "ngx-chips": "1.9.2",
     "ngx-clipboard": "11.0.0",
     "ngx-pipes": "^2.1.7",

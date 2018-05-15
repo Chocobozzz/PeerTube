@@ -227,6 +227,10 @@ p-table {
     width: 250px !important;
     padding: 0 !important;
     text-align: center;
+
+    my-edit-button + my-delete-button {
+      margin-left: 5px;
+    }
   }
 
   p-paginator {

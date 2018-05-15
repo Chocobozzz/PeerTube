@@ -5464,9 +5464,9 @@ ng2-material-dropdown@0.10.0:
   dependencies:
     tslib "^1.9.0"
 
-ngx-bootstrap@2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.3.tgz#b8ca4be305be4e2e99f60d941cc8a3e906f198d7"
+ngx-bootstrap@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/ngx-bootstrap/-/ngx-bootstrap-2.0.5.tgz#83aab39d1e4fe811fad2b34f7927f9ce19d68daa"
 
 ngx-chips@1.9.2:
   version "1.9.2"

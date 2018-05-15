@@ -30,7 +30,6 @@ export class VideoEditComponent implements OnInit {
   @Input() videoPrivacies = []
   @Input() userVideoChannels = []
 
-  tags: string[] = []
   videoCategories = []
   videoLicences = []
   videoLanguages = []
