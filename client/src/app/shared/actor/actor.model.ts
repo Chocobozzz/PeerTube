@@ -10,8 +10,8 @@ export abstract class Actor implements ActorServer {
   host: string
   followingCount: number
   followersCount: number
-  createdAt: Date
-  updatedAt: Date
+  createdAt: Date | string
+  updatedAt: Date | string
   avatar: Avatar
 
   avatarUrl: string
@@ -41,8 +41,8 @@ export abstract class Actor implements ActorServer {
     this.host = hash.host
     this.followingCount = hash.followingCount
     this.followersCount = hash.followersCount
-    this.createdAt = new Date(hash.createdAt)
-    this.updatedAt = new Date(hash.updatedAt)
+    this.createdAt = new Date(hash.createdAt.toString())
+    this.updatedAt = new Date(hash.updatedAt.toString())
     this.avatar = hash.avatar
 
     this.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(this)

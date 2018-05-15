@@ -1,14 +1,9 @@
+import { Observable, ReplaySubject, Subject, throwError as observableThrowError } from 'rxjs'
+import { catchError, map, mergeMap, tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import 'rxjs/add/observable/throw'
-import 'rxjs/add/operator/do'
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/mergeMap'
-import { Observable } from 'rxjs/Observable'
-import { ReplaySubject } from 'rxjs/ReplaySubject'
-import { Subject } from 'rxjs/Subject'
 import { OAuthClientLocal, User as UserServerModel, UserRefreshToken } from '../../../../../shared'
 import { User } from '../../../../../shared/models/users'
 import { UserLogin } from '../../../../../shared/models/users/user-login.model'
@@ -46,7 +41,7 @@ export class AuthService {
     private notificationsService: NotificationsService,
     private restExtractor: RestExtractor,
     private router: Router
-   ) {
+  ) {
     this.loginChanged = new Subject<AuthStatus>()
     this.loginChangedSource = this.loginChanged.asObservable()
 
@@ -58,28 +53,28 @@ export class AuthService {
     // Fetch the client_id/client_secret
     // FIXME: save in local storage?
     this.http.get<OAuthClientLocal>(AuthService.BASE_CLIENT_URL)
-             .catch(res => this.restExtractor.handleError(res))
-             .subscribe(
-               res => {
-                 this.clientId = res.client_id
-                 this.clientSecret = res.client_secret
-                 console.log('Client credentials loaded.')
-               },
+        .pipe(catchError(res => this.restExtractor.handleError(res)))
+        .subscribe(
+          res => {
+            this.clientId = res.client_id
+            this.clientSecret = res.client_secret
+            console.log('Client credentials loaded.')
+          },
 
-               error => {
-                 let errorMessage = error.message
+          error => {
+            let errorMessage = error.message
 
-                 if (error.status === 403) {
-                   errorMessage = `Cannot retrieve OAuth Client credentials: ${error.text}. \n`
-                   errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), ' +
-                     'in particular the "webserver" section.'
-                 }
+            if (error.status === 403) {
+              errorMessage = `Cannot retrieve OAuth Client credentials: ${error.text}. \n`
+              errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), ' +
+                'in particular the "webserver" section.'
+            }
 
-                 // We put a bigger timeout
-                 // This is an important message
-                 this.notificationsService.error('Error', errorMessage, { timeOut: 7000 })
-               }
-             )
+            // We put a bigger timeout
+            // This is an important message
+            this.notificationsService.error('Error', errorMessage, { timeOut: 7000 })
+          }
+        )
   }
 
   getRefreshToken () {
@@ -129,10 +124,12 @@ export class AuthService {
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, body.toString(), { headers })
-                    .map(res => Object.assign(res, { username }))
-                    .flatMap(res => this.mergeUserInformation(res))
-                    .map(res => this.handleLogin(res))
-                    .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(res => Object.assign(res, { username })),
+                 mergeMap(res => this.mergeUserInformation(res)),
+                 map(res => this.handleLogin(res)),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 
   logout () {
@@ -161,20 +158,22 @@ export class AuthService {
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 
     this.refreshingTokenObservable = this.http.post<UserRefreshToken>(AuthService.BASE_TOKEN_URL, body, { headers })
-               .map(res => this.handleRefreshToken(res))
-               .do(() => this.refreshingTokenObservable = null)
-               .catch(err => {
-                 this.refreshingTokenObservable = null
+                                         .pipe(
+                                           map(res => this.handleRefreshToken(res)),
+                                           tap(() => this.refreshingTokenObservable = null),
+                                           catchError(err => {
+                                             this.refreshingTokenObservable = null
 
-                 console.error(err)
-                 console.log('Cannot refresh token -> logout...')
-                 this.logout()
-                 this.router.navigate([ '/login' ])
+                                             console.error(err)
+                                             console.log('Cannot refresh token -> logout...')
+                                             this.logout()
+                                             this.router.navigate([ '/login' ])
 
-                 return Observable.throw({
-                   error: 'You need to reconnect.'
-                 })
-               })
+                                             return observableThrowError({
+                                               error: 'You need to reconnect.'
+                                             })
+                                           })
+                                         )
 
     return this.refreshingTokenObservable
   }
@@ -188,14 +187,14 @@ export class AuthService {
     }
 
     this.mergeUserInformation(obj)
-      .subscribe(
-        res => {
-          this.user.patch(res)
-          this.user.save()
+        .subscribe(
+          res => {
+            this.user.patch(res)
+            this.user.save()
 
-          this.userInformationLoaded.next(true)
-        }
-      )
+            this.userInformationLoaded.next(true)
+          }
+        )
   }
 
   private mergeUserInformation (obj: UserLoginWithUsername): Observable<UserLoginWithUserInformation> {
@@ -203,7 +202,7 @@ export class AuthService {
     const headers = new HttpHeaders().set('Authorization', `${obj.token_type} ${obj.access_token}`)
 
     return this.http.get<UserServerModel>(AuthService.BASE_USER_INFORMATION_URL, { headers })
-                    .map(res => Object.assign(obj, res))
+               .pipe(map(res => Object.assign(obj, res)))
   }
 
   private handleLogin (obj: UserLoginWithUserInformation) {

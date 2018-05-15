@@ -1,8 +1,8 @@
+import { tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
-import 'rxjs/add/operator/do'
-import { ReplaySubject } from 'rxjs/ReplaySubject'
+import { ReplaySubject } from 'rxjs'
 import { ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
@@ -69,12 +69,12 @@ export class ServerService {
 
   loadConfig () {
     this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
-      .do(this.saveConfigLocally)
-      .subscribe(data => {
-        this.config = data
+        .pipe(tap(this.saveConfigLocally))
+        .subscribe(data => {
+          this.config = data
 
-        this.configLoaded.next(true)
-      })
+          this.configLoaded.next(true)
+        })
   }
 
   loadVideoCategories () {

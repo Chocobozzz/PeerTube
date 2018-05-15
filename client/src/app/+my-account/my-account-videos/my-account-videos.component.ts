@@ -1,12 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { from as observableFrom, Observable } from 'rxjs'
+import { concatAll, tap } from 'rxjs/operators'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { NotificationsService } from 'angular2-notifications'
-import 'rxjs/add/observable/from'
-import 'rxjs/add/operator/concatAll'
-import { Observable } from 'rxjs/Observable'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
@@ -78,14 +77,14 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
     const observables: Observable<any>[] = []
     for (const videoId of toDeleteVideosIds) {
       const o = this.videoService
-        .removeVideo(videoId)
-        .do(() => this.spliceVideosById(videoId))
+                    .removeVideo(videoId)
+                    .pipe(tap(() => this.spliceVideosById(videoId)))
 
       observables.push(o)
     }
 
-    Observable.from(observables)
-      .concatAll()
+    observableFrom(observables).pipe(
+      concatAll())
       .subscribe(
         res => {
           this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`)

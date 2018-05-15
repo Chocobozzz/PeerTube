@@ -1,9 +1,9 @@
+import { map, switchMap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
-import 'rxjs/add/observable/forkJoin'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { AuthService } from '../../core/auth'
@@ -18,7 +18,6 @@ import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
   styleUrls: [ './shared/video-edit.component.scss' ],
   templateUrl: './video-update.component.html'
 })
-
 export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
@@ -53,38 +52,40 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     this.serverService.videoPrivaciesLoaded
       .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
 
-    const uuid: string = this.route.snapshot.params['uuid']
+    const uuid: string = this.route.snapshot.params[ 'uuid' ]
     this.videoService.getVideo(uuid)
-      .switchMap(video => {
-        return this.videoService
-          .loadCompleteDescription(video.descriptionPath)
-          .map(description => Object.assign(video, { description }))
-      })
-      .subscribe(
-        video => {
-          this.video = new VideoEdit(video)
+        .pipe(
+          switchMap(video => {
+            return this.videoService
+                       .loadCompleteDescription(video.descriptionPath)
+                       .pipe(map(description => Object.assign(video, { description })))
+          })
+        )
+        .subscribe(
+          video => {
+            this.video = new VideoEdit(video)
 
-          populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-            .catch(err => console.error(err))
+            populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
+              .catch(err => console.error(err))
 
-          // We cannot set private a video that was not private
-          if (video.privacy.id !== VideoPrivacy.PRIVATE) {
-            const newVideoPrivacies = []
-            for (const p of this.videoPrivacies) {
-              if (p.id !== VideoPrivacy.PRIVATE) newVideoPrivacies.push(p)
+            // We cannot set private a video that was not private
+            if (video.privacy.id !== VideoPrivacy.PRIVATE) {
+              const newVideoPrivacies = []
+              for (const p of this.videoPrivacies) {
+                if (p.id !== VideoPrivacy.PRIVATE) newVideoPrivacies.push(p)
+              }
+
+              this.videoPrivacies = newVideoPrivacies
             }
 
-            this.videoPrivacies = newVideoPrivacies
+            this.hydrateFormFromVideo()
+          },
+
+          err => {
+            console.error(err)
+            this.notificationsService.error('Error', err.message)
           }
-
-          this.hydrateFormFromVideo()
-        },
-
-        err => {
-          console.error(err)
-          this.notificationsService.error('Error', err.message)
-        }
-      )
+        )
   }
 
   checkForm () {

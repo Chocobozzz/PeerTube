@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { ActivatedRoute } from '@angular/router'
 import { ConfirmService } from '@app/core'
 import { NotificationsService } from 'angular2-notifications'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'

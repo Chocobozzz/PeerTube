@@ -1,20 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Subscription } from 'rxjs/Subscription'
-
+import { Subscription } from 'rxjs'
 import { NotificationsService } from 'angular2-notifications'
-
 import { UserService } from '../shared'
-import {
-  USER_EMAIL,
-  USER_VIDEO_QUOTA,
-  USER_ROLE,
-  User
-} from '../../../shared'
+import { User, USER_EMAIL, USER_ROLE, USER_VIDEO_QUOTA } from '../../../shared'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
-import { UserUpdate, UserRole } from '../../../../../../shared'
+import { UserUpdate } from '../../../../../../shared'
 
 @Component({
   selector: 'my-user-update',

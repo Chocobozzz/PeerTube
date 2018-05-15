@@ -1,7 +1,6 @@
+import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import 'rxjs/add/operator/catch'
-import 'rxjs/add/operator/map'
 import { UserCreate, UserUpdateMe } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
@@ -13,7 +12,8 @@ export class UserService {
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor
-  ) {}
+  ) {
+  }
 
   changePassword (newPassword: string) {
     const url = UserService.BASE_USERS_URL + 'me'
@@ -22,44 +22,52 @@ export class UserService {
     }
 
     return this.authHttp.put(url, body)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 
   updateMyProfile (profile: UserUpdateMe) {
     const url = UserService.BASE_USERS_URL + 'me'
 
     return this.authHttp.put(url, profile)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 
   changeAvatar (avatarForm: FormData) {
     const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
 
     return this.authHttp.post(url, avatarForm)
-                        .catch(this.restExtractor.handleError)
+               .pipe(catchError(this.restExtractor.handleError))
   }
 
   signup (userCreate: UserCreate) {
     return this.authHttp.post(UserService.BASE_USERS_URL + 'register', userCreate)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 
   getMyVideoQuotaUsed () {
     const url = UserService.BASE_USERS_URL + '/me/video-quota-used'
 
     return this.authHttp.get(url)
-      .catch(res => this.restExtractor.handleError(res))
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   askResetPassword (email: string) {
     const url = UserService.BASE_USERS_URL + '/ask-reset-password'
 
     return this.authHttp.post(url, { email })
-      .map(this.restExtractor.extractDataBool)
-      .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 
   resetPassword (userId: number, verificationString: string, password: string) {
@@ -70,7 +78,9 @@ export class UserService {
     }
 
     return this.authHttp.post(url, body)
-      .map(this.restExtractor.extractDataBool)
-      .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 }

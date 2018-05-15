@@ -1,9 +1,8 @@
+import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
-import 'rxjs/add/operator/catch'
-import 'rxjs/add/operator/map'
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
 import { ResultList, VideoAbuse } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
@@ -25,8 +24,10 @@ export class VideoAbuseService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<VideoAbuse>>(url, { params })
-                        .map(res => this.restExtractor.convertResultListDateToHuman(res))
-                        .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 
   reportVideo (id: number, reason: string) {
@@ -36,7 +37,9 @@ export class VideoAbuseService {
     }
 
     return this.authHttp.post(url, body)
-                        .map(this.restExtractor.extractDataBool)
-                        .catch(res => this.restExtractor.handleError(res))
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 }

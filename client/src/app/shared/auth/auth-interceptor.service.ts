@@ -1,14 +1,8 @@
+import { Observable, throwError as observableThrowError } from 'rxjs'
+import { catchError, switchMap } from 'rxjs/operators'
 import { Injectable, Injector } from '@angular/core'
-import {
-  HttpInterceptor,
-  HttpRequest,
-  HttpEvent,
-  HttpHandler, HTTP_INTERCEPTORS
-} from '@angular/common/http'
-import { Observable } from 'rxjs/Observable'
-
+import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http'
 import { AuthService } from '../../core'
-import 'rxjs/add/operator/switchMap'
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -27,22 +21,26 @@ export class AuthInterceptor implements HttpInterceptor {
     // Pass on the cloned request instead of the original request
     // Catch 401 errors (refresh token expired)
     return next.handle(authReq)
-               .catch(err => {
-                 if (err.status === 401 && err.error && err.error.code === 'invalid_token') {
-                   return this.handleTokenExpired(req, next)
-                 }
+               .pipe(
+                 catchError(err => {
+                   if (err.status === 401 && err.error && err.error.code === 'invalid_token') {
+                     return this.handleTokenExpired(req, next)
+                   }
 
-                 return Observable.throw(err)
-               })
+                   return observableThrowError(err)
+                 })
+               )
   }
 
   private handleTokenExpired (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return this.authService.refreshAccessToken()
-                           .switchMap(() => {
-                             const authReq = this.cloneRequestWithAuth(req)
+               .pipe(
+                 switchMap(() => {
+                   const authReq = this.cloneRequestWithAuth(req)
 
-                             return next.handle(authReq)
-                           })
+                   return next.handle(authReq)
+                 })
+               )
   }
 
   private cloneRequestWithAuth (req: HttpRequest<any>) {

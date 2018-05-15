@@ -60,7 +60,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,css,md}": "precise-commits",
+    "*.{css,md}": "precise-commits",
     "*.scss": [
       "sass-lint-auto-fix -c .sass-lint.yml --verbose",
       "git add"

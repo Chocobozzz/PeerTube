@@ -1,10 +1,9 @@
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { Component, forwardRef, Input, OnInit } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import 'rxjs/add/operator/debounceTime'
-import 'rxjs/add/operator/distinctUntilChanged'
 import { isInSmallView } from '@app/shared/misc/utils'
 import { MarkdownService } from '@app/videos/shared'
-import { Subject } from 'rxjs/Subject'
+import { Subject } from 'rxjs'
 import truncate from 'lodash-es/truncate'
 
 @Component({
@@ -40,9 +39,11 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
   ngOnInit () {
     this.contentChanged
-      .debounceTime(150)
-      .distinctUntilChanged()
-      .subscribe(() => this.updatePreviews())
+        .pipe(
+          debounceTime(150),
+          distinctUntilChanged()
+        )
+        .subscribe(() => this.updatePreviews())
 
     this.contentChanged.next(this.content)
 

@@ -1,7 +1,6 @@
+import { first } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
-import { Subject } from 'rxjs/Subject'
-import 'rxjs/add/operator/first'
-import 'rxjs/add/operator/toPromise'
+import { Subject } from 'rxjs'
 
 type ConfirmOptions = {
   title: string
@@ -19,12 +18,12 @@ export class ConfirmService {
   confirm (message: string, title = '', confirmButtonText?: string) {
     this.showConfirm.next({ title, message, confirmButtonText })
 
-    return this.confirmResponse.asObservable().first().toPromise()
+    return this.confirmResponse.asObservable().pipe(first()).toPromise()
   }
 
   confirmWithInput (message: string, inputLabel: string, expectedInputValue: string, title = '', confirmButtonText?: string) {
     this.showConfirm.next({ title, message, inputLabel, expectedInputValue, confirmButtonText })
 
-    return this.confirmResponse.asObservable().first().toPromise()
+    return this.confirmResponse.asObservable().pipe(first()).toPromise()
   }
 }

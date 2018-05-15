@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
-import 'rxjs/add/observable/from'
-import 'rxjs/add/operator/concatAll'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { User } from '@app/shared'
+import { flatMap } from 'rxjs/operators'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -53,7 +52,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
   private loadVideoChannels () {
     this.authService.userInformationLoaded
-        .flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account.id))
+        .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account.id)))
         .subscribe(res => this.videoChannels = res.data)
   }
 }

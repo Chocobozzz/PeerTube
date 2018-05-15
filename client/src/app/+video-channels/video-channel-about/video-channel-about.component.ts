@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import 'rxjs/add/observable/from'
-import 'rxjs/add/operator/concatAll'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 

@@ -1,10 +1,8 @@
+import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { lineFeedToHtml } from '@app/shared/misc/utils'
-import { MarkdownService } from '@app/videos/shared'
-import 'rxjs/add/operator/catch'
-import 'rxjs/add/operator/map'
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
 import { ResultList } from '../../../../../../shared/models'
 import {
   VideoComment as VideoCommentServerModel,
@@ -32,8 +30,10 @@ export class VideoCommentService {
     const normalizedComment = lineFeedToHtml(comment, 'text')
 
     return this.authHttp.post(url, normalizedComment)
-      .map(data => this.extractVideoComment(data['comment']))
-      .catch(this.restExtractor.handleError)
+               .pipe(
+      map(data => this.extractVideoComment(data['comment'])),
+      catchError(this.restExtractor.handleError)
+               )
   }
 
   addCommentReply (videoId: number | string, inReplyToCommentId: number, comment: VideoCommentCreate) {
@@ -41,8 +41,10 @@ export class VideoCommentService {
     const normalizedComment = lineFeedToHtml(comment, 'text')
 
     return this.authHttp.post(url, normalizedComment)
-      .map(data => this.extractVideoComment(data['comment']))
-      .catch(this.restExtractor.handleError)
+               .pipe(
+                 map(data => this.extractVideoComment(data[ 'comment' ])),
+                 catchError(this.restExtractor.handleError)
+               )
   }
 
   getVideoCommentThreads (
@@ -57,27 +59,33 @@ export class VideoCommentService {
 
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
     return this.authHttp
-      .get(url, { params })
-      .map(this.extractVideoComments)
-      .catch((res) => this.restExtractor.handleError(res))
+               .get(url, { params })
+               .pipe(
+                 map(this.extractVideoComments),
+                 catchError((res) => this.restExtractor.handleError(res))
+               )
   }
 
   getVideoThreadComments (videoId: number | string, threadId: number): Observable<VideoCommentThreadTree> {
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comment-threads/${threadId}`
 
     return this.authHttp
-      .get(url)
-      .map(tree => this.extractVideoCommentTree(tree as VideoCommentThreadTree))
-      .catch((res) => this.restExtractor.handleError(res))
+               .get(url)
+               .pipe(
+                 map(tree => this.extractVideoCommentTree(tree as VideoCommentThreadTree)),
+                 catchError((res) => this.restExtractor.handleError(res))
+               )
   }
 
   deleteVideoComment (videoId: number | string, commentId: number) {
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comments/${commentId}`
 
     return this.authHttp
-      .delete(url)
-      .map(this.restExtractor.extractDataBool)
-      .catch((res) => this.restExtractor.handleError(res))
+               .delete(url)
+               .pipe(
+                 map(this.restExtractor.extractDataBool),
+                 catchError((res) => this.restExtractor.handleError(res))
+               )
   }
 
   private extractVideoComment (videoComment: VideoCommentServerModel) {
@@ -87,7 +95,7 @@ export class VideoCommentService {
   private extractVideoComments (result: ResultList<VideoCommentServerModel>) {
     const videoCommentsJson = result.data
     const totalComments = result.total
-    const comments = []
+    const comments: VideoComment[] = []
 
     for (const videoCommentJson of videoCommentsJson) {
       comments.push(new VideoComment(videoCommentJson))

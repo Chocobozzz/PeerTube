@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
-import { CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router'
-import { Observable } from 'rxjs/Observable'
+import { ActivatedRouteSnapshot, CanDeactivate, RouterStateSnapshot } from '@angular/router'
+import { Observable } from 'rxjs'
 import { ConfirmService } from '../../core/index'
 
 export interface CanComponentDeactivate {

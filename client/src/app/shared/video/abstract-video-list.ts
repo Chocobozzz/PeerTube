@@ -1,13 +1,11 @@
+import { debounceTime } from 'rxjs/operators'
 import { ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Location } from '@angular/common'
 import { isInMobileView } from '@app/shared/misc/utils'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { NotificationsService } from 'angular2-notifications'
-import 'rxjs/add/operator/debounceTime'
-import { Observable } from 'rxjs/Observable'
-import { fromEvent } from 'rxjs/observable/fromEvent'
-import { Subscription } from 'rxjs/Subscription'
+import { fromEvent, Observable, Subscription } from 'rxjs'
 import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
 import { VideoSortField } from './sort-field.type'
@@ -64,7 +62,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     this.loadRouteParams(routeParams)
 
     this.resizeSubscription = fromEvent(window, 'resize')
-      .debounceTime(500)
+      .pipe(debounceTime(500))
       .subscribe(() => this.calcPageSizes())
 
     this.calcPageSizes()

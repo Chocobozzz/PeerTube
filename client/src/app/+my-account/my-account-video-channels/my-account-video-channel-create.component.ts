@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import 'rxjs/add/observable/from'
-import 'rxjs/add/operator/concatAll'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { VideoChannelCreate } from '../../../../../shared/models/videos'

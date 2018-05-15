@@ -1,7 +1,6 @@
-import { HttpErrorResponse } from '@angular/common/http'
+import { of, throwError as observableThrowError } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { dateToHuman } from '@app/shared/misc/utils'
-import { Observable } from 'rxjs/Observable'
 import { ResultList } from '../../../../../shared'
 
 @Injectable()
@@ -86,6 +85,8 @@ export class RestExtractor {
       errorObj.body = err.error
     }
 
-    return Observable.throw(errorObj)
+    observableThrowError(errorObj)
+
+    return of(undefined)
   }
 }

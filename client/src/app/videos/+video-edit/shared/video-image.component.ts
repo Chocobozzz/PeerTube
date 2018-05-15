@@ -2,7 +2,6 @@ import { Component, forwardRef, Input } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
-import 'rxjs/add/observable/forkJoin'
 
 @Component({
   selector: 'my-video-image',
@@ -16,7 +15,6 @@ import 'rxjs/add/observable/forkJoin'
     }
   ]
 })
-
 export class VideoImageComponent implements ControlValueAccessor {
   @Input() inputLabel: string
   @Input() inputName: string

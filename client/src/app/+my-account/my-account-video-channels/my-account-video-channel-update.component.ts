@@ -1,8 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
-import 'rxjs/add/observable/from'
-import 'rxjs/add/operator/concatAll'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { VideoChannelUpdate } from '../../../../../shared/models/videos'
@@ -12,7 +10,7 @@ import {
   VIDEO_CHANNEL_SUPPORT
 } from '@app/shared/forms/form-validators/video-channel'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { Subscription } from 'rxjs/Subscription'
+import { Subscription } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { AuthService } from '@app/core'
 

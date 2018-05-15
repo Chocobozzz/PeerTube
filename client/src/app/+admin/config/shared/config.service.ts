@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
@@ -16,11 +17,11 @@ export class ConfigService {
 
   getCustomConfig () {
     return this.authHttp.get<CustomConfig>(ConfigService.BASE_APPLICATION_URL + '/custom')
-      .catch(res => this.restExtractor.handleError(res))
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   updateCustomConfig (data: CustomConfig) {
     return this.authHttp.put<CustomConfig>(ConfigService.BASE_APPLICATION_URL + '/custom', data)
-      .catch(res => this.restExtractor.handleError(res))
+               .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 }

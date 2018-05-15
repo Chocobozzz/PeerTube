@@ -4,4 +4,4 @@ set -eu
 
 cd client
 
-npm run ng -- server --hmr --host 0.0.0.0 --disable-host-check --port 3000
+npm run ng -- serve --hmr --host 0.0.0.0 --disable-host-check --port 3000

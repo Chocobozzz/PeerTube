@@ -1,9 +1,8 @@
+import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/primeng'
-import 'rxjs/add/operator/catch'
-import 'rxjs/add/operator/map'
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs'
 import { ResultList } from '../../../../../../shared'
 import { JobState } from '../../../../../../shared/models'
 import { Job } from '../../../../../../shared/models/server/job.model'
@@ -25,9 +24,11 @@ export class JobService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<Job>>(JobService.BASE_JOB_URL + '/' + state, { params })
-      .map(res => this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'updatedAt' ]))
-      .map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData))
-      .catch(err => this.restExtractor.handleError(err))
+               .pipe(
+                 map(res => this.restExtractor.convertResultListDateToHuman(res, [ 'createdAt', 'updatedAt' ])),
+                 map(res => this.restExtractor.applyToResultListData(res, this.prettyPrintData)),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
   }
 
   private prettyPrintData (obj: Job) {
