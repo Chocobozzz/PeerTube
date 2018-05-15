@@ -183,25 +183,21 @@ export class PeertubeChunkStore extends EventEmitter {
 
   private checkExpiration () {
     this.expirationDB.transaction('rw', this.expirationDB.databases, async () => {
-      try {
-        // Update our database expiration since we are alive
-        await this.expirationDB.databases.put({
-          name: this.databaseName,
-          expiration: new Date().getTime() + PeertubeChunkStore.CLEANER_EXPIRATION_MS
-        })
+      // Update our database expiration since we are alive
+      await this.expirationDB.databases.put({
+        name: this.databaseName,
+        expiration: new Date().getTime() + PeertubeChunkStore.CLEANER_EXPIRATION_MS
+      })
 
-        const now = new Date().getTime()
-        const databasesToDeleteInfo = await this.expirationDB.databases.where('expiration').below(now).toArray()
+      const now = new Date().getTime()
+      const databasesToDeleteInfo = await this.expirationDB.databases.where('expiration').below(now).toArray()
 
-        for (const databaseToDeleteInfo of databasesToDeleteInfo) {
-          await this.dropDatabase(databaseToDeleteInfo.name)
+      for (const databaseToDeleteInfo of databasesToDeleteInfo) {
+        await this.dropDatabase(databaseToDeleteInfo.name)
 
-          await this.expirationDB.databases.where({ name: databaseToDeleteInfo.name }).delete()
-        }
-      } catch (err) {
-        console.error('Cannot check expiration.', err)
+        await this.expirationDB.databases.where({ name: databaseToDeleteInfo.name }).delete()
       }
-    })
+    }).catch(err => console.error('Cannot check expiration.', err))
   }
 
   private dropDatabase (databaseName: string) {
@@ -209,6 +205,7 @@ export class PeertubeChunkStore extends EventEmitter {
 
     console.log('Deleting %s.', databaseName)
     return dbToDelete.delete()
+      .catch(err => console.error('Cannot delete %s.', databaseName))
   }
 
   private nextTick (cb, err, val?) {
