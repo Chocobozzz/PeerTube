@@ -30,7 +30,7 @@ const SORTABLE_COLUMNS = {
   JOBS: [ 'createdAt' ],
   VIDEO_ABUSES: [ 'id', 'createdAt' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
-  VIDEOS: [ 'name', 'duration', 'createdAt', 'views', 'likes' ],
+  VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'views', 'likes' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt' ],
   BLACKLISTS: [ 'id', 'name', 'duration', 'views', 'likes', 'dislikes', 'uuid', 'createdAt' ],
   FOLLOWERS: [ 'createdAt' ],

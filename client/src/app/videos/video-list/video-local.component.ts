@@ -17,7 +17,7 @@ import { VideoFilter } from '../../../../../shared/models/videos/video-query.typ
 export class VideoLocalComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Local videos'
   currentRoute = '/videos/local'
-  sort = '-createdAt' as VideoSortField
+  sort = '-publishedAt' as VideoSortField
   filter: VideoFilter = 'local'
 
   constructor (protected router: Router,

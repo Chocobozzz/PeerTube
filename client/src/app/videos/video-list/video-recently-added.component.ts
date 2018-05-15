@@ -16,7 +16,7 @@ import { VideoService } from '../../shared/video/video.service'
 export class VideoRecentlyAddedComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage = 'Recently added'
   currentRoute = '/videos/recently-added'
-  sort: VideoSortField = '-createdAt'
+  sort: VideoSortField = '-publishedAt'
 
   constructor (protected router: Router,
                protected route: ActivatedRoute,

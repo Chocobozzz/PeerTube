@@ -24,8 +24,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
     itemsPerPage: 10,
     totalItems: null
   }
-  sort: VideoSortField = '-createdAt'
-  defaultSort: VideoSortField = '-createdAt'
+  sort: VideoSortField = '-publishedAt'
+  defaultSort: VideoSortField = '-publishedAt'
   syndicationItems = []
 
   loadOnInit = true
