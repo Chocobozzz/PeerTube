@@ -17,7 +17,7 @@
     "webpack": "webpack",
     "tslint": "tslint",
     "ng": "ng",
-    "postinstall": "npm rebuild node-sass",
+    "postinstall": "npm rebuild node-sass && node angular-cli-patch.js",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer"
   },
   "license": "GPLv3",

@@ -11,6 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "deployUrl": "client/",
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -41,7 +42,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "serviceWorker": true,
+              "serviceWorker": false,
               "ngswConfigPath": "/src/ngsw-config.json",
               "fileReplacements": [
                 {
