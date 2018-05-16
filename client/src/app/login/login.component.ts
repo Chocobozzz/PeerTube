@@ -40,8 +40,7 @@ export class LoginComponent extends FormReactive implements OnInit {
                private serverService: ServerService,
                private redirectService: RedirectService,
                private notificationsService: NotificationsService,
-               private formBuilder: FormBuilder,
-               private router: Router) {
+               private formBuilder: FormBuilder) {
     super()
   }
 

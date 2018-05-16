@@ -85,8 +85,6 @@ export class RestExtractor {
       errorObj.body = err.error
     }
 
-    observableThrowError(errorObj)
-
-    return of(undefined)
+    return observableThrowError(errorObj)
   }
 }
