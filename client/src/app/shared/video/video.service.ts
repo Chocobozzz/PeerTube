@@ -48,7 +48,7 @@ export class VideoService {
                )
   }
 
-  viewVideo (uuid: string): Observable<VideoDetails> {
+  viewVideo (uuid: string): Observable<boolean> {
     return this.authHttp.post(this.getVideoViewUrl(uuid), {})
                .pipe(
                  map(this.restExtractor.extractDataBool),
@@ -92,7 +92,7 @@ export class VideoService {
     const req = new HttpRequest('POST', VideoService.BASE_VIDEO_URL + 'upload', video, { reportProgress: true })
 
     return this.authHttp
-               .request(req)
+               .request<{ video: { id: number, uuid: string} }>(req)
                .pipe(catchError(this.restExtractor.handleError))
   }
 
@@ -265,11 +265,10 @@ export class VideoService {
     return this.setVideoRate(id, 'none')
   }
 
-  getUserVideoRating (id: number): Observable<UserVideoRate> {
+  getUserVideoRating (id: number) {
     const url = UserService.BASE_USERS_URL + 'me/videos/' + id + '/rating'
 
-    return this.authHttp
-               .get(url)
+    return this.authHttp.get<UserVideoRate>(url)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 

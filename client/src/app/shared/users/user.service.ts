@@ -1,9 +1,10 @@
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { UserCreate, UserUpdateMe } from '../../../../../shared'
+import { UserCreate, UserUpdateMe, UserVideoQuota } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../rest'
+import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 
 @Injectable()
 export class UserService {
@@ -41,7 +42,7 @@ export class UserService {
   changeAvatar (avatarForm: FormData) {
     const url = UserService.BASE_USERS_URL + 'me/avatar/pick'
 
-    return this.authHttp.post(url, avatarForm)
+    return this.authHttp.post<{ avatar: Avatar }>(url, avatarForm)
                .pipe(catchError(this.restExtractor.handleError))
   }
 
@@ -56,7 +57,7 @@ export class UserService {
   getMyVideoQuotaUsed () {
     const url = UserService.BASE_USERS_URL + '/me/video-quota-used'
 
-    return this.authHttp.get(url)
+    return this.authHttp.get<UserVideoQuota>(url)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 

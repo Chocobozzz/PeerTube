@@ -22,7 +22,7 @@ export class FollowService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    return this.authHttp.get<ResultList<Account>>(FollowService.BASE_APPLICATION_URL + '/following', { params })
+    return this.authHttp.get<ResultList<AccountFollow>>(FollowService.BASE_APPLICATION_URL + '/following', { params })
                .pipe(
                  map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(res => this.restExtractor.handleError(res))

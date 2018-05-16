@@ -44,6 +44,7 @@ import { OAuthTokenModel } from '../../models/oauth/oauth-token'
 import { VideoModel } from '../../models/video/video'
 import { VideoSortField } from '../../../client/src/app/shared/video/sort-field.type'
 import { createReqFiles } from '../../helpers/express-utils'
+import { UserVideoQuota } from '../../../shared/models/users/user-video-quota.model'
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], IMAGE_MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.AVATARS_DIR })
 const loginRateLimiter = new RateLimit({
@@ -253,9 +254,10 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
   const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
   const videoQuotaUsed = await UserModel.getOriginalVideoFileTotalFromUser(user)
 
-  return res.json({
+  const data: UserVideoQuota = {
     videoQuotaUsed
-  })
+  }
+  return res.json(data)
 }
 
 function getUser (req: express.Request, res: express.Response, next: express.NextFunction) {
