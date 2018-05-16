@@ -45,6 +45,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
   abstract titlePage: string
 
   protected loadedPages: { [ id: number ]: Video[] } = {}
+  protected loadingPage: { [ id: number ]: boolean } = {}
   protected otherRouteParams = {}
 
   private resizeSubscription: Subscription
@@ -95,11 +96,15 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
 
   loadMoreVideos (page: number) {
     if (this.loadedPages[page] !== undefined) return
+    if (this.loadingPage[page] === true) return
 
+    this.loadingPage[page] = true
     const observable = this.getVideosObservable(page)
 
     observable.subscribe(
       ({ videos, totalVideos }) => {
+        this.loadingPage[page] = false
+
         // Paging is too high, return to the first one
         if (this.pagination.currentPage > 1 && totalVideos <= ((this.pagination.currentPage - 1) * this.pagination.itemsPerPage)) {
           this.pagination.currentPage = 1
@@ -117,7 +122,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy {
           setTimeout(() => this.infiniteScroller.initialize(), 500)
         }
       },
-      error => this.notificationsService.error('Error', error.message)
+      error => {
+        this.loadingPage[page] = false
+        this.notificationsService.error('Error', error.message)
+      }
     )
   }
 
