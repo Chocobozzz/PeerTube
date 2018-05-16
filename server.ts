@@ -95,7 +95,7 @@ if (isTestInstance()) {
       req.path.indexOf(STATIC_PATHS.WEBSEED) === -1
     ) {
       return (cors({
-        origin: 'http://localhost:3000',
+        origin: '*',
         exposedHeaders: 'Retry-After',
         credentials: true
       }))(req, res, next)

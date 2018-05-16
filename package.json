@@ -17,6 +17,7 @@
     "url": "git://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
+    "e2e": "scripty",
     "build": "SCRIPTY_PARALLEL=true scripty",
     "build:server": "scripty",
     "build:client": "scripty",
