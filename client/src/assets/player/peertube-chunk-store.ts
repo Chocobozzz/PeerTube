@@ -155,15 +155,15 @@ export class PeertubeChunkStore extends EventEmitter {
         this.cleanerInterval = null
       }
 
+      if (this.db) {
+        await this.db.close()
+
+        await this.dropDatabase(this.databaseName)
+      }
+
       if (this.expirationDB) {
         await this.expirationDB.close()
         this.expirationDB = null
-      }
-
-      if (this.db) {
-        console.log('Destroying IndexDB database %s.', this.databaseName)
-        await this.db.close()
-        await this.db.delete()
       }
 
       return cb()
@@ -181,31 +181,42 @@ export class PeertubeChunkStore extends EventEmitter {
     }, PeertubeChunkStore.CLEANER_INTERVAL_MS)
   }
 
-  private checkExpiration () {
-    this.expirationDB.transaction('rw', this.expirationDB.databases, async () => {
-      // Update our database expiration since we are alive
-      await this.expirationDB.databases.put({
-        name: this.databaseName,
-        expiration: new Date().getTime() + PeertubeChunkStore.CLEANER_EXPIRATION_MS
+  private async checkExpiration () {
+    let databasesToDeleteInfo: { name: string }[] = []
+
+    try {
+      await this.expirationDB.transaction('rw', this.expirationDB.databases, async () => {
+        // Update our database expiration since we are alive
+        await this.expirationDB.databases.put({
+          name: this.databaseName,
+          expiration: new Date().getTime() + PeertubeChunkStore.CLEANER_EXPIRATION_MS
+        })
+
+        const now = new Date().getTime()
+        databasesToDeleteInfo = await this.expirationDB.databases.where('expiration').below(now).toArray()
       })
+    } catch (err) {
+      console.error('Cannot update expiration of fetch expired databases.', err)
+    }
 
-      const now = new Date().getTime()
-      const databasesToDeleteInfo = await this.expirationDB.databases.where('expiration').below(now).toArray()
-
-      for (const databaseToDeleteInfo of databasesToDeleteInfo) {
-        await this.dropDatabase(databaseToDeleteInfo.name)
-
-        await this.expirationDB.databases.where({ name: databaseToDeleteInfo.name }).delete()
-      }
-    }).catch(err => console.error('Cannot check expiration.', err))
+    for (const databaseToDeleteInfo of databasesToDeleteInfo) {
+      await this.dropDatabase(databaseToDeleteInfo.name)
+    }
   }
 
-  private dropDatabase (databaseName: string) {
+  private async dropDatabase (databaseName: string) {
     const dbToDelete = new ChunkDatabase(databaseName)
+    console.log('Destroying IndexDB database %s.', databaseName)
 
-    console.log('Deleting %s.', databaseName)
-    return dbToDelete.delete()
-      .catch(err => console.error('Cannot delete %s.', databaseName))
+    try {
+      await dbToDelete.delete()
+
+      await this.expirationDB.transaction('rw', this.expirationDB.databases, () => {
+        return this.expirationDB.databases.where({ name: databaseName }).delete()
+      })
+    } catch (err) {
+      console.error('Cannot delete %s.', databaseName, err)
+    }
   }
 
   private nextTick (cb, err, val?) {

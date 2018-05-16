@@ -244,7 +244,7 @@ async function addVideo (req: express.Request, res: express.Response, videoPhysi
 
     video.VideoFiles = [ videoFile ]
 
-    if (videoInfo.tags) {
+    if (videoInfo.tags !== undefined) {
       const tagInstances = await TagModel.findOrCreateTags(videoInfo.tags, t)
 
       await video.$set('Tags', tagInstances, sequelizeOptions)
@@ -332,7 +332,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
 
       // Video tags update?
-      if (videoInfoToUpdate.tags) {
+      if (videoInfoToUpdate.tags !== undefined) {
         const tagInstances = await TagModel.findOrCreateTags(videoInfoToUpdate.tags, t)
 
         await videoInstanceUpdated.$set('Tags', tagInstances, sequelizeOptions)

@@ -2,7 +2,7 @@ import * as express from 'express'
 import 'express-validator'
 import { body, param, query } from 'express-validator/check'
 import { UserRight, VideoPrivacy } from '../../../shared'
-import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntOrNull, toStringOrNull } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntOrNull, toValueOrNull } from '../../helpers/custom-validators/misc'
 import {
   isVideoAbuseReasonValid,
   isVideoCategoryValid,
@@ -52,21 +52,22 @@ const videosAddValidator = [
     .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language')
     .optional()
-    .customSanitizer(toStringOrNull)
+    .customSanitizer(toValueOrNull)
     .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw')
     .toBoolean()
     .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
   body('description')
     .optional()
-    .customSanitizer(toStringOrNull)
+    .customSanitizer(toValueOrNull)
     .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('support')
     .optional()
-    .customSanitizer(toStringOrNull)
+    .customSanitizer(toValueOrNull)
     .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
   body('tags')
     .optional()
+    .customSanitizer(toValueOrNull)
     .custom(isVideoTagsValid).withMessage('Should have correct tags'),
   body('commentsEnabled')
     .toBoolean()
@@ -142,7 +143,7 @@ const videosUpdateValidator = [
     .custom(isVideoLicenceValid).withMessage('Should have a valid licence'),
   body('language')
     .optional()
-    .customSanitizer(toStringOrNull)
+    .customSanitizer(toValueOrNull)
     .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
   body('nsfw')
     .optional()
@@ -154,14 +155,15 @@ const videosUpdateValidator = [
     .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
   body('description')
     .optional()
-    .customSanitizer(toStringOrNull)
+    .customSanitizer(toValueOrNull)
     .custom(isVideoDescriptionValid).withMessage('Should have a valid description'),
   body('support')
     .optional()
-    .customSanitizer(toStringOrNull)
+    .customSanitizer(toValueOrNull)
     .custom(isVideoSupportValid).withMessage('Should have a valid support text'),
   body('tags')
     .optional()
+    .customSanitizer(toValueOrNull)
     .custom(isVideoTagsValid).withMessage('Should have correct tags'),
   body('commentsEnabled')
     .optional()

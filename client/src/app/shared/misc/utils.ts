@@ -66,6 +66,11 @@ function objectToFormData (obj: any, form?: FormData, namespace?: string) {
 
     if (obj[key] === undefined) continue
 
+    if (Array.isArray(obj[key]) && obj[key].length === 0) {
+      fd.append(key, null)
+      continue
+    }
+
     if (obj[key] !== null && typeof obj[ key ] === 'object' && !(obj[ key ] instanceof File)) {
       objectToFormData(obj[ key ], fd, key)
     } else {

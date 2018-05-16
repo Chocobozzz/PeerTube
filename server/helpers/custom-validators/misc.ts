@@ -35,7 +35,7 @@ function toIntOrNull (value: string) {
   return validator.toInt(value)
 }
 
-function toStringOrNull (value: string) {
+function toValueOrNull (value: string) {
   if (value === 'null') return null
 
   return value
@@ -73,7 +73,7 @@ export {
   isUUIDValid,
   isIdOrUUIDValid,
   isDateValid,
-  toStringOrNull,
+  toValueOrNull,
   isBooleanValid,
   toIntOrNull,
   isFileValid

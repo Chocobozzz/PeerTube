@@ -37,6 +37,8 @@ export class TagModel extends Model<TagModel> {
   Videos: VideoModel[]
 
   static findOrCreateTags (tags: string[], transaction: Transaction) {
+    if (tags === null) return []
+
     const tasks: Bluebird<TagModel>[] = []
     tags.forEach(tag => {
       const query = {

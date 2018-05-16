@@ -57,9 +57,11 @@ function isVideoTagValid (tag: string) {
 }
 
 function isVideoTagsValid (tags: string[]) {
-  return isArray(tags) &&
-         validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
-         tags.every(tag => isVideoTagValid(tag))
+  return tags === null || (
+    isArray(tags) &&
+    validator.isInt(tags.length.toString(), VIDEOS_CONSTRAINTS_FIELDS.TAGS) &&
+    tags.every(tag => isVideoTagValid(tag))
+  )
 }
 
 function isVideoAbuseReasonValid (value: string) {

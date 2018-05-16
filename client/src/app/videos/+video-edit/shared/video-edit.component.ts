@@ -80,7 +80,7 @@ export class VideoEditComponent implements OnInit {
     this.form.addControl('licence', new FormControl('', VIDEO_LICENCE.VALIDATORS))
     this.form.addControl('language', new FormControl('', VIDEO_LANGUAGE.VALIDATORS))
     this.form.addControl('description', new FormControl('', VIDEO_DESCRIPTION.VALIDATORS))
-    this.form.addControl('tags', new FormControl(''))
+    this.form.addControl('tags', new FormControl([]))
     this.form.addControl('thumbnailfile', new FormControl(''))
     this.form.addControl('previewfile', new FormControl(''))
     this.form.addControl('support', new FormControl('', VIDEO_SUPPORT.VALIDATORS))
