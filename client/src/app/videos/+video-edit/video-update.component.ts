@@ -11,7 +11,7 @@ import { FormReactive } from '../../shared'
 import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
-import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
+import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 
 @Component({
   selector: 'my-videos-update',
@@ -36,7 +36,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private serverService: ServerService,
     private videoService: VideoService,
     private authService: AuthService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private videoChannelService: VideoChannelService
   ) {
     super()
   }
@@ -59,14 +60,21 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
             return this.videoService
                        .loadCompleteDescription(video.descriptionPath)
                        .pipe(map(description => Object.assign(video, { description })))
+          }),
+          switchMap(video => {
+            return this.videoChannelService
+                       .listAccountVideoChannels(video.account.id)
+                       .pipe(
+                         map(result => result.data),
+                         map(videoChannels => videoChannels.map(c => ({ id: c.id, label: c.displayName }))),
+                         map(videoChannels => ({ video, videoChannels }))
+                       )
           })
         )
         .subscribe(
-          video => {
+          ({ video, videoChannels }) => {
             this.video = new VideoEdit(video)
-
-            populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
-              .catch(err => console.error(err))
+            this.userVideoChannels = videoChannels
 
             // We cannot set private a video that was not private
             if (video.privacy.id !== VideoPrivacy.PRIVATE) {

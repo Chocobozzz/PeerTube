@@ -341,7 +341,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
 
       // Video channel update?
       if (res.locals.videoChannel && videoInstanceUpdated.channelId !== res.locals.videoChannel.id) {
-        await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel)
+        await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel, { transaction: t })
         videoInstance.VideoChannel = res.locals.videoChannel
 
         if (wasPrivateVideo === false) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)

@@ -3,7 +3,7 @@ import 'express-validator'
 import { values } from 'lodash'
 import 'multer'
 import * as validator from 'validator'
-import { VideoRateType } from '../../../shared'
+import { UserRight, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
   VIDEO_CATEGORIES,
@@ -15,6 +15,7 @@ import {
 import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isFileValid } from './misc'
 import { VideoChannelModel } from '../../models/video/video-channel'
+import { UserModel } from '../../models/account/user'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
@@ -127,8 +128,22 @@ async function isVideoExist (id: string, res: Response) {
   return true
 }
 
-async function isVideoChannelOfAccountExist (channelId: number, accountId: number, res: Response) {
-  const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, accountId)
+async function isVideoChannelOfAccountExist (channelId: number, user: UserModel, res: Response) {
+  if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) === true) {
+    const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
+    if (!videoChannel) {
+      res.status(400)
+         .json({ error: 'Unknown video video channel on this instance.' })
+         .end()
+
+      return false
+    }
+
+    res.locals.videoChannel = videoChannel
+    return true
+  }
+
+  const videoChannel = await VideoChannelModel.loadByIdAndAccount(channelId, user.Account.id)
   if (!videoChannel) {
     res.status(400)
        .json({ error: 'Unknown video video channel for this account.' })

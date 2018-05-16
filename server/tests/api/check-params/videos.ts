@@ -280,7 +280,7 @@ describe('Test videos API validator', function () {
       const fields = immutableAssign(baseCorrectParams, { channelId: customChannelId })
       const attaches = baseCorrectAttaches
 
-      await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
+      await makeUploadRequest({ url: server.url, path: path + '/upload', token: userAccessToken, fields, attaches })
     })
 
     it('Should fail with too many tags', async function () {

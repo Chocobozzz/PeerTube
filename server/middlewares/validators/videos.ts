@@ -90,7 +90,7 @@ const videosAddValidator = [
     const videoFile: Express.Multer.File = req.files['videofile'][0]
     const user = res.locals.oauth.token.User
 
-    if (!await isVideoChannelOfAccountExist(req.body.channelId, user.Account.id, res)) return
+    if (!await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return
 
     const isAble = await user.isAbleToUploadVideo(videoFile)
     if (isAble === false) {
@@ -193,7 +193,7 @@ const videosUpdateValidator = [
         .end()
     }
 
-    if (req.body.channelId && !await isVideoChannelOfAccountExist(req.body.channelId, user.Account.id, res)) return
+    if (req.body.channelId && !await isVideoChannelOfAccountExist(req.body.channelId, user, res)) return
 
     return next()
   }
@@ -332,7 +332,7 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
   // Retrieve the user who did the request
   if (video.isOwned() === false) {
     res.status(403)
-              .json({ error: 'Cannot remove video of another server, blacklist it' })
+              .json({ error: 'Cannot manage a video of another server.' })
               .end()
     return false
   }
@@ -343,7 +343,7 @@ function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: Use
   const account = video.VideoChannel.Account
   if (user.hasRight(right) === false && account.userId !== user.id) {
     res.status(403)
-              .json({ error: 'Cannot remove video of another user' })
+              .json({ error: 'Cannot manage a video of another user.' })
               .end()
     return false
   }
