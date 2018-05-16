@@ -23,6 +23,10 @@
       "label": "Cloud9",
       "proxy": "https"
     },
+    "8090": {
+      "label": "Theia",
+      "proxy": "https"
+    },
     "9000": {
       "label": "PeerTube API",
       "proxy": "https"
