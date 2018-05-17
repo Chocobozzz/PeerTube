@@ -8,16 +8,17 @@ exports.config = {
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
-  multiCapabilities: [
-    {
-      'browserName': 'firefox',
-      'moz:firefoxOptions': {
-        binary: 'firefox-developer'
-      }
-    }
-  ],
+
+  seleniumAddress: 'http://hub-cloud.browserstack.com/wd/hub',
+  capabilities: {
+    'browserstack.user': process.env.BROWSERSTACK_USER,
+    'browserstack.key': process.env.BROWSERSTACK_KEY,
+    'browserName': 'chrome',
+    'browserstack.local': true,
+    'project': 'PeerTube'
+  },
+
   maxSessions: 1,
-  directConnect: true,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
   jasmineNodeOpts: {

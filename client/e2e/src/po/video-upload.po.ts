@@ -1,5 +1,6 @@
 import { browser, element, by } from 'protractor'
 import { join } from 'path'
+import { FileDetector } from 'selenium-webdriver/remote'
 
 export class VideoUploadPage {
   navigateTo () {
@@ -7,6 +8,8 @@ export class VideoUploadPage {
   }
 
   async uploadVideo () {
+    browser.setFileDetector(new FileDetector())
+
     const fileToUpload = join(__dirname, '../../fixtures/video.mp4')
 
     await element(by.css('.upload-video-container input[type=file]')).sendKeys(fileToUpload)
