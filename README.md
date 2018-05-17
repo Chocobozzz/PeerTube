@@ -24,6 +24,8 @@ donating to them](https://soutenir.framasoft.org/en/).**
   <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client&type=dev">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
   </a>
+  
+  <img src="http://lutim.cpy.re/js3rkfIc.png" alt="Browser Stack" />
 </p>
 
 <p align="center">

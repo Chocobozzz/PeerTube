@@ -1,4 +1,4 @@
-import { AppPage } from './app.po'
+import { AppPage } from './po/app.po'
 
 describe('PeerTube app', () => {
   let page: AppPage
@@ -7,7 +7,7 @@ describe('PeerTube app', () => {
     page = new AppPage()
   })
 
-  it('should display the app title', () => {
+  it('Should display the app title', () => {
     page.navigateTo()
     expect(page.getHeaderTitle()).toEqual('PeerTube')
   })

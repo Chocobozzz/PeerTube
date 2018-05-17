@@ -8,9 +8,15 @@ exports.config = {
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
-  capabilities: {
-    'browserName': 'chrome'
-  },
+  multiCapabilities: [
+    {
+      'browserName': 'firefox',
+      'moz:firefoxOptions': {
+        binary: 'firefox-developer'
+      }
+    }
+  ],
+  maxSessions: 1,
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
