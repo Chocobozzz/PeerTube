@@ -11,6 +11,7 @@ import { environment } from '../../../environments/environment'
 import { RestExtractor } from '../../shared/rest'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
+import { objectToUrlEncoded } from '@app/shared/misc/utils'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -113,17 +114,18 @@ export class AuthService {
 
   login (username: string, password: string) {
     // Form url encoded
-    const body = new URLSearchParams()
-    body.set('client_id', this.clientId)
-    body.set('client_secret', this.clientSecret)
-    body.set('response_type', 'code')
-    body.set('grant_type', 'password')
-    body.set('scope', 'upload')
-    body.set('username', username)
-    body.set('password', password)
+    const body = {
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+      response_type: 'code',
+      grant_type: 'password',
+      scope: 'upload',
+      username,
+      password
+  }
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-    return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, body.toString(), { headers })
+    return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, objectToUrlEncoded(body), { headers })
                .pipe(
                  map(res => Object.assign(res, { username })),
                  mergeMap(res => this.mergeUserInformation(res)),

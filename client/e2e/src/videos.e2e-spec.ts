@@ -34,15 +34,13 @@ describe('Videos workflow', () => {
   })
 
   it('Should go on video watch page', async () => {
-    await videoWatchPage.clickOnFirstVideoOfList()
+    await videoWatchPage.clickOnVideo(videoName)
 
     return videoWatchPage.waitWatchVideoName(videoName)
   })
 
   it('Should play the video', async () => {
-    await browser.sleep(4000)
-
-    await videoWatchPage.pauseVideo()
+    await videoWatchPage.pauseVideo(2500)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 })

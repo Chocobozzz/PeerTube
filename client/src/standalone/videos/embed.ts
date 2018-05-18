@@ -1,5 +1,8 @@
 import './embed.scss'
 
+// For google bot that uses Chrome 41 and does not understand fetch
+import 'whatwg-fetch'
+
 import * as videojs from 'video.js'
 
 import { VideoDetails } from '../../../../shared'

@@ -10,13 +10,41 @@ exports.config = {
   ],
 
   seleniumAddress: 'http://hub-cloud.browserstack.com/wd/hub',
-  capabilities: {
+  commonCapabilities: {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_KEY,
-    'browserName': 'chrome',
     'browserstack.local': true,
     'project': 'PeerTube'
   },
+
+  multiCapabilities: [
+    {
+      browserName: 'Chrome',
+      version: '66'
+    },
+    {
+      browserName: 'Chrome',
+      version: '66',
+      os: 'android',
+
+    },
+    {
+      browserName: 'Safari',
+      version: '11.1'
+    },
+    {
+      browserName: 'Firefox',
+      version: '52' // ESR
+    },
+    {
+      browserName: 'Firefox',
+      version: '60'
+    },
+    {
+      browserName: 'Edge',
+      version: '17'
+    }
+  ],
 
   maxSessions: 1,
   baseUrl: 'http://localhost:4200/',
@@ -34,3 +62,7 @@ exports.config = {
     jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}))
   }
 }
+
+exports.config.multiCapabilities.forEach(function (caps) {
+  for (var i in exports.config.commonCapabilities) caps[i] = caps[i] || exports.config.commonCapabilities[i]
+})

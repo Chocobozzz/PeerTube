@@ -24,15 +24,19 @@ export class VideoWatchPage {
       .then(seconds => parseInt(seconds, 10))
   }
 
-  async pauseVideo () {
-    const el = element(by.css('video'))
+  async pauseVideo (pauseAfterMs: number) {
+    await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))
+
+    const el = element(by.css('div.video-js'))
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(el))
+
+    await browser.sleep(pauseAfterMs)
 
     return el.click()
   }
 
-  async clickOnFirstVideoOfList () {
-    const video = element(by.css('.videos .video-miniature:first-child .video-thumbnail'))
+  async clickOnVideo (videoName: string) {
+    const video = element(by.css('.videos .video-miniature .video-thumbnail[title="' + videoName + '"]'))
 
     await video.click()
 

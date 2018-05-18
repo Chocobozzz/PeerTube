@@ -55,6 +55,15 @@ function immutableAssign <A, B> (target: A, source: B) {
   return Object.assign({}, target, source)
 }
 
+function objectToUrlEncoded (obj: any) {
+  const str: string[] = []
+  for (const key of Object.keys(obj)) {
+    str.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]))
+  }
+
+  return str.join('&')
+}
+
 // Thanks: https://gist.github.com/ghinda/8442a57f22099bdb2e34
 function objectToFormData (obj: any, form?: FormData, namespace?: string) {
   let fd = form || new FormData()
@@ -100,6 +109,7 @@ function isInMobileView () {
 }
 
 export {
+  objectToUrlEncoded,
   getParameterByName,
   populateAsyncUserVideoChannels,
   getAbsoluteAPIUrl,
