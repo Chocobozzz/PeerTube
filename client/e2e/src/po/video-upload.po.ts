@@ -1,6 +1,6 @@
-import { browser, element, by } from 'protractor'
-import { join } from 'path'
+import { browser, by, element } from 'protractor'
 import { FileDetector } from 'selenium-webdriver/remote'
+import { join } from 'path'
 
 export class VideoUploadPage {
   navigateTo () {

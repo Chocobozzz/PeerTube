@@ -4,7 +4,7 @@
 const {SpecReporter} = require('jasmine-spec-reporter')
 
 exports.config = {
-  allScriptsTimeout: 11000,
+  allScriptsTimeout: 25000,
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
@@ -23,12 +23,6 @@ exports.config = {
       version: '66'
     },
     {
-      browserName: 'Chrome',
-      version: '66',
-      os: 'android',
-
-    },
-    {
       browserName: 'Safari',
       version: '11.1'
     },
@@ -42,16 +36,35 @@ exports.config = {
     },
     {
       browserName: 'Edge',
-      version: '17'
-    }
+      version: '16'
+    },
+    {
+      browserName: 'Chrome',
+      device: 'Google Nexus 6',
+      realMobile: 'true',
+      os_version: '5.0'
+    },
+    // {
+    //   browserName: 'Safari',
+    //   device: 'iPhone 6s',
+    //   realMobile: 'true',
+    //   os_version: '9.0'
+    // },
+    // {
+    //   browserName: 'Safari',
+    //   device: 'iPhone SE',
+    //   realMobile: 'true',
+    //   os_version: '11.2'
+    // }
   ],
 
   maxSessions: 1,
-  baseUrl: 'http://localhost:4200/',
+  // BrowserStack compatible ports: https://www.browserstack.com/question/664
+  baseUrl: 'http://localhost:3333/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 30000,
+    defaultTimeoutInterval: 45000,
     print: function () {}
   },
 

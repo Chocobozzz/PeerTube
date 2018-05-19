@@ -10,6 +10,6 @@ npm run clean:server:test
 )
 
 concurrently -k -s first \
-    "cd client && npm run ng -- e2e" \
+    "cd client && npm run ng -- e2e --port 3333" \
     "NODE_ENV=test NODE_APP_INSTANCE=1 NODE_CONFIG='{ \"log\": { \"level\": \"warning\" } }' npm start"
 
