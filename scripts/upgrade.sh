@@ -2,7 +2,24 @@
 
 set -eu
 
-PEERTUBE_PATH=/var/www/peertube/
+PEERTUBE_PATH=${1:-/var/www/peertube/}
+
+if [ ! -e "$PEERTUBE_PATH" ]; then
+  echo "Error - path \"$PEERTUBE_PATH\" wasn't found"
+  echo ""
+  echo "If peertube was installed in another path, you can specify it with"
+  echo "    ./upgrade.sh <PATH>"
+  exit 1
+fi
+
+if [ ! -e "$PEERTUBE_PATH/versions" -o ! -e "$PEERTUBE_PATH/config/production.yaml" ]; then
+  echo "Error - Couldn't find peertube installation in \"$PEERTUBE_PATH\""
+  echo ""
+  echo "If peertube was installed in another path, you can specify it with"
+  echo "    ./upgrade.sh <PATH>"
+  exit 1
+fi
+
 
 # Backup database
 SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak" 
