@@ -22,7 +22,7 @@ function checkMissedConfig () {
     'webserver.https', 'webserver.hostname', 'webserver.port',
     'trust_proxy',
     'database.hostname', 'database.port', 'database.suffix', 'database.username', 'database.password',
-    'redis.hostname', 'redis.port', 'redis.auth',
+    'redis.hostname', 'redis.port', 'redis.auth', 'redis.db',
     'smtp.hostname', 'smtp.port', 'smtp.username', 'smtp.password', 'smtp.tls', 'smtp.from_address',
     'storage.avatars', 'storage.videos', 'storage.logs', 'storage.previews', 'storage.thumbnails', 'storage.torrents', 'storage.cache',
     'log.level',

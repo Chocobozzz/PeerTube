@@ -111,7 +111,8 @@ const CONFIG = {
   REDIS: {
     HOSTNAME: config.get<string>('redis.hostname'),
     PORT: config.get<number>('redis.port'),
-    AUTH: config.get<string>('redis.auth')
+    AUTH: config.get<string>('redis.auth'),
+    DB: config.get<number>('redis.db')
   },
   SMTP: {
     HOSTNAME: config.get<string>('smtp.hostname'),
