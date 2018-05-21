@@ -26,7 +26,8 @@ class Redis {
 
     this.client = createClient({
       host: CONFIG.REDIS.HOSTNAME,
-      port: CONFIG.REDIS.PORT
+      port: CONFIG.REDIS.PORT,
+      db: CONFIG.REDIS.DB
     })
 
     this.client.on('error', err => {

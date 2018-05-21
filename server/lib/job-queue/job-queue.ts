@@ -56,7 +56,8 @@ class JobQueue {
       redis: {
         host: CONFIG.REDIS.HOSTNAME,
         port: CONFIG.REDIS.PORT,
-        auth: CONFIG.REDIS.AUTH
+        auth: CONFIG.REDIS.AUTH,
+        db: CONFIG.REDIS.DB
       }
     })
 
