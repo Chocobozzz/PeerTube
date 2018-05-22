@@ -5,16 +5,14 @@ const {SpecReporter} = require('jasmine-spec-reporter')
 
 exports.config = {
   allScriptsTimeout: 25000,
-  specs: [
-    './src/**/*.e2e-spec.ts'
-  ],
+  specs: ['./src/**/*.e2e-spec.ts'],
 
   seleniumAddress: 'http://hub-cloud.browserstack.com/wd/hub',
   commonCapabilities: {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_KEY,
     'browserstack.local': true,
-    'project': 'PeerTube'
+    projec: 'PeerTube'
   },
 
   multiCapabilities: [
@@ -24,7 +22,8 @@ exports.config = {
     },
     {
       browserName: 'Safari',
-      version: '11.1'
+      version: '11.1',
+      resolution: '1920x1080'
     },
     {
       browserName: 'Firefox',
@@ -44,35 +43,29 @@ exports.config = {
       realMobile: 'true',
       os_version: '5.0'
     },
-    // {
-    //   browserName: 'Safari',
-    //   device: 'iPhone 6s',
-    //   realMobile: 'true',
-    //   os_version: '9.0'
-    // },
-    // {
-    //   browserName: 'Safari',
-    //   device: 'iPhone SE',
-    //   realMobile: 'true',
-    //   os_version: '11.2'
-    // }
+    {
+      browserName: 'Safari',
+      device: 'iPhone SE',
+      realMobile: 'true',
+      os_version: '11.2'
+    }
   ],
 
-  maxSessions: 1,
+  // maxSessions: 1,
   // BrowserStack compatible ports: https://www.browserstack.com/question/664
   baseUrl: 'http://localhost:3333/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
     defaultTimeoutInterval: 45000,
-    print: function () {}
+    print: function() {}
   },
 
-  onPrepare () {
+  onPrepare() {
     require('ts-node').register({
       project: require('path').join(__dirname, './tsconfig.e2e.json')
     })
-    jasmine.getEnv().addReporter(new SpecReporter({spec: {displayStacktrace: true}}))
+    jasmine.getEnv().addReporter(new SpecReporter({   spec:  {  displayStacktrace: true    }  }))
   }
 }
 

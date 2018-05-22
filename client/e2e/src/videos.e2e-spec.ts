@@ -10,6 +10,7 @@ describe('Videos workflow', () => {
   const videoName = new Date().getTime() + ' video'
   let isMobileDevice = false
   let isIphoneDevice = false
+  let isSafari = false
 
   beforeEach(async () => {
     browser.waitForAngularEnabled(false)
@@ -21,6 +22,7 @@ describe('Videos workflow', () => {
     const caps = await browser.getCapabilities()
     isMobileDevice = caps.get('realMobile') === 'true' || caps.get('realMobile') === true
     isIphoneDevice = caps.get('device') === 'iphone'
+    isSafari = caps.get('browserName') && caps.get('browserName').toLowerCase() === 'safari'
   })
 
   it('Should log in', () => {
@@ -38,14 +40,14 @@ describe('Videos workflow', () => {
       return
     }
 
-    pageUploadPage.navigateTo()
+    await pageUploadPage.navigateTo()
 
     await pageUploadPage.uploadVideo()
     return pageUploadPage.validSecondUploadStep(videoName)
   })
 
   it('Should list the video', async () => {
-    await videoWatchPage.goOnVideosList(isIphoneDevice)
+    await videoWatchPage.goOnVideosList(isIphoneDevice, isSafari)
 
     if (isMobileDevice) {
       console.log('Skipping because we are on a real device and BrowserStack does not support file upload.')
@@ -59,16 +61,21 @@ describe('Videos workflow', () => {
   it('Should go on video watch page', async () => {
     let videoNameToExcept = videoName
 
-    if (isMobileDevice && isIphoneDevice) videoNameToExcept = 'PeerTube_Mobile.v.1'
-
-    if (isMobileDevice && isIphoneDevice === false) videoNameToExcept = await videoWatchPage.clickOnFirstVideo()
+    if (isMobileDevice) videoNameToExcept = await videoWatchPage.clickOnFirstVideo()
     else await videoWatchPage.clickOnVideo(videoName)
 
     return videoWatchPage.waitWatchVideoName(videoNameToExcept)
   })
 
   it('Should play the video', async () => {
-    await videoWatchPage.pauseVideo(7000, isMobileDevice, isIphoneDevice)
+    await videoWatchPage.pauseVideo(7000, !isMobileDevice, isSafari)
+    expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
+  })
+
+  it('Should watch the associated embed video', async () => {
+    await videoWatchPage.goOnAssociatedEmbed()
+
+    await videoWatchPage.pauseVideo(7000, false, isSafari)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 })

@@ -60,6 +60,10 @@ function saveAverageBandwidth (value: number) {
   return setLocalStorage('average-bandwidth', value.toString())
 }
 
+function isMobile () {
+  return /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+}
+
 export {
   toTitleCase,
   getStoredVolume,
@@ -68,6 +72,7 @@ export {
   getAverageBandwidth,
   saveMuteInStore,
   getStoredMute,
+  isMobile,
   bytes
 }
 

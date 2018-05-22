@@ -7,6 +7,7 @@ npm run clean:server:test
 (
     cd client
     npm run webdriver-manager update
+    npm run webpack -- --config webpack/webpack.video-embed.js --mode development
 )
 
 concurrently -k -s first \

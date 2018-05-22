@@ -89,7 +89,7 @@
     "jsonld": "^1.0.1",
     "jsonld-signatures": "https://github.com/Chocobozzz/jsonld-signatures#rsa2017",
     "kue": "^0.11.6",
-    "lodash": "^4.11.1",
+    "lodash": "^4.17.10",
     "magnet-uri": "^5.1.4",
     "mkdirp": "^0.5.1",
     "morgan": "^1.5.3",
