@@ -89,6 +89,7 @@
     "raw-loader": "^0.5.1",
     "resolve-url-loader": "^2.0.0",
     "rxjs": "^6.1.0",
+    "rxjs-compat": "^6.1.0",
     "sanitize-html": "^1.16.3",
     "sass-loader": "^7.0.1",
     "sass-resources-loader": "^1.2.1",
@@ -105,8 +106,5 @@
     "webtorrent": "^0.99.4",
     "whatwg-fetch": "^2.0.4",
     "zone.js": "~0.8.5"
-  },
-  "dependencies": {
-    "rxjs-compat": "^6.0.0-rc.0"
   }
 }

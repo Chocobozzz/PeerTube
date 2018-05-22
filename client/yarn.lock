@@ -8325,9 +8325,9 @@ rust-result@^1.0.0:
   dependencies:
     individual "^2.0.0"
 
-rxjs-compat@^6.0.0-rc.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/rxjs-compat/-/rxjs-compat-6.2.0.tgz#2eb49cc6ac20d0d7057c6887d1895beaab0966f9"
+rxjs-compat@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/rxjs-compat/-/rxjs-compat-6.1.0.tgz#935059623ee4c167728c9dd03ee6e4468cc5b583"
 
 rxjs@^5.4.2, rxjs@^5.5.2:
   version "5.5.10"
