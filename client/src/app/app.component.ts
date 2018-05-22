@@ -112,11 +112,4 @@ export class AppComponent implements OnInit {
     window.scrollTo(0, 0)
     this.isMenuDisplayed = !this.isMenuDisplayed
   }
-
-  getMainColClasses () {
-    // Take all width is the menu is not displayed
-    if (this.isMenuDisplayed === false) return [ 'expanded' ]
-
-    return []
-  }
 }

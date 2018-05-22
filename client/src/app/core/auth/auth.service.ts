@@ -122,7 +122,7 @@ export class AuthService {
       scope: 'upload',
       username,
       password
-  }
+    }
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, objectToUrlEncoded(body), { headers })

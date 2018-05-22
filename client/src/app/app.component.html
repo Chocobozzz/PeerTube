@@ -22,7 +22,7 @@
         <my-menu></my-menu>
     </div>
 
-    <div class="main-col container-fluid" [ngClass]="getMainColClasses()">
+    <div class="main-col container-fluid" [ngClass]="{ expanded: isMenuDisplayed === false }">
 
       <div class="main-row">
         <router-outlet></router-outlet>
