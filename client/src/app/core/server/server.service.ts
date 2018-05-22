@@ -34,7 +34,8 @@ export class ServerService {
     },
     serverVersion: 'Unknown',
     signup: {
-      allowed: false
+      allowed: false,
+      allowedForCurrentIP: false
     },
     transcoding: {
       enabledResolutions: []

@@ -60,6 +60,10 @@ admin:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
+  filters: 
+    cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
+      whitelist: []
+      blacklist: []
 
 user:
   # Default value of maximum video BYTES the user can upload (does not take into account transcoded files).

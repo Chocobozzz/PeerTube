@@ -15,7 +15,8 @@ export interface ServerConfig {
   }
 
   signup: {
-    allowed: boolean
+    allowed: boolean,
+    allowedForCurrentIP: boolean
   }
 
   transcoding: {
