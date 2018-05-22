@@ -4,7 +4,7 @@ import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { unlinkPromise, writeFilePromise } from '../../helpers/core-utils'
-import { isSignupAllowed } from '../../helpers/utils'
+import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/utils'
 import { CONFIG, CONSTRAINTS_FIELDS, reloadConfig } from '../../initializers'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
@@ -36,6 +36,7 @@ configRouter.delete('/custom',
 
 async function getConfig (req: express.Request, res: express.Response, next: express.NextFunction) {
   const allowed = await isSignupAllowed()
+  const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
 
   const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
    .filter(key => CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
@@ -54,7 +55,8 @@ async function getConfig (req: express.Request, res: express.Response, next: exp
     },
     serverVersion: packageJSON.version,
     signup: {
-      allowed
+      allowed,
+      allowedForCurrentIP
     },
     transcoding: {
       enabledResolutions

@@ -52,7 +52,8 @@ export class MenuComponent implements OnInit {
   }
 
   isRegistrationAllowed () {
-    return this.serverService.getConfig().signup.allowed
+    return this.serverService.getConfig().signup.allowed &&
+           this.serverService.getConfig().signup.allowedForCurrentIP
   }
 
   getFirstAdminRightAvailable () {

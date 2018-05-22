@@ -149,7 +149,13 @@ const CONFIG = {
   },
   SIGNUP: {
     get ENABLED () { return config.get<boolean>('signup.enabled') },
-    get LIMIT () { return config.get<number>('signup.limit') }
+    get LIMIT () { return config.get<number>('signup.limit') },
+    FILTERS: {
+      CIDR: {
+        get WHITELIST () { return config.get<string[]>('signup.filters.cidr.whitelist') },
+        get BLACKLIST () { return config.get<string[]>('signup.filters.cidr.blacklist') }
+      }
+    }
   },
   USER: {
     get VIDEO_QUOTA () { return config.get<number>('user.video_quota') }

@@ -16,8 +16,8 @@ import {
 } from '../../helpers/custom-validators/users'
 import { isVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
-import { isSignupAllowed } from '../../helpers/utils'
-import { CONSTRAINTS_FIELDS } from '../../initializers'
+import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/utils'
+import { CONFIG, CONSTRAINTS_FIELDS } from '../../initializers'
 import { Redis } from '../../lib/redis'
 import { UserModel } from '../../models/account/user'
 import { areValidationErrors } from './utils'
@@ -177,6 +177,20 @@ const ensureUserRegistrationAllowed = [
   }
 ]
 
+const ensureUserRegistrationAllowedForIP = [
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    const allowed = isSignupAllowedForCurrentIP(req.ip)
+
+    if (allowed === false) {
+      return res.status(403)
+                .send({ error: 'You are not on a network authorized for registration.' })
+                .end()
+    }
+
+    return next()
+  }
+]
+
 const usersAskResetPasswordValidator = [
   body('email').isEmail().not().isEmpty().withMessage('Should have a valid email'),
 
@@ -230,6 +244,7 @@ export {
   usersUpdateMeValidator,
   usersVideoRatingValidator,
   ensureUserRegistrationAllowed,
+  ensureUserRegistrationAllowedForIP,
   usersGetValidator,
   usersUpdateMyAvatarValidator,
   usersAskResetPasswordValidator,

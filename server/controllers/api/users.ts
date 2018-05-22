@@ -19,6 +19,7 @@ import {
   authenticate,
   ensureUserHasRight,
   ensureUserRegistrationAllowed,
+  ensureUserRegistrationAllowedForIP,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
@@ -106,6 +107,7 @@ usersRouter.post('/',
 
 usersRouter.post('/register',
   asyncMiddleware(ensureUserRegistrationAllowed),
+  ensureUserRegistrationAllowedForIP,
   asyncMiddleware(usersRegisterValidator),
   asyncMiddleware(registerUserRetryWrapper)
 )
