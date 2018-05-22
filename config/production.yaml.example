@@ -107,10 +107,10 @@ instance:
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
     css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
-  # Robot.txt rules. To allow robots to crawl your instance and allow indexation of your site, remove the '/'
+  # Robot.txt rules. To disallow robots to crawl your instance and disallow indexation of your site, add '/' to "Disallow:'
   robots: |
     User-agent: *
-    Disallow: /
+    Disallow: ''
 
 services:
   # Cards configuration to format video in Twitter
