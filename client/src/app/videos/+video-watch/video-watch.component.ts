@@ -340,6 +340,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const playerElementWrapper = this.elementRef.nativeElement.querySelector('#video-element-wrapper')
     this.playerElement = document.createElement('video')
     this.playerElement.className = 'video-js vjs-peertube-skin'
+    this.playerElement.setAttribute('playsinline', 'true')
     playerElementWrapper.appendChild(this.playerElement)
 
     const videojsOptions = getVideojsOptions({
