@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.0.0-beta.6
+
+### Features
+
+ * Handle concurrent requests in cache middleware
+ * Add ability to enable registration by IP
+
+### Bug fixes
+
+ * Fix insane SQL request when loading all video attributes
+
+
 ## v1.0.0-beta.5
 
 ### BREAKING CHANGES
