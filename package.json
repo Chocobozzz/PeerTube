@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "async": "^2.0.0",
+    "async-lock": "^1.1.2",
     "async-lru": "^1.1.1",
     "bcrypt": "^2.0.1",
     "bittorrent-tracker": "^9.0.0",
@@ -120,6 +121,7 @@
   },
   "devDependencies": {
     "@types/async": "^2.0.40",
+    "@types/async-lock": "^1.1.0",
     "@types/bcrypt": "^2.0.0",
     "@types/body-parser": "^1.16.3",
     "@types/chai": "^4.0.4",

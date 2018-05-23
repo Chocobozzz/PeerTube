@@ -88,6 +88,18 @@ class Redis {
     })
   }
 
+  generateResetPasswordKey (userId: number) {
+    return 'reset-password-' + userId
+  }
+
+  buildViewKey (ip: string, videoUUID: string) {
+    return videoUUID + '-' + ip
+  }
+
+  buildCachedRouteKey (req: express.Request) {
+    return req.method + '-' + req.originalUrl
+  }
+
   private getValue (key: string) {
     return new Promise<string>((res, rej) => {
       this.client.get(this.prefix + key, (err, value) => {
@@ -144,18 +156,6 @@ class Redis {
         return res(existsNumber === 1)
       })
     })
-  }
-
-  private generateResetPasswordKey (userId: number) {
-    return 'reset-password-' + userId
-  }
-
-  private buildViewKey (ip: string, videoUUID: string) {
-    return videoUUID + '-' + ip
-  }
-
-  private buildCachedRouteKey (req: express.Request) {
-    return req.method + '-' + req.originalUrl
   }
 
   static get Instance () {

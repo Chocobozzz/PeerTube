@@ -16,6 +16,10 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@types/async-lock@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@types/async-lock/-/async-lock-1.1.0.tgz#002b1ebeebd382aff66b68bed70a74c7bdd06e3e"
+
 "@types/async@^2.0.40":
   version "2.0.49"
   resolved "https://registry.yarnpkg.com/@types/async/-/async-2.0.49.tgz#92e33d13f74c895cb9a7f38ba97db8431ed14bc0"
@@ -617,6 +621,10 @@ async-foreach@^0.1.3:
 async-limiter@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
+
+async-lock@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/async-lock/-/async-lock-1.1.2.tgz#d552b3f8fe93018bf917efcf66d3154b9035282a"
 
 async-lru@^1.1.1:
   version "1.1.1"
