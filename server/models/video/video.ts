@@ -271,6 +271,7 @@ enum ScopeNames {
   [ScopeNames.WITH_SHARES]: {
     include: [
       {
+        ['separate' as any]: true,
         model: () => VideoShareModel.unscoped()
       }
     ]
@@ -278,6 +279,7 @@ enum ScopeNames {
   [ScopeNames.WITH_RATES]: {
     include: [
       {
+        ['separate' as any]: true,
         model: () => AccountVideoRateModel,
         include: [
           {
@@ -297,6 +299,7 @@ enum ScopeNames {
   [ScopeNames.WITH_COMMENTS]: {
     include: [
       {
+        ['separate' as any]: true,
         model: () => VideoCommentModel.unscoped()
       }
     ]
