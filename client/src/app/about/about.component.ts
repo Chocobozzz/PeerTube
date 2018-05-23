@@ -10,6 +10,7 @@ import { NotificationsService } from 'angular2-notifications'
 })
 
 export class AboutComponent implements OnInit {
+  shortDescription = ''
   descriptionHTML = ''
   termsHTML = ''
 
@@ -35,6 +36,7 @@ export class AboutComponent implements OnInit {
     this.serverService.getAbout()
       .subscribe(
         res => {
+          this.shortDescription = res.instance.shortDescription
           this.descriptionHTML = this.markdownService.textMarkdownToHTML(res.instance.description)
           this.termsHTML = this.markdownService.textMarkdownToHTML(res.instance.terms)
         },
