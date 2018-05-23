@@ -34,11 +34,11 @@ enum ScopeNames {
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
-        model: () => AccountModel,
+        model: () => AccountModel.unscoped(),
         required: true,
         include: [
           {
-            model: () => ActorModel,
+            model: () => ActorModel.unscoped(),
             required: true
           }
         ]
@@ -247,12 +247,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       videos: undefined
     }
 
-    if (this.Account) {
-      videoChannel.ownerAccount = {
-        id: this.Account.id,
-        uuid: this.Account.Actor.uuid
-      }
-    }
+    if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()
 
     return Object.assign(actor, videoChannel)
   }
