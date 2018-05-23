@@ -24,7 +24,8 @@
   "license": "GPLv3",
   "resolutions": {
     "videojs-dock/video.js": "^6",
-    "webtorrent/create-torrent/junk": "^1"
+    "webtorrent/create-torrent/junk": "^1",
+    "simple-get": "^2.8.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.1",
