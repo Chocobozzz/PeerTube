@@ -12,7 +12,7 @@ exports.config = {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_KEY,
     'browserstack.local': true,
-    projec: 'PeerTube'
+    project: 'PeerTube'
   },
 
   multiCapabilities: [
@@ -22,8 +22,7 @@ exports.config = {
     },
     {
       browserName: 'Safari',
-      version: '11.1',
-      resolution: '1920x1080'
+      version: '11.1'
     },
     {
       browserName: 'Firefox',

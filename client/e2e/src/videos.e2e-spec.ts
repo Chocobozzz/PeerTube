@@ -9,7 +9,6 @@ describe('Videos workflow', () => {
   let loginPage: LoginPage
   const videoName = new Date().getTime() + ' video'
   let isMobileDevice = false
-  let isIphoneDevice = false
   let isSafari = false
 
   beforeEach(async () => {
@@ -21,13 +20,12 @@ describe('Videos workflow', () => {
 
     const caps = await browser.getCapabilities()
     isMobileDevice = caps.get('realMobile') === 'true' || caps.get('realMobile') === true
-    isIphoneDevice = caps.get('device') === 'iphone'
     isSafari = caps.get('browserName') && caps.get('browserName').toLowerCase() === 'safari'
   })
 
   it('Should log in', () => {
-    if (isMobileDevice) {
-      console.log('Skipping because we are on a real device and BrowserStack does not support file upload.')
+    if (isMobileDevice || isSafari) {
+      console.log('Skipping because we are on a real device or Safari and BrowserStack does not support file upload.')
       return
     }
 
@@ -35,8 +33,8 @@ describe('Videos workflow', () => {
   })
 
   it('Should upload a video', async () => {
-    if (isMobileDevice) {
-      console.log('Skipping because we are on a real device and BrowserStack does not support file upload.')
+    if (isMobileDevice || isSafari) {
+      console.log('Skipping because we are on a real device or Safari and BrowserStack does not support file upload.')
       return
     }
 
@@ -47,10 +45,10 @@ describe('Videos workflow', () => {
   })
 
   it('Should list the video', async () => {
-    await videoWatchPage.goOnVideosList(isIphoneDevice, isSafari)
+    await videoWatchPage.goOnVideosList(isMobileDevice, isSafari)
 
-    if (isMobileDevice) {
-      console.log('Skipping because we are on a real device and BrowserStack does not support file upload.')
+    if (isMobileDevice || isSafari) {
+      console.log('Skipping because we are on a real device or Safari and BrowserStack does not support file upload.')
       return
     }
 
@@ -61,21 +59,21 @@ describe('Videos workflow', () => {
   it('Should go on video watch page', async () => {
     let videoNameToExcept = videoName
 
-    if (isMobileDevice) videoNameToExcept = await videoWatchPage.clickOnFirstVideo()
+    if (isMobileDevice || isSafari) videoNameToExcept = await videoWatchPage.clickOnFirstVideo()
     else await videoWatchPage.clickOnVideo(videoName)
 
-    return videoWatchPage.waitWatchVideoName(videoNameToExcept)
+    return videoWatchPage.waitWatchVideoName(videoNameToExcept, isSafari)
   })
 
   it('Should play the video', async () => {
-    await videoWatchPage.pauseVideo(7000, !isMobileDevice, isSafari)
+    await videoWatchPage.pauseVideo(!isMobileDevice, isSafari && isMobileDevice === false)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should watch the associated embed video', async () => {
     await videoWatchPage.goOnAssociatedEmbed()
 
-    await videoWatchPage.pauseVideo(7000, false, isSafari)
+    await videoWatchPage.pauseVideo(false, isSafari && isMobileDevice === false)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 })

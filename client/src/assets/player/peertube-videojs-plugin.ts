@@ -270,6 +270,7 @@ class PeerTubePlugin extends Plugin {
 
   private tryToPlay (done?: Function) {
     if (!done) done = function () { /* empty */ }
+
     const playPromise = this.player.play()
     if (playPromise !== undefined) {
       return playPromise.then(done)
@@ -355,9 +356,6 @@ class PeerTubePlugin extends Plugin {
       // Proxy first play
       const oldPlay = this.player.play.bind(this.player)
       this.player.play = () => {
-        // Avoid issue new play policy on mobiles
-        if (isMobile()) oldPlay()
-
         this.player.addClass('vjs-has-big-play-button-clicked')
         this.player.play = oldPlay
 
