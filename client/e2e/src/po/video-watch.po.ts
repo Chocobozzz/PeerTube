@@ -1,4 +1,4 @@
-import { by, element, browser } from 'protractor'
+import { browser, by, element } from 'protractor'
 
 export class VideoWatchPage {
   async goOnVideosList (isMobileDevice: boolean, isSafari: boolean) {
@@ -41,17 +41,12 @@ export class VideoWatchPage {
       .then(seconds => parseInt(seconds, 10))
   }
 
-  async pauseVideo (isAutoplay: boolean, isDesktopSafari: boolean) {
+  async pauseVideo (isAutoplay: boolean) {
     if (isAutoplay === false) {
       const playButton = element(by.css('.vjs-big-play-button'))
       await browser.wait(browser.ExpectedConditions.elementToBeClickable(playButton))
       await playButton.click()
     }
-
-    // if (isDesktopSafari === true) {
-    //   await browser.sleep(1000)
-    //   await element(by.css('.vjs-play-control')).click()
-    // }
 
     await browser.sleep(1000)
     await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))

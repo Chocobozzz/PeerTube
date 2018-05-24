@@ -66,14 +66,14 @@ describe('Videos workflow', () => {
   })
 
   it('Should play the video', async () => {
-    await videoWatchPage.pauseVideo(!isMobileDevice, isSafari && isMobileDevice === false)
+    await videoWatchPage.pauseVideo(!isMobileDevice)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
   it('Should watch the associated embed video', async () => {
     await videoWatchPage.goOnAssociatedEmbed()
 
-    await videoWatchPage.pauseVideo(false, isSafari && isMobileDevice === false)
+    await videoWatchPage.pauseVideo(false)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 })
