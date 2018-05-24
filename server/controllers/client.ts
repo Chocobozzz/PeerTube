@@ -6,6 +6,7 @@ import { escapeHTML, readFileBufferPromise, root } from '../helpers/core-utils'
 import { CONFIG, EMBED_SIZE, OPENGRAPH_AND_OEMBED_COMMENT, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers'
 import { asyncMiddleware } from '../middlewares'
 import { VideoModel } from '../models/video/video'
+import { VideoPrivacy } from '../../shared/models/videos'
 
 const clientsRouter = express.Router()
 
@@ -152,7 +153,7 @@ async function generateWatchHtmlPage (req: express.Request, res: express.Respons
   const html = file.toString()
 
   // Let Angular application handle errors
-  if (!video) return res.sendFile(indexPath)
+  if (!video || video.privacy === VideoPrivacy.PRIVATE) return res.sendFile(indexPath)
 
   const htmlStringPageWithTags = addOpenGraphAndOEmbedTags(html, video)
   res.set('Content-Type', 'text/html; charset=UTF-8').send(htmlStringPageWithTags)
