@@ -5,6 +5,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
+- [I don't like the name "PeerTube"](#i-dont-like-the-name-peertube)
 - [If nobody watches a video, is it seeded?](#if-nobody-watches-a-video-is-it-seeded)
 - [What is WebSeed?](#what-is-webseed)
 - [If a client requests each chunk of a video through HTTP, will the server be overloaded?](#if-a-client-requests-each-chunk-of-a-video-through-http-will-the-server-be-overloaded)
@@ -18,6 +19,12 @@
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## I don't like the name "PeerTube"
+
+PeerTube is just the name of the software. You can install it on your
+server, and choose the name you want. For example, [this instance](https://framatube.org/)
+is named "Framatube".
 
 ## If nobody watches a video, is it seeded?
 
