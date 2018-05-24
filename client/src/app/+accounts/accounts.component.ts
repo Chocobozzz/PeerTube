@@ -16,7 +16,7 @@ export class AccountsComponent implements OnInit {
   ) {}
 
   ngOnInit () {
-    const accountId = parseInt(this.route.snapshot.params['accountId'], 10)
+    const accountId = this.route.snapshot.params['accountId']
 
     this.accountService.getAccount(accountId)
         .subscribe(account => this.account = account)
