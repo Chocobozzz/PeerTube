@@ -2,7 +2,7 @@ import { ActivityAccept } from '../../../../shared/models/activitypub'
 import { getActorUrl } from '../../../helpers/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { addFetchOutboxJob } from '../fetch'
+import { addFetchOutboxJob } from '../actor'
 
 async function processAcceptActivity (activity: ActivityAccept, inboxActor?: ActorModel) {
   if (inboxActor === undefined) throw new Error('Need to accept on explicit inbox.')

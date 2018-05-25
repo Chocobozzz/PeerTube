@@ -139,9 +139,7 @@ async function getActorsInvolvedInVideo (video: VideoModel, t: Transaction) {
 }
 
 async function getAudience (actorSender: ActorModel, t: Transaction, isPublic = true) {
-  const followerInboxUrls = await actorSender.getFollowerSharedInboxUrls(t)
-
-  return buildAudience(followerInboxUrls, isPublic)
+  return buildAudience([ actorSender.followersUrl ], isPublic)
 }
 
 function buildAudience (followerInboxUrls: string[], isPublic = true) {

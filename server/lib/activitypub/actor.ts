@@ -19,6 +19,8 @@ import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
+import { JobQueue } from '../job-queue'
+import { getServerActor } from '../../helpers/utils'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys (actor: ActorModel) {
@@ -169,6 +171,21 @@ async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
   return undefined
 }
 
+async function addFetchOutboxJob (actor: ActorModel) {
+  // Don't fetch ourselves
+  const serverActor = await getServerActor()
+  if (serverActor.id === actor.id) {
+    logger.error('Cannot fetch our own outbox!')
+    return undefined
+  }
+
+  const payload = {
+    uris: [ actor.outboxUrl ]
+  }
+
+  return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
+}
+
 export {
   getOrCreateActorAndServerAndModel,
   buildActorInstance,
@@ -176,7 +193,8 @@ export {
   fetchActorTotalItems,
   fetchAvatarIfExists,
   updateActorInstance,
-  updateActorAvatarInstance
+  updateActorAvatarInstance,
+  addFetchOutboxJob
 }
 
 // ---------------------------------------------------------------------------
