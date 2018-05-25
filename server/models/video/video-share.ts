@@ -187,4 +187,17 @@ export class VideoShareModel extends Model<VideoShareModel> {
       .findAll(query)
       .then(res => res.map(r => r.Actor))
   }
+
+  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Sequelize.Transaction) {
+    const query = {
+      start,
+      count,
+      where: {
+        videoId
+      },
+      transaction: t
+    }
+
+    return VideoShareModel.findAndCountAll(query)
+  }
 }

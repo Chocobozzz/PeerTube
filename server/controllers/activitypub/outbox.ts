@@ -1,16 +1,15 @@
 import * as express from 'express'
 import { Activity } from '../../../shared/models/activitypub/activity'
 import { VideoPrivacy } from '../../../shared/models/videos'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
-import { pageToStartAndCount } from '../../helpers/core-utils'
+import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { logger } from '../../helpers/logger'
-import { ACTIVITY_PUB } from '../../initializers/constants'
 import { announceActivityData, createActivityData } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/audience'
 import { asyncMiddleware, localAccountValidator } from '../../middlewares'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
+import { activityPubResponse } from './utils'
 
 const outboxRouter = express.Router()
 
@@ -30,10 +29,17 @@ export {
 async function outboxController (req: express.Request, res: express.Response, next: express.NextFunction) {
   const account: AccountModel = res.locals.account
   const actor = account.Actor
+  const actorOutboxUrl = account.Actor.url + '/outbox'
 
-  const page = req.query.page || 1
-  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
+  logger.info('Receiving outbox request for %s.', actorOutboxUrl)
 
+  const handler = (start: number, count: number) => buildActivities(actor, start, count)
+  const json = await activityPubCollectionPagination(actorOutboxUrl, handler, req.query.page)
+
+  return activityPubResponse(activityPubContextify(json), res)
+}
+
+async function buildActivities (actor: ActorModel, start: number, count: number) {
   const data = await VideoModel.listAllAndSharedByActorForOutbox(actor.id, start, count)
   const activities: Activity[] = []
 
@@ -62,14 +68,8 @@ async function outboxController (req: express.Request, res: express.Response, ne
     }
   }
 
-  const newResult = {
+  return {
     data: activities,
     total: data.total
   }
-  const actorOutboxUrl = account.Actor.url + '/outbox'
-  const json = activityPubCollectionPagination(actorOutboxUrl, page, newResult)
-
-  logger.info('Receiving outbox request for %s.', actorOutboxUrl)
-
-  return res.json(json).end()
 }

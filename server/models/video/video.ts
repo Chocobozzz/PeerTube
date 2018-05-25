@@ -29,7 +29,7 @@ import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
-import { activityPubCollection } from '../../helpers/activitypub'
+import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import {
   createTorrentPromise,
   peertubeTruncate,
@@ -602,18 +602,6 @@ export class VideoModel extends Model<VideoModel> {
           attributes: [ 'id', 'url' ],
           model: VideoShareModel.unscoped(),
           required: false,
-          where: {
-            [Sequelize.Op.and]: [
-              {
-                id: {
-                  [Sequelize.Op.not]: null
-                }
-              },
-              {
-                actorId
-              }
-            ]
-          },
           include: [
             {
               attributes: [ 'id', 'url' ],
@@ -643,35 +631,6 @@ export class VideoModel extends Model<VideoModel> {
               required: true
             }
           ]
-        },
-        {
-          attributes: [ 'type' ],
-          model: AccountVideoRateModel,
-          required: false,
-          include: [
-            {
-              attributes: [ 'id' ],
-              model: AccountModel.unscoped(),
-              include: [
-                {
-                  attributes: [ 'url' ],
-                  model: ActorModel.unscoped(),
-                  include: [
-                    {
-                      attributes: [ 'host' ],
-                      model: ServerModel,
-                      required: false
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          attributes: [ 'url' ],
-          model: VideoCommentModel,
-          required: false
         },
         VideoFileModel,
         TagModel
@@ -894,26 +853,6 @@ export class VideoModel extends Model<VideoModel> {
 
     return VideoModel
       .scope([ ScopeNames.WITH_TAGS, ScopeNames.WITH_FILES, ScopeNames.WITH_ACCOUNT_DETAILS ])
-      .findOne(options)
-  }
-
-  static loadAndPopulateAll (id: number) {
-    const options = {
-      order: [ [ 'Tags', 'name', 'ASC' ] ],
-      where: {
-        id
-      }
-    }
-
-    return VideoModel
-      .scope([
-        ScopeNames.WITH_RATES,
-        ScopeNames.WITH_SHARES,
-        ScopeNames.WITH_TAGS,
-        ScopeNames.WITH_FILES,
-        ScopeNames.WITH_ACCOUNT_DETAILS,
-        ScopeNames.WITH_COMMENTS
-      ])
       .findOne(options)
   }
 
@@ -1203,25 +1142,6 @@ export class VideoModel extends Model<VideoModel> {
       }
     }
 
-    let likesObject
-    let dislikesObject
-
-    if (Array.isArray(this.AccountVideoRates)) {
-      const res = this.toRatesActivityPubObjects()
-      likesObject = res.likesObject
-      dislikesObject = res.dislikesObject
-    }
-
-    let sharesObject
-    if (Array.isArray(this.VideoShares)) {
-      sharesObject = this.toAnnouncesActivityPubObject()
-    }
-
-    let commentsObject
-    if (Array.isArray(this.VideoComments)) {
-      commentsObject = this.toCommentsActivityPubObject()
-    }
-
     const url = []
     for (const file of this.VideoFiles) {
       url.push({
@@ -1280,10 +1200,10 @@ export class VideoModel extends Model<VideoModel> {
         height: THUMBNAILS_SIZE.height
       },
       url,
-      likes: likesObject,
-      dislikes: dislikesObject,
-      shares: sharesObject,
-      comments: commentsObject,
+      likes: getVideoLikesActivityPubUrl(this),
+      dislikes: getVideoDislikesActivityPubUrl(this),
+      shares: getVideoSharesActivityPubUrl(this),
+      comments: getVideoCommentsActivityPubUrl(this),
       attributedTo: [
         {
           type: 'Person',
@@ -1295,44 +1215,6 @@ export class VideoModel extends Model<VideoModel> {
         }
       ]
     }
-  }
-
-  toAnnouncesActivityPubObject () {
-    const shares: string[] = []
-
-    for (const videoShare of this.VideoShares) {
-      shares.push(videoShare.url)
-    }
-
-    return activityPubCollection(getVideoSharesActivityPubUrl(this), shares)
-  }
-
-  toCommentsActivityPubObject () {
-    const comments: string[] = []
-
-    for (const videoComment of this.VideoComments) {
-      comments.push(videoComment.url)
-    }
-
-    return activityPubCollection(getVideoCommentsActivityPubUrl(this), comments)
-  }
-
-  toRatesActivityPubObjects () {
-    const likes: string[] = []
-    const dislikes: string[] = []
-
-    for (const rate of this.AccountVideoRates) {
-      if (rate.type === 'like') {
-        likes.push(rate.Account.Actor.url)
-      } else if (rate.type === 'dislike') {
-        dislikes.push(rate.Account.Actor.url)
-      }
-    }
-
-    const likesObject = activityPubCollection(getVideoLikesActivityPubUrl(this), likes)
-    const dislikesObject = activityPubCollection(getVideoDislikesActivityPubUrl(this), dislikes)
-
-    return { likesObject, dislikesObject }
   }
 
   getTruncatedDescription () {

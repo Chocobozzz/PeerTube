@@ -37,7 +37,7 @@ async function videoCommentActivityObjectToDBAttributes (video: VideoModel, acto
   }
 }
 
-async function addVideoComments (instance: VideoModel, commentUrls: string[]) {
+async function addVideoComments (commentUrls: string[], instance: VideoModel) {
   for (const commentUrl of commentUrls) {
     await addVideoComment(instance, commentUrl)
   }
