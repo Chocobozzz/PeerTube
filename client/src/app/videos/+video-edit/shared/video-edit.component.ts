@@ -16,6 +16,7 @@ import {
   VIDEO_TAGS
 } from '../../../shared/forms/form-validators/video'
 import { VideoEdit } from '../../../shared/video/video-edit.model'
+import { map } from 'rxjs/operators'
 
 @Component({
   selector: 'my-video-edit',
@@ -28,7 +29,7 @@ export class VideoEditComponent implements OnInit {
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: ValidatorMessage = {}
   @Input() videoPrivacies = []
-  @Input() userVideoChannels = []
+  @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
 
   videoCategories = []
   videoLicences = []
@@ -84,6 +85,37 @@ export class VideoEditComponent implements OnInit {
     this.form.addControl('thumbnailfile', new FormControl(''))
     this.form.addControl('previewfile', new FormControl(''))
     this.form.addControl('support', new FormControl('', VIDEO_SUPPORT.VALIDATORS))
+
+    // We will update the "support" field depending on the channel
+    this.form.controls['channelId']
+      .valueChanges
+      .pipe(map(res => parseInt(res.toString(), 10)))
+      .subscribe(
+        newChannelId => {
+          const oldChannelId = parseInt(this.form.value['channelId'], 10)
+          const currentSupport = this.form.value['support']
+
+          // Not initialized yet
+          if (isNaN(newChannelId)) return
+          const newChannel = this.userVideoChannels.find(c => c.id === newChannelId)
+
+          // First time we set the channel?
+          if (isNaN(oldChannelId)) return this.updateSupportField(newChannel.support)
+          const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
+
+          if (!newChannel || !oldChannel) {
+            console.error('Cannot find new or old channel.')
+            return
+          }
+
+          // If the current support text is not the same than the old channel, the user updated it.
+          // We don't want the user to lose his text, so stop here
+          if (currentSupport && currentSupport !== oldChannel.support) return
+
+          // Update the support text with our new channel
+          this.updateSupportField(newChannel.support)
+        }
+      )
   }
 
   ngOnInit () {
@@ -92,5 +124,9 @@ export class VideoEditComponent implements OnInit {
     this.videoCategories = this.serverService.getVideoCategories()
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
+  }
+
+  private updateSupportField (support: string) {
+    return this.form.patchValue({ support: support || '' })
   }
 }

@@ -42,7 +42,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   formErrors: { [ id: string ]: string } = {}
   validationMessages: ValidatorMessage = {}
 
-  userVideoChannels = []
+  userVideoChannels: { id: number, label: string, support: string }[] = []
   userVideoQuotaUsed = 0
   videoPrivacies = []
   firstStepPrivacyId = 0
