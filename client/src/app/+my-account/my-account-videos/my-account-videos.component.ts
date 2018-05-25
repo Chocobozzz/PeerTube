@@ -88,7 +88,8 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
       .subscribe(
         res => {
           this.notificationsService.success('Success', `${toDeleteVideosIds.length} videos deleted.`)
-          this.buildVideoPages()
+          this.abortSelectionMode()
+          this.reloadVideos()
         },
 
         err => this.notificationsService.error('Error', err.message)
@@ -103,8 +104,7 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
       .subscribe(
         status => {
           this.notificationsService.success('Success', `Video ${video.name} deleted.`)
-          this.spliceVideosById(video.id)
-          this.buildVideoPages()
+          this.reloadVideos()
         },
 
         error => this.notificationsService.error('Error', error.message)

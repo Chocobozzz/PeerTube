@@ -5,7 +5,6 @@ import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
-  AfterDestroy,
   AllowNull,
   BeforeDestroy,
   BelongsTo,
@@ -32,7 +31,11 @@ import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { activityPubCollection } from '../../helpers/activitypub'
 import {
-  createTorrentPromise, peertubeTruncate, renamePromise, statPromise, unlinkPromise,
+  createTorrentPromise,
+  peertubeTruncate,
+  renamePromise,
+  statPromise,
+  unlinkPromise,
   writeFilePromise
 } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
