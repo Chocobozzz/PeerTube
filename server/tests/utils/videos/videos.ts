@@ -167,8 +167,8 @@ function getMyVideos (url: string, accessToken: string, start: number, count: nu
     .expect('Content-Type', /json/)
 }
 
-function getAccountVideos (url: string, accessToken: string, accountId: number | string, start: number, count: number, sort?: string) {
-  const path = '/api/v1/accounts/' + accountId + '/videos'
+function getAccountVideos (url: string, accessToken: string, accountName: string, start: number, count: number, sort?: string) {
+  const path = '/api/v1/accounts/' + accountName + '/videos'
 
   return makeGetRequest({
     url,

@@ -26,7 +26,7 @@ const expect = chai.expect
 describe('Test users with multiple servers', function () {
   let servers: ServerInfo[] = []
   let user: User
-  let userAccountUUID: string
+  let userAccountName: string
   let userVideoChannelUUID: string
   let userId: number
   let videoUUID: string
@@ -56,10 +56,13 @@ describe('Test users with multiple servers', function () {
         password: 'password'
       }
       const res = await createUser(servers[ 0 ].url, servers[ 0 ].accessToken, user.username, user.password)
-      userAccountUUID = res.body.user.account.uuid
       userId = res.body.user.id
-
       userAccessToken = await userLogin(servers[ 0 ], user)
+    }
+
+    {
+      const res = await getMyUserInformation(servers[0].url, userAccessToken)
+      userAccountName = res.body.account.name + '@' + res.body.account.host
     }
 
     {
@@ -135,7 +138,7 @@ describe('Test users with multiple servers', function () {
       const rootServer1List = resAccounts.body.data.find(a => a.name === 'root' && a.host === 'localhost:9001') as Account
       expect(rootServer1List).not.to.be.undefined
 
-      const resAccount = await getAccount(server.url, rootServer1List.id)
+      const resAccount = await getAccount(server.url, rootServer1List.name + '@' + rootServer1List.host)
       const rootServer1Get = resAccount.body as Account
       expect(rootServer1Get.name).to.equal('root')
       expect(rootServer1Get.host).to.equal('localhost:9001')
@@ -148,7 +151,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should list account videos', async function () {
     for (const server of servers) {
-      const res = await getAccountVideos(server.url, server.accessToken, userAccountUUID, 0, 5)
+      const res = await getAccountVideos(server.url, server.accessToken, userAccountName, 0, 5)
 
       expect(res.body.total).to.equal(1)
       expect(res.body.data).to.be.an('array')
@@ -193,7 +196,7 @@ describe('Test users with multiple servers', function () {
 
   it('Should not have actor files', async () => {
     for (const server of servers) {
-      await checkActorFilesWereRemoved(userAccountUUID, server.serverNumber)
+      await checkActorFilesWereRemoved(userAccountName, server.serverNumber)
       await checkActorFilesWereRemoved(userVideoChannelUUID, server.serverNumber)
     }
   })

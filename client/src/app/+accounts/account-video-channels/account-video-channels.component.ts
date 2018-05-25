@@ -26,7 +26,7 @@ export class AccountVideoChannelsComponent implements OnInit {
     this.accountService.accountLoaded
         .pipe(
           tap(account => this.account = account),
-          flatMap(account => this.videoChannelService.listAccountVideoChannels(account.id)),
+          flatMap(account => this.videoChannelService.listAccountVideoChannels(account)),
           map(res => res.data)
         )
         .subscribe(videoChannels => this.videoChannels = videoChannels)

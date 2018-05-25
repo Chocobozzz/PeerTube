@@ -16,8 +16,8 @@ function getVideoChannelsList (url: string, start: number, count: number, sort?:
             .expect('Content-Type', /json/)
 }
 
-function getAccountVideoChannelsList (url: string, accountId: number | string, specialStatus = 200) {
-  const path = '/api/v1/accounts/' + accountId + '/video-channels'
+function getAccountVideoChannelsList (url: string, accountName: string, specialStatus = 200) {
+  const path = '/api/v1/accounts/' + accountName + '/video-channels'
 
   return request(url)
     .get(path)

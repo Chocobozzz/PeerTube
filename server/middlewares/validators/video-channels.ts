@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../shared'
-import { isAccountIdExist } from '../../helpers/custom-validators/accounts'
+import { isAccountIdExist, isAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoChannelDescriptionValid,
@@ -15,13 +15,13 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { areValidationErrors } from './utils'
 
 const listVideoAccountChannelsValidator = [
-  param('accountId').custom(isIdOrUUIDValid).withMessage('Should have a valid account id'),
+  param('accountName').exists().withMessage('Should have a valid account name'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listVideoAccountChannelsValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await isAccountIdExist(req.params.accountId, res)) return
+    if (!await isAccountNameWithHostExist(req.params.accountName, res)) return
 
     return next()
   }

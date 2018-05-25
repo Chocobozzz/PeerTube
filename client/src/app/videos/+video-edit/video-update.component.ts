@@ -63,7 +63,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           }),
           switchMap(video => {
             return this.videoChannelService
-                       .listAccountVideoChannels(video.account.id)
+                       .listAccountVideoChannels(video.account)
                        .pipe(
                          map(result => result.data),
                          map(videoChannels => videoChannels.map(c => ({ id: c.id, label: c.displayName }))),

@@ -8,7 +8,7 @@ import {
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
-import { accountsGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
+import { accountsNameWithHostGetValidator, accountsSortValidator, videosSortValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { VideoModel } from '../../models/video/video'
 import { isNSFWHidden } from '../../helpers/express-utils'
@@ -24,13 +24,13 @@ accountsRouter.get('/',
   asyncMiddleware(listAccounts)
 )
 
-accountsRouter.get('/:id',
-  asyncMiddleware(accountsGetValidator),
+accountsRouter.get('/:accountName',
+  asyncMiddleware(accountsNameWithHostGetValidator),
   getAccount
 )
 
-accountsRouter.get('/:id/videos',
-  asyncMiddleware(accountsGetValidator),
+accountsRouter.get('/:accountName/videos',
+  asyncMiddleware(accountsNameWithHostGetValidator),
   paginationValidator,
   videosSortValidator,
   setDefaultSort,
@@ -39,7 +39,7 @@ accountsRouter.get('/:id/videos',
   asyncMiddleware(listAccountVideos)
 )
 
-accountsRouter.get('/:accountId/video-channels',
+accountsRouter.get('/:accountName/video-channels',
   asyncMiddleware(listVideoAccountChannelsValidator),
   asyncMiddleware(listVideoAccountChannels)
 )

@@ -120,7 +120,7 @@ export class VideoService {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp
-               .get(AccountService.BASE_ACCOUNT_URL + account.id + '/videos', { params })
+               .get(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/videos', { params })
                .pipe(
                  map(this.extractVideos),
                  catchError(res => this.restExtractor.handleError(res))

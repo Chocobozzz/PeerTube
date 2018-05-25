@@ -18,7 +18,7 @@ describe('Test videos API validator', function () {
   const path = '/api/v1/videos/'
   let server: ServerInfo
   let userAccessToken = ''
-  let accountUUID: string
+  let accountName: string
   let channelId: number
   let channelUUID: string
   let videoId
@@ -43,7 +43,7 @@ describe('Test videos API validator', function () {
       const res = await getMyUserInformation(server.url, server.accessToken)
       channelId = res.body.videoChannels[ 0 ].id
       channelUUID = res.body.videoChannels[ 0 ].uuid
-      accountUUID = res.body.account.uuid
+      accountName = res.body.account.name + '@' + res.body.account.host
     }
   })
 
@@ -116,7 +116,7 @@ describe('Test videos API validator', function () {
     let path: string
 
     before(async function () {
-      path = '/api/v1/accounts/' + accountUUID + '/videos'
+      path = '/api/v1/accounts/' + accountName + '/videos'
     })
 
     it('Should fail with a bad start pagination', async function () {

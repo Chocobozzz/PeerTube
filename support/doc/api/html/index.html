@@ -25,10 +25,10 @@
             <a href="#tag-Accounts">Accounts</a>
             <ul>
               <li>
-                <a href="#operation--accounts--id--get"> GET /accounts/{id} </a>
+                <a href="#operation--accounts--name--get"> GET /accounts/{name} </a>
               </li>
               <li>
-                <a href="#operation--accounts--id--videos-get"> GET /accounts/{id}/videos </a>
+                <a href="#operation--accounts--name--videos-get"> GET /accounts/{name}/videos </a>
               </li>
               <li>
                 <a href="#operation--accounts-get"> GET /accounts </a>
@@ -205,7 +205,7 @@
                 <a href="#operation--video-channels--id--videos-get"> GET /video-channels/{id}/videos </a>
               </li>
               <li>
-                <a href="#operation--accounts--accountId--video-channels-get"> GET /accounts/{accountId}/video-channels </a>
+                <a href="#operation--accounts--name--video-channels-get"> GET /accounts/{name}/video-channels </a>
               </li>
             </ul>
           </section>
@@ -333,7 +333,7 @@
             </div>
           </div>
           <h1 id="tag-Accounts" class="swagger-summary-tag" data-traverse-target="tag-Accounts">Accounts</h1>
-          <div id="operation--accounts--id--get" class="operation panel" data-traverse-target="operation--accounts--id--get">
+          <div id="operation--accounts--name--get" class="operation panel" data-traverse-target="operation--accounts--name--get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -345,7 +345,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">GET</span>
-                <span class="operation-path">/accounts/{id}</span>
+                <span class="operation-path">/accounts/{name}</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -353,7 +353,7 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">name</div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
                       <div class="prop-subtitle">
@@ -362,7 +362,8 @@
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>The id of the account</p>
+                      <p>The name of the account (chocobozzz or
+                        <a href="mailto:chocobozzz@peertube.cpy.re">chocobozzz@peertube.cpy.re</a> for example)</p>
                     </div>
                   </div>
                   <div class="prop-row prop-group">
@@ -458,7 +459,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--accounts--id--videos-get" class="operation panel" data-traverse-target="operation--accounts--id--videos-get">
+          <div id="operation--accounts--name--videos-get" class="operation panel" data-traverse-target="operation--accounts--name--videos-get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -470,7 +471,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">GET</span>
-                <span class="operation-path">/accounts/{id}/videos</span>
+                <span class="operation-path">/accounts/{name}/videos</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -478,7 +479,7 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">id</div>
+                      <div class="prop-title">name</div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
                       <div class="prop-subtitle">
@@ -487,7 +488,8 @@
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>The id of the account</p>
+                      <p>The name of the account (chocobozzz or
+                        <a href="mailto:chocobozzz@peertube.cpy.re">chocobozzz@peertube.cpy.re</a> for example)</p>
                     </div>
                   </div>
                 </section>
@@ -5329,7 +5331,7 @@
               </div>
             </div>
           </div>
-          <div id="operation--accounts--accountId--video-channels-get" class="operation panel" data-traverse-target="operation--accounts--accountId--video-channels-get">
+          <div id="operation--accounts--name--video-channels-get" class="operation panel" data-traverse-target="operation--accounts--name--video-channels-get">
             <!-- <section class="operation-tags row"> -->
             <!-- <div class="doc-copy"> -->
             <div class="operation-tags">
@@ -5341,7 +5343,7 @@
             <h2 class="operation-title">
               <span class="operation-name">
                 <span class="operation-name">GET</span>
-                <span class="operation-path">/accounts/{accountId}/video-channels</span>
+                <span class="operation-path">/accounts/{name}/video-channels</span>
               </span>
             </h2>
             <div class="doc-row">
@@ -5349,7 +5351,7 @@
                 <section class="swagger-request-params">
                   <div class="prop-row prop-group">
                     <div class="prop-name">
-                      <div class="prop-title">accountId</div>
+                      <div class="prop-title">name</div>
                       <span class="json-property-required"></span>
                       <div class="prop-subtitle"> in path </div>
                       <div class="prop-subtitle">
@@ -5358,7 +5360,8 @@
                       </div>
                     </div>
                     <div class="prop-value">
-                      <p>The account id </p>
+                      <p>The name of the account (chocobozzz or
+                        <a href="mailto:chocobozzz@peertube.cpy.re">chocobozzz@peertube.cpy.re</a> for example)</p>
                     </div>
                   </div>
                 </section>
@@ -6403,6 +6406,41 @@
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="name">
+                            <span class="json-property-name">name:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="displayName">
+                            <span class="json-property-name">displayName:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="url">
+                            <span class="json-property-name">url:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="host">
+                            <span class="json-property-name">host:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="avatar">
+                            <span class="json-property-name">avatar:</span>
+                            <span class="json-property-type">
+                              <span class="">
+                                <a class="json-schema-ref" href="#/definitions/Avatar">Avatar</a>
+                              </span>
+                            </span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                        </dl>
+                      </section>
+                    </dt>
                   </dl>
                 </section>
               </div>
@@ -6493,6 +6531,32 @@
                       <span class="json-property-name">video:</span>
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="id">
+                            <span class="json-property-name">id:</span>
+                            <span class="json-property-type">number</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="name">
+                            <span class="json-property-name">name:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="uuid">
+                            <span class="json-property-name">uuid:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="url">
+                            <span class="json-property-name">url:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                        </dl>
+                      </section>
                     </dt>
                     <dt data-property-name="createdAt">
                       <span class="json-property-name">createdAt:</span>
@@ -6671,6 +6735,22 @@
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="id">
+                            <span class="json-property-name">id:</span>
+                            <span class="json-property-type">number</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="uuid">
+                            <span class="json-property-name">uuid:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                        </dl>
+                      </section>
+                    </dt>
                   </dl>
                 </section>
               </div>
@@ -6829,6 +6909,17 @@
                         </span>
                       </span>
                       <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">
+                          <span class="">
+                            <a class="json-schema-ref" href="#/definitions/VideoCommentThreadTree">VideoCommentThreadTree</a>
+                          </span>
+                        </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
                     </dt>
                   </dl>
                 </section>
@@ -7210,6 +7301,17 @@
                       </span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">
+                          <span class="">
+                            <a class="json-schema-ref" href="#/definitions/VideoChannel">VideoChannel</a>
+                          </span>
+                        </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
+                    </dt>
                   </dl>
                 </section>
               </div>
@@ -7278,20 +7380,123 @@
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="allowed">
+                            <span class="json-property-name">allowed:</span>
+                            <span class="json-property-type">boolean</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                        </dl>
+                      </section>
+                    </dt>
                     <dt data-property-name="transcoding">
                       <span class="json-property-name">transcoding:</span>
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="enabledResolutions">
+                            <span class="json-property-name">enabledResolutions:</span>
+                            <span class="json-property-type">number[]</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt class="json-inner-schema">
+                            <section class="json-schema-array-items">
+                              <span class="json-property-type">number</span>
+                              <span class="json-property-range" title="Value limits"></span>
+                              <div class="json-inner-schema"> </div>
+                            </section>
+                          </dt>
+                        </dl>
+                      </section>
                     </dt>
                     <dt data-property-name="avatar">
                       <span class="json-property-name">avatar:</span>
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="file">
+                            <span class="json-property-name">file:</span>
+                            <span class="json-property-type">object</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt class="json-inner-schema">
+                            <section class="json-schema-properties">
+                              <dl>
+                                <dt data-property-name="size">
+                                  <span class="json-property-name">size:</span>
+                                  <span class="json-property-type">object</span>
+                                  <span class="json-property-range" title="Value limits"></span>
+                                </dt>
+                                <dt class="json-inner-schema">
+                                  <section class="json-schema-properties">
+                                    <dl>
+                                      <dt data-property-name="max">
+                                        <span class="json-property-name">max:</span>
+                                        <span class="json-property-type">number</span>
+                                        <span class="json-property-range" title="Value limits"></span>
+                                      </dt>
+                                    </dl>
+                                  </section>
+                                </dt>
+                              </dl>
+                            </section>
+                          </dt>
+                          <dt data-property-name="extensions">
+                            <span class="json-property-name">extensions:</span>
+                            <span class="json-property-type">string[]</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt class="json-inner-schema">
+                            <section class="json-schema-array-items">
+                              <span class="json-property-type">string</span>
+                              <span class="json-property-range" title="Value limits"></span>
+                              <div class="json-inner-schema"> </div>
+                            </section>
+                          </dt>
+                        </dl>
+                      </section>
+                    </dt>
                     <dt data-property-name="video">
                       <span class="json-property-name">video:</span>
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="file">
+                            <span class="json-property-name">file:</span>
+                            <span class="json-property-type">object</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt class="json-inner-schema">
+                            <section class="json-schema-properties">
+                              <dl>
+                                <dt data-property-name="extensions">
+                                  <span class="json-property-name">extensions:</span>
+                                  <span class="json-property-type">string[]</span>
+                                  <span class="json-property-range" title="Value limits"></span>
+                                </dt>
+                                <dt class="json-inner-schema">
+                                  <section class="json-schema-array-items">
+                                    <span class="json-property-type">string</span>
+                                    <span class="json-property-range" title="Value limits"></span>
+                                    <div class="json-inner-schema"> </div>
+                                  </section>
+                                </dt>
+                              </dl>
+                            </section>
+                          </dt>
+                        </dl>
+                      </section>
                     </dt>
                   </dl>
                 </section>
@@ -7579,6 +7784,22 @@
                       <span class="json-property-type">object</span>
                       <span class="json-property-range" title="Value limits"></span>
                     </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-properties">
+                        <dl>
+                          <dt data-property-name="id">
+                            <span class="json-property-name">id:</span>
+                            <span class="json-property-type">number</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                          <dt data-property-name="uuid">
+                            <span class="json-property-name">uuid:</span>
+                            <span class="json-property-type">string</span>
+                            <span class="json-property-range" title="Value limits"></span>
+                          </dt>
+                        </dl>
+                      </section>
+                    </dt>
                   </dl>
                 </section>
               </div>
@@ -7623,6 +7844,17 @@
                         </span>
                       </span>
                       <span class="json-property-range" title="Value limits"></span>
+                    </dt>
+                    <dt class="json-inner-schema">
+                      <section class="json-schema-array-items">
+                        <span class="json-property-type">
+                          <span class="">
+                            <a class="json-schema-ref" href="#/definitions/VideoComment">VideoComment</a>
+                          </span>
+                        </span>
+                        <span class="json-property-range" title="Value limits"></span>
+                        <div class="json-inner-schema"> </div>
+                      </section>
                     </dt>
                   </dl>
                 </section>

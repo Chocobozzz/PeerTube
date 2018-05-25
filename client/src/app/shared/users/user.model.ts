@@ -1,6 +1,14 @@
-import { Account, hasUserRight, User as UserServerModel, UserRight, UserRole, VideoChannel } from '../../../../../shared'
+import {
+  Account as AccountServerModel,
+  hasUserRight,
+  User as UserServerModel,
+  UserRight,
+  UserRole,
+  VideoChannel
+} from '../../../../../shared'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 import { Actor } from '@app/shared/actor/actor.model'
+import { Account } from '@app/shared/account/account.model'
 
 export type UserConstructorHash = {
   id: number,
@@ -11,7 +19,7 @@ export type UserConstructorHash = {
   nsfwPolicy?: NSFWPolicyType,
   autoPlayVideo?: boolean,
   createdAt?: Date,
-  account?: Account,
+  account?: AccountServerModel,
   videoChannels?: VideoChannel[]
 }
 export class User implements UserServerModel {
@@ -32,7 +40,10 @@ export class User implements UserServerModel {
     this.username = hash.username
     this.email = hash.email
     this.role = hash.role
-    this.account = hash.account
+
+    if (hash.account !== undefined) {
+      this.account = new Account(hash.account)
+    }
 
     if (hash.videoChannels !== undefined) {
       this.videoChannels = hash.videoChannels
@@ -64,6 +75,10 @@ export class User implements UserServerModel {
   patch (obj: UserServerModel) {
     for (const key of Object.keys(obj)) {
       this[key] = obj[key]
+    }
+
+    if (obj.account !== undefined) {
+      this.account = new Account(obj.account)
     }
 
     this.updateComputedAttributes()

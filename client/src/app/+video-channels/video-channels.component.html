@@ -10,7 +10,7 @@
         </div>
         <div class="actor-followers">{{ videoChannel.followersCount }} subscribers</div>
 
-        <a [routerLink]="[ '/accounts', videoChannel.ownerAccount.id ]" title="Go the owner account page" class="actor-owner">
+        <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" title="Go the owner account page" class="actor-owner">
           <span>Created by {{ videoChannel.ownerBy }}</span>
           <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
         </a>

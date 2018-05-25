@@ -10,7 +10,7 @@ servicesRouter.use('/oembed',
   asyncMiddleware(oembedValidator),
   generateOEmbed
 )
-servicesRouter.use('/redirect/accounts/:nameWithHost',
+servicesRouter.use('/redirect/accounts/:accountName',
   asyncMiddleware(accountsNameWithHostGetValidator),
   redirectToAccountUrl
 )

@@ -1,7 +1,7 @@
 import { UserRight, VideoChannel, VideoDetails as VideoDetailsServerModel, VideoFile } from '../../../../../shared'
-import { Account } from '../../../../../shared/models/actors'
 import { AuthUser } from '../../core'
 import { Video } from '../../shared/video/video.model'
+import { Account } from '@app/shared/account/account.model'
 
 export class VideoDetails extends Video implements VideoDetailsServerModel {
   descriptionPath: string
@@ -21,7 +21,7 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
     this.descriptionPath = hash.descriptionPath
     this.files = hash.files
     this.channel = hash.channel
-    this.account = hash.account
+    this.account = new Account(hash.account)
     this.tags = hash.tags
     this.support = hash.support
     this.commentsEnabled = hash.commentsEnabled

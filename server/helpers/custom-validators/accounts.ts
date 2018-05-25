@@ -5,6 +5,7 @@ import * as validator from 'validator'
 import { AccountModel } from '../../models/account/account'
 import { isUserDescriptionValid, isUserUsernameValid } from './users'
 import { exists } from './misc'
+import { CONFIG } from '../../initializers'
 
 function isAccountNameValid (value: string) {
   return isUserUsernameValid(value)
@@ -40,7 +41,7 @@ function isAccountNameWithHostExist (nameWithDomain: string, res: Response, send
   const [ accountName, host ] = nameWithDomain.split('@')
 
   let promise: Bluebird<AccountModel>
-  if (!host) promise = AccountModel.loadLocalByName(accountName)
+  if (!host || host === CONFIG.WEBSERVER.HOST) promise = AccountModel.loadLocalByName(accountName)
   else promise = AccountModel.loadLocalByNameAndHost(accountName, host)
 
   return isAccountExist(promise, res, sendNotFound)

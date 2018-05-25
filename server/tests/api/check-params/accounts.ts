@@ -35,8 +35,8 @@ describe('Test users API validators', function () {
   })
 
   describe('When getting an account', function () {
-    it('Should return 404 with a non existing id', async function () {
-      await getAccount(server.url, 4545454, 404)
+    it('Should return 404 with a non existing name', async function () {
+      await getAccount(server.url, 'arfaze', 404)
     })
   })
 

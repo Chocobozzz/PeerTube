@@ -52,7 +52,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
   private loadVideoChannels () {
     this.authService.userInformationLoaded
-        .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account.id)))
+        .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account)))
         .subscribe(res => this.videoChannels = res.data)
   }
 }
