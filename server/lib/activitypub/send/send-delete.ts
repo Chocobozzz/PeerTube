@@ -5,7 +5,8 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getDeleteActivityPubUrl } from '../url'
-import { audiencify, broadcastToActors, broadcastToFollowers, getActorsInvolvedInVideo, getVideoCommentAudience, unicastTo } from './misc'
+import { broadcastToActors, broadcastToFollowers, unicastTo } from './utils'
+import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
 
 async function sendDeleteVideo (video: VideoModel, t: Transaction) {
   const url = getDeleteActivityPubUrl(video.url)

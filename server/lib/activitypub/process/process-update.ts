@@ -14,7 +14,8 @@ import { VideoFileModel } from '../../../models/video/video-file'
 import { fetchAvatarIfExists, getOrCreateActorAndServerAndModel, updateActorAvatarInstance, updateActorInstance } from '../actor'
 import {
   generateThumbnailFromUrl,
-  getOrCreateAccountAndVideoAndChannel, getOrCreateVideoChannel,
+  getOrCreateAccountAndVideoAndChannel,
+  getOrCreateVideoChannel,
   videoActivityObjectToDBAttributes,
   videoFileActivityUrlToDBAttributes
 } from '../videos'

@@ -5,7 +5,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { forwardActivity } from '../send/misc'
+import { forwardActivity } from '../send/utils'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 
 async function processAnnounceActivity (activity: ActivityAnnounce) {

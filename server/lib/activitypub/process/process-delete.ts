@@ -8,7 +8,7 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { forwardActivity } from '../send/misc'
+import { forwardActivity } from '../send/utils'
 
 async function processDeleteActivity (activity: ActivityDelete) {
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id

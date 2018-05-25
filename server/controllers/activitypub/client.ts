@@ -5,7 +5,7 @@ import { activityPubCollectionPagination, activityPubContextify } from '../../he
 import { pageToStartAndCount } from '../../helpers/core-utils'
 import { ACTIVITY_PUB, CONFIG, ROUTE_CACHE_LIFETIME } from '../../initializers'
 import { buildVideoAnnounce } from '../../lib/activitypub/send'
-import { audiencify, getAudience } from '../../lib/activitypub/send/misc'
+import { audiencify, getAudience } from '../../lib/activitypub/audience'
 import { createActivityData } from '../../lib/activitypub/send/send-create'
 import { asyncMiddleware, executeIfActivityPub, localAccountValidator } from '../../middlewares'
 import { videoChannelsGetValidator, videosGetValidator, videosShareValidator } from '../../middlewares/validators'

@@ -7,7 +7,8 @@ import { VideoModel } from '../../../models/video/video'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getUpdateActivityPubUrl } from '../url'
-import { audiencify, broadcastToFollowers, getAudience } from './misc'
+import { broadcastToFollowers } from './utils'
+import { audiencify, getAudience } from '../audience'
 
 async function sendUpdateVideo (video: VideoModel, t: Transaction) {
   const byActor = video.VideoChannel.Account.Actor

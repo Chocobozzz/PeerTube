@@ -9,9 +9,10 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { forwardActivity, getActorsInvolvedInVideo } from '../send/misc'
+import { getActorsInvolvedInVideo } from '../audience'
 import { resolveThread } from '../video-comments'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
+import { forwardActivity } from '../send/utils'
 
 async function processCreateActivity (activity: ActivityCreate) {
   const activityObject = activity.object

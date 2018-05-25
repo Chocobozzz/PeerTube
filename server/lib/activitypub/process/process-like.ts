@@ -4,7 +4,7 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { getOrCreateActorAndServerAndModel } from '../actor'
-import { forwardActivity } from '../send/misc'
+import { forwardActivity } from '../send/utils'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 
 async function processLikeActivity (activity: ActivityLike) {
