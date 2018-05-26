@@ -52,7 +52,7 @@ In our benchmarks, 1,000,000 videos takes around 2GB of storage on PostgreSQL.
 We think it is acceptable for a video platform.
 
 
-## What codecs can I use for the videos I want to upload?
+## What container formats can I use for the videos I want to upload?
 
 WEBM, MP4 or OGV videos.
 
