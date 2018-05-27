@@ -53,6 +53,26 @@ transcoding:
   enabled:
     __name: "PEERTUBE_TRANSCODING_ENABLED"
     __format: "json"
+  threads:
+    __name: "PEERTUBE_TRANSCODING_THREADS"
+    __format: "json"
+  resolutions:
+    240p:
+      __name: "PEERTUBE_TRANSCODING_240P"
+      __format: "json"
+    360p:
+      __name: "PEERTUBE_TRANSCODING_360P"
+      __format: "json"
+    480p:
+      __name: "PEERTUBE_TRANSCODING_480P"
+      __format: "json"
+    720p:
+      __name: "PEERTUBE_TRANSCODING_720P"
+      __format: "json"
+    1080:
+      __name: "PEERTUBE_TRANSCODING_1080P"
+      __format: "json"
+    
 
 instance:
   name: "PEERTUBE_INSTANCE_NAME"
