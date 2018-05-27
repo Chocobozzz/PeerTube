@@ -64,6 +64,8 @@ Install Peertube. If you're using CentOS7, do not forget to activate the devtool
 $ scl enable devtool-6 bash
 ```
 And after that, follow the step as usual. Do not forget to exit the environment after installing Peertube.
+
+Install Peertube:
 ```
 $ cd ../ && sudo -u peertube ln -s versions/peertube-${VERSION} ./peertube-latest
 $ cd ./peertube-latest && sudo -H -u peertube yarn install --production --pure-lockfile
