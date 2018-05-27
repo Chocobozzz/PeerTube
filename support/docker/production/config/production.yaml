@@ -45,3 +45,9 @@ log:
 
 admin:
   email: null
+
+transcoding:
+  resolutions:
+    360: true
+    720: true
+
