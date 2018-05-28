@@ -40,7 +40,7 @@ ln -s "$PEERTUBE_PATH/versions/peertube-${VERSION}" $PEERTUBE_PATH/peertube-late
 cd $PEERTUBE_PATH/peertube-latest
 yarn install --production --pure-lockfile 
 cp $PEERTUBE_PATH/peertube-latest/config/default.yaml $PEERTUBE_PATH/config/default.yaml
-
+npm install && npm upgrade
 echo "Differences in configuration files..."
 diff "$PEERTUBE_PATH/versions/peertube-${VERSION}/config/production.yaml.example" $PEERTUBE_PATH/config/production.yaml
 
