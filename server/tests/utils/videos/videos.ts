@@ -447,6 +447,7 @@ async function completeVideoCheck (
     nsfw: boolean
     commentsEnabled: boolean
     description: string
+    publishedAt?: string
     support: string
     account: {
       name: string
@@ -499,6 +500,12 @@ async function completeVideoCheck (
   expect(dateIsValid(video.createdAt)).to.be.true
   expect(dateIsValid(video.publishedAt)).to.be.true
   expect(dateIsValid(video.updatedAt)).to.be.true
+
+  if (attributes.publishedAt) {
+    console.log(attributes.publishedAt)
+    console.log(video.publishedAt)
+    expect(video.publishedAt).to.equal(attributes.publishedAt)
+  }
 
   const res = await getVideo(url, video.uuid)
   const videoDetails: VideoDetails = res.body

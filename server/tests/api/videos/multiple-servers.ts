@@ -105,6 +105,7 @@ describe('Test multiple servers', function () {
       await wait(10000)
 
       // All servers should have this video
+      let publishedAt: string = null
       for (const server of servers) {
         const isLocal = server.url === 'http://localhost:9001'
         const checkAttributes = {
@@ -120,6 +121,7 @@ describe('Test multiple servers', function () {
             host: 'localhost:9001'
           },
           isLocal,
+          publishedAt,
           duration: 10,
           tags: [ 'tag1p1', 'tag2p1' ],
           privacy: VideoPrivacy.PUBLIC,
@@ -145,6 +147,7 @@ describe('Test multiple servers', function () {
         const video = videos[0]
 
         await completeVideoCheck(server.url, video, checkAttributes)
+        publishedAt = video.publishedAt
       }
     })
 
