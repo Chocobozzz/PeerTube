@@ -1,5 +1,32 @@
 # Changelog
 
+## v1.0.0-beta.7
+
+### BREAKING CHANGES
+
+ * Account client URLs are now `/accounts/{username}/` (and not `/accounts/{id}/`)
+
+### Documentation
+
+ * Better documentation on how to deploy with Docker: https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/docker.md
+
+### Features
+
+ * Add short description in about page
+ * Add owner account name in video channel page
+ * Improve performance in ActivityPub controllers
+ * Video **support** field inherits video channel **support** field when uploading/updating a video
+ * Resume video when clicking on "PeerTube" link in embed
+
+### Bug fixes
+
+ * Fix player on Android
+ * Fix player when Firefox has cookies disabled
+ * Reload "my videos" after a delete
+ * Fix missing key configuration when upgrading with Docker
+ * Fix CC audience in Activity Pub objects/activities
+
+
 ## v1.0.0-beta.6
 
 ### Features
