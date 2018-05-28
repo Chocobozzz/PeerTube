@@ -602,6 +602,19 @@ export class VideoModel extends Model<VideoModel> {
           attributes: [ 'id', 'url' ],
           model: VideoShareModel.unscoped(),
           required: false,
+          // We only want videos shared by this actor
+          where: {
+            [Sequelize.Op.and]: [
+              {
+                id: {
+                  [Sequelize.Op.not]: null
+                }
+              },
+              {
+                actorId
+              }
+            ]
+          },
           include: [
             {
               attributes: [ 'id', 'url' ],
@@ -619,14 +632,14 @@ export class VideoModel extends Model<VideoModel> {
               required: true,
               include: [
                 {
-                  attributes: [ 'id', 'url' ],
+                  attributes: [ 'id', 'url', 'followersUrl' ],
                   model: ActorModel.unscoped(),
                   required: true
                 }
               ]
             },
             {
-              attributes: [ 'id', 'url' ],
+              attributes: [ 'id', 'url', 'followersUrl' ],
               model: ActorModel.unscoped(),
               required: true
             }

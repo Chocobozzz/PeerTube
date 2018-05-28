@@ -59,14 +59,13 @@ async function getAudience (actorSender: ActorModel, t: Transaction, isPublic = 
   return buildAudience([ actorSender.followersUrl ], isPublic)
 }
 
-function buildAudience (followerInboxUrls: string[], isPublic = true) {
-  // Thanks Mastodon: https://github.com/tootsuite/mastodon/blob/master/app/lib/activitypub/tag_manager.rb#L47
+function buildAudience (followerUrls: string[], isPublic = true) {
   let to = []
   let cc = []
 
   if (isPublic) {
     to = [ ACTIVITY_PUB.PUBLIC ]
-    cc = followerInboxUrls
+    cc = followerUrls
   } else { // Unlisted
     to = [ ]
     cc = [ ]
