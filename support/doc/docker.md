@@ -51,8 +51,10 @@ program output, so check out your logs to find them.
 Pull the latest images and rerun PeerTube:
 
 ```
+$ cd /your/peertube/directory
+$ docker-compose down
 $ docker-compose pull
-$ PEERTUBE_WEBSERVER_HOSTNAME="domain.tld" docker-compose up
+$ PEERTUBE_WEBSERVER_HOSTNAME="domain.tld" docker-compose up -d
 ```
 
 
