@@ -2,6 +2,19 @@ version: "3.3"
 
 services:
 
+  reverse-proxy:
+    image: traefik
+    command: --api --docker # Enables the web UI and tells Træfik to listen to docker
+    ports:
+      - "80:80"     # The HTTP port
+      - "443:443"   # The HTTPS port
+      - "8080:8080" # The Web UI (enabled by --api)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+      - ./docker-volume/traefik/acme.json:/etc/acme.json
+      - ./docker-volume/traefik/traefik.toml:/traefik.toml
+    restart: "always"
+
   peertube:
     # If you don't want to use the official image and build one from sources
     # build:
@@ -49,9 +62,13 @@ services:
     volumes:
       - ./docker-volume/db:/var/lib/postgresql/data
     restart: "always"
+    labels:
+      traefik.enable: "false"
 
   redis:
     image: redis:4-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"
+    labels:
+      traefik.enable: "false"
