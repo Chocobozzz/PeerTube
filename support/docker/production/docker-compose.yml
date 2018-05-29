@@ -32,6 +32,8 @@ services:
       PEERTUBE_SIGNUP_ENABLED: "true"
       PEERTUBE_TRANSCODING_ENABLED: "true"
       PEERTUBE_REDIS_HOSTNAME: redis
+      PEERTUBE_SMTP_USERNAME: null
+      PEERTUBE_SMTP_PASSWORD: null
       PEERTUBE_SMTP_HOSTNAME: null
       PEERTUBE_SMTP_PORT: 25
       PEERTUBE_SMTP_FROM: noreply@peertube.domain.tld

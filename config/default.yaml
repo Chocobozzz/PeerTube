@@ -1,3 +1,5 @@
+# /!\ YOU SHOULD NOT UPDATE THIS FILE, USE production.yaml instead /!\ #
+
 listen:
   hostname: '127.0.0.1'
   port: 9000
@@ -60,7 +62,7 @@ admin:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
-  filters: 
+  filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []
       blacklist: []

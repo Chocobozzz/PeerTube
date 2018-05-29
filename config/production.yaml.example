@@ -32,10 +32,10 @@ redis:
 # SMTP server to send emails
 smtp:
   hostname: null
-  port: 465
+  port: 465 # If you use StartTLS: 587
   username: null
   password: null
-  tls: true
+  tls: true # If you use StartTLS: false
   disable_starttls: false
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
@@ -76,7 +76,7 @@ admin:
 signup:
   enabled: false
   limit: 10 # When the limit is reached, registrations are disabled. -1 == unlimited
-  filters: 
+  filters:
     cidr: # You can specify CIDR ranges to whitelist (empty = no filtering) or blacklist
       whitelist: []
       blacklist: []
