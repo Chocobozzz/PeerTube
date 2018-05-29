@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject, Subject, throwError as observableThrowError } from 'rxjs'
-import { catchError, map, mergeMap, tap } from 'rxjs/operators'
+import { catchError, map, mergeMap, tap, share } from 'rxjs/operators'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
@@ -12,6 +12,7 @@ import { RestExtractor } from '../../shared/rest'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 import { objectToUrlEncoded } from '@app/shared/misc/utils'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -27,12 +28,16 @@ export class AuthService {
   private static BASE_CLIENT_URL = environment.apiUrl + '/api/v1/oauth-clients/local'
   private static BASE_TOKEN_URL = environment.apiUrl + '/api/v1/users/token'
   private static BASE_USER_INFORMATION_URL = environment.apiUrl + '/api/v1/users/me'
+  private static LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
+    CLIENT_ID: 'client_id',
+    CLIENT_SECRET: 'client_secret'
+  }
 
   loginChangedSource: Observable<AuthStatus>
   userInformationLoaded = new ReplaySubject<boolean>(1)
 
-  private clientId: string
-  private clientSecret: string
+  private clientId: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID)
+  private clientSecret: string = peertubeLocalStorage.getItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET)
   private loginChanged: Subject<AuthStatus>
   private user: AuthUser = null
   private refreshingTokenObservable: Observable<any>
@@ -52,13 +57,16 @@ export class AuthService {
 
   loadClientCredentials () {
     // Fetch the client_id/client_secret
-    // FIXME: save in local storage?
     this.http.get<OAuthClientLocal>(AuthService.BASE_CLIENT_URL)
         .pipe(catchError(res => this.restExtractor.handleError(res)))
         .subscribe(
           res => {
             this.clientId = res.client_id
             this.clientSecret = res.client_secret
+
+            peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_ID, this.clientId)
+            peertubeLocalStorage.setItem(AuthService.LOCAL_STORAGE_OAUTH_CLIENT_KEYS.CLIENT_SECRET, this.clientSecret)
+
             console.log('Client credentials loaded.')
           },
 
@@ -174,7 +182,8 @@ export class AuthService {
                                              return observableThrowError({
                                                error: 'You need to reconnect.'
                                              })
-                                           })
+                                           }),
+                                           share()
                                          )
 
     return this.refreshingTokenObservable
