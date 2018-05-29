@@ -5,6 +5,7 @@ import { ServerService } from '@app/core'
 import { ResetPasswordModule } from '@app/reset-password'
 
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
+import { ClipboardModule } from 'ngx-clipboard'
 
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
@@ -38,6 +39,8 @@ export function metaFactory (serverService: ServerService): MetaLoader {
   ],
   imports: [
     BrowserModule,
+    // FIXME: https://github.com/maxisam/ngx-clipboard/issues/133
+    ClipboardModule,
 
     CoreModule,
     SharedModule,
