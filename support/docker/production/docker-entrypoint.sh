@@ -6,8 +6,9 @@ if [ -z "$(ls -A /config)" ]; then
     cp /app/support/docker/production/config/* /config
 fi
 
-# Always copy default configuration file, in cases where new keys were added
+# Always copy default and custom env configuration file, in cases where new keys were added
 cp /app/config/default.yaml /config
+cp /app/config/custom-environment-variables.yaml /config
 chown -R peertube:peertube /config
 
 # first arg is `-f` or `--some-option`
