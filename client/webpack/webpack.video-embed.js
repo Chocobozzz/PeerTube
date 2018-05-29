@@ -35,6 +35,8 @@ module.exports = function () {
       publicPath: '/client/standalone/videos/'
     },
 
+    // devtool: 'source-map',
+
     module: {
 
       rules: [
