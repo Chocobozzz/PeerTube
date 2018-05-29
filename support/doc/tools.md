@@ -34,7 +34,7 @@ $ yarn install
 
 Build server tools:
 ```
-$ cd ${CLONE}
+$ cd ${CLONE}/scripts
 $ npm run build:server
 ```
 
