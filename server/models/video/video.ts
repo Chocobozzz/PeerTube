@@ -29,7 +29,6 @@ import { VideoPrivacy, VideoResolution } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
-import { activityPubCollectionPagination } from '../../helpers/activitypub'
 import {
   createTorrentPromise,
   peertubeTruncate,
@@ -59,6 +58,7 @@ import {
   CONSTRAINTS_FIELDS,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
+  STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
@@ -979,6 +979,10 @@ export class VideoModel extends Model<VideoModel> {
     )
   }
 
+  getTorrentFilePath (videoFile: VideoFileModel) {
+    return join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
+  }
+
   getVideoFilePath (videoFile: VideoFileModel) {
     return join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
   }
@@ -1112,7 +1116,9 @@ export class VideoModel extends Model<VideoModel> {
             magnetUri: this.generateMagnetUri(videoFile, baseUrlHttp, baseUrlWs),
             size: videoFile.size,
             torrentUrl: this.getTorrentUrl(videoFile, baseUrlHttp),
-            fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp)
+            torrentDownloadUrl: this.getTorrentDownloadUrl(videoFile, baseUrlHttp),
+            fileUrl: this.getVideoFileUrl(videoFile, baseUrlHttp),
+            fileDownloadUrl: this.getVideoFileDownloadUrl(videoFile, baseUrlHttp)
           } as VideoFile
         })
         .sort((a, b) => {
@@ -1367,8 +1373,16 @@ export class VideoModel extends Model<VideoModel> {
     return baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
   }
 
+  private getTorrentDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
+  }
+
   private getVideoFileUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
     return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+  }
+
+  private getVideoFileDownloadUrl (videoFile: VideoFileModel, baseUrlHttp: string) {
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + this.getVideoFilename(videoFile)
   }
 
   private generateMagnetUri (videoFile: VideoFileModel, baseUrlHttp: string, baseUrlWs: string) {

@@ -389,6 +389,10 @@ const STATIC_PATHS = {
   WEBSEED: '/static/webseed/',
   AVATARS: '/static/avatars/'
 }
+const STATIC_DOWNLOAD_PATHS = {
+  TORRENTS: '/download/torrents/',
+  VIDEOS: '/download/videos/'
+}
 
 // Cache control
 let STATIC_MAX_AGE = '30d'
@@ -493,6 +497,7 @@ export {
   USER_PASSWORD_RESET_LIFETIME,
   IMAGE_MIMETYPE_EXT,
   SCHEDULER_INTERVAL,
+  STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   JOB_COMPLETED_LIFETIME,
   VIDEO_VIEW_LIFETIME
