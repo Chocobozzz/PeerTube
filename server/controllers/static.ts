@@ -77,20 +77,20 @@ async function getPreview (req: express.Request, res: express.Response, next: ex
 }
 
 async function downloadTorrent (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const { video, videoFile } = getVideoAndFileOr404(req, res)
+  const { video, videoFile } = getVideoAndFile(req, res)
   if (!videoFile) return res.status(404).end()
 
   return res.download(video.getTorrentFilePath(videoFile), `${video.name}-${videoFile.resolution}p.torrent`)
 }
 
 async function downloadVideoFile (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const { video, videoFile } = getVideoAndFileOr404(req, res)
+  const { video, videoFile } = getVideoAndFile(req, res)
   if (!videoFile) return res.status(404).end()
 
   return res.download(video.getVideoFilePath(videoFile), `${video.name}-${videoFile.resolution}p${videoFile.extname}`)
 }
 
-function getVideoAndFileOr404 (req: express.Request, res: express.Response) {
+function getVideoAndFile (req: express.Request, res: express.Response) {
   const resolution = parseInt(req.params.resolution, 10)
   const video: VideoModel = res.locals.video
 
