@@ -23,7 +23,7 @@
   },
   "license": "GPLv3",
   "resolutions": {
-    "videojs-dock/video.js": "^6",
+    "videojs-dock/video.js": "^7",
     "webtorrent/create-torrent/junk": "^1",
     "simple-get": "^2.8.1"
   },
@@ -54,7 +54,7 @@
     "@types/markdown-it": "^0.0.4",
     "@types/node": "^9.3.0",
     "@types/sanitize-html": "^1.14.0",
-    "@types/video.js": "6.2.4",
+    "@types/video.js": "6.2.5",
     "@types/webtorrent": "^0.98.4",
     "angular2-notifications": "^1.0.2",
     "awesome-typescript-loader": "5.0.0",
@@ -98,7 +98,7 @@
     "tslint-config-standard": "^7.0.0",
     "typescript": "2.7",
     "uglifyjs-webpack-plugin": "^1.1.2",
-    "video.js": "^6",
+    "video.js": "^7.0.3",
     "videojs-dock": "^2.0.2",
     "videojs-hotkeys": "^0.2.21",
     "webpack": "^4.5.0",
