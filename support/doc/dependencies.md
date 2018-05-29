@@ -84,15 +84,11 @@ On a fresh install of [FreeBSD](https://www.freebsd.org), new system or new jail
 ```
 
   3. Enable nginx, redis, postgresql services and initialize database
-```
-# ee /etc/rc.conf
-```
 
-     Add the following lines
 ```
-postgresql_enable="YES"
-redis_enable="YES"
-nginx_enable="YES"
+# sysrc postgresql_enable="YES"
+# sysrc redis_enable="YES"
+# sysrc nginx_enable="YES"
 ```
 
 	 Initialize database and start services
