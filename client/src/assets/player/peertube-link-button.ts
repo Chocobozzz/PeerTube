@@ -32,7 +32,10 @@ class PeerTubeLinkButton extends Button {
 
   private buildHref (time?: number) {
     let href = window.location.href.replace('embed', 'watch')
-    if (time) href += '?start=' + time
+    if (time) {
+      if (window.location.search) href += '&start=' + time
+      else href += '?start=' + time
+    }
 
     return href
   }
