@@ -4,6 +4,7 @@ import { NotificationsService } from 'angular2-notifications'
 
 import { ModalDirective } from 'ngx-bootstrap/modal'
 import { VideoDetails } from '../../../shared/video/video-details.model'
+import { buildVideoEmbed } from '../../../../assets/player/utils'
 
 @Component({
   selector: 'my-video-share',
@@ -28,10 +29,7 @@ export class VideoShareComponent {
   }
 
   getVideoIframeCode () {
-    return '<iframe width="560" height="315" ' +
-           'src="' + this.video.embedUrl + '" ' +
-           'frameborder="0" allowfullscreen>' +
-           '</iframe>'
+    return buildVideoEmbed(this.video.embedUrl)
   }
 
   getVideoUrl () {

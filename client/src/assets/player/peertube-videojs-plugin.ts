@@ -268,6 +268,10 @@ class PeerTubePlugin extends Plugin {
     this.trigger('autoResolutionUpdate')
   }
 
+  getCurrentVideoFile () {
+    return this.currentVideoFile
+  }
+
   private tryToPlay (done?: Function) {
     if (!done) done = function () { /* empty */ }
 

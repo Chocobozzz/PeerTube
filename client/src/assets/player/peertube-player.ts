@@ -2,12 +2,15 @@ import { VideoFile } from '../../../../shared/models/videos'
 
 import 'videojs-hotkeys'
 import 'videojs-dock'
+import 'videojs-contextmenu'
+import 'videojs-contextmenu-ui'
 import './peertube-link-button'
 import './resolution-menu-button'
 import './settings-menu-button'
 import './webtorrent-info-button'
 import './peertube-videojs-plugin'
 import { videojsUntyped } from './peertube-videojs-typings'
+import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -16,6 +19,7 @@ function getVideojsOptions (options: {
   autoplay: boolean,
   playerElement: HTMLVideoElement,
   videoViewUrl: string,
+  videoEmbedUrl: string,
   videoDuration: number,
   videoFiles: VideoFile[],
   enableHotkeys: boolean,
@@ -38,6 +42,29 @@ function getVideojsOptions (options: {
         videoViewUrl: options.videoViewUrl,
         videoDuration: options.videoDuration,
         startTime: options.startTime
+      },
+      contextmenuUI: {
+        content: [
+          {
+            label: 'Copy the video URL',
+            listener: function () {
+              copyToClipboard(buildVideoLink())
+            }
+          },
+          {
+            label: 'Copy the video URL at the current time',
+            listener: function () {
+              const player = this
+              copyToClipboard(buildVideoLink(player.currentTime()))
+            }
+          },
+          {
+            label: 'Copy embed code',
+            listener: () => {
+              copyToClipboard(buildVideoEmbed(options.videoEmbedUrl))
+            }
+          }
+        ]
       }
     },
     controlBar: {

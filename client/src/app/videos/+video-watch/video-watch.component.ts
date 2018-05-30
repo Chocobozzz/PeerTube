@@ -348,6 +348,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       inactivityTimeout: 2500,
       videoFiles: this.video.files,
       playerElement: this.playerElement,
+      videoEmbedUrl: this.video.embedUrl,
       videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
       videoDuration: this.video.duration,
       enableHotkeys: true,

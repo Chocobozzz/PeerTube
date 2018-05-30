@@ -91,6 +91,7 @@ loadVideoInfo(videoId)
     const videojsOptions = getVideojsOptions({
       autoplay,
       inactivityTimeout: 1500,
+      videoEmbedUrl: window.location.origin + videoInfo.embedPath,
       videoViewUrl: getVideoUrl(videoId) + '/views',
       playerElement: videoElement,
       videoFiles: videoInfo.files,

@@ -1,15 +1,19 @@
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
+import { buildVideoLink } from './utils'
 
 const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
 class PeerTubeLinkButton extends Button {
+
+  constructor (player: videojs.Player, options) {
+    super(player, options)
+  }
 
   createEl () {
     return this.buildElement()
   }
 
   updateHref () {
-    const currentTime = Math.floor(this.player().currentTime())
-    this.el().setAttribute('href', this.buildHref(currentTime))
+    this.el().setAttribute('href', buildVideoLink(this.player().currentTime()))
   }
 
   handleClick () {
@@ -18,7 +22,7 @@ class PeerTubeLinkButton extends Button {
 
   private buildElement () {
     const el = videojsUntyped.dom.createEl('a', {
-      href: this.buildHref(),
+      href: buildVideoLink(),
       innerHTML: 'PeerTube',
       title: 'Go to the video page',
       className: 'vjs-peertube-link',
@@ -28,16 +32,6 @@ class PeerTubeLinkButton extends Button {
     el.addEventListener('mouseenter', () => this.updateHref())
 
     return el
-  }
-
-  private buildHref (time?: number) {
-    let href = window.location.href.replace('embed', 'watch')
-    if (time) {
-      if (window.location.search) href += '&start=' + time
-      else href += '?start=' + time
-    }
-
-    return href
   }
 }
 Button.registerComponent('PeerTubeLinkButton', PeerTubeLinkButton)
