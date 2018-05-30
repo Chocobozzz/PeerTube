@@ -9,6 +9,7 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { tap } from 'rxjs/operators'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -60,7 +61,9 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getVideoChannelVideos(this.videoChannel, newPagination, this.sort)
+    return this.videoService
+               .getVideoChannelVideos(this.videoChannel, newPagination, this.sort)
+               .pipe(tap(({ totalVideos }) => this.titlePage = `Published ${totalVideos} videos`))
   }
 
   generateSyndicationList () {

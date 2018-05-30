@@ -9,6 +9,7 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
+import { tap } from 'rxjs/operators'
 
 @Component({
   selector: 'my-account-videos',
@@ -60,7 +61,9 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getAccountVideos(this.account, newPagination, this.sort)
+    return this.videoService
+               .getAccountVideos(this.account, newPagination, this.sort)
+               .pipe(tap(({ totalVideos }) => this.titlePage = `Published ${totalVideos} videos`))
   }
 
   generateSyndicationList () {
