@@ -11,7 +11,8 @@ import { JobQueue } from '../job-queue'
 
 export type VideoFilePayload = {
   videoUUID: string
-  resolution?: VideoResolution,
+  isNewVideo: boolean
+  resolution?: VideoResolution
   isPortraitMode?: boolean
 }
 
@@ -32,7 +33,7 @@ async function processVideoFile (job: kue.Job) {
     await onVideoFileTranscoderSuccess(video)
   } else {
     await video.optimizeOriginalVideofile()
-    await onVideoFileOptimizerSuccess(video)
+    await onVideoFileOptimizerSuccess(video, payload.isNewVideo)
   }
 
   return video
@@ -53,7 +54,7 @@ async function onVideoFileTranscoderSuccess (video: VideoModel) {
   return undefined
 }
 
-async function onVideoFileOptimizerSuccess (video: VideoModel) {
+async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boolean) {
   if (video === undefined) return undefined
 
   // Maybe the video changed in database, refresh it
@@ -62,11 +63,15 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
   if (!videoDatabase) return undefined
 
   if (video.privacy !== VideoPrivacy.PRIVATE) {
-    // Now we'll add the video's meta data to our followers
-    await sequelizeTypescript.transaction(async t => {
-      await sendCreateVideo(video, t)
-      await shareVideoByServerAndChannel(video, t)
-    })
+    if (isNewVideo === true) {
+      // Now we'll add the video's meta data to our followers
+      await sequelizeTypescript.transaction(async t => {
+        await sendCreateVideo(video, t)
+        await shareVideoByServerAndChannel(video, t)
+      })
+    } else {
+      await sendUpdateVideo(video, undefined)
+    }
   }
 
   const { videoFileResolution } = await videoDatabase.getOriginalFileResolution()
@@ -84,7 +89,8 @@ async function onVideoFileOptimizerSuccess (video: VideoModel) {
     for (const resolution of resolutionsEnabled) {
       const dataInput = {
         videoUUID: videoDatabase.uuid,
-        resolution
+        resolution,
+        isNewVideo
       }
 
       const p = JobQueue.Instance.createJob({ type: 'video-file', payload: dataInput })

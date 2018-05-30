@@ -36,6 +36,7 @@
     "dev:client": "scripty",
     "start": "node dist/server",
     "update-host": "node ./dist/scripts/update-host.js",
+    "create-transcoding-job": "node ./dist/scripts/create-transcoding-job.js",
     "test": "scripty",
     "help": "scripty",
     "generate-api-doc": "scripty",
