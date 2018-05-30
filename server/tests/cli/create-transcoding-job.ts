@@ -72,12 +72,27 @@ describe('Test create transcoding jobs', function () {
       const videos = res.body.data
       expect(videos).to.have.lengthOf(2)
 
+      let infoHashes: { [ id: number ]: string }
+
       for (const video of videos) {
         const res2 = await getVideo(server.url, video.uuid)
         const videoDetail: VideoDetails = res2.body
 
         if (video.uuid === video2UUID) {
           expect(videoDetail.files).to.have.lengthOf(4)
+
+          if (!infoHashes) {
+            infoHashes = {}
+
+            for (const file of videoDetail.files) {
+              infoHashes[file.resolution.id.toString()] = file.magnetUri
+            }
+          } else {
+            for (const resolution of Object.keys(infoHashes)) {
+              const file = videoDetail.files.find(f => f.resolution.id.toString() === resolution)
+              expect(file.magnetUri).to.equal(infoHashes[resolution])
+            }
+          }
         } else {
           expect(videoDetail.files).to.have.lengthOf(1)
         }

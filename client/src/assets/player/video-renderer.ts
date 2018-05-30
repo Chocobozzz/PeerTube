@@ -50,7 +50,7 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
 
       return fallbackToMediaSource()
     })
-    preparedElem.addEventListener('loadstart', onLoadStart)
+    preparedElem.addEventListener('canplay', onLoadStart)
     return videostream(file, preparedElem)
   }
 
@@ -66,7 +66,7 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
 
       return callback(err)
     })
-    preparedElem.addEventListener('loadstart', onLoadStart)
+    preparedElem.addEventListener('canplay', onLoadStart)
 
     const wrapper = new MediaElementWrapper(preparedElem)
     const writable = wrapper.createWriteStream(codecs)
@@ -95,7 +95,7 @@ function renderMedia (file, elem: HTMLVideoElement, opts: RenderMediaOptions, ca
   }
 
   function onLoadStart () {
-    preparedElem.removeEventListener('loadstart', onLoadStart)
+    preparedElem.removeEventListener('canplay', onLoadStart)
     if (opts.autoplay) preparedElem.play()
 
     callback(null, renderer)
