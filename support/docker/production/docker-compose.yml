@@ -25,12 +25,9 @@ services:
       PEERTUBE_WEBSERVER_HOSTNAME: my.domain.tld
       PEERTUBE_WEBSERVER_PORT: 443
       PEERTUBE_WEBSERVER_HTTPS: "true"
-      PEERTUBE_ADMIN_EMAIL: admin@domain.tld
       PEERTUBE_DB_HOSTNAME: postgres
       PEERTUBE_DB_USERNAME: postgres_user
       PEERTUBE_DB_PASSWORD: postgres_password
-      PEERTUBE_SIGNUP_ENABLED: "true"
-      PEERTUBE_TRANSCODING_ENABLED: "true"
       PEERTUBE_REDIS_HOSTNAME: redis
       PEERTUBE_SMTP_USERNAME: null
       PEERTUBE_SMTP_PASSWORD: null
@@ -38,6 +35,10 @@ services:
       PEERTUBE_SMTP_PORT: 25
       PEERTUBE_SMTP_FROM: noreply@peertube.domain.tld
       PEERTUBE_SMTP_TLS: "true"
+      # /!\ Prefer to use the PeerTube admin interface to set the following configurations /!\
+      # PEERTUBE_ADMIN_EMAIL: admin@domain.tld
+      # PEERTUBE_SIGNUP_ENABLED: "true"
+      # PEERTUBE_TRANSCODING_ENABLED: "true"
     # Traefik labels are suggested as an example for people using Traefik,
     # remove them if you are using another reverse proxy.
     labels:
