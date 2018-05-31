@@ -119,7 +119,7 @@ instance:
 services:
   # Cards configuration to format video in Twitter
   twitter:
-    username: '@Chocobozzz' # The Twitter @username the card should be attributed to
+    username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
     # If true, a video player will be embedded in the Twitter feed on PeerTube video share
     # If false, we use an image link card that will redirect on your PeerTube instance
     # Test on https://cards-dev.twitter.com/validator to see if you are whitelisted

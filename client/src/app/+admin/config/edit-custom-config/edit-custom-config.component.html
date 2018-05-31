@@ -136,7 +136,7 @@
 
       <div class="form-group">
         <label for="signupLimit">Your Twitter username</label>
-        <my-help helpType="custom" customHtml="The Twitter @username the cards (created by PeerTube video shares) should be attributed to."></my-help>
+        <my-help helpType="custom" customHtml="Indicates the Twitter account for the website or platform on which the content was published."></my-help>
         <input
             type="text" id="servicesTwitterUsername"
             formControlName="servicesTwitterUsername" [ngClass]="{ 'input-error': formErrors['servicesTwitterUsername'] }"
@@ -153,7 +153,7 @@
         <label for="servicesTwitterWhitelisted">Instance whitelisted by Twitter</label>
         <my-help helpType="custom" customHtml="If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
 If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
-Check this checkbox, save the configuration and test on <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a> to see if you instance is whitelisted."></my-help>
+Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a> to see if you instance is whitelisted."></my-help>
 
       </div>
     </tab>
