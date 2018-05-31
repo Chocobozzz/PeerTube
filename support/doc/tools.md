@@ -51,7 +51,7 @@ $ cd ${CLONE}
 $ node dist/server/tools/import-videos.js -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD" -t "TARGET_URL"
 ```
 
- * PEERTUBE_URL : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re/
+ * PEERTUBE_URL : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
  * PEERTUBE_USER : your PeerTube account where videos will be uploaded
  * PEERTUBE_PASSWORD : password of your PeerTube account (if ommited, you will be prompted for)
  * TARGET_URL : the target url you want to import. Examples:
