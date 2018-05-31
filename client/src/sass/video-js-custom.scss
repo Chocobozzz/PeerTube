@@ -175,6 +175,7 @@ $context-menu-width: 350px;
     }
 
     .vjs-play-progress {
+      padding-right: 4px;
 
       &::before {
         top: -0.3em;
@@ -217,6 +218,8 @@ $context-menu-width: 350px;
     }
 
     .vjs-time-control {
+      line-height: inherit;
+
       &.vjs-current-time {
         font-size: $font-size;
         display: inline-block;
