@@ -25,3 +25,4 @@
 /logs/
 /server/tools/import-mediacore.ts
 /docker-volume/
+/.zanata-cache

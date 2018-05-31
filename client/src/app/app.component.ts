@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { GuardsCheckStart, Router, NavigationEnd } from '@angular/router'
+import { GuardsCheckStart, NavigationEnd, Router } from '@angular/router'
 import { AuthService, RedirectService, ServerService } from '@app/core'
 import { isInSmallView } from '@app/shared/misc/utils'
+import { is18nPath } from '../../../shared/models/i18n'
 
 @Component({
   selector: 'my-app',
@@ -33,7 +34,7 @@ export class AppComponent implements OnInit {
     private serverService: ServerService,
     private domSanitizer: DomSanitizer,
     private redirectService: RedirectService
-  ) {}
+  ) { }
 
   get serverVersion () {
     return this.serverService.getConfig().serverVersion
@@ -53,7 +54,7 @@ export class AppComponent implements OnInit {
     this.router.events.subscribe(e => {
       if (e instanceof NavigationEnd) {
         const pathname = window.location.pathname
-        if (!pathname || pathname === '/') {
+        if (!pathname || pathname === '/' || is18nPath(pathname)) {
           this.redirectService.redirectToHomepage()
         }
       }

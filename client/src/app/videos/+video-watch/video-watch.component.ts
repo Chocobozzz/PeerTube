@@ -23,6 +23,7 @@ import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
 import { getVideojsOptions } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-watch',
@@ -70,7 +71,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private notificationsService: NotificationsService,
     private markdownService: MarkdownService,
     private zone: NgZone,
-    private redirectService: RedirectService
+    private redirectService: RedirectService,
+    private i18n: I18n
   ) {}
 
   get user () {
@@ -153,17 +155,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   async blacklistVideo (event: Event) {
     event.preventDefault()
 
-    const res = await this.confirmService.confirm('Do you really want to blacklist this video?', 'Blacklist')
+    const res = await this.confirmService.confirm(this.i18n('Do you really want to blacklist this video?'), this.i18n('Blacklist'))
     if (res === false) return
 
     this.videoBlacklistService.blacklistVideo(this.video.id)
                               .subscribe(
                                 status => {
-                                  this.notificationsService.success('Success', `Video ${this.video.name} had been blacklisted.`)
+                                  this.notificationsService.success(
+                                    this.i18n('Success'),
+                                    this.i18n('Video {{ videoName }} had been blacklisted.', { videoName: this.video.name })
+                                  )
                                   this.redirectService.redirectToHomepage()
                                 },
 
-                                error => this.notificationsService.error('Error', error.message)
+                                error => this.notificationsService.error(this.i18n('Error'), error.message)
                               )
   }
 
@@ -198,7 +203,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
         error => {
           this.descriptionLoading = false
-          this.notificationsService.error('Error', error.message)
+          this.notificationsService.error(this.i18n('Error'), error.message)
         }
       )
   }
@@ -252,19 +257,22 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   async removeVideo (event: Event) {
     event.preventDefault()
 
-    const res = await this.confirmService.confirm('Do you really want to delete this video?', 'Delete')
+    const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this video?'), this.i18n('Delete'))
     if (res === false) return
 
     this.videoService.removeVideo(this.video.id)
       .subscribe(
         status => {
-          this.notificationsService.success('Success', `Video ${this.video.name} deleted.`)
+          this.notificationsService.success(
+            this.i18n('Success'),
+            this.i18n('Video {{ videoName }} deleted.', { videoName: this.video.name })
+          )
 
           // Go back to the video-list.
           this.redirectService.redirectToHomepage()
         },
 
-        error => this.notificationsService.error('Error', error.message)
+        error => this.notificationsService.error(this.i18n('Error'), error.message)
       )
   }
 
@@ -288,7 +296,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private setVideoLikesBarTooltipText () {
-    this.likesBarTooltipText = `${this.video.likes} likes / ${this.video.dislikes} dislikes`
+    this.likesBarTooltipText = this.i18n(
+      '{{ likesNumber }} likes / {{ dislikesNumber }} dislikes',
+      { likesNumber: this.video.likes, dislikes: this.video.dislikes }
+    )
   }
 
   private handleError (err: any) {
@@ -298,12 +309,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     let message = ''
 
     if (errorMessage.indexOf('http error') !== -1) {
-      message = 'Cannot fetch video from server, maybe down.'
+      message = this.i18n('Cannot fetch video from server, maybe down.')
     } else {
       message = errorMessage
     }
 
-    this.notificationsService.error('Error', message)
+    this.notificationsService.error(this.i18n('Error'), message)
   }
 
   private checkUserRating () {
@@ -318,7 +329,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                          }
                        },
 
-                       err => this.notificationsService.error('Error', err.message)
+                       err => this.notificationsService.error(this.i18n('Error'), err.message)
                       )
   }
 
@@ -333,8 +344,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     if (this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())) {
       const res = await this.confirmService.confirm(
-        'This video contains mature or explicit content. Are you sure you want to watch it?',
-        'Mature or explicit content'
+        this.i18n('This video contains mature or explicit content. Are you sure you want to watch it?'),
+        this.i18n('Mature or explicit content')
       )
       if (res === false) return this.redirectService.redirectToHomepage()
     }
@@ -399,7 +410,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.updateVideoRating(this.userRating, nextRating)
         this.userRating = nextRating
       },
-      err => this.notificationsService.error('Error', err.message)
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
      )
   }
 

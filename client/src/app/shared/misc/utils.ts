@@ -98,7 +98,7 @@ function lineFeedToHtml (obj: object, keyToNormalize: string) {
 
 // Try to cache a little bit window.innerWidth
 let windowInnerWidth = window.innerWidth
-// setInterval(() => windowInnerWidth = window.innerWidth, 500)
+setInterval(() => windowInnerWidth = window.innerWidth, 500)
 
 function isInSmallView () {
   return windowInnerWidth < 600

@@ -12,7 +12,6 @@ import * as bodyParser from 'body-parser'
 import * as express from 'express'
 import * as http from 'http'
 import * as morgan from 'morgan'
-import * as path from 'path'
 import * as bitTorrentTracker from 'bittorrent-tracker'
 import * as cors from 'cors'
 import { Server as WebSocketServer } from 'ws'
@@ -156,20 +155,11 @@ app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', webfingerRouter)
 
-// Client files
-app.use('/', clientsRouter)
-
 // Static files
 app.use('/', staticRouter)
 
-// Always serve index client page (the client is a single page application, let it handle routing)
-app.use('/*', function (req, res) {
-  if (req.accepts(ACCEPT_HEADERS) === 'html') {
-    return res.sendFile(path.join(__dirname, '../client/dist/index.html'))
-  }
-
-  return res.status(404).end()
-})
+// Client files, last valid routes!
+app.use('/', clientsRouter)
 
 // ----------- Errors -----------
 

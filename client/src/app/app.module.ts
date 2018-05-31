@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core'
+import { LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { AboutModule } from '@app/about'
 import { ServerService } from '@app/core'
@@ -16,6 +16,7 @@ import { MenuComponent } from './menu'
 import { SharedModule } from './shared'
 import { SignupModule } from './signup'
 import { VideosModule } from './videos'
+import { buildFileLocale, getDefaultLocale } from '../../../shared/models/i18n'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -61,6 +62,21 @@ export function metaFactory (serverService: ServerService): MetaLoader {
 
     AppRoutingModule // Put it after all the module because it has the 404 route
   ],
-  providers: [ ]
+  providers: [
+    {
+      provide: TRANSLATIONS,
+      useFactory: (locale) => {
+        const fileLocale = buildFileLocale(locale)
+
+        // Default locale, nothing to translate
+        const defaultFileLocale = buildFileLocale(getDefaultLocale())
+        if (fileLocale === defaultFileLocale) return ''
+
+        return require(`raw-loader!../locale/target/messages_${fileLocale}.xml`)
+      },
+      deps: [ LOCALE_ID ]
+    },
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' }
+  ]
 })
 export class AppModule {}

@@ -29,6 +29,7 @@
     "danger:clean:dev": "scripty",
     "danger:clean:prod": "scripty",
     "danger:clean:modules": "scripty",
+    "i18n:generate": "scripty",
     "reset-password": "node ./dist/scripts/reset-password.js",
     "play": "scripty",
     "dev": "scripty",

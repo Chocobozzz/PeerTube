@@ -57,7 +57,7 @@ git commit package.json client/package.json -m "Bumped to version $version"
 git tag -s -a "$version" -m "$version"
 
 npm run build
-rm "./client/dist/stats.json"
+rm "./client/dist/en-US/stats.json"
 
 # Creating the archives
 (

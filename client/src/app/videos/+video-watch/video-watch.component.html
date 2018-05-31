@@ -3,7 +3,7 @@
   <div [hidden]="videoNotFound" id="video-element-wrapper">
   </div>
 
-  <div *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
+  <div i18n *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
@@ -12,21 +12,21 @@
         <div>
           <div class="video-info-name">{{ video.name }}</div>
 
-          <div class="video-info-date-views">
+          <div i18n class="video-info-date-views">
             {{ video.publishedAt | myFromNow }} - {{ video.views | myNumberFormatter }} views
           </div>
 
           <div class="video-info-channel">
-            <a [routerLink]="[ '/video-channels', video.channel.id ]" title="Go the channel page">
+            <a [routerLink]="[ '/video-channels', video.channel.id ]" i18n-title title="Go the channel page">
               {{ video.channel.displayName }}
             </a>
             <!-- Here will be the subscribe button -->
-            <my-help helpType="custom" customHtml="You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.displayName}}@{{video.account.host}}</strong> and subscribe there. Subscription as a PeerTube user is being worked on in <a href='https://github.com/Chocobozzz/PeerTube/issues/470'>#470</a>."></my-help>
+            <my-help helpType="custom" i18n-customHtml customHtml="You can subscribe to this account via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.displayName}}@{{video.account.host}}</strong> and subscribe there. Subscription as a PeerTube user is being worked on in <a href='https://github.com/Chocobozzz/PeerTube/issues/470'>#470</a>."></my-help>
           </div>
 
           <div class="video-info-by">
-            <a [routerLink]="[ '/accounts', video.by ]" title="Go the account page">
-              <span>By {{ video.by }}</span>
+            <a [routerLink]="[ '/accounts', video.by ]" i18n-title title="Go the account page">
+              <span i18n>By {{ video.by }}</span>
               <img [src]="video.accountAvatarUrl" alt="Account avatar" />
             </a>
           </div>
@@ -38,24 +38,24 @@
                 *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
                 class="action-button action-button-like"
             >
-              <span class="icon icon-like" title="Like this video" ></span>
+              <span class="icon icon-like" i18n-title title="Like this video" ></span>
             </div>
 
             <div
                 *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
                 class="action-button action-button-dislike"
             >
-              <span class="icon icon-dislike" title="Dislike this video"></span>
+              <span class="icon icon-dislike" i18n-title title="Dislike this video"></span>
             </div>
 
             <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
               <span class="icon icon-support"></span>
-              <span class="icon-text">Support</span>
+              <span class="icon-text" i18n>Support</span>
             </div>
 
             <div (click)="showShareModal()" class="action-button action-button-share">
               <span class="icon icon-share"></span>
-              <span class="icon-text">Share</span>
+              <span class="icon-text" i18n>Share</span>
             </div>
 
             <div class="action-more" dropdown dropup="true" placement="right">
@@ -65,32 +65,32 @@
 
               <ul *dropdownMenu class="dropdown-menu" id="more-menu" role="menu" aria-labelledby="single-button">
                 <li role="menuitem">
-                  <a class="dropdown-item" title="Download the video" href="#" (click)="showDownloadModal($event)">
-                    <span class="icon icon-download"></span> Download
+                  <a class="dropdown-item" i18n-title title="Download the video" href="#" (click)="showDownloadModal($event)">
+                    <span class="icon icon-download"></span> <ng-container i18n>Download</ng-container>
                   </a>
                 </li>
 
                 <li *ngIf="isUserLoggedIn()" role="menuitem">
-                  <a class="dropdown-item" title="Report this video" href="#" (click)="showReportModal($event)">
-                    <span class="icon icon-alert"></span> Report
+                  <a class="dropdown-item" i18n-title title="Report this video" href="#" (click)="showReportModal($event)">
+                    <span class="icon icon-alert"></span> <ng-container i18n>Report</ng-container>
                   </a>
                 </li>
 
                 <li *ngIf="isVideoBlacklistable()" role="menuitem">
-                  <a class="dropdown-item" title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
-                    <span class="icon icon-blacklist"></span> Blacklist
+                  <a class="dropdown-item" i18n-title title="Blacklist this video" href="#" (click)="blacklistVideo($event)">
+                    <span class="icon icon-blacklist"></span> <ng-container i18n>Blacklist</ng-container>
                   </a>
                 </li>
 
                 <li *ngIf="isVideoUpdatable()" role="menuitem">
-                  <a class="dropdown-item" title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
-                    <span class="icon icon-edit"></span> Update
+                  <a class="dropdown-item" i18n-title title="Update this video" href="#" [routerLink]="[ '/videos/update', video.uuid ]">
+                    <span class="icon icon-edit"></span> <ng-container i18n>Update</ng-container>
                   </a>
                 </li>
 
                 <li *ngIf="isVideoRemovable()" role="menuitem">
-                  <a class="dropdown-item" title="Delete this video" href="#" (click)="removeVideo($event)">
-                    <span class="icon icon-blacklist"></span> Delete
+                  <a class="dropdown-item" i18n-title title="Delete this video" href="#" (click)="removeVideo($event)">
+                    <span class="icon icon-blacklist"></span> <ng-container i18n>Delete</ng-container>
                   </a>
                 </li>
               </ul>
@@ -109,20 +109,20 @@
         <div class="video-info-description-html" [innerHTML]="videoHTMLDescription"></div>
 
         <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
-          Show more
+          <ng-container i18n>Show more</ng-container>
           <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-down"></span>
           <my-loader class="description-loading" [loading]="descriptionLoading"></my-loader>
         </div>
 
         <div *ngIf="completeDescriptionShown === true" (click)="showLessDescription()" class="video-info-description-more">
-          Show less
+          <ng-container i18n>Show less</ng-container>
           <span *ngIf="descriptionLoading === false" class="glyphicon glyphicon-menu-up"></span>
         </div>
       </div>
 
       <div class="video-attributes">
         <div class="video-attribute">
-          <span class="video-attribute-label">
+          <span i18n class="video-attribute-label">
             Privacy
           </span>
           <span class="video-attribute-value">
@@ -131,7 +131,7 @@
         </div>
 
         <div class="video-attribute">
-          <span class="video-attribute-label">
+          <span i18n class="video-attribute-label">
             Category
           </span>
           <span class="video-attribute-value">
@@ -140,7 +140,7 @@
         </div>
 
         <div class="video-attribute">
-          <span class="video-attribute-label">
+          <span i18n class="video-attribute-label">
             Licence
           </span>
           <span class="video-attribute-value">
@@ -149,7 +149,7 @@
         </div>
 
         <div class="video-attribute">
-          <span class="video-attribute-label">
+          <span i18n class="video-attribute-label">
             Language
           </span>
           <span class="video-attribute-value">
@@ -158,7 +158,7 @@
         </div>
 
         <div class="video-attribute">
-          <span class="video-attribute-label">
+          <span i18n class="video-attribute-label">
             Tags
           </span>
 
@@ -172,7 +172,7 @@
     </div>
 
     <div class="other-videos">
-      <div class="title-page title-page-single">
+      <div i18n class="title-page title-page-single">
         Other videos
       </div>
 
@@ -184,13 +184,15 @@
 
 
   <div class="privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">
-    <strong>Friendly Reminder:</strong>
+    <strong i18n>Friendly Reminder:</strong>
     <div class="privacy-concerns-text">
-      The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be accessed publicly.
-      <a title="Get more information" target="_blank" rel="noopener noreferrer" href="/about#p2p-privacy">More information</a>
+      <ng-container i18n>
+        The sharing system used by this video implies that some technical information about your system (such as a public IP address) can be accessed publicly.
+      </ng-container>
+      <a i18n i18n-title title="Get more information" target="_blank" rel="noopener noreferrer" href="/about#p2p-privacy">More information</a>
     </div>
 
-    <div class="privacy-concerns-okay" (click)="acceptedPrivacyConcern()">
+    <div i18n class="privacy-concerns-okay" (click)="acceptedPrivacyConcern()">
       OK
     </div>
   </div>

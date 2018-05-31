@@ -19,7 +19,8 @@
     "ng": "ng",
     "postinstall": "npm rebuild node-sass && test -f angular-cli-patch.js && node angular-cli-patch.js || true",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer",
-    "webdriver-manager": "webdriver-manager"
+    "webdriver-manager": "webdriver-manager",
+    "ngx-extractor": "ngx-extractor"
   },
   "license": "GPLv3",
   "resolutions": {
@@ -47,6 +48,7 @@
     "@ngx-loading-bar/http-client": "^2.0.0",
     "@ngx-loading-bar/router": "^2.0.0",
     "@ngx-meta/core": "^6.0.0-rc.1",
+    "@ngx-translate/i18n-polyfill": "^1.0.0",
     "@types/core-js": "^0.9.28",
     "@types/jasmine": "^2.8.7",
     "@types/jasminewd2": "^2.0.3",
