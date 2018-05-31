@@ -4,6 +4,21 @@ import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../job-queue'
+import { VideoModel } from '../../../models/video/video'
+import { getActorsInvolvedInVideo } from '../audience'
+
+async function forwardVideoRelatedActivity (
+  activity: Activity,
+  t: Transaction,
+  followersException: ActorModel[] = [],
+  video: VideoModel
+) {
+  // Mastodon does not add our announces in audience, so we forward to them manually
+  const additionalActors = await getActorsInvolvedInVideo(video, t)
+  const additionalFollowerUrls = additionalActors.map(a => a.followersUrl)
+
+  return forwardActivity(activity, t, followersException, additionalFollowerUrls)
+}
 
 async function forwardActivity (
   activity: Activity,
@@ -91,7 +106,8 @@ export {
   broadcastToFollowers,
   unicastTo,
   forwardActivity,
-  broadcastToActors
+  broadcastToActors,
+  forwardVideoRelatedActivity
 }
 
 // ---------------------------------------------------------------------------

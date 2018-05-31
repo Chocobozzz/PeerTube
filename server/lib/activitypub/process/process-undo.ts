@@ -8,7 +8,7 @@ import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { forwardActivity } from '../send/utils'
+import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateAccountAndVideoAndChannel } from '../videos'
 import { VideoShareModel } from '../../../models/video/video-share'
 
@@ -67,7 +67,8 @@ async function undoLike (actorUrl: string, activity: ActivityUndo) {
     if (video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byAccount.Actor ]
-      await forwardActivity(activity, t, exceptions)
+
+      await forwardVideoRelatedActivity(activity, t, exceptions, video)
     }
   })
 }
@@ -99,7 +100,8 @@ async function undoDislike (actorUrl: string, activity: ActivityUndo) {
     if (video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byAccount.Actor ]
-      await forwardActivity(activity, t, exceptions)
+
+      await forwardVideoRelatedActivity(activity, t, exceptions, video)
     }
   })
 }
@@ -138,11 +140,19 @@ function processUndoAnnounce (actorUrl: string, announceActivity: ActivityAnnoun
 
 function undoAnnounce (actorUrl: string, announceActivity: ActivityAnnounce) {
   return sequelizeTypescript.transaction(async t => {
+    const byAccount = await AccountModel.loadByUrl(actorUrl, t)
+    if (!byAccount) throw new Error('Unknown account ' + actorUrl)
+
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
     if (!share) throw new Error(`'Unknown video share ${announceActivity.id}.`)
 
     await share.destroy({ transaction: t })
 
-    return undefined
+    if (share.Video.isOwned()) {
+      // Don't resend the activity to the sender
+      const exceptions = [ byAccount.Actor ]
+
+      await forwardVideoRelatedActivity(announceActivity, t, exceptions, share.Video)
+    }
   })
 }

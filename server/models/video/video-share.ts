@@ -99,7 +99,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
   }
 
   static loadByUrl (url: string, t: Sequelize.Transaction) {
-    return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
+    return VideoShareModel.scope(ScopeNames.FULL).findOne({
       where: {
         url
       },
