@@ -59,7 +59,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
       deps: [ ServerService ]
     }),
 
-    AppRoutingModule, // Put it after all the module because it has the 404 route
+    AppRoutingModule // Put it after all the module because it has the 404 route
   ],
   providers: [ ]
 })

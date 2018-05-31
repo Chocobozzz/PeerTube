@@ -10,7 +10,7 @@ import { PageNotFoundRoutingModule } from '@app/+page-not-found/page-not-found-r
   ],
 
   declarations: [
-    PageNotFoundComponent,
+    PageNotFoundComponent
   ],
 
   exports: [

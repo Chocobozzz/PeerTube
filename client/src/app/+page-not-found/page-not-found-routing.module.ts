@@ -5,7 +5,7 @@ import { PageNotFoundComponent } from './page-not-found.component'
 const pageNotFoundRoutes: Routes = [
   {
     path: '',
-    component: PageNotFoundComponent,
+    component: PageNotFoundComponent
   }
 ]
 
