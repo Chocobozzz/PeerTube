@@ -1,4 +1,3 @@
-import * as Bitfield from 'bitfield'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
