@@ -272,6 +272,10 @@ class PeerTubePlugin extends Plugin {
     return this.currentVideoFile
   }
 
+  getTorrent () {
+    return this.torrent
+  }
+
   private tryToPlay (done?: Function) {
     if (!done) done = function () { /* empty */ }
 

@@ -130,39 +130,6 @@ $context-menu-width: 350px;
     background-color: rgba($primary-background-color, 0.5);
   }
 
-  .vjs-slider {
-    background-color: rgba(255, 255, 255, .3);
-    border-radius: 2px;
-    height: 5px;
-
-    .vjs-slider-bar {
-      background: $primary-foreground-color;
-    }
-  }
-
-  .vjs-play-progress {
-
-    &::before {
-      top: -0.3em;
-
-      &:hover {
-        top: -0.372em;
-      }
-    }
-
-    .vjs-time-tooltip {
-      display: none;
-    }
-  }
-
-  .vjs-load-progress {
-    background: rgba($slider-bg-color, 0.5);
-
-    div {
-      background: rgba($slider-bg-color, 0.75);
-    }
-  }
-
   .vjs-poster {
     outline: none; /* Remove Blue Outline on Click*/
     outline: 0;
@@ -195,6 +162,37 @@ $context-menu-width: 350px;
     .vjs-peertube {
       color: $primary-foreground-color;
       opacity: $primary-foreground-opacity;
+    }
+
+    .vjs-slider {
+      background-color: rgba(255, 255, 255, .2);
+      border-radius: 2px;
+      height: 5px;
+
+      .vjs-slider-bar {
+        background: $primary-foreground-color;
+      }
+    }
+
+    .vjs-play-progress {
+
+      &::before {
+        top: -0.3em;
+
+        &:hover {
+          top: -0.372em;
+        }
+      }
+
+      .vjs-time-tooltip {
+        display: none;
+      }
+    }
+
+    .vjs-load-progress {
+      &, & div {
+        background: rgba(255, 255, 255, .2);
+      }
     }
 
     .vjs-progress-control {

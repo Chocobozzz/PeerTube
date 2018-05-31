@@ -9,6 +9,7 @@ import './resolution-menu-button'
 import './settings-menu-button'
 import './webtorrent-info-button'
 import './peertube-videojs-plugin'
+import './peertube-load-progress-bar'
 import { videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
 
@@ -94,7 +95,16 @@ function getControlBarChildren (options: {
     'liveDisplay': {},
 
     'flexibleWidthSpacer': {},
-    'progressControl': {},
+    'progressControl': {
+      children: {
+        'seekBar': {
+          children: {
+            'peerTubeLoadProgressBar': {},
+            'playProgressBar': {}
+          }
+        }
+      }
+    },
 
     'webTorrentButton': {},
 
