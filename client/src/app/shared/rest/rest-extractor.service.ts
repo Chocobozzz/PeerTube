@@ -1,10 +1,15 @@
-import { of, throwError as observableThrowError } from 'rxjs'
+import { throwError as observableThrowError } from 'rxjs'
 import { Injectable } from '@angular/core'
 import { dateToHuman } from '@app/shared/misc/utils'
 import { ResultList } from '../../../../../shared'
+import { Router } from '@angular/router'
 
 @Injectable()
 export class RestExtractor {
+
+  constructor (private router: Router) {
+    // empty
+  }
 
   extractDataBool () {
     return true
@@ -86,5 +91,14 @@ export class RestExtractor {
     }
 
     return observableThrowError(errorObj)
+  }
+
+  redirectTo404IfNotFound (obj: { status: number }, status = [ 404 ]) {
+    if (obj && obj.status && status.indexOf(obj.status) !== -1) {
+      // Do not use redirectService to avoid circular dependencies
+      this.router.navigate([ '/404' ], { skipLocationChange: true })
+    }
+
+    return observableThrowError(obj)
   }
 }

@@ -1,3 +1,4 @@
+import { catchError } from 'rxjs/operators'
 import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
@@ -12,7 +13,7 @@ import * as WebTorrent from 'webtorrent'
 import { UserVideoRateType, VideoRateType } from '../../../../../shared'
 import '../../../assets/player/peertube-videojs-plugin'
 import { AuthService, ConfirmService } from '../../core'
-import { VideoBlacklistService } from '../../shared'
+import { RestExtractor, VideoBlacklistService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
 import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
@@ -65,6 +66,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private metaService: MetaService,
     private authService: AuthService,
     private serverService: ServerService,
+    private restExtractor: RestExtractor,
     private notificationsService: NotificationsService,
     private markdownService: MarkdownService,
     private zone: NgZone,
@@ -99,21 +101,25 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }
 
       const uuid = routeParams['uuid']
+
       // Video did not change
       if (this.video && this.video.uuid === uuid) return
       // Video did change
-      this.videoService.getVideo(uuid).subscribe(
-        video => {
-          const startTime = this.route.snapshot.queryParams.start
-          this.onVideoFetched(video, startTime)
-            .catch(err => this.handleError(err))
-        },
+      this.videoService
+          .getVideo(uuid)
+          .pipe(catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ])))
+          .subscribe(
+            video => {
+              const startTime = this.route.snapshot.queryParams.start
+              this.onVideoFetched(video, startTime)
+                  .catch(err => this.handleError(err))
+            },
 
-        error => {
-          this.videoNotFound = true
-          console.error(error)
-        }
-      )
+            error => {
+              this.videoNotFound = true
+              console.error(error)
+            }
+          )
     })
   }
 

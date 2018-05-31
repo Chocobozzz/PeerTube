@@ -19,30 +19,29 @@ export class RedirectService {
     }
 
     this.serverService.configLoaded
-      .subscribe(() => {
-        const defaultRouteConfig = this.serverService.getConfig().instance.defaultClientRoute
+        .subscribe(() => {
+          const defaultRouteConfig = this.serverService.getConfig().instance.defaultClientRoute
 
-        if (defaultRouteConfig) {
-          RedirectService.DEFAULT_ROUTE = defaultRouteConfig
-        }
-      })
+          if (defaultRouteConfig) {
+            RedirectService.DEFAULT_ROUTE = defaultRouteConfig
+          }
+        })
   }
 
   redirectToHomepage () {
     console.log('Redirecting to %s...', RedirectService.DEFAULT_ROUTE)
 
     this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { replaceUrl: true })
-      .catch(() => {
-        console.error(
-          'Cannot navigate to %s, resetting default route to %s.',
-          RedirectService.DEFAULT_ROUTE,
-          RedirectService.INIT_DEFAULT_ROUTE
-        )
+        .catch(() => {
+          console.error(
+            'Cannot navigate to %s, resetting default route to %s.',
+            RedirectService.DEFAULT_ROUTE,
+            RedirectService.INIT_DEFAULT_ROUTE
+          )
 
-        RedirectService.DEFAULT_ROUTE = RedirectService.INIT_DEFAULT_ROUTE
-        return this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { replaceUrl: true })
-      })
+          RedirectService.DEFAULT_ROUTE = RedirectService.INIT_DEFAULT_ROUTE
+          return this.router.navigate([ RedirectService.DEFAULT_ROUTE ], { replaceUrl: true })
+        })
 
   }
-
 }
