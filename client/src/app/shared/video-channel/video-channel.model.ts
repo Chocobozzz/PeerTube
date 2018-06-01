@@ -22,7 +22,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     if (hash.ownerAccount) {
       this.ownerAccount = hash.ownerAccount
       this.ownerBy = Actor.CREATE_BY_STRING(hash.ownerAccount.name, hash.ownerAccount.host)
-      this.ownerAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.ownerAccount)
+      this.ownerAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(hash.ownerAccount)
     }
   }
 }
