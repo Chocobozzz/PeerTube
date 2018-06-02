@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird'
 import { map, maxBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
-import { join } from 'path'
+import { join, extname } from 'path'
 import * as Sequelize from 'sequelize'
 import {
   AllowNull,
@@ -32,6 +32,7 @@ import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import {
   createTorrentPromise,
   peertubeTruncate,
+  copyFilePromise,
   renamePromise,
   statPromise,
   unlinkPromise,
@@ -1313,6 +1314,38 @@ export class VideoModel extends Model<VideoModel> {
     await newVideoFile.save()
 
     this.VideoFiles.push(newVideoFile)
+  }
+
+  async importVideoFile (inputFilePath: string) {
+    let updatedVideoFile = new VideoFileModel({
+      resolution: (await getVideoFileResolution(inputFilePath)).videoFileResolution,
+      extname: extname(inputFilePath),
+      size: (await statPromise(inputFilePath)).size,
+      videoId: this.id
+    })
+
+    const outputPath = this.getVideoFilePath(updatedVideoFile)
+    await copyFilePromise(inputFilePath, outputPath)
+
+    const currentVideoFile = this.VideoFiles.find(videoFile => videoFile.resolution === updatedVideoFile.resolution)
+    const isNewVideoFile = !currentVideoFile
+
+    if (!isNewVideoFile) {
+      if (currentVideoFile.extname !== updatedVideoFile.extname) {
+        await this.removeFile(currentVideoFile)
+        currentVideoFile.set('extname', updatedVideoFile.extname)
+      }
+      currentVideoFile.set('size', updatedVideoFile.size)
+      updatedVideoFile = currentVideoFile
+    }
+
+    await this.createTorrentAndSetInfoHash(updatedVideoFile)
+
+    await updatedVideoFile.save()
+
+    if (isNewVideoFile) {
+      this.VideoFiles.push(updatedVideoFile)
+    }
   }
 
   getOriginalFileResolution () {

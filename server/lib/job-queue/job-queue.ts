@@ -7,7 +7,7 @@ import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from
 import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { EmailPayload, processEmail } from './handlers/email'
-import { processVideoFile, VideoFilePayload } from './handlers/video-file'
+import { processVideoFile, processVideoImport, VideoFilePayload, VideoImportPayload } from './handlers/video-file'
 import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
 
 type CreateJobArgument =
@@ -15,6 +15,7 @@ type CreateJobArgument =
   { type: 'activitypub-http-unicast', payload: ActivitypubHttpUnicastPayload } |
   { type: 'activitypub-http-fetcher', payload: ActivitypubHttpFetcherPayload } |
   { type: 'activitypub-follow', payload: ActivitypubFollowPayload } |
+  { type: 'video-file-import', payload: VideoImportPayload } |
   { type: 'video-file', payload: VideoFilePayload } |
   { type: 'email', payload: EmailPayload }
 
@@ -23,6 +24,7 @@ const handlers: { [ id in JobType ]: (job: kue.Job) => Promise<any>} = {
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-follow': processActivityPubFollow,
+  'video-file-import': processVideoImport,
   'video-file': processVideoFile,
   'email': processEmail
 }
