@@ -40,6 +40,7 @@
     "start": "node dist/server",
     "update-host": "node ./dist/scripts/update-host.js",
     "create-transcoding-job": "node ./dist/scripts/create-transcoding-job.js",
+    "create-import-video-file-job": "node ./dist/scripts/create-import-video-file-job.js",
     "test": "scripty",
     "help": "scripty",
     "generate-api-doc": "scripty",

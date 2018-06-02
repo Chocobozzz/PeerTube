@@ -16,6 +16,28 @@ export type VideoFilePayload = {
   isPortraitMode?: boolean
 }
 
+export type VideoImportPayload = {
+  videoUUID: string,
+  filePath: string
+}
+
+async function processVideoImport (job: kue.Job) {
+  const payload = job.data as VideoImportPayload
+  logger.info('Processing video import in job %d.', job.id)
+
+  const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
+  // No video, maybe deleted?
+  if (!video) {
+    logger.info('Do not process job %d, video does not exist.', job.id, { videoUUID: video.uuid })
+    return undefined
+  }
+
+  await video.importVideoFile(payload.filePath)
+
+  await onVideoFileTranscoderOrImportSuccess(video)
+  return video
+}
+
 async function processVideoFile (job: kue.Job) {
   const payload = job.data as VideoFilePayload
   logger.info('Processing video file in job %d.', job.id)
@@ -30,7 +52,7 @@ async function processVideoFile (job: kue.Job) {
   // Transcoding in other resolution
   if (payload.resolution) {
     await video.transcodeOriginalVideofile(payload.resolution, payload.isPortraitMode)
-    await onVideoFileTranscoderSuccess(video)
+    await onVideoFileTranscoderOrImportSuccess(video)
   } else {
     await video.optimizeOriginalVideofile()
     await onVideoFileOptimizerSuccess(video, payload.isNewVideo)
@@ -39,7 +61,7 @@ async function processVideoFile (job: kue.Job) {
   return video
 }
 
-async function onVideoFileTranscoderSuccess (video: VideoModel) {
+async function onVideoFileTranscoderOrImportSuccess (video: VideoModel) {
   if (video === undefined) return undefined
 
   // Maybe the video changed in database, refresh it
@@ -109,5 +131,6 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
 // ---------------------------------------------------------------------------
 
 export {
-  processVideoFile
+  processVideoFile,
+  processVideoImport
 }
