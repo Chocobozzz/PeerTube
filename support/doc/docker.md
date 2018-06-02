@@ -12,36 +12,41 @@ PeerTube needs a PostgreSQL and a Redis instance to work correctly. If you want
 to quickly set up a full environment, either for trying the service or in
 production, you can use a `docker-compose` setup.
 
-```bash
+```shell
 $ cd /your/peertube/directory
 $ mkdir ./docker-volume && mkdir ./docker-volume/traefik
 $ curl "https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/config/traefik.toml" > ./docker-volume/traefik/traefik.toml
 $ touch ./docker-volume/traefik/acme.json && chmod 600 ./docker-volume/traefik/acme.json
-$ curl -s "https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml" > ./docker-compose.yml
+$ curl -s "https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml" -o docker-compose.yml "https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/docker/production/.env" -o .env
 ```
 
 Update the reverse proxy configuration:
 
-```
+```shell
 $ vim ./docker-volume/traefik/traefik.toml
 ```
 
 Tweak the `docker-compose.yml` file there according to your needs:
 
-```
+```shell
 $ vim ./docker-compose.yaml
 ```
 
-You can use the regular `up` command to set it up, with possible overrides of
-the environment variables:
+Then tweak the `.env` file to change the enviromnent variables:
 
-```bash
-$ PEERTUBE_WEBSERVER_HOSTNAME="domain.tld" docker-compose up
+```shell
+$ vim ./.env
 ```
 
 Other environment variables are used in
 `support/docker/production/config/custom-environment-variables.yaml` and can be
 intuited from usage.
+
+You can use the regular `up` command to set it up:
+
+```shell
+$ docker-compose up
+```
 
 **Important**: note that you'll get the initial `root` user password from the
 program output, so check out your logs to find them.
@@ -50,17 +55,17 @@ program output, so check out your logs to find them.
 
 Pull the latest images and rerun PeerTube:
 
-```
+```shell
 $ cd /your/peertube/directory
 $ docker-compose down
 $ docker-compose pull
-$ PEERTUBE_WEBSERVER_HOSTNAME="domain.tld" docker-compose up -d
+$ docker-compose up -d
 ```
 
 
 ## Build your own Docker image
 
-```bash
+```shell
 $ git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
 $ cd /tmp/peertube
 $ docker build . -f ./support/docker/production/Dockerfile.stretch
