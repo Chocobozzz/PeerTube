@@ -10,7 +10,7 @@
 - [What is WebSeed?](#what-is-webseed)
 - [If a client requests each chunk of a video through HTTP, will the server be overloaded?](#if-a-client-requests-each-chunk-of-a-video-through-http-will-the-server-be-overloaded)
 - [Will an index of all the videos of servers you follow be too large for small servers?](#will-an-index-of-all-the-videos-of-servers-you-follow-be-too-large-for-small-servers)
-- [What codecs can I use for the videos I want to upload?](#what-codecs-can-i-use-for-the-videos-i-want-to-upload)
+- [Which container formats can I use for the videos I want to upload?](#which-container-formats-can-i-use-for-the-videos-i-want-to-upload)
 - [I want to change my domain name, how can I do that?](#i-want-to-change-my-domain-name-how-can-i-do-that)
 - [Should I have a big server to run PeerTube?](#should-i-have-a-big-server-to-run-peertube)
 - [Can I seed videos with my classic BitTorrent client (Transmission, rTorrent...)?](#can-i-seed-videos-with-my-classic-bittorrent-client-transmission-rtorrent)
@@ -52,7 +52,7 @@ In our benchmarks, 1,000,000 videos takes around 2GB of storage on PostgreSQL.
 We think it is acceptable for a video platform.
 
 
-## What container formats can I use for the videos I want to upload?
+## Which container formats can I use for the videos I want to upload?
 
 WEBM, MP4 or OGV videos.
 
