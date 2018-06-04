@@ -12,6 +12,7 @@ import { ValidatorMessage } from '../../shared/forms/form-validators/validator-m
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-videos-update',
@@ -37,7 +38,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private videoService: VideoService,
     private authService: AuthService,
     private loadingBar: LoadingBarService,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -91,7 +93,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
 
           err => {
             console.error(err)
-            this.notificationsService.error('Error', err.message)
+            this.notificationsService.error(this.i18n('Error'), err.message)
           }
         )
   }
@@ -116,13 +118,13 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
                        () => {
                          this.isUpdatingVideo = false
                          this.loadingBar.complete()
-                         this.notificationsService.success('Success', 'Video updated.')
+                         this.notificationsService.success(this.i18n('Success'), this.i18n('Video updated.'))
                          this.router.navigate([ '/videos/watch', this.video.uuid ])
                        },
 
                        err => {
                          this.isUpdatingVideo = false
-                         this.notificationsService.error('Error', err.message)
+                         this.notificationsService.error(this.i18n('Error'), err.message)
                          console.error(err)
                        }
                       )

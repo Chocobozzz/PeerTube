@@ -25,8 +25,8 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     protected notificationsService: NotificationsService,
     protected authService: AuthService,
     protected location: Location,
-    private videoService: VideoService,
-    private i18n: I18n
+    protected i18n: I18n,
+    private videoService: VideoService
   ) {
     super()
 

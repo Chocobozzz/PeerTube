@@ -7,6 +7,7 @@ import { NotificationsService } from 'angular2-notifications'
 import { ModalDirective } from 'ngx-bootstrap/modal'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-login',
@@ -35,12 +36,15 @@ export class LoginComponent extends FormReactive implements OnInit {
   }
   forgotPasswordEmail = ''
 
-  constructor (private authService: AuthService,
-               private userService: UserService,
-               private serverService: ServerService,
-               private redirectService: RedirectService,
-               private notificationsService: NotificationsService,
-               private formBuilder: FormBuilder) {
+  constructor (
+    private authService: AuthService,
+    private userService: UserService,
+    private serverService: ServerService,
+    private redirectService: RedirectService,
+    private notificationsService: NotificationsService,
+    private formBuilder: FormBuilder,
+    private i18n: I18n
+  ) {
     super()
   }
 
@@ -78,12 +82,15 @@ export class LoginComponent extends FormReactive implements OnInit {
     this.userService.askResetPassword(this.forgotPasswordEmail)
       .subscribe(
         res => {
-          const message = `An email with the reset password instructions will be sent to ${this.forgotPasswordEmail}.`
-          this.notificationsService.success('Success', message)
+          const message = this.i18n(
+            'An email with the reset password instructions will be sent to {{ email }}.',
+            { email: this.forgotPasswordEmail }
+          )
+          this.notificationsService.success(this.i18n('Success'), message)
           this.hideForgotPasswordModal()
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 

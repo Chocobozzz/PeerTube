@@ -3,7 +3,10 @@
     <div class="title-page title-page-single">
       Comments
     </div>
-    <my-help *ngIf="video.commentsEnabled === true" helpType="custom" customHtml="You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.displayName}}@{{video.account.host}}</strong> and find back the video. Direct commenting capabilities are being worked on in <a href='https://github.com/Chocobozzz/PeerTube/issues/224'>#224</a>."></my-help>
+    <my-help
+      *ngIf="video.commentsEnabled === true" helpType="custom" i18n-customHtml
+      customHtml="You can either comment on the page of your instance where this video is federated with your PeerTube account, or via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type in the search box <strong>@{{video.account.displayName}}@{{video.account.host}}</strong> and find back the video. Direct commenting capabilities are being worked on in <a href='https://github.com/Chocobozzz/PeerTube/issues/224'>#224</a>."
+    ></my-help>
   </div>
 
   <ng-template [ngIf]="video.commentsEnabled === true">
@@ -14,7 +17,7 @@
       (commentCreated)="onCommentThreadCreated($event)"
     ></my-video-comment-add>
 
-    <div *ngIf="componentPagination.totalItems === 0 && comments.length === 0">No comments.</div>
+    <div *ngIf="componentPagination.totalItems === 0 && comments.length === 0" i18n>No comments.</div>
 
     <div
       class="comment-threads"
@@ -24,15 +27,15 @@
     >
       <div *ngIf="highlightedThread" id="highlighted-comment">
         <my-video-comment
-            [comment]="highlightedThread"
-            [video]="video"
-            [inReplyToCommentId]="inReplyToCommentId"
-            [commentTree]="threadComments[highlightedThread.id]"
-            [highlightedComment]="true"
-            (wantedToReply)="onWantedToReply($event)"
-            (wantedToDelete)="onWantedToDelete($event)"
-            (threadCreated)="onThreadCreated($event)"
-            (resetReply)="onResetReply()"
+          [comment]="highlightedThread"
+          [video]="video"
+          [inReplyToCommentId]="inReplyToCommentId"
+          [commentTree]="threadComments[highlightedThread.id]"
+          [highlightedComment]="true"
+          (wantedToReply)="onWantedToReply($event)"
+          (wantedToDelete)="onWantedToDelete($event)"
+          (threadCreated)="onThreadCreated($event)"
+          (resetReply)="onResetReply()"
         ></my-video-comment>
       </div>
 
@@ -50,7 +53,7 @@
         ></my-video-comment>
 
         <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies">
-          View all {{ comment.totalReplies }} replies
+          <ng-container i18n>View all {{ comment.totalReplies }} replies</ng-container>
 
           <span *ngIf="!threadLoading[comment.id]" class="glyphicon glyphicon-menu-down"></span>
           <my-loader class="comment-thread-loading" [loading]="threadLoading[comment.id]"></my-loader>
@@ -59,7 +62,7 @@
     </div>
   </ng-template>
 
-  <div *ngIf="video.commentsEnabled === false">
+  <div *ngIf="video.commentsEnabled === false" i18n>
     Comments are disabled.
   </div>
 </div>

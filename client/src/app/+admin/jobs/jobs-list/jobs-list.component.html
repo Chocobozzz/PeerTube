@@ -1,5 +1,5 @@
 <div class="admin-sub-header">
-  <div class="form-sub-title">Jobs list</div>
+  <div i18n class="form-sub-title">Jobs list</div>
 
   <div class="peertube-select-container">
     <select [(ngModel)]="jobState" (ngModelChange)="onJobStateChanged()">
@@ -15,11 +15,11 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 27px"></th>
-      <th style="width: 60px">ID</th>
-      <th style="width: 210px">Type</th>
-      <th style="width: 130px">State</th>
-      <th style="width: 250px" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 250px">Updated</th>
+      <th i18n style="width: 60px">ID</th>
+      <th i18n style="width: 210px">Type</th>
+      <th i18n style="width: 130px">State</th>
+      <th i18n style="width: 250px" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n style="width: 250px">Updated</th>
     </tr>
   </ng-template>
 

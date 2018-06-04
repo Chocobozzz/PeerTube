@@ -3,7 +3,7 @@
     <img [src]="user.accountAvatarUrl" alt="Avatar" />
 
     <div class="form-group">
-      <textarea placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
+      <textarea i18n-placeholder placeholder="Add comment..." formControlName="text" [ngClass]="{ 'input-error': formErrors['text'] }"
                 (keyup.control.enter)="onValidKey()" (keyup.meta.enter)="onValidKey()" #textarea>
 
       </textarea>
@@ -14,7 +14,7 @@
   </div>
 
   <div class="submit-comment">
-    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid }">
+    <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid }" i18n>
       Post comment
     </button>
   </div>

@@ -1,5 +1,5 @@
 import { Observable, ReplaySubject, Subject, throwError as observableThrowError } from 'rxjs'
-import { catchError, map, mergeMap, tap, share } from 'rxjs/operators'
+import { catchError, map, mergeMap, share, tap } from 'rxjs/operators'
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
@@ -13,6 +13,7 @@ import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 import { objectToUrlEncoded } from '@app/shared/misc/utils'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 interface UserLoginWithUsername extends UserLogin {
   access_token: string
@@ -46,7 +47,8 @@ export class AuthService {
     private http: HttpClient,
     private notificationsService: NotificationsService,
     private restExtractor: RestExtractor,
-    private router: Router
+    private router: Router,
+    private i18n: I18n
   ) {
     this.loginChanged = new Subject<AuthStatus>()
     this.loginChangedSource = this.loginChanged.asObservable()
@@ -74,14 +76,15 @@ export class AuthService {
             let errorMessage = error.message
 
             if (error.status === 403) {
-              errorMessage = `Cannot retrieve OAuth Client credentials: ${error.text}. \n`
-              errorMessage += 'Ensure you have correctly configured PeerTube (config/ directory), ' +
-                'in particular the "webserver" section.'
+              errorMessage = this.i18n('Cannot retrieve OAuth Client credentials: {{ errorText }}.\n', { errorText: error.text })
+              errorMessage += this.i18n(
+                'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
+              )
             }
 
             // We put a bigger timeout
             // This is an important message
-            this.notificationsService.error('Error', errorMessage, { timeOut: 7000 })
+            this.notificationsService.error(this.i18n('Error'), errorMessage, { timeOut: 7000 })
           }
         )
   }
@@ -180,7 +183,7 @@ export class AuthService {
                                              this.router.navigate([ '/login' ])
 
                                              return observableThrowError({
-                                               error: 'You need to reconnect.'
+                                               error: this.i18n('You need to reconnect.')
                                              })
                                            }),
                                            share()

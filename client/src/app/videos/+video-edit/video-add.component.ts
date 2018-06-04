@@ -15,6 +15,7 @@ import { ValidatorMessage } from '../../shared/forms/form-validators/validator-m
 import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-videos-add',
@@ -56,7 +57,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     private userService: UserService,
     private serverService: ServerService,
     private videoService: VideoService,
-    private loadingBar: LoadingBarService
+    private loadingBar: LoadingBarService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -99,10 +101,11 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     let text = ''
 
     if (this.videoUploaded === true) {
-      text = 'Your video was uploaded in your account and is private.' +
-        ' But associated data (tags, description...) will be lost, are you sure you want to leave this page?'
+      // FIXME: cannot concatenate strings inside i18n service :/
+      text = this.i18n('Your video was uploaded in your account and is private.') +
+        this.i18n('But associated data (tags, description...) will be lost, are you sure you want to leave this page?')
     } else {
-      text = 'Your video is not uploaded yet, are you sure you want to leave this page?'
+      text = this.i18n('Your video is not uploaded yet, are you sure you want to leave this page?')
     }
 
     return {
@@ -127,7 +130,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
       this.isUploadingVideo = false
       this.videoUploadPercents = 0
       this.videoUploadObservable = null
-      this.notificationsService.info('Info', 'Upload cancelled')
+      this.notificationsService.info(this.i18n('Info'), this.i18n('Upload cancelled'))
     }
   }
 
@@ -137,7 +140,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
 
     // Cannot upload videos > 4GB for now
     if (videofile.size > 4 * 1024 * 1024 * 1024) {
-      this.notificationsService.error('Error', 'We are sorry but PeerTube cannot handle videos > 4GB')
+      this.notificationsService.error(this.i18n('Error'), this.i18n('We are sorry but PeerTube cannot handle videos > 4GB'))
       return
     }
 
@@ -145,11 +148,15 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
       const bytePipes = new BytesPipe()
 
-      const msg = 'Your video quota is exceeded with this video ' +
-        `(video size: ${bytePipes.transform(videofile.size, 0)}, ` +
-        `used: ${bytePipes.transform(this.userVideoQuotaUsed, 0)}, ` +
-        `quota: ${bytePipes.transform(videoQuota, 0)})`
-      this.notificationsService.error('Error', msg)
+      const msg = this.i18n(
+        'Your video quota is exceeded with this video (video size: {{ videoSize }}, used: {{ videoQuotaUsed }}, quota: {{ videoQuota }})',
+        {
+          videoSize: bytePipes.transform(videofile.size, 0),
+          videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
+          videoQuota: bytePipes.transform(videoQuota, 0)
+        }
+      )
+      this.notificationsService.error(this.i18n('Error'), msg)
       return
     }
 
@@ -192,8 +199,6 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
         if (event.type === HttpEventType.UploadProgress) {
           this.videoUploadPercents = Math.round(100 * event.loaded / event.total)
         } else if (event instanceof HttpResponse) {
-          console.log('Video uploaded.')
-
           this.videoUploaded = true
 
           this.videoUploadedIds = event.body.video
@@ -207,7 +212,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
         this.isUploadingVideo = false
         this.videoUploadPercents = 0
         this.videoUploadObservable = null
-        this.notificationsService.error('Error', err.message)
+        this.notificationsService.error(this.i18n('Error'), err.message)
       }
     )
   }
@@ -231,13 +236,13 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
           this.isUploadingVideo = false
           this.loadingBar.complete()
 
-          this.notificationsService.success('Success', 'Video published.')
+          this.notificationsService.success(this.i18n('Success'), this.i18n('Video published.'))
           this.router.navigate([ '/videos/watch', video.uuid ])
         },
 
         err => {
           this.isUpdatingVideo = false
-          this.notificationsService.error('Error', err.message)
+          this.notificationsService.error(this.i18n('Error'), err.message)
           console.error(err)
         }
       )

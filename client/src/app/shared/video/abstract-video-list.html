@@ -4,7 +4,7 @@
   </div>
   <my-video-feed [syndicationItems]="syndicationItems"></my-video-feed>
 
-  <div *ngIf="pagination.totalItems === 0">No results.</div>
+  <div i18n *ngIf="pagination.totalItems === 0">No results.</div>
   <div
     myInfiniteScroller
     [pageHeight]="pageHeight"

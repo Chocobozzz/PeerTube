@@ -6,6 +6,7 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { User } from '@app/shared'
 import { flatMap } from 'rxjs/operators'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -21,7 +22,8 @@ export class MyAccountVideoChannelsComponent implements OnInit {
     private authService: AuthService,
     private notificationsService: NotificationsService,
     private confirmService: ConfirmService,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private i18n: I18n
   ) {}
 
   ngOnInit () {
@@ -32,10 +34,13 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithInput(
-      `Do you really want to delete ${videoChannel.displayName}? It will delete all videos uploaded in this channel too.`,
-      'Please type the name of the video channel to confirm',
+      this.i18n(
+        'Do you really want to delete {{ videoChannelName }}? It will delete all videos uploaded in this channel too.',
+        { videoChannelName: videoChannel.displayName }
+      ),
+      this.i18n('Please type the name of the video channel to confirm'),
       videoChannel.displayName,
-      'Delete'
+      this.i18n('Delete')
     )
     if (res === false) return
 
@@ -43,10 +48,13 @@ export class MyAccountVideoChannelsComponent implements OnInit {
       .subscribe(
         status => {
           this.loadVideoChannels()
-          this.notificationsService.success('Success', `Video channel ${videoChannel.name} deleted.`)
+          this.notificationsService.success(
+            this.i18n('Success'),
+            this.i18n('Video channel {{ videoChannelName } deleted.', { videoChannelName: videoChannel.displayName })
+          )
         },
 
-        error => this.notificationsService.error('Error', error.message)
+        error => this.notificationsService.error(this.i18n('Error'), error.message)
       )
   }
 

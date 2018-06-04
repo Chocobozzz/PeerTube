@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-channel-about',
@@ -12,7 +13,8 @@ export class VideoChannelAboutComponent implements OnInit {
   videoChannel: VideoChannel
 
   constructor (
-    protected route: ActivatedRoute,
+    private route: ActivatedRoute,
+    private i18n: I18n,
     private videoChannelService: VideoChannelService
   ) { }
 
@@ -25,6 +27,6 @@ export class VideoChannelAboutComponent implements OnInit {
   getVideoChannelDescription () {
     if (this.videoChannel.description) return this.videoChannel.description
 
-    return 'No description'
+    return this.i18n('No description')
   }
 }

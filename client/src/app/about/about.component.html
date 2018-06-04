@@ -1,5 +1,5 @@
 <div class="margin-content">
-  <div class="title-page title-page-single">
+  <div i18n class="title-page title-page-single">
     Welcome to the {{ instanceName }} instance
   </div>
 
@@ -8,41 +8,41 @@
   </div>
 
   <div class="description">
-    <div class="section-title">Description</div>
+    <div i18n class="section-title">Description</div>
 
     <div [innerHTML]="descriptionHTML"></div>
   </div>
 
   <div class="terms">
-    <div class="section-title">Terms</div>
+    <div i18n class="section-title">Terms</div>
 
     <div [innerHTML]="termsHTML"></div>
   </div>
 
   <div class="signup">
-    <div class="section-title">Signup</div>
+    <div i18n class="section-title">Signup</div>
 
     <div *ngIf="isSignupAllowed">
-      User registration is allowed and
+      <ng-container i18n>User registration is allowed and</ng-container>
 
-      <ng-template [ngIf]="userVideoQuota !== -1">
+      <ng-container i18n *ngIf="userVideoQuota !== -1">
         this instance provides a baseline quota of {{ userVideoQuota | bytes: 0 }} space for the videos of its users.
-      </ng-template>
+      </ng-container>
 
-      <ng-template [ngIf]="userVideoQuota === -1">
+      <ng-container i18n *ngIf="userVideoQuota === -1">
         this instance provides unlimited space for the videos of its users.
-      </ng-template>
+      </ng-container>
     </div>
 
-    <div *ngIf="isSignupAllowed === false">
+    <div i18n *ngIf="isSignupAllowed === false">
       User registration is currently not allowed.
     </div>
   </div>
 
   <div id="p2p-privacy">
-    <div class="section-title">P2P & Privacy</div>
+    <div i18n class="section-title">P2P & Privacy</div>
 
-    <p>
+    <p i18n>
       PeerTube uses the BitTorrent protocol to share bandwidth between users. It implies that your public IP address is stored in the public BitTorrent tracker of the video PeerTube instance as long as you're watching the video.
       If you want to keep your public IP address private, please use a VPN or Tor.
     </p>

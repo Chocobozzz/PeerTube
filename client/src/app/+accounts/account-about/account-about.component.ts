@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-about',
@@ -12,7 +13,8 @@ export class AccountAboutComponent implements OnInit {
   account: Account
 
   constructor (
-    protected route: ActivatedRoute,
+    private route: ActivatedRoute,
+    private i18n: I18n,
     private accountService: AccountService
   ) { }
 
@@ -25,6 +27,6 @@ export class AccountAboutComponent implements OnInit {
   getAccountDescription () {
     if (this.account.description) return this.account.description
 
-    return 'No description'
+    return this.i18n('No description')
   }
 }

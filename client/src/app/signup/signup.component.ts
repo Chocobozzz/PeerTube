@@ -6,6 +6,8 @@ import { ServerService } from '@app/core/server'
 import { NotificationsService } from 'angular2-notifications'
 import { UserCreate } from '../../../../shared'
 import { FormReactive, USER_EMAIL, USER_PASSWORD, USER_USERNAME, UserService } from '../shared'
+import { RedirectService } from '@app/core'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-signup',
@@ -45,7 +47,9 @@ export class SignupComponent extends FormReactive implements OnInit {
     private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService,
-    private serverService: ServerService
+    private redirectService: RedirectService,
+    private serverService: ServerService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -78,8 +82,11 @@ export class SignupComponent extends FormReactive implements OnInit {
 
     this.userService.signup(userCreate).subscribe(
       () => {
-        this.notificationsService.success('Success', `Registration for ${userCreate.username} complete.`)
-        this.router.navigate([ '/videos/list' ])
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('Registration for {{ username }} complete.', { username: userCreate.username})
+        )
+        this.redirectService.redirectToHomepage()
       },
 
       err => this.error = err.message
@@ -99,9 +106,9 @@ export class SignupComponent extends FormReactive implements OnInit {
     const normalSeconds = initialUserVideoQuotaBit / (1.5 * 1000 * 1000)
 
     const lines = [
-      SignupComponent.getApproximateTime(fullHdSeconds) + ' of full HD videos',
-      SignupComponent.getApproximateTime(hdSeconds) + ' of HD videos',
-      SignupComponent.getApproximateTime(normalSeconds) + ' of average quality videos'
+      this.i18n('{{ seconds }} of full HD videos', { seconds: SignupComponent.getApproximateTime(fullHdSeconds) }),
+      this.i18n('{{ seconds }} of HD videos', { seconds: SignupComponent.getApproximateTime(hdSeconds) }),
+      this.i18n('{{ seconds }} of average quality videos', { seconds: SignupComponent.getApproximateTime(normalSeconds) })
     ]
 
     this.quotaHelpIndication = lines.join('<br />')

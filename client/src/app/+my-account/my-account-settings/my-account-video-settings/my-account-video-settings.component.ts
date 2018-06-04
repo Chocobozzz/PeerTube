@@ -4,6 +4,7 @@ import { NotificationsService } from 'angular2-notifications'
 import { UserUpdateMe } from '../../../../../../shared'
 import { AuthService } from '../../../core'
 import { FormReactive, User, UserService } from '../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-video-settings',
@@ -21,7 +22,8 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private notificationsService: NotificationsService,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -49,12 +51,12 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
 
     this.userService.updateMyProfile(details).subscribe(
       () => {
-        this.notificationsService.success('Success', 'Information updated.')
+        this.notificationsService.success(this.i18n('Success'), this.i18n('Information updated.'))
 
         this.authService.refreshUserInformation()
       },
 
-      err => this.notificationsService.error('Error', err.message)
+      err => this.notificationsService.error(this.i18n('Error'), err.message)
     )
   }
 }

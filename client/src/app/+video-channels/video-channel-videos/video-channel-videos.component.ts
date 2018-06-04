@@ -10,6 +10,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { tap } from 'rxjs/operators'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -20,7 +21,7 @@ import { tap } from 'rxjs/operators'
   ]
 })
 export class VideoChannelVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  titlePage = 'Published videos'
+  titlePage: string
   marginContent = false // Disable margin
   currentRoute = '/video-channel/videos'
   loadOnInit = false
@@ -34,10 +35,13 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected i18n: I18n,
     private videoChannelService: VideoChannelService,
     private videoService: VideoService
   ) {
     super()
+
+    this.titlePage = this.i18n('Published videos')
   }
 
   ngOnInit () {
@@ -63,7 +67,11 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
 
     return this.videoService
                .getVideoChannelVideos(this.videoChannel, newPagination, this.sort)
-               .pipe(tap(({ totalVideos }) => this.titlePage = `Published ${totalVideos} videos`))
+               .pipe(
+                 tap(({ totalVideos }) => {
+                   this.titlePage = this.i18n('Published {{ totalVideos }} videos', { totalVideos })
+                 })
+               )
   }
 
   generateSyndicationList () {

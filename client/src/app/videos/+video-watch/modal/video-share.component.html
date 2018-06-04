@@ -4,12 +4,12 @@
 
       <div class="modal-header">
         <span class="close" aria-hidden="true" (click)="hide()"></span>
-        <h4 class="modal-title">Share</h4>
+        <h4 i18n class="modal-title">Share</h4>
       </div>
 
       <div class="modal-body">
         <div class="form-group">
-          <label>URL</label>
+          <label i18n>URL</label>
           <div class="input-group input-group-sm">
             <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoUrl()" />
             <div class="input-group-btn" placement="bottom right">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="form-group">
-          <label>Embed</label>
+          <label i18n>Embed</label>
           <div class="input-group input-group-sm">
             <input #shareInput (click)="shareInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getVideoIframeCode()" />
             <div class="input-group-btn" placement="bottom right">
@@ -32,12 +32,12 @@
           </div>
         </div>
 
-        <div *ngIf="notSecure()" class="alert alert-warning">
+        <div i18n *ngIf="notSecure()" class="alert alert-warning">
           The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
         </div>
 
         <div class="form-group inputs">
-          <span class="action-button action-button-cancel" (click)="hide()">
+          <span i18n class="action-button action-button-cancel" (click)="hide()">
             Cancel
           </span>
         </div>

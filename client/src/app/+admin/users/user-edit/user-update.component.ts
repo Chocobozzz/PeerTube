@@ -8,6 +8,7 @@ import { User, USER_EMAIL, USER_ROLE, USER_VIDEO_QUOTA } from '../../../shared'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
 import { UserUpdate } from '../../../../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-user-update',
@@ -39,7 +40,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     private router: Router,
     private notificationsService: NotificationsService,
     private formBuilder: FormBuilder,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -81,7 +83,10 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.userService.updateUser(this.userId, userUpdate).subscribe(
       () => {
-        this.notificationsService.success('Success', `User ${this.username} updated.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('User {{ username }} updated.', { username: this.username })
+        )
         this.router.navigate([ '/admin/users/list' ])
       },
 
@@ -94,7 +99,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   }
 
   getFormButtonTitle () {
-    return 'Update user'
+    return this.i18n('Update user')
   }
 
   private onUserFetched (userJson: User) {

@@ -25,8 +25,8 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
     protected location: Location,
     protected notificationsService: NotificationsService,
     protected authService: AuthService,
-    private videoService: VideoService,
-    private i18n: I18n
+    protected i18n: I18n,
+    private videoService: VideoService
   ) {
     super()
 

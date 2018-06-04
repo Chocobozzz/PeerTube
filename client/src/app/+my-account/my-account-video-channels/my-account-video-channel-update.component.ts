@@ -13,6 +13,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { Subscription } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { AuthService } from '@app/core'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-video-channel-update',
@@ -43,7 +44,8 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -97,7 +99,10 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
     this.videoChannelService.updateVideoChannel(this.videoChannelToUpdate.uuid, videoChannelUpdate).subscribe(
       () => {
         this.authService.refreshUserInformation()
-        this.notificationsService.success('Success', `Video channel ${videoChannelUpdate.displayName} updated.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('Video channel {{ videoChannelName }} updated.', { videoChannelName: videoChannelUpdate.displayName })
+        )
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
 
@@ -110,6 +115,6 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   }
 
   getFormButtonTitle () {
-    return 'Update'
+    return this.i18n('Update')
   }
 }

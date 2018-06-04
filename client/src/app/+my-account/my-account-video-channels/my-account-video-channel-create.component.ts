@@ -11,6 +11,7 @@ import {
 } from '@app/shared/forms/form-validators/video-channel'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { AuthService } from '@app/core'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-video-channel-create',
@@ -37,7 +38,8 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
     private notificationsService: NotificationsService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -69,7 +71,10 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
     this.videoChannelService.createVideoChannel(videoChannelCreate).subscribe(
       () => {
         this.authService.refreshUserInformation()
-        this.notificationsService.success('Success', `Video channel ${videoChannelCreate.displayName} created.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('Video channel {{ videoChannelName }} created.', { videoChannelName: videoChannelCreate.displayName })
+        )
         this.router.navigate([ '/my-account', 'video-channels' ])
       },
 
@@ -82,6 +87,6 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
   }
 
   getFormButtonTitle () {
-    return 'Create'
+    return this.i18n('Create')
   }
 }

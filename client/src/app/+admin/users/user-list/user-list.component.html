@@ -1,9 +1,9 @@
 <div class="admin-sub-header">
-  <div class="form-sub-title">Users list</div>
+  <div i18n class="form-sub-title">Users list</div>
 
   <a class="add-button" routerLink="/admin/users/create">
     <span class="icon icon-add"></span>
-    Create user
+    <ng-container i18n>Create user</ng-container>
   </a>
 </div>
 
@@ -13,11 +13,11 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
-      <th>Email</th>
-      <th>Video quota</th>
-      <th>Role</th>
-      <th pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
+      <th i18n>Email</th>
+      <th i18n>Video quota</th>
+      <th i18n>Role</th>
+      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th></th>
     </tr>
   </ng-template>

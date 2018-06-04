@@ -31,9 +31,9 @@ export class VideoSearchComponent extends AbstractVideoList implements OnInit, O
     protected notificationsService: NotificationsService,
     protected authService: AuthService,
     protected location: Location,
+    protected i18n: I18n,
     private videoService: VideoService,
-    private redirectService: RedirectService,
-    private i18n: I18n
+    private redirectService: RedirectService
   ) {
     super()
 

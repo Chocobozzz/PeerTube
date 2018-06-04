@@ -1,10 +1,10 @@
 <input
-    type="text" id="search-video" name="search-video" placeholder="Search..."
+    type="text" id="search-video" name="search-video" i18n-placeholder placeholder="Search..."
     [(ngModel)]="searchValue" (keyup.enter)="doSearch()"
 >
 <span (click)="doSearch()" class="icon icon-search"></span>
 
 <a class="upload-button" routerLink="/videos/upload">
   <span class="icon icon-upload"></span>
-  <span class="upload-button-label">Upload</span>
+  <span i18n class="upload-button-label">Upload</span>
 </a>

@@ -10,6 +10,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { tap } from 'rxjs/operators'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-videos',
@@ -20,7 +21,7 @@ import { tap } from 'rxjs/operators'
   ]
 })
 export class AccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  titlePage = 'Published videos'
+  titlePage: string
   marginContent = false // Disable margin
   currentRoute = '/account/videos'
   loadOnInit = false
@@ -34,10 +35,13 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected notificationsService: NotificationsService,
     protected confirmService: ConfirmService,
     protected location: Location,
+    protected i18n: I18n,
     private accountService: AccountService,
     private videoService: VideoService
   ) {
     super()
+
+    this.titlePage = this.i18n('Published videos')
   }
 
   ngOnInit () {
@@ -63,7 +67,11 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
     return this.videoService
                .getAccountVideos(this.account, newPagination, this.sort)
-               .pipe(tap(({ totalVideos }) => this.titlePage = `Published ${totalVideos} videos`))
+               .pipe(
+                 tap(({ totalVideos }) => {
+                   this.titlePage = this.i18n('Published {{ totalVideos }} videos', { totalVideos })
+                 })
+               )
   }
 
   generateSyndicationList () {

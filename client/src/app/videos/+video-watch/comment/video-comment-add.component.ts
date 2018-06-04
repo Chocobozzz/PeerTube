@@ -9,6 +9,7 @@ import { User } from '../../../shared/users'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-comment-add',
@@ -37,7 +38,8 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   constructor (
     private formBuilder: FormBuilder,
     private notificationsService: NotificationsService,
-    private videoCommentService: VideoCommentService
+    private videoCommentService: VideoCommentService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -92,7 +94,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
         this.form.reset()
       },
 
-      err => this.notificationsService.error('Error', err.text)
+      err => this.notificationsService.error(this.i18n('Error'), err.text)
     )
   }
 

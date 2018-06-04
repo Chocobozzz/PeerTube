@@ -4,6 +4,7 @@ import { NotificationsService } from 'angular2-notifications'
 import { ModalDirective } from 'ngx-bootstrap/modal'
 import { FormReactive, VIDEO_ABUSE_REASON, VideoAbuseService } from '../../../shared/index'
 import { VideoDetails } from '../../../shared/video/video-details.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-report',
@@ -27,8 +28,9 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   constructor (
     private formBuilder: FormBuilder,
     private videoAbuseService: VideoAbuseService,
-    private notificationsService: NotificationsService
-   ) {
+    private notificationsService: NotificationsService,
+    private i18n: I18n
+  ) {
     super()
   }
 
@@ -58,11 +60,11 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     this.videoAbuseService.reportVideo(this.video.id, reason)
                           .subscribe(
                             () => {
-                              this.notificationsService.success('Success', 'Video reported.')
+                              this.notificationsService.success(this.i18n('Success'), this.i18n('Video reported.'))
                               this.hide()
                             },
 
-                            err => this.notificationsService.error('Error', err.message)
+                            err => this.notificationsService.error(this.i18n('Error'), err.message)
                            )
   }
 }

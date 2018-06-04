@@ -1,11 +1,11 @@
 <div class="margin-content">
 
-  <div class="title-page title-page-single">
+  <div i18n class="title-page title-page-single">
     Create an account
   </div>
 
   <div class="initial-user-quota">
-    <span class="initial-user-quota-label">Initial video quota:</span>
+    <span i18n class="initial-user-quota-label">Initial video quota:</span>
 
     <span *ngIf="initialUserVideoQuota !== -1">
       {{ initialUserVideoQuota | bytes: 0 }}
@@ -13,18 +13,18 @@
       <my-help helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
     </span>
 
-    <ng-template [ngIf]="initialUserVideoQuota === -1">
+    <ng-container i18n *ngIf="initialUserVideoQuota === -1">
       Unlimited
-    </ng-template>
+    </ng-container>
   </div>
 
   <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
   <form role="form" (ngSubmit)="signup()" [formGroup]="form">
     <div class="form-group">
-      <label for="username">Username</label>
+      <label for="username" i18n>Username</label>
       <input
-        type="text" id="username" placeholder="Username"
+        type="text" id="username" i18n-placeholder placeholder="Username"
         formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
       <div *ngIf="formErrors.username" class="form-error">
@@ -33,9 +33,9 @@
     </div>
 
     <div class="form-group">
-      <label for="email">Email</label>
+      <label for="email" i18n>Email</label>
       <input
-        type="text" id="email" placeholder="Email"
+        type="text" id="email" i18n-placeholder placeholder="Email"
         formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
       >
       <div *ngIf="formErrors.email" class="form-error">
@@ -44,9 +44,9 @@
     </div>
 
     <div class="form-group">
-      <label for="password">Password</label>
+      <label for="password" i18n>Password</label>
       <input
-        type="password" id="password" placeholder="Password"
+        type="password" id="password" i18n-placeholder placeholder="Password"
         formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
       >
       <div *ngIf="formErrors.password" class="form-error">
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <input type="submit" value="Signup" [disabled]="!form.valid">
+    <input type="submit" i18n-value value="Signup" [disabled]="!form.valid">
   </form>
 
 </div>

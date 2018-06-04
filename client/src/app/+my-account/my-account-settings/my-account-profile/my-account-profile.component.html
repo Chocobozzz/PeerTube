@@ -2,7 +2,7 @@
 
 <form role="form" (ngSubmit)="updateMyProfile()" [formGroup]="form">
 
-  <label for="display-name">Display name</label>
+  <label i18n for="display-name">Display name</label>
   <input
     type="text" id="display-name"
     formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
@@ -11,7 +11,7 @@
     {{ formErrors['display-name'] }}
   </div>
 
-  <label for="description">Description</label>
+  <label i18n for="description">Description</label>
   <textarea
     id="description" formControlName="description"
     [ngClass]="{ 'input-error': formErrors['description'] }"
@@ -20,5 +20,5 @@
     {{ formErrors.description }}
   </div>
 
-  <input type="submit" value="Update my profile" [disabled]="!form.valid">
+  <input type="submit" i18n-value value="Update my profile" [disabled]="!form.valid">
 </form>

@@ -1,13 +1,16 @@
 <form role="form" (ngSubmit)="updateDetails()" [formGroup]="form">
   <div class="form-group">
-    <label for="nsfwPolicy">Default policy on videos containing sensitive content</label>
-    <my-help helpType="custom" customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."></my-help>
+    <label i18n for="nsfwPolicy">Default policy on videos containing sensitive content</label>
+    <my-help
+      helpType="custom" i18n-customHtml
+      customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."
+    ></my-help>
 
     <div class="peertube-select-container">
       <select id="nsfwPolicy" formControlName="nsfwPolicy">
-        <option value="do_not_list">Do not list</option>
-        <option value="blur">Blur thumbnails</option>
-        <option value="display">Display</option>
+        <option i18n value="do_not_list">Do not list</option>
+        <option i18n value="blur">Blur thumbnails</option>
+        <option i18n value="display">Display</option>
       </select>
     </div>
   </div>
@@ -18,8 +21,8 @@
       formControlName="autoPlayVideo"
     >
     <label for="autoPlayVideo"></label>
-    <label for="autoPlayVideo">Automatically plays video</label>
+    <label i18n for="autoPlayVideo">Automatically plays video</label>
   </div>
 
-  <input type="submit" value="Save" [disabled]="!form.valid">
+  <input type="submit" i18n-value value="Save" [disabled]="!form.valid">
 </form>

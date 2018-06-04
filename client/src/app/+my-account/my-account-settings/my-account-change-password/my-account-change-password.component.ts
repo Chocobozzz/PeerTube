@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { FormReactive, USER_PASSWORD, UserService } from '../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-change-password',
@@ -24,7 +25,8 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
   constructor (
     private formBuilder: FormBuilder,
     private notificationsService: NotificationsService,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -49,12 +51,12 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
     this.error = null
 
     if (newPassword !== newConfirmedPassword) {
-      this.error = 'The new password and the confirmed password do not correspond.'
+      this.error = this.i18n('The new password and the confirmed password do not correspond.')
       return
     }
 
     this.userService.changePassword(newPassword).subscribe(
-      () => this.notificationsService.success('Success', 'Password updated.'),
+      () => this.notificationsService.success(this.i18n('Success'), this.i18n('Password updated.')),
 
       err => this.error = err.message
     )

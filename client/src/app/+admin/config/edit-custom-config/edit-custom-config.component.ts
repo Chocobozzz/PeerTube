@@ -8,12 +8,15 @@ import { FormReactive, USER_VIDEO_QUOTA } from '@app/shared'
 import {
   ADMIN_EMAIL,
   CACHE_PREVIEWS_SIZE,
-  INSTANCE_NAME, INSTANCE_SHORT_DESCRIPTION, SERVICES_TWITTER_USERNAME,
+  INSTANCE_NAME,
+  INSTANCE_SHORT_DESCRIPTION,
+  SERVICES_TWITTER_USERNAME,
   SIGNUP_LIMIT,
   TRANSCODING_THREADS
 } from '@app/shared/forms/form-validators/custom-config'
 import { NotificationsService } from 'angular2-notifications'
 import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -77,7 +80,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     private notificationsService: NotificationsService,
     private configService: ConfigService,
     private serverService: ServerService,
-    private confirmService: ConfirmService
+    private confirmService: ConfirmService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -133,7 +137,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           this.forceCheck()
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 
@@ -156,11 +160,15 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     if (customizations.length !== 0) {
       const customizationsText = customizations.join('/')
 
-      const message = `You set custom ${customizationsText}. ` +
-        'This could lead to security issues or bugs if you do not understand it. ' +
-        'Are you sure you want to update the configuration?'
-      const label = `Please type "I understand the ${customizationsText} I set" to confirm.`
-      const expectedInputValue = `I understand the ${customizationsText} I set`
+      // FIXME: i18n service does not support string concatenation
+      const message = this.i18n('You set custom {{ customizationsText }}. ', { customizationsText }) +
+        this.i18n('This could lead to security issues or bugs if you do not understand it. ') +
+        this.i18n('Are you sure you want to update the configuration?')
+      const label = this.i18n(
+        'Please type "I understand the {{ customizationsText }} I set" to confirm.',
+        { customizationsText }
+      )
+      const expectedInputValue = this.i18n('I understand the {{ customizationsText }} I set', { customizationsText})
 
       const confirmRes = await this.confirmService.confirmWithInput(message, label, expectedInputValue)
       if (confirmRes === false) return
@@ -223,10 +231,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
           this.updateForm()
 
-          this.notificationsService.success('Success', 'Configuration updated.')
+          this.notificationsService.success(this.i18n('Success'), this.i18n('Configuration updated.'))
         },
 
-        err => this.notificationsService.error('Error', err.message)
+        err => this.notificationsService.error(this.i18n('Error'), err.message)
       )
   }
 

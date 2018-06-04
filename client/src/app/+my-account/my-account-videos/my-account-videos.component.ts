@@ -11,6 +11,7 @@ import { ConfirmService } from '../../core/confirm'
 import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { Video } from '../../shared/video/video.model'
 import { VideoService } from '../../shared/video/video.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-videos',
@@ -18,7 +19,7 @@ import { VideoService } from '../../shared/video/video.service'
   styleUrls: [ './my-account-videos.component.scss' ]
 })
 export class MyAccountVideosComponent extends AbstractVideoList implements OnInit, OnDestroy {
-  titlePage = 'My videos'
+  titlePage: string
   currentRoute = '/my-account/videos'
   checkedVideos: { [ id: number ]: boolean } = {}
   pagination: ComponentPagination = {
@@ -30,14 +31,19 @@ export class MyAccountVideosComponent extends AbstractVideoList implements OnIni
   protected baseVideoWidth = -1
   protected baseVideoHeight = 155
 
-  constructor (protected router: Router,
-               protected route: ActivatedRoute,
-               protected authService: AuthService,
-               protected notificationsService: NotificationsService,
-               protected confirmService: ConfirmService,
-               protected location: Location,
-               private videoService: VideoService) {
+  constructor (
+    protected router: Router,
+    protected route: ActivatedRoute,
+    protected authService: AuthService,
+    protected notificationsService: NotificationsService,
+    protected confirmService: ConfirmService,
+    protected location: Location,
+    protected i18n: I18n,
+    private videoService: VideoService
+  ) {
     super()
+
+    this.titlePage = this.i18n('My videos')
   }
 
   ngOnInit () {

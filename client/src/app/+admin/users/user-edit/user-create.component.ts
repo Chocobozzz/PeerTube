@@ -1,20 +1,13 @@
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
-
 import { NotificationsService } from 'angular2-notifications'
-
 import { UserService } from '../shared'
-import {
-  USER_USERNAME,
-  USER_EMAIL,
-  USER_PASSWORD,
-  USER_VIDEO_QUOTA,
-  USER_ROLE
-} from '../../../shared'
+import { USER_EMAIL, USER_PASSWORD, USER_ROLE, USER_USERNAME, USER_VIDEO_QUOTA } from '../../../shared'
 import { ServerService } from '../../../core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-user-create',
@@ -45,7 +38,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private notificationsService: NotificationsService,
-    private userService: UserService
+    private userService: UserService,
+    private i18n: I18n
   ) {
     super()
   }
@@ -76,7 +70,10 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
     this.userService.addUser(userCreate).subscribe(
       () => {
-        this.notificationsService.success('Success', `User ${userCreate.username} created.`)
+        this.notificationsService.success(
+          this.i18n('Success'),
+          this.i18n('User {{ username }} created.', { username: userCreate.username })
+        )
         this.router.navigate([ '/admin/users/list' ])
       },
 
@@ -89,6 +86,6 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   }
 
   getFormButtonTitle () {
-    return 'Create user'
+    return this.i18n('Create user')
   }
 }
