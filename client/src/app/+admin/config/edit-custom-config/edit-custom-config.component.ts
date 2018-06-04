@@ -168,7 +168,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         'Please type "I understand the {{ customizationsText }} I set" to confirm.',
         { customizationsText }
       )
-      const expectedInputValue = this.i18n('I understand the {{ customizationsText }} I set', { customizationsText})
+      const expectedInputValue = this.i18n('I understand the {{ customizationsText }} I set', { customizationsText })
 
       const confirmRes = await this.confirmService.confirmWithInput(message, label, expectedInputValue)
       if (confirmRes === false) return

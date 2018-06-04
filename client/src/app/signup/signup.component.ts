@@ -84,7 +84,7 @@ export class SignupComponent extends FormReactive implements OnInit {
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('Registration for {{ username }} complete.', { username: userCreate.username})
+          this.i18n('Registration for {{ username }} complete.', { username: userCreate.username })
         )
         this.redirectService.redirectToHomepage()
       },

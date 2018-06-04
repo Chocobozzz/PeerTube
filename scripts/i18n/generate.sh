@@ -8,4 +8,5 @@ npm run ngx-extractor -- --locale "en-US" -i 'src/**/*.ts' -f xlf -o src/locale/
 
 # Zanata does not support inner elements in <source>, so we hack these special elements
 # This regex translate the Angular elements to special entities (that we will reconvert on pull)
-sed -i 's/<x id=\([^\/]\+\?\)\/>/\&lt;x id=\1\/\&gt;/g' src/locale/source/messages_en_US.xml
+#sed -i 's/<x id=\(.\+\?\)\/>/\&lt;x id=\1\/\&gt;/g' src/locale/source/messages_en_US.xml
+perl -pi -e 's|<x id=(.+?)/>|&lt;x id=\1/&gt;|g' src/locale/source/messages_en_US.xml
