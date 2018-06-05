@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core'
 import { MarkdownService } from '@app/videos/shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-help',
@@ -15,6 +16,8 @@ export class HelpComponent implements OnInit, OnChanges {
   @Input() tooltipPlacement = 'right'
 
   mainHtml = ''
+
+  constructor (private i18n: I18n) { }
 
   ngOnInit () {
     this.init()
@@ -42,18 +45,18 @@ export class HelpComponent implements OnInit, OnChanges {
   }
 
   private formatMarkdownSupport (rules: string[]) {
-    return '<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> ' +
-      'compatible that supports:' +
+    // tslint:disable:max-line-length
+    return this.i18n('<a href="https://en.wikipedia.org/wiki/Markdown#Example" target="_blank" rel="noopener noreferrer">Markdown</a> compatible that supports:') +
       this.createMarkdownList(rules)
   }
 
   private createMarkdownList (rules: string[]) {
     const rulesToText = {
-      'emphasis': 'Emphasis',
-      'link': 'Links',
-      'newline': 'New lines',
-      'list': 'Lists',
-      'image': 'Images'
+      'emphasis': this.i18n('Emphasis'),
+      'link': this.i18n('Links'),
+      'newline': this.i18n('New lines'),
+      'list': this.i18n('Lists'),
+      'image': this.i18n('Images')
     }
 
     const bullets = rules.map(r => rulesToText[r])

@@ -75,7 +75,6 @@ export class SignupComponent extends FormReactive implements OnInit {
     return this.i18n('~ {{minutes}} {minutes, plural, =1 {minute} other {minutes}}', { minutes })
   }
 
-
   private buildQuotaHelpIndication () {
     if (this.initialUserVideoQuota === -1) return
 

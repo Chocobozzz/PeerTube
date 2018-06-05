@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
 import { NavigationEnd, Router } from '@angular/router'
 import { TabsetComponent } from 'ngx-bootstrap/tabs'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   templateUrl: './follows.component.html',
@@ -9,22 +10,27 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs'
 export class FollowsComponent implements OnInit, AfterViewInit {
   @ViewChild('followsMenuTabs') followsMenuTabs: TabsetComponent
 
-  links = [
-    {
-      path: 'following-list',
-      title: 'Following'
-    },
-    {
-      path: 'following-add',
-      title: 'Follow'
-    },
-    {
-      path: 'followers-list',
-      title: 'Followers'
-    }
-  ]
+  links: { path: string, title: string }[] = []
 
-  constructor (private router: Router) {}
+  constructor (
+    private i18n: I18n,
+    private router: Router
+  ) {
+    this.links = [
+      {
+        path: 'following-list',
+        title: this.i18n('Following')
+      },
+      {
+        path: 'following-add',
+        title: this.i18n('Follow')
+      },
+      {
+        path: 'followers-list',
+        title: this.i18n('Followers')
+      }
+    ]
+  }
 
   ngOnInit () {
     this.router.events.subscribe(
