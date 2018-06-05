@@ -77,7 +77,9 @@ function getIndexPath (req: express.Request, paramLang?: string) {
   if (paramLang && is18nLocale(paramLang)) {
     lang = paramLang
   } else {
-    lang = req.acceptsLanguages(Object.keys(I18N_LOCALES)) || getDefaultLocale()
+    // lang = req.acceptsLanguages(Object.keys(I18N_LOCALES)) || getDefaultLocale()
+    // Disable auto language for now
+    lang = getDefaultLocale()
   }
 
   return join(__dirname, '../../../client/dist/' + lang + '/index.html')
