@@ -7,7 +7,7 @@ import { AuthService } from '../core'
 import { FormReactive } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { LOGIN_PASSWORD, LOGIN_USERNAME } from '@app/shared/forms/form-validators/login'
+import { LoginValidatorsService } from '@app/shared/forms/form-validators/login-validators.service'
 
 @Component({
   selector: 'my-login',
@@ -24,6 +24,7 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private loginValidatorsService: LoginValidatorsService,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
@@ -40,8 +41,8 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      username: LOGIN_USERNAME,
-      password: LOGIN_PASSWORD
+      username: this.loginValidatorsService.LOGIN_USERNAME,
+      password: this.loginValidatorsService.LOGIN_PASSWORD
     })
   }
 

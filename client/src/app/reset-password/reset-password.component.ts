@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { USER_PASSWORD, UserService } from '@app/shared'
+import { UserService, UserValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { RESET_PASSWORD_CONFIRM } from '@app/shared/forms/form-validators/reset-password'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { ResetPasswordValidatorsService } from '@app/shared/forms/form-validators/reset-password-validators.service'
 
 @Component({
   selector: 'my-login',
@@ -20,6 +20,8 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private resetPasswordValidatorsService: ResetPasswordValidatorsService,
+    private userValidatorsService: UserValidatorsService,
     private authService: AuthService,
     private userService: UserService,
     private notificationsService: NotificationsService,
@@ -32,8 +34,8 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      password: USER_PASSWORD,
-      'password-confirm': RESET_PASSWORD_CONFIRM
+      password: this.userValidatorsService.USER_PASSWORD,
+      'password-confirm': this.resetPasswordValidatorsService.RESET_PASSWORD_CONFIRM
     })
 
     this.userId = this.route.snapshot.queryParams['userId']

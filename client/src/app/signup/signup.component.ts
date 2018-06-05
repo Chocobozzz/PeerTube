@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { ServerService } from '@app/core/server'
-
 import { NotificationsService } from 'angular2-notifications'
 import { UserCreate } from '../../../../shared'
-import { FormReactive, USER_EMAIL, USER_PASSWORD, USER_USERNAME, UserService } from '../shared'
+import { FormReactive, UserService, UserValidatorsService } from '../shared'
 import { RedirectService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
@@ -32,6 +31,7 @@ export class SignupComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private userValidatorsService: UserValidatorsService,
     private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService,
@@ -48,9 +48,9 @@ export class SignupComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      username: USER_USERNAME,
-      password: USER_PASSWORD,
-      email: USER_EMAIL
+      username: this.userValidatorsService.USER_USERNAME,
+      password: this.userValidatorsService.USER_PASSWORD,
+      email: this.userValidatorsService.USER_EMAIL
     })
 
     this.serverService.configLoaded

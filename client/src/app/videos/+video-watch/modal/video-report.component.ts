@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { ModalDirective } from 'ngx-bootstrap/modal'
-import { FormReactive, VIDEO_ABUSE_REASON, VideoAbuseService } from '../../../shared/index'
+import { FormReactive, VideoAbuseService } from '../../../shared/index'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { VideoAbuseValidatorsService } from '@app/shared/forms/form-validators/video-abuse-validators.service'
 
 @Component({
   selector: 'my-video-report',
@@ -22,6 +21,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private videoAbuseValidatorsService: VideoAbuseValidatorsService,
     private videoAbuseService: VideoAbuseService,
     private notificationsService: NotificationsService,
     private i18n: I18n
@@ -31,7 +31,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      reason: VIDEO_ABUSE_REASON
+      reason: this.videoAbuseValidatorsService.VIDEO_ABUSE_REASON
     })
   }
 

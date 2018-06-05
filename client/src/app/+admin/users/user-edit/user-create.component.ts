@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { UserService } from '../shared'
-import { USER_EMAIL, USER_PASSWORD, USER_ROLE, USER_USERNAME, USER_VIDEO_QUOTA } from '../../../shared'
 import { ServerService } from '../../../core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-user-create',
@@ -20,6 +20,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   constructor (
     protected serverService: ServerService,
     protected formValidatorService: FormValidatorService,
+    private userValidatorsService: UserValidatorsService,
     private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService,
@@ -35,11 +36,11 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     }
 
     this.buildForm({
-      username: USER_USERNAME,
-      email: USER_EMAIL,
-      password: USER_PASSWORD,
-      role: USER_ROLE,
-      videoQuota: USER_VIDEO_QUOTA
+      username: this.userValidatorsService.USER_USERNAME,
+      email: this.userValidatorsService.USER_EMAIL,
+      password: this.userValidatorsService.USER_PASSWORD,
+      role: this.userValidatorsService.USER_ROLE,
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
     }, defaultValues)
   }
 

@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core'
+import { enableProdMode, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core'
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
 
 import { AppModule } from './app/app.module'
@@ -6,12 +6,22 @@ import { environment } from './environments/environment'
 
 import { hmrBootstrap } from './hmr'
 
+let providers = []
 if (environment.production) {
   enableProdMode()
 }
 
+if (environment.production === false && window.location.search === '?lang=fr') {
+  const translations = require(`raw-loader!./locale/target/messages_fr.xml`)
+
+  providers = [
+    { provide: TRANSLATIONS, useValue: translations },
+    { provide: TRANSLATIONS_FORMAT, useValue: 'xlf' }
+  ]
+}
+
 const bootstrap = () => platformBrowserDynamic()
-  .bootstrapModule(AppModule)
+  .bootstrapModule(AppModule, { providers })
   .then(bootstrapModule => {
     // TODO: Uncomment and remove unregistration when https://github.com/angular/angular/issues/21191 is fixed
     // TODO: Remove when https://github.com/angular/angular-cli/issues/8779 is fixed?

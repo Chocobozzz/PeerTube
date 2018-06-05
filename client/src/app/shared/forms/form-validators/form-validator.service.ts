@@ -3,11 +3,12 @@ import { Injectable } from '@angular/core'
 import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared/forms/form-reactive'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
+export type BuildFormValidator = {
+  VALIDATORS: ValidatorFn[],
+  MESSAGES: { [ name: string ]: string }
+}
 export type BuildFormArgument = {
-  [ id: string ]: {
-    VALIDATORS: ValidatorFn[],
-    MESSAGES: { [ name: string ]: string }
-  }
+  [ id: string ]: BuildFormValidator
 }
 export type BuildFormDefaultValues = {
   [ name: string ]: string | string[]

@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
-import { FormReactive, USER_DESCRIPTION, USER_DISPLAY_NAME, UserService } from '../../../shared'
+import { FormReactive, UserService } from '../../../shared'
 import { User } from '@app/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { Subject } from 'rxjs/Subject'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-account-profile',
@@ -19,6 +20,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private userValidatorsService: UserValidatorsService,
     private notificationsService: NotificationsService,
     private userService: UserService,
     private i18n: I18n
@@ -28,8 +30,8 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      'display-name': USER_DISPLAY_NAME,
-      description: USER_DESCRIPTION
+      'display-name': this.userValidatorsService.USER_DISPLAY_NAME,
+      description: this.userValidatorsService.USER_DESCRIPTION
     })
 
     this.userInformationLoaded.subscribe(() => {

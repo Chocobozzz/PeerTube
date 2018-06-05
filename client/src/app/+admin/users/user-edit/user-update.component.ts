@@ -3,12 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { NotificationsService } from 'angular2-notifications'
 import { UserService } from '../shared'
-import { User, USER_EMAIL, USER_ROLE, USER_VIDEO_QUOTA } from '../../../shared'
+import { User } from '../../../shared'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
 import { UserUpdate } from '../../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-user-update',
@@ -25,6 +26,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   constructor (
     protected formValidatorService: FormValidatorService,
     protected serverService: ServerService,
+    private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -37,9 +39,9 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   ngOnInit () {
     const defaultValues = { videoQuota: '-1' }
     this.buildForm({
-      email: USER_EMAIL,
-      role: USER_ROLE,
-      videoQuota: USER_VIDEO_QUOTA
+      email: this.userValidatorsService.USER_EMAIL,
+      role: this.userValidatorsService.USER_ROLE,
+      videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA
     }, defaultValues)
 
     this.paramsSub = this.route.params.subscribe(routeParams => {

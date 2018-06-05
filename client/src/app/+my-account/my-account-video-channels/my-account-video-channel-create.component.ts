@@ -3,15 +3,11 @@ import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { MyAccountVideoChannelEdit } from './my-account-video-channel-edit'
 import { VideoChannelCreate } from '../../../../../shared/models/videos'
-import {
-  VIDEO_CHANNEL_DESCRIPTION,
-  VIDEO_CHANNEL_DISPLAY_NAME,
-  VIDEO_CHANNEL_SUPPORT
-} from '@app/shared/forms/form-validators/video-channel'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { AuthService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { VideoChannelValidatorsService } from '@app/shared/forms/form-validators/video-channel-validators.service'
 
 @Component({
   selector: 'my-account-video-channel-create',
@@ -24,6 +20,7 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
+    private videoChannelValidatorsService: VideoChannelValidatorsService,
     private notificationsService: NotificationsService,
     private router: Router,
     private videoChannelService: VideoChannelService,
@@ -34,9 +31,9 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
 
   ngOnInit () {
     this.buildForm({
-      'display-name': VIDEO_CHANNEL_DISPLAY_NAME,
-      description: VIDEO_CHANNEL_DESCRIPTION,
-      support: VIDEO_CHANNEL_SUPPORT
+      'display-name': this.videoChannelValidatorsService.VIDEO_CHANNEL_DISPLAY_NAME,
+      description: this.videoChannelValidatorsService.VIDEO_CHANNEL_DESCRIPTION,
+      support: this.videoChannelValidatorsService.VIDEO_CHANNEL_SUPPORT
     })
   }
 

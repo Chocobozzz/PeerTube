@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { NotificationsService } from 'angular2-notifications'
-import { FormReactive, USER_PASSWORD, UserService } from '../../../shared'
+import { FormReactive, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 
 @Component({
   selector: 'my-account-change-password',
@@ -14,6 +15,7 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private userValidatorsService: UserValidatorsService,
     private notificationsService: NotificationsService,
     private userService: UserService,
     private i18n: I18n
@@ -23,8 +25,8 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
 
   ngOnInit () {
     this.buildForm({
-      'new-password': USER_PASSWORD,
-      'new-confirmed-password': USER_PASSWORD
+      'new-password': this.userValidatorsService.USER_PASSWORD,
+      'new-confirmed-password': this.userValidatorsService.USER_PASSWORD
     })
   }
 

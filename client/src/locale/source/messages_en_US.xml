@@ -306,7 +306,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+video-channels/video-channel-about/video-channel-about.component.ts</context>
@@ -739,8 +739,8 @@ Check this checkbox, save the configuration and test with a video URL of your in
           <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">207</context>
         </context-group>
-      </trans-unit><trans-unit id="48c189b718ed2d091e5c515bfc14b03e5ceb4f93" datatype="html">
-        <source>Preview cache size</source>
+      </trans-unit><trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7" datatype="html">
+        <source>Previews cache size</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">210</context>
@@ -1239,7 +1239,7 @@ Check this checkbox, save the configuration and test with a video URL of your in
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit><trans-unit id="74728de5289ea2ff3f553bc2b48f1811680b931a" datatype="html">
         <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
@@ -1296,7 +1296,7 @@ When you will upload a video in this channel, the video support field will be au
         <source>Update my profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit><trans-unit id="e242e3e8608a3c4a944327eb3d5c221dc6e4e3cd" datatype="html">
         <source>
@@ -1851,8 +1851,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="b0ea97653991a80d6324423949d37b8f165a4505" datatype="html">
-        <source>Published &lt;x id="INTERPOLATION" equiv-text="{{ totalVideos }}"/&gt; videos</source>
+      <trans-unit id="369ef5e9c0dd1251abdbf699a5db408bca10777f" datatype="html">
+        <source>Published &lt;x id="INTERPOLATION" equiv-text="{{totalVideos}}"/&gt; videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-videos/account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2009,8 +2009,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6b988bab9e171f65ed3510e8a66b9c5f7fcc5209" datatype="html">
-        <source>You set custom &lt;x id="INTERPOLATION" equiv-text="{{ customizationsText }}"/&gt;. </source>
+      <trans-unit id="27a71a0aee65258179e90ecf0841c0a68f95beed" datatype="html">
+        <source>You set custom &lt;x id="INTERPOLATION" equiv-text="{{customizationsText}}"/&gt;. </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2030,15 +2030,15 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="03b6bae23e3f895ed8f53e3b29fad0cafc7dd002" datatype="html">
-        <source>Please type &quot;I understand the &lt;x id="INTERPOLATION" equiv-text="{{ customizationsText }}"/&gt; I set&quot; to confirm.</source>
+      <trans-unit id="1ae0ab69f5c19d179282c8d882fd2f3c00e29119" datatype="html">
+        <source>Please type</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="892eb3bbce40125f9ed1dc13078d2938b921ff53" datatype="html">
-        <source>I understand the &lt;x id="INTERPOLATION" equiv-text="{{ customizationsText }}"/&gt; I set</source>
+      <trans-unit id="75f4bb68ee4c6b282abfd9d8d32be22c6202794d" datatype="html">
+        <source>to confirm.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2146,8 +2146,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="511be2e1ddb087fe7a0d95654f5f72b446d3da87" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ host }}"/&gt; is not valid</source>
+      <trans-unit id="fc5731a28a99b25c62d43333ceebb250d60aff84" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{host}}"/&gt; is not valid</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-add/following-add.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2188,8 +2188,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="b1f6b95a2d83bc589955f2679de00ce70fa03594" datatype="html">
-        <source>Do you really want to unfollow &lt;x id="INTERPOLATION" equiv-text="{{ host }}"/&gt;?</source>
+      <trans-unit id="5729c34a858c78daa1aa606f62a3665527cf97e6" datatype="html">
+        <source>Do you really want to unfollow &lt;x id="INTERPOLATION" equiv-text="{{host}}"/&gt;?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2202,22 +2202,22 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c02051988cf0b04bc8bea7602c909c4835ed770f" datatype="html">
-        <source>You are not following &lt;x id="INTERPOLATION" equiv-text="{{ host }}"/&gt; anymore.</source>
+      <trans-unit id="fb4e35e2b0ea2abc1f71295a4b34830e57c07bd0" datatype="html">
+        <source>You are not following &lt;x id="INTERPOLATION" equiv-text="{{host}}"/&gt; anymore.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fed7ccf455d8457dfe6b8650161b2ba991fc3162" datatype="html">
-        <source>User &lt;x id="INTERPOLATION" equiv-text="{{ username }}"/&gt; created.</source>
+      <trans-unit id="364463fab6c5714118d6449561a0f8de1cc10bfa" datatype="html">
+        <source>User &lt;x id="INTERPOLATION" equiv-text="{{username}}"/&gt; created.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-create.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="047fa00d26afadba9a3c82453e653ba863ed048b" datatype="html">
-        <source>User &lt;x id="INTERPOLATION" equiv-text="{{ username }}"/&gt; updated.</source>
+      <trans-unit id="964865a3cd90b4af99902f071644a4b2aede4c32" datatype="html">
+        <source>User &lt;x id="INTERPOLATION" equiv-text="{{username}}"/&gt; updated.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2244,8 +2244,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="383611faadd7b4cf0bbc124d2e42b535fa6c2eb0" datatype="html">
-        <source>User &lt;x id="INTERPOLATION" equiv-text="{{ username }}"/&gt; deleted.</source>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a" datatype="html">
+        <source>User &lt;x id="INTERPOLATION" equiv-text="{{username}}"/&gt; deleted.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2258,8 +2258,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4255d5c12ab55f41866ad22453d4b70e0deab89f" datatype="html">
-        <source>Video &lt;x id="INTERPOLATION" equiv-text="{{ name }}"/&gt; removed from the blacklist.</source>
+      <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f" datatype="html">
+        <source>Video &lt;x id="INTERPOLATION" equiv-text="{{name}}"/&gt; removed from the blacklist.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/video-blacklist/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2307,8 +2307,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="206542c1b57ce583f3cfe68b8609a0c4f791ae0c" datatype="html">
-        <source>Video channel &lt;x id="INTERPOLATION" equiv-text="{{ videoChannelName }}"/&gt; created.</source>
+      <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645" datatype="html">
+        <source>Video channel &lt;x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/&gt; created.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2321,15 +2321,15 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8ad57f6504ec3c791c2fc07523053ae4bf12e63e" datatype="html">
-        <source>Video channel &lt;x id="INTERPOLATION" equiv-text="{{ videoChannelName }}"/&gt; updated.</source>
+      <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559" datatype="html">
+        <source>Video channel &lt;x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/&gt; updated.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cb033ad5876fce7072bceb4eeba7d2154748153f" datatype="html">
-        <source>Do you really want to delete &lt;x id="INTERPOLATION" equiv-text="{{ videoChannelName }}"/&gt;? It will delete all videos uploaded in this channel too.</source>
+      <trans-unit id="d5adc9efad0469fc3e1503d68c4ec2ff4453a814" datatype="html">
+        <source>Do you really want to delete &lt;x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/&gt;? It will delete all videos uploaded in this channel too.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2342,8 +2342,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="504b4bf7053bc5ac9853d4fd7aaa6b38703dcbd2" datatype="html">
-        <source>Video channel {{ videoChannelName } deleted.</source>
+      <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2" datatype="html">
+        <source>Video channel &lt;x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/&gt; deleted.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2356,8 +2356,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="070558f351471e268ae7a690ba31ac0c1ead6d8f" datatype="html">
-        <source>Cannot retrieve OAuth Client credentials: &lt;x id="INTERPOLATION" equiv-text="{{ errorText }}"/&gt;.
+      <trans-unit id="edeaa933b09690523e46977e11064e9c655d77d7" datatype="html">
+        <source>Cannot retrieve OAuth Client credentials: &lt;x id="INTERPOLATION" equiv-text="{{errorText}}"/&gt;.
 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
@@ -2406,6 +2406,387 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b67c8e57904c67c4566610363b7f82c748d04323" datatype="html">
+        <source>Instance name is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10a248adb1ee12830355a04ac3cde2bad2d41d7d" datatype="html">
+        <source>Short description should not be longer than 250 characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="356e63270712273da168072ec0fc78a969919bf1" datatype="html">
+        <source>Twitter username is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dbb2ef02020afc05e146855f2e1dd7c9522d49b6" datatype="html">
+        <source>Previews cache size is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97836c6e698185b4ce357de9d4b2ab3e838f2459" datatype="html">
+        <source>Previews cache size must be greater than 1.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7393dc4a4aa12d005582eb9e1ddc7e5ca5bebd3" datatype="html">
+        <source>Previews cache size must be a number.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2cdd5a8c604ef16c2f9a17ed81d73f4f9509e828" datatype="html">
+        <source>Signup limit is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0ca9f7ec55c9896add6e82d2b52e9217e1140cf7" datatype="html">
+        <source>Signup limit must be greater than 1.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="58c2f66ba74f1400914031ef4ed635938e9e8ced" datatype="html">
+        <source>Signup limit must be a number.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1245841647f9b42d3e7554903c1c50bdd80ab021" datatype="html">
+        <source>Admin email is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fd2feb77dfe57fe82573e3cdf996105e2fafc66" datatype="html">
+        <source>Admin email must be valid.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f15f2e02b1f6a96553e98ea4a969045d17ec1400" datatype="html">
+        <source>Transcoding threads is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba88636d27c1a6a7e1f75ff57ec182b30b851c2e" datatype="html">
+        <source>Transcoding threads must be greater than 1.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5db300f6fba918a35597160183205ede13e8e149" datatype="html">
+        <source>Username is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/login-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4eb39d69b74d7a56652ec84fa6826994ee26c0e5" datatype="html">
+        <source>Password is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/login-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c90872a06666a51c2957c4b29724e68df5c67154" datatype="html">
+        <source>Confirmation of the password is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/reset-password-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="05ad6b99d9bf7b51968aa0b0b939e8627a329bea" datatype="html">
+        <source>Username must be at least 3 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d4b11fd0ddeea39b33f911d3aac1e82799cdaaef" datatype="html">
+        <source>Username cannot be more than 20 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5acbe0aa7a7157b1f09057a98ba01ab578a303a9" datatype="html">
+        <source>Username should be only lowercase alphanumeric characters.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6f52e19f074f77866fa03fabe1ddd5cdae346f0" datatype="html">
+        <source>Email is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bef8a36c3dffff15fb5faf3d20bdbbbc1af824c1" datatype="html">
+        <source>Email must be valid.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1fe26e49476ac701885abc59127e96a3760847f0" datatype="html">
+        <source>Password must be at least 6 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0a154031f3e66985af96d5f903441cf84f0dc75e" datatype="html">
+        <source>Password cannot be more than 255 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="abede840116d58f04a55d99a6cbd68da8a3e1bbf" datatype="html">
+        <source>Video quota is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="93a6dc1d3aa0d3201c86ef1ec8adf5cf0ada3c80" datatype="html">
+        <source>Quota must be greater than -1.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="545e77fd5d9526228a2133109447c23225ed9c85" datatype="html">
+        <source>User role is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1c417b7aef730d6ef5d62fa8a0a7e25e3a2393e4" datatype="html">
+        <source>Display name is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bdeb1a8e69e137572df795d64120ea85069b7674" datatype="html">
+        <source>Display name must be at least 3 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e81bda510399d52f26a44a15c3dbf4d6205d90a9" datatype="html">
+        <source>Display name cannot be more than 120 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d531c2261dc0c2739bd7cbb2bb175946b7eeb3ae" datatype="html">
+        <source>Description must be at least 3 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="916a6e4fd83ece1dc54c6135eb3b8cd064b4bac3" datatype="html">
+        <source>Description cannot be more than 250 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6" datatype="html">
+        <source>Report reason is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="993f9f5703d449a1d467243db75253d288a2947e" datatype="html">
+        <source>Report reason must be at least 2 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7de2178ed1036844fb1c3ad8b7899a039fcdcdb9" datatype="html">
+        <source>Report reason cannot be more than 300 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fac936be125163a8494f3d7e7f21d65c7e4f1ff6" datatype="html">
+        <source>Description cannot be more than 500 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7182e21e9566cc81c83f92727461322f71fd69b" datatype="html">
+        <source>Support text must be at least 3 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fe80c71378e127dda2dda9dbcd66b059d362813" datatype="html">
+        <source>Support text cannot be more than 500 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ca60e0f6dfbc0073b0514bce7d273150b0b9e79" datatype="html">
+        <source>Comment is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-comment-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f5a94cae76685e72f33541b977efdd7845cb0ed6" datatype="html">
+        <source>Comment must be at least 2 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-comment-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c194080446ee6901fd17a8b8648534ffe98b123" datatype="html">
+        <source>Comment cannot be more than 3000 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-comment-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cdc51eaeab88683610a28af8645cf91d136b39e1" datatype="html">
+        <source>Video name is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c27cc734f76efd221663921dd0898ea7c8bcbb5c" datatype="html">
+        <source>Video name must be at least 3 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0320d0f7f8eec2341e27ca53d7875217a3d99695" datatype="html">
+        <source>Video name cannot be more than 120 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4" datatype="html">
+        <source>Video privacy is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97afb789c1ab09074495d49aaadb92a1c3e71a16" datatype="html">
+        <source>Video channel is required.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="af5e2d5f3ac817c735fb7ff9ca16322789f66fef" datatype="html">
+        <source>Video description must be at least 3 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ce28a9403c2d7e5da2e59af27118f8b6d109e906" datatype="html">
+        <source>Video description cannot be more than 10000 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1cffdc2e156716cd9880201d65ba457d11464f8" datatype="html">
+        <source>A tag should be more than 2 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="34a0811f9a2a7366cc9efcdad52ea59b105326ea" datatype="html">
+        <source>A tag should be less than 30 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6" datatype="html">
+        <source>Video support must be at least 3 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e61f1c05121fa5effa6ccddf5be6dcf1c822ff4b" datatype="html">
+        <source>Video support cannot be more than 500 characters long.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0bf41abaa85526711f7952b4600e4044bc7f04a4" datatype="html">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
         <context-group purpose="location">
@@ -2420,78 +2801,78 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4ae5829f2615ca2343280765e6b6adfb5cc41128" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; years ago</source>
+      <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; years ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a2bada0a7274e74d4318cc86d413e3ae32f57bdd" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; months ago</source>
+      <trans-unit id="e622d3813449fe36371ea258281059306819199d" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; months ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="550f8907c0a4a636d494ed945f3c10dd3a58113a" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; month ago</source>
+      <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; month ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bcc068f243c2f21112b7559f88d1d599b94e2a46" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; weeks ago</source>
+      <trans-unit id="1d1a46543a29096d3c6676be2d561380a0bc94e1" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; weeks ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a8ab22b7de1e4a70285fe7d06962a2140d5a5252" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; week ago</source>
+      <trans-unit id="e1db0b98b6cdf817508195f3649c48475c32ae7e" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; week ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ca8bfebe411d4b56e2cfea8bd47346a7a51dea66" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; days ago</source>
+      <trans-unit id="a7654c3ece96e777527606f1c2870d6ee0b180f7" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; days ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="853e61e6ba27292056e756194829c5498387b381" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; day ago</source>
+      <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; day ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="41d5a34bc1c27138d8ffbeecd7499f7854025f11" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; hours ago</source>
+      <trans-unit id="dc7addf53bd6405a9c746db6dfca665c33679a84" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; hours ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="551090bafad6b52d4677e7d65fb10692b813945b" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; hour ago</source>
+      <trans-unit id="d54a610250ed38efccf0e3afdd0004f6ad83ea8d" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; hour ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5f751a2e17480da31cd12f8cac3e85a9a5ea9439" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; min ago</source>
+      <trans-unit id="9704e5e3adce178c127ead05f7057d3fb827308a" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; min ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a3ac5cb5be93ff145b3bf0139fe20da052060c4c" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ interval }}"/&gt; sec ago</source>
+      <trans-unit id="7a158a7555a44ea7eff9fa4988df9aa24d262ceb" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{interval}}"/&gt; sec ago</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/misc/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -2504,8 +2885,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3d6b54e95d42ef7586fb88f535b8d0349d431745" datatype="html">
-        <source>Too many attempts, please try again after &lt;x id="INTERPOLATION" equiv-text="{{ minutesLeft }}"/&gt; minutes.</source>
+      <trans-unit id="58546fd4d14b2d9635ce3d28c216ac68587bb25b" datatype="html">
+        <source>Too many attempts, please try again after &lt;x id="INTERPOLATION" equiv-text="{{minutesLeft}}"/&gt; minutes.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/rest/rest-extractor.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -2525,29 +2906,29 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="240f841426d253c459e739c19156f05d913ac10c" datatype="html">
-        <source>Registration for &lt;x id="INTERPOLATION" equiv-text="{{ username }}"/&gt; complete.</source>
+      <trans-unit id="20deec13d8d4ff199aa04318818ca44dab0585be" datatype="html">
+        <source>Registration for &lt;x id="INTERPOLATION" equiv-text="{{username}}"/&gt; complete.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/signup/signup.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cb77327761a94def3c7c0c2362e3af9e5949f57b" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ seconds }}"/&gt; of full HD videos</source>
+      <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{seconds}}"/&gt; of full HD videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/signup/signup.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="06dbb94903fc77f10c6760d7ebbb9cf649a0c8fd" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ seconds }}"/&gt; of HD videos</source>
+      <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{seconds}}"/&gt; of HD videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/signup/signup.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="d44fb1f436492c547bfb99825245526958dc84e7" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ seconds }}"/&gt; of average quality videos</source>
+      <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{seconds}}"/&gt; of average quality videos</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/signup/signup.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2616,8 +2997,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="36cd97a83cd16866213a1d16d1637a3639ec998f" datatype="html">
-        <source> &lt;x id="INTERPOLATION" equiv-text="{{ totalReplies }}"/&gt; replies will be deleted too.</source>
+      <trans-unit id="aeb61b334cac080733c3e03766165a346bbf42fd" datatype="html">
+        <source> &lt;x id="INTERPOLATION" equiv-text="{{totalReplies}}"/&gt; replies will be deleted too.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2644,8 +3025,8 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="085d56464b75ae5c1e370f5290e4c4cf23961a61" datatype="html">
-        <source>Video &lt;x id="INTERPOLATION" equiv-text="{{ videoName }}"/&gt; had been blacklisted.</source>
+      <trans-unit id="cafd8ec6020e69f241a107b1cb7081bd9e773d4e" datatype="html">
+        <source>Video &lt;x id="INTERPOLATION" equiv-text="{{videoName}}"/&gt; had been blacklisted.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2658,15 +3039,15 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="007c1d7080cf6da1ac264b23705246f0c53e3114" datatype="html">
-        <source>Video &lt;x id="INTERPOLATION" equiv-text="{{ videoName }}"/&gt; deleted.</source>
+      <trans-unit id="d39a0bfa616a9a8473b2e379eefe17d8ed1af118" datatype="html">
+        <source>Video &lt;x id="INTERPOLATION" equiv-text="{{videoName}}"/&gt; deleted.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cf9a064824f2fa3f01fd5544ad21032e33e60dca" datatype="html">
-        <source>&lt;x id="INTERPOLATION" equiv-text="{{ likesNumber }}"/&gt; likes / &lt;x id="INTERPOLATION_1" equiv-text="{{ dislikesNumber }}"/&gt; dislikes</source>
+      <trans-unit id="d5a4811e15319ad9354e1b62e9ca0131192b489e" datatype="html">
+        <source>&lt;x id="INTERPOLATION" equiv-text="{{likesNumber}}"/&gt; likes / &lt;x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/&gt; dislikes</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>

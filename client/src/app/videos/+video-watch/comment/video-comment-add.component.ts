@@ -3,13 +3,13 @@ import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs'
 import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
 import { FormReactive } from '../../../shared'
-import { VIDEO_COMMENT_TEXT } from '../../../shared/forms/form-validators/video-comment'
 import { User } from '../../../shared/users'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { VideoCommentValidatorsService } from '@app/shared/forms/form-validators/video-comment-validators.service'
 
 @Component({
   selector: 'my-video-comment-add',
@@ -29,6 +29,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
+    private videoCommentValidatorsService: VideoCommentValidatorsService,
     private notificationsService: NotificationsService,
     private videoCommentService: VideoCommentService,
     private i18n: I18n
@@ -38,7 +39,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      text: VIDEO_COMMENT_TEXT
+      text: this.videoCommentValidatorsService.VIDEO_COMMENT_TEXT
     })
 
     if (this.focusOnInit === true) {

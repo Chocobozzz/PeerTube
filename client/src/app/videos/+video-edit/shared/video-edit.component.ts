@@ -1,20 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormGroup } from '@angular/forms'
+import { FormGroup, ValidatorFn } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { VIDEO_SUPPORT } from '@app/shared'
+import { FormReactiveValidationMessages, VideoValidatorsService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
 import { ServerService } from '../../../core/server'
-import { VIDEO_CHANNEL } from '../../../shared/forms/form-validators'
-import { ValidatorMessage } from '../../../shared/forms/form-validators/validator-message'
-import {
-  VIDEO_CATEGORY,
-  VIDEO_DESCRIPTION,
-  VIDEO_LANGUAGE,
-  VIDEO_LICENCE,
-  VIDEO_NAME,
-  VIDEO_PRIVACY,
-  VIDEO_TAGS
-} from '../../../shared/forms/form-validators/video'
 import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { map } from 'rxjs/operators'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
@@ -28,7 +17,7 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 export class VideoEditComponent implements OnInit {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
-  @Input() validationMessages: ValidatorMessage = {}
+  @Input() validationMessages: FormReactiveValidationMessages = {}
   @Input() videoPrivacies = []
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
 
@@ -37,18 +26,22 @@ export class VideoEditComponent implements OnInit {
   videoLanguages = []
   video: VideoEdit
 
-  tagValidators = VIDEO_TAGS.VALIDATORS
-  tagValidatorsMessages = VIDEO_TAGS.MESSAGES
+  tagValidators: ValidatorFn[]
+  tagValidatorsMessages: { [ name: string ]: string }
 
   error: string = null
 
   constructor (
     private formValidatorService: FormValidatorService,
+    private videoValidatorsService: VideoValidatorsService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
     private serverService: ServerService
-  ) { }
+  ) {
+    this.tagValidators = this.videoValidatorsService.VIDEO_TAGS.VALIDATORS
+    this.tagValidatorsMessages = this.videoValidatorsService.VIDEO_TAGS.MESSAGES
+  }
 
   updateForm () {
     const defaultValues = {
@@ -57,19 +50,19 @@ export class VideoEditComponent implements OnInit {
       tags: []
     }
     const obj = {
-      name: VIDEO_NAME,
-      privacy: VIDEO_PRIVACY,
-      channelId: VIDEO_CHANNEL,
+      name: this.videoValidatorsService.VIDEO_NAME,
+      privacy: this.videoValidatorsService.VIDEO_PRIVACY,
+      channelId: this.videoValidatorsService.VIDEO_CHANNEL,
       nsfw: null,
       commentsEnabled: null,
-      category: VIDEO_CATEGORY,
-      licence: VIDEO_LICENCE,
-      language: VIDEO_LANGUAGE,
-      description: VIDEO_DESCRIPTION,
+      category: this.videoValidatorsService.VIDEO_CATEGORY,
+      licence: this.videoValidatorsService.VIDEO_LICENCE,
+      language: this.videoValidatorsService.VIDEO_LANGUAGE,
+      description: this.videoValidatorsService.VIDEO_DESCRIPTION,
       tags: null,
       thumbnailfile: null,
       previewfile: null,
-      support: VIDEO_SUPPORT
+      support: this.videoValidatorsService.VIDEO_SUPPORT
     }
 
     this.formValidatorService.updateForm(

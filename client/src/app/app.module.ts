@@ -17,6 +17,7 @@ import { SharedModule } from './shared'
 import { SignupModule } from './signup'
 import { VideosModule } from './videos'
 import { buildFileLocale, getDefaultLocale } from '../../../shared/models/i18n'
+import { environment } from '../environments/environment'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -66,6 +67,11 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     {
       provide: TRANSLATIONS,
       useFactory: (locale) => {
+        // On dev mode, test locales
+        if (environment.production === false && window.location.search === '?lang=fr') {
+          return require(`raw-loader!../locale/target/messages_fr.xml`)
+        }
+
         const fileLocale = buildFileLocale(locale)
 
         // Default locale, nothing to translate
