@@ -17,18 +17,6 @@ export class SignupComponent extends FormReactive implements OnInit {
   error: string = null
   quotaHelpIndication = ''
 
-  private static getApproximateTime (seconds: number) {
-    const hours = Math.floor(seconds / 3600)
-    let pluralSuffix = ''
-    if (hours > 1) pluralSuffix = 's'
-    if (hours > 0) return `~ ${hours} hour${pluralSuffix}`
-
-    const minutes = Math.floor(seconds % 3600 / 60)
-    if (minutes > 1) pluralSuffix = 's'
-
-    return `~ ${minutes} minute${pluralSuffix}`
-  }
-
   constructor (
     protected formValidatorService: FormValidatorService,
     private userValidatorsService: UserValidatorsService,
@@ -75,6 +63,19 @@ export class SignupComponent extends FormReactive implements OnInit {
     )
   }
 
+  private getApproximateTime (seconds: number) {
+    const hours = Math.floor(seconds / 3600)
+    let pluralSuffix = ''
+    if (hours > 1) pluralSuffix = 's'
+    if (hours > 0) return `~ ${hours} hour${pluralSuffix}`
+
+    const minutes = Math.floor(seconds % 3600 / 60)
+    if (minutes > 1) pluralSuffix = 's'
+
+    return this.i18n('~ {{minutes}} {minutes, plural, =1 {minute} other {minutes}}', { minutes })
+  }
+
+
   private buildQuotaHelpIndication () {
     if (this.initialUserVideoQuota === -1) return
 
@@ -88,9 +89,9 @@ export class SignupComponent extends FormReactive implements OnInit {
     const normalSeconds = initialUserVideoQuotaBit / (1.5 * 1000 * 1000)
 
     const lines = [
-      this.i18n('{{seconds}} of full HD videos', { seconds: SignupComponent.getApproximateTime(fullHdSeconds) }),
-      this.i18n('{{seconds}} of HD videos', { seconds: SignupComponent.getApproximateTime(hdSeconds) }),
-      this.i18n('{{seconds}} of average quality videos', { seconds: SignupComponent.getApproximateTime(normalSeconds) })
+      this.i18n('{{seconds}} of full HD videos', { seconds: this.getApproximateTime(fullHdSeconds) }),
+      this.i18n('{{seconds}} of HD videos', { seconds: this.getApproximateTime(hdSeconds) }),
+      this.i18n('{{seconds}} of average quality videos', { seconds: this.getApproximateTime(normalSeconds) })
     ]
 
     this.quotaHelpIndication = lines.join('<br />')
