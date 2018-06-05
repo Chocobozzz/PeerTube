@@ -34,6 +34,7 @@ import { VideoService } from './video/video.service'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @NgModule({
   imports: [
@@ -110,6 +111,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
     AccountService,
     MarkdownService,
     VideoChannelService,
+    FormValidatorService,
     I18n
   ]
 })

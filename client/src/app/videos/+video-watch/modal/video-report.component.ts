@@ -5,6 +5,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal'
 import { FormReactive, VIDEO_ABUSE_REASON, VideoAbuseService } from '../../../shared/index'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormReactiveErrors, FormReactiveValidationMessages } from '@app/shared'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-video-report',
@@ -17,16 +19,9 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   @ViewChild('modal') modal: ModalDirective
 
   error: string = null
-  form: FormGroup
-  formErrors = {
-    reason: ''
-  }
-  validationMessages = {
-    reason: VIDEO_ABUSE_REASON.MESSAGES
-  }
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private videoAbuseService: VideoAbuseService,
     private notificationsService: NotificationsService,
     private i18n: I18n
@@ -35,15 +30,9 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.buildForm()
-  }
-
-  buildForm () {
-    this.form = this.formBuilder.group({
-      reason: [ '', VIDEO_ABUSE_REASON.VALIDATORS ]
+    this.buildForm({
+      reason: VIDEO_ABUSE_REASON
     })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
   }
 
   show () {

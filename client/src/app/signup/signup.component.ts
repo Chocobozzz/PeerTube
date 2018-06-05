@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { ServerService } from '@app/core/server'
 
@@ -8,6 +7,7 @@ import { UserCreate } from '../../../../shared'
 import { FormReactive, USER_EMAIL, USER_PASSWORD, USER_USERNAME, UserService } from '../shared'
 import { RedirectService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-signup',
@@ -17,18 +17,6 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class SignupComponent extends FormReactive implements OnInit {
   error: string = null
   quotaHelpIndication = ''
-
-  form: FormGroup
-  formErrors = {
-    'username': '',
-    'email': '',
-    'password': ''
-  }
-  validationMessages = {
-    'username': USER_USERNAME.MESSAGES,
-    'email': USER_EMAIL.MESSAGES,
-    'password': USER_PASSWORD.MESSAGES
-  }
 
   private static getApproximateTime (seconds: number) {
     const hours = Math.floor(seconds / 3600)
@@ -43,7 +31,7 @@ export class SignupComponent extends FormReactive implements OnInit {
   }
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService,
@@ -58,18 +46,12 @@ export class SignupComponent extends FormReactive implements OnInit {
     return this.serverService.getConfig().user.videoQuota
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      username: [ '', USER_USERNAME.VALIDATORS ],
-      email:    [ '', USER_EMAIL.VALIDATORS ],
-      password: [ '', USER_PASSWORD.VALIDATORS ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({
+      username: USER_USERNAME,
+      password: USER_PASSWORD,
+      email: USER_EMAIL
+    })
 
     this.serverService.configLoaded
       .subscribe(() => this.buildQuotaHelpIndication())

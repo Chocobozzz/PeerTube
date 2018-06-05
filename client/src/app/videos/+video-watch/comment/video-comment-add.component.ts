@@ -1,5 +1,4 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { Observable } from 'rxjs'
 import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
@@ -10,6 +9,7 @@ import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-video-comment-add',
@@ -25,18 +25,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
 
-  form: FormGroup
-  formErrors = {
-    'text': ''
-  }
-  validationMessages = {
-    'text': VIDEO_COMMENT_TEXT.MESSAGES
-  }
-
   @ViewChild('textarea') private textareaElement: ElementRef
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private notificationsService: NotificationsService,
     private videoCommentService: VideoCommentService,
     private i18n: I18n
@@ -44,16 +36,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      text: [ '', VIDEO_COMMENT_TEXT.VALIDATORS ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({
+      text: VIDEO_COMMENT_TEXT
+    })
 
     if (this.focusOnInit === true) {
       this.textareaElement.nativeElement.focus()

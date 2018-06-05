@@ -12,9 +12,9 @@ export abstract class UserEdit extends FormReactive {
     { value: 5 * 1024 * 1024 * 1024, label: '5GB' },
     { value: 20 * 1024 * 1024 * 1024, label: '20GB' },
     { value: 50 * 1024 * 1024 * 1024, label: '50GB' }
-  ]
+  ].map(q => ({ value: q.value.toString(), label: q.label })) // Used by a HTML select, so convert key into strings
 
-  roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key, label: USER_ROLE_LABELS[key] }))
+  roles = Object.keys(USER_ROLE_LABELS).map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
 
   protected abstract serverService: ServerService
   abstract isCreation (): boolean

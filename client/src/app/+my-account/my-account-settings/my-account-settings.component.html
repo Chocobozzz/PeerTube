@@ -3,7 +3,7 @@
 
   <div class="user-info">
     <div class="user-info-names">
-      <div class="user-info-display-name">{{ user.account.displayName }}</div>
+      <div class="user-info-display-name">{{ user.account?.displayName }}</div>
       <div class="user-info-username">{{ user.username }}</div>
     </div>
     <div i18n class="user-info-followers">{{ user.account?.followersCount }} subscribers</div>
@@ -22,11 +22,11 @@
 
 <ng-template [ngIf]="user && user.account">
   <div i18n class="account-title">Profile</div>
-  <my-account-profile [user]="user"></my-account-profile>
+  <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
 </ng-template>
 
 <div i18n class="account-title">Password</div>
 <my-account-change-password></my-account-change-password>
 
 <div i18n class="account-title">Video settings</div>
-<my-account-video-settings [user]="user"></my-account-video-settings>
+<my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>

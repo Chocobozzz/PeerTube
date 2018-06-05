@@ -17,6 +17,7 @@ import {
 import { NotificationsService } from 'angular2-notifications'
 import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { BuildFormDefaultValues, FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -44,38 +45,11 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     { value: 8, label: '8' }
   ]
 
-  form: FormGroup
-  formErrors = {
-    instanceName: '',
-    instanceShortDescription: '',
-    instanceDescription: '',
-    instanceTerms: '',
-    instanceDefaultClientRoute: '',
-    instanceDefaultNSFWPolicy: '',
-    servicesTwitterUsername: '',
-    cachePreviewsSize: '',
-    signupLimit: '',
-    adminEmail: '',
-    userVideoQuota: '',
-    transcodingThreads: '',
-    customizationJavascript: '',
-    customizationCSS: ''
-  }
-  validationMessages = {
-    instanceShortDescription: INSTANCE_SHORT_DESCRIPTION.MESSAGES,
-    instanceName: INSTANCE_NAME.MESSAGES,
-    servicesTwitterUsername: SERVICES_TWITTER_USERNAME,
-    cachePreviewsSize: CACHE_PREVIEWS_SIZE.MESSAGES,
-    signupLimit: SIGNUP_LIMIT.MESSAGES,
-    adminEmail: ADMIN_EMAIL.MESSAGES,
-    userVideoQuota: USER_VIDEO_QUOTA.MESSAGES
-  }
-
   private oldCustomJavascript: string
   private oldCustomCSS: string
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private router: Router,
     private notificationsService: NotificationsService,
     private configService: ConfigService,
@@ -90,39 +64,35 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     return 'transcodingResolution' + resolution
   }
 
-  buildForm () {
+  ngOnInit () {
     const formGroupData = {
-      instanceName: [ '', INSTANCE_NAME.VALIDATORS ],
-      instanceShortDescription: [ '', INSTANCE_SHORT_DESCRIPTION.VALIDATORS ],
-      instanceDescription: [ '' ],
-      instanceTerms: [ '' ],
-      instanceDefaultClientRoute: [ '' ],
-      instanceDefaultNSFWPolicy: [ '' ],
-      servicesTwitterUsername: [ '', SERVICES_TWITTER_USERNAME.VALIDATORS ],
-      servicesTwitterWhitelisted: [ ],
-      cachePreviewsSize: [ '', CACHE_PREVIEWS_SIZE.VALIDATORS ],
-      signupEnabled: [ ],
-      signupLimit: [ '', SIGNUP_LIMIT.VALIDATORS ],
-      adminEmail: [ '', ADMIN_EMAIL.VALIDATORS ],
-      userVideoQuota: [ '', USER_VIDEO_QUOTA.VALIDATORS ],
-      transcodingThreads: [ '', TRANSCODING_THREADS.VALIDATORS ],
-      transcodingEnabled: [ ],
-      customizationJavascript: [ '' ],
-      customizationCSS: [ '' ]
+      instanceName: INSTANCE_NAME,
+      instanceShortDescription: INSTANCE_SHORT_DESCRIPTION,
+      instanceDescription: null,
+      instanceTerms: null,
+      instanceDefaultClientRoute: null,
+      instanceDefaultNSFWPolicy: null,
+      servicesTwitterUsername: SERVICES_TWITTER_USERNAME,
+      servicesTwitterWhitelisted: null,
+      cachePreviewsSize: CACHE_PREVIEWS_SIZE,
+      signupEnabled: null,
+      signupLimit: SIGNUP_LIMIT,
+      adminEmail: ADMIN_EMAIL,
+      userVideoQuota: USER_VIDEO_QUOTA,
+      transcodingThreads: TRANSCODING_THREADS,
+      transcodingEnabled: null,
+      customizationJavascript: null,
+      customizationCSS: null
     }
 
+    const defaultValues: BuildFormDefaultValues = {}
     for (const resolution of this.resolutions) {
       const key = this.getResolutionKey(resolution)
-      formGroupData[key] = [ false ]
+      defaultValues[key] = 'false'
+      formGroupData[key] = null
     }
 
-    this.form = this.formBuilder.group(formGroupData)
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
-  ngOnInit () {
-    this.buildForm()
+    this.buildForm(formGroupData)
 
     this.configService.getCustomConfig()
       .subscribe(

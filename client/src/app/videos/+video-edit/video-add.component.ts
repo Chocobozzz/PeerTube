@@ -1,6 +1,5 @@
 import { HttpEventType, HttpResponse } from '@angular/common/http'
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { UserService } from '@app/shared'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
@@ -11,11 +10,11 @@ import { Subscription } from 'rxjs'
 import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { AuthService, ServerService } from '../../core'
 import { FormReactive } from '../../shared'
-import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
 import { populateAsyncUserVideoChannels } from '../../shared/misc/utils'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-videos-add',
@@ -39,10 +38,6 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   }
   videoFileName: string
 
-  form: FormGroup
-  formErrors: { [ id: string ]: string } = {}
-  validationMessages: ValidatorMessage = {}
-
   userVideoChannels: { id: number, label: string, support: string }[] = []
   userVideoQuotaUsed = 0
   videoPrivacies = []
@@ -50,7 +45,7 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
   firstStepChannelId = 0
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private router: Router,
     private notificationsService: NotificationsService,
     private authService: AuthService,
@@ -67,13 +62,8 @@ export class VideoAddComponent extends FormReactive implements OnInit, OnDestroy
     return this.serverService.getConfig().video.file.extensions.join(',')
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({})
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({})
 
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
       .then(() => this.firstStepChannelId = this.userVideoChannels[0].id)

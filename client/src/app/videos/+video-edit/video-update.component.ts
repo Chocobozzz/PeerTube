@@ -1,6 +1,5 @@
 import { map, switchMap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { NotificationsService } from 'angular2-notifications'
@@ -8,11 +7,11 @@ import { VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { AuthService } from '../../core/auth'
 import { FormReactive } from '../../shared'
-import { ValidatorMessage } from '../../shared/forms/form-validators/validator-message'
 import { VideoEdit } from '../../shared/video/video-edit.model'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-videos-update',
@@ -23,14 +22,11 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
   isUpdatingVideo = false
-  form: FormGroup
-  formErrors: { [ id: string ]: string } = {}
-  validationMessages: ValidatorMessage = {}
   videoPrivacies = []
   userVideoChannels = []
 
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -44,13 +40,8 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({})
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({})
 
     this.serverService.videoPrivaciesLoaded
       .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())

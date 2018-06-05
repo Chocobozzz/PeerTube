@@ -1,6 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { Router } from '@angular/router'
 import { RedirectService, ServerService } from '@app/core'
 import { UserService } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
@@ -8,6 +6,8 @@ import { ModalDirective } from 'ngx-bootstrap/modal'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { LOGIN_PASSWORD, LOGIN_USERNAME } from '@app/shared/forms/form-validators/login'
 
 @Component({
   selector: 'my-login',
@@ -20,29 +20,15 @@ export class LoginComponent extends FormReactive implements OnInit {
   @ViewChild('forgotPasswordEmailInput') forgotPasswordEmailInput: ElementRef
 
   error: string = null
-
-  form: FormGroup
-  formErrors = {
-    'username': '',
-    'password': ''
-  }
-  validationMessages = {
-    'username': {
-      'required': 'Username is required.'
-    },
-    'password': {
-      'required': 'Password is required.'
-    }
-  }
   forgotPasswordEmail = ''
 
   constructor (
+    protected formValidatorService: FormValidatorService,
     private authService: AuthService,
     private userService: UserService,
     private serverService: ServerService,
     private redirectService: RedirectService,
     private notificationsService: NotificationsService,
-    private formBuilder: FormBuilder,
     private i18n: I18n
   ) {
     super()
@@ -52,17 +38,11 @@ export class LoginComponent extends FormReactive implements OnInit {
     return this.serverService.getConfig().signup.allowed === true
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      username: [ '', Validators.required ],
-      password: [ '', Validators.required ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({
+      username: LOGIN_USERNAME,
+      password: LOGIN_PASSWORD
+    })
   }
 
   login () {

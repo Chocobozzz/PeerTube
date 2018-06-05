@@ -27,6 +27,10 @@ export class MyAccountSettingsComponent implements OnInit {
     private i18n: I18n
   ) {}
 
+  get userInformationLoaded () {
+    return this.authService.userInformationLoaded
+  }
+
   ngOnInit () {
     this.user = this.authService.getUser()
 

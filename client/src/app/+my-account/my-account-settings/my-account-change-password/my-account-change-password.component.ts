@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { NotificationsService } from 'angular2-notifications'
 import { FormReactive, USER_PASSWORD, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-account-change-password',
@@ -12,18 +12,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class MyAccountChangePasswordComponent extends FormReactive implements OnInit {
   error: string = null
 
-  form: FormGroup
-  formErrors = {
-    'new-password': '',
-    'new-confirmed-password': ''
-  }
-  validationMessages = {
-    'new-password': USER_PASSWORD.MESSAGES,
-    'new-confirmed-password': USER_PASSWORD.MESSAGES
-  }
-
   constructor (
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private notificationsService: NotificationsService,
     private userService: UserService,
     private i18n: I18n
@@ -31,17 +21,11 @@ export class MyAccountChangePasswordComponent extends FormReactive implements On
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      'new-password': [ '', USER_PASSWORD.VALIDATORS ],
-      'new-confirmed-password': [ '', USER_PASSWORD.VALIDATORS ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    this.buildForm({
+      'new-password': USER_PASSWORD,
+      'new-confirmed-password': USER_PASSWORD
+    })
   }
 
   changePassword () {

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core'
-import { FormBuilder, FormGroup } from '@angular/forms'
 import { Router } from '@angular/router'
 import { NotificationsService } from 'angular2-notifications'
 import { UserService } from '../shared'
@@ -8,6 +7,7 @@ import { ServerService } from '../../../core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-user-create',
@@ -17,25 +17,9 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class UserCreateComponent extends UserEdit implements OnInit {
   error: string
 
-  form: FormGroup
-  formErrors = {
-    'username': '',
-    'email': '',
-    'password': '',
-    'role': '',
-    'videoQuota': ''
-  }
-  validationMessages = {
-    'username': USER_USERNAME.MESSAGES,
-    'email': USER_EMAIL.MESSAGES,
-    'password': USER_PASSWORD.MESSAGES,
-    'role': USER_ROLE.MESSAGES,
-    'videoQuota': USER_VIDEO_QUOTA.MESSAGES
-  }
-
   constructor (
     protected serverService: ServerService,
-    private formBuilder: FormBuilder,
+    protected formValidatorService: FormValidatorService,
     private router: Router,
     private notificationsService: NotificationsService,
     private userService: UserService,
@@ -44,20 +28,19 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     super()
   }
 
-  buildForm () {
-    this.form = this.formBuilder.group({
-      username: [ '', USER_USERNAME.VALIDATORS ],
-      email:    [ '', USER_EMAIL.VALIDATORS ],
-      password: [ '', USER_PASSWORD.VALIDATORS ],
-      role: [ UserRole.USER, USER_ROLE.VALIDATORS ],
-      videoQuota: [ '-1', USER_VIDEO_QUOTA.VALIDATORS ]
-    })
-
-    this.form.valueChanges.subscribe(data => this.onValueChanged(data))
-  }
-
   ngOnInit () {
-    this.buildForm()
+    const defaultValues = {
+      role: UserRole.USER.toString(),
+      videoQuota: '-1'
+    }
+
+    this.buildForm({
+      username: USER_USERNAME,
+      email: USER_EMAIL,
+      password: USER_PASSWORD,
+      role: USER_ROLE,
+      videoQuota: USER_VIDEO_QUOTA
+    }, defaultValues)
   }
 
   formValidated () {

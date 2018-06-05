@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core'
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
+import { FormGroup } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router'
-import { VIDEO_IMAGE, VIDEO_SUPPORT } from '@app/shared'
+import { VIDEO_SUPPORT } from '@app/shared'
 import { NotificationsService } from 'angular2-notifications'
 import { ServerService } from '../../../core/server'
 import { VIDEO_CHANNEL } from '../../../shared/forms/form-validators'
@@ -17,6 +17,7 @@ import {
 } from '../../../shared/forms/form-validators/video'
 import { VideoEdit } from '../../../shared/video/video-edit.model'
 import { map } from 'rxjs/operators'
+import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 
 @Component({
   selector: 'my-video-edit',
@@ -42,7 +43,7 @@ export class VideoEditComponent implements OnInit {
   error: string = null
 
   constructor (
-    private formBuilder: FormBuilder,
+    private formValidatorService: FormValidatorService,
     private route: ActivatedRoute,
     private router: Router,
     private notificationsService: NotificationsService,
@@ -50,41 +51,34 @@ export class VideoEditComponent implements OnInit {
   ) { }
 
   updateForm () {
-    this.formErrors['name'] = ''
-    this.formErrors['privacy'] = ''
-    this.formErrors['channelId'] = ''
-    this.formErrors['category'] = ''
-    this.formErrors['licence'] = ''
-    this.formErrors['language'] = ''
-    this.formErrors['description'] = ''
-    this.formErrors['thumbnailfile'] = ''
-    this.formErrors['previewfile'] = ''
-    this.formErrors['support'] = ''
+    const defaultValues = {
+      nsfw: 'false',
+      commentsEnabled: 'true',
+      tags: []
+    }
+    const obj = {
+      name: VIDEO_NAME,
+      privacy: VIDEO_PRIVACY,
+      channelId: VIDEO_CHANNEL,
+      nsfw: null,
+      commentsEnabled: null,
+      category: VIDEO_CATEGORY,
+      licence: VIDEO_LICENCE,
+      language: VIDEO_LANGUAGE,
+      description: VIDEO_DESCRIPTION,
+      tags: null,
+      thumbnailfile: null,
+      previewfile: null,
+      support: VIDEO_SUPPORT
+    }
 
-    this.validationMessages['name'] = VIDEO_NAME.MESSAGES
-    this.validationMessages['privacy'] = VIDEO_PRIVACY.MESSAGES
-    this.validationMessages['channelId'] = VIDEO_CHANNEL.MESSAGES
-    this.validationMessages['category'] = VIDEO_CATEGORY.MESSAGES
-    this.validationMessages['licence'] = VIDEO_LICENCE.MESSAGES
-    this.validationMessages['language'] = VIDEO_LANGUAGE.MESSAGES
-    this.validationMessages['description'] = VIDEO_DESCRIPTION.MESSAGES
-    this.validationMessages['thumbnailfile'] = VIDEO_IMAGE.MESSAGES
-    this.validationMessages['previewfile'] = VIDEO_IMAGE.MESSAGES
-    this.validationMessages['support'] = VIDEO_SUPPORT.MESSAGES
-
-    this.form.addControl('name', new FormControl('', VIDEO_NAME.VALIDATORS))
-    this.form.addControl('privacy', new FormControl('', VIDEO_PRIVACY.VALIDATORS))
-    this.form.addControl('channelId', new FormControl('', VIDEO_CHANNEL.VALIDATORS))
-    this.form.addControl('nsfw', new FormControl(false))
-    this.form.addControl('commentsEnabled', new FormControl(true))
-    this.form.addControl('category', new FormControl('', VIDEO_CATEGORY.VALIDATORS))
-    this.form.addControl('licence', new FormControl('', VIDEO_LICENCE.VALIDATORS))
-    this.form.addControl('language', new FormControl('', VIDEO_LANGUAGE.VALIDATORS))
-    this.form.addControl('description', new FormControl('', VIDEO_DESCRIPTION.VALIDATORS))
-    this.form.addControl('tags', new FormControl([]))
-    this.form.addControl('thumbnailfile', new FormControl(''))
-    this.form.addControl('previewfile', new FormControl(''))
-    this.form.addControl('support', new FormControl('', VIDEO_SUPPORT.VALIDATORS))
+    this.formValidatorService.updateForm(
+      this.form,
+      this.formErrors,
+      this.validationMessages,
+      obj,
+      defaultValues
+    )
 
     // We will update the "support" field depending on the channel
     this.form.controls['channelId']
@@ -98,6 +92,7 @@ export class VideoEditComponent implements OnInit {
           // Not initialized yet
           if (isNaN(newChannelId)) return
           const newChannel = this.userVideoChannels.find(c => c.id === newChannelId)
+          if (!newChannel) return
 
           // First time we set the channel?
           if (isNaN(oldChannelId)) return this.updateSupportField(newChannel.support)
