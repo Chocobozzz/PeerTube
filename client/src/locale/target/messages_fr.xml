@@ -1254,7 +1254,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9">
         <source>Select the file to upload</source>
-        <target>Sélectionner le fichier à mettre en ligne</target>
+        <target>Sélectionner le fichier</target>
         <context-group name="null">
           <context context-type="linenumber">12</context>
         </context-group>
@@ -1268,7 +1268,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
-        <target>Confidentialité</target>
+        <target>Visibilité</target>
         <context-group name="null">
           <context context-type="linenumber">86</context>
         </context-group>
@@ -1296,7 +1296,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="cafc87479686947e2590b9f588a88040aeaf660b">
         <source>Tags</source>
-        <target>Tags</target>
+        <target>Étiquettes</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
@@ -1366,14 +1366,14 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="1dd793abd1cb8d16a7a2cb71ca5549a7111ee513">
         <source>Upload thumbnail</source>
-        <target>Mettre en ligne une vignette</target>
+        <target>Téléverser une vignette</target>
         <context-group name="null">
           <context context-type="linenumber">119</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9df3f57e251c077bef7e7da81677cb971c55b639">
         <source>Upload preview</source>
-        <target>Mettre en ligne une vignette</target>
+        <target>Téléverser un aperçu</target>
         <context-group name="null">
           <context context-type="linenumber">126</context>
         </context-group>
@@ -1689,9 +1689,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
         <source>
             Tags
           </source>
-        <target>
-            Tags
-          </target>
+        <target>Étiquettes</target>
         <context-group name="null">
           <context context-type="linenumber">161</context>
         </context-group>
@@ -1748,6 +1746,15 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
     </target>
         <context-group name="null">
           <context context-type="linenumber">195</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7">
+        <source>
+      Comments
+    </source>
+        <target>Commentaires</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4b1a394a3d619606f79b1051b1493e6b743a072d">
@@ -1975,6 +1982,13 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
+        <source>Unlimited</source>
+        <target>Illimité</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="364463fab6c5714118d6449561a0f8de1cc10bfa">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> created.</source>
         <target>Utilisateur <x id="INTERPOLATION" equiv-text="{{username}}"/> créé.</target>
@@ -2048,13 +2062,6 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b">
         <source>Profile updated.</source>
         <target>Profil mis à jour.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="aa6fb95c355f172bda303de1ce2f38c251a149cf">
-        <source>Unlimited</source>
-        <target>Illimité</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2476,7 +2483,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4">
         <source>Video privacy is required.</source>
-        <target>La confidentialité de la vidéo est requise.</target>
+        <target>La visibilité de la vidéo est requise.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2742,7 +2749,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="24840228f2826b66252cfcaab9820b1c7e0da264">
         <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
-        <target>Les données associées (tags, description, etc.) seront par contre perdues ; êtes-vous sûr·e de vouloir quitter cette page ?</target>
+        <target>Les données associées (étiquettes, description, etc.) seront par contre perdues ; êtes-vous sûr·e de vouloir quitter cette page ?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

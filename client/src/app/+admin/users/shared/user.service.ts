@@ -62,7 +62,7 @@ export class UserService {
   private formatUser (user: User) {
     let videoQuota
     if (user.videoQuota === -1) {
-      videoQuota = 'Unlimited'
+      videoQuota = this.i18n('Unlimited')
     } else {
       videoQuota = this.bytesPipe.transform(user.videoQuota)
     }
