@@ -33,7 +33,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   async removeFollowing (follow: AccountFollow) {
     const res = await this.confirmService.confirm(
-      this.i18n('Do you really want to unfollow {{ host }}?', { host: follow.following.host }),
+      this.i18n('Do you really want to unfollow {{host}}?', { host: follow.following.host }),
       this.i18n('Unfollow')
     )
     if (res === false) return
@@ -42,7 +42,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('You are not following {{ host }} anymore.', { host: follow.following.host })
+          this.i18n('You are not following {{host}} anymore.', { host: follow.following.host })
         )
         this.loadData()
       },

@@ -161,14 +161,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       const customizationsText = customizations.join('/')
 
       // FIXME: i18n service does not support string concatenation
-      const message = this.i18n('You set custom {{ customizationsText }}. ', { customizationsText }) +
+      const message = this.i18n('You set custom {{customizationsText}}. ', { customizationsText }) +
         this.i18n('This could lead to security issues or bugs if you do not understand it. ') +
         this.i18n('Are you sure you want to update the configuration?')
       const label = this.i18n(
-        'Please type "I understand the {{ customizationsText }} I set" to confirm.',
+        'Please type "I understand the {{customizationsText}} I set" to confirm.',
         { customizationsText }
       )
-      const expectedInputValue = this.i18n('I understand the {{ customizationsText }} I set', { customizationsText })
+      const expectedInputValue = this.i18n('I understand the {{customizationsText}} I set', { customizationsText })
 
       const confirmRes = await this.confirmService.confirmWithInput(message, label, expectedInputValue)
       if (confirmRes === false) return

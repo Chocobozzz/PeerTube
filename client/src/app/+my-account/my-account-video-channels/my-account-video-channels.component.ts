@@ -35,7 +35,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithInput(
       this.i18n(
-        'Do you really want to delete {{ videoChannelName }}? It will delete all videos uploaded in this channel too.',
+        'Do you really want to delete {{videoChannelName}}? It will delete all videos uploaded in this channel too.',
         { videoChannelName: videoChannel.displayName }
       ),
       this.i18n('Please type the name of the video channel to confirm'),
@@ -50,7 +50,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
           this.loadVideoChannels()
           this.notificationsService.success(
             this.i18n('Success'),
-            this.i18n('Video channel {{ videoChannelName } deleted.', { videoChannelName: videoChannel.displayName })
+            this.i18n('Video channel {{videoChannelName}} deleted.', { videoChannelName: videoChannel.displayName })
           )
         },
 

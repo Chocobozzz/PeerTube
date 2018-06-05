@@ -12,28 +12,28 @@ export class FromNowPipe implements PipeTransform {
 
     let interval = Math.floor(seconds / 31536000)
     if (interval > 1) {
-      return this.i18n('{{ interval }} years ago', { interval })
+      return this.i18n('{{interval}} years ago', { interval })
     }
 
     interval = Math.floor(seconds / 2592000)
-    if (interval > 1) return this.i18n('{{ interval }} months ago', { interval })
-    if (interval === 1) return this.i18n('{{ interval }} month ago', { interval })
+    if (interval > 1) return this.i18n('{{interval}} months ago', { interval })
+    if (interval === 1) return this.i18n('{{interval}} month ago', { interval })
 
     interval = Math.floor(seconds / 604800)
-    if (interval > 1) return this.i18n('{{ interval }} weeks ago', { interval })
-    if (interval === 1) return this.i18n('{{ interval }} week ago', { interval })
+    if (interval > 1) return this.i18n('{{interval}} weeks ago', { interval })
+    if (interval === 1) return this.i18n('{{interval}} week ago', { interval })
 
     interval = Math.floor(seconds / 86400)
-    if (interval > 1) return this.i18n('{{ interval }} days ago', { interval })
-    if (interval === 1) return this.i18n('{{ interval }} day ago', { interval })
+    if (interval > 1) return this.i18n('{{interval}} days ago', { interval })
+    if (interval === 1) return this.i18n('{{interval}} day ago', { interval })
 
     interval = Math.floor(seconds / 3600)
-    if (interval > 1) return this.i18n('{{ interval }} hours ago', { interval })
-    if (interval === 1) return this.i18n('{{ interval }} hour ago', { interval })
+    if (interval > 1) return this.i18n('{{interval}} hours ago', { interval })
+    if (interval === 1) return this.i18n('{{interval}} hour ago', { interval })
 
     interval = Math.floor(seconds / 60)
-    if (interval >= 1) return this.i18n('{{ interval }} min ago', { interval })
+    if (interval >= 1) return this.i18n('{{interval}} min ago', { interval })
 
-    return this.i18n('{{ interval }} sec ago', { interval: Math.floor(seconds) })
+    return this.i18n('{{interval}} sec ago', { interval: Math.floor(seconds) })
   }
 }

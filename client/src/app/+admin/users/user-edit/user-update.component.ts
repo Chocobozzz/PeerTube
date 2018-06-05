@@ -85,7 +85,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('User {{ username }} updated.', { username: this.username })
+          this.i18n('User {{username}} updated.', { username: this.username })
         )
         this.router.navigate([ '/admin/users/list' ])
       },

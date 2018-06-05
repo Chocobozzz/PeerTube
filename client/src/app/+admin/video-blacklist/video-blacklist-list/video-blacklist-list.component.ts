@@ -43,7 +43,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('Video {{ name }} removed from the blacklist.', { name: entry.name })
+          this.i18n('Video {{name}} removed from the blacklist.', { name: entry.name })
         )
         this.loadData()
       },

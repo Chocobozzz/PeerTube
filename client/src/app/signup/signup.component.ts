@@ -84,7 +84,7 @@ export class SignupComponent extends FormReactive implements OnInit {
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('Registration for {{ username }} complete.', { username: userCreate.username })
+          this.i18n('Registration for {{username}} complete.', { username: userCreate.username })
         )
         this.redirectService.redirectToHomepage()
       },
@@ -106,9 +106,9 @@ export class SignupComponent extends FormReactive implements OnInit {
     const normalSeconds = initialUserVideoQuotaBit / (1.5 * 1000 * 1000)
 
     const lines = [
-      this.i18n('{{ seconds }} of full HD videos', { seconds: SignupComponent.getApproximateTime(fullHdSeconds) }),
-      this.i18n('{{ seconds }} of HD videos', { seconds: SignupComponent.getApproximateTime(hdSeconds) }),
-      this.i18n('{{ seconds }} of average quality videos', { seconds: SignupComponent.getApproximateTime(normalSeconds) })
+      this.i18n('{{seconds}} of full HD videos', { seconds: SignupComponent.getApproximateTime(fullHdSeconds) }),
+      this.i18n('{{seconds}} of HD videos', { seconds: SignupComponent.getApproximateTime(hdSeconds) }),
+      this.i18n('{{seconds}} of average quality videos', { seconds: SignupComponent.getApproximateTime(normalSeconds) })
     ]
 
     this.quotaHelpIndication = lines.join('<br />')

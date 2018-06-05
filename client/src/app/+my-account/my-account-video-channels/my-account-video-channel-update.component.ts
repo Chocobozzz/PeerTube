@@ -101,7 +101,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
         this.authService.refreshUserInformation()
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('Video channel {{ videoChannelName }} updated.', { videoChannelName: videoChannelUpdate.displayName })
+          this.i18n('Video channel {{videoChannelName}} updated.', { videoChannelName: videoChannelUpdate.displayName })
         )
         this.router.navigate([ '/my-account', 'video-channels' ])
       },

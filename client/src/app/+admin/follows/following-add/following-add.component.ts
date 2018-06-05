@@ -36,7 +36,7 @@ export class FollowingAddComponent {
 
     for (const host of hosts) {
       if (validateHost(host) === false) {
-        newHostsErrors.push(this.i18n('{{ host }} is not valid', { host }))
+        newHostsErrors.push(this.i18n('{{host}} is not valid', { host }))
       }
     }
 

@@ -72,7 +72,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('User {{ username }} created.', { username: userCreate.username })
+          this.i18n('User {{username}} created.', { username: userCreate.username })
         )
         this.router.navigate([ '/admin/users/list' ])
       },

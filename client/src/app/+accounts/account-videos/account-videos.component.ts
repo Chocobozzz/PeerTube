@@ -69,7 +69,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
                .getAccountVideos(this.account, newPagination, this.sort)
                .pipe(
                  tap(({ totalVideos }) => {
-                   this.titlePage = this.i18n('Published {{ totalVideos }} videos', { totalVideos })
+                   this.titlePage = this.i18n('Published {{totalVideos}} videos', { totalVideos })
                  })
                )
   }

@@ -163,7 +163,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
                                 status => {
                                   this.notificationsService.success(
                                     this.i18n('Success'),
-                                    this.i18n('Video {{ videoName }} had been blacklisted.', { videoName: this.video.name })
+                                    this.i18n('Video {{videoName}} had been blacklisted.', { videoName: this.video.name })
                                   )
                                   this.redirectService.redirectToHomepage()
                                 },
@@ -265,7 +265,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         status => {
           this.notificationsService.success(
             this.i18n('Success'),
-            this.i18n('Video {{ videoName }} deleted.', { videoName: this.video.name })
+            this.i18n('Video {{videoName}} deleted.', { videoName: this.video.name })
           )
 
           // Go back to the video-list.
@@ -297,7 +297,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private setVideoLikesBarTooltipText () {
     this.likesBarTooltipText = this.i18n(
-      '{{ likesNumber }} likes / {{ dislikesNumber }} dislikes',
+      '{{likesNumber}} likes / {{dislikesNumber}} dislikes',
       { likesNumber: this.video.likes, dislikes: this.video.dislikes }
     )
   }

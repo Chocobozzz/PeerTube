@@ -71,7 +71,7 @@ export class RestExtractor {
         const secondsLeft = err.headers.get('retry-after')
         if (secondsLeft) {
           const minutesLeft = Math.floor(parseInt(secondsLeft, 10) / 60)
-          errorMessage = this.i18n('Too many attempts, please try again after {{ minutesLeft }} minutes.', { minutesLeft })
+          errorMessage = this.i18n('Too many attempts, please try again after {{minutesLeft}} minutes.', { minutesLeft })
         } else {
           errorMessage = this.i18n('Too many attempts, please try again later.')
         }

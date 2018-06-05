@@ -73,7 +73,7 @@ export class MyAccountVideoChannelCreateComponent extends MyAccountVideoChannelE
         this.authService.refreshUserInformation()
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('Video channel {{ videoChannelName }} created.', { videoChannelName: videoChannelCreate.displayName })
+          this.i18n('Video channel {{videoChannelName}} created.', { videoChannelName: videoChannelCreate.displayName })
         )
         this.router.navigate([ '/my-account', 'video-channels' ])
       },

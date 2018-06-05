@@ -76,7 +76,7 @@ export class AuthService {
             let errorMessage = error.message
 
             if (error.status === 403) {
-              errorMessage = this.i18n('Cannot retrieve OAuth Client credentials: {{ errorText }}.\n', { errorText: error.text })
+              errorMessage = this.i18n('Cannot retrieve OAuth Client credentials: {{errorText}}.\n', { errorText: error.text })
               errorMessage += this.i18n(
                 'Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.'
               )

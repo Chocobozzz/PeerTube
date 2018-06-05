@@ -44,7 +44,7 @@ export class UserListComponent extends RestTable implements OnInit {
       () => {
         this.notificationsService.success(
           this.i18n('Success'),
-          this.i18n('User {{ username }} deleted.', { username: user.username })
+          this.i18n('User {{username}} deleted.', { username: user.username })
         )
         this.loadData()
       },
