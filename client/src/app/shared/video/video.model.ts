@@ -5,6 +5,7 @@ import { VideoConstant } from '../../../../../shared/models/videos/video.model'
 import { getAbsoluteAPIUrl } from '../misc/utils'
 import { ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
+import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
 
 export class Video implements VideoServerModel {
   by: string
@@ -68,7 +69,7 @@ export class Video implements VideoServerModel {
         minutes.toString() + ':' + secondsPadding + seconds.toString()
   }
 
-  constructor (hash: VideoServerModel) {
+  constructor (hash: VideoServerModel, translations = {}) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
     this.createdAt = new Date(hash.createdAt.toString())
@@ -98,6 +99,11 @@ export class Video implements VideoServerModel {
 
     this.by = Actor.CREATE_BY_STRING(hash.account.name, hash.account.host)
     this.accountAvatarUrl = Actor.GET_ACTOR_AVATAR_URL(this.account)
+
+    this.category.label = peertubeTranslate(this.category.label, translations)
+    this.licence.label = peertubeTranslate(this.licence.label, translations)
+    this.language.label = peertubeTranslate(this.language.label, translations)
+    this.privacy.label = peertubeTranslate(this.privacy.label, translations)
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

@@ -1,12 +1,15 @@
 import * as jsToXliff12 from 'xliff/jsToXliff12'
 import { writeFile } from 'fs'
 import { join } from 'path'
+import { buildLanguages, VIDEO_CATEGORIES, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../server/initializers/constants'
+import { values } from 'lodash'
 
-// First, the player
-const playerSource = join(__dirname, '../../../client/src/locale/source/videojs_en_US.json')
-const playerTarget = join(__dirname, '../../../client/src/locale/source/player_en_US.xml')
+type TranslationType = {
+  target: string
+  data: { [id: string]: string }
+}
 
-const videojs = require(playerSource)
+const videojs = require(join(__dirname, '../../../client/src/locale/source/videojs_en_US.json'))
 const playerKeys = {
   'Quality': 'Quality',
   'Auto': 'Auto',
@@ -19,36 +22,65 @@ const playerKeys = {
   'Copy the video URL at the current time': 'Copy the video URL at the current time',
   'Copy embed code': 'Copy embed code'
 }
-
-const obj = {
-  resources: {
-    namespace1: {}
-  }
+const playerTranslations = {
+  target: join(__dirname, '../../../client/src/locale/source/player_en_US.xml'),
+  data: Object.assign({}, videojs, playerKeys)
 }
 
-for (const sourceObject of [ videojs, playerKeys ]) {
-  Object.keys(sourceObject).forEach(k => obj.resources.namespace1[ k ] = { source: sourceObject[ k ] })
+// Server keys
+const serverKeys: any = {}
+values(VIDEO_CATEGORIES)
+  .concat(values(VIDEO_LICENCES))
+  .concat(values(VIDEO_PRIVACIES))
+  .forEach(v => serverKeys[v] = v)
+
+// ISO 639 keys
+const languages = buildLanguages()
+Object.keys(languages).forEach(k => serverKeys[languages[k]] = languages[k])
+
+// More keys
+Object.assign(serverKeys, {
+  'Misc': 'Misc',
+  'Unknown': 'Unknown'
+})
+
+const serverTranslations = {
+  target: join(__dirname, '../../../client/src/locale/source/server_en_US.xml'),
+  data: serverKeys
 }
 
-saveToXliffFile(playerTarget, obj, err => {
-  if (err) {
-    console.error(err)
-    process.exit(-1)
-  }
+saveToXliffFile(playerTranslations, err => {
+  if (err) return handleError(err)
 
-  process.exit(0)
+  saveToXliffFile(serverTranslations, err => {
+    if (err) return handleError(err)
+
+    process.exit(0)
+  })
 })
 
 // Then, the server strings
 
-function saveToXliffFile (targetPath: string, obj: any, cb: Function) {
+function saveToXliffFile (jsonTranslations: TranslationType, cb: Function) {
+  const obj = {
+    resources: {
+      namespace1: {}
+    }
+  }
+  Object.keys(jsonTranslations.data).forEach(k => obj.resources.namespace1[ k ] = { source: jsonTranslations.data[ k ] })
+
   jsToXliff12(obj, (err, res) => {
     if (err) return cb(err)
 
-    writeFile(playerTarget, res, err => {
+    writeFile(jsonTranslations.target, res, err => {
       if (err) return cb(err)
 
       return cb(null)
     })
   })
+}
+
+function handleError (err: any) {
+  console.error(err)
+  process.exit(-1)
 }

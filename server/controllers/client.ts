@@ -48,8 +48,11 @@ clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }
 clientsRouter.use('/client/assets/images', express.static(assetsImagesPath, { maxAge: STATIC_MAX_AGE }))
 
 clientsRouter.use('/client/locales/:locale/:file.json', function (req, res) {
-  if (req.params.locale === 'fr' && req.params.file === 'player') {
-    return res.sendFile(join(__dirname, '../../../client/dist/locale/player_fr.json'))
+  const locale = req.params.locale
+  const file = req.params.file
+
+  if (is18nLocale(locale) && [ 'player', 'server' ].indexOf(file) !== -1) {
+    return res.sendFile(join(__dirname, `../../../client/dist/locale/${file}_${locale}.json`))
   }
 
   return res.sendStatus(404)

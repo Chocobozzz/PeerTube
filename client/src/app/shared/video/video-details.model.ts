@@ -15,8 +15,8 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   likesPercent: number
   dislikesPercent: number
 
-  constructor (hash: VideoDetailsServerModel) {
-    super(hash)
+  constructor (hash: VideoDetailsServerModel, translations = {}) {
+    super(hash, translations)
 
     this.descriptionPath = hash.descriptionPath
     this.files = hash.files

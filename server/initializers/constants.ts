@@ -500,7 +500,8 @@ export {
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
   JOB_COMPLETED_LIFETIME,
-  VIDEO_VIEW_LIFETIME
+  VIDEO_VIEW_LIFETIME,
+  buildLanguages
 }
 
 // ---------------------------------------------------------------------------
