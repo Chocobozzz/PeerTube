@@ -47,6 +47,14 @@ for (const staticClientFile of staticClientFiles) {
 clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
 clientsRouter.use('/client/assets/images', express.static(assetsImagesPath, { maxAge: STATIC_MAX_AGE }))
 
+clientsRouter.use('/client/locales/:locale/:file.json', function (req, res) {
+  if (req.params.locale === 'fr' && req.params.file === 'player') {
+    return res.sendFile(join(__dirname, '../../../client/dist/locale/player_fr.json'))
+  }
+
+  return res.sendStatus(404)
+})
+
 // 404 for static files not found
 clientsRouter.use('/client/*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
   res.sendStatus(404)

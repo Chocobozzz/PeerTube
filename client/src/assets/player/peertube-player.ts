@@ -12,6 +12,7 @@ import './peertube-videojs-plugin'
 import './peertube-load-progress-bar'
 import { videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
+import { is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -20,7 +21,6 @@ function getVideojsOptions (options: {
   autoplay: boolean,
   playerElement: HTMLVideoElement,
   videoViewUrl: string,
-  videoEmbedUrl: string,
   videoDuration: number,
   videoFiles: VideoFile[],
   enableHotkeys: boolean,
@@ -43,29 +43,6 @@ function getVideojsOptions (options: {
         videoViewUrl: options.videoViewUrl,
         videoDuration: options.videoDuration,
         startTime: options.startTime
-      },
-      contextmenuUI: {
-        content: [
-          {
-            label: 'Copy the video URL',
-            listener: function () {
-              copyToClipboard(buildVideoLink())
-            }
-          },
-          {
-            label: 'Copy the video URL at the current time',
-            listener: function () {
-              const player = this
-              copyToClipboard(buildVideoLink(player.currentTime()))
-            }
-          },
-          {
-            label: 'Copy embed code',
-            listener: () => {
-              copyToClipboard(buildVideoEmbed(options.videoEmbedUrl))
-            }
-          }
-        ]
       }
     },
     controlBar: {
@@ -135,4 +112,44 @@ function getControlBarChildren (options: {
   return children
 }
 
-export { getVideojsOptions }
+function addContextMenu (player: any, videoEmbedUrl: string) {
+  console.log(videoEmbedUrl)
+
+  player.contextmenuUI({
+    content: [
+      {
+        label: player.localize('Copy the video URL'),
+        listener: function () {
+          copyToClipboard(buildVideoLink())
+        }
+      },
+      {
+        label: player.localize('Copy the video URL at the current time'),
+        listener: function () {
+          const player = this
+          copyToClipboard(buildVideoLink(player.currentTime()))
+        }
+      },
+      {
+        label: player.localize('Copy embed code'),
+        listener: () => {
+          copyToClipboard(buildVideoEmbed(videoEmbedUrl))
+        }
+      }
+    ]
+  })
+}
+
+function loadLocale (serverUrl: string, videojs: any, locale: string) {
+  if (!is18nLocale(locale) || isDefaultLocale(locale)) return undefined
+
+  return fetch(serverUrl + '/client/locales/' + locale + '/player.json')
+    .then(res => res.json())
+    .then(json => videojs.addLanguage(locale, json))
+}
+
+export {
+  loadLocale,
+  getVideojsOptions,
+  addContextMenu
+}

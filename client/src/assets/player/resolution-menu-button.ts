@@ -8,10 +8,7 @@ class ResolutionMenuButton extends MenuButton {
   label: HTMLElement
 
   constructor (player: videojs.Player, options) {
-    options.label = 'Quality'
     super(player, options)
-
-    this.controlText_ = 'Quality'
     this.player = player
 
     player.peertube().on('videoFileUpdate', () => this.updateLabel())
@@ -51,7 +48,7 @@ class ResolutionMenuButton extends MenuButton {
       this.player_,
       {
         id: -1,
-        label: 'Auto',
+        label: this.player_.localize('Auto'),
         src: null
       }
     ))
@@ -77,4 +74,6 @@ class ResolutionMenuButton extends MenuButton {
     return this.player_.peertube().getCurrentResolutionLabel()
   }
 }
+ResolutionMenuButton.prototype.controlText_ = 'Quality'
+
 MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton)

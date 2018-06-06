@@ -60,13 +60,8 @@ class WebtorrentInfoButton extends Button {
       className: 'peers-number',
       textContent: 'HTTP'
     })
-    const subDivFallbackText = videojsUntyped.dom.createEl('span', {
-      className: 'peers-text',
-      textContent: ' fallback'
-    })
 
     subDivHttp.appendChild(subDivHttpText)
-    subDivHttp.appendChild(subDivFallbackText)
     div.appendChild(subDivHttp)
 
     this.player_.peertube().on('torrentInfo', (event, data) => {
@@ -89,7 +84,7 @@ class WebtorrentInfoButton extends Button {
       uploadSpeedUnit.textContent = ' ' + uploadSpeed[ 1 ]
 
       peersNumber.textContent = numPeers
-      peersText.textContent = ' peers'
+      peersText.textContent = ' ' + this.player_.localize('peers')
 
       subDivHttp.className = 'vjs-peertube-hidden'
       subDivWebtorrent.className = 'vjs-peertube-displayed'

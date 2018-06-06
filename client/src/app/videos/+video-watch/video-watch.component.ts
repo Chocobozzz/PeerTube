@@ -1,5 +1,5 @@
 import { catchError } from 'rxjs/operators'
-import { Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild, Inject } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
@@ -21,9 +21,10 @@ import { MarkdownService } from '../shared'
 import { VideoDownloadComponent } from './modal/video-download.component'
 import { VideoReportComponent } from './modal/video-report.component'
 import { VideoShareComponent } from './modal/video-share.component'
-import { getVideojsOptions } from '../../../assets/player/peertube-player'
+import { getVideojsOptions, loadLocale, addContextMenu } from '../../../assets/player/peertube-player'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { environment } from '../../../environments/environment'
 
 @Component({
   selector: 'my-video-watch',
@@ -54,6 +55,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   likesBarTooltipText = ''
   hasAlreadyAcceptedPrivacyConcern = false
 
+  private videojsLocaleLoaded = false
   private otherVideos: Video[] = []
   private paramsSub: Subscription
 
@@ -72,7 +74,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
-    private i18n: I18n
+    private i18n: I18n,
+    @Inject(LOCALE_ID) private localeId: string
   ) {}
 
   get user () {
@@ -365,7 +368,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       inactivityTimeout: 2500,
       videoFiles: this.video.files,
       playerElement: this.playerElement,
-      videoEmbedUrl: this.video.embedUrl,
       videoViewUrl: this.videoService.getVideoViewUrl(this.video.uuid),
       videoDuration: this.video.duration,
       enableHotkeys: true,
@@ -374,11 +376,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       startTime
     })
 
+    if (this.videojsLocaleLoaded === false) {
+      await loadLocale(environment.apiUrl, videojs, environment.production === true ? this.localeId : 'fr')
+      this.videojsLocaleLoaded = true
+    }
+
     const self = this
-    this.zone.runOutsideAngular(() => {
+    this.zone.runOutsideAngular(async () => {
       videojs(this.playerElement, videojsOptions, function () {
         self.player = this
         this.on('customError', (event, data) => self.handleError(data.err))
+
+        addContextMenu(self.player, self.video.embedUrl)
       })
     })
 

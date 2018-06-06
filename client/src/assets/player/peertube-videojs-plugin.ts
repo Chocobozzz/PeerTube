@@ -4,15 +4,7 @@ import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import {
-  getAverageBandwidth,
-  getStoredMute,
-  getStoredVolume,
-  isMobile,
-  saveAverageBandwidth,
-  saveMuteInStore,
-  saveVolumeInStore
-} from './utils'
+import { getAverageBandwidth, getStoredMute, getStoredVolume, saveAverageBandwidth, saveMuteInStore, saveVolumeInStore } from './utils'
 import minBy from 'lodash-es/minBy'
 import maxBy from 'lodash-es/maxBy'
 import * as CacheChunkStore from 'cache-chunk-store'

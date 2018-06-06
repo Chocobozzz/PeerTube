@@ -1,3 +1,5 @@
+import { is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
+
 function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }

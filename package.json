@@ -30,6 +30,8 @@
     "danger:clean:prod": "scripty",
     "danger:clean:modules": "scripty",
     "i18n:generate": "scripty",
+    "i18n:xliff2json": "node ./dist/scripts/i18n/xliff2json.js",
+    "i18n:create-custom-files": "node ./dist/scripts/i18n/create-custom-files.js",
     "reset-password": "node ./dist/scripts/reset-password.js",
     "play": "scripty",
     "dev": "scripty",
@@ -174,6 +176,7 @@
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.5.2",
     "webtorrent": "^0.100.0",
+    "xliff": "^3.0.1",
     "youtube-dl": "^1.12.2"
   },
   "scripty": {

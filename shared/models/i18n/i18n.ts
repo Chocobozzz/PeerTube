@@ -7,6 +7,10 @@ export function getDefaultLocale () {
   return 'en-US'
 }
 
+export function isDefaultLocale (locale: string) {
+  return locale === getDefaultLocale()
+}
+
 const possiblePaths = Object.keys(I18N_LOCALES).map(l => '/' + l)
 export function is18nPath (path: string) {
   return possiblePaths.indexOf(path) !== -1

@@ -24,7 +24,7 @@ class PeerTubeLinkButton extends Button {
     const el = videojsUntyped.dom.createEl('a', {
       href: buildVideoLink(),
       innerHTML: 'PeerTube',
-      title: 'Go to the video page',
+      title: this.player_.localize('Go to the video page'),
       className: 'vjs-peertube-link',
       target: '_blank'
     })

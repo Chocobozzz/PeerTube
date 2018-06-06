@@ -8402,6 +8402,18 @@ xhr2@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
 
+xliff@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/xliff/-/xliff-3.0.1.tgz#ea0f5840011727aecbddf111e5c26d8590dcca9b"
+  dependencies:
+    xml-js "1.6.2"
+
+xml-js@1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/xml-js/-/xml-js-1.6.2.tgz#4c4cb8413998f73701a202a1b8b2f17c985a72c5"
+  dependencies:
+    sax "^1.2.4"
+
 xml-name-validator@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-3.0.0.tgz#6ae73e06de4d8c6e47f9fb181f78d648ad457c6a"
