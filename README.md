@@ -110,8 +110,9 @@ BitTorrent) inside the web browser, as of today.
 See the [docker guide](/support/doc/docker.md)
 
 ## Run on YunoHost
+[![Install Peertube with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=peertube)
 
-Peertube app for [YunoHost](https://yunohost.org).See [here](https://github.com/YunoHost-Apps/peertube_ynh)
+Peertube app for [YunoHost](https://yunohost.org). See [here](https://github.com/YunoHost-Apps/peertube_ynh)
 
 ## Production
 
