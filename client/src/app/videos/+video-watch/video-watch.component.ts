@@ -25,6 +25,7 @@ import { getVideojsOptions, loadLocale, addContextMenu } from '../../../assets/p
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { environment } from '../../../environments/environment'
+import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 
 @Component({
   selector: 'my-video-watch',
@@ -377,7 +378,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
 
     if (this.videojsLocaleLoaded === false) {
-      await loadLocale(environment.apiUrl, videojs, environment.production === true ? this.localeId : 'fr')
+      await loadLocale(environment.apiUrl, videojs, isOnDevLocale() ? getDevLocale() : this.localeId)
       this.videojsLocaleLoaded = true
     }
 

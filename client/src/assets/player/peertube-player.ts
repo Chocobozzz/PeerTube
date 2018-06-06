@@ -12,7 +12,7 @@ import './peertube-videojs-plugin'
 import './peertube-load-progress-bar'
 import { videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard } from './utils'
-import { is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
+import { getCompleteLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -141,11 +141,13 @@ function addContextMenu (player: any, videoEmbedUrl: string) {
 }
 
 function loadLocale (serverUrl: string, videojs: any, locale: string) {
-  if (!is18nLocale(locale) || isDefaultLocale(locale)) return undefined
+  const completeLocale = getCompleteLocale(locale)
 
-  return fetch(serverUrl + '/client/locales/' + locale + '/player.json')
+  if (!is18nLocale(completeLocale) || isDefaultLocale(completeLocale)) return Promise.resolve(undefined)
+
+  return fetch(serverUrl + '/client/locales/' + completeLocale + '/player.json')
     .then(res => res.json())
-    .then(json => videojs.addLanguage(locale, json))
+    .then(json => videojs.addLanguage(completeLocale, json))
 }
 
 export {

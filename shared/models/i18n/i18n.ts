@@ -1,34 +1,45 @@
+export const LOCALE_FILES = [ 'player', 'server' ]
+
 export const I18N_LOCALES = {
   'en-US': 'English (US)',
   fr: 'French'
 }
+
+const I18N_LOCALE_ALIAS = {
+  'en': 'en-US'
+}
+
+export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
+                                      .concat(Object.keys(I18N_LOCALE_ALIAS))
+
+const possiblePaths = POSSIBLE_LOCALES.map(l => '/' + l)
 
 export function getDefaultLocale () {
   return 'en-US'
 }
 
 export function isDefaultLocale (locale: string) {
-  return locale === getDefaultLocale()
+  return getCompleteLocale(locale) === getCompleteLocale(getDefaultLocale())
 }
 
-const possiblePaths = Object.keys(I18N_LOCALES).map(l => '/' + l)
 export function is18nPath (path: string) {
   return possiblePaths.indexOf(path) !== -1
 }
 
-const possibleLanguages = Object.keys(I18N_LOCALES)
 export function is18nLocale (locale: string) {
-  return possibleLanguages.indexOf(locale) !== -1
+  return POSSIBLE_LOCALES.indexOf(locale) !== -1
 }
 
-// Only use in dev mode, so relax
-// In production, the locale always match with a I18N_LANGUAGES key
-export function buildFileLocale (locale: string) {
-  if (!is18nLocale(locale)) {
-    // Some working examples for development purpose
-    if (locale.split('-')[ 0 ] === 'en') return 'en_US'
-    else if (locale === 'fr') return 'fr'
-  }
+export function getCompleteLocale (locale: string) {
+  if (!locale) return locale
 
-  return locale.replace('-', '_')
+  if (I18N_LOCALE_ALIAS[locale]) return I18N_LOCALE_ALIAS[locale]
+
+  return locale
+}
+
+export function buildFileLocale (locale: string) {
+  const completeLocale = getCompleteLocale(locale)
+
+  return completeLocale.replace('-', '_')
 }

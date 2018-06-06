@@ -2,13 +2,13 @@ import { map, share, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
-import { Observable, ReplaySubject } from 'rxjs'
-import { ServerConfig } from '../../../../../shared'
+import { Observable, ReplaySubject, of } from 'rxjs'
+import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { About } from '../../../../../shared/models/server/about.model'
 import { environment } from '../../../environments/environment'
 import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
-import { buildFileLocale, getDefaultLocale } from '../../../../../shared/models/i18n'
-import { peertubeTranslate } from '@app/shared/i18n/i18n-utils'
+import { isDefaultLocale } from '../../../../../shared/models/i18n'
+import { getDevLocale, isOnDevLocale, peertubeTranslate } from '@app/shared/i18n/i18n-utils'
 
 @Injectable()
 export class ServerService {
@@ -72,8 +72,8 @@ export class ServerService {
     private http: HttpClient,
     @Inject(LOCALE_ID) private localeId: string
   ) {
-    this.loadConfigLocally()
     this.loadServerLocale()
+    this.loadConfigLocally()
   }
 
   loadConfig () {
@@ -163,14 +163,16 @@ export class ServerService {
   }
 
   private loadServerLocale () {
-    const fileLocale = buildFileLocale(environment.production === true ? this.localeId : 'fr')
+    const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
 
     // Default locale, nothing to translate
-    const defaultFileLocale = buildFileLocale(getDefaultLocale())
-    if (fileLocale === defaultFileLocale) return {}
+    if (isDefaultLocale(completeLocale)) {
+      this.localeObservable = of({}).pipe(share())
+      return
+    }
 
     this.localeObservable = this.http
-                                  .get(ServerService.BASE_LOCALE_URL + fileLocale + '/server.json')
+                                  .get(ServerService.BASE_LOCALE_URL + completeLocale + '/server.json')
                                   .pipe(share())
   }
 

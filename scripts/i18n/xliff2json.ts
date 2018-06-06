@@ -1,7 +1,7 @@
 import * as xliff12ToJs from 'xliff/xliff12ToJs'
 import { unlink, readFileSync, writeFile } from 'fs'
 import { join } from 'path'
-import { buildFileLocale, I18N_LOCALES, isDefaultLocale } from '../../shared/models/i18n/i18n'
+import { buildFileLocale, I18N_LOCALES, isDefaultLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
 import { eachSeries } from 'async'
 
 const sources: string[] = []
@@ -9,7 +9,7 @@ const availableLocales = Object.keys(I18N_LOCALES)
                                .filter(l => isDefaultLocale(l) === false)
                                .map(l => buildFileLocale(l))
 
-for (const file of [ 'server', 'player' ]) {
+for (const file of LOCALE_FILES) {
   for (const locale of availableLocales) {
     sources.push(join(__dirname, '../../../client/src/locale/target/', `${file}_${locale}.xml`))
   }

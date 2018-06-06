@@ -16,8 +16,8 @@ import { MenuComponent } from './menu'
 import { SharedModule } from './shared'
 import { SignupModule } from './signup'
 import { VideosModule } from './videos'
-import { buildFileLocale, getDefaultLocale } from '../../../shared/models/i18n'
-import { environment } from '../environments/environment'
+import { buildFileLocale, getCompleteLocale, getDefaultLocale, isDefaultLocale } from '../../../shared/models/i18n'
+import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -67,17 +67,17 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     {
       provide: TRANSLATIONS,
       useFactory: (locale) => {
-        // On dev mode, test locales
-        if (environment.production === false && window.location.search === '?lang=fr') {
-          return require(`raw-loader!../locale/target/angular_fr.xml`)
+        // On dev mode, test localization
+        if (isOnDevLocale()) {
+          locale = getDevLocale()
+          return require(`raw-loader!../locale/target/angular_${locale}.xml`)
         }
 
-        const fileLocale = buildFileLocale(locale)
-
         // Default locale, nothing to translate
-        const defaultFileLocale = buildFileLocale(getDefaultLocale())
-        if (fileLocale === defaultFileLocale) return ''
+        const completeLocale = getCompleteLocale(locale)
+        if (isDefaultLocale(completeLocale)) return ''
 
+        const fileLocale = buildFileLocale(locale)
         return require(`raw-loader!../locale/target/angular_${fileLocale}.xml`)
       },
       deps: [ LOCALE_ID ]

@@ -46,8 +46,8 @@ export class VideoService {
     return this.serverService.localeObservable
                .pipe(
                  switchMap(translations => {
-                  return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
-                     .pipe(map(videoHash => ({ videoHash, translations })))
+                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
+                              .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
                  catchError(res => this.restExtractor.handleError(res))

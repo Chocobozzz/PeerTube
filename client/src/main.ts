@@ -5,14 +5,17 @@ import { AppModule } from './app/app.module'
 import { environment } from './environments/environment'
 
 import { hmrBootstrap } from './hmr'
+import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 
 let providers = []
 if (environment.production) {
   enableProdMode()
 }
 
-if (environment.production === false && window.location.search === '?lang=fr') {
-  const translations = require(`raw-loader!./locale/target/angular_fr.xml`)
+// Template translation, should be in the bootstrap step
+if (isOnDevLocale()) {
+  const locale = getDevLocale()
+  const translations = require(`raw-loader!./locale/target/angular_${locale}.xml`)
 
   providers = [
     { provide: TRANSLATIONS, useValue: translations },
