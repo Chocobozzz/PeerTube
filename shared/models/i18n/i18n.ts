@@ -2,11 +2,12 @@ export const LOCALE_FILES = [ 'player', 'server' ]
 
 export const I18N_LOCALES = {
   'en-US': 'English (US)',
-  fr: 'French'
+  'fr-FR': 'French (France)'
 }
 
 const I18N_LOCALE_ALIAS = {
-  'en': 'en-US'
+  'en': 'en-US',
+  'fr': 'fr-FR'
 }
 
 export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
@@ -36,6 +37,12 @@ export function getCompleteLocale (locale: string) {
   if (I18N_LOCALE_ALIAS[locale]) return I18N_LOCALE_ALIAS[locale]
 
   return locale
+}
+
+export function getShortLocale (locale: string) {
+  if (locale.indexOf('-') === -1) return locale
+
+  return locale.split('-')[0]
 }
 
 export function buildFileLocale (locale: string) {
