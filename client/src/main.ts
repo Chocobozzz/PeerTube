@@ -12,7 +12,7 @@ if (environment.production) {
 }
 
 if (environment.production === false && window.location.search === '?lang=fr') {
-  const translations = require(`raw-loader!./locale/target/messages_fr.xml`)
+  const translations = require(`raw-loader!./locale/target/angular_fr.xml`)
 
   providers = [
     { provide: TRANSLATIONS, useValue: translations },

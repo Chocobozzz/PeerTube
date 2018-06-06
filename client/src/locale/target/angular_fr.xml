@@ -22,7 +22,7 @@
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
-        <target>Éditer</target>
+        <target>Modifier</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
@@ -106,7 +106,7 @@
       </trans-unit>
       <trans-unit id="b87e81682959464211443afc3e23c506865d2eda">
         <source>I forgot my password</source>
-        <target>J'ai oublié mon mot de passe</target>
+        <target>J’ai oublié mon mot de passe</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
         </context-group>
@@ -120,14 +120,14 @@
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
         <source>Email</source>
-        <target>Email</target>
+        <target>Courriel</target>
         <context-group name="null">
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529">
         <source>Email address</source>
-        <target>Adresse email</target>
+        <target>Courriel</target>
         <context-group name="null">
           <context context-type="linenumber">66</context>
         </context-group>
@@ -143,7 +143,7 @@
         <source>
     Reset my password
   </source>
-        <target>Remettre à zéro mon mot de passe</target>
+        <target>Réinitialiser mon mot de passe</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
@@ -313,7 +313,7 @@
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
-        <target>Se connecter</target>
+        <target>Connexion</target>
         <context-group name="null">
           <context context-type="linenumber">34</context>
         </context-group>
@@ -1152,7 +1152,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="739516c2ca75843d5aec9cf0e6b3e4335c4227b9">
         <source>Change password</source>
-        <target>Changer votre phrase de passe</target>
+        <target>Changer le mot de passe</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
@@ -1268,7 +1268,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
-        <target>Visibilité</target>
+        <target>Confidentialité</target>
         <context-group name="null">
           <context context-type="linenumber">86</context>
         </context-group>
@@ -1331,7 +1331,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
-        <target>Langue</target>
+        <target>Langage</target>
         <context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
@@ -1633,7 +1633,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
-        <target>Montrer plus</target>
+        <target>Voir plus</target>
         <context-group name="null">
           <context context-type="linenumber">112</context>
         </context-group>
@@ -1886,7 +1886,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba">
         <source>Success</source>
-        <target>Succès</target>
+        <target>Réussite</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2882,7 +2882,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
         <source>Search</source>
-        <target>Rechercher</target>
+        <target>Chercher</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

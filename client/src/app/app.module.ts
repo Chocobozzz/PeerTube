@@ -69,7 +69,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
       useFactory: (locale) => {
         // On dev mode, test locales
         if (environment.production === false && window.location.search === '?lang=fr') {
-          return require(`raw-loader!../locale/target/messages_fr.xml`)
+          return require(`raw-loader!../locale/target/angular_fr.xml`)
         }
 
         const fileLocale = buildFileLocale(locale)
@@ -78,7 +78,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
         const defaultFileLocale = buildFileLocale(getDefaultLocale())
         if (fileLocale === defaultFileLocale) return ''
 
-        return require(`raw-loader!../locale/target/messages_${fileLocale}.xml`)
+        return require(`raw-loader!../locale/target/angular_${fileLocale}.xml`)
       },
       deps: [ LOCALE_ID ]
     },

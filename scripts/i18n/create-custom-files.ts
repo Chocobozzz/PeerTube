@@ -30,20 +30,25 @@ for (const sourceObject of [ videojs, playerKeys ]) {
   Object.keys(sourceObject).forEach(k => obj.resources.namespace1[ k ] = { source: sourceObject[ k ] })
 }
 
-jsToXliff12(obj, (err, res) => {
+saveToXliffFile(playerTarget, obj, err => {
   if (err) {
     console.error(err)
     process.exit(-1)
   }
 
-  writeFile(playerTarget, res, err => {
-    if (err) {
-      console.error(err)
-      process.exit(-1)
-    }
-
-    process.exit(0)
-  })
+  process.exit(0)
 })
 
 // Then, the server strings
+
+function saveToXliffFile (targetPath: string, obj: any, cb: Function) {
+  jsToXliff12(obj, (err, res) => {
+    if (err) return cb(err)
+
+    writeFile(playerTarget, res, err => {
+      if (err) return cb(err)
+
+      return cb(null)
+    })
+  })
+}
