@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, OnDestroy } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AccountService } from '@app/shared/account/account.service'
 import { Account } from '@app/shared/account/account.model'
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs'
   templateUrl: './accounts.component.html',
   styleUrls: [ './accounts.component.scss' ]
 })
-export class AccountsComponent implements OnInit {
+export class AccountsComponent implements OnInit, OnDestroy {
   account: Account
 
   private routeSub: Subscription
