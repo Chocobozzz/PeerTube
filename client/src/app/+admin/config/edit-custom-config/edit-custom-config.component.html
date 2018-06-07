@@ -176,6 +176,8 @@ Check this checkbox, save the configuration and test with a video URL of your in
 
         <label for="transcodingEnabled"></label>
         <label i18n for="transcodingEnabled">Transcoding enabled</label>
+
+        <my-help helpType="custom" i18n-customHtml customHtml="If you disable transcoding, many videos from your users will not work!"></my-help>
       </div>
 
       <ng-template [ngIf]="isTranscodingEnabled()">
