@@ -147,7 +147,7 @@ class PeerTubePlugin extends Plugin {
       const savedAverageBandwidth = getAverageBandwidth()
       videoFile = savedAverageBandwidth
         ? this.getAppropriateFile(savedAverageBandwidth)
-        : this.videoFiles[0]
+        : this.pickAverageVideoFile()
     }
 
     // Don't add the same video file once again
@@ -377,7 +377,7 @@ class PeerTubePlugin extends Plugin {
     } else {
       // Don't try on iOS that does not support MediaSource
       if (this.isIOS()) {
-        this.currentVideoFile = this.videoFiles[0]
+        this.currentVideoFile = this.pickAverageVideoFile()
         return this.fallbackToHttp(undefined, false)
       }
 
@@ -531,6 +531,12 @@ class PeerTubePlugin extends Plugin {
     settingsDialog.on('mouseenter', () => disableInactivity())
     this.player.controlBar.on('mouseleave', () => enableInactivity())
     settingsDialog.on('mouseleave', () => enableInactivity())
+  }
+
+  private pickAverageVideoFile () {
+    if (this.videoFiles.length === 1) return this.videoFiles[0]
+
+    return this.videoFiles[Math.floor(this.videoFiles.length / 2)]
   }
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657

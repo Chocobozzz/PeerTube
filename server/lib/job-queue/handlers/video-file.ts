@@ -85,7 +85,7 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
   if (!videoDatabase) return undefined
 
   if (video.privacy !== VideoPrivacy.PRIVATE) {
-    if (isNewVideo === true) {
+    if (isNewVideo !== false) {
       // Now we'll add the video's meta data to our followers
       await sequelizeTypescript.transaction(async t => {
         await sendCreateVideo(video, t)
