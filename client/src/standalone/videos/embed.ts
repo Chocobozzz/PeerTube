@@ -59,7 +59,8 @@ function videoFetchError (videoElement: HTMLVideoElement) {
 }
 
 const urlParts = window.location.href.split('/')
-const videoId = urlParts[urlParts.length - 1]
+const lastPart = urlParts[urlParts.length - 1]
+const videoId = lastPart.indexOf('?') === -1 ? lastPart : lastPart.split('?')[0]
 
 loadLocale(environment.apiUrl, videojs, navigator.language)
   .then(() => loadVideoInfo(videoId))
