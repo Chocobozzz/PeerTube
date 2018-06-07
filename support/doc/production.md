@@ -205,7 +205,7 @@ Now your instance is up you can:
 The password it asks is PeerTube's database user password.
 
 ```
-$ cd /var/www/peertube/peertube-latest/scripts && sudo -u peertube ./upgrade.sh
+$ cd /var/www/peertube/peertube-latest/scripts && sudo -H -u peertube ./upgrade.sh
 $ sudo systemctl restart peertube && sudo journalctl -fu peertube
 ```
 
@@ -238,7 +238,7 @@ Install node dependencies:
 
 ```
 $ cd /var/www/peertube/versions/peertube-${VERSION} && \
-    sudo -u peertube yarn install --production --pure-lockfile
+    sudo -H -u peertube yarn install --production --pure-lockfile
 ```
 
 Copy new configuration defaults values and update your configuration file:
