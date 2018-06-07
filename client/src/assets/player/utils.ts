@@ -1,4 +1,5 @@
 import { is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
+import { VideoFile } from '../../../../shared/models/videos'
 
 function toTitleCase (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1)
@@ -97,6 +98,28 @@ function copyToClipboard (text: string) {
   document.body.removeChild(el)
 }
 
+function videoFileMaxByResolution (files: VideoFile[]) {
+  let max = files[0]
+
+  for (let i = 1; i < files.length; i++) {
+    const file = files[i]
+    if (max.resolution.id < file.resolution.id) max = file
+  }
+
+  return max
+}
+
+function videoFileMinByResolution (files: VideoFile[]) {
+  let min = files[0]
+
+  for (let i = 1; i < files.length; i++) {
+    const file = files[i]
+    if (min.resolution.id > file.resolution.id) min = file
+  }
+
+  return min
+}
+
 export {
   toTitleCase,
   buildVideoLink,
@@ -107,6 +130,8 @@ export {
   saveMuteInStore,
   buildVideoEmbed,
   getStoredMute,
+  videoFileMaxByResolution,
+  videoFileMinByResolution,
   copyToClipboard,
   isMobile,
   bytes

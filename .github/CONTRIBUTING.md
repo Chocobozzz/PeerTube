@@ -133,6 +133,7 @@ with the `root` as username and `test{1,2,3}` for the password.
 ### Unit tests
 
 Create a PostgreSQL user **with the same name as your username** in order to avoid using the *postgres* user.
+
 Then, we can create the databases (if they don't already exist):
 
 ```

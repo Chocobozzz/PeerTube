@@ -21,7 +21,7 @@ for lang in "$languages"; do
     rm -r "./dist/$lang/assets"
 done
 
-NODE_ENV=production npm run webpack -- --config webpack/webpack.video-embed.js --mode production
+NODE_ENV=production npm run webpack -- --config webpack/webpack.video-embed.js --mode production --json > "./dist/embed-stats.json"
 
 # Copy runtime locales
 cp -r "./src/locale/target" "./dist/locale"

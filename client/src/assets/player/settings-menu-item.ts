@@ -1,6 +1,7 @@
 // Author: Yanko Shterev
 // Thanks https://github.com/yshterev/videojs-settings-menu
 
+import * as videojs from 'video.js'
 import { toTitleCase } from './utils'
 import { VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
 

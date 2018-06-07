@@ -2,7 +2,7 @@ import * as videojs from 'video.js'
 import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { PeerTubePlugin } from './peertube-videojs-plugin'
 
-declare module 'video.js' {
+declare namespace videojs {
   interface Player {
     peertube (): PeerTubePlugin
   }

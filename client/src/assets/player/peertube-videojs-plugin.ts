@@ -4,9 +4,16 @@ import { VideoFile } from '../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import './settings-menu-button'
 import { PeertubePluginOptions, VideoJSComponentInterface, videojsUntyped } from './peertube-videojs-typings'
-import { getAverageBandwidth, getStoredMute, getStoredVolume, saveAverageBandwidth, saveMuteInStore, saveVolumeInStore } from './utils'
-import minBy from 'lodash-es/minBy'
-import maxBy from 'lodash-es/maxBy'
+import {
+  getAverageBandwidth,
+  getStoredMute,
+  getStoredVolume,
+  saveAverageBandwidth,
+  saveMuteInStore,
+  saveVolumeInStore,
+  videoFileMaxByResolution,
+  videoFileMinByResolution
+} from './utils'
 import * as CacheChunkStore from 'cache-chunk-store'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 
@@ -339,9 +346,9 @@ class PeerTubePlugin extends Plugin {
     })
 
     // If the download speed is too bad, return the lowest resolution we have
-    if (filteredFiles.length === 0) return minBy(this.videoFiles, 'resolution.id')
+    if (filteredFiles.length === 0) return videoFileMinByResolution(this.videoFiles)
 
-    return maxBy(filteredFiles, 'resolution.id')
+    return videoFileMaxByResolution(filteredFiles)
   }
 
   private getAndSaveActualDownloadSpeed () {
