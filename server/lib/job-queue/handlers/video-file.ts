@@ -16,14 +16,14 @@ export type VideoFilePayload = {
   isPortraitMode?: boolean
 }
 
-export type VideoImportPayload = {
+export type VideoFileImportPayload = {
   videoUUID: string,
   filePath: string
 }
 
-async function processVideoImport (job: kue.Job) {
-  const payload = job.data as VideoImportPayload
-  logger.info('Processing video import in job %d.', job.id)
+async function processVideoFileImport (job: kue.Job) {
+  const payload = job.data as VideoFileImportPayload
+  logger.info('Processing video file import in job %d.', job.id)
 
   const video = await VideoModel.loadByUUIDAndPopulateAccountAndServerAndTags(payload.videoUUID)
   // No video, maybe deleted?
@@ -132,5 +132,5 @@ async function onVideoFileOptimizerSuccess (video: VideoModel, isNewVideo: boole
 
 export {
   processVideoFile,
-  processVideoImport
+  processVideoFileImport
 }

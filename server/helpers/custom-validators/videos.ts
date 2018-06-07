@@ -7,8 +7,8 @@ import { UserRight, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
   VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES, VIDEO_MIMETYPE_EXT,
+  VIDEO_LICENCES,
+  VIDEO_MIMETYPE_EXT,
   VIDEO_PRIVACIES,
   VIDEO_RATE_TYPES
 } from '../../initializers'

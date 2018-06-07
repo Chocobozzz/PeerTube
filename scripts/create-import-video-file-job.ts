@@ -27,6 +27,7 @@ async function run () {
 
   const video = await VideoModel.loadByUUID(program['video'])
   if (!video) throw new Error('Video not found.')
+  if (video.isOwned() === false) throw new Error('Cannot import files of a non owned video.')
 
   const dataInput = {
     videoUUID: video.uuid,

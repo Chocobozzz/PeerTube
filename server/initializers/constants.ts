@@ -7,6 +7,7 @@ import { VideoPrivacy } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, isTestInstance, root, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
+import { invert } from 'lodash'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -330,6 +331,7 @@ const VIDEO_MIMETYPE_EXT = {
   'video/ogg': '.ogv',
   'video/mp4': '.mp4'
 }
+const VIDEO_EXT_MIMETYPE = invert(VIDEO_MIMETYPE_EXT)
 
 const IMAGE_MIMETYPE_EXT = {
   'image/png': '.png',
@@ -501,6 +503,7 @@ export {
   SCHEDULER_INTERVAL,
   STATIC_DOWNLOAD_PATHS,
   RATES_LIMIT,
+  VIDEO_EXT_MIMETYPE,
   JOB_COMPLETED_LIFETIME,
   VIDEO_VIEW_LIFETIME,
   buildLanguages

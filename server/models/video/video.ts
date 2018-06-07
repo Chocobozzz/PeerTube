@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird'
 import { map, maxBy } from 'lodash'
 import * as magnetUtil from 'magnet-uri'
 import * as parseTorrent from 'parse-torrent'
-import { join, extname } from 'path'
+import { extname, join } from 'path'
 import * as Sequelize from 'sequelize'
 import {
   AllowNull,
@@ -30,9 +30,9 @@ import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import {
+  copyFilePromise,
   createTorrentPromise,
   peertubeTruncate,
-  copyFilePromise,
   renamePromise,
   statPromise,
   unlinkPromise,
@@ -63,6 +63,7 @@ import {
   STATIC_PATHS,
   THUMBNAILS_SIZE,
   VIDEO_CATEGORIES,
+  VIDEO_EXT_MIMETYPE,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
@@ -1166,7 +1167,7 @@ export class VideoModel extends Model<VideoModel> {
     for (const file of this.VideoFiles) {
       url.push({
         type: 'Link',
-        mimeType: 'video/' + file.extname.replace('.', ''),
+        mimeType: VIDEO_EXT_MIMETYPE[file.extname],
         href: this.getVideoFileUrl(file, baseUrlHttp),
         width: file.resolution,
         size: file.size
@@ -1328,14 +1329,18 @@ export class VideoModel extends Model<VideoModel> {
     await copyFilePromise(inputFilePath, outputPath)
 
     const currentVideoFile = this.VideoFiles.find(videoFile => videoFile.resolution === updatedVideoFile.resolution)
-    const isNewVideoFile = !currentVideoFile
 
-    if (!isNewVideoFile) {
-      if (currentVideoFile.extname !== updatedVideoFile.extname) {
-        await this.removeFile(currentVideoFile)
-        currentVideoFile.set('extname', updatedVideoFile.extname)
-      }
+    if (currentVideoFile) {
+      // Remove old file and old torrent
+      await this.removeFile(currentVideoFile)
+      await this.removeTorrent(currentVideoFile)
+      // Remove the old video file from the array
+      this.VideoFiles = this.VideoFiles.filter(f => f !== currentVideoFile)
+
+      // Update the database
+      currentVideoFile.set('extname', updatedVideoFile.extname)
       currentVideoFile.set('size', updatedVideoFile.size)
+
       updatedVideoFile = currentVideoFile
     }
 
@@ -1343,9 +1348,7 @@ export class VideoModel extends Model<VideoModel> {
 
     await updatedVideoFile.save()
 
-    if (isNewVideoFile) {
-      this.VideoFiles.push(updatedVideoFile)
-    }
+    this.VideoFiles.push(updatedVideoFile)
   }
 
   getOriginalFileResolution () {
