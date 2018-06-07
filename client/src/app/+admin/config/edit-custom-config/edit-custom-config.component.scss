@@ -19,6 +19,11 @@ input[type=submit] {
   @include orange-button;
 
   margin-top: 20px;
+
+  & + .form-error {
+    display: inline;
+    margin-left: 5px;
+  }
 }
 
 .inner-form-title {
