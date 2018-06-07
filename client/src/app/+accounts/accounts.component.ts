@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router'
 import { AccountService } from '@app/shared/account/account.service'
 import { Account } from '@app/shared/account/account.model'
 import { RestExtractor } from '@app/shared'
-import { catchError } from 'rxjs/operators'
+import { catchError, switchMap, distinctUntilChanged, map } from 'rxjs/operators'
+import { Subscription } from 'rxjs'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -12,6 +13,8 @@ import { catchError } from 'rxjs/operators'
 export class AccountsComponent implements OnInit {
   account: Account
 
+  private routeSub: Subscription
+
   constructor (
     private route: ActivatedRoute,
     private accountService: AccountService,
@@ -19,10 +22,17 @@ export class AccountsComponent implements OnInit {
   ) {}
 
   ngOnInit () {
-    const accountId = this.route.snapshot.params['accountId']
+    this.routeSub = this.route.params
+      .pipe(
+        map(params => params[ 'accountId' ]),
+        distinctUntilChanged(),
+        switchMap(accountId => this.accountService.getAccount(accountId)),
+        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
+      )
+      .subscribe(account => this.account = account)
+  }
 
-    this.accountService.getAccount(accountId)
-        .pipe(catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ])))
-        .subscribe(account => this.account = account)
+  ngOnDestroy () {
+    if (this.routeSub) this.routeSub.unsubscribe()
   }
 }

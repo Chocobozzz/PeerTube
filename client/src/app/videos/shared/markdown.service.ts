@@ -69,7 +69,6 @@ export class MarkdownService {
   }
 
   private avoidTruncatedLinks (html: string) {
-    console.log(html)
     return html.replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
   }
 }

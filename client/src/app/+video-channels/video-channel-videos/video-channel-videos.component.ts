@@ -11,6 +11,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-video-channel-videos',
@@ -27,6 +28,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
   loadOnInit = false
 
   private videoChannel: VideoChannel
+  private videoChannelSub: Subscription
 
   constructor (
     protected router: Router,
@@ -48,17 +50,19 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     super.ngOnInit()
 
     // Parent get the video channel for us
-    this.videoChannelService.videoChannelLoaded
+    this.videoChannelSub = this.videoChannelService.videoChannelLoaded
       .subscribe(videoChannel => {
         this.videoChannel = videoChannel
         this.currentRoute = '/video-channel/' + this.videoChannel.uuid + '/videos'
 
-        this.loadMoreVideos(this.pagination.currentPage)
+        this.reloadVideos()
         this.generateSyndicationList()
       })
   }
 
   ngOnDestroy () {
+    if (this.videoChannelSub) this.videoChannelSub.unsubscribe()
+
     super.ngOnDestroy()
   }
 

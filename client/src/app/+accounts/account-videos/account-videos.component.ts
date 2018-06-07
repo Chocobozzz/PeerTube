@@ -11,6 +11,7 @@ import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-account-videos',
@@ -27,6 +28,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   loadOnInit = false
 
   private account: Account
+  private accountSub: Subscription
 
   constructor (
     protected router: Router,
@@ -48,17 +50,19 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     super.ngOnInit()
 
     // Parent get the account for us
-    this.accountService.accountLoaded
+    this.accountSub = this.accountService.accountLoaded
       .subscribe(account => {
         this.account = account
-        this.currentRoute = '/account/' + this.account.id + '/videos'
+        this.currentRoute = '/account/' + this.account.nameWithHost + '/videos'
 
-        this.loadMoreVideos(this.pagination.currentPage)
+        this.reloadVideos()
         this.generateSyndicationList()
       })
   }
 
   ngOnDestroy () {
+    if (this.accountSub) this.accountSub.unsubscribe()
+
     super.ngOnDestroy()
   }
 
