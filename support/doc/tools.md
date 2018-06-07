@@ -4,6 +4,8 @@
  - [Usage](#usage)
    - [import-videos.js](#import-videosjs)
    - [upload.js](#uploadjs)
+   - [create-transcoding-job.js](#create-transcoding-jobjs)
+   - [create-import-video-file-job.js](#create-import-video-file-jobjs)
 
 ## Installation
 
@@ -45,22 +47,24 @@ $ npm run build:server
 You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
 Be sure you own the videos or have the author's authorization to do so.
 
-
+```sh
+$ node dist/server/tools/import-videos.js \
+    -u "PEERTUBE_URL" \
+    -U "PEERTUBE_USER" \
+    --password "PEERTUBE_PASSWORD" \
+    -t "TARGET_URL"
 ```
-$ cd ${CLONE}
-$ node dist/server/tools/import-videos.js -u "PEERTUBE_URL" -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD" -t "TARGET_URL"
-```
 
- * PEERTUBE_URL : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
- * PEERTUBE_USER : your PeerTube account where videos will be uploaded
- * PEERTUBE_PASSWORD : password of your PeerTube account (if ommited, you will be prompted for)
- * TARGET_URL : the target url you want to import. Examples:
-   * YouTube:
-     * Channel: https://www.youtube.com/channel/ChannelId
-     * User https://www.youtube.com/c/UserName or https://www.youtube.com/user/UserName
-     * Video https://www.youtube.com/watch?v=blabla
-   * Vimeo: https://vimeo.com/xxxxxx
-   * Dailymotion: https://www.dailymotion.com/xxxxx
+* `PEERTUBE_URL` : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
+* `PEERTUBE_USER` : your PeerTube account where videos will be uploaded
+* `PEERTUBE_PASSWORD` : password of your PeerTube account (if omitted, you will be prompted for it)
+* `TARGET_URL` : the target url you want to import. Examples:
+  * YouTube:
+    * Channel: https://www.youtube.com/channel/ChannelId
+    * User https://www.youtube.com/c/UserName or https://www.youtube.com/user/UserName
+    * Video https://www.youtube.com/watch?v=blabla
+  * Vimeo: https://vimeo.com/xxxxxx
+  * Dailymotion: https://www.dailymotion.com/xxxxx
 
  The script will get all public videos from Youtube, download them and upload to PeerTube.  
  Already downloaded videos will not be uploaded twice, so you can run and re-run the script in case of crash, disconnection...
@@ -72,4 +76,22 @@ You can use this script to import videos directly from the CLI.
 ```
 $ cd ${CLONE}
 $ node dist/server/tools/upload.js --help
+```
+
+## Tools to create jobs in the queue
+
+### create-transcoding-job.js
+
+You can use this script to force transcoding of an existing video.
+
+```
+$ npm run create-transcoding-job -- -v [videoUUID]
+```
+   
+### create-import-video-file-job.js
+
+You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video.
+
+```
+$ npm run create-import-video-file-job -- -v [videoUUID] -i [videoFile]
 ```
