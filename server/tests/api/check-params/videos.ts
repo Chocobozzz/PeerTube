@@ -163,7 +163,7 @@ describe('Test videos API validator', function () {
   describe('When adding a video', function () {
     let baseCorrectParams
     const baseCorrectAttaches = {
-      'videofile': join(__dirname, '..', 'fixtures', 'video_short.webm')
+      'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
     }
 
     before(function () {
@@ -313,7 +313,7 @@ describe('Test videos API validator', function () {
     it('Should fail without an incorrect input file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
       }
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
     })
@@ -321,8 +321,8 @@ describe('Test videos API validator', function () {
     it('Should fail with an incorrect thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar.png'),
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+        'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png'),
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -331,8 +331,8 @@ describe('Test videos API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar-big.png'),
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+        'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png'),
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -341,8 +341,8 @@ describe('Test videos API validator', function () {
     it('Should fail with an incorrect preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'previewfile': join(__dirname, '..', 'fixtures', 'avatar.png'),
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+        'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png'),
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -351,8 +351,8 @@ describe('Test videos API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'previewfile': join(__dirname, '..', 'fixtures', 'avatar-big.png'),
-        'videofile': join(__dirname, '..', 'fixtures', 'video_short_fake.webm')
+        'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png'),
+        'videofile': join(__dirname, '..', '..', 'fixtures', 'video_short_fake.webm')
       }
 
       await makeUploadRequest({ url: server.url, path: path + '/upload', token: server.accessToken, fields, attaches })
@@ -377,7 +377,7 @@ describe('Test videos API validator', function () {
 
       {
         const attaches = immutableAssign(baseCorrectAttaches, {
-          videofile: join(__dirname, '..', 'fixtures', 'video_short.mp4')
+          videofile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
         })
 
         await makeUploadRequest({
@@ -392,7 +392,7 @@ describe('Test videos API validator', function () {
 
       {
         const attaches = immutableAssign(baseCorrectAttaches, {
-          videofile: join(__dirname, '..', 'fixtures', 'video_short.ogv')
+          videofile: join(__dirname, '..', '..', 'fixtures', 'video_short.ogv')
         })
 
         await makeUploadRequest({
@@ -510,7 +510,7 @@ describe('Test videos API validator', function () {
     it('Should fail with an incorrect thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar.png')
+        'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
       }
 
       await makeUploadRequest({
@@ -526,7 +526,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'thumbnailfile': join(__dirname, '..', 'fixtures', 'avatar-big.png')
+        'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
       }
 
       await makeUploadRequest({
@@ -542,7 +542,7 @@ describe('Test videos API validator', function () {
     it('Should fail with an incorrect preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'previewfile': join(__dirname, '..', 'fixtures', 'avatar.png')
+        'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
       }
 
       await makeUploadRequest({
@@ -558,7 +558,7 @@ describe('Test videos API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'previewfile': join(__dirname, '..', 'fixtures', 'avatar-big.png')
+        'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
       }
 
       await makeUploadRequest({

@@ -502,8 +502,6 @@ async function completeVideoCheck (
   expect(dateIsValid(video.updatedAt)).to.be.true
 
   if (attributes.publishedAt) {
-    console.log(attributes.publishedAt)
-    console.log(video.publishedAt)
     expect(video.publishedAt).to.equal(attributes.publishedAt)
   }
 

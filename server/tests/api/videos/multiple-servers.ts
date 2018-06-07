@@ -938,7 +938,7 @@ describe('Test multiple servers', function () {
         .field('channelId', '1')
         .field('commentsEnabled', 'true')
 
-      const filePath = join(__dirname, '..', '..', 'api', 'fixtures', 'video_short.webm')
+      const filePath = join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
 
       await req.attach('videofile', filePath)
         .expect(200)

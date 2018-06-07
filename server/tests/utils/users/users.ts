@@ -164,7 +164,7 @@ function updateMyAvatar (options: {
   if (isAbsolute(options.fixture)) {
     filePath = options.fixture
   } else {
-    filePath = join(__dirname, '..', '..', 'api', 'fixtures', options.fixture)
+    filePath = join(__dirname, '..', '..', 'fixtures', options.fixture)
   }
 
   return makeUploadRequest({

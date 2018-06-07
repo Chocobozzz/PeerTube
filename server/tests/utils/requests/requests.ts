@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { buildAbsoluteFixturePath } from '../'
+import { buildAbsoluteFixturePath } from '../miscs/miscs'
 
 function makeGetRequest (options: {
   url: string,
