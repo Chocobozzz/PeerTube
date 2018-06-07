@@ -113,8 +113,6 @@ function getControlBarChildren (options: {
 }
 
 function addContextMenu (player: any, videoEmbedUrl: string) {
-  console.log(videoEmbedUrl)
-
   player.contextmenuUI({
     content: [
       {
