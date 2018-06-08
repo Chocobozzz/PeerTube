@@ -46,7 +46,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   playerElement: HTMLVideoElement
   userRating: UserVideoRateType = null
   video: VideoDetails = null
-  videoNotFound = false
   descriptionLoading = false
 
   completeDescriptionShown = false
@@ -119,11 +118,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
               const startTime = this.route.snapshot.queryParams.start
               this.onVideoFetched(video, startTime)
                   .catch(err => this.handleError(err))
-            },
-
-            error => {
-              this.videoNotFound = true
-              console.error(error)
             }
           )
     })

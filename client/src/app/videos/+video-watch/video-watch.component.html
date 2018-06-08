@@ -1,9 +1,7 @@
 <div class="row">
   <!-- We need the video container for videojs so we just hide it -->
-  <div [hidden]="videoNotFound" id="video-element-wrapper">
+  <div id="video-element-wrapper">
   </div>
-
-  <div i18n *ngIf="videoNotFound" id="video-not-found">Video not found :'(</div>
 
   <!-- Video information -->
   <div *ngIf="video" class="margin-content video-bottom">
