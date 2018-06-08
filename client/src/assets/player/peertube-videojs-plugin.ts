@@ -185,6 +185,7 @@ class PeerTubePlugin extends Plugin {
     console.log('Adding ' + magnetOrTorrentUrl + '.')
 
     const oldTorrent = this.torrent
+    let fakeRenderer
     const torrentOptions = {
       store: (chunkLength, storeOpts) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
         max: 100
@@ -199,10 +200,37 @@ class PeerTubePlugin extends Plugin {
         oldTorrent.pause()
         // Pause does not remove actual peers (in particular the webseed peer)
         oldTorrent.removePeer(oldTorrent['ws'])
+
+        // We use a fake renderer so we download correct pieces of the next file
+        // This way we'll be able to
+        if (options.delay) {
+          const fakeVideoElem = document.createElement('video')
+          renderVideo(torrent.files[0], fakeVideoElem, { autoplay: false, controls: false }, (err, renderer) => {
+            fakeRenderer = renderer
+
+            if (err) {
+              console.error('Cannot render new torrent in fake video element.', err)
+            }
+
+            // Load the future file at the correct time
+            fakeVideoElem.currentTime = this.player.currentTime() + (options.delay / 2000)
+          })
+        }
       }
 
       // Render the video in a few seconds? (on resolution change for example, we wait some seconds of the new video resolution)
       this.addTorrentDelay = setTimeout(() => {
+        if (fakeRenderer) {
+          if (fakeRenderer.destroy) {
+            try {
+              fakeRenderer.destroy()
+            } catch (err) {
+              console.log('Cannot destroy correctly fake renderer.', err)
+            }
+          }
+          fakeRenderer = undefined
+        }
+
         const paused = this.player.paused()
 
         this.flushVideoFile(previousVideoFile)
